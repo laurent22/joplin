@@ -518,12 +518,13 @@ export default class Resource extends BaseItem {
 				SELECT ${selectSql}
 				FROM resources
 				WHERE
-					ocr_status = ? AND
+					(ocr_status = ? or ocr_status = ?) AND
 					encryption_applied = 0 AND
 					mime IN ('${supportedMimeTypes.join('\',\'')}')
 			`,
 			params: [
 				ResourceOcrStatus.Todo,
+				ResourceOcrStatus.Processing,
 			],
 		};
 	}

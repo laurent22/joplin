@@ -52,8 +52,8 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		expect(tags.length).toBe(3);
 
 		const tagTitles = tags.map(tag => tag.title);
-		expect(tagTitles).toContain('joplin');
-		expect(tagTitles).toContain('note');
+		expect(tagTitles).toContain('Joplin');
+		expect(tagTitles).toContain('nOte');
 		expect(tagTitles).toContain('pencil');
 	});
 	it('should only import data from the first yaml block', async () => {
@@ -131,8 +131,8 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 		expect(tags.length).toBe(2);
 
 		const tagTitles = tags.map(tag => tag.title);
-		expect(tagTitles).toContain('yaml');
-		expect(tagTitles).toContain('rmd');
+		expect(tagTitles).toContain('YAML');
+		expect(tagTitles).toContain('Rmd');
 	});
 	it('should import r-markdown files with alternative author syntax', async () => {
 		const note = await importTestFile('r-markdown_author.md');
@@ -203,5 +203,11 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', () => {
 			is_todo: 0,
 			todo_completed: 0,
 		});
+	});
+
+	it('should use the filename in cases where the frontmatter has no title', async () => {
+		const note = await importTestFile('filename-title.md');
+
+		expect(note.title).toBe('filename-title');
 	});
 });

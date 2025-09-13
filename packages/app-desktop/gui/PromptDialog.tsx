@@ -8,6 +8,7 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import Dialog from './Dialog';
 import { ChangeEvent } from 'react';
 import { formatDateTimeLocalToMs, isValidDate } from '@joplin/utils/time';
+import lightTheme from '@joplin/lib/themes/light';
 
 interface Props {
 	themeId: number;
@@ -115,6 +116,15 @@ export default class PromptDialog extends React.Component<Props, any> {
 			backgroundColor: theme.backgroundColor,
 			border: '1px solid',
 			borderColor: theme.dividerColor,
+		};
+
+		// The button to change the date/time cannot be customized easily so we need to use the
+		// light theme for that particular component.
+		this.styles_.dateTimeInput = {
+			...this.styles_.input,
+			color: lightTheme.color,
+			backgroundColor: lightTheme.backgroundColor,
+			borderColor: lightTheme.dividerColor,
 		};
 
 		this.styles_.select = {
@@ -241,8 +251,6 @@ export default class PromptDialog extends React.Component<Props, any> {
 				} else {
 					onClose(true);
 				}
-			} else if (event.key === 'Escape') {
-				onClose(false);
 			}
 		};
 
@@ -256,7 +264,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 				onChange={onChange}
 				type="datetime-local"
 				className='datetime-picker'
-				style={styles.input}
+				style={styles.dateTimeInput}
 			/>;
 		} else if (this.props.inputType === 'tags') {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -299,7 +307,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		}
 
 		return (
-			<Dialog className='prompt-dialog' contentStyle={styles.dialog}>
+			<Dialog className='prompt-dialog' contentStyle={styles.dialog} onCancel={() => onClose(false, 'cancel')}>
 				<label style={styles.label}>{this.props.label ? this.props.label : ''}</label>
 				<div style={{ display: 'inline-block', color: 'black', backgroundColor: theme.backgroundColor }}>
 					{inputComp}

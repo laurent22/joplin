@@ -13,6 +13,7 @@ import { MarkupToHtmlOptions } from '../../hooks/useMarkupToHtml';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
 import { RefObject, SetStateAction } from 'react';
 import * as React from 'react';
+import { ResourceEntity, ResourceLocalStateEntity } from '@joplin/lib/services/database/types';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -67,6 +68,7 @@ export interface NoteEditorProps {
 	onTitleChange?: (title: string)=> void;
 	bodyEditor: string;
 	startupPluginsLoaded: boolean;
+	enableHtmlToMarkdownBanner: boolean;
 }
 
 export interface NoteBodyEditorRef {
@@ -138,6 +140,7 @@ export interface NoteBodyEditorProps {
 	noteId: string;
 	useCustomPdfViewer: boolean;
 	watchedNoteFiles: string[];
+	enableHtmlToMarkdownBanner: boolean;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {
@@ -212,10 +215,8 @@ export function defaultFormNote(): FormNote {
 }
 
 export interface ResourceInfo {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	localState: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	item: any;
+	localState: ResourceLocalStateEntity;
+	item: ResourceEntity;
 }
 
 export interface ResourceInfos {

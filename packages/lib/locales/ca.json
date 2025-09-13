@@ -2,17 +2,40 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"A «%s» li manca la propietat «%s»."
 	],
+	"%d day": [
+		"%d dia",
+		"%d dies"
+	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB d'espai d'emmagatzematge"
 	],
+	"%d hour": [
+		"%d hora",
+		"%d hores"
+	],
 	"%d MB": [
 		"%d MB"
 	],
 	"%d MB per note or attachment": [
 		"%d MB per nota o adjunt"
+	],
+	"%d minute": [
+		"%d minut",
+		"%d minuts"
+	],
+	"%d note matches this pattern. Delete it?": [
+		"%d nota coincideix amb aquest patró. Voleu suprimir-la?",
+		"%d notes coincideixen amb aquest patró. Voleu suprimir-les?"
+	],
+	"%d note will be permanently deleted. Continue?": [
+		"%d nota s'eliminarà permanentment. Continuar?",
+		"%d notes s'eliminaràn permanentment. Continuar?"
+	],
+	"%d photo(s) taken": [
+		"%d fotos preses"
 	],
 	"%s": [
 		"%s"
@@ -47,20 +70,30 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be greater than %s": [
+		"%s no pot ser més gran que %s"
+	],
 	"%s cannot be less than %s": [
-		""
+		"%s no pot ser inferior a %s"
+	],
+	"%s from %s": [
+		"%s de %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s no està optimitzat per sincronitzar molts fitxers petits, de manera que la sincronització inicial serà lenta."
 	],
 	"%s must be a valid whole number": [
-		""
+		"%s ha de ser un número enter vàlid"
 	],
 	"%s tab opened": [
-		""
+		"%s pestanya oberta"
 	],
 	"%s: %d": [
 		"%s: %d"
+	],
+	"%s: %d note": [
+		"%s: %d nota",
+		"%s: %d notes"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -68,8 +101,11 @@
 	"%s: %s": [
 		"%s: %s"
 	],
+	"%s: Missing password.": [
+		"%s: Falta la contrasenya."
+	],
 	"&Edit": [
-		"&Edita"
+		"&Editar"
 	],
 	"&File": [
 		"&Fitxer"
@@ -89,6 +125,9 @@
 	"&View": [
 		"&Visualitza"
 	],
+	"&Window": [
+		"&Finestra"
+	],
 	"(%s)": [
 		"(%s)"
 	],
@@ -96,31 +135,43 @@
 		"(A l'extensió: %s)"
 	],
 	"(level %d)": [
-		""
+		"(nivell %d)"
 	],
 	"(None)": [
 		"(cap)"
+	],
+	"(Read-only)": [
+		"(Només de lectura)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Podeu desactivar aquesta sol·licitud a les opcions)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
-		"- Càmera: per a poder fer fotografies i adjuntar-les a les notes."
+		"- Camera: per permetre fer una foto i adjuntar-la a una nota."
 	],
 	"- Location: to allow attaching geo-location information to a note.": [
-		"- Geolocalització: per a poder ajuntar la informació de geolocalització a les notes."
+		"- Ubicació: per permetre adjuntar informació de geolocalització a una nota."
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
-		"- Emmagatzematge: per a adjuntar fitxers a les notes i per a activar la sincronització amb el sistema de fitxers."
+		"- Emmagatzematge: per permetre adjuntar fitxers a notes i permetre la sincronització del sistema de fitxers."
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
-		"<tag-command> pot ser «add», «remove», «list» o «notetags» per a assignar o suprimir l'[etiqueta] de la [nota], o per a llistar les notes associades amb l'[etiqueta]. L'ordre «tag list» es pot usar per a llistar totes les etiquetes (useu -l per l'opció llarga)."
+		"<tag-command> pot ser \"add\", \"remove\", \"list\" o \"notetags\" per assignar o eliminar [tag] de [note], per llistar notes associades amb [tag], o per llistar etiquetes associades amb [note]. L'ordre `tag list`). es pot utilitzar per a llistar totes les etiquetes (utilitzeu -l per a l'opció llarga)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> pot ser «toggle» o «clear». Useu «toggle» per a canviar els llistats de tasques entre l'estat de finalitzat i no finalitzat (si l'objectiu és una nota normal, es convertirà a un llistat de tasques pendents). Useu «clear» per a convertir un llistat de tasques pendents a una nota normal."
+	],
+	"[None]": [
+		"[None]"
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		"Una llista de paraules separades per comes. Es pot utilitzar per a paraules poc comunes, per ajudar a escriure la veu a escriure-les correctament."
+	],
+	"A new update (%s) is available": [
+		"Una nova actualització (%s) està disponible"
 	],
 	"A3": [
 		"A3"
@@ -132,7 +183,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Quant a"
 	],
 	"About Joplin": [
 		"Quant al Joplin"
@@ -149,6 +200,15 @@
 	"Accept": [
 		"Accepta"
 	],
+	"Accepted invitations": [
+		"Invitacions acceptades"
+	],
+	"Accepted: Notebook %s from %s": [
+		"Acceptat: Llibreta %s de %s"
+	],
+	"Accepting share...": [
+		"Acceptant compartir..."
+	],
 	"Access denied: Please check your username and password": [
 		"S'ha denegat l'accés: comproveu el nom d'usuari i la contrasenya"
 	],
@@ -157,6 +217,12 @@
 	],
 	"Account": [
 		"Compte"
+	],
+	"Account information": [
+		"Informació del compte"
+	],
+	"Account type": [
+		"Tipus de compte"
 	],
 	"Action": [
 		"Acció"
@@ -182,14 +248,17 @@
 	"Add recipient:": [
 		"Afegeix un destinatari:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Afegeix títol"
 	],
 	"Add to dictionary": [
 		"Afegeix al diccionari"
+	],
+	"Add to note": [
+		"Afegeix a la nota"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Administració"
@@ -200,14 +269,20 @@
 	"Advanced options": [
 		"Opcions avançades"
 	],
+	"Advanced settings": [
+		"Paràmetres avançats"
+	],
 	"Advanced tools": [
 		"Opcions avançades"
+	],
+	"all": [
+		"tot"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Totes les dades, incloent notes, blocs de notes i etiquetes se suprimiran de manera permanent."
 	],
 	"All item sync failures have been marked as \"ignored\".": [
-		""
+		"Tots els errors de sincronització d'elements s'han marcat com a «ignorats»."
 	],
 	"All notes": [
 		"Totes les notes"
@@ -215,8 +290,11 @@
 	"All potential ports are in use - please report the issue at %s": [
 		"Tots els ports potencials estan en ús - si us plau, informeu del problema a %s"
 	],
+	"All shared folders:": [
+		"Totes les carpetes compartides:"
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
-		""
+		"Permet depurar connectors mòbils. Vegeu %s per a més detalls."
 	],
 	"Also displays unset and hidden config variables.": [
 		"També mostra variables de configuració ocultes o sense definir."
@@ -224,32 +302,41 @@
 	"Also publish linked notes": [
 		"Publica també les notes enllaçades"
 	],
+	"Alternative instance ID: %s": [
+		"Identificador d'instància alternatiu: %s"
+	],
 	"Always": [
 		"Sempre"
 	],
+	"Always ask": [
+		"Pregunti sempre"
+	],
 	"Always open %s files without asking.": [
-		""
+		"Obre sempre %s fitxers sense preguntar."
+	],
+	"Always resize": [
+		"Canvia sempre la mida"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
-		""
+		"Llibreta ambigua \"%s\". Si us plau, utilitzeu l'identificador de la llibreta en lloc d'això: premeu \"ti\" per veure l'identificador curt de la llibreta o utilitzeu-$b per a la llibreta seleccionada actual"
 	],
 	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
-		""
+		"Llibreta ambigua \"%s\". Si us plau, utilitzeu l'identificador de la llibreta curta: premeu \"ti\" per veure l'identificador de la llibreta curta"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
-		""
+		"S'ha trobat un dibuix desat automàticament. Voleu adjuntar-ne una còpia a la nota?"
 	],
 	"An error occurred: %s": [
-		""
+		"S'ha produït un error: %s"
 	],
 	"An update is available, do you want to download it now?": [
 		"Hi ha disponible una actualització. Voleu descarregar-la ara?"
 	],
 	"Android API level: %d": [
-		""
+		"Nivell de l'API d'Android: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
-		""
+		"Qualsevol correu electrònic enviat a aquesta adreça serà convertit en una nota i afegit a la vostra col·lecció. La nota es desarà a la llibreta de la safata d'entrada"
 	],
 	"Appearance": [
 		"Aspecte"
@@ -260,11 +347,17 @@
 	"Apply": [
 		"Aplica"
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		"Estàs segur que vols restaurar el disseny predeterminat de la barra d'eines?\nAixò no es pot desfer."
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Estàs segur que vols suprimir tot l'historial d'aquesta nota? Això no es pot desfer."
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		"Esteu segur que voleu renovar el testimoni d'autorització?"
 	],
 	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
-		""
+		"Estàs segur que vols tornar al disseny per defecte? La configuració de disseny actual es perdrà."
 	],
 	"Arguments:": [
 		"Arguments:"
@@ -272,8 +365,11 @@
 	"Aritim Dark": [
 		"Aritim fosc"
 	],
-	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+	"Associated tags:": [
 		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		"Actualment, Joplin Web només es pot obrir en una pestanya alhora. Si us plau, tanqueu l'altra instància de Joplin."
 	],
 	"Attach": [
 		"Adjunta"
@@ -292,6 +388,9 @@
 	],
 	"attachment": [
 		"fitxer adjunt"
+	],
+	"Attachment": [
+		"Adjunts"
 	],
 	"Attachment conflict: \"%s\"": [
 		"Conflicte en un adjunt: \"%s\""
@@ -314,6 +413,9 @@
 	"Authorisation token:": [
 		"Testimoni d'autorització:"
 	],
+	"Authorise": [
+		"Autoritzar"
+	],
 	"Auto": [
 		"Automàtic"
 	],
@@ -321,19 +423,19 @@
 		"Afegeix automàticament per a eliminar els comptes deshabilitats"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
-		""
+		"Formatar automàticament el Markdown a l'editor de text enriquit"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Aparellament automàtic de claus, parèntesis, cites, etc."
 	],
 	"Autocomplete Markdown and HTML": [
-		""
+		"Autocompletar Markdown i HTML"
 	],
 	"Automatically check for updates": [
 		"Comprova les actualitzacions automàticament"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"Elimina automàticament les notes a la paperera després d'un número de dies"
 	],
 	"Automatically switch theme to match system theme": [
 		"Canvia de tema automàticament per a coincidir amb el tema del sistema"
@@ -342,10 +444,10 @@
 		"Enrere"
 	],
 	"Basic": [
-		""
+		"Bàsic"
 	],
 	"Beta": [
-		""
+		"Beta"
 	],
 	"Bold": [
 		"Negreta"
@@ -357,19 +459,19 @@
 		"Navega..."
 	],
 	"Built-in": [
-		""
+		"Integrat"
 	],
 	"Bulleted List": [
 		"Llista de pics"
 	],
 	"by %s": [
-		""
+		"per %s"
 	],
 	"by word": [
-		""
+		"per paraula"
 	],
 	"Camera": [
-		""
+		"Càmera"
 	],
 	"Can Share": [
 		"Pot compartir"
@@ -378,7 +480,7 @@
 		"Pot veure"
 	],
 	"Can view and edit": [
-		""
+		"Pot veure i editar"
 	],
 	"Cancel": [
 		"Cancel·la"
@@ -387,7 +489,7 @@
 		"S'està cancel·lant la sincronització en segon pla... Espereu."
 	],
 	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
-		""
+		"La cancel·lació descartarà la gravació. Això no es pot desfer. Estàs segur que vols continuar?"
 	],
 	"Cancelling...": [
 		"S'està cancel·lant..."
@@ -402,7 +504,7 @@
 		"No es pot canviar un element xifrat"
 	],
 	"Cannot copy note to \"%s\" notebook": [
-		"No es pot copiar la nota al bloc de notes «%s»"
+		"No es pot copiar la nota a la llibreta «%s»"
 	],
 	"Cannot create a new note: %s": [
 		"No pot crear una nova nota: %s"
@@ -423,10 +525,10 @@
 		"No puc carregar el mòdul «%s» per al format «%s» i destí «%s»"
 	],
 	"Cannot move note to \"%s\" notebook": [
-		"No es pot moure la nota al bloc de notes «%s»"
+		"No es pot moure la nota a la llibreta «%s»"
 	],
 	"Cannot move notebook to this location": [
-		"No es pot moure el bloc de notes a aquesta ubicació"
+		"No es pot moure la llibreta a aquesta ubicació"
 	],
 	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
 		"No es pot actualitzar el testimoni: manquen les dades d'autenticació. Reiniciar la sincronització pot solucionar el problema."
@@ -438,10 +540,10 @@
 		"No es pot desar %s «%s» perquè se'n passaria de l'espai total (%s) d'aquest compte"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
-		"No es pot compartir el bloc de notes xifrat amb el destinatari %sperquè no té habilitat el xifrat d'extrem a extrem. Pot fer-ho des de la finestra Configuració > Xifrat"
+		"No es pot compartir la llibreta xifrada amb el destinatari %s perquè no ha habilitat el xifratge d'extrem a extrem. Poden fer-ho des de la pantalla Configuració > Xifratge."
 	],
 	"Case sensitive": [
-		""
+		"Distingeix entre majúscules i minúscules"
 	],
 	"Change application layout": [
 		"Canvia la disposició de l'aplicació"
@@ -449,8 +551,11 @@
 	"Change language": [
 		"Canvia la llengua"
 	],
+	"Change ratio": [
+		"Relació de canvi"
+	],
 	"Change shortcut for \"%s\"": [
-		""
+		"Canvia la drecera per a «%s»"
 	],
 	"Characters": [
 		"Caràcters"
@@ -458,8 +563,11 @@
 	"Characters excluding spaces": [
 		"Caràcters excloent espais"
 	],
+	"Check": [
+		"Comprova"
+	],
 	"Check elements to display in the toolbar": [
-		""
+		"Comprova els elements a mostrar a la barra d'eines"
 	],
 	"Check for updates...": [
 		"Comprova les actualitzacions..."
@@ -472,6 +580,9 @@
 	],
 	"Checkbox list": [
 		"Llista de caselles de verificació"
+	],
+	"Checked": [
+		"Seleccionat"
 	],
 	"Checking... Please wait.": [
 		"Verificant... Espereu."
@@ -488,11 +599,14 @@
 	"Clear alarm": [
 		"Esborra l'alarma"
 	],
+	"Clear search": [
+		"Esborra la cerques"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
-		"Feu clic «%s» per a restaurar la nota. Aquesta serà copiada al bloc de notes anomenat «%s». La versió actual de la nota no serà substituïda o modificada."
+		"Feu clic a \"%s\" per restaurar la nota. Es copiarà a la llibreta anomenada \"%s\". La versió actual de la nota no serà substituïda ni modificada."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
-		""
+		"Feu clic a \"inicia\" per adjuntar una nova nota de veu a la nota."
 	],
 	"Click to add tags...": [
 		"Feu clic per a afegir etiquetes..."
@@ -500,29 +614,35 @@
 	"Client ID: %s": [
 		"ID del client: %s"
 	],
+	"close": [
+		"tanca"
+	],
 	"Close": [
 		"Tanca"
+	],
+	"Close dialog": [
+		"Tanca el diàleg"
 	],
 	"Close dropdown": [
 		"Tanca el desplegable"
 	],
 	"Close side menu": [
-		""
+		"Tanca el menú lateral"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
-		""
+		"Tanqueu l'aplicació, elimineu el vostre perfil a «%s», i torneu a iniciar l'aplicació. Assegureu-vos de crear una còpia de seguretat primer exportant totes les vostres notes com a JEX."
 	],
 	"Close Window": [
 		"Tanca la finestra"
 	],
 	"Closing session...": [
-		""
+		"S'està tancant la sessió..."
 	],
 	"Cmd-click to open": [
-		""
+		"Clic Cmd per obrir"
 	],
 	"Cmd-click to open: %s": [
-		""
+		"Clic Cmd per obrir: %s"
 	],
 	"Code": [
 		"Codi"
@@ -533,11 +653,17 @@
 	"Code View": [
 		"Vista de codi"
 	],
+	"Collaborate on a notebook with others": [
+		"Col·laborar en una llibreta amb altres"
+	],
 	"Collaborate on notebooks with others": [
 		"Col·laboreu en blocs de notes amb altres"
 	],
+	"Collapse all notebooks": [
+		"Redueix totes les llibretes"
+	],
 	"Collapsed": [
-		""
+		"Col·lapsat"
 	],
 	"Coming alarms": [
 		"Alarmes programades"
@@ -557,6 +683,18 @@
 	"Command palette...": [
 		"Paleta d'ordres..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		"Ordres: 'afegir', 'eliminar', 'llistar', 'suprimir', 'acceptar', 'deixar' i 'rebutjar'."
+	],
+	"Compact": [
+		"Compacte"
+	],
+	"Complete": [
+		"Completada"
+	],
+	"Complete to-do": [
+		"Completa la tasca pendent"
+	],
 	"Completed": [
 		"Finalitzat"
 	],
@@ -564,13 +702,13 @@
 		"El desxifratge ha finalitzat."
 	],
 	"Completed with warnings:\n%s": [
-		""
+		"Completat amb avisos:\n%s"
 	],
 	"Completed: %s (%s)": [
 		"Completat: %s (%s)"
 	],
 	"completion date": [
-		""
+		"data de finalització"
 	],
 	"Compress old changes": [
 		"Comprimeix els canvis vells"
@@ -579,7 +717,7 @@
 		"Configuració"
 	],
 	"Configures the size of scrollbars used in the app.": [
-		""
+		"Configura la mida de les barres de desplaçament utilitzades a l'aplicació."
 	],
 	"Confirm password cannot be empty": [
 		"El camp *Confirma la contrasenya* no pot ser buit"
@@ -599,14 +737,30 @@
 	"Conflicts (attachments)": [
 		"Conflictes (adjunts)"
 	],
+	"Connect to Joplin Cloud": [
+		"Connecta't a Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		"Connecteu-vos amb el vostre compte d'organització"
+	],
 	"Consolidated billing": [
-		""
+		"Facturació consolidada"
+	],
+	"Contains %d note": [
+		"Conté %d nota",
+		"Conté %d notes"
 	],
 	"Content provided by %s": [
 		"Contingut proporcionat per %s"
 	],
+	"Content provided by: %s": [
+		"Contingut proporcionat per %s"
+	],
 	"Continue": [
-		""
+		"Continua"
+	],
+	"Control character": [
+		"Caràcter de control"
 	],
 	"Convert to note": [
 		"Converteix a nota"
@@ -632,6 +786,9 @@
 	"Copy Link Address": [
 		"Copia l'adreça de l'enllaç"
 	],
+	"Copy link to website": [
+		"Copia l'enllaç al lloc web"
+	],
 	"Copy Markdown link": [
 		"Copia l'enllaç Markdown"
 	],
@@ -648,6 +805,9 @@
 	"Copy token": [
 		"Copia testimoni"
 	],
+	"Copy version info": [
+		"Copia la informació de la versió"
+	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"No s'ha pogut autoritzar l'aplicació:\n\n%s\n\nTorneu-ho a provar."
 	],
@@ -655,7 +815,7 @@
 		"No s'ha pogut connectar amb el Joplin Server. Comproveu la configuració en la pantalla de Sincronització. L'error complet és: %s"
 	],
 	"Could not connect to plugin repository.": [
-		"No s'ha pogut connectar al repositori d'extensions"
+		"No s'ha pogut connectar al repositori d'extensions."
 	],
 	"Could not export notes: %s": [
 		"No s'han pogut exportar les notes: %s"
@@ -664,7 +824,7 @@
 		"No s'ha pogut instal·lar l'extensió: %s"
 	],
 	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
-		"No s'ha pogut contestar a la invitació. Torneu-ho a provar, o comproveu amb el propietari del bloc de notes si encara l'està compartint.\n\nL'error és \"%s\""
+		"No s'ha pogut respondre a la invitació. Torneu-ho a provar o consulteu amb el propietari de la llibreta si encara la comparteix.\n\nL'error era: \"%s\""
 	],
 	"Could not switch profile: %s": [
 		"No s'ha pogut canviar el perfil: %s"
@@ -673,7 +833,7 @@
 		"No s'ha pogut actualitzar la clau mestra: %s"
 	],
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
-		"No s'ha pogut verificar l'estat de compartició d'aquest bloc de notes - s'està avortant. Torneu a provar quan tingueu connexió a Internet."
+		"No s'ha pogut verificar l'estat compartit d'aquesta llibreta: s'avorta. Torneu-ho a provar quan estigueu connectat a Internet."
 	],
 	"Could not verify your identity: %s": [
 		"No s'ha pogut verificar la identitat: %s"
@@ -682,16 +842,16 @@
 		"Crea"
 	],
 	"Create a new notebook under a parent notebook.": [
-		"Crea un bloc de notes nou sota un bloc de notes pare."
+		"Creeu una llibreta nova sota una llibreta principal."
 	],
 	"Create a notebook": [
-		"Crea un bloc de notes nou"
+		"Crear una llibreta"
 	],
 	"Create new profile...": [
 		"Crea un perfil nou..."
 	],
 	"Create notebook": [
-		"Crea un bloc de notes"
+		"Crea una llibreta"
 	],
 	"Create user": [
 		"Crea un usuari"
@@ -720,26 +880,38 @@
 	"Created: %s": [
 		"Creació: %s"
 	],
+	"Creates a new note with an attachment of type %s": [
+		"Crea una nota nova amb un fitxer adjunt de tipus %s"
+	],
 	"Creates a new note.": [
 		"Crea una nota nova."
 	],
 	"Creates a new notebook.": [
-		"Crea un bloc de notes nou."
+		"Crea una llibreta nova."
 	],
 	"Creates a new to-do.": [
-		"Crea una llista de tasques pendents."
+		"Crea una nova tasca."
+	],
+	"Creating new note...": [
+		"Creant una nota nova..."
+	],
+	"Creating new to-do...": [
+		"Creant una tasca nova..."
 	],
 	"Creating report...": [
 		"Creant informe..."
 	],
 	"Ctrl-click to open": [
-		""
+		"Ctrl-clic per obrir"
 	],
 	"Ctrl-click to open: %s": [
-		""
+		"Ctrl-clic per obrir: %s"
 	],
 	"current match": [
-		""
+		"coincidència actual"
+	],
+	"Current password": [
+		"Contrasenya actual"
 	],
 	"Current version is up-to-date.": [
 		"La versió actual està actualitzada."
@@ -760,7 +932,7 @@
 		"Certificats TLS personalitzats"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Personalitza el bàner de publicació de notes"
 	],
 	"Cut": [
 		"Retalla"
@@ -781,7 +953,7 @@
 		"dies"
 	],
 	"Decrease indent level": [
-		""
+		"Disminueix el nivell de sagnat"
 	],
 	"Decrypted items: %d": [
 		"Elements desxifrats: %d"
@@ -794,6 +966,9 @@
 	],
 	"Default": [
 		"Per defecte"
+	],
+	"Default title to use for documents created by the scanner.": [
+		""
 	],
 	"Default: %s": [
 		"Per defecte: %s"
@@ -810,6 +985,9 @@
 	"Delete expired tokens": [
 		"Suprimeix els tokens expirats"
 	],
+	"Delete history": [
+		"Elimina l'historial"
+	],
 	"Delete line": [
 		"Suprimeix la línia"
 	],
@@ -820,7 +998,7 @@
 		"Suprimeix la nota"
 	],
 	"Delete notebook": [
-		"Suprimeix el bloc de notes"
+		"Elimina la llibreta"
 	],
 	"Delete plugin \"%s\"?": [
 		"Voleu suprimir l'extensió \"%s\"?"
@@ -832,13 +1010,16 @@
 		"Suprimeix les notes seleccionades"
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
-		""
+		"Suprimir la llibreta de la safata d'entrada?\n\nSi suprimiu la llibreta de la safata d'entrada, és possible que es perdin els correus electrònics que s'hagin enviat recentment."
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
 		"Voleu suprimir aquesta invitació? El destinatari ja no tindrà accés a aquest quadern compartit."
 	],
 	"Delete this profile?": [
 		"Voleu suprimir aquestes perfil?"
+	],
+	"Deleted": [
+		"Eliminat"
 	],
 	"Deleted local items: %d.": [
 		"Elements locals suprimits: %d."
@@ -847,31 +1028,37 @@
 		"Elements remots suprimits: %d."
 	],
 	"Deletes notes permanently, skipping the trash.": [
-		""
+		"Elimina les notes permanentment, saltant-se la paperera."
 	],
 	"Deletes the given notebook.": [
-		"Suprimeix el bloc de notes indicat."
+		"Elimina la llibreta indicada."
 	],
 	"Deletes the notebook without asking for confirmation.": [
-		"Suprimeix el bloc de notes sense demanar cap confirmació."
+		"Elimina la llibreta sense demanar confirmació."
 	],
 	"Deletes the notes matching <note-pattern>.": [
-		"Suprimeix les notes que coincideixen amb <note-pattern>."
+		"Elimina les notes que coincideixen amb <note-pattern>."
 	],
 	"Deletes the notes without asking for confirmation.": [
 		"Suprimeix les notes sense demanar confirmació."
+	],
+	"Deletion log": [
+		"Registre d'eliminació"
+	],
+	"Deselect": [
+		"Deselecciona"
 	],
 	"Destination format: %s": [
 		"Format destí: %s"
 	],
 	"Detailed": [
-		""
+		"Detallat"
 	],
 	"Dev": [
-		""
+		"Dev"
 	],
 	"Device: %s": [
-		""
+		"Dispositiu: %s"
 	],
 	"Directory": [
 		"Directori"
@@ -888,14 +1075,23 @@
 	"Disable safe mode and restart": [
 		"Desactiva el mode segur i reinicia"
 	],
+	"Disable synchronisation": [
+		"Desactiva la sincronització"
+	],
 	"Disable Web Clipper Service": [
 		"Desactiva el servei del porta-retalls de webs"
 	],
 	"Disabled": [
 		"Desactivat"
 	],
+	"Disabled keys": [
+		"Tecles inhabilitades"
+	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Si desactiveu el xifratge, significa que *totes* les notes i adjunts es tornaran a sincronitzar i enviar sense xifrar a la destinació de sincronització. Voleu continuar?"
+	],
+	"Discard": [
+		"Descarta"
 	],
 	"Discard changes": [
 		"Descarta els canvis"
@@ -922,7 +1118,7 @@
 		"Mostra la nota indicada."
 	],
 	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
-		"Mostra les notes en el bloc de notes actual. Useu «ls /» per a mostrar la llista de blocs de notes."
+		"Mostra les notes a la llibreta actual. Utilitza 'ls /' per visualitzar la llista de llibretes."
 	],
 	"Displays usage information.": [
 		"Mostra la informació d'ús."
@@ -936,17 +1132,35 @@
 	"Do not ask for confirmation.": [
 		"No demanis confirmació."
 	],
+	"Do not ask for user confirmation.": [
+		"No demaneu confirmació a l'usuari."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"No perdeu les contrasenyes perquè, per motius de seguretat, és l'única forma de desxifrar les dades. Per habilitar el xifrat, introduïu la vostra contrasenya."
 	],
-	"Done": [
+	"Document scanner: Title template": [
 		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		"No permetis que el destinatari compartit escrigui a la llibreta compartida. Vàlid només per a la subordre 'add'."
+	],
+	"Don't show this message again": [
+		""
+	],
+	"Donate, website": [
+		"Dona, lloc web"
+	],
+	"Done": [
+		"Fet"
 	],
 	"Download": [
 		"Baixa"
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Descarregueu i instal·leu l'extensió adient per al vostre navegador:"
+	],
+	"Download it now": [
+		"Descarrega'l ara"
 	],
 	"Downloaded": [
 		"Descarregat"
@@ -970,10 +1184,10 @@
 		"Dràcula"
 	],
 	"Draw picture": [
-		""
+		"Dibuixa la imatge"
 	],
 	"Drawing": [
-		""
+		"Dibuix"
 	],
 	"Drop notes or files here": [
 		"Arrossega les notes o fitxers aquí"
@@ -985,7 +1199,10 @@
 		"Inicia sessió al Dropbox"
 	],
 	"Due": [
-		""
+		"Venciment"
+	],
+	"due date": [
+		"data de venciment"
 	],
 	"Duplicate": [
 		"Duplica"
@@ -997,7 +1214,10 @@
 		"Duplica les notes seleccionades"
 	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
-		"Duplica les notes que coincideixen amb <note> a [notebook]. Si no indiqueu cap bloc de notes, es dupliquen en el bloc de notes actual."
+		"Duplica les notes que coincideixen amb <note> a [notebook]. Si no indiqueu cap llibreta, es dupliquen a la llibreta actual."
+	],
+	"Duration: %s": [
+		"Durada: %s"
 	],
 	"Edit": [
 		"Edita"
@@ -1009,16 +1229,19 @@
 		"Edita la nota."
 	],
 	"Edit notebook": [
-		"Edita el bloc de notes"
+		"Edita la llibreta"
 	],
 	"Edit profile": [
 		"Edita el perfil"
 	],
 	"Edit profile configuration...": [
-		"Edita la configuració del perfil"
+		"Edita la configuració del perfil."
 	],
 	"Editor": [
 		"Editor"
+	],
+	"Editor actions": [
+		"Accions de l'editor"
 	],
 	"Editor font": [
 		"Tipus de lletra de l'editor"
@@ -1053,6 +1276,9 @@
 	"Email to Note": [
 		"De correu electrònic a nota"
 	],
+	"Email To Note, login information": [
+		"Correu electrònic a nota, informació d'inici de sessió"
+	],
 	"Emails": [
 		"Correus electrònics"
 	],
@@ -1060,7 +1286,7 @@
 		"text ressaltat"
 	],
 	"Empty trash": [
-		""
+		"Paperera buida"
 	],
 	"Enable": [
 		"Activa"
@@ -1081,7 +1307,7 @@
 		"Habilita el reproductor d'àudio"
 	],
 	"Enable biometrics authentication?": [
-		""
+		"Habilitar l'autenticació biomètrica?"
 	],
 	"Enable deflist syntax": [
 		"Activa la sintaxi deflist"
@@ -1090,16 +1316,16 @@
 		"Activa el xifratge"
 	],
 	"Enable file:// URLs for images and videos": [
-		""
+		"Activa els URL file:// per a imatges i vídeos"
 	],
 	"Enable footnotes": [
-		"Activar notes a peu de pàgina"
+		"Activa les notes a peu de pàgina"
 	],
 	"Enable Fountain syntax support": [
 		"Activa el suport de sintaxi de Fountain"
 	],
 	"Enable Linkify": [
-		"Habilita Linkify"
+		"Activa Linkify"
 	],
 	"Enable markdown emoji": [
 		"Activa els emoticons Markdown"
@@ -1117,16 +1343,25 @@
 		"Activa l'historial de notes"
 	],
 	"Enable optical character recognition (OCR)": [
-		""
+		"Activa el reconeixement òptic de caràcters (OCR)"
+	],
+	"Enable or disable plugins": [
+		"Activa o desactiva els connectors"
 	],
 	"Enable PDF viewer": [
 		"Habilita el visor de PDF"
 	],
+	"Enable plugin support": [
+		"Activa el suport del connector"
+	],
 	"Enable soft breaks": [
 		"Activa els salts de línia"
 	],
+	"Enable spell checking in Markdown editor": [
+		"Activa la correcció ortogràfica a l'editor de Markdown"
+	],
 	"Enable spellcheck in the text editor": [
-		""
+		"Activa la correcció ortogràfica a l'editor de text"
 	],
 	"Enable table of contents extension": [
 		"Activar l'extensió de l'índex"
@@ -1150,10 +1385,10 @@
 		"Activat"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
-		""
+		"Activa la continuació de la llista Markdown, les etiquetes HTML de tancament automàtic i altres autocompletaments de marcatge."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
-		""
+		"Activa la substitució del patró Markdown a l'editor de text enriquit. Per exemple, quan està activat, escriure **negreta** crea text en negreta."
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Habilitar el xifrat significa que totes les notes i adjunts es tornaran a sincronitzar i s'enviaran de forma xifrada a la destinació de sincronització."
@@ -1183,7 +1418,7 @@
 		"Xifrat d'extrem a extrem"
 	],
 	"Ends voice typing": [
-		""
+		"Finalitza l'escriptura per veu"
 	],
 	"Enter code here": [
 		"Entreu el codi aquí"
@@ -1192,10 +1427,19 @@
 		"Introduïu una contrasenya mestra:"
 	],
 	"Enter notebook title": [
-		"Entra el títol del bloc de notes"
+		"Introdueix el títol de la llibreta"
+	],
+	"Enter password": [
+		"Introdueix la contrasenya"
+	],
+	"Enter the code": [
+		"Introdueix el codi"
+	],
+	"Enter the code:": [
+		"Introdueix el codi:"
 	],
 	"Entering selection mode": [
-		""
+		"Entrant al mode de selecció"
 	],
 	"Enum": [
 		"Enumeració"
@@ -1205,6 +1449,9 @@
 	],
 	"Error opening note in editor: %s": [
 		"S'ha produït un error en l'obrir la nota amb l'editor: %s"
+	],
+	"Error starting camera: %s": [
+		"S'ha produït un error en iniciar la càmera: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Error. Comproveu que l’URL, el nom d’usuari, la contrasenya, etc. siguin correctes i que el servei a sincronitzar sigui accessible. L'error reportat ha estat:"
@@ -1221,14 +1468,23 @@
 	"Evernote Export File (as Markdown)": [
 		"Exporta com a fitxer de l'Evernote (com a Markdown)"
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Fitxers d'exportació d'Evernote (directori, com a HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Fitxers d'exportació d'Evernote (directori, com a Markdown)"
+	],
 	"Exits the application.": [
 		"Surt de l'aplicació."
 	],
 	"Expand %s": [
-		""
+		"Expandeix %s"
+	],
+	"Expand all notebooks": [
+		"Desplegar totes les llibretes"
 	],
 	"Expanded": [
-		""
+		"Expandit"
 	],
 	"Export": [
 		"Exporta"
@@ -1245,11 +1501,14 @@
 	"Export Debug Report": [
 		"Exporta l'informe de depuració"
 	],
+	"Export deletion log": [
+		"Exporta el registre de supressió"
+	],
 	"Export profile": [
 		"Exporta el perfil"
 	],
 	"Exported successfully!": [
-		""
+		"S'ha exportat correctament!"
 	],
 	"Exporting profile...": [
 		"Exportant el perfil..."
@@ -1267,7 +1526,7 @@
 		"Exporta només la nota indicada."
 	],
 	"Exports only the given notebook.": [
-		"Exporta només el bloc de notes indicat."
+		"Exporta només la llibreta indicada."
 	],
 	"Fail-safe": [
 		"A prova d'errors"
@@ -1276,7 +1535,10 @@
 		"A prova d'errors: no esborreu les dades locals quan la destinació de sincronització estigui buida (sovint és el resultat d'una configuració errònia o d'algun altre error)"
 	],
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
-		""
+		"A prova de fallades: la sincronització s'ha interromput per evitar la pèrdua de dades, perquè la destinació de sincronització està buida o danyada. Per substituir aquest comportament, desactiveu la seguretat a la configuració de sincronització."
+	],
+	"Failed to connect to your account. Please try again.": [
+		"No s'ha pogut connectar al compte. Si us plau, torneu-ho a provar."
 	],
 	"Fatal error:": [
 		"Error fatal:"
@@ -1296,14 +1558,17 @@
 	"File system": [
 		"Sistema de fitxers"
 	],
-	"Filter tags": [
-		"Filtra les etiquetes"
+	"Filter": [
+		"Filtre"
+	],
+	"Find": [
+		"Cercar"
 	],
 	"Find: ": [
 		"S'ha trobat: "
 	],
 	"Finishes recording": [
-		""
+		"Finalitza la gravació"
 	],
 	"Firefox Extension": [
 		"Extensió del Firefox"
@@ -1323,14 +1588,17 @@
 	"Focus title": [
 		"Vés al títol"
 	],
+	"Folder \"%s\" is shared with:": [
+		"La carpeta «%s» es comparteix amb:"
+	],
 	"Follow link": [
-		""
+		"Segueix l'enllaç"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Només en cas depuració: exporta el vostre perfil a una targeta SD externa."
 	],
 	"For example \"%s\"": [
-		""
+		"Per exemple «%s»"
 	],
 	"For information on how to customise the shortcuts please visit %s": [
 		"Per a obtenir informació sobre com personalitzar les dreceres de teclat, visiteu %s"
@@ -1370,7 +1638,10 @@
 		"Generant enllaços..."
 	],
 	"Geolocation, spellcheck, editor toolbar, image resize": [
-		""
+		"Geolocalització, verificació ortogràfica, barra d'eines d'editors, redimensionament de la imatge"
+	],
+	"Get a quote": [
+		"Obtenir una cita"
 	],
 	"Get it now:": [
 		"Obteniu-lo ara:"
@@ -1379,16 +1650,22 @@
 		"Obtén prellançaments quan cerqui actualitzacions"
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
-		"Obté o estableix un valor de configuració. Si no s'indica [valor], mostrarà el valor de [nom]. Si no s'indica ni [nom] ni [valor], es mostrarà un llistat amb la configuració actual."
+		"Obté o estableix un valor de configuració. Si no s'indica [value], mostrarà el valor de [name]. Si no s'indica ni [name] ni [value], es mostrarà un llistat amb la configuració actual."
+	],
+	"Glossary:": [
+		"Glossari:"
 	],
 	"go": [
-		""
+		"anar"
 	],
 	"Go back": [
-		""
+		"Anar enrere"
+	],
+	"Go to Joplin Cloud profile": [
+		"Anar al perfil de Joplin Cloud"
 	],
 	"Go to line": [
-		""
+		"Anar a la línia"
 	],
 	"Go to source URL": [
 		"Anar a URL origen"
@@ -1400,10 +1677,10 @@
 		"Autoritza"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"Heu autoritzat l'inici de sessió de l'aplicació a l'URL anterior?"
 	],
 	"Header %d": [
-		""
+		"Capçalera %d"
 	],
 	"Heading": [
 		"Capçalera"
@@ -1412,7 +1689,7 @@
 		"Ajuda"
 	],
 	"Here's what we do to make plugins safer:": [
-		""
+		"Això és el que fem per fer que els connectors siguin més segurs:"
 	],
 	"Hermes enabled: %d": [
 		"Hermes activat: %d"
@@ -1435,6 +1712,9 @@
 	"Hide keyboard": [
 		"Amaga el teclat"
 	],
+	"Hide password": [
+		"Amaga la contrasenya"
+	],
 	"Highlight": [
 		"Ressalta"
 	],
@@ -1448,7 +1728,7 @@
 		"Directori HTML"
 	],
 	"HTML document": [
-		""
+		"document HTML"
 	],
 	"HTML File": [
 		"Fitxer HTML"
@@ -1465,8 +1745,11 @@
 	"Idle": [
 		"Ociós"
 	],
-	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		"Si ja heu autoritzat, espereu que l'aplicació es sincronitzi amb Joplin Cloud."
 	],
 	"Ignore": [
 		"Ignora"
@@ -1474,29 +1757,41 @@
 	"Ignore TLS certificate errors": [
 		"Ignora els errors de certificat TLS"
 	],
+	"Ignored items that cannot be synchronised": [
+		"Elements ignorats que no es poden sincronitzar"
+	],
 	"Images": [
 		"Imatges"
 	],
 	"Import": [
 		"Importació"
 	],
+	"Import and Export": [
+		"Importació i exportació"
+	],
 	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		""
+		"Ha fallat la importació. Assegureu-vos que s'ha seleccionat un fitxer JEX.\nDetalls: %s"
 	],
 	"Import from JEX": [
-		""
+		"Importa des de JEX"
 	],
 	"Import notes from a JEX (Joplin Export) file.": [
-		""
+		"Importa notes des d'un fitxer JEX (Joplin Export)."
+	],
+	"Import or export your data": [
+		"Importar o exportar les dades"
 	],
 	"Imported successfully!": [
-		""
+		"S'ha importat correctament!"
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"S'està important el format de «%s» a «%s». Espereu..."
 	],
 	"Importing notes...": [
 		"S'estan important notes..."
+	],
+	"Importing...": [
+		"Important..."
 	],
 	"Imports data into Joplin.": [
 		"Importa les dades al Joplin."
@@ -1505,7 +1800,7 @@
 		"En el mode \"Manual\", els adjunts només es descarreguen quan hi feu clic. En l'\"Automàtic\", es descarreguen quan obriu la nota. A \"Sempre\", es descarreguen tots els adjunts, tant si obriu la nota com si no."
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
-		"En qualsevol ordre, podeu referenciar una nota o bloc de notes pel títol o l'ID, o podeu usar dreceres «$n» o «$b» per a, respectivament, la nota o el bloc de nota seleccionat. Podeu usar «$c» per a fer referència a l'element seleccionat."
+		"En qualsevol ordre, es pot fer referència a una nota o llibreta per títol o ID, o utilitzant les dreceres \"$n\" o \"$b\" per, respectivament, la nota o llibreta seleccionada actualment. '$c' es pot utilitzar per referir-se a l'element seleccionat actualment."
 	],
 	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
 		"Per tal d'associar una geolocalització a la nota, l'aplicació necessita permís per a accedir a la vostra ubicació.\n\nPodeu desactivar aquesta opció en qualsevol moment a la pantalla de configuració."
@@ -1514,7 +1809,7 @@
 		"Per a fer-ho, totes les vostres dades hauran de ser encriptades i sincronitzades, per tant és millor executar-ho durant la nit.\n\nPer a començar, seguiu aquestes instruccions:\n\n1. Sincronitzeu tots els vostres dispositius.\n2. Feu click en \"%s\".\n3. Deixeu-lo executant-se fins que acabi. Mentre s'executa, eviteu fer canvis en cap nota des dels altres dispositius per a evitar els conflictes.\n4. Un cop la sincronització està acabada en aquest dispositiu, sincronitzeu tots els altres dispositius, i deixeu-los executant-se fins que acabin.\n\nImportant: només cal executar això UNA SOLA VEGADA en un dispositiu."
 	],
 	"In order to synchronise, please upgrade your application to version %s+": [
-		""
+		"Per sincronitzar, actualitzeu la vostra aplicació a la versió %s+"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"Per a utilitzar la sincronització del sistema de fitxers, cal el vostre permís per a escriure a l'emmagatzematge extern."
@@ -1528,11 +1823,20 @@
 	"In: %s": [
 		"A: %s"
 	],
+	"Incoming shares:": [
+		"Accions entrants:"
+	],
 	"Incompatible": [
-		""
+		"Incompatible"
+	],
+	"Incomplete": [
+		"Incomplet"
+	],
+	"Incomplete to-do": [
+		"Tasca pendent incompleta"
 	],
 	"Increase indent level": [
-		""
+		"Augmenta el nivell de sagnat"
 	],
 	"Indent less": [
 		"Sagna menys"
@@ -1541,7 +1845,7 @@
 		"Sagna més"
 	],
 	"Info": [
-		""
+		"Info"
 	],
 	"Information": [
 		"Informació"
@@ -1567,6 +1871,9 @@
 	"Installed": [
 		"Instal·lat"
 	],
+	"Installed (%d):": [
+		"Instal·lat (%d):"
+	],
 	"Installing...": [
 		"S'està cancel·lant..."
 	],
@@ -1583,13 +1890,16 @@
 		"Ordre no vàlida: «%s»"
 	],
 	"Invalid format. E.g.: 48.8581372, 2.2926735": [
-		""
+		"Format no vàlid. P. ex.: 48.8581372, 2.2926735"
 	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"El valor de l'opció no és vàlid: «%s». Els valors possibles són: %s."
 	],
 	"Invalid password": [
 		"Contrasenya incorrecta"
+	],
+	"iOS version: %s": [
+		"versió iOS: %s"
 	],
 	"Italic": [
 		"Cursiva"
@@ -1606,8 +1916,11 @@
 	"Items that cannot be synchronised": [
 		"Elements que no s'han pogut sincronitzar"
 	],
+	"Items with error: %s": [
+		"Elements amb error: %s"
+	],
 	"Join us on %s": [
-		""
+		"Uniu-vos a %s"
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin pot sincronitzar les notes utilitzant diversos proveïdors. Seleccioneu-ne un de la llista inferior."
@@ -1615,8 +1928,14 @@
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Inici de sessió a Joplin Coud"
+	],
+	"Joplin Desktop": [
+		"Joplin Escriptori"
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
-		""
+		"Joplin no reconeix l'extensió %s. Obrir aquest fitxer pot ser perillós. Què t'agradaria fer?"
 	],
 	"Joplin Export Directory": [
 		"Directori d'exportació del Joplin"
@@ -1630,17 +1949,32 @@
 	"Joplin Forum": [
 		"Fòrum del Joplin"
 	],
+	"Joplin is already running.": [
+		"El Joplin ja s'està executant."
+	],
+	"Joplin Mobile": [
+		"Joplin Mòbil"
+	],
 	"Joplin Server": [
 		"Servidor del Joplin"
 	],
+	"Joplin Server Business": [
+		"Joplin Servidor d'empreses"
+	],
 	"Joplin Server email": [
 		"Correu electrònic del servidor del Joplin"
+	],
+	"Joplin Server Login": [
+		"Inici de sessió al servidor Joplin"
 	],
 	"Joplin Server password": [
 		"Contrasenya del servidor del Joplin"
 	],
 	"Joplin Server URL": [
 		"URL del servidor Joplin"
+	],
+	"Joplin SSO Authentication": [
+		"Autenticació SSO de Joplin"
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"El porta-retalls de webs del Joplin us permet desar pàgines web i captures de pantalla del navegador web al Joplin."
@@ -1653,6 +1987,9 @@
 	],
 	"Keep note history for": [
 		"Conserva l'historial de la nota durant"
+	],
+	"Keep notes in the trash for": [
+		"Conserva les notes a la paperera per"
 	],
 	"Keyboard Mode": [
 		"Mode de teclat"
@@ -1675,8 +2012,11 @@
 	"Language": [
 		"Llengua"
 	],
+	"Language, date format": [
+		"Idioma, format de data"
+	],
 	"Large": [
-		""
+		"Gran"
 	],
 	"Last error: %s": [
 		"Últim error: %s"
@@ -1685,7 +2025,7 @@
 		"Més tard"
 	],
 	"Latitude": [
-		""
+		"Latitud"
 	],
 	"Layout": [
 		"Disposició"
@@ -1693,11 +2033,17 @@
 	"Layout button sequence": [
 		"Seqüència del botó de disposició"
 	],
+	"Learn more": [
+		"Més informació"
+	],
 	"Leave it blank to download the language files from the default website": [
-		""
+		"Deixeu-lo en blanc per baixar els fitxers d'idioma del lloc web predeterminat"
+	],
+	"Leave notebook": [
+		"Deixa la llibreta"
 	],
 	"Leave notebook...": [
-		"Surt del bloc de notes"
+		"Deixa la llibreta..."
 	],
 	"Legal": [
 		"Legal"
@@ -1709,13 +2055,17 @@
 		"Clar"
 	],
 	"Like any software you install, plugins can potentially cause security issues or data loss.": [
-		""
+		"Com qualsevol programari que instal·leu, els connectors poden causar problemes de seguretat o pèrdua de dades."
 	],
 	"Lines": [
 		"Línies"
 	],
 	"Link": [
 		"Enllaç"
+	],
+	"Link created!": [
+		"Enllaç creat!",
+		"Enllaços creats!"
 	],
 	"Link description": [
 		"Descripció de l'enllaç"
@@ -1726,6 +2076,12 @@
 	],
 	"Link text": [
 		"Text de l'enllaç"
+	],
+	"Link to note...": [
+		"Enllaç a la nota..."
+	],
+	"Links": [
+		"Enllaços"
 	],
 	"List item": [
 		"Element de llista"
@@ -1745,6 +2101,12 @@
 	"Log": [
 		"Registre"
 	],
+	"Log in with your web browser": [
+		"Inicia sessió amb el teu navegador"
+	],
+	"Login to Joplin Cloud.": [
+		"Inicia sessió a Joplin Cloud."
+	],
 	"Login with Dropbox": [
 		"Inicia sessió amb Dropbox"
 	],
@@ -1755,10 +2117,10 @@
 		"Desconnecta"
 	],
 	"Logs, profiles, sync status": [
-		""
+		"Registres, perfils, estat de sincronització"
 	],
 	"Longitude": [
-		""
+		"Longitud"
 	],
 	"Make a donation": [
 		"Donatius"
@@ -1775,6 +2137,12 @@
 	"Manage profiles": [
 		"Gestiona els perfils"
 	],
+	"Manage shared notebooks": [
+		"Administrar llibretes compartides"
+	],
+	"Manage toolbar options": [
+		"Gestionar les opcions de la barra d'eines"
+	],
 	"Manage your plugins": [
 		"Gestioneu les extensions"
 	],
@@ -1789,6 +2157,12 @@
 	],
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
+	],
+	"Markdown editor": [
+		"Editor Markdown"
+	],
+	"Markdown editor: Render markup in editor": [
+		""
 	],
 	"Marks a to-do as done.": [
 		"Marca un llistat de tasques pendents com a fet."
@@ -1809,16 +2183,16 @@
 		"Contrasenya mestra:"
 	],
 	"match case": [
-		""
+		"coincidència de majúscules"
 	],
 	"Math": [
-		""
+		"Math"
 	],
 	"Max concurrent connections": [
 		"Connexions simultànies màximes"
 	],
 	"Max Item Size": [
-		""
+		"Mida màxima de l'element"
 	],
 	"Max note or attachment size": [
 		"Mida màxima de nota o adjunt"
@@ -1827,19 +2201,25 @@
 		"Mida màxima total"
 	],
 	"Media player, math, diagrams, table of contents": [
-		""
+		"Reproductor multimèdia, matemàtiques, diagrames, taula de continguts"
 	],
 	"Medium": [
-		""
+		"Mitjana"
 	],
 	"Minimise": [
-		""
+		"Minimitza"
+	],
+	"Missing camera permission": [
+		"Falta el permís de la càmera"
 	],
 	"Missing keys": [
 		"Claus que falten"
 	],
 	"Missing Master Keys": [
 		"Manquen les claus mestres"
+	],
+	"Missing permission to record audio.": [
+		"Falta permís per gravar àudio."
 	],
 	"Missing required argument: %s": [
 		"Manca un argument requerit: %s"
@@ -1860,28 +2240,38 @@
 		"Hi ha més d'un element que coincideix amb «%s». Restringiu la consulta."
 	],
 	"Most plugins have source code available for review on the plugin website.": [
-		""
+		"La majoria dels connectors tenen codi font disponible per a la seva revisió al lloc web del connector."
+	],
+	"Move %d note to notebook \"%s\"?": [
+		"Moure %d nota a la llibreta \"%s\"?",
+		"Moure %d notes a la llibreta \"%s\"?"
+	],
+	"Move down": [
+		"Mou avall"
 	],
 	"Move left": [
-		""
+		"Mou a l'esquerra"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Moure el \"%s\" de la llibreta a la paperera?\n\nTotes les notes i subllibretes d'aquesta llibreta també es mouran a la paperera."
 	],
 	"Move right": [
-		""
+		"Mou a la dreta"
 	],
 	"Move to notebook": [
-		"Mou al bloc de notes"
+		"Mou a la llibreta"
 	],
 	"Move to notebook...": [
-		"Mou al bloc de notes..."
+		"Mou a la llibreta..."
 	],
 	"Move to notebook:": [
-		"Mou al bloc de notes:"
+		"Mou a la llibreta:"
 	],
 	"Move up": [
-		""
+		"Mou amunt"
 	],
 	"Moves the given <item> to [notebook]": [
-		"Mou els elements marcats a [notebook]."
+		"Mou l'<item> donat a la [notebook]"
 	],
 	"n": [
 		"n"
@@ -1890,37 +2280,55 @@
 		"N"
 	],
 	"Never resize": [
-		""
+		"No canvieu mai la mida"
+	],
+	"New attachment": [
+		"Nou fitxer adjunt"
+	],
+	"New drawing": [
+		"Nou dibuix"
+	],
+	"New invitations": [
+		"Noves invitacions"
+	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
+		"Nou model disponible\nHi ha disponible un nou model d'escriptura per veu. Vols descarregar-lo?"
 	],
 	"New note": [
 		"Nota nova"
 	],
 	"New notebook": [
-		"Bloc de notes nou"
+		"Nova llibreta"
 	],
 	"New Notebook": [
-		"Bloc de notes nou"
+		"Nova llibreta"
 	],
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
-		"Es crearà un bloc de notes «%s» i s'hi importarà el fitxer «%s»"
+		"Es crearà una nova llibreta \"%s\" i s'hi importarà el fitxer \"%s\""
+	],
+	"New photo": [
+		"Nova foto"
+	],
+	"New profile": [
+		"Nou perfil"
 	],
 	"New sub-notebook": [
-		"Sub-bloc de notes nou"
-	],
-	"New tags:": [
-		"Etiquetes noves:"
+		"Noba subllibreta"
 	],
 	"New to-do": [
-		"Llistat de tasques pendents nou"
+		"Llistat de tasques nou"
 	],
 	"New version: %s": [
 		"Nova versió: %s"
 	],
 	"next": [
-		""
+		"següent"
+	],
+	"Next": [
+		"Següent"
 	],
 	"Next match": [
-		""
+		"Coincidència següent"
 	],
 	"Nextcloud": [
 		"Nextcloud"
@@ -1941,22 +2349,22 @@
 		"No"
 	],
 	"No active notebook.": [
-		"No hi ha cap bloc de notes actiu."
+		"No hi ha cap llibreta activa."
 	],
 	"No new invitations": [
-		""
+		"No hi ha invitacions noves"
 	],
 	"No notebook has been specified.": [
-		"No heu indicat cap bloc de notes."
+		"No s'ha especificat cap llibreta."
 	],
 	"No notebook selected.": [
-		"No heu seleccionat cap bloc de notes."
+		"No hi ha cap llibreta seleccionada."
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"No hi ha cap nota aquí. Creeu-ne una fent clic a «Nota nova»."
 	],
 	"No plugins are installed.": [
-		""
+		"No hi ha cap connector instal·lat."
 	],
 	"No resources!": [
 		"No hi ha recursos!"
@@ -1964,14 +2372,26 @@
 	"No results": [
 		"No hi ha resultats"
 	],
+	"No revision selected": [
+		"No s'ha seleccionat cap revisió"
+	],
 	"No such command: %s": [
 		"No existeix l'ordre: %s"
 	],
 	"No suggestions": [
 		"Sense suggeriments"
 	],
+	"No tab selected": [
+		"No hi ha cap pestanya seleccionada"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"No hi ha definit cap editor de text. Establiu-ne un usant \"config editor <editor-path>\""
+	],
+	"No updates available": [
+		"No hi ha actualitzacions disponibles"
+	],
+	"None": [
+		"(cap)"
 	],
 	"Nord": [
 		"Nord"
@@ -1980,7 +2400,7 @@
 		"No esteu autenticats amb %s. Proporcioneu les credencials que falten."
 	],
 	"Not checked": [
-		""
+		"No marcat"
 	],
 	"Not downloaded": [
 		"No descarregat"
@@ -2018,8 +2438,14 @@
 	"Note has been saved.": [
 		"S'ha desat la nota."
 	],
+	"Note history": [
+		"Historial de la nota"
+	],
 	"Note History": [
 		"Historial de la nota"
+	],
+	"Note history has been deleted.": [
+		"S'ha suprimit l'historial de notes."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"La nota no és un llistat de tasques pendents: «%s»"
@@ -2030,14 +2456,20 @@
 	"Note list growth factor": [
 		"Factor de creixement de la llista de notes"
 	],
+	"Note list style": [
+		"Estil de llista de notes"
+	],
 	"Note properties": [
 		"Propietats de la nota"
 	],
 	"Note title": [
 		"Títol de la nota"
 	],
+	"Note viewer": [
+		"Visor de notes"
+	],
 	"Note&book": [
-		"&Blocs de notes"
+		"Lli&breta"
 	],
 	"Note: Does not work in all desktop environments.": [
 		"Nota: no funciona en tots els entorns d'escriptori."
@@ -2046,34 +2478,43 @@
 		"Nota: quan es comparteix una nota, deixa d'estar xifrada al servidor."
 	],
 	"Notebook": [
-		"Bloc de notes"
+		"Llibreta"
 	],
 	"Notebook list growth factor": [
-		"Factor de creixement de la llista de blocs de notes"
+		"Factor de creixement de la llista de llibretes"
 	],
 	"Notebook: %s": [
-		"Blocs de notes: %s"
+		"Llibreta: %s"
+	],
+	"Notebook: %s (%s)": [
+		"Llibreta: %s (%s)"
 	],
 	"Notebooks": [
-		"Blocs de notes"
+		"Llibretes"
 	],
 	"Notebooks cannot be named \"%s\", which is a reserved title.": [
-		"Els blocs de notes no poden tenir el nom «%s», és un títol reservat."
+		"Les llibretes no es poden anomenar \"%s\", que és un títol reservat."
 	],
 	"Notes": [
-		"otes"
+		"Notes"
 	],
 	"Notes and settings are stored in: %s": [
 		"Les notes i la configuració es desen a: %s"
 	],
 	"Notes can only be created within a notebook.": [
-		"Només podeu crear notes en un bloc de notes."
+		"Les notes només es poden crear dins d'una llibreta."
+	],
+	"Notifications": [
+		"Notificacions"
 	],
 	"Numbered List": [
 		"Llista numerada"
 	],
 	"OCR: Clear cache and re-download language data files": [
-		""
+		"OCR: esborra la memòria cau i torna a descarregar fitxers de dades d'idioma"
+	],
+	"OCR: Language data URL or path": [
+		"OCR: URL o camí de dades de l'idioma"
 	],
 	"OK": [
 		"D'acord"
@@ -2085,7 +2526,7 @@
 		"A les %s.%s"
 	],
 	"on line": [
-		""
+		"en línia"
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Una de les vostres claus mestres utilitza un mètode de xifratge obsolet."
@@ -2102,6 +2543,9 @@
 	"OneDrive Login": [
 		"Inicia sessió al OneDrive"
 	],
+	"OneNote Notebook": [
+		"Llibreta del OneNote"
+	],
 	"Only one note can be printed at a time.": [
 		"Només es pot imprimir una nota alhora."
 	],
@@ -2111,20 +2555,35 @@
 	"Open %s": [
 		"Obre %s"
 	],
+	"Open in external editor": [
+		"Obre en editor extern"
+	],
 	"Open in new window": [
-		""
+		"Obre en una finestra nova"
+	],
+	"Open it": [
+		"Obre-ho"
+	],
+	"Open log": [
+		"Obre el registre"
 	],
 	"Open PDF viewer": [
 		"Obre el visor de PDF"
 	],
 	"Open primary app instance...": [
-		""
+		"Obre la instància principal de l'aplicació..."
 	],
 	"Open profile directory": [
 		"Obre carpeta de perfil"
 	],
 	"Open secondary app instance...": [
-		""
+		"Obre la instància secundària de l'aplicació..."
+	],
+	"Open settings": [
+		"Obre la configuració"
+	],
+	"Open Source": [
+		"Codi obert"
 	],
 	"Open Sync Wizard...": [
 		"Obre l'assistent de sincronització..."
@@ -2133,7 +2592,16 @@
 		"Obre..."
 	],
 	"Opening section %s": [
-		""
+		"S'està obrint la secció %s"
+	],
+	"Opens dropdown": [
+		"Obre el menú desplegable"
+	],
+	"Opens note": [
+		"Obre la nota"
+	],
+	"Opens notebook": [
+		"Obre la llibreta"
 	],
 	"Operation cancelled": [
 		"L'operació s'ha cancel·lat"
@@ -2145,7 +2613,7 @@
 		"Llista ordenada"
 	],
 	"Other applications...": [
-		"Altres aplicacions"
+		"Altres aplicacions."
 	],
 	"Output format: %s": [
 		"Format destí: %s"
@@ -2157,10 +2625,10 @@
 		"Mida de la pàgina per exportació a PDF"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"El panell \"%s\" és visible"
 	],
 	"Panel %s is hidden": [
-		""
+		"El panell %s està ocult"
 	],
 	"Password": [
 		"Contrasenya"
@@ -2178,7 +2646,7 @@
 		"Enganxa"
 	],
 	"Paste as text": [
-		""
+		"Enganxa com a text"
 	],
 	"Path:": [
 		"Camí:"
@@ -2187,10 +2655,29 @@
 		"Fitxer PDF"
 	],
 	"Per user. Minimum of 2 users.": [
-		""
+		"Per usuari. Mínim de 2 usuaris."
+	],
+	"Permanently delete note": [
+		"Esborrar la nota permanentment"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Esborrar permanentment la nota \"%s\"?"
+	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"Esborrar permanentment la llibreta \"%s\"?\n\nTotes les notes i subllibretes d'aquesta llibreta s'eliminaràn permanentment."
+	],
+	"Permanently delete this note?": [
+		"Eliminar permanentment aquesta nota?",
+		"Eliminar permanentment aquestes notes?"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"Elimina permanentment la llibreta, ometent la paperera."
 	],
 	"Permission needed": [
 		"Cal permís"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Feu clic a \"%s\" per a continuar, o definiu les contrasenyes a la llista \"%s\" inferior."
@@ -2202,22 +2689,22 @@
 		"Entreu la vostra contrasenya en la llista de claus mestres d'aquí a sota abans d'actualitzar la clau."
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
-		"Teniu en compte que si és un bloc de notes llarg, pot necessitar uns quants minuts fins que totes les notes es mostren al dispositiu del destinatari."
+		"Tingueu en compte que si es tracta d'una llibreta gran, totes les notes poden tardar uns minuts a aparèixer al dispositiu del destinatari."
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Obriu l'URL següent al navegador per a autenticar l'aplicació. L'aplicació crearà un directori a «Aplicacions/Joplin» i només llegirà i escriurà fitxers en aquest directory. No tindrà accés a cap fitxer fora d'aquest directori ni a cap dada personal. No es compartirà cap dada amb terceres parts."
 	],
 	"Please provide the recipient email": [
-		""
+		"Si us plau, proporcioneu el correu electrònic del destinatari"
 	],
 	"Please record your voice...": [
-		""
+		"Si us plau, grava la teva veu..."
 	],
 	"Please select a notebook first.": [
-		"Cal que primer seleccioneu un bloc de notes."
+		"Si us plau, seleccioneu primer una llibreta."
 	],
 	"Please select the note or notebook to be deleted first.": [
-		"Primer seleccioneu la nota o el bloc de notes que vulgueu suprimir."
+		"Seleccioneu primer la nota o la llibreta que voleu eliminar."
 	],
 	"Please select where the sync status should be exported to": [
 		"Seleccioneu on s'hauria d'exportar l'estat de la sincronització"
@@ -2226,28 +2713,46 @@
 		"Indiqueu el format d'importació per a %s"
 	],
 	"Please specify the notebook where the notes should be imported to.": [
-		"Indiqueu el bloc de notes on s'haurien d'importar les notes."
+		"Especifiqueu la llibreta on s'han d'importar les notes."
+	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"Si us plau, actualitzeu Joplin a la versió %s o posterior per utilitzar aquest connector."
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Espereu que tots els adjunts hagin estat descarregats i desxifrats. També podeu canviar a %s per a editar la nota."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		"Espereu mentre carreguem la pàgina d'inici de sessió de la vostra organització..."
+	],
 	"Please wait...": [
 		"Espereu..."
 	],
+	"Plugin message": [
+		"Missatge del connector"
+	],
+	"Plugin panels": [
+		"Panells de connectors"
+	],
 	"Plugin repository failed to load": [
-		""
+		"No s'ha pogut carregar el repositori de connectors"
+	],
+	"Plugin search": [
+		"Cerca de connectors"
+	],
+	"Plugin security": [
+		"Seguretat del connector"
 	],
 	"Plugin tools": [
 		"Eines de les extensions"
 	],
 	"Plugin WebView debugging": [
-		""
+		"Depuració del connector WebView"
 	],
 	"Plugins": [
 		"Extensions"
 	],
 	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
-		""
+		"Els connectors amplien Joplin amb funcions que no estan presents per defecte. Els connectors poden ampliar l'editor, el visor i molt més de Joplin."
 	],
 	"Portrait": [
 		"Retrat"
@@ -2257,6 +2762,9 @@
 	],
 	"Possible values: %s.": [
 		"Valors possibles: %s."
+	],
+	"Prefer JSON output.": [
+		"Prefereix la sortida JSON."
 	],
 	"Preferences": [
 		"Preferències"
@@ -2271,10 +2779,10 @@
 		"Tema clar preferit"
 	],
 	"Preferred voice typing provider": [
-		""
+		"Proveïdor preferit d'escriptura per veu"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
-		""
+		"Conserva els colors en enganxar text a l'editor de text enriquit"
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Premeu Ctrl+D o escriviu «exit» per a sortir de l'aplicació"
@@ -2289,10 +2797,13 @@
 		"Premeu per a definir la contrasenya de desxifrat."
 	],
 	"previous": [
-		""
+		"anterior"
 	],
 	"Previous match": [
-		""
+		"Coincidència anterior"
+	],
+	"Previous versions": [
+		"Versions anteriors"
 	],
 	"Previous versions of this note": [
 		"Versions prèvies d'aquesta nota"
@@ -2301,7 +2812,7 @@
 		"Imprimeix"
 	],
 	"Priority support": [
-		""
+		"Suport prioritari"
 	],
 	"Privacy Policy": [
 		"Política de privacitat"
@@ -2319,7 +2830,10 @@
 		"Processa les supressions d'usuaris"
 	],
 	"Processing": [
-		""
+		"Processament"
+	],
+	"Processing photo...": [
+		"S'està processant la foto..."
 	],
 	"Profile": [
 		"Perfil"
@@ -2343,13 +2857,16 @@
 		"Intermediari activat"
 	],
 	"Proxy timeout (seconds)": [
-		""
+		"Temps d'espera del servidor intermediari (segons)"
 	],
 	"Proxy URL": [
-		""
+		"URL del proxy"
 	],
 	"Public-private key pair:": [
 		"Parell de claus pública-privada:"
+	],
+	"Publish Note": [
+		"Publica la nota"
 	],
 	"Publish note...": [
 		"Publica la nota..."
@@ -2360,17 +2877,26 @@
 	"Publish notes to the internet": [
 		"Publica les notes a internet"
 	],
+	"Publish/unpublish": [
+		"Publica/despublica"
+	],
+	"QR Code": [
+		"Codi QR"
+	],
 	"Quit": [
 		"Surt"
 	],
 	"Re-download model": [
-		""
+		"Torna a baixar el model"
 	],
 	"Re-encrypt data": [
 		"Torna a xifrar les dades"
 	],
 	"Re-encryption": [
 		"Xifratge"
+	],
+	"Re-enter password": [
+		"Torna a introduir la contrasenya"
 	],
 	"Re-upload local data to sync target": [
 		"Torna a pujar les dades locals per a sincronitzar la destinació"
@@ -2393,8 +2919,20 @@
 	"Recipients:": [
 		"Destinataris:"
 	],
+	"Recommended": [
+		"Recomanat"
+	],
+	"Recommended plugins": [
+		"Connectors recomanats"
+	],
 	"Record audio": [
-		""
+		"Gravar àudio"
+	],
+	"Recording": [
+		"Gravant"
+	],
+	"Recording...": [
+		"Gravant..."
 	],
 	"Redo": [
 		"Refés"
@@ -2408,8 +2946,14 @@
 	"Reject": [
 		"Rebutja"
 	],
+	"Rejecting share...": [
+		"Rebutjant la compartició..."
+	],
 	"Remove": [
 		"Elimina"
+	],
+	"Remove %s from share": [
+		"Elimina %s de la compartició"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"Voleu suprimir l'etiqueta \"%s\" de totes les notes?"
@@ -2417,47 +2961,65 @@
 	"Remove this search from the sidebar?": [
 		"Voleu suprimir aquesta cerca de la barra lateral?"
 	],
+	"Removed %s from share.": [
+		"S'ha eliminat %s de la compartició."
+	],
 	"Rename": [
 		"Canvia el nom"
 	],
 	"Rename notebook:": [
-		"Canvia el nom del bloc de notes:"
+		"Canvia el nom de la llibreta:"
 	],
 	"Rename tag:": [
 		"Canvia el nom de l'etiqueta:"
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
-		"Canvia el nom de la nota o bloc de notes indicat de <item> a <name>."
+		"Canvia el nom de la nota o de la llibreta indicat de <item> a <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Renova el testimoni"
 	],
+	"replace": [
+		"reemplaça"
+	],
 	"Replace": [
-		""
+		"Reemplaça"
+	],
+	"replace all": [
+		"reemplaça-ho tot"
 	],
 	"Replace all": [
 		"Reemplaça-ho tot"
 	],
 	"Replace with...": [
-		""
+		"Reemplaça per..."
 	],
 	"Replace: ": [
-		""
+		"Reemplaça: "
 	],
 	"replaced $ matches": [
-		""
+		"s'han reemplaçat $ coincidències"
 	],
 	"replaced match on line $": [
-		""
+		"coincidència substituïda a la línia $"
 	],
 	"Report an issue": [
-		""
+		"Informa d'un problema"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"Informa de qualsevol problema relacionat amb el connector."
 	],
 	"Report fraudulent plugin": [
-		""
+		"Informeu d'un connector fraudulent"
+	],
+	"Report system": [
+		"Sistema d'informes"
+	],
+	"Reports": [
+		"Informes"
 	],
 	"Reset application layout": [
 		"Reinicialitza la disposició de l'aplicació"
@@ -2465,11 +3027,17 @@
 	"Reset master password": [
 		"Torna a definir la contrasenya mestra"
 	],
+	"Resize large images:": [
+		"Canvia la mida de les imatges grans:"
+	],
 	"Resources: %d.": [
 		"Recursos: %d."
 	],
 	"Restart and upgrade": [
 		"Reinicia i actualitza"
+	],
+	"Restart in safe mode": [
+		"Reinicia en mode segur"
 	],
 	"Restart now": [
 		"Reinicia ara"
@@ -2477,11 +3045,26 @@
 	"Restore": [
 		"Restaurar"
 	],
+	"Restore defaults": [
+		"Restaurar els valors predeterminats"
+	],
+	"Restore note": [
+		"Restaura la nota"
+	],
+	"Restore notebook": [
+		"Restaura la llibreta"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Restaura els elements que coincideixin amb <pattern> des de la paperera."
+	],
+	"Restored items": [
+		"Elements restaurats"
+	],
 	"Restored Notes": [
 		"Notes restaurades"
 	],
 	"Results (%d):": [
-		""
+		"Resultats (%d):"
 	],
 	"Retry": [
 		"Torna a provar"
@@ -2498,14 +3081,17 @@
 	"Reverses the sorting order.": [
 		"Inverteix el criteri d'ordenació."
 	],
+	"Revision:": [
+		"Revisió:"
+	],
 	"Revision: %s (%s)": [
 		"Revisió: %s (%s)"
 	],
 	"Rich Text": [
-		""
+		"Text enriquit"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
-		""
+		"Editor de text enriquit. Premeu Esc i després Tab per a escapar del focus."
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Executa les ordres contingudes al fitxer de text. Hi ha d'haver una ordre per línia."
@@ -2546,14 +3132,17 @@
 	"Save changes": [
 		"Desa els canvis"
 	],
+	"Save changes?": [
+		"Vols desar els canvis?"
+	],
 	"Save geo-location with notes": [
 		"Desa la geolocalització a les notes"
 	],
 	"Scanned code": [
-		""
+		"Codi escanejat"
 	],
 	"Scrollbar size": [
-		""
+		"Mida de la barra de desplaçament"
 	],
 	"Search": [
 		"Cerca"
@@ -2564,11 +3153,20 @@
 	"Search for...": [
 		"Cerca per..."
 	],
+	"Search hidden": [
+		"Cerca oculta"
+	],
 	"Search in all the notes": [
 		"Cerca a totes les notes"
 	],
 	"Search in current note": [
 		"Cerca en la nota actual"
+	],
+	"Search results": [
+		"Resultats de la recerca"
+	],
+	"Search shown": [
+		"Cerca mostrada"
 	],
 	"Search...": [
 		"Cerca..."
@@ -2579,11 +3177,17 @@
 	"Searches for the given <pattern> in all the notes.": [
 		"Cerca el patró <pattern> en totes les notes."
 	],
+	"See changelog": [
+		"Veure registre de canvis"
+	],
 	"See the pre-release page for more details: %s": [
 		"Consulta la pàgina de prellançament per a més detalls: %s"
 	],
 	"Select": [
 		"Selecciona"
+	],
+	"Select a revision...": [
+		"Selecciona una revisió..."
 	],
 	"Select all": [
 		"Seleccioneu tot"
@@ -2595,7 +3199,19 @@
 		"Selecciona un fitxer..."
 	],
 	"Select parent notebook": [
-		"Selecciona el bloc de notes pare"
+		"Selecciona la llibreta principal"
+	],
+	"Selection deleted": [
+		"Selecció eliminada"
+	],
+	"Selects a notebook": [
+		"Selecciona una llibreta"
+	],
+	"Self-hosted": [
+		"Autohostatjat"
+	],
+	"Send bug report": [
+		"Enviar informe d'error"
 	],
 	"Server is already running on port %d": [
 		"El servidor ja està corrent en el port %d"
@@ -2619,16 +3235,22 @@
 		"Establiu la contrasenya"
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
-		"Estableix la propietat <name> de la <note> indicada al [valor] donat. Les propietats possibles són:\n\n%s"
+		"Estableix la propietat <name> de la <note> indicada al [value] donat. Les propietats possibles són:\n\n%s"
 	],
 	"Settings": [
-		""
+		"Configuració"
 	],
 	"Share": [
 		"Comparteix"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
-		""
+		"Comparteix una còpia de totes les notes en un format de fitxer que Joplin pot importar en un ordinador."
+	],
+	"Share a notebook with others": [
+		"Compartir una llibreta amb altres"
+	],
+	"Share from %s (%s)": [
+		"Comparteix des de %s (%s)"
 	],
 	"Share Notebook": [
 		"Comparteix el quadern de notes"
@@ -2637,10 +3259,19 @@
 		"Comparteix el quadern de notes..."
 	],
 	"Share permissions": [
-		""
+		"Comparteix els permisos"
+	],
+	"Shared": [
+		"Compartit"
+	],
+	"Shares": [
+		"Comparticions"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		"Comparteix o deixa de compartir la [notebook] especificada amb [user]. Requereix Joplin Cloud o Joplin Server."
 	],
 	"Sharing notebook...": [
-		"S'està compartint el bloc de notes."
+		"S'està compartint llibreta..."
 	],
 	"Shortcuts are not available in CLI mode.": [
 		"Les dreceres no són disponibles en el mode de línia d'ordres."
@@ -2663,8 +3294,17 @@
 	"Show disabled keys": [
 		"Mostra les claus deshabilitades"
 	],
+	"Show monospace fonts only.": [
+		"Mostra només els tipus de lletra monoespai."
+	],
 	"Show note counts": [
 		"Mostra el nombre de notes"
+	],
+	"Show notebook options": [
+		"Mostra les opcions de la llibreta"
+	],
+	"Show password": [
+		"Mostra la contrasenya"
 	],
 	"Show sort order buttons": [
 		"Mostra els botons de canviar l'ordenació"
@@ -2673,16 +3313,25 @@
 		"Mostra la icona a la safata"
 	],
 	"Show/hide the sidebar": [
-		""
+		"Mostra/oculta la barra lateral"
+	],
+	"Shows notes for tag": [
+		"Mostra notes per a l'etiqueta"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Redueix les imatges grans abans d'afegir-les a les notes."
+	],
+	"Side menu closed": [
+		"Menú lateral tancat"
 	],
 	"Side menu opened": [
-		""
+		"Menú lateral obert"
 	],
 	"Sidebar": [
 		"Barra lateral"
+	],
+	"Sign up to Joplin Cloud": [
+		"Registra't a Joplin Cloud"
 	],
 	"Size": [
 		"Mida"
@@ -2697,7 +3346,7 @@
 		"Omeses: %d."
 	],
 	"Small": [
-		""
+		"Petit"
 	],
 	"Solarised Dark": [
 		"Solaritzat fosc"
@@ -2706,10 +3355,10 @@
 		"Solaritzat clar"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
-		""
+		"Alguns fitxers adjunts no s'han pogut descarregar. Si us plau, intenteu descarregar-los de nou."
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
-		""
+		"Alguns fitxers adjunts s'han de descarregar. Configureu el mode de descàrrega de fitxers adjunts a \"sempre\" i torneu-ho a provar."
 	],
 	"Some items cannot be decrypted.": [
 		"Alguns elements no s'han pogut desxifrar."
@@ -2720,11 +3369,14 @@
 	"Some items cannot be synchronised. Press for more info.": [
 		"Alguns elements no es poden sincronitzar. Premeu per a més informació."
 	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Alguns elements no s'han pogut sincronitzar. Si us plau, intenteu sincronitzar-los primer."
+	],
 	"Sort \"%s\" in ascending order": [
-		""
+		"Ordena «%s» en ordre ascendent"
 	],
 	"Sort \"%s\" in descending order": [
-		""
+		"Ordena «%s» en ordre descendent"
 	],
 	"Sort notebooks by": [
 		"Ordena els blocs de notes per"
@@ -2741,6 +3393,9 @@
 	"Source": [
 		"Font"
 	],
+	"Source code available": [
+		"Codi font disponible"
+	],
 	"Source format: %s": [
 		"Format d'origen: %s"
 	],
@@ -2748,7 +3403,7 @@
 		"Font: "
 	],
 	"Spacer": [
-		""
+		"Espaiador"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Especifiqueu el port que hauria de fer servir el servidor API. Si no s’estableix, s’utilitzarà un valor per defecte."
@@ -2763,7 +3418,7 @@
 		"Inicieu l'aplicació minimitzada a la icona de la safata"
 	],
 	"Start recording": [
-		""
+		"Comença a gravar"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Arrenca, atura o verifica el servidor API. Per a especificar a quin port ha de córrer, estableix la variable api.port. Les ordres són (%s)."
@@ -2811,7 +3466,7 @@
 		"Atura l'edició externa"
 	],
 	"Storage space": [
-		""
+		"Espai d'emmagatzematge"
 	],
 	"Strikethrough": [
 		"Ratllat"
@@ -2825,8 +3480,14 @@
 	"Subscript": [
 		"Subíndex"
 	],
+	"Success": [
+		"Èxit"
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Èxit! Sembla que la configuració de sincronització és correcta."
+	],
+	"Suggestions": [
+		"Suggeriments"
 	],
 	"Superscript": [
 		"Superíndex"
@@ -2844,22 +3505,34 @@
 		"Canvia el perfil"
 	],
 	"Switch to back-facing camera": [
-		""
+		"Canvia a la càmera posterior"
+	],
+	"Switch to front-facing camera": [
+		"Canvia a la càmera frontal"
 	],
 	"Switch to note type": [
-		"Canvia el tipus a nota"
+		"Canvia al tipus de nota"
 	],
 	"Switch to profile %d": [
 		"Canvia al perfil %d"
+	],
+	"Switch to the %s Editor": [
+		"Canviar a l'editor de %s"
+	],
+	"Switch to the legacy editor": [
+		"Canvia a l'editor heretat"
+	],
+	"Switch to the new editor": [
+		"Canvia al nou editor"
 	],
 	"Switch to to-do type": [
 		"Canvia el tipos a tasques pendents"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
-		"Canvia a [notebook] - totes les operacions posteriors s'aplicaran en aquest bloc de notes."
+		"Canvia a [notebook] - totes les operacions posteriors s'aplicaran en aquesta llibreta."
 	],
 	"Sync as many devices as you want": [
-		""
+		"Sincronitza tants dispositius com vulguis"
 	],
 	"Sync Status": [
 		"Estat de sincronització"
@@ -2881,6 +3554,9 @@
 	],
 	"Sync your notes": [
 		"Sincronitzeu les notes"
+	],
+	"Sync, encryption, proxy": [
+		"Sincronització, xifratge, proxy"
 	],
 	"Synchronisation": [
 		"Sincronització"
@@ -2916,16 +3592,13 @@
 		"S'està sincronitzant..."
 	],
 	"Tab indents": [
-		""
+		"Sagnats de tabulació"
 	],
 	"Tab moves focus": [
-		""
+		"El tab mou el focus"
 	],
 	"Tabloid": [
 		"Tabloide"
-	],
-	"tag1, tag2, ...": [
-		"etiqueta1, etiqueta2, ..."
 	],
 	"Tagged: %d.": [
 		"Etiquetats: %d."
@@ -2937,7 +3610,7 @@
 		"Fes una foto"
 	],
 	"Task \"%s\" failed with error: %s": [
-		""
+		"La tasca \"%s\" ha fallat amb l'error: %s"
 	],
 	"Task list": [
 		"Llista de tasques"
@@ -2946,19 +3619,19 @@
 		"Tasques"
 	],
 	"Teams": [
-		""
+		"Equips"
+	],
+	"Text document": [
+		"Document de text"
 	],
 	"Text editor command": [
 		"Ordre de l'editor de text"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
-		""
+		"El perfil actiu no es pot esborrar. Canvia a un perfil diferent i torna-ho a provar."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"L'aplicació es tancarà ara. Si us plau, torneu-la a executar per a completar el procés."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"L'aplicació no s'ha tancat correctament. Voleu iniciar en mode segur?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"L'aplicació ha estat autoritzada - podeu tancar aquesta pestanya del navegador."
@@ -2988,13 +3661,17 @@
 		"El mètode de xifratge per defecte s'ha canviat, hauríeu de tornar a xifrar les vostres dades."
 	],
 	"The default profile cannot be deleted": [
-		""
+		"El perfil per defecte no es pot esborrar"
 	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
 		"L'ordre de l'editor (que pot incloure arguments) que s'usarà per a obrir una nota. Si no se'n proporciona cap, es detectarà automàticament l'editor predeterminat."
 	],
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"La propietat factor defineix com l’element creixerà o es reduirà per a ajustar-se a l’espai disponible al seu contenidor respecte als altres elements. Per tant, un element amb un factor de 2 ocuparà el doble d’espai que un element amb un factor d'1. Reinicieu l’aplicació per a veure els canvis."
+	],
+	"The following attachment matches your search query:": [
+		"L'adjunt següent coincideix amb la vostra consulta de cerca:",
+		"Els adjunts següents coincideixen amb la vostra consulta de cerca:"
 	],
 	"The following attachments are being watched for changes:": [
 		"S'estan vigilant els següents adjunts per si hi ha canvis:"
@@ -3003,13 +3680,16 @@
 		"Les següents claus utilitzen un algorisme de xifrat obsolet i és recomanable actualitzar-les. La clau actualitzada podrà xifrar i desxifrar les dades com és habitual."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		""
+		"És possible que els connectors següents no admetin l'editor de markdown actual:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"L'equip de Joplin ha comprovat aquesta extensió i compleix els nostres estàndards de seguretat i rendiment."
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Les claus amb aquests ID s'utilitzen per a xifrar alguns elements. Tot i això, l'aplicació no hi té accés. És probable que es baixen en algun moment via sincronització."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		"Sembla que l'editor Markdown antic ha fallat a causa d'una incompatibilitat amb un connector. Recomanem utilitzar el nou editor."
 	],
 	"The master key has been upgraded successfully!": [
 		"La clau mestra s'ha actualitzat amb èxit!"
@@ -3018,10 +3698,17 @@
 		"Les claus mestres amb aquests ID s'usen per a xifrar alguns dels elements. Tot i això l'aplicació actualment no hi té accés. Probablement es baixaran via sincronització."
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
-		"La nota «%s» s'ha restaurat amb èxit en el bloc de notes «%s»."
+		"La nota \"%s\" s'ha restaurat correctament a la llibreta \"%s\"."
+	],
+	"The note was successfully moved to the trash.": [
+		"La nota s'ha traslladat amb èxit a la paperera.",
+		"Les notes s'han traslladat amb èxit a la paperera."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"La llibreta i el seu contingut s'han mogut amb èxit a la paperera."
 	],
 	"The notebook could not be saved: %s": [
-		"No s'ha pogut desar el bloc de notes: %s"
+		"No s'ha pogut desar la llibreta: %s"
 	],
 	"The notes have been imported: %s": [
 		"Notes s'han importat: %s"
@@ -3033,13 +3720,16 @@
 		"El destinatari no s'ha pogut eliminar de la llista. Torneu-ho a provar.\n\nL'error era \"%s\""
 	],
 	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
-		""
+		"La destinació de sincronització no es pot canviar per la següent raó: %s\n\nSi el problema no es pot resoldre, és possible que primer hagi de netejar les seves dades seguint aquestes instruccions:\n\n%s"
 	],
 	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
 		"Cal actualitzar l'objectiu de sincronització abans que Joplin pugui sincronitzar. L'operació pot trigar uns minuts a completar-se i cal reiniciar l'aplicació. Per a continuar, feu clic a l'enllaç."
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
 		"La destinació de sincronització s'ha d'actualitzar. Premeu aquest bàner per procedir."
+	],
+	"The synchronisation password is missing.": [
+		"Falta la contrasenya de sincronització."
 	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"L'etiqueta \"%s\" ja existeix. Escolliu un nom diferent."
@@ -3048,40 +3738,49 @@
 		"L'objectiu on se sincronitzarà. Cada objectiu pot tenir paràmetres addicionals que s'anomenen «sync.NUM.NAME» (tots documentats a sota)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		""
+		"El client web no admet l'acceptació de llibretes compartides xifrades. Canvieu a l'aplicació per a ordinadors o mòbil abans d'acceptar la compartició.\n\nError: \"%s\""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"El porta-retalls web necessita autorització per a accedir a les vostres dades."
 	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
+		"El servei web clipper no es pot habilitar en en aquesta instància de Joplin."
+	],
 	"The web clipper service is enabled and set to auto-start.": [
-		"El servei de porta-retalls de webs és actiu i configurat per a iniciar-se automàticament."
+		"El servei web clipper està habilitat i configurat per a l'inici automàtic."
 	],
 	"The web clipper service is not enabled.": [
-		"El servei del porta-retalls de webs no està activat."
+		"El servei web clipper no està habilitat."
 	],
 	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
-		""
+		"La implementació de WebDAV de %s és incompatible amb Joplin, i com a tal ja no és compatible. Utilitzeu un mètode de sincronització diferent."
 	],
 	"Theme": [
 		"Tema"
 	],
+	"Themes, editor font": [
+		"Temes, tipus de lletra de l'editor"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Ara mateix no hi ha cap nota. Creeu-ne una fent clic en el botó (+)."
 	],
+	"There are no notes in the trash folder.": [
+		"No hi ha notes a la carpeta de la paperera."
+	],
 	"There are unsaved changes.": [
-		""
+		"Hi ha canvis sense desar."
 	],
 	"There is no data to export.": [
 		"No hi ha dades per a exportar."
 	],
 	"There was a [conflict](%s) on the attachment below.\n\n%s": [
-		"Hi ha hagut un [conflicte](%s) en aquest l'adjunt.\n\n%s"
+		"Hi ha hagut un [conflict](%s) en aquest l'adjunt.\n\n%s"
 	],
 	"There was an error downloading this attachment:": [
 		"Hi ha hagut un error en baixar aquest adjunt:"
 	],
 	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
-		""
+		"Aquests elements no s'han pogut sincronitzar, però s'han marcat com a \"ignorats\". No faran que aparegui l'avís de sincronització, però encara no se sincronitzen. Per no ignorar, feu clic a \"torna a intentar-ho\"."
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Aquests elements es mantindran al dispositiu, però no es pujaran a la destinació de sincronització. Per a poder trobar aquests elements, podeu cercar pel títol o la ID (que es mostra entre claudàtors a sobre)."
@@ -3090,10 +3789,10 @@
 		"Aquestes extensions milloren el renderitzador de Markdown amb funcions addicionals. Tingueu en compte que, tot i que aquestes funcions poden ser útils, no són Markdown estàndard i, per tant, la majoria només funcionaran dins de Joplin. A més, alguneas d’ells són *incompatibles* amb l’editor WYSIWYG. Si obriu una nota que utilitza un d'aquestes extensions en aquest editor, perdreu el format de l'extensió. A continuació s’indica quines extensions són compatibles o no amb l’editor WYSIWYG."
 	],
 	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
-		""
+		"Això permet que un altre usuari comparteixi una llibreta amb vosaltres i tots dos hi podeu col·laborar. No obstant això, no us permet compartir una llibreta amb algú altre, tret que tingueu la funció \"%s\"."
 	],
 	"This attachment does not have OCR data (Status: %s)": [
-		""
+		"Aquest adjunt no té dades OCR (estat: %s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Aquest adjunt no ha estat descarregat o desxifrat encara"
@@ -3102,6 +3801,15 @@
 		"Aquest testimoni d'autorització només és necessari per a permetre l'accés d'aplicacions de tercers al Joplin."
 	],
 	"This drawing may have unsaved changes.": [
+		"Aquest dibuix pot tenir canvis sense desar."
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
 		""
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
@@ -3131,8 +3839,11 @@
 	"This note has no history": [
 		"Aquesta nota no té historial"
 	],
-	"This plugin doesn't support %s.": [
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		""
+	],
+	"This plugin doesn't support %s.": [
+		"Aquest connector no admet %s."
 	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Aquest editor de text enriquit té una sèrie de limitacions i es recomana ser conscient d'elles abans d'utilitzar-lo."
@@ -3141,7 +3852,7 @@
 		"Aquest servei permet que l'extensió del navegador pugui comunicar-se amb el Joplin. En activar-la, el tallafoc us podria demanar  de donar permís al Joplin per a escoltar un port determinat."
 	],
 	"This subfolder of the trash has no notes.": [
-		""
+		"Aquesta subcarpeta de la paperera no té notes."
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Això permetrà que Joplin s’executi en segon pla. Es recomana habilitar aquesta configuració perquè les notes se sincronitzin constantment, reduint així el nombre de conflictes."
@@ -3150,10 +3861,10 @@
 		"Això obrirà una nova pantalla. Voleu desar els canvis actuals?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"Això eliminarà permanentment tots els elements de la paperera. Voleu continuar?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
-		"Això eliminarà el bloc de notes de la vostra col·lecció i no hi tindreu accés al contingut. Voleu continuar?"
+		"Això suprimirà la llibreta de la col·lecció i ja no tindreu accés al seu contingut. Vols continuar?"
 	],
 	"Time format": [
 		"Format horari"
@@ -3167,8 +3878,17 @@
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Per a permetre que el Joplin sincronitzi amb el Dropbox, seguiu les passes següents:"
 	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Per permetre que Joplin se sincronitzi amb Joplin Cloud, inicieu sessió amb aquest URL:"
+	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Per permetre que Joplin es sincronitzi amb el vostre compte, seguiu aquests passos:"
+	],
 	"To continue, please enter your master password below.": [
 		"Per a continuar, introduïu la contrasenya mestra."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Per a suprimir una etiqueta, traieu l'etiqueta en les notes associades."
@@ -3195,7 +3915,7 @@
 		"Per a reintentar el desxifratge d'aquests elements. Executa \"e2ee decrypt --retry-failed-items\""
 	],
 	"To switch the profile, the app is going to close and you will need to restart it.": [
-		""
+		"Per canviar de perfil, l'app es tancarà i hauràs de reiniciar-la."
 	],
 	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
 		"Per a funcionar correctament, l'aplicació requereix els permisos següents. Habiliteu-los a la configuració del telèfon a Aplicacions > Joplin > Permisos"
@@ -3203,8 +3923,14 @@
 	"to-do": [
 		"tasques pendents"
 	],
+	"To-do": [
+		"Tasques"
+	],
 	"to-do: %s": [
 		"tasques pendents: %s"
+	],
+	"Toggle all notebooks": [
+		"Mostra o amaga totes les llibretes"
 	],
 	"Toggle comment": [
 		"Mostra o amaga el comentari"
@@ -3215,17 +3941,32 @@
 	"Toggle editor layout": [
 		"Canvia disposició de l'editor"
 	],
+	"Toggle editor plugin": [
+		"Commuta el connector de l'editor"
+	],
+	"Toggle editor tab key navigation": [
+		"Commuta la navegació per la tecla tab de l'editor"
+	],
 	"Toggle editors": [
 		"Canvia disposició de l'editor"
 	],
 	"Toggle external editing": [
 		"Activa/desactiva l'edició externa"
 	],
+	"Toggle menu bar": [
+		"Commuta la barra de menús"
+	],
+	"Toggle note history, keep notes for": [
+		"Commuta l'historial de notes, conserva les notes per"
+	],
 	"Toggle note list": [
 		"Mostra o amaga llista de notes"
 	],
 	"Toggle own sort order": [
 		"Canvia l'ordenació"
+	],
+	"Toggle plugin editor": [
+		"Commuta l'editor de connectors"
 	],
 	"Toggle safe mode": [
 		"Activa/desactiva el mode segur"
@@ -3239,6 +3980,9 @@
 	"Token has been copied to the clipboard!": [
 		"El testimoni s'ha copiat al porta-retalls!"
 	],
+	"Toolbar": [
+		"Barra d’eines"
+	],
 	"Tools": [
 		"Eines"
 	],
@@ -3249,7 +3993,7 @@
 		"Total: %d/%d"
 	],
 	"Trash": [
-		""
+		"Paperera"
 	],
 	"Try again": [
 		"Intenta-ho de nou"
@@ -3258,28 +4002,28 @@
 		"Proveu-ho ara"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
-		"Escriviu «help [ordre]» per a més informació sobre l'ordre; o escriviu «help all» per a la informació d'ús completa."
+		"Escriviu «help [command]» per a més informació sobre l'ordre; o escriviu «help all» per a la informació d'ús completa."
 	],
 	"Type `joplin help` for usage information.": [
 		"Escriviu «joplin help» per a obtenir informació d'ús."
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
-		"Escriviu un títol de nota o part del seu contingut per a saltar a la nota. O escriviu # seguit d'un nom d'etiqueta, o @ seguit d'un nom de bloc de notes. O escriviu \":\" per a cercar entre les ordres."
+		"Escriviu el títol d'una nota o part del seu contingut per saltar-hi. O bé escriviu # seguit d'un nom d'etiqueta o @ seguit d'un nom de llibreta. O escriviu : per cercar ordres."
 	],
-	"Type new tags or select from list": [
-		"Escriviu etiquetes noves o seleccioneu-ne de la llista"
+	"Type a note title to search for it.": [
+		"Escriviu un títol de nota per cercar-lo."
 	],
 	"Type: %s.": [
 		"Tipus: %s."
 	],
 	"Unable to edit resource of type %s": [
-		""
+		"No s'ha pogut editar el recurs del tipus %s"
 	],
 	"Unable to share log data. Reason: %s": [
-		""
+		"No s'han pogut compartir les dades del registre. Motiu: %s"
 	],
 	"Unchecked": [
-		""
+		"Desmarcat"
 	],
 	"Uncompleted to-dos on top": [
 		"Les tasques pendents sense finalitzar a la part superior"
@@ -3288,10 +4032,13 @@
 		"Desfés"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		""
+		"Desinstal·la i reinstal·la l'aplicació. Assegureu-vos de crear una còpia de seguretat primer exportant totes les vostres notes com a JEX des de l'aplicació d'escriptori."
 	],
 	"Unknown": [
 		"Desconegut"
+	],
+	"Unknown file type": [
+		"Tipus de fitxer desconegut"
 	],
 	"Unknown flag: %s": [
 		"Bandera desconeguda: %s"
@@ -3299,8 +4046,17 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"S'ha baixat un tipus d'ítem desconegut. Si us plau, actualitzeu Joplin a la darrera versió"
 	],
+	"Unknown platform": [
+		"Plataforma desconeguda"
+	],
 	"Unordered list": [
 		"Llista no ordenada"
+	],
+	"Unpublish": [
+		"Despublica"
+	],
+	"Unpublish \"%s\"": [
+		"Despublica \"%s\""
 	],
 	"Unpublish note": [
 		"Deixa de publicar la nota"
@@ -3308,8 +4064,11 @@
 	"Unshare": [
 		"Deixa de compartir"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		"Deixar de compartir la llibreta \"%s\"? Això pot fer que altres usuaris perdin l'accés a la llibreta."
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
-		"Voleu deixar de compartir aquest bloc de notes? Els destinataris ja no tindran accés al seu contingut."
+		"Vols deixar de compartir aquesta llibreta? Els destinataris ja no tindran accés al seu contingut."
 	],
 	"Unsupported image type: %s": [
 		"Tipus d'imatge no admesa: %s"
@@ -3317,11 +4076,20 @@
 	"Unsupported link or message: %s": [
 		"Missatge o enllaç no suportat: %s"
 	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"Missatge o enllaç no suportat: %s"
+	],
 	"Untitled": [
 		"Sense títol"
 	],
 	"Update": [
 		"Actualització"
+	],
+	"Update available": [
+		"Actualització disponible"
+	],
+	"Update later": [
+		"Actualitzar més tard"
 	],
 	"Update profile": [
 		"Actualitza el perfil"
@@ -3366,7 +4134,7 @@
 		"Ús: %s"
 	],
 	"Use biometrics to secure access to the app": [
-		""
+		"Utilitza la biometria per protegir l'accés a l'aplicació"
 	],
 	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
 		"Usa el format de llista llarga. El format és ID, NRE_NOTES (per a blocs de notes), DATA, TASQUES_MARCADES (per a llistats de tasques pendents), TÍTOL"
@@ -3380,11 +4148,14 @@
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
 		"Utilitzeu les fletxes per a moure els elements de la disposició. Premeu «Escapa» per a sortir."
 	],
+	"Use the legacy Markdown editor": [
+		"Utilitza l'editor de Markdown heretat"
+	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
 		"Utilitzeu això per a reconstruir l'índex de cerca si hi ha un problema amb la cerca. Pot trigar molt en funció del nombre de notes."
 	],
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
-		""
+		"Utilitza la teva biometria per assegurar l'accés a la teva aplicació. Sempre podeu configurar-lo més tard a Configuració."
 	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
 		"S'utilitza per a la majoria de text a l'editor Markdown. Si no es troba, s'utilitza un tipus de lletra genèric proporcional (amplada variable)."
@@ -3402,13 +4173,13 @@
 		"Vàlid"
 	],
 	"Verify your identity": [
-		""
+		"Verifica la teva identitat"
 	],
 	"View": [
-		"Vista"
+		"Veure"
 	],
 	"View OCR text": [
-		""
+		"Mostra el text OCR"
 	],
 	"View on map": [
 		"Mostra-ho al mapa"
@@ -3419,20 +4190,35 @@
 	"Viewer": [
 		"Visor"
 	],
+	"Viewer and Rich Text Editor font family": [
+		"Família de tipus de lletra del visor i editor de text enriquit"
+	],
+	"Viewer font size": [
+		"Mida del tipus de lletra del visualitzador"
+	],
 	"Vim": [
 		"Vim"
 	],
 	"Voice recorder": [
-		""
+		"Gravadora de veu"
 	],
 	"Voice typing language files (URL)": [
-		""
+		"Fitxers d'idioma d'escriptura per veu (URL)"
 	],
 	"Voice typing...": [
-		""
+		"Escriptura per veu..."
+	],
+	"Voice typing: Glossary": [
+		"Escriptura per veu: Glossari"
 	],
 	"Vosk": [
-		""
+		"Vosk"
+	],
+	"Waiting for authorisation...": [
+		"S'està esperant autorització..."
+	],
+	"Waiting: Notebook %s from %s": [
+		"Esperant: Llibreta %s de %s"
 	],
 	"Warning": [
 		"Avís"
@@ -3441,10 +4227,10 @@
 		"Avís: no es mostren tots els recursos per motius de rendiment (límit:% s)."
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"Tenim un sistema per informar i eliminar plugins problemàtics."
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"Marquem els connectors desenvolupats pels membres de la comunitat Joplin de confiança com a \"recomanats\"."
 	],
 	"Web Clipper": [
 		"Desa-retalls de webs"
@@ -3465,28 +4251,34 @@
 		"Lloc web i documentació"
 	],
 	"WebView package: %s": [
-		""
+		"Paquet WebView: %s"
+	],
+	"WebView version: %s": [
+		"Versió WebView: %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
-		"Us donem la benvinguda al Joplin!\n\nEscriviu «:help shortcuts» per a llistar les dreceres de teclat, o simplement «:help» per a informació d'ús.\n\nPer exemple, per a crear un bloc de notes premeu «mb»; per a crear una nota premeu «mn»."
+		"Us donem la benvinguda al Joplin!\n\nEscriviu «:help shortcuts» per a llistar les dreceres de teclat, o simplement «:help» per a informació d'ús.\n\nPer exemple, per a crear una llibreta premeu «mb»; per a crear una nota premeu «mn»."
 	],
 	"Welcome!": [
 		"Benvinguts!"
 	],
+	"What are plugins?": [
+		"Què són els connectors?"
+	],
 	"When creating a new note:": [
-		"En crear una nota:"
+		"En crear una nota nova:"
 	],
 	"When creating a new to-do:": [
-		"En crear un llistat de tasques pendents:"
+		"En crear una tasca nova:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Quan estigui activada, l'aplicació escanejarà els adjunts i n'extraurà el text. Això us permetrà cercar text en aquests adjunts."
 	],
 	"Whisper": [
-		""
+		"Whisper"
 	],
 	"Window unresponsive.": [
-		""
+		"La finestra no respon."
 	],
 	"Words": [
 		"Paraules"
@@ -3507,13 +4299,19 @@
 		"Esteu a punt d'adjuntar una imatge gran (%dx%d pixels). Voleu reduir-la a %d pixels abans d'adjuntar-la?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Esteu connectat a Joplin Cloud, podeu sortir d'aquesta pantalla ara."
+	],
+	"You are now logged into your account.": [
+		"Ara heu iniciat sessió al vostre compte."
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		"Ara esteu utilitzant l'última versió de l'editor Markdown."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
-		""
+		"Esteu executant la versió Intel de Joplin en un processador Apple Silicon. Descarrega't l'Apple Silicon per obtenir un millor rendiment."
 	],
 	"You currently have no notebooks.": [
-		"Ara mateix no teniu cap bloc de notes."
+		"Actualment no teniu llibretes."
 	],
 	"You do not have any installed plugin.": [
 		"No teniu cap connector instal·lat."
@@ -3524,8 +4322,11 @@
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"Podeu utilitzar l'eina següent per tornar a xifrar les vostres dades, per exemple si sabeu que algunes de les vostres notes estan xifrades amb un mètode de xifratge obsolet."
 	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"No heu pogut connectar-vos a Joplin Cloud. Comproveu les vostres credencials i torneu-ho a provar. Error:"
+	],
 	"Your account doesn't have access to this feature": [
-		""
+		"El vostre compte no té accés a aquesta característica"
 	],
 	"Your choice: ": [
 		"La vostra tria: "
@@ -3534,7 +4335,7 @@
 		"Les vostres dades es tornaran a xifrar i sincronitzar."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		""
+		"Les vostres credencials de Joplin Cloud no són vàlides, si us plau, inicieu sessió."
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"Fa falta la contrasenya per a desxifrar part de les dades."

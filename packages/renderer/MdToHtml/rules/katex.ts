@@ -323,8 +323,10 @@ export default {
 		katexOptions.macros = options.context.userData.__katex.macros;
 		katexOptions.trust = true;
 
-		const renderKatexError = (error: Error): string => {
-			return `<div class="inline-code">${markdownIt.utils.escapeHtml(error.message)}</div>`;
+		// When targeting inline math, the `containerTag` should be a `span` to prevent issues
+		// with converting back to Markdown from the Rich Text Editor:
+		const renderKatexError = (error: Error, containerTag: 'div'|'span'): string => {
+			return `<${containerTag} class="inline-code">${markdownIt.utils.escapeHtml(error.message)}</${containerTag}>`;
 		};
 
 		// set KaTeX as the renderer for markdown-it-simplemath
@@ -334,7 +336,7 @@ export default {
 			try {
 				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {
-				outputHtml = renderKatexError(error);
+				outputHtml = renderKatexError(error, 'span');
 			}
 			return `<span class="joplin-editable"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${outputHtml}</span>`;
 		};
@@ -351,7 +353,7 @@ export default {
 			try {
 				outputHtml = renderToStringWithCache(latex, katexOptions);
 			} catch (error) {
-				outputHtml = renderKatexError(error);
+				outputHtml = renderKatexError(error, 'div');
 			}
 
 			return `<div class="joplin-editable"><pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${outputHtml}</div>`;

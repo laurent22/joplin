@@ -1,5 +1,98 @@
 # Joplin Desktop Changelog
 
+## [v3.4.12](https://github.com/laurent22/joplin/releases/tag/v3.4.12) - 2025-09-09T21:35:47Z
+
+- Fixed: Fix error when saving in-editor rendering-related settings ([#13105](https://github.com/laurent22/joplin/issues/13105)) ([#13103](https://github.com/laurent22/joplin/issues/13103) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.4.10](https://github.com/laurent22/joplin/releases/tag/v3.4.10) - 2025-09-01T12:25:22Z
+
+- Improved: Clarify handwritten text transcription setting ([#13073](https://github.com/laurent22/joplin/issues/13073) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add a "highlight active line" setting ([#12967](https://github.com/laurent22/joplin/issues/12967) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Auto-disable plugin settings when conflicting built-in settings are enabled ([#13055](https://github.com/laurent22/joplin/issues/13055)) ([#13048](https://github.com/laurent22/joplin/issues/13048) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Disable in-editor Markdown rendering by default (can be re-enabled in settings &gt; note) ([#13022](https://github.com/laurent22/joplin/issues/13022) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix notifications ([#13007](https://github.com/laurent22/joplin/issues/13007)) ([#12991](https://github.com/laurent22/joplin/issues/12991) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown editor: Fix image rendering is disabled unless markup rendering is also enabled ([#13056](https://github.com/laurent22/joplin/issues/13056) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OCR: Fix infinite loop ([#13025](https://github.com/laurent22/joplin/issues/13025)) ([#13024](https://github.com/laurent22/joplin/issues/13024) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OCR: Fix processing resources with an invalid `ocr_driver_id` ([#13051](https://github.com/laurent22/joplin/issues/13051)) ([#13043](https://github.com/laurent22/joplin/issues/13043) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Clarified that handwritten transcription may not always work ([0024722](https://github.com/laurent22/joplin/commit/0024722))
+- Fixed: Legacy editor: Fix plugin support ([#13066](https://github.com/laurent22/joplin/issues/13066)) ([#12855](https://github.com/laurent22/joplin/issues/12855) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.4.7](https://github.com/laurent22/joplin/releases/tag/v3.4.7) (Pre-release) - 2025-08-23T10:49:54Z
+
+- Improved: Downgrade to Electron 35.7.5 ([#13013](https://github.com/laurent22/joplin/issues/13013) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix custom root CA support ([#13018](https://github.com/laurent22/joplin/issues/13018)) ([#13009](https://github.com/laurent22/joplin/issues/13009) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix error logged when rendering a non-existent resource ([#13004](https://github.com/laurent22/joplin/issues/13004)) ([#12998](https://github.com/laurent22/joplin/issues/12998) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix startup failure when unable to access the keychain ([#13006](https://github.com/laurent22/joplin/issues/13006) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unshare action requires two syncs to be reflected locally ([#12999](https://github.com/laurent22/joplin/issues/12999)) ([#12648](https://github.com/laurent22/joplin/issues/12648) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.4.6](https://github.com/laurent22/joplin/releases/tag/v3.4.6) (Pre-release) - 2025-08-20T20:30:35Z
+
+- Improved: Markdown editor: Toggle checkboxes on ctrl-click ([#12927](https://github.com/laurent22/joplin/issues/12927) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.4.3), @playwright/test (v1.52.0), jsdom (v26.1.0), sass (v1.87.0), sharp (v0.34.2)
+- Improved: Upgrade to Electron v37.3.0 ([#12951](https://github.com/laurent22/joplin/issues/12951) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Clicking Edit URL button in Note properties does not focus in url field ([#12970](https://github.com/laurent22/joplin/issues/12970)) ([#12315](https://github.com/laurent22/joplin/issues/12315) by [@pedr](https://github.com/pedr))
+- Fixed: Shared folders: Fix moving shared subfolder to toplevel briefly marks it as a toplevel share ([#12964](https://github.com/laurent22/joplin/issues/12964) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.4.5](https://github.com/laurent22/joplin/releases/tag/v3.4.5) (Pre-release) - 2025-08-10T12:49:30Z
+
+- Improved: Add an option to enable or disable search in OCR text ([#12578](https://github.com/laurent22/joplin/issues/12578)) ([#12224](https://github.com/laurent22/joplin/issues/12224) by [@pedr](https://github.com/pedr))
+- Improved: Add option to transform HTML notes into Markdown ([#12730](https://github.com/laurent22/joplin/issues/12730)) ([#2059](https://github.com/laurent22/joplin/issues/2059) by [@pedr](https://github.com/pedr))
+- Improved: Add shortcut to toggle between editors ([#12869](https://github.com/laurent22/joplin/issues/12869)) ([#12087](https://github.com/laurent22/joplin/issues/12087) by [@pedr](https://github.com/pedr))
+- Improved: Move several features from Extra Markdown Editor Settings into the main app ([#12747](https://github.com/laurent22/joplin/issues/12747) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages sharp (v0.34.1)
+- Fixed: Ensure merges to revisions during cleaning are synced to the target ([#12444](https://github.com/laurent22/joplin/issues/12444)) ([#12104](https://github.com/laurent22/joplin/issues/12104) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix switching to the Markdown editor after pasting links ([#12241](https://github.com/laurent22/joplin/issues/12241)) ([#12235](https://github.com/laurent22/joplin/issues/12235) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Put crash dump files at the platform-compliant locations ([#12839](https://github.com/laurent22/joplin/issues/12839)) ([#11871](https://github.com/laurent22/joplin/issues/11871) by [@w568w](https://github.com/w568w))
+- Fixed: Selected emoji for new notebooks display too large until Joplin is restarted ([#12888](https://github.com/laurent22/joplin/issues/12888)) ([#12358](https://github.com/laurent22/joplin/issues/12358) by [@suchithms19](https://github.com/suchithms19))
+
+## [v3.4.4](https://github.com/laurent22/joplin/releases/tag/v3.4.4) (Pre-release) - 2025-08-13T16:46:39Z
+
+- New: Add transcribe functionality ([#12670](https://github.com/laurent22/joplin/issues/12670) by [@pedr](https://github.com/pedr))
+- Improved: Make more settings per-profile (application layout, note list style, and note list order) ([#12825](https://github.com/laurent22/joplin/issues/12825)) ([#12714](https://github.com/laurent22/joplin/issues/12714) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages jsdom (v26), sharp (v0.34.0), types
+- Fixed: Add tooltips to sidebar buttons ([#12798](https://github.com/laurent22/joplin/issues/12798)) ([#12233](https://github.com/laurent22/joplin/issues/12233) by [@suchithms19](https://github.com/suchithms19))
+- Fixed: Date/Time dialog button not visible in dark mode ([#12816](https://github.com/laurent22/joplin/issues/12816))
+
+## [v3.4.3](https://github.com/laurent22/joplin/releases/tag/v3.4.3) (Pre-release) - 2025-07-25T19:49:44Z
+
+- Improved: Updated packages glob (v11.0.2), mermaid (v11.6.0)
+- Fixed: Markdown editor: Make list indentation size equivalent to four spaces ([#12794](https://github.com/laurent22/joplin/issues/12794)) ([#12573](https://github.com/laurent22/joplin/issues/12573) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix importing sqlite3 ([#12792](https://github.com/laurent22/joplin/issues/12792)) ([#12790](https://github.com/laurent22/joplin/issues/12790) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.4.2](https://github.com/laurent22/joplin/releases/tag/v3.4.2) (Pre-release) - 2025-07-24T10:43:55Z
+
+- New: Add Joplin Server SAML support ([#11865](https://github.com/laurent22/joplin/issues/11865) by [@ttcchhmm](https://github.com/ttcchhmm))
+- New: Rich text editor: Add a right-click "Open" menu item for external links ([#12391](https://github.com/laurent22/joplin/issues/12391) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Adjust list toggle behavior for consistency with other apps ([#12360](https://github.com/laurent22/joplin/issues/12360)) ([#11845](https://github.com/laurent22/joplin/issues/11845) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow users to change the font used in the Markdown viewer and Rich Text Editor ([#12356](https://github.com/laurent22/joplin/issues/12356)) ([#12113](https://github.com/laurent22/joplin/issues/12113) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Disable console wrapper ([#12663](https://github.com/laurent22/joplin/issues/12663) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Extend the maximum note history expiry days to 99999 ([#12374](https://github.com/laurent22/joplin/issues/12374) by [@mrjo118](https://github.com/mrjo118))
+- Improved: Falls back to filename for the title when importing Markdown files with FrontMatter ([#12698](https://github.com/laurent22/joplin/issues/12698) by [@khemarato](https://github.com/khemarato))
+- Improved: Move the conflicts folder to the top of the notebook list to improve visibility ([#12688](https://github.com/laurent22/joplin/issues/12688)) ([#12594](https://github.com/laurent22/joplin/issues/12594) by [@mrjo118](https://github.com/mrjo118))
+- Improved: Performance: Faster startup and smaller application size ([#12366](https://github.com/laurent22/joplin/issues/12366) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Plugins: Allow editor plugins to support multiple windows ([#12041](https://github.com/laurent22/joplin/issues/12041)) ([#11687](https://github.com/laurent22/joplin/issues/11687) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Add less information to the log file when pasting ([#12684](https://github.com/laurent22/joplin/issues/12684)) ([#11866](https://github.com/laurent22/joplin/issues/11866) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Auto-format "---", "***" and "___" as dividers ([#12397](https://github.com/laurent22/joplin/issues/12397) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.3), @rollup/plugin-node-resolve (v16.0.1), @rollup/plugin-replace (v6.0.2), dayjs (v1.11.13), domutils (v3.2.2), form-data (v4.0.2), glob (v11.0.1), highlight.js (v11.11.1), jsdom (v25), katex (v0.16.22), license-checker-rseidelsohn (v4.4.2), mermaid (v11.4.1), nan (v2.22.2), nanoid (v3.3.9), node (v18.20.7), re-resizable (v6.11.2), react, react-select (v5.10.1), sass (v1.86.3), sharp (v0.33.5), standard (v17.1.2), style-to-js (v1.1.16), tesseract.js (v5.1.1), types, uuid (v11.1.0)
+- Improved: Upgrade to Electron 35.5.1 ([#12396](https://github.com/laurent22/joplin/issues/12396) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Add ability to delete all history for individual notes ([#12381](https://github.com/laurent22/joplin/issues/12381)) ([#12097](https://github.com/laurent22/joplin/issues/12097) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Change how the main content size is determined ([#12388](https://github.com/laurent22/joplin/issues/12388)) ([#12214](https://github.com/laurent22/joplin/issues/12214) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Ensure min and max validation is enforced when setting is not yet present ([#12553](https://github.com/laurent22/joplin/issues/12553)) ([#12419](https://github.com/laurent22/joplin/issues/12419) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix Yinxiang HTML imported notes being enclosed by a open anchor tag ([#12395](https://github.com/laurent22/joplin/issues/12395)) ([#12363](https://github.com/laurent22/joplin/issues/12363) by [@pedr](https://github.com/pedr))
+- Fixed: Fix adding lists to blank lines using toolbar buttons ([#12745](https://github.com/laurent22/joplin/issues/12745)) ([#12744](https://github.com/laurent22/joplin/issues/12744) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix changing focused window when clicking on the note viewer ([#12390](https://github.com/laurent22/joplin/issues/12390)) ([#12377](https://github.com/laurent22/joplin/issues/12377) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix data API failure when including both conflicts and deleted notes in results ([#12650](https://github.com/laurent22/joplin/issues/12650) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix import of certain OneNote files that contain invalid properties ([#12338](https://github.com/laurent22/joplin/issues/12338)) ([#12295](https://github.com/laurent22/joplin/issues/12295) by [@pedr](https://github.com/pedr))
+- Fixed: Fix incorrect line numbers/files in debug output ([#12664](https://github.com/laurent22/joplin/issues/12664)) ([#12451](https://github.com/laurent22/joplin/issues/12451) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix printing ([#12244](https://github.com/laurent22/joplin/issues/12244)) ([#12240](https://github.com/laurent22/joplin/issues/12240) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix secondary window controls greyed out when first opened ([#12685](https://github.com/laurent22/joplin/issues/12685) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed import of Markdown files that contain links with Windows paths ([#12386](https://github.com/laurent22/joplin/issues/12386)) ([#12362](https://github.com/laurent22/joplin/issues/12362) by [@pedr](https://github.com/pedr))
+- Fixed: Long URL in note properties breaks the dialog layout ([#12669](https://github.com/laurent22/joplin/issues/12669) by [@SAYAN02-DEV](https://github.com/SAYAN02-DEV))
+- Fixed: Markdown editor: Prevent selection from extending far outside the editor boundaries ([#12746](https://github.com/laurent22/joplin/issues/12746)) ([#12341](https://github.com/laurent22/joplin/issues/12341) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Moving sub-notebook of shared notebook should unshare it ([#12647](https://github.com/laurent22/joplin/issues/12647)) ([#12089](https://github.com/laurent22/joplin/issues/12089))
+- Fixed: Rich Text Editor: Fix including `$`s creates math blocks on save ([#12398](https://github.com/laurent22/joplin/issues/12398)) ([#9593](https://github.com/laurent22/joplin/issues/9593) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Show warning when a plugin is not compatible with the new Markdown editor ([#12040](https://github.com/laurent22/joplin/issues/12040)) ([#11548](https://github.com/laurent22/joplin/issues/11548) by [@pedr](https://github.com/pedr))
+
 ## [v3.3.13](https://github.com/laurent22/joplin/releases/tag/v3.3.13) - 2025-06-09T20:13:30Z
 
 - Fixed: Fix printing ([#12244](https://github.com/laurent22/joplin/issues/12244)) ([#12240](https://github.com/laurent22/joplin/issues/12240) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

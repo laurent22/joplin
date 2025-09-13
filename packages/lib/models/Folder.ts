@@ -1,4 +1,4 @@
-import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
+import { BaseItemEntity, defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import { FolderLoadOptions } from './utils/types';
 import time from '../time';
@@ -357,7 +357,7 @@ export default class Folder extends BaseItem {
 
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
-			if (conflictCount) output.push(this.conflictFolder());
+			if (conflictCount) output.unshift(this.conflictFolder());
 		}
 
 		return output;
@@ -747,14 +747,18 @@ export default class Folder extends BaseItem {
 			report[tableName] = rows.length;
 
 			for (const row of rows) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const toSave: any = {
+				const toSave: BaseItemEntity = {
 					id: row.id,
 					share_id: '',
-					updated_time: Date.now(),
+					// Don't change the updated_time.
+					// This prevents conflicts in the case where the item was unshared remotely.
+					// See https://github.com/laurent22/joplin/issues/12648
+					// updated_time: Date.now(),
 				};
 
-				if (hasParentId) toSave.parent_id = row.parent_id;
+				if (hasParentId) {
+					(toSave as FolderEntity|NoteEntity).parent_id = row.parent_id;
+				}
 
 				await ItemClass.save(toSave, { autoTimestamp: false });
 			}
@@ -938,14 +942,27 @@ export default class Folder extends BaseItem {
 	public static async moveToFolder(folderId: string, targetFolderId: string) {
 		if (!(await this.canNestUnder(folderId, targetFolderId))) throw new Error(_('Cannot move notebook to this location'));
 
-		// When moving a note to a different folder, the user timestamp is not updated.
-		// However updated_time is updated so that the note can be synced later on.
-
-		const modifiedFolder = {
+		const original = await this.load(folderId);
+		const modifiedFolder: FolderEntity = {
 			id: folderId,
 			parent_id: targetFolderId,
+
+			// When moving a note to a different folder, the user timestamp is not updated.
+			// However updated_time is updated so that the note can be synced later on.
 			updated_time: time.unixMs(),
+			share_id: original.share_id,
 		};
+
+		const wasShared = !!modifiedFolder.share_id;
+		const movedToTopLevel = original.parent_id !== '' && targetFolderId === '';
+		if (wasShared && movedToTopLevel) {
+			// When a shared subfolder is converted to a toplevel folder, clear its share_id
+			// as soon as possible. Without this, modifiedFolder would be incorrectly treated
+			// as a root shared folder by some logic.
+			// Since the folder's children aren't toplevel, they won't be considered root
+			// shared folders and are updated later.
+			modifiedFolder.share_id = '';
+		}
 
 		return Folder.save(modifiedFolder, { autoTimestamp: false });
 	}

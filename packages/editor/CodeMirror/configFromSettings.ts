@@ -5,17 +5,21 @@ import createTheme from './theme';
 import { EditorState } from '@codemirror/state';
 import { deleteMarkupBackward, markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
-import MarkdownMathExtension from './markdown/MarkdownMathExtension';
-import MarkdownHighlightExtension from './markdown/MarkdownHighlightExtension';
-import lookUpLanguage from './markdown/codeBlockLanguages/lookUpLanguage';
+import markdownMathExtension from './extensions/markdownMathExtension';
+import markdownHighlightExtension from './extensions/markdownHighlightExtension';
+import lookUpLanguage from './utils/markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
 import { Prec } from '@codemirror/state';
-import insertNewlineContinueMarkup from './markdown/insertNewlineContinueMarkup';
+import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
+import renderingExtension from './extensions/rendering/renderingExtension';
+import { RenderedContentContext } from './extensions/rendering/types';
+import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
+import renderBlockImages from './extensions/rendering/renderBlockImages';
 
-const configFromSettings = (settings: EditorSettings) => {
+const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
 		const openingBrackets = '`([{\'"‘“（《「『【〔〖〘〚'.split('');
 
@@ -26,10 +30,10 @@ const configFromSettings = (settings: EditorSettings) => {
 					extensions: [
 						GitHubFlavoredMarkdownExtension,
 
-						settings.markdownMarkEnabled ? MarkdownHighlightExtension : [],
+						settings.markdownMarkEnabled ? markdownHighlightExtension : [],
 
 						// Don't highlight KaTeX if the user disabled it
-						settings.katexEnabled ? MarkdownMathExtension : [],
+						settings.katexEnabled ? markdownMathExtension : [],
 					],
 					codeLanguages: lookUpLanguage,
 
@@ -82,6 +86,18 @@ const configFromSettings = (settings: EditorSettings) => {
 
 	if (!settings.ignoreModifiers) {
 		extensions.push(Prec.low(keymap.of(defaultKeymap)));
+	}
+
+	if (settings.inlineRenderingEnabled) {
+		extensions.push(renderingExtension());
+	}
+
+	if (settings.imageRenderingEnabled) {
+		extensions.push(renderBlockImages(context));
+	}
+
+	if (settings.highlightActiveLine) {
+		extensions.push(highlightActiveLineExtension());
 	}
 
 	return extensions;

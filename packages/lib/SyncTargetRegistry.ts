@@ -97,4 +97,12 @@ export default class SyncTargetRegistry {
 		];
 	}
 
+	public static isJoplinServerOrCloud(id: number) {
+		return [
+			SyncTargetRegistry.nameToId('joplinServer'),
+			SyncTargetRegistry.nameToId('joplinCloud'),
+			SyncTargetRegistry.nameToId('joplinServerSaml'),
+		].includes(id);
+	}
+
 }

@@ -125,6 +125,13 @@ export interface EditorControl {
 	setSearchState(state: SearchState): void;
 
 	setContentScripts(plugins: ContentScriptData[]): Promise<void>;
+
+	// Called when a resource associated with the current note finishes downloading
+	// or has been updated in an external editor.
+	onResourceChanged(id: string): void;
+
+	remove(): void;
+	focus(): void;
 }
 
 export enum EditorLanguageType {
@@ -139,8 +146,9 @@ export enum EditorKeymap {
 }
 
 export interface EditorTheme extends Theme {
+	themeId: number;
 	fontFamily: string;
-	fontSize?: number;
+	fontSize: number;
 	fontSizeUnits?: string;
 	isDesktop?: boolean;
 	monospaceFont?: string;
@@ -175,7 +183,10 @@ export interface EditorSettings {
 	markdownMarkEnabled: boolean;
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
+	inlineRenderingEnabled: boolean;
+	imageRenderingEnabled: boolean;
 	readOnly: boolean;
+	highlightActiveLine: boolean;
 
 	indentWithTabs: boolean;
 
@@ -186,6 +197,8 @@ export type LogMessageCallback = (message: string)=> void;
 export type OnEventCallback = (event: EditorEvent)=> void;
 export type PasteFileCallback = (data: File)=> Promise<void>;
 type OnScrollPastBeginningCallback = ()=> void;
+export type LocalizationResult = Promise<string>|string;
+export type OnLocalize = (input: string)=> LocalizationResult;
 
 interface Localisations {
 	[editorString: string]: string;
@@ -195,6 +208,7 @@ export interface EditorProps {
 	settings: EditorSettings;
 	initialText: string;
 	initialNoteId: string;
+	onLocalize: OnLocalize;
 	// Used mostly for internal editor library strings
 	localisations?: Localisations;
 

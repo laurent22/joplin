@@ -94,6 +94,13 @@ document.addEventListener('click', (event) => {
 	const anchor = webviewLib.getParentAnchorElement(event.target);
 	if (!anchor) return;
 
+	// If contained within a content-editable region, don't follow the link.
+	// Usually, the user wants to move the cursor into the link on click.
+	if (anchor.closest('div[contenteditable]')) {
+		event.preventDefault();
+		return;
+	}
+
 	// Prevent URLs added via <a> tags from being opened within the application itself
 	// otherwise it would open the whole website within the WebView.
 

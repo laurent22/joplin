@@ -7,6 +7,8 @@ import type SettingType from '../Setting';
 import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem } from './types';
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
+import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
+import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
 const { toTitleCase } = require('../../string-utils.js');
 
@@ -28,6 +30,17 @@ export enum ScrollbarSize {
 	Small = 7,
 	Medium = 12,
 	Large = 24,
+}
+
+type CachedPpk = EmptyObject|{
+	timestamp: number;
+	ppk: PublicPrivateKeyPair;
+};
+
+export enum SurveyProgress {
+	NotStarted,
+	Started,
+	Dismissed,
 }
 
 const builtInMetadata = (Setting: typeof SettingType) => {
@@ -81,7 +94,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: false,
-			appTypes: [AppType.Desktop],
+			appTypes: [AppType.Desktop, AppType.Mobile],
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -556,6 +569,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'ocr.handwrittenTextDriverEnabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable handwritten transcription'),
+			description: () => 'Allows selecting specific attachments for higher-quality on-server OCR. When enabled, the right-click menu for an attachment includes an option to send an attachment to Joplin Cloud/Server for off-device processing.\n\nExperimental! It may not work at all. Requires Joplin Server or Cloud.',
+			storage: SettingStorage.File,
+			isGlobal: true,
+			advanced: true,
+		},
+
 		'ocr.languageDataPath': {
 			value: '',
 			type: SettingItemType.String,
@@ -582,6 +607,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			appTypes: [AppType.Desktop],
 			label: () => _('OCR: Clear cache and re-download language data files'),
+		},
+
+		'ocr.searchInExtractedContent': {
+			value: true,
+			type: SettingItemType.Bool,
+			advanced: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+			label: () => _('OCR: Search in extracted content'),
 		},
 
 		theme: {
@@ -687,7 +722,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				return options;
 			},
 			storage: SettingStorage.File,
-			isGlobal: true,
+			isGlobal: false,
 		},
 		'editor.autoMatchingBraces': {
 			value: true,
@@ -708,6 +743,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Autocomplete Markdown and HTML'),
 			description: () => _('Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+		'editor.enableHtmlToMarkdownBanner': {
+			value: true,
+			advanced: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'note',
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable HTML-to-Markdown conversion banner'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -759,7 +805,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: false,
 		},
 
-		'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+		'notes.sortOrder.reverse': {
+			value: true,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			isGlobal: false,
+			section: 'note',
+			public: true,
+			label: () => _('Reverse sort order'),
+			appTypes: [AppType.Cli],
+		},
 		// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
 		// which implies changing the setting automatically triggers the refresh of notes.
 		// See lib/BaseApplication.ts/generalMiddleware() for details.
@@ -936,7 +991,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 			appTypes: [AppType.Desktop],
 			storage: SettingStorage.File,
-			isGlobal: true,
+			isGlobal: false,
 		},
 
 		'plugins.states': {
@@ -1099,6 +1154,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Int,
 			public: false,
 		},
+		// Holds the no-longer-published PPK from before a migration. This allows accepting
+		// shares that target the old PPK.
+		'encryption.cachedPpk': {
+			value: {} as CachedPpk,
+			type: SettingItemType.Object,
+			public: false,
+		},
 
 		'sync.userId': {
 			value: '',
@@ -1223,7 +1285,14 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
-		'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
+		'ui.layout': {
+			value: {},
+			type: SettingItemType.Object,
+			storage: SettingStorage.File,
+			isGlobal: false,
+			public: false,
+			appTypes: [AppType.Desktop],
+		},
 
 		'ui.lastSelectedPluginPanel': {
 			value: '',
@@ -1404,6 +1473,37 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable spell checking in Markdown editor'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'editor.inlineRendering': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Render markup in editor'),
+			description: () => _('Renders markup on all lines that don\'t include the cursor.'),
+			section: 'note',
+			storage: SettingStorage.File,
+		},
+		'editor.imageRendering': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Render images'),
+			description: () => _('If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.'),
+			section: 'note',
+			storage: SettingStorage.File,
+		},
+		'editor.highlightActiveLine': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'note',
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Highlight active line'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -1680,6 +1780,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: false,
 		},
 
+		lastSettingGlobalMigration: {
+			value: -1,
+			type: SettingItemType.Int,
+			public: false,
+		},
+
 		wasClosedSuccessfully: {
 			value: true,
 			type: SettingItemType.Bool,
@@ -1789,6 +1895,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'survey.webClientEval2025.progress': {
+			value: SurveyProgress.NotStarted,
+			type: SettingItemType.Int,
+			public: false,
+			isEnum: true,
+			storage: SettingStorage.File,
+			options: () => ({
+				[SurveyProgress.NotStarted]: 'Not started',
+				[SurveyProgress.Started]: 'Started',
+				[SurveyProgress.Dismissed]: 'Done',
+			}),
+			label: () => 'Show web client evaluation survey',
+			isGlobal: true,
+		},
+
 		'sync.allowUnsupportedProviders': {
 			value: -1,
 			type: SettingItemType.Int,
@@ -1812,20 +1933,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'note',
 		},
 
+		// Deprecated and currently unused. For now, the mobile app only supports the Whisper voice typing provider.
 		'voiceTyping.preferredProvider': {
 			value: 'whisper-tiny',
 			type: SettingItemType.String,
-			public: true,
+			public: false,
 			appTypes: [AppType.Mobile],
-			label: () => _('Preferred voice typing provider'),
+			label: () => 'Preferred voice typing provider',
 			isEnum: true,
 			show: showVoiceTypingSettings,
 			section: 'note',
 
 			options: () => {
 				return {
-					'vosk': _('Vosk'),
-					'whisper-tiny': _('Whisper'),
+					'vosk': 'Vosk', // No longer supported
+					'whisper-tiny': 'Whisper',
 				};
 			},
 		},
@@ -1837,7 +1959,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			label: () => _('Voice typing: Glossary'),
 			description: () => _('A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.'),
-			show: (settings) => showVoiceTypingSettings() && settings['voiceTyping.preferredProvider'].startsWith('whisper'),
+			show: () => showVoiceTypingSettings(),
+			section: 'note',
+		},
+
+		'scanner.titleTemplate': {
+			value: 'Scan: {date} ({count})',
+			type: SettingItemType.String,
+			public: true,
+			appTypes: [AppType.Mobile],
+			label: () => _('Document scanner: Title template'),
+			description: () => _('Default title to use for documents created by the scanner.'),
 			section: 'note',
 		},
 

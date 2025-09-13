@@ -12,6 +12,7 @@ import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
 import apiUsers from './api/users';
 import apiLogin from './api/login';
+import apiTranscribe from './api/transcribe';
 
 import adminDashboard from './admin/dashboard';
 import adminEmails from './admin/emails';
@@ -52,6 +53,7 @@ const routes: Routers = {
 	'api/share_users': apiShareUsers,
 	'api/shares': apiShares,
 	'api/users': apiUsers,
+	'api/transcribe': apiTranscribe,
 
 	'admin/dashboard': adminDashboard,
 	'admin/emails': adminEmails,

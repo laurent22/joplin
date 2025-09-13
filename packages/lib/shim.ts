@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { NoteEntity, ResourceEntity } from './services/database/types';
+import type * as React from 'react';
+import type { NoteEntity, ResourceEntity } from './services/database/types';
 import type FsDriverBase from './fs-driver-base';
 import type FileApiDriverLocal from './file-api-driver-local';
-import { Crypto } from './services/e2ee/types';
-import { MarkupLanguage } from '@joplin/renderer';
+import type { Crypto } from './services/e2ee/types';
+import type { MarkupLanguage } from '@joplin/renderer';
 
 export interface CreateResourceFromPathOptions {
 	resizeLargeImages?: 'always' | 'never' | 'ask';
@@ -421,6 +421,7 @@ const shim = {
 	},
 
 	injectedJs: (_name: string) => '',
+	injectedCss: (_name: string) => '',
 
 	isTestingEnv: () => {
 		return isTestingEnv_;

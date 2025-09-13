@@ -11,7 +11,7 @@ import { saveProfileConfig, switchProfile } from '../../services/profiles';
 import { themeStyle } from '../global-style';
 import shim from '@joplin/lib/shim';
 import { DialogContext } from '../DialogManager';
-import { FAB, List, Portal } from 'react-native-paper';
+import { FAB, List } from 'react-native-paper';
 import { TextStyle } from 'react-native';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import { Dispatch } from 'redux';
@@ -206,19 +206,17 @@ export default (props: Props) => {
 					extraData={extraListItemData}
 				/>
 			</View>
-			<Portal>
-				<FAB
-					icon="plus"
-					accessibilityLabel={_('New profile')}
-					style={style.fab}
-					onPress={() => {
-						props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'ProfileEditor',
-						});
-					}}
-				/>
-			</Portal>
+			<FAB
+				icon="plus"
+				accessibilityLabel={_('New profile')}
+				style={style.fab}
+				onPress={() => {
+					props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'ProfileEditor',
+					});
+				}}
+			/>
 		</View>
 	);
 };

@@ -1,46 +1,17 @@
 import Setting from '../../models/Setting';
-import PluginService, { defaultPluginSetting } from '../../services/plugins/PluginService';
-import { PluginManifest } from '../../services/plugins/utils/types';
+import PluginService from '../../services/plugins/PluginService';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import { writeFile } from 'fs-extra';
-import { join } from 'path';
 import loadPlugins, { Props as LoadPluginsProps } from './loadPlugins';
 import MockPluginRunner from './testing/MockPluginRunner';
 import reducer, { State, defaultState } from '../../reducer';
 import { Action, createStore } from 'redux';
 import MockPlatformImplementation from './testing/MockPlatformImplementation';
+import createTestPlugin from '../../testing/plugins/createTestPlugin';
 
 const createMockReduxStore = () => {
 	return createStore((state: State = defaultState, action: Action<string>) => {
 		return reducer(state, action);
 	});
-};
-
-const setPluginEnabled = (id: string, enabled: boolean) => {
-	const newPluginStates = {
-		...Setting.value('plugins.states'),
-		[id]: {
-			...defaultPluginSetting(),
-			enabled,
-		},
-	};
-	Setting.setValue('plugins.states', newPluginStates);
-};
-
-const addPluginWithManifest = async (manifest: PluginManifest, enabled: boolean) => {
-	const pluginSource = `
-		/* joplin-manifest:
-		${JSON.stringify(manifest)}
-		*/
-
-		joplin.plugins.register({
-			onStart: async function() { },
-		});
-	`;
-	const pluginPath = join(Setting.value('pluginDir'), `${manifest.id}.js`);
-	await writeFile(pluginPath, pluginSource, 'utf-8');
-
-	setPluginEnabled(manifest.id, enabled);
 };
 
 const defaultManifestProperties = {
@@ -66,18 +37,18 @@ describe('loadPlugins', () => {
 	});
 
 	test('should load only enabled plugins', async () => {
-		await addPluginWithManifest({
+		await createTestPlugin({
 			...defaultManifestProperties,
 			id: 'this.is.a.test.1',
 			name: 'Disabled Plugin',
-		}, false);
+		}, { enabled: false });
 
 		const enabledPluginId = 'this.is.a.test.2';
-		await addPluginWithManifest({
+		await createTestPlugin({
 			...defaultManifestProperties,
 			id: enabledPluginId,
 			name: 'Enabled Plugin',
-		}, true);
+		});
 
 		const pluginRunner = new MockPluginRunner();
 		const store = createMockReduxStore();
@@ -110,20 +81,23 @@ describe('loadPlugins', () => {
 	test('should reload all plugins when reloadAll is true', async () => {
 		const enabledCount = 3;
 		for (let i = 0; i < enabledCount; i++) {
-			await addPluginWithManifest({
+			await createTestPlugin({
 				...defaultManifestProperties,
 				id: `joplin.test.plugin.${i}`,
 				name: `Enabled Plugin ${i}`,
-			}, true);
+			});
 		}
 
 		const disabledCount = 6;
+		const disabledPlugins = [];
 		for (let i = 0; i < disabledCount; i++) {
-			await addPluginWithManifest({
-				...defaultManifestProperties,
-				id: `joplin.test.plugin.disabled.${i}`,
-				name: `Disabled Plugin ${i}`,
-			}, false);
+			disabledPlugins.push(
+				await createTestPlugin({
+					...defaultManifestProperties,
+					id: `joplin.test.plugin.disabled.${i}`,
+					name: `Disabled Plugin ${i}`,
+				}, { enabled: false }),
+			);
 		}
 
 		const pluginRunner = new MockPluginRunner();
@@ -146,8 +120,11 @@ describe('loadPlugins', () => {
 		// No plugins were running before -- there were no plugins to stop
 		expect(pluginRunner.stopCalledTimes).toBe(0);
 
+		const testPlugin = disabledPlugins[2];
+		expect(testPlugin.manifest.id).toBe('joplin.test.plugin.disabled.2');
+
 		// Enabling a plugin and reloading it should cause all plugins to load.
-		setPluginEnabled('joplin.test.plugin.disabled.2', true);
+		testPlugin.setEnabled(true);
 		await loadPlugins({ ...loadPluginsOptions, pluginSettings: Setting.value('plugins.states') });
 		expectedRunningIds = ['joplin.test.plugin.0', 'joplin.test.plugin.1', 'joplin.test.plugin.2', 'joplin.test.plugin.disabled.2'];
 		await pluginRunner.waitForAllToBeRunning(expectedRunningIds);

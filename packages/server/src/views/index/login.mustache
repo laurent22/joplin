@@ -24,25 +24,23 @@
 					<button class="button is-primary">Login</button>
 				</div>
 			</form>
+		</div>
+	</div>
 
-			{{#samlEnabled}}
-			<div class="column is-one-fifth is-flex is-justify-content-center">
-				<div style="border-left: 2px solid #f5f5f5; height: 100%; width: 2px;"></div>
-			</div>
-
+	{{#samlEnabled}}
+		<div class="columns">
 			<div class="column is-flex is-flex-direction-column is-justify-content-center">
-				<h2 class="title">Use your organisation account</h2>
+				<h2 class="title">Or use your organisation account</h2>
 				{{#samlOrganizationName}}
 				<p class="subtitle">{{samlOrganizationName}}</p>
 				{{/samlOrganizationName}}
 
 				<a href="/login/sso-saml">
-					<button class="button is-primary is-fullwidth">Login using your organisation account</button>
+					<button class="button is-primary">Login using your organisation account</button>
 				</a>
 			</div>
-			{{/samlEnabled}}
 		</div>
-	</div>
+	{{/samlEnabled}}
 
 	{{#signupUrl}}
 		<div class="container block">

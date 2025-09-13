@@ -909,15 +909,21 @@ export default class ItemModel extends BaseModel<Item> {
 		}, 'ItemModel::delete');
 	}
 
-	public async deleteForUser(userId: Uuid, item: Item): Promise<void> {
+	public async deleteForUser(userId: Uuid, item: Item, options: DeleteOptions = {}): Promise<void> {
 		if (this.isRootSharedFolder(item)) {
 			const share = await this.models().share().byItemId(item.id);
 			if (!share) throw new Error(`Cannot find share associated with item ${item.id}`);
 			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
-			if (!userShare) return;
-			await this.models().shareUser().delete(userShare.id);
+
+			if (userShare) {
+				// Leave the share, but keep the notebook for the owner
+				await this.models().shareUser().delete(userShare.id);
+			} else if (share.owner_id === userId) {
+				// Delete the share for everyone
+				await this.delete(item.id, options);
+			}
 		} else {
-			await this.delete(item.id);
+			await this.delete(item.id, options);
 		}
 	}
 

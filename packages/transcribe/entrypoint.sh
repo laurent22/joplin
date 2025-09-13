@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -f "/images/$1" ]; then
-    echo "Error: Image file /images/$1 does not exist."
+    echo "Error: Image file /images/$1 does not exist. Check if HTR_CLI_IMAGES_FOLDER environment variable is set correctly."
     exit 1
 fi
 

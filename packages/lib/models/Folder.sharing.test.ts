@@ -102,6 +102,40 @@ describe('models/Folder.sharing', () => {
 		expect(folder5.share_id).toBe('');
 	}));
 
+	it('should clear the share ID of a folder immediately when moved out of a shared folder', async () => {
+		let folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1',
+				children: [
+					{
+						title: 'folder 2',
+						children: [
+							{
+								title: 'folder 3',
+								children: [],
+							},
+						],
+					},
+				],
+			},
+		]);
+
+		await Folder.save({ id: folder1.id, share_id: 'test123456' });
+		await Folder.updateAllShareIds(resourceService(), []);
+
+		folder1 = await Folder.loadByTitle('folder 1');
+		const folder2 = await Folder.loadByTitle('folder 2');
+
+		expect(folder1.share_id).toBe('test123456');
+		expect(folder2.share_id).toBe('test123456');
+
+		await Folder.moveToFolder(folder2.id, '');
+		// Should have updated the share_id of folder 2 during "moveToFolder":
+		expect(await Folder.loadByTitle('folder 2')).toMatchObject({
+			share_id: '',
+		});
+	});
+
 	it('should update the share ID when a folder is moved in or out of shared folder', (async () => {
 		let folder1 = await createFolderTree('', [
 			{
@@ -471,7 +505,7 @@ describe('models/Folder.sharing', () => {
 		expect(note4.user_updated_time).toBe(userUpdatedTimes[note4.id]);
 	});
 
-	it('should unshare items that are no longer part of an existing share', async () => {
+	it('should clear share_ids for items that are no longer part of an existing share', async () => {
 		await createFolderTree('', [
 			{
 				title: 'folder 1',
@@ -555,6 +589,36 @@ describe('models/Folder.sharing', () => {
 			expect((await Folder.loadByTitle('folder 1')).updated_time).toBe(folder1.updated_time);
 			expect((await Folder.loadByTitle('folder 2')).updated_time).toBe(folder2.updated_time);
 		}
+	});
+
+	it('should not change the updated_time when clearing share_ids for no-longer-shared items', async () => {
+		await createFolderTree('', [
+			{
+				title: 'folder 1',
+				share_id: '1',
+				children: [
+					{
+						title: 'note 1',
+					},
+				],
+			},
+		]);
+
+		await Folder.updateAllShareIds(resourceService(), []);
+
+		const folder1 = await Folder.loadByTitle('folder 1');
+		const note1 = await Note.loadByTitle('note 1');
+		await Folder.updateNoLongerSharedItems([]);
+
+		// To avoid conflicts, should not change the updated_time
+		expect(await Note.loadByTitle('note 1')).toMatchObject({
+			updated_time: note1.updated_time,
+			share_id: '',
+		});
+		expect(await Folder.loadByTitle('folder 1')).toMatchObject({
+			updated_time: folder1.updated_time,
+			share_id: '',
+		});
 	});
 
 });

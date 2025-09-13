@@ -43,7 +43,6 @@ import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDe
 import { join } from 'path';
 import { Dispatch } from 'redux';
 import { RefObject, useContext } from 'react';
-import { SelectionRange } from '../../NoteEditor/types';
 import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { AppState } from '../../../utils/types';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
@@ -57,7 +56,7 @@ import getImageDimensions from '../../../utils/image/getImageDimensions';
 import resizeImage from '../../../utils/image/resizeImage';
 import { CameraResult } from '../../CameraView/types';
 import { DialogContext, DialogControl } from '../../DialogManager';
-import { CommandRuntimeProps, EditorMode, PickerResponse } from './types';
+import { CommandRuntimeProps, NoteViewerMode, PickerResponse } from './types';
 import commands from './commands';
 import { AttachFileAction, AttachFileOptions } from './commands/attachFile';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -72,6 +71,9 @@ import ShareNoteDialog from '../ShareNoteDialog';
 import stateToWhenClauseContext from '../../../services/commands/stateToWhenClauseContext';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
+import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
+import { EditorType } from '../../NoteEditor/types';
+import IconButton from '../../IconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -95,6 +97,7 @@ interface Props extends BaseProps {
 	navigation: NoteNavigation;
 	dispatch: Dispatch;
 	noteId: string;
+	editorType: EditorType;
 	useEditorBeta: boolean;
 	plugins: PluginStates;
 	themeId: number;
@@ -119,7 +122,7 @@ interface ComponentProps extends Props {
 
 interface State {
 	note: NoteEntity;
-	mode: EditorMode;
+	mode: NoteViewerMode;
 	readOnly: boolean;
 	folder: FolderEntity|null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -146,6 +149,7 @@ interface State {
 	};
 
 	showSpeechToTextDialog: boolean;
+	multiline: boolean;
 }
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
@@ -217,6 +221,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			},
 
 			showSpeechToTextDialog: false,
+			multiline: false,
 		};
 
 		this.titleTextFieldRef = React.createRef();
@@ -506,7 +511,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
 		};
@@ -524,6 +528,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			fontSize: theme.fontSize,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+		};
+
+		styles.titleToggleIcon = {
+			color: theme.colorFaded,
+			fontSize: 30,
+			height: 48,
+			width: 48,
+			verticalAlign: 'middle',
+			textAlign: 'center',
+			alignContent: 'center',
 		};
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -637,6 +651,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
+		if (prevState.mode !== this.state.mode) {
+			this.props.dispatch({
+				type: 'NOTE_EDITOR_VISIBLE_CHANGE',
+				visible: this.state.mode === 'edit' && !this.state.showCamera && !this.state.showImageEditor,
+			});
+		}
+
 		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
 			// Easier to just go back, then go to the note since
 			// the Note screen doesn't handle reloading a different note
@@ -684,10 +705,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		this.commandRegistration_?.deregister();
 		this.commandRegistration_ = null;
+
+		this.props.dispatch({
+			type: 'SET_NOTE_EDITOR_VISIBLE',
+			visible: false,
+		});
 	}
 
 	private title_changeText(text: string) {
-		shared.noteComponent_change(this, 'title', text);
+		const newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
+		shared.noteComponent_change(this, 'title', newText);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
 
@@ -909,7 +936,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		resource = await Resource.save(resource, { isNew: true });
 
-		const resourceTag = Resource.markupTag(resource);
+		const resourceTag = Resource.markupTag(resource, this.state.note.markup_language);
 		const newNote = await this.insertText(resourceTag, { newLine: true });
 
 		void this.refreshResource(resource, newNote.body);
@@ -1029,9 +1056,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	};
 
 	private toggleIsTodo_onPress() {
-		shared.toggleIsTodo_onPress(this);
+		const newNote = shared.toggleIsTodo_onPress(this);
 
-		this.scheduleSave(this.state);
+		this.scheduleSave({ ...this.state, note: newNote });
 	}
 
 	private async share_onPress() {
@@ -1158,79 +1185,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		await CommandService.instance().execute('attachFile', filePath);
 	};
 
-	// private vosk_:Vosk;
-
-	// private async getVosk() {
-	// 	if (this.vosk_) return this.vosk_;
-	// 	this.vosk_ = new Vosk();
-	// 	await this.vosk_.loadModel('model-fr-fr');
-	// 	return this.vosk_;
-	// }
-
-	// private async voiceRecording_onPress() {
-	// 	logger.info('Vosk: Getting instance...');
-
-	// 	const vosk = await this.getVosk();
-
-	// 	this.voskResult_ = [];
-
-	// 	const eventHandlers: any[] = [];
-
-	// 	eventHandlers.push(vosk.onResult(e => {
-	// 		logger.info('Vosk: result', e.data);
-	// 		this.voskResult_.push(e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onError(e => {
-	// 		logger.warn('Vosk: error', e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onTimeout(e => {
-	// 		logger.warn('Vosk: timeout', e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onFinalResult(e => {
-	// 		logger.info('Vosk: final result', e.data);
-	// 	}));
-
-	// 	logger.info('Vosk: Starting recording...');
-
-	// 	void vosk.start();
-
-	// 	const buttonId = await dialogs.pop(this, 'Voice recording in progress...', [
-	// 		{ text: 'Stop recording', id: 'stop' },
-	// 		{ text: _('Cancel'), id: 'cancel' },
-	// 	]);
-
-	// 	logger.info('Vosk: Stopping recording...');
-	// 	vosk.stop();
-
-	// 	for (const eventHandler of eventHandlers) {
-	// 		eventHandler.remove();
-	// 	}
-
-	// 	logger.info('Vosk: Recording stopped:', this.voskResult_);
-
-	// 	if (buttonId === 'cancel') return;
-
-	// 	const newNote: NoteEntity = { ...this.state.note };
-	// 	newNote.body = `${newNote.body} ${this.voskResult_.join(' ')}`;
-	// 	this.setState({ note: newNote });
-	// 	this.scheduleSave();
-	// }
-
-
-
 	public menuOptions() {
 		const note = this.state.note;
 		const isTodo = note && !!note.is_todo;
 		const isSaved = note && note.id;
 		const readOnly = this.state.readOnly;
 		const isDeleted = !!this.state.note.deleted_time;
+		const isCodeView = this.props.editorType === EditorType.Markdown;
 
 		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
 
-		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly].join('_'));
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly, this.state.mode, isCodeView].join('_'));
 		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
@@ -1346,6 +1311,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				this.properties_onPress();
 			},
 		});
+
+		if (this.state.mode === 'edit') {
+			const newCodeView = !isCodeView;
+			output.push({
+				title: newCodeView ? _('Edit as Markdown') : _('Edit as Rich Text'),
+				onPress: () => {
+					Setting.setValue('editor.codeView', newCodeView);
+				},
+			});
+		}
 
 		if (isDeleted) {
 			output.push({
@@ -1635,11 +1610,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						noteHash={this.props.noteHash}
 						initialText={note.body}
 						initialSelection={this.selection}
+						markupLanguage={this.state.note.markup_language}
 						globalSearch={this.props.searchQuery}
 						onChange={this.onMarkdownEditorTextChange}
 						onSelectionChange={this.onMarkdownEditorSelectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 						onAttach={this.onAttach}
+						noteResources={this.state.noteResources}
 						readOnly={this.state.readOnly}
 						plugins={this.props.plugins}
 						style={{
@@ -1649,6 +1626,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							paddingLeft: 0,
 							paddingRight: 0,
 						}}
+						mode={this.props.editorType}
 					/>;
 				}
 			}
@@ -1698,6 +1676,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
 					editable={!this.state.readOnly}
+					multiline={this.state.multiline}
+					submitBehavior = "blurAndSubmit"
+				/>
+				<IconButton
+					iconName={(!this.state.multiline && 'material menu-down') || (this.state.multiline && 'material menu-up')}
+					onPress={() => this.setState({ multiline: !this.state.multiline })}
+					description={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
+					iconStyle={this.styles().titleToggleIcon}
+					themeId={this.props.themeId}
 				/>
 			</View>
 		);
@@ -1797,6 +1784,8 @@ const NoteScreen = connect((state: AppState) => {
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		editorNoteReloadTimeRequest: state.editorNoteReloadTimeRequest,
+
+		editorType: state.settings['editor.codeView'] ? EditorType.Markdown : EditorType.RichText,
 
 		// What we call "beta editor" in this component is actually the (now
 		// default) CodeMirror editor. That should be refactored to make it less

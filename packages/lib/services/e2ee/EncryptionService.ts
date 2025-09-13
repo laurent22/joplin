@@ -6,9 +6,11 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
+import PerformanceLogger from '../../PerformanceLogger';
 const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
+const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
 
@@ -27,13 +29,11 @@ interface DecryptedMasterKey {
 	plainText: string;
 }
 
-export interface EncryptionCustomHandler {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	context?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	encrypt(context: any, hexaBytes: string, password: string): Promise<string>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	decrypt(context: any, hexaBytes: string, password: string): Promise<string>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export interface EncryptionCustomHandler<Context = any> {
+	context?: Context;
+	encrypt(context: Context, hexaBytes: string, password: string): Promise<string>;
+	decrypt(context: Context, data: string, password: string): Promise<string>;
 }
 
 export enum EncryptionMethod {
@@ -177,7 +177,7 @@ export default class EncryptionService {
 	public async loadMasterKey(model: MasterKeyEntity, getPassword: string|GetPasswordCallback, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
 
-		const loadKey = async () => {
+		const loadKey = () => perfLogger.track('EncryptionService/loadKey', async () => {
 			logger.info(`Loading master key: ${model.id}. Make active:`, makeActive);
 
 			const password = typeof getPassword === 'string' ? getPassword : (await getPassword());
@@ -197,7 +197,7 @@ export default class EncryptionService {
 			}
 
 			this.encryptedMasterKeys_.delete(model.id);
-		};
+		});
 
 		if (!makeActive) {
 			this.encryptedMasterKeys_.set(model.id, {
@@ -272,7 +272,9 @@ export default class EncryptionService {
 	public async reencryptMasterKey(model: MasterKeyEntity, decryptionPassword: string, encryptionPassword: string, decryptOptions: EncryptOptions = null, encryptOptions: EncryptOptions = null): Promise<MasterKeyEntity> {
 		const newEncryptionMethod = this.defaultMasterKeyEncryptionMethod_;
 		const plainText = await this.decryptMasterKeyContent(model, decryptionPassword, decryptOptions);
-		const newContent = await this.encryptMasterKeyContent(newEncryptionMethod, plainText, encryptionPassword, encryptOptions);
+		const newContent = await this.encryptMasterKeyContent(
+			newEncryptionMethod, plainText, encryptionPassword, encryptOptions,
+		);
 		return { ...model, ...newContent };
 	}
 
@@ -337,10 +339,13 @@ export default class EncryptionService {
 	}
 
 	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
+		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
 			await this.decryptMasterKeyContent(model, password);
 		} catch (error) {
 			return false;
+		} finally {
+			task.onEnd();
 		}
 
 		return true;
@@ -526,7 +531,7 @@ export default class EncryptionService {
 		return handlers[method]();
 	}
 
-	public async decrypt(method: EncryptionMethod, key: string, cipherText: string) {
+	public async decrypt(method: EncryptionMethod, key: string, cipherText: string): Promise<string> {
 		if (!method) throw new Error('Encryption method is required');
 		if (!key) throw new Error('Encryption key is required');
 

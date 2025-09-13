@@ -51,10 +51,10 @@ import handleSyncStartupOperation from './services/synchronizer/utils/handleSync
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 import { setAutoFreeze } from 'immer';
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
-import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2ee/utils';
+import { loadMasterKeysFromSettings, migrateMasterPassword, migratePpk } from './services/e2ee/utils';
 import SyncTargetNone from './SyncTargetNone';
-import { setRSA } from './services/e2ee/ppk';
-import RSA from './services/e2ee/RSA.node';
+import { setRSA } from './services/e2ee/ppk/ppk';
+import RSA from './services/e2ee/ppk/RSA.node';
 import Resource from './models/Resource';
 import { ProfileConfig } from './services/profileConfig/types';
 import initProfile from './services/profileConfig/initProfile';
@@ -67,8 +67,10 @@ import { setupAutoDeletion } from './services/trash/permanentlyDeleteOldItems';
 import determineProfileAndBaseDir from './determineBaseAppDirs';
 import NavService from './services/NavService';
 import getAppName from './getAppName';
+import PerformanceLogger from './PerformanceLogger';
 
 const appLogger: LoggerWrapper = Logger.create('App');
+const perfLogger = PerformanceLogger.create();
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
@@ -88,8 +90,7 @@ export default class BaseApplication {
 	private eventEmitter_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private scheduleAutoAddResourcesIID_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private database_: any = null;
+	protected database_: JoplinDatabase = null;
 	private profileConfig_: ProfileConfig = null;
 
 	protected showStackTraces_ = false;
@@ -393,17 +394,18 @@ export default class BaseApplication {
 			// - All the calls below are cheap or do nothing if there's nothing
 			//   to do.
 			'syncInfoCache': async () => {
+				appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+				await loadMasterKeysFromSettings(EncryptionService.instance());
+				const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
+
+				this.dispatch({
+					type: 'MASTERKEY_REMOVE_NOT_LOADED',
+					ids: loadedMasterKeyIds,
+				});
+
 				if (this.hasGui()) {
-					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
-
-					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
-					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
-
-					this.dispatch({
-						type: 'MASTERKEY_REMOVE_NOT_LOADED',
-						ids: loadedMasterKeyIds,
-					});
 
 					// Schedule a sync operation so that items that need to be encrypted
 					// are sent to sync target.
@@ -673,6 +675,7 @@ export default class BaseApplication {
 			...options,
 		};
 
+		const startTask = perfLogger.taskStart('BaseApplication/start');
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
@@ -748,6 +751,8 @@ export default class BaseApplication {
 			globalLogger.setLevel(initArgs.logLevel);
 		}
 
+		PerformanceLogger.setLogger(globalLogger);
+
 		reg.setLogger(Logger.create('') as Logger);
 		// reg.dispatch = () => {};
 
@@ -775,6 +780,7 @@ export default class BaseApplication {
 			options.keychainEnabled ? [KeychainServiceDriverElectron, KeychainServiceDriverNode] : [],
 		);
 		await migrateMasterPassword();
+		await migratePpk();
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
@@ -804,7 +810,7 @@ export default class BaseApplication {
 				const locale = shim.detectAndSetLocale(Setting);
 				reg.logger().info(`First start: detected locale as ${locale}`);
 			}
-			Setting.skipDefaultMigrations();
+			Setting.skipMigrations();
 
 			if (Setting.value('env') === 'dev') {
 				Setting.setValue('showTrayIcon', false);
@@ -814,8 +820,7 @@ export default class BaseApplication {
 
 			Setting.setValue('firstStart', false);
 		} else {
-			Setting.applyDefaultMigrations();
-			Setting.applyUserSettingMigration();
+			await Setting.applyMigrations();
 		}
 
 		setLocale(Setting.value('locale'));
@@ -886,10 +891,15 @@ export default class BaseApplication {
 		if (!currentFolder) currentFolder = await Folder.defaultFolder();
 		Setting.setValue('activeFolderId', currentFolder ? currentFolder.id : '');
 
+		if (currentFolder && !this.hasGui()) {
+			this.currentFolder_ = currentFolder;
+		}
+
 		await setupAutoDeletion();
 
 		await MigrationService.instance().run();
 
+		startTask.onEnd();
 		return argv;
 	}
 }

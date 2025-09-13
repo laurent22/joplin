@@ -5,8 +5,8 @@
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
-import { useState, useMemo, useCallback, useRef } from 'react';
-import { Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform, Role } from 'react-native';
+import { useState, useMemo, useCallback, useRef, Ref } from 'react';
+import { Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform, Role, StyleProp, View } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 import Icon from './Icon';
 import AccessibleView from './accessibility/AccessibleView';
@@ -15,11 +15,13 @@ type ButtonClickListener = ()=> void;
 interface ButtonProps {
 	onPress: ButtonClickListener;
 
+	pressableRef?: Ref<View>;
+
 	// Accessibility label and text shown in a tooltip
 	description: string;
 
 	iconName: string;
-	iconStyle: TextStyle;
+	iconStyle: StyleProp<TextStyle>;
 
 	themeId: number;
 
@@ -85,8 +87,17 @@ const IconButton = (props: ButtonProps) => {
 		props.preventKeyboardDismiss, props.onPress, props.disabled,
 	);
 
+	let icon = <Icon
+		name={props.iconName}
+		style={props.iconStyle}
+		accessibilityLabel={null}
+	/>;
+	// Include browser-provided tooltips on web.
+	icon = Platform.OS === 'web' ? <span title={props.description}>{icon}</span> : icon;
+
 	const button = (
 		<Pressable
+			ref={props.pressableRef}
 			onPress={props.onPress}
 			onLongPress={onLongPress}
 			onPressIn={onPressIn}
@@ -112,11 +123,7 @@ const IconButton = (props: ButtonProps) => {
 				opacity: fadeAnim,
 				...props.contentWrapperStyle,
 			}}>
-				<Icon
-					name={props.iconName}
-					style={props.iconStyle}
-					accessibilityLabel={null}
-				/>
+				{icon}
 			</Animated.View>
 		</Pressable>
 	);

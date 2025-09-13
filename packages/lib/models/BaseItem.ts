@@ -125,7 +125,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	// Need to dynamically load the classes like this to avoid circular dependencies
-	public static getClass(name: string) {
+	public static getClass<T extends typeof BaseItem>(name: string): T {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className === name) {
 				const classRef = BaseItem.syncItemDefinitions_[i].classRef;
@@ -710,8 +710,7 @@ export default class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let extraWhere: any = [];
+			let extraWhere: string[]|string = [];
 			if (className === 'Note') extraWhere.push('is_conflict = 0');
 			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
@@ -774,8 +773,7 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
+			const neverSyncedItemIds = neverSyncedItem.map((it: BaseItemEntity) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {

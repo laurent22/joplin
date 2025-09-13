@@ -22,9 +22,7 @@ const expectWithInstructions = <T>(value: T) => {
 	return expect(value, instructionMessage);
 };
 
-// We don't require all developers to have Rust to run the project, so we skip this test if not running in CI
-const skipIfNotCI = process.env.IS_CONTINUOUS_INTEGRATION ? it : it.skip;
-
+// This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
 	async function importNote(path: string) {
@@ -52,7 +50,7 @@ describe('InteropService_Importer_OneNote', () => {
 	afterEach(async () => {
 		await remove(tempDir);
 	});
-	skipIfNotCI('should import a simple OneNote notebook', async () => {
+	it('should import a simple OneNote notebook', async () => {
 		const notes = await importNote(`${supportDir}/onenote/simple_notebook.zip`);
 		const folders = await Folder.all();
 
@@ -69,7 +67,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(mainNote.body).toMatchSnapshot(mainNote.title);
 	});
 
-	skipIfNotCI('should preserve indentation of subpages in Section page', async () => {
+	it('should preserve indentation of subpages in Section page', async () => {
 		const notes = await importNote(`${supportDir}/onenote/subpages.zip`);
 
 		const sectionPage = notes.find(n => n.title === 'Section');
@@ -89,7 +87,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(menuLines[7].trim()).toBe(`<li class="l2"><a href=":/${pageTwoB.id}" target="content" title="Page 2-b">${pageTwoB.title}</a>`);
 	});
 
-	skipIfNotCI('should created subsections', async () => {
+	it('should created subsections', async () => {
 		const notes = await importNote(`${supportDir}/onenote/subsections.zip`);
 		const folders = await Folder.all();
 
@@ -107,7 +105,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(notesFromParentSection.length).toBe(2);
 	});
 
-	skipIfNotCI('should expect notes to be rendered the same', async () => {
+	it('should expect notes to be rendered the same', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/complex_notes.zip`);
@@ -124,7 +122,7 @@ describe('InteropService_Importer_OneNote', () => {
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
 
-	skipIfNotCI('should render the proper tree for notebook with group sections', async () => {
+	it('should render the proper tree for notebook with group sections', async () => {
 		const notes = await importNote(`${supportDir}/onenote/group_sections.zip`);
 		const folders = await Folder.all();
 
@@ -152,7 +150,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(notes.filter(n => n.parent_id === sectionD1.id).length).toBe(1);
 	});
 
-	skipIfNotCI.each([
+	it.each([
 		'svg_with_text_and_style.html',
 		'many_svgs.html',
 	])('should extract svgs', async (filename: string) => {
@@ -179,7 +177,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(importer.extractSvgs(content, titleGenerator())).toMatchSnapshot();
 	});
 
-	skipIfNotCI('should ignore broken characters at the start of paragraph', async () => {
+	it('should ignore broken characters at the start of paragraph', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/bug_broken_character.zip`);
@@ -189,7 +187,7 @@ describe('InteropService_Importer_OneNote', () => {
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
 
-	skipIfNotCI('should remove hyperlink from title', async () => {
+	it('should remove hyperlink from title', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/remove_hyperlink_on_title.zip`);
@@ -200,7 +198,7 @@ describe('InteropService_Importer_OneNote', () => {
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
 
-	skipIfNotCI('should group link parts even if they have different css styles', async () => {
+	it('should group link parts even if they have different css styles', async () => {
 		const notes = await importNote(`${supportDir}/onenote/remove_hyperlink_on_title.zip`);
 
 		const noteToTest = notes.find(n => n.title === 'Tips from a Pro Using Trees for Dramatic Landscape Photography');
@@ -209,7 +207,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(noteToTest.body.includes('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/风景.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>')).toBe(true);
 	});
 
-	skipIfNotCI('should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker', async () => {
+	it('should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/hyperlink_marker_as_first_character.zip`);
@@ -220,7 +218,7 @@ describe('InteropService_Importer_OneNote', () => {
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
 
-	skipIfNotCI('should be able to create notes from corrupted attachment', async () => {
+	it('should be able to create notes from corrupted attachment', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/corrupted_attachment.zip`));
@@ -233,7 +231,7 @@ describe('InteropService_Importer_OneNote', () => {
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
 
-	skipIfNotCI('should render audio as links to resource', async () => {
+	it('should render audio as links to resource', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/note_with_audio_embedded.zip`);
@@ -246,7 +244,7 @@ describe('InteropService_Importer_OneNote', () => {
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
 
-	skipIfNotCI('should use default value for EntityGuid and InkBias if not found', async () => {
+	it('should use default value for EntityGuid and InkBias if not found', async () => {
 		let idx = 0;
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/ink_bias_and_entity_guid.zip`));

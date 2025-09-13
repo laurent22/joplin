@@ -51,10 +51,8 @@
 			const modulePath = args && args.length ? args[0] : null;
 			if (!modulePath) throw new Error('No module path specified on `require` call');
 
-			// The sqlite3 is actually part of the lib package so we need to do
-			// something convoluted to get it working.
 			if (modulePath === 'sqlite3') {
-				return require('../../node_modules/@joplin/lib/node_modules/sqlite3/lib/sqlite3.js');
+				return require('sqlite3');
 			}
 
 			if (modulePath === 'fs-extra') {

@@ -9,7 +9,6 @@ import Tag from '@joplin/lib/models/Tag';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry.js';
 import { dirname, fileExtension } from '@joplin/lib/path-utils';
-import { splitCommandString } from '@joplin/utils';
 import { _ } from '@joplin/lib/locale';
 import { pathExists, readFile, readdirSync } from 'fs-extra';
 import RevisionService from '@joplin/lib/services/RevisionService';
@@ -19,7 +18,6 @@ import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import initializeCommandService from './utils/initializeCommandService';
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('@joplin/lib/Cache');
-const { splitCommandBatch } = require('@joplin/lib/string-utils');
 
 class Application extends BaseApplication {
 
@@ -222,6 +220,7 @@ class Application extends BaseApplication {
 		return { ...this.commandMetadata_ };
 	}
 
+
 	public hasGui() {
 		return this.gui() && !this.gui().isDummy();
 	}
@@ -332,6 +331,7 @@ class Application extends BaseApplication {
 			{ keys: ['mb'], type: 'prompt', command: 'mkbook ""', cursorPosition: -2 },
 			{ keys: ['yn'], type: 'prompt', command: 'cp $n ""', cursorPosition: -2 },
 			{ keys: ['dn'], type: 'prompt', command: 'mv $n ""', cursorPosition: -2 },
+			{ keys: ['z'], type: 'function', command: 'toggle_folder_collapse' },
 		];
 
 		// Filter the keymap item by command so that items in keymap.json can override
@@ -381,22 +381,6 @@ class Application extends BaseApplication {
 		return output;
 	}
 
-	public async commandList(argv: string[]) {
-		if (argv.length && argv[0] === 'batch') {
-			const commands = [];
-			const commandLines = splitCommandBatch(await readFile(argv[1], 'utf-8'));
-
-			for (const commandLine of commandLines) {
-				if (!commandLine.trim()) continue;
-				const splitted = splitCommandString(commandLine.trim());
-				commands.push(splitted);
-			}
-			return commands;
-		} else {
-			return [argv];
-		}
-	}
-
 	// We need this special case here because by the time the `version` command
 	// runs, the keychain has already been setup.
 	public checkIfKeychainEnabled(argv: string[]) {
@@ -419,6 +403,11 @@ class Application extends BaseApplication {
 
 		this.initRedux();
 
+		// Since the settings need to be loaded before the store is created, it will never
+		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
+		// initialised. So we manually call dispatchUpdateAll() to force an update.
+		Setting.dispatchUpdateAll();
+
 		if (!shim.sharpEnabled()) this.logger().warn('Sharp is disabled - certain image-related features will not be available');
 
 		initializeCommandService(this.store(), Setting.value('env') === Env.Dev);
@@ -428,15 +417,12 @@ class Application extends BaseApplication {
 		if (argv.length) {
 			this.gui_ = this.dummyGui();
 
-			this.currentFolder_ = await Folder.load(Setting.value('activeFolderId'));
-
+			const initialFolder = await Folder.load(Setting.value('activeFolderId'));
+			await this.switchCurrentFolder(initialFolder);
 			await this.applySettingsSideEffects();
 
 			try {
-				const commands = await this.commandList(argv);
-				for (const command of commands) {
-					await this.execCommand(command);
-				}
+				await this.execCommand(argv);
 			} catch (error) {
 				if (this.showStackTraces_) {
 					console.error(error);
@@ -448,6 +434,7 @@ class Application extends BaseApplication {
 			}
 
 			await Setting.saveAll();
+			await this.database_.close();
 
 			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095
@@ -460,11 +447,6 @@ class Application extends BaseApplication {
 			this.gui_ = new AppGui(this, this.store(), keymap);
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();
-
-			// Since the settings need to be loaded before the store is created, it will never
-			// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
-			// initialised. So we manually call dispatchUpdateAll() to force an update.
-			Setting.dispatchUpdateAll();
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			await refreshFolders((action: any) => this.store().dispatch(action), '');

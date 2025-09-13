@@ -4,7 +4,7 @@
     "access": "public"
   },
   "description": "Used to import a OneNote archive into Joplin",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "license": "AGPL-3.0-or-later",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/onenote-converter",
   "main": "./pkg/onenote_converter.js",

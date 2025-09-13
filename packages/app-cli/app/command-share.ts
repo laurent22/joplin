@@ -149,6 +149,7 @@ class Command extends BaseCommand {
 						waiting: invitation.status === ShareUserStatus.Waiting,
 						rejected: invitation.status === ShareUserStatus.Rejected,
 						folderId: invitation.share.folder_id,
+						canWrite: !!invitation.can_write,
 						fromUser: {
 							email: invitation.share.user?.email,
 						},

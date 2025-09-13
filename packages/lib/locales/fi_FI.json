@@ -2,17 +2,40 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"Ominaisuudesta %s puuttuu pakollinen ominaisuus %s."
 	],
+	"%d day": [
+		"%d päivä",
+		"%d päivää"
+	],
 	"%d GB": [
 		"%d Gt"
 	],
 	"%d GB storage space": [
 		"%d Gt tallennustila"
 	],
+	"%d hour": [
+		"%d tunti",
+		"%d tuntia"
+	],
 	"%d MB": [
 		"%d Mt"
 	],
 	"%d MB per note or attachment": [
 		"%d Mt muistiinpanoa tai liitettä kohti"
+	],
+	"%d minute": [
+		"%d minuutti",
+		"%d minuuttia"
+	],
+	"%d note matches this pattern. Delete it?": [
+		"%d muistiinpano vastaa tätä mallia. Poistetaanko se?",
+		"%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
+	],
+	"%d note will be permanently deleted. Continue?": [
+		"%d muistiinpano poistetaan pysyvästi. Jatka?",
+		"%d muistiinpanot poistetaan pysyvästi. Jatka?"
+	],
+	"%d photo(s) taken": [
+		"%d kuvaa otettu"
 	],
 	"%s": [
 		"%s"
@@ -47,26 +70,39 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be greater than %s": [
+		"%s ei voi olla suurempi kuin %s"
+	],
 	"%s cannot be less than %s": [
-		""
+		"%s ei voi olla pienempi kuin %s"
+	],
+	"%s from %s": [
+		"%s kohteesta %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
-		""
+		"%s ei ole optimoitu synkronoimaan monia pieniä tiedostoja, joten ensimmäinen synkronointi on hidas."
 	],
 	"%s must be a valid whole number": [
-		""
+		"%s pitää olla kokonaisluku"
 	],
 	"%s tab opened": [
-		""
+		"%s välilehti avattu"
 	],
 	"%s: %d": [
 		"%s: %d"
+	],
+	"%s: %d note": [
+		"%s: %d muistiinpano",
+		"%s: %d muistiinpanoja"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
 	],
 	"%s: %s": [
 		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: Puuttuva salasana."
 	],
 	"&Edit": [
 		"&Muokkaa"
@@ -89,6 +125,9 @@
 	"&View": [
 		"&Näytä"
 	],
+	"&Window": [
+		"&Ikkuna"
+	],
 	"(%s)": [
 		"(%s)"
 	],
@@ -96,31 +135,43 @@
 		"(Laajennuksessa: %s)"
 	],
 	"(level %d)": [
-		""
+		"(taso %d)"
 	],
 	"(None)": [
 		"(Ei mitään)"
+	],
+	"(Read-only)": [
+		"(Vain luku)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Voit poistaa tämän kehotuksen käytöstä asetuksista)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
-		"- Kamera: sallia kuvan ottamisen ja liittämisen muistiinpanoon."
+		"- Kamera: sallii kuvan ottamisen ja liittämisen muistiinpanoon."
 	],
 	"- Location: to allow attaching geo-location information to a note.": [
-		"- Sijainti: sallia paikkatietojen liittämisen muistiinpanoon."
+		"- Sijainti: sallii paikkatietojen liittämisen muistiinpanoon."
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
-		"- Tallennustila: sallia tiedostojen liittämisen muistiinpanoihin ja ottaa tiedostojärjestelmän synkronointi käyttöön."
+		"- Tallennustila: sallii tiedostojen liittämisen muistiinpanoihin ja tiedostojärjestelmän synkronoinnin."
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
 		"<tag-command> voidaan \"add\", \"remove\", \"list\", tai \"notetags\" määrittää tai poistaa [tag] kohteesta [note], luetteloinnin muistiinpanoista, jotka liittyvät [tag], tai luetteloida tunnisteita, jotka liittyvät [note]. Komento `tag list` voidaan käyttää kaikkien tunnisteiden luetteloinnissa (Käytä -l pitkälle vaihtoehdolle)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> voidaan joko \"toggle\" tai \"clear\". Käytä \"toggle\" vaihtaa annettua tehtävättä valmistuneen ja keskeneräisen tilan välillä (Jos kohde on säännöllinen huomautus, se muunnetaan tehtäväksi). Käytä \"clear\" voit muuntaa tehtäväkokeen takaisin tavalliseksi. muistiinpanoksi.."
+	],
+	"[None]": [
+		"[Ei mitään]"
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
+	"A new update (%s) is available": [
+		"Uusi päivitys (%s) on saatavilla"
 	],
 	"A3": [
 		"A3"
@@ -132,10 +183,10 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Lisätietoja"
 	],
 	"About Joplin": [
-		"Joplinista"
+		"Lisätietoja Joplin:ista"
 	],
 	"accelerator": [
 		"pikatoiminto"
@@ -149,6 +200,15 @@
 	"Accept": [
 		"Hyväksy"
 	],
+	"Accepted invitations": [
+		"Hyväksytyt kutsut"
+	],
+	"Accepted: Notebook %s from %s": [
+		""
+	],
+	"Accepting share...": [
+		""
+	],
 	"Access denied: Please check your username and password": [
 		""
 	],
@@ -157,6 +217,12 @@
 	],
 	"Account": [
 		"Tili"
+	],
+	"Account information": [
+		"Tilitiedot"
+	],
+	"Account type": [
+		"Tilin tyyppi"
 	],
 	"Action": [
 		"Toiminta"
@@ -182,14 +248,26 @@
 	"Add recipient:": [
 		"Lisää vastaanottaja:"
 	],
-	"Add tag %s to note": [
-		""
+	"Add tags:": [
+		"Lisää tunnisteet:"
 	],
 	"Add title": [
 		"Lisää otsikko"
 	],
 	"Add to dictionary": [
 		"Lisää sanakirjaan"
+	],
+	"Add to note": [
+		""
+	],
+	"Added new: %s": [
+		"Lisätty uusi: %s"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Ylläpitäjä"
@@ -200,8 +278,14 @@
 	"Advanced options": [
 		"Lisäasetukset"
 	],
+	"Advanced settings": [
+		"Lisäasetukset"
+	],
 	"Advanced tools": [
 		"Lisätyökalut"
+	],
+	"all": [
+		"kaikki"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Kaikki tiedot, mukaan lukien muistiinpanot, muistikirjat ja tunnisteet, poistetaan pysyvästi."
@@ -215,6 +299,9 @@
 	"All potential ports are in use - please report the issue at %s": [
 		"Kaikki mahdolliset portit ovat käytössä - ilmoita ongelmasta osoitteessa %s"
 	],
+	"All shared folders:": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
 	],
@@ -224,10 +311,19 @@
 	"Also publish linked notes": [
 		"Julkaise myös linkitetyt muistiinpanot"
 	],
+	"Alternative instance ID: %s": [
+		""
+	],
 	"Always": [
 		"Aina"
 	],
+	"Always ask": [
+		"Kysy aina"
+	],
 	"Always open %s files without asking.": [
+		""
+	],
+	"Always resize": [
 		""
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
@@ -271,6 +367,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -551,6 +650,9 @@
 	"Command palette...": [
 		"Komentovalikoima..."
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Completed": [
 		"Valmis"
 	],
@@ -592,6 +694,9 @@
 	],
 	"Conflicts (attachments)": [
 		"Ristiriidat (liitteet)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"Yhdistetty laskutus"
@@ -777,6 +882,9 @@
 	"Default": [
 		"Oletus"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Oletus: %s"
 	],
@@ -915,6 +1023,15 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Älä kadota salasanaa, sillä tämä on turvallisuussyistä *ainoa* tapa purkaa tietojen salaus! Voit ottaa salauksen käyttöön kirjoittamalla salasanasi alle."
 	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
+	],
 	"Done": [
 		"Valmis"
 	],
@@ -974,6 +1091,9 @@
 	],
 	"Edit": [
 		"Muokkaa"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"Muokkaa linkkiä"
@@ -1173,6 +1293,9 @@
 	"Error opening note in editor: %s": [
 		"Virhe avattaessa muistiinpanoa editorissa: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Virhe. Tarkista URL osoite, käyttäjänimi, salasana jne. ovat oikeita ja synkronointi kohde on käytettävissä. Raportoitu virhe oli:"
 	],
@@ -1233,6 +1356,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Vakava virhe:"
 	],
@@ -1250,9 +1376,6 @@
 	],
 	"File system": [
 		"Tiedostojärjestelmä"
-	],
-	"Filter tags": [
-		"Suodata tunnisteet"
 	],
 	"Find: ": [
 		"Etsi: "
@@ -1277,6 +1400,9 @@
 	],
 	"Focus title": [
 		"Tarkennuksen otsikko"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1327,6 +1453,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Hae se nyt:"
 	],
@@ -1335,6 +1464,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Hakee tai määrittää määritysarvon. Jos [value] ei anneta, se näyttää arvon [name]. Jos [name] tai [value] ei ole annettu, se luettelee nykyisen kokoonpanon."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1416,6 +1548,9 @@
 	],
 	"Idle": [
 		"Käyttämättömänä"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1591,6 +1726,9 @@
 	"Joplin Server URL": [
 		"Joplin palvelimen URL-osoite"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper mahdollistaa verkkosivujen ja kuvakaappausten tallentamisen selaimesta Jopliniin."
 	],
@@ -1736,6 +1874,9 @@
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Merkitsee tehtävän valmiiksi."
 	],
@@ -1850,11 +1991,17 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Uusi muistikirja \"%s\" luodaan ja tiedosto \"%s\" tuodaan siihen"
 	],
+	"New notebook title": [
+		"Uusi muistikirjan otsikko:"
+	],
+	"New photo": [
+		"Uusi valokuva"
+	],
+	"New profile": [
+		"Uusi profiili"
+	],
 	"New sub-notebook": [
 		"Uusi alimuistikirja"
-	],
-	"New tags:": [
-		"Uudet tunnisteet:"
 	],
 	"New to-do": [
 		"Uusi tehtävä"
@@ -1863,7 +2010,10 @@
 		"Uusi versio: %s"
 	],
 	"next": [
-		""
+		"seuraava"
+	],
+	"Next": [
+		"Seuraava"
 	],
 	"Next match": [
 		"Seuraava vastaavuus"
@@ -1910,14 +2060,29 @@
 	"No results": [
 		"Ei tuloksia"
 	],
+	"No revision selected": [
+		""
+	],
 	"No such command: %s": [
 		"Ei tällaista komentoa: %s"
 	],
 	"No suggestions": [
 		"Ei ehdotuksia"
 	],
+	"No tab selected": [
+		""
+	],
+	"No tags": [
+		"Ei tunnisteita:"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Tekstieditoria ei ole määritetty. Aseta se käyttäen `config editor <editor-path>`"
+	],
+	"No updates available": [
+		"Ei päivityksiä saatavilla"
+	],
+	"None": [
+		"Ei mitään"
 	],
 	"Nord": [
 		"Nord"
@@ -1926,7 +2091,7 @@
 		"Ei todennettu %s. Anna puuttuvat tunnistetiedot."
 	],
 	"Not checked": [
-		""
+		"Ei tarkistettu"
 	],
 	"Not downloaded": [
 		"Ei ladattu"
@@ -1964,8 +2129,14 @@
 	"Note has been saved.": [
 		"Huomautus on tallennettu."
 	],
+	"Note history": [
+		"Muistiinpanohistoria"
+	],
 	"Note History": [
 		"Muistiinpanohistoria"
+	],
+	"Note history has been deleted.": [
+		"Muistiinpanohistoria on tyhjennetty."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"Huomautus ei ole tehtävä: \"%s\""
@@ -1975,6 +2146,12 @@
 	],
 	"Note list growth factor": [
 		"Huomautus luettelon kasvutekijä"
+	],
+	"Note list style": [
+		""
+	],
+	"Note preview": [
+		""
 	],
 	"Note properties": [
 		"Muistiinpanon ominaisuudet"
@@ -1999,6 +2176,9 @@
 	],
 	"Notebook: %s": [
 		"Muistikirja: %s"
+	],
+	"Notebook: %s (%s)": [
+		"Muistikirja: %s (%s)"
 	],
 	"Notebooks": [
 		"Muistikirjat"
@@ -2048,6 +2228,9 @@
 	"OneDrive Login": [
 		"OneDrive kirjautuminen"
 	],
+	"OneNote Notebook": [
+		"OneNote muistikirja"
+	],
 	"Only one note can be printed at a time.": [
 		"Vain yksi muistiinpano voidaan tulostaa kerrallaan."
 	],
@@ -2057,8 +2240,17 @@
 	"Open %s": [
 		"Avaa %s"
 	],
+	"Open in external editor": [
+		"Avaa ulkoisessa tekstieditorissa"
+	],
 	"Open in new window": [
-		""
+		"Avaa uudessa ikkunassa"
+	],
+	"Open it": [
+		"Avaa se"
+	],
+	"Open log": [
+		"Avaa loki"
 	],
 	"Open PDF viewer": [
 		"Avaa PDF katseluohjelma"
@@ -2072,6 +2264,12 @@
 	"Open secondary app instance...": [
 		""
 	],
+	"Open settings": [
+		"Avaa lisäasetukset"
+	],
+	"Open Source": [
+		"avaa lähde"
+	],
 	"Open Sync Wizard...": [
 		"Avaa ohjattu synkronointitoiminto."
 	],
@@ -2080,6 +2278,15 @@
 	],
 	"Opening section %s": [
 		""
+	],
+	"Opens dropdown": [
+		"Avaa pudotusvalikko"
+	],
+	"Opens note": [
+		"Avaa muistio"
+	],
+	"Opens notebook": [
+		"Avaa muistiinpano"
 	],
 	"Operation cancelled": [
 		"Toiminto peruutettu"
@@ -2103,10 +2310,10 @@
 		"PDF viennin sivukoko"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"Paneeli %s on näkyvissä"
 	],
 	"Panel %s is hidden": [
-		""
+		"Paneeli %s on piilotettu"
 	],
 	"Password": [
 		"Salasana"
@@ -2132,8 +2339,24 @@
 	"PDF File": [
 		"PDF tiedosto"
 	],
+	"Per user. Minimum of 2 users.": [
+		"Käyttäjää kohti. Vähintään 2 käyttäjää."
+	],
+	"Permanently delete note": [
+		"Poista muistiinpano pysyvästi"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Poista muistiinpano \"%s\" pysyvästi?"
+	],
+	"Permanently delete this note?": [
+		"Poista muistiinpano pysyvästi?",
+		"Poista muistiinpanot pysyvästi?"
+	],
 	"Permission needed": [
 		"Tarvittava lupa"
+	],
+	"Photo %d": [
+		"Kuva %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Jatka napsauttamalla \"%s\" tai aseta salasana oheiseen \"%s\" luetteloon."
@@ -2171,14 +2394,26 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"Määritä muistikirja, johon muistiinpanot tuodaan."
 	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"Päivitä Joplin vähintään versioon %s käyttääksesi tätä laajennusta."
+	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Odota, että kaikki liitteet ladataan ja puretaan. Voit myös vaihtaa kohtaan %s muokkaamaan muistiinpanoa."
+	],
+	"Please wait while we load your organisation sign-in page...": [
+		"Odota hetki, kun lataamme organisaatiosi kirjautumissivua..."
 	],
 	"Please wait...": [
 		"Odota..."
 	],
-	"Plugin repository failed to load": [
-		""
+	"Plugin message": [
+		"Laajennuksen viesti"
+	],
+	"Plugin search": [
+		"Laajennuksien haku"
+	],
+	"Plugin security": [
+		"Laajennuksien turvallisuus"
 	],
 	"Plugin tools": [
 		"Laajennustyökalut"
@@ -2231,8 +2466,14 @@
 	"Press to set the decryption password.": [
 		"Aseta salauksen purkuun salasana painamalla tätä."
 	],
+	"previous": [
+		"Edellinen"
+	],
 	"Previous match": [
 		"Edellinen vastaavuus"
+	],
+	"Previous versions": [
+		"Aiemmat versiot"
 	],
 	"Previous versions of this note": [
 		"Tämän muistiinpanon aiemmat versiot"
@@ -2259,7 +2500,10 @@
 		"Käsittele käyttäjien poistot"
 	],
 	"Processing": [
-		""
+		"Käsittelee"
+	],
+	"Processing photo...": [
+		"Käsittelee kuvaa..."
 	],
 	"Profile": [
 		"Profiili"
@@ -2291,6 +2535,9 @@
 	"Public-private key pair:": [
 		"Julkinen ja yksityinen avainpari:"
 	],
+	"Publish Note": [
+		"Julkaise muistiinpano"
+	],
 	"Publish note...": [
 		"Muistiinpanon julkaiseminen..."
 	],
@@ -2300,11 +2547,17 @@
 	"Publish notes to the internet": [
 		"Julkaise muistiinpanot Internetissä"
 	],
+	"Publish/unpublish": [
+		"Julkaise/peruuta julkaisu"
+	],
+	"QR Code": [
+		"QR-koodi"
+	],
 	"Quit": [
 		"Lopeta"
 	],
 	"Re-download model": [
-		""
+		"Uudelleenlataa malli"
 	],
 	"Re-encrypt data": [
 		"Salaa tiedot uudelleen"
@@ -2312,8 +2565,14 @@
 	"Re-encryption": [
 		"Uudelleen salaus"
 	],
+	"Re-enter password": [
+		"Syötä salasana uudelleen"
+	],
 	"Re-upload local data to sync target": [
 		"Lataa paikalliset tiedot uudelleen kohteen synkronointia varten"
+	],
+	"Read more": [
+		"Lue lisää"
 	],
 	"Read more about it": [
 		"Lue lisää siitä"
@@ -2333,8 +2592,20 @@
 	"Recipients:": [
 		"Vastaanottajat:"
 	],
+	"Recommended": [
+		"Suositeltu"
+	],
+	"Recommended plugins": [
+		"Suositellut lisäosat"
+	],
 	"Record audio": [
-		""
+		"Tallentaa äänitettä"
+	],
+	"Recording": [
+		"Tallentaa"
+	],
+	"Recording...": [
+		"Tallentaa..."
 	],
 	"Redo": [
 		"Tee uudelleen"
@@ -2348,14 +2619,29 @@
 	"Reject": [
 		"Hylkää"
 	],
+	"Rejecting share...": [
+		"Hylätään jako..."
+	],
 	"Remove": [
 		"Poista"
+	],
+	"Remove %s": [
+		"Poista %s"
+	],
+	"Remove %s from share": [
+		"Poista %s jaosta"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"Poistetaanko tunniste \"%s\" kaikista muistiinpanoista?"
 	],
 	"Remove this search from the sidebar?": [
 		"Poistetaanko tämä haku sivupalkista?"
+	],
+	"Removed %s from share.": [
+		"Poistettu %s jaosta"
+	],
+	"Removed tag: %s": [
+		"Poistettu tunniste: %s"
 	],
 	"Rename": [
 		"Nimeä uudelleen"
@@ -2369,11 +2655,20 @@
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Nimeää annetun <item> (muistiinpano tai muistikirja) nimeksi <name>."
 	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
+	],
 	"Renew token": [
 		"Uusi tunnus"
 	],
+	"replace": [
+		"korvaa"
+	],
 	"Replace": [
 		"Korvaa"
+	],
+	"replace all": [
+		"korvaa kaikki"
 	],
 	"Replace all": [
 		"Korvaa kaikki"
@@ -2382,7 +2677,7 @@
 		"Korvaa..."
 	],
 	"Replace: ": [
-		"Vaihda: "
+		"korvaa:"
 	],
 	"replaced $ matches": [
 		""
@@ -2391,13 +2686,16 @@
 		""
 	],
 	"Report an issue": [
-		""
+		"Ilmoita ongelmasta"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"Ilmoita lisäosaan liittyvästä ongelmasta"
 	],
-	"Report fraudulent plugin": [
-		""
+	"Report system": [
+		"Raporttijärjestelmä"
+	],
+	"Reports": [
+		"Raportit"
 	],
 	"Reset application layout": [
 		"Palauta sovelluksen asettelu"
@@ -2405,11 +2703,17 @@
 	"Reset master password": [
 		"Pääsalasanan vaihtaminen"
 	],
+	"Resize large images:": [
+		"Muunna suuret kuvat:"
+	],
 	"Resources: %d.": [
 		"Resursseja: %d."
 	],
 	"Restart and upgrade": [
 		"Käynnistä uudelleen ja päivitä"
+	],
+	"Restart in safe mode": [
+		"Käynnistä uudelleen viansietotilassa"
 	],
 	"Restart now": [
 		"Käynnistä uudelleen nyt"
@@ -2417,11 +2721,23 @@
 	"Restore": [
 		"Palauttaa"
 	],
+	"Restore defaults": [
+		"Palauta oletusarvot"
+	],
+	"Restore note": [
+		"Palauta muistiinpano"
+	],
+	"Restore notebook": [
+		"Palauta muistikirja"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Palauttaa <pattern> vastaavat muistiinpanot roskakorista."
+	],
 	"Restored Notes": [
 		"Palautetut muistiinpanot"
 	],
 	"Results (%d):": [
-		""
+		"Tulokset (%d):"
 	],
 	"Retry": [
 		"Yritä uudelleen"
@@ -2438,11 +2754,11 @@
 	"Reverses the sorting order.": [
 		"Kääntää lajittelujärjestyksen."
 	],
+	"Revision:": [
+		"Versio:"
+	],
 	"Revision: %s (%s)": [
 		"Versio: %s (%s)"
-	],
-	"Rich Text": [
-		""
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		""
@@ -2486,14 +2802,20 @@
 	"Save changes": [
 		"Tallenna muutokset"
 	],
+	"Save changes?": [
+		"Tallenna muutokset?"
+	],
 	"Save geo-location with notes": [
 		"Tallenna maantieteellinen sijainti muistiinpanojen avulla"
 	],
+	"Scan notebook": [
+		"Skannaa muistikirja"
+	],
 	"Scanned code": [
-		""
+		"Skannattu koodi"
 	],
 	"Scrollbar size": [
-		""
+		"Vierityspalkin koko"
 	],
 	"Search": [
 		"Etsi"
@@ -2504,11 +2826,23 @@
 	"Search for...": [
 		"Etsii..."
 	],
+	"Search hidden": [
+		"Haku piilotettu"
+	],
 	"Search in all the notes": [
 		"Etsi kaikista muistiinpanoista"
 	],
 	"Search in current note": [
 		"Etsi nykyisestä muistiinpanosta"
+	],
+	"Search results": [
+		"Hakutulokset"
+	],
+	"Search shown": [
+		"Haku näytetään"
+	],
+	"Search tags": [
+		"Etsi merkkejä"
 	],
 	"Search...": [
 		"Etsi..."
@@ -2519,11 +2853,17 @@
 	"Searches for the given <pattern> in all the notes.": [
 		"Etsii annettua <pattern> kaikista muistiinpanoista."
 	],
+	"See changelog": [
+		"Katso muutoslokia"
+	],
 	"See the pre-release page for more details: %s": [
 		"Lisätietoja on ennakkojulkaisusivulla: %s"
 	],
 	"Select": [
 		"Valitse"
+	],
+	"Select a revision...": [
+		"Valitse versio..."
 	],
 	"Select all": [
 		"Valitse kaikki"
@@ -2533,6 +2873,24 @@
 	],
 	"Select file...": [
 		"Valitse tiedosto..."
+	],
+	"Select notebook": [
+		"Valitse muistikirja"
+	],
+	"Select parent notebook": [
+		"Valitse ylempi muistikirja"
+	],
+	"Selected: %s": [
+		"Valitut: %s"
+	],
+	"Selection deleted": [
+		"Valinta poistettu: %d"
+	],
+	"Selects a notebook": [
+		"Valitsee muistikirja"
+	],
+	"Send bug report": [
+		"Lähetä virheenkorjausraportti"
 	],
 	"Server is already running on port %d": [
 		"Palvelin on jo käynnissä portissa %d"
@@ -2559,7 +2917,7 @@
 		"Asettaa ominaisuuden <name> annetusta <note> annettuun [arvoon]. Mahdolliset ominaisuudet ovat:\n\n%s"
 	],
 	"Settings": [
-		""
+		"Asetukset"
 	],
 	"Share": [
 		"Jaa"
@@ -2574,7 +2932,13 @@
 		"Muistikirjan jakaminen..."
 	],
 	"Share permissions": [
-		""
+		"Jaon oikeudet"
+	],
+	"Shared": [
+		"Jaetut"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		"Jakaa tai poistaa määritetyn [notebook] jakamisen käyttäjän [user] kanssa. Vaatii Joplin Cloud:in tai Joplin Server:in."
 	],
 	"Sharing notebook...": [
 		"Jaetaan muistikirjaa..."
@@ -2600,8 +2964,17 @@
 	"Show disabled keys": [
 		"Näytä käytöstä poistetut avaimet"
 	],
+	"Show monospace fonts only.": [
+		"Näytä vain monospace-fontit."
+	],
 	"Show note counts": [
 		"Näytä muistiinpanojen määrä"
+	],
+	"Show notebook options": [
+		"Näytä muistiinpanojen asetukset"
+	],
+	"Show password": [
+		"Näytä salasana"
 	],
 	"Show sort order buttons": [
 		"Näytä lajittelujärjestyspainikkeet"
@@ -2613,13 +2986,19 @@
 		"Näytä/piilota sivupalkki"
 	],
 	"Shrink large images before adding them to notes.": [
-		""
+		"Pienennä suuria kuvia ennen niiden lisäämistä muistiinpanoihin."
+	],
+	"Side menu closed": [
+		"Sivupalkki suljettu"
 	],
 	"Side menu opened": [
-		""
+		"Sivupalkki avattu"
 	],
 	"Sidebar": [
 		"Sivupalkki"
+	],
+	"Sign up to Joplin Cloud": [
+		"Rekisteröidy Joplin Cloud:iin"
 	],
 	"Size": [
 		"Koko"
@@ -2634,7 +3013,7 @@
 		"Ohitetaan: %d."
 	],
 	"Small": [
-		""
+		"Pieni"
 	],
 	"Solarised Dark": [
 		"Solarised Dark"
@@ -2643,7 +3022,7 @@
 		"Solarised Light"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
-		""
+		"Joitain liitteitä ei voitu ladata. Yritä ladata ne uudelleen."
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
 		""
@@ -2657,11 +3036,14 @@
 	"Some items cannot be synchronised. Press for more info.": [
 		"Joitakin kohteita ei voida synkronoida. Paina saadaksesi lisätietoja."
 	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Joitakin kohteita ei voitu synkronoida. Yritä synkronoida ne ensin."
+	],
 	"Sort \"%s\" in ascending order": [
-		""
+		"Lajittele \"%s\" nousevassa järjestyksessä"
 	],
 	"Sort \"%s\" in descending order": [
-		""
+		"Lajittele \"%s\" laskevassa järjestyksessä"
 	],
 	"Sort notebooks by": [
 		"Muistikirjojen lajitteleminen"
@@ -2678,14 +3060,14 @@
 	"Source": [
 		"Lähde"
 	],
+	"Source code available": [
+		"Lähdekoodi on saatavilla"
+	],
 	"Source format: %s": [
 		"Lähdemuoto: %s"
 	],
 	"Source: ": [
 		"Lähde: "
-	],
-	"Spacer": [
-		""
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Määritä portti, jota API palvelimen on käytettävä. Jos sitä ei ole määritetty, käytetään oletusarvoa."
@@ -2700,7 +3082,7 @@
 		"Käynnistys sovellus pienennetään tehtäväpalkkiin"
 	],
 	"Start recording": [
-		""
+		"Aloita tallennus"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Käynnistä, pysäytä tai tarkista API-palvelin. Määritä api.port-asetusmuuttuja määrittääksesi, missä portissa sen pitäisi toimia. Komennot ovat (% s)."
@@ -2762,8 +3144,14 @@
 	"Subscript": [
 		"Alaindeksi"
 	],
+	"Success": [
+		"Onnistuminen"
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Suoritettu! Synkronoinnin määritys näyttää olevan oikea."
+	],
+	"Suggestions": [
+		"Ehdotukset"
 	],
 	"Superscript": [
 		"Yläindeksi"
@@ -2781,7 +3169,10 @@
 		"Vaihda profiili"
 	],
 	"Switch to back-facing camera": [
-		""
+		"Vaihda takakameraan"
+	],
+	"Switch to front-facing camera": [
+		"Vaihda etukameraan"
 	],
 	"Switch to note type": [
 		"Vaihda muistiinpanotyyppiin"
@@ -2819,6 +3210,9 @@
 	"Sync your notes": [
 		"Synkronoi muistiinpanosi"
 	],
+	"Sync, encryption, proxy": [
+		"Synkronointi, salaus, välityspalvelin"
+	],
 	"Synchronisation": [
 		"Synkronointi"
 	],
@@ -2852,17 +3246,8 @@
 	"Synchronizing...": [
 		"Synkronoidaan..."
 	],
-	"Tab indents": [
-		""
-	],
-	"Tab moves focus": [
-		""
-	],
 	"Tabloid": [
 		"Tabloid"
-	],
-	"tag1, tag2, ...": [
-		"tunniste1, tunniste2, ..."
 	],
 	"Tagged: %d.": [
 		"Merkityt: %d."
@@ -2874,7 +3259,7 @@
 		"Ota valokuva"
 	],
 	"Task \"%s\" failed with error: %s": [
-		""
+		"Tehtävä \"%s\" epäonnistui virheellä: %s"
 	],
 	"Task list": [
 		"Tehtävälista"
@@ -2893,9 +3278,6 @@
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Sovellus suljetaan nyt. Käynnistä se uudelleen prosessin loppuun saamiseksi."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"Sovellus ei sulkeutunut kunnolla. Haluatko aloittaa vikasietotilassa?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Sovellus on hyväksytty - voit nyt sulkea tämän välilehden."
@@ -2948,6 +3330,9 @@
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Näillä tunnuksilla varustettuja avaimia käytetään joidenkin kohteiden salaamiseen, mutta sovelluksella ei tällä hetkellä ole pääsyä niihin. On todennäköistä, että ne lopulta ladataan synkronoinnin avulla."
 	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
+	],
 	"The master key has been upgraded successfully!": [
 		"Pääavain on päivitetty onnistuneesti!"
 	],
@@ -2978,6 +3363,9 @@
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
 		"Synkronointikohde on päivitettävä. Jatka painamalla tätä banneria."
 	],
+	"The synchronisation password is missing.": [
+		"Synkronoinnin salasana puuttuu."
+	],
 	"The tag \"%s\" already exists. Please choose a different name.": [
 		"Tunniste \"%s\" on jo olemassa. Valitse toinen nimi."
 	],
@@ -2990,8 +3378,11 @@
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper tarvitsee valtuutuksen tietojen käyttöön."
 	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
+		"Web Clipper työkalua ei voida ottaa käyttöön tässä Joplin-instanssissa."
+	],
 	"The web clipper service is enabled and set to auto-start.": [
-		"Web Clipper työkalu on käytössä ja asetettu käynnistymään automaattisesti."
+		"Web Clipper työkalu on käytössä ja se on asetettu käynnistymään automaattisesti."
 	],
 	"The web clipper service is not enabled.": [
 		"Web Clipper työkalu ei ole käytössä."
@@ -3002,8 +3393,14 @@
 	"Theme": [
 		"Teema"
 	],
+	"Themes, editor font": [
+		"Teemat, editorin fontti"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) -painiketta."
+	],
+	"There are no notes in the trash folder.": [
+		"Roskakorissa ei ole muistiinpanoja."
 	],
 	"There are unsaved changes.": [
 		"On tallentamattomia muutoksia."
@@ -3018,7 +3415,7 @@
 		"Tämän liitteen lataamisessa tapahtui virhe:"
 	],
 	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
-		""
+		"Näiden kohteiden synkronointi epäonnistui, mutta ne on merkitty ohitetuiksi. Ne eivät aiheuta synkronointivaroitusta, mutta niitä ei silti synkronoida. Voit poistaa ohituksen napsauttamalla \"yritä uudelleen\"."
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"Nämä kohteet pysyvät laitteessa, mutta niitä ei ladata synkronointikohteeseen. Löytääksesi nämä kohteet, etsi joko otsikko tai tunnus (joka näkyy edellä olevissa hakasulkeissa)."
@@ -3030,7 +3427,7 @@
 		""
 	],
 	"This attachment does not have OCR data (Status: %s)": [
-		""
+		"Tässä liitteessä ei ole OCR-dataa (Tila: %s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"Tätä liitettä ei ole vielä ladattu tai sitä ei ole vielä purettu"
@@ -3038,8 +3435,29 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Tätä valtuutustunnusta tarvitaan vain, jotta kolmannen osapuolen sovellukset voivat käyttää Joplinia."
 	],
+	"This drawing may have unsaved changes.": [
+		"Tässä piirroksessa saattaa olla tallentamattomia muutoksia."
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		"Tämä ominaisuus on käytettävissä vain Joplin Cloud:issa ja Joplin Server:issä."
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Tämä on kehittynyt työkalu muistiinpanoihin linkitettyjen liitteiden näyttämiseen. Ole varovainen, kun poistat yhden niistä, koska niitä ei voi palauttaa jälkeenpäin."
+	],
+	"This note could not be deleted: %s": [
+		"Tätä tiedostoa ei voitu poistaa: %s",
+		"Näitä tiedostoja ei voitu poistaa: %s"
+	],
+	"This note could not be duplicated: %s": [
+		"Muistikirjaa ei voitu kopioida: %s",
+		"Muistikirjoja ei voitu kopioida: %s"
+	],
+	"This note could not be moved: %s": [
+		"Muistikirjaa ei voitu siirtää: %s",
+		"Muistikirjoja ei voitu siirtää: %s"
 	],
 	"This note does not have geolocation information.": [
 		"Tässä muistiinpanossa ei ole sijaintitietoja."
@@ -3053,8 +3471,11 @@
 	"This note has no history": [
 		"Tällä muistiinpanolla ei ole historiaa"
 	],
-	"This plugin doesn't support %s.": [
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		""
+	],
+	"This plugin doesn't support %s.": [
+		"Tämä lisäosa ei tue %s."
 	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"Tällä Rich Text -editorilla on useita rajoituksia, on suositeltavaa olla tietoinen niistä ennen sen käyttöä."
@@ -3063,7 +3484,7 @@
 		"Tämän palvelun avulla selainlaajennus voi olla yhteydessä Jopliniin. Kun se otetaan käyttöön, palomuuri voi pyytää sinua antamaan Joplinille luvan kuunnella tiettyä porttia."
 	],
 	"This subfolder of the trash has no notes.": [
-		""
+		"Tässä roskakorin alikansiossa ei ole muistiinpanoja."
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"Antaa Joplinille mahdollisuuden toimia taustalla. On suositeltavaa ottaa tämä asetus käyttöön, jotta muistiinpanoja synkronoidaan jatkuvasti, näin vähennetään ristiriitojen määrää."
@@ -3072,7 +3493,7 @@
 		"Tämä avaa uuden ikkunan. Tallennetaanko nykyiset muutokset?"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"Tämä poistaa kaikki roskakorissa olevat kohteet pysyvästi. Jatka?"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"Tämä poistaa muistikirjan kokoelmasta, etkä voi enää käyttää sen sisältöä. Haluatko jatkaa?"
@@ -3089,11 +3510,20 @@
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"Jos haluat, että Joplin voi synkronoida Dropboxin kanssa, toimi seuraavasti:"
 	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Jos haluat, että Joplin voi synkronoida Joplin Cloud:in kanssa, toimi seuraavasti:"
+	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Jos haluat, että Joplin voi synkronoida käyttäjäsi, toimi seuraavasti:"
+	],
 	"To continue, please enter your master password below.": [
 		"Jatka kirjoittamalla pääsalasanasi alle."
 	],
+	"To create a new tag, type the name and press enter.": [
+		"Luodaksesi uuden tunnisteen, kirjoita sen nimi ja paina Enter."
+	],
 	"To delete a tag, untag the associated notes.": [
-		"Tunnisteen poistaminen, poista merkinnät muistiinpanoista."
+		"Poistaaksesi tunnisteen, poista merkinnät muistiinpanoista."
 	],
 	"To delete: %d": [
 		"Poistettu: %d"
@@ -3125,6 +3555,9 @@
 	"to-do": [
 		"tehtävä"
 	],
+	"To-do": [
+		"Tehtävälista"
+	],
 	"to-do: %s": [
 		"tehtävä: %s"
 	],
@@ -3142,6 +3575,9 @@
 	],
 	"Toggle external editing": [
 		"Vaihda ulkoiseen tekstieditoriin"
+	],
+	"Toggle menu bar": [
+		"Näytä/piilota valikkopalkki"
 	],
 	"Toggle note list": [
 		"Muistiinpanoluettelon vaihtaminen"
@@ -3161,6 +3597,9 @@
 	"Token has been copied to the clipboard!": [
 		"Tunnus on kopioitu leikepöydälle!"
 	],
+	"Toolbar": [
+		"Työkalurivi"
+	],
 	"Tools": [
 		"Työkalut"
 	],
@@ -3171,7 +3610,7 @@
 		"Yhteensä: %d/%d"
 	],
 	"Trash": [
-		""
+		"Roskakori"
 	],
 	"Try again": [
 		"Yritä uudestaan"
@@ -3188,20 +3627,17 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Kirjoita muistiinpanon otsikko, jos haluat siirtyä siihen. Voit myös kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ ja sen jälkeen muistikirjan nimen. Voit myös etsiä komentoja kirjoittamalla : ."
 	],
-	"Type new tags or select from list": [
-		"Kirjoita uudet tunnisteet tai valitse luettelosta"
+	"Type a note title to search for it.": [
+		"Kirjoita muistiinpanon otsikko etsiäksesi sitä."
 	],
 	"Type: %s.": [
 		"Tyyppi: %s."
 	],
 	"Unable to edit resource of type %s": [
-		""
+		"Resurssia, jonka tyyppi on %s, ei voida muokata"
 	],
 	"Unable to share log data. Reason: %s": [
-		""
-	],
-	"Unchecked": [
-		""
+		"Lokitietojen jakaminen epäonnistui. Syy: %s"
 	],
 	"Uncompleted to-dos on top": [
 		"Keskeneräiset tehtävät ylhäällä"
@@ -3215,20 +3651,35 @@
 	"Unknown": [
 		"Tuntematon"
 	],
+	"Unknown file type": [
+		"Tuntematon tiedoston tyyppi"
+	],
 	"Unknown flag: %s": [
 		"Tuntematon merkintä: %s"
 	],
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Tuntematon kohdetyyppi ladattu - päivitä Joplin uusimpaan versioon"
 	],
+	"Unknown platform": [
+		"Tuntematon laite"
+	],
 	"Unordered list": [
 		"Järjestämätön luettelo"
+	],
+	"Unpublish": [
+		"Peruuta julkaisu"
+	],
+	"Unpublish \"%s\"": [
+		"Peruuta julkaisu \"%s\""
 	],
 	"Unpublish note": [
 		"Peruuta muistiinpanon julkaisu"
 	],
 	"Unshare": [
 		"Poista jakaminen"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		"Poistetaanko muistikirjan \"%s\" jakaminen? Tämä voi aiheuttaa sen, että muut käyttäjät menettävät pääsyn muistikirjaan."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Poistetaanko tämän muistikirjan jakaminen? Vastaanottajilla ei ole enää pääsyä sen sisältöön."
@@ -3244,6 +3695,12 @@
 	],
 	"Update": [
 		"Päivitä"
+	],
+	"Update available": [
+		"Päivitys saatavilla"
+	],
+	"Update later": [
+		"Päivitä myöhemmin"
 	],
 	"Update profile": [
 		"Päivitä profiili"
@@ -3280,6 +3737,9 @@
 	],
 	"Upgrade the sync target to the latest version.": [
 		"Päivitä synkronointikohde uusimpaan versioon."
+	],
+	"Upload photo": [
+		"Lataa valokuva"
 	],
 	"URL": [
 		"URL"
@@ -3330,7 +3790,7 @@
 		"Näytä"
 	],
 	"View OCR text": [
-		""
+		"Näytä OCR teksti"
 	],
 	"View on map": [
 		"Näytä kartalla"
@@ -3339,22 +3799,28 @@
 		"Näytä ne nyt"
 	],
 	"Viewer": [
-		"Katselija"
+		"Editori"
+	],
+	"Viewer font size": [
+		"Editorin fonttikoko"
 	],
 	"Vim": [
 		"Vim"
 	],
 	"Voice recorder": [
-		""
-	],
-	"Voice typing language files (URL)": [
-		""
+		"Äänitallennin"
 	],
 	"Voice typing...": [
-		""
+		"Äänikirjoitus..."
 	],
-	"Vosk": [
-		""
+	"Voice typing: Glossary": [
+		"Äänikirjoitus: Sanasto"
+	],
+	"Waiting for authorisation...": [
+		"Odottaa hyväksyntää..."
+	],
+	"Waiting: Notebook %s from %s": [
+		"Odottaa: Muistikirjaa %s kohteesta %s"
 	],
 	"Warning": [
 		"Varoitus"
@@ -3363,10 +3829,10 @@
 		"Varoitus: kaikkia resursseja ei näytetä suorituskyvyn vuoksi (raja: %s)."
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"Meillä on järjestelmä ongelmallisten lisäosien raportointiin ja poistamiseen."
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"Merkitsemme luotettavien Joplin-yhteisön jäsenten kehittämät lisäosat \"suositelluiksi\"."
 	],
 	"Web Clipper": [
 		"Web Clipper"
@@ -3387,13 +3853,19 @@
 		"Verkkosivusto ja asiakirjat"
 	],
 	"WebView package: %s": [
-		""
+		"WebView paketti: %s"
+	],
+	"WebView version: %s": [
+		"WebView versio: %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Tervetuloa Jopliniin!\n\nValitse `:help shortcuts` pikanäppäinten luetteloa varten, tai `:help` saadaksesi käytöstä lisätietoja."
 	],
 	"Welcome!": [
-		""
+		"Tervetuloa!"
+	],
+	"What are plugins?": [
+		"Mitä laajennukset ovat?"
 	],
 	"When creating a new note:": [
 		"Kun luot uutta muistiinpanoa:"
@@ -3402,13 +3874,13 @@
 		"Kun luot uuden tehtävän:"
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		""
+		"Kun tämä on käytössä, sovellus skannaa liitteesi ja poimii tekstin niistä. Näin voit hakea tekstiä näistä liitteistä."
 	],
 	"Whisper": [
-		""
+		"Kuiskata"
 	],
 	"Window unresponsive.": [
-		""
+		"Ikkuna ei vastaa."
 	],
 	"Words": [
 		"Sanat"
@@ -3429,10 +3901,16 @@
 		"Olet liittämässä suurta kuvaa (%dx%d pikseliä). Haluatko muuttaa sen koon %d pikseliä ennen sen liittämistä?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
-		""
+		"Olet kirjautunut sisään Joplin Cloud:iin, voit nyt poistua tältä näytöltä."
+	],
+	"You are now logged into your account.": [
+		"Olet nyt kirjautunut käyttäjällesi."
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		"Käytät nyt Markdown-editorin uusinta versiota."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
-		""
+		"Käytät Joplinin Intel-versiota Apple Silicon-prosessorilla. Lataa Apple Silicon-versio paremman suorituskyvyn saavuttamiseksi."
 	],
 	"You currently have no notebooks.": [
 		"Sinulla ei ole muistikirjoja."
@@ -3447,7 +3925,7 @@
 		"Voit käyttää alla olevaa työkalua tietojen salaamiseen uudelleen, esimerkiksi jos tiedät, että osa muistiinpanoistasi on salattu vanhentuneella salausmenetelmällä."
 	],
 	"Your account doesn't have access to this feature": [
-		""
+		"Sinun käyttäjälläsi ei ole oikeutta tähän ominaisuuteen"
 	],
 	"Your choice: ": [
 		"Sinun valintasi: "
@@ -3456,7 +3934,7 @@
 		"Tietosi salataan ja synkronoidaan uudelleen."
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		""
+		"Sinun Joplin Cloud kirjautumistietosi ovat väärät, kirjaudu sisään."
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"Salasanaasi tarvitaan joidenkin tietojen salauksen purkamiseen."

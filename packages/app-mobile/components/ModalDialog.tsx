@@ -1,91 +1,86 @@
 import * as React from 'react';
-import { ReactNode } from 'react';
-import { Text, View, StyleSheet, Button, TextStyle, ViewStyle } from 'react-native';
+import { useMemo } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { themeStyle } from './global-style';
-import { _ } from '@joplin/lib/locale';
 
-import Modal from './Modal';
+import Modal, { ModalElementProps } from './Modal';
+import { PrimaryButton } from './buttons';
+import { _ } from '@joplin/lib/locale';
+import { Button } from 'react-native-paper';
 
 interface Props {
 	themeId: number;
-	ContentComponent: ReactNode;
+	children: React.ReactNode;
+	modalProps: Partial<ModalElementProps>;
 
 	buttonBarEnabled: boolean;
-	title: string;
+	okTitle: string;
+	cancelTitle: string;
 	onOkPress: ()=> void;
 	onCancelPress: ()=> void;
 }
 
-interface State {
-
-}
-
-class ModalDialog extends React.Component<Props, State> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private styles_: any;
-
-	public constructor(props: Props) {
-		super(props);
-		this.styles_ = {};
-	}
-
-	private styles() {
-		const themeId = this.props.themeId;
+const useStyles = (themeId: number) => {
+	return useMemo(() => {
 		const theme = themeStyle(themeId);
-
-		if (this.styles_[themeId]) return this.styles_[themeId];
-		this.styles_ = {};
-
-		const styles: Record<string, ViewStyle|TextStyle> = {
-			modalContentWrapper: {
-				flex: 1,
-				flexDirection: 'column',
+		return StyleSheet.create({
+			container: {
+				borderRadius: 4,
 				backgroundColor: theme.backgroundColor,
-				borderWidth: 1,
-				borderColor: theme.dividerColor,
-				margin: 20,
-				padding: 10,
-				borderRadius: 5,
-				elevation: 10,
+				maxWidth: 600,
+				width: '100%',
+				alignSelf: 'center',
+				marginVertical: 'auto',
+				flexShrink: 1,
+				padding: theme.margin,
 			},
-			modalContentWrapper2: {
-				flex: 1,
+			title: theme.headerStyle,
+			contentWrapper: {
+				flexGrow: 1,
 			},
-			title: { ...theme.normalText, borderBottomWidth: 1,
-				borderBottomColor: theme.dividerColor,
-				paddingBottom: 10,
-				fontWeight: 'bold' },
 			buttonRow: {
 				flexDirection: 'row',
-				borderTopWidth: 1,
-				borderTopColor: theme.dividerColor,
-				paddingTop: 10,
+				justifyContent: 'flex-end',
+				gap: theme.margin,
+				marginTop: theme.marginTop,
 			},
-		};
+			// Ensures that screen-reader-only headings have size (necessary for focusing/reading them).
+			invisibleHeading: {
+				flexGrow: 1,
+			},
+		});
+	}, [themeId]);
+};
 
-		this.styles_[themeId] = StyleSheet.create(styles);
-		return this.styles_[themeId];
-	}
+const ModalDialog: React.FC<Props> = props => {
+	const styles = useStyles(props.themeId);
+	const theme = themeStyle(props.themeId);
 
-	public override render() {
-		const ContentComponent = this.props.ContentComponent;
-		const buttonBarEnabled = this.props.buttonBarEnabled !== false;
-
-		return (
-			<Modal transparent={true} visible={true} onRequestClose={() => {}} containerStyle={this.styles().modalContentWrapper}>
-				<Text style={this.styles().title}>{this.props.title}</Text>
-				<View style={this.styles().modalContentWrapper2}>{ContentComponent}</View>
-				<View style={this.styles().buttonRow}>
-					<View style={{ flex: 1 }}>
-						<Button disabled={!buttonBarEnabled} title={_('OK')} onPress={this.props.onOkPress}></Button>
-					</View>
-					<View style={{ flex: 1, marginLeft: 5 }}>
-						<Button disabled={!buttonBarEnabled} title={_('Cancel')} onPress={this.props.onCancelPress}></Button>
-					</View>
-				</View>
-			</Modal>
-		);
-	}
-}
+	return (
+		<Modal
+			transparent={true}
+			visible={true}
+			onRequestClose={null}
+			containerStyle={styles.container}
+			backgroundColor={theme.backgroundColorTransparent2}
+			{...props.modalProps}
+		>
+			<View style={styles.contentWrapper}>{props.children}</View>
+			<View style={styles.buttonRow}>
+				<View
+					// This heading makes it easier for screen readers to jump to the
+					// actions list. Without a heading here, it can be difficult to locate the "ok" and "cancel"
+					// buttons.
+					role='heading'
+					aria-label={_('Actions')}
+					accessible={true}
+					style={styles.invisibleHeading}
+				/>
+				<Button disabled={!props.buttonBarEnabled} onPress={props.onCancelPress}>{props.cancelTitle}</Button>
+				<PrimaryButton disabled={!props.buttonBarEnabled} onPress={props.onOkPress}>{props.okTitle}</PrimaryButton>
+			</View>
+		</Modal>
+	);
+};
 
 export default ModalDialog;

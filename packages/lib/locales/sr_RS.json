@@ -11,6 +11,9 @@
 	"%d MB": [
 		""
 	],
+	"%d photo(s) taken": [
+		""
+	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
 	],
@@ -92,6 +95,9 @@
 	"(None)": [
 		""
 	],
+	"(Read-only)": [
+		""
+	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
@@ -112,6 +118,12 @@
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> може или бити \"toggle\" или \"clear. Користите \"toggle\" да пребаците ставку задужења у завршено или незавршено стање (уколико је одредиште обична белешка онда ће бити претворена у ставку задужења. Користите \"clear\" вратите белешку у претходно стање."
+	],
+	"[None]": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
 	],
 	"A3": [
 		"А3"
@@ -167,13 +179,16 @@
 	"Add recipient:": [
 		"Додај примаоца:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"Додај наслов"
 	],
 	"Add to dictionary": [
+		""
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
 		""
 	],
 	"Admin": [
@@ -193,6 +208,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"Сви потенцијални портови се користе - молимо пријавите проблем на %s"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -247,6 +265,9 @@
 	],
 	"Aritim Dark": [
 		"Аритим Tamna"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -488,6 +509,9 @@
 	"Command palette": [
 		"Командна палета"
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Completed decryption.": [
 		"Дешифровање је завршено."
 	],
@@ -514,6 +538,9 @@
 	],
 	"Conflicts": [
 		"Неслагања"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		""
@@ -647,6 +674,9 @@
 	"Decrypting items: %d/%d": [
 		"Дешифрујем ставке: %d/%d"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Подразумевано: %s"
 	],
@@ -755,6 +785,15 @@
 	"Do not ask for confirmation.": [
 		"Не питај за потврду."
 	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
+	],
 	"Done": [
 		""
 	],
@@ -805,6 +844,9 @@
 	],
 	"Edit": [
 		"Уреди"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit note.": [
 		"Уреди белешку."
@@ -950,6 +992,9 @@
 	"Error opening note in editor: %s": [
 		"Грешка при отварању белешке у уређивачу: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Грешка. Молимо вас да проверите да су УРЛ, корисничко име, лозинка, итд. тачни и да се одредишту за синхронизацију може приступити. Грешка која је пријављена је:"
 	],
@@ -1001,6 +1046,9 @@
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
 		""
 	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Фатална грешка:"
 	],
@@ -1039,6 +1087,9 @@
 	],
 	"Focus title": [
 		"Фокусирај назив"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
 	],
 	"Follow link": [
 		""
@@ -1079,6 +1130,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"Набави сада:"
 	],
@@ -1087,6 +1141,9 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Добија или поставља конфигурацијску вредност. Уколико (вредност) није дата, приказаће вредност (имена). Уколико ни (име) ни вредност нису одбрани излистаће се тренутна конфигурација."
+	],
+	"Glossary:": [
+		""
 	],
 	"go": [
 		""
@@ -1153,6 +1210,9 @@
 	],
 	"Idle": [
 		"Неактивно"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1322,6 +1382,9 @@
 	"Joplin Server URL": [
 		"Џоплин Сервер УРЛ"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Џоплин веб клипер вам омогућава да сачувате веб странице и снимке екрана из вашег интернет претраживача у Џоплин."
 	],
@@ -1427,6 +1490,9 @@
 	"Markdown + Front Matter": [
 		""
 	],
+	"Markdown editor: Render markup in editor": [
+		""
+	],
 	"Marks a to-do as done.": [
 		"Обележава ставку као одрађену."
 	],
@@ -1513,9 +1579,6 @@
 	],
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Нова бележница \"%s\" ће бити креирана и фајл \"%s\" ће бити увезен у њу"
-	],
-	"New tags:": [
-		"Нове ознаке:"
 	],
 	"New to-do": [
 		"Нова ставка задужења"
@@ -1742,6 +1805,9 @@
 	"Per user. Minimum of 2 users.": [
 		""
 	],
+	"Photo %d": [
+		""
+	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
 	],
@@ -1781,6 +1847,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"Молимо сачекајте док сви прилози буду скинути и дешифровани. За уређивање белешке можете прећи на %s."
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Plugin repository failed to load": [
 		""
 	],
@@ -1801,6 +1870,9 @@
 	],
 	"Possible values: %s.": [
 		"Могуће вредности: %s."
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"Поставке"
@@ -1883,6 +1955,9 @@
 	"Publish notes to the internet": [
 		""
 	],
+	"Publish/unpublish": [
+		""
+	],
 	"Quit": [
 		"Излаз"
 	],
@@ -1909,6 +1984,9 @@
 	],
 	"Recipients:": [
 		"Примаоци:"
+	],
+	"Recognize handwritten image": [
+		""
 	],
 	"Record audio": [
 		""
@@ -1942,6 +2020,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Преименује задату <item> (белешку или бележницу) у <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Обнови токен"
@@ -2063,6 +2144,9 @@
 	"Select all": [
 		"Одабери све"
 	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		""
 	],
@@ -2097,6 +2181,9 @@
 		""
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Shortcuts are not available in CLI mode.": [
@@ -2330,9 +2417,6 @@
 	"Tabloid": [
 		"Таблоид"
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		"Означено: %d."
 	],
@@ -2359,9 +2443,6 @@
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"Програм ће се сада затворити. Молимо вас да га покренете поново, да заврши процес."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		""
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"Апликација је ауторизована - сада можете затворити ову картицу у претраживачу."
@@ -2406,6 +2487,9 @@
 		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -2501,6 +2585,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Ово је напредни алат за приказивање прилога који су повезани са вашом бележницом. Молимо будите пажљиви приликом брисања, јер се након брисања  не могу вратити."
 	],
@@ -2515,6 +2608,9 @@
 	],
 	"This note has no history": [
 		"Ова белешка нема историју"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -2542,6 +2638,9 @@
 	],
 	"title": [
 		"назив"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Да обришете ознаку, уклоните је са повезаних белешки."
@@ -2606,9 +2705,6 @@
 	"Type `joplin help` for usage information.": [
 		"Укуцајте 'joplin help' за информацију о коришћењу."
 	],
-	"Type new tags or select from list": [
-		"Унесите нове ознаке или одаберите са листе"
-	],
 	"Type: %s.": [
 		"Тип:%s."
 	],
@@ -2635,6 +2731,9 @@
 	],
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Непознати тип ставке је преузет - молимо вас да надоградите Џоплин на последњу верзију"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Престани да делиш ову бележницу? Овај прималац више неће имати приступ садржају ове бележнице."
@@ -2735,6 +2834,9 @@
 	"Voice typing...": [
 		""
 	],
+	"Voice typing: Glossary": [
+		""
+	],
 	"Vosk": [
 		""
 	],
@@ -2805,6 +2907,12 @@
 		"Приложићете слику величине (%dx%d пиксела). Да ли желите да је смањите на %d пиксела пре него што је приложите?"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
 		""
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
