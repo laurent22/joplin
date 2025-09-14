@@ -9526,7 +9526,7 @@ __metadata:
     fast-xml-parser: "npm:3.21.1"
     file-type: "npm:16.5.4"
     follow-redirects: "npm:1.15.6"
-    form-data: "npm:4.0.2"
+    form-data: "npm:4.0.3"
     fs-extra: "npm:11.2.0"
     hpagent: "npm:1.2.0"
     html-entities: "npm:1.4.0"
@@ -27395,15 +27395,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:4.0.2":
-  version: 4.0.2
-  resolution: "form-data@npm:4.0.2"
+"form-data@npm:4.0.3":
+  version: 4.0.3
+  resolution: "form-data@npm:4.0.3"
   dependencies:
     asynckit: "npm:^0.4.0"
     combined-stream: "npm:^1.0.8"
     es-set-tostringtag: "npm:^2.1.0"
+    hasown: "npm:^2.0.2"
     mime-types: "npm:^2.1.12"
-  checksum: 10/82c65b426af4a40090e517a1bc9057f76970b4c6043e37aa49859c447d88553e77d4cc5626395079a53d2b0889ba5f2a49f3900db3ad3f3f1bf76613532572fb
+  checksum: 10/22f6e55e6f32a5797a500ed7ca5aa9d690c4de6e1b3308f25f0d83a27d08d91a265ab59a190db2305b15144f8f07df08e8117bad6a93fc93de1baa838bfcc0b5
   languageName: node
   linkType: hard
 
