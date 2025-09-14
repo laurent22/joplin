@@ -15,6 +15,7 @@ const joplinRendererUtils = require('@joplin/renderer').utils;
 const { clipboard } = require('electron');
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import bridge from '../../../services/bridge';
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 const md5 = require('md5');
 const path = require('path');
 
@@ -42,6 +43,12 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 		});
 		if (!filePaths || !filePaths.length) return null;
 	}
+
+	const collatorLocale = getCollatorLocale();
+	const collator = getCollator(collatorLocale);
+	filePaths = filePaths.sort((a, b) => {
+		return collator.compare(a, b);
+	});
 
 	let pos = options.position ?? 0;
 
