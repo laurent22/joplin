@@ -9277,7 +9277,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     jetifier: "npm:2.0.0"
-    js-draw: "npm:1.30.0"
+    js-draw: "npm:1.30.1"
     jsdom: "npm:26.1.0"
     lodash: "npm:4.17.21"
     md5: "npm:2.3.0"
@@ -10073,12 +10073,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.30.0":
-  version: 1.30.0
-  resolution: "@js-draw/math@npm:1.30.0"
+"@js-draw/math@npm:^1.30.1":
+  version: 1.31.1
+  resolution: "@js-draw/math@npm:1.31.1"
   dependencies:
     bezier-js: "npm:6.1.3"
-  checksum: 10/69cea822aec001190350fa0189fe604ea956aa1b708b76071e90b69a0edec79f59a41e0cf8af8650db2b75a17cca76c5925af6b1a2c48dc7d5dc8b9373ac3d0a
+  checksum: 10/c1dc1d4c7b44904e15a85dd10fa659600247ebd71dcc1e3be95663b1808170e48560734b3de3c3a7e4ea3d077d57de03608ead488367b53124566bc496698886
   languageName: node
   linkType: hard
 
@@ -32835,13 +32835,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.30.0":
-  version: 1.30.0
-  resolution: "js-draw@npm:1.30.0"
+"js-draw@npm:1.30.1":
+  version: 1.30.1
+  resolution: "js-draw@npm:1.30.1"
   dependencies:
-    "@js-draw/math": "npm:^1.30.0"
+    "@js-draw/math": "npm:^1.30.1"
     "@melloware/coloris": "npm:0.22.0"
-  checksum: 10/3d6c9d12bf480474d61c0d136362ec70d9c4d7ad783b4ef27437bf9007c1710dd70e2771ac595f9e3c3c97e0fb2a0f054977a950a90e327b9d1098c8b479587c
+  checksum: 10/7c772f7cd62461811467a0c93801b149c822616a8127f4f26e92383df1218591822ea40e1fdc743070b98229f1708c3e6f49437e7a051c6d66caa2d470456b9e
   languageName: node
   linkType: hard
 
