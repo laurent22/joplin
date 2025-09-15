@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.26.0",
-    "@babel/plugin-transform-export-namespace-from": "7.25.9",
+    "@babel/plugin-transform-export-namespace-from": "7.27.1",
     "@babel/preset-env": "7.25.3",
     "@babel/runtime": "7.25.0",
     "@joplin/tools": "~3.4",
