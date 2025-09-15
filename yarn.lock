@@ -9277,7 +9277,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     jetifier: "npm:2.0.0"
-    js-draw: "npm:1.30.0"
+    js-draw: "npm:1.30.1"
     jsdom: "npm:26.1.0"
     lodash: "npm:4.17.21"
     md5: "npm:2.3.0"
@@ -9311,7 +9311,7 @@ __metadata:
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.20.0"
     react-native-webview: "npm:13.13.5"
-    react-native-zip-archive: "npm:7.0.1"
+    react-native-zip-archive: "npm:7.0.2"
     react-redux: "npm:8.1.3"
     react-refresh: "npm:0.17.0"
     react-test-renderer: "npm:19.0.0"
@@ -10073,12 +10073,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.30.0":
-  version: 1.30.0
-  resolution: "@js-draw/math@npm:1.30.0"
+"@js-draw/math@npm:^1.30.1":
+  version: 1.31.1
+  resolution: "@js-draw/math@npm:1.31.1"
   dependencies:
     bezier-js: "npm:6.1.3"
-  checksum: 10/69cea822aec001190350fa0189fe604ea956aa1b708b76071e90b69a0edec79f59a41e0cf8af8650db2b75a17cca76c5925af6b1a2c48dc7d5dc8b9373ac3d0a
+  checksum: 10/c1dc1d4c7b44904e15a85dd10fa659600247ebd71dcc1e3be95663b1808170e48560734b3de3c3a7e4ea3d077d57de03608ead488367b53124566bc496698886
   languageName: node
   linkType: hard
 
@@ -32856,13 +32856,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.30.0":
-  version: 1.30.0
-  resolution: "js-draw@npm:1.30.0"
+"js-draw@npm:1.30.1":
+  version: 1.30.1
+  resolution: "js-draw@npm:1.30.1"
   dependencies:
-    "@js-draw/math": "npm:^1.30.0"
+    "@js-draw/math": "npm:^1.30.1"
     "@melloware/coloris": "npm:0.22.0"
-  checksum: 10/3d6c9d12bf480474d61c0d136362ec70d9c4d7ad783b4ef27437bf9007c1710dd70e2771ac595f9e3c3c97e0fb2a0f054977a950a90e327b9d1098c8b479587c
+  checksum: 10/7c772f7cd62461811467a0c93801b149c822616a8127f4f26e92383df1218591822ea40e1fdc743070b98229f1708c3e6f49437e7a051c6d66caa2d470456b9e
   languageName: node
   linkType: hard
 
@@ -41994,13 +41994,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-zip-archive@npm:7.0.1":
-  version: 7.0.1
-  resolution: "react-native-zip-archive@npm:7.0.1"
+"react-native-zip-archive@npm:7.0.2":
+  version: 7.0.2
+  resolution: "react-native-zip-archive@npm:7.0.2"
   peerDependencies:
     react: ">=16.8.6"
     react-native: ">=0.60.0"
-  checksum: 10/833c4f67d4916a921e78efebf159ed6007b5f57bb22d2da31cdfc9a6398922f6213ea519c3b79c4bc48ad7e306ae783b955e7e64cf932f36fd83e6e969506904
+  checksum: 10/63a0bc5e946d84a9564ac1fd0319fa01b8a0af72d841007db41b374254e6dbc5d38d28aea43703c6f5458c72742c9cc8e7d7fc17cee6717da0ab106da71fe35f
   languageName: node
   linkType: hard
 
