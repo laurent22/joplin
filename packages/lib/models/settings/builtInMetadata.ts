@@ -1619,22 +1619,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Proxy timeout (seconds)'),
 			storage: SettingStorage.File,
 		},
-		'sync.detectBasedOnAnyTimestampChanges': {
-			value: false,
+		'sync.2.detectBasedOnAnyTimestampChanges': {
+			value: true,
 			type: SettingItemType.Bool,
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
 				return [
 					SyncTargetRegistry.nameToId('filesystem'),
-					SyncTargetRegistry.nameToId('webdav'),
 				].indexOf(settings['sync.target']) >= 0;
 			},
 			advanced: true,
 			public: true,
 			section: 'sync',
 			label: () => _('Detect changes based on any timestamp change'),
-			description: () => _('Warning: When this is first enabled, it will result in a rescan of all your notes which may take a long time. Enable this if using an external sync tool in combination with Joplin. Enabling this setting will make the sync detect incoming changes based on both timestamp increases and decreases. This will prevent changes not being synced sometimes (providing the sync target uses a file system which allows a high precision for modified timestamps), which can happen if an external service is syncing to the sync target directory at the same time as Joplin.'),
-			storage: SettingStorage.File,
+			description: () => _('Allows the sync to detect incoming changes based on both timestamp increases and decreases, which resolves issues where an external service is syncing to the sync target directory at the same time as Joplin.'),
+			storage: SettingStorage.Database,
 		},
 		'sync.wipeOutFailSafe': {
 			value: true,

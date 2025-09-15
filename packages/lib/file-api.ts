@@ -8,6 +8,7 @@ import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import * as ArrayUtils from './ArrayUtils';
 import Setting from './models/Setting';
+import SyncTargetRegistry from './SyncTargetRegistry';
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 
@@ -52,6 +53,26 @@ export interface PaginatedList {
 export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
 	if (!deltaResponse.items.length) return false;
 	return 'jopItem' in deltaResponse.items[0];
+};
+
+const isLocalServer = (url: string) => {
+	const regex = /^https?:\/\/(localhost|127\.0\.0\.1)(?=[/:]|$)/;
+	return regex.test(url);
+};
+
+// The enhanced basic delta algorithm detects incoming changes based on both timestamp increases and decreases, which resolves issues where an external
+// service is syncing to the sync target directory at the same time as Joplin. Change detection is still limited by the precision of the modified timestamp
+// of the filesystem in use, but at worst this would mean that if 2 Joplin clients synced a conflicting change to the same note within 2 seconds, the incoming
+// change may get ignored (but this is a limitation of the normal basic algorithm as well). However, with the enhanced algorithm, the timing of syncs made by
+// an external sync service are irrelevant, providing the service is set to sync the modified time of files it syncs
+export const enableEnhancedBasicDeltaAlgorithm = () => {
+	if (Setting.value('sync.target') === SyncTargetRegistry.nameToId('filesystem')) {
+		return Setting.value('sync.2.detectBasedOnAnyTimestampChanges');
+	} else if (Setting.value('sync.target') === SyncTargetRegistry.nameToId('webdav')) {
+		return isLocalServer(Setting.value('sync.6.path'));
+	} else {
+		return false;
+	}
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -499,7 +520,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 
 	let remoteItemMetadata: Map<string, RemoteItemMetadata>;
 
-	if (Setting.value('sync.detectBasedOnAnyTimestampChanges')) {
+	if (enableEnhancedBasicDeltaAlgorithm()) {
 		remoteItemMetadata = await options.allItemMetadataHandler();
 	}
 
@@ -521,7 +542,7 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		let lastRemoteItemUpdatedTime = 0;
 		const itemId = BaseItem.pathToId(stat.path);
 
-		if (Setting.value('sync.detectBasedOnAnyTimestampChanges')) {
+		if (enableEnhancedBasicDeltaAlgorithm()) {
 			const metadata = remoteItemMetadata.get(itemId);
 
 			if (metadata) {
@@ -574,11 +595,11 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		if (output.length >= outputLimit) break;
 	}
 
-	if (Setting.value('sync.detectBasedOnAnyTimestampChanges')) {
+	if (enableEnhancedBasicDeltaAlgorithm()) {
 		// context.timestamp and filesAtTimestamp are not required when syncing based on any timestamp changes, but should be updated for backwards compatibility
 		newContext.timestamp = time.unixMs();
 		newContext.filesAtTimestamp = [];
-		logger.info(`BasicDelta (with syncBasedOnTimestampChanges): Report: ${JSON.stringify(updateReport)}`);
+		logger.info(`BasicDelta (enhanced): Report: ${JSON.stringify(updateReport)}`);
 	} else {
 		logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
 	}

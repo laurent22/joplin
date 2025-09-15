@@ -20,7 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from './file-api';
+import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem, enableEnhancedBasicDeltaAlgorithm } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
@@ -971,8 +971,8 @@ export default class Synchronizer {
 										if (content && content.updated_time > local.updated_time) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
-										} else if (Setting.value('sync.detectBasedOnAnyTimestampChanges')) {
-											// When initially enabling detectBasedOnAnyTimestampChanges, all items are rescanned and we need to persist the remoteItemUpdatedTime
+										} else if (enableEnhancedBasicDeltaAlgorithm()) {
+											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
 											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);

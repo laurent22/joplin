@@ -1,4 +1,6 @@
-import { PaginatedList, RemoteItem, getSupportsDeltaWithItems } from './file-api';
+import { PaginatedList, RemoteItem, getSupportsDeltaWithItems, enableEnhancedBasicDeltaAlgorithm } from './file-api';
+import Setting from './models/Setting';
+import SyncTargetRegistry from './SyncTargetRegistry';
 
 const defaultPaginatedList = (): PaginatedList => {
 	return {
@@ -68,6 +70,47 @@ describe('file-api', () => {
 	])('should tell if the sync target supports delta with items', async (deltaResponse: PaginatedList, expected: boolean) => {
 		const actual = getSupportsDeltaWithItems(deltaResponse);
 		expect(actual).toBe(expected);
+	});
+
+	it.each([
+		true,
+		false,
+	])('should use enhanced basic delta algorithm when using file system sync depending on the detectBasedOnAnyTimestampChanges setting', (detectBasedOnAnyTimestampChanges: boolean) => {
+		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('filesystem'));
+		Setting.setValue('sync.2.detectBasedOnAnyTimestampChanges', detectBasedOnAnyTimestampChanges);
+		const result = enableEnhancedBasicDeltaAlgorithm();
+		expect(result).toBe(detectBasedOnAnyTimestampChanges);
+	});
+
+	it.each([
+		'http://localhost',
+		'http://localhost/',
+		'http://localhost:3000',
+		'https://127.0.0.1',
+		'https://127.0.0.1/',
+		'https://127.0.0.1:8080',
+	])('should use enhanced basic delta algorithm when using WebDAV for a local server url', (url: string) => {
+		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('webdav'));
+		Setting.setValue('sync.6.path', url);
+		const result = enableEnhancedBasicDeltaAlgorithm();
+		expect(result).toBe(true);
+	});
+
+	it.each([
+		'http://localhostXYZ',
+		'http://127.0.0.1foobar',
+		'http://example.com',
+	])('should not use enhanced basic delta algorithm when using WebDAV for a non local server url', (url: string) => {
+		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('webdav'));
+		Setting.setValue('sync.6.path', url);
+		const result = enableEnhancedBasicDeltaAlgorithm();
+		expect(result).toBe(false);
+	});
+
+	it('should not use enhanced basic delta algorithm when not using file system sync or WebDAV', () => {
+		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('joplinServer'));
+		const result = enableEnhancedBasicDeltaAlgorithm();
+		expect(result).toBe(false);
 	});
 
 });
