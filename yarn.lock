@@ -9747,7 +9747,7 @@ __metadata:
     node-os-utils: "npm:1.3.7"
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.10"
-    pg: "npm:8.15.6"
+    pg: "npm:8.16.0"
     pretty-bytes: "npm:5.6.0"
     prettycron: "npm:0.10.0"
     query-string: "npm:7.1.3"
@@ -39446,7 +39446,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:^2.8.5, pg-connection-string@npm:^2.9.1":
+"pg-connection-string@npm:^2.9.0, pg-connection-string@npm:^2.9.1":
   version: 2.9.1
   resolution: "pg-connection-string@npm:2.9.1"
   checksum: 10/40e9e9cd752121e72bff18d83e6c7ecda9056426815a84294de018569a319293c924704c8b7f0604fdc588835c7927647dea4f3c87a014e715bcbb17d794e9f0
@@ -39460,7 +39460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.10.1, pg-pool@npm:^3.9.6":
+"pg-pool@npm:^3.10.0, pg-pool@npm:^3.10.1":
   version: 3.10.1
   resolution: "pg-pool@npm:3.10.1"
   peerDependencies:
@@ -39469,14 +39469,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.10.3, pg-protocol@npm:^1.9.5":
+"pg-protocol@npm:^1.10.0, pg-protocol@npm:^1.10.3":
   version: 1.10.3
   resolution: "pg-protocol@npm:1.10.3"
   checksum: 10/31da85319084c03f403efee7accce9786964df82a7feb60e6bd77b71f1e622c74a2a644a2bc434389d0ab92e5abdeedea69ebdb53b1897d9f01d2a1f51a8a2fe
   languageName: node
   linkType: hard
 
-"pg-types@npm:2.2.0, pg-types@npm:^2.1.0":
+"pg-types@npm:2.2.0":
   version: 2.2.0
   resolution: "pg-types@npm:2.2.0"
   dependencies:
@@ -39489,16 +39489,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.15.6":
-  version: 8.15.6
-  resolution: "pg@npm:8.15.6"
+"pg@npm:8.16.0":
+  version: 8.16.0
+  resolution: "pg@npm:8.16.0"
   dependencies:
     pg-cloudflare: "npm:^1.2.5"
-    pg-connection-string: "npm:^2.8.5"
-    pg-pool: "npm:^3.9.6"
-    pg-protocol: "npm:^1.9.5"
-    pg-types: "npm:^2.1.0"
-    pgpass: "npm:1.x"
+    pg-connection-string: "npm:^2.9.0"
+    pg-pool: "npm:^3.10.0"
+    pg-protocol: "npm:^1.10.0"
+    pg-types: "npm:2.2.0"
+    pgpass: "npm:1.0.5"
   peerDependencies:
     pg-native: ">=3.0.1"
   dependenciesMeta:
@@ -39507,7 +39507,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/f465bc7cfbaee64f97e3a51be6a9c883d6ff29b0a825d4f8c3e0b24d1530a51c80f0a736d189c8db051cf18e9e60f20ddde4227adea8ca55700ab154c1abe21d
+  checksum: 10/706ba6bbc79c397ae32ab144db2cc4e962a2dbad759ba539be0269731298efca8e0dbcd4de4ad14fb6e8b54c830b82f5da7d94ae4c32d853dea7e541b3a05f60
   languageName: node
   linkType: hard
 
@@ -39539,15 +39539,6 @@ __metadata:
   dependencies:
     split2: "npm:^4.1.0"
   checksum: 10/0a6f3bf76e36bdb3c20a7e8033140c732767bba7e81f845f7489fc3123a2bd6e3b8e704f08cba86b117435414b5d2422e20ba9d5f2efb6f0c75c9efca73e8e87
-  languageName: node
-  linkType: hard
-
-"pgpass@npm:1.x":
-  version: 1.0.4
-  resolution: "pgpass@npm:1.0.4"
-  dependencies:
-    split2: "npm:^3.1.1"
-  checksum: 10/792b84496848fa054330516e070b6dc22f415bb0e99aab1618fa4833e04fd8ac3c38a90ad6fc4b28f827d871787e66050d95eddd99f7472b362c58435df58f54
   languageName: node
   linkType: hard
 
@@ -45828,7 +45819,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"split2@npm:^3.0.0, split2@npm:^3.1.1":
+"split2@npm:^3.0.0":
   version: 3.2.2
   resolution: "split2@npm:3.2.2"
   dependencies:
