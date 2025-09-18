@@ -24,29 +24,8 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
-
-        // Seems to be required for react-native-vosk, otherwise the lib looks for it at "https://maven.aliyun.com/repository/jcenter/com/alphacephei/vosk-android/0.3.46/vosk-android-0.3.46.aar" but it's not there. And we get this error:
-        //
-        // Execution failed for task ':app:checkDebugAarMetadata'.
-        // > Could not resolve all files for configuration ':app:debugRuntimeClasspath'.
-        //    > Failed to transform vosk-android-0.3.46.aar (com.alphacephei:vosk-android:0.3.46) to match attributes {artifactType=android-aar-metadata, org.gradle.status=release}.
-        //       > Could not find vosk-android-0.3.46.aar (com.alphacephei:vosk-android:0.3.46).
-        //         Searched in the following locations:
-        //             https://maven.aliyun.com/repository/jcenter/com/alphacephei/vosk-android/0.3.46/vosk-android-0.3.46.aar
-        //
-        // But according to this page, the lib is on the Apache repository:
-        //
-        // https://search.maven.org/artifact/com.alphacephei/vosk-android/0.3.46/aar
-        maven { url "https://maven.apache.org" }
-
-        // Also required for react-native-vosk?
-        maven { url "https://maven.google.com" }
-
-        // Maybe still needed to fetch above package?
-        
         google()
-        maven { url 'https://www.jitpack.io' }
+        mavenCentral()
 
         maven {
             // expo-camera bundles a custom com.google.android:cameraview

@@ -217,7 +217,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.showMessageBox = async (message, options = null) => {
 		if (shim.isElectron()) {
-			return shim.electronBridge().showMessageBox(message, options);
+			return shim.electronBridge().showMessageBox(message, options ?? {});
 		} else {
 			throw new Error('Not implemented');
 		}

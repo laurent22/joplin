@@ -197,8 +197,8 @@ command | 16
 | encryption_cipher_text | text  |       |
 | encryption_applied | int   |       |
 | markup_language | int   |       |
-| is_shared | int   |       |
-| share_id | text  |       |
+| is_shared | int   | Whether the note is published. |
+| share_id | text  | The ID of the Joplin Server/Cloud share containing the note. Empty if not shared. |
 | conflict_original_id | text  |       |
 | master_key_id | text  |       |
 | user_data | text  |       |
@@ -288,7 +288,7 @@ This is actually a notebook. Internally notebooks are called "folders".
 | encryption_applied | int   |       |
 | parent_id | text  |       |
 | is_shared | int   |       |
-| share_id | text  |       |
+| share_id | text  | The ID of the Joplin Server/Cloud share containing the folder. Empty if not shared. |
 | master_key_id | text  |       |
 | icon  | text  |       |
 | user_data | text  |       |
@@ -342,7 +342,7 @@ By default, the folder will be moved **to the trash**. To permanently delete it,
 | encryption_blob_encrypted | int   |       |
 | size  | int   |       |
 | is_shared | int   |       |
-| share_id | text  |       |
+| share_id | text  | The ID of the Joplin Server/Cloud share containing the resource. Empty if not shared. |
 | master_key_id | text  |       |
 | user_data | text  |       |
 | blob_updated_time | int   |       |
