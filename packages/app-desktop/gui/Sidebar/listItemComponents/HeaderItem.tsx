@@ -46,6 +46,14 @@ const HeaderItem: React.FC<Props> = props => {
 		}
 	}, [itemId]);
 
+	const handleMouseEnter = useCallback(() => {
+		setIsHovered(true);
+	}, []);
+
+	const handleMouseLeave = useCallback(() => {
+		setIsHovered(false);
+	}, []);
+
 	return (
 		<ListItemWrapper
 			containerRef={props.anchorRef}
@@ -62,8 +70,8 @@ const HeaderItem: React.FC<Props> = props => {
 		>
 			<StyledHeader
 				onClick={onClick}
-				onMouseEnter={()=>setIsHovered(true)}
-				onMouseLeave={()=>setIsHovered(false)}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
 			>
 				<StyledHeaderIcon aria-hidden='true' role='img' className={isHovered ? `fas ${expanded ? 'fa-caret-down' : 'fa-caret-right'}` : item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>

@@ -30,8 +30,8 @@ export const StyledHeader = styled.div`
 	//cursor: pointer;
 	cursor: default;
 	transition: background 0.2s;
-	&:hover{
-	background: ${(props: StyleProps) => props.theme.backgroundColorHover2};
+	&:hover {
+		background: ${(props: StyleProps) => props.theme.backgroundColorHover2};
 	}
 `;
 
