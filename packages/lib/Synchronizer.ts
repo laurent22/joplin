@@ -32,6 +32,8 @@ import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import { reg } from './registry';
+import SearchEngine from './services/search/SearchEngine';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -387,7 +389,7 @@ export default class Synchronizer {
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(options: any = null): Promise<any> {
+	public async start(options: any = null) {
 		if (!options) options = {};
 
 		if (this.state() !== 'idle') {
@@ -628,7 +630,7 @@ export default class Synchronizer {
 							} else if (syncItem.force_sync) {
 								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Item was marked for sync using force_sync', path), 'processingPathTwice');
 							} else {
-								logger.info(sprintf('Processing a path that has already been done: %s. The user is making changes while the sync is in progress', path));
+								throw new JoplinError(sprintf('Processing a path that has already been done: %s. The user is making changes while the sync is in progress', path), 'changedDuringSync');
 							}
 						}
 
@@ -1160,6 +1162,10 @@ export default class Synchronizer {
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				logger.error(error);
+			} else if (error.code === 'changedDuringSync') {
+				// We want to re-trigger the sync in this scenario
+				hasCaughtError = false;
+				logger.info(error.message);
 			} else {
 				logger.error(error);
 				if (error.details) logger.error('Details:', error.details);
@@ -1216,11 +1222,11 @@ export default class Synchronizer {
 		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
 		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
-			options.context = outputContext;
 
 			if (result.items.length > 0) {
-				logger.info('There are more outgoing changes to sync, trigger the sync again');
-				return await this.start(options);
+				logger.info('There are more outgoing changes to sync, schedule the sync again');
+				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps: ['update_remote', 'delete_remote'] }, true);
+				SearchEngine.instance().scheduleSyncTables();
 			}
 		}
 

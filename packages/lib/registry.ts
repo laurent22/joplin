@@ -70,6 +70,16 @@ class Registry {
 		return this.syncTarget(SyncTargetRegistry.nameToId('nextcloud'));
 	}
 
+	// There is a delay of at least 1 second to avoid using excessive data usage, as the full note contents are uploaded every time a change is made.
+	// On desktop this delay is longer, to avoid distraction to the user due to the sync button continually stopping and starting spinning
+	public syncAsYouTypeInterval() {
+		if (shim.isElectron()) {
+			return 15 * 1000;
+		} else {
+			return 1000;
+		}
+	}
+
 	public syncTarget = (syncTargetId: number = null) => {
 		if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 		if (this.syncTargets_[syncTargetId]) return this.syncTargets_[syncTargetId];
