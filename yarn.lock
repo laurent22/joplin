@@ -9225,7 +9225,7 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.0"
     "@react-native-clipboard/clipboard": "npm:1.16.2"
     "@react-native-community/cli": "npm:16.0.3"
-    "@react-native-community/cli-platform-android": "npm:16.0.3"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
     "@react-native-community/cli-platform-ios": "npm:16.0.3"
     "@react-native-community/datetimepicker": "npm:8.3.0"
     "@react-native-community/geolocation": "npm:3.4.0"
@@ -11891,6 +11891,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/cli-config-android@npm:18.0.0":
+  version: 18.0.0
+  resolution: "@react-native-community/cli-config-android@npm:18.0.0"
+  dependencies:
+    "@react-native-community/cli-tools": "npm:18.0.0"
+    chalk: "npm:^4.1.2"
+    fast-glob: "npm:^3.3.2"
+    fast-xml-parser: "npm:^4.4.1"
+  checksum: 10/8374e009062fec17aa6af54a22bcc7209830232ddfaf5f421153cc09765e49b7f4278319c14ac408a7665e5e90e8153f23d5a74029fc525bbdb05b2190ca70f4
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-config-apple@npm:16.0.3":
   version: 16.0.3
   resolution: "@react-native-community/cli-config-apple@npm:16.0.3"
@@ -12022,6 +12034,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/cli-platform-android@npm:18.0.0":
+  version: 18.0.0
+  resolution: "@react-native-community/cli-platform-android@npm:18.0.0"
+  dependencies:
+    "@react-native-community/cli-config-android": "npm:18.0.0"
+    "@react-native-community/cli-tools": "npm:18.0.0"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    logkitty: "npm:^0.7.1"
+  checksum: 10/b09b2683cd88a41c0604b6a0b3ee2310dfbb1ea8bf309e4a5e83c8ed967ee41aaf7e5e0e103476bf4cd65b4e1f6a9d189ac0bb58e5f081b26c3ec6c43f56dc77
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-platform-android@npm:9.3.1, @react-native-community/cli-platform-android@npm:^9.3.1":
   version: 9.3.1
   resolution: "@react-native-community/cli-platform-android@npm:9.3.1"
@@ -12140,6 +12165,24 @@ __metadata:
     semver: "npm:^7.5.2"
     shell-quote: "npm:^1.7.3"
   checksum: 10/e78817b5f4a2db8128296c5c5e6dfc4067de121f122e9621515eab6a237cb64d95944c7faeaba4c222685b3d27f0ae2691d97447888b4f473a8da83bcffa730b
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli-tools@npm:18.0.0":
+  version: 18.0.0
+  resolution: "@react-native-community/cli-tools@npm:18.0.0"
+  dependencies:
+    "@vscode/sudo-prompt": "npm:^9.0.0"
+    appdirsjs: "npm:^1.2.4"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    find-up: "npm:^5.0.0"
+    launch-editor: "npm:^2.9.1"
+    mime: "npm:^2.4.1"
+    ora: "npm:^5.4.1"
+    prompts: "npm:^2.4.2"
+    semver: "npm:^7.5.2"
+  checksum: 10/8d5ce6a67a744e81c923ac7a3edc5619b65941f7ff7ccb47e89420b6b221a5cf49cd6d84e944d6d733daec2356252532e2734d1388537fe927eea872ffb99eb2
   languageName: node
   linkType: hard
 
@@ -33704,6 +33747,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"launch-editor@npm:^2.9.1":
+  version: 2.11.1
+  resolution: "launch-editor@npm:2.11.1"
+  dependencies:
+    picocolors: "npm:^1.1.1"
+    shell-quote: "npm:^1.8.3"
+  checksum: 10/652230807292551876b6ee9c504c3e85193a0c21722f6975a990edb0747b0584900550a3ea001fb3adacc7d14cc6681c4f07a51ab9d6fe255aad1bd30e5a878d
+  languageName: node
+  linkType: hard
+
 "layout-base@npm:^1.0.0":
   version: 1.0.2
   resolution: "layout-base@npm:1.0.2"
@@ -45048,6 +45101,13 @@ __metadata:
   version: 1.8.1
   resolution: "shell-quote@npm:1.8.1"
   checksum: 10/af19ab5a1ec30cb4b2f91fd6df49a7442d5c4825a2e269b3712eded10eedd7f9efeaab96d57829880733fc55bcdd8e9b1d8589b4befb06667c731d08145e274d
+  languageName: node
+  linkType: hard
+
+"shell-quote@npm:^1.8.3":
+  version: 1.8.3
+  resolution: "shell-quote@npm:1.8.3"
+  checksum: 10/5473e354637c2bd698911224129c9a8961697486cff1fb221f234d71c153fc377674029b0223d1d3c953a68d451d79366abfe53d1a0b46ee1f28eb9ade928f4c
   languageName: node
   linkType: hard
 
