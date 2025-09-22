@@ -14,6 +14,9 @@ import getSearchState from './utils/getSearchState';
 import { noteIdFacet, setNoteIdEffect } from './extensions/selectedNoteIdExtension';
 import jumpToHash from './editorCommands/jumpToHash';
 import { resetImageResourceEffect } from './extensions/rendering/renderBlockImages';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('CodeMirrorControl');
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -59,6 +62,8 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 			commandOutput = super.execCommand(name, ...args);
 		} else if (super.supportsJoplinCommand(name)) {
 			commandOutput = super.execJoplinCommand(name);
+		} else {
+			logger.warn('Unknown command', name);
 		}
 
 		if (name === EditorCommandType.Undo || name === EditorCommandType.Redo) {
