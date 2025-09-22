@@ -150,7 +150,7 @@ export default class ItemChange extends BaseModel {
 		`, [changeId, options.limit]);
 	}
 
-	public static async oldNoteChangeItem(noteId: string): Promise<string> {
+	public static async oldNoteContent(noteId: string): Promise<string> {
 		const row = await this.db().selectOne(`
 			SELECT before_change_item
 			FROM item_changes

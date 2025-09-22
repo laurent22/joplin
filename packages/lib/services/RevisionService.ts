@@ -21,11 +21,6 @@ export default class RevisionService extends BaseService {
 
 	public static instance_: RevisionService;
 
-	// An "old note" is one that has been created before the revision service existed, or for some
-	// other reason does not have existing revisions (imported note, or the user deleted them). These
-	// notes never benefited from revisions so the first time they are modified, a copy of
-	// the original note is saved. The goal is to have at least one revision in case the note
-	// is deleted or modified as a result of a bug or user mistake.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private changedSinceCollectionCache_: Set<string> = new Set();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -43,6 +38,16 @@ export default class RevisionService extends BaseService {
 		return this.instance_;
 	}
 
+	// An "old note" is a note which is without any history, or has not had a revision created since the defined oldNoteInterval.
+	// Originally this concept was introduced to define a note that was created before the revision service existed, but actually
+	// this also applies to any note that is history-less, which is also the case for notes which have been imported, or notes which
+	// had their note history deleted by the user or by the revision cleaner.
+	// These notes are without revisions so the first time they are modified, a copy of the original note is saved. The goal is to
+	// have at least one revision in case the note is deleted or modified as a result of a bug or user mistake.
+	// Also, because of the fact that the revision collection will not always create a revision for the latest change (due to the
+	// intervalBetweenRevisions restriction), it is beneficial to determine an old note based on an interval rather than solely on
+	// the existence of at least 1 revision for a note. Therefore it is beneficial for the old note concept to include any note
+	// which has not been changed since the defined oldNoteInterval.
 	public oldNoteCutOffDate_() {
 		return Date.now() - Setting.value('revisionService.oldNoteInterval');
 	}
