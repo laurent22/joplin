@@ -25,6 +25,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-sync-pending {
+  position: relative;
+  display: inline-block;
+}
+
+.icon-sync-pending::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -4px;
+  width: 4px;
+  height: 4px;
+  background-color: red;
+  border-radius: 50%;
+  outline: 1px solid;
+}
+
 .icon-error:before {
   content: "\e900";
 }

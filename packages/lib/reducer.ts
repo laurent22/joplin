@@ -139,6 +139,7 @@ export interface State extends WindowState {
 	screens: any;
 	historyCanGoBack: boolean;
 	syncStarted: boolean;
+	syncPending: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	searchResults: ProcessResultsRow[];
@@ -193,6 +194,7 @@ export const defaultState: State = {
 	screens: {},
 	historyCanGoBack: false,
 	syncStarted: false,
+	syncPending: false,
 	syncReport: {},
 	searchQuery: '',
 	searchResults: [],
@@ -1368,10 +1370,17 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SYNC_STARTED':
 			draft.syncStarted = true;
+			draft.syncPending = false;
 			break;
 
 		case 'SYNC_COMPLETED':
 			draft.syncStarted = false;
+			break;
+
+		case 'SYNC_PENDING':
+			if (!draft.syncStarted) {
+				draft.syncPending = true;
+			}
 			break;
 
 		case 'SYNC_REPORT_UPDATE':
