@@ -121,7 +121,9 @@ class Registry {
 				this.scheduleSyncId_ = null;
 			}
 
-			if (syncOptions.syncSteps?.toString() === ['update_remote', 'delete_remote'].toString()) {
+			const syncTargetId = Setting.value('sync.target');
+
+			if (!!syncTargetId && syncOptions.syncSteps?.toString() === ['update_remote', 'delete_remote'].toString()) {
 				// Only dispatch the event if scheduled via a trigger when making a change
 				this.dispatch({ type: 'SYNC_PENDING' });
 			}

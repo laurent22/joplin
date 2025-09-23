@@ -1074,6 +1074,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				const newSettings = { ...draft.settings };
 				newSettings[action.key] = action.value;
 				draft.settings = newSettings;
+
+				// Reset the sync pending status when the user updates the sync target, because if the sync target has changed then the "dirty"
+				// state is no longer relevant
+				if (action.key === 'sync.target') {
+					draft.syncPending = false;
+				}
 			}
 			break;
 
