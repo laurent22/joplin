@@ -123,7 +123,10 @@ class Registry {
 
 			const syncTargetId = Setting.value('sync.target');
 
-			if (!!syncTargetId && syncOptions.syncSteps?.toString() === ['update_remote', 'delete_remote'].toString()) {
+			if (!syncTargetId) {
+				// In case the user changes the sync target to None while the sync is running, ensure new changes reset the pending state
+				this.dispatch({ type: 'SYNC_PENDING_RESET' });
+			} else if (syncOptions.syncSteps?.toString() === ['update_remote', 'delete_remote'].toString()) {
 				// Only dispatch the event if scheduled via a trigger when making a change
 				this.dispatch({ type: 'SYNC_PENDING' });
 			}

@@ -420,6 +420,7 @@ export default class Synchronizer {
 
 		this.progressReport_.startTime = time.unixMs();
 
+		this.dispatch({ type: 'SYNC_PENDING_RESET' });
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit(EventName.SyncStart);
 
@@ -1211,14 +1212,16 @@ export default class Synchronizer {
 
 		if (errorToThrow) throw errorToThrow;
 
-		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
-		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
-		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
-		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
-			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
-			options.context = outputContext;
+		const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 
-			if (result.items.length > 0) {
+		if (result.items.length > 0) {
+			this.dispatch({ type: 'SYNC_PENDING' });
+
+			// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
+			// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
+			// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
+			if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
+				options.context = outputContext;
 				logger.info('There are more outgoing changes to sync, trigger the sync again');
 				return await this.start(options);
 			}

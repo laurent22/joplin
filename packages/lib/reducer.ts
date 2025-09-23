@@ -1376,7 +1376,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SYNC_STARTED':
 			draft.syncStarted = true;
-			draft.syncPending = false;
 			break;
 
 		case 'SYNC_COMPLETED':
@@ -1387,6 +1386,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			if (!draft.syncStarted) {
 				draft.syncPending = true;
 			}
+			break;
+
+		case 'SYNC_PENDING_RESET':
+			draft.syncPending = false;
 			break;
 
 		case 'SYNC_REPORT_UPDATE':
