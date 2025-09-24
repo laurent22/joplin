@@ -119,6 +119,9 @@
 		// upgrading React Native.
 		"@babel/preset-env",
 		"@babel/runtime",
+		"@react-native-community/cli",
+		"@react-native-community/cli-platform-android",
+		"@react-native-community/cli-platform-ios",
 		"@tsconfig/react-native",
 		"@types/react-native",
 		"@testing-library/react-native",
