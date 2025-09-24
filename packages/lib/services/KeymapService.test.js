@@ -342,4 +342,83 @@ describe('services_KeymapService', () => {
 		keymapService.registerCommandAccelerator('some-command', null);
 		expect(keymapService.getAriaKeyShortcuts('some-command')).toBe(undefined);
 	});
+
+	// Test for international keyboard layout support (Issue #13270)
+	describe('domToElectronAccelerator', () => {
+		beforeEach(() => keymapService.initialize());
+
+		it('should handle German keyboard layout characters correctly', () => {
+			// Simulate German keyboard events where # key produces different keyCode
+			const germanHashEvent = {
+				key: '#',
+				keyCode: 191, // This would be '/' on US layout but '#' on German layout
+				ctrlKey: true,
+				metaKey: false,
+				altKey: false,
+				shiftKey: false
+			};
+
+			const result = keymapService.domToElectronAccelerator(germanHashEvent);
+			expect(result).toBe('Ctrl+#'); // Should be '#', not '/'
+		});
+
+		it('should handle other international characters correctly', () => {
+			// Test French keyboard AZERTY layout
+			const frenchEvent = {
+				key: 'ù',
+				keyCode: 192, // Different keyCode but same character
+				ctrlKey: true,
+				metaKey: false,
+				altKey: false,
+				shiftKey: false
+			};
+
+			const result = keymapService.domToElectronAccelerator(frenchEvent);
+			expect(result).toBe('Ctrl+ù');
+		});
+
+		it('should still handle function keys and special keys via keyCode', () => {
+			// Function keys should still use keyCode mapping
+			const f1Event = {
+				key: 'F1',
+				keyCode: 112,
+				ctrlKey: true,
+				metaKey: false,
+				altKey: false,
+				shiftKey: false
+			};
+
+			const result = keymapService.domToElectronAccelerator(f1Event);
+			expect(result).toBe('Ctrl+F1');
+		});
+
+		it('should handle space key correctly', () => {
+			const spaceEvent = {
+				key: ' ',
+				keyCode: 32,
+				ctrlKey: true,
+				metaKey: false,
+				altKey: false,
+				shiftKey: false
+			};
+
+			const result = keymapService.domToElectronAccelerator(spaceEvent);
+			expect(result).toBe('Ctrl+Space');
+		});
+
+		it('should maintain backward compatibility with US keyboard', () => {
+			// Test that US keyboard still works as before
+			const usHashEvent = {
+				key: '#',
+				keyCode: 163, // US layout keyCode for #
+				ctrlKey: true,
+				metaKey: false,
+				altKey: false,
+				shiftKey: false
+			};
+
+			const result = keymapService.domToElectronAccelerator(usHashEvent);
+			expect(result).toBe('Ctrl+#');
+		});
+	});
 });

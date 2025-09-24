@@ -400,9 +400,10 @@ export default class KeymapService extends BaseService {
 	public domToElectronAccelerator(event: any) {
 		const parts = [];
 
-		// We use the "keyCode" and not "key" because the modifier keys
-		// would change the "key" value. eg "Option+U" would give "º" as a key instead of "U"
-		const { keyCode, ctrlKey, metaKey, altKey, shiftKey } = event;
+		// We use both "key" and "keyCode" for better international keyboard support.
+		// event.key gives the actual character produced (layout-independent)
+		// event.keyCode is used as fallback for special keys like function keys
+		const { key, keyCode, ctrlKey, metaKey, altKey, shiftKey } = event;
 
 		// First, the modifiers
 		// We have to use the following js events, because modifiers won't stick otherwise
@@ -418,10 +419,21 @@ export default class KeymapService extends BaseService {
 			if (shiftKey) parts.push('Shift');
 		}
 
-		// Finally, the key
-		// String.fromCharCode expects unicode charcodes as an argument; e.keyCode returns javascript keycodes.
-		// Javascript keycodes and unicode charcodes are not the same thing!
-		const electronKey = keycodeToElectronMap[keyCode];
+		// Finally, the key - use event.key for better international keyboard support
+		let electronKey;
+		
+		// Use event.key directly for most characters as it's layout-independent
+		if (key && key.length === 1 && keysRegExp.test(key)) {
+			// For single characters, use event.key directly (supports international layouts)
+			electronKey = key;
+		} else if (key === ' ') {
+			// Handle space key specially
+			electronKey = 'Space';
+		} else {
+			// For special keys (F1, Arrow keys, etc.), fall back to keyCode mapping
+			electronKey = keycodeToElectronMap[keyCode];
+		}
+		
 		if (electronKey && keysRegExp.test(electronKey)) parts.push(electronKey);
 
 		return parts.join('+');
