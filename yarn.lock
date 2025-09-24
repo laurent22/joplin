@@ -9227,7 +9227,7 @@ __metadata:
     "@react-native-community/cli": "npm:16.0.3"
     "@react-native-community/cli-platform-android": "npm:16.0.3"
     "@react-native-community/cli-platform-ios": "npm:16.0.3"
-    "@react-native-community/datetimepicker": "npm:8.4.1"
+    "@react-native-community/datetimepicker": "npm:8.4.2"
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:11.4.1"
     "@react-native-community/push-notification-ios": "npm:1.11.0"
@@ -12231,9 +12231,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:8.4.1":
-  version: 8.4.1
-  resolution: "@react-native-community/datetimepicker@npm:8.4.1"
+"@react-native-community/datetimepicker@npm:8.4.2":
+  version: 8.4.2
+  resolution: "@react-native-community/datetimepicker@npm:8.4.2"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -12246,7 +12246,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10/5815cc911018b7ca158afa36fa34399fb0193c0b2220272bfb57ee57ffc0121eb4d84b61ccad50b97d9b56ad918ae7a8792016d7f96fc2764c88e2ad3801d5e9
+  checksum: 10/0916192b7093dfbd0877740cbce11752fc6b888d39c523b72b8f4b364229ec56d3c09a79ed2a5011e67e5e201d4d533772c0d71ba0464b2f8bb94fb01bfb2cd1
   languageName: node
   linkType: hard
 
