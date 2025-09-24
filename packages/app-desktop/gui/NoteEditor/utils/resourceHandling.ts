@@ -43,11 +43,14 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 		if (!filePaths || !filePaths.length) return null;
 	}
 
+	// Keep track of the current insertion position to maintain correct order
+	let currentPosition = options.position;
+	
 	for (let i = 0; i < filePaths.length; i++) {
 		const filePath = filePaths[i];
 		try {
 			logger.info(`Attaching ${filePath}`);
-			const newBody = await shim.attachFileToNoteBody(body, filePath, options.position, {
+			const newBody = await shim.attachFileToNoteBody(body, filePath, currentPosition, {
 				createFileURL: options.createFileURL,
 				resizeLargeImages: Setting.value('imageResizing'),
 				markupLanguage: options.markupLanguage,
@@ -59,6 +62,9 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 				return null;
 			}
 
+			// Calculate how much content was added and update position for next file
+			const addedLength = newBody.length - body.length;
+			currentPosition += addedLength;
 			body = newBody;
 			logger.info('File was attached.');
 		} catch (error) {
