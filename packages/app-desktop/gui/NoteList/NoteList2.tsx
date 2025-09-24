@@ -131,6 +131,48 @@ const NoteList = (props: Props) => {
 		};
 	}, [focusNote]);
 
+	// Auto-scroll to the selected note when selection changes (e.g., via "Go to Anything")
+	// Only trigger for single note selections to avoid interfering with multi-selection
+	const lastSelectedNoteRef = useRef<string | null>(null);
+	const lastSelectedFolderRef = useRef<string | null>(null);
+	const pendingAutoScrollRef = useRef<string | null>(null);
+	useEffect(() => {
+		if (props.selectedNoteIds.length === 1) {
+			const selectedNoteId = props.selectedNoteIds[0];
+			const selectedFolderId = props.selectedFolderId;
+
+			// Auto-scroll if this is a new selection OR if we switched folders
+			const isNewSelection = selectedNoteId !== lastSelectedNoteRef.current;
+			const isFolderChange = selectedFolderId !== lastSelectedFolderRef.current;
+
+			if (isNewSelection || isFolderChange) {
+				lastSelectedNoteRef.current = selectedNoteId;
+				lastSelectedFolderRef.current = selectedFolderId;
+				pendingAutoScrollRef.current = selectedNoteId;
+			}
+
+			// Only auto-scroll if we have a pending scroll for this specific note
+			if (pendingAutoScrollRef.current === selectedNoteId) {
+				const targetIndex = props.notes.findIndex(note => note.id === selectedNoteId);
+				if (targetIndex > -1) {
+					// Only auto-scroll if the note is outside the currently visible range
+					const isNoteVisible = targetIndex >= startNoteIndex && targetIndex <= endNoteIndex;
+					if (!isNoteVisible) {
+						focusNote(selectedNoteId);
+					}
+					// Clear the pending scroll once we've found and handled the note
+					pendingAutoScrollRef.current = null;
+				}
+			}
+		} else {
+			lastSelectedNoteRef.current = null;
+			lastSelectedFolderRef.current = props.selectedFolderId;
+			pendingAutoScrollRef.current = null;
+		}
+	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps
+	}, [props.selectedNoteIds, props.notes, props.selectedFolderId, focusNote]);
+
+
 	const onItemContextMenu = useOnContextMenu(
 		props.selectedNoteIds,
 		props.selectedFolderId,
