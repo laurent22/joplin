@@ -131,6 +131,15 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          docker system prune -af || true
+          docker builder prune -af || true
+          sudo rm -rf /var/lib/docker/tmp/* || true
+
       - name: Install Yarn
         run: |
           # https://yarnpkg.com/getting-started/install
