@@ -20,7 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from './file-api';
+import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
@@ -32,6 +32,7 @@ import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import SyncTargetRegistry from './SyncTargetRegistry';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -1164,8 +1165,11 @@ export default class Synchronizer {
 				logger.error(error);
 				if (error.details) logger.error('Details:', error.details);
 
-				// Don't save to the report errors that are due to things like temporary network errors or timeout.
-				if (!shim.fetchRequestCanBeRetried(error)) {
+				const isLocalWebDavServer = Setting.value('sync.target') === SyncTargetRegistry.nameToId('webdav') && isLocalServer(Setting.value('sync.6.path'));
+
+				// Don't save to the report errors that are due to things like temporary network errors or timeout, except if using a local WebDAV server, in which
+				// case timeout errors can occur when the server is actually down.
+				if (!shim.fetchRequestCanBeRetried(error) || isLocalWebDavServer) {
 					this.progressReport_.errors.push(error);
 					this.logLastRequests();
 				}
