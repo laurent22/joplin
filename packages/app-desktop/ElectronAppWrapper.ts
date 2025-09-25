@@ -612,7 +612,7 @@ export default class ElectronAppWrapper {
 					console.warn('The window object was not available during the click event from tray icon');
 					return;
 				}
-				if(!this.mainWindow().isVisible()){
+				if (!this.mainWindow().isVisible()) {
 					this.mainWindow().show();
 				} else {
 					this.mainWindow().hide();
