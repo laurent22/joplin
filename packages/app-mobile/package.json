@@ -28,7 +28,7 @@
     "@joplin/react-native-saf-x": "~3.4",
     "@joplin/renderer": "~3.4",
     "@joplin/utils": "~3.4",
-    "@react-native-clipboard/clipboard": "1.16.2",
+    "@react-native-clipboard/clipboard": "1.16.3",
     "@react-native-community/datetimepicker": "8.4.2",
     "@react-native-community/geolocation": "3.4.0",
     "@react-native-community/netinfo": "11.4.1",

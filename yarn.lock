@@ -9223,7 +9223,7 @@ __metadata:
     "@joplin/utils": "npm:~3.4"
     "@js-draw/material-icons": "npm:1.30.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.0"
-    "@react-native-clipboard/clipboard": "npm:1.16.2"
+    "@react-native-clipboard/clipboard": "npm:1.16.3"
     "@react-native-community/cli": "npm:16.0.3"
     "@react-native-community/cli-platform-android": "npm:16.0.3"
     "@react-native-community/cli-platform-ios": "npm:16.0.3"
@@ -11838,9 +11838,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-clipboard/clipboard@npm:1.16.2":
-  version: 1.16.2
-  resolution: "@react-native-clipboard/clipboard@npm:1.16.2"
+"@react-native-clipboard/clipboard@npm:1.16.3":
+  version: 1.16.3
+  resolution: "@react-native-clipboard/clipboard@npm:1.16.3"
   peerDependencies:
     react: ">= 16.9.0"
     react-native: ">= 0.61.5"
@@ -11851,7 +11851,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10/c556ed2f539c524aafd8fdfa34b03136185dc75fcb1e98bd2ca319adde852aa5f4b5e4c8998a1b0297c3ba36c1e98c1036930adc56792ba36073a71add9af1fa
+  checksum: 10/87608bee52757af514b4717c42cde330dd61f46d1348dd59b4f478a27d351060c8b433375166d486d3e80d3db41dfcd17be401679cced3951c69857727ecbc96
   languageName: node
   linkType: hard
 
