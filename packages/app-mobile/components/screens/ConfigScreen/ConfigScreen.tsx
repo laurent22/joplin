@@ -231,11 +231,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			// Not implemented yet
 			return true;
 		}
-		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, { rationale: {
 			title: _('Information'),
 			message: _('In order to use file system synchronisation your permission to write to external storage is required.'),
 			buttonPositive: _('OK'),
-		});
+		} });
 	}
 
 	public UNSAFE_componentWillMount() {

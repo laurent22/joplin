@@ -183,6 +183,7 @@ export interface Config extends EnvVariables {
 	businessEmail: string;
 	isJoplinCloud: boolean;
 	cookieSecure: boolean;
+	cookieSameSite: 'strict' | 'lax' | 'none' | boolean;
 	storageDriver: StorageDriverConfig;
 	storageDriverFallback: StorageDriverConfig;
 	itemSizeHardLimit: number;

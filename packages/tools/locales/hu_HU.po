@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: summoner <summoner@vivaldi.net>\n"
+"Last-Translator: summoner <summoner@disroot.org>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
@@ -2984,7 +2984,7 @@ msgid ""
 "will be rendered just below its Markdown source."
 msgstr ""
 "Ha egy képmelléklet a saját sorában található, és utána egy üres sor "
-"következik, akkor a Markdown forrása alatt jelenik meg."
+"következik, akkor a Markdown forrása alá renderelődik."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -7163,7 +7163,7 @@ msgstr "Megjelenítő"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1238
 msgid "Viewer and Rich Text Editor font family"
-msgstr "A megtekintő és a szövegszerkesztő betűcsaládja"
+msgstr "A megjelenítő és a szövegszerkesztő betűcsaládja"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1160
 msgid "Viewer font size"

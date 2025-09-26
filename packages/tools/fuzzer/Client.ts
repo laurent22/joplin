@@ -583,6 +583,8 @@ class Client implements ActionableClient {
 	public async publishNote(id: ItemId) {
 		await this.tracker_.publishNote(id);
 
+		await this.sync();
+
 		logger.info('Publish note', id, 'in', this.label);
 		const publishOutput = await this.execCliCommand_('publish', '-f', id);
 		const publishUrl = publishOutput.stdout.match(/http[s]?:\/\/\S+/);
@@ -599,7 +601,7 @@ class Client implements ActionableClient {
 	}
 
 	public async unpublishNote(id: ItemId) {
-		await this.tracker_.publishNote(id);
+		await this.tracker_.unpublishNote(id);
 
 		logger.info('Unpublish note', id, 'in', this.label);
 		await this.execCliCommand_('unpublish', id);

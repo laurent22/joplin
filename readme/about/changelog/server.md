@@ -1,5 +1,13 @@
 # Joplin Server Changelog
 
+## [server-v3.4.4](https://github.com/laurent22/joplin/releases/tag/server-v3.4.4) - 2025-09-25T13:19:10Z
+
+- Improved: Clean-up SAML login section (4cb6b01)
+- Improved: Pin pm2-logrotate version to prevent supply chain attacks (#13235)
+- Improved: Provide more logging information for each request to help debugging issues (1ef8fd5)
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.6), form-data (v4.0.3), glob (v11.0.3), node-mocks-http (v1.17.2), pg (v8.16.2), sass (v1.93.0), style-to-js (v1.1.17)
+- Improved: Use "lax" cookies when using external authentication like SAML or LDAP (6705712)
+
 ## [server-v3.4.3](https://github.com/laurent22/joplin/releases/tag/server-v3.4.3) - 2025-09-09T08:47:12Z
 
 - Improved: Remove the need to install pm2-logrotate on startup so that image can work in a closed environment (#13149)

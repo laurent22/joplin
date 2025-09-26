@@ -21,7 +21,7 @@ version: '2'
 services:
 
     postgresql-master:
-        image: 'bitnami/postgresql:17.4.0'
+        image: 'bitnamilegacy/postgresql:17.4.0'
         ports:
             - '5432:5432'
         environment:
@@ -38,7 +38,7 @@ services:
             - POSTGRESQL_EXTRA_FLAGS=-c work_mem=100000 -c log_statement=all
 
     postgresql-slave:
-        image: 'bitnami/postgresql:17.4.0'
+        image: 'bitnamilegacy/postgresql:17.4.0'
         ports:
             - '5433:5432'
         depends_on:
