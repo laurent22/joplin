@@ -1066,7 +1066,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private async share_onPress() {
 		const shareText = `${this.state.note.title}\n\n${this.state.note.body}`;
 
-		if (shareText.length > 10000) {
+		if (shareText.length > 100000) {
 			let fileToShare;
 			try {
 				// Using a .txt file extension causes a "No valid provider found from URL" error
