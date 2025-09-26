@@ -242,6 +242,7 @@ const createEditor = (
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 			// for a sample configuration.
 			extensions: [
+				EditorState.tabSize.of(4),
 				keymapConfig,
 
 				dynamicConfig.of(configFromSettings(props.settings, context)),
