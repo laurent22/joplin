@@ -74,6 +74,8 @@ import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisibleP
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
 import IconButton from '../../IconButton';
+import { writeTextToCacheFile } from '../../../utils/ShareUtils';
+import shareFile from '../../../utils/shareFile';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -1062,10 +1064,31 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async share_onPress() {
-		await Share.share({
-			message: `${this.state.note.title}\n\n${this.state.note.body}`,
-			title: this.state.note.title,
-		});
+		const shareText = `${this.state.note.title}\n\n${this.state.note.body}`;
+
+		if (shareText.length > 10000) {
+			let fileToShare;
+			try {
+				// Using a .txt file extension causes a "No valid provider found from URL" error
+				// and blank share sheet on iOS for larger log files (around 200 KiB).
+				fileToShare = await writeTextToCacheFile(shareText, 'note.md');
+				await shareFile(fileToShare, 'text/plain');
+			} catch (e) {
+				logger.error('Unable to share note data:', e);
+
+				// Display a message to the user (e.g. in the case where the user is out of disk space).
+				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+			} finally {
+				if (fileToShare) {
+					await shim.fsDriver().remove(fileToShare);
+				}
+			}
+		} else {
+			await Share.share({
+				message: shareText,
+				title: this.state.note.title,
+			});
+		}
 	}
 
 	private properties_onPress() {
