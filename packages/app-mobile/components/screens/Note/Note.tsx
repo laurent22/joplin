@@ -1065,13 +1065,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	private async share_onPress() {
 		const shareText = `${this.state.note.title}\n\n${this.state.note.body}`;
+		const filename = this.state.note.id ?? `${uuid.create()}.md`;
 
 		if (shareText.length > 100000) {
 			let fileToShare;
 			try {
 				// Using a .txt file extension causes a "No valid provider found from URL" error
 				// and blank share sheet on iOS for larger log files (around 200 KiB).
-				fileToShare = await writeTextToCacheFile(shareText, 'note.md');
+				fileToShare = await writeTextToCacheFile(shareText, filename);
 				await shareFile(fileToShare, 'text/plain');
 			} catch (e) {
 				logger.error('Unable to share note data:', e);
@@ -1086,7 +1087,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		} else {
 			await Share.share({
 				message: shareText,
-				title: this.state.note.title,
+				title: filename,
 			});
 		}
 	}
