@@ -1065,7 +1065,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	private async share_onPress() {
 		const shareText = `${this.state.note.title}\n\n${this.state.note.body}`;
-		const filename = this.state.note.id ?? `${uuid.create()}.md`;
+		const filename = this.state.note.id ? `${this.state.note.id}.md` : `${uuid.create()}.md`;
 
 		if (shareText.length > 100000) {
 			let fileToShare;
