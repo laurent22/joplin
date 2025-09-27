@@ -86,6 +86,9 @@ export const StyledShareIcon = styled.i`
 
 export const StyledSynchronizeButton = styled(Button)`
 	width: 100%;
+	white-space: pre;
+    line-height: 1;
+	padding-right: 4px;
 `;
 
 export const StyledAddButton = styled(Button)`

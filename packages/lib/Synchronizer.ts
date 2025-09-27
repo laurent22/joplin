@@ -420,7 +420,7 @@ export default class Synchronizer {
 
 		this.progressReport_.startTime = time.unixMs();
 
-		this.dispatch({ type: 'SYNC_PENDING_RESET' });
+		this.dispatch({ type: 'SYNC_CHANGES_PENDING_RESET' });
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit(EventName.SyncStart);
 
@@ -1215,7 +1215,7 @@ export default class Synchronizer {
 		const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 
 		if (result.items.length > 0) {
-			this.dispatch({ type: 'SYNC_PENDING' });
+			this.dispatch({ type: 'SYNC_CHANGES_PENDING' });
 
 			// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 			// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.

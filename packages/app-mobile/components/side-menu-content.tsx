@@ -30,6 +30,7 @@ const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
 	syncStarted: boolean;
+	syncChangesPending: boolean;
 	themeId: number;
 	dispatch: Dispatch;
 	collapsedFolderIds: string[];
@@ -581,9 +582,13 @@ const SideMenuContentComponent = (props: Props) => {
 		{ onPress = null, selected = false, isHeader = false }: SidebarButtonOptions = {},
 	) => {
 		let icon = <Icon name={`ionicon ${iconName}`} style={styles_.sidebarIcon} accessibilityLabel={null} />;
+		let buttonText = title;
+		let ariaLabel;
 
 		if (key === 'synchronize_button') {
 			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
+			buttonText = props.syncChangesPending ? `${buttonText} ●` : buttonText;
+			ariaLabel = title;
 		}
 
 		const content = (
@@ -592,7 +597,8 @@ const SideMenuContentComponent = (props: Props) => {
 				<Text
 					style={styles_.sideButtonText}
 					accessibilityRole={isHeader ? 'header' : undefined}
-				>{title}</Text>
+					aria-label={ariaLabel}
+				>{buttonText}</Text>
 			</View>
 		);
 
@@ -724,6 +730,7 @@ export default connect((state: AppState) => {
 	return {
 		folders: state.folders,
 		syncStarted: state.syncStarted,
+		syncChangesPending: state.syncChangesPending,
 		syncReport: state.syncReport,
 		selectedFolderId: state.selectedFolderId,
 		selectedTagId: state.selectedTagId,

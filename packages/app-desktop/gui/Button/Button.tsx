@@ -28,6 +28,7 @@ interface Props extends Omit<ReactButtonProps, 'onClick'> {
 	color?: string;
 	iconAnimation?: string;
 	tooltip?: string;
+	ariaLabel?: string;
 	disabled?: boolean;
 	size?: ButtonSize;
 	isSquare?: boolean;
@@ -210,7 +211,7 @@ function buttonClass(level: ButtonLevel) {
 }
 
 const Button = React.forwardRef(({
-	iconName, iconLabel, iconAnimation, color, title, level, fontSize, isSquare, tooltip, disabled, onClick: propsOnClick, ...unusedProps
+	iconName, iconLabel, iconAnimation, color, title, level, fontSize, isSquare, tooltip, ariaLabel, disabled, onClick: propsOnClick, ...unusedProps
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
 }: Props, ref: any) => {
 	const iconOnly = iconName && !title;
@@ -250,9 +251,9 @@ const Button = React.forwardRef(({
 			iconOnly={iconOnly}
 			onClick={onClick}
 
-			// When there's no title, the button needs a label. In this case, fall back
+			// When there's no ariaLabel or title, the button needs a label. In this case, fall back
 			// to the tooltip.
-			aria-label={title ? undefined : tooltip}
+			aria-label={ariaLabel ? ariaLabel : (title ? undefined : tooltip)}
 			aria-disabled={disabled}
 			{...unusedProps}
 		>

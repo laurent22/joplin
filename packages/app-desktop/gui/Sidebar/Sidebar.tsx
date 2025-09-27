@@ -20,20 +20,24 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	syncStarted: boolean;
-	syncPending: boolean;
+	syncChangesPending: boolean;
 }
 
 const SidebarComponent = (props: Props) => {
 	const renderSynchronizeButton = (type: string) => {
-		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
+		const figureSpace = '\u2007'; // Use to maintain centered alignment when the indicator is hidden
+		const pendingIndicator = props.syncChangesPending ? ' ●' : ` ${figureSpace}`;
+		const label = type === 'sync' ? _('Synchronise') + pendingIndicator : `${_('Cancel')} ${figureSpace}`;
+		const ariaLabel = type === 'sync' ? _('Synchronise') : _('Cancel');
 
 		return (
 			<StyledSynchronizeButton
 				level={ButtonLevel.SidebarSecondary}
 				className={`sidebar-sync-button ${type === 'sync' ? '' : '-syncing'}`}
-				iconName={props.syncPending ? 'icon-sync icon-sync-pending' : 'icon-sync'}
+				iconName="icon-sync"
 				key="sync_button"
 				title={label}
+				ariaLabel={ariaLabel}
 				onClick={() => {
 					void CommandService.instance().execute('synchronize', type !== 'sync');
 				}}
@@ -88,7 +92,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		searches: state.searches,
 		syncStarted: state.syncStarted,
-		syncPending: state.syncPending,
+		syncChangesPending: state.syncChangesPending,
 		syncReport: state.syncReport,
 		selectedSearchId: state.selectedSearchId,
 		selectedSmartFilterId: state.selectedSmartFilterId,
