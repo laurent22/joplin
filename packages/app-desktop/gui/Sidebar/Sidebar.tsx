@@ -29,6 +29,7 @@ const SidebarComponent = (props: Props) => {
 		const pendingIndicator = props.syncChangesPending ? ' ●' : ` ${figureSpace}`;
 		const label = type === 'sync' ? _('Synchronise') + pendingIndicator : `${_('Cancel')} ${figureSpace}`;
 		const ariaLabel = type === 'sync' ? _('Synchronise') : _('Cancel');
+		const tooltip = props.syncChangesPending ? _('Not all changes have been synced') : undefined;
 
 		return (
 			<StyledSynchronizeButton
@@ -38,6 +39,7 @@ const SidebarComponent = (props: Props) => {
 				key="sync_button"
 				title={label}
 				ariaLabel={ariaLabel}
+				tooltip={tooltip}
 				onClick={() => {
 					void CommandService.instance().execute('synchronize', type !== 'sync');
 				}}
