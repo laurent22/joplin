@@ -1,4 +1,5 @@
 /* eslint no-useless-escape: 0*/
+import { pathToFileURL } from 'url';
 
 export function dirname(path: string) {
 	if (!path) throw new Error('Path is empty');
@@ -59,17 +60,10 @@ export function safeFilename(e: string, maxLength: number|null = null, allowSpac
 	return output.substring(0, maxLength);
 }
 
-export function toFileProtocolPath(filePathEncode: string, os: string|null = null) {
-	if (os === null) os = process.platform;
-
-	if (os === 'win32') {
-		filePathEncode = filePathEncode.replace(/\\/g, '/'); // replace backslash in windows pathname with slash e.g. c:\temp to c:/temp
-		filePathEncode = `/${filePathEncode}`; // put slash in front of path to comply with windows fileURL syntax
-	}
-
-	filePathEncode = encodeURI(filePathEncode);
-	filePathEncode = filePathEncode.replace(/\+/g, '%2B'); // escape '+' with unicode
-	return `file://${filePathEncode.replace(/\'/g, '%27')}`; // escape '(single quote) with unicode, to prevent crashing the html view
+export function toFileProtocolPath(filePathEncode: string) {
+	// pathToFileURL normalizes slashes and percent-encodes reserved chars (#, ?, [, ])
+	// and returns a proper file:// URL (with the right number of leading slashes on Windowns and Mac).
+	return pathToFileURL(filePathEncode).href;
 }
 
 export function toSystemSlashes(path: string, os: string|null = null) {

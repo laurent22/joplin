@@ -27,6 +27,7 @@ const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
 const dgram = require('dgram');
+const { toFileProtocolPath } = require('./path-utils');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const proxySettings: any = {};
@@ -236,7 +237,7 @@ function shimInit(options: ShimInitOptions = null) {
 			// original code).
 
 			const image = new Image();
-			image.src = filePath;
+			image.src = toFileProtocolPath(filePath);
 			await new Promise<void>((resolve, reject) => {
 				image.onload = () => resolve();
 				image.onerror = () => reject(new Error(`Image at ${filePath} failed to load.`));
