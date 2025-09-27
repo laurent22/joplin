@@ -105,6 +105,10 @@ const useStyles = (themeId: number) => {
 			},
 			button: buttonStyle,
 			buttonText: buttonTextStyle,
+			syncButtonText: {
+				...buttonTextStyle,
+				textAlignVertical: 'center',
+			},
 			syncStatus: {
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
@@ -582,11 +586,13 @@ const SideMenuContentComponent = (props: Props) => {
 		{ onPress = null, selected = false, isHeader = false }: SidebarButtonOptions = {},
 	) => {
 		let icon = <Icon name={`ionicon ${iconName}`} style={styles_.sidebarIcon} accessibilityLabel={null} />;
+		let textStyle = styles_.sideButtonText;
 		let buttonText = title;
 		let ariaLabel;
 
 		if (key === 'synchronize_button') {
 			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
+			textStyle = styles_.syncButtonText;
 			buttonText = props.syncChangesPending ? `${buttonText} ●` : buttonText;
 			ariaLabel = title;
 		}
@@ -595,7 +601,7 @@ const SideMenuContentComponent = (props: Props) => {
 			<View key={key} style={selected ? styles_.sideButtonSelected : styles_.sideButton}>
 				{icon}
 				<Text
-					style={styles_.sideButtonText}
+					style={textStyle}
 					accessibilityRole={isHeader ? 'header' : undefined}
 					aria-label={ariaLabel}
 				>{buttonText}</Text>
