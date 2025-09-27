@@ -1,4 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 28 Apr 2025 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 28 Apr 2025 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.3]]></title><description><![CDATA[<h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 22 Sep 2025 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 22 Sep 2025 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.4?]]></title><description><![CDATA[<p>Joplin 3.4 includes many bug fixes and improvements, with a focus on the mobile app.</p>
+<h2>Mobile<a name="mobile" href="#mobile" class="heading-anchor">🔗</a></h2>
+<h3>Rich Text Editor<a name="rich-text-editor" href="#rich-text-editor" class="heading-anchor">🔗</a></h3>
+<p>The mobile app now includes a beta <a href="https://joplinapp.org/help/apps/rich_text_editor">Rich Text Editor</a>! The new editor renders formatting/math/images within the editor:</p>
+<img src="/images/news/20250922-mobile-rte.png" width="400" alt="screenshot: Mobile Rich Text Editor editing the welcome notes. Images, headings, etc are rendering."/>
+<p>To try it, 1) open a note in the default Markdown editor 2) open the note actions menu (the three vertical dots) for the note and 3) click “Edit as Rich Text”.</p>
+<p>Be aware that this editor is still in active development and <a href="https://github.com/laurent22/joplin/issues/12840">has a number of known limitations and issues</a>. The Rich Text editor is based on <a href="https://prosemirror.net/">ProseMirror</a> and will behave differently from the desktop Rich Text Editor in many cases.</p>
+<h3>Support for publishing notes with Joplin Cloud and Server<a name="support-for-publishing-notes-with-joplin-cloud-and-server" href="#support-for-publishing-notes-with-joplin-cloud-and-server" class="heading-anchor">🔗</a></h3>
+<p>It's now possible to <a href="https://joplinapp.org/help/apps/publish_note">publish notes</a> from the mobile app! To do so, open the “Properties” menu for a note, then click “Publish/unpublish”:</p>
+<p><img src="/images/news/20250922-publish-notes.png" alt="screenshot: A Publish/unpublish note action is shown in the &quot;Note properties&quot; sidebar, just below a &quot;Previous versions&quot; button"></p>
+<p>Next, in the “publish note” dialog, click “Copy shareable link”. Notes can later be unpublished by clicking &quot;Unpublish&quot; in the publication dialog.</p>
+<h3>Viewing note history<a name="viewing-note-history" href="#viewing-note-history" class="heading-anchor">🔗</a></h3>
+<p>It is now possible to view and restore previous note versions from the mobile app. Like the &quot;publish note&quot; feature, previous note versions can be accessed from the note properties menu.</p>
+<p><img src="/images/news/20250922-note-history.png" alt="screenshot: The note history page"></p>
+<p>As on desktop, the note history feature can be configured from the “Note History” tab in settings.</p>
+<h3>Updated tag dialog<a name="updated-tag-dialog" href="#updated-tag-dialog" class="heading-anchor">🔗</a></h3>
+<p>The tag dialog has been redesigned, with a new UI for adding, removing, and creating new tags:<br>
+<img src="/images/news/20250922-tag-editor.png" width="500" alt="screenshot: Tag dialog now consists of three sections: Added tags, Add new tags, Actions."/></p>
+<h3>Android: Improved voice typing<a name="android-improved-voice-typing" href="#android-improved-voice-typing" class="heading-anchor">🔗</a></h3>
+<p>The voice typing feature on Android has been updated with <a href="https://github.com/laurent22/joplin/pull/12404">improved silence detection</a> and a new “<a href="https://github.com/laurent22/joplin/pull/12370">custom glossary</a>” setting. Voice typing also now <a href="https://github.com/laurent22/joplin/pull/12352">defaults to a more accurate (but somewhat slower) model</a>.</p>
+<h3>Quickly creating a note from multiple photos<a name="quickly-creating-a-note-from-multiple-photos" href="#quickly-creating-a-note-from-multiple-photos" class="heading-anchor">🔗</a></h3>
+<p>A “scan notebook” action has been added to the “New note” menu:</p>
+<img src="/images/news/20250922-scan-notebook.png" width="500"/>
+<p>This action allows quickly creating a new note with multiple pictures taken from the camera.</p>
+<h2>Desktop<a name="desktop" href="#desktop" class="heading-anchor">🔗</a></h2>
+<h3>More Markdown Editor settings<a name="more-markdown-editor-settings" href="#more-markdown-editor-settings" class="heading-anchor">🔗</a></h3>
+<p>The &quot;Note&quot; tab in settings now includes new settings for the Markdown editor, including:</p>
+<ul>
+<li>An option to render headers, lists, and certain other formatting within the editor.</li>
+<li>An option to render images in the editor.</li>
+</ul>
+<p>When enabled, these settings bring the Markdown editor closer to the Rich Text Editor, without <a href="https://joplinapp.org/help/apps/rich_text_editor">some of the Rich Text Editor's limitations</a>.</p>
+<p>These settings are also available on mobile.</p>
+<h3>Smaller application size and faster startup<a name="smaller-application-size-and-faster-startup" href="#smaller-application-size-and-faster-startup" class="heading-anchor">🔗</a></h3>
+<p>We've made the desktop application roughly 33% smaller! In addition to faster application startup, this means that the desktop app should be faster to download take up less space.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Joplin version</th>
+<th>Previous size (v3.3.13)</th>
+<th>New size (v3.4.12)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joplin for MacOS (ARM)</td>
+<td>211 MB</td>
+<td>141 MB</td>
+</tr>
+<tr>
+<td>Joplin for Windows (installer)</td>
+<td>321 MB</td>
+<td>219 MB</td>
+</tr>
+<tr>
+<td>Joplin for Windows (portable)</td>
+<td>320 MB</td>
+<td>219 MB</td>
+</tr>
+<tr>
+<td>Joplin for Linux (AppImage)</td>
+<td>219 MB</td>
+<td>147 MB</td>
+</tr>
+</tbody>
+</table>
+<h2>Terminal app<a name="terminal-app" href="#terminal-app" class="heading-anchor">🔗</a></h2>
+<h3>Collapsible folders<a name="collapsible-folders" href="#collapsible-folders" class="heading-anchor">🔗</a></h3>
+<p>The <a href="https://joplinapp.org/help/apps/terminal/">terminal application</a> now supports expanding and collapsing folders by pressing <kbd>z</kbd>. For additional information, see <a href="https://github.com/laurent22/joplin/pull/12718">the original pull request</a>.</p>
+<h3>Managing shared notebooks and published notes<a name="managing-shared-notebooks-and-published-notes" href="#managing-shared-notebooks-and-published-notes" class="heading-anchor">🔗</a></h3>
+<p>New commands have been added to the terminal app, including <code>publish</code>, <code>unpublish</code>, and <code>share</code>. This allows the terminal app to manage shared folders and published notes.</p>
+<h2>Bug fixes<a name="bug-fixes" href="#bug-fixes" class="heading-anchor">🔗</a></h2>
+<p>For the full list of changes, see <a href="https://joplinapp.org/help/about/changelog/desktop/">the desktop changelog</a> and <a href="https://joplinapp.org/help/about/changelog/android/">the mobile changelog</a>.</p>
+]]></description><link>https://joplinapp.org/news/20250922-release-3-4</link><guid isPermaLink="false">20250922-release-3-4</guid><pubDate>Mon, 22 Sep 2025 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[What's new in Joplin 3.3]]></title><description><![CDATA[<h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
 <h3>Accessibility improvements<a name="accessibility-improvements" href="#accessibility-improvements" class="heading-anchor">🔗</a></h3>
 <p>The Joplin 3.3 release introduces significant accessibility enhancements designed to make the application more inclusive and user-friendly. Users can now benefit from improved keyboard navigation, thanks to newly added shortcuts and clearer labels that streamline interaction across the interface. We've also added a &quot;go to viewer&quot; menu item that moves focus from the note editor to the note viewer. Focus is moved to the location in the viewer corresponding to the location of the cursor in the editor.</p>
 <p>Screen reader support has been bolstered, ensuring elements like the note list and sidebar are easier to toggle and interact with. These updates make the application more usable for individuals relying on assistive technologies.</p>
@@ -446,10 +519,4 @@ sys 0m38.013s</p>
 <p>Unfortunately we cannot publish the Android version because it is based on a framework version that Google does not accept. To upgrade the app a lot of changes are needed and another round of pre-releases, and therefore there will not be a 2.9 version for Google Play. You may however download the official APK directly from there: <a href="https://github.com/laurent22/joplin-android/releases/tag/android-v2.9.8">Android 2.9 Official Release</a></p>
 <p>This is the reality of app stores in general - small developers being imposed never ending new requirements by all-powerful companies, and by the time a version is finally ready we can't even publish it because yet more requirements are in place.</p>
 <p>For the record the current 2.9 app works perfectly fine. It targets Android 11, which is only 2 years old and is still supported (and installed on millions of phones). Google requires us to target Android 12 which only came out last year.</p>
-]]></description><link>https://joplinapp.org/news/20221216-release-2-9</link><guid isPermaLink="false">20221216-release-2-9</guid><pubDate>Fri, 16 Dec 2022 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.9</twitter-text></item><item><title><![CDATA[Joplin is hiring!]]></title><description><![CDATA[<p>Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device.</p>
-<p>We are looking to hire two JavaScript software developers to work on the desktop, mobile, and server applications. All those are built using modern technologies, including React, React Native and Electron with a strong focus on test units.</p>
-<p>You need to demonstrate some experience with at least some of these technologies, and willing to learn more and touch various different projects.</p>
-<p>You will be part of a small team, so you will have an opportunity for a high-impact role, targeting hundreds of thousands of users.</p>
-<p>If you're interested please contact us at job-AT-joplin.cloud</p>
-<p>No agencies please.</p>
-]]></description><link>https://joplinapp.org/news/20221209-job</link><guid isPermaLink="false">20221209-job</guid><pubDate>Fri, 09 Dec 2022 00:00:00 GMT</pubDate><twitter-text>Joplin is hiring!</twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20221216-release-2-9</link><guid isPermaLink="false">20221216-release-2-9</guid><pubDate>Fri, 16 Dec 2022 00:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.9</twitter-text></item></channel></rss>

@@ -59,8 +59,8 @@ jobs:
           fi
           # The build-tools/ directory contains different subdirectories
           # for each build tools version. As a result, there may be multiple
-          # zipalign tools. Select one of them:
-          ZIPALIGN_PATH="$(find $BUILD_TOOLS_PATH -name "zipalign" -print | head -n1)"
+          # zipalign tools. Select the most recent (biggest two-digit version number):
+          ZIPALIGN_PATH="$(find $BUILD_TOOLS_PATH -name "zipalign" -print | sort | tail -n1)"
           if test ! -x "$ZIPALIGN_PATH" ; then
             echo "zipalign not found (searching in $BUILD_TOOLS_PATH, candidate: $ZIPALIGN_PATH)"
             exit 1

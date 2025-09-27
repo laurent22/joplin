@@ -31,6 +31,16 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
+      - name: Free disk space
+        if: runner.os == 'Linux'
+        run: |
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          docker system prune -af || true
+          docker builder prune -af || true
+          sudo rm -rf /var/lib/docker/tmp/* || true
+
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
       # secrets
@@ -121,6 +131,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Free disk space
+        if: runner.os == 'Linux'
+        run: |
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          docker system prune -af || true
+          docker builder prune -af || true
+          sudo rm -rf /var/lib/docker/tmp/* || true
 
       - name: Install Yarn
         run: |
