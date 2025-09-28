@@ -1395,6 +1395,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		async function onCut(event: any) {
 			event.preventDefault();
 			const selectedContent = editor.selection.getContent();
+			if (!selectedContent) return;
 			copyHtmlToClipboard(selectedContent);
 			editor.insertContent('');
 			onChangeHandler();
