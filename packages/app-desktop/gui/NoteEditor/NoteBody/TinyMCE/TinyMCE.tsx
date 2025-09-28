@@ -1387,6 +1387,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
+			if (!copiedContent) return;
 			copyHtmlToClipboard(copiedContent);
 			event.preventDefault();
 		}
