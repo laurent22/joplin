@@ -43,6 +43,8 @@ After this, the HTML should look the same and is ready to be imported by the Imp
     - package.json              -> where the project is built
     - node_functions.js         -> where the custom-made functions used inside rust goes
     ...
+    - tests                     -> Integration tests
+    ...
     - pkg                       -> artifact folder generated in the build step
         - onenote_converter.js  -> main file
     ...
@@ -58,7 +60,7 @@ To work with the project you will need:
 
 ### Running tests
 
-Tests for the project are located in the `lib` packages, but to make it work it is necessary to build this project first:
+Most tests for the project are located in the `lib` packages, but to make it work it is necessary to build this project first:
 
 `IS_CONTINUOUS_INTEGRATION=1 yarn build # for production build`
 or 
@@ -70,6 +72,21 @@ After that you should navigate to `lib` package and run the tests of `InteropSer
 cd ../lib
 IS_CONTINUOUS_INTEGRATION=1 yarn test services/interop/InteropService_Importer_OneNote.test.
 ```
+
+Other tests are written in Rust. To run these tests, use `cargo test`:
+```
+cd packages/onenote-converter
+cargo test
+```
+
+### Debugging tests
+
+Suppose that the importer's Rust code is failing to parse a specific `example.one` file. In this case, it may be useful to step through part of the import process in a debugger. If using VSCode, this can be done by:
+1. Adding a new test to `tests/convert.rs` that runs `convert()` on the `example.one` file.
+2. Setting up Rust and Rust debugging. See [the relevant VSCode documentation](https://code.visualstudio.com/docs/languages/rust#_debugging) for details.
+3. Clicking the "Debug" button for the test added in step 1. This button should be provided by extensions set up in step 2.
+
+
 
 ### Developing
 

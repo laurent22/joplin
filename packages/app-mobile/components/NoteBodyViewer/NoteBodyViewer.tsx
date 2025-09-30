@@ -65,7 +65,7 @@ function NoteBodyViewer(props: Props) {
 		onResourceLongPress,
 	});
 
-	const { api: renderer, pageSetup, webViewEventHandlers } = useWebViewSetup({
+	const { api: renderer, pageSetup, webViewEventHandlers, hasPluginScripts } = useWebViewSetup({
 		webviewRef,
 		onBodyScroll: onScroll,
 		onPostMessage,
@@ -106,6 +106,7 @@ function NoteBodyViewer(props: Props) {
 				mixedContentMode="always"
 				onLoadEnd={onLoadEnd}
 				onMessage={webViewEventHandlers.onMessage}
+				hasPluginScripts={hasPluginScripts}
 			/>
 		</View>
 	);

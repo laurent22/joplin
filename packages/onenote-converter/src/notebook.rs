@@ -2,8 +2,8 @@ use crate::parser::notebook::Notebook;
 use crate::parser::property::common::Color;
 use crate::parser::section::{Section, SectionEntry};
 use crate::templates::notebook::Toc;
+use crate::utils::fs_driver;
 use crate::utils::utils::log;
-use crate::utils::{join_path, make_dir, remove_prefix};
 use crate::{section, templates};
 use color_eyre::eyre::Result;
 use palette::rgb::Rgb;
@@ -20,12 +20,12 @@ impl Renderer {
 
     pub fn render(&mut self, notebook: &Notebook, name: &str, output_dir: &str) -> Result<()> {
         log!("Notebook name: {:?} {:?}", name, output_dir);
-        let _ = unsafe { make_dir(output_dir) };
+        fs_driver().make_dir(output_dir)?;
 
         // let notebook_dir = unsafe { join_path(output_dir, sanitize_filename::sanitize(name).as_str()) }.unwrap().as_string().unwrap();
         let notebook_dir = output_dir.to_owned();
 
-        let _ = unsafe { make_dir(&notebook_dir) };
+        fs_driver().make_dir(&notebook_dir)?;
 
         let mut toc = Vec::new();
 
@@ -41,13 +41,10 @@ impl Renderer {
                 SectionEntry::SectionGroup(group) => {
                     let dir_name = sanitize_filename::sanitize(group.display_name());
                     let section_group_dir =
-                        unsafe { join_path(notebook_dir.as_str(), dir_name.as_str()) }
-                            .unwrap()
-                            .as_string()
-                            .unwrap();
+                        fs_driver().join(notebook_dir.as_str(), dir_name.as_str());
 
                     log!("Section group directory: {:?}", section_group_dir);
-                    let _ = unsafe { make_dir(section_group_dir.as_str()) };
+                    fs_driver().make_dir(section_group_dir.as_str())?;
 
                     let mut entries = Vec::new();
 
@@ -84,10 +81,7 @@ impl Renderer {
         let section_path = renderer.render(section, notebook_dir)?;
         log!("section_path: {:?}", section_path);
 
-        let path_from_base_dir = unsafe { remove_prefix(section_path, base_dir.as_str()) }
-            .unwrap()
-            .as_string()
-            .unwrap();
+        let path_from_base_dir = String::from(fs_driver().remove_prefix(&section_path, &base_dir));
         log!("path_from_base_dir: {:?}", path_from_base_dir);
         Ok(templates::notebook::Section {
             name: section.display_name().to_string(),

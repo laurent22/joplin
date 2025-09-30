@@ -1,0 +1,36 @@
+# Patch to remove eval. This allows using depd in an environment with
+# a strict Content-Security-Policy.
+# Ref: https://github.com/dougwilson/nodejs-depd/pull/33
+diff --git a/index.js b/index.js
+index d758d3c8f58a60bf27ef377ad77639bf10ce7854..2bad40d4eeba553d3bcfb206873eac059067ae3b 100644
+--- a/index.js
++++ b/index.js
+@@ -399,19 +399,20 @@ function wrapfunction (fn, message) {
+     throw new TypeError('argument fn must be a function')
+   }
+ 
+-  var args = createArgumentsString(fn.length)
+-  var deprecate = this // eslint-disable-line no-unused-vars
+   var stack = getStack()
+   var site = callSiteLocation(stack[1])
+ 
+   site.name = fn.name
+ 
+-   // eslint-disable-next-line no-eval
+-  var deprecatedfn = eval('(function (' + args + ') {\n' +
+-    '"use strict"\n' +
+-    'log.call(deprecate, message, site)\n' +
+-    'return fn.apply(this, arguments)\n' +
+-    '})')
++  var deprecatedfn
++  var self = this
++  deprecatedfn = function () {
++    'use strict'
++    log.call(self, message, site)
++    return fn.apply(this, arguments)
++  }
++  Object.defineProperty(deprecatedfn, 'length', { value: fn.length })
++  Object.defineProperty(deprecatedfn, 'name', { value: fn.name })
+ 
+   return deprecatedfn
+ }
