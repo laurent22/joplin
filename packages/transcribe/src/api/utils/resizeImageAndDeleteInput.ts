@@ -1,7 +1,10 @@
 import { remove, copy } from 'fs-extra';
 import * as sharp from 'sharp';
 
-const resizeImage = async (inputPath: string, outputPath: string, imageMaxDimension: number) => {
+// Strange function that deletes the input file so we give it a specific name, because it shouldn't
+// be used as a general function to resize an image. Should probably be refactored but for now it's
+// good enough.
+const resizeImageAndDeleteInput = async (inputPath: string, outputPath: string, imageMaxDimension: number) => {
 
 	const metadata = await sharp(inputPath).metadata();
 
@@ -24,4 +27,4 @@ const resizeImage = async (inputPath: string, outputPath: string, imageMaxDimens
 	await remove(inputPath);
 };
 
-export default resizeImage;
+export default resizeImageAndDeleteInput;

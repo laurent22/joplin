@@ -1,6 +1,6 @@
 import Logger from '@joplin/utils/Logger';
 import { JobData } from '../../types';
-import resizeImage from '../utils/resizeImage';
+import resizeImageAndDeleteInput from '../utils/resizeImageAndDeleteInput';
 import { join } from 'path';
 
 const logger = Logger.create('createJob');
@@ -16,7 +16,7 @@ type CreateJobContext = {
 const createJob = async (context: CreateJobContext) => {
 	const imageResizedPath = join('images', context.randomName);
 
-	await resizeImage(context.filepath, imageResizedPath, context.imageMaxDimension);
+	await resizeImageAndDeleteInput(context.filepath, imageResizedPath, context.imageMaxDimension);
 
 	const filePath = await context.storeImage(imageResizedPath);
 

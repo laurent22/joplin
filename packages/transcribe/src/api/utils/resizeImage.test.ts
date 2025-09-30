@@ -1,5 +1,5 @@
 import { copy, exists, remove } from 'fs-extra';
-import resizeImage from './resizeImage';
+import resizeImageAndDeleteInput from './resizeImageAndDeleteInput';
 import * as sharp from 'sharp';
 
 describe('resizeImage', () => {
@@ -11,7 +11,7 @@ describe('resizeImage', () => {
 		const resizedImageFilePath = `${process.cwd()}/test-cases/sample-copied-resized.jpeg`;
 		await copy(fullFilePath, copiedFilePath);
 
-		await resizeImage(copiedFilePath, resizedImageFilePath, 400);
+		await resizeImageAndDeleteInput(copiedFilePath, resizedImageFilePath, 400);
 		const metadata = await sharp(resizedImageFilePath).metadata();
 
 		expect(metadata.width).toBe(400);
@@ -27,7 +27,7 @@ describe('resizeImage', () => {
 		await copy(fullFilePath, copiedFilePath);
 		const originalMetadata = await sharp(copiedFilePath).metadata();
 
-		await resizeImage(copiedFilePath, resizedImageFilePath, 400);
+		await resizeImageAndDeleteInput(copiedFilePath, resizedImageFilePath, 400);
 		const metadata = await sharp(resizedImageFilePath).metadata();
 
 		if (originalMetadata.width === undefined || originalMetadata.height === undefined ||
@@ -47,7 +47,7 @@ describe('resizeImage', () => {
 		const resizedImageFilePath = `${process.cwd()}/test-cases/sample-copied-resized.jpeg`;
 		await copy(fullFilePath, copiedFilePath);
 
-		await resizeImage(copiedFilePath, resizedImageFilePath, 400);
+		await resizeImageAndDeleteInput(copiedFilePath, resizedImageFilePath, 400);
 
 		const doesFileExists = await exists(copiedFilePath);
 		expect(doesFileExists).toBe(false);
@@ -62,7 +62,7 @@ describe('resizeImage', () => {
 		await copy(fullFilePath, copiedFilePath);
 		const originalMetadata = await sharp(copiedFilePath).metadata();
 
-		await resizeImage(copiedFilePath, resizedImageFilePath, 1000);
+		await resizeImageAndDeleteInput(copiedFilePath, resizedImageFilePath, 1000);
 
 		const resizedImageMetadata = await sharp(resizedImageFilePath).metadata();
 
