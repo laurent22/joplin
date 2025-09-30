@@ -2,11 +2,19 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<!--
-		No CPS because we need to allow everything due to some dependencies (eg. depd, which comes from maybe Node or Electron
-		uses 'eval'.
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'">
-		-->
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="
+				default-src 'self' joplin-content://* ;
+				connect-src 'self' * http://* https://* joplin-content://* blob: ;
+				style-src 'unsafe-inline' 'self' blob: joplin-content://* https://* http://* ;
+				child-src 'self' joplin-content://* ;
+				script-src 'self' 'unsafe-inline' joplin-content://* ;
+				media-src 'self' * blob: data: https://* http://* joplin-content://* ;
+				img-src 'self' blob: data: http://* https://* joplin-content://* ;
+				font-src 'self' http://* https://* blob: data: joplin-content://* ;
+			"
+		/>
 		<title>Joplin</title>
 		<!-- Note: Add new dynamic CSS imports to style.scss to allow them to be included in secondary windows. -->
 		<link rel="stylesheet" href="style.min.css">

@@ -23,7 +23,7 @@ import searchExtension from './plugins/searchPlugin';
 import joplinEditorApiPlugin, { setEditorApi } from './plugins/joplinEditorApiPlugin';
 import linkTooltipPlugin from './plugins/linkTooltipPlugin';
 import { OnCreateCodeEditor as OnCreateCodeEditor, RendererControl } from './types';
-import resourcePlaceholderPlugin, { onResourceDownloaded } from './plugins/resourcePlaceholderPlugin';
+import imagePlugin, { onResourceDownloaded } from './plugins/imagePlugin';
 import getFileFromPasteEvent from '../utils/getFileFromPasteEvent';
 import { RenderResult } from '../../renderer/types';
 import postprocessEditorOutput from './utils/postprocessEditorOutput';
@@ -92,7 +92,7 @@ const createEditor = async (
 				linkTooltipPlugin,
 				tableEditing({ allowTableNodeSelection: true }),
 				joplinEditorApiPlugin,
-				resourcePlaceholderPlugin,
+				imagePlugin,
 			].flat(),
 		});
 
@@ -265,8 +265,8 @@ const createEditor = async (
 
 			view.dispatch(transaction);
 		},
-		setSearchState: (newState: SearchState) => {
-			view.dispatch(updateSearchState(view.state, newState));
+		setSearchState: (newState: SearchState, changeSource = 'setSearchState') => {
+			view.dispatch(updateSearchState(view.state, newState, changeSource));
 		},
 		setContentScripts: (_plugins: ContentScriptData[]) => {
 			throw new Error('setContentScripts not implemented.');

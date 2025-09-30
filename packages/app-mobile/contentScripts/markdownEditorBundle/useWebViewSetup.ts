@@ -56,13 +56,11 @@ const useWebViewSetup = ({
 	})})
 	` : '';
 
-	const injectedJavaScript = useMemo(() => `
-		if (typeof markdownEditorBundle === 'undefined') {
-			${shim.injectedJs('markdownEditorBundle')};
-			window.markdownEditorBundle = markdownEditorBundle;
-			markdownEditorBundle.setUpLogger();
-		}
-
+	const afterLoadFinishedJs = useRef((): string => '');
+	// Store as a callback to avoid rebuilding the string on each content change.
+	// Since the editor content is included in editorOptions, for large documents,
+	// creating the initial injected JS is potentially expensive.
+	afterLoadFinishedJs.current = () => `
 		if (!window.cm) {
 			const parentClassName = ${JSON.stringify(editorOptions?.parentElementOrClassName)};
 			const foundParent = !!parentClassName && document.getElementsByClassName(parentClassName).length > 0;
@@ -74,6 +72,7 @@ const useWebViewSetup = ({
 				window.cm = markdownEditorBundle.createMainEditor(${JSON.stringify(editorOptions)});
 
 				${jumpToHashJs}
+
 				// Set the initial selection after jumping to the header -- the initial selection,
 				// if specified, should take precedence.
 				${setInitialSelectionJs}
@@ -86,7 +85,15 @@ const useWebViewSetup = ({
 				console.log('No parent element found with class name ', parentClassName);
 			}
 		}
-	`, [jumpToHashJs, setInitialSearchJs, setInitialSelectionJs, editorOptions]);
+	`;
+
+	const injectedJavaScript = useMemo(() => `
+		if (typeof markdownEditorBundle === 'undefined') {
+			${shim.injectedJs('markdownEditorBundle')};
+			window.markdownEditorBundle = markdownEditorBundle;
+			markdownEditorBundle.setUpLogger();
+		}
+	`, []);
 
 	// Scroll to the new hash, if it changes.
 	const isFirstScrollRef = useRef(true);
@@ -158,13 +165,14 @@ const useWebViewSetup = ({
 	const webViewEventHandlers = useMemo(() => {
 		return {
 			onLoadEnd: () => {
+				webviewRef.current?.injectJS(afterLoadFinishedJs.current());
 				editorMessenger.onWebViewLoaded();
 			},
 			onMessage: (event: OnMessageEvent) => {
 				editorMessenger.onWebViewMessage(event);
 			},
 		};
-	}, [editorMessenger]);
+	}, [editorMessenger, webviewRef]);
 
 	const api = useMemo(() => {
 		return editorMessenger.remoteApi;

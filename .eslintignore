@@ -1098,6 +1098,8 @@ packages/editor/ProseMirror/createEditor.js
 packages/editor/ProseMirror/index.js
 packages/editor/ProseMirror/plugins/detailsPlugin.test.js
 packages/editor/ProseMirror/plugins/detailsPlugin.js
+packages/editor/ProseMirror/plugins/imagePlugin.test.js
+packages/editor/ProseMirror/plugins/imagePlugin.js
 packages/editor/ProseMirror/plugins/inputRulesPlugin.js
 packages/editor/ProseMirror/plugins/joplinEditablePlugin/createEditorDialog.js
 packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.test.js
@@ -1109,12 +1111,15 @@ packages/editor/ProseMirror/plugins/linkTooltipPlugin.test.js
 packages/editor/ProseMirror/plugins/linkTooltipPlugin.js
 packages/editor/ProseMirror/plugins/listPlugin.js
 packages/editor/ProseMirror/plugins/originalMarkupPlugin.js
-packages/editor/ProseMirror/plugins/resourcePlaceholderPlugin.js
 packages/editor/ProseMirror/plugins/searchPlugin.js
+packages/editor/ProseMirror/plugins/utils/createExternalEditorPlugin.js
+packages/editor/ProseMirror/plugins/utils/createFloatingButtonPlugin.js
 packages/editor/ProseMirror/schema.js
 packages/editor/ProseMirror/styles.js
 packages/editor/ProseMirror/testing/createTestEditor.js
+packages/editor/ProseMirror/testing/createTestEditorWithSerializer.js
 packages/editor/ProseMirror/types.js
+packages/editor/ProseMirror/utils/SelectableNodeView.js
 packages/editor/ProseMirror/utils/UndoStackSynchronizer.js
 packages/editor/ProseMirror/utils/canReplaceSelectionWith.js
 packages/editor/ProseMirror/utils/computeSelectionFormatting.js
@@ -1122,6 +1127,7 @@ packages/editor/ProseMirror/utils/dom/createButton.js
 packages/editor/ProseMirror/utils/dom/createTextArea.js
 packages/editor/ProseMirror/utils/dom/createTextNode.js
 packages/editor/ProseMirror/utils/dom/createUniqueId.js
+packages/editor/ProseMirror/utils/dom/showModal.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.test.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.js
 packages/editor/ProseMirror/utils/forEachHeading.js
@@ -1132,6 +1138,7 @@ packages/editor/ProseMirror/utils/postprocessEditorOutput.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.test.js
 packages/editor/ProseMirror/utils/preprocessEditorInput.js
 packages/editor/ProseMirror/utils/sanitizeHtml.js
+packages/editor/ProseMirror/utils/selectFirstInstanceOfNode.js
 packages/editor/ProseMirror/utils/trimEmptyParagraphs.js
 packages/editor/ProseMirror/vendor/changedDescendants.js
 packages/editor/ProseMirror/vendor/splitBlockAs.js

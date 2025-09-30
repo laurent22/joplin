@@ -117,6 +117,12 @@
     "pdfjs-dist@*": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "pdfjs-dist@3.11.174": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "canvas@npm:^2.11.2": "link:./.yarn/joplin-empty-package/",
-    "node-gyp@npm:^9.0.0": "11.2.0"
+    "node-gyp@npm:^9.0.0": "11.2.0",
+    "depd@npm:^2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:~2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:~1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:^1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:^1.1.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch"
   }
 }

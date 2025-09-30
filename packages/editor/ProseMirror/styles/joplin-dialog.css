@@ -1,5 +1,5 @@
 
-.editor-dialog {
+.joplin-dialog {
 	display: flex;
 	flex-direction: column;
 	background-color: var(--joplin-background-color);
@@ -12,19 +12,15 @@
 	padding: 16px;
 }
 
-.editor-dialog > textarea {
-	flex-grow: 1;
-	min-height: min(70vh, 400px);
-	resize: none;
-	color: var(--joplin-color);
-	background-color: var(--joplin-background-color);
-}
-
-.editor-dialog > button {
+.joplin-dialog > button.done {
 	color: var(--joplin-color);
 	background-color: var(--joplin-background-color3);
-	border: none;
+	border: 1px solid var(--joplin-border-color4);
 
 	border-radius: 8px;
+	min-height: 36px;
 	height: 38px;
+
+	bottom: 0;
+	position: sticky;
 }
