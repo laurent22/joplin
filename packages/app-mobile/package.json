@@ -105,7 +105,7 @@
     "@testing-library/react-native": "13.2.0",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
-    "@types/node": "18.19.113",
+    "@types/node": "18.19.115",
     "@types/react": "19.0.14",
     "@types/react-redux": "7.1.33",
     "@types/serviceworker": "0.0.140",
