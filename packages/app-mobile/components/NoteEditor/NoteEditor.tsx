@@ -33,6 +33,9 @@ import { toFileExtension } from '@joplin/lib/mime-utils';
 import { MarkupLanguage } from '@joplin/renderer';
 import WarningBanner from './WarningBanner';
 import useIsScreenReaderEnabled from '../../utils/hooks/useIsScreenReaderEnabled';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('NoteEditor');
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -111,6 +114,7 @@ const useEditorControl = (
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			execCommand(command, ...args: any[]) {
+				logger.debug('execCommand', command);
 				return editorRef.current.execCommand(command, ...args);
 			},
 

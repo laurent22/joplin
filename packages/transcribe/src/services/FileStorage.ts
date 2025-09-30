@@ -6,6 +6,8 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('FileStorage');
 
+const imagesFolderPath = join(process.cwd(), 'images');
+
 export default class FileStorage implements ContentStorage {
 
 	private isMaintenanceRunning = false;
@@ -14,13 +16,13 @@ export default class FileStorage implements ContentStorage {
 		const time = new Date().getTime();
 		const random = randomBytes(16).toString('hex');
 		const randomName = `${time}_${random}`;
-		await move(filepath, join('images', randomName));
+		await move(filepath, join(imagesFolderPath, randomName));
 		return randomName;
 	}
 
 	public async remove(filename: string) {
 		logger.info(`Deleting: ${filename}`);
-		await remove(join('images', filename));
+		await remove(join(imagesFolderPath, filename));
 	}
 
 	public initMaintenance(retentionDuration: number, maintenanceInterval: number) {
@@ -37,7 +39,7 @@ export default class FileStorage implements ContentStorage {
 	}
 
 	public async removeOldFiles(olderThan: Date) {
-		const files = await readdir('images');
+		const files = await readdir(imagesFolderPath);
 		const filesToBeDeleted = files
 			.map(f => {
 				const datetimePart = parseInt(f.split('_')[0], 10);

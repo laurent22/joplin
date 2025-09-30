@@ -73,7 +73,7 @@ import { defaultWindowId } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
-import IconButton from '../../IconButton';
+import { IconButton } from 'react-native-paper';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -530,16 +530,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		};
 
-		styles.titleToggleIcon = {
-			color: theme.colorFaded,
-			fontSize: 30,
-			height: 48,
-			width: 48,
-			verticalAlign: 'middle',
-			textAlign: 'center',
-			alignContent: 'center',
-		};
-
 		this.styles_[cacheKey] = StyleSheet.create(styles);
 		return this.styles_[cacheKey];
 	}
@@ -553,8 +543,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (Platform.OS === 'web') return;
 
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-			message: _('In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.'),
-			title: _('Permission needed'),
+			onRequestConfirmation: async () => {
+				const yesIndex = 0;
+				const result = await shim.showMessageBox(
+					_('Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.'),
+					{
+						buttons: [_('Yes'), _('No')],
+						title: _('Save geolocation?'),
+					},
+				);
+				return result === yesIndex;
+			},
 		});
 
 		// If the user simply pressed "Deny", we don't automatically switch it off because they might accept
@@ -713,7 +712,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private title_changeText(text: string) {
-		const newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
+		let newText = text;
+		if (Platform.OS !== 'web') {
+			// Manipulating the underlying text inside of onChangeText causes issues with the cursor position jumping to the end while typing
+			// when the Web app is being used on a desktop OS, so providing a toggle to expand the title field can only be done on mobile platforms
+			newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
+		}
 		shared.noteComponent_change(this, 'title', newText);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
@@ -1661,6 +1665,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const dueDate = Note.dueDateObject(note);
 
+		const titleToggleButton = Platform.OS === 'web' ? null :
+			<IconButton
+				icon={(!this.state.multiline && 'menu-down') || (this.state.multiline && 'menu-up')}
+				accessibilityLabel={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
+				onPress={() => this.setState({ multiline: !this.state.multiline })}
+				size={30}
+				style={{ width: 30, height: 30, alignSelf: 'center' }}
+			/>;
+
 		const titleComp = (
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
@@ -1679,13 +1692,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					multiline={this.state.multiline}
 					submitBehavior = "blurAndSubmit"
 				/>
-				<IconButton
-					iconName={(!this.state.multiline && 'material menu-down') || (this.state.multiline && 'material menu-up')}
-					onPress={() => this.setState({ multiline: !this.state.multiline })}
-					description={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
-					iconStyle={this.styles().titleToggleIcon}
-					themeId={this.props.themeId}
-				/>
+				{ titleToggleButton }
 			</View>
 		);
 

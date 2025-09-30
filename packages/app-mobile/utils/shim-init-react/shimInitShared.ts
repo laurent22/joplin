@@ -116,8 +116,7 @@ const shimInitShared = () => {
 		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
 
 		const ext = fileExtension(filePath);
-		let mimeType = mimeUtils.fromFileExtension(ext);
-		if (!mimeType) mimeType = 'image/jpeg';
+		const mimeType = defaultProps.mime ?? mimeUtils.fromFileExtension(ext) ?? 'image/jpeg';
 
 		let resource = Resource.new();
 		resource.id = resourceId;
