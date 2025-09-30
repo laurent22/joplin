@@ -16,8 +16,6 @@
 # SLAVE_POSTGRES_PORT=5433
 # SLAVE_POSTGRES_HOST=localhost
 
-version: '2'
-
 services:
 
     postgresql-master:

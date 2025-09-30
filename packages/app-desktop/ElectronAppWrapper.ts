@@ -407,7 +407,17 @@ export default class ElectronAppWrapper {
 					isGoingToExit = true;
 				} else {
 					event.preventDefault();
-					this.hide();
+
+					const w = this.win_;
+					if (!w) return;
+
+					if (w.isFullScreen()) {
+						// leave fullscreen, then hide
+						w.once('leave-full-screen', () => w.hide());
+						w.setFullScreen(false);
+					} else {
+						w.hide();
+					}
 				}
 			} else {
 				const hasBackgroundWindows = this.secondaryWindows_.size > 0;
