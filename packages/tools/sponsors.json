@@ -112,13 +112,6 @@
 			"alt": "Freespinny.io Free Spins Bonus site"
 		},
 		{
-			"url": "https://damangameplay.in",
-			"title": "Daman Game",
-			"imageName": "DamanGame.png",
-			"alt": "Daman Game",
-			"githubUser": "vikasmanimc"
-		},
-		{
 			"url": "https://essayshark.com",
 			"title": "EssayShark - essay writers for hire",
 			"imageName": "EssayShark.png",
@@ -159,6 +152,12 @@
 			"title": "free spins no deposit at NotGamstop",
 			"imageName": "NotGamStop.jpg",
 			"alt": "free spins no deposit at NotGamstop"
+		},
+		{
+			"url": "https://www.writemyessay.com/",
+			"title": "writing service for students WriteMyEssay",
+			"imageName": "WriteMyEssay.png",
+			"alt": "writing service for students WriteMyEssay"
 		}
 	]
 }

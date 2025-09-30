@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 
 const lockToSingleInstance = async () => {
 	if (Platform.OS !== 'web') return;
+	if (__DEV__) return;
 
 	const channel = new BroadcastChannel('single-instance-lock');
 	channel.postMessage('app-opened');

@@ -3,8 +3,6 @@ use itertools::Itertools;
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
-use wasm_bindgen::prelude::wasm_bindgen;
-use wasm_bindgen::JsValue;
 use widestring::U16CString;
 
 pub(crate) struct AttributeSet(HashMap<&'static str, String>);
@@ -67,35 +65,6 @@ impl Display for StyleSet {
                 .join(" ")
         )
     }
-}
-
-#[wasm_bindgen(module = "/node_functions.js")]
-extern "C" {
-    #[wasm_bindgen(js_name = isDirectory, catch)]
-    pub unsafe fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
-
-    #[wasm_bindgen(js_name = readDir, catch)]
-    unsafe fn read_dir_js(path: &str) -> std::result::Result<JsValue, JsValue>;
-}
-
-pub unsafe fn read_dir(path: &str) -> Option<Vec<String>> {
-    let result_ptr = read_dir_js(path).unwrap();
-
-    let result_str: String = match result_ptr.as_string() {
-        Some(x) => x,
-        _ => String::new(),
-    };
-    let names: Vec<String> = result_str.split('\n').map(|s| s.to_string()).collect_vec();
-    Some(names)
-}
-
-#[wasm_bindgen(module = "fs")]
-extern "C" {
-    #[wasm_bindgen(js_name = readFileSync, catch)]
-    pub unsafe fn read_file(path: &str) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = existsSync, catch)]
-    pub unsafe fn exists(path: &str) -> std::result::Result<bool, JsValue>;
 }
 
 pub(crate) trait Utf16ToString {
