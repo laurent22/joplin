@@ -169,8 +169,8 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should handle conflict when remote folder is deleted then local folder is renamed', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		await Folder.save({ title: 'folder2' });
-		await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const note1 = await Note.save({ title: 'un', parent_id: folder2.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -179,7 +179,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await sleep(0.1);
 
-		await Folder.delete(folder1.id);
+		await Folder.delete(folder1.id, { deleteChildren: false });
 
 		await synchronizerStart();
 
@@ -192,9 +192,13 @@ describe('Synchronizer.conflicts', () => {
 
 		await synchronizerStart();
 
-		const items = await allNotesFolders();
+		const remainingFolder1 = await Folder.load(folder1.id);
+		const remainingFolder2 = await Folder.load(folder2.id);
+		const remainingNote1 = await Note.load(note1.id);
 
-		expect(items.length).toBe(1);
+		expect(remainingFolder1).toBeUndefined();
+		expect(remainingFolder2?.id).toBe(folder2.id);
+		expect(remainingNote1?.id).toBe(note1.id);
 	}));
 
 	it('should not sync notes with conflicts', (async () => {
