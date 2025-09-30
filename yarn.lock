@@ -7196,14 +7196,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/notarize@npm:2.5.0":
-  version: 2.5.0
-  resolution: "@electron/notarize@npm:2.5.0"
+"@electron/notarize@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@electron/notarize@npm:3.0.0"
   dependencies:
-    debug: "npm:^4.1.1"
-    fs-extra: "npm:^9.0.1"
+    debug: "npm:^4.4.0"
+    graceful-fs: "npm:^4.2.11"
     promise-retry: "npm:^2.0.1"
-  checksum: 10/16380675e47e272d481b14a4e66326e7bbc4cb7183d40e4eb146440183bc5dc45f5bc4cf75dfeb4c7b2574919f343fc678ae20512b59427216512470c3942ab2
+  checksum: 10/cadafaa1e7467ba54d68977f662713a76646a8057f9d07425f1b75a84e92b3e52a0971a9403c93c1be23677ecf92305b3ca4d4ee638dd8aef8fb8c6d3e101e94
   languageName: node
   linkType: hard
 
@@ -9122,7 +9122,7 @@ __metadata:
   dependencies:
     7zip-bin: "npm:5.2.0"
     "@axe-core/playwright": "npm:4.10.2"
-    "@electron/notarize": "npm:2.5.0"
+    "@electron/notarize": "npm:3.0.0"
     "@electron/rebuild": "npm:3.7.2"
     "@electron/remote": "npm:2.1.2"
     "@fortawesome/fontawesome-free": "npm:5.15.4"
