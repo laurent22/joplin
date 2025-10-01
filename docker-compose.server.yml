@@ -15,8 +15,6 @@
 #	- This would typically be mapped to port to 443 (TLS) with a reverse proxy.
 #	- If Joplin Server does not need to be accessible over the internet, the port can be mapped to 22300.
 
-version: '3'
-
 networks:
     app-network:
     transcribe-network:

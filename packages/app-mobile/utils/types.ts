@@ -11,4 +11,5 @@ export interface AppState extends State {
 	noteSideMenuOptions: any;
 	disableSideMenuGestures: boolean;
 	noteEditorVisible: boolean;
+	syncWizardVisible: boolean;
 }

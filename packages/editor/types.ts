@@ -122,7 +122,7 @@ export interface EditorControl {
 	// the given [label] and [url].
 	updateLink(label: string, url: string): void;
 
-	setSearchState(state: SearchState): void;
+	setSearchState(state: SearchState, changeSource: string): void;
 
 	setContentScripts(plugins: ContentScriptData[]): Promise<void>;
 

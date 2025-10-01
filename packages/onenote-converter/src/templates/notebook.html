@@ -9,7 +9,7 @@
         {%- when None -%}
         {%- endmatch -%}
     >
-        <a href="{{ section.path|encode }}.html" target="section" title="{{ section.name }}">{{ section.name }}</a>
+        <a href="{{ section.path|urlencode }}.html" target="section" title="{{ section.name }}">{{ section.name }}</a>
     </li>
 {% endmacro %}
 

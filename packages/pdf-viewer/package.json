@@ -35,9 +35,9 @@
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "style-loader": "3.3.4",
-    "ts-jest": "29.3.1",
+    "ts-jest": "29.3.4",
     "ts-loader": "9.5.2",
-    "typescript": "5.8.2",
+    "typescript": "5.8.3",
     "webpack": "5.74.0",
     "webpack-cli": "4.10.0"
   },

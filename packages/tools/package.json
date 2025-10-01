@@ -52,7 +52,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/markdown-it": "13.0.9",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.112",
+    "@types/node": "18.19.115",
     "@types/node-fetch": "2.6.12",
     "@types/yargs": "17.0.33",
     "gettext-extractor": "3.8.0",
@@ -65,7 +65,7 @@
     "sqlite3": "5.1.6",
     "style-to-js": "1.1.17",
     "ts-node": "10.9.2",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }
