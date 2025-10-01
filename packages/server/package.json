@@ -83,6 +83,6 @@
     "jsdom": "26.1.0",
     "node-mocks-http": "1.17.2",
     "source-map-support": "0.5.21",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   }
 }

@@ -9517,9 +9517,9 @@ __metadata:
     taboverride: "npm:4.0.3"
     tesseract.js: "npm:5.1.1"
     tinymce: "npm:6.8.5"
-    ts-jest: "npm:29.3.1"
+    ts-jest: "npm:29.3.4"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -9554,7 +9554,7 @@ __metadata:
     "@react-native-documents/picker": "npm:10.1.3"
     "@react-native/babel-preset": "npm:0.79.5"
     "@react-native/metro-config": "npm:0.79.5"
-    "@react-native/typescript-config": "npm:0.79.2"
+    "@react-native/typescript-config": "npm:0.79.5"
     "@sqlite.org/sqlite-wasm": "npm:3.46.0-build2"
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
@@ -9634,7 +9634,7 @@ __metadata:
     tar-stream: "npm:3.1.7"
     timers: "npm:0.1.1"
     timers-browserify: "npm:2.0.12"
-    ts-jest: "npm:29.3.1"
+    ts-jest: "npm:29.3.4"
     ts-loader: "npm:9.5.2"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.8.3"
@@ -9654,7 +9654,7 @@ __metadata:
     "@types/yargs": "npm:17.0.33"
     fs-extra: "npm:11.2.0"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
@@ -9728,8 +9728,8 @@ __metadata:
     prosemirror-tables: "npm:1.7.1"
     prosemirror-transform: "npm:1.10.4"
     prosemirror-view: "npm:1.40.0"
-    ts-jest: "npm:29.3.1"
-    typescript: "npm:5.8.2"
+    ts-jest: "npm:29.3.4"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -9749,8 +9749,8 @@ __metadata:
     eslint: "npm:8.57.1"
     jest: "npm:29.7.0"
     prettier: "npm:3.5.3"
-    ts-jest: "npm:29.3.1"
-    typescript: "npm:5.8.2"
+    ts-jest: "npm:29.3.4"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -9771,7 +9771,7 @@ __metadata:
     "@types/node": "npm:18.19.115"
     jest: "npm:29.7.0"
     node-emoji: "npm:1.11.0"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -9787,7 +9787,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -9875,7 +9875,7 @@ __metadata:
     tar: "npm:6.2.1"
     tcp-port-used: "npm:1.0.2"
     tesseract.js: "npm:5.1.1"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
     uglifycss: "npm:0.0.29"
     url-parse: "npm:1.5.10"
     uuid: "npm:11.1.0"
@@ -9916,9 +9916,9 @@ __metadata:
     react-dom: "npm:18.3.1"
     style-loader: "npm:3.3.4"
     styled-components: "npm:5.3.11"
-    ts-jest: "npm:29.3.1"
+    ts-jest: "npm:29.3.4"
     ts-loader: "npm:9.5.2"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
     webpack: "npm:5.74.0"
     webpack-cli: "npm:4.10.0"
   languageName: unknown
@@ -9940,7 +9940,7 @@ __metadata:
     node-fetch: "npm:2.6.7"
     source-map-loader: "npm:5.0.0"
     source-map-support: "npm:0.5.21"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
     webpack: "npm:5.97.1"
     webpack-cli: "npm:4.10.0"
     yargs: "npm:17.7.2"
@@ -9972,7 +9972,7 @@ __metadata:
     "@types/react-native": "npm:0.64.19"
     react: "npm:18.3.1"
     react-native: "npm:0.70.6"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -10012,8 +10012,8 @@ __metadata:
     markdown-it-toc-done-right: "npm:4.2.0"
     md5: "npm:2.3.0"
     mermaid: "npm:11.6.0"
-    ts-jest: "npm:29.3.1"
-    typescript: "npm:5.8.2"
+    ts-jest: "npm:29.3.4"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -10077,7 +10077,7 @@ __metadata:
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
     stripe: "npm:8.222.0"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
     uuid: "npm:11.1.0"
     yargs: "npm:17.7.2"
     zxcvbn: "npm:4.4.2"
@@ -10128,7 +10128,7 @@ __metadata:
     sqlite3: "npm:5.1.6"
     style-to-js: "npm:1.1.17"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
     uri-template: "npm:2.0.0"
     yargs: "npm:17.7.2"
   languageName: unknown
@@ -10159,7 +10159,7 @@ __metadata:
     pg-boss: "npm:10.2.0"
     sharp: "npm:0.34.1"
     sqlite3: "npm:5.1.6"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -10213,8 +10213,8 @@ __metadata:
     node-fetch: "npm:2.6.7"
     sprintf-js: "npm:1.1.3"
     tcp-port-used: "npm:1.0.2"
-    ts-jest: "npm:29.3.1"
-    typescript: "npm:5.8.2"
+    ts-jest: "npm:29.3.4"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -12884,10 +12884,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/typescript-config@npm:0.79.2":
-  version: 0.79.2
-  resolution: "@react-native/typescript-config@npm:0.79.2"
-  checksum: 10/ca52b9297db02e5e7db0343da71faca8aab85ce1b434a811ea1f864bcdb7089f9c8be393e1bce0e855eeeca67e9bcfdd56a457b64d55f495aa9fc3fa49cb92f9
+"@react-native/typescript-config@npm:0.79.5":
+  version: 0.79.5
+  resolution: "@react-native/typescript-config@npm:0.79.5"
+  checksum: 10/5d97999236be9af8911bedf9812d808385d618ffd3f45aba63fe01507d4c0da05b66d7c98898190ec8797971e8c8b3ad35c526054104534b11734b3b9a28d41c
   languageName: node
   linkType: hard
 
@@ -25882,35 +25882,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.37.4":
-  version: 7.37.4
-  resolution: "eslint-plugin-react@npm:7.37.4"
-  dependencies:
-    array-includes: "npm:^3.1.8"
-    array.prototype.findlast: "npm:^1.2.5"
-    array.prototype.flatmap: "npm:^1.3.3"
-    array.prototype.tosorted: "npm:^1.1.4"
-    doctrine: "npm:^2.1.0"
-    es-iterator-helpers: "npm:^1.2.1"
-    estraverse: "npm:^5.3.0"
-    hasown: "npm:^2.0.2"
-    jsx-ast-utils: "npm:^2.4.1 || ^3.0.0"
-    minimatch: "npm:^3.1.2"
-    object.entries: "npm:^1.1.8"
-    object.fromentries: "npm:^2.0.8"
-    object.values: "npm:^1.2.1"
-    prop-types: "npm:^15.8.1"
-    resolve: "npm:^2.0.0-next.5"
-    semver: "npm:^6.3.1"
-    string.prototype.matchall: "npm:^4.0.12"
-    string.prototype.repeat: "npm:^1.0.0"
-  peerDependencies:
-    eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
-  checksum: 10/c538c10665c87cb90a0bcc4efe53a758570db10997d079d31474a9760116ef5584648fa22403d889ca672df8071bda10b40434ea0499e5ee8360bc5c8aba1679
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-react@npm:^7.36.1":
+"eslint-plugin-react@npm:7.37.5, eslint-plugin-react@npm:^7.36.1":
   version: 7.37.5
   resolution: "eslint-plugin-react@npm:7.37.5"
   dependencies:
@@ -33070,7 +33042,7 @@ __metadata:
     temp: "npm:0.9.4"
     terminal-kit: "npm:3.1.2"
     tkwidgets: "npm:0.5.27"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
     url-parse: "npm:1.5.10"
     word-wrap: "npm:1.2.5"
     yargs-parser: "npm:21.1.1"
@@ -38304,17 +38276,6 @@ __metadata:
     define-properties: "npm:^1.1.4"
     es-abstract: "npm:^1.20.4"
   checksum: 10/08a09ff839fd541e8af90a47c67a3dd71721683cdc28e55470e191a8afd8b61188fb9a429fd1d1805808097d8d5950b47c0c2862157dad891226112d8321401b
-  languageName: node
-  linkType: hard
-
-"object.entries@npm:^1.1.8":
-  version: 1.1.8
-  resolution: "object.entries@npm:1.1.8"
-  dependencies:
-    call-bind: "npm:^1.0.7"
-    define-properties: "npm:^1.2.1"
-    es-object-atoms: "npm:^1.0.0"
-  checksum: 10/2301918fbd1ee697cf6ff7cd94f060c738c0a7d92b22fd24c7c250e9b593642c9707ad2c44d339303c1439c5967d8964251cdfc855f7f6ec55db2dd79e8dc2a7
   languageName: node
   linkType: hard
 
@@ -44132,7 +44093,7 @@ __metadata:
     eslint-plugin-import: "npm:2.31.0"
     eslint-plugin-jest: "npm:27.9.0"
     eslint-plugin-promise: "npm:6.6.0"
-    eslint-plugin-react: "npm:7.37.4"
+    eslint-plugin-react: "npm:7.37.5"
     execa: "npm:5.1.1"
     fs-extra: "npm:11.2.0"
     glob: "npm:11.0.3"
@@ -44145,7 +44106,7 @@ __metadata:
     node-gyp: "npm:11.2.0"
     nodemon: "npm:3.1.10"
     npm-package-json-lint: "npm:8.0.0"
-    typescript: "npm:5.8.2"
+    typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -48741,9 +48702,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:29.3.1":
-  version: 29.3.1
-  resolution: "ts-jest@npm:29.3.1"
+"ts-jest@npm:29.3.4":
+  version: 29.3.4
+  resolution: "ts-jest@npm:29.3.4"
   dependencies:
     bs-logger: "npm:^0.2.6"
     ejs: "npm:^3.1.10"
@@ -48752,8 +48713,8 @@ __metadata:
     json5: "npm:^2.2.3"
     lodash.memoize: "npm:^4.1.2"
     make-error: "npm:^1.3.6"
-    semver: "npm:^7.7.1"
-    type-fest: "npm:^4.38.0"
+    semver: "npm:^7.7.2"
+    type-fest: "npm:^4.41.0"
     yargs-parser: "npm:^21.1.1"
   peerDependencies:
     "@babel/core": ">=7.0.0-beta.0 <8"
@@ -48775,7 +48736,7 @@ __metadata:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: 10/a3450dde2821608bd83cb063eb33fe67c450fd99bf94b4fff12c50f789124fa652e74bd1890068cc1e1a929013fa677fae72da8d864528f1587ec44a9b94d985
+  checksum: 10/9f22469ef9cbdfb819fe03c4554a83af66d810e7ac72efca433d098f09b73c15b5f5d83a56732e01b40baf621e288c2e0178fad45d304ff69d18d8e0490498d3
   languageName: node
   linkType: hard
 
@@ -49095,7 +49056,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.20.0, type-fest@npm:^4.38.0":
+"type-fest@npm:^4.20.0, type-fest@npm:^4.41.0":
   version: 4.41.0
   resolution: "type-fest@npm:4.41.0"
   checksum: 10/617ace794ac0893c2986912d28b3065ad1afb484cad59297835a0807dc63286c39e8675d65f7de08fafa339afcb8fe06a36e9a188b9857756ae1e92ee8bda212
@@ -49345,16 +49306,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.8.2":
-  version: 5.8.2
-  resolution: "typescript@npm:5.8.2"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10/dbc2168a55d56771f4d581997be52bab5cbc09734fec976cfbaabd787e61fb4c6cf9125fd48c6f98054ce549c77ecedefc7f64252a830dd8e9c3381f61fbeb78
-  languageName: node
-  linkType: hard
-
 "typescript@npm:5.8.3, typescript@npm:^5.7.3, typescript@npm:^5.8.3":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
@@ -49392,16 +49343,6 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/cd6f51368ba0f8c458a44ca8b05684e9cda49acbb4e7dcf40c4720cd1534f68c2d139ec6f179bb9996e6fe9d0c7a04846db55a048f51fd2f3c41fbce0a004971
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>":
-  version: 5.8.2
-  resolution: "typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10/97920a082ffc57583b1cb6bc4faa502acc156358e03f54c7fc7fdf0b61c439a717f4c9070c449ee9ee683d4cfc3bb203127c2b9794b2950f66d9d307a4ff262c
   languageName: node
   linkType: hard
 
