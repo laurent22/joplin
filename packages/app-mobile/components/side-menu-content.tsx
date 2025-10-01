@@ -96,6 +96,10 @@ const useStyles = (themeId: number) => {
 			...buttonStyle,
 			flex: 0,
 		};
+		const folderButtonTextStyle: ViewStyle = {
+			...buttonTextStyle,
+			paddingLeft: 0,
+		};
 
 		const styles = StyleSheet.create({
 			menu: {
@@ -113,9 +117,10 @@ const useStyles = (themeId: number) => {
 			},
 			sidebarIcon: sidebarIconStyle,
 			folderButton: folderButtonStyle,
-			folderButtonText: {
-				...buttonTextStyle,
-				paddingLeft: 0,
+			folderButtonText: folderButtonTextStyle,
+			conflictFolderButtonText: {
+				...folderButtonTextStyle,
+				color: theme.colorError,
 			},
 			folderButtonSelected: {
 				...folderButtonStyle,
@@ -264,6 +269,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	// depth is specified with an accessibilityLabel:
 	const folderDepthDescription = props.depth > 0 ? _('(level %d)', props.depth) : '';
 	const accessibilityLabel = `${folderTitle}  ${folderDepthDescription}`.trim();
+	const folderButtonTextStyle = props.folder.id === Folder.conflictFolderId() ? baseStyles.conflictFolderButtonText : baseStyles.folderButtonText;
 	return (
 		<View key={props.folder.id} style={styles.buttonWrapper}>
 			<TouchableRipple
@@ -279,7 +285,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 					{renderFolderIcon(props.folder.id, folderIcon)}
 					<Text
 						numberOfLines={1}
-						style={baseStyles.folderButtonText}
+						style={folderButtonTextStyle}
 						accessibilityLabel={accessibilityLabel}
 					>
 						{folderTitle}
