@@ -54,7 +54,7 @@ export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
 };
 
 export const isLocalServer = (url: string) => {
-	const regex = /^https?:\/\/(localhost|127\.0\.0\.1)(?=[/:]|$)/;
+	const regex = /^(https?:\/\/)?(localhost|127(?:\.\d{1,3}){3}|\[::1\])(?::\d{1,5})?(\/.*)?$/i;
 	return regex.test(url);
 };
 

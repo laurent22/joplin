@@ -73,10 +73,11 @@ describe('file-api', () => {
 	it.each([
 		'http://localhost',
 		'http://localhost/',
-		'http://localhost:3000',
-		'https://127.0.0.1',
-		'https://127.0.0.1/',
-		'https://127.0.0.1:8080',
+		'https://localhost:8080',
+		'http://127.0.0.1',
+		'https://127.100.50.25:3000/test',
+		'http://[::1]',
+		'http://localhost/api/v1',
 	])('should detect a local server url', (url: string) => {
 		const result = isLocalServer(url);
 		expect(result).toBe(true);
@@ -85,7 +86,9 @@ describe('file-api', () => {
 	it.each([
 		'http://localhostXYZ',
 		'http://127.0.0.1foobar',
+		'http://192.168.1.1',
 		'http://example.com',
+		'https://my-localhost.com',
 	])('should detect a non local server url', (url: string) => {
 		const result = isLocalServer(url);
 		expect(result).toBe(false);
