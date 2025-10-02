@@ -85,10 +85,11 @@ describe('file-api', () => {
 	it.each([
 		'http://localhost',
 		'http://localhost/',
-		'http://localhost:3000',
-		'https://127.0.0.1',
-		'https://127.0.0.1/',
-		'https://127.0.0.1:8080',
+		'https://localhost:8080',
+		'http://127.0.0.1',
+		'https://127.100.50.25:3000/test',
+		'http://[::1]',
+		'http://localhost/api/v1',
 	])('should use enhanced basic delta algorithm when using WebDAV for a local server url', (url: string) => {
 		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('webdav'));
 		Setting.setValue('sync.6.path', url);
@@ -99,7 +100,9 @@ describe('file-api', () => {
 	it.each([
 		'http://localhostXYZ',
 		'http://127.0.0.1foobar',
+		'http://192.168.1.1',
 		'http://example.com',
+		'https://my-localhost.com',
 	])('should not use enhanced basic delta algorithm when using WebDAV for a non local server url', (url: string) => {
 		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('webdav'));
 		Setting.setValue('sync.6.path', url);
