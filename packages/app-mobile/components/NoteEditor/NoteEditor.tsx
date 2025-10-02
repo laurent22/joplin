@@ -90,6 +90,8 @@ function editorTheme(themeId: number) {
 	};
 }
 
+const noteEditorSearchChangeSource = 'joplin.noteEditor.setSearchState';
+
 type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
@@ -104,7 +106,7 @@ const useEditorControl = (
 		};
 
 		const setSearchStateCallback = (state: SearchState) => {
-			editorRef.current.setSearchState(state);
+			editorRef.current.setSearchState(state, noteEditorSearchChangeSource);
 			setSearchState(state);
 		};
 
@@ -310,15 +312,26 @@ function NoteEditor(props: Props) {
 		case EditorEventType.FollowLink:
 			void CommandService.instance().execute('openItem', event.link);
 			break;
-		case EditorEventType.UpdateSearchDialog:
-			setSearchState(event.searchState);
+		case EditorEventType.UpdateSearchDialog: {
+			const hasExternalChange = (
+				event.changeSources.length !== 1
+				|| event.changeSources[0] !== noteEditorSearchChangeSource
+			);
 
-			if (event.searchState.dialogVisible) {
-				editorControl.searchControl.showSearch();
-			} else {
-				editorControl.searchControl.hideSearch();
+			// If the change to the search was done by this editor, it was already applied to the
+			// search state. Skipping the update in this case also helps avoid overwriting the
+			// search state with an older value.
+			if (hasExternalChange) {
+				setSearchState(event.searchState);
+
+				if (event.searchState.dialogVisible) {
+					editorControl.searchControl.showSearch();
+				} else {
+					editorControl.searchControl.hideSearch();
+				}
 			}
 			break;
+		}
 		case EditorEventType.Remove:
 		case EditorEventType.Scroll:
 			// Not handled

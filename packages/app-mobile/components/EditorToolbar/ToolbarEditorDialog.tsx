@@ -12,7 +12,7 @@ import { AppState } from '../../utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import allToolbarCommandNamesFromState from './utils/allToolbarCommandNamesFromState';
 import Setting from '@joplin/lib/models/Setting';
-import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
+import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
 import selectedCommandNamesFromState from './utils/selectedCommandNamesFromState';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { DeleteButton } from '../buttons';
@@ -158,7 +158,7 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 
 	return (
 		<DismissibleDialog
-			size={DialogSize.Small}
+			size={DialogVariant.Small}
 			themeId={props.themeId}
 			visible={props.visible}
 			onDismiss={props.onDismiss}

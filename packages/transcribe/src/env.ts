@@ -16,6 +16,7 @@ export const defaultEnvValues: EnvVariables = {
 	FILE_STORAGE_MAINTENANCE_INTERVAL: 1 * Hour,
 	FILE_STORAGE_TTL: 7 * Day,
 	QUEUE_DATABASE_HOST: 'localhost',
+	IMAGE_MAX_DIMENSION: 400,
 };
 
 export interface EnvVariables {
@@ -34,6 +35,7 @@ export interface EnvVariables {
 	FILE_STORAGE_MAINTENANCE_INTERVAL: number;
 	FILE_STORAGE_TTL: number;
 	QUEUE_DATABASE_HOST: string;
+	IMAGE_MAX_DIMENSION: number;
 }
 
 export function parseEnv(rawEnv: Record<string, string | undefined>): EnvVariables {

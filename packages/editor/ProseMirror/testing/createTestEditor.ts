@@ -3,7 +3,7 @@ import { EditorView } from 'prosemirror-view';
 import schema from '../schema';
 import { EditorState, Plugin } from 'prosemirror-state';
 
-type PluginList = Plugin[]|(Plugin|Plugin[])[];
+export type PluginList = Plugin[]|(Plugin|Plugin[])[];
 
 interface Options {
 	parent?: HTMLElement;
@@ -12,6 +12,11 @@ interface Options {
 }
 
 const createTestEditor = ({ html, parent = null, plugins = [] }: Options) => {
+	if (parent === null) {
+		// Create a test parent -- some code adds tooltips, etc to view.dom.parent.
+		parent = document.createElement('div');
+	}
+
 	const htmlDocument = new DOMParser().parseFromString(html, 'text/html');
 	const proseMirrorDocument = ProseMirrorDomParser.fromSchema(schema).parse(htmlDocument);
 	return new EditorView(parent, {

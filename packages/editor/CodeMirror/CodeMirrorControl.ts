@@ -15,6 +15,7 @@ import { noteIdFacet, setNoteIdEffect } from './extensions/selectedNoteIdExtensi
 import jumpToHash from './editorCommands/jumpToHash';
 import { resetImageResourceEffect } from './extensions/rendering/renderBlockImages';
 import Logger from '@joplin/utils/Logger';
+import { searchChangeSourceEffect } from './extensions/searchExtension';
 
 const logger = Logger.create('CodeMirrorControl');
 
@@ -181,7 +182,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return getSearchState(this.editor.state);
 	}
 
-	public setSearchState(newState: SearchState) {
+	public setSearchState(newState: SearchState, changeSource = 'setSearchState') {
 		if (newState.dialogVisible !== searchPanelOpen(this.editor.state)) {
 			this.execCommand(newState.dialogVisible ? EditorCommandType.ShowSearch : EditorCommandType.HideSearch);
 		}
@@ -194,6 +195,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		});
 		this.editor.dispatch({
 			effects: [
+				searchChangeSourceEffect.of(changeSource),
 				setSearchQuery.of(query),
 			],
 		});

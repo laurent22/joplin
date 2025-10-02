@@ -407,7 +407,17 @@ export default class ElectronAppWrapper {
 					isGoingToExit = true;
 				} else {
 					event.preventDefault();
-					this.hide();
+
+					const w = this.win_;
+					if (!w) return;
+
+					if (w.isFullScreen()) {
+						// leave fullscreen, then hide
+						w.once('leave-full-screen', () => w.hide());
+						w.setFullScreen(false);
+					} else {
+						w.hide();
+					}
 				}
 			} else {
 				const hasBackgroundWindows = this.secondaryWindows_.size > 0;
@@ -612,7 +622,11 @@ export default class ElectronAppWrapper {
 					console.warn('The window object was not available during the click event from tray icon');
 					return;
 				}
-				this.mainWindow().show();
+				if (!this.mainWindow().isVisible()) {
+					this.mainWindow().show();
+				} else {
+					this.mainWindow().hide();
+				}
 			});
 		} catch (error) {
 			console.error('Cannot create tray', error);

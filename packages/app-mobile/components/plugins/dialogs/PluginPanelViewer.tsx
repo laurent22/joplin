@@ -12,7 +12,7 @@ import PluginUserWebView from './PluginUserWebView';
 import { View, StyleSheet, AccessibilityInfo } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
-import DismissibleDialog, { DialogSize } from '../../../components/DismissibleDialog';
+import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
 import CommandService from '@joplin/lib/services/CommandService';
 
 interface Props {
@@ -164,7 +164,7 @@ const PluginPanelViewer: React.FC<Props> = props => {
 			<DismissibleDialog
 				themeId={props.themeId}
 				visible={props.visible}
-				size={DialogSize.Large}
+				size={DialogVariant.Large}
 				onDismiss={onClose}
 			>
 				{renderTabContent()}
