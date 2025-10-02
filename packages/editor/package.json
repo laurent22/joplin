@@ -1,6 +1,6 @@
 {
   "name": "@joplin/editor",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "Web-based markdown editor",
   "private": true,
   "scripts": {
@@ -14,8 +14,8 @@
     "url": "git+https://github.com/laurent22/joplin.git"
   },
   "devDependencies": {
-    "@joplin/lib": "~3.4",
-    "@joplin/utils": "~3.4",
+    "@joplin/lib": "~3.5",
+    "@joplin/utils": "~3.5",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.14",
     "@types/node": "18.19.115",

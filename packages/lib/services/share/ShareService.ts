@@ -59,7 +59,7 @@ export default class ShareService {
 
 	public get enabled(): boolean {
 		if (!this.initialized_) return false;
-		return [9, 10].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
+		return [9, 10, 11].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

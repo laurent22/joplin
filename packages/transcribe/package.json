@@ -1,6 +1,6 @@
 {
   "name": "@joplin/transcribe",
-  "version": "3.4.9",
+  "version": "3.5.0",
   "private": true,
   "scripts": {
     "rebuild": "yarn clean && yarn build && yarn tsc",
@@ -14,7 +14,7 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "dependencies": {
-    "@joplin/utils": "~3.4",
+    "@joplin/utils": "~3.5",
     "@koa/cors": "3.4.3",
     "dotenv": "16.5.0",
     "file-type": "16.5.4",
@@ -27,7 +27,7 @@
     "sqlite3": "5.1.6"
   },
   "devDependencies": {
-    "@joplin/tools": "~3.4",
+    "@joplin/tools": "~3.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/jest-expect-message": "1.1.0",

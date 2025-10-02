@@ -1406,7 +1406,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-alarm-notification (3.4.0):
+  - react-native-alarm-notification (3.5.0):
     - React
   - react-native-document-picker (10.1.3):
     - DoubleConversion
@@ -1514,7 +1514,7 @@ PODS:
     - Yoga
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.4.1):
+  - react-native-saf-x (3.5.0):
     - React-Core
   - react-native-safe-area-context (5.4.1):
     - React-Core
@@ -1522,7 +1522,7 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.13.5):
+  - react-native-webview (13.14.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1870,7 +1870,7 @@ PODS:
     - React-utils (= 0.79.2)
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCClipboard (1.16.2):
+  - RNCClipboard (1.16.3):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
@@ -1884,7 +1884,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNLocalize (3.4.1):
+  - RNLocalize (3.4.2):
     - React-Core
   - RNQuickAction (0.3.13):
     - React
@@ -2339,7 +2339,7 @@ SPEC CHECKSUMS:
   React-logger: 8edfcedc100544791cd82692ca5a574240a16219
   React-Mapbuffer: c3f4b608e4a59dd2f6a416ef4d47a14400194468
   React-microtasksnativemodule: 054f34e9b82f02bd40f09cebd4083828b5b2beb6
-  react-native-alarm-notification: fd7c73a3dc15ce2d5bd9b28dfaa5aa2e25850c7b
+  react-native-alarm-notification: a4326a743df72a94d361a4c3a21515556f650341
   react-native-document-picker: da39c5e4f279d39c0356dca157b98f9dc349e5bb
   react-native-geolocation: ec15ffebc53790314885eb9e5f2132132fbc2600
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
@@ -2348,11 +2348,11 @@ SPEC CHECKSUMS:
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-quick-crypto: b475b71e7fa4dbf3446be55e8ad4ef2c58ac4f7f
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-saf-x: 3f8b52fb8160d7322161dec02a564271cc8f4138
+  react-native-saf-x: 8a349c8348f43ff7c14770da4b0d618d62593346
   react-native-safe-area-context: dde2052b903c11d677c320b599c3244021c34ce8
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-version-info: f0b04e16111c4016749235ff6d9a757039189141
-  react-native-webview: 1b5778b306d4ed09d13829a6e7a6550e3c1a644a
+  react-native-webview: 2d9ffd72b87cf905cdf8821d7d27d551188bac70
   React-NativeModulesApple: 2c4377e139522c3d73f5df582e4f051a838ff25e
   React-oscompat: ef5df1c734f19b8003e149317d041b8ce1f7d29c
   React-perflogger: 9a151e0b4c933c9205fd648c246506a83f31395d
@@ -2385,14 +2385,14 @@ SPEC CHECKSUMS:
   ReactCodegen: c63eda03ba1d94353fb97b031fc84f75a0d125ba
   ReactCommon: 76d2dc87136d0a667678668b86f0fca0c16fdeb0
   rn-fetch-blob: 25612b6d6f6e980c6f17ed98ba2f58f5696a51ca
-  RNCClipboard: e1d17c9d093d8129ef50b39b63a17a0e8ccd0ade
+  RNCClipboard: f6679d470d0da2bce2a37b0af7b9e0bf369ecda5
   RNCPushNotificationIOS: 6c4ca3388c7434e4a662b92e4dfeeee858e6f440
   RNDateTimePicker: 392bdc0d6863b5de2fe9b957c82c25b6a038db29
   RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
-  RNLocalize: 15463c4d79c7da45230064b4adcf5e9bb984667e
+  RNLocalize: 6a87f0490f1793d7a70042e4c55eb9a1ba6dd5b4
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
   RNShare: 675e8e4a84f0137baf33057cac8f7334b0bb4b98
