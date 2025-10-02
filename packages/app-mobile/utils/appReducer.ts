@@ -195,6 +195,10 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'NOTE_EDITOR_VISIBLE_CHANGE':
 			newState = { ...state, noteEditorVisible: action.visible };
 			break;
+
+		case 'SYNC_WIZARD_VISIBLE_CHANGE':
+			newState = { ...state, syncWizardVisible: action.visible };
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
