@@ -1,6 +1,6 @@
 {
   "name": "@joplin/lib",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "Joplin Core library",
   "author": "Laurent Cozic",
   "homepage": "",
@@ -38,7 +38,7 @@
     "react-test-renderer": "18.3.1",
     "sharp": "0.34.2",
     "tesseract.js": "5.1.1",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   },
   "dependencies": {
     "@adobe/css-tools": "4.4.3",
@@ -47,12 +47,12 @@
     "@joplin/fork-htmlparser2": "^4.1.59",
     "@joplin/fork-sax": "^1.2.63",
     "@joplin/fork-uslug": "^2.0.2",
-    "@joplin/htmlpack": "^3.4.1",
-    "@joplin/onenote-converter": "^3.4.1",
-    "@joplin/renderer": "^3.4.1",
+    "@joplin/htmlpack": "~3.5",
+    "@joplin/onenote-converter": "~3.5",
+    "@joplin/renderer": "~3.5",
     "@joplin/turndown": "^4.0.81",
     "@joplin/turndown-plugin-gfm": "^1.0.63",
-    "@joplin/utils": "^3.4.1",
+    "@joplin/utils": "~3.5",
     "@types/nanoid": "3.0.0",
     "adm-zip": "0.5.16",
     "async-mutex": "0.5.0",

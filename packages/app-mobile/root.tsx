@@ -107,6 +107,7 @@ import DocumentScanner from './components/screens/DocumentScanner/DocumentScanne
 import buildStartupTasks from './utils/buildStartupTasks';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import appReducer from './utils/appReducer';
+import SyncWizard from './components/SyncWizard/SyncWizard';
 
 const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();
@@ -762,6 +763,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							</View>
 							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
 							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
+							<SyncWizard/>
 						</SafeAreaView>
 					</View>
 				</SideMenu>

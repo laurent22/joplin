@@ -109,7 +109,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsTrash: commandFolder ? commandFolder.id === getTrashFolderId() : false,
 		folderIsReadOnly: commandFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
 
-		joplinServerConnected: [9, 10].includes(settings['sync.target']),
+		joplinServerConnected: [9, 10, 11].includes(settings['sync.target']),
 		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,
 		hasMultiProfiles: state.profileConfig && state.profileConfig.profiles.length > 1,
 
