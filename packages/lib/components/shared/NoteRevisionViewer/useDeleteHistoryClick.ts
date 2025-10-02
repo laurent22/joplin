@@ -23,7 +23,7 @@ const useDeleteHistoryClick = ({
 		if (response === 0) {
 			setDeleting(true);
 			try {
-				await Revision.deleteHistoryForNote(noteId);
+				await Revision.deleteHistoryForNote(noteId, { sourceDescription: 'useDeleteHistoryClick' });
 				await shim.showMessageBox(_('Note history has been deleted.'), { type: MessageBoxType.Info });
 			} finally {
 				setDeleting(false);

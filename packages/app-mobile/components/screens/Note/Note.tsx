@@ -73,6 +73,9 @@ import { defaultWindowId } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
+import { IconButton } from 'react-native-paper';
+import { writeTextToCacheFile } from '../../../utils/ShareUtils';
+import shareFile from '../../../utils/shareFile';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -148,6 +151,7 @@ interface State {
 	};
 
 	showSpeechToTextDialog: boolean;
+	multiline: boolean;
 }
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
@@ -219,6 +223,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			},
 
 			showSpeechToTextDialog: false,
+			multiline: false,
 		};
 
 		this.titleTextFieldRef = React.createRef();
@@ -508,7 +513,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
 		};
@@ -541,8 +545,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (Platform.OS === 'web') return;
 
 		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-			message: _('In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.'),
-			title: _('Permission needed'),
+			onRequestConfirmation: async () => {
+				const yesIndex = 0;
+				const result = await shim.showMessageBox(
+					_('Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.'),
+					{
+						buttons: [_('Yes'), _('No')],
+						title: _('Save geolocation?'),
+					},
+				);
+				return result === yesIndex;
+			},
 		});
 
 		// If the user simply pressed "Deny", we don't automatically switch it off because they might accept
@@ -701,7 +714,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private title_changeText(text: string) {
-		shared.noteComponent_change(this, 'title', text);
+		let newText = text;
+		if (Platform.OS !== 'web') {
+			// Manipulating the underlying text inside of onChangeText causes issues with the cursor position jumping to the end while typing
+			// when the Web app is being used on a desktop OS, so providing a toggle to expand the title field can only be done on mobile platforms
+			newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
+		}
+		shared.noteComponent_change(this, 'title', newText);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
 
@@ -1049,10 +1068,33 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async share_onPress() {
-		await Share.share({
-			message: `${this.state.note.title}\n\n${this.state.note.body}`,
-			title: this.state.note.title,
-		});
+		const shareText = `${this.state.note.title}\n\n${this.state.note.body}`;
+		const filename = this.state.note.id ?? uuid.create();
+
+		if (shareText.length > 100000) {
+			let fileToShare;
+			try {
+				// Using a .txt file extension causes a "No valid provider found from URL" error
+				// and blank share sheet on iOS for larger log files (around 200 KiB).
+				fileToShare = await writeTextToCacheFile(shareText, `${filename}.md`);
+				await shareFile(fileToShare, 'text/plain');
+			} catch (e) {
+				logger.error('Unable to share note data:', e);
+
+				// Display a message to the user (e.g. in the case where the user is out of disk space).
+				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+			} finally {
+				if (fileToShare) {
+					await shim.fsDriver().remove(fileToShare);
+				}
+			}
+		} else {
+			// A txt extension is automatically appended to the title when shared to a file via this route
+			await Share.share({
+				message: shareText,
+				title: filename,
+			});
+		}
 	}
 
 	private properties_onPress() {
@@ -1171,69 +1213,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public onAttach = async (filePath?: string) => {
 		await CommandService.instance().execute('attachFile', filePath);
 	};
-
-	// private vosk_:Vosk;
-
-	// private async getVosk() {
-	// 	if (this.vosk_) return this.vosk_;
-	// 	this.vosk_ = new Vosk();
-	// 	await this.vosk_.loadModel('model-fr-fr');
-	// 	return this.vosk_;
-	// }
-
-	// private async voiceRecording_onPress() {
-	// 	logger.info('Vosk: Getting instance...');
-
-	// 	const vosk = await this.getVosk();
-
-	// 	this.voskResult_ = [];
-
-	// 	const eventHandlers: any[] = [];
-
-	// 	eventHandlers.push(vosk.onResult(e => {
-	// 		logger.info('Vosk: result', e.data);
-	// 		this.voskResult_.push(e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onError(e => {
-	// 		logger.warn('Vosk: error', e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onTimeout(e => {
-	// 		logger.warn('Vosk: timeout', e.data);
-	// 	}));
-
-	// 	eventHandlers.push(vosk.onFinalResult(e => {
-	// 		logger.info('Vosk: final result', e.data);
-	// 	}));
-
-	// 	logger.info('Vosk: Starting recording...');
-
-	// 	void vosk.start();
-
-	// 	const buttonId = await dialogs.pop(this, 'Voice recording in progress...', [
-	// 		{ text: 'Stop recording', id: 'stop' },
-	// 		{ text: _('Cancel'), id: 'cancel' },
-	// 	]);
-
-	// 	logger.info('Vosk: Stopping recording...');
-	// 	vosk.stop();
-
-	// 	for (const eventHandler of eventHandlers) {
-	// 		eventHandler.remove();
-	// 	}
-
-	// 	logger.info('Vosk: Recording stopped:', this.voskResult_);
-
-	// 	if (buttonId === 'cancel') return;
-
-	// 	const newNote: NoteEntity = { ...this.state.note };
-	// 	newNote.body = `${newNote.body} ${this.voskResult_.join(' ')}`;
-	// 	this.setState({ note: newNote });
-	// 	this.scheduleSave();
-	// }
-
-
 
 	public menuOptions() {
 		const note = this.state.note;
@@ -1711,6 +1690,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const dueDate = Note.dueDateObject(note);
 
+		const titleToggleButton = Platform.OS === 'web' ? null :
+			<IconButton
+				icon={(!this.state.multiline && 'menu-down') || (this.state.multiline && 'menu-up')}
+				accessibilityLabel={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
+				onPress={() => this.setState({ multiline: !this.state.multiline })}
+				size={30}
+				style={{ width: 30, height: 30, alignSelf: 'center' }}
+			/>;
+
 		const titleComp = (
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
@@ -1726,7 +1714,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
 					editable={!this.state.readOnly}
+					multiline={this.state.multiline}
+					submitBehavior = "blurAndSubmit"
 				/>
+				{ titleToggleButton }
 			</View>
 		);
 

@@ -86,8 +86,14 @@ export default class InteropServiceHelper {
 								// pdfs.
 								// https://github.com/laurent22/joplin/issues/6254.
 								await win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								const data = await win.webContents.printToPDF(options as any);
+								const data = await win.webContents.printToPDF({
+									...options,
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
+									pageSize: options.pageSize as any,
+									// Allows users to override the CSS page size.
+									// See https://github.com/laurent22/joplin/issues/13096
+									preferCSSPageSize: true,
+								});
 								resolve(data);
 							} catch (error) {
 								reject(error);

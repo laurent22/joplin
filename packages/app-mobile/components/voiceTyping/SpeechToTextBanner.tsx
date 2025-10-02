@@ -5,9 +5,6 @@ import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import VoiceTyping, { OnTextCallback, VoiceTypingSession } from '../../services/voiceTyping/VoiceTyping';
 import whisper from '../../services/voiceTyping/whisper';
-import vosk from '../../services/voiceTyping/vosk';
-import { AppState } from '../../utils/types';
-import { connect } from 'react-redux';
 import { RecorderState } from './types';
 import RecordingControls from './RecordingControls';
 import { PrimaryButton } from '../buttons';
@@ -16,19 +13,17 @@ import shim from '@joplin/lib/shim';
 
 interface Props {
 	locale: string;
-	provider: string;
 	onDismiss: ()=> void;
 	onText: (text: string)=> void;
 }
 
 interface UseVoiceTypingProps {
 	locale: string;
-	provider: string;
 	onSetPreview: OnTextCallback;
 	onText: OnTextCallback;
 }
 
-const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypingProps) => {
+const useVoiceTyping = ({ locale, onSetPreview, onText }: UseVoiceTypingProps) => {
 	const [voiceTyping, setVoiceTyping] = useState<VoiceTypingSession>(null);
 	const [error, setError] = useState<Error|null>(null);
 	const [mustDownloadModel, setMustDownloadModel] = useState<boolean | null>(null);
@@ -43,8 +38,8 @@ const useVoiceTyping = ({ locale, provider, onSetPreview, onText }: UseVoiceTypi
 	voiceTypingRef.current = voiceTyping;
 
 	const builder = useMemo(() => {
-		return new VoiceTyping(locale, provider?.startsWith('whisper') ? [whisper] : [vosk]);
-	}, [locale, provider]);
+		return new VoiceTyping(locale, [whisper]);
+	}, [locale]);
 
 	const [redownloadCounter, setRedownloadCounter] = useState(0);
 
@@ -121,7 +116,6 @@ const SpeechToTextComponent: React.FC<Props> = props => {
 		locale: props.locale,
 		onSetPreview: setPreview,
 		onText: props.onText,
-		provider: props.provider,
 	});
 
 	useEffect(() => {
@@ -209,6 +203,4 @@ const SpeechToTextComponent: React.FC<Props> = props => {
 	/>;
 };
 
-export default connect((state: AppState) => ({
-	provider: state.settings['voiceTyping.preferredProvider'],
-}))(SpeechToTextComponent);
+export default SpeechToTextComponent;

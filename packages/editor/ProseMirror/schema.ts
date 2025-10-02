@@ -2,7 +2,7 @@ import { AttributeSpec, DOMOutputSpec, MarkSpec, NodeSpec, Schema } from 'prosem
 import { nodeSpecs as joplinEditableNodes } from './plugins/joplinEditablePlugin/joplinEditablePlugin';
 import { tableNodes } from 'prosemirror-tables';
 import { nodeSpecs as listNodes } from './plugins/listPlugin';
-import { nodeSpecs as resourcePlaceholderNodes } from './plugins/resourcePlaceholderPlugin';
+import { nodeSpecs as imageNodes } from './plugins/imagePlugin';
 import { hasProtocol } from '@joplin/utils/url';
 import { isResourceUrl } from '@joplin/lib/models/utils/resourceUtils';
 import { nodeSpecs as detailsNodes } from './plugins/detailsPlugin';
@@ -136,12 +136,12 @@ const nodes = addDefaultToplevelAttributes({
 		},
 	},
 	...detailsNodes,
-	...resourcePlaceholderNodes,
+	...imageNodes,
 	...listNodes,
 	...joplinEditableNodes,
 	...tableNodes({
 		tableGroup: 'block',
-		cellContent: 'inline*',
+		cellContent: 'block+',
 		cellAttributes: {},
 	}),
 	// Override the default `table` node to include the default toplevel attributes
@@ -156,46 +156,6 @@ const nodes = addDefaultToplevelAttributes({
 
 	text: {
 		group: 'inline',
-	},
-	image: {
-		group: 'inline',
-		inline: true,
-		draggable: true,
-		attrs: {
-			src: { default: '', validate: 'string' },
-			alt: { default: '', validate: 'string' },
-			title: { default: '', validate: 'string' },
-			fromMd: { default: false, validate: 'boolean' },
-			resourceId: { default: null as string|null, validate: 'string|null' },
-		},
-		parseDOM: [
-			{
-				tag: 'img[src]',
-				getAttrs: node => ({
-					src: node.getAttribute('src'),
-					alt: node.getAttribute('alt'),
-					title: node.getAttribute('title'),
-					fromMd: node.hasAttribute('data-from-md'),
-					resourceId: node.getAttribute('data-resource-id') || null,
-				}),
-			},
-		],
-		toDOM: node => {
-			const { src, alt, title, fromMd, resourceId } = node.attrs;
-			const outputAttrs: Record<string, unknown> = { src, alt, title };
-
-			if (fromMd) {
-				outputAttrs['data-from-md'] = true;
-			}
-			if (resourceId) {
-				outputAttrs['data-resource-id'] = resourceId;
-			}
-
-			return [
-				'img',
-				outputAttrs,
-			];
-		},
 	},
 	hard_break: {
 		inline: true,

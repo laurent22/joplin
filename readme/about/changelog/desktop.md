@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v3.4.12](https://github.com/laurent22/joplin/releases/tag/v3.4.12) - 2025-09-09T21:35:47Z
+
+- Fixed: Fix error when saving in-editor rendering-related settings ([#13105](https://github.com/laurent22/joplin/issues/13105)) ([#13103](https://github.com/laurent22/joplin/issues/13103) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.4.10](https://github.com/laurent22/joplin/releases/tag/v3.4.10) - 2025-09-01T12:25:22Z
 
 - Improved: Clarify handwritten text transcription setting ([#13073](https://github.com/laurent22/joplin/issues/13073) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

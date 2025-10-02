@@ -4,25 +4,3 @@
 	/* Override the "white-space" setting for the editor */
 	white-space: normal;
 }
-
-.joplin-editable > .edit {
-	position: absolute;
-	top: 0;
-	right: 0;
-	opacity: 0;
-
-	display: none;
-
-	transition-behavior: allow-discrete;
-	transition-duration: 0.2s;
-	transition-property: opacity, display;
-}
-
-.joplin-editable.-selected {
-	outline: 4px solid var(--joplin-text-selection-color);
-}
-
-.joplin-editable.-selected > .edit {
-	display: block;
-	opacity: 0.9;
-}

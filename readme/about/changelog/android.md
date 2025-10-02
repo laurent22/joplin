@@ -1,5 +1,11 @@
 # Joplin Android Changelog
 
+## [android-v3.4.7](https://github.com/laurent22/joplin/releases/tag/android-v3.4.7) (Pre-release) - 2025-09-09T08:09:54Z
+
+- Fixed: Fix error when saving in-editor rendering-related settings (#13105) (#13103 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix light bar shown above header in dark mode (#13132 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix renderer plugins that use the `settingValue` API (#13131 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.4.6](https://github.com/laurent22/joplin/releases/tag/android-v3.4.6) (Pre-release) - 2025-09-01T12:02:41Z
 
 - Fixed: Fix "edit profile" button is partially off-screen (#13084) (#13015 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

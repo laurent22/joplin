@@ -1,6 +1,6 @@
 import { getSearchState, search, SearchQuery, setSearchState } from 'prosemirror-search';
 import { SearchState } from '../../types';
-import { Plugin, EditorState, Command } from 'prosemirror-state';
+import { Plugin, EditorState, Command, Transaction } from 'prosemirror-state';
 import { EditorEvent, EditorEventType } from '../../events';
 
 const visiblePlugin = new Plugin({
@@ -32,7 +32,7 @@ export const setSearchVisible = (visible: boolean): Command => (state, dispatch)
 const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 
 	let lastState: SearchState|null = null;
-	const checkSearchStateChange = (state: EditorState) => {
+	const checkSearchStateChange = (state: EditorState, transaction: Transaction) => {
 		const currentQuery = getSearchState(state).query;
 		const currentVisible = getSearchVisible(state);
 
@@ -58,6 +58,7 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 			onEditorEvent({
 				kind: EditorEventType.UpdateSearchDialog,
 				searchState: currentState,
+				changeSources: [transaction.getMeta(visiblePlugin)?.changeSource ?? 'unknown'],
 			});
 		}
 	};
@@ -65,8 +66,8 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 	const checkStateChangePlugin = new Plugin<null>({
 		state: {
 			init: ()=>null,
-			apply: (_transaction, oldValue, _oldState, state) => {
-				checkSearchStateChange(state);
+			apply: (transaction, oldValue, _oldState, state) => {
+				checkSearchStateChange(state, transaction);
 				return oldValue;
 			},
 		},
@@ -78,7 +79,7 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 			visiblePlugin,
 			checkStateChangePlugin,
 		],
-		updateState: (editorState: EditorState, searchState: SearchState) => {
+		updateState: (editorState: EditorState, searchState: SearchState, changeSource: string) => {
 			let transaction = editorState.tr;
 			setSearchVisible(searchState.dialogVisible)(editorState, (newTransaction) => {
 				transaction = newTransaction;
@@ -89,6 +90,7 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 				regexp: searchState.useRegex,
 				replace: searchState.replaceText,
 			}));
+			transaction.setMeta(visiblePlugin, { changeSource });
 			lastState = { ...searchState };
 
 			return transaction;

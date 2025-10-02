@@ -67,10 +67,10 @@ import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from '../utils/ShareUtils';
 import setIgnoreTlsErrors from '../utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
-import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
-import { setRSA } from '@joplin/lib/services/e2ee/ppk';
+import { loadMasterKeysFromSettings, migrateMasterPassword, migratePpk } from '@joplin/lib/services/e2ee/utils';
+import { setRSA } from '@joplin/lib/services/e2ee/ppk/ppk';
 import RSA from '../services/e2ee/RSA.react-native';
-import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppk/ppkTestUtils';
 import { runIntegrationTests as runCryptoIntegrationTests } from '@joplin/lib/services/e2ee/cryptoTestUtils';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getPluginDataDir, getProfilesRootDir, getResourceDir } from '../services/profiles';
@@ -356,6 +356,9 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/set up sharing', async () => {
 		await ShareService.instance().initialize(store, EncryptionService.instance());
 	});
+	addTask('buildStartupTasks/migrate PPK', async () => {
+		await migratePpk();
+	});
 	addTask('buildStartupTasks/load folders', async () => {
 		await refreshFolders(dispatch, '');
 
@@ -463,11 +466,7 @@ const buildStartupTasks = (
 		// just print some messages in the console.
 		// ----------------------------------------------------------------------------
 		if (Setting.value('env') === 'dev') {
-			if (Platform.OS !== 'web') {
-				await runRsaIntegrationTests();
-			} else {
-				logger.info('Skipping encryption tests -- not supported on web.');
-			}
+			await runRsaIntegrationTests();
 			await runCryptoIntegrationTests();
 			await runOnDeviceFsDriverTests();
 		}

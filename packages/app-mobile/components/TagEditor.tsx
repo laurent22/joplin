@@ -10,6 +10,7 @@ import { TagEntity } from '@joplin/lib/services/database/types';
 import { Divider } from 'react-native-paper';
 import focusView from '../utils/focusView';
 import { msleep } from '@joplin/utils/time';
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 export enum TagEditorMode {
 	Large,
@@ -38,11 +39,13 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 				color: theme.color3,
 				flexDirection: 'row',
 				alignItems: 'center',
+				maxWidth: '100%',
 				gap: 4,
 			},
 			tagText: {
 				color: theme.color3,
 				fontSize: theme.fontSize,
+				flexShrink: 1,
 			},
 			removeTagButton: {
 				color: theme.color3,
@@ -122,7 +125,11 @@ const TagCard: React.FC<TagChipProps> = props => {
 		style={props.styles.tag}
 		role='listitem'
 	>
-		<Text style={props.styles.tagText}>{props.title}</Text>
+		<Text
+			ellipsizeMode='tail'
+			numberOfLines={1}
+			style={props.styles.tagText}
+		>{props.title}</Text>
 		<IconButton
 			pressableRef={removeButtonRef}
 			themeId={props.themeId}
@@ -144,23 +151,32 @@ interface TagsBoxProps {
 }
 
 const TagsBox: React.FC<TagsBoxProps> = props => {
+	const collatorLocale = getCollatorLocale();
+	const collator = useMemo(() => {
+		return getCollator(collatorLocale);
+	}, [collatorLocale]);
+
 	const onRemoveTag = useCallback((tag: string) => {
 		props.onRemoveTag(tag);
 	}, [props.onRemoveTag]);
 
 	const renderContent = () => {
 		if (props.tags.length) {
-			return props.tags.map(tag => (
-				<TagCard
-					key={`tag-${tag}`}
-					title={tag}
-					styles={props.styles}
-					themeId={props.themeId}
-					onRemove={onRemoveTag}
-					autofocus={props.autofocusTag === tag}
-					onAutoFocusComplete={props.onAutoFocusComplete}
-				/>
-			));
+			return props.tags
+				.sort((a, b) => {
+					return collator.compare(a, b);
+				})
+				.map(tag => (
+					<TagCard
+						key={`tag-${tag}`}
+						title={tag}
+						styles={props.styles}
+						themeId={props.themeId}
+						onRemove={onRemoveTag}
+						autofocus={props.autofocusTag === tag}
+						onAutoFocusComplete={props.onAutoFocusComplete}
+					/>
+				));
 		} else {
 			return <Text
 				style={props.styles.noTagsLabel}
@@ -189,15 +205,13 @@ const TagsBox: React.FC<TagsBoxProps> = props => {
 	</View>;
 };
 
-const normalizeTag = (tagText: string) => tagText.trim().toLowerCase();
-
 const TagEditor: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId, props.headerStyle);
 
 	const comboBoxItems = useMemo(() => {
 		return props.allTags
 			// Exclude tags already associated with the note
-			.filter(tag => !props.tags.includes(tag.title))
+			.filter(tag => !props.tags.some(o => o.toLowerCase() === tag.title?.toLowerCase()))
 			.map((tag): Option => {
 				const title = tag.title ?? 'Untitled';
 				return {
@@ -217,11 +231,13 @@ const TagEditor: React.FC<Props> = props => {
 
 	const onAddTag = useCallback((title: string) => {
 		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', title));
-		props.onTagsChange([...props.tags, normalizeTag(title)]);
+		props.onTagsChange([...props.tags, title.trim()]);
 	}, [props.tags, props.onTagsChange]);
 
 	const onRemoveTag = useCallback(async (title: string) => {
-		const previousTagIndex = props.tags.indexOf(title);
+		if (!title) return;
+		const lowercaseTitle = title.toLowerCase();
+		const previousTagIndex = props.tags.findIndex(item => item.toLowerCase() === lowercaseTitle);
 		const targetTag = props.tags[previousTagIndex + 1] ?? props.tags[previousTagIndex - 1];
 		setAutofocusTag(targetTag);
 
@@ -229,7 +245,7 @@ const TagEditor: React.FC<Props> = props => {
 		// prevent focus from occasionally jumping away from the tag box.
 		await msleep(100);
 		AccessibilityInfo.announceForAccessibility(_('Removed tag: %s', title));
-		props.onTagsChange(props.tags.filter(tag => tag !== title));
+		props.onTagsChange(props.tags.filter(tag => tag.toLowerCase() !== lowercaseTitle));
 	}, [props.tags, props.onTagsChange]);
 
 	const onComboBoxSelect = useCallback((item: { title: string }) => {
@@ -237,16 +253,16 @@ const TagEditor: React.FC<Props> = props => {
 		return { willRemove: true };
 	}, [onAddTag]);
 
-	const allTagsSet = useMemo(() => {
+	const allTagsSetNormalized = useMemo(() => {
 		return new Set([
-			...props.allTags.map(tag => tag.title),
-			...props.tags,
+			...props.allTags.map(tag => tag.title?.trim()?.toLowerCase()),
+			...props.tags.map(tag => tag.trim().toLowerCase()),
 		]);
 	}, [props.allTags, props.tags]);
 
 	const onCanAddTag = useCallback((tag: string) => {
-		return !allTagsSet.has(normalizeTag(tag));
-	}, [allTagsSet]);
+		return !allTagsSetNormalized.has(tag.trim().toLowerCase());
+	}, [allTagsSetNormalized]);
 
 	const showAssociatedTags = props.mode === TagEditorMode.Large || props.tags.length > 0;
 

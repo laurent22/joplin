@@ -7,7 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: summoner <summoner@vivaldi.net>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: summoner <summoner@disroot.org>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
@@ -1196,9 +1198,9 @@ msgstr "Következő riasztások"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "A tanúsítványok betöltéséhez használt könyvtárak elérési útvonalainak "
 "vesszővel elválasztott listája, vagy az egyes tanúsítványfájlok elérési "
@@ -2982,7 +2984,7 @@ msgid ""
 "will be rendered just below its Markdown source."
 msgstr ""
 "Ha egy képmelléklet a saját sorában található, és utána egy üres sor "
-"következik, akkor a Markdown forrása alatt jelenik meg."
+"következik, akkor a Markdown forrása alá renderelődik."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3208,7 +3210,7 @@ msgstr "Hiperhivatkozás beszúrása"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:854
 #: packages/app-mobile/components/screens/Note/commands/insertDateTime.ts:8
 msgid "Insert time"
-msgstr "Idő beszúrása"
+msgstr "Időpont beszúrása"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:191
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/buttons/InstallButton.tsx:18
@@ -5717,7 +5719,7 @@ msgstr "Osztott nézet"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1120
 msgid "Start application minimised in the tray icon"
-msgstr "Indításkor kicsinyítse az alkalmazást a tálcára"
+msgstr "Alkalmazás kicsinyítése a tálcára indításkor"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 msgid "Start recording"
@@ -7161,7 +7163,7 @@ msgstr "Megjelenítő"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1238
 msgid "Viewer and Rich Text Editor font family"
-msgstr "A megtekintő és a szövegszerkesztő betűcsaládja"
+msgstr "A megjelenítő és a szövegszerkesztő betűcsaládja"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1160
 msgid "Viewer font size"

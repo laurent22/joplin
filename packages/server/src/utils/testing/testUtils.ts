@@ -177,6 +177,8 @@ export interface AppContextTestOptions {
 	sessionId?: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	request?: any;
+
+	baseAppContext?: AppContext;
 }
 
 export function msleep(ms: number) {
@@ -205,6 +207,12 @@ export function msleep(ms: number) {
 		}, ms);
 	});
 }
+
+export const createBaseAppContext = () => {
+	const appLogger = Logger.create('AppTest');
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	return setupAppContext({} as any, Env.Dev, db_, dbSlave_, () => appLogger);
+};
 
 export async function koaAppContext(options: AppContextTestOptions = null): Promise<AppContext> {
 	if (!db_) throw new Error('Database must be initialized first');
@@ -238,15 +246,13 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	const req = httpMocks.createRequest(reqOptions);
 	req.__isMocked = true;
 
-	const appLogger = Logger.create('AppTest');
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, dbSlave_, () => appLogger);
+	const baseAppContext = options.baseAppContext ?? await createBaseAppContext();
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const appContext: any = {
+		joplinBase: baseAppContext.joplinBase,
 		baseAppContext,
 		joplin: {
 			...baseAppContext.joplinBase,
@@ -406,8 +412,8 @@ export async function updateItem(sessionId: string, path: string, content: strin
 	return models().item().load(item.id);
 }
 
-export async function deleteItem(sessionId: string, jopId: string): Promise<void> {
-	await deleteApi(sessionId, `items/root:/${jopId}.md:`);
+export async function deleteItem(sessionId: string, jopId: string, baseAppContext?: AppContext): Promise<void> {
+	await deleteApi(sessionId, `items/root:/${jopId}.md:`, { baseAppContext });
 }
 
 export async function createNote(sessionId: string, note: NoteEntity): Promise<Item> {

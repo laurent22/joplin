@@ -7,6 +7,8 @@ import type SettingType from '../Setting';
 import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem } from './types';
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
+import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
+import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
 const { toTitleCase } = require('../../string-utils.js');
 
@@ -28,6 +30,17 @@ export enum ScrollbarSize {
 	Small = 7,
 	Medium = 12,
 	Large = 24,
+}
+
+type CachedPpk = EmptyObject|{
+	timestamp: number;
+	ppk: PublicPrivateKeyPair;
+};
+
+export enum SurveyProgress {
+	NotStarted,
+	Started,
+	Dismissed,
 }
 
 const builtInMetadata = (Setting: typeof SettingType) => {
@@ -1141,6 +1154,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Int,
 			public: false,
 		},
+		// Holds the no-longer-published PPK from before a migration. This allows accepting
+		// shares that target the old PPK.
+		'encryption.cachedPpk': {
+			value: {} as CachedPpk,
+			type: SettingItemType.Object,
+			public: false,
+		},
 
 		'sync.userId': {
 			value: '',
@@ -1891,6 +1911,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'survey.webClientEval2025.progress': {
+			value: SurveyProgress.NotStarted,
+			type: SettingItemType.Int,
+			public: false,
+			isEnum: true,
+			storage: SettingStorage.File,
+			options: () => ({
+				[SurveyProgress.NotStarted]: 'Not started',
+				[SurveyProgress.Started]: 'Started',
+				[SurveyProgress.Dismissed]: 'Done',
+			}),
+			label: () => 'Show web client evaluation survey',
+			isGlobal: true,
+		},
+
 		'sync.allowUnsupportedProviders': {
 			value: -1,
 			type: SettingItemType.Int,
@@ -1914,20 +1949,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'note',
 		},
 
+		// Deprecated and currently unused. For now, the mobile app only supports the Whisper voice typing provider.
 		'voiceTyping.preferredProvider': {
 			value: 'whisper-tiny',
 			type: SettingItemType.String,
-			public: true,
+			public: false,
 			appTypes: [AppType.Mobile],
-			label: () => _('Preferred voice typing provider'),
+			label: () => 'Preferred voice typing provider',
 			isEnum: true,
 			show: showVoiceTypingSettings,
 			section: 'note',
 
 			options: () => {
 				return {
-					'vosk': _('Vosk'),
-					'whisper-tiny': _('Whisper'),
+					'vosk': 'Vosk', // No longer supported
+					'whisper-tiny': 'Whisper',
 				};
 			},
 		},
@@ -1939,7 +1975,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			label: () => _('Voice typing: Glossary'),
 			description: () => _('A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.'),
-			show: (settings) => showVoiceTypingSettings() && settings['voiceTyping.preferredProvider'].startsWith('whisper'),
+			show: () => showVoiceTypingSettings(),
 			section: 'note',
 		},
 

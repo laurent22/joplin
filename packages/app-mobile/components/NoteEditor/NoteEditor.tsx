@@ -33,6 +33,9 @@ import { toFileExtension } from '@joplin/lib/mime-utils';
 import { MarkupLanguage } from '@joplin/renderer';
 import WarningBanner from './WarningBanner';
 import useIsScreenReaderEnabled from '../../utils/hooks/useIsScreenReaderEnabled';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('NoteEditor');
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -87,6 +90,8 @@ function editorTheme(themeId: number) {
 	};
 }
 
+const noteEditorSearchChangeSource = 'joplin.noteEditor.setSearchState';
+
 type OnSetVisibleCallback = (visible: boolean)=> void;
 type OnSearchStateChangeCallback = (state: SearchState)=> void;
 const useEditorControl = (
@@ -101,7 +106,7 @@ const useEditorControl = (
 		};
 
 		const setSearchStateCallback = (state: SearchState) => {
-			editorRef.current.setSearchState(state);
+			editorRef.current.setSearchState(state, noteEditorSearchChangeSource);
 			setSearchState(state);
 		};
 
@@ -111,6 +116,7 @@ const useEditorControl = (
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			execCommand(command, ...args: any[]) {
+				logger.debug('execCommand', command);
 				return editorRef.current.execCommand(command, ...args);
 			},
 
@@ -230,8 +236,8 @@ const useEditorControl = (
 				setSearchState: setSearchStateCallback,
 			},
 
-			onResourceDownloaded: (id: string) => {
-				editorRef.current.onResourceDownloaded(id);
+			onResourceChanged: (id: string) => {
+				editorRef.current.onResourceChanged(id);
 			},
 
 			remove: () => {
@@ -306,15 +312,26 @@ function NoteEditor(props: Props) {
 		case EditorEventType.FollowLink:
 			void CommandService.instance().execute('openItem', event.link);
 			break;
-		case EditorEventType.UpdateSearchDialog:
-			setSearchState(event.searchState);
+		case EditorEventType.UpdateSearchDialog: {
+			const hasExternalChange = (
+				event.changeSources.length !== 1
+				|| event.changeSources[0] !== noteEditorSearchChangeSource
+			);
 
-			if (event.searchState.dialogVisible) {
-				editorControl.searchControl.showSearch();
-			} else {
-				editorControl.searchControl.hideSearch();
+			// If the change to the search was done by this editor, it was already applied to the
+			// search state. Skipping the update in this case also helps avoid overwriting the
+			// search state with an older value.
+			if (hasExternalChange) {
+				setSearchState(event.searchState);
+
+				if (event.searchState.dialogVisible) {
+					editorControl.searchControl.showSearch();
+				} else {
+					editorControl.searchControl.hideSearch();
+				}
 			}
 			break;
+		}
 		case EditorEventType.Remove:
 		case EditorEventType.Scroll:
 			// Not handled
@@ -342,10 +359,18 @@ function NoteEditor(props: Props) {
 		const isDownloaded = (resourceInfos: ResourceInfos, resourceId: string) => {
 			return resourceInfos[resourceId]?.localState?.fetch_status === Resource.FETCH_STATUS_DONE;
 		};
+		const isEncrypted = (resourceInfos: ResourceInfos, resourceId: string) => {
+			return resourceInfos[resourceId]?.item?.encryption_blob_encrypted === 1;
+		};
 		for (const key in props.noteResources) {
 			const wasDownloaded = isDownloaded(lastNoteResources.current, key);
-			if (!wasDownloaded && isDownloaded(props.noteResources, key)) {
-				editorControl.onResourceDownloaded(key);
+			const hasDownloaded = !wasDownloaded && isDownloaded(props.noteResources, key);
+
+			const wasEncrypted = isEncrypted(lastNoteResources.current, key);
+			const hasDecrypted = wasEncrypted && !isEncrypted(props.noteResources, key);
+
+			if (hasDownloaded || hasDecrypted) {
+				editorControl.onResourceChanged(key);
 			}
 		}
 	}, [props.noteResources, editorControl]);

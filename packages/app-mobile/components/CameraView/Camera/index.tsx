@@ -54,6 +54,14 @@ const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 		logger.error(message);
 	}, []);
 
+	const isReadyRef = useRef(false);
+	const onCameraReady = useCallback(() => {
+		if (isReadyRef.current) return; // Already emitted
+
+		isReadyRef.current = true;
+		props.onCameraReady();
+	}, [props.onCameraReady]);
+
 	useAsyncEffect(async (event) => {
 		// iOS issue workaround: Since upgrading to Expo SDK 52, closing and reopening the camera on iOS
 		// never emits onCameraReady. As a workaround, call .resumePreview and wait for it to resolve,
@@ -63,16 +71,16 @@ const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 			// Instead, wait for the preview to start using resumePreview:
 			await camera.resumePreview();
 			if (event.cancelled) return;
-			props.onCameraReady();
+			onCameraReady();
 		}
-	}, [camera, props.onCameraReady]);
+	}, [camera, onCameraReady]);
 
 	return hasPermission?.granted ? <CameraView
 		ref={setCamera}
 		style={props.style}
 		facing={props.cameraType === CameraDirection.Front ? 'front' : 'back'}
 		ratio={props.ratio as CameraRatio}
-		onCameraReady={Platform.OS === 'android' ? props.onCameraReady : undefined}
+		onCameraReady={onCameraReady}
 		onMountError={onMountError}
 		animateShutter={false}
 		barcodeScannerSettings={barcodeScannerSettings}

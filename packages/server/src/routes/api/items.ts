@@ -108,7 +108,13 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 		} else {
 			const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
 			await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
-			await ctx.joplin.models.item().deleteForUser(ctx.joplin.owner.id, item);
+			await ctx.joplin.models.item().deleteForUser(
+				ctx.joplin.owner.id,
+				item,
+				// Even though item has already been fetched, a no-op can
+				// still happen if two users try to delete the item at the same time.
+				{ allowNoOp: true },
+			);
 		}
 	} catch (error) {
 		if (error instanceof ErrorNotFound) {

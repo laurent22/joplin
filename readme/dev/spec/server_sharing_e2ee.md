@@ -9,3 +9,11 @@
 Once the key exchange is done, each user has their own copy of NOTEBOOK_KEY encrypted with their own master password. Public/Private Keys are only used to transfer NOTEBOOK_KEY.
 
 Whenever any item within the notebook is encrypted, it is done with NOTEBOOK_KEY.
+
+# Migrations
+
+Enabling migration to a new public key algorithm can be done by:
+1. Registering a new public key algorithm. This involves:
+	1. Adding a new item to the `PublicKeyAlgorithm` `enum` and
+	2. Updating the `PublicKeyCryptoProvider` for each platform.
+2. Adding the new `PublicKeyAlgorithm` enum item to the `ppkMigrations` array in `ppk.ts`.

@@ -40,4 +40,29 @@ jobs:
           cd packages/app-mobile/android
           sed -i -- 's/signingConfig signingConfigs.release/signingConfig signingConfigs.debug/' app/build.gradle
           ./gradlew assembleRelease
-          
+      
+      - name: Verify alignment
+        run: |
+          cd packages/app-mobile/android/app
+          APK_FILE="./build/outputs/apk/release/app-release.apk"
+          if test ! -f "$APK_FILE" ; then
+            echo "APK file not found."
+            exit 1
+          else
+            echo "APK file found at: $APK_FILE"
+          fi
+
+          BUILD_TOOLS_PATH="$ANDROID_HOME/build-tools/"
+          if test ! -d "$BUILD_TOOLS_PATH" ; then
+            echo "Build tools not found at $BUILD_TOOLS_PATH ($ANDROID_HOME, $BUILD_TOOLS_VERSION)"
+            exit 1
+          fi
+          # The build-tools/ directory contains different subdirectories
+          # for each build tools version. As a result, there may be multiple
+          # zipalign tools. Select the most recent (biggest two-digit version number):
+          ZIPALIGN_PATH="$(find $BUILD_TOOLS_PATH -name "zipalign" -print | sort | tail -n1)"
+          if test ! -x "$ZIPALIGN_PATH" ; then
+            echo "zipalign not found (searching in $BUILD_TOOLS_PATH, candidate: $ZIPALIGN_PATH)"
+            exit 1
+          fi
+          "$ZIPALIGN_PATH" -c -P 16 -v 4 "$APK_FILE"
