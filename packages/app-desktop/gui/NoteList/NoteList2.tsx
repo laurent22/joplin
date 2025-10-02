@@ -158,7 +158,7 @@ const NoteList = (props: Props) => {
 					// Only auto-scroll if the note is outside the currently visible range
 					const isNoteVisible = targetIndex >= startNoteIndex && targetIndex <= endNoteIndex;
 					if (!isNoteVisible) {
-						focusNote(selectedNoteId);
+						makeItemIndexVisible(targetIndex);
 					}
 					// Clear the pending scroll once we've found and handled the note
 					pendingAutoScrollRef.current = null;
@@ -169,8 +169,7 @@ const NoteList = (props: Props) => {
 			lastSelectedFolderRef.current = props.selectedFolderId;
 			pendingAutoScrollRef.current = null;
 		}
-	// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps
-	}, [props.selectedNoteIds, props.notes, props.selectedFolderId, focusNote]);
+	}, [props.selectedNoteIds, props.notes, props.selectedFolderId, makeItemIndexVisible, startNoteIndex, endNoteIndex]);
 
 
 	const onItemContextMenu = useOnContextMenu(
