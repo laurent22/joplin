@@ -1168,7 +1168,9 @@ export default class Synchronizer {
 				const isLocalWebDavServer = Setting.value('sync.target') === SyncTargetRegistry.nameToId('webdav') && isLocalServer(Setting.value('sync.6.path'));
 
 				// Don't save to the report errors that are due to things like temporary network errors or timeout, except if using a local WebDAV server, in which
-				// case timeout errors can occur when the server is actually down.
+				// case timeout errors can occur when the server is actually down. Those type of errors happen consistently when a local server is down when using
+				// the Android app in particular, but they can also happen on the desktop app in some circumstances. The usage of a local WebDAV server is most useful
+				// on Android, as it can be used as an alternative to file system sync, in order to work around performance issues related to SAF
 				if (!shim.fetchRequestCanBeRetried(error) || isLocalWebDavServer) {
 					this.progressReport_.errors.push(error);
 					this.logLastRequests();
