@@ -510,16 +510,6 @@ class Application extends BaseApplication {
 			Setting.dispatchUpdateAll();
 		});
 
-		addTask('app/override setting metadata', () => {
-			const meta = Setting.settingMetadata('startMinimized');
-			Setting.registerSetting('startMinimized', {
-				...meta,
-				show: (settings: any) => {
-					return !!settings['showTrayIcon'];
-				},
-			});
-		});
-
 		addTask('app/update folders and tags', async () => {
 			await refreshFolders((action) => this.dispatch(action), '');
 
