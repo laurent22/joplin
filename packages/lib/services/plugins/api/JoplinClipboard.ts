@@ -90,7 +90,10 @@ export default class JoplinClipboard {
 			clipboardData.image = this.electronNativeImage_.createFromDataURL(content.image);
 		}
 
-		this.electronClipboard_.write(clipboardData);
+		// Only write to clipboard if there's actually data to write
+		if (Object.keys(clipboardData).length > 0) {
+			this.electronClipboard_.write(clipboardData);
+		}
 	}
 
 }
