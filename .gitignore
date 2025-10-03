@@ -492,6 +492,7 @@ packages/app-desktop/gui/hooks/useImperativeHandlerDebugger.js
 packages/app-desktop/gui/hooks/useMarkupToHtml.js
 packages/app-desktop/gui/hooks/usePrevious.js
 packages/app-desktop/gui/hooks/usePropsDebugger.js
+packages/app-desktop/gui/hooks/useToast.js
 packages/app-desktop/gui/lib/SearchInput/SearchInput.js
 packages/app-desktop/gui/lib/ToggleButton/ToggleButton.js
 packages/app-desktop/gui/menuCommandNames.js
