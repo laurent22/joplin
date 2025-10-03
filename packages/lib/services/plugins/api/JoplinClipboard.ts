@@ -69,13 +69,13 @@ export default class JoplinClipboard {
 	 *
 	 * @example
 	 * ```typescript
-	 * await joplin.clipboard.writeMultiple({
+	 * await joplin.clipboard.write({
 	 *   text: 'Plain text version',
 	 *   html: '<strong>HTML version</strong>'
 	 * });
 	 * ```
 	 */
-	public async writeMultiple(content: ClipboardContent): Promise<void> {
+	public async write(content: ClipboardContent): Promise<void> {
 		const clipboardData: Record<string, unknown> = {};
 
 		if (content.text !== undefined) {
