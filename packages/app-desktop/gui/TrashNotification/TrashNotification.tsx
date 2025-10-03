@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { StateLastDeletion } from '@joplin/lib/reducer';
 import { _, _n } from '@joplin/lib/locale';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { Dispatch } from 'redux';
-import { PopupNotificationContext } from '../PopupNotification/PopupNotificationProvider';
 import { NotificationType } from '../PopupNotification/types';
 import TrashNotificationMessage from './TrashNotificationMessage';
+import useToast from '../../gui/hooks/useToast';
 
 interface Props {
 	lastDeletion: StateLastDeletion;
@@ -27,7 +27,7 @@ const onCancelClick = async (lastDeletion: StateLastDeletion) => {
 };
 
 export default (props: Props) => {
-	const popupManager = useContext(PopupNotificationContext);
+	const toast = useToast();
 
 	const lastDeletionNotificationTimeRef = useRef<number>(props.lastDeletionNotificationTime);
 	lastDeletionNotificationTimeRef.current = props.lastDeletionNotificationTime;
@@ -51,11 +51,12 @@ export default (props: Props) => {
 			notification.remove();
 			void onCancelClick(props.lastDeletion);
 		};
-		const notification = popupManager.createPopup(() => (
-			<TrashNotificationMessage message={msg} onCancel={handleCancelClick}/>
-		), { type: NotificationType.Success });
-		notification.scheduleDismiss();
-	}, [props.lastDeletion, props.dispatch, popupManager]);
+		const notification = toast(
+			<TrashNotificationMessage message={msg} onCancel={handleCancelClick} />,
+			4000,
+			NotificationType.Success,
+		);
+	}, [props.lastDeletion, props.dispatch, toast]);
 
 	return <div style={{ display: 'none' }}/>;
 };
