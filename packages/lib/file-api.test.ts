@@ -19,6 +19,7 @@ const defaultItem = (): RemoteItem => {
 
 const validNoteId = '1b175bb38bba47baac22b0b47f778113';
 const basePath = '/';
+const baseTimestamp = new Date().getTime();
 
 const setupWebDavSync = (isLocal: boolean) => {
 	let url = 'http://www.example.com';
@@ -198,119 +199,95 @@ describe('file-api', () => {
 
 	test.each([false, true])('basicDelta (enhancedAlgorithm: %s) should not return item, where remote item is a directory', async (enhancedAlgorithm) => {
 		setupWebDavSync(enhancedAlgorithm);
-		const timestamp = new Date().getTime();
 		const stat = {
 			path: remotePath(validNoteId),
-			updated_time: timestamp + 1,
+			updated_time: baseTimestamp + 1,
 			isDir: true,
 		};
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(undefined, timestamp));
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(undefined, baseTimestamp));
 		expect(context.items.length).toBe(0);
 	});
 
 	test.each([false, true])('basicDelta (enhancedAlgorithm: %s) should not return item, where remote item is not a system path', async (enhancedAlgorithm) => {
 		setupWebDavSync(enhancedAlgorithm);
 		const noteId = '1b175bb38bba47baac22b0b47f77811'; // 1 char too short
-		const timestamp = new Date().getTime();
-		const stat = statItem(noteId, timestamp + 1);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(undefined, timestamp));
+		const stat = statItem(noteId, baseTimestamp + 1);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(undefined, baseTimestamp));
 		expect(context.items.length).toBe(0);
 	});
 
 	test.each([false, true])('basicDelta (enhancedAlgorithm: %s) should return item with isDeleted true, where remote item not longer exists', async (enhancedAlgorithm) => {
 		setupWebDavSync(enhancedAlgorithm);
-		const timestamp = new Date().getTime();
-
-		const context = await basicDelta(basePath, dirStatFunc(undefined), syncOptions(validNoteId, timestamp));
+		const context = await basicDelta(basePath, dirStatFunc(undefined), syncOptions(validNoteId, baseTimestamp));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0].isDeleted).toBe(true);
 	});
 
 	test.each([false, true])('basicDelta (enhancedAlgorithm: %s) should return item, where local item does not exist', async (enhancedAlgorithm) => {
 		setupWebDavSync(enhancedAlgorithm);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(undefined, timestamp));
+		const stat = statItem(validNoteId, baseTimestamp);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(undefined, baseTimestamp));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0]).toBe(stat);
 	});
 
 	test.each([false, true])('basicDelta (enhancedAlgorithm: %s) should return item, where local item exists and remote item has a newer timestamp', async (enhancedAlgorithm) => {
 		setupWebDavSync(enhancedAlgorithm);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp + 1);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, timestamp));
+		const stat = statItem(validNoteId, baseTimestamp + 1);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, baseTimestamp));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0]).toBe(stat);
 	});
 
 	test.each([false, true])('basicDelta (enhancedAlgorithm: %s) should not return item, where local item exists and remote item has an equal timestamp', async (enhancedAlgorithm) => {
 		setupWebDavSync(enhancedAlgorithm);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, timestamp));
+		const stat = statItem(validNoteId, baseTimestamp);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, baseTimestamp));
 		expect(context.items.length).toBe(0);
 	});
 
 	test('basicDelta (enhancedAlgorithm: false) should return item, where local item exists and remote item has an equal timestamp, but it is not present in fileAtTimestamp', async () => {
 		setupWebDavSync(false);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, timestamp, timestamp, false));
+		const stat = statItem(validNoteId, baseTimestamp);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, baseTimestamp, baseTimestamp, false));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0]).toBe(stat);
 	});
 
 	test('basicDelta (enhancedAlgorithm: false) should not return item, where local item exists and remote item has an older timestamp', async () => {
 		setupWebDavSync(false);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp - 1);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, timestamp));
+		const stat = statItem(validNoteId, baseTimestamp - 1);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, baseTimestamp));
 		expect(context.items.length).toBe(0);
 	});
 
 	test('basicDelta (enhancedAlgorithm: false) should use context timestamp for timestamp comparisons, ignoring items with earlier timestamps', async () => {
 		setupWebDavSync(false);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp + 1);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, timestamp, timestamp + 2));
+		const stat = statItem(validNoteId, baseTimestamp + 1);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, baseTimestamp, baseTimestamp + 2));
 		expect(context.items.length).toBe(0);
 	});
 
 	test('basicDelta (enhancedAlgorithm: true) should return item, where local item exists and remote item has an older timestamp', async () => {
 		setupWebDavSync(true);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp - 1);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, timestamp));
+		const stat = statItem(validNoteId, baseTimestamp - 1);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, baseTimestamp));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0]).toBe(stat);
 	});
 
 	test('basicDelta (enhancedAlgorithm: true) should ignore context timestamp for timestamp comparisons, and return item based on metadata timestamp', async () => {
 		setupWebDavSync(true);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp + 1);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, timestamp, timestamp + 2));
+		const stat = statItem(validNoteId, baseTimestamp + 1);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, baseTimestamp, baseTimestamp + 2));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0]).toBe(stat);
 	});
 
 	test('basicDelta (enhancedAlgorithm: true) should always return item if there is no metadata timestamp set', async () => {
 		setupWebDavSync(true);
-		const timestamp = new Date().getTime();
-		const stat = statItem(validNoteId, timestamp);
-
-		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, undefined, timestamp + 1));
+		const stat = statItem(validNoteId, baseTimestamp);
+		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, undefined, baseTimestamp + 1));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0]).toBe(stat);
 	});
