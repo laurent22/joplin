@@ -61,7 +61,7 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 	}
 
 	public static override label() {
-		return `${_('Joplin Server')} (Beta, SAML)`;
+		return `${_('Joplin Server (SAML)')}`;
 	}
 
 	public override async isAuthenticated() {
