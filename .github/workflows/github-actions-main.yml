@@ -9,7 +9,7 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [macos-13, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
+        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
     steps:
       - uses: actions/checkout@v4
 
