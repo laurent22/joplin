@@ -27,7 +27,7 @@ These files and folders contain the application's primary data, user-generated c
 | **settings.json**       | JSON configuration file containing all user preferences and application settings. The full list of supported settings is documented in the [JSON schema](https://joplinapp.org/schema/settings.json).                                                                          |
 | **keymap-desktop.json** | Stores user-defined keyboard shortcuts overriding the defaults.                                                                                                                                                                                                                |
 | **userchrome.css**      | Optional user stylesheet that allows customisation of the Joplin user interface (e.g. colours, fonts, layout).                                                                                                                                                                 |
-| **profile-<id>/**       | When [multiple profiles](https://joplinapp.org/help/apps/profiles/) are in use, they are created in these additional folders. Each subdirectory mirrors the main profile structure.                                                                                            |
+| **profile-ID/**       | When [multiple profiles](https://joplinapp.org/help/apps/profiles/) are in use, they are created in these additional folders. Each subdirectory mirrors the main profile structure.                                                                                            |
 
 ### Runtime and State Files
 
