@@ -150,8 +150,9 @@ export default function(props: Props) {
 
 	const onNameClick = useCallback(() => {
 		const manifest = item.manifest;
-		if (!manifest.homepage_url) return;
-		void bridge().openExternal(manifest.homepage_url);
+		const url = manifest.homepage_url ? manifest.homepage_url : manifest.repository_url;
+		if (!url) return;
+		void bridge().openExternal(url);
 	}, [item]);
 
 	const onRecommendedClick = useCallback(() => {

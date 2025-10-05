@@ -13,6 +13,11 @@ import toggleInlineSelectionFormat from './utils/formatting/toggleInlineSelectio
 import getSearchState from './utils/getSearchState';
 import { noteIdFacet, setNoteIdEffect } from './extensions/selectedNoteIdExtension';
 import jumpToHash from './editorCommands/jumpToHash';
+import { resetImageResourceEffect } from './extensions/rendering/renderBlockImages';
+import Logger from '@joplin/utils/Logger';
+import { searchChangeSourceEffect } from './extensions/searchExtension';
+
+const logger = Logger.create('CodeMirrorControl');
 
 interface Callbacks {
 	onUndoRedo(): void;
@@ -58,6 +63,8 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 			commandOutput = super.execCommand(name, ...args);
 		} else if (super.supportsJoplinCommand(name)) {
 			commandOutput = super.execJoplinCommand(name);
+		} else {
+			logger.warn('Unknown command', name);
 		}
 
 		if (name === EditorCommandType.Undo || name === EditorCommandType.Redo) {
@@ -175,7 +182,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return getSearchState(this.editor.state);
 	}
 
-	public setSearchState(newState: SearchState) {
+	public setSearchState(newState: SearchState, changeSource = 'setSearchState') {
 		if (newState.dialogVisible !== searchPanelOpen(this.editor.state)) {
 			this.execCommand(newState.dialogVisible ? EditorCommandType.ShowSearch : EditorCommandType.HideSearch);
 		}
@@ -188,6 +195,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		});
 		this.editor.dispatch({
 			effects: [
+				searchChangeSourceEffect.of(changeSource),
 				setSearchQuery.of(query),
 			],
 		});
@@ -229,8 +237,12 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		};
 	}
 
-	public onResourceDownloaded(_id: string) {
-		// Unused
+	public onResourceChanged(id: string) {
+		this.editor.dispatch({
+			effects: [
+				resetImageResourceEffect.of({ id }),
+			],
+		});
 	}
 
 	public setContentScripts(plugins: ContentScriptData[]) {

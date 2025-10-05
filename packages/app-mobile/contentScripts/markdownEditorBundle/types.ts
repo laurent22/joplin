@@ -37,5 +37,5 @@ export interface MainProcessApi {
 	onEditorAdded(): Promise<void>;
 	logMessage(message: string): Promise<void>;
 	onPasteFile(type: string, dataBase64: string): Promise<void>;
-	onResolveImageSrc(src: string): Promise<string|null>;
+	onResolveImageSrc(src: string, reloadCounter: number): Promise<string|null>;
 }

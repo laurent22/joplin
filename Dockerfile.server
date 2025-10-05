@@ -63,10 +63,23 @@ FROM node:18-slim
 ARG user=joplin
 RUN useradd --create-home --shell /bin/bash $user
 
+# Install PM2 and set home directory. Setting the PM2 data dir so modules/config persist regardless
+# of user home.
+RUN npm i -g pm2@5.4.3 && mkdir -p /opt/pm2 && chown -R $user:$user /opt/pm2
+ENV PM2_HOME=/opt/pm2
+
 USER $user
 
 COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
 COPY --chown=$user:$user --from=builder /usr/bin/tini /usr/local/bin/tini
+
+# We download a specific version of the plugin to prevent pm2 from fetching the latest, since it may
+# not have been properly audited (that fact was used to spread malware at some point). Ref:
+# https://github.com/laurent22/joplin/issues/12754
+RUN pm2 install https://registry.npmjs.org/pm2-logrotate/-/pm2-logrotate-3.0.0.tgz \
+	&& pm2 set pm2-logrotate:max_size 100MB \
+	&& pm2 set pm2-logrotate:retain 5 \
+	&& pm2 set pm2-logrotate:compress true
 
 ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1

@@ -25,14 +25,13 @@ interface Props {
 const SidebarComponent = (props: Props) => {
 	const renderSynchronizeButton = (type: string) => {
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
-		const iconAnimation = type !== 'sync' ? 'icon-infinite-rotation 1s linear infinite' : '';
 
 		return (
 			<StyledSynchronizeButton
 				level={ButtonLevel.SidebarSecondary}
+				className={`sidebar-sync-button ${type === 'sync' ? '' : '-syncing'}`}
 				iconName="icon-sync"
 				key="sync_button"
-				iconAnimation={iconAnimation}
 				title={label}
 				onClick={() => {
 					void CommandService.instance().execute('synchronize', type !== 'sync');

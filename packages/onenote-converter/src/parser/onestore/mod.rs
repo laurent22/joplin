@@ -31,7 +31,7 @@ impl<'a> OneStore<'a> {
         self.schema
     }
 
-    pub(crate) fn data_root(&'a self) -> &'a ObjectSpace {
+    pub(crate) fn data_root(&self) -> &ObjectSpace {
         &self.data_root
     }
 

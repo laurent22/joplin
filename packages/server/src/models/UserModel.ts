@@ -15,7 +15,7 @@ import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
 import { betaStartSubUrl, betaUserDateRange, betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../utils/stripe';
 import endOfBetaTemplate from '../views/emails/endOfBetaTemplate';
 import Logger from '@joplin/utils/Logger';
-import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
+import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
 import paymentFailedUploadDisabledTemplate from '../views/emails/paymentFailedUploadDisabledTemplate';
 import oversizedAccount1 from '../views/emails/oversizedAccount1';
 import oversizedAccount2 from '../views/emails/oversizedAccount2';

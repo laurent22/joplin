@@ -1,4 +1,4 @@
-import BaseModel, { ModelType } from '../BaseModel';
+import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import { RevisionEntity, StringOrSqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 const DiffMatchPatch = require('diff-match-patch');
@@ -374,13 +374,15 @@ export default class Revision extends BaseItem {
 		}
 	}
 
-	public static async deleteHistoryForNote(noteId: string) {
+	public static async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
+		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
+
 		const revisions: RevisionEntity[] = await this.modelSelectAll(
-			'SELECT id FROM revisions WHERE item_type = ? AND item_id = ? ORDER BY item_updated_time DESC',
-			[ModelType.Note, noteId],
+			`SELECT id FROM revisions WHERE item_type = ? AND item_id in (${this.escapeIdsForSql(ids)}) ORDER BY item_updated_time DESC`,
+			[ModelType.Note],
 		);
 
-		await this.batchDelete(revisions.map(item => item.id), { sourceDescription: 'Revision.deleteHistoryForNote' });
+		await this.batchDelete(revisions.map(item => item.id), options);
 	}
 
 	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {

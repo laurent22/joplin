@@ -123,8 +123,8 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 <body>
 
 <div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">title</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href="Untitled">Untitled</a></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Untitled-0.</a></p></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Untitled</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/6">Untitled-0.</a></p></div>
 </div><div class="container-outline" style="left: 909px; position: absolute; top: 132px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div>
 

@@ -87,12 +87,6 @@
 			"alt": "casino without making any upfront cost"
 		},
 		{
-			"url": "https://essayservice.com",
-			"title": "quick and reliable service to write my paper for me",
-			"imageName": "EssayService.png",
-			"alt": "quick and reliable service to write my paper for me"
-		},
-		{
 			"url": "https://writepaper.com/",
 			"title": "best service to write my paper for me",
 			"imageName": "WritePaper.png",
@@ -118,13 +112,6 @@
 			"alt": "Freespinny.io Free Spins Bonus site"
 		},
 		{
-			"url": "https://damangameplay.in",
-			"title": "Daman Game",
-			"imageName": "DamanGame.png",
-			"alt": "Daman Game",
-			"githubUser": "vikasmanimc"
-		},
-		{
 			"url": "https://essayshark.com",
 			"title": "EssayShark - essay writers for hire",
 			"imageName": "EssayShark.png",
@@ -147,6 +134,30 @@
 			"title": "Essay writers DoMyEssay are dedicated to providing top-notch, custom-written papers that meet your academic requirements",
 			"imageName": "DoMyEssay.png",
 			"alt": "DoMyEssay"
+		},
+		{
+			"url": "https://essaypro.com/",
+			"title": "best essay writing service",
+			"imageName": "EssayPro.png",
+			"alt": "best essay writing service"
+		},
+		{
+			"url": "https://socialkings.online",
+			"title": "Boost your reach and buy real followers",
+			"imageName": "SocialKings.png",
+			"alt": "Boost your reach and buy real followers"
+		},
+		{
+			"url": "https://uk.notgamstop.com/bonuses/free-spins-no-deposit-no-gamstop/",
+			"title": "free spins no deposit at NotGamstop",
+			"imageName": "NotGamStop.jpg",
+			"alt": "free spins no deposit at NotGamstop"
+		},
+		{
+			"url": "https://www.writemyessay.com/",
+			"title": "writing service for students WriteMyEssay",
+			"imageName": "WriteMyEssay.png",
+			"alt": "writing service for students WriteMyEssay"
 		}
 	]
 }

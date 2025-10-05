@@ -9,6 +9,7 @@ import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 import BackButtonService from '../../../services/BackButtonService';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
@@ -60,6 +61,7 @@ interface ConfigScreenProps {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navigation: any;
+	dispatch: Dispatch;
 }
 
 class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, ConfigScreenState> {
@@ -124,6 +126,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private e2eeConfig_ = () => {
 		void NavService.go('EncryptionConfig');
+	};
+
+	private onShowSyncWizard_ = () => {
+		this.props.dispatch({
+			type: 'SYNC_WIZARD_VISIBLE_CHANGE',
+			visible: true,
+		});
 	};
 
 	private saveButton_press = async () => {
@@ -231,11 +240,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			// Not implemented yet
 			return true;
 		}
-		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, { rationale: {
 			title: _('Information'),
 			message: _('In order to use file system synchronisation your permission to write to external storage is required.'),
 			buttonPositive: _('OK'),
-		});
+		} });
 	}
 
 	public UNSAFE_componentWillMount() {
@@ -545,6 +554,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
+			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 

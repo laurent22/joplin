@@ -1,7 +1,6 @@
-import { focus } from '@joplin/lib/utils/focusHandler';
-import createTextNode from '../../utils/dom/createTextNode';
 import { EditorApi } from '../joplinEditorApiPlugin';
 import { EditorLanguageType } from '../../../types';
+import showModal from '../../utils/dom/showModal';
 
 interface SourceBlockData {
 	start: string;
@@ -19,18 +18,12 @@ interface Options {
 }
 
 const createEditorDialog = ({ editorApi, doneLabel, block, onSave, onDismiss }: Options) => {
-	const dialog = document.createElement('dialog');
-	dialog.classList.add('editor-dialog', '-visible');
-	document.body.appendChild(dialog);
-
-	dialog.onclose = () => {
-		onDismiss();
-		dialog.remove();
-		editor.remove();
-	};
+	const content = document.createElement('div');
+	content.classList.add('editor-dialog-content');
+	document.body.appendChild(content);
 
 	const editor = editorApi.createCodeEditor(
-		dialog,
+		content,
 		EditorLanguageType.Markdown,
 		(newContent) => {
 			block = {
@@ -48,35 +41,14 @@ const createEditorDialog = ({ editorApi, doneLabel, block, onSave, onDismiss }: 
 		block.end,
 	].join(''));
 
-	const onClose = () => {
-		if (dialog.close) {
-			dialog.close();
-		} else {
-			// Handle the case where the dialog element is not supported by the
-			// browser/testing environment.
-			dialog.onclose(new Event('close'));
-		}
-	};
-
-	const submitButton = document.createElement('button');
-	submitButton.appendChild(createTextNode(doneLabel));
-	submitButton.classList.add('submit');
-	submitButton.onclick = onClose;
-
-	dialog.appendChild(submitButton);
-
-
-	// .showModal is not defined in JSDOM and some older (pre-2022) browsers
-	if (dialog.showModal) {
-		dialog.showModal();
-	} else {
-		dialog.classList.add('-fake-modal');
-		focus('createEditorDialog/legacy', editor);
-	}
-
-	return {
-		dismiss: onClose,
-	};
+	return showModal({
+		content,
+		doneLabel,
+		onDismiss: () => {
+			onDismiss();
+			editor.remove();
+		},
+	});
 };
 
 export default createEditorDialog;

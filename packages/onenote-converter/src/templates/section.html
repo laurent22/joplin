@@ -6,7 +6,7 @@
 <nav>
     <ul>
         {% for page in pages %}
-        <li class="l{{page.level}}"><a href="{{ page.path|encode }}" target="content" title="{{ page.name }}">{{ page.name }}</a></li>
+        <li class="l{{page.level}}"><a href="{{ page.path|urlencode }}" target="content" title="{{ page.name }}">{{ page.name }}</a></li>
         {% endfor %}
     </ul>
 </nav>

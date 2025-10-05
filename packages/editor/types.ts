@@ -122,12 +122,13 @@ export interface EditorControl {
 	// the given [label] and [url].
 	updateLink(label: string, url: string): void;
 
-	setSearchState(state: SearchState): void;
+	setSearchState(state: SearchState, changeSource: string): void;
 
 	setContentScripts(plugins: ContentScriptData[]): Promise<void>;
 
-	// Called when a resource associated with the current note finishes downloading.
-	onResourceDownloaded(id: string): void;
+	// Called when a resource associated with the current note finishes downloading
+	// or has been updated in an external editor.
+	onResourceChanged(id: string): void;
 
 	remove(): void;
 	focus(): void;
@@ -147,7 +148,7 @@ export enum EditorKeymap {
 export interface EditorTheme extends Theme {
 	themeId: number;
 	fontFamily: string;
-	fontSize?: number;
+	fontSize: number;
 	fontSizeUnits?: string;
 	isDesktop?: boolean;
 	monospaceFont?: string;

@@ -1,5 +1,15 @@
 # Joplin iOS Changelog
 
+## [ios-v13.4.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.4.3) - 2025-09-09T08:25:07Z
+
+- Fixed: Fix "scan notebook" tool on iOS (#13114) (#13111 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix error when saving in-editor rendering-related settings (#13105) (#13103 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix light bar shown above header in dark mode (#13132 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix certain renderer plugins fail to load (#13078 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix compatibility with certain plugins targetting the desktop app (#13077 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix plugin panel buttons are off-screen on recent versions (#13080 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Fix renderer plugins that use the `settingValue` API (#13131 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.4.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.4.2) - 2025-08-27T06:32:12Z
 
 - New: Add a "highlight active line" setting (#12967 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

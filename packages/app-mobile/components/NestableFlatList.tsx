@@ -84,7 +84,7 @@ const NestableFlatList = function<T>({
 	}, []);
 
 	const bufferSize = 10;
-	const visibleStartIndex = Math.floor(scroll / itemHeight);
+	const visibleStartIndex = Math.min(Math.floor(scroll / itemHeight), data.length);
 	const visibleEndIndex = Math.ceil((scroll + listHeight) / itemHeight);
 	const startIndex = Math.max(0, visibleStartIndex - bufferSize);
 	const maximumIndex = data.length - 1;

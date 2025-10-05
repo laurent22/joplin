@@ -119,6 +119,9 @@
 		// upgrading React Native.
 		"@babel/preset-env",
 		"@babel/runtime",
+		"@react-native-community/cli",
+		"@react-native-community/cli-platform-android",
+		"@react-native-community/cli-platform-ios",
 		"@tsconfig/react-native",
 		"@types/react-native",
 		"@testing-library/react-native",
@@ -220,9 +223,6 @@
 		// For now we are stuck with v5.1.6 due to this bug:
 		// https://github.com/TryGhost/node-sqlite3/issues/1747
 		"sqlite3",
-
-		// They refactored it with undocumented breaking changes.
-		"react-native-vosk",
 
 		// Used by onenote-converter but has many breaking changes and we don't test it on CI, so
 		// would need to be manually upgraded and tested.

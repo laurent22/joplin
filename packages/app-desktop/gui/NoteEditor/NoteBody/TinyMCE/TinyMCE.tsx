@@ -1387,16 +1387,18 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
+			if (!copiedContent) return;
 			copyHtmlToClipboard(copiedContent);
 			event.preventDefault();
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCut(event: any) {
+			event.preventDefault();
 			const selectedContent = editor.selection.getContent();
+			if (!selectedContent) return;
 			copyHtmlToClipboard(selectedContent);
 			editor.insertContent('');
-			event.preventDefault();
 			onChangeHandler();
 		}
 
@@ -1444,7 +1446,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
 		editor.on(TinyMceEditorEvents.CompositionEnd, onChangeHandler);
-		editor.on(TinyMceEditorEvents.Cut, onCut);
+		editor.on(TinyMceEditorEvents.Cut, onCut, true);
 		editor.on(TinyMceEditorEvents.JoplinChange, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);

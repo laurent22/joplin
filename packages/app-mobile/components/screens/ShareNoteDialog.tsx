@@ -15,7 +15,7 @@ import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNote
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
-import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
+import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
 import { _, _n } from '@joplin/lib/locale';
 import { LinkButton, PrimaryButton } from '../buttons';
 import { themeStyle } from '../global-style';
@@ -191,7 +191,7 @@ const ShareNoteDialog: React.FC<Props> = props => {
 		themeId={props.themeId}
 		visible={props.visible}
 		onDismiss={props.onClose}
-		size={DialogSize.Small}
+		size={DialogVariant.Small}
 		heading={_('Publish Note')}
 	>
 		{props.visible ? <ShareNoteDialogContent {...props}/> : null}

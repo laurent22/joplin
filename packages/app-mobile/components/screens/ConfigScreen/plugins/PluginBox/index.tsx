@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Text, TouchableRipple } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import ActionButton from '../buttons/ActionButton';
@@ -7,11 +7,12 @@ import { ButtonType } from '../../../../buttons/TextButton';
 import PluginChips from './PluginChips';
 import { UpdateState } from '../utils/useUpdateState';
 import { PluginCallback } from '../utils/usePluginCallbacks';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import InstallButton from '../buttons/InstallButton';
 import PluginTitle from './PluginTitle';
 import RecommendedBadge from './RecommendedBadge';
+import CardButton from '../../../../buttons/CardButton';
 
 export enum InstallState {
 	NotInstalled,
@@ -38,28 +39,14 @@ interface Props {
 	onShowPluginInfo?: PluginCallback;
 }
 
-const useStyles = (compatible: boolean) => {
-	return useMemo(() => {
-		// For the TouchableRipple to work on Android, the card needs a transparent background.
-		const baseCard = { backgroundColor: 'transparent' };
-		return StyleSheet.create({
-			cardContainer: {
-				margin: 0,
-				marginTop: 8,
-				padding: 0,
-				borderRadius: 14,
-			},
-			card: !compatible ? {
-				...baseCard,
-				opacity: 0.7,
-			} : baseCard,
-			content: {
-				gap: 5,
-			},
-		});
-	}, [compatible]);
-};
-
+const styles = StyleSheet.create({
+	content: {
+		gap: 5,
+	},
+	cardContainer: {
+		marginTop: 8,
+	},
+});
 
 const PluginBox: React.FC<Props> = props => {
 	const manifest = props.item.manifest;
@@ -78,46 +65,36 @@ const PluginBox: React.FC<Props> = props => {
 		props.onShowPluginInfo?.({ item: props.item });
 	}, [props.onShowPluginInfo, props.item]);
 
-	const styles = useStyles(props.isCompatible);
-
-	const CardWrapper = props.onShowPluginInfo ? TouchableRipple : View;
-	const containerIsButton = !!props.onShowPluginInfo;
 	return (
-		<CardWrapper
-			accessibilityRole={containerIsButton ? 'button' : null}
-			accessible={containerIsButton}
-			onPress={props.onShowPluginInfo ? onPress : null}
+		<CardButton
 			style={styles.cardContainer}
+			onPress={props.onShowPluginInfo ? onPress : null}
+			testID='plugin-card'
+			disabled={!props.isCompatible}
 		>
-			<Card
-				mode='outlined'
-				style={styles.card}
-				testID='plugin-card'
-			>
-				<Card.Content style={styles.content}>
-					<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-						<View style={{ flexShrink: 1 }}>
-							<PluginTitle manifest={item.manifest} />
-							<Text numberOfLines={2}>{manifest.description}</Text>
-						</View>
-						<RecommendedBadge manifest={item.manifest} isCompatible={props.isCompatible} themeId={props.themeId} />
+			<Card.Content style={styles.content}>
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+					<View style={{ flexShrink: 1 }}>
+						<PluginTitle manifest={item.manifest} />
+						<Text numberOfLines={2}>{manifest.description}</Text>
 					</View>
-					<PluginChips
-						themeId={props.themeId}
-						item={props.item}
-						showInstalledChip={props.showInstalledChip}
-						hasErrors={props.hasErrors}
-						canUpdate={props.updateState === UpdateState.CanUpdate}
-						onShowPluginLog={props.onShowPluginLog}
-						isCompatible={props.isCompatible}
-					/>
-				</Card.Content>
-				<Card.Actions>
-					{props.onAboutPress ? aboutButton : null}
-					{props.onInstall ? installButton : null}
-				</Card.Actions>
-			</Card>
-		</CardWrapper>
+					<RecommendedBadge manifest={item.manifest} isCompatible={props.isCompatible} themeId={props.themeId} />
+				</View>
+				<PluginChips
+					themeId={props.themeId}
+					item={props.item}
+					showInstalledChip={props.showInstalledChip}
+					hasErrors={props.hasErrors}
+					canUpdate={props.updateState === UpdateState.CanUpdate}
+					onShowPluginLog={props.onShowPluginLog}
+					isCompatible={props.isCompatible}
+				/>
+			</Card.Content>
+			<Card.Actions>
+				{props.onAboutPress ? aboutButton : null}
+				{props.onInstall ? installButton : null}
+			</Card.Actions>
+		</CardButton>
 	);
 };
 

@@ -264,6 +264,7 @@ export default class JoplinDatabase extends Database {
 					todo_due: sp('When the todo is due. An alarm will be triggered on that date.'),
 					todo_completed: sp('Tells whether todo is completed or not. This is a timestamp in milliseconds.'),
 					source_url: sp('The full URL where the note comes from.'),
+					is_shared: sp('Whether the note is published.'),
 				},
 				folders: {},
 				resources: {},
@@ -288,6 +289,7 @@ export default class JoplinDatabase extends Database {
 				this.tableDescriptions_[n].updated_time = sp('When the %s was last updated.', singular);
 				this.tableDescriptions_[n].user_created_time = sp('When the %s was created. It may differ from created_time as it can be manually set by the user.', singular);
 				this.tableDescriptions_[n].user_updated_time = sp('When the %s was last updated. It may differ from updated_time as it can be manually set by the user.', singular);
+				this.tableDescriptions_[n].share_id = sp('The ID of the Joplin Server/Cloud share containing the %s. Empty if not shared.', singular);
 			}
 		}
 

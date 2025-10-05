@@ -4,6 +4,8 @@ import createTestEditor from '../../testing/createTestEditor';
 import joplinEditorApiPlugin, { getEditorApi, setEditorApi } from '../joplinEditorApiPlugin';
 import joplinEditablePlugin, { editSourceBlockAt, hideSourceBlockEditor } from './joplinEditablePlugin';
 import { Second } from '@joplin/utils/time';
+import { EditorView } from 'prosemirror-view';
+import selectFirstInstanceOfNode from '../../utils/selectFirstInstanceOfNode';
 
 const createEditor = (html: string) => {
 	return createTestEditor({
@@ -12,12 +14,12 @@ const createEditor = (html: string) => {
 	});
 };
 
-const findEditButton = (ancestor: Element): HTMLButtonElement => {
-	return ancestor.querySelector('.joplin-editable > button.edit');
+const findEditButton = (editor: EditorView): HTMLButtonElement => {
+	return editor.dom.parentElement.querySelector('.floating-button-bar:not(.-hidden) > .edit-button');
 };
 
 const findEditorDialog = () => {
-	const dialog = document.querySelector('dialog.editor-dialog');
+	const dialog = document.querySelector('dialog.joplin-dialog');
 	if (!dialog) {
 		return null;
 	}
@@ -47,13 +49,19 @@ describe('joplinEditablePlugin', () => {
 		'<p>Test: <mark><span class="joplin-editable"><pre class="joplin-source">test</pre>rendered</span></mark></p>',
 	])('should show an edit button on source blocks (case %#)', (htmlSource) => {
 		const editor = createEditor(htmlSource);
-		const editButton = findEditButton(editor.dom);
+
+		selectFirstInstanceOfNode(editor, 'joplinEditableInline');
+		selectFirstInstanceOfNode(editor, 'joplinEditableBlock');
+
+		const editButton = findEditButton(editor);
 		expect(editButton.textContent).toBe('Edit');
 	});
 
 	test('clicking the edit button should show an editor dialog', () => {
 		const editor = createEditor('<span class="joplin-editable"><pre class="joplin-source">test source</pre>rendered</span>');
-		const editButton = findEditButton(editor.dom);
+		selectFirstInstanceOfNode(editor, 'joplinEditableInline');
+
+		const editButton = findEditButton(editor);
 		editButton.click();
 
 		// Should show the dialog
@@ -76,7 +84,7 @@ describe('joplinEditablePlugin', () => {
 			},
 		}));
 
-		const editButton = findEditButton(editor.dom);
+		const editButton = findEditButton(editor);
 		editButton.click();
 
 		const dialog = findEditorDialog();
