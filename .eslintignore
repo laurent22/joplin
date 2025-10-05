@@ -1535,6 +1535,7 @@ packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getActivePluginEditorView.js
 packages/lib/services/plugins/utils/getActivePluginEditorViews.js
+packages/lib/services/plugins/utils/getPluginHelpUrl.js
 packages/lib/services/plugins/utils/getPluginIssueReportUrl.test.js
 packages/lib/services/plugins/utils/getPluginIssueReportUrl.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
