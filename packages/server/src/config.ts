@@ -163,7 +163,7 @@ function samlConfigFromEnv(env: EnvVariables): SamlConfig {
 	}
 }
 
-const isUsingExternalAuth = (env: EnvVariables) => {
+export const isUsingExternalAuth = (env: EnvVariables) => {
 	return !!env.SAML_ENABLED || !!env.LDAP_1_ENABLED || !!env.LDAP_2_ENABLED;
 };
 
