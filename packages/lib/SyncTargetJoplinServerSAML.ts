@@ -77,20 +77,27 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 			// Simulate a login request
 			const result = await fetch(`${fileApi.path()}/api/saml`);
 
+			// SAML seems to be enabled
 			if (result.status === 200) { // The server successfully responded, SAML is enabled
 				return {
 					ok: true,
 					errorMessage: '',
 				};
-			} else if (result.status === 403) { // The server responded with a forbidden response, SAML is disabled
+			} else { // SAML is disabled or an error occurred
+				let message = result.statusText;
+
+				// Check if we got an error message
+				if (result.headers.get('Content-Type').includes('application/json')) {
+					const json = await result.json();
+
+					if (json.error) {
+						message = json.error;
+					}
+				}
+
 				return {
 					ok: false,
-					errorMessage: _('SAML is not enabled on this server.'),
-				};
-			} else { // Unknown error
-				return {
-					ok: false,
-					errorMessage: _('Failed to connect to the server'),
+					errorMessage: `Could not connect to server: Error ${result.status}: ${message}`,
 				};
 			}
 		} catch (e) {
