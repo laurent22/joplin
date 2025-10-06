@@ -17,6 +17,12 @@ export interface PopupOptions {
 	type?: NotificationType;
 }
 
+export interface ToastOptions {
+	delay?: number;
+	type?: NotificationType;
+	persistent?: boolean;
+}
+
 export interface PopupControl {
 	createPopup(content: NotificationContentCallback, props?: PopupOptions): PopupHandle;
 }

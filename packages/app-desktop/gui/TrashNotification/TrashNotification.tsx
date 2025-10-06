@@ -53,8 +53,11 @@ export default (props: Props) => {
 		};
 		const notification = toast(
 			<TrashNotificationMessage message={msg} onCancel={handleCancelClick} />,
-			4000,
-			NotificationType.Success,
+			{
+				delay: 4000,
+				type: NotificationType.Success,
+				persistent: false,
+			},
 		);
 	}, [props.lastDeletion, props.dispatch, toast]);
 
