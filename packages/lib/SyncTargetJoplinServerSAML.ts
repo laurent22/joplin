@@ -87,10 +87,14 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 
 				// Check if we got an error message
 				if (result.headers.get('Content-Type').includes('application/json')) {
-					const json = await result.json();
+					try {
+						const json = await result.json();
 
-					if (json.error) {
-						message = json.error;
+						if (json.error) {
+							message = json.error;
+						}
+					} catch (e) {
+						message = 'Not a valid JSON response';
 					}
 				}
 
