@@ -73,7 +73,7 @@
     "@joplin/tools": "~3.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
-    "@types/node": "18.19.115",
+    "@types/node": "18.19.116",
     "@types/proper-lockfile": "^4.1.2",
     "gulp": "4.0.2",
     "jest": "29.7.0",
