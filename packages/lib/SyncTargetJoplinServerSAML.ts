@@ -77,7 +77,6 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 			// Simulate a login request
 			const result = await fetch(`${fileApi.path()}/api/saml`);
 
-			// SAML seems to be enabled
 			if (result.status === 200) { // The server successfully responded, SAML is enabled
 				return {
 					ok: true,
