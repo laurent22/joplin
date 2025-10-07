@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
 import { NotificationType } from '../PopupNotification/types';
-import useToast from '../../gui/hooks/useToast';
+import useToastNotifier from '../../gui/hooks/useToast';
 
 interface Props {
 	noteId: string;
@@ -11,21 +11,21 @@ interface Props {
 }
 
 export default (props: Props) => {
-	const toast = useToast();
+	const notify = useToastNotifier();
 
 	useEffect(() => {
 		if (!props.noteId || props.noteId === '') return;
 
 		props.dispatch({ type: 'NOTE_HTML_TO_MARKDOWN_DONE', value: '' });
 
-		toast(
+		notify(
 			_('The note has been converted to Markdown and the original note has been moved to the trash'),
 			{
 				type: NotificationType.Success,
 				delay: 4000,
 			},
 		);
-	}, [props.dispatch, props.noteId, toast]);
+	}, [props.dispatch, props.noteId, notify]);
 
 	return <div style={{ display: 'none' }}/>;
 };

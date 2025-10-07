@@ -2,9 +2,8 @@ import * as React from 'react';
 import { useContext, useCallback } from 'react';
 import { PopupNotificationContext } from '../PopupNotification/PopupNotificationProvider';
 import { ToastOptions, NotificationType } from '../PopupNotification/types';
-import type { PopupHandle } from '../PopupNotification/types';
 
-export default function useToast() {
+export default function useToastNotifier() {
 	const popupManager = useContext(PopupNotificationContext);
 
 	return useCallback(
@@ -15,14 +14,10 @@ export default function useToast() {
 				persistent = false,
 			} = options;
 
-			const handle: PopupHandle = popupManager.createPopup(() => message, { type });
+			const handle = popupManager.createPopup(() => message, { type });
 
 			if (!persistent) {
-				try {
-					handle.scheduleDismiss?.(delay);
-				} catch {
-					handle.scheduleDismiss?.();
-				}
+				handle.scheduleDismiss(delay);
 			}
 
 			return handle;
