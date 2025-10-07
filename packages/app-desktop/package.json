@@ -46,6 +46,9 @@
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
+      "signtoolOptions": {
+        "sign": "./sign.js"
+      },
       "rfc3161TimeStampServer": "http://timestamp.digicert.com",
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [

@@ -203,3 +203,5 @@ traspire
 Pokies
 Pokiesman
 Gamstop
+ESIGNER
+TOTP
