@@ -80,7 +80,7 @@ exports.default = async (configuration) => {
 		const createdFiles = readdirSync(tempDir);
 		console.info('sign.js: Created files:', createdFiles);
 
-		moveSync(`${tempDir}/${createdFiles[0]}`, inputFilePath);
+		moveSync(`${tempDir}/${createdFiles[0]}`, inputFilePath, { overwrite: true });
 	} catch (error) {
 		console.error('sign.js: Could not sign file:', error);
 		process.exit(1);
