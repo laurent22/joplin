@@ -11,7 +11,7 @@ const downloadSignTool = async () => {
 	const extractDir = `${__dirname}/signToolExtractTemp`;
 
 	const response = await fetch(signToolUrl);
-	if (!response.ok) throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+	if (!response.ok) throw new Error(`sign.js: HTTP error ${response.status}: ${response.statusText}`);
 
 	const zipPath = `${downloadDir}/codeSignTool.zip`;
 
