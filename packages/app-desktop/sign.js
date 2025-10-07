@@ -10,6 +10,9 @@ const downloadSignTool = async () => {
 	const downloadDir = `${__dirname}/signToolDownloadTemp`;
 	const extractDir = `${__dirname}/signToolExtractTemp`;
 
+	mkdirpSync(downloadDir);
+	mkdirpSync(extractDir);
+
 	const response = await fetch(signToolUrl);
 	if (!response.ok) throw new Error(`sign.js: HTTP error ${response.status}: ${response.statusText}`);
 
