@@ -52,12 +52,16 @@ export default class RevisionService extends BaseService {
 		return Date.now() - Setting.value('revisionService.oldNoteInterval');
 	}
 
-	public async changedSinceCollection(noteId: string) {
+	public changedSinceCollection(noteId: string) {
 		if (this.changedSinceCollectionCache_.has(noteId)) return true;
 
 		this.changedSinceCollectionCache_.add(noteId);
 
 		return false;
+	}
+
+	public removeChangedSinceCollection(noteId: string) {
+		this.changedSinceCollectionCache_.delete(noteId);
 	}
 
 	private noteMetadata_(note: NoteEntity) {

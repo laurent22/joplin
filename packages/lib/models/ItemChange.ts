@@ -161,4 +161,11 @@ export default class ItemChange extends BaseModel {
 		return row && row.before_change_item ? row.before_change_item : null;
 	}
 
+	public static async updateOldNoteContent(noteId: string, beforeChangeItemJson: string) {
+		const beforeChangeItem = beforeChangeItemJson ? beforeChangeItemJson : '';
+		return this.db().exec(`
+			UPDATE item_changes SET before_change_item = ? WHERE item_type = ? AND item_id = ?
+		`, [beforeChangeItem, ModelType.Note, noteId]);
+	}
+
 }
