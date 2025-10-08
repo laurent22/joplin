@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from '../styles';
 import { HeaderId, HeaderListItem } from '../types';
 import bridge from '../../../services/bridge';
@@ -25,6 +25,8 @@ const HeaderItem: React.FC<Props> = props => {
 	const item = props.item;
 	const onItemClick = item.onClick;
 	const itemId = item.id;
+	const [isHovered, setIsHovered] = useState(false);
+	const expanded = item.expanded;
 
 	const onClick: React.MouseEventHandler<HTMLElement> = useCallback(event => {
 		if (onItemClick) {
@@ -44,6 +46,14 @@ const HeaderItem: React.FC<Props> = props => {
 		}
 	}, [itemId]);
 
+	const handleMouseEnter = useCallback(() => {
+		setIsHovered(true);
+	}, []);
+
+	const handleMouseLeave = useCallback(() => {
+		setIsHovered(false);
+	}, []);
+
 	return (
 		<ListItemWrapper
 			containerRef={props.anchorRef}
@@ -58,8 +68,12 @@ const HeaderItem: React.FC<Props> = props => {
 			{...item.extraProps}
 			onDrop={props.onDrop}
 		>
-			<StyledHeader onClick={onClick}>
-				<StyledHeaderIcon aria-hidden='true' role='img' className={item.iconName}/>
+			<StyledHeader
+				onClick={onClick}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+			>
+				<StyledHeaderIcon aria-hidden='true' role='img' className={isHovered ? `fas ${expanded ? 'fa-caret-down' : 'fa-caret-right'}` : item.iconName}/>
 				<StyledHeaderLabel>{item.label}</StyledHeaderLabel>
 			</StyledHeader>
 		</ListItemWrapper>

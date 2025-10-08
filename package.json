@@ -79,7 +79,7 @@
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jest": "27.9.0",
     "eslint-plugin-promise": "6.6.0",
-    "eslint-plugin-react": "7.37.4",
+    "eslint-plugin-react": "7.37.5",
     "execa": "5.1.1",
     "fs-extra": "11.2.0",
     "glob": "11.0.3",
@@ -89,7 +89,7 @@
     "lint-staged": "15.5.2",
     "madge": "8.0.0",
     "npm-package-json-lint": "8.0.0",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   },
   "dependencies": {
     "@types/fs-extra": "11.0.4",
@@ -117,6 +117,12 @@
     "pdfjs-dist@*": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "pdfjs-dist@3.11.174": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "canvas@npm:^2.11.2": "link:./.yarn/joplin-empty-package/",
-    "node-gyp@npm:^9.0.0": "11.2.0"
+    "node-gyp@npm:^9.0.0": "11.2.0",
+    "depd@npm:^2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:~2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:~1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:^1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "depd@npm:^1.1.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch"
   }
 }

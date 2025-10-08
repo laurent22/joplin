@@ -5,9 +5,11 @@ use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
 use std::sync::Mutex;
-use wasm_bindgen::prelude::wasm_bindgen;
-use wasm_bindgen::JsValue;
 use widestring::U16CString;
+
+mod file_api;
+pub use file_api::fs_driver;
+pub use file_api::FileApiDriver;
 
 pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())
@@ -74,63 +76,8 @@ impl Display for StyleSet {
     }
 }
 
-#[wasm_bindgen(module = "/node_functions.js")]
-extern "C" {
-    #[wasm_bindgen(js_name = mkdirSyncRecursive, catch)]
-    pub unsafe fn make_dir(path: &str) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = pathSep, catch)]
-    pub unsafe fn path_sep() -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = removePrefix, catch)]
-    pub unsafe fn remove_prefix(
-        base_path: String,
-        prefix: &str,
-    ) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = getOutputPath, catch)]
-    pub unsafe fn get_output_path(
-        input_dir: &str,
-        output_dir: &str,
-        file_path: &str,
-    ) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = getParentDir, catch)]
-    pub unsafe fn get_parent_dir(input_dir: &str) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = normalizeAndWriteFile, catch)]
-    pub unsafe fn write_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
-}
-
-#[wasm_bindgen(module = "fs")]
-extern "C" {
-    // #[wasm_bindgen(js_name = writeFileSync, catch)]
-    // pub unsafe fn write_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = readFileSync, catch)]
-    pub unsafe fn read_file(path: &str) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = existsSync, catch)]
-    pub unsafe fn exists(path: &str) -> std::result::Result<bool, JsValue>;
-}
-
-#[wasm_bindgen(module = "path")]
-extern "C" {
-    #[wasm_bindgen(js_name = basename, catch)]
-    pub unsafe fn get_file_name(path: &str) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = extname, catch)]
-    pub unsafe fn get_file_extension(path: &str) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = dirname, catch)]
-    pub unsafe fn get_dir_name(path: &str) -> std::result::Result<JsValue, JsValue>;
-
-    #[wasm_bindgen(js_name = join, catch)]
-    pub unsafe fn join_path(path_1: &str, path_2: &str) -> std::result::Result<JsValue, JsValue>;
-}
-
 pub mod utils {
-
+    #[cfg(target_arch = "wasm32")]
     macro_rules! log {
         ( $( $t:tt )* ) => {
             #[cfg(debug_assertions)]
@@ -138,12 +85,29 @@ pub mod utils {
         }
     }
 
+    #[cfg(target_arch = "wasm32")]
     macro_rules! log_warn {
         ( $( $t:tt )* ) => {
             use crate::utils::get_current_page;
 
-            web_sys::console::warn_1(&format!("OneNoteConverter: Warning around the following page: {}", get_current_page().unwrap()).into());
+            web_sys::console::warn_1(&format!("OneNoteConverter: Warning around the following page: {}", get_current_page()).into());
             web_sys::console::warn_2(&format!("OneNoteConverter: ").into(), &format!( $( $t )* ).into());
+        }
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    macro_rules! log {
+        ( $( $t:tt )* ) => {
+            #[cfg(debug_assertions)]
+            println!( $( $t )* );
+        }
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    macro_rules! log_warn {
+        ( $( $t:tt )* ) => {
+            use crate::utils::get_current_page;
+            println!("Warning: {}, near {}", &format!( $( $t )* ), get_current_page());
         }
     }
 
@@ -177,7 +141,9 @@ pub fn set_current_page(page_name: String) {
     *current_page = Some(page_name.to_string());
 }
 
-pub fn get_current_page() -> Option<String> {
+pub fn get_current_page() -> String {
     let current_page = CURRENT_PAGE.lock().unwrap();
-    current_page.clone()
+    current_page
+        .clone()
+        .unwrap_or_else(|| String::from("[None]"))
 }

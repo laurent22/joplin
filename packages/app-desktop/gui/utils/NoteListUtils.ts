@@ -143,7 +143,7 @@ export default class NoteListUtils {
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
-			if ([9, 10].includes(Setting.value('sync.target'))) {
+			if ([9, 10, 11].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

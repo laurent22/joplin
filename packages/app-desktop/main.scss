@@ -97,12 +97,6 @@ a {
 	border-radius: 5px;
 }
 
-@keyframes icon-infinite-rotation{
-	to {
-		transform: rotate(360deg);
-	}
-}
-
 .rdtPicker {
 	min-width: 250px;
 	width: auto !important;

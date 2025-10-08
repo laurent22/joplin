@@ -502,9 +502,8 @@ const SideMenuContentComponent = (props: Props) => {
 			});
 
 			props.dispatch({
-				type: 'NAV_GO',
-				routeName: 'Config',
-				sectionName: 'sync',
+				type: 'SYNC_WIZARD_VISIBLE_CHANGE',
+				visible: true,
 			});
 
 			return 'init';

@@ -4,8 +4,8 @@ import { Text } from 'react-native-paper';
 import IconButton from '../IconButton';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useState } from 'react';
-import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
-import { LinkButton } from '../buttons';
+import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
+import { LinkButton, PrimaryButton } from '../buttons';
 import makeDiscourseDebugUrl from '@joplin/lib/makeDiscourseDebugUrl';
 import getPackageInfo from '../../utils/getPackageInfo';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
@@ -30,7 +30,10 @@ const onReportBug = () => {
 const styles = StyleSheet.create({
 	feedbackContainer: {
 		flexGrow: 1,
+		flexDirection: 'row',
+		gap: 16,
 		justifyContent: 'flex-end',
+		flexWrap: 'wrap',
 	},
 	paragraph: {
 		paddingBottom: 7,
@@ -65,7 +68,7 @@ const WebBetaButton: React.FC<Props> = props => {
 			/>
 			<DismissibleDialog
 				heading={_('Beta')}
-				size={DialogSize.Small}
+				size={DialogVariant.SmallResize}
 				themeId={props.themeId}
 				visible={dialogVisible}
 				onDismiss={onHideDialog}
@@ -76,7 +79,7 @@ const WebBetaButton: React.FC<Props> = props => {
 				{renderParagraph('Feel free to use it and let us know if have any questions or notice any issues!')}
 				<View style={styles.feedbackContainer}>
 					<LinkButton onPress={onReportBug}>{'Report bug'}</LinkButton>
-					<LinkButton onPress={onLeaveFeedback}>{'Give feedback'}</LinkButton>
+					<PrimaryButton onPress={onLeaveFeedback}>{'Give feedback'}</PrimaryButton>
 				</View>
 			</DismissibleDialog>
 		</>

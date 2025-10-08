@@ -137,7 +137,11 @@ const useTempDirPath = () => {
 	return tempDirPath;
 };
 
-const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
+type Result = SetUpResult<RendererControl> & {
+	hasPluginScripts: boolean;
+};
+
+const useWebViewSetup = (props: Props): Result => {
 	const tempDirPath = useTempDirPath();
 	const { css, injectedJs } = useSource(tempDirPath);
 	const { editPopupCss, createEditPopupSyntax, destroyEditPopupSyntax } = useEditPopup(props.themeId);
@@ -269,6 +273,7 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 		};
 	}, [createEditPopupSyntax, destroyEditPopupSyntax, messenger]);
 
+	const hasPluginScripts = contentScripts.length > 0;
 	return useMemo(() => {
 		return {
 			api: rendererControl,
@@ -280,8 +285,9 @@ const useWebViewSetup = (props: Props): SetUpResult<RendererControl> => {
 				onLoadEnd: messenger.onWebViewLoaded,
 				onMessage: messenger.onWebViewMessage,
 			},
+			hasPluginScripts,
 		};
-	}, [css, injectedJs, messenger, editPopupCss, rendererControl]);
+	}, [css, injectedJs, messenger, editPopupCss, rendererControl, hasPluginScripts]);
 };
 
 export default useWebViewSetup;

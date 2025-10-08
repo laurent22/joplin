@@ -28,6 +28,11 @@ export const StyledHeader = styled.div`
 	user-select: none;
 	text-transform: uppercase;
 	//cursor: pointer;
+	cursor: default;
+	transition: background 0.2s;
+	&:hover {
+		background: ${(props: StyleProps) => props.theme.backgroundColorHover2};
+	}
 `;
 
 export const StyledHeaderIcon = styled.i`

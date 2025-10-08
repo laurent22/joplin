@@ -23,6 +23,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { EditorSettings } from './types';
 import { pregQuote } from '@joplin/lib/string-utils';
+import { join } from 'path';
 
 
 interface WrapperProps {
@@ -103,8 +104,8 @@ const mockTyping = (window: EditorWindow, text: string) => {
 	}
 };
 
-const mockSelectionMovement = (window: EditorWindow, position: number) => {
-	getEditorControl(window).select(position, position);
+const mockSelectionMovement = (window: EditorWindow, from: number, to?: number) => {
+	getEditorControl(window).select(from, to ?? from);
 };
 
 const findElement = async function<ElementType extends Element = Element>(selector: string) {
@@ -333,11 +334,34 @@ describe('RichTextEditor', () => {
 			const editorContent = body.trim();
 			if (markupLanguage === MarkupLanguage.Html) {
 				expect(editorContent).toMatch(
-					new RegExp(`^<p><img src=":/${pregQuote(resource.id)}" alt="${pregQuote(renderedImage.alt)}"[^>]*> test</p>$`),
+					new RegExp(`^<p><img[^>]* src=":/${pregQuote(resource.id)}" alt="${pregQuote(renderedImage.alt)}"[^>]*> test</p>$`),
 				);
 			} else {
 				expect(editorContent).toBe(`![${renderedImage.alt}](:/${resource.id}) test`);
 			}
+		});
+	});
+
+	it('should preserve non-image attachments on edit', async () => {
+		const { note, resource } = await createNoteAndResource({ path: join(supportDir, 'sample.txt') });
+		let body = note.body;
+
+		const resources = await attachedResources(body);
+		render(<WrappedEditor
+			noteBody={note.body}
+			note={note}
+			onBodyChange={newBody => { body = newBody; }}
+			noteResources={resources}
+		/>);
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' test');
+
+		await waitFor(async () => {
+			const editorContent = body.trim();
+			// TODO: At present, the resource title may be included in the final Markdown
+			// (e.g. as [sample.txt](:/id-here "sample.txt")).
+			expect(editorContent).toMatch(new RegExp(`^\\[sample\\.txt\\]\\(:/${pregQuote(resource.id)}.*\\) test$`));
 		});
 	});
 
@@ -390,14 +414,18 @@ describe('RichTextEditor', () => {
 		});
 	});
 
-	it('should be possible show an editor for math blocks', async () => {
+	it('should be possible to show an editor for math blocks', async () => {
 		let body = 'Test:\n\n$$3^2 + 4^2 = 5^2$$';
 		render(<WrappedEditor
 			noteBody={body}
 			onBodyChange={newBody => { body = newBody; }}
 		/>);
 
-		const editButton = await findElement<HTMLButtonElement>('button.edit');
+		const window = await getEditorWindow();
+		// Select the math block to show the "edit" button.
+		mockSelectionMovement(window, '<Test:>'.length, '<Test:>$'.length);
+
+		const editButton = await findElement<HTMLButtonElement>('button.edit-button');
 		editButton.click();
 
 		const editor = await findElement('dialog .cm-editor');
@@ -453,7 +481,7 @@ describe('RichTextEditor', () => {
 		'<sup>Super</sup>script',
 		'<sub>Sub</sub>script',
 		'![image](data:image/svg+xml;utf8,test)',
-		'<img src="data:image/svg+xml;utf8,test" width="120">',
+		'<img width="120" src="data:image/svg+xml;utf8,test">',
 	])('should preserve inline markup on edit (case %#)', async (initialBody) => {
 		initialBody += 'test'; // Ensure that typing will add new content outside the formatting
 		let body = initialBody;

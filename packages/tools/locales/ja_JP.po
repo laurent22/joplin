@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.7\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -431,9 +433,8 @@ msgid "Add recipient:"
 msgstr "受信者を追加:"
 
 #: packages/app-mobile/components/TagEditor.tsx:265
-#, fuzzy
 msgid "Add tags:"
-msgstr "新しいタグ:"
+msgstr "タグを追加:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1726
 msgid "Add title"
@@ -459,7 +460,7 @@ msgstr ""
 
 #: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
-msgstr ""
+msgstr "タグを追加"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -637,7 +638,7 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "関連タグ:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -773,7 +774,7 @@ msgstr "Basic"
 #: packages/app-mobile/components/ScreenHeader/WebBetaButton.tsx:38
 #: packages/app-mobile/components/ScreenHeader/WebBetaButton.tsx:46
 msgid "Beta"
-msgstr ""
+msgstr "ベータ版"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:65
@@ -808,7 +809,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:79
 msgid "Camera"
-msgstr ""
+msgstr "カメラ"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -1192,9 +1193,9 @@ msgstr "直近のアラーム"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "証明書を読み込むディレクトリ、または個々の証明書ファイルのパスのリストをコン"
 "マで区切って記述します。例は次のとおりです: /my/cert_dir, /other/custom.pem "
@@ -1258,7 +1259,7 @@ msgstr "完了: %s (%s)"
 
 #: packages/lib/models/Note.ts:66
 msgid "completion date"
-msgstr ""
+msgstr "完了日"
 
 #: packages/server/src/services/TaskService.ts:28
 msgid "Compress old changes"
@@ -1837,9 +1838,8 @@ msgid "Deletes the notes without asking for confirmation."
 msgstr "ノートを確認なしで削除します。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
-#, fuzzy
 msgid "Deletion log"
-msgstr "行を削除"
+msgstr "削除ログ"
 
 #: packages/app-mobile/components/NoteItem.tsx:151
 #, fuzzy
@@ -1862,7 +1862,7 @@ msgstr "締切日"
 
 #: packages/lib/versionInfo.ts:88
 msgid "Device: %s"
-msgstr ""
+msgstr "デバイス: %s"
 
 #: packages/lib/services/interop/Module.ts:61
 msgid "Directory"
@@ -2077,12 +2077,12 @@ msgstr "Dracula"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1273
 msgid "Draw picture"
-msgstr ""
+msgstr "絵を描く"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:967
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
-msgstr ""
+msgstr "描画"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1556
 msgid "Drop notes or files here"
@@ -2153,7 +2153,7 @@ msgstr "Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
 msgid "Edit as Rich Text"
-msgstr ""
+msgstr "リッチテキストとして編集"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:138
 msgid "Edit link"
@@ -3051,9 +3051,8 @@ msgid "Import notes from a JEX (Joplin Export) file."
 msgstr "JEX(Joplin エクスポート)ファイルからノートをインポートします。"
 
 #: packages/lib/models/Setting.ts:1297
-#, fuzzy
 msgid "Import or export your data"
-msgstr "データをエクスポートする"
+msgstr "データのインポートまたはエクスポート"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3435,9 +3434,8 @@ msgid "Keep note history for"
 msgstr "ノート履歴の保存期間"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1949
-#, fuzzy
 msgid "Keep notes in the trash for"
-msgstr "ノート履歴の保存期間"
+msgstr "ゴミ箱の保存期間"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1435
 msgid "Keyboard Mode"
@@ -3602,8 +3600,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"ロックファイルがすでに保持されています。同期作業が行われていない場合"
-"は、\"%s\"にあるロックファイルを削除して、作業を再度行ってください。"
+"ロックファイルがすでに保持されています。同期作業が行われていない場合は、"
+"\"%s\"にあるロックファイルを削除して、作業を再度行ってください。"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:568
 #: packages/app-mobile/components/screens/LogScreen.tsx:215
@@ -4089,9 +4087,8 @@ msgstr "プロファイルの更新"
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:44
-#, fuzzy
 msgid "None"
-msgstr "(なし)"
+msgstr "なし"
 
 #: packages/lib/models/settings/builtInMetadata.ts:58
 msgid "Nord"
@@ -4978,12 +4975,11 @@ msgstr "おすすめのプラグイン"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:91
 msgid "Record audio"
-msgstr ""
+msgstr "音声を録音"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:78
-#, fuzzy
 msgid "Recording"
-msgstr "見出し"
+msgstr "録音"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:231
 #, fuzzy
@@ -7202,9 +7198,8 @@ msgid "Viewer and Rich Text Editor font family"
 msgstr "エディターのフォントファミリー"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1160
-#, fuzzy
 msgid "Viewer font size"
-msgstr "エディターのフォントサイズ"
+msgstr "ビューアーのフォントサイズ"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1441
 msgid "Vim"
@@ -7219,9 +7214,8 @@ msgid "Voice typing language files (URL)"
 msgstr "音声入力言語ファイル (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1912
-#, fuzzy
 msgid "Voice typing: Glossary"
-msgstr "音声入力…"
+msgstr "音声入力: 用語集"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1302
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
