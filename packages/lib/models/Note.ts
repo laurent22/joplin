@@ -819,7 +819,9 @@ export default class Note extends BaseItem {
 		syncDebugLog.info('Save Note: P:', oldNote);
 
 		let beforeNoteJson = null;
-		if (oldNote) {
+		// Only update the beforeNoteJson if encryption is not applied, to avoid creating a faulty revision if an encrypted profile
+		// has just been downloaded from the sync target and save is invoked when the note has not yet been decrypted
+		if (oldNote && !oldNote.encryption_applied) {
 			const changedSinceCollection = await this.revisionService().changedSinceCollection(o.id);
 			if (changedSinceCollection) {
 				beforeNoteJson = await ItemChange.oldNoteContent(o.id);
