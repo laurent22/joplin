@@ -23,7 +23,7 @@
     "koa": "2.16.1",
     "koa-body": "6.0.1",
     "pg-boss": "10.3.2",
-    "sharp": "0.34.2",
+    "sharp": "0.34.3",
     "sqlite3": "5.1.6"
   },
   "devDependencies": {
