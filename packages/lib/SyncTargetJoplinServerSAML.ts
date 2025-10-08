@@ -83,19 +83,18 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 					errorMessage: '',
 				};
 			} else { // SAML is disabled or an error occurred
-				let message = result.statusText;
+				const text = await result.text();
+				let message = text; // Use the textual body as the default message
 
 				// Check if we got an error message
 				if (result.headers.get('Content-Type').includes('application/json')) {
 					try {
-						const json = await result.json();
+						const json = JSON.parse(text);
 
 						if (json.error) {
 							message = json.error;
 						}
-					} catch (e) {
-						message = 'Not a valid JSON response';
-					}
+					} catch (_e) {} // eslint-disable-line no-empty -- Keep the plain text response as the error message, ignore the parsing exception
 				}
 
 				return {
