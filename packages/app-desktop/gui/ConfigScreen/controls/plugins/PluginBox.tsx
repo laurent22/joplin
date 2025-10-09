@@ -8,6 +8,7 @@ import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import bridge from '../../../../services/bridge';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import getPluginHelpUrl from '@joplin/lib/services/plugins/utils/getPluginHelpUrl';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -150,9 +151,7 @@ export default function(props: Props) {
 
 	const onNameClick = useCallback(() => {
 		const manifest = item.manifest;
-		const url = manifest.homepage_url ? manifest.homepage_url : manifest.repository_url;
-		if (!url) return;
-		void bridge().openExternal(url);
+		void bridge().openExternal(getPluginHelpUrl(manifest.id));
 	}, [item]);
 
 	const onRecommendedClick = useCallback(() => {

@@ -4,7 +4,7 @@ version = "0.0.1"
 authors = ["Pedro Luiz <pedrlz.frn@gmail.com>"]
 edition = "2024"
 description = "Convert Microsoft OneNote® notebooks to HTML"
-license = "MIT"
+license = "MPL-2.0-no-copyleft-exception"
 repository = "https://github.com/laurent22/joplin"
 keywords = ["onenote"]
 

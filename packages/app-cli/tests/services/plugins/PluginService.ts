@@ -2,7 +2,7 @@ import PluginRunner from '../../../app/services/plugins/PluginRunner';
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
-import shim from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
@@ -310,7 +310,7 @@ describe('services_PluginService', () => {
 
 		let resetPlatformMock = () => {};
 		if (!isDesktop) {
-			resetPlatformMock = mockMobilePlatform('android').reset;
+			resetPlatformMock = mockMobilePlatform(MobilePlatform.Android).reset;
 		}
 
 		try {

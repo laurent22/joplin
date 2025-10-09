@@ -1049,6 +1049,7 @@ packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/nodeIntersectsSelection.js
+packages/editor/CodeMirror/extensions/searchExtension.test.js
 packages/editor/CodeMirror/extensions/searchExtension.js
 packages/editor/CodeMirror/extensions/selectedNoteIdExtension.js
 packages/editor/CodeMirror/getScrollFraction.js
@@ -1095,6 +1096,7 @@ packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.js
 packages/editor/CodeMirror/utils/markdown/stripBlockquote.js
 packages/editor/CodeMirror/utils/markdown/toggleCheckboxAt.js
 packages/editor/CodeMirror/utils/setupVim.js
+packages/editor/CodeMirror/vendor/announceSearchMatch.js
 packages/editor/ProseMirror/commands.test.js
 packages/editor/ProseMirror/commands.js
 packages/editor/ProseMirror/createEditor.js
@@ -1535,6 +1537,7 @@ packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/executeSandboxCall.js
 packages/lib/services/plugins/utils/getActivePluginEditorView.js
 packages/lib/services/plugins/utils/getActivePluginEditorViews.js
+packages/lib/services/plugins/utils/getPluginHelpUrl.js
 packages/lib/services/plugins/utils/getPluginIssueReportUrl.test.js
 packages/lib/services/plugins/utils/getPluginIssueReportUrl.js
 packages/lib/services/plugins/utils/getPluginNamespacedSettingKey.js
@@ -1854,6 +1857,8 @@ packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.test.js
 packages/tools/utils/discourse.js
 packages/tools/utils/loadSponsors.js
+packages/tools/utils/parsePluralLocalizationForm.js
+packages/tools/utils/parsePlurallLocalizationForm.test.js
 packages/tools/utils/translation.js
 packages/tools/validateFilenames.js
 packages/tools/website/build.js
