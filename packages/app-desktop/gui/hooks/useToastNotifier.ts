@@ -9,7 +9,7 @@ export default function useToastNotifier() {
 	return useCallback(
 		(message: React.ReactNode | string, options: ToastOptions = {}) => {
 			const {
-				type = NotificationType.Info,
+				type = NotificationType.Success,
 				delay = 4000,
 				persistent = false,
 			} = options;

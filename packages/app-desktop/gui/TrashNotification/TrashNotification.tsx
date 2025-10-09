@@ -5,9 +5,8 @@ import { _, _n } from '@joplin/lib/locale';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { Dispatch } from 'redux';
-import { NotificationType } from '../PopupNotification/types';
 import TrashNotificationMessage from './TrashNotificationMessage';
-import useToastNotifier from '../../gui/hooks/useToast';
+import useToastNotifier from '../hooks/useToastNotifier';
 
 interface Props {
 	lastDeletion: StateLastDeletion;
@@ -52,12 +51,7 @@ export default (props: Props) => {
 			void onCancelClick(props.lastDeletion);
 		};
 		const notification = notify(
-			<TrashNotificationMessage message={msg} onCancel={handleCancelClick} />,
-			{
-				delay: 4000,
-				type: NotificationType.Success,
-				persistent: false,
-			},
+			<TrashNotificationMessage message={msg} onCancel={handleCancelClick}/>,
 		);
 	}, [props.lastDeletion, props.dispatch, notify]);
 
