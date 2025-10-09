@@ -2,13 +2,20 @@
 
 const { execSync } = require('child_process');
 const { chdir, cwd } = require('process');
-const { mkdirpSync, moveSync } = require('fs-extra');
+const { mkdirpSync, moveSync, pathExists } = require('fs-extra');
 const { readdirSync, writeFileSync } = require('fs');
+
+const signToolName = 'CodeSignTool.bat';
 
 const downloadSignTool = async () => {
 	const signToolUrl = 'https://www.ssl.com/download/codesigntool-for-windows/';
 	const downloadDir = `${__dirname}/signToolDownloadTemp`;
 	const extractDir = `${__dirname}/signToolExtractTemp`;
+
+	if (await pathExists(`${extractDir}/${signToolName}`)) {
+		console.info('sign.js: Sign tool has already been downloaded - skipping');
+		return extractDir;
+	}
 
 	mkdirpSync(downloadDir);
 	mkdirpSync(extractDir);
@@ -56,7 +63,6 @@ exports.default = async (configuration) => {
 	console.info('sign.js: SIGN_APPLICATION = 1 - signing application');
 
 	const signToolDir = await downloadSignTool();
-	const signToolName = 'CodeSignTool.bat';
 	const tempDir = `${__dirname}/temp`;
 
 	mkdirpSync(tempDir);

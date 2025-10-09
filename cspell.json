@@ -15,7 +15,6 @@
 		"/.git",
 		"/.yarn",
 		"/Assets",
-		"/packages/app-desktop/tools/CodeSignTool-v1.3.2-windows",
 		"/packages/app-cli/app/fuzzing.js",
 		"/packages/app-cli/build",
 		"/packages/app-cli/tests/enex_to_md/",
