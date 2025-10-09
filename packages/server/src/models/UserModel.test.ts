@@ -463,4 +463,38 @@ describe('UserModel', () => {
 
 		expect(await models().user().login(user.email, '123456')).toBe(null);
 	});
+
+	test('should not change user properties managed by SAML', async () => {
+		const user1 = await createUser(1);
+
+		config().SAML_ENABLED = true;
+
+		try {
+			await models().user().save({
+				id: user1.id,
+				is_external: 1,
+				full_name: 'testing',
+			}, { skipValidation: true });
+
+			const previousUser = await models().user().load(user1.id);
+
+			await models().user().save({
+				id: user1.id,
+				full_name: 'testing mod',
+				email: 'testingmod@example.com',
+				password: 'mod',
+				max_item_size: 12345,
+			});
+
+			const modUser = await models().user().load(user1.id);
+
+			expect(modUser.full_name).toBe(previousUser.full_name);
+			expect(modUser.email).toBe(previousUser.email);
+			expect(modUser.password).toBe(previousUser.password);
+			expect(modUser.max_item_size).toBe(12345);
+		} finally {
+			config().SAML_ENABLED = false;
+		}
+	});
+
 });

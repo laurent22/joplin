@@ -31,8 +31,9 @@ import { Config, Env, LdapConfig } from '../utils/types';
 import ldapLogin from '../utils/ldapLogin';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
-import config from '../config';
+import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
+import { samlOwnedUserProperties } from '../utils/saml';
 
 const logger = Logger.create('UserModel');
 
@@ -118,12 +119,13 @@ export function accountTypeToString(accountType: AccountType): string {
 
 export default class UserModel extends BaseModel<User> {
 	private authCodeTtl = 600000; // 10 minutes
-
 	private ldapConfig_: LdapConfig[];
+	private isUsingExternalAuth_ = false;
 
 	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, dbSlave, modelFactory, config);
 		this.ldapConfig_ = config.ldap;
+		this.isUsingExternalAuth_ = isUsingExternalAuth(config);
 	}
 
 	public get tableName(): string {
@@ -267,10 +269,6 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		if (action === AclAction.Update) {
-			if (user.is_external) { // Modifying users directly from Joplin may cause them to be out of sync with the data we got from the Identity Provider
-				throw new ErrorForbidden('users imported from an external source (such as SAML) cannot be modified');
-			}
-
 			const previousResource = await this.load(resource.id);
 
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
@@ -738,6 +736,14 @@ export default class UserModel extends BaseModel<User> {
 		return syncInfo.ppk?.value || null;
 	}
 
+	private isUserExternal = async (user: User) => {
+		if (!this.isUsingExternalAuth_) return false;
+		if ('is_external' in user) return !!user.is_external;
+		if (!user.id) return false;
+		const userWithProp = await this.load(user.id, { fields: ['is_external'] });
+		return !!userWithProp.is_external;
+	};
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
@@ -749,6 +755,15 @@ export default class UserModel extends BaseModel<User> {
 		const user = this.formatValues(object);
 
 		const isNew = await this.isNew(object, options);
+
+		const isExternal = await this.isUserExternal(user);
+
+		// Ensure that we don't save the properties that are managed by SAML
+		if (isExternal && !options.skipValidation) {
+			for (const propName of samlOwnedUserProperties()) {
+				delete user[propName];
+			}
+		}
 
 		if (user.password) {
 			if (isHashedPassword(user.password)) {

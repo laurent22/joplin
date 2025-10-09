@@ -4,7 +4,7 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes } from '../../path-utils';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
-import { join, resolve, normalize, sep, dirname } from 'path';
+import { join, resolve, normalize, sep, dirname, extname } from 'path';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
@@ -61,13 +61,27 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const { oneNoteConverter } = shim.requireDynamic('@joplin/onenote-converter');
 
 		logger.info('Extracting OneNote to HTML');
+		const skippedFiles = [];
 		for (const notebookFile of notebookFiles) {
 			const notebookFilePath = join(unzipTempDirectory, notebookFile.entryName);
+			// In some cases, the OneNote zip file can include folders and other files
+			// that shouldn't be imported directly. Skip these:
+			if (!['.one', '.onetoc2'].includes(extname(notebookFilePath).toLowerCase())) {
+				logger.info('Skipping non-OneNote file:', notebookFile.entryName);
+				skippedFiles.push(notebookFile.entryName);
+				continue;
+			}
+
 			try {
 				await oneNoteConverter(notebookFilePath, resolve(outputDirectory2), notebookBaseDir);
 			} catch (error) {
+				this.options_.onError?.(error);
 				console.error(error);
 			}
+		}
+
+		if (skippedFiles.length === notebookFiles.length) {
+			this.options_.onError?.(new Error(`None of the files appear to be from OneNote. Skipped files include: ${JSON.stringify(skippedFiles)}`));
 		}
 
 		logger.info('Extracting SVGs into files');

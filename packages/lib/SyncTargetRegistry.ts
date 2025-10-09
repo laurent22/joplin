@@ -55,7 +55,7 @@ export default class SyncTargetRegistry {
 	}
 
 	public static allIds() {
-		return Object.keys(this.reg);
+		return Object.keys(this.reg).map(key => Number(key));
 	}
 
 	public static nameToId(name: string) {

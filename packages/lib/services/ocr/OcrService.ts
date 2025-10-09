@@ -68,8 +68,13 @@ export default class OcrService {
 		return this.runInBackground;
 	}
 
-	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult> {
+	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult|null> {
 		if (resource.encryption_applied) throw new Error(`Cannot OCR encrypted resource: ${resource.id}`);
+
+		if (getOcrDriverId(resource) === ResourceOcrDriverId.HandwrittenText && !Setting.value('ocr.handwrittenTextDriverEnabled')) {
+			logger.debug('Skipping OCR of', resource.id, 'with the HandwrittenText driver. The HTR driver has been disabled by the user.');
+			return null;
+		}
 
 		const resourceFilePath = Resource.fullPath(resource);
 
@@ -152,10 +157,12 @@ export default class OcrService {
 					}
 
 					const recognizeResult = await this.recognize(language, resource);
-					toSave = {
-						...toSave,
-						...recognizeResult,
-					};
+					if (recognizeResult) {
+						toSave = {
+							...toSave,
+							...recognizeResult,
+						};
+					}
 				} catch (error) {
 					const errorMessage = typeof error === 'string' ? error : error?.message;
 					logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
