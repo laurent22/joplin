@@ -9249,7 +9249,7 @@ __metadata:
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:11.4.1"
     "@react-native-community/push-notification-ios": "npm:1.11.0"
-    "@react-native-documents/picker": "npm:10.1.4"
+    "@react-native-documents/picker": "npm:10.1.5"
     "@react-native/babel-preset": "npm:0.79.5"
     "@react-native/metro-config": "npm:0.79.5"
     "@react-native/typescript-config": "npm:0.79.5"
@@ -12302,13 +12302,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-documents/picker@npm:10.1.4":
-  version: 10.1.4
-  resolution: "@react-native-documents/picker@npm:10.1.4"
+"@react-native-documents/picker@npm:10.1.5":
+  version: 10.1.5
+  resolution: "@react-native-documents/picker@npm:10.1.5"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/35c52e3c02f56f845a31d9ea7d2ebe9c70395e56815d502e747a81e0d21c9a9eb3119fdcfcd83aa9afd0a236d66691f4c22ee994e6dc39ba182c215cbb0ab065
+  checksum: 10/22ec4d3aa64ecfcc7afecf0ef77c936bd0cb10a62c4887baf19404f47d5eb4b91f093e2f5a694e537ffe7a212222a08731aa903664b6c02029ff4fa2fec5af07
   languageName: node
   linkType: hard
 
