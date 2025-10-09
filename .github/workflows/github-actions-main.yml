@@ -169,7 +169,7 @@ jobs:
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run -p 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js --env dev &
+          docker run --env MAX_TIME_DRIFT=0 --publish 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js --env dev &
 
           # Wait for server to start
           sleep 120
