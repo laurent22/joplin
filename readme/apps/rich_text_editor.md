@@ -37,7 +37,7 @@ On desktop, the following patterns are replaced:
 - `$math$`: Auto-formats to inline math (using KaTeX math syntax). After rendering, equations can be edited by double-clicking or with the "edit" option in the right click menu.
 - `# Heading 1`: Creates a level 1 heading. The `#` should be at the start of the line.
 - `## Heading 2`: Creates a level 2 heading.
-- `## Heading 3`: Creates a level 3 heading.
+- `### Heading 3`: Creates a level 3 heading.
 - `- List`: Creates a bulleted list.
 - `1. List`: Creates a numbered list.
 - `---`, `___`, or `***`: Creates a horizontal rule.
