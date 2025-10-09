@@ -1639,22 +1639,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Proxy timeout (seconds)'),
 			storage: SettingStorage.File,
 		},
-		'sync.2.detectBasedOnAnyTimestampChanges': {
-			value: true,
-			type: SettingItemType.Bool,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
-				return [
-					SyncTargetRegistry.nameToId('filesystem'),
-				].indexOf(settings['sync.target']) >= 0;
-			},
-			advanced: true,
-			public: true,
-			section: 'sync',
-			label: () => _('Detect changes based on any timestamp change'),
-			description: () => _('Allows the sync to detect incoming changes based on both timestamp increases and decreases, which resolves issues where an external service is syncing to the sync target directory at the same time as Joplin.'),
-			storage: SettingStorage.Database,
-		},
 		'sync.wipeOutFailSafe': {
 			value: true,
 			type: SettingItemType.Bool,

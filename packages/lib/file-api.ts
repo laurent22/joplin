@@ -67,7 +67,7 @@ export const isLocalServer = (url: string) => {
 // an external sync service are irrelevant, providing the service is set to sync the modified time of files it syncs
 export const enableEnhancedBasicDeltaAlgorithm = () => {
 	if (Setting.value('sync.target') === SyncTargetRegistry.nameToId('filesystem')) {
-		return Setting.value('sync.2.detectBasedOnAnyTimestampChanges');
+		return true;
 	} else if (Setting.value('sync.target') === SyncTargetRegistry.nameToId('webdav')) {
 		return isLocalServer(Setting.value('sync.6.path'));
 	} else {

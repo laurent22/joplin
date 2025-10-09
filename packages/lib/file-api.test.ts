@@ -177,14 +177,10 @@ describe('file-api', () => {
 		expect(result).toBe(false);
 	});
 
-	it.each([
-		true,
-		false,
-	])('should use enhanced basic delta algorithm when using file system sync depending on the detectBasedOnAnyTimestampChanges setting', (detectBasedOnAnyTimestampChanges: boolean) => {
+	it('should use enhanced basic delta algorithm when using file system sync', () => {
 		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('filesystem'));
-		Setting.setValue('sync.2.detectBasedOnAnyTimestampChanges', detectBasedOnAnyTimestampChanges);
 		const result = enableEnhancedBasicDeltaAlgorithm();
-		expect(result).toBe(detectBasedOnAnyTimestampChanges);
+		expect(result).toBe(true);
 	});
 
 	it.each([
