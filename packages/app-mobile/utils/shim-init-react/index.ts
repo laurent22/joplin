@@ -1,6 +1,6 @@
 import shimInitShared from './shimInitShared';
 
-import shim from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 const { GeolocationReact } = require('../geolocation-react.js');
 import RNFetchBlob from 'rn-fetch-blob';
 import { generateSecureRandom } from 'react-native-securerandom';
@@ -165,7 +165,7 @@ export default function shimInit() {
 	};
 
 	shim.mobilePlatform = () => {
-		return Platform.OS;
+		return Platform.OS as MobilePlatform;
 	};
 
 	shim.isAppleSilicon = () => {

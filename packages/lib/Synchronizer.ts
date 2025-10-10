@@ -20,7 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from './file-api';
+import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
@@ -32,6 +32,8 @@ import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import { reg } from './registry';
+import SyncTargetRegistry from './SyncTargetRegistry';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -387,7 +389,7 @@ export default class Synchronizer {
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(options: any = null): Promise<any> {
+	public async start(options: any = null) {
 		if (!options) options = {};
 
 		if (this.state() !== 'idle') {
@@ -629,7 +631,7 @@ export default class Synchronizer {
 							} else if (syncItem.force_sync) {
 								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Item was marked for sync using force_sync', path), 'processingPathTwice');
 							} else {
-								logger.info(sprintf('Processing a path that has already been done: %s. The user is making changes while the sync is in progress', path));
+								throw new JoplinError(sprintf('Processing a path that has already been done: %s. The user is making changes while the sync is in progress', path), 'changedDuringSync');
 							}
 						}
 
@@ -1161,12 +1163,21 @@ export default class Synchronizer {
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				logger.error(error);
+			} else if (error.code === 'changedDuringSync') {
+				// We want to re-trigger the sync in this scenario
+				hasCaughtError = false;
+				logger.info(error.message);
 			} else {
 				logger.error(error);
 				if (error.details) logger.error('Details:', error.details);
 
-				// Don't save to the report errors that are due to things like temporary network errors or timeout.
-				if (!shim.fetchRequestCanBeRetried(error)) {
+				const isLocalWebDavServer = Setting.value('sync.target') === SyncTargetRegistry.nameToId('webdav') && isLocalServer(Setting.value('sync.6.path'));
+
+				// Don't save to the report errors that are due to things like temporary network errors or timeout, except if using a local WebDAV server, in which
+				// case timeout errors can occur when the server is actually down. Those type of errors happen consistently when a local server is down when using
+				// the Android app in particular, but they can also happen on the desktop app in some circumstances. The usage of a local WebDAV server is most useful
+				// on Android, as it can be used as an alternative to file system sync, in order to work around performance issues related to SAF
+				if (!shim.fetchRequestCanBeRetried(error) || isLocalWebDavServer) {
 					this.progressReport_.errors.push(error);
 					this.logLastRequests();
 				}
@@ -1221,9 +1232,8 @@ export default class Synchronizer {
 			// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
 			// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
 			if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
-				options.context = outputContext;
-				logger.info('There are more outgoing changes to sync, trigger the sync again');
-				return await this.start(options);
+				logger.info('There are more outgoing changes to sync, schedule the sync again');
+				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 			}
 		}
 

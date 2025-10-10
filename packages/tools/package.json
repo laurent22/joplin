@@ -38,7 +38,7 @@
     "node-fetch": "2.6.7",
     "relative": "3.0.2",
     "request": "2.88.2",
-    "sharp": "0.34.2",
+    "sharp": "0.34.3",
     "source-map-support": "0.5.21",
     "uri-template": "2.0.0",
     "yargs": "17.7.2"
@@ -52,7 +52,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/markdown-it": "13.0.9",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.115",
+    "@types/node": "18.19.118",
     "@types/node-fetch": "2.6.12",
     "@types/yargs": "17.0.33",
     "gettext-extractor": "3.8.0",

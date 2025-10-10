@@ -10,6 +10,7 @@ import { Store } from 'redux';
 import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstructor';
 import { resetRepoApi } from './utils/useRepoApi';
 import mockPluginServiceSetup from '../../../../utils/testing/mockPluginServiceSetup';
+import { MobilePlatform } from '@joplin/lib/shim';
 
 const expectSearchResultCountToBe = async (count: number) => {
 	await waitFor(() => {
@@ -38,7 +39,7 @@ describe('PluginStates.search', () => {
 		await switchClient(0);
 		reduxStore = createMockReduxStore();
 		mockPluginServiceSetup(reduxStore);
-		mockMobilePlatform('android');
+		mockMobilePlatform(MobilePlatform.Android);
 		resetRepoApi();
 
 		await mockRepositoryApiConstructor();
@@ -70,7 +71,7 @@ describe('PluginStates.search', () => {
 
 	it('should only show recommended plugin search results on iOS-like environments', async () => {
 		// iOS uses restricted install mode
-		mockMobilePlatform('ios');
+		mockMobilePlatform(MobilePlatform.Ios);
 		await mockRepositoryApiConstructor();
 
 		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);

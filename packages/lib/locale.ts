@@ -7,7 +7,6 @@ interface StringToStringMap {
 interface CodeToCountryMap {
 	[key: string]: string[];
 }
-type ParsePluralFormFunction = (n: number)=> number;
 
 interface Iso639Item {
 	alpha3: string;
@@ -469,33 +468,12 @@ let localeStats_: any = null;
 
 const loadedLocales_: Record<string, Record<string, string[]>> = {};
 
+type ParsePluralFormFunction = (n: number)=> number;
 const pluralFunctions_: Record<string, ParsePluralFormFunction> = {};
 
 const defaultLocale_ = 'en_GB';
 
 let currentLocale_ = defaultLocale_;
-
-// Copied from https://github.com/eugeny-dementev/parse-gettext-plural-form
-// along with the tests
-export const parsePluralForm = (form: string): ParsePluralFormFunction => {
-	const pluralFormRegex = /^(\s*nplurals\s*=\s*[0-9]+\s*;\s*plural\s*=\s*(?:\s|[-?|&=!<>+*/%:;a-zA-Z0-9_()])+)$/m;
-
-	if (!pluralFormRegex.test(form)) throw new Error(`Plural-Forms is invalid: ${form}`);
-
-	if (!/;\s*$/.test(form)) {
-		form += ';';
-	}
-
-	const code = [
-		'var plural;',
-		'var nplurals;',
-		form,
-		'return (plural === true ? 1 : plural ? plural : 0);',
-	].join('\n');
-
-	// eslint-disable-next-line no-new-func -- There's a regex to check the form but it's still slightly unsafe, eventually we should automatically generate all the functions in advance in build-translations.ts
-	return (new Function('n', code)) as ParsePluralFormFunction;
-};
 
 const iso639LineToObject = (line: Iso639Line) => {
 	// TODO: filter name in English (remove brackets, commas,)
@@ -525,7 +503,7 @@ const getPluralFunction = (lang: string) => {
 		if (!stats.pluralForms) {
 			pluralFunctions_[lang] = null;
 		} else {
-			pluralFunctions_[lang] = parsePluralForm(stats.pluralForms);
+			pluralFunctions_[lang] = stats.pluralForms;
 		}
 	}
 

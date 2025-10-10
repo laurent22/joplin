@@ -6,7 +6,7 @@ import Setting, { AppType, Env } from '../models/Setting';
 import BaseService from '../services/BaseService';
 import FsDriverNode from '../fs-driver-node';
 import time from '../time';
-import shim from '../shim';
+import shim, { MobilePlatform } from '../shim';
 import uuid from '../uuid';
 import ResourceService from '../services/ResourceService';
 import KeymapService from '../services/KeymapService';
@@ -1119,7 +1119,7 @@ export const newOcrService = () => {
 	return new OcrService([driver]);
 };
 
-export const mockMobilePlatform = (platform: string) => {
+export const mockMobilePlatform = (platform: MobilePlatform) => {
 	const originalMobilePlatform = shim.mobilePlatform;
 	const originalIsNode = shim.isNode;
 

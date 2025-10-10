@@ -806,13 +806,28 @@ export default class Note extends BaseItem {
 		// This is necessary for example so that the folder list is not refreshed every time a note is changed.
 		// Now it can look at the properties and refresh only if the "parent_id" property is changed.
 		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
+
+		// 2025-09-22: Because we previously only stored the latest previous note contents, this meant that
+		// the original note contents would be overwritten if save is called multiple times on a note, between
+		// revision collections. In order to retain the original note contents at the point of the last revision
+		// collection (which may not have created a revision due to the intervalBetweenRevisions restriction), we
+		// now cache note ids for notes which were changed since the last collection, in order to determine whether
+		// we should set beforeNoteJson to the current contents in the database, or the last value which was stored
+		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 
 		syncDebugLog.info('Save Note: P:', oldNote);
 
 		let beforeNoteJson = null;
-		if (oldNote && this.revisionService().isOldNote(o.id)) {
-			beforeNoteJson = JSON.stringify(oldNote);
+		// Only update the beforeNoteJson if encryption is not applied, to avoid creating a faulty revision if an encrypted profile
+		// has just been downloaded from the sync target and save is invoked when the note has not yet been decrypted
+		if (oldNote && !oldNote.encryption_applied) {
+			const changedSinceCollection = this.revisionService().changedSinceCollection(o.id);
+			if (changedSinceCollection) {
+				beforeNoteJson = await ItemChange.oldNoteContent(o.id);
+			} else {
+				beforeNoteJson = JSON.stringify(oldNote);
+			}
 		}
 
 		const changedFields = [];

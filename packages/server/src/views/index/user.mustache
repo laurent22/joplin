@@ -10,20 +10,20 @@
 		<div class="field">
 			<label class="label">Full name</label>
 			<div class="control">
-				<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+				<input {{disabledIfExternalAuth}} class="input" type="text" name="full_name" value="{{user.full_name}}"/>
 			</div>
 		</div>
 		<div class="field">
 			<label class="label">Email</label>
 			<div class="control">
-				<input class="input" type="email" name="email" value="{{user.email}}"/>
+				<input {{disabledIfExternalAuth}} class="input" type="email" name="email" value="{{user.email}}"/>
 			</div>
 		</div>
 
 		<div class="field">
 			<label class="label">Password</label>
 			<div class="control">
-				<input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
+				<input {{disabledIfExternalAuth}} id="password" class="input" type="password" name="password" autocomplete="new-password"/>
 			</div>
 			<p id="password_strength" class="help"></p>
 		</div>
@@ -31,7 +31,7 @@
 		<div class="field">
 			<label class="label">Repeat password</label>
 			<div class="control">
-				<input class="input" type="password" name="password2" autocomplete="new-password"/>
+				<input {{disabledIfExternalAuth}} class="input" type="password" name="password2" autocomplete="new-password"/>
 			</div>
 		</div>
 
