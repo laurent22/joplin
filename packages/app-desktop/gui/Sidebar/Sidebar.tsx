@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
 import FolderAndTagList from './FolderAndTagList';
+import Setting from '@joplin/lib/models/Setting';
 
 
 interface Props {
@@ -25,11 +26,12 @@ interface Props {
 
 const SidebarComponent = (props: Props) => {
 	const renderSynchronizeButton = (type: string) => {
+		const showIndicator = Setting.value('sync.showIndicator') && props.syncChangesPending;
 		const figureSpace = '\u2007'; // Use to maintain centered alignment when the indicator is hidden
-		const pendingIndicator = props.syncChangesPending ? ' ●' : ` ${figureSpace}`;
+		const pendingIndicator = showIndicator ? ' ●' : ` ${figureSpace}`;
 		const label = type === 'sync' ? _('Synchronise') + pendingIndicator : `${_('Cancel')} ${figureSpace}`;
 		const ariaLabel = type === 'sync' ? _('Synchronise') : _('Cancel');
-		const tooltip = props.syncChangesPending ? _('Not all changes have been synced') : undefined;
+		const tooltip = showIndicator ? _('Not all changes have been synced') : undefined;
 
 		return (
 			<StyledSynchronizeButton

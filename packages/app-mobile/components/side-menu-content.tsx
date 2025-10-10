@@ -596,9 +596,10 @@ const SideMenuContentComponent = (props: Props) => {
 		let ariaLabel;
 
 		if (key === 'synchronize_button') {
+			const showIndicator = Setting.value('sync.showIndicator') && props.syncChangesPending;
 			icon = <Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>{icon}</Animated.View>;
 			textStyle = styles_.syncButtonText;
-			buttonText = props.syncChangesPending ? `${buttonText} ●` : buttonText;
+			buttonText = showIndicator ? `${buttonText} ●` : buttonText;
 			ariaLabel = title;
 		}
 
