@@ -25,15 +25,15 @@ function historyCanGoBackTo(route: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 function removeAdjacentNoteDuplicates(items: any[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 	return items.filter((item: any, idx: number) => (idx >= 1) ? !(items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 function removeAdjacentFolderDuplicates(items: any[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 	return items.filter((item: any, idx: number) => (idx >= 1) ? !(items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
 }
 
@@ -131,7 +131,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 				newNavHistoryForFolder = removeAdjacentFolderDuplicates(newNavHistoryForFolder);
 				navHistory.splice(0, navHistory.length, ...newNavHistoryForFolder);
 			}
-
 			break;
 
 		case 'NOTE_DELETE':
@@ -147,7 +146,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 				navHistory.splice(0, navHistory.length, ...newNavHistory);
 			}
-
 			break;
 
 		case 'SIDE_MENU_TOGGLE':
