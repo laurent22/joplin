@@ -1,12 +1,15 @@
 import * as React from 'react';
-import { Linking, TextStyle, View, ViewStyle } from 'react-native';
+import { Linking, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { Text } from 'react-native-paper';
 import IconButton from '../IconButton';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useState } from 'react';
-import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
-import { LinkButton } from '../buttons';
-import NavService from '@joplin/lib/services/NavService';
+import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
+import { LinkButton, PrimaryButton } from '../buttons';
+import makeDiscourseDebugUrl from '@joplin/lib/makeDiscourseDebugUrl';
+import getPackageInfo from '../../utils/getPackageInfo';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	wrapperStyle: ViewStyle;
@@ -15,10 +18,27 @@ interface Props {
 }
 
 const onLeaveFeedback = () => {
-	void Linking.openURL('https://discourse.joplinapp.org/t/web-client-running-joplin-mobile-in-a-web-browser-with-react-native-web/38749');
+	void Linking.openURL('https://forms.gle/B5YGDNzsUYBnoPx19');
 };
 
-const feedbackContainerStyles: ViewStyle = { flexGrow: 1, justifyContent: 'flex-end' };
+const onReportBug = () => {
+	void Linking.openURL(
+		makeDiscourseDebugUrl('', '', [], getPackageInfo(), PluginService.instance(), Setting.value('plugins.states')),
+	);
+};
+
+const styles = StyleSheet.create({
+	feedbackContainer: {
+		flexGrow: 1,
+		flexDirection: 'row',
+		gap: 16,
+		justifyContent: 'flex-end',
+		flexWrap: 'wrap',
+	},
+	paragraph: {
+		paddingBottom: 7,
+	},
+});
 
 const WebBetaButton: React.FC<Props> = props => {
 	const [dialogVisible, setDialogVisible] = useState(false);
@@ -30,6 +50,10 @@ const WebBetaButton: React.FC<Props> = props => {
 	const onHideDialog = useCallback(() => {
 		setDialogVisible(false);
 	}, []);
+
+	const renderParagraph = (content: string) => {
+		return <Text variant='bodyLarge' style={styles.paragraph}>{content}</Text>;
+	};
 
 	return (
 		<>
@@ -44,15 +68,18 @@ const WebBetaButton: React.FC<Props> = props => {
 			/>
 			<DismissibleDialog
 				heading={_('Beta')}
-				size={DialogSize.Small}
+				size={DialogVariant.SmallResize}
 				themeId={props.themeId}
 				visible={dialogVisible}
 				onDismiss={onHideDialog}
 			>
-				<Text>{'At present, the web client is in beta. In the future, it may change significantly, or be removed.'}</Text>
-				<View style={feedbackContainerStyles}>
-					<LinkButton onPress={onLeaveFeedback}>{'Give feedback'}</LinkButton>
-					<LinkButton onPress={() => NavService.go('DocumentScanner')}>{'Test work-in-progress feature: Document scanner'}</LinkButton>
+				{renderParagraph('Welcome to the beta version of the Joplin Web App!')}
+				{renderParagraph('Thank you for participating in the beta version of the Joplin Web App.')}
+				{renderParagraph('The Joplin Web App is available for a limited time in open beta and may later join the Joplin Cloud plans.')}
+				{renderParagraph('Feel free to use it and let us know if have any questions or notice any issues!')}
+				<View style={styles.feedbackContainer}>
+					<LinkButton onPress={onReportBug}>{'Report bug'}</LinkButton>
+					<PrimaryButton onPress={onLeaveFeedback}>{'Give feedback'}</PrimaryButton>
 				</View>
 			</DismissibleDialog>
 		</>

@@ -25,6 +25,18 @@ Technically, the server would only need to know the root shared folder, and from
 
 On the other hand, all that information is present on the client. Whenever a notes is moved out a shared folder, or whenever a resources is attached, the changes are tracked, and that can be used to easily assign a `share_id` property. Once this is set, it makes the whole system more simple and reliable.
 
+### When are changes to `share_id` synced?
+
+In general, changes to `share_id` should be synced only if a Joplin client still has access to the remote item. For example, if `User1` adds an item to a folder shared with `User2`, then `User1` should update and sync the `share_id` for that item.
+
+However, there are some maintenance tasks that clear `share_id` locally when a user no longer has access to a share. These changes should not be synced to the server because the user no longer has access to the relevant remote items. For example, if,
+1. `User1` shares `Folder A` with `User2`.
+2. `User2` accepts the share.
+3. `User1` unshares `Folder A`.
+4. `User2` locally clears the `share_id` property on the local `Folder A`.
+
+At this point, `User2` no longer has access to `Folder A` on the server. They cannot sync the change to `share_id` because they no longer have access to the share.
+
 ## Publishing a note via a public URL 
 
 This is done by posting a note ID to `/api/shares`.

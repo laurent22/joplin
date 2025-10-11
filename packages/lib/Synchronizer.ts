@@ -20,11 +20,11 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi, getSupportsDeltaWithItems, PaginatedList, RemoteItem } from './file-api';
+import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
-import { generateKeyPair } from './services/e2ee/ppk';
+import { generateKeyPair } from './services/e2ee/ppk/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
 import handleConflictAction from './services/synchronizer/utils/handleConflictAction';
 import resourceRemotePath from './services/synchronizer/utils/resourceRemotePath';
@@ -32,6 +32,8 @@ import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import { reg } from './registry';
+import SyncTargetRegistry from './SyncTargetRegistry';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -476,6 +478,7 @@ export default class Synchronizer {
 
 		let errorToThrow = null;
 		let syncLock = null;
+		let hasCaughtError = false;
 
 		try {
 			await this.api().initialize();
@@ -611,12 +614,25 @@ export default class Synchronizer {
 
 						// Safety check to avoid infinite loops.
 						// - In fact this error is possible if the item is marked for sync (via sync_time or force_sync) while synchronisation is in
-						//   progress. In that case exit anyway to be sure we aren't in a loop and the item will be re-synced next time.
+						//   progress. When force_sync is not true, this is because the user is typing while the sync is running, so we should continue
+						//   looping, as we don't want the sync to stop when there are still un-synced outgoing changes, otherwise this creates a race condition
+						//   on mobile, where additional changes made during upload are not synced and don't trigger another sync, whereas a change made immediately
+						//   after the sync has finished will trigger another sync. Once the user has stopped typing, it can then break out of the loop and continue
+						//   the rest of the process.
 						// - It can also happen if the item is directly modified in the sync target, and set with an update_time in the future. In that case,
 						//   the local sync_time will be updated to Date.now() but on the next loop it will see that the remote item still has a date ahead
 						//   and will see a conflict. There's currently no automatic fix for this - the remote item on the sync target must be fixed manually
 						//   (by setting an updated_time less than current time).
-						if (donePaths.indexOf(path) >= 0) throw new JoplinError(sprintf('Processing a path that has already been done: %s. sync_time was not updated? Remote item has an updated_time in the future?', path), 'processingPathTwice');
+						if (donePaths.indexOf(path) >= 0) {
+							const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['force_sync'] });
+							if (local.updated_time > time.unixMs()) {
+								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Remote item has an updated_time in the future', path), 'processingPathTwice');
+							} else if (syncItem.force_sync) {
+								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Item was marked for sync using force_sync', path), 'processingPathTwice');
+							} else {
+								throw new JoplinError(sprintf('Processing a path that has already been done: %s. The user is making changes while the sync is in progress', path), 'changedDuringSync');
+							}
+						}
 
 						const remote: RemoteItem = result.neverSyncedItemIds.includes(local.id) ? null : await this.apiCall('stat', path);
 						let action: SyncAction = null;
@@ -1121,6 +1137,8 @@ export default class Synchronizer {
 				}
 			} // DELTA STEP
 		} catch (error) {
+			hasCaughtError = true;
+
 			if (error.code === ErrorCode.MustUpgradeApp) {
 				this.dispatch({
 					type: 'MUST_UPGRADE_APP',
@@ -1144,12 +1162,21 @@ export default class Synchronizer {
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
 				logger.error(error);
+			} else if (error.code === 'changedDuringSync') {
+				// We want to re-trigger the sync in this scenario
+				hasCaughtError = false;
+				logger.info(error.message);
 			} else {
 				logger.error(error);
 				if (error.details) logger.error('Details:', error.details);
 
-				// Don't save to the report errors that are due to things like temporary network errors or timeout.
-				if (!shim.fetchRequestCanBeRetried(error)) {
+				const isLocalWebDavServer = Setting.value('sync.target') === SyncTargetRegistry.nameToId('webdav') && isLocalServer(Setting.value('sync.6.path'));
+
+				// Don't save to the report errors that are due to things like temporary network errors or timeout, except if using a local WebDAV server, in which
+				// case timeout errors can occur when the server is actually down. Those type of errors happen consistently when a local server is down when using
+				// the Android app in particular, but they can also happen on the desktop app in some circumstances. The usage of a local WebDAV server is most useful
+				// on Android, as it can be used as an alternative to file system sync, in order to work around performance issues related to SAF
+				if (!shim.fetchRequestCanBeRetried(error) || isLocalWebDavServer) {
 					this.progressReport_.errors.push(error);
 					this.logLastRequests();
 				}
@@ -1163,9 +1190,12 @@ export default class Synchronizer {
 
 		this.syncTargetIsLocked_ = false;
 
+		let cancelledBeforeClearedState = false;
+
 		if (this.cancelling()) {
 			logger.info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
+			cancelledBeforeClearedState = true;
 		}
 
 		this.progressReport_.completedTime = time.unixMs();
@@ -1174,8 +1204,10 @@ export default class Synchronizer {
 
 		await this.logSyncSummary(this.progressReport_);
 
+		const hasErrors = Synchronizer.reportHasErrors(this.progressReport_);
+
 		eventManager.emit(EventName.SyncComplete, {
-			withErrors: Synchronizer.reportHasErrors(this.progressReport_),
+			withErrors: hasErrors,
 		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -1189,6 +1221,18 @@ export default class Synchronizer {
 		this.state_ = 'idle';
 
 		if (errorToThrow) throw errorToThrow;
+
+		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
+		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
+		// IMPORTANT: This must be the very last step in the sync, to avoid any window to allow an un-synced change to get missed
+		if (!hasErrors && !hasCaughtError && !cancelledBeforeClearedState && !this.cancelling()) {
+			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
+
+			if (result.items.length > 0) {
+				logger.info('There are more outgoing changes to sync, schedule the sync again');
+				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+			}
+		}
 
 		return outputContext;
 	}

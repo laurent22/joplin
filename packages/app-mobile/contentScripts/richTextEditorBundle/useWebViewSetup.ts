@@ -44,11 +44,14 @@ const useMessenger = (props: UseMessengerProps) => {
 	onAttachRef.current = props.onAttachFile;
 
 	const markupRenderingSettings = useRef<RenderOptions>(null);
+	const baseTheme = props.settings.themeData;
 	markupRenderingSettings.current = {
 		themeId: props.themeId,
 		highlightedKeywords: [],
 		resources: props.noteResources,
-		themeOverrides: {},
+		themeOverrides: {
+			noteViewerFontSize: `${baseTheme.fontSize}${baseTheme.fontSizeUnits ?? 'px'}`,
+		},
 		noteHash: '',
 		initialScroll: 0,
 		pluginAssetContainerSelector: null,

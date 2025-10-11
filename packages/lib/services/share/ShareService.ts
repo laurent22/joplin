@@ -8,7 +8,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { FolderEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
-import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword } from '../e2ee/ppk';
+import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
@@ -59,7 +59,7 @@ export default class ShareService {
 
 	public get enabled(): boolean {
 		if (!this.initialized_) return false;
-		return [9, 10].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
+		return [9, 10, 11].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -111,6 +111,12 @@ export default class ShareService {
 
 			// Shouldn't happen
 			if (!syncInfo.ppk) throw new Error('Cannot share notebook because E2EE is enabled and no Public Private Key pair exists.');
+
+			// This can happen if using an outdated Joplin client, where the PPK
+			// was generated on a different device with a newer PPK implementation.
+			if (!supportsPpkAlgorithm(syncInfo.ppk)) {
+				throw new Error('The local public private key pair uses an unsupported algorithm. It may be necessary to upgrade Joplin or share from a different device.');
+			}
 
 			// TODO: handle "undefinedMasterPassword" error - show master password dialog
 			folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword());
@@ -333,8 +339,8 @@ export default class ShareService {
 		return this.state.shareInvitations;
 	}
 
-	private async userPublicKey(userEmail: string): Promise<PublicPrivateKeyPair> {
-		return this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
+	private async userPublicKey(userEmail: string): Promise<PublicPrivateKeyPair|''> {
+		return await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
 	}
 
 	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string, permissions: SharePermissions) {
@@ -346,7 +352,7 @@ export default class ShareService {
 			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
 			if (!masterKey) throw new Error(`Cannot find master key with ID "${masterKeyId}"`);
 
-			const recipientPublicKey: PublicPrivateKeyPair = await this.userPublicKey(recipientEmail);
+			const recipientPublicKey = await this.userPublicKey(recipientEmail);
 			if (!recipientPublicKey) throw new Error(_('Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.', recipientEmail));
 
 			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
@@ -417,14 +423,38 @@ export default class ShareService {
 
 		if (accept) {
 			if (masterKey) {
-				const reencryptedMasterKey = await mkReencryptFromPublicKeyToPassword(
-					this.encryptionService_,
-					masterKey,
-					localSyncInfo().ppk,
-					getMasterPassword(),
-					getMasterPassword(),
-				);
+				const getReEncryptedKey = async (ppkCandidates: PublicPrivateKeyPair[]) => {
+					let lastError: Error = null;
+					for (const ppk of ppkCandidates) {
+						lastError = null;
+						try {
+							return await mkReencryptFromPublicKeyToPassword(
+								this.encryptionService_,
+								masterKey,
+								ppk,
+								getMasterPassword(),
+								getMasterPassword(),
+							);
+						} catch (error) {
+							logger.warn('Failed to decrypt master key. Has the public key been migrated since the item was shared? Error:', error);
+							lastError = error;
+						}
+					}
 
+					throw lastError;
+				};
+
+				// The invitation's masterKey may be encrypted with either the current PPK or a PPK from
+				// before a recent migration. Check the old PPK to prevent the sharer from having to
+				// create a new invitation just after the recipient runs a migration.
+				const ppkCandidates = [localSyncInfo().ppk];
+
+				const cachedPpk = Setting.value('encryption.cachedPpk');
+				if ('ppk' in cachedPpk) {
+					ppkCandidates.push(cachedPpk.ppk);
+				}
+
+				const reencryptedMasterKey = await getReEncryptedKey(ppkCandidates);
 				logger.info('respondInvitation: Key has been reencrypted using master password', reencryptedMasterKey);
 
 				await MasterKey.save(reencryptedMasterKey);

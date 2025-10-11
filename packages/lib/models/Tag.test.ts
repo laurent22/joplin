@@ -212,11 +212,22 @@ describe('models/Tag', () => {
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	});
 
-	it('should allow finding tags even with special Unicode characters', async () => {
+	it('should allow finding tags when case does not match, for standard ASCII characters', async () => {
+		const note1 = await Note.save({});
+		await Tag.setNoteTagsByTitles(note1.id, ['Hello']);
+		const tag1 = await Tag.loadByTitle('Hello');
+		const tag2 = await Tag.loadByTitle('hello');
+		expect(tag1).toStrictEqual(tag2);
+	});
+
+	it('should find separate tags when case does not match, for special Unicode characters', async () => {
 		const note1 = await Note.save({});
 		await Tag.setNoteTagsByTitles(note1.id, ['Ökonomie']);
+		await Tag.setNoteTagsByTitles(note1.id, ['ökonomie']);
 		const tag1 = await Tag.loadByTitle('Ökonomie');
 		const tag2 = await Tag.loadByTitle('ökonomie');
-		expect(tag1).toStrictEqual(tag2);
+		expect(tag1).not.toBe(undefined);
+		expect(tag2).not.toBe(undefined);
+		expect(tag1).not.toStrictEqual(tag2);
 	});
 });

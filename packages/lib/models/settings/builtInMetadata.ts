@@ -7,6 +7,8 @@ import type SettingType from '../Setting';
 import { AppType, SettingItemSubType, SettingItemType, SettingStorage, SyncStartupOperation, SettingItem } from './types';
 import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
+import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
+import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
 const { toTitleCase } = require('../../string-utils.js');
 
@@ -29,6 +31,11 @@ export enum ScrollbarSize {
 	Medium = 12,
 	Large = 24,
 }
+
+type CachedPpk = EmptyObject|{
+	timestamp: number;
+	ppk: PublicPrivateKeyPair;
+};
 
 export enum SurveyProgress {
 	NotStarted,
@@ -1125,7 +1132,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 		},
 
-		startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon') },
+		startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon'), show: settings => !!settings['showTrayIcon'] },
 
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
@@ -1145,6 +1152,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'encryption.shouldReencrypt': {
 			value: -1, // will be set on app startup
 			type: SettingItemType.Int,
+			public: false,
+		},
+		// Holds the no-longer-published PPK from before a migration. This allows accepting
+		// shares that target the old PPK.
+		'encryption.cachedPpk': {
+			value: {} as CachedPpk,
+			type: SettingItemType.Object,
 			public: false,
 		},
 
@@ -1919,20 +1933,21 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'note',
 		},
 
+		// Deprecated and currently unused. For now, the mobile app only supports the Whisper voice typing provider.
 		'voiceTyping.preferredProvider': {
 			value: 'whisper-tiny',
 			type: SettingItemType.String,
-			public: true,
+			public: false,
 			appTypes: [AppType.Mobile],
-			label: () => _('Preferred voice typing provider'),
+			label: () => 'Preferred voice typing provider',
 			isEnum: true,
 			show: showVoiceTypingSettings,
 			section: 'note',
 
 			options: () => {
 				return {
-					'vosk': _('Vosk'),
-					'whisper-tiny': _('Whisper'),
+					'vosk': 'Vosk', // No longer supported
+					'whisper-tiny': 'Whisper',
 				};
 			},
 		},
@@ -1944,7 +1959,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			label: () => _('Voice typing: Glossary'),
 			description: () => _('A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.'),
-			show: (settings) => showVoiceTypingSettings() && settings['voiceTyping.preferredProvider'].startsWith('whisper'),
+			show: () => showVoiceTypingSettings(),
 			section: 'note',
 		},
 
@@ -1956,6 +1971,14 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Document scanner: Title template'),
 			description: () => _('Default title to use for documents created by the scanner.'),
 			section: 'note',
+		},
+
+		'scanner.requestTranscription': {
+			value: false,
+			type: SettingItemType.Bool,
+			label: () => 'Default value for the "queue for transcription" checkbox',
+			public: false,
+			appTypes: [AppType.Mobile],
 		},
 
 		'trash.autoDeletionEnabled': {

@@ -808,15 +808,20 @@ class Setting extends BaseModel {
 			this.scheduleChangeEvent();
 		};
 
+		const setValueInternalIfExists = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
+			if (!this.keyExists(key)) return;
+			setValueInternal(key, value);
+		};
+
 		setValueInternal(key, value);
 
 		// Prevent conflicts. Use setValueInternal to avoid infinite recursion in the case
 		// where conflictingSettings has invalid data.
 		for (const conflict of conflictingSettings) {
 			if (conflict.key1 === key && conflict.value1 === value) {
-				setValueInternal(conflict.key2, conflict.alternate2);
+				setValueInternalIfExists(conflict.key2, conflict.alternate2);
 			} else if (conflict.key2 === key && conflict.value2 === value) {
-				setValueInternal(conflict.key1, conflict.alternate1);
+				setValueInternalIfExists(conflict.key1, conflict.alternate1);
 			}
 		}
 	}

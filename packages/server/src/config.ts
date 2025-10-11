@@ -163,6 +163,10 @@ function samlConfigFromEnv(env: EnvVariables): SamlConfig {
 	}
 }
 
+export const isUsingExternalAuth = (env: EnvVariables) => {
+	return !!env.SAML_ENABLED || !!env.LDAP_1_ENABLED || !!env.LDAP_2_ENABLED;
+};
+
 let config_: Config = null;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -210,6 +214,12 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		cookieSecure: env.COOKIES_SECURE,
+
+		// We need "lax" when using external auth due to the redirects from the auth provider to
+		// /api/saml, which then redirects to /home. And because the "origin" is going to be the
+		// auth provider URL, the cookies won't be set property. "Lax" solves this and this is what
+		// most web apps use these days. It is still reasonably secure.
+		cookieSameSite: isUsingExternalAuth(env) ? 'lax' : true,
 		storageDriver: parseStorageDriverConnectionString(env.STORAGE_DRIVER),
 		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
 		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app

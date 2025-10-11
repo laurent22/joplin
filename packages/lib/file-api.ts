@@ -53,6 +53,11 @@ export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
 	return 'jopItem' in deltaResponse.items[0];
 };
 
+export const isLocalServer = (url: string) => {
+	const regex = /^(https?:\/\/)?(localhost|127(?:\.\d{1,3}){3}|\[::1\])(?::\d{1,5})?(\/.*)?$/i;
+	return regex.test(url);
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;

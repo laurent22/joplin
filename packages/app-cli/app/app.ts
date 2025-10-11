@@ -417,8 +417,10 @@ class Application extends BaseApplication {
 		if (argv.length) {
 			this.gui_ = this.dummyGui();
 
+			const initialFolder = await Folder.load(Setting.value('activeFolderId'));
+			await this.switchCurrentFolder(initialFolder);
 			await this.applySettingsSideEffects();
-			await this.refreshCurrentFolder();
+
 			try {
 				await this.execCommand(argv);
 			} catch (error) {

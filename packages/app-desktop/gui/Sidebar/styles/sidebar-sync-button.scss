@@ -1,0 +1,16 @@
+
+@keyframes icon-infinite-rotation {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.sidebar-sync-button {
+	&.-syncing > .icon {
+		animation: icon-infinite-rotation 1s linear infinite;
+
+		@media (prefers-reduced-motion: reduce) {
+			animation: none;
+		}
+	}
+}

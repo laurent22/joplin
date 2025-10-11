@@ -54,6 +54,13 @@ export interface ShowMessageBoxOptions {
 	cancelId?: number;
 }
 
+export enum MobilePlatform {
+	None = '',
+	Android = 'android',
+	Ios = 'ios',
+	Web = 'web',
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -190,8 +197,8 @@ const shim = {
 	},
 
 	// "ios" or "android", or "" if not on mobile
-	mobilePlatform: () => {
-		return ''; // Default if we're not on mobile (React Native)
+	mobilePlatform: (): MobilePlatform => {
+		return MobilePlatform.None; // Default if we're not on mobile (React Native)
 	},
 
 	// https://github.com/cheton/is-electron

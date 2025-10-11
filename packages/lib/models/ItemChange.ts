@@ -150,4 +150,22 @@ export default class ItemChange extends BaseModel {
 		`, [changeId, options.limit]);
 	}
 
+	public static async oldNoteContent(noteId: string): Promise<string> {
+		const row = await this.db().selectOne(`
+			SELECT before_change_item
+			FROM item_changes
+			WHERE item_type = ? AND item_id = ?
+			ORDER BY created_time DESC
+			LIMIT 1
+		`, [ModelType.Note, noteId]);
+		return row && row.before_change_item ? row.before_change_item : null;
+	}
+
+	public static async updateOldNoteContent(noteId: string, beforeChangeItemJson: string) {
+		const beforeChangeItem = beforeChangeItemJson ? beforeChangeItemJson : '';
+		return this.db().exec(`
+			UPDATE item_changes SET before_change_item = ? WHERE item_type = ? AND item_id = ?
+		`, [beforeChangeItem, ModelType.Note, noteId]);
+	}
+
 }

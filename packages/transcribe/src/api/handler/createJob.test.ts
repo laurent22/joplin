@@ -29,53 +29,60 @@ describe('createJob', () => {
 	});
 
 	it('should be able to store a image and retrieve a job', async () => {
-		const requirements = {
-			filepath: 'filepath',
-			storeImage: () => Promise.resolve('file-id'),
-			sendToQueue: (data: JobData) => queue.send(data),
+		await copyFile('./images/htr_sample.png', './test_file-1.png');
 
+		const fileStorage = new FileStorage();
+
+		const requirements = {
+			filepath: './test_file-1.png',
+			storeImage: (filePath: string) => fileStorage.store(filePath),
+			sendToQueue: (data: JobData) => queue.send(data),
+			imageMaxDimension: 400,
+			randomName: 'test_file_resized-1',
 		};
 		const result = await createJob(requirements);
 		const job = await queue.fetch();
 		if (job === null) throw new Error('Should not be null');
 
 		expect(result.jobId).toEqual(job.id);
-		expect(job).toEqual({
-			data: {
-				filePath: 'file-id',
-			},
-			id: result.jobId,
-			retryCount: 0,
-		});
+
+		await remove(join('images', job.data.filePath));
 	});
 
 	it('should fail if is not possible to store image', async () => {
+		await copyFile('./images/htr_sample.png', './test_file-2.png');
+
 		const requirements = {
-			filepath: 'filepath',
+			filepath: './test_file-2.png',
 			storeImage: () => { throw new Error('Something went wrong'); },
 			sendToQueue: (data: JobData) => queue.send(data),
-
+			imageMaxDimension: 400,
+			randomName: 'test_file_resized-2',
 		};
 
 		expect(async () => createJob(requirements)).rejects.toThrow();
 
 		const job = await queue.fetch();
 		expect(job).toBeNull();
+
+		await remove(join(process.cwd(), 'images', requirements.randomName));
 	});
 
 	it('should delete the original file after storing', async () => {
-		await copyFile('./images/htr_sample.png', './test_file.png');
+		await copyFile('./images/htr_sample.png', './test_file-3.png');
 
 		const fs = new FileStorage();
 		const requirements = {
-			filepath: './test_file.png',
+			filepath: './test_file-3.png',
 			storeImage: fs.store,
 			sendToQueue: (data: JobData) => queue.send(data),
+			imageMaxDimension: 400,
+			randomName: 'test_file_resized-3',
 		};
 
 		await createJob(requirements);
 
-		const originalFile = await exists('./test_file.png');
+		const originalFile = await exists('./test_file-3.png');
 		expect(originalFile).toBe(false);
 	});
 });

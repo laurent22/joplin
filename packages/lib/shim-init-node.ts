@@ -18,6 +18,7 @@ import * as mimeUtils from './mime-utils';
 import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
 import { cpus } from 'os';
+import { pathToFileURL } from 'url';
 import type PdfJs from './utils/types/pdfJs';
 const { _ } = require('./locale');
 const http = require('http');
@@ -217,7 +218,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.showMessageBox = async (message, options = null) => {
 		if (shim.isElectron()) {
-			return shim.electronBridge().showMessageBox(message, options);
+			return shim.electronBridge().showMessageBox(message, options ?? {});
 		} else {
 			throw new Error('Not implemented');
 		}
@@ -236,7 +237,7 @@ function shimInit(options: ShimInitOptions = null) {
 			// original code).
 
 			const image = new Image();
-			image.src = filePath;
+			image.src = pathToFileURL(filePath).href;
 			await new Promise<void>((resolve, reject) => {
 				image.onload = () => resolve();
 				image.onerror = () => reject(new Error(`Image at ${filePath} failed to load.`));

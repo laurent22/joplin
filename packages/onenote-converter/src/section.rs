@@ -1,6 +1,6 @@
 use crate::parser::section::Section;
+use crate::utils::fs_driver;
 use crate::utils::utils::log;
-use crate::utils::{join_path, make_dir, remove_prefix, write_file};
 use crate::{page, templates};
 use color_eyre::eyre::Result;
 use std::collections::HashSet;
@@ -19,15 +19,10 @@ impl Renderer {
     }
 
     pub fn render(&mut self, section: &Section, output_dir: String) -> Result<String> {
-        let section_dir = unsafe {
-            join_path(
-                output_dir.as_str(),
-                sanitize_filename::sanitize(section.display_name()).as_str(),
-            )
-        }
-        .unwrap()
-        .as_string()
-        .unwrap();
+        let section_dir = fs_driver().join(
+            output_dir.as_str(),
+            sanitize_filename::sanitize(section.display_name()).as_str(),
+        );
         log!(
             "section_dir: {:?} \n output_dir: {:?}",
             section_dir,
@@ -35,7 +30,7 @@ impl Renderer {
         );
 
         log!("Rendering section: {:?}", section_dir);
-        let _ = unsafe { make_dir(section_dir.as_str()) };
+        fs_driver().make_dir(section_dir.as_str())?;
 
         let mut toc = Vec::new();
         let mut fallback_title_index = 0;
@@ -52,38 +47,27 @@ impl Renderer {
                 let file_name = self.determine_page_filename(&file_name)?;
                 let file_name = sanitize_filename::sanitize(file_name + ".html");
 
-                let page_path = unsafe { join_path(section_dir.as_str(), file_name.as_str()) }
-                    .unwrap()
-                    .as_string()
-                    .unwrap();
+                let page_path = fs_driver().join(section_dir.as_str(), file_name.as_str());
 
                 let mut renderer = page::Renderer::new(section_dir.clone(), self);
                 let page_html = renderer.render_page(page)?;
 
                 log!("Creating page file: {:?}", page_path);
-                let _ = unsafe { write_file(&page_path, page_html.as_bytes()) };
+                fs_driver().write_file(&page_path, page_html.as_bytes())?;
 
                 let page_path_without_basedir =
-                    unsafe { remove_prefix(page_path, output_dir.as_str()) }
-                        .unwrap()
-                        .as_string()
-                        .unwrap();
+                    String::from(fs_driver().remove_prefix(&page_path, output_dir.as_str()));
                 toc.push((title, page_path_without_basedir, page.level()))
             }
         }
 
         let toc_html = templates::section::render(section.display_name(), toc)?;
-        let toc_file = unsafe {
-            join_path(
-                output_dir.as_str(),
-                format!("{}.html", section.display_name()).as_str(),
-            )
-        }
-        .unwrap()
-        .as_string()
-        .unwrap();
+        let toc_file = fs_driver().join(
+            output_dir.as_str(),
+            format!("{}.html", section.display_name()).as_str(),
+        );
         log!("ToC: {:?}", toc_file);
-        let _ = unsafe { write_file(toc_file.as_str(), toc_html.as_bytes()) };
+        fs_driver().write_file(toc_file.as_str(), toc_html.as_bytes())?;
 
         Ok(section_dir)
     }

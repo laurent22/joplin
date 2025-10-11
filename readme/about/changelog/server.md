@@ -1,5 +1,21 @@
 # Joplin Server Changelog
 
+## [server-v3.4.4](https://github.com/laurent22/joplin/releases/tag/server-v3.4.4) - 2025-09-25T13:19:10Z
+
+- Improved: Clean-up SAML login section (4cb6b01)
+- Improved: Pin pm2-logrotate version to prevent supply chain attacks (#13235)
+- Improved: Provide more logging information for each request to help debugging issues (1ef8fd5)
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.6), form-data (v4.0.3), glob (v11.0.3), node-mocks-http (v1.17.2), pg (v8.16.2), sass (v1.93.0), style-to-js (v1.1.17)
+- Improved: Use "lax" cookies when using external authentication like SAML or LDAP (6705712)
+
+## [server-v3.4.3](https://github.com/laurent22/joplin/releases/tag/server-v3.4.3) - 2025-09-09T08:47:12Z
+
+- Improved: Remove the need to install pm2-logrotate on startup so that image can work in a closed environment (#13149)
+- Improved: Updated packages pg (v8.15.6), sass (v1.87.0), sharp (v0.34.2)
+- Fixed: Fix unique constraint error when multiple `createSharedFolderUserItems` are run concurrently (#13112 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve handling of concurrent deletion requests for the same item (#13092) (#12984 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Not handling correctly non JSON error responses from Transcribe (#12986) (#12983 by [@pedr](https://github.com/pedr))
+
 ## [server-v3.4.2](https://github.com/laurent22/joplin/releases/tag/server-v3.4.2) - 2025-08-18T16:51:55Z
 
 - New: Add transcribe functionality (#12670 by [@pedr](https://github.com/pedr))

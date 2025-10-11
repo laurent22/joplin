@@ -15,6 +15,8 @@ import { ErrorCode } from '../errors';
 import SearchEngine from '../services/search/SearchEngine';
 import { getTrashFolderId } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
+import Revision from './Revision';
+import RevisionService from '../services/RevisionService';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -607,4 +609,44 @@ describe('models/Note', () => {
 		expect(await Note.previews(getConflictFolderId())).toHaveLength(0);
 		expect(await Note.conflictedCount()).toBe(0);
 	});
+
+	it('should delete the revisions when permanently deleting a note', (async () => {
+		const service = new RevisionService();
+		const folder = await Folder.save({ title: 'folder1' });
+		const note = await Note.save({ title: 'my note', parent_id: folder.id });
+
+		await Note.save({
+			id: note.id,
+			body: 'something something',
+		});
+		await service.collectRevisions();
+
+		const revisionsCountBefore = await Revision.countRevisions(Note.modelType(), note.id);
+		expect(revisionsCountBefore).toBe(1);
+
+		await Note.delete(note.id, { toTrash: false });
+
+		const revisionsCountAfter = await Revision.countRevisions(Note.modelType(), note.id);
+		expect(revisionsCountAfter).toBe(0);
+	}));
+
+	it('should not delete the revisions when sending to trash', (async () => {
+		const service = new RevisionService();
+		const folder = await Folder.save({ title: 'folder1' });
+		const note = await Note.save({ title: 'my note', parent_id: folder.id });
+
+		await Note.save({
+			id: note.id,
+			body: 'something something',
+		});
+		await service.collectRevisions();
+
+		const revisionsCountBefore = await Revision.countRevisions(Note.modelType(), note.id);
+		expect(revisionsCountBefore).toBe(1);
+
+		await Note.delete(note.id, { toTrash: true });
+
+		const revisionsCountAfter = await Revision.countRevisions(Note.modelType(), note.id);
+		expect(revisionsCountAfter).toBe(1);
+	}));
 });

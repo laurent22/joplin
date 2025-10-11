@@ -5,7 +5,7 @@ import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User, UserFlag, Uuid } from '../../services/database/types';
-import config from '../../config';
+import config, { isUsingExternalAuth } from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
@@ -107,6 +107,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 	view.content.hasFlags = !!userFlagViews.length;
 	view.content.userFlagViews = userFlagViews;
 	view.content.stripePortalUrl = stripePortalUrl();
+	view.content.disabledIfExternalAuth = isUsingExternalAuth(config()) ? 'disabled' : '';
 
 	view.jsFiles.push('zxcvbn');
 	view.cssFiles.push('index/user');

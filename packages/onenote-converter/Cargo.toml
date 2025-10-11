@@ -2,14 +2,14 @@
 name = "onenote-converter"
 version = "0.0.1"
 authors = ["Pedro Luiz <pedrlz.frn@gmail.com>"]
-edition = "2018"
+edition = "2024"
 description = "Convert Microsoft OneNote® notebooks to HTML"
-license = "MIT"
+license = "MPL-2.0-no-copyleft-exception"
 repository = "https://github.com/laurent22/joplin"
 keywords = ["onenote"]
 
 [dependencies]
-askama = "0.10"
+askama = "0.14.0"
 color-eyre = "0.5"
 log = "0.4.11"
 mime_guess = "2.0.3"
@@ -39,4 +39,4 @@ features = [
 ]
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "lib"]

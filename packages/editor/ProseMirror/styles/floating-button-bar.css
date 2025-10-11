@@ -1,0 +1,13 @@
+
+.floating-button-bar {
+	position: absolute;
+	z-index: 1;
+}
+
+.floating-button-bar.-hidden {
+	display: none;
+}
+
+.floating-button-bar > .action {
+	opacity: 0.9;
+}

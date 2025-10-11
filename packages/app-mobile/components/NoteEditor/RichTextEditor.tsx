@@ -44,6 +44,13 @@ function useCss(themeId: number, editorCss: string): string {
 				font-size: 13pt;
 				font-family: ${JSON.stringify(theme.fontFamily)}, sans-serif;
 			}
+
+			.RichTextEditor {
+				/* Relatively positioning the editor container causes absolutely-positioned
+				   elements to be positioned relative to Rich Text Editor's container,
+				   rather than the body. This fixes an alignment issue involving button overlays. */
+				position: relative;
+			}
 		`;
 	}, [themeId, editorCss]);
 }

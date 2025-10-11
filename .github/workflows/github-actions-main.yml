@@ -9,7 +9,7 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [macos-13, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
+        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
     steps:
       - uses: actions/checkout@v4
 
@@ -30,6 +30,16 @@ jobs:
               $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
+
+      - name: Free disk space
+        if: runner.os == 'Linux'
+        run: |
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          docker system prune -af || true
+          docker builder prune -af || true
+          sudo rm -rf /var/lib/docker/tmp/* || true
 
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
@@ -121,6 +131,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Free disk space
+        if: runner.os == 'Linux'
+        run: |
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          docker system prune -af || true
+          docker builder prune -af || true
+          sudo rm -rf /var/lib/docker/tmp/* || true
 
       - name: Install Yarn
         run: |

@@ -7,6 +7,7 @@ import createMockReduxStore from '../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../utils/testing/setupGlobalStore';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import FeedbackBanner from './FeedbackBanner';
+import { MobilePlatform } from '@joplin/lib/shim';
 
 interface WrapperProps { }
 
@@ -84,7 +85,7 @@ describe('FeedbackBanner', () => {
 		setupGlobalStore(store);
 
 		jest.useFakeTimers({ advanceTimers: true });
-		mockMobilePlatform('web');
+		mockMobilePlatform(MobilePlatform.Web);
 	});
 
 	afterEach(() => {
@@ -93,9 +94,9 @@ describe('FeedbackBanner', () => {
 	});
 
 	test.each([
-		{ platform: 'android', shouldShow: false },
-		{ platform: 'web', shouldShow: true },
-		{ platform: 'ios', shouldShow: false },
+		{ platform: MobilePlatform.Android, shouldShow: false },
+		{ platform: MobilePlatform.Web, shouldShow: true },
+		{ platform: MobilePlatform.Ios, shouldShow: false },
 	])('should correctly show/hide the feedback banner on %s', ({ platform, shouldShow }) => {
 		mockMobilePlatform(platform);
 

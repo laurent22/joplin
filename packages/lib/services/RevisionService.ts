@@ -21,12 +21,8 @@ export default class RevisionService extends BaseService {
 
 	public static instance_: RevisionService;
 
-	// An "old note" is one that has been created before the revision service existed. These
-	// notes never benefited from revisions so the first time they are modified, a copy of
-	// the original note is saved. The goal is to have at least one revision in case the note
-	// is deleted or modified as a result of a bug or user mistake.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private isOldNotesCache_: any = {};
+	private changedSinceCollectionCache_: Set<string> = new Set();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceCalls_: any[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -42,16 +38,30 @@ export default class RevisionService extends BaseService {
 		return this.instance_;
 	}
 
+	// An "old note" is a note which is without any history, or has not had a revision created since the defined oldNoteInterval.
+	// Originally this concept was introduced to define a note that was created before the revision service existed, but actually
+	// this also applies to any note that is history-less, which is also the case for notes which have been imported, or notes which
+	// had their note history deleted by the user or by the revision cleaner.
+	// These notes are without revisions so the first time they are modified, a copy of the original note is saved. The goal is to
+	// have at least one revision in case the note is deleted or modified as a result of a bug or user mistake.
+	// Also, because of the fact that the revision collection will not always create a revision for the latest change (due to the
+	// intervalBetweenRevisions restriction), it is beneficial to determine an old note based on an interval rather than solely on
+	// the existence of at least 1 revision for a note. Therefore it is beneficial for the old note concept to include any note
+	// which has not been changed since the defined oldNoteInterval.
 	public oldNoteCutOffDate_() {
 		return Date.now() - Setting.value('revisionService.oldNoteInterval');
 	}
 
-	public async isOldNote(noteId: string) {
-		if (noteId in this.isOldNotesCache_) return this.isOldNotesCache_[noteId];
+	public changedSinceCollection(noteId: string) {
+		if (this.changedSinceCollectionCache_.has(noteId)) return true;
 
-		const isOld = await Note.noteIsOlderThan(noteId, this.oldNoteCutOffDate_());
-		this.isOldNotesCache_[noteId] = isOld;
-		return isOld;
+		this.changedSinceCollectionCache_.add(noteId);
+
+		return false;
+	}
+
+	public removeChangedSinceCollection(noteId: string) {
+		this.changedSinceCollectionCache_.delete(noteId);
 	}
 
 	private noteMetadata_(note: NoteEntity) {
@@ -70,7 +80,7 @@ export default class RevisionService extends BaseService {
 		return md;
 	}
 
-	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null): Promise<RevisionEntity> {
+	public async createNoteRevision_(note: NoteEntity, parentRevId: string = null, bypassInterval = false): Promise<RevisionEntity> {
 		try {
 			const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
 
@@ -90,7 +100,7 @@ export default class RevisionService extends BaseService {
 				output.body_diff = Revision.createTextPatch('', noteBody);
 				output.metadata_diff = Revision.createObjectPatch({}, noteMd);
 			} else {
-				if (Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
+				if (!bypassInterval && Date.now() - parentRev.updated_time < Setting.value('revisionService.intervalBetweenRevisions')) return null;
 
 				const merged = await Revision.mergeDiffs(parentRev);
 				output.parent_id = parentRev.id;
@@ -152,16 +162,26 @@ export default class RevisionService extends BaseService {
 							const oldNote = change.before_change_item ? JSON.parse(change.before_change_item) : null;
 
 							if (note) {
+								let oldNoteSaved = false;
+
 								if (oldNote && oldNote.updated_time < this.oldNoteCutOffDate_()) {
 									// This is where we save the original version of this old note
+									// We need to use the more recent timestamp, because if the last update was a long time ago, the revision could get immediately removed by the cleaner
+									// We also want to avoid creating 2 revisions with exactly the same timestamp, so deduct 1 ms from the timestamp on the old revision to avoid this
+									oldNote.updated_time = note.updated_time - 1;
+									oldNote.user_updated_time = oldNote.updated_time;
 									const rev = await this.createNoteRevision_(oldNote);
-									if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
+									if (rev) {
+										oldNoteSaved = true;
+										logger.debug(sprintf('collectRevisions: Saved revision %s (old note)', rev.id));
+									}
 								}
 
-								const rev = await this.createNoteRevision_(note);
+								const rev = await this.createNoteRevision_(note, null, oldNoteSaved);
 								if (rev) logger.debug(sprintf('collectRevisions: Saved revision %s (Last rev was more than %d ms ago)', rev.id, Setting.value('revisionService.intervalBetweenRevisions')));
 								doneNoteIds.push(noteId);
-								this.isOldNotesCache_[noteId] = false;
+
+								this.changedSinceCollectionCache_.delete(noteId);
 							}
 						}
 

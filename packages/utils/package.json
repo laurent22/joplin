@@ -1,6 +1,6 @@
 {
   "name": "@joplin/utils",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
@@ -39,7 +39,7 @@
     "dayjs": "1.11.13",
     "execa": "5.1.1",
     "fs-extra": "11.2.0",
-    "glob": "11.0.2",
+    "glob": "11.0.3",
     "html-entities": "1.4.0",
     "markdown-it": "13.0.2",
     "moment": "2.30.1",
@@ -53,8 +53,8 @@
     "@types/markdown-it": "13.0.9",
     "@types/node-fetch": "2.6.12",
     "jest": "29.7.0",
-    "ts-jest": "29.3.1",
-    "typescript": "5.8.2"
+    "ts-jest": "29.3.4",
+    "typescript": "5.8.3"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }

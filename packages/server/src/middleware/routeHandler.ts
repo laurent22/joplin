@@ -7,6 +7,41 @@ import { createCsrfTag } from '../utils/csrf';
 import { getImpersonatorAdminSessionId } from '../routes/admin/utils/users/impersonate';
 import { onRequestComplete, onRequestStart } from '../utils/metrics';
 import { uuidgen } from '@joplin/lib/uuid';
+import { ApiError, ErrorTooManyRequests } from '../utils/errors';
+import { formatBytesSimple } from '../utils/bytes';
+
+const logRequestInfo = (ctx: AppContext, requestStartTime: number, error: Error | string | null) => {
+	try {
+		const owner = ctx.joplin.owner;
+		// Technically this is not the total request duration because there are
+		// other middlewares but that should give a good approximation
+		const requestDuration = Date.now() - requestStartTime;
+
+		const getLinePrefix = () => {
+			const prefix: string[] = [];
+			if (owner) prefix.push(owner.id);
+			prefix.push(userIp(ctx));
+			if (typeof ctx.request?.length === 'number') prefix.push(formatBytesSimple(ctx.request.length));
+			return prefix;
+		};
+
+		// If it's a successful request or a user error (error code < 500) we display the
+		// information on a single line.
+		const line = getLinePrefix();
+		if (error && typeof error === 'string') line.push(error);
+		line.push(`${ctx.request.method} ${ctx.path} (${ctx.response.status}) (${requestDuration}ms)`);
+		ctx.joplin.appLogger().info(line.join(': '));
+
+		// If we have an error object (should be a server error), we log the full stack trace.
+		if (error && typeof error !== 'string' && error.message) {
+			const line = getLinePrefix();
+			ctx.joplin.appLogger().error(`${line.join(': ')}:`, error);
+		}
+	} catch (logFunctionError) {
+		// eslint-disable-next-line no-console
+		console.error('[ERROR] Error in logging function!!', logFunctionError);
+	}
+};
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
@@ -37,32 +72,25 @@ export default async function(ctx: AppContext) {
 			ctx.response.status = 200;
 			ctx.response.body = [undefined, null].includes(responseObject) ? '' : responseObject;
 		}
-	} catch (error) {
-		if (error.httpCode >= 400 && error.httpCode < 500) {
-			const owner = ctx.joplin.owner;
 
-			const line: string[] = [
-				error.httpCode,
-				`${ctx.request.method} ${ctx.path}`,
-				owner ? owner.id : userIp(ctx),
-				error.message,
-			];
-
-			if (error.details) line.push(JSON.stringify(error.details));
-
-			ctx.joplin.appLogger().error(line.join(': '));
-		} else {
-			ctx.joplin.appLogger().error(userIp(ctx), error);
-		}
+		logRequestInfo(ctx, requestStartTime, null);
+	} catch (e) {
+		const error = e as ApiError;
 
 		// Uncomment this when getting HTML blobs as errors while running tests.
 		// console.error(error);
 
 		ctx.response.status = error.httpCode ? error.httpCode : 500;
 
+		if (error.httpCode >= 400 && error.httpCode < 500) {
+			logRequestInfo(ctx, requestStartTime, error.message);
+		} else {
+			logRequestInfo(ctx, requestStartTime, error);
+		}
+
 		const responseFormat = routeResponseFormat(ctx);
 
-		if (error.retryAfterMs) ctx.response.set('Retry-After', Math.ceil(error.retryAfterMs / 1000).toString());
+		if ((error as ErrorTooManyRequests).retryAfterMs) ctx.response.set('Retry-After', Math.ceil((error as ErrorTooManyRequests).retryAfterMs / 1000).toString());
 
 		if (error.code === 'invalidOrigin') {
 			ctx.response.body = error.message;
@@ -87,11 +115,6 @@ export default async function(ctx: AppContext) {
 			if (error.code) r.code = error.code;
 			ctx.response.body = r;
 		}
-	} finally {
-		// Technically this is not the total request duration because there are
-		// other middlewares but that should give a good approximation
-		const requestDuration = Date.now() - requestStartTime;
-		ctx.joplin.appLogger().info(`${ctx.request.method} ${ctx.path} (${ctx.response.status}) (${requestDuration}ms)`);
 	}
 
 	onRequestComplete(requestId);

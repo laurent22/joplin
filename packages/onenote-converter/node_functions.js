@@ -23,16 +23,6 @@ function removePrefix(basePath, prefix) {
 	return basePath.replace(prefix, '');
 }
 
-function getOutputPath(inputDir, outputDir, filePath) {
-	const basePathFromInputFolder = filePath.replace(inputDir, '');
-	const newOutput = path.join(outputDir, basePathFromInputFolder);
-	return path.dirname(newOutput);
-}
-
-function getParentDir(filePath) {
-	return path.basename(path.dirname(filePath));
-}
-
 function normalizeAndWriteFile(filePath, data) {
 	filePath = path.normalize(filePath);
 	fs.writeFileSync(filePath, data);
@@ -43,7 +33,5 @@ module.exports = {
 	isDirectory,
 	readDir,
 	removePrefix,
-	getOutputPath,
-	getParentDir,
 	normalizeAndWriteFile,
 };

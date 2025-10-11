@@ -11,6 +11,7 @@ import { TagEntity } from '@joplin/lib/services/database/types';
 import { useCallback, useMemo, useState } from 'react';
 import { Dispatch } from 'redux';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 interface Props {
 	dispatch: Dispatch;
@@ -46,13 +47,17 @@ const useStyles = (themeId: number) => {
 const TagsScreenComponent: React.FC<Props> = props => {
 	const [tags, setTags] = useState<TagEntity[]>([]);
 	const styles = useStyles(props.themeId);
+	const collatorLocale = getCollatorLocale();
+	const collator = useMemo(() => {
+		return getCollator(collatorLocale);
+	}, [collatorLocale]);
 
 	type TagItemPressEvent = { id: string };
 
 	useAsyncEffect(async () => {
 		const tags = await Tag.allWithNotes();
 		tags.sort((a, b) => {
-			return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+			return collator.compare(a.title, b.title);
 		});
 		setTags(tags);
 	}, []);

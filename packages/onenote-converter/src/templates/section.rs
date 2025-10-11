@@ -33,6 +33,3 @@ pub(crate) fn render(name: &str, pages: Vec<(String, String, i32)>) -> Result<St
         .wrap_err("Failed to render section template")
 }
 
-mod filters {
-    pub(crate) use crate::templates::url_encode as encode;
-}

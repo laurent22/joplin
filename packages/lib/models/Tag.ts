@@ -172,9 +172,9 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async loadByTitle(title: string): Promise<TagEntity> {
-		// Case insensitive doesn't work with especial Unicode characters like Ö
-		const lowercaseTitle = title.toLowerCase();
-		return this.loadByField('title', lowercaseTitle, { caseInsensitive: true });
+		// Case insensitive doesn't work with special Unicode characters like Ö, but as these characters are no longer converted to lowercase on save, this is ok
+		// For the original issue, see https://github.com/laurent22/joplin/issues/11179
+		return this.loadByField('title', title, { caseInsensitive: true });
 	}
 
 	public static async addNoteTagByTitle(noteId: string, tagTitle: string) {
@@ -184,20 +184,23 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async setNoteTagsByTitles(noteId: string, tagTitles: string[]) {
+		// We still compare lowercased tag titles here, so that special unicode characters will match regardless of case. But this won't stop the user from renaming
+		// a tag to a title which matches another tag except for one or more special unicode characters having a different case. But this seems a reasonable compromise
+		// due to the lack of native case insensitive text comparison functionality for special unicode characters in sqlite without any extensions
 		const previousTags = await this.tagsByNoteId(noteId);
-		const addedTitles = [];
+		const addedTitlesLowercased = [];
 
 		for (let i = 0; i < tagTitles.length; i++) {
-			const title = tagTitles[i].trim().toLowerCase();
+			const title = tagTitles[i].trim();
 			if (!title) continue;
 			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
 			await this.addNote(tag.id, noteId);
-			addedTitles.push(title);
+			addedTitlesLowercased.push(title.toLowerCase());
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitles.indexOf(previousTags[i].title.toLowerCase()) < 0) {
+			if (addedTitlesLowercased.indexOf(previousTags[i].title.toLowerCase()) < 0) {
 				await this.removeNote(previousTags[i].id, noteId);
 			}
 		}
@@ -227,7 +230,7 @@ export default class Tag extends BaseItem {
 
 		if (options.userSideValidation) {
 			if ('title' in o) {
-				o.title = o.title.trim().toLowerCase();
+				o.title = o.title.trim();
 
 				const existingTag = await Tag.loadByTitle(o.title);
 				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
