@@ -5,6 +5,8 @@ const DiffMatchPatch = require('diff-match-patch');
 import * as ArrayUtils from '../ArrayUtils';
 import JoplinError from '../JoplinError';
 import time from '../time';
+import ItemChange from './ItemChange';
+import RevisionService from '../services/RevisionService';
 const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();
@@ -374,7 +376,7 @@ export default class Revision extends BaseItem {
 		}
 	}
 
-	public static async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
+	public static async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions, resetItemChanges = false) {
 		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
 
 		const revisions: RevisionEntity[] = await this.modelSelectAll(
@@ -383,6 +385,15 @@ export default class Revision extends BaseItem {
 		);
 
 		await this.batchDelete(revisions.map(item => item.id), options);
+
+		if (resetItemChanges) {
+			// This ensures that any new revisions created upon revision collection do not include contents which were present prior to
+			// triggering the deletion
+			for (const noteId of ids) {
+				await ItemChange.updateOldNoteContent(noteId, null);
+				RevisionService.instance().removeChangedSinceCollection(noteId);
+			}
+		}
 	}
 
 	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
