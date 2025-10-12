@@ -166,7 +166,7 @@ const MenuComponent: React.FC<Props> = props => {
 	const dualActionMenuTrigger = (
 		<MenuTrigger
 			style={styles.contextMenuButton}
-			testID='screen-header-menu-trigger'
+			testID='screen-header-dual-action-menu-trigger'
 			triggerOnLongPress={true}
 			customStyles={{
 				TriggerTouchableComponent: TouchableOpacity,
