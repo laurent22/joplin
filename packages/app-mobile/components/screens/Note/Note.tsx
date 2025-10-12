@@ -428,15 +428,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 	}
 
-	private screenHeader_backButtonLongPress = (folderId: string, isViewMode: boolean) => {
-		if (isViewMode) {
-			if (folderId) {
-				void NavService.go('Notes', { folderId: folderId, clearHistory: true });
-			} else {
-				void NavService.go('Notes', { smartFilterId: 'c3176726992c11e9ac940492261af972', clearHistory: true });
-			}
+	private backButtonMenu_goToHome = (folderId: string) => {
+		if (folderId) {
+			void NavService.go('Notes', { folderId: folderId, clearHistory: true });
 		} else {
-			void BackButtonService.back();
+			void NavService.go('Notes', { smartFilterId: 'c3176726992c11e9ac940492261af972', clearHistory: true });
 		}
 	};
 
@@ -1757,6 +1753,20 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const { editorPlugin: activeEditorPlugin } = getActivePluginEditorView(this.props.plugins, this.props.windowId);
 
+		const backButtonMenuOptions: MenuOptionType[] = [];
+
+		backButtonMenuOptions.push({
+			key: 'goBack',
+			title: _('Go back'),
+			onPress: () => BackButtonService.back(),
+		});
+
+		backButtonMenuOptions.push({
+			key: 'goToHome',
+			title: _('Go to home'),
+			onPress: () => this.backButtonMenu_goToHome(this.state.folder?.id),
+		});
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
@@ -1773,7 +1783,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
-					onBackButtonLongPress={() => this.screenHeader_backButtonLongPress(this.state.folder?.id, this.state.mode === 'view')}
+					backButtonMenuOptions={backButtonMenuOptions}
 					title={getDisplayParentTitle(this.state.note, this.state.folder)}
 				/>
 				{titleComp}

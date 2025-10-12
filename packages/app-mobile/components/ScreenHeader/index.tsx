@@ -65,7 +65,7 @@ interface ScreenHeaderProps {
 	sortButton_press?: OnPressCallback;
 	onSearchButtonPress?: OnPressCallback;
 	onDeleteButtonPress?: OnPressCallback;
-	onBackButtonLongPress?: OnPressCallback;
+	backButtonMenuOptions?: MenuOptionType[];
 
 	showSideMenuButton?: boolean;
 	showSearchButton?: boolean;
@@ -290,11 +290,15 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function backButton(styles: any, onPress: OnPressCallback, onLongPress: OnPressCallback, disabled: boolean) {
-			return (
+		function backButton(styles: any, onPress: OnPressCallback, backButtonMenuOptions: MenuOptionType[], disabled: boolean) {
+			const iconStyle: ViewStyle = {
+				...styles.topIcon,
+				flex: 0,
+			};
+
+			const backButton = (
 				<TouchableOpacity
 					onPress={onPress}
-					onLongPress={onLongPress ? onLongPress : onPress}
 					disabled={disabled}
 
 					accessibilityLabel={_('Back')}
@@ -302,11 +306,39 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
 						<Icon
 							name="arrow-back"
-							style={styles.topIcon}
+							style={iconStyle}
 						/>
 					</View>
 				</TouchableOpacity>
 			);
+
+			// In order to maintain visual parity when transitioning between both modes, the icon must use the same styling but not the container
+			const containerStyle: ViewStyle = {
+				...styles.backButton,
+				flex: 0,
+			};
+
+			const containerDisabledStyle: ViewStyle = {
+				...styles.backButtonDisabled,
+				flex: 0,
+			};
+
+			const backButtonWithMenu = (
+				<Menu themeId={themeId} options={backButtonMenuOptions} onShortPressOverride={onPress}>
+					<View
+						accessibilityLabel={_('Back')}
+						accessibilityRole="button"
+						style={disabled ? containerDisabledStyle : containerStyle}
+					>
+						<Icon
+							name="arrow-back"
+							style={iconStyle}
+						/>
+					</View>
+				</Menu>
+			);
+
+			return backButtonMenuOptions ? backButtonWithMenu : backButton;
 		}
 
 		function saveButton(
@@ -652,7 +684,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const headerItemDisabled = !(this.props.selectedNoteIds.length > 0);
 
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
-		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), this.props.onBackButtonLongPress, backButtonDisabled);
+		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), this.props.backButtonMenuOptions, backButtonDisabled);
 		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
 		const betaIconComp = betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());

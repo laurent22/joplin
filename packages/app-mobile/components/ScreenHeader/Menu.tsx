@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, TextStyle, View, Text, ScrollView, useWindowDimensions, Platform } from 'react-native';
+import { StyleSheet, TextStyle, View, Text, ScrollView, useWindowDimensions, Platform, TouchableOpacity } from 'react-native';
 import { themeStyle } from '../global-style';
 import { Menu, MenuOption as MenuOptionComponent, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import AccessibleView from '../accessibility/AccessibleView';
@@ -28,6 +28,7 @@ interface Props {
 	themeId: number;
 	options: MenuOptionType[];
 	children: React.ReactNode;
+	onShortPressOverride?: ()=> void;
 }
 
 const useStyles = (themeId: number) => {
@@ -153,6 +154,31 @@ const MenuComponent: React.FC<Props> = props => {
 		setOpen(false);
 	}, []);
 
+	const singleActionMenuTrigger = (
+		<MenuTrigger
+			style={styles.contextMenuButton}
+			testID='screen-header-menu-trigger'
+		>
+			{props.children}
+		</MenuTrigger>
+	);
+
+	const dualActionMenuTrigger = (
+		<MenuTrigger
+			style={styles.contextMenuButton}
+			testID='screen-header-menu-trigger'
+			triggerOnLongPress={true}
+			customStyles={{
+				TriggerTouchableComponent: TouchableOpacity,
+				triggerTouchable: {
+					onPress: props.onShortPressOverride,
+				},
+			}}
+		>
+			{props.children}
+		</MenuTrigger>
+	);
+
 	return (
 		<Menu
 			onSelect={onMenuItemSelect}
@@ -160,9 +186,7 @@ const MenuComponent: React.FC<Props> = props => {
 			onOpen={onMenuOpened}
 			style={styles.contextMenu}
 		>
-			<MenuTrigger style={styles.contextMenuButton} testID='screen-header-menu-trigger'>
-				{props.children}
-			</MenuTrigger>
+			{props.onShortPressOverride ? dualActionMenuTrigger : singleActionMenuTrigger}
 			<MenuOptions>
 				<FocusControl.ModalWrapper state={open ? ModalState.Open : ModalState.Closed}>
 					<ScrollView
