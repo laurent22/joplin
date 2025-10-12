@@ -71,9 +71,19 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 
 	while (remainingSize.width < noWidthChildrenMinWidth) {
 		// There is not enough space, the widest item will be made smaller
-		let widestChild = item.children[0].key;
+		// Find the first visible child to use as initial widest
+		let widestChild = null;
 		for (const child of item.children) {
-			if (!child.visible) continue;
+			if (child.visible !== false) {
+				widestChild = child.key;
+				break;
+			}
+		}
+
+		if (!widestChild) break;
+
+		for (const child of item.children) {
+			if (child.visible === false) continue;
 			if (sizes[child.key].width > sizes[widestChild].width) widestChild = child.key;
 		}
 
@@ -84,9 +94,19 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 
 	while (remainingSize.height < noHeightChildrenMinHeight) {
 		// There is not enough space, the tallest item will be made smaller
-		let tallestChild = item.children[0].key;
+		// Find the first visible child to use as initial tallest
+		let tallestChild = null;
 		for (const child of item.children) {
-			if (!child.visible) continue;
+			if (child.visible !== false) {
+				tallestChild = child.key;
+				break;
+			}
+		}
+
+		if (!tallestChild) break;
+
+		for (const child of item.children) {
+			if (child.visible === false) continue;
 			if (sizes[child.key].height > sizes[tallestChild].height) tallestChild = child.key;
 		}
 

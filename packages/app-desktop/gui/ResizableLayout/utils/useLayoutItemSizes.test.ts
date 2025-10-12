@@ -349,4 +349,62 @@ describe('useLayoutItemSizes', () => {
 		expect(maxSize1.width).toBe(160); // 160 = layout.width - col2.minWidth(=40)
 	});
 
+	test('should handle all invisible children without crashing', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{
+					key: 'col1',
+					width: 100,
+					visible: false,
+				},
+				{
+					key: 'col2',
+					width: 100,
+					visible: false,
+				},
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+
+		// Should not crash and should set invisible items to 0 width
+		expect(sizes.col1.width).toBe(0);
+		expect(sizes.col2.width).toBe(0);
+	});
+
+	test('should handle nested containers with all invisible children', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{
+					key: 'col1',
+					direction: LayoutItemDirection.Column,
+					children: [
+						{ key: 'row1', visible: false },
+						{ key: 'row2', visible: false },
+					],
+				},
+				{
+					key: 'col2',
+				},
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+
+		// Should not crash when processing nested containers with all invisible children
+		expect(sizes.root).toEqual({ width: 200, height: 100 });
+		expect(sizes.row1.width).toBe(0);
+		expect(sizes.row2.width).toBe(0);
+	});
+
 });
