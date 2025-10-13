@@ -9158,7 +9158,7 @@ __metadata:
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@types/react": "npm:18.3.23"
     "@types/react-dom": "npm:18.3.7"
     "@types/react-redux": "npm:7.1.33"
@@ -9257,7 +9257,7 @@ __metadata:
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@types/react": "npm:19.0.14"
     "@types/react-redux": "npm:7.1.33"
     "@types/serviceworker": "npm:0.0.141"
@@ -9405,7 +9405,7 @@ __metadata:
     "@replit/codemirror-vim": "npm:6.2.1"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@types/react": "npm:18.3.23"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
@@ -9437,7 +9437,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@typescript-eslint/eslint-plugin": "npm:6.21.0"
     "@typescript-eslint/parser": "npm:6.21.0"
     coveralls: "npm:3.1.1"
@@ -9467,7 +9467,7 @@ __metadata:
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     jest: "npm:29.7.0"
     node-emoji: "npm:1.11.0"
     typescript: "npm:5.8.3"
@@ -9516,7 +9516,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/nanoid": "npm:3.0.0"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@types/node-rsa": "npm:1.1.4"
     "@types/react": "npm:18.3.23"
     "@types/uuid": "npm:10.0.0"
@@ -9632,7 +9632,7 @@ __metadata:
     "@joplin/utils": "npm:~3.5"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     fs-extra: "npm:11.2.0"
     gh-release-assets: "npm:2.0.1"
     jest: "npm:29.7.0"
@@ -9687,7 +9687,7 @@ __metadata:
     "@joplin/utils": "npm:~3.5"
     "@types/jest": "npm:29.5.14"
     "@types/markdown-it": "npm:13.0.9"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.2.0"
     highlight.js: "npm:11.11.1"
@@ -9738,7 +9738,7 @@ __metadata:
     "@types/koa": "npm:2.15.0"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@types/node-os-utils": "npm:1.3.4"
     "@types/nodemailer": "npm:6.4.17"
     "@types/uuid": "npm:10.0.0"
@@ -9798,7 +9798,7 @@ __metadata:
     "@types/js-yaml": "npm:4.0.9"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@types/node-fetch": "npm:2.6.12"
     "@types/yargs": "npm:17.0.33"
     compare-versions: "npm:6.1.1"
@@ -14594,12 +14594,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.118":
-  version: 18.19.118
-  resolution: "@types/node@npm:18.19.118"
+"@types/node@npm:18.19.119":
+  version: 18.19.119
+  resolution: "@types/node@npm:18.19.119"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/ed7a7ef22b10f463ea168f0d9a354902b1cc3af7d8df94cbbd986a60c504afab7d184ea6bf9fd2125d8e800d076f60171bb593567014a54dbf83d1645819234d
+  checksum: 10/d41d94e575611f0d94498e1c91fc06f4f448dd4b1e952fc8812b69b1e549874a18d510334b6e88d65d5a8ac77de07bf21e2637b297f49d80319204c43aa9fa59
   languageName: node
   linkType: hard
 
@@ -32784,7 +32784,7 @@ __metadata:
     "@joplin/utils": "npm:~3.5"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.118"
+    "@types/node": "npm:18.19.119"
     "@types/proper-lockfile": "npm:^4.1.2"
     aws-sdk: "npm:2.1340.0"
     chalk: "npm:4.1.2"
