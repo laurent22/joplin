@@ -8,7 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 3.2.13\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Dmitriy Q <krotesk@yandex.ru>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Arman Saga <asagatbekov@gmail.com>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.7\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -58,7 +60,7 @@ msgstr "(Нет)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr ""
+msgstr "(Только чтение)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:40
 #: packages/lib/models/settings/builtInMetadata.ts:41
@@ -71,9 +73,8 @@ msgid "(You may disable this prompt in the options)"
 msgstr "(Вы можете отключить это предупреждение в настройках)"
 
 #: packages/app-cli/app/command-share.ts:31
-#, fuzzy
 msgid "[None]"
-msgstr "Нет"
+msgstr "[Отсутствует]"
 
 #: packages/app-desktop/gui/MenuBar.tsx:1065
 #: packages/app-desktop/gui/MenuBar.tsx:754
@@ -112,7 +113,6 @@ msgstr "&Окно"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1655
 #: packages/lib/models/settings/builtInMetadata.ts:1945
-#, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d дней"
@@ -134,7 +134,6 @@ msgstr "%d ГБ дискового пространства"
 #: packages/lib/models/settings/builtInMetadata.ts:1377
 #: packages/lib/models/settings/builtInMetadata.ts:1378
 #: packages/lib/models/settings/builtInMetadata.ts:1379
-#, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d час"
@@ -156,7 +155,6 @@ msgstr "%d МБ на заметку или вложение"
 #: packages/lib/models/settings/builtInMetadata.ts:1374
 #: packages/lib/models/settings/builtInMetadata.ts:1375
 #: packages/lib/models/settings/builtInMetadata.ts:1376
-#, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d минут"
@@ -164,7 +162,6 @@ msgstr[1] "%d минут"
 msgstr[2] "%d минут"
 
 #: packages/app-cli/app/command-rmnote.ts:34
-#, fuzzy
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
 msgstr[0] "%d заметок соответствуют указанному выражению. Удалить их?"
@@ -172,7 +169,6 @@ msgstr[1] "%d заметок соответствуют указанному в�
 msgstr[2] "%d заметок соответствуют указанному выражению. Удалить их?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
-#, fuzzy
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
 msgstr[0] "%d заметок будут удалены навсегда. Продолжить?"
@@ -181,7 +177,7 @@ msgstr[2] "%d заметок будут удалены навсегда. Про�
 
 #: packages/app-mobile/components/CameraView/PhotoPreview.tsx:60
 msgid "%d photo(s) taken"
-msgstr ""
+msgstr "Сделано %d фото"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -232,16 +228,14 @@ msgid "%s = %s (%s)"
 msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
-#, fuzzy
 msgid "%s cannot be greater than %s"
 msgstr "Невозможно создать новую заметку: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:36
 msgid "%s cannot be less than %s"
-msgstr ""
+msgstr "%s не может быть меньше, чем %s"
 
 #: packages/app-cli/app/command-share.ts:202
-#, fuzzy
 msgid "%s from %s"
 msgstr "Удалить %s из общего ресурса"
 
@@ -255,7 +249,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
-msgstr ""
+msgstr "%s должен быть допустимым целым числом"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
@@ -269,7 +263,6 @@ msgid "%s: %d"
 msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.ts:378
-#, fuzzy
 msgid "%s: %d note"
 msgid_plural "%s: %d notes"
 msgstr[0] "%s: %d заметок"
@@ -320,6 +313,8 @@ msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
 msgstr ""
+"Список слов, разделённые запятыми. Может использоваться для редких слов, "
+"чтобы облегчить их правильное написание при голосовом наборе."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -374,14 +369,12 @@ msgid "Accepted invitations"
 msgstr "Принятые приглашения"
 
 #: packages/app-cli/app/command-share.ts:179
-#, fuzzy
 msgid "Accepted: Notebook %s from %s"
 msgstr "Блокнот: %s (%s)"
 
 #: packages/app-cli/app/command-share.ts:229
-#, fuzzy
 msgid "Accepting share..."
-msgstr "Принятые шары"
+msgstr "Принятые ресурсы..."
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
@@ -444,7 +437,6 @@ msgid "Add recipient:"
 msgstr "Добавить получателя:"
 
 #: packages/app-mobile/components/TagEditor.tsx:265
-#, fuzzy
 msgid "Add tags:"
 msgstr "Новые метки:"
 
@@ -461,18 +453,16 @@ msgid "Add to note"
 msgstr "Добавить к заметке"
 
 #: packages/app-mobile/components/ComboBox.tsx:89
-#, fuzzy
 msgid "Added new: %s"
 msgstr "Добавить новый"
 
 #: packages/app-mobile/components/TagEditor.tsx:219
-#, fuzzy
 msgid "Added tag: %s"
 msgstr "Добавить тег %s к заметке"
 
 #: packages/app-mobile/components/TagEditor.tsx:206
 msgid "Adds tag"
-msgstr ""
+msgstr "Добавляет тег"
 
 #: packages/server/src/services/MustacheService.ts:162
 #: packages/server/src/services/MustacheService.ts:286
@@ -522,7 +512,7 @@ msgstr "Все возможные порты заняты - пожалуйста
 
 #: packages/app-cli/app/command-share.ts:191
 msgid "All shared folders:"
-msgstr ""
+msgstr "Все общие папки:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1008
 msgid "Allows debugging mobile plugins. See %s for details."
@@ -537,7 +527,6 @@ msgid "Also publish linked notes"
 msgstr "Также публикуйте связанные заметки"
 
 #: packages/lib/versionInfo.ts:93
-#, fuzzy
 msgid "Alternative instance ID: %s"
 msgstr "Идентификатор клиента: %s"
 
@@ -624,7 +613,6 @@ msgstr ""
 "Это нельзя отменить."
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:17
-#, fuzzy
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
@@ -656,7 +644,7 @@ msgstr "Aritim тёмная"
 
 #: packages/app-mobile/components/TagEditor.tsx:172
 msgid "Associated tags:"
-msgstr ""
+msgstr "Связанные теги:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:15
 msgid ""
@@ -695,7 +683,6 @@ msgid "attachment"
 msgstr "вложение"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:77
-#, fuzzy
 msgid "Attachment"
 msgstr "Вложения"
 
@@ -753,7 +740,7 @@ msgstr "Автоматическое добавление отключенных
 
 #: packages/lib/models/settings/builtInMetadata.ts:761
 msgid "Auto-format Markdown in the Rich Text Editor"
-msgstr ""
+msgstr "Автоформатирование в Markdown в текстовом редакторе"
 
 #: packages/lib/models/settings/builtInMetadata.ts:718
 msgid "Auto-pair braces, parentheses, quotations, etc."
@@ -831,7 +818,7 @@ msgstr "словом"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:79
 msgid "Camera"
-msgstr ""
+msgstr "Камера"
 
 #: packages/server/src/routes/admin/users.ts:160
 msgid "Can Share"
@@ -891,6 +878,8 @@ msgid ""
 "Cancelling will discard the recording. This cannot be undone. Are you sure "
 "you want to proceed?"
 msgstr ""
+"Отмена приведёт к потере записи. Это действие нельзя будет отменить. Вы "
+"уверены, что хотите продолжить?"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.tsx:23
 #: packages/lib/Synchronizer.ts:206
@@ -1031,7 +1020,6 @@ msgid "Characters excluding spaces"
 msgstr "Символы за исключением пробелов"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:165
-#, fuzzy
 msgid "Check"
 msgstr "Флажок"
 
@@ -1058,7 +1046,6 @@ msgid "Checkbox list"
 msgstr "Список флажков"
 
 #: packages/app-mobile/components/Checkbox.tsx:49
-#, fuzzy
 msgid "Checked"
 msgstr "Флажок"
 
@@ -1104,7 +1091,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:234
 msgid "Click \"start\" to attach a new voice memo to the note."
-msgstr ""
+msgstr "Нажмите «старт», чтобы прикрепить к заметке новую голосовую заметку."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1133,7 +1120,6 @@ msgid "Close"
 msgstr "Закрыть"
 
 #: packages/app-mobile/components/Modal.tsx:139
-#, fuzzy
 msgid "Close dialog"
 msgstr "Закрыть окно"
 
@@ -1162,7 +1148,7 @@ msgstr "Закрыть окно"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
 msgid "Closing session..."
-msgstr ""
+msgstr "Закрытие сессии..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:40
 msgid "Cmd-click to open"
@@ -1186,7 +1172,6 @@ msgid "Code View"
 msgstr "Просмотр кода"
 
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
-#, fuzzy
 msgid "Code:"
 msgstr "Код"
 
@@ -1199,12 +1184,10 @@ msgid "Collaborate on notebooks with others"
 msgstr "Совместная работа над блокнотами с другими людьми"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Collapse all notebooks"
 msgstr "Создать новый блокнот"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
-#, fuzzy
 msgid "Collapsed"
 msgstr "Свернуть"
 
@@ -1215,9 +1198,9 @@ msgstr "Ближайшие напоминания"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Разделенный запятыми список путей к файлам сертификатов (поддерживаются как "
 "каталоги, так и абсолютные пути к отдельным файлам). Например: /my/"
@@ -1245,6 +1228,8 @@ msgstr "Палитра команд..."
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 msgstr ""
+"Команды: 'добавить', 'удалить', 'список', 'удалить', 'принять', 'выйти' и "
+"'отклонить'."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1296,7 +1281,7 @@ msgstr "Конфигурация"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1261
 msgid "Configures the size of scrollbars used in the app."
-msgstr ""
+msgstr "Настраивает размер полос прокрутки, используемых в приложении."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:155
 msgid "Confirm password cannot be empty"
@@ -1332,7 +1317,7 @@ msgstr "Подключение к Joplin Cloud"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:274
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:476
 msgid "Connect using your organisation account"
-msgstr ""
+msgstr "Подключитесь, используя учетную запись вашей организации"
 
 #: packages/lib/utils/joplinCloud/index.ts:224
 msgid "Consolidated billing"
@@ -1364,12 +1349,10 @@ msgid "Control character"
 msgstr "Управляющий символ"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
-#, fuzzy
 msgid "Convert it"
 msgstr "Преобразовать в заметку"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
 msgstr "Преобразовать в задачу"
 
@@ -1478,7 +1461,6 @@ msgid "Could not connect to plugin repository."
 msgstr "Не удалось соединиться с репозиторием плагинов."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
 msgstr "Не удалось экспортировать заметки: %s"
 
@@ -1536,7 +1518,6 @@ msgid "Create a notebook"
 msgstr "Создать новый блокнот"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
 msgstr "Создает новый блокнот."
 
@@ -1546,7 +1527,6 @@ msgid "Create new profile..."
 msgstr "Создание нового профиля..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
-#, fuzzy
 msgid "Create note"
 msgstr "Создать блокнот"
 
@@ -1596,7 +1576,6 @@ msgid "Created: %s"
 msgstr "Создано: %s"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:70
-#, fuzzy
 msgid "Creates a new note with an attachment of type %s"
 msgstr "Создать новый блокнот под родительским блокнотом."
 
@@ -1621,12 +1600,10 @@ msgid "Creating new to-do..."
 msgstr "Создание новой задачи..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
-#, fuzzy
 msgid "Creating note \"%s\"..."
 msgstr "Создание новой заметки..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
-#, fuzzy
 msgid "Creating note."
 msgstr "Создание новой заметки..."
 
@@ -1731,6 +1708,7 @@ msgstr "По умолчанию: %s"
 #: packages/lib/models/settings/builtInMetadata.ts:1924
 msgid "Default title to use for documents created by the scanner."
 msgstr ""
+"Заголовок по-умолчанию для использования в документах, созданных сканером."
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
@@ -1764,7 +1742,6 @@ msgstr "Удаление просроченных токенов"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:190
-#, fuzzy
 msgid "Delete history"
 msgstr "Включить историю заметок"
 
@@ -1878,7 +1855,7 @@ msgstr "Разр"
 
 #: packages/lib/versionInfo.ts:88
 msgid "Device: %s"
-msgstr ""
+msgstr "Устройство: %s"
 
 #: packages/lib/services/interop/Module.ts:61
 msgid "Directory"
@@ -1902,7 +1879,6 @@ msgid "Disable safe mode and restart"
 msgstr "Отключить безопасный режим и перезапустить"
 
 #: packages/app-desktop/gui/MainScreen.tsx:597
-#, fuzzy
 msgid "Disable synchronisation"
 msgstr "Отменить синхронизацию"
 
@@ -2008,7 +1984,6 @@ msgid "Do not ask for confirmation."
 msgstr "Не запрашивать подтверждение."
 
 #: packages/app-cli/app/command-share.ts:66
-#, fuzzy
 msgid "Do not ask for user confirmation."
 msgstr "Не запрашивать подтверждение."
 
@@ -2024,17 +1999,19 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1923
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Сканированный документ: Заголовок шаблона"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
 "Don't allow the share recipient to write to the shared notebook. Valid only "
 "for the `add` subcommand."
 msgstr ""
+"Не разрешать получившему общий доступ, записывать данные в общий блокнот. "
+"Действует только для подкоманды `добавить`."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Больше не показывать это сообщение"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Donate, website"
@@ -2058,7 +2035,6 @@ msgid "Download and install the relevant extension for your browser:"
 msgstr "Скачайте и установите расширение для вашего браузера:"
 
 #: packages/app-desktop/gui/MainScreen.tsx:589
-#, fuzzy
 msgid "Download it now"
 msgstr "Загрузка"
 
@@ -2143,7 +2119,6 @@ msgstr ""
 "Если блокнот не указан - заметки дублируются в текущем блокноте."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
-#, fuzzy
 msgid "Duration: %s"
 msgstr "Ваша версия: %s"
 
@@ -2162,12 +2137,10 @@ msgid "Edit"
 msgstr "Правка"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Markdown"
 msgstr "Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
-#, fuzzy
 msgid "Edit as Rich Text"
 msgstr "Свободный текст"
 
@@ -2329,12 +2302,10 @@ msgid "Enable Fountain syntax support"
 msgstr "Включить поддержку синтаксиса Fountain"
 
 #: packages/lib/models/settings/builtInMetadata.ts:564
-#, fuzzy
 msgid "Enable handwritten transcription"
 msgstr "Включить шифрование"
 
 #: packages/lib/models/settings/builtInMetadata.ts:741
-#, fuzzy
 msgid "Enable HTML-to-Markdown conversion banner"
 msgstr "Включить панель инструментов Markdown"
 
@@ -2433,6 +2404,8 @@ msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
+"Включает замену шаблонов Markdown в текстовом редакторе. Например, если эта "
+"опция включена, ввод **bold** создаст полужирный текст."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
@@ -2500,12 +2473,10 @@ msgid "Enter password"
 msgstr "Введите пароль"
 
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:73
-#, fuzzy
 msgid "Enter the code"
 msgstr "Введите код здесь"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:43
-#, fuzzy
 msgid "Enter the code:"
 msgstr "Введите код здесь"
 
@@ -2534,7 +2505,7 @@ msgstr "Ошибка при открытии заметки в редактор�
 
 #: packages/app-mobile/components/CameraView/Camera/index.tsx:53
 msgid "Error starting camera: %s"
-msgstr ""
+msgstr "Ошибка запуска камеры: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:64
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:85
@@ -2550,8 +2521,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"Ошибка. Пожалуйста, убедитесь, что URL-адрес, имя пользователя, пароль и т."
-"д. верны и что цель синхронизации доступна. Сообщение об ошибке:"
+"Ошибка. Пожалуйста, убедитесь, что URL-адрес, имя пользователя, пароль и "
+"т.д. верны и что цель синхронизации доступна. Сообщение об ошибке:"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:237
 msgid "Errors only"
@@ -2582,12 +2553,10 @@ msgid "Expand %s"
 msgstr "Расширить %s"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
-#, fuzzy
 msgid "Expand all notebooks"
 msgstr "Редактировать блокнот"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
-#, fuzzy
 msgid "Expanded"
 msgstr "Развернуть"
 
@@ -2672,11 +2641,15 @@ msgid ""
 "target is empty or damaged. To override this behaviour disable the fail-safe "
 "in the sync settings."
 msgstr ""
+"Отказоустойчивость: Синхронизация была прервана для предотвращения потери "
+"данных, поскольку целевой объект синхронизации пуст или повреждён. Чтобы "
+"изменить это поведение, отключите отказоустойчивость в настройках "
+"синхронизации."
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
 msgid "Failed to connect to your account. Please try again."
-msgstr ""
+msgstr "Не удалось подключиться к вашей учётной записи. Попробуйте ещё раз."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -2719,7 +2692,7 @@ msgstr "Найти: "
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:215
 msgid "Finishes recording"
-msgstr ""
+msgstr "Завершает запись"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
@@ -2756,7 +2729,7 @@ msgstr "Фокус на названии"
 
 #: packages/app-cli/app/command-share.ts:139
 msgid "Folder \"%s\" is shared with:"
-msgstr ""
+msgstr "Папка «%s» доступна для:"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
 msgid "Follow link"
@@ -2839,7 +2812,7 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr ""
+msgstr "Получить предложение"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
@@ -2862,7 +2835,7 @@ msgstr ""
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
 msgid "Glossary:"
-msgstr ""
+msgstr "Глоссарий:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:13
 msgid "go"
@@ -2952,7 +2925,6 @@ msgid "Hide password"
 msgstr "Скрыть пароль"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:24
-#, fuzzy
 msgid "Hides warning"
 msgstr "Предупреждение"
 
@@ -3007,6 +2979,9 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Если прикрепленное изображение находится на отдельной строке и за ним "
+"следует пустая строка, оно будет отображено сразу под его исходным кодом "
+"Markdown."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
@@ -3177,7 +3152,6 @@ msgid "In: %s"
 msgstr "В: %s"
 
 #: packages/app-cli/app/command-share.ts:170
-#, fuzzy
 msgid "Incoming shares:"
 msgstr "Поступающие ресурсы"
 
@@ -3277,7 +3251,7 @@ msgstr "Неверная команда: \"%s\""
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:373
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
-msgstr ""
+msgstr "Неверный формат. Например: 48.8581372, 2.2926735"
 
 #: packages/lib/models/Setting.ts:744
 msgid "Invalid option value: \"%s\". Possible values are: %s."
@@ -3290,12 +3264,12 @@ msgstr "Неверный пароль"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:24
 msgid "iOS version: %s"
-msgstr "Версия iOS: %s"
+msgstr "iOS версия: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:60
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:70
 msgid "Italic"
-msgstr "Курсивный"
+msgstr "Курсив"
 
 #: packages/lib/services/ReportService.ts:194
 msgid "Item \"%s\" could not be downloaded: %s"
@@ -3315,7 +3289,6 @@ msgid "Items that cannot be synchronised"
 msgstr "Элементы, которые не могут быть синхронизированы"
 
 #: packages/lib/services/ReportService.ts:294
-#, fuzzy
 msgid "Items with error: %s"
 msgstr "Последняя ошибка: %s"
 
@@ -3390,7 +3363,6 @@ msgid "Joplin Server"
 msgstr "Сервер Joplin"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
-#, fuzzy
 msgid "Joplin Server Business"
 msgstr "Имя пользователя Joplin Server"
 
@@ -3400,7 +3372,6 @@ msgstr "E-mail сервера Joplin"
 
 #: packages/app-desktop/gui/Root.tsx:164
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:60
-#, fuzzy
 msgid "Joplin Server Login"
 msgstr "URL сервера Joplin"
 
@@ -3415,7 +3386,7 @@ msgstr "URL сервера Joplin"
 
 #: packages/server/src/utils/saml.ts:54
 msgid "Joplin SSO Authentication"
-msgstr ""
+msgstr "Аутентификация SSO в Joplin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
@@ -3481,7 +3452,7 @@ msgstr "Язык, формат даты"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1257
 msgid "Large"
-msgstr ""
+msgstr "Большой"
 
 #: packages/lib/Synchronizer.ts:208
 msgid "Last error: %s"
@@ -3553,7 +3524,6 @@ msgid "Link"
 msgstr "Ссылка"
 
 #: packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.ts:21
-#, fuzzy
 msgid "Link created!"
 msgid_plural "Links created!"
 msgstr[0] "Текст ссылки"
@@ -3576,12 +3546,10 @@ msgid "Link text"
 msgstr "Текст ссылки"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.ts:13
-#, fuzzy
 msgid "Link to note..."
 msgstr "Переместить в блокнот..."
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:158
-#, fuzzy
 msgid "Links"
 msgstr "Ссылка"
 
@@ -3625,7 +3593,6 @@ msgstr "Журнал"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:39
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:69
-#, fuzzy
 msgid "Log in with your web browser"
 msgstr "Войти с Dropbox"
 
@@ -3718,13 +3685,12 @@ msgid "Markdown editor"
 msgstr "Редактор Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1473
-#, fuzzy
 msgid "Markdown editor: Render images"
 msgstr "Редактор Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1463
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Редактор Markdown: отображать разметку в редакторе"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3784,7 +3750,7 @@ msgstr "Медиаплеер, математические формулы, ди�
 
 #: packages/lib/models/settings/builtInMetadata.ts:1256
 msgid "Medium"
-msgstr ""
+msgstr "Средний"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
@@ -3803,7 +3769,6 @@ msgid "Missing Master Keys"
 msgstr "Недостающие мастер-ключи"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:121
-#, fuzzy
 msgid "Missing permission to record audio."
 msgstr "Отсутствует разрешение для камеры"
 
@@ -3841,7 +3806,6 @@ msgstr ""
 "плагина."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:588
-#, fuzzy
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "Переместить %d заметок в блокнот \"%s\"?"
@@ -3849,13 +3813,12 @@ msgstr[1] "Переместить %d заметок в блокнот \"%s\"?"
 msgstr[2] "Переместить %d заметок в блокнот \"%s\"?"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
-#, fuzzy
 msgid "Move down"
 msgstr "Закрыть выпадающий список"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:74
 msgid "Move left"
-msgstr ""
+msgstr "Сместить влево"
 
 #: packages/app-cli/app/command-rmbook.ts:37
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:20
@@ -3872,7 +3835,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:75
 msgid "Move right"
-msgstr ""
+msgstr "Сместить вправо"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.ts:14
 msgid "Move to notebook"
@@ -3888,7 +3851,7 @@ msgstr "Переместить в блокнот..."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:72
 msgid "Move up"
-msgstr ""
+msgstr "Сместить вверх"
 
 #: packages/app-cli/app/command-mv.ts:14
 msgid "Moves the given <item> to [notebook]"
@@ -3920,7 +3883,6 @@ msgid "New invitations"
 msgstr "Новые приглашения"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:62
-#, fuzzy
 msgid ""
 "New model available\n"
 "A new voice typing model is available. Do you want to download it?"
@@ -3952,7 +3914,6 @@ msgstr ""
 "Будет создан новый блокнот \"%s\" и файл \"%s\" будет импортирован в него"
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
-#, fuzzy
 msgid "New notebook title"
 msgstr "Название блокнота:"
 
@@ -3961,7 +3922,6 @@ msgid "New photo"
 msgstr "Новое фото"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
-#, fuzzy
 msgid "New profile"
 msgstr "Переключение профиля"
 
@@ -3987,7 +3947,6 @@ msgid "next"
 msgstr "далее"
 
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:92
-#, fuzzy
 msgid "Next"
 msgstr "Nextcloud"
 
@@ -4056,7 +4015,6 @@ msgid "No results"
 msgstr "Нет данных"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
-#, fuzzy
 msgid "No revision selected"
 msgstr "Вкладка не выбрана"
 
@@ -4073,7 +4031,6 @@ msgid "No tab selected"
 msgstr "Вкладка не выбрана"
 
 #: packages/app-mobile/components/TagEditor.tsx:167
-#, fuzzy
 msgid "No tags"
 msgstr "Новые метки:"
 
@@ -4106,7 +4063,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:165
 msgid "Not checked"
-msgstr ""
+msgstr "Не проверено"
 
 #: packages/lib/models/Resource.ts:407
 msgid "Not downloaded"
@@ -4163,7 +4120,6 @@ msgid "Note has been saved."
 msgstr "Заметка сохранена."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
-#, fuzzy
 msgid "Note history"
 msgstr "История заметок"
 
@@ -4174,7 +4130,6 @@ msgid "Note History"
 msgstr "История заметок"
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
-#, fuzzy
 msgid "Note history has been deleted."
 msgstr "Заметка сохранена."
 
@@ -4198,7 +4153,6 @@ msgid "Note list style"
 msgstr "Стиль списка заметок"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
-#, fuzzy
 msgid "Note preview"
 msgstr "Название заметки"
 
@@ -4215,7 +4169,6 @@ msgstr "Название заметки"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:8
 #: packages/app-desktop/gui/NoteTextViewer.tsx:244
-#, fuzzy
 msgid "Note viewer"
 msgstr "Название заметки"
 
@@ -4279,7 +4232,6 @@ msgid "Notes can only be created within a notebook."
 msgstr "Заметки могут быть созданы только в блокноте."
 
 #: packages/app-desktop/gui/PopupNotification/PopupNotificationList.tsx:32
-#, fuzzy
 msgid "Notifications"
 msgstr "Местоположение"
 
@@ -4296,7 +4248,6 @@ msgid "OCR: Language data URL or path"
 msgstr "OCR: URL-адрес или путь к языковым данным"
 
 #: packages/lib/models/settings/builtInMetadata.ts:604
-#, fuzzy
 msgid "OCR: Search in extracted content"
 msgstr "Поиск во всех заметках"
 
@@ -4387,12 +4338,10 @@ msgid "Open %s"
 msgstr "Открыть %s"
 
 #: packages/app-desktop/commands/startExternalEditing.ts:10
-#, fuzzy
 msgid "Open in external editor"
 msgstr "Редактировать во внешнем редакторе"
 
 #: packages/app-desktop/commands/openNoteInNewWindow.ts:10
-#, fuzzy
 msgid "Open in new window"
 msgstr "Редактировать в новом окне"
 
@@ -4401,7 +4350,6 @@ msgid "Open it"
 msgstr "Откройте"
 
 #: packages/app-desktop/bridge.ts:557
-#, fuzzy
 msgid "Open log"
 msgstr "Открыть %s"
 
@@ -4411,7 +4359,7 @@ msgstr "Открыть программу просмотра PDF-файлов"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
-msgstr ""
+msgstr "Открыть основной экземпляр приложения..."
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -4419,7 +4367,7 @@ msgstr "Открыть директорию с настройками"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
-msgstr ""
+msgstr "Открыть вторичный экземпляр приложения..."
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:149
 msgid "Open settings"
@@ -4487,11 +4435,11 @@ msgstr "Размер страницы при экспорте в PDF"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel \"%s\" is visible"
-msgstr ""
+msgstr "Панель \"%s\" отображается"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:32
 msgid "Panel %s is hidden"
-msgstr ""
+msgstr "Панель %s скрыта"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 msgid "Password"
@@ -4533,7 +4481,6 @@ msgid "PDF File"
 msgstr "Файл PDF"
 
 #: packages/lib/utils/joplinCloud/index.ts:448
-#, fuzzy
 msgid "Per user. Minimum of 2 users."
 msgstr "На каждого пользователя. Минимум %d пользователей."
 
@@ -4556,7 +4503,6 @@ msgstr ""
 "Все заметки и вложенные блокноты также будут безвозвратно удалены."
 
 #: packages/lib/models/Note.ts:949
-#, fuzzy
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Удалить безвозвратно эти %d заметки?"
@@ -4573,7 +4519,7 @@ msgstr "Необходимы разрешения"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
 msgid "Photo %d"
-msgstr ""
+msgstr "Фото %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
@@ -4622,7 +4568,7 @@ msgstr ""
 
 #: packages/lib/services/share/ShareService.ts:344
 msgid "Please provide the recipient email"
-msgstr ""
+msgstr "Пожалуйста, укажите адрес электронной почты получателя"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:166
 msgid "Please record your voice..."
@@ -4666,6 +4612,7 @@ msgstr ""
 #: packages/server/src/utils/saml.ts:57
 msgid "Please wait while we load your organisation sign-in page..."
 msgstr ""
+"Пожалуйста, подождите, пока мы загрузим страницу входа вашей организации..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:309
@@ -4729,7 +4676,7 @@ msgstr "Возможные значения: %s."
 
 #: packages/app-cli/app/command-share.ts:67
 msgid "Prefer JSON output."
-msgstr ""
+msgstr "Предпочитать вывод в формате JSON."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
 msgid "Preferences"
@@ -4784,7 +4731,6 @@ msgid "Previous match"
 msgstr "Предыдущее совпадение"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1145
-#, fuzzy
 msgid "Previous versions"
 msgstr "Предыдущая версия заметки"
 
@@ -4870,7 +4816,6 @@ msgid "Public-private key pair:"
 msgstr "Пара открытый-закрытый ключ:"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:195
-#, fuzzy
 msgid "Publish Note"
 msgstr "Публиковать заметку"
 
@@ -4889,7 +4834,7 @@ msgstr "Опубликовать заметки в Интернет"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1163
 msgid "Publish/unpublish"
-msgstr ""
+msgstr "Опубликовать/Отменить публикацию"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4923,7 +4868,6 @@ msgid "Re-upload local data to sync target"
 msgstr "Перегрузка локальных данных в цель синхронизации"
 
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:19
-#, fuzzy
 msgid "Read more"
 msgstr "Узнать больше"
 
@@ -4936,7 +4880,6 @@ msgid "Read time: %s min"
 msgstr "Продолжительность чтения: %s мин"
 
 #: packages/app-cli/app/command-batch.ts:45
-#, fuzzy
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr "Команда \"%s\" доступна только в режиме GUI"
 
@@ -4957,7 +4900,6 @@ msgid "Recipients:"
 msgstr "Получатели:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
-#, fuzzy
 msgid "Recognize handwritten image"
 msgstr "Изменение размера больших изображений:"
 
@@ -4971,15 +4913,13 @@ msgstr "Рекомендуемые плагины"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:91
 msgid "Record audio"
-msgstr ""
+msgstr "Запись аудио"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:78
-#, fuzzy
 msgid "Recording"
 msgstr "Заголовок"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:231
-#, fuzzy
 msgid "Recording..."
 msgstr "Загрузка..."
 
@@ -5007,7 +4947,6 @@ msgid "Reject"
 msgstr "Отказаться"
 
 #: packages/app-cli/app/command-share.ts:229
-#, fuzzy
 msgid "Rejecting share..."
 msgstr "Создание отчета…"
 
@@ -5016,7 +4955,6 @@ msgid "Remove"
 msgstr "Удалить"
 
 #: packages/app-mobile/components/TagEditor.tsx:129
-#, fuzzy
 msgid "Remove %s"
 msgstr "Удалить"
 
@@ -5033,12 +4971,10 @@ msgid "Remove this search from the sidebar?"
 msgstr "Удалить этот поиск из боковой панели?"
 
 #: packages/app-cli/app/command-share.ts:112
-#, fuzzy
 msgid "Removed %s from share."
 msgstr "Удалить %s из общего ресурса"
 
 #: packages/app-mobile/components/TagEditor.tsx:231
-#, fuzzy
 msgid "Removed tag: %s"
 msgstr "Переименовать метку:"
 
@@ -5061,7 +4997,7 @@ msgstr "Переименовывает элемент <item> (заметку и�
 
 #: packages/lib/models/settings/builtInMetadata.ts:1464
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Отображает разметку на всех строках, где нет курсора."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
@@ -5219,7 +5155,6 @@ msgid "Reverses the sorting order."
 msgstr "Меняет порядок сортировки."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
-#, fuzzy
 msgid "Revision:"
 msgstr "Изменения: %s (%s)"
 
@@ -5314,7 +5249,6 @@ msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о географическом местоположении в заметках"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
-#, fuzzy
 msgid "Scan notebook"
 msgstr "Выбор блокнота"
 
@@ -5324,7 +5258,7 @@ msgstr "Сканировать код"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1260
 msgid "Scrollbar size"
-msgstr ""
+msgstr "Размер полосы прокрутки"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:138
@@ -5365,7 +5299,6 @@ msgid "Search shown"
 msgstr "Поиск показан"
 
 #: packages/app-mobile/components/TagEditor.tsx:273
-#, fuzzy
 msgid "Search tags"
 msgstr "Результаты поиска"
 
@@ -5402,7 +5335,6 @@ msgid "Select"
 msgstr "Выбрать"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
-#, fuzzy
 msgid "Select a revision..."
 msgstr "Выбрать эмодзи..."
 
@@ -5420,7 +5352,6 @@ msgid "Select file..."
 msgstr "Выбрать файл..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
-#, fuzzy
 msgid "Select notebook"
 msgstr "Выбор блокнота"
 
@@ -5429,7 +5360,6 @@ msgid "Select parent notebook"
 msgstr "Выбрать родительский блокнот"
 
 #: packages/app-mobile/components/ComboBox.tsx:367
-#, fuzzy
 msgid "Selected: %s"
 msgstr "Создано: %s"
 
@@ -5443,7 +5373,7 @@ msgstr "Выбор блокнота"
 
 #: packages/lib/utils/joplinCloud/index.ts:246
 msgid "Self-hosted"
-msgstr ""
+msgstr "Собственный сервер"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
 msgid "Send bug report"
@@ -5550,6 +5480,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
+"Предоставляет или отменяет доступ к указанному [блокноту] для "
+"[пользователь]. Требуется Joplin Cloud или Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5636,7 +5568,6 @@ msgid "Sidebar"
 msgstr "Боковая панель"
 
 #: packages/app-desktop/gui/JoplinCloudSignUpCallToAction.tsx:15
-#, fuzzy
 msgid "Sign up to Joplin Cloud"
 msgstr "Войти в Joplin Cloud."
 
@@ -5662,7 +5593,7 @@ msgstr "Пропущено: %d."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1255
 msgid "Small"
-msgstr ""
+msgstr "Маленький"
 
 #: packages/lib/models/settings/builtInMetadata.ts:57
 msgid "Solarised Dark"
@@ -5742,7 +5673,6 @@ msgid "Source"
 msgstr "Источник"
 
 #: packages/lib/utils/joplinCloud/index.ts:253
-#, fuzzy
 msgid "Source code available"
 msgstr "Нет доступных обновлений"
 
@@ -5783,7 +5713,7 @@ msgstr "Запускать приложение свернутым в трее"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 msgid "Start recording"
-msgstr ""
+msgstr "Начать запись"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
@@ -5887,7 +5817,6 @@ msgid "Subscript"
 msgstr "Подписка"
 
 #: packages/app-desktop/gui/PopupNotification/NotificationItem.tsx:16
-#, fuzzy
 msgid "Success"
 msgstr "Ключ доступа S3"
 
@@ -5896,7 +5825,6 @@ msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Успешно! Синхронизация настроена правильно."
 
 #: packages/app-desktop/gui/InlineCombobox.tsx:182
-#, fuzzy
 msgid "Suggestions"
 msgstr "Нет вариантов"
 
@@ -5950,7 +5878,6 @@ msgid "Switch to the legacy editor"
 msgstr "Переключение на старый редактор"
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:52
-#, fuzzy
 msgid "Switch to the new editor"
 msgstr "Переключение на старый редактор"
 
@@ -6054,12 +5981,12 @@ msgstr "Синхронизация..."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 msgid "Tab indents"
-msgstr ""
+msgstr "\"Tab\" добавляет отступ"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 #: packages/lib/models/settings/builtInMetadata.ts:781
 msgid "Tab moves focus"
-msgstr ""
+msgstr "\"Tab\" cмещает фокус"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1405
 msgid "Tabloid"
@@ -6252,6 +6179,8 @@ msgid ""
 "The legacy Markdown editor appears to have crashed due to an incompatibility "
 "with a plugin. We recommend using the new editor."
 msgstr ""
+"Старый редактор Markdown, похоже, перестал работать из-за несовместимости с "
+"плагином. Мы рекомендуем использовать новый редактор."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:222
 msgid "The master key has been upgraded successfully!"
@@ -6272,7 +6201,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Заметка “%s” была успешно восстановлена в блокнот “%s”."
 
 #: packages/app-desktop/gui/ConversionNotification/ConversionNotification.tsx:22
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -6379,7 +6307,6 @@ msgid "The Web Clipper needs your authorisation to access your data."
 msgstr "Web Clipper требуется ваше разрешение на доступ к вашим данным."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
-#, fuzzy
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr "Служба веб-клиппера включена и настроена на автоматический запуск."
 
@@ -6514,14 +6441,16 @@ msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Эта функция по умолчанию отключена, вам необходимо включить ее вручную, "
+"включив опцию «Включить рукописную транскрипцию»."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Эта функция доступна только в Joplin Cloud и Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
-msgstr ""
+msgstr "Данный тип изображения не поддерживается системой распознавания."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:298
 msgid ""
@@ -6580,6 +6509,8 @@ msgstr "Эта заметка не имеет предыдущих версий"
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
+"Эта заметка в формате HTML. Для удобства редактирования конвертируйте её в "
+"Markdown."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6674,7 +6605,6 @@ msgstr ""
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
 msgstr ""
@@ -6687,7 +6617,7 @@ msgstr "Для продолжения введите свой мастер-па�
 
 #: packages/app-mobile/components/ComboBox.tsx:569
 msgid "To create a new tag, type the name and press enter."
-msgstr ""
+msgstr "Чтобы создать новый тег, введите имя и нажмите \"Ввод\"."
 
 #: packages/app-cli/app/app-gui.js:465
 msgid "To delete a tag, untag the associated notes."
@@ -6758,7 +6688,6 @@ msgid "to-do: %s"
 msgstr "задача: %s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
-#, fuzzy
 msgid "Toggle all notebooks"
 msgstr "Выбор блокнота"
 
@@ -6779,7 +6708,6 @@ msgid "Toggle editor plugin"
 msgstr "Переключить плагин редактора"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
-#, fuzzy
 msgid "Toggle editor tab key navigation"
 msgstr "Переключить вид редактора"
 
@@ -6808,7 +6736,6 @@ msgid "Toggle own sort order"
 msgstr "Переключение собственного порядка сортировки"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:455
-#, fuzzy
 msgid "Toggle plugin editor"
 msgstr "Переключить редактор"
 
@@ -6830,7 +6757,6 @@ msgid "Token has been copied to the clipboard!"
 msgstr "Токен скопирован в буфер обмена!"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
-#, fuzzy
 msgid "Toolbar"
 msgstr "Инструменты"
 
@@ -6883,9 +6809,8 @@ msgstr ""
 "@имя_блокнота, либо введите : для поиска команд."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:706
-#, fuzzy
 msgid "Type a note title to search for it."
-msgstr "Введите новые метки или выберите из списка"
+msgstr "Введите новые метки или выберите из списка."
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Type: %s."
@@ -6901,7 +6826,7 @@ msgstr "Невозможно поделиться данными журнала.
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
-msgstr ""
+msgstr "Не отмечено"
 
 #: packages/lib/models/settings/builtInMetadata.ts:689
 msgid "Uncompleted to-dos on top"
@@ -6952,14 +6877,12 @@ msgid "Unordered list"
 msgstr "Неупорядоченный список"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
-#, fuzzy
 msgid "Unpublish"
-msgstr "Снять публикацию"
+msgstr "Отменить публикацию"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
-#, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Снять публикацию"
+msgstr "Отменить публикацию \"%s\""
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
@@ -6974,6 +6897,8 @@ msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
+"Отменить общий доступ к блокноту «%s»? Это может привести к потере доступа к "
+"блокноту другими пользователями."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
 msgid ""
@@ -7078,7 +7003,6 @@ msgid "Upgrade the sync target to the latest version."
 msgstr "Обновить цель синхронизации до последней версии."
 
 #: packages/app-mobile/components/CameraView/CameraView.web.tsx:45
-#, fuzzy
 msgid "Upload photo"
 msgstr "Сделать фото"
 
@@ -7210,12 +7134,10 @@ msgid "Viewer"
 msgstr "Программа просмотра"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1238
-#, fuzzy
 msgid "Viewer and Rich Text Editor font family"
 msgstr "Семейство шрифтов редактора"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1160
-#, fuzzy
 msgid "Viewer font size"
 msgstr "Размер шрифта редактора"
 
@@ -7225,16 +7147,15 @@ msgstr "Vim"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:231
 msgid "Voice recorder"
-msgstr ""
+msgstr "Запись голоса"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1884
 msgid "Voice typing language files (URL)"
 msgstr "Языковые файлы голосового набора (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1912
-#, fuzzy
 msgid "Voice typing: Glossary"
-msgstr "Голосовой набор..."
+msgstr "Голосовой набор текста: Глоссарий"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1302
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
@@ -7250,9 +7171,8 @@ msgid "Waiting for authorisation..."
 msgstr "Ожидание авторизации..."
 
 #: packages/app-cli/app/command-share.ts:175
-#, fuzzy
 msgid "Waiting: Notebook %s from %s"
-msgstr "Блокнот: %s (%s)"
+msgstr "Ожидание: Блокнот %s из %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
@@ -7399,17 +7319,19 @@ msgstr "Вы вошли в систему Joplin Cloud, теперь вы мож
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
 msgid "You are now logged into your account."
-msgstr ""
+msgstr "Теперь вы вошли в свою учетную запись."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr ""
+msgstr "Теперь вы используете последнюю версию редактора Markdown."
 
 #: packages/app-desktop/gui/MainScreen.tsx:588
 msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
+"Вы используете версию Joplin от Intel на процессоре Apple Silicon. Загрузите "
+"версию от Apple Silicon для повышения производительности."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
