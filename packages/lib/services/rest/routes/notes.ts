@@ -560,7 +560,7 @@ export default async function(request: Request, id: string = null, link: string 
 
 	if (request.method === RequestMethod.DELETE) {
 		if (link && link === 'revisions') {
-			await Revision.deleteHistoryForNote(id, { sourceDescription: 'api/notes/revisions DELETE' }, true);
+			await Revision.deleteHistoryForNote(id, { sourceDescription: 'api/notes/revisions DELETE' });
 			return;
 		} else if (link) {
 			throw new ErrorNotFound();

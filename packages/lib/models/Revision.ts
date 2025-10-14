@@ -376,7 +376,7 @@ export default class Revision extends BaseItem {
 		}
 	}
 
-	public static async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions, resetItemChanges = false) {
+	public static async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
 		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
 
 		const revisions: RevisionEntity[] = await this.modelSelectAll(
@@ -386,13 +386,11 @@ export default class Revision extends BaseItem {
 
 		await this.batchDelete(revisions.map(item => item.id), options);
 
-		if (resetItemChanges) {
-			// This ensures that any new revisions created upon revision collection do not include contents which were present prior to
-			// triggering the deletion
-			for (const noteId of ids) {
-				await ItemChange.updateOldNoteContent(noteId, null);
-				RevisionService.instance().removeChangedSinceCollection(noteId);
-			}
+		// Clear any cached content in the item_changes table and reset the state of the note in the revision service, to ensure that any new revisions created
+		// upon revision collection do not include contents which were present prior to triggering the deletion
+		for (const noteId of ids) {
+			await ItemChange.resetOldNoteContent(noteId);
+			RevisionService.instance().removeChangedSinceCollection(noteId);
 		}
 	}
 

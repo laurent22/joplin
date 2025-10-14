@@ -150,22 +150,28 @@ export default class ItemChange extends BaseModel {
 		`, [changeId, options.limit]);
 	}
 
-	public static async oldNoteContent(noteId: string): Promise<string> {
-		const row = await this.db().selectOne(`
-			SELECT before_change_item
+	public static async itemChange(itemType: ModelType, itemId: string): Promise<ItemChangeEntity> {
+		return await this.db().selectOne(`
+			SELECT item_type, item_id, type, source, created_time, before_change_item
 			FROM item_changes
 			WHERE item_type = ? AND item_id = ?
 			ORDER BY created_time DESC
 			LIMIT 1
-		`, [ModelType.Note, noteId]);
-		return row && row.before_change_item ? row.before_change_item : null;
+		`, [itemType, itemId]);
 	}
 
-	public static async updateOldNoteContent(noteId: string, beforeChangeItemJson: string) {
-		const beforeChangeItem = beforeChangeItemJson ? beforeChangeItemJson : '';
-		return this.db().exec(`
-			UPDATE item_changes SET before_change_item = ? WHERE item_type = ? AND item_id = ?
-		`, [beforeChangeItem, ModelType.Note, noteId]);
+	public static async oldNoteContent(noteId: string): Promise<string> {
+		const itemChange = await this.itemChange(ModelType.Note, noteId);
+		return itemChange && itemChange.before_change_item ? itemChange.before_change_item : null;
+	}
+
+	public static async resetOldNoteContent(noteId: string) {
+		const itemChange = await this.itemChange(ModelType.Note, noteId);
+
+		// Only create a new item change if there is an existing item change and it has the before_change_item populated on it
+		if (itemChange && itemChange.before_change_item) {
+			await this.add(itemChange.item_type, itemChange.item_id, itemChange.type);
+		}
 	}
 
 }
