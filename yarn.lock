@@ -9276,7 +9276,7 @@ __metadata:
     events: "npm:3.3.0"
     expo: "npm:53.0.19"
     expo-av: "npm:15.1.7"
-    expo-camera: "npm:16.1.10"
+    expo-camera: "npm:16.1.11"
     expo-local-authentication: "npm:16.0.5"
     fast-deep-equal: "npm:3.1.3"
     fs-extra: "npm:11.2.0"
@@ -26222,9 +26222,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-camera@npm:16.1.10":
-  version: 16.1.10
-  resolution: "expo-camera@npm:16.1.10"
+"expo-camera@npm:16.1.11":
+  version: 16.1.11
+  resolution: "expo-camera@npm:16.1.11"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -26235,7 +26235,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-web:
       optional: true
-  checksum: 10/40cabe31c6567fe4e97aa9420a7958a0103bb35a9563c70a27052a1674aba3c2e21ec9605df7d77e6fe9af49adafe0d09a71b2513c8ae8e1e4a347ab21cbacbb
+  checksum: 10/8e44f73a4239b52ba9a5784288d3d2c1d53882b85afad0b75947984929f9a25cea997c99e44e81751122c8b1fd7e65dccd43c3609065c5944067ce6ba50a71f0
   languageName: node
   linkType: hard
 
