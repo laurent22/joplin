@@ -41,7 +41,7 @@
     "crypto-browserify": "3.12.1",
     "deprecated-react-native-prop-types": "5.0.0",
     "events": "3.3.0",
-    "expo": "53.0.19",
+    "expo": "53.0.20",
     "expo-av": "15.1.7",
     "expo-camera": "16.1.11",
     "expo-local-authentication": "16.0.5",

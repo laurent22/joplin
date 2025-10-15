@@ -9274,7 +9274,7 @@ __metadata:
     deprecated-react-native-prop-types: "npm:5.0.0"
     esbuild: "npm:0.25.6"
     events: "npm:3.3.0"
-    expo: "npm:53.0.19"
+    expo: "npm:53.0.20"
     expo-av: "npm:15.1.7"
     expo-camera: "npm:16.1.11"
     expo-local-authentication: "npm:16.0.5"
@@ -26312,18 +26312,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-core@npm:2.4.2":
-  version: 2.4.2
-  resolution: "expo-modules-core@npm:2.4.2"
+"expo-modules-core@npm:2.5.0":
+  version: 2.5.0
+  resolution: "expo-modules-core@npm:2.5.0"
   dependencies:
     invariant: "npm:^2.2.4"
-  checksum: 10/c8992dcd7e9a3124c245beb65333add2c1955200724ac5b0a3fc5214f8da2b7779f6f88474b284be5dc9bc4030369c2189ea14200b97854758e086c0ee10c6bf
+  checksum: 10/ad34d71571bcfbff166da47fa3847ab03886b691b80079d9a3d111e5061cccbaa785c55eb48451ce7d300ce725d32f844492b0109d069dc89f70864b9de2c1c6
   languageName: node
   linkType: hard
 
-"expo@npm:53.0.19":
-  version: 53.0.19
-  resolution: "expo@npm:53.0.19"
+"expo@npm:53.0.20":
+  version: 53.0.20
+  resolution: "expo@npm:53.0.20"
   dependencies:
     "@babel/runtime": "npm:^7.20.0"
     "@expo/cli": "npm:0.24.20"
@@ -26339,7 +26339,7 @@ __metadata:
     expo-font: "npm:~13.3.2"
     expo-keep-awake: "npm:~14.1.4"
     expo-modules-autolinking: "npm:2.1.14"
-    expo-modules-core: "npm:2.4.2"
+    expo-modules-core: "npm:2.5.0"
     react-native-edge-to-edge: "npm:1.6.0"
     whatwg-url-without-unicode: "npm:8.0.0-3"
   peerDependencies:
@@ -26359,7 +26359,7 @@ __metadata:
     expo: bin/cli
     expo-modules-autolinking: bin/autolinking
     fingerprint: bin/fingerprint
-  checksum: 10/e48538498158176e2af9ed3105cd7547f47dffd50045c3ac8d61181cd93cafc44d56107e7bfdcc0de849ce44b0155fd91949989151805d03ae4ad6c2e66c7561
+  checksum: 10/73cb5ad2e3eb8927390ff685b3f53b0a496fdaa99ec73f6cc3faa732534ad5ec0b5378abdf3da2d0c692397b758eadeed1eabad7f412f0b7576c29f2518e6f93
   languageName: node
   linkType: hard
 
