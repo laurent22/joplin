@@ -25,7 +25,7 @@
     "@types/jsdom": "21.1.7",
     "@types/markdown-it": "13.0.9",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.118",
+    "@types/node": "18.19.119",
     "@types/node-rsa": "1.1.4",
     "@types/react": "18.3.23",
     "@types/uuid": "10.0.0",
