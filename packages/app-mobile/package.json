@@ -68,7 +68,7 @@
     "react-native-rsa-native": "2.0.5",
     "react-native-safe-area-context": "5.4.1",
     "react-native-securerandom": "1.0.1",
-    "react-native-share": "12.0.11",
+    "react-native-share": "12.1.0",
     "react-native-sqlite-storage": "6.0.1",
     "react-native-svg": "15.13.0",
     "react-native-url-polyfill": "2.0.0",
