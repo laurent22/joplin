@@ -59,6 +59,6 @@
     "prosemirror-state": "1.4.3",
     "prosemirror-tables": "1.7.1",
     "prosemirror-transform": "1.10.4",
-    "prosemirror-view": "1.40.0"
+    "prosemirror-view": "1.40.1"
   }
 }

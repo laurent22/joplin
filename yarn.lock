@@ -9426,7 +9426,7 @@ __metadata:
     prosemirror-state: "npm:1.4.3"
     prosemirror-tables: "npm:1.7.1"
     prosemirror-transform: "npm:1.10.4"
-    prosemirror-view: "npm:1.40.0"
+    prosemirror-view: "npm:1.40.1"
     ts-jest: "npm:29.3.4"
     typescript: "npm:5.8.3"
   languageName: unknown
@@ -40929,7 +40929,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-view@npm:1.40.0, prosemirror-view@npm:^1.0.0, prosemirror-view@npm:^1.1.0, prosemirror-view@npm:^1.27.0, prosemirror-view@npm:^1.31.0, prosemirror-view@npm:^1.33.6, prosemirror-view@npm:^1.39.1":
+"prosemirror-view@npm:1.40.1":
+  version: 1.40.1
+  resolution: "prosemirror-view@npm:1.40.1"
+  dependencies:
+    prosemirror-model: "npm:^1.20.0"
+    prosemirror-state: "npm:^1.0.0"
+    prosemirror-transform: "npm:^1.1.0"
+  checksum: 10/d491194a399e70eca624702aa8f3ca114ad262f3354d7d7f9ef87de0e664f660c44203433b2b9e81d241a679fd9e5bf47db2338d52dfa4f28651ff2cb096f7a2
+  languageName: node
+  linkType: hard
+
+"prosemirror-view@npm:^1.0.0, prosemirror-view@npm:^1.1.0, prosemirror-view@npm:^1.27.0, prosemirror-view@npm:^1.31.0, prosemirror-view@npm:^1.33.6, prosemirror-view@npm:^1.39.1":
   version: 1.40.0
   resolution: "prosemirror-view@npm:1.40.0"
   dependencies:
