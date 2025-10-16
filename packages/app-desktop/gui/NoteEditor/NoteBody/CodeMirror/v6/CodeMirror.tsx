@@ -31,6 +31,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventManager';
+import useSyncEditorValue from './utils/useSyncEditorValue';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -167,9 +168,8 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			},
 			scrollTo: (options: ScrollOptions) => {
 				if (options.type === ScrollOptionTypes.Hash) {
-					if (!webviewRef.current) return;
 					const hash: string = options.value;
-					webviewRef.current.send('scrollToHash', hash);
+					webviewRef.current?.send('scrollToHash', hash);
 					editorRef.current.jumpToHash(hash);
 				} else if (options.type === ScrollOptionTypes.Percent) {
 					const percent = options.value as number;
@@ -400,15 +400,13 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		props.tabMovesFocus,
 	]);
 
-	// Update the editor's value
-	useEffect(() => {
-		// Include the noteId in the update props to give plugins access
-		// to the current note ID.
-		const updateProps = { noteId: props.noteId };
-		if (editorRef.current?.updateBody(props.content, updateProps)) {
-			editorRef.current?.clearHistory();
-		}
-	}, [props.content, props.noteId]);
+	useSyncEditorValue({
+		content: props.content,
+		visiblePanes: props.visiblePanes,
+		onMessage: props.onMessage,
+		editorRef,
+		noteId: props.noteId,
+	});
 
 	const renderEditor = () => {
 		return (

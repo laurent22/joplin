@@ -16,6 +16,7 @@
     "test": "jest",
     "test-ui": "gulp before-start && playwright test",
     "test-ci": "yarn test",
+    "resolve-sourcemap": "node tools/resolveSourceMap.js",
     "modifyReleaseAssets": "node tools/modifyReleaseAssets.js"
   },
   "repository": {

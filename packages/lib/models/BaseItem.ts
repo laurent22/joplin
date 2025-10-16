@@ -28,6 +28,7 @@ export interface ItemsThatNeedDecryptionResult {
 export interface ItemThatNeedSync {
 	id: string;
 	sync_time: number;
+	remote_item_updated_time: number;
 	type_: ModelType;
 	updated_time: number;
 	encryption_applied: number;
@@ -38,6 +39,11 @@ export interface ItemsThatNeedSyncResult {
 	hasMore: boolean;
 	items: ItemThatNeedSync[];
 	neverSyncedItemIds: string[];
+}
+
+export interface RemoteItemMetadata {
+	item_id: string;
+	updated_time: number;
 }
 
 export interface EncryptedItemsStats {
@@ -199,6 +205,20 @@ export default class BaseItem extends BaseModel {
 		const output = [];
 		for (let i = 0; i < temp.length; i++) {
 			output.push(temp[i].item_id);
+		}
+		return output;
+	}
+
+	public static async remoteItemMetadata(syncTarget: number): Promise<Map<string, RemoteItemMetadata>> {
+		if (!syncTarget) throw new Error('No syncTarget specified');
+		const temp = await this.db().selectAll('SELECT item_id, remote_item_updated_time FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		const output = new Map<string, RemoteItemMetadata>();
+		for (let i = 0; i < temp.length; i++) {
+			const metadata: RemoteItemMetadata = {
+				item_id: temp[i].item_id,
+				updated_time: temp[i].remote_item_updated_time,
+			};
+			output.set(temp[i].item_id, metadata);
 		}
 		return output;
 	}
@@ -751,6 +771,7 @@ export default class BaseItem extends BaseModel {
 
 			if (newLimit > 0) {
 				fieldNames.push('sync_time');
+				fieldNames.push('remote_item_updated_time');
 
 				const sql = sprintf(
 					`
@@ -850,7 +871,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
+	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
@@ -863,22 +884,23 @@ export default class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, itemLocation, syncTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
 			},
 		];
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number) {
-		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime);
+	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0) {
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, remoteItemUpdatedTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async saveSyncDisabled(syncTargetId: number, item: any, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
-		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation);
+		const remoteItemUpdatedTime = 'remote_item_updated_time' in item ? item.remote_item_updated_time : 0;
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
 	}
 

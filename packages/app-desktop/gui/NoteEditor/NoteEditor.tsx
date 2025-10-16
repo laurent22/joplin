@@ -329,13 +329,13 @@ function NoteEditorContent(props: NoteEditorProps) {
 		});
 	}, [formNote, setFormNote, handleProvisionalFlag, props.dispatch]);
 
-	const { scrollWhenReady, clearScrollWhenReady } = useScrollWhenReadyOptions({
+	const { scrollWhenReadyRef, clearScrollWhenReady } = useScrollWhenReadyOptions({
 		noteId: formNote.id,
 		selectedNoteHash: props.selectedNoteHash,
 		lastEditorScrollPercents: props.lastEditorScrollPercents,
 		editorRef,
 	});
-	const onMessage = useMessageHandler(scrollWhenReady, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
+	const onMessage = useMessageHandler(scrollWhenReadyRef, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
 

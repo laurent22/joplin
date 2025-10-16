@@ -71,7 +71,7 @@ dependencies = [
  "rustc-hash",
  "serde",
  "serde_derive",
- "syn 2.0.96",
+ "syn 2.0.106",
 ]
 
 [[package]]
@@ -383,35 +383,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
 
 [[package]]
-name = "onenote-converter"
-version = "0.0.1"
-dependencies = [
- "askama",
- "bytes",
- "color-eyre",
- "console_error_panic_hook",
- "encoding_rs",
- "enum-primitive-derive",
- "itertools",
- "lazy_static",
- "log",
- "mime_guess",
- "num-traits",
- "once_cell",
- "palette",
- "paste",
- "percent-encoding",
- "regex",
- "sanitize-filename",
- "structopt",
- "thiserror",
- "uuid",
- "wasm-bindgen",
- "web-sys",
- "widestring",
-]
-
-[[package]]
 name = "owo-colors"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -439,6 +410,55 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "parser"
+version = "0.0.1"
+dependencies = [
+ "color-eyre",
+ "console_error_panic_hook",
+ "encoding_rs",
+ "enum-primitive-derive",
+ "itertools",
+ "lazy_static",
+ "log",
+ "mime_guess",
+ "num-traits",
+ "once_cell",
+ "palette",
+ "parser-macros",
+ "parser-utils",
+ "percent-encoding",
+ "regex",
+ "sanitize-filename",
+ "structopt",
+ "uuid",
+ "web-sys",
+]
+
+[[package]]
+name = "parser-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.106",
+]
+
+[[package]]
+name = "parser-utils"
+version = "0.1.0"
+dependencies = [
+ "bytes",
+ "lazy_static",
+ "parser-macros",
+ "paste",
+ "thiserror",
+ "uuid",
+ "wasm-bindgen",
+ "web-sys",
+ "widestring",
 ]
 
 [[package]]
@@ -529,18 +549,18 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.93"
+version = "1.0.101"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "60946a68e5f9d28b0dc1c21bb8a97ee7d018a8b322fa57838ba31cc878e22d99"
+checksum = "89ae43fd86e4158d6db51ad8e2b80f313af9cc74f5c0e03ccb87de09998732de"
 dependencies = [
  "unicode-ident",
 ]
 
 [[package]]
 name = "quote"
-version = "1.0.36"
+version = "1.0.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fa76aaf39101c457836aec0ce2316dbdc3ab723cdda1c6bd4e6ad4208acaca7"
+checksum = "ce25767e7b499d1b604768e7cde645d14cc8584231ea6b295e9c9eb22c02e1d1"
 dependencies = [
  "proc-macro2",
 ]
@@ -614,6 +634,36 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
+name = "renderer"
+version = "0.0.1"
+dependencies = [
+ "askama",
+ "bytes",
+ "color-eyre",
+ "console_error_panic_hook",
+ "encoding_rs",
+ "enum-primitive-derive",
+ "itertools",
+ "lazy_static",
+ "log",
+ "mime_guess",
+ "num-traits",
+ "once_cell",
+ "palette",
+ "parser",
+ "parser-utils",
+ "paste",
+ "regex",
+ "sanitize-filename",
+ "structopt",
+ "thiserror",
+ "uuid",
+ "wasm-bindgen",
+ "web-sys",
+ "widestring",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -664,7 +714,7 @@ checksum = "856f046b9400cee3c8c94ed572ecdb752444c24528c035cd35882aad6f492bcb"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.96",
+ "syn 2.0.106",
 ]
 
 [[package]]
@@ -737,9 +787,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.96"
+version = "2.0.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5d0adab1ae378d7f53bdebc67a39f1f151407ef230f0ce2883572f5d8985c80"
+checksum = "ede7c438028d4436d71104916910f5bb611972c5cfd7f89b8300a8186e6fada6"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -772,7 +822,7 @@ checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.96",
+ "syn 2.0.106",
 ]
 
 [[package]]
@@ -804,7 +854,7 @@ checksum = "34704c8d6ebcbc939824180af020566b01a7c01f80641264eba0999f6c2b6be7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.96",
+ "syn 2.0.106",
 ]
 
 [[package]]
@@ -917,7 +967,7 @@ dependencies = [
  "log",
  "proc-macro2",
  "quote",
- "syn 2.0.96",
+ "syn 2.0.106",
  "wasm-bindgen-shared",
 ]
 
@@ -939,7 +989,7 @@ checksum = "8ae87ea40c9f689fc23f209965b6fb8a99ad69aeeb0231408be24920604395de"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.96",
+ "syn 2.0.106",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]

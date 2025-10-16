@@ -6,7 +6,7 @@ import { getEditorApi } from './joplinEditorApiPlugin';
 import showModal from '../utils/dom/showModal';
 import createTextArea from '../utils/dom/createTextArea';
 import createExternalEditorPlugin, { OnHide } from './utils/createExternalEditorPlugin';
-import createFloatingButtonPlugin, { ToolbarPosition } from './utils/createFloatingButtonPlugin';
+import createFloatingButtonPlugin, { ToolbarType } from './utils/createFloatingButtonPlugin';
 
 // See the fold example for more information about
 // writing similar ProseMirror plugins:
@@ -263,7 +263,7 @@ const imagePlugin = [
 	}),
 	createFloatingButtonPlugin('image', [
 		{ label: _ => _('Label'), command: (_node, offset) => editAltTextAt(offset) },
-	], ToolbarPosition.TopRightInside),
+	], ToolbarType.AnchorTopRight),
 ];
 
 export default imagePlugin;

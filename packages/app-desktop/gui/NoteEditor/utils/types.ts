@@ -84,6 +84,13 @@ export { MarkupToHtmlOptions };
 export type MarkupToHtmlHandler = (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 export type HtmlToMarkdownHandler = (markupLanguage: number, html: string, originalCss: string, parseOptions?: ParseOptions)=> Promise<string>;
 
+export interface MessageEvent {
+	channel: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
+	args?: any[];
+}
+export type OnMessage = (event: MessageEvent)=> void;
+
 export interface NoteBodyEditorProps {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
@@ -105,8 +112,7 @@ export interface NoteBodyEditorProps {
 	onChange(event: OnChangeEvent): void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onWillChange(event: any): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onMessage(event: any): void;
+	onMessage: OnMessage;
 	onScroll(event: { percent: number }): void;
 	markupToHtml: MarkupToHtmlHandler;
 	htmlToMarkdown: HtmlToMarkdownHandler;

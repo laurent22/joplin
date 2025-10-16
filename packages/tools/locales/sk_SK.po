@@ -471,7 +471,6 @@ msgstr "Správca"
 msgid "Admin dashboard"
 msgstr "Ovládací panel správcu"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Pokročilé možnosti"
@@ -624,7 +623,6 @@ msgstr ""
 "Ste si istí, že chcete vymazať celú históriu tejto poznámky? Toto sa nedá "
 "vrátiť späť."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Naozaj chcete obnoviť autorizačný token?"
@@ -722,7 +720,6 @@ msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "Overovanie nebolo dokončené (nebol prijatý overovací token)."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Overovací token:"
@@ -766,7 +763,6 @@ msgstr "Automaticky prepínať tému tak, aby zodpovedala systémovej téme"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
@@ -787,6 +783,7 @@ msgstr "Beta"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:65
+#: packages/app-mobile/components/NoteEditor/NoteEditor.test.tsx:101
 msgid "Bold"
 msgstr "Tučné"
 
@@ -838,11 +835,9 @@ msgstr "Môže prezerať a upravovať"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/DialogButtonRow.tsx:79
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
-#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/PromptDialog.tsx:297
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
@@ -1056,13 +1051,11 @@ msgstr "Prebieha kontrola... Čakajte prosím."
 msgid "Choose an option"
 msgstr "Vyberte možnosť"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
-#: packages/app-desktop/gui/PromptDialog.min.js:256
 #: packages/app-desktop/gui/PromptDialog.tsx:304
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
 #: packages/app-mobile/components/screens/SearchScreen/index.tsx:137
@@ -1079,7 +1072,6 @@ msgstr "Zrušiť budík"
 msgid "Clear search"
 msgstr "Vyčistiť vyhľadávanie"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1205,9 +1197,9 @@ msgstr "Blížiace sa budíky"
 #: packages/lib/models/settings/builtInMetadata.ts:1582
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Čiarkou oddelený zoznam ciest k priečinkom, z ktorých sa majú načítať "
 "certifikáty, alebo cesta k jednotlivým súborom cert. Napríklad: /moj/"
@@ -1251,7 +1243,6 @@ msgid "Complete to-do"
 msgstr "Dokončiť úlohu"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Dokončené"
@@ -1429,7 +1420,6 @@ msgstr[2] "Kopírovať zdieľateľné odkazy"
 msgid "Copy to clipboard"
 msgstr "Kopírovať do schránky"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Kopírovať token"
@@ -1512,7 +1502,6 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Nepodarilo sa overiť vašu totožnosť: %s"
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/gui/PromptDialog.tsx:283
 msgid "Create"
 msgstr "Vytvoriť"
@@ -1547,7 +1536,6 @@ msgid "Create user"
 msgstr "Vytvoriť používateľa"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Vytvorené"
@@ -1573,7 +1561,6 @@ msgid "Created: "
 msgstr "Vytvorené: "
 
 #: packages/app-cli/app/command-import.ts:54
-#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Vytvorené: %d."
@@ -1889,7 +1876,6 @@ msgstr "Zakázať núdzový režim a reštartovať"
 msgid "Disable synchronisation"
 msgstr "Vypnúť synchronizáciu"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Zakázať službu Web Clipper"
@@ -2043,7 +2029,6 @@ msgstr "Hotovo"
 msgid "Download"
 msgstr "Stiahnuť"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Stiahnite a nainštalujte príslušné rozšírenie pre váš prehliadač:"
@@ -2392,7 +2377,6 @@ msgstr "Povoliť podporu typografov"
 msgid "Enable video player"
 msgstr "Povoliť prehrávač videa"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Povoliť službu Web Clipper"
@@ -2590,6 +2574,7 @@ msgstr "Exportovať"
 msgid "Export all"
 msgstr "Exportovať všetko"
 
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.tsx:38
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:20
 msgid "Export all notes as JEX"
 msgstr "Exportovať všetky poznámky ako JEX"
@@ -2610,6 +2595,7 @@ msgstr "Exportovať záznam o vymazaní"
 msgid "Export profile"
 msgstr "Exportovať profil"
 
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.tsx:42
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:70
 msgid "Exported successfully!"
 msgstr "Úspešne exportované!"
@@ -2718,7 +2704,6 @@ msgstr "Nájsť: "
 msgid "Finishes recording"
 msgstr "Ukončí nahrávanie"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Rozšírenie Firefoxu"
@@ -2794,7 +2779,6 @@ msgid "Forward"
 msgstr "Vpred"
 
 #: packages/app-cli/app/command-import.ts:53
-#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Nájdené: %d."
@@ -2837,7 +2821,6 @@ msgstr ""
 msgid "Get a quote"
 msgstr "Získať cenovú ponuku"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Získať teraz:"
@@ -2987,7 +2970,6 @@ msgstr "Ikona"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
@@ -3146,7 +3128,6 @@ msgstr ""
 "Ak chcete používať synchronizáciu súborového systému, je potrebné povolenie "
 "na zápis do externého úložiska."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Ak chcete používať web clipper, musíte vykonať nasledujúce kroky:"
@@ -3408,7 +3389,6 @@ msgid ""
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3595,7 +3575,6 @@ msgstr "Načítané"
 msgid "Loading..."
 msgstr "Načítava sa..."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Poloha"
@@ -3729,7 +3708,6 @@ msgstr "Označí úlohu ako hotovú."
 msgid "Marks a to-do as non-completed."
 msgstr "Označí úlohu ako nedokončenú."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Markup"
@@ -3936,7 +3914,6 @@ msgstr "Nový zápisník"
 msgid "New Notebook"
 msgstr "Nový zápisník"
 
-#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -4155,7 +4132,6 @@ msgstr "Poznámka bola uložená."
 msgid "Note history"
 msgstr "História poznámky"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
 #: packages/lib/models/Setting.ts:1300
 msgid "Note History"
@@ -4193,7 +4169,6 @@ msgstr "Obsah poskytol: %s"
 msgid "Note preview"
 msgstr "Náhľad poznámky"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
@@ -4292,10 +4267,8 @@ msgstr "OCR: Vyhľadať v extrahovanom obsahu"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:71
 #: packages/app-desktop/gui/MenuBar.tsx:616
-#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
@@ -4764,7 +4737,6 @@ msgstr "Predchádzajúca zhoda"
 msgid "Previous versions"
 msgstr "Predchádzajúce verzie"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Predchádzajúce verzie tejto poznámky"
@@ -5051,7 +5023,6 @@ msgstr "Premenuje danú <item> (poznámku alebo zápisník) na <name>."
 msgid "Renders markup on all lines that don't include the cursor."
 msgstr "Vykreslí značky na všetkých riadkoch, ktoré neobsahujú kurzor."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Obnoviť token"
@@ -5123,7 +5094,6 @@ msgid "Resize large images:"
 msgstr "Zmeniť veľkosť veľkých obrázkov:"
 
 #: packages/app-cli/app/command-import.ts:57
-#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Zdroje: %d."
@@ -5142,7 +5112,6 @@ msgid "Restart now"
 msgstr "Reštartovať teraz"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
@@ -5367,7 +5336,6 @@ msgstr "Hľadať:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
-#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:813
@@ -5647,7 +5615,6 @@ msgstr ""
 "dešifrovania)"
 
 #: packages/app-cli/app/command-import.ts:56
-#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Vynechané: %d."
@@ -5811,17 +5778,14 @@ msgstr "Štatistiky..."
 msgid "Status"
 msgstr "Stav"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Stav: %s"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Stav: Spustené na porte %d"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Krok 1: Povoľte službu clipper"
@@ -5840,7 +5804,6 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Krok 2: Zadajte kód poskytnutý službou Dropbox:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Krok 2: Nainštalujte rozšírenie"
@@ -6058,7 +6021,6 @@ msgid "Tabloid"
 msgstr "Tabloid"
 
 #: packages/app-cli/app/command-import.ts:58
-#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Označené štítkom: %d."
@@ -6300,7 +6262,6 @@ msgid "The notebook could not be saved: %s"
 msgstr "Zápisník sa nepodarilo uložiť: %s"
 
 #: packages/app-cli/app/command-import.ts:76
-#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Poznámky boli importované: %s"
@@ -6389,12 +6350,10 @@ msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr ""
 "V tejto inštancii aplikácie Joplin nie je možné povoliť službu web clipper."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Služba web clipper je povolená a nastavená na automatické spustenie."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Služba web clipper nie je povolená."
@@ -6505,7 +6464,6 @@ msgstr "Táto príloha neobsahuje údaje OCR (Stav: %s)"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Táto príloha nie je stiahnutá alebo ešte nie je dešifrovaná"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6582,7 +6540,6 @@ msgstr ""
 "Táto poznámka nemá žiadny obsah. Kliknutím na „%s“ prepnete editor a "
 "upravíte poznámku."
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Táto poznámka nemá históriu"
@@ -6607,7 +6564,6 @@ msgstr ""
 "Tento editor rozšíreného textu má niekoľko obmedzení a pred jeho použitím sa "
 "odporúča, aby ste si ich uvedomili."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6835,7 +6791,6 @@ msgstr "Prepnúť bočný panel"
 msgid "Toggle sort order field"
 msgstr "Prepnúť pole poradia zoradenia"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Token bol skopírovaný do schránky!"
@@ -7001,7 +6956,6 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Nepodporovaný typ obrázka: %s"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -7046,7 +7000,6 @@ msgstr "Aktualizovať celkové veľkosti"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
@@ -7069,7 +7022,6 @@ msgid "Updated: "
 msgstr "Aktualizované: "
 
 #: packages/app-cli/app/command-import.ts:55
-#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Aktualizované: %d."
@@ -7095,7 +7047,6 @@ msgstr "Aktualizujte cieľ synchronizácie na najnovšiu verziu."
 msgid "Upload photo"
 msgstr "Nahrať fotografiu"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112

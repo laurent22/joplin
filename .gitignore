@@ -243,6 +243,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useKeymap.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useRefocusOnVisiblePaneChange.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useSyncEditorValue.js
 packages/app-desktop/gui/NoteEditor/NoteBody/PlainEditor/PlainEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
@@ -577,6 +578,7 @@ packages/app-desktop/tools/generateLatestArm64Yml.js
 packages/app-desktop/tools/githubReleasesUtils.js
 packages/app-desktop/tools/modifyReleaseAssets.js
 packages/app-desktop/tools/notarizeMacApp.js
+packages/app-desktop/tools/resolveSourceMap.js
 packages/app-desktop/utils/7zip/getPathToExecutable7Zip.js
 packages/app-desktop/utils/7zip/pathToBundled7Zip.js
 packages/app-desktop/utils/checkForUpdatesUtils.test.js
@@ -1071,8 +1073,9 @@ packages/editor/CodeMirror/utils/markdown/stripBlockquote.js
 packages/editor/CodeMirror/utils/markdown/toggleCheckboxAt.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/CodeMirror/vendor/announceSearchMatch.js
-packages/editor/ProseMirror/commands.test.js
-packages/editor/ProseMirror/commands.js
+packages/editor/ProseMirror/commands/commands.test.js
+packages/editor/ProseMirror/commands/commands.js
+packages/editor/ProseMirror/commands/focusEditor.js
 packages/editor/ProseMirror/createEditor.js
 packages/editor/ProseMirror/index.js
 packages/editor/ProseMirror/plugins/detailsPlugin.test.js
@@ -1091,6 +1094,7 @@ packages/editor/ProseMirror/plugins/linkTooltipPlugin.js
 packages/editor/ProseMirror/plugins/listPlugin.js
 packages/editor/ProseMirror/plugins/originalMarkupPlugin.js
 packages/editor/ProseMirror/plugins/searchPlugin.js
+packages/editor/ProseMirror/plugins/tablePlugin.js
 packages/editor/ProseMirror/plugins/utils/createExternalEditorPlugin.js
 packages/editor/ProseMirror/plugins/utils/createFloatingButtonPlugin.js
 packages/editor/ProseMirror/schema.js
@@ -1120,6 +1124,12 @@ packages/editor/ProseMirror/utils/sanitizeHtml.js
 packages/editor/ProseMirror/utils/selectFirstInstanceOfNode.js
 packages/editor/ProseMirror/utils/trimEmptyParagraphs.js
 packages/editor/ProseMirror/vendor/changedDescendants.js
+packages/editor/ProseMirror/vendor/icons/addColumnRight.js
+packages/editor/ProseMirror/vendor/icons/addRowBelow.js
+packages/editor/ProseMirror/vendor/icons/icon.js
+packages/editor/ProseMirror/vendor/icons/removeColumn.js
+packages/editor/ProseMirror/vendor/icons/removeRow.js
+packages/editor/ProseMirror/vendor/icons/types.js
 packages/editor/ProseMirror/vendor/splitBlockAs.js
 packages/editor/SelectionFormatting.js
 packages/editor/events.js
@@ -1388,6 +1398,7 @@ packages/lib/services/database/migrations/45.js
 packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/47.js
 packages/lib/services/database/migrations/48.js
+packages/lib/services/database/migrations/49.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
