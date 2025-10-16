@@ -39,6 +39,7 @@ describe('services/RevisionService', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		Setting.setValue('revisionService.intervalBetweenRevisions', 0);
+		Setting.setValue('revisionService.oldNoteInterval', 1000 * 60 * 60 * 24 * 7);
 
 		jest.useFakeTimers({ advanceTimers: true });
 	});
@@ -621,6 +622,7 @@ describe('services/RevisionService', () => {
 		await Note.save({ id: note.id, title: 'test', body: 'StartA' });
 		await Note.save({ id: note.id, title: 'test', body: 'StartAB' });
 		await Note.save({ id: note.id, title: 'test', body: 'StartABC' }); // REV 2
+		await msleep(100); // Avoid race condition when collecting revision for an 'old note', due to Note.save not awaiting the ItemChange.add function
 		await revisionService().collectRevisions(); // Create revisions for old and new content
 
 		Setting.setValue('revisionService.oldNoteInterval', 10_000);
@@ -727,7 +729,8 @@ describe('services/RevisionService', () => {
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEF' });
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEFG' }); // REV 2
-		await revisionService().collectRevisions();
+		await msleep(100); // Avoid race condition when collecting revision for an 'old note', due to Note.save not awaiting the ItemChange.add function
+		await revisionService().collectRevisions(); // Create revisions for old and new content
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(revisions.length).toBe(3);
@@ -764,7 +767,8 @@ describe('services/RevisionService', () => {
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEF' });
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' }); // REV 1
-		await revisionService().collectRevisions(); // Content is the same, create just one revision instead of two
+		await msleep(100); // Avoid race condition when collecting revision for an 'old note', due to Note.save not awaiting the ItemChange.add function
+		await revisionService().collectRevisions(); // Content is the same for old and new content, so create just one revision instead of two
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(revisions.length).toBe(2);
