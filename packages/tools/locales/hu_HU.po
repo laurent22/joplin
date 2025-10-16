@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: summoner <summoner@disroot.org>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
@@ -25,7 +27,7 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:624
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"– Helyszín: lehetővé teszi a földrajzi helymeghatározási információk "
+"– Hely: lehetővé teszi a földrajzi helymeghatározási információk "
 "mellékelését a jegyzetekhez."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
@@ -304,7 +306,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "A kép rövid leírása:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1961
 msgid ""
@@ -574,6 +576,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Hiba történt a válasz elküldésekor. Ez akkor fordulhat elő, ha az alkalmazás "
+"offline állapotban van, vagy nem tud csatlakozni a kiszolgálóhoz.\r\n"
+"Hiba: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1191,9 +1196,8 @@ msgstr "Összes jegyzetfüzet összecsukása"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Collapse title"
-msgstr "Összecsukva"
+msgstr "Cím összecsukása"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1455,8 +1459,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Nem sikerült kapcsolódni a Joplin kiszolgálóhoz. Ellenőrizze a "
-"szinkronizálási beállításokat. A teljes hiba a következő volt:\n"
+"Nem sikerült kapcsolódni a Joplin Serverhez. Ellenőrizze a szinkronizálási "
+"beállításokat. A teljes hiba a következő volt:\n"
 "\n"
 "%s"
 
@@ -1932,7 +1936,7 @@ msgstr "Elvetés"
 
 #: packages/app-cli/app/command-geoloc.ts:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Megjeleníti a jegyzethez tartozó földrajzi helyszín webcímét."
+msgstr "Megjeleníti a jegyzethez tartozó földrajzi hely webcímét."
 
 #: packages/app-cli/app/command-ls.ts:28
 msgid "Displays only the first top <num> notes."
@@ -2003,7 +2007,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Hasznosnak találja a Joplin webalkalmazását?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1971
 msgid "Document scanner: Title template"
@@ -2567,9 +2571,8 @@ msgstr "Összes jegyzetfüzet kibontása"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Expand title"
-msgstr "Kibontva"
+msgstr "Cím kibontása"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2680,7 +2683,7 @@ msgstr "Funkciójelölők"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Visszajelzés"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3369,34 +3372,33 @@ msgstr "Joplin mobilalkalmazás"
 
 #: packages/lib/SyncTargetJoplinServer.ts:62
 msgid "Joplin Server"
-msgstr "Joplin kiszolgáló"
+msgstr "Joplin Server"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:64
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "Joplin kiszolgáló webcíme"
+msgstr "Joplin Server (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
-msgstr "Üzleti Joplin kiszolgáló"
+msgstr "Üzleti Joplin Server"
 
 #: packages/lib/models/settings/builtInMetadata.ts:355
 msgid "Joplin Server email"
-msgstr "Joplin kiszolgáló e-mail-címe"
+msgstr "Joplin Server e-mail-címe"
 
 #: packages/app-desktop/gui/Root.tsx:164
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:60
 msgid "Joplin Server Login"
-msgstr "Bejelentkezés a Joplin kiszolgálóba"
+msgstr "Bejelentkezés a Joplin Serverbe"
 
 #: packages/lib/models/settings/builtInMetadata.ts:367
 msgid "Joplin Server password"
-msgstr "Joplin kiszolgáló jelszava"
+msgstr "Joplin Server jelszava"
 
 #: packages/lib/models/settings/builtInMetadata.ts:336
 #: packages/lib/models/settings/builtInMetadata.ts:379
 msgid "Joplin Server URL"
-msgstr "Joplin kiszolgáló webcíme"
+msgstr "Joplin Server webcíme"
 
 #: packages/server/src/utils/saml.ts:55
 msgid "Joplin SSO Authentication"
@@ -3407,6 +3409,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"A Joplin támogatja annak a helynek a mentését, amelybe a jegyzetek el lettek "
+"mentve vagy létre lettek hozva. Szeretné engedélyezni? Ez a beállítás "
+"bármikor módosítható a beállításokban."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3460,7 +3465,7 @@ msgstr "Frissítésre szoruló kulcsok"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Címke"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1434
 msgid "Landscape"
@@ -3594,7 +3599,7 @@ msgstr "Betöltés…"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
-msgstr "Helyszín"
+msgstr "Hely"
 
 #: packages/app-cli/app/command-sync.ts:156
 msgid ""
@@ -3708,9 +3713,8 @@ msgid "Markdown editor"
 msgstr "Markdown szerkesztő"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1506
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown szerkesztő: képek renderelése"
+msgstr "Markdown szerkesztő: Aktív sor kiemelése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Markdown editor: Render images"
@@ -4109,7 +4113,7 @@ msgstr "Most nem"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Nem hasznos"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4186,9 +4190,8 @@ msgid "Note list style"
 msgstr "Jegyzetlista stílusa"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Tartalomszolgáltató: %s"
+msgstr "A jegyzet nem lett közzétéve: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4456,7 +4459,7 @@ msgstr "Számozott lista"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:124
 msgid "Other"
-msgstr ""
+msgstr "Egyéb"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4851,9 +4854,8 @@ msgid "Publish Note"
 msgstr "Jegyzet közzététele"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Áthelyezi a(z) %d jegyzetet a(z) „%s” jegyzetfüzetbe?"
+msgstr "Közzéteszi a(z) „%s” jegyzetet (a(z) „%s” jegyzetfüzetből)?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4874,14 +4876,13 @@ msgid "Publish/unpublish"
 msgstr "Közzététel / Közzététel megszüntetése"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Jegyzetek közzététele"
+msgstr "Közzétéve a következő webcímen: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Megjegyzés közzététele a Joplin Serveren vagy a Joplin Cloudon"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4948,9 +4949,8 @@ msgid "Recipients:"
 msgstr "Címzettek:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "kiemelt szöveg"
+msgstr "Szöveg felismerése:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5299,12 +5299,11 @@ msgstr "Módosítások mentése?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:897
 msgid "Save geo-location with notes"
-msgstr "Földrajzi helyszín mentése a jegyzetekhez"
+msgstr "Földrajzi hely mentése a jegyzetekhez"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:554
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Földrajzi helyszín mentése a jegyzetekhez"
+msgstr "Menti a földrajzi helyet?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5412,7 +5411,7 @@ msgstr "Jegyzetfüzet kiválasztása"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:125
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Válasszon ki egy másik támogatott szinkronizálási célt."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5540,7 +5539,7 @@ msgid ""
 "Cloud or Joplin Server."
 msgstr ""
 "Engedélyezi vagy megszünteti a megadott [jegyzetfüzet] megosztását a "
-"[felhasználóval]. Joplin Cloud vagy Joplin kiszolgáló szükséges hozzá."
+"[felhasználóval]. Joplin Cloud vagy Joplin Server szükséges hozzá."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
 msgid "Sharing notebook..."
@@ -5951,7 +5950,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:105
 msgid "Sync"
-msgstr ""
+msgstr "Szinkronizálás"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6076,9 +6075,8 @@ msgid "Take photo"
 msgstr "Kép készítése"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Fotó készítése"
+msgstr "Kérdőív kitöltése"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6110,6 +6108,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Köszönjük a visszajelzést!\r\n"
+"Van ideje kitölteni egy rövid kérdőívet?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6907,9 +6907,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "A naplóadatok megosztása nem lehetséges. Indok: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1085
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "A naplóadatok megosztása nem lehetséges. Indok: %s"
+msgstr "Nem lehet a jegyzet adatait megosztani. Indok: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7173,7 +7172,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Hasznos"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7353,6 +7352,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Ha engedélyezve van, akkor a jegyzetben lévő képek átírása egy jobb "
+"minőségű, kiszolgálóoldali átírási szolgáltatással történik. Ehhez "
+"szinkronizáció szükséges az asztali alkalmazással."
 
 #: packages/lib/models/settings/builtInMetadata.ts:567
 msgid ""
