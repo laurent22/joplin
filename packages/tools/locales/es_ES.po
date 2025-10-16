@@ -1216,7 +1216,7 @@ msgstr "Colapsado"
 
 #: packages/lib/services/ReportService.ts:386
 msgid "Coming alarms"
-msgstr "Alarmas próximas"
+msgstr "Próximas alarmas"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1582
 msgid ""
