@@ -14,6 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Gustavo Vianna França <gugvfranca@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -21,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.6.3\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1204,9 +1206,9 @@ msgstr "Próximos alarmes"
 #: packages/lib/models/settings/builtInMetadata.ts:1550
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Lista de caminhos para diretórios, separados por vírgula, de onde carregar "
 "os certificados, ou caminhos para arquivos cert. Por exemplo, /my/cert_dir, /"
@@ -1602,11 +1604,11 @@ msgstr "Cria uma nova tarefa."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
 msgid "Creating new note..."
-msgstr "Criando nova %s..."
+msgstr "Criando nova..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
 msgid "Creating new to-do..."
-msgstr "Criando nova %s..."
+msgstr "Criando nova..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
 #, fuzzy
@@ -5949,8 +5951,8 @@ msgstr "Upgrade de alvo de sincronização"
 #: packages/app-cli/app/command-sync.ts:42
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
-"Sincronizar para destino fornecido (p padrão é o valor de configuração sync."
-"target)"
+"Sincronizar para destino fornecido (p padrão é o valor de configuração "
+"sync.target)"
 
 #: packages/lib/versionInfo.ts:90
 msgid "Sync Version: %s"
@@ -7419,8 +7421,8 @@ msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Sua senha é necessária para descriptografar alguns de seus dados. Digite `:"
-"e2ee decrypt` para ver."
+"Sua senha é necessária para descriptografar alguns de seus dados. Digite "
+"`:e2ee decrypt` para ver."
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"
