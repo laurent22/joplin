@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/jest": "29.5.14",
     "@types/markdown-it": "13.0.9",
-    "@types/node": "18.19.120",
+    "@types/node": "18.19.130",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "mermaid": "11.6.0",
