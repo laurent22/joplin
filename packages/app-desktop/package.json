@@ -149,7 +149,7 @@
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.14",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.119",
+    "@types/node": "18.19.120",
     "@types/react": "18.3.23",
     "@types/react-dom": "18.3.7",
     "@types/react-redux": "7.1.33",
