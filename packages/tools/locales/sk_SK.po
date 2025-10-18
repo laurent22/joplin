@@ -5,7 +5,9 @@
 # Jozef Gaal <preklady@mayday.sk>, 2024,2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin v3.4.5\n"
+"Project-Id-Version: Joplin v3.5.5\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
 "Language: sk_SK\n"
@@ -304,7 +306,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "Stručný popis obrázku:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1961
 msgid ""
@@ -572,6 +574,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Pri odosielaní odpovede došlo k chybe. K tejto chybe môže dôjsť, ak je "
+"aplikácia offline alebo sa nemôže pripojiť k serveru.\n"
+"Chyba: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1182,9 +1187,8 @@ msgstr "Zbaliť všetky zápisníky"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Collapse title"
-msgstr "Zbaliť %s"
+msgstr "Zbaliť nadpis"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1994,7 +1998,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Považujete webovú aplikáciu Joplin za užitočnú?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1971
 msgid "Document scanner: Title template"
@@ -2555,9 +2559,8 @@ msgstr "Rozbaliť všetky zápisníky"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Expand title"
-msgstr "Rozbalené"
+msgstr "Rozbaliť nadpis"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2668,7 +2671,7 @@ msgstr "Príznaky funkcií"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Spätná väzba"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3353,9 +3356,8 @@ msgid "Joplin Server"
 msgstr "Joplin Server"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:64
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "URL servera Joplin"
+msgstr "Joplin Server (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3388,6 +3390,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin podporuje ukladanie polohy, pri ktorej sa poznámky ukladajú alebo "
+"vytvárajú. Chcete túto funkciu povoliť? Túto voľbu môžete kedykoľvek zmeniť "
+"v nastaveniach."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3441,7 +3446,7 @@ msgstr "Kľúče, ktoré si vyžadujú aktualizáciu"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Označenie"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1434
 msgid "Landscape"
@@ -3688,9 +3693,8 @@ msgid "Markdown editor"
 msgstr "Editor Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1506
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Editor Markdown: Vykresliť obrázky"
+msgstr "Editor Markdown: Zvýrazniť aktívny riadok"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Markdown editor: Render images"
@@ -4084,7 +4088,7 @@ msgstr "Teraz nie"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Nie je užitočné"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4161,9 +4165,8 @@ msgid "Note list style"
 msgstr "Štýl zoznamu poznámok"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Obsah poskytol: %s"
+msgstr "Poznámka neuverejnená: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4429,7 +4432,7 @@ msgstr "Usporiadaný zoznam"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:124
 msgid "Other"
-msgstr ""
+msgstr "Iné"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4822,9 +4825,8 @@ msgid "Publish Note"
 msgstr "Zverejniť poznámku"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Presunúť %d poznámku do zápisníka „%s“?"
+msgstr "Zverejniť poznámku „%s“ (v zápisníku „%s“)?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4845,14 +4847,13 @@ msgid "Publish/unpublish"
 msgstr "Zverejniť/Zrušiť zverejnenie"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Zverejniť poznámky"
+msgstr "Uverejnené na URL adrese: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Uverejní poznámku na serveri Joplin alebo v cloude Joplin"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4919,9 +4920,8 @@ msgid "Recipients:"
 msgstr "Príjemcovia:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "zvýraznený text"
+msgstr "Rozpoznať text:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5272,9 +5272,8 @@ msgid "Save geo-location with notes"
 msgstr "Uložiť geografickú polohu s poznámkami"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:554
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Uložiť geografickú polohu s poznámkami"
+msgstr "Uložiť geografickú polohu?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5382,7 +5381,7 @@ msgstr "Vybrať zápisník"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:125
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Vyberte jeden z ďalších podporovaných cieľov synchronizácie."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5916,7 +5915,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:105
 msgid "Sync"
-msgstr ""
+msgstr "Synchronizovať"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6040,9 +6039,8 @@ msgid "Take photo"
 msgstr "Odfotiť"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Nakreslite obrázok"
+msgstr "Zúčastniť sa prieskumu"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6074,6 +6072,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Ďakujeme za spätnú väzbu!\n"
+"Máte čas vyplniť krátky dotazník?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6865,9 +6865,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "Nie je možné zdieľať údaje záznamu. Dôvod: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1085
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "Nie je možné zdieľať údaje záznamu. Dôvod: %s"
+msgstr "Nie je možné zdieľať údaje poznámky. Dôvod: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7129,7 +7128,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Užitočné"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7309,6 +7308,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Ak je táto funkcia povolená, požiada o prepis obrázkov v poznámke pomocou "
+"kvalitnejšej služby prepisovania na serveri. Vyžaduje synchronizáciu s "
+"kópiou aplikácie pre počítače."
 
 #: packages/lib/models/settings/builtInMetadata.ts:567
 msgid ""
