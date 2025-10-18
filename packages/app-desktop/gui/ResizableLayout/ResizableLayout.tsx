@@ -85,6 +85,31 @@ function ResizableLayout(props: Props) {
 		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean,
 	): React.ReactNode {
 		const onResizeStart: ResizeStartCallback = () => {
+			// When starting to resize an item, we need to fix the sizes of all siblings
+			// that don't have explicit widths/heights. This prevents them from being
+			// recalculated during the resize, which would cause unexpected resizing of
+			// multiple panels at once.
+			let layoutWithFixedSizes = props.layout;
+			if (parent) {
+				for (const sibling of parent.children) {
+					if (sibling.key === item.key) continue;
+					if (sibling.visible === false) continue;
+
+					const isRow = parent.direction === 'row';
+					const hasSizeSet = isRow ? ('width' in sibling) : ('height' in sibling);
+
+					if (!hasSizeSet) {
+						// Fix this sibling's size based on its current calculated size
+						const fixedSize = isRow
+							? { width: sizes[sibling.key].width }
+							: { height: sizes[sibling.key].height };
+						layoutWithFixedSizes = setLayoutItemProps(layoutWithFixedSizes, sibling.key, fixedSize);
+					}
+				}
+			}
+
+			props.onResize({ layout: layoutWithFixedSizes });
+
 			setResizedItem({
 				key: item.key,
 				initialWidth: sizes[item.key].width,
