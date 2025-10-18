@@ -3,6 +3,7 @@ import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection, Size } from './types';
 import { itemMinHeight, itemMinWidth } from './useLayoutItemSizes';
 import validateLayout from './validateLayout';
+import { cleanupAutoSizeContext, currentAutoSizeContext, ensureAutoSizeContext } from './autoSizeUtils';
 
 function clamp(value: number, minimum: number) {
 	return Math.max(minimum, Math.round(value));
@@ -13,48 +14,14 @@ function safeRatio(value: number) {
 	return value;
 }
 
-interface AutoSizeContext {
-	naturalWidth?: number;
-	naturalHeight?: number;
-	rootWidth?: number;
-	rootHeight?: number;
-}
-
-function ensureContext(item: LayoutItem) {
-	if (!item.context) item.context = {};
-	return item.context;
-}
-
-function ensureAutoSizeContext(item: LayoutItem): AutoSizeContext {
-	const context = ensureContext(item);
-	if (!context.autoSize) context.autoSize = {};
-	return context.autoSize as AutoSizeContext;
-}
-
-function currentAutoSize(item: LayoutItem): AutoSizeContext | null {
-	return item.context?.autoSize ? item.context.autoSize as AutoSizeContext : null;
-}
-
-function cleanupAutoSizeContext(item: LayoutItem) {
-	if (!item.context?.autoSize) return;
-	const autoSize = item.context.autoSize as AutoSizeContext;
-
-	if (autoSize.naturalWidth === undefined) delete autoSize.rootWidth;
-	if (autoSize.naturalHeight === undefined) delete autoSize.rootHeight;
-
-	const hasWidthInfo = autoSize.naturalWidth !== undefined || autoSize.rootWidth !== undefined;
-	const hasHeightInfo = autoSize.naturalHeight !== undefined || autoSize.rootHeight !== undefined;
-
-	if (!hasWidthInfo && !hasHeightInfo) {
-		delete item.context.autoSize;
-		if (!Object.keys(item.context).length) delete item.context;
-	}
-}
-
+// Scales panel sizes proportionally when the window is resized.
+// Tracks "natural" sizes (before min-size constraints) to avoid cumulative scaling errors
+// when the window is repeatedly resized to/from minimum dimensions.
 export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Size, widthRatio: number, heightRatio: number): LayoutItem {
 	const ratioX = safeRatio(widthRatio);
 	const ratioY = safeRatio(heightRatio);
 
+	// Previous window size calculated from ratio, used for fallback
 	const referenceRootWidth = ratioX ? newRootSize.width / ratioX : undefined;
 	const referenceRootHeight = ratioY ? newRootSize.height / ratioY : undefined;
 	const savedRootWidth = layout.context?.savedRootSize?.width;
@@ -70,7 +37,7 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 				return true;
 			}
 
-			const autoSize = currentAutoSize(item);
+			const autoSize = currentAutoSizeContext(item);
 
 			if (parent.direction === LayoutItemDirection.Row) {
 				const hasExplicitWidth = typeof item.width === 'number';
@@ -79,11 +46,13 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 				if (hasExplicitWidth || hasNaturalWidth) {
 					const ensuredAutoSize = autoSize ?? ensureAutoSizeContext(item);
 
+					// Store reference window width for this panel's natural width
 					if (typeof ensuredAutoSize.rootWidth !== 'number') {
 						const fallbackRootWidth = referenceRootWidth ?? savedRootWidth ?? previousRootWidth ?? newRootSize.width;
 						if (typeof fallbackRootWidth === 'number') ensuredAutoSize.rootWidth = fallbackRootWidth;
 					}
 
+					// Calculate natural width (before min-size clamping) if not already tracked
 					if (typeof ensuredAutoSize.naturalWidth !== 'number' && hasExplicitWidth) {
 						const targetReferenceWidth = ensuredAutoSize.rootWidth ?? referenceRootWidth ?? savedRootWidth ?? previousRootWidth ?? newRootSize.width;
 						const sourceReferenceWidth = referenceRootWidth ?? previousRootWidth ?? targetReferenceWidth;
@@ -96,6 +65,7 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 						}
 					}
 
+					// Scale from natural width, then apply min-size constraint
 					const baseWidth = ensuredAutoSize.naturalWidth ?? (hasExplicitWidth ? item.width : null);
 					if (typeof baseWidth === 'number') {
 						const referenceWidth = ensuredAutoSize.rootWidth ?? referenceRootWidth ?? savedRootWidth ?? previousRootWidth;
@@ -108,6 +78,7 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 
 				cleanupAutoSizeContext(item);
 			} else if (parent.direction === LayoutItemDirection.Column) {
+				// Same logic as Row, but for height
 				const hasExplicitHeight = typeof item.height === 'number';
 				const hasNaturalHeight = typeof autoSize?.naturalHeight === 'number';
 
