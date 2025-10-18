@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -14,11 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "-Kamera: fotoğraf çekimi ve fotoğrafın nota eklenebilmesi için."
+msgstr "- Kamera: fotoğraf çekimi ve fotoğrafın nota eklenebilmesi için."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:624
 msgid "- Location: to allow attaching geo-location information to a note."
@@ -240,7 +242,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:26
 msgid "%s must be a valid whole number"
-msgstr "%s geçerli bir telefon numarası olmalıdır"
+msgstr "%s geçerli bir tamsayı olmalıdır"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:74
 msgid "%s tab opened"
@@ -300,7 +302,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "Resmin kısa bir açıklaması:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1961
 msgid ""
@@ -572,6 +574,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Cevap gönderilirken bir hata oluştu. Bu durum uygulama çevrimdışıyken, veya "
+"sunucuya bağlanılamadığı zamanlarda olabilir\n"
+"Hata: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -645,7 +650,7 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/TagEditor.tsx:188
 msgid "Associated tags:"
-msgstr "Ekli etiketler"
+msgstr "Tanımlı etiketler:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:16
 msgid ""
@@ -1180,9 +1185,8 @@ msgstr "Tüm not defterlerini küçült"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Collapse title"
-msgstr "Daralt %s"
+msgstr "Başlığı daralt"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1991,7 +1995,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Joplin web uygulamasını faydalı buldunuz mu?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1971
 msgid "Document scanner: Title template"
@@ -2085,7 +2089,7 @@ msgstr "Dropbox Girişi"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:13
 msgid "Due"
-msgstr "Şu tarihe kadar: "
+msgstr "Şu tarihe kadar:"
 
 #: packages/lib/models/Note.ts:66
 msgid "due date"
@@ -2554,9 +2558,8 @@ msgstr "Tüm not defterini genişlet"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Expand title"
-msgstr "Genişletilmiş"
+msgstr "Başlığı genişlet"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2666,7 +2669,7 @@ msgstr "Özellik bilgileri"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Geribildirim"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3359,9 +3362,8 @@ msgid "Joplin Server"
 msgstr "Joplin Sunucusu"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:64
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "Joplin Sunucusu URL"
+msgstr "Joplin Server (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3394,6 +3396,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin notların oluşturulduğu veya güncellemelerin kaydedildiği konumları "
+"saklayabilme özelliğine sahip. Bu özelliği aktifleştirmek ister misiniz? Bu "
+"özelliği istediğiniz zaman ayarlardan açıp kapatabilirsiniz."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3447,7 +3452,7 @@ msgstr "Güncellenmesi gereken anahtarlar"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Etiket"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1434
 msgid "Landscape"
@@ -3690,9 +3695,8 @@ msgid "Markdown editor"
 msgstr "Markdown düzenleyici"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1506
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown düzenleyici: Resimleri görüntüle"
+msgstr "Markdown düzenleyici: Mevcut satırı rengini değiştirerek vurgula"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Markdown editor: Render images"
@@ -3924,7 +3928,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FolderPicker.tsx:71
 msgid "New notebook title"
-msgstr "Yeni not defteri başlığı:"
+msgstr "Yeni not defteri başlığı"
 
 #: packages/app-mobile/setupQuickActions.ts:32
 msgid "New photo"
@@ -4087,7 +4091,7 @@ msgstr "Şimdi değil"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Kullanışsız"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4164,9 +4168,8 @@ msgid "Note list style"
 msgstr "Not listeleme biçimi"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "İçerik sağlayıcı: %s"
+msgstr "Not paylaşılamadı: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4431,7 +4434,7 @@ msgstr "Dizilmiş liste"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:124
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4824,9 +4827,8 @@ msgid "Publish Note"
 msgstr "Notu Yayımla"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "%d not \"%s\" not defterine taşınsın mı?"
+msgstr "“%s” notu (“%s” not defterinde) yayımlansın mı?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4847,14 +4849,13 @@ msgid "Publish/unpublish"
 msgstr "Yayımla/yayından kaldır"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Notları Yayımla"
+msgstr "Şu URL’de yayımlandı: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Notu Joplin Server veya Joplin Cloud’a yayımlar"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4920,9 +4921,8 @@ msgid "Recipients:"
 msgstr "Alıcılar:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "vurgulanan metin"
+msgstr "Metni algıla:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5273,9 +5273,8 @@ msgid "Save geo-location with notes"
 msgstr "Coğrafi konumu notlarla kaydedin"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:554
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Coğrafi konumu notlarla kaydedin"
+msgstr "Coğrafi konumu kaydedilsin mi?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5383,7 +5382,7 @@ msgstr "Not defterini seç"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:125
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Destekleyen diğer senkronizasyon hedeflerinden birini seçin."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5916,7 +5915,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:105
 msgid "Sync"
-msgstr ""
+msgstr "Senkronizasyon"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6041,9 +6040,8 @@ msgid "Take photo"
 msgstr "Fotoğraf çek"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Çizim yap"
+msgstr "Ankete katıl"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6075,6 +6073,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Geribildirim için teşekkür ederiz!\n"
+"Kısa bir anketimiz var, bunu doldurmaya vaktiniz var mı?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6241,7 +6241,7 @@ msgstr "“%s” notu başarılı bir şekilde “%s” not defterine geri yükl
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
-msgstr "Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı."
+msgstr "Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6858,9 +6858,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "Loglar dışarı aktarılamadı. Sebep: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1085
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "Loglar dışarı aktarılamadı. Sebep: %s"
+msgstr "Not verisi paylaşılamadı. Sebep: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7122,7 +7121,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Kullanuşlı"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7301,6 +7300,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Etkinleştirildiğinde, nottaki resimlerin sunucu tabanlı daha yüksek kaliteli "
+"transkripsiyon servisi ile çözümlenmesini ister. Masaüstü uygulamasının bir "
+"kopyasıyla senkronizasyon gerektirir."
 
 #: packages/lib/models/settings/builtInMetadata.ts:567
 msgid ""
