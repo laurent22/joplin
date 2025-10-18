@@ -1,6 +1,7 @@
 import { LayoutItem, Size } from './types';
 import { produce } from 'immer';
 import iterateItems from './iterateItems';
+import scaleLayoutItemSizes from './scaleLayoutItemSizes';
 import validateLayout from './validateLayout';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -14,8 +15,17 @@ export function saveLayout(layout: LayoutItem): any {
 		'context',
 	];
 
+	const rootSize = {
+		width: layout.width,
+		height: layout.height,
+	};
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	return produce(layout, (draft: any) => {
+		draft.context = {
+			...draft.context,
+			savedRootSize: rootSize,
+		};
 		delete draft.width;
 		delete draft.height;
 		iterateItems(draft, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
@@ -41,5 +51,14 @@ export function loadLayout(layout: any, defaultLayout: LayoutItem, rootSize: Siz
 	output.width = rootSize.width;
 	output.height = rootSize.height;
 
-	return validateLayout(output);
+	const validated = validateLayout(output);
+	const savedRootSize = output?.context?.savedRootSize as Size | undefined;
+
+	if (savedRootSize && savedRootSize.width > 0 && savedRootSize.height > 0) {
+		const widthRatio = rootSize.width / savedRootSize.width;
+		const heightRatio = rootSize.height / savedRootSize.height;
+		return scaleLayoutItemSizes(validated, rootSize, widthRatio, heightRatio);
+	}
+
+	return validated;
 }

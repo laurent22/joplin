@@ -22,6 +22,13 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 			if (!parent) {
 				item.width = newRootSize.width;
 				item.height = newRootSize.height;
+				item.context = {
+					...item.context,
+					savedRootSize: {
+						width: newRootSize.width,
+						height: newRootSize.height,
+					},
+				};
 				return true;
 			}
 
