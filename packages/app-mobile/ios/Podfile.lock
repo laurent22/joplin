@@ -6,7 +6,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - EXConstants (17.1.7):
     - ExpoModulesCore
-  - Expo (53.0.19):
+  - Expo (53.0.20):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -35,7 +35,7 @@ PODS:
     - Yoga
   - ExpoAsset (11.1.7):
     - ExpoModulesCore
-  - ExpoCamera (16.1.10):
+  - ExpoCamera (16.1.11):
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
@@ -45,7 +45,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalAuthentication (16.0.5):
     - ExpoModulesCore
-  - ExpoModulesCore (2.4.2):
+  - ExpoModulesCore (2.5.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1408,7 +1408,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-alarm-notification (3.5.0):
     - React
-  - react-native-document-picker (10.1.3):
+  - react-native-document-picker (10.1.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1522,7 +1522,7 @@ PODS:
     - React-Core
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.14.2):
+  - react-native-webview (13.15.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1890,7 +1890,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (12.0.11):
+  - RNShare (12.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2293,13 +2293,13 @@ SPEC CHECKSUMS:
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EXAV: ae28256069c4cdde93d185c007d8f68d92902c2e
   EXConstants: 98bcf0f22b820f9b28f9fee55ff2daededadd2f8
-  Expo: 4b1c6de7c441e1caa1918671ae0aa34d51f019a5
+  Expo: b527631da3b11e085809e877b845f9e6cdd68f9c
   ExpoAsset: ef06e880126c375f580d4923fdd1cdf4ee6ee7d6
-  ExpoCamera: 7edf99216d92e40b991d4e7ed69eba9527c94cda
+  ExpoCamera: e1879906d41184e84b57d7643119f8509414e318
   ExpoFileSystem: 7f92f7be2f5c5ed40a7c9efc8fa30821181d9d63
   ExpoFont: cf508bc2e6b70871e05386d71cab927c8524cc8e
   ExpoLocalAuthentication: c35f18692dcb35775a1be0f37b2131096951a6bd
-  ExpoModulesCore: e2c98670a94932b744f5bc4e394520e1c63b5462
+  ExpoModulesCore: f55e7872391bae03ee5547c83152c81750d89508
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 84b955f7b4da8b895faf5946f73748267347c975
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
@@ -2340,7 +2340,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: c3f4b608e4a59dd2f6a416ef4d47a14400194468
   React-microtasksnativemodule: 054f34e9b82f02bd40f09cebd4083828b5b2beb6
   react-native-alarm-notification: a4326a743df72a94d361a4c3a21515556f650341
-  react-native-document-picker: da39c5e4f279d39c0356dca157b98f9dc349e5bb
+  react-native-document-picker: d7580f6e287bbf2c31c071d6b3f252ae1c6586f1
   react-native-geolocation: ec15ffebc53790314885eb9e5f2132132fbc2600
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
   react-native-image-picker: 7babe45e727db306b3f00d08c72eda3586d6e9c1
@@ -2352,7 +2352,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: dde2052b903c11d677c320b599c3244021c34ce8
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-version-info: f0b04e16111c4016749235ff6d9a757039189141
-  react-native-webview: 2d9ffd72b87cf905cdf8821d7d27d551188bac70
+  react-native-webview: 0dceb35a9d050f5fa55f7fe2d8c4d1903651eb7d
   React-NativeModulesApple: 2c4377e139522c3d73f5df582e4f051a838ff25e
   React-oscompat: ef5df1c734f19b8003e149317d041b8ce1f7d29c
   React-perflogger: 9a151e0b4c933c9205fd648c246506a83f31395d
@@ -2395,7 +2395,7 @@ SPEC CHECKSUMS:
   RNLocalize: 6a87f0490f1793d7a70042e4c55eb9a1ba6dd5b4
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
-  RNShare: 675e8e4a84f0137baf33057cac8f7334b0bb4b98
+  RNShare: 9528acd4e374d3cb76b994b9e167d4a75cd8f452
   RNSVG: 295a96bc43f2baa5958d64aeec9847a1d8ca7a3d
   RNVectorIcons: d53917643fddb261b22bd6d889776f336893622b
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748

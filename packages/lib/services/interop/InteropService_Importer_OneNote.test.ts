@@ -257,4 +257,18 @@ describe('InteropService_Importer_OneNote', () => {
 
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
+
+	it('should support directly importing .one files', async () => {
+		const notes = await importNote(`${supportDir}/onenote/onenote_desktop.one`);
+
+		// For this test, just check that the extracted files exist.
+		expect(notes.map(note => note.title).sort()).toEqual([
+			// The three pages contained within the notebook
+			'Another page',
+			'Page 3',
+			'Test',
+			// The index page
+			'onenote_desktop',
+		]);
+	});
 });

@@ -49,6 +49,24 @@ const getParentOffset = (childIndex: number, listItems: ListItem[]): number|null
 	return null;
 };
 
+const findNextTypeAheadMatch = (selectedIndex: number, query: string, listItems: ListItem[]) => {
+	const matches = (item: ListItem) => {
+		return item.label.startsWith(query);
+	};
+	const indexBefore = listItems.slice(0, selectedIndex).findIndex(matches);
+	// Search in all results **after** the current. This prevents the current item from
+	// always being identified as the next match, if the user repeatedly presses the
+	// same key.
+	const startAfter = selectedIndex + 1;
+	let indexAfter = listItems.slice(startAfter).findIndex(matches);
+	if (indexAfter !== -1) {
+		indexAfter += startAfter;
+	}
+	// Prefer jumping to the next match, rather than the previous
+	const matchingIndex = indexAfter !== -1 ? indexAfter : indexBefore;
+	return matchingIndex;
+};
+
 const useOnSidebarKeyDownHandler = (props: Props) => {
 	const { updateSelectedIndex, listItems, selectedIndex, collapsedFolderIds, dispatch } = props;
 
@@ -82,9 +100,22 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 			indexChange = 1;
 		} else if ((event.ctrlKey || event.metaKey) && event.code === 'KeyA') { // ctrl+a or cmd+a
 			event.preventDefault();
+		} else if (event.code === 'Home') {
+			event.preventDefault();
+			updateSelectedIndex(0);
+			indexChange = 0;
+		} else if (event.code === 'End') {
+			event.preventDefault();
+			updateSelectedIndex(listItems.length - 1);
+			indexChange = 0;
 		} else if (event.code === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			void CommandService.instance().execute('focusElement', 'noteList');
+		} else if (selectedIndex && selectedIndex >= 0 && event.key.length === 1) {
+			const nextMatch = findNextTypeAheadMatch(selectedIndex, event.key, listItems);
+			if (nextMatch !== -1) {
+				indexChange = nextMatch - selectedIndex;
+			}
 		}
 
 		if (indexChange !== 0) {

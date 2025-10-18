@@ -11,6 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
 "Language-Team: contacto@ericdq.com\n"
 "Language: ca\n"
@@ -18,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -305,7 +307,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "Una breu descripció de la imatge:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1961
 msgid ""
@@ -578,6 +580,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"S'ha produït un error en enviar la resposta. Això pot passar si l'aplicació "
+"està fora de línia o no es pot connectar al servidor.\n"
+"Error: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1190,9 +1195,8 @@ msgstr "Redueix totes les llibretes"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Collapse title"
-msgstr "Col·lapsat"
+msgstr "Replega el títol"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -2004,7 +2008,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Trobes útil l'aplicació web Joplin?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1971
 msgid "Document scanner: Title template"
@@ -2566,9 +2570,8 @@ msgstr "Desplegar totes les llibretes"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Expand title"
-msgstr "Expandit"
+msgstr "Expandeix el títol"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2679,7 +2682,7 @@ msgstr "Interruptors de funcions"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Comentaris"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3368,9 +3371,8 @@ msgid "Joplin Server"
 msgstr "Servidor del Joplin"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:64
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "URL del servidor Joplin"
+msgstr "Servidor Joplin (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3403,6 +3405,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin admet desar la ubicació a la qual es desen o es creen les notes. "
+"Voleu habilitar-lo? Això es pot canviar en qualsevol moment a la "
+"configuració."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3456,7 +3461,7 @@ msgstr "Claus que requereixen actualització"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Etiqueta"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1434
 msgid "Landscape"
@@ -3701,9 +3706,8 @@ msgid "Markdown editor"
 msgstr "Editor Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1506
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Editor Markdown: Renderització d'imatges"
+msgstr "Editor Markdown: ressalta la línia activa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Markdown editor: Render images"
@@ -4097,7 +4101,7 @@ msgstr "No ara"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "No és útil"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4174,9 +4178,8 @@ msgid "Note list style"
 msgstr "Estil de llista de notes"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Contingut proporcionat per %s"
+msgstr "Nota no publicada: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4442,7 +4445,7 @@ msgstr "Llista ordenada"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:124
 msgid "Other"
-msgstr ""
+msgstr "Altres"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4836,9 +4839,8 @@ msgid "Publish Note"
 msgstr "Publica la nota"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Moure %d nota a la llibreta \"%s\"?"
+msgstr "Publicar la nota \"%s\" (a la llibreta \"%s\")?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4859,14 +4861,13 @@ msgid "Publish/unpublish"
 msgstr "Publica/despublica"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Publica notes"
+msgstr "Publicat a la URL: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Publica una nota a Joplin Server o Joplin Cloud"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4934,9 +4935,8 @@ msgid "Recipients:"
 msgstr "Destinataris:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "text ressaltat"
+msgstr "Reconeix el text:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5287,9 +5287,8 @@ msgid "Save geo-location with notes"
 msgstr "Desa la geolocalització a les notes"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:554
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Desa la geolocalització a les notes"
+msgstr "Voleu desar la geolocalització?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5397,7 +5396,7 @@ msgstr "Selecciona la llibreta"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:125
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Seleccioneu un dels altres objectius de sincronització admesos."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5930,7 +5929,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:105
 msgid "Sync"
-msgstr ""
+msgstr "Sincronitza"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6055,9 +6054,8 @@ msgid "Take photo"
 msgstr "Fes una foto"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Fes una foto"
+msgstr "Fer enquesta"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6089,6 +6087,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Gràcies pels comentaris!\n"
+"Tens temps per fer una petita enquesta?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6879,9 +6879,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "No s'han pogut compartir les dades del registre. Motiu: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1085
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "No s'han pogut compartir les dades del registre. Motiu: %s"
+msgstr "No s'han pogut compartir les dades de la nota. Motiu: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7142,7 +7141,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Útil"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7321,6 +7320,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Quan està activat, sol·licita que les imatges de la nota es transcriguin amb "
+"un servei de transcripció al servidor de més qualitat. Requereix "
+"sincronització amb una còpia de l'aplicació d'escriptori."
 
 #: packages/lib/models/settings/builtInMetadata.ts:567
 msgid ""

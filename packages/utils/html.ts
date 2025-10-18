@@ -82,3 +82,69 @@ export const extractUrls = (html: string) => {
 
 	return output;
 };
+
+const parseDimensionAttribute = (value: string) => {
+	const regex = /^([0-9]*\.?[0-9]+)\s*(in|cm|mm|pt|pc|px)?$/i;
+	const m = value.trim().match(regex);
+	if (!m) return null;
+	const num = parseFloat(m[1]);
+	const unit = m[2]?.toLowerCase() || 'px';
+	return { num, unit };
+};
+
+const dimensionAttributeInPixels = (value: string) => {
+	const parsed = parseDimensionAttribute(value);
+	if (!parsed) {
+		return null;
+	} else {
+		switch (parsed.unit) {
+		case 'px':
+			return parsed.num;
+		case 'in':
+			return parsed.num * 96;
+		case 'cm':
+			return parsed.num * 96 / 2.54;
+		case 'mm':
+			return parsed.num * 96 / 25.4;
+		case 'pt':
+			return parsed.num * 96 / 72;
+		case 'pc':
+			return parsed.num * 16;
+		default:
+			return null;
+		}
+	}
+};
+
+// Currently this function only fix the width and height attributes: those should be specified in
+// pixels, however certain application (such as Evernote) occasionally specify them in inches. When
+// that happens, and we import it, Electron is going to ignore the unit and assume pixels. So "1in"
+// becomes 1 pixel. So the function below is used to convert those invalid values to actual pixel
+// values by converting them properly.
+//
+// Currently only used in import-enex-html-gen.js and tested there.
+//
+// Ref: https://html.spec.whatwg.org/multipage/embedded-content-other.html#dimension-attributes
+export const fixAttributes = (attributes: Record<string, string>) => {
+	const output: Record<string, string> = {};
+	for (const [keyRaw, value] of Object.entries(attributes)) {
+		const key = keyRaw.toLowerCase();
+		let finalValue = value;
+
+		if (key === 'width' || key === 'height') {
+			const pixelValue = dimensionAttributeInPixels(value);
+
+			if (pixelValue === null) {
+				// Skip if the value can't be parsed, which means the image will display at its real
+				// size. Better than letting bad values go through as it may cause rendering issues.
+				continue;
+			}
+
+			finalValue = pixelValue.toString();
+		}
+
+		output[keyRaw] = finalValue;
+	}
+
+	return output;
+};

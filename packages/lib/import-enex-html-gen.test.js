@@ -1,7 +1,6 @@
 const { setupDatabaseAndSynchronizer, switchClient, supportDir } = require('./testing/test-utils.js');
 const shim = require('./shim').default;
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
-const cleanHtml = require('clean-html');
 
 const fileWithPath = (filename) =>
 	`${supportDir}/../enex_to_html/${filename}`;
@@ -12,20 +11,6 @@ const audioResource = {
 	mime: 'audio/x-m4a',
 	size: 82011,
 	title: 'audio test',
-};
-
-// All the test HTML files are beautified ones, so we need to run
-// this before the comparison. Before, beautifying was done by `enexXmlToHtml`
-// but that was removed due to problems with the clean-html package.
-const beautifyHtml = (html) => {
-	return new Promise((resolve) => {
-		try {
-			cleanHtml.clean(html, { wrap: 0 }, (...cleanedHtml) => resolve(cleanedHtml.join('')));
-		} catch (error) {
-			console.warn(`Could not clean HTML - the "unclean" version will be used: ${error.message}: ${html.trim().substr(0, 512).replace(/[\n\r]/g, ' ')}...`);
-			resolve([html].join(''));
-		}
-	});
 };
 
 // Tests the importer for a single note, checking that the result of
@@ -51,7 +36,7 @@ const compareOutputToExpected = (options) => {
 	it(testTitle, (async () => {
 		const enexInput = await shim.fsDriver().readFile(inputFile);
 		const expectedOutput = await shim.fsDriver().readFile(outputFile);
-		const actualOutput = await beautifyHtml(await enexXmlToHtml(enexInput, options.resources));
+		const actualOutput = (await enexXmlToHtml(enexInput, options.resources)).trim();
 		expect(actualOutput).toEqual(expectedOutput);
 	}));
 };
@@ -97,6 +82,16 @@ describe('EnexToHtml', () => {
 			id: '21ca2b948f222a38802940ec7e2e5de3',
 			mime: 'application/pdf', // Any non-image/non-audio mime type will do
 			size: 1000,
+		}],
+	});
+
+	compareOutputToExpected({
+		testName: 'attachment-image',
+		resources: [{
+			filename: 'attachment-image',
+			id: 'e2d4887c5a32ab1686276c7c5ae733ef',
+			mime: 'image/jpeg', // Any non-image/non-audio mime type will do
+			width: '1.125in',
 		}],
 	});
 

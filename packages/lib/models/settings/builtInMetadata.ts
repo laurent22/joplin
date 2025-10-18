@@ -109,6 +109,15 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 		},
 
+		'sync.wizard.autoShowOnStartup': {
+			value: mobilePlatform === 'web',
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Mobile],
+			label: () => 'Show the sync wizard on startup if no sync target is selected',
+			section: 'sync',
+		},
+
 		'sync.target': {
 			value: 0,
 			type: SettingItemType.Int,

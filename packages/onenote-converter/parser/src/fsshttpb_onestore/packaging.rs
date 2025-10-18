@@ -3,9 +3,8 @@ use crate::fsshttpb::data::stream_object::ObjectHeader;
 use crate::fsshttpb::data_element::DataElementPackage;
 use crate::shared::exguid::ExGuid;
 use crate::shared::guid::Guid;
-use parser_utils::Reader;
+use parser_utils::{log_warn, Reader};
 use parser_utils::errors::{ErrorKind, Result};
-use parser_utils::log;
 use parser_utils::parse::ParseHttpb;
 
 /// A OneNote file packaged in FSSHTTPB format.
@@ -32,25 +31,35 @@ impl OneStorePackaging {
         let legacy_file_version = Guid::parse(reader)?;
         let file_format = Guid::parse(reader)?;
 
-        if file_format == Guid::from_str("109ADD3F-911B-49F5-A5D0-1791EDC8AED8").unwrap() {
+        if file_format == guid!("{109ADD3F-911B-49F5-A5D0-1791EDC8AED8}") {
             // Matches the file format specified in MS-ONESTORE section 2.3
             return Err(
                 ErrorKind::NotFssHttpBData(
                     "This parser only supports notebooks that have been shared then downloaded from OneDrive.".into()
                 ).into(),
             );
-        } else if file == legacy_file_version {
-            // Matches the file format specified in MS-ONESTORE section 2.8
-            log!("File matches the alternative packaging format");
-        } else {
+        }
+
+        // Matches the file format specified in MS-ONESTORE section 2.8?
+        let expected_format = guid!("{638DE92F-A6D4-4bc1-9A36-B3FC2511A5B7}");
+        if file_format != expected_format {
             return Err(parser_error!(
                 MalformedOneStoreData,
-                "not a valid OneStore file. Expected {} == {}. Format: {}",
+                "not a valid OneStore file. Expected {} == {}. File GUID: {}, {}",
+                file_format,
+                expected_format,
                 file,
                 legacy_file_version,
-                file_format,
             )
             .into());
+        }
+
+        // Originally, file == legacy_file_version was used as a validity check. However,
+        // it isn't specified that `file` must always equal the `legacy_file_version`.
+        // Additionally, per [this forum post](https://discourse.joplinapp.org/t/onenote-zip-file-import-not-working/47499/6),
+        // it may not always be the case. For now, only log a warning. 
+        if file != legacy_file_version {
+            log_warn!("Possible file corruption: file ({}) != legacy_file_version ({})", file, legacy_file_version);
         }
 
         if reader.get_u32()? != 0 {

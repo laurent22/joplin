@@ -1,6 +1,7 @@
 use super::ApiResult;
 use super::FileApiDriver;
 use std::fs;
+use std::path;
 use std::path::Path;
 
 pub struct FileApiDriverImpl {}
@@ -62,8 +63,8 @@ impl FileApiDriver for FileApiDriverImpl {
     fn join(&self, path_1: &str, path_2: &str) -> String {
         // Remove the / prefix prior to joining: Match the behavior of the
         // WASM/NodeJS file API.
-        let path_2 = if path_2.starts_with("/") {
-            path_2.strip_prefix("/").unwrap()
+        let path_2 = if path_2.starts_with(path::MAIN_SEPARATOR) {
+            path_2.strip_prefix(path::MAIN_SEPARATOR).unwrap()
         } else {
             path_2
         };
