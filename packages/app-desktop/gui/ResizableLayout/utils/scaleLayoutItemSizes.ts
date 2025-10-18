@@ -13,6 +13,22 @@ function safeRatio(value: number) {
 	return value;
 }
 
+interface AutoSizeContext {
+	naturalWidth?: number;
+	naturalHeight?: number;
+}
+
+function ensureContext(item: LayoutItem) {
+	if (!item.context) item.context = {};
+	return item.context;
+}
+
+function ensureAutoSizeContext(item: LayoutItem): AutoSizeContext {
+	const context = ensureContext(item);
+	if (!context.autoSize) context.autoSize = {};
+	return context.autoSize as AutoSizeContext;
+}
+
 export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Size, widthRatio: number, heightRatio: number): LayoutItem {
 	const ratioX = safeRatio(widthRatio);
 	const ratioY = safeRatio(heightRatio);
@@ -22,25 +38,58 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 			if (!parent) {
 				item.width = newRootSize.width;
 				item.height = newRootSize.height;
-				item.context = {
-					...item.context,
-					savedRootSize: {
-						width: newRootSize.width,
-						height: newRootSize.height,
-					},
+				const context = ensureContext(item);
+				context.savedRootSize = {
+					width: newRootSize.width,
+					height: newRootSize.height,
 				};
 				return true;
 			}
 
+			const autoSize = ensureAutoSizeContext(item);
+
 			if (parent.direction === LayoutItemDirection.Row) {
-				if (typeof item.width === 'number') {
-					const minimumWidth = item.minWidth || itemMinWidth;
-					item.width = clamp(item.width * ratioX, minimumWidth);
+				const hasExplicitWidth = typeof item.width === 'number';
+				if (!hasExplicitWidth && typeof autoSize.naturalWidth !== 'number') {
+					autoSize.naturalWidth = undefined;
+					return true;
 				}
+
+				const baseWidth = typeof autoSize.naturalWidth === 'number' ? autoSize.naturalWidth : (hasExplicitWidth ? item.width : null);
+				if (typeof baseWidth !== 'number') {
+					autoSize.naturalWidth = undefined;
+					return true;
+				}
+
+				const minimumWidth = item.minWidth || itemMinWidth;
+				const scaledWidth = baseWidth * ratioX;
+				autoSize.naturalWidth = scaledWidth;
+				item.width = clamp(scaledWidth, minimumWidth);
 			} else if (parent.direction === LayoutItemDirection.Column) {
-				if (typeof item.height === 'number') {
-					const minimumHeight = item.minHeight || itemMinHeight;
-					item.height = clamp(item.height * ratioY, minimumHeight);
+				const hasExplicitHeight = typeof item.height === 'number';
+				if (!hasExplicitHeight && typeof autoSize.naturalHeight !== 'number') {
+					autoSize.naturalHeight = undefined;
+					return true;
+				}
+
+				const baseHeight = typeof autoSize.naturalHeight === 'number' ? autoSize.naturalHeight : (hasExplicitHeight ? item.height : null);
+				if (typeof baseHeight !== 'number') {
+					autoSize.naturalHeight = undefined;
+					return true;
+				}
+
+				const minimumHeight = item.minHeight || itemMinHeight;
+				const scaledHeight = baseHeight * ratioY;
+				autoSize.naturalHeight = scaledHeight;
+				item.height = clamp(scaledHeight, minimumHeight);
+			}
+
+			if (item.context?.autoSize) {
+				const hasNaturalWidth = typeof item.context.autoSize.naturalWidth === 'number';
+				const hasNaturalHeight = typeof item.context.autoSize.naturalHeight === 'number';
+				if (!hasNaturalWidth && !hasNaturalHeight) {
+					delete item.context.autoSize;
+					if (!Object.keys(item.context).length) delete item.context;
 				}
 			}
 

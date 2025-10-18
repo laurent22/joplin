@@ -33,6 +33,12 @@ export function saveLayout(layout: LayoutItem): any {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				if (!propertyWhiteList.includes(k)) delete (item as any)[k];
 			}
+
+			if (item.context?.autoSize) {
+				delete item.context.autoSize;
+				if (!Object.keys(item.context).length) delete item.context;
+			}
+
 			return true;
 		});
 	});
