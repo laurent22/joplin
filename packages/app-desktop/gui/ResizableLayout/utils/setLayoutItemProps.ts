@@ -5,10 +5,15 @@ import validateLayout from './validateLayout';
 interface AutoSizeContext {
 	naturalWidth?: number;
 	naturalHeight?: number;
+	rootWidth?: number;
+	rootHeight?: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function setLayoutItemProps(layout: LayoutItem, key: string, props: any) {
+	const rootWidth = layout.width;
+	const rootHeight = layout.height;
+
 	return validateLayout(produce(layout, (draftState: LayoutItem) => {
 		function ensureContext(item: LayoutItem) {
 			if (!item.context) item.context = {};
@@ -29,7 +34,13 @@ export default function setLayoutItemProps(layout: LayoutItem, key: string, prop
 			if (item.context?.autoSize) {
 				const autoSize = item.context.autoSize as AutoSizeContext;
 				if (autoSize && typeof autoSize === 'object') {
-					if (autoSize.naturalWidth === undefined && autoSize.naturalHeight === undefined) {
+					if (autoSize.naturalWidth === undefined) delete autoSize.rootWidth;
+					if (autoSize.naturalHeight === undefined) delete autoSize.rootHeight;
+
+					const hasWidthInfo = autoSize.naturalWidth !== undefined || autoSize.rootWidth !== undefined;
+					const hasHeightInfo = autoSize.naturalHeight !== undefined || autoSize.rootHeight !== undefined;
+
+					if (!hasWidthInfo && !hasHeightInfo) {
 						delete item.context.autoSize;
 						removeEmptyContext(item);
 					}
@@ -42,8 +53,11 @@ export default function setLayoutItemProps(layout: LayoutItem, key: string, prop
 				if (typeof value === 'number') {
 					const autoSize = ensureAutoSize(item);
 					autoSize.naturalWidth = value;
+					if (typeof rootWidth === 'number') autoSize.rootWidth = rootWidth;
 				} else if (item.context?.autoSize) {
-					delete (item.context.autoSize as AutoSizeContext).naturalWidth;
+					const autoSize = item.context.autoSize as AutoSizeContext;
+					delete autoSize.naturalWidth;
+					delete autoSize.rootWidth;
 					cleanupAutoSize(item);
 				}
 				return;
@@ -53,8 +67,11 @@ export default function setLayoutItemProps(layout: LayoutItem, key: string, prop
 				if (typeof value === 'number') {
 					const autoSize = ensureAutoSize(item);
 					autoSize.naturalHeight = value;
+					if (typeof rootHeight === 'number') autoSize.rootHeight = rootHeight;
 				} else if (item.context?.autoSize) {
-					delete (item.context.autoSize as AutoSizeContext).naturalHeight;
+					const autoSize = item.context.autoSize as AutoSizeContext;
+					delete autoSize.naturalHeight;
+					delete autoSize.rootHeight;
 					cleanupAutoSize(item);
 				}
 			}
