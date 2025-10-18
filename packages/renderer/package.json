@@ -25,7 +25,7 @@
     "@types/node": "18.19.120",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "mermaid": "11.6.0",
+    "mermaid": "11.7.0",
     "ts-jest": "29.3.4",
     "typescript": "5.8.3"
   },
