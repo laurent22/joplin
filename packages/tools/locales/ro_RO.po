@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && "
 "n%100<=19) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -310,7 +310,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "O descriere sumară a imaginii:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1961
 msgid ""
@@ -582,6 +582,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"A apărut o eroare la trimiterea răspunsului. Acest lucru se poate întâmpla "
+"dacă aplicația este offline sau nu se poate conecta la server.\n"
+"Eroare: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1193,9 +1196,8 @@ msgstr "Restrânge toate caietele"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Collapse title"
-msgstr "Restrânge"
+msgstr "Restrânge titlul"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -2007,7 +2009,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Consideri că aplicația web Joplin este utilă?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1971
 msgid "Document scanner: Title template"
@@ -2569,9 +2571,8 @@ msgstr "Extinde toate caietele"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1696
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
-#, fuzzy
 msgid "Expand title"
-msgstr "Extins"
+msgstr "Extinde titlul"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2681,7 +2682,7 @@ msgstr "Feature Flags"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3373,9 +3374,8 @@ msgid "Joplin Server"
 msgstr "Server Joplin"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:64
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "URL server Joplin"
+msgstr "Server Joplin (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3408,6 +3408,8 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin suportă salvarea locației în care notițele sunt salvate sau create. "
+"Dorești să o activezi? Acest lucru poate fi modificat oricând din setări."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3461,7 +3463,7 @@ msgstr "Chei care trebuie actualizate"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Etichetă"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1434
 msgid "Landscape"
@@ -3708,9 +3710,8 @@ msgid "Markdown editor"
 msgstr "Editor Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1506
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Editor Markdown: Redă imaginile"
+msgstr "Editor Markdown: Evidențiază linia activă"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Markdown editor: Render images"
@@ -4107,7 +4108,7 @@ msgstr "Nu acum"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Nu este utilă"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4184,9 +4185,8 @@ msgid "Note list style"
 msgstr "Stilul listei de notițe"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Conținut asigurat de: %s"
+msgstr "Notița nu a fost publicată: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4453,7 +4453,7 @@ msgstr "Listă ordonată"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:124
 msgid "Other"
-msgstr ""
+msgstr "Alta"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4849,9 +4849,8 @@ msgid "Publish Note"
 msgstr "Publică notița"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Muți %d notiță în caietul „%s”?"
+msgstr "Publici notița „%s” (în caietul „%s”)?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4872,14 +4871,13 @@ msgid "Publish/unpublish"
 msgstr "Publică/Retrage"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Publică notițele"
+msgstr "Publicat la URL: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Publică o notiță pe un server Joplin sau în Cloud-ul Joplin"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4947,9 +4945,8 @@ msgid "Recipients:"
 msgstr "Destinatari:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "text accentuat"
+msgstr "Recunoaște textul:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5299,9 +5296,8 @@ msgid "Save geo-location with notes"
 msgstr "Salvează geo-locația în notițe"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:554
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Salvează geo-locația în notițe"
+msgstr "Salvezi geo-locația?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5409,7 +5405,7 @@ msgstr "Selectează caiet"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:125
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Selectează una din celelalte destinații de sincronizare suportate."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5946,7 +5942,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:105
 msgid "Sync"
-msgstr ""
+msgstr "Sincronizează"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6071,9 +6067,8 @@ msgid "Take photo"
 msgstr "Fotografiază"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Desenați imaginea"
+msgstr "Completează chestionarul"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6105,6 +6100,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Mulțumim pentru feedback!\n"
+"Ai timp să completezi un scurt chestionar?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6907,12 +6904,11 @@ msgstr "Nu se poate edita resursa de tip %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:108
 msgid "Unable to share log data. Reason: %s"
-msgstr "Imposibilitatea de a partaja datele din jurnal. Motivul: %s"
+msgstr "Imposibil de a partaja datele din jurnal. Motivul: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1085
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "Imposibilitatea de a partaja datele din jurnal. Motivul: %s"
+msgstr "Imposibil de a partaja datele din notiță. Motivul: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7177,7 +7173,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Utilă"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7359,6 +7355,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Când este activat, solicită ca imaginile din notiță să fie transcrise cu un "
+"serviciu de calitate mai bună de pe server. Necesită sincronizare cu "
+"aplicația desktop."
 
 #: packages/lib/models/settings/builtInMetadata.ts:567
 msgid ""
