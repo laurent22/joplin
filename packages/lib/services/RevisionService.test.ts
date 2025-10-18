@@ -620,8 +620,6 @@ describe('services/RevisionService', () => {
 		jest.advanceTimersByTime(100);
 
 		await Note.save({ id: note.id, title: 'test', body: 'StartA' });
-		// The first save after a revision collection will set the beforeChangeItemJson for subsequent saves to use. Wait for ItemChange.add to complete before subsequent
-		// saves, to avoid a race condition whereby the next save selects the beforeChangeItemJson before it has been saved and then uses a null value for subsequent saves
 		await ItemChange.waitForAllSaved();
 		await Note.save({ id: note.id, title: 'test', body: 'StartAB' });
 		await Note.save({ id: note.id, title: 'test', body: 'StartABC' }); // REV 2
@@ -730,8 +728,6 @@ describe('services/RevisionService', () => {
 		Setting.setValue('revisionService.oldNoteInterval', 50);
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEF' });
-		// The first save after a revision collection will set the beforeChangeItemJson for subsequent saves to use. Wait for ItemChange.add to complete before subsequent
-		// saves, to avoid a race condition whereby the next save selects the beforeChangeItemJson before it has been saved and then uses a null value for subsequent saves
 		await ItemChange.waitForAllSaved();
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEFG' }); // REV 2
 		await revisionService().collectRevisions(); // Create revisions for old and new content
@@ -770,8 +766,6 @@ describe('services/RevisionService', () => {
 		Setting.setValue('revisionService.oldNoteInterval', 50);
 
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDEF' });
-		// The first save after a revision collection will set the beforeChangeItemJson for subsequent saves to use. Wait for ItemChange.add to complete before subsequent
-		// saves, to avoid a race condition whereby the next save selects the beforeChangeItemJson before it has been saved and then uses a null value for subsequent saves
 		await ItemChange.waitForAllSaved();
 		await Note.save({ id: note.id, title: 'test', body: 'ABCDE' }); // REV 1
 		await revisionService().collectRevisions(); // Content is the same for old and new content, so create just one revision instead of two
