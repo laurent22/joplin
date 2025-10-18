@@ -379,6 +379,7 @@ packages/app-desktop/gui/ResizableLayout/utils/persist.test.js
 packages/app-desktop/gui/ResizableLayout/utils/persist.js
 packages/app-desktop/gui/ResizableLayout/utils/removeItem.js
 packages/app-desktop/gui/ResizableLayout/utils/removeKeylessItems.js
+packages/app-desktop/gui/ResizableLayout/utils/scaleLayoutItemSizes.js
 packages/app-desktop/gui/ResizableLayout/utils/setLayoutItemProps.js
 packages/app-desktop/gui/ResizableLayout/utils/style.js
 packages/app-desktop/gui/ResizableLayout/utils/types.js

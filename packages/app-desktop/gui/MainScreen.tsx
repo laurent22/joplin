@@ -22,9 +22,10 @@ import shim from '@joplin/lib/shim';
 import bridge from '../services/bridge';
 import styled from 'styled-components';
 import { themeStyle, ThemeStyle } from '@joplin/lib/theme';
-import validateLayout from './ResizableLayout/utils/validateLayout';
 import iterateItems from './ResizableLayout/utils/iterateItems';
 import removeItem from './ResizableLayout/utils/removeItem';
+import scaleLayoutItemSizes from './ResizableLayout/utils/scaleLayoutItemSizes';
+import validateLayout from './ResizableLayout/utils/validateLayout';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
@@ -312,12 +313,26 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	public updateRootLayoutSize() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
-			const s = this.rootLayoutSize();
-			draft.width = s.width;
-			draft.height = s.height;
-		}));
+		const layout = this.props.mainLayout;
+		if (!layout) return;
+
+		const newSize = this.rootLayoutSize();
+		const currentWidth = layout.width;
+		const currentHeight = layout.height;
+
+		if (!currentWidth || !currentHeight) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			this.updateMainLayout(produce(layout, (draft: any) => {
+				draft.width = newSize.width;
+				draft.height = newSize.height;
+			}));
+			return;
+		}
+
+		const widthRatio = newSize.width / currentWidth;
+		const heightRatio = newSize.height / currentHeight;
+
+		this.updateMainLayout(scaleLayoutItemSizes(layout, newSize, widthRatio, heightRatio));
 	}
 
 	public componentDidUpdate(prevProps: Props, prevState: State) {
