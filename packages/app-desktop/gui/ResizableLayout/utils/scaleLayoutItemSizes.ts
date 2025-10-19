@@ -5,7 +5,7 @@ import { itemMinHeight, itemMinWidth } from './useLayoutItemSizes';
 import validateLayout from './validateLayout';
 import { cleanupAutoSizeContext, currentAutoSizeContext, ensureAutoSizeContext } from './autoSizeUtils';
 
-function clamp(value: number, minimum: number) {
+function clampToMinimum(value: number, minimum: number) {
 	return Math.max(minimum, Math.round(value));
 }
 
@@ -72,7 +72,7 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 						const scaleFactor = referenceWidth ? newRootSize.width / referenceWidth : ratioX;
 						const scaledWidth = baseWidth * scaleFactor;
 						const minimumWidth = item.minWidth || itemMinWidth;
-						item.width = clamp(scaledWidth, minimumWidth);
+						item.width = clampToMinimum(scaledWidth, minimumWidth);
 					}
 				}
 
@@ -108,7 +108,7 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 						const scaleFactor = referenceHeight ? newRootSize.height / referenceHeight : ratioY;
 						const scaledHeight = baseHeight * scaleFactor;
 						const minimumHeight = item.minHeight || itemMinHeight;
-						item.height = clamp(scaledHeight, minimumHeight);
+						item.height = clampToMinimum(scaledHeight, minimumHeight);
 					}
 				}
 
