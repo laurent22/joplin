@@ -326,13 +326,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				draft.width = newSize.width;
 				draft.height = newSize.height;
 			}));
-			return;
+		} else {
+			const widthRatio = newSize.width / currentWidth;
+			const heightRatio = newSize.height / currentHeight;
+
+			this.updateMainLayout(scaleLayoutItemSizes(layout, newSize, widthRatio, heightRatio));
 		}
-
-		const widthRatio = newSize.width / currentWidth;
-		const heightRatio = newSize.height / currentHeight;
-
-		this.updateMainLayout(scaleLayoutItemSizes(layout, newSize, widthRatio, heightRatio));
 	}
 
 	public componentDidUpdate(prevProps: Props, prevState: State) {
