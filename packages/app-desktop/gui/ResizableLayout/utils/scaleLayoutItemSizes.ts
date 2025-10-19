@@ -22,8 +22,8 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 	const ratioY = safeRatio(heightRatio);
 
 	// Previous window size calculated from ratio, used for fallback
-	const referenceRootWidth = ratioX ? newRootSize.width / ratioX : undefined;
-	const referenceRootHeight = ratioY ? newRootSize.height / ratioY : undefined;
+	const referenceRootWidth = newRootSize.width / ratioX;
+	const referenceRootHeight = newRootSize.height / ratioY;
 	const savedRootWidth = layout.context?.savedRootSize?.width;
 	const savedRootHeight = layout.context?.savedRootSize?.height;
 	const previousRootWidth = layout.width;
