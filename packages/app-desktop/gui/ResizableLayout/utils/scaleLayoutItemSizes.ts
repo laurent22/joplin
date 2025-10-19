@@ -21,13 +21,9 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 	const ratioX = safeRatio(widthRatio);
 	const ratioY = safeRatio(heightRatio);
 
-	// Previous window size calculated from ratio, used for fallback
+	// Previous window size calculated from ratio
 	const referenceRootWidth = newRootSize.width / ratioX;
 	const referenceRootHeight = newRootSize.height / ratioY;
-	const savedRootWidth = layout.context?.savedRootSize?.width;
-	const savedRootHeight = layout.context?.savedRootSize?.height;
-	const previousRootWidth = layout.width;
-	const previousRootHeight = layout.height;
 
 	const scaledLayout = produce(layout, (draft: LayoutItem) => {
 		iterateItems(draft, (_itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
@@ -48,17 +44,16 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 
 					// Store reference window width for this panel's natural width
 					if (typeof ensuredAutoSize.rootWidth !== 'number') {
-						const fallbackRootWidth = referenceRootWidth ?? savedRootWidth ?? previousRootWidth ?? newRootSize.width;
-						if (typeof fallbackRootWidth === 'number') ensuredAutoSize.rootWidth = fallbackRootWidth;
+						ensuredAutoSize.rootWidth = referenceRootWidth;
 					}
 
 					// Calculate natural width (before min-size clamping) if not already tracked
 					if (typeof ensuredAutoSize.naturalWidth !== 'number' && hasExplicitWidth) {
-						const targetReferenceWidth = ensuredAutoSize.rootWidth ?? referenceRootWidth ?? savedRootWidth ?? previousRootWidth ?? newRootSize.width;
-						const sourceReferenceWidth = referenceRootWidth ?? previousRootWidth ?? targetReferenceWidth;
+						const targetReferenceWidth = ensuredAutoSize.rootWidth;
+						const sourceReferenceWidth = referenceRootWidth;
 						const widthValue = item.width;
 
-						if (typeof targetReferenceWidth === 'number' && typeof sourceReferenceWidth === 'number' && sourceReferenceWidth > 0) {
+						if (sourceReferenceWidth > 0) {
 							ensuredAutoSize.naturalWidth = widthValue * (targetReferenceWidth / sourceReferenceWidth);
 						} else {
 							ensuredAutoSize.naturalWidth = widthValue;
@@ -68,8 +63,8 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 					// Scale from natural width, then apply min-size constraint
 					const baseWidth = ensuredAutoSize.naturalWidth ?? (hasExplicitWidth ? item.width : null);
 					if (typeof baseWidth === 'number') {
-						const referenceWidth = ensuredAutoSize.rootWidth ?? referenceRootWidth ?? savedRootWidth ?? previousRootWidth;
-						const scaleFactor = referenceWidth ? newRootSize.width / referenceWidth : ratioX;
+						const referenceWidth = ensuredAutoSize.rootWidth;
+						const scaleFactor = newRootSize.width / referenceWidth;
 						const scaledWidth = baseWidth * scaleFactor;
 						const minimumWidth = item.minWidth || itemMinWidth;
 						item.width = clampToMinimum(scaledWidth, minimumWidth);
@@ -86,16 +81,15 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 					const ensuredAutoSize = autoSize ?? ensureAutoSizeContext(item);
 
 					if (typeof ensuredAutoSize.rootHeight !== 'number') {
-						const fallbackRootHeight = referenceRootHeight ?? savedRootHeight ?? previousRootHeight ?? newRootSize.height;
-						if (typeof fallbackRootHeight === 'number') ensuredAutoSize.rootHeight = fallbackRootHeight;
+						ensuredAutoSize.rootHeight = referenceRootHeight;
 					}
 
 					if (typeof ensuredAutoSize.naturalHeight !== 'number' && hasExplicitHeight) {
-						const targetReferenceHeight = ensuredAutoSize.rootHeight ?? referenceRootHeight ?? savedRootHeight ?? previousRootHeight ?? newRootSize.height;
-						const sourceReferenceHeight = referenceRootHeight ?? previousRootHeight ?? targetReferenceHeight;
+						const targetReferenceHeight = ensuredAutoSize.rootHeight;
+						const sourceReferenceHeight = referenceRootHeight;
 						const heightValue = item.height;
 
-						if (typeof targetReferenceHeight === 'number' && typeof sourceReferenceHeight === 'number' && sourceReferenceHeight > 0) {
+						if (sourceReferenceHeight > 0) {
 							ensuredAutoSize.naturalHeight = heightValue * (targetReferenceHeight / sourceReferenceHeight);
 						} else {
 							ensuredAutoSize.naturalHeight = heightValue;
@@ -104,8 +98,8 @@ export default function scaleLayoutItemSizes(layout: LayoutItem, newRootSize: Si
 
 					const baseHeight = ensuredAutoSize.naturalHeight ?? (hasExplicitHeight ? item.height : null);
 					if (typeof baseHeight === 'number') {
-						const referenceHeight = ensuredAutoSize.rootHeight ?? referenceRootHeight ?? savedRootHeight ?? previousRootHeight;
-						const scaleFactor = referenceHeight ? newRootSize.height / referenceHeight : ratioY;
+						const referenceHeight = ensuredAutoSize.rootHeight;
+						const scaleFactor = newRootSize.height / referenceHeight;
 						const scaledHeight = baseHeight * scaleFactor;
 						const minimumHeight = item.minHeight || itemMinHeight;
 						item.height = clampToMinimum(scaledHeight, minimumHeight);
