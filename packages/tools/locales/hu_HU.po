@@ -999,7 +999,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
 msgid "Case sensitive"
-msgstr "Kis-nagybetű érzékeny"
+msgstr "Kis- és nagybetűk megkülönböztetése"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -4991,7 +4991,7 @@ msgstr "Frissítés"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
 msgid "Regular expression"
-msgstr "Reguláris kifejezés"
+msgstr "Reguláris kifejezések"
 
 #: packages/app-desktop/gui/MainScreen.tsx:569
 #: packages/app-desktop/gui/Root.tsx:130
