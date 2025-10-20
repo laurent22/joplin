@@ -62,7 +62,9 @@ class FolderScreenComponent extends BaseScreenComponent {
 	}
 
 	parent_changeValue(parent) {
-		this.folderComponent_change('parent_id', parent);
+		// Handle the special 'root' value for creating top-level notebooks
+		const parentId = parent === 'root' ? '' : parent;
+		this.folderComponent_change('parent_id', parentId);
 	}
 
 

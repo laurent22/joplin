@@ -60,7 +60,11 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	const titlePickerItems = (mustSelect: boolean) => {
 		const folderList = folders.filter(f => f.id !== Folder.conflictFolderId());
 		let output = [];
-		if (mustSelect) output.push({ label: placeholder || _('Move to notebook...'), value: '' });
+		if (mustSelect) {
+			output.push({ label: placeholder || _('Move to notebook...'), value: '' });
+			
+			output.push({ label: _('None (create top-level notebook)'), value: 'root' });
+		}
 		const folderTree = Folder.buildTree(folderList);
 		output = addFolderChildren(folderTree, output, 0);
 		return output;
