@@ -64,7 +64,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 		let output: DropdownListItem[] = [];
 		if (mustSelect) {
 			output.push({ label: placeholder || _('Move to notebook...'), value: '' });
-			
+
 			// Add option for creating top-level notebooks when showRootOption is true
 			if (showRootOption) {
 				output.push({ label: _('None (create top-level notebook)'), value: 'root' });
