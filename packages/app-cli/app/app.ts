@@ -468,6 +468,9 @@ class Application extends BaseApplication {
 			});
 
 			this.startRotatingLogMaintenance(Setting.value('profileDir'));
+
+			this.gui_.addCommandToConsole('server start');
+			await this.gui_.processPromptCommand('server start');			
 		}
 	}
 }

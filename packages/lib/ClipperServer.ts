@@ -256,7 +256,8 @@ export default class ClipperServer {
 
 		this.logger().info(`Starting Clipper server on port ${this.port_}`);
 
-		this.server_.listen(this.port_, '127.0.0.1');
+		// this.server_.listen(this.port_, '127.0.0.1');
+		this.server_.listen(this.port_, '0.0.0.0');
 
 		this.setStartState(StartState.Started);
 
