@@ -113,6 +113,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 						selectedFolderId={this.state.folder.parent_id}
 						onValueChange={newValue => this.parent_changeValue(newValue)}
 						mustSelect
+						showRootOption
 						darkText
 					/>
 				</View>

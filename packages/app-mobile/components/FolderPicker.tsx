@@ -14,6 +14,7 @@ interface FolderPickerProps {
 	selectedFolderId?: string;
 	onValueChange?: OnValueChangedListener;
 	mustSelect?: boolean;
+	showRootOption?: boolean; // New prop to control when to show the 'root' option
 	folders: FolderEntity[];
 	placeholder?: string;
 	darkText?: boolean;
@@ -28,6 +29,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	selectedFolderId,
 	onValueChange,
 	mustSelect,
+	showRootOption = false, // Default to false for backward compatibility
 	folders,
 	placeholder,
 	darkText,
@@ -57,13 +59,16 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 		return pickerItems;
 	};
 
-	const titlePickerItems = (mustSelect: boolean) => {
+	const titlePickerItems = (mustSelect: boolean, showRootOption: boolean) => {
 		const folderList = folders.filter(f => f.id !== Folder.conflictFolderId());
-		let output = [];
+		let output: DropdownListItem[] = [];
 		if (mustSelect) {
 			output.push({ label: placeholder || _('Move to notebook...'), value: '' });
 			
-			output.push({ label: _('None (create top-level notebook)'), value: 'root' });
+			// Add option for creating top-level notebooks when showRootOption is true
+			if (showRootOption) {
+				output.push({ label: _('None (create top-level notebook)'), value: 'root' });
+			}
 		}
 		const folderTree = Folder.buildTree(folderList);
 		output = addFolderChildren(folderTree, output, 0);
@@ -80,7 +85,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 
 	const dropdown = (
 		<Dropdown
-			items={titlePickerItems(!!mustSelect)}
+			items={titlePickerItems(!!mustSelect, showRootOption)}
 			accessibilityHint={_('Selects a notebook')}
 			disabled={disabled}
 			labelTransform="trim"
