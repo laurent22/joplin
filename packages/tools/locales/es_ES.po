@@ -15,6 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
 "Language-Team: Spanish <contacto@ericdq.com>\n"
 "Language: es_ES\n"
@@ -22,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
@@ -428,7 +430,7 @@ msgstr "Añadir cuerpo"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:24
 msgid "Add column"
-msgstr ""
+msgstr "Añadir columna"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -445,9 +447,8 @@ msgid "Add recipient:"
 msgstr "Agregar destinatario:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
-#, fuzzy
 msgid "Add row"
-msgstr "Añadir nuevo"
+msgstr "Añadir fila"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -1228,9 +1229,9 @@ msgstr "Próximas alarmas"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Lista separada por comas de rutas de acceso a directorios desde los que "
 "cargar los certificados, o ruta de acceso a archivos de certificado "
@@ -1760,9 +1761,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "¿Eliminar el archivo adjunto \"%s\"?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:34
-#, fuzzy
 msgid "Delete column"
-msgstr "Borrar línea"
+msgstr "Borrar columna"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1805,9 +1805,8 @@ msgid "Delete profile \"%s\""
 msgstr "¿Borrar perfil \"%s\"?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:29
-#, fuzzy
 msgid "Delete row"
-msgstr "Eliminar nota"
+msgstr "Borrar fila"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:486
 msgid "Delete selected notes"
@@ -7498,8 +7497,8 @@ msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Su contraseña es necesaria para descrifrar algunos de sus datos. Escriba `:"
-"e2ee decrypt` para establecerla."
+"Su contraseña es necesaria para descrifrar algunos de sus datos. Escriba "
+"`:e2ee decrypt` para establecerla."
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"
