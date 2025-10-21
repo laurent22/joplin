@@ -48,6 +48,11 @@ const useStyles = (themeId: number) => {
 			invisibleHeading: {
 				flexGrow: 1,
 			},
+			// Use compact mode on the button and expand the padding to match the original styling, to work around an Android issue #13120
+			buttonStyle: {
+				paddingLeft: 16,
+				paddingRight: 16,
+			},
 		});
 	}, [themeId]);
 };
@@ -76,8 +81,8 @@ const ModalDialog: React.FC<Props> = props => {
 					accessible={true}
 					style={styles.invisibleHeading}
 				/>
-				<Button disabled={!props.buttonBarEnabled} onPress={props.onCancelPress}>{props.cancelTitle}</Button>
-				<PrimaryButton disabled={!props.buttonBarEnabled} onPress={props.onOkPress}>{props.okTitle}</PrimaryButton>
+				<Button compact contentStyle={styles.buttonStyle} disabled={!props.buttonBarEnabled} onPress={props.onCancelPress}>{props.cancelTitle}</Button>
+				<PrimaryButton compact contentStyle={styles.buttonStyle} disabled={!props.buttonBarEnabled} onPress={props.onOkPress}>{props.okTitle}</PrimaryButton>
 			</View>
 		</Modal>
 	);
