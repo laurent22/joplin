@@ -8222,15 +8222,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:0.2.2":
-  version: 0.2.2
-  resolution: "@fortawesome/react-fontawesome@npm:0.2.2"
+"@fortawesome/react-fontawesome@npm:0.2.3":
+  version: 0.2.3
+  resolution: "@fortawesome/react-fontawesome@npm:0.2.3"
   dependencies:
     prop-types: "npm:^15.8.1"
   peerDependencies:
-    "@fortawesome/fontawesome-svg-core": ~1 || ~6
-    react: ">=16.3"
-  checksum: 10/05537fd7c34d43e0d8823df0195cb6fd935ff78e296e2d362e668bcf75f13d71c70c7fd6d596dff4e37b5f27e0ae43b98cb4732e0d91570f30b8a5581bbe2704
+    "@fortawesome/fontawesome-svg-core": ~1 || ~6 || ~7
+    react: ^16.3 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/cd0da6a27748c7c8efa22ea9b3449bc0d0fbd0010623d462771d17e77a915cd1abbc1b2b73663a1c888a0510bdde2eb483760b61e80780d8b684714d18728983
   languageName: node
   linkType: hard
 
@@ -9415,7 +9415,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": "npm:6.1.2"
     "@fortawesome/free-solid-svg-icons": "npm:6.1.2"
-    "@fortawesome/react-fontawesome": "npm:0.2.2"
+    "@fortawesome/react-fontawesome": "npm:0.2.3"
     "@joplin/lib": "npm:~3.5"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
