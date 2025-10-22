@@ -657,6 +657,26 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				type: 'NOTE_EDITOR_VISIBLE_CHANGE',
 				visible: this.state.mode === 'edit' && !this.state.showCamera && !this.state.showImageEditor,
 			});
+
+			// Reset undo/redo button state when switching modes since the editor is recreated and loses its undo/redo history
+			if (this.state.mode === 'edit') {
+				this.setState({
+					undoRedoButtonState: {
+						canUndo: false,
+						canRedo: false,
+					},
+				});
+			}
+		}
+
+		// Reset undo/redo button state when switching between markdown and rich text editors since the editor is recreated and loses its undo/redo history
+		if (prevProps.editorType !== this.props.editorType && this.state.mode === 'edit') {
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: false,
+					canRedo: false,
+				},
+			});
 		}
 
 		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
