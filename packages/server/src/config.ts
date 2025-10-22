@@ -4,7 +4,6 @@ import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
 import parseStorageDriverConnectionString from './models/items/storage/parseStorageConnectionString';
-import Logger from '@joplin/utils/Logger';
 
 interface PackageJson {
 	version: string;
@@ -227,7 +226,6 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		maxTimeDrift: env.MAX_TIME_DRIFT,
 		ldap: ldapConfigFromEnv(env),
 		saml: samlConfigFromEnv(env),
-		logLevel: Logger.levelStringToId(env.LOG_LEVEL),
 		...overrides,
 	};
 }

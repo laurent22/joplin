@@ -1,4 +1,4 @@
-import { LoggerWrapper, LogLevel } from '@joplin/utils/Logger';
+import { LoggerWrapper } from '@joplin/utils/Logger';
 import { StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import * as Koa from 'koa';
 import { User, Uuid } from '../services/database/types';
@@ -190,7 +190,6 @@ export interface Config extends EnvVariables {
 	maxTimeDrift: number;
 	ldap: LdapConfig[];
 	saml: SamlConfig;
-	logLevel: LogLevel;
 }
 
 export enum HttpMethod {
