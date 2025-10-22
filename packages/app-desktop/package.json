@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -16,6 +16,7 @@
     "test": "jest",
     "test-ui": "gulp before-start && playwright test",
     "test-ci": "yarn test",
+    "resolve-sourcemap": "node tools/resolveSourceMap.js",
     "modifyReleaseAssets": "node tools/modifyReleaseAssets.js"
   },
   "repository": {
@@ -148,7 +149,7 @@
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.14",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.118",
+    "@types/node": "18.19.130",
     "@types/react": "18.3.23",
     "@types/react-dom": "18.3.7",
     "@types/react-redux": "7.1.33",
@@ -160,7 +161,7 @@
     "compare-versions": "6.1.1",
     "countable": "3.0.1",
     "debounce": "1.2.1",
-    "electron": "37.4.0",
+    "electron": "37.7.0",
     "electron-builder": "24.13.3",
     "electron-updater": "6.6.2",
     "electron-window-state": "5.0.3",

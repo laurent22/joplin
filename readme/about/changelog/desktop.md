@@ -1,5 +1,20 @@
 # Joplin Desktop Changelog
 
+## [v3.5.5](https://github.com/laurent22/joplin/releases/tag/v3.5.5) (Pre-release) - 2025-10-18T10:31:09Z
+
+- Improved: Accessibility: Allow jumping to notebooks by typing the initial letter or Home/End ([#13469](https://github.com/laurent22/joplin/issues/13469) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Correctly import Evernote resources that do not have the encoding specified ([3097c3e](https://github.com/laurent22/joplin/commit/3097c3e))
+- Improved: OneNote importer: Improve file header validation ([#13467](https://github.com/laurent22/joplin/issues/13467) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: OneNote importer: Support directly importing .one files and, on Windows, .onepkg files ([#13474](https://github.com/laurent22/joplin/issues/13474) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Save and restore the cursor position when switching between notes ([#13447](https://github.com/laurent22/joplin/issues/13447)) ([#520](https://github.com/laurent22/joplin/issues/520) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support importing `.one` files from OneNote 2016 ([#13391](https://github.com/laurent22/joplin/issues/13391) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update translations (5f66c51 by Helmut K. C. Tessarek)
+- Improved: Updated packages form-data (v4.0.4)
+- Improved: Upgrade to Electron v37.7.0 ([#13445](https://github.com/laurent22/joplin/issues/13445) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix header links only work if the note viewer is visible ([#13442](https://github.com/laurent22/joplin/issues/13442)) ([#13411](https://github.com/laurent22/joplin/issues/13411) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed importing certain Evernote images that have invalid dimension attributes ([#13472](https://github.com/laurent22/joplin/issues/13472))
+- Fixed: Prevent Joplin from missing changes when syncing with file system or WebDAV ([#13054](https://github.com/laurent22/joplin/issues/13054)) ([#6517](https://github.com/laurent22/joplin/issues/6517) by [@mrjo118](https://github.com/mrjo118))
+
 ## [v3.5.4](https://github.com/laurent22/joplin/releases/tag/v3.5.4) (Pre-release) - 2025-10-10T17:19:58Z
 
 - New: Add support for mixed case tags ([#12931](https://github.com/laurent22/joplin/issues/12931) by [@mrjo118](https://github.com/mrjo118))

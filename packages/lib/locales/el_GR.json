@@ -134,6 +134,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> μπορεί να είναι \"toggle\" ή \"clear\". Χρησιμοποιήστε το \"toggle\" για εναλλαγή κατάστασης της συγκεκριμένης υπόμνησης μεταξύ ολοκληρωμένης και μη-ολοκληρωμένης (εάν  χρησιμοποιηθεί σε κανονική σημείωση, αυτή θα μετατραπεί σε υπόμνηση). Χρησιμοποιήστε το \"clear\" για να μετατρέψετε την υπόμνηση σε κανονική σημείωση."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -196,6 +199,9 @@
 	],
 	"Add body": [
 		"Προσθήκη σώματος κειμένου"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Προσθήκη νέου"
@@ -277,6 +283,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Βρέθηκε ένα αυτόματα αποθηκευμένο σχέδιο. Να επισυναφθεί αντίγραφό του στην σημείωση;"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Συνέβη ένα σφάλμα: %s"
@@ -1017,6 +1026,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Μην χάσετε τον κωδικό πρόσβασης, καθώς, για λόγους ασφαλείας, αυτός θα είναι ο *μόνος* τρόπος αποκρυπτογράφησης των δεδομένων! Για να ενεργοποιήσετε την κρυπτογράφηση, εισαγάγετε τον κωδικό πρόσβασής σας παρακάτω."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1395,6 +1407,9 @@
 	"Feature flags": [
 		"Feature flags"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Ληφθέντα στοιχεία: %d/%d."
 	],
@@ -1645,9 +1660,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Σε οποιαδήποτε εντολή, μπορείτε να αναφέρετε μια σημείωση ή ένα σημειωματάριο με τον τίτλο ή το αναγνωριστικό (ID) ή χρησιμοποιώντας τις συντομεύσεις `$n` ή `$b` αντίστοιχα. Η `$c` μπορεί να χρησιμοποιηθεί για αναφορά στο τρέχον επιλεγμένο στοιχείο."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Για να συσχετίσετε μια γεωγραφική τοποθεσία με τη σημείωση, η εφαρμογή χρειάζεται την άδειά σας για να αποκτήσει πρόσβαση στην τοποθεσία σας.\n\nΜπορείτε να απενεργοποιήσετε αυτήν την επιλογή ανά πάσα στιγμή στην οθόνη Ρύθμιση παραμέτρων."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Για να το κάνετε αυτό, ολόκληρο το σύνολο δεδομένων σας θα πρέπει να κρυπτογραφηθεί και να συγχρονιστεί, επομένως είναι καλύτερο να το εκτελέσετε κατά τη διάρκεια της νύχτας.\n\nΓια να ξεκινήσετε, ακολουθήστε τις παρακάτω οδηγίες:\n\n1. Συγχρονίστε όλες τις συσκευές σας.\n2. Κάντε κλικ στο κουμπί \"%s\".\n3. Αφήστε το να τρέξει μέχρι να ολοκληρωθεί. Κατά την εκτέλεσή του, αποφύγετε να αλλάξετε οποιαδήποτε σημείωση στις άλλες συσκευές σας, για να αποφύγετε διενέξεις.\n4. Μόλις ολοκληρωθεί ο συγχρονισμός σε αυτήν τη συσκευή, συγχρονίστε όλες τις άλλες συσκευές σας και αφήστε τον συγχρονισμό να ολοκληρωθεί.\n\nΣημαντικό: χρειάζεται να τρέξει ΜΟΝΟ μία φορά σε μια συσκευή."
 	],
@@ -1795,6 +1807,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Το Joplin Web Clipper επιτρέπει την αποθήκευση ιστοσελίδων και screenshots από το πρόγραμμα περιήγησης στο Joplin."
 	],
@@ -1824,6 +1839,9 @@
 	],
 	"Keys that need upgrading": [
 		"Κλειδιά που χρειάζονται αναβάθμιση"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Οριζόντια"
@@ -2171,6 +2189,9 @@
 	"Not now": [
 		"Αργότερα"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"σημείωση"
 	],
@@ -2336,6 +2357,9 @@
 	"Ordered list": [
 		"Ταξινομημένη λίστα"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Άλλες εφαρμογές..."
 	],
@@ -2389,9 +2413,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Διαγράφει οριστικά το σημειωματάριο, παρακάμπτοντας τον κάδο απορριμμάτων."
-	],
-	"Permission needed": [
-		"Απαιτείται άδεια"
 	],
 	"Photo %d": [
 		""
@@ -2495,9 +2516,6 @@
 	"Preferred light theme": [
 		"Προτιμώμενο φωτεινό θέμα"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2583,6 +2601,9 @@
 		"Δημοσίευση σημειώσεων στο διαδίκτυο"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2860,6 +2881,9 @@
 	],
 	"Select file...": [
 		"Επιλογή φακέλου..."
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Select parent notebook": [
 		"Επιλέξτε γονικό σημειωματάριο"
@@ -3146,6 +3170,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Αλλάζει σε [σημειωματάριο] - όλες οι περαιτέρω λειτουργίες θα πραγματοποιηθούν μέσα σε αυτό το σημειωματάριο."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Συγχρονίστε όσες συσκευές επιθυμείτε"
 	],
@@ -3241,6 +3268,9 @@
 	],
 	"Text editor command": [
 		"Εντολή \"Επεξεργαστή κειμένου\""
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Το ενεργό προφίλ δεν μπορεί να διαγραφεί. Μεταβείτε σε ένα άλλο προφίλ και δοκιμάστε ξανά."
@@ -3736,6 +3766,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Χρησιμοποιείται όταν απαιτείται γραμματοσειρά σταθερού πλάτους για την ευανάκριβη δημιουργία κειμένου (π.χ. πίνακες, πλαίσια ελέγχου, κωδικός). Εάν δεν βρεθεί, χρησιμοποιείται μια γενική μονοδιάστημα (σταθερού πλάτους)."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Διαγραφές χρήστη"
 	],
@@ -3774,9 +3807,6 @@
 	],
 	"Voice typing...": [
 		"Φωνητική πληκτρολόγηση..."
-	],
-	"Vosk": [
-		""
 	],
 	"Waiting for authorisation...": [
 		"Αναμονή εξουσιοδότησης…"
@@ -3832,11 +3862,11 @@
 	"When creating a new to-do:": [
 		"Κατά τη δημιουργία νέας υπόμνησης:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Αν είναι ενεργοποιημένο, η εφαρμογή θα σαρώσει τα συνημμένα σας και θα εξάγει το κείμενο από αυτά. Έτσι, θα έχετε τη δυνατότητα να αναζητήσετε κείμενο μέσα στα συνημμένα."
-	],
-	"Whisper": [
-		""
 	],
 	"Window unresponsive.": [
 		"Το παράθυρο δεν αποκρίνεται."

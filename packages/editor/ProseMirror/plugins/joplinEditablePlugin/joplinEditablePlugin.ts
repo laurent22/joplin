@@ -9,7 +9,7 @@ import postProcessRenderedHtml from './postProcessRenderedHtml';
 import makeLinksClickableInElement from '../../utils/makeLinksClickableInElement';
 import SelectableNodeView from '../../utils/SelectableNodeView';
 import createExternalEditorPlugin, { OnHide } from '../utils/createExternalEditorPlugin';
-import createFloatingButtonPlugin, { ToolbarPosition } from '../utils/createFloatingButtonPlugin';
+import createFloatingButtonPlugin, { ToolbarType } from '../utils/createFloatingButtonPlugin';
 
 // See the fold example for more information about
 // writing similar ProseMirror plugins:
@@ -245,6 +245,6 @@ export default [
 				className: 'edit-button',
 				command: (_node, offset) => editAt(offset),
 			},
-		], ToolbarPosition.TopRightInside)
+		], ToolbarType.AnchorTopRight)
 	)),
 ];

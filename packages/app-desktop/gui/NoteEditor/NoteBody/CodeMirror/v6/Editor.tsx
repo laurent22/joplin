@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ForwardedRef } from 'react';
+import { ForwardedRef, RefObject } from 'react';
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { EditorProps, LogMessageCallback, OnEventCallback, ContentScriptData } from '@joplin/editor/types';
 import createEditor from '@joplin/editor/CodeMirror/createEditor';
@@ -23,6 +23,7 @@ import getResourceBaseUrl from '../../../utils/getResourceBaseUrl';
 interface Props extends EditorProps {
 	style: React.CSSProperties;
 	pluginStates: PluginStates;
+	initialSelectionRef: RefObject<number>;
 
 	onEditorPaste: (event: Event)=> void;
 	externalSearch: SearchMarkers;
@@ -127,6 +128,9 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 				direction: 'unset',
 			},
 		});
+		const cursor = props.initialSelectionRef.current;
+		editor.select(cursor, cursor);
+
 		setEditor(editor);
 
 		return () => {

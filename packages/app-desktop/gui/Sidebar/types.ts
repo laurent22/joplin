@@ -16,6 +16,8 @@ export enum ListItemType {
 
 interface BaseListItem {
 	key: string;
+	// Used for typeahead
+	label: string;
 	depth: number;
 	hasChildren: boolean;
 }
@@ -26,7 +28,6 @@ interface ToplevelListItem extends BaseListItem {
 
 export interface HeaderListItem extends ToplevelListItem {
 	kind: ListItemType.Header;
-	label: string;
 	expanded: boolean;
 	iconName: string;
 	id: HeaderId;

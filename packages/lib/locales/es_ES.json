@@ -167,6 +167,9 @@
 	"[None]": [
 		"[none]"
 	],
+	"A brief description of the image:": [
+		"Una breve descripción de la imagen:"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Una lista de palabras separadas por comas. Se puede usar para palabras poco comunes, para ayudar a la escritura por voz a deletrearlas correctamente."
 	],
@@ -238,6 +241,9 @@
 	],
 	"Add body": [
 		"Añadir cuerpo"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Añadir nuevo"
@@ -334,6 +340,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Se ha encontrado un dibujo autoguardado. ¿Adjuntar una copia a la nota?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		"Se ha producido un error al enviar la respuesta. Esto puede ocurrir si la aplicación no está en línea o no puede conectarse al servidor.\nError: %s"
 	],
 	"An error occurred: %s": [
 		"Se ha producido un error: %s"
@@ -674,11 +683,14 @@
 	"Collapse all notebooks": [
 		"Contraer todas las libretas"
 	],
+	"Collapse title": [
+		"Contraer título"
+	],
 	"Collapsed": [
 		"Colapsado"
 	],
 	"Coming alarms": [
-		"Alarmas próximas"
+		"Próximas alarmas"
 	],
 	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
 		"Lista separada por comas de rutas de acceso a directorios desde los que cargar los certificados, o ruta de acceso a archivos de certificado individuales. Por ejemplo: /my/cert_dir, /other/custom.pem. Tenga en cuenta que si realiza cambios en la configuración de TLS, debe guardar los cambios antes de hacer clic en \"Comprobar configuración de sincronización\"."
@@ -1171,6 +1183,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"¡No pierda la contraseña ya que, por motivos de seguridad, esta será la *única* forma de descifrar los datos! Para habilitar el cifrado, ingrese su contraseña a continuación."
 	],
+	"Do you find the Joplin web app useful?": [
+		"¿Le resulta útil la aplicación web de Joplin?"
+	],
 	"Document scanner: Title template": [
 		"Escáner de documentos: Plantilla de título"
 	],
@@ -1528,6 +1543,9 @@
 	"Expand all notebooks": [
 		"Expandir todas las libretas"
 	],
+	"Expand title": [
+		"Expandir título"
+	],
 	"Expanded": [
 		"Expandido"
 	],
@@ -1590,6 +1608,9 @@
 	],
 	"Feature flags": [
 		"Feature flags"
+	],
+	"Feedback": [
+		"Comentarios"
 	],
 	"Fetched items: %d/%d.": [
 		"Elementos obtenidos: %d/%d."
@@ -1850,9 +1871,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"En cualquier comando, una nota o libreta puede ser referida por su título o ID, o utilizando los atajos `$n` o `$b`, respectivamente, para la nota o libreta seleccionada. Se puede utilizar `$c` para hacer referencia al elemento seleccionado."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Para asociar una geolocalización con la nota, la aplicación necesita su permiso para acceder a su ubicación.\n\nPuede desactivar esta opción en cualquier momento en la pantalla de Configuración."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Para hacerlo, todos sus datos deberán ser cifrados y sincronizados, por lo que es mejor realizarlo durante la noche.\n\nPara empezar, siga estas instrucciones:\n\n1. Sincronice todos sus dispositivos.\n2. Haga clic en \"%s\".\n3. Deje que se ejecute hasta su finalización. Mientras se ejecuta, evite modificar cualquier nota en sus otros dispositivos para evitar conflictos.\n4. Una vez que la sincronización finalice en este dispositivo, sincronice todos sus otros dispositivos y permítale ejecutarse hasta su finalización.\n\nImportante: solo necesita realizar este procedimiento UNA ÚNICA VEZ en un dispositivo."
 	],
@@ -2006,6 +2024,9 @@
 	"Joplin Server": [
 		"Servidor de Joplin"
 	],
+	"Joplin Server (SAML)": [
+		"Servidor Joplin (SAML)"
+	],
 	"Joplin Server Business": [
 		"Servidor Joplin para empresas"
 	],
@@ -2023,6 +2044,9 @@
 	],
 	"Joplin SSO Authentication": [
 		"Autenticación SSO de Joplin"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		"Joplin permite guardar la ubicación en la que se guardan o crean las notas. ¿Quieres habilitarlo? Esto se puede cambiar en cualquier momento en la configuración."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"El Web Clipper de Joplin le permite guardar páginas web y capturas de pantalla desde su navegador a la aplicación."
@@ -2053,6 +2077,9 @@
 	],
 	"Keys that need upgrading": [
 		"Claves que necesitan actualizarse"
+	],
+	"Label": [
+		"Etiqueta"
 	],
 	"Landscape": [
 		"Apaisado"
@@ -2208,6 +2235,9 @@
 	],
 	"Markdown editor": [
 		"Editor de Markdown"
+	],
+	"Markdown editor: Highlight active line": [
+		"Editor de Markdown: Resaltar línea activa"
 	],
 	"Markdown editor: Render images": [
 		"Editor de Markdown: Renderizar imágenes"
@@ -2468,6 +2498,9 @@
 	"Not now": [
 		"Ahora no"
 	],
+	"Not useful": [
+		"No es útil"
+	],
 	"note": [
 		"nota"
 	],
@@ -2515,6 +2548,9 @@
 	],
 	"Note list style": [
 		"Estilo de lista de nota"
+	],
+	"Note not published: %s": [
+		"Nota no publicada: %s"
 	],
 	"Note preview": [
 		"Vista previa de la nota"
@@ -2675,6 +2711,9 @@
 	"Ordered list": [
 		"Lista ordenada"
 	],
+	"Other": [
+		"Otro"
+	],
 	"Other applications...": [
 		"Otras aplicaciones..."
 	],
@@ -2735,9 +2774,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Elimina permanentemente la libreta, omitiendo la papelera."
-	],
-	"Permission needed": [
-		"Se necesita permiso"
 	],
 	"Photo %d": [
 		"Foto %d"
@@ -2841,9 +2877,6 @@
 	"Preferred light theme": [
 		"Tema claro preferido"
 	],
-	"Preferred voice typing provider": [
-		"Proveedor de mecanografía por voz preferido"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Conservar los colores al pegar texto en el Editor de texto enriquecido"
 	],
@@ -2931,6 +2964,9 @@
 	"Publish Note": [
 		"Publicar nota"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"¿Publicar la nota \"%s\" (en la libreta \"%s\")?"
+	],
 	"Publish note...": [
 		"Publicar nota..."
 	],
@@ -2942,6 +2978,12 @@
 	],
 	"Publish/unpublish": [
 		"Publicar/despublicar"
+	],
+	"Published at URL: %s": [
+		"Publicado en URL: %s"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		"Publica una nota en Joplin Server o Joplin Cloud"
 	],
 	"QR Code": [
 		"Código QR"
@@ -2987,6 +3029,9 @@
 	],
 	"Recipients:": [
 		"Destinatarios:"
+	],
+	"Recognise text:": [
+		"Reconocer texto:"
 	],
 	"Recognize handwritten image": [
 		"Reconocer imagen manuscrita"
@@ -3216,6 +3261,9 @@
 	"Save geo-location with notes": [
 		"Guardar geolocalización en las notas"
 	],
+	"Save geolocation?": [
+		"¿Guardar la geolocalización?"
+	],
 	"Scan notebook": [
 		"Escanear libreta"
 	],
@@ -3284,6 +3332,9 @@
 	],
 	"Select notebook": [
 		"Seleccionar libreta"
+	],
+	"Select one of the other supported sync targets.": [
+		"Seleccione uno de los otros destinos de sincronización admitidos."
 	],
 	"Select parent notebook": [
 		"Seleccionar libreta principal"
@@ -3621,6 +3672,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Cambia a [notebook] - todas las demás operaciones se realizarán en esta libreta."
 	],
+	"Sync": [
+		"Sincronizar"
+	],
 	"Sync as many devices as you want": [
 		"Sincronice todos los dispositivos que desee"
 	],
@@ -3699,6 +3753,9 @@
 	"Take photo": [
 		"Tomar foto"
 	],
+	"Take survey": [
+		"Responder encuesta"
+	],
 	"Task \"%s\" failed with error: %s": [
 		"Error en la tarea \"%s\" con error: %s"
 	],
@@ -3716,6 +3773,9 @@
 	],
 	"Text editor command": [
 		"Comando de editor de texto"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		"¡Gracias por los comentarios!\n¿Tienes tiempo para completar una breve encuesta?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"El perfil activo no puede eliminarse. Cambie de perfil e intente de nuevo."
@@ -4115,6 +4175,9 @@
 	"Unable to share log data. Reason: %s": [
 		"No se pueden compartir los datos de registro. Motivo: %s"
 	],
+	"Unable to share note data. Reason: %s": [
+		"No se pueden compartir los datos de la nota. Motivo: %s"
+	],
 	"Unchecked": [
 		"No marcado"
 	],
@@ -4259,6 +4322,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Se utiliza donde se necesita una fuente de ancho fijo para presentar el texto de manera legible (por ejemplo, tablas, casillas de verificación, código). Si no se encuentra, se utiliza una fuente genérica monoespaciada (ancho fijo)."
 	],
+	"Useful": [
+		"Útil"
+	],
 	"User deletions": [
 		"Eliminaciones de usuarios"
 	],
@@ -4306,9 +4372,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Escritura por voz: Glosario"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"A la espera de la autorización..."
@@ -4367,11 +4430,11 @@
 	"When creating a new to-do:": [
 		"Al crear una tarea nueva:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Cuando está activada, solicita que las imágenes de la nota se transcriban con un servicio de transcripción en el servidor de mayor calidad. Requiere sincronización con una copia de la aplicación de escritorio."
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Cuando está habilitado, la aplicación escaneará sus archivos adjuntos y extraerá el texto de ellos. Esto le permitirá buscar texto en estos archivos adjuntos."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"La ventana no responde."

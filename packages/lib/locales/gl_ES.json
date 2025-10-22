@@ -161,6 +161,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> pode ser «toggle» ou «clear». Use «toggle» para alternar a tarefa dada entre o estado de completa e o de incompleta (se o destino é unha nota normal a nota será convertida nunha tarefa). Use «clear» para converter a tarefa de novo nunha nota normal."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -226,6 +229,9 @@
 	],
 	"Add body": [
 		"Engadir corpo"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Engadir novo"
@@ -313,6 +319,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Atopouse un debuxo autogardado. ¿Anexar unha copia á nota?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Produciuse un erro: %s"
@@ -1117,6 +1126,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Non perda o contrasinal xa que, por motivos de seguranza, é a *única* forma de descifrar os datos! Para activar o cifrado, introduza o contrasinal a continuación."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1519,6 +1531,9 @@
 	"Feature flags": [
 		"Feature flags"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Elementos obtidos: %d/%d."
 	],
@@ -1775,9 +1790,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"En calquera orde podemos referirnos a unha nota ou caderno polo título ou identificador usando os atallos «$n» ou «$b» para, respectivamente a nota ou cadernos seleccionados actualmente. «$c» pode usarse para referirse ao elemento seleccionado actualmente."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Para asociar unha xeolocalización coa nota, a aplicación necesita o seu permiso para acceder á sua ubicación.\n\nPode desactivar esta opción en calquera momento na pantalla de Configuración."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Para facelo, todos os seus datos deberán ser cifrados e sincronizados, polo que é mellor realizalo durante a noite.\n\nPara empezar, siga estas instruccións:\n\n1. Sincronice todos os seus dispositivos.\n2. Faga clic en \"%s\".\n3. Deixe que se execute ata a súa finalización. Mentres se executa, evite modificar calquera nota en outros dispositivos para evitar conflitos.\n4. Unha vez que a sincronización finalice neste dispositivo, sincronice todos os outros dispositivos e permítalle executarse ata a súa finalización.\n\nImportante: só necesita realizar este procedemento UNHA ÚNICA VEZ nun dispositivo."
 	],
@@ -1940,6 +1952,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Web Clipper de Joplin permite gardar páxinas web e capturas de pantalla dende o seu navegador á Joplin."
 	],
@@ -1969,6 +1984,9 @@
 	],
 	"Keys that need upgrading": [
 		"Claves que necesitan actualizarse"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Apaisado"
@@ -2359,6 +2377,9 @@
 	"Not now": [
 		"Agora non"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"nota"
 	],
@@ -2551,6 +2572,9 @@
 	"Ordered list": [
 		"Lista ordeada"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Outras aplicacións..."
 	],
@@ -2611,9 +2635,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Elimina permanentemente o caderno, omitindo a papeleira."
-	],
-	"Permission needed": [
-		"Necesítase permiso"
 	],
 	"Photo %d": [
 		""
@@ -2717,9 +2738,6 @@
 	"Preferred light theme": [
 		"Tema claro preferido"
 	],
-	"Preferred voice typing provider": [
-		"Provedor de mecanografía por voz preferido"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Conservar colores ao pegar texto no Editor de texto enriquecido"
 	],
@@ -2811,6 +2829,9 @@
 		"Publicar notas en Internet"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"QR Code": [
@@ -3118,6 +3139,9 @@
 	],
 	"Select file...": [
 		"Seleccionar ficheiro..."
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Select parent notebook": [
 		"Seleccionar caderno principal"
@@ -3443,6 +3467,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Cambia a [notebook] - todas as demais operacións realizaranse neste caderno."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Sincronice todos os dispositivos que desexe"
 	],
@@ -3538,6 +3565,9 @@
 	],
 	"Text editor command": [
 		"Comando de editor de texto"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"O perfil activo non pode eliminarse. Cambie de perfil e ténteo de novo."
@@ -4066,6 +4096,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Úsase onde se necesita unha fonte de ancho fixo para presentar o texto de maneira lexible (por exemplo, táboas, caixas de verificación, código). Se non se atopa, úsase unha fonte xenérica monoespaciada (ancho fixo)."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Supresións de usuario"
 	],
@@ -4107,9 +4140,6 @@
 	],
 	"Voice typing...": [
 		"Escritura por voz..."
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Agardando autorización..."
@@ -4165,11 +4195,11 @@
 	"When creating a new to-do:": [
 		"Cando se crea unha nova tarefa:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Cando está habilitado, a aplicación escaneará os seus ficheiros anexos e extraerá o texto deles. Isto permitiralle buscar texto nestes ficheiros anexos."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"A xanela non responde."

@@ -173,6 +173,9 @@
 	"[None]": [
 		"[niciuna]"
 	],
+	"A brief description of the image:": [
+		"O descriere sumară a imaginii:"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"O listă de cuvinte separate de virgule. Poate fi folosită pentru cuvinte mai puțin comune, pentru a ajuta transcrierea prin dictare să le scrie corect."
 	],
@@ -244,6 +247,9 @@
 	],
 	"Add body": [
 		"Adaugă corp"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Adaugă un nou"
@@ -340,6 +346,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"A fost găsit un desen salvat automat. Atașezi o copie a acestuia la notiță?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		"A apărut o eroare la trimiterea răspunsului. Acest lucru se poate întâmpla dacă aplicația este offline sau nu se poate conecta la server.\nEroare: %s"
 	],
 	"An error occurred: %s": [
 		"S-a produs o eroare: %s"
@@ -679,6 +688,9 @@
 	],
 	"Collapse all notebooks": [
 		"Restrânge toate caietele"
+	],
+	"Collapse title": [
+		"Restrânge titlul"
 	],
 	"Collapsed": [
 		"Restrâns"
@@ -1179,6 +1191,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nu pierde parola, deoarece din motive de securitate, aceasta este *unica* modalitate de decriptare a datelor! Pentru a activa criptarea, te rog să introduci parola mai jos."
 	],
+	"Do you find the Joplin web app useful?": [
+		"Consideri că aplicația web Joplin este utilă?"
+	],
 	"Document scanner: Title template": [
 		"Scanner documente: Șablon titlu"
 	],
@@ -1536,6 +1551,9 @@
 	"Expand all notebooks": [
 		"Extinde toate caietele"
 	],
+	"Expand title": [
+		"Extinde titlul"
+	],
 	"Expanded": [
 		"Extins"
 	],
@@ -1598,6 +1616,9 @@
 	],
 	"Feature flags": [
 		"Feature Flags"
+	],
+	"Feedback": [
+		"Feedback"
 	],
 	"Fetched items: %d/%d.": [
 		"Elemente preluate: %d/%d."
@@ -1859,9 +1880,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"În orice comandă, se poate face referire la o notă sau la un caiet de notițe prin titlu sau ID, sau folosind comenzile rapide `$n` sau `$b` pentru nota sau caietul selectat în acel moment. Se poate utiliza `$c` pentru a se referi la elementul selectat în mod curent."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Pentru a asocia o geolocație cu notița, aplicația are nevoie de permisiunea de a îți accesa locația.\n\nPoți dezactiva această opțiune în orice moment din ecranul de configurare."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Pentru a face acest lucru, întregul set de date va trebui să fie criptat și sincronizat, așa că cel mai bine este să îl execuți peste noapte.\n\nPentru a începe, te rog să urmezi aceste instrucțiuni:\n\n1. Sincronizează-ți toate dispozitivele.\n2. Fă clic pe „%s”.\n3. Lasă-l să se execute până la finalizare. În timp ce se execută, evită să modifici orice notiță pe celelalte dispozitive, pentru a evita conflictele.\n4. Odată ce sincronizarea este finalizată pe acest dispozitiv, sincronizează toate celelalte dispozitive și las-o să se execute până la finalizare.\n\nImportant: nu trebuie să execuți acest lucru decât O SINGURĂ dată pe un singur dispozitiv."
 	],
@@ -2015,6 +2033,9 @@
 	"Joplin Server": [
 		"Server Joplin"
 	],
+	"Joplin Server (SAML)": [
+		"Server Joplin (SAML)"
+	],
 	"Joplin Server Business": [
 		"Server Joplin Business"
 	],
@@ -2032,6 +2053,9 @@
 	],
 	"Joplin SSO Authentication": [
 		"Autentificare SSO Joplin"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		"Joplin suportă salvarea locației în care notițele sunt salvate sau create. Dorești să o activezi? Acest lucru poate fi modificat oricând din setări."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper permite salvarea paginilor web și a capturilor de ecran din navigatorul tău web în Joplin."
@@ -2062,6 +2086,9 @@
 	],
 	"Keys that need upgrading": [
 		"Chei care trebuie actualizate"
+	],
+	"Label": [
+		"Etichetă"
 	],
 	"Landscape": [
 		"Peisaj"
@@ -2219,6 +2246,9 @@
 	],
 	"Markdown editor": [
 		"Editor Markdown"
+	],
+	"Markdown editor: Highlight active line": [
+		"Editor Markdown: Evidențiază linia activă"
 	],
 	"Markdown editor: Render images": [
 		"Editor Markdown: Redă imaginile"
@@ -2480,6 +2510,9 @@
 	"Not now": [
 		"Nu acum"
 	],
+	"Not useful": [
+		"Nu este utilă"
+	],
 	"note": [
 		"notiță"
 	],
@@ -2527,6 +2560,9 @@
 	],
 	"Note list style": [
 		"Stilul listei de notițe"
+	],
+	"Note not published: %s": [
+		"Notița nu a fost publicată: %s"
 	],
 	"Note preview": [
 		"Previzualizare notiță"
@@ -2687,6 +2723,9 @@
 	"Ordered list": [
 		"Listă ordonată"
 	],
+	"Other": [
+		"Alta"
+	],
 	"Other applications...": [
 		"Alte aplicații…"
 	],
@@ -2748,9 +2787,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Șterge permanent caietul, omițând coșul."
-	],
-	"Permission needed": [
-		"Permisiune necesară"
 	],
 	"Photo %d": [
 		"Fotografia %d"
@@ -2854,9 +2890,6 @@
 	"Preferred light theme": [
 		"Tema luminoasă preferată"
 	],
-	"Preferred voice typing provider": [
-		"Furnizorul preferat de transcriere vocală"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Păstrează culorile la lipirea textului în editorul de text îmbogățit"
 	],
@@ -2944,6 +2977,9 @@
 	"Publish Note": [
 		"Publică notița"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Publici notița „%s” (în caietul „%s”)?"
+	],
 	"Publish note...": [
 		"Publică notița…"
 	],
@@ -2955,6 +2991,12 @@
 	],
 	"Publish/unpublish": [
 		"Publică/Retrage"
+	],
+	"Published at URL: %s": [
+		"Publicat la URL: %s"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		"Publică o notiță pe un server Joplin sau în Cloud-ul Joplin"
 	],
 	"QR Code": [
 		"Cod QR"
@@ -3000,6 +3042,9 @@
 	],
 	"Recipients:": [
 		"Destinatari:"
+	],
+	"Recognise text:": [
+		"Recunoaște textul:"
 	],
 	"Recognize handwritten image": [
 		"Recunoaște imagine cu text scris de mână"
@@ -3229,6 +3274,9 @@
 	"Save geo-location with notes": [
 		"Salvează geo-locația în notițe"
 	],
+	"Save geolocation?": [
+		"Salvezi geo-locația?"
+	],
 	"Scan notebook": [
 		"Scanează un caiet"
 	],
@@ -3297,6 +3345,9 @@
 	],
 	"Select notebook": [
 		"Selectează caiet"
+	],
+	"Select one of the other supported sync targets.": [
+		"Selectează una din celelalte destinații de sincronizare suportate."
 	],
 	"Select parent notebook": [
 		"Selectează caietul părinte"
@@ -3634,6 +3685,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Comută la [notebook] - toate operațiunile ulterioare vor avea loc în acest caiet."
 	],
+	"Sync": [
+		"Sincronizează"
+	],
 	"Sync as many devices as you want": [
 		"Sincronizează cât de multe dispozitive dorești"
 	],
@@ -3712,6 +3766,9 @@
 	"Take photo": [
 		"Fotografiază"
 	],
+	"Take survey": [
+		"Completează chestionarul"
+	],
 	"Task \"%s\" failed with error: %s": [
 		"Sarcina „%s” a eșuat cu eroarea: %s"
 	],
@@ -3729,6 +3786,9 @@
 	],
 	"Text editor command": [
 		"Comandă editor de text"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		"Mulțumim pentru feedback!\nAi timp să completezi un scurt chestionar?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Profilul activ nu poate fi șters. Comută la un alt profil și încearcă din nou."
@@ -4131,7 +4191,10 @@
 		"Nu se poate edita resursa de tip %s"
 	],
 	"Unable to share log data. Reason: %s": [
-		"Imposibilitatea de a partaja datele din jurnal. Motivul: %s"
+		"Imposibil de a partaja datele din jurnal. Motivul: %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"Imposibil de a partaja datele din notiță. Motivul: %s"
 	],
 	"Unchecked": [
 		"Debifat"
@@ -4277,6 +4340,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Se utilizează atunci când este necesar un font cu lățime fixă pentru a prezenta textul în mod lizibil (de exemplu, tabele, căsuțe de selectare, coduri). Dacă nu se găsește, se utilizează un font generic monospace (lățime fixă)."
 	],
+	"Useful": [
+		"Utilă"
+	],
 	"User deletions": [
 		"Ștergeri de utilizatori"
 	],
@@ -4324,9 +4390,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Transcriere vocală: Glosar"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Se așteaptă autorizarea..."
@@ -4385,11 +4448,11 @@
 	"When creating a new to-do:": [
 		"Când este creată o nouă listă de făcut:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Când este activat, solicită ca imaginile din notiță să fie transcrise cu un serviciu de calitate mai bună de pe server. Necesită sincronizare cu aplicația desktop."
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Atunci când este activată, aplicația va scana atașamentele și va extrage textul din ele. Acest lucru îți va permite să cauți text în atașamente."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"Fereastra nu răspunde."

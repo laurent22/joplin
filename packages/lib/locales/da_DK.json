@@ -167,6 +167,9 @@
 	"[None]": [
 		"[Ingen]"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"En kommasepareret liste af ord. Kan bruges til ualmindelige ord for at hjælpe stemmeindtastning med at stave dem korrekt."
 	],
@@ -238,6 +241,9 @@
 	],
 	"Add body": [
 		"Tilføj brødtekst"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Tilføj ny"
@@ -334,6 +340,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Der blev fundet en automatisk gemt tegning. Vedhæfter en kopi af den til noten?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Der opstod en fejl: %s"
@@ -1171,6 +1180,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Glem ikke adgangkoden, da den af sikkerhedshensyn er den *eneste* mulighed for dekryptering af data! For at aktivere kryptering til, skal du indtaste din adgangskode herunder."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		"Dokumentscanner: Skabelon til titel"
 	],
@@ -1591,6 +1603,9 @@
 	"Feature flags": [
 		"Feature-markeringer"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Hentede emner: %d/%d."
 	],
@@ -1850,9 +1865,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"I enhver kommando kan en note eller notesbog refereres med titel eller ID, eller ved at bruge links `$n` eller `$b` for valgte noter eller notesbøger. `$c` kan bruges som reference til aktuel/valgt emne."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"For at knytte en geo-lokation til noten har app'en brug for din tilladelse til at tilgå din placering.\n\nDu kan slå denne mulighed fra når som helst i Indstillinger."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"For at gøre dette skal hele dit datasæt krypteres og synkroniseres, så det er bedst at lade det køre hen over natten.\n\nFølg disse instruktioner for at starte:\n\n1. Synkroniser alle dine enheder.\n2. Klik \"%s\".\n3. Lad det køre færdig. Mens synkroniseringen kører, bør du undgå at ændre nogen noter på dine andre enheder for at undgå konflikter.\n4. Når synk er færdig på denne enhed, synk'er du alle dine andre enheder og lader det køre helt færdig.\n\nVigtigt: Du behøver kun at gøre dette EN gang på en enhed."
 	],
@@ -2024,6 +2036,9 @@
 	"Joplin SSO Authentication": [
 		"Joplin SSO-godkendelse"
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web-Clipper gør at du kan gemme hjemmesider og screenshots fra din browser i Joplin."
 	],
@@ -2053,6 +2068,9 @@
 	],
 	"Keys that need upgrading": [
 		"Nøgler der har brug for opgradering"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Landskab"
@@ -2468,6 +2486,9 @@
 	"Not now": [
 		"Ikke nu"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"note"
 	],
@@ -2675,6 +2696,9 @@
 	"Ordered list": [
 		"Sorteret liste"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Andre applikationer..."
 	],
@@ -2735,9 +2759,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Sletter notesbogen permanent og springer papirkurven over."
-	],
-	"Permission needed": [
-		"Tilladelse nødvendig"
 	],
 	"Photo %d": [
 		"Foto %d"
@@ -2841,9 +2862,6 @@
 	"Preferred light theme": [
 		"Foretrukket lyst tema"
 	],
-	"Preferred voice typing provider": [
-		"Foretrukken udbyder af stemmeskrivning"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Bevar farver, når du indsætter tekst i Rich Text Editor"
 	],
@@ -2942,6 +2960,9 @@
 	],
 	"Publish/unpublish": [
 		"Publicer/afpublicer"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
 	],
 	"QR Code": [
 		"QR-kode"
@@ -3285,6 +3306,9 @@
 	"Select notebook": [
 		"Vælg notesbog"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Vælg overordnet notesbog"
 	],
@@ -3621,6 +3645,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Skifter til [notebook] - alle fremtidige handlinger sker i denne notesbog."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Synkroniser så mange enheder, du vil"
 	],
@@ -3716,6 +3743,9 @@
 	],
 	"Text editor command": [
 		"Tekstredigeringskomando"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Den aktive profil kan ikke slettes. Skift til en anden profil, og prøv igen."
@@ -4259,6 +4289,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Bruges hvor en font med fast bredde er nødvendig for at vise læsbar tekst (f.eks. tabeller, afkrydsningsfelter, kode). Hvis ikke fundet, bruges en generisk monospatieret (fast bredde) font."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Brugersletninger"
 	],
@@ -4306,9 +4339,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Stemmeindtastning: Ordliste"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Venter på godkendelse..."
@@ -4367,11 +4397,11 @@
 	"When creating a new to-do:": [
 		"Ved oprettelse af ny opgave:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Når det er aktiveret, vil applikationen scanne dine vedhæftede filer og udtrække teksten fra dem. Dette giver dig mulighed for at søge efter tekst i disse vedhæftede filer."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"Vinduet reagerer ikke."

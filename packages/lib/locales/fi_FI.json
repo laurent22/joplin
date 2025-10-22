@@ -167,6 +167,9 @@
 	"[None]": [
 		"[Ei mitään]"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -238,6 +241,9 @@
 	],
 	"Add body": [
 		"Lisää runko"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Lisää uusi"
@@ -333,6 +339,9 @@
 		"Epäselvä muistikirja \"%s\". Käytä sen sijaan lyhyttä muistikirjan tunnusta - paina \"ti\" nähdäksesi lyhyen muistikirjan tunnuksen"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -1023,6 +1032,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Älä kadota salasanaa, sillä tämä on turvallisuussyistä *ainoa* tapa purkaa tietojen salaus! Voit ottaa salauksen käyttöön kirjoittamalla salasanasi alle."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1365,6 +1377,9 @@
 	"Feature flags": [
 		"Ominaisuus liput"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Noudetut kohteet: %d/%d."
 	],
@@ -1594,9 +1609,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Missä tahansa komennossa muistiinpanoon tai muistikirjaan voidaan viitata otsikon tai tunnuksen avulla tai käyttämällä pikakuvakkeita `$n` tai `$b` vastaavasti valitulle muistilappulle tai muistikirjalle. `$c` voidaan käyttää viittaamaan valittuun kohtaan."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Jotta voit liittää maantieteellisen sijainnin muistiinpanoon, sovellus tarvitsee luvan käyttää sijaintiasi.\n\nVoit poistaa tämän asetuksen käytöstä milloin tahansa Määritys näytössä."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Tätä varten koko tietojoukko on salattava ja synkronoitava, joten se on parasta suorittaa yön yli.\n\nAloita noudattamalla seuraavia ohjeita:\n\n1. Synkronoi kaikki laitteesi.\n2. Napsauta \"%s\".\n3. Anna sen ajaa loppuun. Kun se suoritetaan, vältä muiden laitteiden muistiinpanojen vaihtamista ristiriitojen välttämiseksi.\n4. Kun synkronointi on tehty tällä laitteella, synkronoi kaikki muut laitteesi ja anna sen suorittaa loppuun.\n\nTärkeää: sinun tarvitsee suorittaa tämä kerran vain yhdellä laitteella."
 	],
@@ -1729,6 +1741,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper mahdollistaa verkkosivujen ja kuvakaappausten tallentamisen selaimesta Jopliniin."
 	],
@@ -1755,6 +1770,9 @@
 	],
 	"Keys that need upgrading": [
 		"Päivitystä vaativat avaimet"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Vaakasuunta"
@@ -2102,6 +2120,9 @@
 	"Not now": [
 		"Ei nyt"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"merkintä"
 	],
@@ -2297,6 +2318,9 @@
 	"Ordered list": [
 		"Järjestetty luettelo"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Muut sovellukset..."
 	],
@@ -2351,9 +2375,6 @@
 	"Permanently delete this note?": [
 		"Poista muistiinpano pysyvästi?",
 		"Poista muistiinpanot pysyvästi?"
-	],
-	"Permission needed": [
-		"Tarvittava lupa"
 	],
 	"Photo %d": [
 		"Kuva %d"
@@ -2447,9 +2468,6 @@
 	],
 	"Preferred light theme": [
 		"Ensisijainen vaalea teema"
-	],
-	"Preferred voice typing provider": [
-		""
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
@@ -2549,6 +2567,9 @@
 	],
 	"Publish/unpublish": [
 		"Julkaise/peruuta julkaisu"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
 	],
 	"QR Code": [
 		"QR-koodi"
@@ -2877,6 +2898,9 @@
 	"Select notebook": [
 		"Valitse muistikirja"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Valitse ylempi muistikirja"
 	],
@@ -3186,6 +3210,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Vaihtaa tilaan [notebook] - kaikki muut toiminnot tapahtuvat tässä muistikirjassa."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Synkronoi niin monta laitetta kuin haluat"
 	],
@@ -3272,6 +3299,9 @@
 	],
 	"Text editor command": [
 		"Tekstieditorin komento"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktiivista profiilia ei voi poistaa. Vaihda toiseen profiiliin ja yritä uudelleen."
@@ -3774,6 +3804,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Käytetään, kun tekstiin tarvitaan kiinteäleveyksinen fontti (esim. taulukot, valintaruudut, koodi). Jos sitä ei löydy, käytetään yleistä monospace fonttia (kiinteäleveyksinen)."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Käyttäjien poisto"
 	],
@@ -3873,11 +3906,11 @@
 	"When creating a new to-do:": [
 		"Kun luot uuden tehtävän:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Kun tämä on käytössä, sovellus skannaa liitteesi ja poimii tekstin niistä. Näin voit hakea tekstiä näistä liitteistä."
-	],
-	"Whisper": [
-		"Kuiskata"
 	],
 	"Window unresponsive.": [
 		"Ikkuna ei vastaa."

@@ -629,7 +629,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				);
 			}
 
-			addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
+			if (Platform.OS !== 'ios') addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
 			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
 			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
 

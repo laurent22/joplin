@@ -71,6 +71,7 @@ import { Store } from 'redux';
 import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
+import SearchEngine from '../services/search/SearchEngine';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -287,6 +288,7 @@ async function switchClient(id: number, options: any = null) {
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
 	KvStore.instance().setDb(databases_[id]);
+	SearchEngine.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];

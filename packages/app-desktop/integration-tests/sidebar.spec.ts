@@ -44,6 +44,28 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
 	});
 
+	test('should allow changing the focused folder by pressing the first character of the title', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const sidebar = mainScreen.sidebar;
+
+		const folderAHeader = await sidebar.createNewFolder('1-Test A');
+		await expect(folderAHeader).toBeVisible();
+
+		const folderBHeader = await sidebar.createNewFolder('Folder b');
+		await expect(folderBHeader).toBeVisible();
+		await folderBHeader.click();
+
+		await sidebar.forceUpdateSorting(electronApp);
+
+		await folderBHeader.click();
+		await mainWindow.keyboard.type('1');
+		await expect(mainWindow.locator(':focus')).toHaveText('1-Test A');
+		await mainWindow.keyboard.type('F');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder b');
+		await mainWindow.keyboard.type('A');
+		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
+	});
+
 	test('left/right arrow keys should expand/collapse notebooks', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;

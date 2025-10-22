@@ -210,3 +210,5 @@ IDPSSO
 nameid
 attrname
 dpkg
+onepkg
+ATTLIST

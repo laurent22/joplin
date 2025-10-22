@@ -1,6 +1,8 @@
 import AdmZip = require('adm-zip');
-import FsDriverBase, { Stat, ZipEntry, ZipExtractOptions } from './fs-driver-base';
+import FsDriverBase, { Stat, ZipEntry, ArchiveExtractOptions, CabExtractOptions } from './fs-driver-base';
 import time from './time';
+import { execCommand } from '@joplin/utils';
+import { extname } from 'path';
 const md5File = require('md5-file');
 const fs = require('fs-extra');
 
@@ -211,9 +213,30 @@ export default class FsDriverNode extends FsDriverBase {
 		await require('tar').create(options, filePaths);
 	}
 
-	public async zipExtract(options: ZipExtractOptions): Promise<ZipEntry[]> {
+	public async zipExtract(options: ArchiveExtractOptions): Promise<ZipEntry[]> {
 		const zip = new AdmZip(options.source);
 		zip.extractAllTo(options.extractTo, false);
 		return zip.getEntries();
+	}
+
+	public async cabExtract(options: CabExtractOptions) {
+		if (process.platform !== 'win32') {
+			throw new Error('Extracting CAB archives is only supported on Windows.');
+		}
+
+		const source = this.resolve(options.source);
+		const extractTo = this.resolve(options.extractTo);
+
+		if (extname(source).toLowerCase() !== '.cab') {
+			throw new Error(`Invalid file extension. Expected .CAB. Was ${extname(source)}`);
+		}
+
+		// See https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/expand
+		await execCommand([
+			'expand.exe',
+			source,
+			`-f:${options.fileNamePattern}`,
+			extractTo,
+		], { quiet: true });
 	}
 }

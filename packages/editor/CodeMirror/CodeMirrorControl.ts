@@ -89,8 +89,14 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 	}
 
 	public select(anchor: number, head: number) {
+		const maximumPosition = this.editor.state.doc.length;
 		this.editor.dispatch(this.editor.state.update({
-			selection: { anchor, head },
+			selection: {
+				// Ensure that (anchor, head) are in range.
+				// (CodeMirror throws when (anchor, head) are out-of-range.)
+				anchor: Math.min(anchor, maximumPosition),
+				head: Math.min(head, maximumPosition),
+			},
 			scrollIntoView: true,
 		}));
 	}

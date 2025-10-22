@@ -30,7 +30,7 @@
 		"%d 条笔记将被永久删除。是否继续？"
 	],
 	"%d photo(s) taken": [
-		""
+		"已拍摄 %d 张照片"
 	],
 	"%s": [
 		"%s"
@@ -70,6 +70,9 @@
 	],
 	"%s cannot be less than %s": [
 		"%s 无法比 %s 更小"
+	],
+	"%s from %s": [
+		"%s 自 %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 未针对同步许多小文件进行优化，因此您的首次同步将会很慢。"
@@ -132,7 +135,7 @@
 		"（无）"
 	],
 	"(Read-only)": [
-		""
+		"（只读）"
 	],
 	"(wysiwyg: %s)": [
 		"（兼容所见即所得编辑器：%s）"
@@ -155,8 +158,14 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> 可以是 “toggle” 或者 “clear” 。使用 “toggle” 命令来切换待办的完成/未完成状态（若目标为普通笔记则将会转换成待办）。使用 “clear” 命令来把待办转换到普通笔记。"
 	],
-	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+	"[None]": [
+		"[无]"
+	],
+	"A brief description of the image:": [
 		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		"以逗号分隔的单词列表。可用于生僻词，帮助语音输入正确拼写它们。"
 	],
 	"A new update (%s) is available": [
 		"发现新更新（%s）可用"
@@ -191,6 +200,12 @@
 	"Accepted invitations": [
 		"已接受邀请"
 	],
+	"Accepted: Notebook %s from %s": [
+		"已接受邀请：笔记本 %s (来自%s)"
+	],
+	"Accepting share...": [
+		"接受共享……"
+	],
 	"Access denied: Please check your username and password": [
 		"拒绝访问：请检查您的用户名和密码"
 	],
@@ -221,6 +236,9 @@
 	"Add body": [
 		"添加内容"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"新增"
 	],
@@ -229,6 +247,9 @@
 	],
 	"Add recipient:": [
 		"添加受邀人："
+	],
+	"Add tags:": [
+		"新建标签："
 	],
 	"Add title": [
 		"添加标题"
@@ -239,8 +260,14 @@
 	"Add to note": [
 		"添加到笔记"
 	],
+	"Added new: %s": [
+		"已新建标签 %s"
+	],
+	"Added tag: %s": [
+		"已将标签 %s 添加到笔记"
+	],
 	"Adds tag": [
-		""
+		"添加标签"
 	],
 	"Admin": [
 		"管理员"
@@ -273,7 +300,7 @@
 		"所有默认可用端口均被占用 - 请在 %s 反馈这个问题"
 	],
 	"All shared folders:": [
-		""
+		"所有共享的文件夹："
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"允许调试移动插件。详见 %s。"
@@ -308,6 +335,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"发现一张自动保存的绘图。是否将其添加到笔记中？"
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		"出现异常: %s"
 	],
@@ -332,6 +362,9 @@
 	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
 		"确定要还原默认工具栏布局吗？\n此操作无法撤销。"
 	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"确定要删除此笔记的所有历史记录吗？此操作无法撤销。"
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		"确定要更新授权令牌吗？"
 	],
@@ -345,7 +378,7 @@
 		"Aritim 暗色"
 	],
 	"Associated tags:": [
-		""
+		"关联标签："
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"目前，Joplin Web 一次只能在一个标签页中打开。请关闭 Joplin 的其他实例。"
@@ -632,6 +665,9 @@
 	"Code View": [
 		"代码视图"
 	],
+	"Code:": [
+		"代码："
+	],
 	"Collaborate on a notebook with others": [
 		"与他人共同协作笔记"
 	],
@@ -663,7 +699,7 @@
 		"命令面板……"
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"命令：`add`、`remove`、`list`、`delete`、`accept`、`leave` 和 `reject`。"
 	],
 	"Compact": [
 		"紧凑"
@@ -720,7 +756,7 @@
 		"连接至 Joplin 云"
 	],
 	"Connect using your organisation account": [
-		""
+		"使用您的组织账户连接"
 	],
 	"Consolidated billing": [
 		"合并计费"
@@ -739,6 +775,12 @@
 	],
 	"Control character": [
 		"控制字符"
+	],
+	"Convert it": [
+		"转换"
+	],
+	"Convert note to Markdown": [
+		"将笔记转换为 Markdown"
 	],
 	"Convert to note": [
 		"转换为笔记"
@@ -794,6 +836,9 @@
 	"Could not connect to plugin repository.": [
 		"无法连接到插件库。"
 	],
+	"Could not convert note to Markdown: %s": [
+		"无法将笔记 %s 转换为 Markdown"
+	],
 	"Could not export notes: %s": [
 		"无法导出笔记：%s"
 	],
@@ -824,8 +869,14 @@
 	"Create a notebook": [
 		"新建一个笔记本"
 	],
+	"Create new notebook": [
+		"新建一个笔记本"
+	],
 	"Create new profile...": [
 		"创建新的配置档案……"
+	],
+	"Create note": [
+		"新建笔记"
 	],
 	"Create notebook": [
 		"新建笔记本"
@@ -874,6 +925,12 @@
 	],
 	"Creating new to-do...": [
 		"新建待办……"
+	],
+	"Creating note \"%s\"...": [
+		"正在创建笔记 \"%s\"……"
+	],
+	"Creating note.": [
+		"正在新建笔记。"
 	],
 	"Creating report...": [
 		"新建报告……"
@@ -945,7 +1002,7 @@
 		"默认"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"扫描器创建的文档默认标题。"
 	],
 	"Default: %s": [
 		"默认值：%s"
@@ -961,6 +1018,9 @@
 	],
 	"Delete expired tokens": [
 		"删除过期的令牌"
+	],
+	"Delete history": [
+		"删除历史记录"
 	],
 	"Delete line": [
 		"删除行"
@@ -1106,17 +1166,23 @@
 	"Do not ask for confirmation.": [
 		"不再要求确认。"
 	],
+	"Do not ask for user confirmation.": [
+		"不再要求用户确认。"
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"请妥善保管密码，因为出于安全考虑，这将是解密数据的 *唯一* 方式！要启用加密功能，请在下面输入密码。"
 	],
-	"Document scanner: Title template": [
+	"Do you find the Joplin web app useful?": [
 		""
+	],
+	"Document scanner: Title template": [
+		"文档扫描器：标题模板"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
-		""
+		"不允许共享接收方向共享笔记本写入。仅适用于 `add` 子命令。"
 	],
 	"Don't show this message again": [
-		""
+		"不再显示此消息"
 	],
 	"Donate, website": [
 		"捐助与官网信息"
@@ -1192,6 +1258,12 @@
 	],
 	"Edit": [
 		"编辑"
+	],
+	"Edit as Markdown": [
+		"以 Markdown 形式编辑"
+	],
+	"Edit as Rich Text": [
+		"以富文本形式编辑"
 	],
 	"Edit link": [
 		"编辑链接"
@@ -1294,6 +1366,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"启用 Fountain 语法支持"
+	],
+	"Enable handwritten transcription": [
+		"启用手写识别"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"启用 HTML 转 Markdown 的横幅提示"
 	],
 	"Enable Linkify": [
 		"启用自动链接（Linkify）"
@@ -1403,6 +1481,12 @@
 	"Enter password": [
 		"输入密码"
 	],
+	"Enter the code": [
+		"在此输入代码"
+	],
+	"Enter the code:": [
+		"在此输入代码："
+	],
 	"Entering selection mode": [
 		"进入选择模式"
 	],
@@ -1416,7 +1500,7 @@
 		"在编辑器中打开笔记时出现错误：%s"
 	],
 	"Error starting camera: %s": [
-		""
+		"启动摄像头时出错：%s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"发生错误。请检查 URL、用户名、密码等是否正确以及同步目标是否可访问。报告的错误为："
@@ -1503,13 +1587,16 @@
 		"故障保护：同步被中断以防数据丢失，因为同步目标为空或已损坏。若要覆盖这一行为，在同步设置中禁用故障保护。"
 	],
 	"Failed to connect to your account. Please try again.": [
-		""
+		"无法连接到您的账户。请重试。"
 	],
 	"Fatal error:": [
 		"致命错误："
 	],
 	"Feature flags": [
 		"特性标志"
+	],
+	"Feedback": [
+		""
 	],
 	"Fetched items: %d/%d.": [
 		"已获取条目：%d/%d。"
@@ -1554,7 +1641,7 @@
 		"聚焦标题"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"文件夹“%s”已与以下对象共享："
 	],
 	"Follow link": [
 		"打开链接"
@@ -1617,7 +1704,7 @@
 		"读取或设置配置数值。如果 [value] 值没有提供，它将显示 [name] 值。若 [name] 与 [value] 值均未提供，它将列出当前配置。"
 	],
 	"Glossary:": [
-		""
+		"术语表："
 	],
 	"go": [
 		"跳转"
@@ -1679,6 +1766,9 @@
 	"Hide password": [
 		"隐藏密码"
 	],
+	"Hides warning": [
+		"隐藏警告"
+	],
 	"Highlight": [
 		"高亮"
 	],
@@ -1710,7 +1800,7 @@
 		"空闲"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"如果图像附件单独占一行，且后面紧跟一个空行，它会被渲染在其 Markdown 源文本的正下方。"
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"如果您已授权，请等待应用程序同步到 Joplin 云。"
@@ -1766,9 +1856,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"在任何命令中，某个笔记或笔记本可通过它的名称或 ID 引用，也可使用代表当前所选笔记和笔记本的快捷变量 `$n` 和 `$b`。`$c` 可用于引用当前所选的条目。"
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"为了将地理位置与笔记关联，本应用需要获取您的位置的权限。\n\n您可以在“配置”页面中随时关闭此选项。"
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"为此，必须对整个数据集进行加密和同步，因此最好在夜间休息时分运行。\n\n首先，请按照以下说明进行操作：\n\n1. 同步您的所有设备。\n2. 单击 “%s”。\n3. 让其完成运行。在运行时，请不要在其他设备上更改任何笔记，以免发生冲突。\n4. 在此设备上完成同步后，同步其他所有设备，并运行至同步完成。\n\n重要提醒：在一台设备上只需要运行一次。"
 	],
@@ -1786,6 +1873,9 @@
 	],
 	"In: %s": [
 		"归属于：%s"
+	],
+	"Incoming shares:": [
+		"传入的共享："
 	],
 	"Incompatible": [
 		"不兼容"
@@ -1919,8 +2009,14 @@
 	"Joplin Server": [
 		"Joplin 服务器"
 	],
+	"Joplin Server Business": [
+		"Joplin 商业版服务器"
+	],
 	"Joplin Server email": [
 		"Joplin 服务器邮箱"
+	],
+	"Joplin Server Login": [
+		"Joplin 服务器登录"
 	],
 	"Joplin Server password": [
 		"Joplin 服务器密码"
@@ -1929,6 +2025,9 @@
 		"Joplin 服务器 URL"
 	],
 	"Joplin SSO Authentication": [
+		"Joplin 单点登录（SSO）身份验证"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
 		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
@@ -1960,6 +2059,9 @@
 	],
 	"Keys that need upgrading": [
 		"需要升级的密钥"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"横版"
@@ -2018,6 +2120,9 @@
 	"Link": [
 		"链接"
 	],
+	"Link created!": [
+		"已创建链接！"
+	],
 	"Link description": [
 		"链接描述"
 	],
@@ -2029,6 +2134,9 @@
 	],
 	"Link to note...": [
 		"链接到笔记……"
+	],
+	"Links": [
+		"链接"
 	],
 	"List item": [
 		"列表项"
@@ -2047,6 +2155,9 @@
 	],
 	"Log": [
 		"日志"
+	],
+	"Log in with your web browser": [
+		"使用您的浏览器登录"
 	],
 	"Login to Joplin Cloud.": [
 		"登录至 Joplin 云。"
@@ -2105,8 +2216,11 @@
 	"Markdown editor": [
 		"Markdown 编辑器"
 	],
+	"Markdown editor: Render images": [
+		"Markdown 编辑器：渲染图像"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Markdown 编辑器：在编辑器中渲染标记"
 	],
 	"Marks a to-do as done.": [
 		"标记待办为完成。"
@@ -2249,6 +2363,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"将新建笔记本 “%s”，并将文件 “%s” 导入其中"
 	],
+	"New notebook title": [
+		"新建笔记本标题"
+	],
 	"New photo": [
 		"新照片"
 	],
@@ -2265,6 +2382,9 @@
 		"新版本：%s"
 	],
 	"next": [
+		"下一个"
+	],
+	"Next": [
 		"下一个"
 	],
 	"Next match": [
@@ -2312,6 +2432,9 @@
 	"No results": [
 		"无结果"
 	],
+	"No revision selected": [
+		"未选择任何修订版本"
+	],
 	"No such command: %s": [
 		"不存在该命令：%s"
 	],
@@ -2320,6 +2443,9 @@
 	],
 	"No tab selected": [
 		"未选择标签页"
+	],
+	"No tags": [
+		"无标签"
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"未指定文本编辑器。请通过 `config editor <editor-path>` 设置它"
@@ -2348,6 +2474,9 @@
 	"Not now": [
 		"不是现在"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"笔记"
 	],
@@ -2375,8 +2504,14 @@
 	"Note has been saved.": [
 		"笔记已被保存。"
 	],
+	"Note history": [
+		"笔记历史"
+	],
 	"Note History": [
 		"笔记历史"
+	],
+	"Note history has been deleted.": [
+		"笔记历史已被删除。"
 	],
 	"Note is not a to-do: \"%s\"": [
 		"笔记不是一个待办：“%s”"
@@ -2389,6 +2524,9 @@
 	],
 	"Note list style": [
 		"笔记列表样式"
+	],
+	"Note preview": [
+		"笔记预览"
 	],
 	"Note properties": [
 		"笔记属性"
@@ -2446,6 +2584,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR：语言数据 URL 或路径"
+	],
+	"OCR: Search in extracted content": [
+		"OCR：在提取的内容中搜索"
 	],
 	"OK": [
 		"确认"
@@ -2508,7 +2649,7 @@
 		"打开配置档案目录"
 	],
 	"Open secondary app instance...": [
-		"打开次要应用实例"
+		"打开次要应用实例…"
 	],
 	"Open settings": [
 		"打开设置"
@@ -2542,6 +2683,9 @@
 	],
 	"Ordered list": [
 		"有序列表"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"其他应用……"
@@ -2603,11 +2747,8 @@
 	"Permanently deletes the notebook, skipping the trash.": [
 		"永久删除笔记本并跳过回收站。"
 	],
-	"Permission needed": [
-		"需要权限"
-	],
 	"Photo %d": [
-		""
+		"照片 %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"请单击 “%s” 继续，或在下面的 “%s” 列表中设置密码。"
@@ -2652,7 +2793,7 @@
 		"请等待至所有附件均被下载并解密。您也可以切换到 %s 以编辑笔记。"
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"正在加载您的组织登录页面，请稍候……"
 	],
 	"Please wait...": [
 		"请稍候……"
@@ -2694,7 +2835,7 @@
 		"可用值：%s。"
 	],
 	"Prefer JSON output.": [
-		""
+		"优先使用 JSON 输出。"
 	],
 	"Preferences": [
 		"偏好设置"
@@ -2707,9 +2848,6 @@
 	],
 	"Preferred light theme": [
 		"首选亮色主题"
-	],
-	"Preferred voice typing provider": [
-		"首选语音输入提供者"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"在富文本编辑器中粘贴文本时保留颜色"
@@ -2731,6 +2869,9 @@
 	],
 	"Previous match": [
 		"上一个匹配"
+	],
+	"Previous versions": [
+		"历史版本"
 	],
 	"Previous versions of this note": [
 		"该笔记的历史版本"
@@ -2792,6 +2933,9 @@
 	"Public-private key pair:": [
 		"公-私钥对："
 	],
+	"Publish Note": [
+		"发布笔记"
+	],
 	"Publish note...": [
 		"发布笔记……"
 	],
@@ -2802,6 +2946,9 @@
 		"将笔记发布到互联网"
 	],
 	"Publish/unpublish": [
+		"发布 / 取消发布"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"QR Code": [
@@ -2825,11 +2972,17 @@
 	"Re-upload local data to sync target": [
 		"重新上传本地数据到同步目标"
 	],
+	"Read more": [
+		"阅读更多"
+	],
 	"Read more about it": [
 		"进一步了解"
 	],
 	"Read time: %s min": [
 		"阅读时间：%s 分钟"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"仅在 CLI 模式下支持从标准输入读取命令。"
 	],
 	"Recipient has accepted the invitation": [
 		"受邀人已接受邀请"
@@ -2842,6 +2995,9 @@
 	],
 	"Recipients:": [
 		"受邀人："
+	],
+	"Recognize handwritten image": [
+		"识别手写内容"
 	],
 	"Recommended": [
 		"推荐"
@@ -2870,8 +3026,14 @@
 	"Reject": [
 		"拒绝"
 	],
+	"Rejecting share...": [
+		"不接受共享……"
+	],
 	"Remove": [
 		"删除"
+	],
+	"Remove %s": [
+		"删除 %s"
 	],
 	"Remove %s from share": [
 		"从共享中删除 %s"
@@ -2881,6 +3043,12 @@
 	],
 	"Remove this search from the sidebar?": [
 		"从边栏中删除该项搜索？"
+	],
+	"Removed %s from share.": [
+		"从共享中删除 %s。"
+	],
+	"Removed tag: %s": [
+		"删除标签：%s"
 	],
 	"Rename": [
 		"重命名"
@@ -2895,7 +3063,7 @@
 		"重命名选定的 <item> （笔记或笔记本）到 <name>。"
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"对所有不包含光标的行进行标记渲染。"
 	],
 	"Renew token": [
 		"更新令牌"
@@ -2999,6 +3167,9 @@
 	"Reverses the sorting order.": [
 		"倒序。"
 	],
+	"Revision:": [
+		"修订："
+	],
 	"Revision: %s (%s)": [
 		"修订：%s (%s)"
 	],
@@ -3053,6 +3224,9 @@
 	"Save geo-location with notes": [
 		"保存地理位置信息到笔记中"
 	],
+	"Scan notebook": [
+		"扫描笔记本"
+	],
 	"Scanned code": [
 		"已扫码"
 	],
@@ -3083,6 +3257,9 @@
 	"Search shown": [
 		"搜索已显示"
 	],
+	"Search tags": [
+		"搜索标签"
+	],
 	"Search...": [
 		"搜索……"
 	],
@@ -3101,6 +3278,9 @@
 	"Select": [
 		"选择"
 	],
+	"Select a revision...": [
+		"选择一个修订版本……"
+	],
 	"Select all": [
 		"全选"
 	],
@@ -3110,8 +3290,17 @@
 	"Select file...": [
 		"选择文件……"
 	],
+	"Select notebook": [
+		"选择笔记本"
+	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"选择父笔记本"
+	],
+	"Selected: %s": [
+		"已选择：%s"
 	],
 	"Selection deleted": [
 		"已删除的选择"
@@ -3120,7 +3309,7 @@
 		"选择笔记本"
 	],
 	"Self-hosted": [
-		""
+		"自托管"
 	],
 	"Send bug report": [
 		"发送错误报告"
@@ -3180,7 +3369,7 @@
 		"共享"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"将指定的 [notebook] 与 [user] 共享或取消共享。需要 Joplin Cloud 或 Joplin Server。"
 	],
 	"Sharing notebook...": [
 		"正在共享笔记本……"
@@ -3243,7 +3432,7 @@
 		"边栏"
 	],
 	"Sign up to Joplin Cloud": [
-		"注册于 Joplin 云。"
+		"注册于 Joplin 云"
 	],
 	"Size": [
 		"大小"
@@ -3304,6 +3493,9 @@
 	],
 	"Source": [
 		"来源"
+	],
+	"Source code available": [
+		"提供源代码"
 	],
 	"Source format: %s": [
 		"原数据格式：%s"
@@ -3431,11 +3623,17 @@
 	"Switch to the legacy editor": [
 		"切换到传统编辑器"
 	],
+	"Switch to the new editor": [
+		"切换到新编辑器"
+	],
 	"Switch to to-do type": [
 		"切换为待办类型"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"切换到 [notebook] - 所有进一步操作将在该笔记本中进行。"
+	],
+	"Sync": [
+		""
 	],
 	"Sync as many devices as you want": [
 		"尽可能多地同步您想要的设备"
@@ -3533,6 +3731,9 @@
 	"Text editor command": [
 		"文本编辑器命令"
 	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"无法删除正在使用的配置档案。请切换到另一配置档案后再次尝试。"
 	],
@@ -3594,7 +3795,7 @@
 		"具有这些 ID 的密钥已用于加密某些条目，但应用程序目前无法访问它们。它们可能最终会通过同步获取。"
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
-		""
+		"旧版 Markdown 编辑器似乎因与某个插件不兼容而崩溃。建议使用新编辑器。"
 	],
 	"The master key has been upgraded successfully!": [
 		"主密钥已成功升级！"
@@ -3604,6 +3805,9 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"笔记“%s”已成功恢复到笔记本“%s”中。"
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"该笔记已转换为 Markdown，原始笔记已移至回收站。"
 	],
 	"The note was successfully moved to the trash.": [
 		"已成功将笔记移到回收站中。"
@@ -3708,13 +3912,13 @@
 		"本次绘图可能有未保存的更改。"
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"此功能默认关闭。您需要手动启用，打开“启用手写识别”选项。"
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"此功能仅在 Joplin Cloud 和 Joplin Server 上可用。"
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"不支持此图像类型。"
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"这是用于展示已链接到笔记的附件的高级工具。需要小心，删除后无法恢复。"
@@ -3741,7 +3945,7 @@
 		"该笔记没有历史记录"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"该笔记为 HTML 格式。将其转换为 Markdown 以便更轻松地编辑。"
 	],
 	"This plugin doesn't support %s.": [
 		"该插件不支持 %s。"
@@ -3782,11 +3986,14 @@
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		"要让 Joplin 与 Joplin 云同步，请使用以下 URL 登录："
 	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"要使 Joplin 与您的账户同步，请按以下步骤操作："
+	],
 	"To continue, please enter your master password below.": [
 		"若要继续，请在下面输入您的主密码。"
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"要创建新标签，输入名称并按 Enter 键。"
 	],
 	"To delete a tag, untag the associated notes.": [
 		"移除相关笔记的标签后才可删除此标签。"
@@ -3950,6 +4157,12 @@
 	"Unordered list": [
 		"无序列表"
 	],
+	"Unpublish": [
+		"取消发布笔记"
+	],
+	"Unpublish \"%s\"": [
+		"取消发布笔记\"%s\""
+	],
 	"Unpublish note": [
 		"取消发布笔记"
 	],
@@ -3957,7 +4170,7 @@
 		"取消共享"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"取消共享笔记本“%s”？这可能会导致其他用户无法访问该笔记本。"
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"取消共享这个笔记本？受邀人将无法再访问到它的内容。"
@@ -4019,6 +4232,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"升级同步目标到最新版本。"
 	],
+	"Upload photo": [
+		"上传图片"
+	],
 	"URL": [
 		"URL"
 	],
@@ -4055,6 +4271,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"用于需要固定宽度的字体来清晰地布局文本的场景（例如表格、多选框和代码块）。如果没有找到，会使用默认等宽字体。"
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"用户删除"
 	],
@@ -4082,6 +4301,9 @@
 	"Viewer": [
 		"查看器"
 	],
+	"Viewer and Rich Text Editor font family": [
+		"查看器和富文本编辑器的字体系列"
+	],
 	"Viewer font size": [
 		"查看器字体大小"
 	],
@@ -4097,11 +4319,14 @@
 	"Voice typing...": [
 		"使用语音输入……"
 	],
-	"Vosk": [
-		"Vosk"
+	"Voice typing: Glossary": [
+		"语音输入：术语表"
 	],
 	"Waiting for authorisation...": [
 		"正在等待授权……"
+	],
+	"Waiting: Notebook %s from %s": [
+		"正在等待：笔记本“%s”，来自 %s"
 	],
 	"Warning": [
 		"警告"
@@ -4154,11 +4379,11 @@
 	"When creating a new to-do:": [
 		"当新建待办时："
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"启用后，应用程序将扫描您的附件并从中提取文本。这将允许您搜索这些附件中的文本。"
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"窗口没有响应。"
@@ -4185,10 +4410,10 @@
 		"您已登录到 Joplin 云，现在可以关闭此界面。"
 	],
 	"You are now logged into your account.": [
-		""
+		"您已登录您的账户。"
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"您现在正在使用 Markdown 编辑器的最新版本。"
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"您正在苹果芯片处理器上运行 Intel 版本的 Joplin。下载苹果芯片的版本以取得更佳性能。"

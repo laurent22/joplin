@@ -131,6 +131,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle\"은 주어진 목록의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다.(만약 대상이 일반적인 노트일 경우에는 목록으로 전환됩니다).\"clear\"는 목록을 일반적인 노트로 변환하는 데 사용됩니다."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -184,6 +187,9 @@
 	],
 	"Add body": [
 		"내용 추가"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"새로 추가"
@@ -262,6 +268,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"자동 저장된 그림을 찾았습니다. 노트에 사본을 첨부하시겠습니까?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"오류가 발생했습니다: %s"
@@ -992,6 +1001,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"비밀번호는 데이터를 복호화할 수 있는 *유일한* 수단이므로 절대로 비밀번호를 잃어버리지 마세요.암호화를 사용하려면 아래에 비밀번호를 넣어주세요."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1358,6 +1370,9 @@
 	"Feature flags": [
 		"기능 플래그"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"가져온 항목: %d/%d."
 	],
@@ -1589,9 +1604,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"노트에 지리적 위치 정보를 포함하기 위해서는 위치 정보에 접근이 필요하고, 이를 위해선 권한이 요구됩니다.\n\n설정 화면에서 언제든지 이 설정을 끌 수 있습니다."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"전체 데이터가 암호 및 동기화되므로, 충분한 시간을 가지고 실행하는게 좋습니다.\n시작하기 위해 아래 방법으로 할 수 있습니다.\n\n1. 모든 디바이스를 동기화.\n2. Click \"%s\".\n3. 충돌을 방지하기 위해, 암호화가 진행되는 동안 다른 장치에서 노트를 변경하지 말아주세요.\n4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화하세요.\n\n중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
 	],
@@ -1727,6 +1739,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있게 해줍니다."
 	],
@@ -1756,6 +1771,9 @@
 	],
 	"Keys that need upgrading": [
 		"키 업그레이드가 필요합니다"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"가로 방향"
@@ -2084,6 +2102,9 @@
 	"Not now": [
 		"지금은 아닙니다"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"노트"
 	],
@@ -2240,6 +2261,9 @@
 	"Ordered list": [
 		"정렬 목록"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"다른 애플리케이션..."
 	],
@@ -2287,9 +2311,6 @@
 	],
 	"Permanently delete note \"%s\"?": [
 		"\"%s\" 노트를 영구적으로 삭제하시겠습니까?"
-	],
-	"Permission needed": [
-		"권한 요구"
 	],
 	"Photo %d": [
 		""
@@ -2384,9 +2405,6 @@
 	"Preferred light theme": [
 		"선호하는 밝은 테마"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2472,6 +2490,9 @@
 		"인터넷에 노트를 발행합니다"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2740,6 +2761,9 @@
 	],
 	"Select file...": [
 		"파일 선택..."
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Select parent notebook": [
 		"상위 노트북 선택"
@@ -3023,6 +3047,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"원하는 만큼 많은 장치를 동기화하세요"
 	],
@@ -3118,6 +3145,9 @@
 	],
 	"Text editor command": [
 		"텍스트 편집기 명령어"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"활성 프로필은 삭제할 수 없습니다. 다른 프로필로 전환하고 다시 시도하세요."
@@ -3596,6 +3626,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"텍스트를 읽기 쉽게 폭이 변경될 글꼴을 선택합니다 (표, 체크박스, 코드 등). 글꼴을 찾지 못할 경우, 기본 모노스페이스 (폭이 변경된) 글꼴이 사용됩니다."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"사용자 삭제"
 	],
@@ -3634,9 +3667,6 @@
 	],
 	"Voice typing...": [
 		"음성 입력 중..."
-	],
-	"Vosk": [
-		""
 	],
 	"Waiting for authorisation...": [
 		"승인을 기다리는 중..."
@@ -3686,11 +3716,11 @@
 	"When creating a new to-do:": [
 		"새 목록을 만들 때:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"이 기능을 활성화하면 애플리케이션이 첨부파일을 스캔하고 첨부파일에서 텍스트를 추출합니다. 이렇게 하면 첨부 파일에 있는 텍스트를 검색할 수 있습니다."
-	],
-	"Whisper": [
-		""
 	],
 	"Window unresponsive.": [
 		"창이 응답하지 않습니다."

@@ -350,7 +350,7 @@ class WebDavApi {
 		// https://github.com/facebook/react-native/issues/30176
 		if (!headers['Content-Type']) {
 			if (method === 'PROPFIND') headers['Content-Type'] = 'text/xml';
-			if (method === 'PUT') headers['Content-Type'] = 'text/plain';
+			if (method === 'PUT') headers['Content-Type'] = 'application/octet-stream';
 		}
 
 		// React-native has caching enabled by at least on Android (see https://github.com/laurent22/joplin/issues/4706 and the related PR).

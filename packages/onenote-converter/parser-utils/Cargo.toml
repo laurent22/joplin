@@ -1,0 +1,20 @@
+[package]
+name = "parser-utils"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+paste = "1.0"
+bytes = "1.2.0"
+thiserror = "1.0"
+widestring = "1.0.2"
+uuid = "1.1.2"
+lazy_static = "1.4"
+wasm-bindgen = "0.2"
+parser-macros = { path = "../parser-macros" }
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "console"
+]

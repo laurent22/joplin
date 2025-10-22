@@ -18,7 +18,7 @@ import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEdi
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
-import { AppState } from '../../app.reducer';
+import { AppState, EditorCursorLocations } from '../../app.reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _, _n } from '@joplin/lib/locale';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
@@ -57,6 +57,7 @@ import StatusBar from './StatusBar';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 import getResourceBaseUrl from './utils/getResourceBaseUrl';
+import useInitialCursorLocation from './utils/useInitialCursorLocation';
 
 const debounce = require('debounce');
 
@@ -329,13 +330,13 @@ function NoteEditorContent(props: NoteEditorProps) {
 		});
 	}, [formNote, setFormNote, handleProvisionalFlag, props.dispatch]);
 
-	const { scrollWhenReady, clearScrollWhenReady } = useScrollWhenReadyOptions({
+	const { scrollWhenReadyRef, clearScrollWhenReady } = useScrollWhenReadyOptions({
 		noteId: formNote.id,
 		selectedNoteHash: props.selectedNoteHash,
 		lastEditorScrollPercents: props.lastEditorScrollPercents,
 		editorRef,
 	});
-	const onMessage = useMessageHandler(scrollWhenReady, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
+	const onMessage = useMessageHandler(scrollWhenReadyRef, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
 
@@ -409,6 +410,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 		});
 	}, [props.dispatch]);
 
+	const onCursorMotion = useCallback((location: EditorCursorLocations) => {
+		props.dispatch({
+			type: 'EDITOR_CURSOR_POSITION_SET',
+			noteId: formNoteRef.current.id,
+			location,
+		});
+	}, [props.dispatch]);
+
 	function renderNoNotes(rootStyle: React.CSSProperties) {
 		const emptyDivStyle = {
 			backgroundColor: 'black',
@@ -419,6 +428,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
+	const initialCursorLocation = useInitialCursorLocation({
+		lastEditorCursorLocations: props.lastEditorCursorLocations, noteId: props.noteId,
+	});
 
 	const markupLanguage = formNote.markup_language;
 	const editorProps: NoteBodyEditorPropsAndRef = {
@@ -432,6 +444,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		content: formNote.body,
 		contentMarkupLanguage: markupLanguage,
 		contentOriginalCss: formNote.originalCss,
+		initialCursorLocation,
 		resourceInfos: resourceInfos,
 		resourceDirectory: Setting.value('resourceDir'),
 		htmlToMarkdown: htmlToMarkdown,
@@ -442,6 +455,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		dispatch: props.dispatch,
 		noteToolbar: null,
 		onScroll: onScroll,
+		onCursorMotion,
 		setLocalSearchResultCount: setLocalSearchResultCount,
 		setLocalSearch: localSearch_change,
 		setShowLocalSearch,
@@ -729,6 +743,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		notesParentType: windowState.notesParentType,
 		selectedNoteTags: windowState.selectedNoteTags,
 		lastEditorScrollPercents: state.lastEditorScrollPercents,
+		lastEditorCursorLocations: state.lastEditorCursorLocations,
 		selectedNoteHash: windowState.selectedNoteHash,
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,

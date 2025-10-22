@@ -52,7 +52,7 @@ describe('app.reducer', () => {
 			...createAppDefaultState({}),
 			backgroundWindows: {
 				testWindow: {
-					...createAppDefaultWindowState(),
+					...createAppDefaultWindowState(null),
 					windowId: 'testWindow',
 
 					visibleDialogs: {

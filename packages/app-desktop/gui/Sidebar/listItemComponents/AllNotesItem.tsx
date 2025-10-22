@@ -7,7 +7,6 @@ import Setting from '@joplin/lib/models/Setting';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
-import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
@@ -70,7 +69,7 @@ const AllNotesItem: React.FC<Props> = props => {
 				onClick={onAllNotesClick_}
 				onContextMenu={toggleAllNotesContextMenu}
 			>
-				{_('All notes')}
+				{props.item.label}
 			</StyledListItemAnchor>
 		</ListItemWrapper>
 	);

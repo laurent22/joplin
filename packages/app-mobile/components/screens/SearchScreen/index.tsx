@@ -53,11 +53,36 @@ const useStyles = (theme: ThemeStyle, visible: boolean) => {
 	}, [theme, visible]);
 };
 
+// Workaround for https://github.com/laurent22/joplin/issues/12823:
+// Disable search-as-you-type for short 0-2 character searches that
+// are likely to match the start of a large number of words.
+const useSearchPaused = (query: string) => {
+	const [pauseDisabled, setPauseDisabled] = useState(false);
+	// Only disable search-as-you-type for a subset of all characters.
+	// This is, for example, to ensure that search-as-you-type remains
+	// enabled for CJK characters (e.g. U+6570 has length 1).
+	const paused = query.match(/^[a-z0-9]{0,2}$/i);
+
+	const onOverridePause = useCallback(() => {
+		setPauseDisabled(true);
+	}, []);
+
+	useEffect(() => {
+		setPauseDisabled(false);
+	}, [query]);
+
+	return {
+		paused: paused && !pauseDisabled,
+		onOverridePause,
+	};
+};
+
 const SearchScreenComponent: React.FC<Props> = props => {
 	const theme = themeStyle(props.themeId);
 	const styles = useStyles(theme, props.visible);
 
 	const [query, setQuery] = useState(props.query);
+	const { paused, onOverridePause } = useSearchPaused(query);
 
 	const globalQueryRef = useRef(props.query);
 	globalQueryRef.current = props.query;
@@ -99,6 +124,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 						autoFocus={props.visible}
 						underlineColorAndroid="#ffffff00"
 						onChangeText={setQuery}
+						onSubmitEditing={onOverridePause}
 						value={query}
 						selectionColor={theme.textSelectionColor}
 						keyboardAppearance={theme.keyboardAppearance}
@@ -114,6 +140,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 
 				<SearchResults
 					query={query}
+					paused={paused}
 					ftsEnabled={props.ftsEnabled}
 					onHighlightedWordsChange={onHighlightedWordsChange}
 				/>

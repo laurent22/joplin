@@ -1,6 +1,6 @@
 /target
 /output
-/test-output
+/*/test-output
 
 /.idea
 *.iml

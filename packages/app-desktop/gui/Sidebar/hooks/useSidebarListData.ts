@@ -4,6 +4,8 @@ import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/data
 import { buildFolderTree, renderFolders, renderTags } from '@joplin/lib/components/shared/side-menu-shared';
 import { _ } from '@joplin/lib/locale';
 import toggleHeader from './utils/toggleHeader';
+import Folder from '@joplin/lib/models/Folder';
+import Tag from '@joplin/lib/models/Tag';
 
 interface Props {
 	tags: TagsWithNoteCountEntity[];
@@ -18,6 +20,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 		return renderTags<ListItem>(props.tags, (tag): TagListItem => {
 			return {
 				kind: ListItemType.Tag,
+				label: Tag.displayTitle(tag),
 				tag,
 				key: tag.id,
 				depth: 1,
@@ -38,6 +41,7 @@ const useSidebarListData = (props: Props): ListItem[] => {
 		return renderFolders<ListItem>(renderProps, (folder, hasChildren, depth): FolderListItem => {
 			return {
 				kind: ListItemType.Folder,
+				label: Folder.displayTitle(folder),
 				folder,
 				hasChildren,
 				// The toplevel headers have depth 1, so the toplevel notebook needs
@@ -65,9 +69,9 @@ const useSidebarListData = (props: Props): ListItem[] => {
 			hasChildren: folderItems.items.length > 0,
 		};
 		const foldersSectionContent: ListItem[] = props.folderHeaderIsExpanded ? [
-			{ kind: ListItemType.AllNotes, key: 'all-notes', depth: 2, hasChildren: false },
+			{ kind: ListItemType.AllNotes, label: _('All notes'), key: 'all-notes', depth: 2, hasChildren: false },
 			...folderItems.items,
-			{ kind: ListItemType.Spacer, key: 'after-folders-spacer', depth: 1, hasChildren: false },
+			{ kind: ListItemType.Spacer, label: '', key: 'after-folders-spacer', depth: 1, hasChildren: false },
 		] : [];
 
 		const tagsHeader: HeaderListItem = {

@@ -134,6 +134,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> может принимать значения \"toggle\" или \"clear\". \"toggle\" переключает статус выбранной задачи (с завершенной на незавершенную и наоборот). При применении к обычной заметке она преобразуется в задачу. \"clear\" преобразует выбранную задачу в обычную заметку."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -199,6 +202,9 @@
 	],
 	"Add body": [
 		"Добавить текст заметки"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Добавить новый"
@@ -283,6 +289,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Найден автосохраненный рисунок. Прикрепить его копию к заметке?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Произошла ошибка: %s"
@@ -1065,6 +1074,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Не теряйте пароль, так как в целях безопасности это будет *единственный* способ расшифровать данные! Чтобы включить шифрование введите свой пароль ниже."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1455,6 +1467,9 @@
 	"Feature flags": [
 		"Флаги функций"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Получено элементов: %d/%d."
 	],
@@ -1712,9 +1727,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"В любой команде можно ссылаться на заметку или блокнот по названию или ID, либо используя ярлыки `$n` или `$b`, указывающие на текущую заметку или блокнот, соответственно. С помощью `$c` можно ссылаться на текущий выбранный элемент."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Для возможности сохранения информации в заметке о географическом местоположении приложению необходим доступ к вашему местоположению.\n\nВы можете выключить эту опцию в любое время в Конфигурации."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Для этого весь ваш набор данных должен быть зашифрован и синхронизирован, поэтому лучше всего запускать процесс на ночь.\n\nДля начала, пожалуйста, следуйте этим инструкциям:\n\n1. Синхронизируйте все ваши устройства.\n2. Нажмите “%s”.\n3. Ждите завершения. Во время работы не изменяйте заметки на других устройствах, чтобы избежать конфликтов.\n4. После завершения синхронизации на этом устройстве синхронизируйте все остальные устройства и ждите завершения.\n\nВажно: вам нужно запустить процесс ОДИН РАЗ на одном устройстве."
 	],
@@ -1874,6 +1886,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Веб-клиппер Joplin позволяет сохранять веб-страницы и скриншоты из вашего браузера в Joplin."
 	],
@@ -1903,6 +1918,9 @@
 	],
 	"Keys that need upgrading": [
 		"Ключи, которые нуждаются в обновлении"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Горизонтально"
@@ -2275,6 +2293,9 @@
 	"Not now": [
 		"Не сейчас"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"заметка"
 	],
@@ -2455,6 +2476,9 @@
 	"Ordered list": [
 		"Упорядоченный список"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Другие приложения..."
 	],
@@ -2508,9 +2532,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Безвозвратно удаляет блокнот, минуя корзину."
-	],
-	"Permission needed": [
-		"Необходимы разрешения"
 	],
 	"Photo %d": [
 		""
@@ -2614,9 +2635,6 @@
 	"Preferred light theme": [
 		"Предпочитаемая светлая тема"
 	],
-	"Preferred voice typing provider": [
-		"Предпочитаемый провайдер голосового ввода текста"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Сохранение цветов при вставке текста в редактор свободного текста"
 	],
@@ -2708,6 +2726,9 @@
 		"Опубликовать заметки в Интернет"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"QR Code": [
@@ -3009,6 +3030,9 @@
 	],
 	"Select file...": [
 		"Выбрать файл..."
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Select parent notebook": [
 		"Выбрать родительский блокнот"
@@ -3328,6 +3352,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Совершает переход в блокнот [notebook]. Все дальнейшие операции будут совершены в этом блокноте."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Синхронизируйте столько устройств, сколько хотите"
 	],
@@ -3423,6 +3450,9 @@
 	],
 	"Text editor command": [
 		"Команда запуска текстового редактора"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Активный профиль не может быть удален. Переключитесь на другой профиль и повторите попытку."
@@ -3938,6 +3968,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Применяется там, где нужен шрифт фиксированной ширины для лучшего отображения текста (таблицы, отметки, код). Если не найден - используется подменный моноширинный шрифт."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Удаление пользователей"
 	],
@@ -3976,9 +4009,6 @@
 	],
 	"Voice typing...": [
 		"Голосовой набор..."
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Ожидание авторизации..."
@@ -4034,11 +4064,11 @@
 	"When creating a new to-do:": [
 		"При создании новой задачи:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Если эта функция включена, приложение будет сканировать ваши вложения и извлекать из них текст. Это позволит вам искать текст в этих вложениях."
-	],
-	"Whisper": [
-		"Шепот"
 	],
 	"Window unresponsive.": [
 		"Окно не отвечает."
