@@ -61,12 +61,6 @@ const useWebViewSetup = ({
 	// Since the editor content is included in editorOptions, for large documents,
 	// creating the initial injected JS is potentially expensive.
 	afterLoadFinishedJs.current = () => `
-		if (typeof window.markdownEditorBundle === 'undefined') {
-			${shim.injectedJs('markdownEditorBundle')};
-			window.markdownEditorBundle = markdownEditorBundle;
-			markdownEditorBundle.setUpLogger();
-		}
-
 		if (!window.cm) {
 			const parentClassName = ${JSON.stringify(editorOptions?.parentElementOrClassName)};
 			const foundParent = !!parentClassName && document.getElementsByClassName(parentClassName).length > 0;
@@ -94,7 +88,7 @@ const useWebViewSetup = ({
 	`;
 
 	const injectedJavaScript = useMemo(() => `
-		if (typeof markdownEditorBundle === 'undefined') {
+		if (typeof window.markdownEditorBundle === 'undefined') {
 			${shim.injectedJs('markdownEditorBundle')};
 			window.markdownEditorBundle = markdownEditorBundle;
 			markdownEditorBundle.setUpLogger();
