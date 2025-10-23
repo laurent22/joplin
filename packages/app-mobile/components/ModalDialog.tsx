@@ -55,11 +55,10 @@ const useStyles = (themeId: number) => {
 const ModalDialog: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 	const theme = themeStyle(props.themeId);
-	const containerStyle = !props.modalProps.containerStyle ? styles.container :
-		{
-			...styles.container,
-			...props.modalProps.containerStyle,
-		};
+	const containerStyle = !props.modalProps.containerStyle ? styles.container : {
+		...styles.container,
+		...props.modalProps.containerStyle,
+	};
 	const modalProps = {
 		...props.modalProps,
 		containerStyle,
