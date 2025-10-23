@@ -9,6 +9,7 @@ import TagEditor, { TagEditorMode } from '../TagEditor';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { ViewStyle } from 'react-native';
 
 interface Props {
 	themeId: number;
@@ -22,6 +23,11 @@ const modalPropOverrides = {
 		// Prevent the keyboard from auto-dismissing when tapping outside the search input
 		keyboardShouldPersistTaps: true,
 	},
+	containerStyle: {
+		height: '100%',
+		marginVertical: 0,
+		flexShrink: 0,
+	} as ViewStyle,
 };
 
 const NoteTagsDialogComponent: React.FC<Props> = props => {
