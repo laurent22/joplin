@@ -9587,7 +9587,7 @@ __metadata:
     pretty-bytes: "npm:5.6.0"
     prettycron: "npm:0.10.0"
     query-string: "npm:7.1.3"
-    rate-limiter-flexible: "npm:7.0.0"
+    rate-limiter-flexible: "npm:7.1.1"
     raw-body: "npm:3.0.0"
     samlify: "npm:2.10.1"
     source-map-support: "npm:0.5.21"
@@ -40992,10 +40992,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rate-limiter-flexible@npm:7.0.0":
-  version: 7.0.0
-  resolution: "rate-limiter-flexible@npm:7.0.0"
-  checksum: 10/b2c1f31f1e254f33227f317eeeadf3b926bf1db1383cbdc4801740c1ff494567655e59343d2fbb2dc8d6d323405493348d03d609d5596946242eac6fcaa42710
+"rate-limiter-flexible@npm:7.1.1":
+  version: 7.1.1
+  resolution: "rate-limiter-flexible@npm:7.1.1"
+  checksum: 10/1d640f98a126e97694c2049f6275c577d880f6352890c68bf8c7006236a70f3c5baa26974c9492a199b63b9301ac8bae694b43034b3729bb40901d731ae91c3c
   languageName: node
   linkType: hard
 
