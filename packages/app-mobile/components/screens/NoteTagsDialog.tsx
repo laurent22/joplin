@@ -25,8 +25,6 @@ const modalPropOverrides = {
 	},
 	containerStyle: {
 		height: '100%',
-		marginVertical: 0,
-		flexShrink: 0,
 	} as ViewStyle,
 };
 
