@@ -6,6 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin v3.5.5\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
 "Language: sk_SK\n"
@@ -422,7 +424,7 @@ msgstr "Pridať telo"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:24
 msgid "Add column"
-msgstr ""
+msgstr "Pridať stĺpec"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -439,9 +441,8 @@ msgid "Add recipient:"
 msgstr "Pridať príjemcu:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
-#, fuzzy
 msgid "Add row"
-msgstr "Pridať novú"
+msgstr "Pridať riadok"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -1208,9 +1209,9 @@ msgstr "Blížiace sa budíky"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Čiarkou oddelený zoznam ciest k priečinkom, z ktorých sa majú načítať "
 "certifikáty, alebo cesta k jednotlivým súborom cert. Napríklad: /moj/"
@@ -1738,9 +1739,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Vymazať prílohu \"%s\"?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:34
-#, fuzzy
 msgid "Delete column"
-msgstr "Vymazať riadok"
+msgstr "Vymazať stĺpec"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1781,9 +1781,8 @@ msgid "Delete profile \"%s\""
 msgstr "Vymazať profil \"%s\""
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:29
-#, fuzzy
 msgid "Delete row"
-msgstr "Vymazať poznámku"
+msgstr "Vymazať riadok"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:486
 msgid "Delete selected notes"
