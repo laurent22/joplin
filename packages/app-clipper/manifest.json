@@ -53,10 +53,21 @@
             "description": "Clip selection (uses last selected notebook)"
         }
     },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": [
+                "content_scripts/setUpEnvironment.js",
+                "content_scripts/JSDOMParser.js",
+                "content_scripts/Readability.js",
+                "content_scripts/Readability-readerable.js",
+                "content_scripts/clipperUtils.js",
+                "content_scripts/index.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ],
     "background": {
-        "scripts": [
-            "service_worker.mjs"
-        ],
         "service_worker": "service_worker.mjs",
         "type": "module"
     },

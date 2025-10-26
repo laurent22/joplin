@@ -151,6 +151,14 @@
 			let isVisible = node.nodeType === 1 ? computedStyle.display !== 'none' && computedStyle.visibility !== 'hidden' : true;
 			if (isVisible && ['script', 'noscript', 'style', 'select', 'option', 'button'].indexOf(nodeName) >= 0) isVisible = false;
 
+			// Filter out MathJax internal elements (they're structural elements for rendering formulas)
+			// These have IDs like "MathJax-Element-*", "MJXc-Node-*", "MathJax-Span-*", etc.
+			// MathJax uses both <a> and <span> tags for structural markup
+			if (isVisible && (nodeName === 'a' || nodeName === 'span') && node.id) {
+				const isMathJaxElement = node.id.startsWith('MathJax-') || node.id.startsWith('MJXc-');
+				if (isMathJaxElement) isVisible = false;
+			}
+
 			// If it's a text input or a textarea and it has a value, save
 			// that value to data-joplin-clipper-value. This is then used
 			// when cleaning up the document to export the value.
