@@ -9574,7 +9574,7 @@ __metadata:
     jquery: "npm:3.7.1"
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
-    koa: "npm:2.16.1"
+    koa: "npm:2.16.2"
     ldapts: "npm:7.4.0"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
@@ -9670,7 +9670,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-expect-message: "npm:1.1.3"
     knex: "npm:3.1.0"
-    koa: "npm:2.16.1"
+    koa: "npm:2.16.2"
     koa-body: "npm:6.0.1"
     pg-boss: "npm:10.3.2"
     sharp: "npm:0.34.3"
@@ -33241,9 +33241,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.16.1":
-  version: 2.16.1
-  resolution: "koa@npm:2.16.1"
+"koa@npm:2.16.2":
+  version: 2.16.2
+  resolution: "koa@npm:2.16.2"
   dependencies:
     accepts: "npm:^1.3.5"
     cache-content-type: "npm:^1.0.0"
@@ -33268,7 +33268,7 @@ __metadata:
     statuses: "npm:^1.5.0"
     type-is: "npm:^1.6.16"
     vary: "npm:^1.1.2"
-  checksum: 10/f33b95227e48bffd3a682996e6cf72c4ae2992671529c6c914b76d28172219c9cbd8201b16cc028dc25fafc8f1dc9391a6e7e045740a10ee7d89a5631031a974
+  checksum: 10/741e389b31a36752c47543f06bcb9b63c19b2649487a266bd83ff363e651d864bbff5d1154a0b310f5db4d11e03060440df0113bad3ef82ac9f051874c789dee
   languageName: node
   linkType: hard
 
