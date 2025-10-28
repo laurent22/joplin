@@ -724,8 +724,22 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			// when the Web app is being used on a desktop OS, so providing a toggle to expand the title field can only be done on mobile platforms
 			newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
 		}
-		shared.noteComponent_change(this, 'title', newText);
-		this.setState({ newAndNoTitleChangeNoteId: null });
+
+		// Group all state changes together, to avoid input issues on the web platform
+		const note = { ...this.state.note };
+		note.title = newText;
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+		const newState: any = { ...this.state, note, newAndNoTitleChangeNoteId: null };
+		this.setState(newState);
+
+		if (Platform.OS !== 'web') {
+			this.scheduleSave(newState);
+		} else {
+			// Without the state update upon save, changing the note body and then changing the title before the scheduled save executes, results in some
+			// input loss. Therefore only do this on the web platform
+			this.scheduleSaveWithoutStateUpdate(newState);
+		}
 	}
 
 	private emitEditorPluginUpdate_() {
@@ -762,9 +776,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.selection = { start: event.from, end: event.to };
 	};
 
-	public makeSaveAction(state: State) {
+	public makeSaveAction(state: State, useProxyComponent: boolean) {
+		const comp: BaseNoteScreenComponent = useProxyComponent ? { ...this, setState: () => {} } : this;
 		return async () => {
-			return shared.saveNoteButton_press(this, state, null, null);
+			return shared.saveNoteButton_press(comp, state, null, null);
 		};
 	}
 
@@ -776,7 +791,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	public scheduleSave(state: State) {
-		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state));
+		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, false));
+	}
+
+	// Use a proxy component to avoid updating the state when the scheduled save executes, but instead make state updates explicitly before calling scheduleSave
+	public scheduleSaveWithoutStateUpdate(state: State) {
+		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, true));
 	}
 
 	private async saveNoteButton_press(folderId: string = null) {
