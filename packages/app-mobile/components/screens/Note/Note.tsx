@@ -794,7 +794,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, false));
 	}
 
-	// Use a proxy component to avoid updating the state when the scheduled save executes, but instead make state updates explicitly before calling scheduleSave
+	// Use a proxy component to avoid updating the state when the scheduled save executes, but instead make state updates explicitly in the calling function
 	public scheduleSaveWithoutStateUpdate(state: State) {
 		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, true));
 	}
