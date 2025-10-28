@@ -121,6 +121,7 @@ const useStyles = (theme: Theme) => {
 				height: buttonSize,
 				backgroundColor: theme.backgroundColor4,
 				color: theme.color4,
+				margin: 2,
 			},
 			buttonText: buttonTextStyle,
 			activeButtonText: {
@@ -352,7 +353,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	);
 
 	const advancedLayout = (
-		<View style={{ flexDirection: 'column', alignItems: 'center' }}>
+		<View style={{ flexDirection: 'column' }}>
 			<View style={{ flexDirection: 'row' }}>
 				{ closeButton }
 				{ labeledSearchInput }
