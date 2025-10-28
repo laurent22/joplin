@@ -36,6 +36,7 @@ import indexStripe from './index/stripe';
 import indexTerms from './index/terms';
 import indexUpgrade from './index/upgrade';
 import indexUsers from './index/users';
+import indexSaml from './index/saml';
 
 import defaultRoute from './default';
 
@@ -47,7 +48,7 @@ const routes: Routers = {
 	'api/items': apiItems,
 	'api/locks': apiLocks,
 	'api/ping': apiPing,
-	'api/saml': apiLogin,
+	// 'api/saml': apiLogin,
 	'api/login_with_code': apiLogin,
 	'api/sessions': apiSessions,
 	'api/share_users': apiShareUsers,
@@ -77,6 +78,7 @@ const routes: Routers = {
 	'terms': indexTerms,
 	'upgrade': indexUpgrade,
 	'users': indexUsers,
+	'api/saml': indexSaml,
 
 	'': defaultRoute,
 };
