@@ -7,6 +7,7 @@ use once_cell::sync::Lazy;
 use parser::contents::{EmbeddedObject, RichText};
 use parser::property::common::ColorRef;
 use parser::property::rich_text::{ParagraphAlignment, ParagraphStyling};
+use parser_utils::log_warn;
 use regex::{Captures, Regex};
 
 impl<'a> Renderer<'a> {
@@ -286,28 +287,44 @@ impl<'a> Renderer<'a> {
             styles.set("background-color", format!("rgb({},{},{})", r, g, b));
         }
 
-        if style.paragraph_alignment().is_some() {
-            unimplemented!()
+        if let Some(align) = &style.paragraph_alignment() {
+            styles.set("text-align", match align {
+                ParagraphAlignment::Center => {
+                    "center"
+                },
+                ParagraphAlignment::Left => {
+                    "left"
+                },
+                ParagraphAlignment::Right => {
+                    "right"
+                },
+                other => {
+                    log_warn!("Unknown/unsupported text-align value: {:?}", other);
+                    ""
+                }
+            }.into());
         }
 
         if let Some(space) = style.paragraph_space_before() {
             if space != 0.0 {
-                unimplemented!()
+                // Space is in half inches:
+                styles.set("margin-top", format!("{}in", space / 2.));
             }
         }
 
         if let Some(space) = style.paragraph_space_after() {
             if space != 0.0 {
-                unimplemented!()
+                styles.set("margin-bottom", format!("{}in", space / 2.));
             }
         }
 
         if let Some(space) = style.paragraph_line_spacing_exact() {
             if space != 0.0 {
-                unimplemented!()
-            }
-
-            if let Some(size) = style.font_size() {
+                styles.set(
+                    "line-height",
+                    format!("{}in", space / 2.),
+                )
+            } else if let Some(size) = style.font_size() {
                 styles.set(
                     "line-height",
                     format!("{}px", (size as f32 * 1.2 / 72.0 * 48.0).floor()),

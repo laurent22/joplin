@@ -690,6 +690,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (prevState.note.body !== this.state.note.body) {
 			this.emitEditorPluginUpdate_();
 		}
+
+		if (prevState.multiline !== this.state.multiline && this.titleTextFieldRef.current) {
+			focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+		}
 	}
 
 	public componentWillUnmount() {
@@ -1703,6 +1707,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
+					key={this.state.multiline ? 'multiLine' : 'singleLine'}
 					ref={this.titleTextFieldRef}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"

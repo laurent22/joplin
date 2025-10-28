@@ -172,7 +172,12 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 			<div style={{ ...labelCompStyle, marginTop: 10 }}>
 				{readTimeLabel}
 			</div>
-			<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
+			<DialogButtonRow
+				themeId={props.themeId}
+				onClick={buttonRow_click}
+				okButtonShow={false}
+				cancelButtonLabel={_('Close')}
+			/>
 		</Dialog>
 	);
 }

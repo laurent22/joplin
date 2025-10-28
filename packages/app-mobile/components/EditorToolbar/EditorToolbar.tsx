@@ -132,6 +132,7 @@ const EditorToolbar: React.FC<Props> = props => {
 			style={styles.content}
 			contentContainerStyle={styles.contentContainer}
 			onLayout={onContainerLayout}
+			keyboardShouldPersistTaps="always"
 		>
 			{buttonInfos.map(renderButton)}
 			<View style={styles.spacer}/>

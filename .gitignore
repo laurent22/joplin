@@ -674,6 +674,7 @@ packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/autosave.js
 packages/app-mobile/components/NoteEditor/ImageEditor/isEditableResource.js
 packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.js
+packages/app-mobile/components/NoteEditor/MarkdownEditor.test.js
 packages/app-mobile/components/NoteEditor/MarkdownEditor.js
 packages/app-mobile/components/NoteEditor/NoteEditor.test.js
 packages/app-mobile/components/NoteEditor/NoteEditor.js

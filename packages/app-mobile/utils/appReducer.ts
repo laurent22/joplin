@@ -67,6 +67,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 				newState.selectedNoteHash = '';
 
+				if (currentRoute.routeName === 'Search' && action.routeName === 'Notes') {
+					// Force a reload of the note list
+					newState.notesSource = '';
+				}
+
 				if (action.routeName === 'Search') {
 					newState.notesParentType = 'Search';
 				}

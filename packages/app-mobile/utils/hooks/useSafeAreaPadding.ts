@@ -11,7 +11,7 @@ const useSafeAreaPadding = () => {
 			paddingRight: safeAreaInsets.right,
 			paddingLeft: safeAreaInsets.left,
 			paddingTop: safeAreaInsets.top,
-			paddingBottom: 0,
+			paddingBottom: safeAreaInsets.bottom,
 		} : {
 			paddingTop: safeAreaInsets.top,
 			paddingBottom: safeAreaInsets.bottom,

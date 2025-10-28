@@ -2,7 +2,7 @@ use crate::page::Renderer;
 use crate::utils::{AttributeSet, StyleSet, px};
 use color_eyre::Result;
 use parser::contents::Image;
-use parser_utils::{fs_driver, log};
+use parser_utils::{fs_driver, log, log_warn};
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_image(&mut self, image: &Image) -> Result<String> {
@@ -58,22 +58,22 @@ impl<'a> Renderer<'a> {
             return self.determine_filename(name);
         }
 
-        if let Some(ext) = image.extension() {
-            let mut i = 0;
+        let ext = image.extension().unwrap_or_else(|| {
+            log_warn!("Image missing extension. Defaulting to .png.");
+            ".png"
+        });
 
-            loop {
-                let filename = format!("image{}{}", i, ext);
+        let mut i = 0;
+        loop {
+            let filename = format!("image{}{}", i, ext);
 
-                if !self.section.files.contains(&filename) {
-                    self.section.files.insert(filename.clone());
+            if !self.section.files.contains(&filename) {
+                self.section.files.insert(filename.clone());
 
-                    return Ok(filename);
-                }
-
-                i += 1;
+                return Ok(filename);
             }
-        }
 
-        unimplemented!()
+            i += 1;
+        }
     }
 }

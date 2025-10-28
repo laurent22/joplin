@@ -1007,7 +1007,7 @@ export default class BaseItem extends BaseModel {
 
 		const isNew = this.isNew(o, options);
 
-		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			if (!isNew) {
 				const previousItem = await this.loadItemByTypeAndId(this.modelType(), o.id, { fields: ['id', 'share_id'] });
 				checkIfItemCanBeChanged(this.modelType(), options.changeSource, previousItem, this.syncShareCache);

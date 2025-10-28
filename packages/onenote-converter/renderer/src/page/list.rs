@@ -3,6 +3,7 @@ use crate::utils::{AttributeSet, StyleSet, px};
 use color_eyre::Result;
 use parser::contents::{List, OutlineElement};
 use parser::property::common::ColorRef;
+use parser_utils::log_warn;
 
 const FORMAT_NUMBERED_LIST: char = '\u{fffd}';
 
@@ -89,8 +90,7 @@ impl<'a> Renderer<'a> {
                 container_style.set("list-style-type", "lower-latin".to_string())
             }
             [FORMAT_NUMBERED_LIST, c, ..] => {
-                dbg!(c);
-                unimplemented!();
+                log_warn!("Not implemented: Numbered list style: {}", c);
             }
             [c] => marker_style.set("content", format!("'{}'", c)),
             _ => {}
