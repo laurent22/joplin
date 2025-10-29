@@ -24,15 +24,15 @@ type ExtractSvgsReturn = {
 // See onenote-converter README.md for more information
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
-	private document: Document = null;
+	private domParser: DOMParser = null;
 	private xmlSerializer: XMLSerializer = null;
 
 	public async init(sourcePath: string, options: ImportOptions) {
 		await super.init(sourcePath, options);
-		if (!options.document || !options.xmlSerializer) {
-			throw new Error('OneNote importer requires document and XMLSerializer to be able to extract SVG from HTML.');
+		if (!options.domParser || !options.xmlSerializer) {
+			throw new Error('OneNote importer requires DOMParser and XMLSerializer to be able to extract SVG from HTML.');
 		}
-		this.document = options.document;
+		this.domParser = options.domParser;
 		this.xmlSerializer = options.xmlSerializer;
 	}
 
@@ -172,14 +172,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	}
 
 	public extractSvgs(html: string, titleGenerator: ()=> string): ExtractSvgsReturn {
-		const htmlDocument = this.document.implementation.createHTMLDocument('htmlDocument');
-		const root = htmlDocument.createElement('html');
-		const body = htmlDocument.createElement('body');
-		root.appendChild(body);
-		root.innerHTML = html;
+		const dom = this.domParser.parseFromString(html, 'text/html');
 
 		// get all "top-level" SVGS (ignore nested)
-		const svgNodeList = root.querySelectorAll('svg');
+		const svgNodeList = dom.querySelectorAll('svg');
 
 		if (!svgNodeList || !svgNodeList.length) {
 			return { svgs: [], html };
@@ -188,23 +184,44 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const svgs: SvgXml[] = [];
 
 		for (const svgNode of svgNodeList) {
+			const img = dom.createElement('img');
+
+			if (svgNode.hasAttribute('style')) {
+				img.setAttribute('style', svgNode.getAttribute('style'));
+				svgNode.removeAttribute('style');
+			}
+
+			for (const entry of svgNode.classList) {
+				img.classList.add(entry);
+			}
+
+			if (svgNode.hasAttribute('style')) {
+				img.setAttribute('style', svgNode.getAttribute('style'));
+				svgNode.removeAttribute('style');
+			}
+
+			// A11Y: Translate SVG titles to ALT text
+			// See https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/title
+			const titleElement = svgNode.querySelector('title');
+			if (titleElement) {
+				img.alt = titleElement.textContent;
+			}
+
 			const title = `${titleGenerator()}.svg`;
-			const img = htmlDocument.createElement('img');
-			img.setAttribute('style', svgNode.getAttribute('style'));
 			img.setAttribute('src', `./${title}`);
-			svgNode.removeAttribute('style');
 
 			svgs.push({
 				title,
 				content: this.xmlSerializer.serializeToString(svgNode),
 			});
 
-			svgNode.parentElement.replaceChild(img, svgNode);
+			svgNode.replaceWith(img);
 		}
 
 		return {
 			svgs,
-			html: this.xmlSerializer.serializeToString(root),
+			// Don't use xmlSerializer here: It breaks <style> blocks.
+			html: `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`,
 		};
 	}
 }

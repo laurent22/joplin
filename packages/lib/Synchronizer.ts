@@ -457,30 +457,30 @@ export default class Synchronizer {
 			}
 		}
 
-		// Before synchronising make sure all share_id properties are set
-		// correctly so as to share/unshare the right items.
-		try {
-			await Folder.updateAllShareIds(this.resourceService(), this.shareService_ ? this.shareService_.shares : []);
-			if (this.shareService_) await this.shareService_.checkShareConsistency();
-		} catch (error) {
-			if (error && error.code === ErrorCode.IsReadOnly) {
-				// We ignore it because the functions above tried to modify a
-				// read-only item and failed. Normally it shouldn't happen since
-				// the UI should prevent, but if there's a bug in the UI or some
-				// other issue we don't want sync to fail because of this.
-				logger.error('Could not update share because an item is readonly:', error);
-			} else {
-				throw error;
-			}
-		}
-
-		const itemUploader = new ItemUploader(this.api(), this.apiCall);
-
 		let errorToThrow = null;
 		let syncLock = null;
 		let hasCaughtError = false;
 
 		try {
+			// Before synchronising make sure all share_id properties are set
+			// correctly so as to share/unshare the right items.
+			try {
+				await Folder.updateAllShareIds(this.resourceService(), this.shareService_ ? this.shareService_.shares : []);
+				if (this.shareService_) await this.shareService_.checkShareConsistency();
+			} catch (error) {
+				if (error && error.code === ErrorCode.IsReadOnly) {
+					// We ignore it because the functions above tried to modify a
+					// read-only item and failed. Normally it shouldn't happen since
+					// the UI should prevent, but if there's a bug in the UI or some
+					// other issue we don't want sync to fail because of this.
+					logger.error('Could not update share because an item is readonly:', error);
+				} else {
+					throw error;
+				}
+			}
+
+			const itemUploader = new ItemUploader(this.api(), this.apiCall);
+
 			await this.api().initialize();
 			this.api().setTempDirName(Dirnames.Temp);
 

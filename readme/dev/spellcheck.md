@@ -22,7 +22,7 @@ Please note that there cannot be more than 400 (maybe 500) words in those lists.
 
 ### Using comments
 
-You can ignore a block of code by wrapping it in `// cSpell:disable` / `// cSpell:enable` in JS/TS files, or in `<!-- cSpell:enable -->` / `<!-- cSpell:disable -->` in Markdown files.
+You can ignore a block of code by wrapping it in `// cSpell:disable` / `// cSpell:enable` in JS/TS files, or in `<!-- cSpell:disable -->` / `<!-- cSpell:enable -->` in Markdown files.
 
 Only do this when there's a large block of code that contains many words to be ignored. Otherwise prefer the word list because it means we don't pollute the code with additional comments.
 

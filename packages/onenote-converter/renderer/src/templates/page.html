@@ -13,8 +13,9 @@
     .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
     .ink-text { top: 0; left: 0; }
     .note-tag-icon { position: relative; }
-    .note-tag-icon > svg { position: absolute; }
-    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    {# Select both SVGs and IMGs: Joplin post-processes the converter's output, converting SVGs to IMGs. #}
+    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
+    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
     .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
 
     {% for entry in global_styles -%}

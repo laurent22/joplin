@@ -997,9 +997,8 @@ msgid "Change language"
 msgstr "Taal veranderen"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
-#, fuzzy
 msgid "Change ratio"
-msgstr "Configuratie"
+msgstr "Ratio aanpassen"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:98
 msgid "Change shortcut for \"%s\""
@@ -1069,9 +1068,8 @@ msgstr "Alarm wissen"
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/SearchPlugins.tsx:140
 #: packages/app-mobile/components/SearchInput.tsx:79
-#, fuzzy
 msgid "Clear search"
-msgstr "Alarm wissen"
+msgstr "Zoekresultaten wissen"
 
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
@@ -1084,7 +1082,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:234
 msgid "Click \"start\" to attach a new voice memo to the note."
-msgstr ""
+msgstr "Klik \"start\" om een nieuwe voicememo toe te voegen aan de notitie"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1138,15 +1136,15 @@ msgstr "Venster afsluiten"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:162
 msgid "Closing session..."
-msgstr ""
+msgstr "Sessie sluiten..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:40
 msgid "Cmd-click to open"
-msgstr ""
+msgstr "Cmd-klik om te openen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:46
 msgid "Cmd-click to open: %s"
-msgstr ""
+msgstr "Cmd-klik om %s te openen"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:70
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:76
@@ -1308,7 +1306,7 @@ msgstr "Verbinding maken met Joplin Cloud"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:274
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:485
 msgid "Connect using your organisation account"
-msgstr ""
+msgstr "Verbinden met de account van jouw organisatie"
 
 #: packages/lib/utils/joplinCloud/index.ts:224
 msgid "Consolidated billing"
@@ -1325,9 +1323,8 @@ msgid "Content provided by %s"
 msgstr "Inhoud geleverd door %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:101
-#, fuzzy
 msgid "Content provided by: %s"
-msgstr "Inhoud geleverd door %s"
+msgstr "Inhoud geleverd door: %s"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:48
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:75
@@ -1336,19 +1333,16 @@ msgid "Continue"
 msgstr "Doorgaan"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:6
-#, fuzzy
 msgid "Control character"
-msgstr "Karakters"
+msgstr "Controltekens"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
-#, fuzzy
 msgid "Convert it"
-msgstr "Omzetten naar notitie"
+msgstr "Omzetten"
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:11
-#, fuzzy
 msgid "Convert note to Markdown"
-msgstr "Omzetten naar taak"
+msgstr "Notitie omzetten naar Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1311
 msgid "Convert to note"
@@ -1420,9 +1414,8 @@ msgid "Copy token"
 msgstr "Kopieer token"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:639
-#, fuzzy
 msgid "Copy version info"
-msgstr "Toont versie-informatie"
+msgstr "Kopieer versie-informatie"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1455,9 +1448,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Kan geen verbinding maken met de plugin bibliotheek."
 
 #: packages/app-desktop/commands/convertNoteToMarkdown.ts:45
-#, fuzzy
 msgid "Could not convert note to Markdown: %s"
-msgstr "Kon geen notities exporteren: %s"
+msgstr "Kon notitie niet converteren naar Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:230
 msgid "Could not export notes: %s"
@@ -1512,9 +1504,8 @@ msgid "Create a notebook"
 msgstr "Creëer een notitieboek"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
-#, fuzzy
 msgid "Create new notebook"
-msgstr "Creëert een nieuw notitieboek."
+msgstr "Creëer een nieuw notitieboek."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1522,9 +1513,8 @@ msgid "Create new profile..."
 msgstr "Creëer nieuw profiel..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:212
-#, fuzzy
 msgid "Create note"
-msgstr "Creëer notitieboek"
+msgstr "Creëer notitie"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:166
 msgid "Create notebook"
@@ -1570,9 +1560,8 @@ msgid "Created: %s"
 msgstr "Gecreëerd op: %s"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:70
-#, fuzzy
 msgid "Creates a new note with an attachment of type %s"
-msgstr "Creëert een nieuw notitieboek onder een bestaand notitieboek."
+msgstr "Creëert een nieuwe notitie met een bijlage van type %s"
 
 #: packages/app-cli/app/command-mknote.js:12
 msgid "Creates a new note."
@@ -1587,23 +1576,20 @@ msgid "Creates a new to-do."
 msgstr "Creëert een nieuwe taak."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
-#, fuzzy
 msgid "Creating new note..."
-msgstr "Bezig met creëren van nieuw(e) %s..."
+msgstr "Bezig met creëren van nieuw notitie..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
 msgid "Creating new to-do..."
 msgstr "Bezig met creëren van nieuw taak..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:79
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Bezig met creëren van nieuw(e) %s..."
+msgstr "Bezig met creëren van notitie \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:142
-#, fuzzy
 msgid "Creating note."
-msgstr "Bezig met creëren van nieuw(e) %s..."
+msgstr "Bezig met creëren van notitie."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1611,21 +1597,19 @@ msgstr "Rapport maken..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:42
 msgid "Ctrl-click to open"
-msgstr ""
+msgstr "Ctrl-klik om te openen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:48
 msgid "Ctrl-click to open: %s"
-msgstr ""
+msgstr "Ctrl-klik om %s te openen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:24
-#, fuzzy
 msgid "current match"
-msgstr "Volgende overeenkomt"
+msgstr "huidige overeenkomt"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:153
-#, fuzzy
 msgid "Current password"
-msgstr "Hoofdwachtwoord"
+msgstr "Huidig wachtwoord"
 
 #: packages/app-desktop/checkForUpdates.ts:90
 msgid "Current version is up-to-date."
