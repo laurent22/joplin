@@ -731,13 +731,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 		const newState: any = { ...this.state, note, newAndNoTitleChangeNoteId: null };
-		this.setState(newState);
 
 		if (Platform.OS !== 'web') {
+			this.setState(newState);
 			this.scheduleSave(newState);
 		} else {
 			// Without the state update upon save, changing the note body and then changing the title before the scheduled save executes, results in some
 			// input loss. Therefore only do this on the web platform
+			this.setState({ ...newState, lastSavedNote: { ...note } }); // Update lastSavedNote to bypass isModified check
 			this.scheduleSaveWithoutStateUpdate(newState);
 		}
 	}
