@@ -515,6 +515,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			paddingLeft: theme.marginLeft,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
+			maxHeight: '40%',
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
