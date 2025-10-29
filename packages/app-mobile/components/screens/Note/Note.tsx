@@ -515,6 +515,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			paddingLeft: theme.marginLeft,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
+			maxHeight: '40%',
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
@@ -656,6 +657,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			this.props.dispatch({
 				type: 'NOTE_EDITOR_VISIBLE_CHANGE',
 				visible: this.state.mode === 'edit' && !this.state.showCamera && !this.state.showImageEditor,
+			});
+		}
+
+		// Reset undo/redo button state when switching to edit mode or when switching between markdown and rich text editors, since the editor is
+		// recreated and loses its undo/redo history
+		if (this.state.mode === 'edit' && (prevState.mode !== this.state.mode || prevProps.editorType !== this.props.editorType)) {
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: false,
+					canRedo: false,
+				},
 			});
 		}
 
