@@ -91,7 +91,8 @@ impl<'a> Renderer<'a> {
                         icon_classes.push(class.to_string());
 
                         self.global_styles
-                            .insert(format!(".{} > svg", class), icon_style);
+                            // Select both `svg` and `img`: `svg`s may be replaced with `img` later in the import process:
+                            .insert(format!(".{} > svg, .{} > img", class, class), icon_style);
                     }
 
                     markup.push_str(&format!(

@@ -169,10 +169,6 @@ function ShareFolderDialog(props: Props) {
 		setShareUsers(sus);
 	}, [share, props.shareUsers]);
 
-	useEffect(() => {
-		void ShareService.instance().refreshShares();
-	}, [props.folderId]);
-
 	const permissionsFromString = (p: string): SharePermissions => {
 		return {
 			can_read: 1,

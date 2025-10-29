@@ -22,6 +22,10 @@ const expectWithInstructions = <T>(value: T) => {
 	return expect(value, instructionMessage);
 };
 
+const removeItemIds = (body: string) => {
+	return body.replace(/:\/[a-z0-9]{32}/g, ':/id-here');
+};
+
 // This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
@@ -39,7 +43,7 @@ describe('InteropService_Importer_OneNote', () => {
 	}
 	beforeAll(() => {
 		const jsdom = new JSDOM('<div></div>');
-		InteropService.instance().document = jsdom.window.document;
+		InteropService.instance().domParser = new jsdom.window.DOMParser();
 		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
 	});
 	beforeEach(async () => {
@@ -165,12 +169,12 @@ describe('InteropService_Importer_OneNote', () => {
 		const content = await readFile(filepath, 'utf-8');
 
 		const jsdom = new JSDOM('<div></div>');
-		InteropService.instance().document = jsdom.window.document;
+		InteropService.instance().domParser = new jsdom.window.DOMParser();
 		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
 
 		const importer = new InteropService_Importer_OneNote();
 		await importer.init('asdf', {
-			document: jsdom.window.document,
+			domParser: new jsdom.window.DOMParser(),
 			xmlSerializer: new jsdom.window.XMLSerializer(),
 		});
 
@@ -245,17 +249,15 @@ describe('InteropService_Importer_OneNote', () => {
 	});
 
 	it('should use default value for EntityGuid and InkBias if not found', async () => {
-		let idx = 0;
-		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/ink_bias_and_entity_guid.zip`));
 
 		// InkBias bug
-		expect(notes.find(n => n.title === 'Marketing Funnel & Training').body).toMatchSnapshot();
+		const note1Content = notes.find(n => n.title === 'Marketing Funnel & Training').body;
+		expect(removeItemIds(note1Content)).toMatchSnapshot();
 
 		// EntityGuid
-		expect(notes.find(n => n.title === 'Decrease support costs').body).toMatchSnapshot();
-
-		BaseModel.setIdGenerator(originalIdGenerator);
+		const note2Content = notes.find(n => n.title === 'Decrease support costs').body;
+		expect(removeItemIds(note2Content)).toMatchSnapshot();
 	});
 
 	it('should support directly importing .one files', async () => {
@@ -270,5 +272,12 @@ describe('InteropService_Importer_OneNote', () => {
 			// The index page
 			'onenote_desktop',
 		]);
+	});
+
+	it('should support importing .one files that contain checkboxes', async () => {
+		const notes = await importNote(`${supportDir}/onenote/checkboxes_and_unicode.one`);
+		expectWithInstructions(
+			removeItemIds(notes.find(n => n.title.startsWith('Test Todo')).body),
+		).toMatchSnapshot();
 	});
 });

@@ -34,7 +34,7 @@ export default class InteropService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any = null;
 	private static instance_: InteropService;
-	private document_: Document;
+	private domParser_: DOMParser;
 	private xmlSerializer_: XMLSerializer;
 
 	public static instance(): InteropService {
@@ -216,12 +216,12 @@ export default class InteropService {
 		return this.xmlSerializer_;
 	}
 
-	public set document(document: Document) {
-		this.document_ = document;
+	public set domParser(domParser: DOMParser) {
+		this.domParser_ = domParser;
 	}
 
-	public get document() {
-		return this.document_;
+	public get domParser() {
+		return this.domParser_;
 	}
 
 	// Find the module that matches the given type ("importer" or "exporter")
@@ -309,7 +309,7 @@ export default class InteropService {
 			destinationFolderId: null,
 			destinationFolder: null,
 			xmlSerializer: this.xmlSerializer,
-			document: this.document,
+			domParser: this.domParser,
 			...options,
 		};
 
