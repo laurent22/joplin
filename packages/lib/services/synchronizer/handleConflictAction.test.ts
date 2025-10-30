@@ -13,6 +13,8 @@ describe('handleConflictAction', () => {
 
 	test('create a note conflict', async () => {
 		const local = await Note.save({ title: 'Test' });
+		// Pass the local note with unsaved changes to verify that the note is reloaded before creating the conflict
+		const changedLocal = { ...local, title: 'TestChanged' };
 		const remoteContent = { ...local, title: 'TestRemote' };
 		const initialSyncItem = await BaseItem.syncItem(1, local.id);
 		await handleConflictAction(
@@ -20,7 +22,7 @@ describe('handleConflictAction', () => {
 			Note,
 			true,
 			remoteContent,
-			local,
+			changedLocal,
 			1,
 			false,
 			(action) => (action),
