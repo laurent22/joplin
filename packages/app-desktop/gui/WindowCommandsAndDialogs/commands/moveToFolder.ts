@@ -55,6 +55,10 @@ export const runtime = (comp: any): CommandRuntime => {
 						continue;
 					}
 
+					if (folder.deleted_time) {
+						continue;
+					}
+
 					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
 					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
 				}
