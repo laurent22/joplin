@@ -1,0 +1,39 @@
+import BaseItem from '../../models/BaseItem';
+import Note from '../../models/Note';
+import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import handleConflictAction from './utils/handleConflictAction';
+import { SyncAction } from './utils/types';
+
+describe('handleConflictAction', () => {
+
+	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+	});
+
+	test('create a note conflict', async () => {
+		const local = await Note.save({ title: 'Test' });
+		const remoteContent = { ...local, title: 'TestRemote' };
+		const initialSyncItem = await BaseItem.syncItem(1, local.id);
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			true,
+			remoteContent,
+			local,
+			1,
+			false,
+			(action) => (action),
+		);
+
+		const createdSyncItem = await BaseItem.syncItem(1, local.id);
+		const updatedLocal = await Note.load(local.id);
+		const conflictNote = await Note.loadByTitle('Test');
+
+		expect(initialSyncItem).toBeUndefined();
+		expect(createdSyncItem).toBeDefined();
+		expect(updatedLocal.title).toBe('TestRemote');
+		expect(conflictNote.id).not.toBe(local.id);
+	});
+
+});
