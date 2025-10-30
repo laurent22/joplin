@@ -2,6 +2,7 @@ import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@jopl
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 
 export const newNoteEnabledConditions = 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
 
@@ -14,8 +15,15 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, body = '', isTodo = false) => {
-			const folderId = Setting.value('activeFolderId');
+			let folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
+
+			const folder = await Folder.load(folderId);
+			if (!folder || !!folder.deleted_time) {
+				const defaultFolder = await Folder.defaultFolder();
+				if (!defaultFolder) return;
+				folderId = defaultFolder.id;
+			}
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 

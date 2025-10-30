@@ -918,7 +918,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static defaultFolder() {
-		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
+		return this.modelSelectOne('SELECT * FROM folders WHERE deleted_time = 0 ORDER BY created_time DESC LIMIT 1');
 	}
 
 	public static async canNestUnder(folderId: string, targetFolderId: string) {
