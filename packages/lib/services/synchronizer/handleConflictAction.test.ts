@@ -12,7 +12,7 @@ describe('handleConflictAction', () => {
 	});
 
 	test('note conflict is created', async () => {
-		const local = await Note.save({ title: 'Test' });
+		const local = await Note.save({ title: 'Test', body: 'body' });
 		// Pass the local note with unsaved changes to verify that the note is reloaded before creating the conflict
 		const changedLocal = { ...local, title: 'TestChanged' };
 		const remoteContent = { ...local, title: 'TestRemote' };
@@ -31,19 +31,22 @@ describe('handleConflictAction', () => {
 
 		const createdSyncItem = await BaseItem.syncItem(1, local.id);
 		const updatedLocal = await Note.load(local.id);
+		const notes = await Note.all();
 		const conflictNote = await Note.loadByTitle('Test');
 
 		expect(initialSyncItem).toBeUndefined();
 		expect(createdSyncItem).toBeDefined();
 		expect(updatedLocal.title).toBe('TestRemote');
+		expect(notes.length).toBe(2);
 		expect(conflictNote.id).not.toBe(local.id);
 	});
 
 	test('note conflict is not created when remote and local contents match', async () => {
-		const local = await Note.save({ title: 'Test' });
+		const local = await Note.save({ title: 'Test', body: 'body' });
 		// Pass the local note with unsaved changes to verify that the note is reloaded before creating the conflict
 		const changedLocal = { ...local, title: 'TestChanged' };
-		const remoteContent = { ...local, title: 'Test' };
+		const remoteContent = local;
+		const initialSyncItem = await BaseItem.syncItem(1, local.id);
 
 		await handleConflictAction(
 			SyncAction.NoteConflict,
@@ -56,11 +59,11 @@ describe('handleConflictAction', () => {
 			(action) => (action),
 		);
 
-		const noteWithSavedTitle = await Note.loadByTitle('Test');
-		const noteWithUnsavedTitle = await Note.loadByTitle('TestChanged');
-
-		expect(noteWithSavedTitle).toBeUndefined();
-		expect(noteWithUnsavedTitle).toBeUndefined();
+		const createdSyncItem = await BaseItem.syncItem(1, local.id);
+		const notes = await Note.all();
+		expect(initialSyncItem).toBeUndefined();
+		expect(createdSyncItem).toBeDefined();
+		expect(notes.length).toBe(1);
 	});
 
 });
