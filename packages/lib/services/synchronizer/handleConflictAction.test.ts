@@ -43,7 +43,7 @@ describe('handleConflictAction', () => {
 
 	test('note conflict is not created when remote and local contents match', async () => {
 		const local = await Note.save({ title: 'Test', body: 'body' });
-		// Pass the local note with unsaved changes to verify that the note is reloaded before creating the conflict
+		// Pass the local note with unsaved changes to verify that the note is reloaded before checking if eligible to create a conflict
 		const changedLocal = { ...local, title: 'TestChanged' };
 		const remoteContent = local;
 		const initialSyncItem = await BaseItem.syncItem(1, local.id);
