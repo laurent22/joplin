@@ -730,14 +730,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private title_changeText(text: string) {
-		let newText = text;
-		if (Platform.OS !== 'web') {
-			// Manipulating the underlying text inside of onChangeText causes issues with the cursor position jumping to the end while typing
-			// when the Web app is being used on a desktop OS, so providing a toggle to expand the title field can only be done on mobile platforms
-			newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
-		}
-
 		// Group all state changes together, to avoid input issues on the web platform
+		const newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
 		const note = { ...this.state.note };
 		note.title = newText;
 
