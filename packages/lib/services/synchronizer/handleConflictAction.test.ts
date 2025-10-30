@@ -11,12 +11,13 @@ describe('handleConflictAction', () => {
 		await switchClient(1);
 	});
 
-	test('create a note conflict', async () => {
+	test('note conflict is created', async () => {
 		const local = await Note.save({ title: 'Test' });
 		// Pass the local note with unsaved changes to verify that the note is reloaded before creating the conflict
 		const changedLocal = { ...local, title: 'TestChanged' };
 		const remoteContent = { ...local, title: 'TestRemote' };
 		const initialSyncItem = await BaseItem.syncItem(1, local.id);
+
 		await handleConflictAction(
 			SyncAction.NoteConflict,
 			Note,
@@ -36,6 +37,30 @@ describe('handleConflictAction', () => {
 		expect(createdSyncItem).toBeDefined();
 		expect(updatedLocal.title).toBe('TestRemote');
 		expect(conflictNote.id).not.toBe(local.id);
+	});
+
+	test('note conflict is not created when remote and local contents match', async () => {
+		const local = await Note.save({ title: 'Test' });
+		// Pass the local note with unsaved changes to verify that the note is reloaded before creating the conflict
+		const changedLocal = { ...local, title: 'TestChanged' };
+		const remoteContent = { ...local, title: 'Test' };
+
+		await handleConflictAction(
+			SyncAction.NoteConflict,
+			Note,
+			true,
+			remoteContent,
+			changedLocal,
+			1,
+			false,
+			(action) => (action),
+		);
+
+		const noteWithSavedTitle = await Note.loadByTitle('Test');
+		const noteWithUnsavedTitle = await Note.loadByTitle('TestChanged');
+
+		expect(noteWithSavedTitle).toBeUndefined();
+		expect(noteWithUnsavedTitle).toBeUndefined();
 	});
 
 });
