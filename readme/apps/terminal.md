@@ -242,7 +242,7 @@ As an example, this is the default keymap, but read below for a detailed explana
 	{ "keys": ["mb"], "type": "prompt", "command": "mkbook \"\"", "cursorPosition": -2 },
 	{ "keys": ["yn"], "type": "prompt", "command": "cp $n \"\"", "cursorPosition": -2 },
 	{ "keys": ["dn"], "type": "prompt", "command": "mv $n \"\"", "cursorPosition": -2 },
-    { "keys": ["z"], "command": "toggle_folder_collapse" }
+	{ "keys": ["z"], "command": "toggle_folder_collapse" }
 ]
 ```
 
