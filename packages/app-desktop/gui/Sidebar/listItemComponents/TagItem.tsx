@@ -8,7 +8,7 @@ import NoteCount from './NoteCount';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 
-export type TagLinkClickEvent = { tag: TagsWithNoteCountEntity|undefined };
+export type TagLinkClickEvent = { tag: TagsWithNoteCountEntity|undefined; shiftKey: boolean };
 
 interface Props {
 	anchorRef: ListItemRef;
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const TagItem = (props: Props) => {
-	const { tag, selected } = props;
+	const { tag, selected, index } = props;
 
 	let noteCount = null;
 	if (Setting.value('showNoteCounts')) {
@@ -32,8 +32,8 @@ const TagItem = (props: Props) => {
 		noteCount = <NoteCount count={count}/>;
 	}
 
-	const onClickHandler = useCallback(() => {
-		props.onClick({ tag });
+	const onClickHandler: React.MouseEventHandler<HTMLElement> = useCallback((event) => {
+		props.onClick({ tag, shiftKey: event.shiftKey });
 	}, [props.onClick, tag]);
 
 	return (
@@ -45,6 +45,7 @@ const TagItem = (props: Props) => {
 			highlightOnHover={true}
 			onDrop={props.onTagDrop}
 			data-tag-id={tag.id}
+			data-index={index}
 			aria-selected={selected}
 			itemIndex={props.index}
 			itemCount={props.itemCount}

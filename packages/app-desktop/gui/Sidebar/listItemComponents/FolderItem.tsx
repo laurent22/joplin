@@ -27,6 +27,11 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 	return <div style={{ marginRight: 7, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
 };
 
+export interface FolderItemClickEvent {
+	id: string;
+	shiftKey: boolean;
+}
+
 interface FolderItemProps {
 	anchorRef: ListItemRef;
 	hasChildren: boolean;
@@ -42,7 +47,7 @@ interface FolderItemProps {
 	onFolderDragOver_: ItemDragListener;
 	onFolderDrop_: ItemDragListener;
 	itemContextMenu: ItemContextMenuListener;
-	folderItem_click: (folderId: string)=> void;
+	folderItem_click: (event: FolderItemClickEvent)=> void;
 	onFolderToggleClick_: ItemClickListener;
 	shareId: string;
 	selected: boolean;
@@ -100,8 +105,8 @@ function FolderItem(props: FolderItemProps) {
 				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}
 
-				onClick={() => {
-					folderItem_click(folderId);
+				onClick={(event: MouseEvent) => {
+					folderItem_click({ id: folderId, shiftKey: event.shiftKey });
 				}}
 			>
 				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>

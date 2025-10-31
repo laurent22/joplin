@@ -7,7 +7,7 @@ import { clipboard } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import { AppState } from '../../../app.reducer';
 import { store } from '@joplin/lib/reducer';
@@ -15,7 +15,7 @@ import Folder from '@joplin/lib/models/Folder';
 import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import { FolderEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, TagEntity } from '@joplin/lib/services/database/types';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import InteropServiceHelper from '../../../InteropServiceHelper';
 import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
@@ -24,7 +24,7 @@ import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSort
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import FolderItem from '../listItemComponents/FolderItem';
+import FolderItem, { FolderItemClickEvent } from '../listItemComponents/FolderItem';
 import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../listItemComponents/HeaderItem';
@@ -73,9 +73,9 @@ const useOnRenderItem = (props: Props) => {
 	const foldersRef = useRef<FolderEntity[]>(null);
 	foldersRef.current = props.folders;
 
-	const tagItem_click = useCallback(({ tag }: TagLinkClickEvent) => {
+	const tagItem_click = useCallback(({ tag, shiftKey }: TagLinkClickEvent) => {
 		props.dispatch({
-			type: 'TAG_SELECT',
+			type: shiftKey ? 'TAG_SELECT_ADD' : 'TAG_SELECT',
 			id: tag ? tag.id : null,
 		});
 	}, [props.dispatch]);
@@ -95,12 +95,31 @@ const useOnRenderItem = (props: Props) => {
 		}
 	}, []);
 
+	const selectedIndexesRef = useRef(props.selectedIndexes);
+	selectedIndexesRef.current = props.selectedIndexes;
+	const itemsRef = useRef(props.listItems);
+	itemsRef.current = props.listItems;
+
 	const onItemContextMenu: ItemContextMenuListener = useCallback(async event => {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
 
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
+		const itemIndex = Number(event.currentTarget.getAttribute('data-index'));
+
+		let itemIds = [itemId];
+		if (selectedIndexesRef.current.includes(itemIndex)) {
+			itemIds = selectedIndexesRef.current.map(index => {
+				const item = itemsRef.current[index];
+				if (item.kind === ListItemType.Folder) {
+					return item.folder.id;
+				} else if (item.kind === ListItemType.Tag) {
+					return item.tag.id;
+				}
+				return null;
+			}).filter(id => !!id);
+		}
 
 		const state: AppState = store().getState();
 
@@ -108,8 +127,9 @@ const useOnRenderItem = (props: Props) => {
 		const deleteButtonLabel = _('Remove');
 
 		if (itemType === BaseModel.TYPE_TAG) {
-			const tag = await Tag.load(itemId);
-			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			const tags: TagEntity[] = await Tag.loadItemsByIds(itemIds);
+			const tagTitles = tags.map(tag => _('"%s"', tag.title)).join(', ');
+			deleteMessage = _n('Remove tag %s from all notes?', 'Remove tags %s from all notes?', tags.length, substrWithEllipsis(tagTitles, 0, 32));
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
 		}
@@ -168,7 +188,7 @@ const useOnRenderItem = (props: Props) => {
 
 			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
 				menu.append(new MenuItem({
-					...menuUtils.commandToStatefulMenuItem('moveToFolder', [itemId]),
+					...menuUtils.commandToStatefulMenuItem('moveToFolder', itemIds),
 					// By default, enabled is based on the selected folder. However, the right-click
 					// menu can be shown for unselected folders.
 					enabled: true,
@@ -189,7 +209,7 @@ const useOnRenderItem = (props: Props) => {
 						new MenuItem({
 							label: module.fullLabel(),
 							click: async () => {
-								await InteropServiceHelper.export(props.dispatch, module, { sourceFolderIds: [itemId], plugins: pluginsRef.current });
+								await InteropServiceHelper.export(props.dispatch, module, { sourceFolderIds: itemIds, plugins: pluginsRef.current });
 							},
 						}),
 					);
@@ -324,10 +344,10 @@ const useOnRenderItem = (props: Props) => {
 		});
 	}, [props.dispatch]);
 
-	const folderItem_click = useCallback((folderId: string) => {
+	const folderItem_click = useCallback((event: FolderItemClickEvent) => {
 		props.dispatch({
-			type: 'FOLDER_SELECT',
-			id: folderId ? folderId : null,
+			type: event.shiftKey ? 'FOLDER_SELECT_ADD' : 'FOLDER_SELECT',
+			id: event.id ?? null,
 		});
 	}, [props.dispatch]);
 

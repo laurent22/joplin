@@ -57,6 +57,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 			style={style}
 			data-folder-id={props['data-folder-id']}
 			data-id={props['data-id']}
+			data-index={props.itemIndex}
 			data-tag-id={props['data-tag-id']}
 			data-type={props['data-type']}
 			aria-labelledby={props['aria-labelledby']}
