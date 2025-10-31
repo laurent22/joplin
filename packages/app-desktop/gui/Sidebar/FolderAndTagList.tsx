@@ -26,8 +26,8 @@ interface Props {
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];
 	notesParentType: string;
-	selectedTagId: string;
-	selectedFolderId: string;
+	selectedTagIds: string[];
+	selectedFolderIds: string[];
 	selectedSmartFilterId: string;
 	collapsedFolderIds: string[];
 	folderHeaderIsExpanded: boolean;
@@ -37,7 +37,7 @@ interface Props {
 
 const FolderAndTagList: React.FC<Props> = props => {
 	const listItems = useSidebarListData(props);
-	const { selectedIndex, updateSelectedIndex } = useSelectedSidebarIndex({
+	const { selectedIndex, selectedIndexes, updateSelectedIndex } = useSelectedSidebarIndex({
 		...props,
 		listItems: listItems,
 	});
@@ -50,6 +50,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const onRenderItem = useOnRenderItem({
 		...props,
 		selectedIndex,
+		selectedIndexes,
 		listItems,
 		containerRef: listContainerRef,
 	});
@@ -107,8 +108,8 @@ const mapStateToProps = (state: AppState) => {
 		tags: state.tags,
 		folders: state.folders,
 		notesParentType: mainWindowState.notesParentType,
-		selectedFolderId: mainWindowState.selectedFolderId,
-		selectedTagId: mainWindowState.selectedTagId,
+		selectedFolderIds: mainWindowState.selectedFolderIds,
+		selectedTagIds: mainWindowState.selectedTagIds,
 		collapsedFolderIds: state.collapsedFolderIds,
 		selectedSmartFilterId: mainWindowState.selectedSmartFilterId,
 		plugins: state.pluginService.plugins,

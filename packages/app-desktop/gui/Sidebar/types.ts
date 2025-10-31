@@ -57,8 +57,10 @@ export interface SpacerListItem extends ToplevelListItem {
 
 export type ListItem = HeaderListItem|AllNotesListItem|TagListItem|FolderListItem|SpacerListItem;
 
-
-export type SetSelectedIndexCallback = (newIndex: number)=> void;
+interface SetSelectedIndexOptions {
+	extend: boolean;
+}
+export type SetSelectedIndexCallback = (newIndex: number, options: SetSelectedIndexOptions)=> void;
 
 
 export type ItemDragListener = DragEventHandler<HTMLElement>;

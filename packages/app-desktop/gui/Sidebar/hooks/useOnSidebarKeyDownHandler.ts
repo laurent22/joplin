@@ -104,11 +104,11 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 			event.preventDefault();
 		} else if (event.code === 'Home') {
 			event.preventDefault();
-			updateSelectedIndex(0);
+			updateSelectedIndex(0, { extend: false });
 			indexChange = 0;
 		} else if (event.code === 'End') {
 			event.preventDefault();
-			updateSelectedIndex(listItems.length - 1);
+			updateSelectedIndex(listItems.length - 1, { extend: false });
 			indexChange = 0;
 		} else if (event.code === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
@@ -122,7 +122,7 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 
 		if (indexChange !== 0) {
 			event.preventDefault();
-			updateSelectedIndex(selectedIndex + indexChange);
+			updateSelectedIndex(selectedIndex + indexChange, { extend: event.shiftKey });
 		}
 	}, [selectedIndex, collapsedFolderIds, listItems, updateSelectedIndex, dispatch]);
 };

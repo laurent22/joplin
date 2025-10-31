@@ -47,6 +47,7 @@ interface Props {
 	containerRef: React.RefObject<HTMLDivElement>;
 
 	selectedIndex: number;
+	selectedIndexes: number[];
 	listItems: ListItem[];
 }
 
@@ -338,14 +339,12 @@ const useOnRenderItem = (props: Props) => {
 		return Folder.shouldShowFolderIcons(props.folders);
 	}, [props.folders]);
 
-	const selectedIndexRef = useRef(props.selectedIndex);
-	selectedIndexRef.current = props.selectedIndex;
-
 	const itemCount = props.listItems.length;
 	return useCallback((item: ListItem, index: number) => {
-		const selected = props.selectedIndex === index;
+		const primarySelected = props.selectedIndex === index;
+		const selected = primarySelected || props.selectedIndexes.includes(index);
 		const focusInList = document.hasFocus() && props.containerRef.current?.contains(document.activeElement);
-		const anchorRef = (focusInList && selected) ? focusListItem : noFocusListItem;
+		const anchorRef = (focusInList && primarySelected) ? focusListItem : noFocusListItem;
 
 		if (item.kind === ListItemType.Tag) {
 			const tag = item.tag;
@@ -454,6 +453,7 @@ const useOnRenderItem = (props: Props) => {
 		showFolderIcons,
 		tagItem_click,
 		props.selectedIndex,
+		props.selectedIndexes,
 		props.containerRef,
 		itemCount,
 	]);

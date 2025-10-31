@@ -83,7 +83,9 @@ export interface WindowState {
 	selectedNoteIds: string[];
 	selectedNoteHash: string;
 	selectedFolderId: string;
+	selectedFolderIds: string[];
 	selectedTagId: string;
+	selectedTagIds: string[];
 	selectedSearchId: string;
 	selectedItemType: string;
 	selectedSmartFilterId: string;
@@ -103,7 +105,9 @@ export const defaultWindowState: WindowState = {
 	selectedNoteIds: [],
 	selectedNoteHash: '',
 	selectedFolderId: null,
+	selectedFolderIds: [],
 	selectedTagId: null,
+	selectedTagIds: [],
 	selectedSearchId: null,
 	selectedSmartFilterId: null,
 	selectedItemType: 'note',
@@ -656,17 +660,22 @@ export const getNotesParent = (state: State): NotesParent => {
 	return { type, selectedItemId };
 };
 
+interface ChangeSelectedFolderOptions {
+	clearSelectedNoteIds?: boolean;
+	extendSelection?: boolean;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function changeSelectedFolder(draft: Draft<State>, action: any, options: any = null) {
-	if (!options) options = {};
+function changeSelectedFolder(draft: Draft<State>, action: any, { clearSelectedNoteIds = false, extendSelection = false }: ChangeSelectedFolderOptions = {}) {
 	draft.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
 	if (!draft.selectedFolderId) {
 		draft.notesParentType = defaultNotesParentType(draft, 'Folder');
 	} else {
 		draft.notesParentType = 'Folder';
+		draft.selectedFolderIds = extendSelection ? [...draft.selectedFolderIds, draft.selectedFolderId] : [draft.selectedFolderId];
 	}
 
-	if (options.clearSelectedNoteIds) draft.selectedNoteIds = [];
+	if (clearSelectedNoteIds) draft.selectedNoteIds = [];
 }
 
 function recordLastSelectedNoteIds(draft: Draft<State>, noteIds: string[]) {
@@ -1051,8 +1060,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			draft.selectedSmartFilterId = action.id;
 			break;
 
+		case 'FOLDER_SELECT_ADD':
 		case 'FOLDER_SELECT':
-			changeSelectedFolder(draft, action, { clearSelectedNoteIds: true });
+			changeSelectedFolder(draft, action, {
+				clearSelectedNoteIds: true,
+				extendSelection: action.type === 'FOLDER_SELECT_ADD',
+			});
 			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
@@ -1273,10 +1286,13 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
+		case 'TAG_SELECT_ADD':
 		case 'TAG_SELECT':
 
 			if (draft.selectedTagId !== action.id || draft.notesParentType !== 'Tag') {
-				draft.selectedTagId = action.id;
+				draft.selectedTagIds = action.type === 'TAG_SELECT' ? [action.id] : [...draft.selectedTagIds, action.id];
+				draft.selectedTagId = draft.selectedTagIds[0];
+
 				if (!action.id) {
 					draft.notesParentType = defaultNotesParentType(draft, 'Tag');
 				} else {
@@ -1284,6 +1300,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				}
 				draft.selectedNoteIds = [];
 			}
+			break;
+
+		case 'TAG_SELECT_REMOVE':
+			draft.selectedTagIds = draft.selectedTagIds.filter(id => id !== action.id);
+			draft.selectedTagId = draft.selectedTagIds[0];
 			break;
 
 		case 'TAG_UPDATE_ONE':
@@ -1560,7 +1581,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 	if (action.type === 'SETTING_UPDATE_ALL' || (action.type === 'SETTING_UPDATE_ONE' && action.key === 'activeFolderId')) {
 		// To allow creating notes when opening the app with all notes and/or tags,
 		// a "last selected folder ID" needs to be set.
-		draft.selectedFolderId ??= draft.settings.activeFolderId;
+		if (!draft.selectedFolderId) {
+			draft.selectedFolderId = draft.settings.activeFolderId;
+			draft.selectedFolderIds = draft.selectedFolderId ? [draft.selectedFolderId] : [];
+		}
 	}
 
 	for (const additionalReducer of additionalReducers) {
