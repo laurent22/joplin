@@ -99,6 +99,17 @@ const useOnRenderItem = (props: Props) => {
 	selectedIndexesRef.current = props.selectedIndexes;
 	const itemsRef = useRef(props.listItems);
 	itemsRef.current = props.listItems;
+	const getSelectedIds = useCallback(() => {
+		return selectedIndexesRef.current.map(index => {
+			const item = itemsRef.current[index];
+			if (item.kind === ListItemType.Folder) {
+				return item.folder.id;
+			} else if (item.kind === ListItemType.Tag) {
+				return item.tag.id;
+			}
+			return null;
+		}).filter(id => !!id);
+	}, []);
 
 	const onItemContextMenu: ItemContextMenuListener = useCallback(async event => {
 		const itemId = event.currentTarget.getAttribute('data-id');
@@ -106,19 +117,11 @@ const useOnRenderItem = (props: Props) => {
 
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
-		const itemIndex = Number(event.currentTarget.getAttribute('data-index'));
 
 		let itemIds = [itemId];
+		const itemIndex = Number(event.currentTarget.getAttribute('data-index'));
 		if (selectedIndexesRef.current.includes(itemIndex)) {
-			itemIds = selectedIndexesRef.current.map(index => {
-				const item = itemsRef.current[index];
-				if (item.kind === ListItemType.Folder) {
-					return item.folder.id;
-				} else if (item.kind === ListItemType.Tag) {
-					return item.tag.id;
-				}
-				return null;
-			}).filter(id => !!id);
+			itemIds = getSelectedIds();
 		}
 
 		const state: AppState = store().getState();
@@ -291,7 +294,7 @@ const useOnRenderItem = (props: Props) => {
 		}
 
 		menu.popup({ window: bridge().activeWindow() });
-	}, [props.dispatch, pluginsRef]);
+	}, [props.dispatch, pluginsRef, getSelectedIds]);
 
 
 
@@ -299,10 +302,16 @@ const useOnRenderItem = (props: Props) => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		if (!folderId) return;
 
+		let itemIds = [folderId];
+		const itemIndex = Number(event.currentTarget.getAttribute('data-index'));
+		if (selectedIndexesRef.current.includes(itemIndex)) {
+			itemIds = getSelectedIds();
+		}
+
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
-		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
-	}, []);
+		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify(itemIds));
+	}, [getSelectedIds]);
 
 	const onFolderDragOver_: ItemDragListener = useCallback(event => {
 		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
