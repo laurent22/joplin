@@ -162,3 +162,34 @@ three line \\n no escape`)).toBe(0);
 		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
 	});
 });
+
+describe("isSystemPath - MC/DC", () => {
+  it("CT1: todas as condições verdadeiras", () => {
+    const result = BaseItem_1.default.isSystemPath(
+      "1b175bb38bba47baac22b0b47f778113.md"
+    );
+    expect(result).toBe(true);
+  });
+
+  it("CT2: path vazio (condição 1 falsa)", () => {
+    const result = BaseItem_1.default.isSystemPath("");
+    expect(result).toBe(false);
+  });
+
+  it("CT3: sem ponto (condição 2 falsa)", () => {
+    const result = BaseItem_1.default.isSystemPath("invalidpath");
+    expect(result).toBe(false);
+  });
+
+  it("CT4: nome curto antes do ponto (condição 3 falsa)", () => {
+    const result = BaseItem_1.default.isSystemPath("short.md");
+    expect(result).toBe(false);
+  });
+
+  it("CT5: extensão diferente de md (condição 4 falsa)", () => {
+    const result = BaseItem_1.default.isSystemPath(
+      "1b175bb38bba47baac22b0b47f778113.txt"
+    );
+    expect(result).toBe(false);
+  });
+});''
