@@ -18,6 +18,8 @@ In the **desktop application**, open File > Import > ENEX and select your file. 
 
 In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/dev/readme/apps/terminal.md#command-line-mode), type `import /path/to/file.enex`. This will import the notes into a new notebook named after the filename.
 
+**From Linux**, where not desktop app is available, you can use [evernote-backup](https://github.com/vzhd1701/evernote-backup). The process to export the notes is very easy. While importing choose "ENEX - Evernote Export Files (Directory, as Markdown)"
+
 In both cases you can either import a single file or a directory that contains multiple ENEX files.
 
 - If you import a single file, a notebook with the same name will be created, and all notes will be imported in this notebook.
