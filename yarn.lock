@@ -9527,7 +9527,7 @@ __metadata:
     markdown-it-sup: "npm:2.0.0"
     markdown-it-toc-done-right: "npm:4.2.0"
     md5: "npm:2.3.0"
-    mermaid: "npm:11.7.0"
+    mermaid: "npm:11.8.0"
     ts-jest: "npm:29.4.1"
     typescript: "npm:5.8.3"
   languageName: unknown
@@ -11015,12 +11015,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mermaid-js/parser@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@mermaid-js/parser@npm:0.5.0"
+"@mermaid-js/parser@npm:^0.6.0":
+  version: 0.6.3
+  resolution: "@mermaid-js/parser@npm:0.6.3"
   dependencies:
     langium: "npm:3.3.1"
-  checksum: 10/ec7a54c95b70df4bbb9fd5ac46facf0a10d8af0658b310ff5412c7c4dba13791ac4076d6001657e1e11dca9cf25a136d4d4dfb92ab1670d5652e06254736f34b
+  checksum: 10/ab8bbdeaf2ef556871f3267541c0b3621d70c4d108ddac36383adc7eb1c7e6bed28d068b4ad196b54314877f263f939f90f0a1a3cfe8576fab30f4514732aa2f
   languageName: node
   linkType: hard
 
@@ -35046,13 +35046,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:11.7.0":
-  version: 11.7.0
-  resolution: "mermaid@npm:11.7.0"
+"mermaid@npm:11.8.0":
+  version: 11.8.0
+  resolution: "mermaid@npm:11.8.0"
   dependencies:
     "@braintree/sanitize-url": "npm:^7.0.4"
     "@iconify/utils": "npm:^2.1.33"
-    "@mermaid-js/parser": "npm:^0.5.0"
+    "@mermaid-js/parser": "npm:^0.6.0"
     "@types/d3": "npm:^7.4.3"
     cytoscape: "npm:^3.29.3"
     cytoscape-cose-bilkent: "npm:^4.1.0"
@@ -35070,7 +35070,7 @@ __metadata:
     stylis: "npm:^4.3.6"
     ts-dedent: "npm:^2.2.0"
     uuid: "npm:^11.1.0"
-  checksum: 10/a09742241639b0a533c50f0139800a8a5d5b898d4b880e1fe1b5d5cd77f125d3bdc302c1d842f2ba8be6de9ba1bac824617cd52119f1666f7115502badd9e7da
+  checksum: 10/6e95b0c8e0f02216f55c80aff8d3da863aaed794bae04f38ceee39c19034278386330fe783b20f9327602cc26c9a82963a44f0ea07e7b5a66deacf30d8466e50
   languageName: node
   linkType: hard
 
