@@ -275,6 +275,18 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
+	public static async loadItemsByIdsOrFail(ids: string[]) {
+		const items = await this.loadItemsByIds(ids);
+		if (items.length < ids.length) {
+			for (let i = 0; i < ids.length; i++) {
+				if (items[i]?.id !== ids[i]) {
+					throw new Error(`No such item: ${ids[i]}`);
+				}
+			}
+		}
+		return items;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async loadItemsByTypeAndIds(itemType: ModelType, ids: string[], options: LoadOptions = null): Promise<any[]> {
 		if (!ids.length) return [];

@@ -163,7 +163,7 @@ const useOnRenderItem = (props: Props) => {
 
 			if (itemType === BaseModel.TYPE_FOLDER) {
 				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('deleteFolder', itemId)),
+					new MenuItem(menuUtils.commandToStatefulMenuItem('deleteFolder', itemIds)),
 				);
 			} else {
 				menu.append(
@@ -288,7 +288,7 @@ const useOnRenderItem = (props: Props) => {
 		} else {
 			if (itemType === BaseModel.TYPE_FOLDER) {
 				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('restoreFolder', itemId)),
+					new MenuItem(menuUtils.commandToStatefulMenuItem('restoreFolder', itemIds)),
 				);
 			}
 		}
