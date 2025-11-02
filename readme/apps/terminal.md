@@ -213,6 +213,7 @@ There are two types of shortcuts: those that manipulate the user interface direc
 	mb                mkbook ""
 	yn                cp $n ""
 	dn                mv $n ""
+	z                 toggle_folder_collapse
 
 Shortcut can be configured by adding a keymap file to the profile directory in `~/.config/joplin/keymap.json`. The content of this file is a JSON array with each entry defining a command and the keys associated with it.
 
@@ -240,7 +241,8 @@ As an example, this is the default keymap, but read below for a detailed explana
 	{ "keys": ["mt"], "type": "prompt", "command": "mktodo \"\"", "cursorPosition": -2 },
 	{ "keys": ["mb"], "type": "prompt", "command": "mkbook \"\"", "cursorPosition": -2 },
 	{ "keys": ["yn"], "type": "prompt", "command": "cp $n \"\"", "cursorPosition": -2 },
-	{ "keys": ["dn"], "type": "prompt", "command": "mv $n \"\"", "cursorPosition": -2 }
+	{ "keys": ["dn"], "type": "prompt", "command": "mv $n \"\"", "cursorPosition": -2 },
+	{ "keys": ["z"], "type": "function", "command": "toggle_folder_collapse" }
 ]
 ```
 
@@ -271,6 +273,7 @@ activate | Activates the selected item. If the item is a note for example it wil
 delete | Deletes the selected item
 toggle_console | Toggle the console
 toggle_metadata | Toggle note metadata
+toggle_folder_collapse | Toggle the collapsed state of a folder
 
 ## Commands
 
