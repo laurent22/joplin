@@ -443,7 +443,6 @@ export default class BaseItem extends BaseModel {
 		if (shownKeys === null) {
 			shownKeys = this.itemClass(item).fieldNames();
 			shownKeys.push('type_');
-			shownKeys.push('sync_change_instance_id_');
 		}
 
 		item = this.filter(item);
@@ -559,7 +558,7 @@ export default class BaseItem extends BaseModel {
 
 		reducedItem.encryption_applied = 1;
 		reducedItem.encryption_cipher_text = cipherText;
-		return ItemClass.serialize(reducedItem);
+		return ItemClass.serialize(reducedItem, shownKeys);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
