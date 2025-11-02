@@ -34,6 +34,7 @@ import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
 import { reg } from './registry';
 import SyncTargetRegistry from './SyncTargetRegistry';
+import uuid from './uuid';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -686,8 +687,13 @@ export default class Synchronizer {
 							}
 							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
 							remoteContent = await BaseItem.unserialize(remoteContent);
+							const changeInstanceIdIsSet = remoteContent.sync_change_instance_id_ && local.sync_change_instance_id_;
+							const changeInstanceIdDiffers = remoteContent.sync_change_instance_id_ !== local.sync_change_instance_id_;
+							// This legacy check is needed for items which are uploaded for the first time since sync_change_instance_id_ was added
+							// or when syncing with older clients
+							const remoteContentTimestampIsNewer = remoteContent.updated_time > local.sync_time;
 
-							if (remoteContent.updated_time > local.sync_time) {
+							if ((changeInstanceIdIsSet && changeInstanceIdDiffers) || (!changeInstanceIdIsSet && remoteContentTimestampIsNewer)) {
 								// Since, in this loop, we are only dealing with items that require sync, if the
 								// remote has been modified after the sync time, it means both items have been
 								// modified and so there's a conflict.
@@ -784,6 +790,7 @@ export default class Synchronizer {
 
 						if (action === SyncAction.CreateRemote || action === SyncAction.UpdateRemote) {
 							let canSync = true;
+							local.sync_change_instance_id_ = uuid.create();
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
 								if (this.testingHooks_.indexOf('itemIsReadOnly') >= 0) throw new JoplinError('Testing isReadOnly', ErrorCode.IsReadOnly);
@@ -984,13 +991,21 @@ export default class Synchronizer {
 										// Nothing to do, and no need to fetch the content
 									} else {
 										content = await loadContent();
-										if (content && content.updated_time > local.updated_time) {
+										const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['sync_change_instance_id_'] });
+										const changeInstanceIdIsSet = content.sync_change_instance_id_ && syncItem.sync_change_instance_id_;
+										const changeInstanceIdDiffers = content.sync_change_instance_id_ !== syncItem.sync_change_instance_id_;
+										// This legacy check is needed for items which are downloaded for the first time since sync_change_instance_id_ was added
+										// or when syncing with older clients
+										const remoteContentTimestampIsNewer = content && content.updated_time > local.updated_time;
+
+										if ((changeInstanceIdIsSet && changeInstanceIdDiffers) || (!changeInstanceIdIsSet && remoteContentTimestampIsNewer)) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
 										} else if (enableEnhancedBasicDeltaAlgorithm()) {
 											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
+											local.sync_change_instance_id_ = syncItem.sync_change_instance_id_; // Must retain original value when replacing the sync_item
 											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
 										}
 									}

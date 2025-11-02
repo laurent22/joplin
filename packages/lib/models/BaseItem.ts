@@ -33,6 +33,7 @@ export interface ItemThatNeedSync {
 	updated_time: number;
 	encryption_applied: number;
 	share_id: string;
+	sync_change_instance_id_: string;
 }
 
 export interface ItemsThatNeedSyncResult {
@@ -442,6 +443,7 @@ export default class BaseItem extends BaseModel {
 		if (shownKeys === null) {
 			shownKeys = this.itemClass(item).fieldNames();
 			shownKeys.push('type_');
+			shownKeys.push('sync_change_instance_id_');
 		}
 
 		item = this.filter(item);
@@ -503,6 +505,7 @@ export default class BaseItem extends BaseModel {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
+		shownKeys.push('sync_change_instance_id_');
 
 		const share = item.share_id ? await this.shareService().shareById(item.share_id) : null;
 		const serialized = await ItemClass.serialize(item, shownKeys);
@@ -543,7 +546,7 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_'];
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_', 'sync_change_instance_id_'];
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const reducedItem: any = {};
 
@@ -772,6 +775,7 @@ export default class BaseItem extends BaseModel {
 			if (newLimit > 0) {
 				fieldNames.push('sync_time');
 				fieldNames.push('remote_item_updated_time');
+				fieldNames.push('sync_change_instance_id_');
 
 				const sql = sprintf(
 					`
@@ -874,6 +878,7 @@ export default class BaseItem extends BaseModel {
 	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
+		const syncChangeInstanceId = item.sync_change_instance_id_ ?? '';
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
 
 		if (itemLocation === null) itemLocation = BaseItem.SYNC_ITEM_LOCATION_LOCAL;
@@ -884,8 +889,8 @@ export default class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason, sync_change_instance_id_) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`, syncChangeInstanceId],
 			},
 		];
 	}
