@@ -207,7 +207,7 @@
     "typescript": "5.8.3"
   },
   "dependencies": {
-    "@electron/remote": "2.1.2",
+    "@electron/remote": "2.1.3",
     "@joplin/onenote-converter": "~3.5",
     "fs-extra": "11.2.0",
     "keytar": "7.9.0",
