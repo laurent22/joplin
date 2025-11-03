@@ -1,5 +1,7 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTargetId, synchronizerStart, msleep } from '../testing/test-utils';
-import BaseItem from './BaseItem';
+import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTargetId, synchronizerStart, msleep, loadEncryptionMasterKey } from '../testing/test-utils';
+import uuid from '../uuid';
+import BaseItem, { ItemThatNeedSync } from './BaseItem';
 import Folder from './Folder';
 import Note from './Note';
 
@@ -160,5 +162,34 @@ three line \\n no escape`)).toBe(0);
 	])('should support querying items with IDs containing special characters (id: %j)', async (id) => {
 		const note = await Note.save({ id }, { isNew: true });
 		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
+	});
+
+	it('should serialize and unserialize sync_operation_id_', async () => {
+		const uid = uuid.create();
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+		const item = { ...note } as ItemThatNeedSync;
+		item.sync_operation_id_ = uid;
+
+		const serialized = await Note.serializeForSync(item);
+		const unserialized = await Note.unserialize(serialized);
+
+		expect(unserialized.sync_operation_id_).toEqual(uid);
+	});
+
+	it('should serialize and unserialize sync_operation_id_ with encryption enabled', async () => {
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+
+		const uid = uuid.create();
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+		const item = { ...note } as ItemThatNeedSync;
+		item.sync_operation_id_ = uid;
+
+		const serialized = await Note.serializeForSync(item);
+		const unserialized = await Note.unserialize(serialized);
+
+		expect(unserialized.sync_operation_id_).toEqual(uid);
 	});
 });
