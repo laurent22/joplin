@@ -65,7 +65,7 @@ describe('synchronizer/ItemUploader', () => {
 			await Note.save({ title: '2' }),
 		];
 
-		await itemUploader.preUploadItems(notes);
+		await itemUploader.preUploadItems(notes, '');
 
 		// There should be only one call to "multiPut" because the items have
 		// been batched.
@@ -97,7 +97,7 @@ describe('synchronizer/ItemUploader', () => {
 			await Note.save({ title: '2' }),
 		];
 
-		await itemUploader.preUploadItems(notes);
+		await itemUploader.preUploadItems(notes, '');
 		expect(callRecorder.length).toBe(0);
 	}));
 
@@ -110,7 +110,7 @@ describe('synchronizer/ItemUploader', () => {
 			await Note.save({ title: '2' }),
 		];
 
-		await itemUploader.preUploadItems(notes);
+		await itemUploader.preUploadItems(notes, '');
 		clearArray(callRecorder);
 
 		await itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[0]), notes[0]);
@@ -137,7 +137,7 @@ describe('synchronizer/ItemUploader', () => {
 
 		// It should send two batches - one with two notes, and the second with
 		// only one note.
-		await itemUploader.preUploadItems(notes);
+		await itemUploader.preUploadItems(notes, '');
 		expect(callRecorder.length).toBe(2);
 		expect(callRecorder[0].args[0].length).toBe(2);
 		expect(callRecorder[1].args[0].length).toBe(1);
@@ -164,7 +164,7 @@ describe('synchronizer/ItemUploader', () => {
 
 		const itemUploader = new ItemUploader(newFakeApi(), newFakeApiCall(callRecorder, itemBodyCallback));
 
-		await itemUploader.preUploadItems(notes);
+		await itemUploader.preUploadItems(notes, '');
 
 		await expectNotThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[0]), notes[0]));
 		await expectThrow(async () => itemUploader.serializeAndUploadItem(Note, BaseItem.systemPath(notes[1]), notes[1]), null);
