@@ -688,13 +688,15 @@ export default class Synchronizer {
 							}
 							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
 							remoteContent = await BaseItem.unserialize(remoteContent);
-							const changeInstanceIdIsSet = remoteContent.sync_operation_id_ && local.sync_operation_id_;
-							const changeInstanceIdDiffers = remoteContent.sync_operation_id_ !== local.sync_operation_id_;
+							const syncOperationIdIsSet = remoteContent.sync_operation_id_ && local.sync_operation_id_;
+							const syncOperationIdDiffers = remoteContent.sync_operation_id_ !== local.sync_operation_id_;
+							const timestampHasChanged = remoteContent.updated_time !== local.updated_time;
 							// This legacy check is needed for items which are uploaded for the first time since sync_operation_id_ was added
-							// or when syncing with older clients
+							// or when syncing with older clients. Also use this when the timestamp has not changed, to avoid all items from conflicting
+							// when toggling encryption, for example
 							const remoteContentTimestampIsNewer = remoteContent.updated_time > local.sync_time;
 
-							if ((changeInstanceIdIsSet && changeInstanceIdDiffers) || (!changeInstanceIdIsSet && remoteContentTimestampIsNewer)) {
+							if ((timestampHasChanged && syncOperationIdIsSet && syncOperationIdDiffers) || (!syncOperationIdIsSet && remoteContentTimestampIsNewer)) {
 								// Since, in this loop, we are only dealing with items that require sync, if the
 								// remote has been modified after the sync time, it means both items have been
 								// modified and so there's a conflict.
@@ -993,13 +995,15 @@ export default class Synchronizer {
 									} else {
 										content = await loadContent();
 										const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['sync_operation_id_'] });
-										const changeInstanceIdIsSet = content.sync_operation_id_ && syncItem.sync_operation_id_;
-										const changeInstanceIdDiffers = content.sync_operation_id_ !== syncItem.sync_operation_id_;
+										const syncOperationIdIsSet = content.sync_operation_id_ && syncItem.sync_operation_id_;
+										const syncOperationIdDiffers = content.sync_operation_id_ !== syncItem.sync_operation_id_;
+										const timestampHasChanged = content.updated_time !== local.updated_time;
 										// This legacy check is needed for items which are downloaded for the first time since sync_operation_id_ was added
-										// or when syncing with older clients
+										// or when syncing with older clients. Also use this when the timestamp has not changed, to avoid all items from conflicting
+										// when toggling encryption, for example
 										const remoteContentTimestampIsNewer = content && content.updated_time > local.updated_time;
 
-										if ((changeInstanceIdIsSet && changeInstanceIdDiffers) || (!changeInstanceIdIsSet && remoteContentTimestampIsNewer)) {
+										if ((timestampHasChanged && syncOperationIdIsSet && syncOperationIdDiffers) || (!syncOperationIdIsSet && remoteContentTimestampIsNewer)) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
 										} else if (enableEnhancedBasicDeltaAlgorithm()) {
