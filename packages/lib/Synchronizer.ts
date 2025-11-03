@@ -602,6 +602,7 @@ export default class Synchronizer {
 
 					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 					const locals = result.items;
+					// This is unique across each upload for a single sync item, but does not need to be unique across sync items
 					const syncOperationId = uuid.create();
 
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

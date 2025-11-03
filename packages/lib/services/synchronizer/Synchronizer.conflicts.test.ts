@@ -19,24 +19,159 @@ describe('Synchronizer.conflicts', () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
+		let note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note1SyncItem.sync_operation_id_).toBeTruthy();
 
 		await switchClient(2);
 
 		await synchronizerStart();
 		let note2 = await Note.load(note1.id);
+		let note2SyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
+		expect(note2SyncItem.sync_operation_id_).toBe(note1SyncItem.sync_operation_id_);
+
 		note2.title = 'Updated on client 2';
+		await sleep(0.1);
 		await Note.save(note2);
 		note2 = await Note.load(note2.id);
 		await synchronizerStart();
+		note2SyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
+		expect(note2SyncItem.sync_operation_id_).toBeTruthy();
+		expect(note2SyncItem.sync_operation_id_).not.toBe(note1SyncItem.sync_operation_id_);
 
 		await switchClient(1);
 
 		let note2conf = await Note.load(note1.id);
 		note2conf.title = 'Updated on client 1';
+		await sleep(0.1);
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
+		note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note1SyncItem.sync_operation_id_).toBe(note2SyncItem.sync_operation_id_);
+
 		const conflictedNotes = await Note.conflictedNotes();
+		expect(conflictedNotes.length).toBe(1);
+
+		// Other than the id (since the conflicted note is a duplicate), and the is_conflict property
+		// the conflicted and original note must be the same in every way, to make sure no data has been lost.
+		const conflictedNote = conflictedNotes[0];
+		expect(conflictedNote.id === note2conf.id).toBe(false);
+		expect(conflictedNote.conflict_original_id).toBe(note2conf.id);
+		for (const n in conflictedNote) {
+			if (!conflictedNote.hasOwnProperty(n)) continue;
+			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			expect(conflictedNote[n]).toBe((note2conf as any)[n]);
+		}
+
+		const noteUpdatedFromRemote = await Note.load(note1.id);
+		for (const n in noteUpdatedFromRemote) {
+			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			expect((noteUpdatedFromRemote as any)[n]).toBe((note2 as any)[n]);
+		}
+	}));
+
+	it('should not resolve note conflicts when updated_time is unchanged', (async () => {
+		// updated_time will be unchanged when updating a note when E2EE is enabled for a profile, for example
+		const options = { 'autoTimestamp': false };
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		await synchronizerStart();
+		let note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note1SyncItem.sync_operation_id_).toBeTruthy();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		let note2 = await Note.load(note1.id);
+		let note2SyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
+		expect(note2SyncItem.sync_operation_id_).toBe(note1SyncItem.sync_operation_id_);
+
+		note2.title = 'Updated on client 2';
+		await sleep(0.1);
+		await Note.save(note2);
+		note2 = await Note.load(note2.id);
+		await synchronizerStart();
+		note2SyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
+		expect(note2SyncItem.sync_operation_id_).toBeTruthy();
+		expect(note2SyncItem.sync_operation_id_).not.toBe(note1SyncItem.sync_operation_id_);
+
+		note2.title = 'Updated on client 2 again';
+		note2.updated_time = note1.updated_time;
+		await Note.save(note2, options);
+		note2 = await Note.load(note2.id);
+		await synchronizerStart();
+		const note2RepeatSyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
+		expect(note2RepeatSyncItem.sync_operation_id_).toBe(note2SyncItem.sync_operation_id_);
+
+		await switchClient(1);
+		let note2conf = await Note.load(note1.id);
+		note2conf.title = 'Updated on client 1';
+		note2conf.updated_time = note2.updated_time;
+		await Note.save(note2conf, options);
+		note2conf = await Note.load(note1.id);
+		await synchronizerStart();
+		note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note1SyncItem.sync_operation_id_).toBe(note2SyncItem.sync_operation_id_);
+
+		const conflictedNotes = await Note.conflictedNotes();
+		expect(conflictedNotes.length).toBe(0);
+	}));
+
+	it('should resolve note conflicts using fallback method (using timestamps) if sync_operation_id_ is not populated in the db', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+		await synchronizerStart();
+		let note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note1SyncItem.sync_operation_id_).toBeTruthy();
+
+		await switchClient(2);
+
+		await BaseItem.saveSyncTime(syncTargetId(), note1, note1SyncItem.sync_time, note1SyncItem.remote_item_updated_time); // Clear sync_operation_id_
+		let note2SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note2SyncItem.sync_operation_id_).toBe('');
+
+		await synchronizerStart(); // delta step uses fallback method
+
+		let note2 = await Note.load(note1.id);
+		note2SyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
+		expect(note2SyncItem.sync_operation_id_).toBe(note1SyncItem.sync_operation_id_);
+
+		note2.title = 'Updated on client 2';
+		await sleep(0.1);
+		await Note.save(note2);
+		note2 = await Note.load(note2.id);
+
+		await BaseItem.saveSyncTime(syncTargetId(), note2, note2SyncItem.sync_time, note2SyncItem.remote_item_updated_time); // Clear sync_operation_id_
+		note2SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note2SyncItem.sync_operation_id_).toBe('');
+
+		await synchronizerStart(); // upload step uses fallback method
+		note2SyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
+		expect(note2SyncItem.sync_operation_id_).toBeTruthy();
+		expect(note2SyncItem.sync_operation_id_).not.toBe(note1SyncItem.sync_operation_id_);
+
+		let conflictedNotes = await Note.conflictedNotes();
+		expect(conflictedNotes.length).toBe(0);
+
+		await switchClient(1);
+
+		let note2conf = await Note.load(note1.id);
+		note2conf.title = 'Updated on client 1';
+		await sleep(0.1);
+		await Note.save(note2conf);
+		note2conf = await Note.load(note1.id);
+
+		await BaseItem.saveSyncTime(syncTargetId(), note2conf, note1SyncItem.sync_time, note1SyncItem.remote_item_updated_time); // Clear sync_operation_id_
+		note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note1SyncItem.sync_operation_id_).toBe('');
+
+		await synchronizerStart(); // upload step uses fallback method and creates a conflict
+		note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
+		expect(note1SyncItem.sync_operation_id_).toBe(note2SyncItem.sync_operation_id_);
+
+		conflictedNotes = await Note.conflictedNotes();
 		expect(conflictedNotes.length).toBe(1);
 
 		// Other than the id (since the conflicted note is a duplicate), and the is_conflict property
