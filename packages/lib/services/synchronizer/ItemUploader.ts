@@ -55,16 +55,18 @@ export default class ItemUploader {
 		await this.apiCall_('put', path, content);
 	}
 
-	public async preUploadItems(items: BaseItemEntity[]) {
+	public async preUploadItems(items: BaseItemEntity[], syncOperationId: string) {
 		if (!this.api_.supportsMultiPut) return;
 
 		const itemsToUpload: BatchItem[] = [];
 
-		for (const local of items) {
+		for (const item of items) {
 			// For resources, additional logic is necessary - in particular the blob
 			// should be uploaded before the metadata, so we can't batch process.
-			if (local.type_ === ModelType.Resource) continue;
+			if (item.type_ === ModelType.Resource) continue;
 
+			const local = { ...item };
+			local.sync_operation_id_ = syncOperationId;
 			const ItemClass = BaseItem.itemClass(local);
 			itemsToUpload.push({
 				name: BaseItem.systemPath(local),

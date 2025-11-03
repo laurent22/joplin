@@ -13,7 +13,7 @@ export interface BaseItemEntity {
   type_?: ModelType;
   updated_time?: number;
   created_time?: number;
-  sync_change_instance_id_?: string;
+  sync_operation_id_?: string;
 }
 
 export type SqlParams = any[];
@@ -342,7 +342,7 @@ export interface SyncItemEntity {
   'sync_warning_ignored'?: number;
   'remote_item_updated_time'?: number;
   'type_'?: number;
-  'sync_change_instance_id_'?: string;
+  'sync_operation_id_'?: string;
 }
 export interface TableFieldEntity {
   'field_default'?: string | null;

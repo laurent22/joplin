@@ -602,9 +602,10 @@ export default class Synchronizer {
 
 					const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 					const locals = result.items;
+					const syncOperationId = uuid.create();
 
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					await itemUploader.preUploadItems(result.items.filter((it: any) => result.neverSyncedItemIds.includes(it.id)));
+					await itemUploader.preUploadItems(result.items.filter((it: any) => result.neverSyncedItemIds.includes(it.id)), syncOperationId);
 
 					for (let i = 0; i < locals.length; i++) {
 						if (this.cancelling()) break;
@@ -687,9 +688,9 @@ export default class Synchronizer {
 							}
 							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
 							remoteContent = await BaseItem.unserialize(remoteContent);
-							const changeInstanceIdIsSet = remoteContent.sync_change_instance_id_ && local.sync_change_instance_id_;
-							const changeInstanceIdDiffers = remoteContent.sync_change_instance_id_ !== local.sync_change_instance_id_;
-							// This legacy check is needed for items which are uploaded for the first time since sync_change_instance_id_ was added
+							const changeInstanceIdIsSet = remoteContent.sync_operation_id_ && local.sync_operation_id_;
+							const changeInstanceIdDiffers = remoteContent.sync_operation_id_ !== local.sync_operation_id_;
+							// This legacy check is needed for items which are uploaded for the first time since sync_operation_id_ was added
 							// or when syncing with older clients
 							const remoteContentTimestampIsNewer = remoteContent.updated_time > local.sync_time;
 
@@ -790,7 +791,7 @@ export default class Synchronizer {
 
 						if (action === SyncAction.CreateRemote || action === SyncAction.UpdateRemote) {
 							let canSync = true;
-							local.sync_change_instance_id_ = uuid.create();
+							local.sync_operation_id_ = syncOperationId;
 							try {
 								if (this.testingHooks_.indexOf('notesRejectedByTarget') >= 0 && local.type_ === BaseModel.TYPE_NOTE) throw new JoplinError('Testing rejectedByTarget', 'rejectedByTarget');
 								if (this.testingHooks_.indexOf('itemIsReadOnly') >= 0) throw new JoplinError('Testing isReadOnly', ErrorCode.IsReadOnly);
@@ -991,10 +992,10 @@ export default class Synchronizer {
 										// Nothing to do, and no need to fetch the content
 									} else {
 										content = await loadContent();
-										const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['sync_change_instance_id_'] });
-										const changeInstanceIdIsSet = content.sync_change_instance_id_ && syncItem.sync_change_instance_id_;
-										const changeInstanceIdDiffers = content.sync_change_instance_id_ !== syncItem.sync_change_instance_id_;
-										// This legacy check is needed for items which are downloaded for the first time since sync_change_instance_id_ was added
+										const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['sync_operation_id_'] });
+										const changeInstanceIdIsSet = content.sync_operation_id_ && syncItem.sync_operation_id_;
+										const changeInstanceIdDiffers = content.sync_operation_id_ !== syncItem.sync_operation_id_;
+										// This legacy check is needed for items which are downloaded for the first time since sync_operation_id_ was added
 										// or when syncing with older clients
 										const remoteContentTimestampIsNewer = content && content.updated_time > local.updated_time;
 
@@ -1005,7 +1006,7 @@ export default class Synchronizer {
 											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
-											local.sync_change_instance_id_ = syncItem.sync_change_instance_id_; // Must retain original value when replacing the sync_item
+											local.sync_operation_id_ = syncItem.sync_operation_id_; // Must retain original value when replacing the sync_item
 											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
 										}
 									}

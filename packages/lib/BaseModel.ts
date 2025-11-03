@@ -247,7 +247,7 @@ class BaseModel {
 		const newModel: any = {};
 		for (const n in model) {
 			if (!model.hasOwnProperty(n)) continue;
-			if (!this.hasField(n) && n !== 'type_' && n !== 'sync_change_instance_id_') continue;
+			if (!this.hasField(n) && n !== 'type_' && n !== 'sync_operation_id_') continue;
 			newModel[n] = model[n];
 		}
 		return newModel;
