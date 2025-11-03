@@ -76,7 +76,7 @@
     "cspell": "5.21.2",
     "eslint": "8.57.1",
     "eslint-interactive": "10.8.0",
-    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jest": "27.9.0",
     "eslint-plugin-promise": "6.6.0",
     "eslint-plugin-react": "7.37.5",

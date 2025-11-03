@@ -1,5 +1,21 @@
 # Joplin Desktop Changelog
 
+## [v3.5.6](https://github.com/laurent22/joplin/releases/tag/v3.5.6) (Pre-release) - 2025-10-29T14:48:46Z
+
+- Improved: Accessibility: Improve dialog keyboard handling ([#13536](https://github.com/laurent22/joplin/issues/13536) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow adding and removing users from a share while a sync is in progress ([#13529](https://github.com/laurent22/joplin/issues/13529) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Disallow unsharing a folder while sharing is in progress ([#13551](https://github.com/laurent22/joplin/issues/13551) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Ensure that sync process ends up properly when Joplin Server shares cannot be accessed ([42d8df3](https://github.com/laurent22/joplin/commit/42d8df3))
+- Improved: OneNote importer: Resolve possible import failure related to unsupported formatting ([#13495](https://github.com/laurent22/joplin/issues/13495) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Open the connection screen when a SAML session has expired ([fc0014c](https://github.com/laurent22/joplin/commit/fc0014c))
+- Improved: Updated packages @fortawesome/react-fontawesome (v0.2.3), mermaid (v11.7.0)
+- Fixed: Accessibility: Fix global keyboard shortcuts are ignored when the sidebar has focus ([#13485](https://github.com/laurent22/joplin/issues/13485) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Prevent sidebar header text from moving: Don't change the header icon on hover ([#13482](https://github.com/laurent22/joplin/issues/13482)) ([#13481](https://github.com/laurent22/joplin/issues/13481) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Change default content-type for Webdav connector to application/octet-stream ([#13053](https://github.com/laurent22/joplin/issues/13053)) ([#12249](https://github.com/laurent22/joplin/issues/12249) by [@pedr](https://github.com/pedr))
+- Fixed: Fix "cannot add an item as a child of a read-only item" error when updating share IDs ([#13523](https://github.com/laurent22/joplin/issues/13523)) ([#13522](https://github.com/laurent22/joplin/issues/13522) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix adding a new user to a share creates an unused E2EE key ([#13538](https://github.com/laurent22/joplin/issues/13538)) ([#13537](https://github.com/laurent22/joplin/issues/13537) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OneNote importer: Task lists: Fix checkbox sizes and accessibility ([#13558](https://github.com/laurent22/joplin/issues/13558)) ([#13549](https://github.com/laurent22/joplin/issues/13549) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.5.5](https://github.com/laurent22/joplin/releases/tag/v3.5.5) (Pre-release) - 2025-10-18T10:31:09Z
 
 - Improved: Accessibility: Allow jumping to notebooks by typing the initial letter or Home/End ([#13469](https://github.com/laurent22/joplin/issues/13469) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
