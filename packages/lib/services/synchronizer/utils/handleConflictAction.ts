@@ -38,6 +38,9 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			});
 		}
 	} else if (action === SyncAction.NoteConflict) {
+		// Reload the note, to ensure the latest version is used to create the conflict
+		local = await Note.load(local.id);
+
 		// ------------------------------------------------------------------------------
 		// First find out if the conflict matters. For example, if the conflict is on the title or body
 		// we want to preserve all the changes. If it's on todo_completed it doesn't really matter

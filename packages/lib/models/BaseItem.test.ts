@@ -1,3 +1,4 @@
+import { Second } from '@joplin/utils/time';
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTargetId, synchronizerStart, msleep } from '../testing/test-utils';
 import BaseItem from './BaseItem';
 import Folder from './Folder';
@@ -42,6 +43,19 @@ describe('BaseItem', () => {
 		expect(unserialized2.title).toBe(folder2.title);
 	});
 
+	it.each([
+		'',
+		'\n\na\nb\nc\nç\nTest!\n Testing. \n',
+		'Test! ☺',
+		'Test! ☺\n\n\n',
+	])('should not modify body when unserializing (body: %j)', async (body) => {
+		const note = await Note.save({ title: 'note1', body });
+
+		expect(await Note.unserialize(await Note.serialize(note))).toMatchObject({
+			body,
+		});
+	});
+
 	it('should correctly unserialize note timestamps', async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.id });
@@ -53,6 +67,22 @@ describe('BaseItem', () => {
 		expect(unserialized.updated_time).toEqual(note.updated_time);
 		expect(unserialized.user_created_time).toEqual(note.user_created_time);
 		expect(unserialized.user_updated_time).toEqual(note.user_updated_time);
+	});
+
+	it('should unserialize a very large note quickly', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+
+		const serialized = await Note.serialize({
+			...note,
+			// 2 MiB
+			body: '\n.'.repeat(1 * 1024 * 1024),
+		});
+
+		const start = performance.now();
+		await Note.unserialize(serialized);
+		// Locally, this passes in in < 2s, so 30s should be a safe upper bound.
+		expect(performance.now() - start).toBeLessThan(30 * Second);
 	});
 
 	it('should serialize geolocation fields', async () => {

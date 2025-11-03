@@ -1644,6 +1644,7 @@ packages/lib/services/synchronizer/Synchronizer.sharing.test.js
 packages/lib/services/synchronizer/Synchronizer.tags.test.js
 packages/lib/services/synchronizer/Synchronizer.tools.test.js
 packages/lib/services/synchronizer/gui/useSyncTargetUpgrade.js
+packages/lib/services/synchronizer/handleConflictAction.test.js
 packages/lib/services/synchronizer/migrations/1.js
 packages/lib/services/synchronizer/migrations/2.js
 packages/lib/services/synchronizer/migrations/3.js

@@ -326,5 +326,16 @@ test.describe('markdownEditor', () => {
 			return true;
 		}).toBe(true);
 	});
+
+	test('should still support the legacy Markdown editor', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await setSettingValue(electronApp, mainWindow, 'editor.legacyMarkdown', true);
+		await mainScreen.createNewNote('Test');
+
+		// Should show the legacy editor
+		await expect(mainWindow.locator('.rli-editor .CodeMirror5')).toBeVisible();
+	});
 });
 
