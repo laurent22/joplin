@@ -14,6 +14,7 @@ import { getDisplayParentId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
 import { Toast, ToastType } from './services/plugins/api/types';
+import { unique } from './array';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -660,19 +661,46 @@ export const getNotesParent = (state: State): NotesParent => {
 	return { type, selectedItemId };
 };
 
-interface ChangeSelectedFolderOptions {
+interface ChangeSelectedTagOrFolderOptions {
 	clearSelectedNoteIds?: boolean;
 	extendSelection?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function changeSelectedFolder(draft: Draft<State>, action: any, { clearSelectedNoteIds = false, extendSelection = false }: ChangeSelectedFolderOptions = {}) {
-	draft.selectedFolderId = 'folderId' in action ? action.folderId : action.id;
-	if (!draft.selectedFolderId) {
-		draft.notesParentType = defaultNotesParentType(draft, 'Folder');
+function changeSelectedTagOrFolder(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	draft: Draft<State>, action: any, { clearSelectedNoteIds, extendSelection = false }: ChangeSelectedTagOrFolderOptions = {},
+) {
+	clearSelectedNoteIds ??= extendSelection;
+
+	const isFolder = action.type.startsWith('FOLDER');
+	const isTag = action.type.startsWith('TAG');
+	if (!isFolder && !isTag) {
+		throw new Error(`Unable to determine item type from action. Action.type: ${action.type}`);
+	}
+
+	let itemIds = [];
+	if ('folderId' in action) {
+		itemIds = [action.folderId];
+	} else if ('tagId' in action) {
+		itemIds = [action.tagId];
+	} else if ('ids' in action) {
+		itemIds = [...action.ids];
 	} else {
-		draft.notesParentType = 'Folder';
-		draft.selectedFolderIds = extendSelection ? [...draft.selectedFolderIds, draft.selectedFolderId] : [draft.selectedFolderId];
+		if (!action.id) {
+			throw new Error(`Missing id in ${action.type} action.`);
+		}
+
+		itemIds = [action.id];
+	}
+
+	const propertyNameSingular: keyof State = isTag ? 'selectedTagId' : 'selectedFolderId';
+	const propertyNamePlural: keyof State = isTag ? 'selectedTagIds' : 'selectedFolderIds';
+
+	draft.notesParentType = isTag ? 'Tag' : 'Folder';
+	draft[propertyNamePlural] = extendSelection ? unique([...draft[propertyNamePlural], ...itemIds]) : itemIds;
+	draft[propertyNameSingular] = draft[propertyNamePlural][0];
+	if (!draft[propertyNameSingular]) {
+		draft.notesParentType = defaultNotesParentType(draft, isTag ? 'Tag' : 'Folder');
 	}
 
 	if (clearSelectedNoteIds) draft.selectedNoteIds = [];
@@ -795,7 +823,7 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.forwardHistoryNotes = draft.forwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		changeSelectedFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
+		changeSelectedTagOrFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
 		changeSelectedNotes(draft, { ...action, type: 'NOTE_SELECT', noteId: note.id });
 
 		const ctx = draft.backwardHistoryNotes[draft.backwardHistoryNotes.length - 1];
@@ -811,7 +839,7 @@ function handleHistory(draft: Draft<State>, action: any) {
 			draft.backwardHistoryNotes = draft.backwardHistoryNotes.concat(currentNote).slice(-MAX_HISTORY);
 		}
 
-		changeSelectedFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
+		changeSelectedTagOrFolder(draft, { ...action, type: 'FOLDER_SELECT', folderId: note.parent_id });
 		changeSelectedNotes(draft, { ...action, type: 'NOTE_SELECT', noteId: note.id });
 
 		const ctx = draft.forwardHistoryNotes[draft.forwardHistoryNotes.length - 1];
@@ -1062,7 +1090,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_SELECT_ADD':
 		case 'FOLDER_SELECT':
-			changeSelectedFolder(draft, action, {
+			changeSelectedTagOrFolder(draft, action, {
 				clearSelectedNoteIds: true,
 				extendSelection: action.type === 'FOLDER_SELECT_ADD',
 			});
@@ -1070,7 +1098,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				changeSelectedFolder(draft, action);
+				changeSelectedTagOrFolder(draft, action);
 				const noteSelectAction = { ...action, type: 'NOTE_SELECT' };
 				changeSelectedNotes(draft, noteSelectAction);
 			}
@@ -1288,18 +1316,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'TAG_SELECT_ADD':
 		case 'TAG_SELECT':
-
-			if (draft.selectedTagId !== action.id || draft.notesParentType !== 'Tag') {
-				draft.selectedTagIds = action.type === 'TAG_SELECT' ? [action.id] : [...draft.selectedTagIds, action.id];
-				draft.selectedTagId = draft.selectedTagIds[0];
-
-				if (!action.id) {
-					draft.notesParentType = defaultNotesParentType(draft, 'Tag');
-				} else {
-					draft.notesParentType = 'Tag';
-				}
-				draft.selectedNoteIds = [];
-			}
+			changeSelectedTagOrFolder(draft, action, { extendSelection: action.type === 'TAG_SELECT_ADD' });
 			break;
 
 		case 'TAG_SELECT_REMOVE':

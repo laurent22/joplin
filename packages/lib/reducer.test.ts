@@ -390,6 +390,40 @@ describe('reducer', () => {
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
 
+	it.each([false, true])('should select multiple folders (extend:%j)', async (extendSelection) => {
+		const folders = await createNTestFolders(3);
+		let state = initTestState(folders, 0, [], []);
+
+		if (extendSelection) {
+			state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[1].id });
+		} else {
+			state = reducer(state, { type: 'FOLDER_SELECT', ids: [folders[0].id, folders[1].id] });
+		}
+
+		const expected = createExpectedState(folders, [0, 1, 2], [0, 1]);
+
+		expect(getIds(state.folders)).toEqual(getIds(expected.items));
+		expect(state.selectedFolderIds).toEqual(expected.selectedIds);
+		expect(state.selectedFolderId).toBe(expected.selectedIds[0]);
+	});
+
+	it.each([false, true])('should select multiple tags (extend:%j)', async (extendSelection) => {
+		const tags = await createNTestTags(3);
+		let state = initTestState([], null, [], [], tags, 0);
+
+		if (extendSelection) {
+			state = reducer(state, { type: 'TAG_SELECT_ADD', id: tags[2].id });
+		} else {
+			state = reducer(state, { type: 'TAG_SELECT', ids: [tags[0].id, tags[2].id] });
+		}
+
+		const expected = createExpectedState(tags, [0, 1, 2], [0, 2]);
+
+		expect(getIds(state.tags)).toEqual(getIds(expected.items));
+		expect(state.selectedTagIds).toEqual(expected.selectedIds);
+		expect(state.selectedTagId).toBe(expected.selectedIds[0]);
+	});
+
 	it('should select all notes', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
