@@ -59,6 +59,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		dispatch: props.dispatch,
 		listItems: listItems,
 		selectedIndex,
+		selectedIndexes,
 		updateSelectedIndex,
 		collapsedFolderIds: props.collapsedFolderIds,
 	});
