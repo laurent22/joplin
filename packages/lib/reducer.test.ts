@@ -455,6 +455,18 @@ describe('reducer', () => {
 		expect(state.selectedNoteIds).toEqual([]);
 	});
 
+	it('should add and remove a folders from the selection', async () => {
+		const folders = await createNTestFolders(3);
+		let state = initTestState(folders, 0, [], []);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', ids: [folders[1].id, folders[2].id] });
+		expect(state.selectedFolderIds).toEqual([folders[0].id, folders[1].id, folders[2].id]);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_REMOVE', id: folders[0].id });
+		expect(state.selectedFolderIds).toEqual([folders[1].id, folders[2].id]);
+		expect(state.selectedFolderId).toBe(folders[1].id);
+	});
+
 	it('should select all notes', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
