@@ -189,14 +189,17 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
-			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+			const isDecryptedFolder = itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied;
+			if (isDecryptedFolder) {
 				menu.append(new MenuItem({
 					...menuUtils.commandToStatefulMenuItem('moveToFolder', itemIds),
 					// By default, enabled is based on the selected folder. However, the right-click
 					// menu can be shown for unselected folders.
 					enabled: true,
 				}));
+			}
 
+			if (isDecryptedFolder && itemIds.length === 1) {
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
 
 				menu.append(new MenuItem({ type: 'separator' }));
@@ -247,7 +250,7 @@ const useOnRenderItem = (props: Props) => {
 				}
 			}
 
-			if (itemType === BaseModel.TYPE_FOLDER) {
+			if (itemType === BaseModel.TYPE_FOLDER && itemIds.length === 1) {
 				menu.append(
 					new MenuItem({
 						label: _('Copy external link'),
@@ -258,7 +261,7 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
-			if (itemType === BaseModel.TYPE_TAG) {
+			if (itemType === BaseModel.TYPE_TAG && itemIds.length === 1) {
 				menu.append(new MenuItem(
 					menuUtils.commandToStatefulMenuItem('renameTag', itemId),
 				));
