@@ -693,14 +693,17 @@ function changeSelectedTagOrFolder(
 	const propertyNameSingular: keyof State = isTag ? 'selectedTagId' : 'selectedFolderId';
 	const propertyNamePlural: keyof State = isTag ? 'selectedTagIds' : 'selectedFolderIds';
 
+	const lastParentType = draft.notesParentType;
 	draft.notesParentType = isTag ? 'Tag' : 'Folder';
 	draft[propertyNamePlural] = extendSelection ? unique([...draft[propertyNamePlural], ...itemIds]) : itemIds;
 	draft[propertyNameSingular] = draft[propertyNamePlural][0];
-	if (!draft[propertyNameSingular]) {
+
+	const hasItem = !!draft[propertyNameSingular];
+	if (!hasItem) {
 		draft.notesParentType = defaultNotesParentType(draft, isTag ? 'Tag' : 'Folder');
 	}
 
-	const clearSelectedNoteIds = !extendSelection;
+	const clearSelectedNoteIds = !extendSelection || lastParentType !== draft.notesParentType;
 	if (clearSelectedNoteIds) draft.selectedNoteIds = [];
 }
 
