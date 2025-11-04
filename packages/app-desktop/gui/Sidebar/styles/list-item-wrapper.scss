@@ -22,7 +22,9 @@
 		background: var(--joplin-selected-color2);
 	}
 
-	&.-highlight-on-hover:hover {
+	// Don't highlight selected items on hover -- doing so makes it
+	// difficult to tell whether the hovered item is selected or not.
+	&.-highlight-on-hover:not(.-selected):hover {
 		background-color: var(--joplin-background-color-hover2);
 	}
 }
