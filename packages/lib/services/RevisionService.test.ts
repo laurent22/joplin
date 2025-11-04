@@ -627,7 +627,8 @@ describe('services/RevisionService', () => {
 		await revisionService().collectRevisions(); // Create revisions for old and new content
 
 		let revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
-		expect(revisions.length).toBe(2);
+		expect(revisions[0].body_diff).toBe('[{"diffs":[[1,"Start"]],"start1":0,"start2":0,"length1":0,"length2":5}]');
+		expect(revisions[1].body_diff).toBe('[{"diffs":[[0,"Start"],[1,"ABC"]],"start1":0,"start2":0,"length1":5,"length2":8}]');
 
 		Setting.setValue('revisionService.intervalBetweenRevisions', 10_000);
 
@@ -648,8 +649,6 @@ describe('services/RevisionService', () => {
 
 		revisions = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(revisions.length).toBe(3);
-		expect(revisions[0].body_diff).toBe('[{"diffs":[[1,"Start"]],"start1":0,"start2":0,"length1":0,"length2":5}]');
-		expect(revisions[1].body_diff).toBe('[{"diffs":[[0,"Start"],[1,"ABC"]],"start1":0,"start2":0,"length1":5,"length2":8}]');
 		expect(revisions[2].body_diff).toBe('[{"diffs":[[0,"StartABC"],[1,"DEF"]],"start1":0,"start2":0,"length1":8,"length2":11}]');
 
 		// The updated time of the revision created for the original note contents must be before the first revision created for the current contents, but only 1 ms in the past
