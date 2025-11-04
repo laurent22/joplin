@@ -463,7 +463,7 @@ describe('models/Folder', () => {
 		Setting.setValue('activeFolderId', undefined);
 
 		const validFolder = await Folder.getValidActiveFolder();
-		expect(validFolder).toBe(null);
+		expect(validFolder).toBeNull();
 	});
 
 	it('should get no folder when activeFolderId is trashed and there are no other not trashed folders', async () => {
