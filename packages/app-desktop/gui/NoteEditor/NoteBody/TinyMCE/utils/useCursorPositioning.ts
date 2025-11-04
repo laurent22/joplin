@@ -13,7 +13,7 @@ const useCursorPositioning = ({ initialCursorLocation, editor, onCursorUpdate }:
 	initialCursorLocationRef.current = initialCursorLocation;
 
 	const appliedInitialCursorLocationRef = useRef(false);
-	const onInitialContentSet = useCallback(() => {
+	const onRestoreCursorPosition = useCallback(() => {
 		if (editor) {
 			if (initialCursorLocationRef.current) {
 				editor.selection.moveToBookmark(initialCursorLocationRef.current);
@@ -25,8 +25,6 @@ const useCursorPositioning = ({ initialCursorLocation, editor, onCursorUpdate }:
 
 	useEffect(() => {
 		if (!editor) return () => {};
-
-		editor.on('ContentSet', onInitialContentSet);
 
 		const onSelectionChange = () => {
 			// Wait until the initial cursor position has been set. This avoids resetting
@@ -44,12 +42,11 @@ const useCursorPositioning = ({ initialCursorLocation, editor, onCursorUpdate }:
 		editor.on('SelectionChange', onSelectionChange);
 
 		return () => {
-			editor.off('ContentSet', onInitialContentSet);
 			editor.off('SelectionChange', onSelectionChange);
 		};
-	}, [editor, onCursorUpdate, onInitialContentSet]);
+	}, [editor, onCursorUpdate, onRestoreCursorPosition]);
 
-	return { onInitialContentSet };
+	return { onRestoreCursorPosition };
 };
 
 export default useCursorPositioning;

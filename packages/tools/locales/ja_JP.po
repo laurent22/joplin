@@ -62,7 +62,7 @@ msgstr ""
 msgid "(wysiwyg: %s)"
 msgstr "(WYSIWYG対応: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr ""
@@ -402,7 +402,7 @@ msgid "Action"
 msgstr "操作"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "操作"
@@ -416,7 +416,7 @@ msgstr "アクティブ"
 msgid "Actual Size"
 msgstr "100%%表示"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "本文を追加"
 
@@ -434,7 +434,7 @@ msgstr "新規追加"
 msgid "Add or remove tags:"
 msgstr "タグの追加・削除："
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "受信者を追加:"
 
@@ -447,7 +447,7 @@ msgstr "新規追加"
 msgid "Add tags:"
 msgstr "タグを追加:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "題名を追加"
 
@@ -613,7 +613,7 @@ msgid "Application"
 msgstr "アプリケーション"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "適用"
 
@@ -677,7 +677,7 @@ msgstr "ファイルを添付する"
 msgid "Attach photo"
 msgstr "写真を添付"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "添付..."
 
@@ -685,8 +685,8 @@ msgstr "添付..."
 msgid "Attaches the given file to the note."
 msgstr "選択したファイルをノートに添付します。"
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "添付ファイル"
 
@@ -844,7 +844,7 @@ msgstr "閲覧・編集可能"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -859,8 +859,8 @@ msgstr "閲覧・編集可能"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -959,7 +959,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" に移動できません"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "ノートブックをこの場所に移動できません"
 
@@ -971,11 +971,11 @@ msgstr ""
 "トークンの更新ができませんでした。認証データがありません。同期を再度行うこと"
 "で解決することがあります。"
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr "%s \"%s\" を保存できません。サイズが上限 (%s) を超えるためです"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -983,7 +983,7 @@ msgstr ""
 "%s \"%s\" を保存できません。このアカウントに許可された合計サイズの上限 (%s) "
 "を超えるためです"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -992,7 +992,7 @@ msgstr ""
 "暗号化されたノートブックはエンドツーエンド暗号化を有効にしていない受信者 %s "
 "とは共有できません。エンドツーエンド暗号化は設定画面から有効にできます。"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "大文字小文字を区別"
 
@@ -1109,13 +1109,13 @@ msgid "close"
 msgstr "閉じる"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1168,7 +1168,7 @@ msgstr "コード"
 msgid "Code Block"
 msgstr "コードブロック"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "コードビュー"
 
@@ -1192,8 +1192,8 @@ msgstr "ノートブック上で共同作業を行う"
 msgid "Collapse all notebooks"
 msgstr "ノートブックを作成します"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Collapse title"
 msgstr "折りたたむ"
@@ -1358,7 +1358,7 @@ msgstr "続行"
 msgid "Control character"
 msgstr "文字数"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 #, fuzzy
 msgid "Convert it"
 msgstr "ノートに変換"
@@ -1368,11 +1368,11 @@ msgstr "ノートに変換"
 msgid "Convert note to Markdown"
 msgstr "ToDoに変換"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "ノートに変換"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "ToDoに変換"
 
@@ -1395,7 +1395,7 @@ msgstr "開発モードコマンドをクリップボードにコピー"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "外部リンクをコピー"
 
@@ -1414,7 +1414,7 @@ msgid "Copy link to website"
 msgstr "JoplinのWebサイト"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Markdownのリンクをコピー"
 
@@ -1582,7 +1582,7 @@ msgid "Created: %d."
 msgstr "新規作成: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "作成日時：%s"
 
@@ -1737,7 +1737,7 @@ msgstr "既定値: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1761,7 +1761,7 @@ msgid "Delete expired tokens"
 msgstr "期限切れトークンを削除"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 #, fuzzy
 msgid "Delete history"
 msgstr "ノートの履歴を有効にする"
@@ -1813,7 +1813,7 @@ msgstr ""
 "Inboxノートブックを削除すると、最近メール送信によって作成したノートが失われる"
 "可能性があります。"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2045,7 +2045,7 @@ msgid ""
 "for the `add` subcommand."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr ""
 
@@ -2103,16 +2103,16 @@ msgstr "リソースをダウンロード中..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "絵を描く"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "描画"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "ノートやファイルをここにドロップします"
 
@@ -2167,19 +2167,19 @@ msgstr "あなたのバージョン: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "編集"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 #, fuzzy
 msgid "Edit as Markdown"
 msgstr "Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "リッチテキストとして編集"
 
@@ -2454,11 +2454,11 @@ msgstr ""
 "暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗"
 "号化した状態で送ることを意味します。"
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "暗号化済"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "暗号化したアイテムは修正できません"
 
@@ -2603,8 +2603,8 @@ msgstr "展開する"
 msgid "Expand all notebooks"
 msgstr "ノートブックの編集"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Expand title"
 msgstr "展開する"
@@ -2746,7 +2746,7 @@ msgstr "フィルタータグ"
 msgid "Find"
 msgstr "検索文字列: "
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "検索文字列: "
 
@@ -2907,7 +2907,7 @@ msgstr "Joplin Cloud"
 msgid "Go to line"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "ソースURLに行く"
 
@@ -2935,7 +2935,7 @@ msgstr "見出し"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "ヘルプ"
@@ -2952,7 +2952,7 @@ msgstr "Hermes有効: %d"
 msgid "Hide %s"
 msgstr "%s を隠す"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "詳細設定を非表示にする"
 
@@ -3179,7 +3179,7 @@ msgstr "Webクリッパーを使用するためには、次のことを行う必
 msgid "In progress"
 msgstr "実行中"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "内: %s"
 
@@ -3404,7 +3404,7 @@ msgstr "JoplinのWebサイト"
 msgid "Joplin Server"
 msgstr "Joplin Server"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 #, fuzzy
 msgid "Joplin Server (SAML)"
 msgstr "Joplin Server URL"
@@ -3437,7 +3437,7 @@ msgstr "Joplin Server URL"
 msgid "Joplin SSO Authentication"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -4026,7 +4026,7 @@ msgstr ""
 msgid "Next"
 msgstr "Nextcloud"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "次を検索"
 
@@ -4051,8 +4051,8 @@ msgid "no"
 msgstr "いいえ"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4091,7 +4091,7 @@ msgstr "リソースがありません!"
 msgid "No results"
 msgstr "該当なし"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 #, fuzzy
 msgid "No revision selected"
 msgstr "ノートブックが選択されていません。"
@@ -4162,8 +4162,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "ノート"
 
@@ -4202,7 +4202,7 @@ msgstr "ノートエディター"
 msgid "Note has been saved."
 msgstr "ノートは保存されました。"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 #, fuzzy
 msgid "Note history"
 msgstr "ノートの履歴"
@@ -4301,7 +4301,7 @@ msgstr "ノートブック: %s"
 msgid "Notebooks"
 msgstr "ノートブック"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "\"%s\" というノートブックの名称はシステムで使用するために予約済みです。名称の"
@@ -4350,7 +4350,7 @@ msgstr "すべてのノートを検索"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4646,7 +4646,7 @@ msgstr ""
 "下記マスターキーをアップグレードするには、マスターキーのパスワードを入力して"
 "ください。"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4667,7 +4667,7 @@ msgstr ""
 "きします。あなたの個人的なファイルや、ディレクトリ外のファイルにはアクセスし"
 "ません。第三者にデータが共有されることもありません。"
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr ""
 
@@ -4700,7 +4700,7 @@ msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr ""
 "このプラグインを使うにはJoplinを %s 以上にバージョンアップしてください。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4824,11 +4824,11 @@ msgstr "復号するパスワードを入力してください。"
 msgid "previous"
 msgstr "前を検索"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "前を検索"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 #, fuzzy
 msgid "Previous versions"
 msgstr "このノートの以前のバージョン"
@@ -4894,7 +4894,7 @@ msgstr "プロファイルバージョン: %s"
 msgid "Profiles"
 msgstr "プロファイル"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "プロパティ"
 
@@ -4938,7 +4938,7 @@ msgstr "ノートを公開"
 msgid "Publish notes to the internet"
 msgstr "ノートをインターネットに公開する"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr ""
 
@@ -5003,19 +5003,19 @@ msgstr "読むのに必要な時間: %s 分"
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr "コマンド \"%s\"は、GUIのみで有効です"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "受信者がこの招待を承諾しました"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "受信者がまだこの招待を承諾していません"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "受信者がこの招待を拒否しました"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "受信者:"
 
@@ -5063,7 +5063,7 @@ msgstr "やり直す"
 msgid "Refresh"
 msgstr "更新"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "正規表現"
 
@@ -5087,7 +5087,7 @@ msgstr "削除"
 msgid "Remove %s"
 msgstr "削除"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 #, fuzzy
 msgid "Remove %s from share"
 msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
@@ -5141,7 +5141,7 @@ msgid "replace"
 msgstr "置換"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "置換"
 
@@ -5150,15 +5150,15 @@ msgstr "置換"
 msgid "replace all"
 msgstr "すべて置換"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "すべて置換"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "...と置換"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "置換文字列: "
 
@@ -5226,8 +5226,8 @@ msgstr "今すぐ再起動"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "復元"
@@ -5291,7 +5291,7 @@ msgstr "逆順に並び替え"
 msgid "Reverses the sorting order."
 msgstr "逆順に並び替えます。"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 #, fuzzy
 msgid "Revision:"
 msgstr "リビジョン: %s (%s)"
@@ -5387,7 +5387,7 @@ msgstr "変更を保存"
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 #, fuzzy
 msgid "Save geolocation?"
 msgstr "ノートに位置情報を保存"
@@ -5419,7 +5419,7 @@ msgstr "検索"
 msgid "Search for plugins..."
 msgstr "プラグインを検索..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "...を検索"
 
@@ -5481,7 +5481,7 @@ msgstr "詳細についてはプレリリースページを参照してくださ
 msgid "Select"
 msgstr "選択"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 #, fuzzy
 msgid "Select a revision..."
 msgstr "絵文字の選択..."
@@ -5549,7 +5549,7 @@ msgid "Server is running on port %d"
 msgstr "サーバーはポート %d で実行中です"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "アラームをセット"
@@ -5586,10 +5586,10 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "共有"
 
@@ -5612,7 +5612,7 @@ msgstr "ノートブック上で共同作業を行う"
 msgid "Share from %s (%s)"
 msgstr "%s = %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "ノートブックを共有"
 
@@ -5639,7 +5639,7 @@ msgid ""
 "Cloud or Joplin Server."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "ノートブックを共有中..."
 
@@ -5647,7 +5647,7 @@ msgstr "ノートブックを共有中..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "CLIモードではショートカットは使用できません。"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "詳細設定を表示する"
 
@@ -6117,7 +6117,7 @@ msgstr "同期先: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "同期"
 
@@ -6135,7 +6135,7 @@ msgstr "リモート保存領域と同期します。"
 msgid "Synchronising..."
 msgstr "同期中..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "同期中..."
 
@@ -6240,7 +6240,7 @@ msgstr "アプリケーションは問題なく認証されました。"
 msgid "The application must be restarted for these changes to take effect."
 msgstr "変更を反映するにはアプリケーションを再起動する必要があります。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6299,13 +6299,13 @@ msgstr ""
 "えば、係数が2の表示項目は、係数が1の項目の2倍の大きさで表示されます。係数の変"
 "更はアプリケーションの再起動後に反映されます。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 #, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "下記の添付ファイルが変更されたかどうかを監視中です:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "下記の添付ファイルが変更されたかどうかを監視中です:"
 
@@ -6397,7 +6397,7 @@ msgstr "ノートはインポートされました：%s"
 msgid "The possible commands are:"
 msgstr "有効なコマンドは："
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6645,7 +6645,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "このノートに履歴はありません"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6951,7 +6951,7 @@ msgstr "新しいタグを入力するか、リストから選択してくださ
 msgid "Type: %s."
 msgstr "種類: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 #, fuzzy
 msgid "Unable to edit resource of type %s"
 msgstr "データをエクスポートまたは共有できません。理由: %s"
@@ -6960,7 +6960,7 @@ msgstr "データをエクスポートまたは共有できません。理由: %
 msgid "Unable to share log data. Reason: %s"
 msgstr "ログを共有できません。理由: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 #, fuzzy
 msgid "Unable to share note data. Reason: %s"
 msgstr "ログを共有できません。理由: %s"
@@ -7030,7 +7030,7 @@ msgstr "ノートの公開を停止"
 msgid "Unpublish note"
 msgstr "ノートの公開を停止"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "共有を解除"
 
@@ -7040,7 +7040,7 @@ msgid ""
 "notebook."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -7048,7 +7048,7 @@ msgstr ""
 "このノートブックの共有を解除しますか? 解除後は招待の受信者がノートブックにア"
 "クセスできなくなります。"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "サポートされていない画像の形式: %s"
 
@@ -7065,7 +7065,7 @@ msgid ""
 msgstr "次のリンクまたはメッセージはサポートしていません: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "名称未設定"
@@ -7123,7 +7123,7 @@ msgstr "更新: "
 msgid "Updated: %d."
 msgstr "アップデート: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "更新日時: %s"
 
@@ -7254,7 +7254,7 @@ msgstr "表示"
 msgid "View OCR text"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "地図上に表示"
 
@@ -7296,7 +7296,7 @@ msgstr "音声入力言語ファイル (URL)"
 msgid "Voice typing: Glossary"
 msgstr "音声入力: 用語集"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "音声入力…"
@@ -7434,14 +7434,14 @@ msgid "yes"
 msgstr "はい"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Yes"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

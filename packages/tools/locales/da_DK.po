@@ -62,7 +62,7 @@ msgstr "(Skrivebeskyttet)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Du kan deaktivere denne prompt i indstillingerne)"
@@ -396,7 +396,7 @@ msgid "Action"
 msgstr "Handling"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Handlinger"
@@ -410,7 +410,7 @@ msgstr "Aktiv"
 msgid "Actual Size"
 msgstr "Faktisk størrelse"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Tilføj brødtekst"
 
@@ -428,7 +428,7 @@ msgstr "Tilføj ny"
 msgid "Add or remove tags:"
 msgstr "Tilføj eller fjern etiketter:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Tilføj modtager:"
 
@@ -441,7 +441,7 @@ msgstr "Tilføj ny"
 msgid "Add tags:"
 msgstr "Tilføj etiketter:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Tilføj titel"
 
@@ -608,7 +608,7 @@ msgid "Application"
 msgstr "Program"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Anvend"
 
@@ -675,7 +675,7 @@ msgstr "Vedhæft fil"
 msgid "Attach photo"
 msgstr "Vedhæft foto"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Vedhæft..."
 
@@ -683,8 +683,8 @@ msgstr "Vedhæft..."
 msgid "Attaches the given file to the note."
 msgstr "Vedhæfter valgt fil til noten."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "vedhæftning"
 
@@ -840,7 +840,7 @@ msgstr "Kan se og redigere"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -855,8 +855,8 @@ msgstr "Kan se og redigere"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -955,7 +955,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan ikke flytte note til \"%s\" notesbog"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Kan ikke flytte notesbogen til denne placering"
 
@@ -967,11 +967,11 @@ msgstr ""
 "Kan ikke genindlæse token: Godkendelsesdata mangler. Prøv at starte "
 "synkronisering igen, det kan måske løse problemet."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr "Kan ikke gemme %s \"%s\" da den er større end den tilladte grænse (%s)"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -979,7 +979,7 @@ msgstr ""
 "Kan ikke gemme %s \"%s\" da den vil overskride den tilladte størrelse (%s) "
 "for denne konto"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -989,7 +989,7 @@ msgstr ""
 "aktiveret end-to-end-kryptering. De kan gøre det i Indstillinger > "
 "Kryptering."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "Bogstavstørrelse har betydning"
 
@@ -1102,13 +1102,13 @@ msgid "close"
 msgstr "luk"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1163,7 +1163,7 @@ msgstr "Kode"
 msgid "Code Block"
 msgstr "Kode blok"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Kodevisning"
 
@@ -1184,8 +1184,8 @@ msgstr "Samarbejd med andre om notesbøger"
 msgid "Collapse all notebooks"
 msgstr "Luk alle notesbøger"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Collapse title"
 msgstr "Fold %s sammen"
@@ -1349,7 +1349,7 @@ msgstr "Fortsæt"
 msgid "Control character"
 msgstr "Kontroltegn"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 msgid "Convert it"
 msgstr "Konverter den"
 
@@ -1357,11 +1357,11 @@ msgstr "Konverter den"
 msgid "Convert note to Markdown"
 msgstr "Konverter note til Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Konverter til note"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Konverter til opgave"
 
@@ -1384,7 +1384,7 @@ msgstr "Kopier udviklertilstand-kommando til udklipsholderen"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Kopiér eksternt link"
 
@@ -1402,7 +1402,7 @@ msgid "Copy link to website"
 msgstr "Kopiér link til hjemmeside"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Kopier markdown link"
 
@@ -1569,7 +1569,7 @@ msgid "Created: %d."
 msgstr "Oprettet: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Oprettet: %s"
 
@@ -1719,7 +1719,7 @@ msgstr "Standard: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1743,7 +1743,7 @@ msgid "Delete expired tokens"
 msgstr "Slet udløbne tokens"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 msgid "Delete history"
 msgstr "Slet historik"
 
@@ -1794,7 +1794,7 @@ msgstr ""
 "Hvis du sletter indbakke-notesbogen, kan e-mails, der for nylig er blevet "
 "sendt til den, gå tabt."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2021,7 +2021,7 @@ msgstr ""
 "Tillad ikke modtageren af delingen at skrive til den delte notesbog. Gælder "
 "kun for underkommandoen `tilføj`."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr "Vis ikke denne besked igen"
 
@@ -2078,16 +2078,16 @@ msgstr "Downloader ressource..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "Tegn billede"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Tegner"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Slip noter eller filer her"
 
@@ -2141,18 +2141,18 @@ msgstr "Varighed: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Redigér"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Rediger som Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Rediger som Rich Text"
 
@@ -2426,11 +2426,11 @@ msgstr ""
 "Slås kryptering fra vil *alle* dine noter og vedhæftninger blive re-"
 "synkroniseret og sendt ukrypteret til synk-modtageren."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Krypteret"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "Krypteret emner kan ikke rettes"
 
@@ -2566,8 +2566,8 @@ msgstr "Udvid %s"
 msgid "Expand all notebooks"
 msgstr "Udvid alle notesbøger"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Expand title"
 msgstr "Udvidet"
@@ -2707,7 +2707,7 @@ msgstr "Filtrér"
 msgid "Find"
 msgstr "Find"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "Find: "
 
@@ -2872,7 +2872,7 @@ msgid "Go to line"
 msgstr "Gå til line"
 
 # Kilde-URL er en dårlig oversættelse
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Gå til kilde-URL"
 
@@ -2900,7 +2900,7 @@ msgstr "Overskrift"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Hjælp"
@@ -2917,7 +2917,7 @@ msgstr "Hermes aktiveret: %d"
 msgid "Hide %s"
 msgstr "Skjul %s"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "Skjul avancerede"
 
@@ -3148,7 +3148,7 @@ msgstr "For at bruge Web-Clipperen skal du gøre følgende:"
 msgid "In progress"
 msgstr "I gang"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "I: %s"
 
@@ -3364,7 +3364,7 @@ msgstr "Joplin Mobil"
 msgid "Joplin Server"
 msgstr "Joplin server"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 #, fuzzy
 msgid "Joplin Server (SAML)"
 msgstr "Joplin Server URL"
@@ -3395,7 +3395,7 @@ msgstr "Joplin Server URL"
 msgid "Joplin SSO Authentication"
 msgstr "Joplin SSO-godkendelse"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -3962,7 +3962,7 @@ msgstr "næste"
 msgid "Next"
 msgstr "Næste"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "Næste match"
 
@@ -3987,8 +3987,8 @@ msgid "no"
 msgstr "nej"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4027,7 +4027,7 @@ msgstr "Ingen ressourcer!"
 msgid "No results"
 msgstr "Ingen resultater"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 msgid "No revision selected"
 msgstr "Ingen revision valgt"
 
@@ -4096,8 +4096,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "note"
 
@@ -4136,7 +4136,7 @@ msgstr "Noteeditor"
 msgid "Note has been saved."
 msgstr "Note gemt."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "Notehistorik"
 
@@ -4231,7 +4231,7 @@ msgstr "Notesbog: %s (%s)"
 msgid "Notebooks"
 msgstr "Notesbøger"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notesbøger kan ikke navngives \"%s\", da det er en reserveret titel."
 
@@ -4275,7 +4275,7 @@ msgstr "OCR: Søg i udtrukket indhold"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4559,7 +4559,7 @@ msgstr ""
 "Indtast din adgangskode i hovednøglelisten nedenfor før opgradering af "
 "nøglen."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4580,7 +4580,7 @@ msgstr ""
 "mappe. Den får ingen adgang til filer udenfor denne mappe, heller ikke til "
 "andre persondata. Ingen data deles med nogen tredjepart."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr "Angiv modtagerens e-mail"
 
@@ -4612,7 +4612,7 @@ msgstr "Angiv hvilken notesbog, noterne skal importeres til."
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr "Opgrader Joplin til version %s eller nyere for at bruge dette plugin."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4732,11 +4732,11 @@ msgstr "Klik for at gemme dekrypterings-adgangskodeord."
 msgid "previous"
 msgstr "forrige"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Forrige match"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 msgid "Previous versions"
 msgstr "Tidligere versioner"
 
@@ -4800,7 +4800,7 @@ msgstr "Profil-version: %s"
 msgid "Profiles"
 msgstr "Profiler"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Egenskaber"
 
@@ -4843,7 +4843,7 @@ msgstr "Publicer noter"
 msgid "Publish notes to the internet"
 msgstr "Udgiv noter til internettet"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr "Publicer/afpublicer"
 
@@ -4904,19 +4904,19 @@ msgstr "Læsetid: %s min"
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr "Det er kun muligt at læse kommandoer fra standardinput i CLI-tilstand."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "Modtageren har accepteret invitationen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Modtager har endnu ikke accepteret invitationen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "Modtageren har afslået invitationen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Modtagere:"
 
@@ -4962,7 +4962,7 @@ msgstr "Gentag"
 msgid "Refresh"
 msgstr "Opfrisk"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "Almindeligt udtryk"
 
@@ -4984,7 +4984,7 @@ msgstr "Fjern"
 msgid "Remove %s"
 msgstr "Fjern %s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 msgid "Remove %s from share"
 msgstr "Fjern %s fra deling"
 
@@ -5034,7 +5034,7 @@ msgid "replace"
 msgstr "erstat"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "Erstat"
 
@@ -5042,15 +5042,15 @@ msgstr "Erstat"
 msgid "replace all"
 msgstr "erstat alt"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "Erstat alt"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "Erstat med..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "Erstat: "
 
@@ -5117,8 +5117,8 @@ msgstr "Genstart nu"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Gendan"
@@ -5177,7 +5177,7 @@ msgstr "Omvendt sorteringsorden"
 msgid "Reverses the sorting order."
 msgstr "Modsat sortering."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Revision:"
 
@@ -5270,7 +5270,7 @@ msgstr "Gem ændringer?"
 msgid "Save geo-location with notes"
 msgstr "Gem geo-lokation i noter"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 #, fuzzy
 msgid "Save geolocation?"
 msgstr "Gem geo-lokation i noter"
@@ -5301,7 +5301,7 @@ msgstr "Søg"
 msgid "Search for plugins..."
 msgstr "Søg efter udvidelser..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "Søg efter..."
 
@@ -5358,7 +5358,7 @@ msgstr "Se for-udgivelsessiden for yderligere information: %s"
 msgid "Select"
 msgstr "Vælg"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 msgid "Select a revision..."
 msgstr "Vælg en revision..."
 
@@ -5421,7 +5421,7 @@ msgid "Server is running on port %d"
 msgstr "Serveren kører på port %d"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Indstil alarm"
@@ -5459,10 +5459,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Indstillinger"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Del"
 
@@ -5483,7 +5483,7 @@ msgstr "Del en notesbog med andre"
 msgid "Share from %s (%s)"
 msgstr "Deling fra %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Del notesbog"
 
@@ -5511,7 +5511,7 @@ msgstr ""
 "Deler eller ophæver delingen af den angivne [notebook] med [user]. Kræver "
 "Joplin Cloud eller Joplin Server."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Deler notesbog..."
 
@@ -5519,7 +5519,7 @@ msgstr "Deler notesbog..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Links er ikke til rådighed i CLI-tilstand."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "Vis avancerede"
 
@@ -5977,7 +5977,7 @@ msgstr "Synkroniseringsmål: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Synkroniser"
 
@@ -5995,7 +5995,7 @@ msgstr "Synkroniserer med fjernlager."
 msgid "Synchronising..."
 msgstr "Synkroniserer..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Synkroniserer..."
 
@@ -6096,7 +6096,7 @@ msgstr "Denne app er succesfuldt godkendt."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Applikationen skal genstartes før disse ændringer kan træde i kraft."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6158,13 +6158,13 @@ msgstr ""
 "Således vil et element med en faktor 2 optage dobbelt så meget plads som et "
 "element med en faktor 1. Genstart app'en for at se ændringer."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "Følgende vedhæftede fil matcher din søgeforespørgsel:"
 msgstr[1] "Følgende vedhæftede filer matcher din søgeforespørgsel:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "Følgende vedhæftninger overvåges for ændringer:"
 
@@ -6259,7 +6259,7 @@ msgstr "Noterne er importeret: %s"
 msgid "The possible commands are:"
 msgstr "Mulige kommandoer er:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6524,7 +6524,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Denne note har ingen historie"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6833,7 +6833,7 @@ msgstr "Indtast en notetitel for at søge efter den."
 msgid "Type: %s."
 msgstr "Tast: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "Kan ikke redigere ressource af typen %s"
 
@@ -6841,7 +6841,7 @@ msgstr "Kan ikke redigere ressource af typen %s"
 msgid "Unable to share log data. Reason: %s"
 msgstr "Kan ikke dele logdata. Årsag: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 #, fuzzy
 msgid "Unable to share note data. Reason: %s"
 msgstr "Kan ikke dele logdata. Årsag: %s"
@@ -6910,7 +6910,7 @@ msgstr "Afpublicer \"%s\""
 msgid "Unpublish note"
 msgstr "Afpublicer note"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Del ikke længere"
 
@@ -6922,7 +6922,7 @@ msgstr ""
 "Ophæv deling af notesbog \"%s\"? Dette kan medføre, at andre brugere mister "
 "adgang til notesbogen."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -6930,7 +6930,7 @@ msgstr ""
 "Del ikke længere denne notesbog? Modtagerne vil ikke længere have adgang til "
 "dens indhold."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Ikke-understøttet billedtype: %s"
 
@@ -6948,7 +6948,7 @@ msgstr ""
 "Fejl: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Uden titel"
@@ -7004,7 +7004,7 @@ msgstr "Opdateret: "
 msgid "Updated: %d."
 msgstr "Opdateret %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Opdateret: %s"
 
@@ -7137,7 +7137,7 @@ msgstr "Vis"
 msgid "View OCR text"
 msgstr "Vis OCR-tekst"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Vis på kort"
 
@@ -7178,7 +7178,7 @@ msgstr "Sprogfiler til stemmeindtastning (URL)"
 msgid "Voice typing: Glossary"
 msgstr "Stemmeindtastning: Ordliste"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Stemmeindtastning..."
@@ -7320,14 +7320,14 @@ msgid "yes"
 msgstr "ja"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Ja"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

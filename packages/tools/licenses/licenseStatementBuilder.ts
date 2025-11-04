@@ -89,20 +89,35 @@ const getNotice = async (pkg: PackageInfo) => {
 	return noticeLines.join('\n\n');
 };
 
+const trimBeforeLicenseHeader = (text: string) => {
+	const header = text.match(/#+ License[\n]/i);
+	if (header) {
+		return text.substring(header.index);
+	} else {
+		return text;
+	}
+};
+
 const readLicense = async (pkg: PackageInfo) => {
 	let result = '';
 	if (pkg.licenseText && !pkg.licenses.includes('UNKNOWN')) {
 		result = pkg.licenseText;
 	}
 
+	const resolvedLicenseToReadme = pkg.licenseFile && pkg.licenseFile.match(/\/README(\.\w+)?$/);
+
 	// By default, license-checker-rseidelsohn uses the README when the license can't be
 	// found. This is often wrong, and we can do better:
-	if (pkg.path && (!pkg.licenseFile || pkg.licenseFile.match(/\/README(\.\w+)?$/))) {
+	if (pkg.path && (!pkg.licenseFile || resolvedLicenseToReadme)) {
 		result = await readOrFetchRepositoryFile(pkg, ['LICENSE', 'LICENSE.md', 'LICENSE.txt', 'MIT-LICENSE.txt']);
 	}
 
 	if (!result && pkg.licenseFile) {
 		result = await readFile(pkg.licenseFile, 'utf8');
+
+		if (resolvedLicenseToReadme) {
+			result = trimBeforeLicenseHeader(result);
+		}
 	}
 
 	return result;

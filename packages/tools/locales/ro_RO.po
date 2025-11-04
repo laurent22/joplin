@@ -67,7 +67,7 @@ msgstr "(doar citire)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Poți dezactiva această solicitare în opțiuni)"
@@ -408,7 +408,7 @@ msgid "Action"
 msgstr "Acțiune"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Acțiuni"
@@ -422,7 +422,7 @@ msgstr "Activ"
 msgid "Actual Size"
 msgstr "Dimensiunea actuală"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Adaugă corp"
 
@@ -440,7 +440,7 @@ msgstr "Adaugă un nou"
 msgid "Add or remove tags:"
 msgstr "Adaugă sau elimină etichete:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Adaugă destinatar:"
 
@@ -453,7 +453,7 @@ msgstr "Adaugă un nou"
 msgid "Add tags:"
 msgstr "Adaugă etichete:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Adaugă titlu"
 
@@ -625,7 +625,7 @@ msgid "Application"
 msgstr "Aplicație"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Aplică"
 
@@ -692,7 +692,7 @@ msgstr "Atașează fișier..."
 msgid "Attach photo"
 msgstr "Atașează imagine"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Atașează..."
 
@@ -700,8 +700,8 @@ msgstr "Atașează..."
 msgid "Attaches the given file to the note."
 msgstr "Atașează fișierul în notiță."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "atașament"
 
@@ -859,7 +859,7 @@ msgstr "Se poate vizualiza și edita"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -874,8 +874,8 @@ msgstr "Se poate vizualiza și edita"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -974,7 +974,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe „%s”"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Nu se poate muta caietul de notițe în această locație"
 
@@ -986,12 +986,12 @@ msgstr ""
 "Nu se poate reactualiza token-ul: lipsesc datele de autentificare. Este "
 "posibil ca problema să fie rezolvată prin reluarea sincronizării."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Nu se poate salva %s „%s” deoarece este mai mare decât limita permisă (%s)"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -999,7 +999,7 @@ msgstr ""
 "Nu se poate salva %s „%s” pentru că ar depăși dimensiunea totală permisă "
 "(%s) pentru acest cont"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -1009,7 +1009,7 @@ msgstr ""
 "activat criptarea end-to-end. Acesta poate face acest lucru din ecranul "
 "Configurare > Criptare."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "Case sensitive"
 
@@ -1121,13 +1121,13 @@ msgid "close"
 msgstr "închide"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1182,7 +1182,7 @@ msgstr "Cod"
 msgid "Code Block"
 msgstr "Bloc de cod"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Vizualizare code"
 
@@ -1203,8 +1203,8 @@ msgstr "Colaborează la caiete cu alte persoane"
 msgid "Collapse all notebooks"
 msgstr "Restrânge toate caietele"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Collapse title"
 msgstr "Restrânge titlul"
 
@@ -1367,7 +1367,7 @@ msgstr "Continuă"
 msgid "Control character"
 msgstr "Caracter de control"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 msgid "Convert it"
 msgstr "Convertește-o"
 
@@ -1375,11 +1375,11 @@ msgstr "Convertește-o"
 msgid "Convert note to Markdown"
 msgstr "Convertește notița în Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Convertește în notiță"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Conversie în todo"
 
@@ -1402,7 +1402,7 @@ msgstr "Copiază comanda dev mode în clipboard"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Copiază link-ul extern"
 
@@ -1420,7 +1420,7 @@ msgid "Copy link to website"
 msgstr "Copiază legătură către website"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Copiază link-ul Markdown"
 
@@ -1587,7 +1587,7 @@ msgid "Created: %d."
 msgstr "Creat: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Creat: %s"
 
@@ -1737,7 +1737,7 @@ msgstr "Mod implicit: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1761,7 +1761,7 @@ msgid "Delete expired tokens"
 msgstr "Șterge token-urile expirate"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 msgid "Delete history"
 msgstr "Șterge istoricul"
 
@@ -1813,7 +1813,7 @@ msgstr ""
 "Dacă ștergi caietul de notițe Inbox, orice e-mail trimis recent în acesta "
 "poate fi pierdut."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2042,7 +2042,7 @@ msgstr ""
 "Nu permite destinatarii partajării să scrie în caietul comun. Valid doar "
 "pentru subcomanda `add`."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr "Nu mai afișa acest mesaj"
 
@@ -2099,16 +2099,16 @@ msgstr "Se descarcă resursele..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "Desenează imagine"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Desen"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Plasează notițe sau fișiere aici"
 
@@ -2162,18 +2162,18 @@ msgstr "Durată: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Editează"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Editează ca Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Editează ca text îmbogățit"
 
@@ -2447,11 +2447,11 @@ msgstr ""
 "Activarea criptării înseamnă că *toate* notele și atașamentele dvs. vor fi "
 "resincronizate și trimise criptate către destinația de sincronizare."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Criptat"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "Elementele criptate nu pot fi editate"
 
@@ -2588,8 +2588,8 @@ msgstr "Extinde %s"
 msgid "Expand all notebooks"
 msgstr "Extinde toate caietele"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Expand title"
 msgstr "Extinde titlul"
 
@@ -2729,7 +2729,7 @@ msgstr "Filtrează"
 msgid "Find"
 msgstr "Găsește"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "Găsește: "
 
@@ -2895,7 +2895,7 @@ msgstr "Mergi la profilul Joplin Cloud"
 msgid "Go to line"
 msgstr "Mergi la linia"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Mergi la URL-ul sursă"
 
@@ -2923,7 +2923,7 @@ msgstr "Titlu"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Ajutor"
@@ -2940,7 +2940,7 @@ msgstr "Hermes activat: %d"
 msgid "Hide %s"
 msgstr "Ascunde %s"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "Ascunde avansat"
 
@@ -3176,7 +3176,7 @@ msgstr "Pentru a utiliza web clipper, trebuie să faci următoarele:"
 msgid "In progress"
 msgstr "În progres"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "În: %s"
 
@@ -3392,7 +3392,7 @@ msgstr "Joplin mobil"
 msgid "Joplin Server"
 msgstr "Server Joplin"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 msgid "Joplin Server (SAML)"
 msgstr "Server Joplin (SAML)"
 
@@ -3422,7 +3422,7 @@ msgstr "URL server Joplin"
 msgid "Joplin SSO Authentication"
 msgstr "Autentificare SSO Joplin"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -3997,7 +3997,7 @@ msgstr "următoarea"
 msgid "Next"
 msgstr "Urnătorul"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "Următoarea potrivire"
 
@@ -4022,8 +4022,8 @@ msgid "no"
 msgstr "nu"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4064,7 +4064,7 @@ msgstr "Fără resurse!"
 msgid "No results"
 msgstr "Fără rezultate"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 msgid "No revision selected"
 msgstr "Nicio revizie selectată"
 
@@ -4131,8 +4131,8 @@ msgstr "Nu este utilă"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "notiță"
 
@@ -4171,7 +4171,7 @@ msgstr "Editor notiță"
 msgid "Note has been saved."
 msgstr "Notița a fost salvată."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "Istoric notiță"
 
@@ -4264,7 +4264,7 @@ msgstr "Caiet: %s (%s)"
 msgid "Notebooks"
 msgstr "Caiete"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Caietele nu pot fi denumite „%s” deoarece este un titlu rezervat."
 
@@ -4309,7 +4309,7 @@ msgstr "OCR: Caută în conținutul extras"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4596,7 +4596,7 @@ msgstr ""
 "Te rog să îți introduci parola în lista de chei principale de mai jos "
 "înainte de a-ți actualiza cheia."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4619,7 +4619,7 @@ msgstr ""
 "acestui dosar și nici la alte date personale. Nu se vor partaja date cu "
 "nicio terță parte."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr "Te rog furnizează adresa de e-mail a destinatarului"
 
@@ -4653,7 +4653,7 @@ msgstr ""
 "Te rog să actualizezi Joplin la versiunea %s sau mai nouă pentru a utiliza "
 "acest plugin."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4775,11 +4775,11 @@ msgstr "Apasă pentru a seta parola de decriptare."
 msgid "previous"
 msgstr "anterioara"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Potrivirea anterioară"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 msgid "Previous versions"
 msgstr "Versiuni anterioare"
 
@@ -4843,7 +4843,7 @@ msgstr "Versiune profil: %s"
 msgid "Profiles"
 msgstr "Profiluri"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Proprietăți"
 
@@ -4885,7 +4885,7 @@ msgstr "Publică notițele"
 msgid "Publish notes to the internet"
 msgstr "Publică notițele pe internet"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr "Publică/Retrage"
 
@@ -4947,19 +4947,19 @@ msgstr ""
 "Citirea comenzilor de la intrarea standard este disponibilă doar în modul "
 "CLI."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "Destinatarul a acceptat invitația"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Destinatarul nu a acceptat încă invitația"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "Destinatarul a respins invitația"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Destinatari:"
 
@@ -5004,7 +5004,7 @@ msgstr "Refă"
 msgid "Refresh"
 msgstr "Reîmprospătează"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "Expresie regulată"
 
@@ -5026,7 +5026,7 @@ msgstr "Șterge"
 msgid "Remove %s"
 msgstr "Șterge %s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 msgid "Remove %s from share"
 msgstr "Elimină %s din partajare"
 
@@ -5076,7 +5076,7 @@ msgid "replace"
 msgstr "înlocuiește"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "Înlocuiește"
 
@@ -5084,15 +5084,15 @@ msgstr "Înlocuiește"
 msgid "replace all"
 msgstr "înlocuiește toate"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "Înlocuiește toate"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "Înlocuiește cu…"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "Înlocuiește: "
 
@@ -5159,8 +5159,8 @@ msgstr "Repornește acum"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Restaurează"
@@ -5220,7 +5220,7 @@ msgstr "Inversează ordinea sortării"
 msgid "Reverses the sorting order."
 msgstr "Inversează ordinea sortării."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Revizie:"
 
@@ -5314,7 +5314,7 @@ msgstr "Salvezi schimbările?"
 msgid "Save geo-location with notes"
 msgstr "Salvează geo-locația în notițe"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 msgid "Save geolocation?"
 msgstr "Salvezi geo-locația?"
 
@@ -5344,7 +5344,7 @@ msgstr "Caută"
 msgid "Search for plugins..."
 msgstr "Caută plugin-uri…"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "Caută după…"
 
@@ -5401,7 +5401,7 @@ msgstr "Pentru mai multe detalii, consultă pagina de pre-release: %s"
 msgid "Select"
 msgstr "Selectează"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 msgid "Select a revision..."
 msgstr "Alege o revizie…"
 
@@ -5464,7 +5464,7 @@ msgid "Server is running on port %d"
 msgstr "Serverul rulează pe portul %d"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Setează alarma"
@@ -5502,10 +5502,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Setări"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Distribuie"
 
@@ -5526,7 +5526,7 @@ msgstr "Partajează un caiet cu alții"
 msgid "Share from %s (%s)"
 msgstr "Partajează din %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Partajează caiet"
 
@@ -5554,7 +5554,7 @@ msgstr ""
 "Partajează sau anulează partajarea pentru [caietul] specificat cu "
 "[utilizatorul]. Necesită Joplin Cloud sau server Joplin."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Se partajează caietul..."
 
@@ -5562,7 +5562,7 @@ msgstr "Se partajează caietul..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Scurtăturile nu sunt disponibile în modul CLI."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "Afișează avansat"
 
@@ -6031,7 +6031,7 @@ msgstr "Destinație sincronizare: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Sincronizează"
 
@@ -6049,7 +6049,7 @@ msgstr "Sincronizarea cu stocarea de la distanță."
 msgid "Synchronising..."
 msgstr "Se sincronizează..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Se sincronizează..."
 
@@ -6157,7 +6157,7 @@ msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 "Aplicația trebuie repornită pentru ca aceste modificări să intre în vigoare."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6220,14 +6220,14 @@ msgstr ""
 "de două ori mai mult spațiu decât un element cu un factor de 1. Repornește "
 "aplicația pentru a vedea modificările."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "Următorul atașament corespunde căutării tale:"
 msgstr[1] "Următoarele atașamente corespund căutării tale:"
 msgstr[2] "Următoarele atașamente corespund căutării tale:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "Următoarele atașamente sunt urmărite pentru modificări:"
 
@@ -6324,7 +6324,7 @@ msgstr "Notițele au fost importante: %s"
 msgid "The possible commands are:"
 msgstr "Comenzile posibile sunt:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6601,7 +6601,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Această notă nu are istoric"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6917,7 +6917,7 @@ msgstr "Tastează un titlu de notiță pentru a-l căuta."
 msgid "Type: %s."
 msgstr "Tip: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "Nu se poate edita resursa de tip %s"
 
@@ -6925,7 +6925,7 @@ msgstr "Nu se poate edita resursa de tip %s"
 msgid "Unable to share log data. Reason: %s"
 msgstr "Imposibil de a partaja datele din jurnal. Motivul: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 msgid "Unable to share note data. Reason: %s"
 msgstr "Imposibil de a partaja datele din notiță. Motivul: %s"
 
@@ -6993,7 +6993,7 @@ msgstr "Retrage publicarea pentru „%s”"
 msgid "Unpublish note"
 msgstr "Notă de retragere a publicării"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Unsoare"
 
@@ -7005,7 +7005,7 @@ msgstr ""
 "Retragi partajarea pentru caietul „%s”? Acest lucru va face ca alți "
 "utilizatori să piardă accesul la caiet."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -7013,7 +7013,7 @@ msgstr ""
 "Anulezi partajarea acestui caiet? Destinatarii nu vor mai avea acces la "
 "conținutul acestuia."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Tip de imagine neacceptat: %s"
 
@@ -7031,7 +7031,7 @@ msgstr ""
 "Eroare: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Fără nume"
@@ -7087,7 +7087,7 @@ msgstr "Actualizat: "
 msgid "Updated: %d."
 msgstr "Actualizat: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Actualizat: %s"
 
@@ -7222,7 +7222,7 @@ msgstr "Vizualizează"
 msgid "View OCR text"
 msgstr "Vizualizează textul OCR"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Vizualizează pe hartă"
 
@@ -7263,7 +7263,7 @@ msgstr "Fișiere de limbă de tastare vocală (URL)"
 msgid "Voice typing: Glossary"
 msgstr "Transcriere vocală: Glosar"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Tastarea vocală…"
@@ -7408,14 +7408,14 @@ msgid "yes"
 msgstr "da"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Da"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

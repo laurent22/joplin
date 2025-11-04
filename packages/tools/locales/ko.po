@@ -65,7 +65,7 @@ msgstr ""
 msgid "(wysiwyg: %s)"
 msgstr "(위지윅: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(옵션에서 이 프롬프트를 비활성화할 수 있습니다)"
@@ -406,7 +406,7 @@ msgid "Action"
 msgstr "동작"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "동작"
@@ -420,7 +420,7 @@ msgstr "활성"
 msgid "Actual Size"
 msgstr "실제 크기"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "내용 추가"
 
@@ -438,7 +438,7 @@ msgstr "새로 추가"
 msgid "Add or remove tags:"
 msgstr "태그 추가 및 제거:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "받는 사람 추가:"
 
@@ -452,7 +452,7 @@ msgstr "새로 추가"
 msgid "Add tags:"
 msgstr "새 태그:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "제목 추가"
 
@@ -619,7 +619,7 @@ msgid "Application"
 msgstr "애플리케이션"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "적용"
 
@@ -680,7 +680,7 @@ msgstr "파일 첨부"
 msgid "Attach photo"
 msgstr "사진 첨부"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "첨부..."
 
@@ -688,8 +688,8 @@ msgstr "첨부..."
 msgid "Attaches the given file to the note."
 msgstr "주어진 파일을 노트에 첨부합니다."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "첨부"
 
@@ -845,7 +845,7 @@ msgstr "조회&편집 가능"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -860,8 +860,8 @@ msgstr "조회&편집 가능"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -958,7 +958,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "노트를 \"%s\" 노트북으로 옮길 수 없습니다"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "노트북을 이 위치로 옮길 수 없습니다"
 
@@ -970,12 +970,12 @@ msgstr ""
 "인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시"
 "도하면 문제가 해결될 수 있습니다."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "%s \"%s\"(이)가 허용된 제한 크기(%s)보다 크기 때문에 저장할 수 없습니다"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -983,7 +983,7 @@ msgstr ""
 "%s \"%s\"(이)가 이 계정에 허용된 사용량(%s)을 초과했기 때문에 저장할 수 없습"
 "니다"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -992,7 +992,7 @@ msgstr ""
 "종단간 암호화가 활성화되어 있지 않기 때문에 암호화된 노트북을 공유할 수 없습"
 "니다. 설정 > 암호화 화면에서 설정할 수 있습니다."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "대소문자 구분"
 
@@ -1109,13 +1109,13 @@ msgid "close"
 msgstr "닫기"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1170,7 +1170,7 @@ msgstr "코드"
 msgid "Code Block"
 msgstr "코드 블록"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "코드 보기"
 
@@ -1193,8 +1193,8 @@ msgstr "다른 사람과 노트북들에서 협업하기"
 msgid "Collapse all notebooks"
 msgstr "새 노트북을 만듭니다"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Collapse title"
 msgstr "무너지다"
@@ -1358,7 +1358,7 @@ msgstr "계속"
 msgid "Control character"
 msgstr "문자"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 #, fuzzy
 msgid "Convert it"
 msgstr "노트로 변환"
@@ -1368,11 +1368,11 @@ msgstr "노트로 변환"
 msgid "Convert note to Markdown"
 msgstr "목록으로 변환"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "노트로 변환"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "목록으로 변환"
 
@@ -1395,7 +1395,7 @@ msgstr "개발자 모드 명령을 클립보드에 복사"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "외부 링크 복사"
 
@@ -1413,7 +1413,7 @@ msgid "Copy link to website"
 msgstr "웹사이트 링크 복사"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "마크다운 링크 복사"
 
@@ -1582,7 +1582,7 @@ msgid "Created: %d."
 msgstr "생성됨: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "생성됨: %s"
 
@@ -1737,7 +1737,7 @@ msgstr "기본값:  %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1761,7 +1761,7 @@ msgid "Delete expired tokens"
 msgstr "만료된 토큰을 제거"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 #, fuzzy
 msgid "Delete history"
 msgstr "노트 변경 이력 활성화"
@@ -1813,7 +1813,7 @@ msgstr ""
 "인박스 노트북을 삭제하면 최근에 해당 노트북으로 전송된 모든 이메일이 손실될 "
 "수 있습니다."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2042,7 +2042,7 @@ msgid ""
 "for the `add` subcommand."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr ""
 
@@ -2100,16 +2100,16 @@ msgstr "리소스 내려받는 중..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "그림 그리기"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "그리는 중"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "노트나 파일을 여기에 끌어놓습니다"
 
@@ -2165,19 +2165,19 @@ msgstr "현재 버전: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "편집"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 #, fuzzy
 msgid "Edit as Markdown"
 msgstr "마크다운"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr ""
 
@@ -2452,11 +2452,11 @@ msgstr ""
 "암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로 암"
 "호화되어 전송됩니다."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "암호화됨"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "암호화된 항목은 변경될 수 없습니다"
 
@@ -2599,8 +2599,8 @@ msgstr "확장"
 msgid "Expand all notebooks"
 msgstr "노트북 편집"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Expand title"
 msgstr "확장"
@@ -2740,7 +2740,7 @@ msgstr "필터"
 msgid "Find"
 msgstr "찾기: "
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "찾기: "
 
@@ -2899,7 +2899,7 @@ msgstr "Joplin 클라우드 로그인"
 msgid "Go to line"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "소스 URL로 이동"
 
@@ -2927,7 +2927,7 @@ msgstr "표제"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "도움말"
@@ -2944,7 +2944,7 @@ msgstr "Hermes 사용: %d"
 msgid "Hide %s"
 msgstr "%s 숨기기"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "고급 숨기기"
 
@@ -3175,7 +3175,7 @@ msgstr "웹 수집기를 사용하려면 다음 절차를 따라주세요:"
 msgid "In progress"
 msgstr "진행 중"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "내부: %s"
 
@@ -3399,7 +3399,7 @@ msgstr "Joplin 웹사이트"
 msgid "Joplin Server"
 msgstr "Joplin 서버"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 #, fuzzy
 msgid "Joplin Server (SAML)"
 msgstr "Joplin 서버 URL"
@@ -3432,7 +3432,7 @@ msgstr "Joplin 서버 URL"
 msgid "Joplin SSO Authentication"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -4014,7 +4014,7 @@ msgstr ""
 msgid "Next"
 msgstr "Nextcloud"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "다음 매치"
 
@@ -4039,8 +4039,8 @@ msgid "no"
 msgstr "아니오"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4079,7 +4079,7 @@ msgstr "없는 리소스입니다!"
 msgid "No results"
 msgstr "결과 없음"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 #, fuzzy
 msgid "No revision selected"
 msgstr "선택된 노트북이 없습니다."
@@ -4151,8 +4151,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "노트"
 
@@ -4191,7 +4191,7 @@ msgstr "노트 편집기"
 msgid "Note has been saved."
 msgstr "노트가 저장되었습니다."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 #, fuzzy
 msgid "Note history"
 msgstr "노트 역사"
@@ -4289,7 +4289,7 @@ msgstr "노트북: %s"
 msgid "Notebooks"
 msgstr "노트북"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "노트북 제목을 \"%s\" 으로 정할 수 없습니다. 이미 예약 중입니다."
 
@@ -4336,7 +4336,7 @@ msgstr "모든 노트에서 검색"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4629,7 +4629,7 @@ msgid ""
 msgstr ""
 "키를 업그레이드하기 전에 마스터 키 목록에 있는 비밀번호를 입력하십시오."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4648,7 +4648,7 @@ msgstr ""
 "입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 "
 "데이터는 제3자와 공유되지 않습니다."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr ""
 
@@ -4681,7 +4681,7 @@ msgstr "노트를 가져와서 저장할 노트북을 지정해주세요."
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr "이 플러그인을 사용하기 위해서는 Joplin을 업그레이드해야 합니다"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4802,11 +4802,11 @@ msgstr "복호화 암호를 설정하려면 누르세요."
 msgid "previous"
 msgstr "이전 매치"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "이전 매치"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 #, fuzzy
 msgid "Previous versions"
 msgstr "노트의 이전 버전들"
@@ -4872,7 +4872,7 @@ msgstr "프로파일 버전: %s"
 msgid "Profiles"
 msgstr "프로파일"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "속성"
 
@@ -4916,7 +4916,7 @@ msgstr "노트 발행"
 msgid "Publish notes to the internet"
 msgstr "인터넷에 노트를 발행합니다"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr ""
 
@@ -4981,19 +4981,19 @@ msgstr "읽기 시간: %s 분"
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr "\"%s\" 명령어는 그래픽 인터페이스 모드에서만 사용 가능합니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "공유 수신자가 초대를 승락하였습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "공유 수신자가 아직 초대를 수락하지 않았습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "공유 수신자가 초대를 거부했습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "공유 수신자:"
 
@@ -5043,7 +5043,7 @@ msgstr "다시 실행"
 msgid "Refresh"
 msgstr "새로고침"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "정규식"
 
@@ -5067,7 +5067,7 @@ msgstr "삭제"
 msgid "Remove %s"
 msgstr "삭제"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 #, fuzzy
 msgid "Remove %s from share"
 msgstr "모든 노트에서 “%s” 태그를 제거할까요?"
@@ -5121,7 +5121,7 @@ msgid "replace"
 msgstr "바꾸기"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "바꾸기"
 
@@ -5130,15 +5130,15 @@ msgstr "바꾸기"
 msgid "replace all"
 msgstr "모두 바꾸기"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "모두 바꾸기"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "다음으로 바꾸기..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "바꾸기: "
 
@@ -5207,8 +5207,8 @@ msgstr "지금 재시작"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "복원"
@@ -5268,7 +5268,7 @@ msgstr "정렬 순서 반전"
 msgid "Reverses the sorting order."
 msgstr "정렬 순서를 바꿉니다."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 #, fuzzy
 msgid "Revision:"
 msgstr "개정판: %s (%s)"
@@ -5362,7 +5362,7 @@ msgstr "변경 사항을 저장하시겠습니까?"
 msgid "Save geo-location with notes"
 msgstr "노트에 지리적 위치 정보 포함시키기"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 #, fuzzy
 msgid "Save geolocation?"
 msgstr "노트에 지리적 위치 정보 포함시키기"
@@ -5394,7 +5394,7 @@ msgstr "검색"
 msgid "Search for plugins..."
 msgstr "플러그인 찾기..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "검색하기..."
 
@@ -5454,7 +5454,7 @@ msgstr "자세한 내용은 사전-출시 페이지를 참조해주세요: %s"
 msgid "Select"
 msgstr "선택"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 #, fuzzy
 msgid "Select a revision..."
 msgstr "이모지 선택..."
@@ -5522,7 +5522,7 @@ msgid "Server is running on port %d"
 msgstr "서버가 %d 포트에서 동작하고 있습니다"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "알람 설정"
@@ -5558,10 +5558,10 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "공유"
 
@@ -5582,7 +5582,7 @@ msgstr "다른 사람과 노트북을 공유하기"
 msgid "Share from %s (%s)"
 msgstr "%s = %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "노트북 공유"
 
@@ -5610,7 +5610,7 @@ msgid ""
 "Cloud or Joplin Server."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "노트북을 공유하는 중..."
 
@@ -5618,7 +5618,7 @@ msgstr "노트북을 공유하는 중..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "바로가기는 명령줄 인터페이스 모드에서는 사용할 수 없습니다."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "고급 보이기"
 
@@ -6083,7 +6083,7 @@ msgstr "동기화 대상: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "동기화"
 
@@ -6101,7 +6101,7 @@ msgstr "원격 저장소와 동기화 합니다."
 msgid "Synchronising..."
 msgstr "동기화 중..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "동기화 중..."
 
@@ -6202,7 +6202,7 @@ msgstr "애플리케이션이 성공적으로 허가되었습니다."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "변경 사항이 적용되려면 애플리케이션이 반드시 재시작되어야 합니다."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6258,12 +6258,12 @@ msgstr ""
 "많은 공간을 차지하게 될 것입니다. 변경은 애플리케이션을 재시작한 후에 적용됩"
 "니다."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "다음 첨부 파일은 검색어와 일치합니다:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "다음 첨부 파일들이 변경되었는지 감시하고 있습니다:"
 
@@ -6352,7 +6352,7 @@ msgstr "노트를 가져왔습니다: %s"
 msgid "The possible commands are:"
 msgstr "가능한 명령어는 다음과 같습니다:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6603,7 +6603,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "이 노트의 변경 내역이 없습니다"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6908,7 +6908,7 @@ msgstr "새 태그를 입력하거나 목록에서 선택하세요"
 msgid "Type: %s."
 msgstr "형태: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "유형 %s 의 리소스를 편집할 수 없습니다"
 
@@ -6916,7 +6916,7 @@ msgstr "유형 %s 의 리소스를 편집할 수 없습니다"
 msgid "Unable to share log data. Reason: %s"
 msgstr "로그 데이터를 공유할 수 없습니다. 이유: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 #, fuzzy
 msgid "Unable to share note data. Reason: %s"
 msgstr "로그 데이터를 공유할 수 없습니다. 이유: %s"
@@ -6988,7 +6988,7 @@ msgstr "노트 발행 취소"
 msgid "Unpublish note"
 msgstr "노트 발행 취소"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "공유 해제"
 
@@ -6998,7 +6998,7 @@ msgid ""
 "notebook."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -7006,7 +7006,7 @@ msgstr ""
 "이 노트북의 공유를 해제하시겠어요? 공유 수신자들은 더 이상 해당 노트북에 접근"
 "할 수 없게 됩니다."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
 
@@ -7023,7 +7023,7 @@ msgid ""
 msgstr "지원하지 않는 링크 또는 메시지: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "제목 없음"
@@ -7081,7 +7081,7 @@ msgstr "업데이트됨: "
 msgid "Updated: %d."
 msgstr "갱신됨: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "업데이트됨: %s"
 
@@ -7214,7 +7214,7 @@ msgstr "보기"
 msgid "View OCR text"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "지도에 표시"
 
@@ -7258,7 +7258,7 @@ msgstr "음성 입력 언어 파일(URL)"
 msgid "Voice typing: Glossary"
 msgstr "음성 입력 중..."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "음성 입력 중..."
@@ -7397,14 +7397,14 @@ msgid "yes"
 msgstr "예"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "예"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

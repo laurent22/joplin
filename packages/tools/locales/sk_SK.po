@@ -6,8 +6,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin v3.5.5\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
 "Language: sk_SK\n"
@@ -64,7 +62,7 @@ msgstr "(Iba na čítanie)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Túto výzvu môžete vypnúť v možnostiach)"
@@ -404,7 +402,7 @@ msgid "Action"
 msgstr "Akcia"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Akcie"
@@ -418,7 +416,7 @@ msgstr "Aktívne"
 msgid "Actual Size"
 msgstr "Skutočná veľkosť"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Pridať telo"
 
@@ -436,7 +434,7 @@ msgstr "Pridať novú"
 msgid "Add or remove tags:"
 msgstr "Pridať alebo odstrániť štítky:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Pridať príjemcu:"
 
@@ -448,7 +446,7 @@ msgstr "Pridať riadok"
 msgid "Add tags:"
 msgstr "Pridať štítky:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Pridať názov"
 
@@ -616,7 +614,7 @@ msgid "Application"
 msgstr "Aplikácia"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Použiť"
 
@@ -683,7 +681,7 @@ msgstr "Pripojiť súbor"
 msgid "Attach photo"
 msgstr "Pripojiť fotografiu"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Pripojiť..."
 
@@ -691,8 +689,8 @@ msgstr "Pripojiť..."
 msgid "Attaches the given file to the note."
 msgstr "Pripojí daný súbor k poznámke."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "príloha"
 
@@ -848,7 +846,7 @@ msgstr "Môže prezerať a upravovať"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -863,8 +861,8 @@ msgstr "Môže prezerať a upravovať"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -963,7 +961,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nie je možné presunúť poznámku do zápisníka „%s“"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Nedá sa presunúť zápisník na toto miesto"
 
@@ -975,12 +973,12 @@ msgstr ""
 "Nie je možné obnoviť token: chýbajú autentifikačné údaje. Problém môže "
 "vyriešiť opätovné spustenie synchronizácie."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Nie je možné uložiť %s \"%s\", pretože je väčšie ako povolený limit (%s)"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -988,7 +986,7 @@ msgstr ""
 "Nie je možné uložiť %s \"%s\", pretože by to prekročilo celkovú povolenú "
 "veľkosť (%s) pre tento účet"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -998,7 +996,7 @@ msgstr ""
 "povolené end-to-end šifrovanie. Môže tak urobiť cez stránku Nastavenie > "
 "Šifrovanie."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "Rozlišujú sa malé a veľké písmená"
 
@@ -1111,13 +1109,13 @@ msgid "close"
 msgstr "zavrieť"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1172,7 +1170,7 @@ msgstr "Kód"
 msgid "Code Block"
 msgstr "Blok kódu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Zobraziť kód"
 
@@ -1193,8 +1191,8 @@ msgstr "Spolupracujte na zápisníkoch s ostatnými"
 msgid "Collapse all notebooks"
 msgstr "Zbaliť všetky zápisníky"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Collapse title"
 msgstr "Zbaliť nadpis"
 
@@ -1209,9 +1207,9 @@ msgstr "Blížiace sa budíky"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Čiarkou oddelený zoznam ciest k priečinkom, z ktorých sa majú načítať "
 "certifikáty, alebo cesta k jednotlivým súborom cert. Napríklad: /moj/"
@@ -1358,7 +1356,7 @@ msgstr "Pokračovať"
 msgid "Control character"
 msgstr "Kontrolný znak"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 msgid "Convert it"
 msgstr "Previesť ju"
 
@@ -1366,11 +1364,11 @@ msgstr "Previesť ju"
 msgid "Convert note to Markdown"
 msgstr "Previesť poznámku na Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Premeniť na poznámku"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Premeniť na úlohu"
 
@@ -1393,7 +1391,7 @@ msgstr "Kopírovať príkaz dev mode do schránky"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Kopírovať externý odkaz"
 
@@ -1411,7 +1409,7 @@ msgid "Copy link to website"
 msgstr "Kopírovať odkaz na webovú stránku"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Kopírovať odkaz Markdown"
 
@@ -1578,7 +1576,7 @@ msgid "Created: %d."
 msgstr "Vytvorené: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Vytvorené: %s"
 
@@ -1728,7 +1726,7 @@ msgstr "Predvolené: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1751,7 +1749,7 @@ msgid "Delete expired tokens"
 msgstr "Vymazať tokeny s uplynutou platnosťou"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 msgid "Delete history"
 msgstr "Vymazať históriu"
 
@@ -1801,7 +1799,7 @@ msgstr ""
 "Ak vymažete zápisník doručenej pošty, všetky e-maily, ktoré doň boli nedávno "
 "odoslané, sa môžu stratiť."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2028,7 +2026,7 @@ msgstr ""
 "Nepovoľte príjemcovi zdieľania zapisovať do zdieľaného zápisníka. Platí len "
 "pre príkaz `add`."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr "Túto správu už nezobrazovať"
 
@@ -2085,16 +2083,16 @@ msgstr "Sťahovanie zdrojov..."
 msgid "Dracula"
 msgstr "Drakula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "Nakreslite obrázok"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Náčrt"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Premiestnite sem poznámky alebo súbory"
 
@@ -2148,18 +2146,18 @@ msgstr "Dĺžka trvania: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Upraviť"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Upraviť ako Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Upraviť ako Rozšírený text"
 
@@ -2433,11 +2431,11 @@ msgstr ""
 "Zapnutie šifrovania znamená, že *všetky* vaše poznámky a prílohy budú "
 "opätovne synchronizované a odoslané zašifrované do cieľa synchronizácie."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Zašifrované"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "Zašifrované položky nie je možné upraviť"
 
@@ -2573,8 +2571,8 @@ msgstr "Rozbaliť %s"
 msgid "Expand all notebooks"
 msgstr "Rozbaliť všetky zápisníky"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Expand title"
 msgstr "Rozbaliť nadpis"
 
@@ -2715,7 +2713,7 @@ msgstr "Filter"
 msgid "Find"
 msgstr "Nájsť"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "Nájsť: "
 
@@ -2879,7 +2877,7 @@ msgstr "Prejdite na profil Joplin Cloud"
 msgid "Go to line"
 msgstr "Prejsť na riadok"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Prejsť na zdrojovú URL"
 
@@ -2907,7 +2905,7 @@ msgstr "Nadpis"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Pomoc"
@@ -2924,7 +2922,7 @@ msgstr "Hermes povolené: %d"
 msgid "Hide %s"
 msgstr "Skryť %s"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "Skryť pokročilé"
 
@@ -3155,7 +3153,7 @@ msgstr "Ak chcete používať web clipper, musíte vykonať nasledujúce kroky:"
 msgid "In progress"
 msgstr "Prebieha"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "V: %s"
 
@@ -3371,7 +3369,7 @@ msgstr "Joplin Mobil"
 msgid "Joplin Server"
 msgstr "Joplin Server"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 msgid "Joplin Server (SAML)"
 msgstr "Joplin Server (SAML)"
 
@@ -3401,7 +3399,7 @@ msgstr "URL servera Joplin"
 msgid "Joplin SSO Authentication"
 msgstr "Joplin SSO overenie"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -3976,7 +3974,7 @@ msgstr "ďalej"
 msgid "Next"
 msgstr "Ďalej"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "Ďalšia zhoda"
 
@@ -4001,8 +3999,8 @@ msgid "no"
 msgstr "nie"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4041,7 +4039,7 @@ msgstr "Žiadne zdroje!"
 msgid "No results"
 msgstr "Žiadne výsledky"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 msgid "No revision selected"
 msgstr "Nebola vybraná žiadna revízia"
 
@@ -4108,8 +4106,8 @@ msgstr "Nie je užitočné"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "pozn"
 
@@ -4148,7 +4146,7 @@ msgstr "Editor poznámok"
 msgid "Note has been saved."
 msgstr "Poznámka bola uložená."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "História poznámky"
 
@@ -4240,7 +4238,7 @@ msgstr "Zápisník: %s (%s)"
 msgid "Notebooks"
 msgstr "Zápisníky"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Zápisníky nemôžu byť pomenované ako „%s“, pretože ide o vyhradený názov."
@@ -4286,7 +4284,7 @@ msgstr "OCR: Vyhľadať v extrahovanom obsahu"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4571,7 +4569,7 @@ msgstr ""
 "Pred aktualizáciou kľúča zadajte svoje heslo do nižšie uvedeného zoznamu "
 "hlavných kľúčov."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4593,7 +4591,7 @@ msgstr ""
 "mimo tohto adresára ani k žiadnym iným osobným údajom. Žiadne údaje sa "
 "nebudú zdieľať so žiadnou treťou stranou."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr "Uveďte prosím e-mail príjemcu"
 
@@ -4627,7 +4625,7 @@ msgstr ""
 "Ak chcete používať tento doplnok, aktualizujte prosím Joplin na verziu %s "
 "alebo novšiu."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4748,11 +4746,11 @@ msgstr "Stlačte pre nastavenie dešifrovacieho hesla."
 msgid "previous"
 msgstr "predchádzajúca"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Predchádzajúca zhoda"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 msgid "Previous versions"
 msgstr "Predchádzajúce verzie"
 
@@ -4816,7 +4814,7 @@ msgstr "Verzia profilu: %s"
 msgid "Profiles"
 msgstr "Profily"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Vlastnosti"
 
@@ -4858,7 +4856,7 @@ msgstr "Zverejniť poznámky"
 msgid "Publish notes to the internet"
 msgstr "Zverejniť poznámky na internete"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr "Zverejniť/Zrušiť zverejnenie"
 
@@ -4919,19 +4917,19 @@ msgid "Reading commands from standard input is only available in CLI mode."
 msgstr ""
 "Čítanie príkazov zo štandardného vstupu je k dispozícii iba v režime CLI."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "Príjemca prijal pozvanie"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Príjemca ešte neprijal pozvanie"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "Príjemca odmietol pozvanie"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Príjemcovia:"
 
@@ -4976,7 +4974,7 @@ msgstr "Znova"
 msgid "Refresh"
 msgstr "Obnoviť"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "Regulárny výraz"
 
@@ -4998,7 +4996,7 @@ msgstr "Odstrániť"
 msgid "Remove %s"
 msgstr "Odstrániť %s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 msgid "Remove %s from share"
 msgstr "Odstrániť %s zo zdieľania"
 
@@ -5048,7 +5046,7 @@ msgid "replace"
 msgstr "nahradiť"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "Nahradiť"
 
@@ -5056,15 +5054,15 @@ msgstr "Nahradiť"
 msgid "replace all"
 msgstr "nahradiť všetko"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "Nahradiť všetko"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "Nahradiť s..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "Nahradiť: "
 
@@ -5131,8 +5129,8 @@ msgstr "Reštartovať teraz"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Obnoviť"
@@ -5191,7 +5189,7 @@ msgstr "Obrátiť poradie"
 msgid "Reverses the sorting order."
 msgstr "Obráti poradie zoradenia."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Revízia:"
 
@@ -5287,7 +5285,7 @@ msgstr "Uložiť zmeny?"
 msgid "Save geo-location with notes"
 msgstr "Uložiť geografickú polohu s poznámkami"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 msgid "Save geolocation?"
 msgstr "Uložiť geografickú polohu?"
 
@@ -5317,7 +5315,7 @@ msgstr "Hľadať"
 msgid "Search for plugins..."
 msgstr "Hľadať doplnky..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "Hľadať..."
 
@@ -5374,7 +5372,7 @@ msgstr "Viac podrobností nájdete na stránke predbežného vydania: %s"
 msgid "Select"
 msgstr "Vybrať"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 msgid "Select a revision..."
 msgstr "Vyberte revíziu..."
 
@@ -5437,7 +5435,7 @@ msgid "Server is running on port %d"
 msgstr "Server beží na porte %d"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Nastaviť budík"
@@ -5475,10 +5473,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Zdieľať"
 
@@ -5499,7 +5497,7 @@ msgstr "Zdieľajte zápisník s ostatnými"
 msgid "Share from %s (%s)"
 msgstr "Zdieľať od %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Zdieľať poznámku"
 
@@ -5527,7 +5525,7 @@ msgstr ""
 "Zdieľa alebo zruší zdieľanie zadaného [zápisníka] s [používateľom]. Vyžaduje "
 "sa Joplin Cloud alebo Joplin Server."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Zdieľanie poznámky..."
 
@@ -5535,7 +5533,7 @@ msgstr "Zdieľanie poznámky..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Skratky nie sú dostupné v režime CLI."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "Zobraziť pokročilé"
 
@@ -6000,7 +5998,7 @@ msgstr "Cieľ synchronizácie: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Synchronizovať"
 
@@ -6018,7 +6016,7 @@ msgstr "Synchronizuje sa so vzdialeným úložiskom."
 msgid "Synchronising..."
 msgstr "Synchronizuje sa..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Synchronizuje sa..."
 
@@ -6122,7 +6120,7 @@ msgstr "Aplikácia bola úspešne autorizovaná."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Aplikácia musí byť reštartovaná, aby sa tieto zmeny prejavili."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6184,14 +6182,14 @@ msgstr ""
 "položky. Teda položka s faktorom 2 zaberie dvakrát viac miesta ako položka s "
 "faktorom 1. Reštartujte aplikáciu, aby ste videli zmeny."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "Nasledujúca príloha zodpovedá vašej vyhľadávacej požiadavke:"
 msgstr[1] "Nasledujúce prílohy zodpovedajú vašej vyhľadávacej požiadavke:"
 msgstr[2] "Nasledujúce prílohy zodpovedajú vašej vyhľadávacej požiadavke:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "V nasledujúcich prílohách sa sledujú zmeny:"
 
@@ -6286,7 +6284,7 @@ msgstr "Poznámky boli importované: %s"
 msgid "The possible commands are:"
 msgstr "Možné príkazy sú:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6560,7 +6558,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Táto poznámka nemá históriu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6872,7 +6870,7 @@ msgstr "Zadaním názvu poznámky ju vyhľadáte."
 msgid "Type: %s."
 msgstr "Typ: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "Nie je možné upraviť zdroj typu %s"
 
@@ -6880,7 +6878,7 @@ msgstr "Nie je možné upraviť zdroj typu %s"
 msgid "Unable to share log data. Reason: %s"
 msgstr "Nie je možné zdieľať údaje záznamu. Dôvod: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 msgid "Unable to share note data. Reason: %s"
 msgstr "Nie je možné zdieľať údaje poznámky. Dôvod: %s"
 
@@ -6947,7 +6945,7 @@ msgstr "Zrušiť zverejnenie \"%s\""
 msgid "Unpublish note"
 msgstr "Zrušiť zverejnenie poznámky"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Zrušiť zdieľanie"
 
@@ -6959,7 +6957,7 @@ msgstr ""
 "Zrušiť zdieľanie zápisníka „%s“? To môže spôsobiť, že ostatní používatelia "
 "stratia prístup k zápisníku."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -6967,7 +6965,7 @@ msgstr ""
 "Zrušiť zdieľanie tohto zápisníka? Príjemcovia už nebudú mať prístup k jeho "
 "obsahu."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Nepodporovaný typ obrázka: %s"
 
@@ -6985,7 +6983,7 @@ msgstr ""
 "Chyba: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Nepomenované"
@@ -7041,7 +7039,7 @@ msgstr "Aktualizované: "
 msgid "Updated: %d."
 msgstr "Aktualizované: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Aktualizované: %s"
 
@@ -7174,7 +7172,7 @@ msgstr "Zobraziť"
 msgid "View OCR text"
 msgstr "Zobraziť text OCR"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Zobraziť na mape"
 
@@ -7215,7 +7213,7 @@ msgstr "Súbory jazyka hlasového zadávania (URL)"
 msgid "Voice typing: Glossary"
 msgstr "Hlasové zadávanie: Slovník"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Hlasové zadávanie..."
@@ -7358,14 +7356,14 @@ msgid "yes"
 msgstr "áno"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Áno"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

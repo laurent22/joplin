@@ -66,7 +66,7 @@ msgstr "(Csak olvasható)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Ezt a promptot kikapcsolhatja a beállításokban)"
@@ -401,7 +401,7 @@ msgid "Action"
 msgstr "Művelet"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Műveletek"
@@ -415,7 +415,7 @@ msgstr "Aktív"
 msgid "Actual Size"
 msgstr "Tényleges méret"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Törzsszöveg hozzáadása"
 
@@ -433,7 +433,7 @@ msgstr "Új hozzáadása"
 msgid "Add or remove tags:"
 msgstr "Címkék hozzáadása vagy eltávolítása:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Címzett hozzáadása:"
 
@@ -446,7 +446,7 @@ msgstr "Új hozzáadása"
 msgid "Add tags:"
 msgstr "Címkék hozzáadása:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Cím hozzáadása"
 
@@ -617,7 +617,7 @@ msgid "Application"
 msgstr "Alkalmazás"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Alkalmaz"
 
@@ -684,7 +684,7 @@ msgstr "Fájl mellékelése"
 msgid "Attach photo"
 msgstr "Kép mellékelése"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Mellékelés…"
 
@@ -692,8 +692,8 @@ msgstr "Mellékelés…"
 msgid "Attaches the given file to the note."
 msgstr "Mellékeli a megadott fájlt a jegyzethez."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "melléklet"
 
@@ -849,7 +849,7 @@ msgstr "Megtekinthető és szerkeszthető"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -864,8 +864,8 @@ msgstr "Megtekinthető és szerkeszthető"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -968,7 +968,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "A jegyzetet nem lehet áthelyezni a(z) „%s” jegyzetfüzetbe"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Nem lehet a jegyzetfüzetet áthelyezni erre a helyre"
 
@@ -980,13 +980,13 @@ msgstr ""
 "Nem lehet frissíteni a tokent: a hitelesítési adatok hiányoznak. A "
 "szinkronizálás újbóli elindítása megoldhatja a problémát."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Nem lehet elmenteni a következőt: %s „%s”, mert nagyobb, mint a megengedett "
 "határérték (%s)"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -994,7 +994,7 @@ msgstr ""
 "Nem lehet elmenteni a következőt: %s „%s”, mert meghaladná a fiók "
 "megengedett teljes méretét (%s)"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -1004,7 +1004,7 @@ msgstr ""
 "mert az nem engedélyezte a végpontok közötti titkosítást. Ezt megteheti a "
 "Beállítások > Titkosítás menüben."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "Kis- és nagybetűk megkülönböztetése"
 
@@ -1119,13 +1119,13 @@ msgid "close"
 msgstr "bezárás"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1180,7 +1180,7 @@ msgstr "Kód"
 msgid "Code Block"
 msgstr "Kódblokk"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Kódnézet"
 
@@ -1201,8 +1201,8 @@ msgstr "Együttműködés a jegyzetfüzeteken másokkal"
 msgid "Collapse all notebooks"
 msgstr "Összes jegyzetfüzet összecsukása"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Collapse title"
 msgstr "Cím összecsukása"
 
@@ -1364,7 +1364,7 @@ msgstr "Folytatás"
 msgid "Control character"
 msgstr "Vezérlőkarakter"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 msgid "Convert it"
 msgstr "Átalakítás"
 
@@ -1372,11 +1372,11 @@ msgstr "Átalakítás"
 msgid "Convert note to Markdown"
 msgstr "Jegyzet átalakítása Markdown formátumba"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Átalakítás jegyzetté"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Átalakítás tennivalóra"
 
@@ -1399,7 +1399,7 @@ msgstr "A „dev mode” parancs másolása a vágólapra"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Külső hivatkozás másolása"
 
@@ -1417,7 +1417,7 @@ msgid "Copy link to website"
 msgstr "Hivatkozás másolása a weboldalra"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Markdown hivatkozás másolása"
 
@@ -1583,7 +1583,7 @@ msgid "Created: %d."
 msgstr "Létrehozva: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Létrehozva: %s"
 
@@ -1735,7 +1735,7 @@ msgstr "Alapértelmezett: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1759,7 +1759,7 @@ msgid "Delete expired tokens"
 msgstr "Lejárt tokenek törlése"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 msgid "Delete history"
 msgstr "Előzmények törlése"
 
@@ -1810,7 +1810,7 @@ msgstr ""
 "Ha törli az „Inbox” nevű jegyzetfüzetet, az ide nemrég küldött e-mailek "
 "elveszhetnek."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2038,7 +2038,7 @@ msgstr ""
 "Ne engedélyezze, hogy a megosztás címzettje írjon a megosztott "
 "jegyzetfüzetbe. Csak az `add` alparancsra érvényes."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr "Ne jelenjen meg többé ez az üzenet"
 
@@ -2095,16 +2095,16 @@ msgstr "Erőforrások letöltése…"
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "Kép rajzolása"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Rajzolás"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Húzza ide a jegyzeteket vagy fájlokat"
 
@@ -2159,18 +2159,18 @@ msgstr "Időtartam: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Szerkesztés Markdownként"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Szerkesztés formázott szövegként"
 
@@ -2446,11 +2446,11 @@ msgstr ""
 "újra lesz szinkronizálva, és titkosítva lesz elküldve a szinkronizálási "
 "célra."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Titkosítva"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "A titkosított elemek nem módosíthatóak"
 
@@ -2586,8 +2586,8 @@ msgstr "%s kibontása"
 msgid "Expand all notebooks"
 msgstr "Összes jegyzetfüzet kibontása"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Expand title"
 msgstr "Cím kibontása"
 
@@ -2728,7 +2728,7 @@ msgstr "Szűrő"
 msgid "Find"
 msgstr "Megtalált"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "Megtalált: "
 
@@ -2895,7 +2895,7 @@ msgstr "Ugrás a Joplin Cloud profilra"
 msgid "Go to line"
 msgstr "Ugrás a sorhoz"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Ugrás a forrás webcímére"
 
@@ -2923,7 +2923,7 @@ msgstr "Cím"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Súgó"
@@ -2940,7 +2940,7 @@ msgstr "Hermes engedélyezve: %d"
 msgid "Hide %s"
 msgstr "%s elrejtése"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "Speciális elrejtése"
 
@@ -3175,7 +3175,7 @@ msgstr "A Web Clipper használatához kövesse az alábbi lépéseket:"
 msgid "In progress"
 msgstr "Folyamatban"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "Ebben: %s"
 
@@ -3391,7 +3391,7 @@ msgstr "Joplin mobilalkalmazás"
 msgid "Joplin Server"
 msgstr "Joplin Server"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 msgid "Joplin Server (SAML)"
 msgstr "Joplin Server (SAML)"
 
@@ -3421,7 +3421,7 @@ msgstr "Joplin Server webcíme"
 msgid "Joplin SSO Authentication"
 msgstr "Joplin SSO-hitelesítés"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -3999,7 +3999,7 @@ msgstr "következő"
 msgid "Next"
 msgstr "Következő"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "Következő egyezés"
 
@@ -4024,8 +4024,8 @@ msgid "no"
 msgstr "nem"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4065,7 +4065,7 @@ msgstr "Nincs erőforrás!"
 msgid "No results"
 msgstr "Nincs eredmény"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 msgid "No revision selected"
 msgstr "Nincs kiválasztva felülvizsgálat"
 
@@ -4134,8 +4134,8 @@ msgstr "Nem hasznos"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "jegyzet"
 
@@ -4174,7 +4174,7 @@ msgstr "Jegyzetszerkesztő"
 msgid "Note has been saved."
 msgstr "Jegyzet elmentve."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "Jegyzetelőzmények"
 
@@ -4268,7 +4268,7 @@ msgstr "Jegyzetfüzet: %s (%s)"
 msgid "Notebooks"
 msgstr "Jegyzetfüzetek"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "A jegyzetfüzetek nem nevezhetők el a következő néven: „%s”, mivel ez egy "
@@ -4314,7 +4314,7 @@ msgstr "OCR: Keresés a kivonatolt tartalomban"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4599,7 +4599,7 @@ msgstr ""
 "Adja meg a jelszavát az alábbi mesterkulcslistában, mielőtt frissítené a "
 "kulcsot."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4621,7 +4621,7 @@ msgstr ""
 "semmilyen fájlhoz ezen a könyvtáron kívül, és nem fér hozzá más személyes "
 "adatokhoz sem. Az adatok nem lesznek megosztva harmadik felekkel."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr "Adja meg a címzett e-mail-címét"
 
@@ -4654,7 +4654,7 @@ msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr ""
 "Frissítse a Joplint a(z) %s vagy újabb verzióra a bővítmény használatához."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4778,11 +4778,11 @@ msgstr "Nyomja meg a visszafejtési jelszó beállításához."
 msgid "previous"
 msgstr "előző"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Előző egyezés"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 msgid "Previous versions"
 msgstr "Korábbi verziók"
 
@@ -4846,7 +4846,7 @@ msgstr "Profilverzió: %s"
 msgid "Profiles"
 msgstr "Profilok"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Tulajdonságok"
 
@@ -4888,7 +4888,7 @@ msgstr "Jegyzetek közzététele"
 msgid "Publish notes to the internet"
 msgstr "Jegyzetek közzététele az internetre"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr "Közzététel / Közzététel megszüntetése"
 
@@ -4949,19 +4949,19 @@ msgid "Reading commands from standard input is only available in CLI mode."
 msgstr ""
 "A parancsok általános bemenetről történő olvasása csak CLI-módban érhető el."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "A címzett elfogadta a meghívást"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "A címzett még nem fogadta el a meghívást"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "A címzett elutasította a meghívást"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Címzettek:"
 
@@ -5006,7 +5006,7 @@ msgstr "Mégis"
 msgid "Refresh"
 msgstr "Frissítés"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "Reguláris kifejezések"
 
@@ -5028,7 +5028,7 @@ msgstr "Eltávolítás"
 msgid "Remove %s"
 msgstr "%s eltávolítása"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 msgid "Remove %s from share"
 msgstr "A(z) %s eltávolítása a megosztásból"
 
@@ -5079,7 +5079,7 @@ msgid "replace"
 msgstr "csere"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "Csere"
 
@@ -5087,15 +5087,15 @@ msgstr "Csere"
 msgid "replace all"
 msgstr "összes cseréje"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "Összes cseréje"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "Csere ezzel…"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "Csere: "
 
@@ -5162,8 +5162,8 @@ msgstr "Újraindítás most"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Visszaállítás"
@@ -5222,7 +5222,7 @@ msgstr "Fordított rendezési sorrend"
 msgid "Reverses the sorting order."
 msgstr "Rendezés sorrendjének megfordítása."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Felülvizsgálat:"
 
@@ -5318,7 +5318,7 @@ msgstr "Módosítások mentése?"
 msgid "Save geo-location with notes"
 msgstr "Földrajzi hely mentése a jegyzetekhez"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 msgid "Save geolocation?"
 msgstr "Menti a földrajzi helyet?"
 
@@ -5348,7 +5348,7 @@ msgstr "Keresés"
 msgid "Search for plugins..."
 msgstr "Bővítmények keresése…"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "Keresés…"
 
@@ -5405,7 +5405,7 @@ msgstr "Tekintse meg a előzetes kiadás oldalát a további részletekért: %s"
 msgid "Select"
 msgstr "Kijelölés"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 msgid "Select a revision..."
 msgstr "Egy felülvizsgálat kiválasztása…"
 
@@ -5468,7 +5468,7 @@ msgid "Server is running on port %d"
 msgstr "A kiszolgáló fut a(z) %d porton"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Riasztás beállítása"
@@ -5506,10 +5506,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Beállítások"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Megosztás"
 
@@ -5530,7 +5530,7 @@ msgstr "Jegyzetfüzet megosztása másokkal"
 msgid "Share from %s (%s)"
 msgstr "Megosztás innen: %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Jegyzetfüzet megosztása"
 
@@ -5558,7 +5558,7 @@ msgstr ""
 "Engedélyezi vagy megszünteti a megadott [jegyzetfüzet] megosztását a "
 "[felhasználóval]. Joplin Cloud vagy Joplin Server szükséges hozzá."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Jegyzetfüzet megosztása…"
 
@@ -5566,7 +5566,7 @@ msgstr "Jegyzetfüzet megosztása…"
 msgid "Shortcuts are not available in CLI mode."
 msgstr "A billentyűparancsok nem érhetők el a CLI-módban."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "Speciális beállítások megjelenítése"
 
@@ -6037,7 +6037,7 @@ msgstr "Szinkronizálási cél: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Szinkronizálás"
 
@@ -6055,7 +6055,7 @@ msgstr "Szinkronizálás távoli tárolóval."
 msgid "Synchronising..."
 msgstr "Szinkronizálás…"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Szinkronizálás…"
 
@@ -6157,7 +6157,7 @@ msgstr "Az alkalmazás sikeresen hitelesítve."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Az alkalmazást újra kell indítani a módosítások érvényesítéséhez."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6219,13 +6219,13 @@ msgstr ""
 "mint egy 1 faktorú elem. A módosítások megtekintéséhez indítsa újra az "
 "alkalmazást."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "A következő melléklet megfelel a keresési lekérdezésnek:"
 msgstr[1] "A következő mellékletek megfelelnek a keresési lekérdezésnek:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "A következő mellékletek módosítása figyelve van:"
 
@@ -6324,7 +6324,7 @@ msgstr "A következő jegyzetek importálva lettek: %s"
 msgid "The possible commands are:"
 msgstr "A lehetséges parancsok a következők:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6602,7 +6602,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Ennek a jegyzetnek nincsenek előzményei"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6915,7 +6915,7 @@ msgstr "Írja be a jegyzet címét a kereséshez."
 msgid "Type: %s."
 msgstr "Típus: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "A(z) %s típusú erőforrás szerkesztése nem lehetséges"
 
@@ -6923,7 +6923,7 @@ msgstr "A(z) %s típusú erőforrás szerkesztése nem lehetséges"
 msgid "Unable to share log data. Reason: %s"
 msgstr "A naplóadatok megosztása nem lehetséges. Indok: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 msgid "Unable to share note data. Reason: %s"
 msgstr "Nem lehet a jegyzet adatait megosztani. Indok: %s"
 
@@ -6990,7 +6990,7 @@ msgstr "„%s” közzétételének megszüntetése"
 msgid "Unpublish note"
 msgstr "Jegyzet közzétételének visszavonása"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Megosztás visszavonása"
 
@@ -7002,7 +7002,7 @@ msgstr ""
 "Megszünteti a(z) „%s” nevű jegyzetfüzet megosztását? Ez azt eredményezheti, "
 "hogy más felhasználók elveszítik a jegyzetfüzethez való hozzáférést."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -7010,7 +7010,7 @@ msgstr ""
 "Visszavonja a jegyzetfüzet megosztását? A címzettek többé nem férnek hozzá a "
 "tartalmához."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Nem támogatott képtípus: %s"
 
@@ -7028,7 +7028,7 @@ msgstr ""
 "Hiba: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Névtelen"
@@ -7084,7 +7084,7 @@ msgstr "Frissítve: "
 msgid "Updated: %d."
 msgstr "Frissítve %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Frissítve: %s"
 
@@ -7219,7 +7219,7 @@ msgstr "Nézet"
 msgid "View OCR text"
 msgstr "OCR-ezett szöveg megjelenítése"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Megjelenítés a térképen"
 
@@ -7260,7 +7260,7 @@ msgstr "Hanggépelési nyelvi fájlok (webcím)"
 msgid "Voice typing: Glossary"
 msgstr "Hanggépelés: Szójegyzék"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Hanggépelés…"
@@ -7404,14 +7404,14 @@ msgid "yes"
 msgstr "igen"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Igen"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

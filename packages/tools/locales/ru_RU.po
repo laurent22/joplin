@@ -8,8 +8,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 3.2.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: Arman Saga <asagatbekov@gmail.com>\n"
 "Language-Team: Sergey Segeda <thesermanarm@gmail.com>\n"
 "Language: ru_RU\n"
@@ -67,7 +65,7 @@ msgstr "(Только чтение)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Вы можете отключить это предупреждение в настройках)"
@@ -111,8 +109,8 @@ msgstr "&Вид"
 msgid "&Window"
 msgstr "&Окно"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1655
-#: packages/lib/models/settings/builtInMetadata.ts:1945
+#: packages/lib/models/settings/builtInMetadata.ts:1696
+#: packages/lib/models/settings/builtInMetadata.ts:2010
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d дней"
@@ -131,9 +129,9 @@ msgstr "%d ГБ"
 msgid "%d GB storage space"
 msgstr "%d ГБ дискового пространства"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1377
-#: packages/lib/models/settings/builtInMetadata.ts:1378
-#: packages/lib/models/settings/builtInMetadata.ts:1379
+#: packages/lib/models/settings/builtInMetadata.ts:1408
+#: packages/lib/models/settings/builtInMetadata.ts:1409
+#: packages/lib/models/settings/builtInMetadata.ts:1410
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d час"
@@ -152,9 +150,9 @@ msgstr "%d МБ"
 msgid "%d MB per note or attachment"
 msgstr "%d МБ на заметку или вложение"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1374
-#: packages/lib/models/settings/builtInMetadata.ts:1375
-#: packages/lib/models/settings/builtInMetadata.ts:1376
+#: packages/lib/models/settings/builtInMetadata.ts:1405
+#: packages/lib/models/settings/builtInMetadata.ts:1406
+#: packages/lib/models/settings/builtInMetadata.ts:1407
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d минут"
@@ -408,7 +406,7 @@ msgid "Action"
 msgstr "Действие"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Действия"
@@ -422,7 +420,7 @@ msgstr "Активен"
 msgid "Actual Size"
 msgstr "Фактический размер"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Добавить текст заметки"
 
@@ -440,15 +438,20 @@ msgstr "Добавить новый"
 msgid "Add or remove tags:"
 msgstr "Добавить или удалить метки:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Добавить получателя:"
 
-#: packages/app-mobile/components/TagEditor.tsx:265
+#: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
+#, fuzzy
+msgid "Add row"
+msgstr "Добавить новый"
+
+#: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
 msgstr "Новые метки:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Добавить заголовок"
 
@@ -460,11 +463,11 @@ msgstr "Добавить в словарь"
 msgid "Add to note"
 msgstr "Добавить к заметке"
 
-#: packages/app-mobile/components/ComboBox.tsx:89
+#: packages/app-mobile/components/ComboBox.tsx:93
 msgid "Added new: %s"
 msgstr "Добавить новый"
 
-#: packages/app-mobile/components/TagEditor.tsx:219
+#: packages/app-mobile/components/TagEditor.tsx:233
 msgid "Added tag: %s"
 msgstr "Добавить тег %s к заметке"
 
@@ -613,7 +616,7 @@ msgid "Application"
 msgstr "Приложение"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Применить"
 
@@ -626,7 +629,7 @@ msgstr ""
 "умолчанию?\n"
 "Это нельзя отменить."
 
-#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:17
+#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:19
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
@@ -682,7 +685,7 @@ msgstr "Прикрепить файл"
 msgid "Attach photo"
 msgstr "Прикрепить фото"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Прикрепить…"
 
@@ -690,8 +693,8 @@ msgstr "Прикрепить…"
 msgid "Attaches the given file to the note."
 msgstr "Прикрепляет заданный файл к заметке."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "вложение"
 
@@ -850,7 +853,7 @@ msgstr "Возможность просмотра и редактировани�
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -865,8 +868,8 @@ msgstr "Возможность просмотра и редактировани�
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -966,7 +969,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "Не удалось переместить заметку в блокнот \"%s\""
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Не удается переместить блокнот в указанное расположение"
 
@@ -978,12 +981,12 @@ msgstr ""
 "Невозможно обновить токен: отсутствуют данные аутентификации. Повторный "
 "запуск синхронизации может решить эту проблему."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Невозможно сохранить %s \"%s\" из-за превышения допустимого лимита (%s)"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -991,7 +994,7 @@ msgstr ""
 "Невозможно сохранить %s \"%s\" из-за превышения допустимого размера (%s) для "
 "этой учетной записи"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -1001,7 +1004,7 @@ msgstr ""
 "него не включено сквозное шифрование. Они могут сделать это на экране "
 "Настройки > Шифрование."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "С учетом регистра"
 
@@ -1113,20 +1116,20 @@ msgid "close"
 msgstr "закрыть"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
 msgid "Close"
 msgstr "Закрыть"
 
-#: packages/app-mobile/components/Modal.tsx:139
+#: packages/app-mobile/components/Modal.tsx:155
 msgid "Close dialog"
 msgstr "Закрыть окно"
 
@@ -1174,11 +1177,11 @@ msgstr "Код"
 msgid "Code Block"
 msgstr "Блок кода"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Просмотр кода"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:29
 msgid "Code:"
 msgstr "Код"
 
@@ -1195,8 +1198,8 @@ msgstr "Совместная работа над блокнотами с дру�
 msgid "Collapse all notebooks"
 msgstr "Создать новый блокнот"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Collapse title"
 msgstr "Крах %s"
@@ -1212,9 +1215,9 @@ msgstr "Ближайшие напоминания"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Разделенный запятыми список путей к файлам сертификатов (поддерживаются как "
 "каталоги, так и абсолютные пути к отдельным файлам). Например: /my/"
@@ -1361,7 +1364,7 @@ msgstr "Продолжить"
 msgid "Control character"
 msgstr "Управляющий символ"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 msgid "Convert it"
 msgstr "Преобразовать в заметку"
 
@@ -1369,11 +1372,11 @@ msgstr "Преобразовать в заметку"
 msgid "Convert note to Markdown"
 msgstr "Преобразовать в задачу"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Преобразовать в заметку"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Преобразовать в задачу"
 
@@ -1396,7 +1399,7 @@ msgstr "Скопировать команду режима разработчи�
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Копирование внешней ссылки"
 
@@ -1414,7 +1417,7 @@ msgid "Copy link to website"
 msgstr "Копировать ссылку на сайт"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Копировать ссылку Markdown"
 
@@ -1537,7 +1540,7 @@ msgstr "Создает новый блокнот."
 msgid "Create new profile..."
 msgstr "Создание нового профиля..."
 
-#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
+#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:212
 msgid "Create note"
 msgstr "Создать блокнот"
 
@@ -1580,7 +1583,7 @@ msgid "Created: %d."
 msgstr "Создано: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Создано: %s"
 
@@ -1608,11 +1611,11 @@ msgstr "Создание новой заметки..."
 msgid "Creating new to-do..."
 msgstr "Создание новой задачи..."
 
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:79
 msgid "Creating note \"%s\"..."
 msgstr "Создание новой заметки..."
 
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:142
 msgid "Creating note."
 msgstr "Создание новой заметки..."
 
@@ -1731,7 +1734,7 @@ msgstr "По умолчанию: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1755,7 +1758,7 @@ msgid "Delete expired tokens"
 msgstr "Удаление просроченных токенов"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:190
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 msgid "Delete history"
 msgstr "Включить историю заметок"
 
@@ -1806,7 +1809,7 @@ msgstr ""
 "При удалении блокнота \"Входящие\" все сообщения электронной почты, недавно "
 "отправленные в него, могут быть потеряны."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2004,6 +2007,7 @@ msgstr "Не запрашивать подтверждение."
 
 #: packages/app-cli/app/command-publish.ts:32
 #: packages/app-cli/app/command-share.ts:66
+#: packages/app-cli/app/command-unpublish.ts:29
 msgid "Do not ask for user confirmation."
 msgstr "Не запрашивать подтверждение."
 
@@ -2033,7 +2037,7 @@ msgstr ""
 "Не разрешать получившему общий доступ, записывать данные в общий блокнот. "
 "Действует только для подкоманды `добавить`."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr "Больше не показывать это сообщение"
 
@@ -2090,16 +2094,16 @@ msgstr "Загрузка ресурсов..."
 msgid "Dracula"
 msgstr "Дракула"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "Нарисовать картинку"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Рисунок"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Перетащите сюда заметки или файлы"
 
@@ -2153,18 +2157,18 @@ msgstr "Ваша версия: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Правка"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1368
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1368
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Свободный текст"
 
@@ -2325,11 +2329,11 @@ msgstr "Включить постраничные сноски"
 msgid "Enable Fountain syntax support"
 msgstr "Включить поддержку синтаксиса Fountain"
 
-#: packages/lib/models/settings/builtInMetadata.ts:564
+#: packages/lib/models/settings/builtInMetadata.ts:586
 msgid "Enable handwritten transcription"
 msgstr "Включить шифрование"
 
-#: packages/lib/models/settings/builtInMetadata.ts:741
+#: packages/lib/models/settings/builtInMetadata.ts:765
 msgid "Enable HTML-to-Markdown conversion banner"
 msgstr "Включить панель инструментов Markdown"
 
@@ -2439,11 +2443,11 @@ msgstr ""
 "повторно синхронизированы и отправлены в зашифрованном виде на сервер "
 "синхронизации."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Зашифровано"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "Зашифрованные элементы не могут быть изменены"
 
@@ -2544,8 +2548,8 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"Ошибка. Пожалуйста, убедитесь, что URL-адрес, имя пользователя, пароль и "
-"т.д. верны и что цель синхронизации доступна. Сообщение об ошибке:"
+"Ошибка. Пожалуйста, убедитесь, что URL-адрес, имя пользователя, пароль и т."
+"д. верны и что цель синхронизации доступна. Сообщение об ошибке:"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:237
 msgid "Errors only"
@@ -2579,8 +2583,8 @@ msgstr "Расширить %s"
 msgid "Expand all notebooks"
 msgstr "Редактировать блокнот"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 #, fuzzy
 msgid "Expand title"
 msgstr "Развернуть"
@@ -2721,7 +2725,7 @@ msgstr "Фильтр"
 msgid "Find"
 msgstr "Поиск"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "Найти: "
 
@@ -2886,7 +2890,7 @@ msgstr "Перейти в профиль Joplin Cloud"
 msgid "Go to line"
 msgstr "Перейти к строке"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Перейти к исходному URL"
 
@@ -2914,7 +2918,7 @@ msgstr "Заголовок"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Помощь"
@@ -2931,7 +2935,7 @@ msgstr "Hermes включен: %d"
 msgid "Hide %s"
 msgstr "Скрыть %s"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "Скрыть расширенные"
 
@@ -3165,7 +3169,7 @@ msgstr "Для использования веб-клиппера сделайт
 msgid "In progress"
 msgstr "В ходе выполнения"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "В: %s"
 
@@ -3381,7 +3385,7 @@ msgstr "Joplin Mobile"
 msgid "Joplin Server"
 msgstr "Сервер Joplin"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 #, fuzzy
 msgid "Joplin Server (SAML)"
 msgstr "URL сервера Joplin"
@@ -3412,7 +3416,7 @@ msgstr "URL сервера Joplin"
 msgid "Joplin SSO Authentication"
 msgstr "Аутентификация SSO в Joplin"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -3843,7 +3847,7 @@ msgstr ""
 "Большинство плагинов имеют исходный код, доступный для просмотра на сайте "
 "плагина."
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:588
+#: packages/app-mobile/components/ScreenHeader/index.tsx:600
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "Переместить %d заметок в блокнот \"%s\"?"
@@ -3920,7 +3924,7 @@ msgstr "Новый рисунок"
 msgid "New invitations"
 msgstr "Новые приглашения"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:62
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:57
 msgid ""
 "New model available\n"
 "A new voice typing model is available. Do you want to download it?"
@@ -3958,7 +3962,7 @@ msgstr "Название блокнота:"
 msgid "New photo"
 msgstr "Новое фото"
 
-#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:211
 msgid "New profile"
 msgstr "Переключение профиля"
 
@@ -3987,7 +3991,7 @@ msgstr "далее"
 msgid "Next"
 msgstr "Nextcloud"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "Следующее совпадение"
 
@@ -4012,8 +4016,8 @@ msgid "no"
 msgstr "нет"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4052,7 +4056,7 @@ msgstr "Нет данных!"
 msgid "No results"
 msgstr "Нет данных"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 msgid "No revision selected"
 msgstr "Вкладка не выбрана"
 
@@ -4068,7 +4072,7 @@ msgstr "Нет вариантов"
 msgid "No tab selected"
 msgstr "Вкладка не выбрана"
 
-#: packages/app-mobile/components/TagEditor.tsx:167
+#: packages/app-mobile/components/TagEditor.tsx:183
 msgid "No tags"
 msgstr "Новые метки:"
 
@@ -4121,8 +4125,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "заметка"
 
@@ -4161,7 +4165,7 @@ msgstr "Редактор заметок"
 msgid "Note has been saved."
 msgstr "Заметка сохранена."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "История заметок"
 
@@ -4170,7 +4174,7 @@ msgstr "История заметок"
 msgid "Note History"
 msgstr "История заметок"
 
-#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
+#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:34
 msgid "Note history has been deleted."
 msgstr "Заметка сохранена."
 
@@ -4193,7 +4197,12 @@ msgstr "Фактор роста списка заметки"
 msgid "Note list style"
 msgstr "Стиль списка заметок"
 
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
+#: packages/app-cli/app/command-unpublish.ts:41
+#, fuzzy
+msgid "Note not published: %s"
+msgstr "Содержимое предоставлено: %s"
+
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
 msgstr "Название заметки"
 
@@ -4251,7 +4260,7 @@ msgstr "Блокнот: %s (%s)"
 msgid "Notebooks"
 msgstr "Блокноты"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "Блокнот не может быть назван \"%s\", так как это зарезервированное название."
@@ -4287,7 +4296,7 @@ msgstr "OCR: очистите кэш и заново загрузите язык
 msgid "OCR: Language data URL or path"
 msgstr "OCR: URL-адрес или путь к языковым данным"
 
-#: packages/lib/models/settings/builtInMetadata.ts:604
+#: packages/lib/models/settings/builtInMetadata.ts:628
 msgid "OCR: Search in extracted content"
 msgstr "Поиск во всех заметках"
 
@@ -4296,7 +4305,7 @@ msgstr "Поиск во всех заметках"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4545,7 +4554,7 @@ msgstr ""
 "\n"
 "Все заметки и вложенные блокноты также будут безвозвратно удалены."
 
-#: packages/lib/models/Note.ts:949
+#: packages/lib/models/Note.ts:967
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Удалить безвозвратно эти %d заметки?"
@@ -4583,7 +4592,7 @@ msgstr ""
 "Пожалуйста, введите ваш пароль в список мастер-ключей ниже перед обновлением "
 "ключа."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4605,7 +4614,7 @@ msgstr ""
 "файлам за пределами этого каталога, ни к каким-либо другим личным данным. "
 "Никакая информация не будет передана третьим лицам."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr "Пожалуйста, укажите адрес электронной почты получателя"
 
@@ -4640,7 +4649,7 @@ msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr ""
 "Обновите Joplin до версии %s или новее для использования этого плагина."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4761,11 +4770,11 @@ msgstr "Нажмите, чтобы установить пароль для ра
 msgid "previous"
 msgstr "предыдущее"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Предыдущее совпадение"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1145
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 msgid "Previous versions"
 msgstr "Предыдущая версия заметки"
 
@@ -4829,7 +4838,7 @@ msgstr "Версия профиля: %s"
 msgid "Profiles"
 msgstr "Профили"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Свойства"
 
@@ -4872,7 +4881,7 @@ msgstr "Публиковать заметку"
 msgid "Publish notes to the internet"
 msgstr "Опубликовать заметки в Интернет"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr "Опубликовать/Отменить публикацию"
 
@@ -4933,19 +4942,19 @@ msgstr "Продолжительность чтения: %s мин"
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr "Команда \"%s\" доступна только в режиме GUI"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "Получатель принял приглашение"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Получатель еще не принял приглашение"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "Получатель отказал в приглашении"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Получатели:"
 
@@ -4991,7 +5000,7 @@ msgstr "Повторить"
 msgid "Refresh"
 msgstr "Обновить"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "Регулярное выражение"
 
@@ -5009,11 +5018,11 @@ msgstr "Создание отчета…"
 msgid "Remove"
 msgstr "Удалить"
 
-#: packages/app-mobile/components/TagEditor.tsx:129
+#: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
 msgstr "Удалить"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 msgid "Remove %s from share"
 msgstr "Удалить %s из общего ресурса"
 
@@ -5029,7 +5038,7 @@ msgstr "Удалить этот поиск из боковой панели?"
 msgid "Removed %s from share."
 msgstr "Удалить %s из общего ресурса"
 
-#: packages/app-mobile/components/TagEditor.tsx:231
+#: packages/app-mobile/components/TagEditor.tsx:247
 msgid "Removed tag: %s"
 msgstr "Переименовать метку:"
 
@@ -5063,7 +5072,7 @@ msgid "replace"
 msgstr "заменить"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "Замена"
 
@@ -5071,15 +5080,15 @@ msgstr "Замена"
 msgid "replace all"
 msgstr "заменить все"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "Заменить все"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "Заменить на..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "Замена: "
 
@@ -5146,8 +5155,8 @@ msgstr "Перезагрузить сейчас"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Восстановить"
@@ -5206,7 +5215,7 @@ msgstr "Обратный порядок сортировки"
 msgid "Reverses the sorting order."
 msgstr "Меняет порядок сортировки."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Изменения: %s (%s)"
 
@@ -5300,7 +5309,7 @@ msgstr "Сохранить изменения?"
 msgid "Save geo-location with notes"
 msgstr "Сохранять информацию о географическом местоположении в заметках"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 #, fuzzy
 msgid "Save geolocation?"
 msgstr "Сохранять информацию о географическом местоположении в заметках"
@@ -5331,7 +5340,7 @@ msgstr "Поиск"
 msgid "Search for plugins..."
 msgstr "Поиск плагинов..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "Поиск..."
 
@@ -5355,7 +5364,7 @@ msgstr "Результаты поиска"
 msgid "Search shown"
 msgstr "Поиск показан"
 
-#: packages/app-mobile/components/TagEditor.tsx:273
+#: packages/app-mobile/components/TagEditor.tsx:289
 msgid "Search tags"
 msgstr "Результаты поиска"
 
@@ -5390,7 +5399,7 @@ msgstr ""
 msgid "Select"
 msgstr "Выбрать"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 msgid "Select a revision..."
 msgstr "Выбрать эмодзи..."
 
@@ -5407,7 +5416,7 @@ msgstr "Выбрать эмодзи..."
 msgid "Select file..."
 msgstr "Выбрать файл..."
 
-#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
+#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:189
 msgid "Select notebook"
 msgstr "Выбор блокнота"
 
@@ -5419,7 +5428,7 @@ msgstr ""
 msgid "Select parent notebook"
 msgstr "Выбрать родительский блокнот"
 
-#: packages/app-mobile/components/ComboBox.tsx:367
+#: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
 msgstr "Создано: %s"
 
@@ -5453,7 +5462,7 @@ msgid "Server is running on port %d"
 msgstr "Сервер запущен. Порт: %d"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Установить напоминание"
@@ -5491,10 +5500,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Настройки"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Поделиться"
 
@@ -5515,7 +5524,7 @@ msgstr "Поделитесь блокнотом с другими людьми"
 msgid "Share from %s (%s)"
 msgstr "Поделиться с %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Поделиться блокнотом"
 
@@ -5543,7 +5552,7 @@ msgstr ""
 "Предоставляет или отменяет доступ к указанному [блокноту] для "
 "[пользователь]. Требуется Joplin Cloud или Joplin Server."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Поделиться блокнотом..."
 
@@ -5551,7 +5560,7 @@ msgstr "Поделиться блокнотом..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Сочетания клавиш недоступны в режиме командной строки."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "Показать расширенные"
 
@@ -6019,7 +6028,7 @@ msgstr "Цель синхронизации: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Синхронизировать"
 
@@ -6037,7 +6046,7 @@ msgstr "Синхронизирует с удаленным хранилищем.
 msgid "Synchronising..."
 msgstr "Синхронизация..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Синхронизация..."
 
@@ -6141,7 +6150,7 @@ msgstr "Приложение успешно авторизовано."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Необходимо перезапустить приложение, чтобы применились изменения."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6202,14 +6211,14 @@ msgstr ""
 "займёт в 2 раза больше места, чем элемент с фактором 1. Перезапустите "
 "приложение, чтобы изменения вступили в силу."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "Следующее вложение соответствует вашему поисковому запросу:"
 msgstr[1] "Следующие вложения соответствует вашему поисковому запросу:"
 msgstr[2] "Следующие вложения соответствует вашему поисковому запросу:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "Отслеживаются изменения следующих вложений:"
 
@@ -6302,7 +6311,7 @@ msgstr "Импортировано заметок: %s"
 msgid "The possible commands are:"
 msgstr "Доступные команды:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6572,7 +6581,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Эта заметка не имеет предыдущих версий"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6801,7 +6810,7 @@ msgstr "Переключить список заметок"
 msgid "Toggle own sort order"
 msgstr "Переключение собственного порядка сортировки"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:455
+#: packages/app-mobile/components/ScreenHeader/index.tsx:467
 msgid "Toggle plugin editor"
 msgstr "Переключить редактор"
 
@@ -6881,7 +6890,7 @@ msgstr "Введите новые метки или выберите из спи
 msgid "Type: %s."
 msgstr "Тип: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "Невозможно редактировать ресурс типа %s"
 
@@ -6889,7 +6898,7 @@ msgstr "Невозможно редактировать ресурс типа %s
 msgid "Unable to share log data. Reason: %s"
 msgstr "Невозможно поделиться данными журнала. Причина: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 #, fuzzy
 msgid "Unable to share note data. Reason: %s"
 msgstr "Невозможно поделиться данными журнала. Причина: %s"
@@ -6958,7 +6967,7 @@ msgstr "Отменить публикацию \"%s\""
 msgid "Unpublish note"
 msgstr "Снять публикацию"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Отмена доступа"
 
@@ -6970,7 +6979,7 @@ msgstr ""
 "Отменить общий доступ к блокноту «%s»? Это может привести к потере доступа к "
 "блокноту другими пользователями."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -6978,7 +6987,7 @@ msgstr ""
 "Снять общий доступ? Получатели больше не смогут получить доступ к этому "
 "содержимому."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Неподдерживаемый формат изображения: %s"
 
@@ -6996,7 +7005,7 @@ msgstr ""
 "Ошибка: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Без имени"
@@ -7052,7 +7061,7 @@ msgstr "Обновлено: "
 msgid "Updated: %d."
 msgstr "Обновлено: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Обновлено: %s"
 
@@ -7186,7 +7195,7 @@ msgstr "Вид"
 msgid "View OCR text"
 msgstr "Просмотр текста OCR"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Посмотреть на карте"
 
@@ -7203,11 +7212,11 @@ msgstr "Просмотреть сейчас"
 msgid "Viewer"
 msgstr "Программа просмотра"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1238
+#: packages/lib/models/settings/builtInMetadata.ts:1269
 msgid "Viewer and Rich Text Editor font family"
 msgstr "Семейство шрифтов редактора"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1160
+#: packages/lib/models/settings/builtInMetadata.ts:1191
 msgid "Viewer font size"
 msgstr "Размер шрифта редактора"
 
@@ -7223,11 +7232,11 @@ msgstr "Запись голоса"
 msgid "Voice typing language files (URL)"
 msgstr "Языковые файлы голосового набора (URL)"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1912
+#: packages/lib/models/settings/builtInMetadata.ts:1969
 msgid "Voice typing: Glossary"
 msgstr "Голосовой набор текста: Глоссарий"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Голосовой набор..."
@@ -7366,14 +7375,14 @@ msgid "yes"
 msgstr "да"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Да"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
