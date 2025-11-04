@@ -155,7 +155,8 @@ const useOnRenderItem = (props: Props) => {
 		const isDeleted = item ? !!item.deleted_time : false;
 
 		if (!isDeleted) {
-			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+			const isDecryptedFolder = itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied;
+			if (isDecryptedFolder && itemIds.length === 1) {
 				menu.append(
 					new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId)),
 				);
@@ -177,7 +178,9 @@ const useOnRenderItem = (props: Props) => {
 							if (!ok) return;
 
 							if (itemType === BaseModel.TYPE_TAG) {
-								await Tag.untagAll(itemId);
+								for (const itemId of itemIds) {
+									await Tag.untagAll(itemId);
+								}
 							} else if (itemType === BaseModel.TYPE_SEARCH) {
 								props.dispatch({
 									type: 'SEARCH_DELETE',
@@ -189,7 +192,6 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
-			const isDecryptedFolder = itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied;
 			if (isDecryptedFolder) {
 				menu.append(new MenuItem({
 					...menuUtils.commandToStatefulMenuItem('moveToFolder', itemIds),

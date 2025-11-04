@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { StyledListItemAnchor, StyledSpanFix } from '../styles';
 import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
-import BaseModel from '@joplin/lib/BaseModel';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const TagItem = (props: Props) => {
-	const { tag, selected, index } = props;
+	const { tag, selected } = props;
 
 	let noteCount = null;
 	if (Setting.value('showNoteCounts')) {
@@ -44,8 +44,10 @@ const TagItem = (props: Props) => {
 			className={`list-item-container ${selected ? 'selected' : ''}`}
 			highlightOnHover={true}
 			onDrop={props.onTagDrop}
+			onContextMenu={props.onContextMenu}
+			data-id={tag.id}
 			data-tag-id={tag.id}
-			data-index={index}
+			data-type={ModelType.Tag}
 			aria-selected={selected}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
@@ -56,7 +58,6 @@ const TagItem = (props: Props) => {
 				selected={selected}
 				data-id={tag.id}
 				data-type={BaseModel.TYPE_TAG}
-				onContextMenu={props.onContextMenu}
 				onClick={onClickHandler}
 			>
 				<StyledSpanFix className="tag-label">{props.label}</StyledSpanFix>
