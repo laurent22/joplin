@@ -62,7 +62,8 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const selectedNote: NoteEntity = selectedNoteId ? BaseModel.byId(windowState.notes, selectedNoteId) : null;
 	const selectedNotes = BaseModel.modelsByIds(windowState.notes ?? [], selectedNoteIds);
 
-	const commandFolderIds = state.notesParentType === 'Folder' ? (options.commandFolderIds || windowState.selectedFolderIds) : [];
+	const selectedFolderIds = windowState.selectedFolderIds || [];
+	const commandFolderIds = state.notesParentType === 'Folder' ? (options.commandFolderIds || selectedFolderIds) : [];
 	const commandFolders = commandFolderIds.length ? BaseModel.modelsByIds(state.folders, commandFolderIds) : [];
 	const commandFolder = commandFolders.length ? commandFolders[0] : null;
 
@@ -93,7 +94,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		historyhasForwardNotes: windowState.forwardHistoryNotes && windowState.forwardHistoryNotes.length > 0,
 
 		// Folder selection
-		oneFolderSelected: windowState.selectedFolderIds.length === 1,
+		oneFolderSelected: selectedFolderIds.length === 1,
 
 		// Current note properties
 		noteIsTodo: selectedNote ? !!selectedNote.is_todo : false,
