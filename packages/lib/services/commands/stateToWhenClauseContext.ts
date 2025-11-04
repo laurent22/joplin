@@ -19,7 +19,6 @@ export interface WhenClauseContextOptions {
 export interface WhenClauseContext {
 	allSelectedNotesAreDeleted: boolean;
 	foldersAreDeleted: boolean;
-	foldersIncludeTrash: boolean;
 	foldersIncludeReadOnly: boolean;
 	folderIsDeleted: boolean;
 	folderIsReadOnly: boolean;
@@ -115,7 +114,6 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// All context folders
 		foldersAreDeleted: commandFolders.every(f => !!f.deleted_time),
-		foldersIncludeTrash: commandFolders.some(f => f.id === getTrashFolderId()),
 		foldersIncludeReadOnly: commandFolders.some(f => itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, f as ItemSlice, settings['sync.userId'], state.shareService)),
 
 		joplinServerConnected: [9, 10, 11].includes(settings['sync.target']),
