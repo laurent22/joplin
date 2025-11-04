@@ -185,7 +185,13 @@ const useOnRenderItem = (props: Props) => {
 			}
 
 			if (isDecryptedFolder) {
-				menu.append(folderCommandToMenuItem('moveToFolder', itemIds));
+				const whenClause = CommandService.instance().currentWhenClauseContext({ commandFolderIds: itemIds });
+				menu.append(new MenuItem({
+					...menuUtils.commandToStatefulMenuItem('moveToFolder', itemIds),
+					// By default, moveToFolder's enabled condition is based on the selected notes. However, the right-click
+					// menu item applies to folders. For now, use a custom condition:
+					enabled: !whenClause.foldersIncludeReadOnly,
+				}));
 			}
 
 			if (isDecryptedFolder && itemIds.length === 1) {
