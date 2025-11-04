@@ -337,10 +337,34 @@ const useOnRenderItem = (props: Props) => {
 	}, [props.dispatch]);
 
 	const folderItem_click = useCallback((event: FolderItemClickEvent) => {
-		props.dispatch({
-			type: event.shiftKey ? 'FOLDER_SELECT_ADD' : 'FOLDER_SELECT',
-			id: event.id ?? null,
-		});
+		const selectedIndexes = selectedIndexesRef.current;
+		if (event.shiftKey && selectedIndexes.length > 0) {
+			const index = itemsRef.current.findIndex(item => item.kind === ListItemType.Folder && item.folder.id === event.id);
+			if (!index) throw new Error(`No item found with ID: ${event.id}`);
+
+			const lastAddedIndex = selectedIndexes[selectedIndexes.length - 1];
+			const indexStart = Math.min(index, lastAddedIndex);
+			const indexStop = Math.max(index, lastAddedIndex);
+			const itemIds = itemsRef.current.slice(indexStart, indexStop + 1).map(item => {
+				if (item.kind !== ListItemType.Folder) return null;
+				return item.folder.id;
+			}).filter(id => !!id);
+
+			props.dispatch({
+				type: 'FOLDER_SELECT_ADD',
+				ids: itemIds,
+			});
+		} else if (event.modKey) {
+			props.dispatch({
+				type: 'FOLDER_SELECT_ADD',
+				id: event.id,
+			});
+		} else {
+			props.dispatch({
+				type: 'FOLDER_SELECT',
+				id: event.id,
+			});
+		}
 	}, [props.dispatch]);
 
 	// If at least one of the folder has an icon, then we display icons for all

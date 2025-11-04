@@ -12,6 +12,7 @@ import { _ } from '@joplin/lib/locale';
 import NoteCount from './NoteCount';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 import { useId } from 'react';
+import shim from '@joplin/lib/shim';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -30,6 +31,7 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 export interface FolderItemClickEvent {
 	id: string;
 	shiftKey: boolean;
+	modKey: boolean; // Cmd on MacOS, Ctrl on other platforms
 }
 
 interface FolderItemProps {
@@ -106,7 +108,9 @@ function FolderItem(props: FolderItemProps) {
 				onDoubleClick={onFolderToggleClick_}
 
 				onClick={(event: MouseEvent) => {
-					folderItem_click({ id: folderId, shiftKey: event.shiftKey });
+					folderItem_click({
+						id: folderId, shiftKey: event.shiftKey, modKey: shim.isMac() ? event.metaKey : event.ctrlKey,
+					});
 				}}
 			>
 				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>
