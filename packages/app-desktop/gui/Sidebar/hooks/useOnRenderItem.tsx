@@ -4,6 +4,7 @@ import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../
 import TagItem from '../listItemComponents/TagItem';
 import { Dispatch } from 'redux';
 import { clipboard } from 'electron';
+import type { MenuItem as MenuItemType } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
@@ -32,7 +33,7 @@ import shim from '@joplin/lib/shim';
 import useOnItemClick from './useOnItemClick';
 
 const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
+const MenuItem: typeof MenuItemType = bridge().MenuItem;
 
 const logger = Logger.create('useOnRenderItem');
 
@@ -219,8 +220,11 @@ const useOnRenderItem = (props: Props) => {
 					);
 				}
 
-				menu.append(folderCommandToMenuItem('showShareFolderDialog', itemId));
-				menu.append(folderCommandToMenuItem('leaveSharedFolder', itemId));
+				// Only show the share/leave share actions for top-level folders
+				const shareFolderItem = folderCommandToMenuItem('showShareFolderDialog', itemId);
+				if (shareFolderItem.enabled) menu.append(shareFolderItem);
+				const leaveSharedFolderItem = folderCommandToMenuItem('leaveSharedFolder', itemId);
+				if (leaveSharedFolderItem.enabled) menu.append(leaveSharedFolderItem);
 
 				menu.append(
 					new MenuItem({
