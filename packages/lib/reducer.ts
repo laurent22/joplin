@@ -1095,6 +1095,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				extendSelection: action.type === 'FOLDER_SELECT_ADD',
 			});
 			break;
+		case 'FOLDER_SELECT_REMOVE':
+			draft.selectedFolderIds = draft.selectedFolderIds.filter(id => id !== action.id);
+			draft.selectedFolderId = draft.selectedFolderIds[0];
+			draft.selectedNoteIds = [];
+			break;
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
@@ -1322,6 +1327,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'TAG_SELECT_REMOVE':
 			draft.selectedTagIds = draft.selectedTagIds.filter(id => id !== action.id);
 			draft.selectedTagId = draft.selectedTagIds[0];
+			draft.selectedNoteIds = [];
 			break;
 
 		case 'TAG_UPDATE_ONE':

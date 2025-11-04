@@ -189,7 +189,7 @@ test.describe('sidebar', () => {
 		await expect(testFolderB).toBeVisible();
 	});
 
-	test('should be possible to select multiple folders with cmd-click', async ({ mainWindow, electronApp }) => {
+	test('should be possible to select, then deselect, multiple folders with cmd-click', async ({ mainWindow, electronApp }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;
 
@@ -208,6 +208,15 @@ test.describe('sidebar', () => {
 		await expect(folderB).toBeSelected();
 		await expect(folderC).toBeSelected();
 		await expect(folderD).toHaveJSProperty('ariaSelected', 'false');
+
+		// Should be able to deselect up to two folders
+		await folderA.click({ modifiers: ['ControlOrMeta'] });
+		await expect(folderA).toHaveJSProperty('ariaSelected', 'false');
+		await folderB.click({ modifiers: ['ControlOrMeta'] });
+		await expect(folderB).toHaveJSProperty('ariaSelected', 'false');
+		// Should not be possible to deselect the last folder
+		await folderC.click({ modifiers: ['ControlOrMeta'] });
+		await expect(folderC).toBeSelected();
 	});
 
 	test('should be possible to move multiple folders at once with drag and drop', async ({ mainWindow, electronApp }) => {

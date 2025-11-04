@@ -46,7 +46,9 @@ const useOnItemClick = ({ dispatch, selectedIndexesRef, itemsRef }: Props) => {
 			});
 		} else if (shim.isMac() ? event.metaKey : event.ctrlKey) {
 			const index = findItemIndex();
-			const actionType = selectedIndexes.includes(index) ? 'REMOVE' : 'ADD';
+			// Don't allow unselecting all items: Keep at least one item selected
+			const canDeselect = selectedIndexes.length > 1;
+			const actionType = canDeselect && selectedIndexes.includes(index) ? 'REMOVE' : 'ADD';
 			dispatch({
 				type: `${action}_${actionType}`,
 				id: id,
