@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DragEventHandler, MouseEventHandler, useCallback, useMemo, useRef } from 'react';
 import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../types';
-import TagItem, { TagLinkClickEvent } from '../listItemComponents/TagItem';
+import TagItem from '../listItemComponents/TagItem';
 import { Dispatch } from 'redux';
 import { clipboard } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
@@ -21,7 +21,7 @@ import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSort
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import FolderItem, { FolderItemClickEvent } from '../listItemComponents/FolderItem';
+import FolderItem from '../listItemComponents/FolderItem';
 import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../listItemComponents/HeaderItem';
@@ -29,6 +29,7 @@ import AllNotesItem from '../listItemComponents/AllNotesItem';
 import ListItemWrapper from '../listItemComponents/ListItemWrapper';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
+import useOnItemClick from './useOnItemClick';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -75,13 +76,6 @@ const useOnRenderItem = (props: Props) => {
 	const foldersRef = useRef<FolderEntity[]>(null);
 	foldersRef.current = props.folders;
 
-	const tagItem_click = useCallback(({ tag, shiftKey }: TagLinkClickEvent) => {
-		props.dispatch({
-			type: shiftKey ? 'TAG_SELECT_ADD' : 'TAG_SELECT',
-			id: tag ? tag.id : null,
-		});
-	}, [props.dispatch]);
-
 	const onTagDrop_: DragEventHandler<HTMLElement> = useCallback(async event => {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
 		const dt = event.dataTransfer;
@@ -112,6 +106,8 @@ const useOnRenderItem = (props: Props) => {
 			return null;
 		}).filter(id => !!id);
 	}, []);
+
+	const onItemClick = useOnItemClick({ dispatch: props.dispatch, selectedIndexesRef, itemsRef });
 
 	const onItemContextMenu: ItemContextMenuListener = useCallback(async event => {
 		const itemId = event.currentTarget.getAttribute('data-id');
@@ -336,37 +332,6 @@ const useOnRenderItem = (props: Props) => {
 		});
 	}, [props.dispatch]);
 
-	const folderItem_click = useCallback((event: FolderItemClickEvent) => {
-		const selectedIndexes = selectedIndexesRef.current;
-		if (event.shiftKey && selectedIndexes.length > 0) {
-			const index = itemsRef.current.findIndex(item => item.kind === ListItemType.Folder && item.folder.id === event.id);
-			if (!index) throw new Error(`No item found with ID: ${event.id}`);
-
-			const lastAddedIndex = selectedIndexes[selectedIndexes.length - 1];
-			const indexStart = Math.min(index, lastAddedIndex);
-			const indexStop = Math.max(index, lastAddedIndex);
-			const itemIds = itemsRef.current.slice(indexStart, indexStop + 1).map(item => {
-				if (item.kind !== ListItemType.Folder) return null;
-				return item.folder.id;
-			}).filter(id => !!id);
-
-			props.dispatch({
-				type: 'FOLDER_SELECT_ADD',
-				ids: itemIds,
-			});
-		} else if (event.modKey) {
-			props.dispatch({
-				type: 'FOLDER_SELECT_ADD',
-				id: event.id,
-			});
-		} else {
-			props.dispatch({
-				type: 'FOLDER_SELECT',
-				id: event.id,
-			});
-		}
-	}, [props.dispatch]);
-
 	// If at least one of the folder has an icon, then we display icons for all
 	// folders (those without one will get the default icon). This is so that
 	// visual alignment is correct for all folders, otherwise the folder tree
@@ -388,7 +353,7 @@ const useOnRenderItem = (props: Props) => {
 				key={item.key}
 				anchorRef={anchorRef}
 				selected={selected}
-				onClick={tagItem_click}
+				onClick={onItemClick}
 				onTagDrop={onTagDrop_}
 				onContextMenu={onItemContextMenu}
 				label={item.label}
@@ -430,7 +395,7 @@ const useOnRenderItem = (props: Props) => {
 				onFolderDragOver_={onFolderDragOver_}
 				onFolderDrop_={onFolderDrop_}
 				itemContextMenu={onItemContextMenu}
-				folderItem_click={folderItem_click}
+				folderItem_click={onItemClick}
 				onFolderToggleClick_={onFolderToggleClick_}
 				shareId={folder.share_id}
 				parentId={folder.parent_id}
@@ -477,7 +442,7 @@ const useOnRenderItem = (props: Props) => {
 			return exhaustivenessCheck;
 		}
 	}, [
-		folderItem_click,
+		onItemClick,
 		onFolderDragOver_,
 		onFolderDragStart_,
 		onFolderDrop_,
@@ -487,7 +452,6 @@ const useOnRenderItem = (props: Props) => {
 		props.collapsedFolderIds,
 		props.folders,
 		showFolderIcons,
-		tagItem_click,
 		props.selectedIndex,
 		props.selectedIndexes,
 		props.containerRef,

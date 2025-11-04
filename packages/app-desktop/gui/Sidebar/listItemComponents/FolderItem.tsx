@@ -12,7 +12,7 @@ import { _ } from '@joplin/lib/locale';
 import NoteCount from './NoteCount';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 import { useId } from 'react';
-import shim from '@joplin/lib/shim';
+import { ItemClickEvent } from '../hooks/useOnItemClick';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -27,12 +27,6 @@ const renderFolderIcon = (folderIcon: FolderIcon) => {
 
 	return <div style={{ marginRight: 7, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
 };
-
-export interface FolderItemClickEvent {
-	id: string;
-	shiftKey: boolean;
-	modKey: boolean; // Cmd on MacOS, Ctrl on other platforms
-}
 
 interface FolderItemProps {
 	anchorRef: ListItemRef;
@@ -49,7 +43,7 @@ interface FolderItemProps {
 	onFolderDragOver_: ItemDragListener;
 	onFolderDrop_: ItemDragListener;
 	itemContextMenu: ItemContextMenuListener;
-	folderItem_click: (event: FolderItemClickEvent)=> void;
+	folderItem_click: (event: ItemClickEvent)=> void;
 	onFolderToggleClick_: ItemClickListener;
 	shareId: string;
 	selected: boolean;
@@ -107,9 +101,9 @@ function FolderItem(props: FolderItemProps) {
 				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}
 
-				onClick={(event: MouseEvent) => {
+				onClick={(event: React.MouseEvent) => {
 					folderItem_click({
-						id: folderId, shiftKey: event.shiftKey, modKey: shim.isMac() ? event.metaKey : event.ctrlKey,
+						id: folderId, type: ModelType.Folder, event,
 					});
 				}}
 			>

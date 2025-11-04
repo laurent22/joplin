@@ -7,8 +7,7 @@ import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
-
-export type TagLinkClickEvent = { tag: TagsWithNoteCountEntity|undefined; shiftKey: boolean };
+import { ItemClickEvent } from '../hooks/useOnItemClick';
 
 interface Props {
 	anchorRef: ListItemRef;
@@ -17,7 +16,7 @@ interface Props {
 	label: string;
 	onTagDrop: React.DragEventHandler<HTMLElement>;
 	onContextMenu: React.MouseEventHandler<HTMLElement>;
-	onClick: (event: TagLinkClickEvent)=> void;
+	onClick: (event: ItemClickEvent)=> void;
 
 	itemCount: number;
 	index: number;
@@ -33,7 +32,7 @@ const TagItem = (props: Props) => {
 	}
 
 	const onClickHandler: React.MouseEventHandler<HTMLElement> = useCallback((event) => {
-		props.onClick({ tag, shiftKey: event.shiftKey });
+		props.onClick({ id: tag.id, type: ModelType.Tag, event });
 	}, [props.onClick, tag]);
 
 	return (
