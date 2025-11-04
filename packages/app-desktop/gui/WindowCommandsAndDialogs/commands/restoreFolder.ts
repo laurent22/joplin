@@ -21,6 +21,6 @@ export const runtime = (): CommandRuntime => {
 			const folders = await Folder.loadItemsByIdsOrFail(folderIds);
 			await restoreItems(ModelType.Folder, folders);
 		},
-		enabledCondition: 'folderIsDeleted',
+		enabledCondition: 'foldersAreDeleted',
 	};
 };

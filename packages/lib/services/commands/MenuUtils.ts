@@ -3,6 +3,7 @@ import CommandService from '../CommandService';
 import KeymapService from '../KeymapService';
 import { PluginStates, utils as pluginUtils } from '../plugins/reducer';
 import propsHaveChanged from './propsHaveChanged';
+import { WhenClauseContextOptions } from './stateToWhenClauseContext';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
@@ -103,11 +104,11 @@ export default class MenuUtils {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public commandToStatefulMenuItem(commandName: string, ...args: any[]): MenuItem {
-		const whenClauseContext = this.service.currentWhenClauseContext();
+	public commandToStatefulMenuItem(commandName: string, commandTarget?: any, options?: WhenClauseContextOptions): MenuItem {
+		const whenClauseContext = this.service.currentWhenClauseContext(options);
 
 		const menuItem = this.commandToMenuItem(commandName, () => {
-			return this.service.execute(commandName, ...args);
+			return this.service.execute(commandName, commandTarget);
 		});
 		menuItem.enabled = this.service.isEnabled(commandName, whenClauseContext);
 		return menuItem;

@@ -2,6 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import Folder from '@joplin/lib/models/Folder';
+import { getTrashFolderId } from '@joplin/lib/services/trash';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 export const declaration: CommandDeclaration = {
@@ -17,6 +18,11 @@ export const runtime = (): CommandRuntime => {
 			}
 			if (!Array.isArray(folderIds)) {
 				folderIds = [folderIds];
+			}
+
+			folderIds = folderIds.filter(id => id !== getTrashFolderId());
+			if (folderIds.length === 0) {
+				throw new Error('Nothing to do: At least one valid folder must be specified.');
 			}
 
 			const folders = await Folder.loadItemsByIdsOrFail(folderIds);
@@ -37,6 +43,6 @@ export const runtime = (): CommandRuntime => {
 
 			await Folder.batchDelete(folderIds, { toTrash: true, sourceDescription: 'deleteFolder command' });
 		},
-		enabledCondition: '!folderIsReadOnly',
+		enabledCondition: '!foldersIncludeReadOnly',
 	};
 };

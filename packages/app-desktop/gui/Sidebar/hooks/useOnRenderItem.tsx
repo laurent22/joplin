@@ -9,8 +9,6 @@ import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
 import { _, _n } from '@joplin/lib/locale';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-import { AppState } from '../../../app.reducer';
-import { store } from '@joplin/lib/reducer';
 import Folder from '@joplin/lib/models/Folder';
 import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
@@ -18,7 +16,6 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { FolderEntity, TagEntity } from '@joplin/lib/services/database/types';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import InteropServiceHelper from '../../../InteropServiceHelper';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import Setting from '@joplin/lib/models/Setting';
 import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
@@ -65,6 +62,11 @@ const focusListItem = (item: HTMLElement|null) => {
 };
 
 const noFocusListItem = () => {};
+
+const folderCommandToMenuItem = (commandId: string, folderIds: string|string[]) => {
+	const options = Array.isArray(folderIds) ? { commandFolderIds: folderIds } : { commandFolderId: folderIds };
+	return new MenuItem(menuUtils.commandToStatefulMenuItem(commandId, folderIds, options));
+};
 
 const useOnRenderItem = (props: Props) => {
 
@@ -124,8 +126,6 @@ const useOnRenderItem = (props: Props) => {
 			itemIds = getSelectedIds();
 		}
 
-		const state: AppState = store().getState();
-
 		let deleteMessage = '';
 		const deleteButtonLabel = _('Remove');
 
@@ -157,15 +157,11 @@ const useOnRenderItem = (props: Props) => {
 		if (!isDeleted) {
 			const isDecryptedFolder = itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied;
 			if (isDecryptedFolder && itemIds.length === 1) {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId)),
-				);
+				menu.append(folderCommandToMenuItem('newFolder', itemId));
 			}
 
 			if (itemType === BaseModel.TYPE_FOLDER) {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('deleteFolder', itemIds)),
-				);
+				menu.append(folderCommandToMenuItem('deleteFolder', itemIds));
 			} else {
 				menu.append(
 					new MenuItem({
@@ -193,16 +189,11 @@ const useOnRenderItem = (props: Props) => {
 			}
 
 			if (isDecryptedFolder) {
-				menu.append(new MenuItem({
-					...menuUtils.commandToStatefulMenuItem('moveToFolder', itemIds),
-					// By default, enabled is based on the selected folder. However, the right-click
-					// menu can be shown for unselected folders.
-					enabled: true,
-				}));
+				menu.append(folderCommandToMenuItem('moveToFolder', itemIds));
 			}
 
 			if (isDecryptedFolder && itemIds.length === 1) {
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId }, { commandFolderId: itemId })));
 
 				menu.append(new MenuItem({ type: 'separator' }));
 
@@ -223,19 +214,8 @@ const useOnRenderItem = (props: Props) => {
 					);
 				}
 
-				// We don't display the "Share notebook" menu item for sub-notebooks
-				// that are within a shared notebook. If user wants to do this,
-				// they'd have to move the notebook out of the shared notebook
-				// first.
-				const whenClause = stateToWhenClauseContext(state, { commandFolderId: itemId });
-
-				if (CommandService.instance().isEnabled('showShareFolderDialog', whenClause)) {
-					menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
-				}
-
-				if (CommandService.instance().isEnabled('leaveSharedFolder', whenClause)) {
-					menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('leaveSharedFolder', itemId)));
-				}
+				menu.append(folderCommandToMenuItem('showShareFolderDialog', itemId));
+				menu.append(folderCommandToMenuItem('leaveSharedFolder', itemId));
 
 				menu.append(
 					new MenuItem({
@@ -245,7 +225,7 @@ const useOnRenderItem = (props: Props) => {
 				);
 				if (Setting.value('notes.perFolderSortOrderEnabled')) {
 					menu.append(new MenuItem({
-						...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId),
+						...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId, { commandFolderId: itemId }),
 						type: 'checkbox',
 						checked: PerFolderSortOrderService.isSet(itemId),
 					}));
@@ -282,19 +262,17 @@ const useOnRenderItem = (props: Props) => {
 			for (const view of pluginViews) {
 				const location = view.location;
 
-				if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu ||
-					itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu
-				) {
+				if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu) {
 					menu.append(
 						new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId)),
 					);
+				} else if (itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu) {
+					menu.append(folderCommandToMenuItem(view.commandName, itemId));
 				}
 			}
 		} else {
 			if (itemType === BaseModel.TYPE_FOLDER) {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('restoreFolder', itemIds)),
-				);
+				menu.append(folderCommandToMenuItem('restoreFolder', itemIds));
 			}
 		}
 
