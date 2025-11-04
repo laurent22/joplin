@@ -74,7 +74,6 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should not resolve note conflicts when updated_time is unchanged', (async () => {
 		// updated_time will be unchanged when updating a note when E2EE is enabled for a profile, for example
-		const options = { 'autoTimestamp': false };
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
@@ -99,7 +98,7 @@ describe('Synchronizer.conflicts', () => {
 
 		note2.title = 'Updated on client 2 again';
 		note2.updated_time = note1.updated_time;
-		await Note.save(note2, options);
+		await Note.save(note2, { 'autoTimestamp': false });
 		note2 = await Note.load(note2.id);
 		await synchronizerStart();
 		const note2RepeatSyncItem = await BaseItem.syncItem(syncTargetId(), note2.id);
@@ -109,7 +108,7 @@ describe('Synchronizer.conflicts', () => {
 		let note2conf = await Note.load(note1.id);
 		note2conf.title = 'Updated on client 1';
 		note2conf.updated_time = note2.updated_time;
-		await Note.save(note2conf, options);
+		await Note.save(note2conf, { 'autoTimestamp': false });
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
 		note1SyncItem = await BaseItem.syncItem(syncTargetId(), note1.id);
