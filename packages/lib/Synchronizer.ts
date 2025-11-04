@@ -1031,7 +1031,7 @@ export default class Synchronizer {
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 							const options: any = {
 								autoTimestamp: false,
-								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs(), remote.updated_time),
+								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, BaseItem.remoteItemSyncTime(content.updated_time), remote.updated_time),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action === SyncAction.CreateLocal) options.isNew = true;
