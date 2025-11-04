@@ -7,13 +7,13 @@ import { clipboard } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
-import { _, _n } from '@joplin/lib/locale';
+import { _ } from '@joplin/lib/locale';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import Folder from '@joplin/lib/models/Folder';
 import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import { FolderEntity, TagEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity } from '@joplin/lib/services/database/types';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import InteropServiceHelper from '../../../InteropServiceHelper';
 import Setting from '@joplin/lib/models/Setting';
@@ -126,9 +126,12 @@ const useOnRenderItem = (props: Props) => {
 		const deleteButtonLabel = _('Remove');
 
 		if (itemType === BaseModel.TYPE_TAG) {
-			const tags: TagEntity[] = await Tag.loadItemsByIds(itemIds);
-			const tagTitles = tags.map(tag => _('"%s"', tag.title)).join(', ');
-			deleteMessage = _n('Remove tag %s from all notes?', 'Remove tags %s from all notes?', tags.length, substrWithEllipsis(tagTitles, 0, 32));
+			if (itemIds.length === 1) {
+				const tag = await Tag.load(itemId);
+				deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			} else {
+				deleteMessage = _('Remove %d tags from all notes? This cannot be undone.', itemIds.length);
+			}
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
 		}
