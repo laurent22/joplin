@@ -27,8 +27,10 @@ const useOnItemClick = ({ dispatch, selectedIndexesRef, itemsRef }: Props) => {
 	return useCallback(({ id, type, event }: ItemClickEvent) => {
 		const action = type === ModelType.Folder ? 'FOLDER_SELECT' : 'TAG_SELECT';
 		const selectedIndexes = selectedIndexesRef.current;
+		const findItemIndex = () => itemsRef.current.findIndex(item => listItemToId(item) === id);
+
 		if (event.shiftKey && selectedIndexes.length > 0) {
-			const index = itemsRef.current.findIndex(item => listItemToId(item) === id);
+			const index = findItemIndex();
 			if (index === -1) throw new Error(`No item found with ID: ${id}`);
 
 			const lastAddedIndex = selectedIndexes[selectedIndexes.length - 1];
@@ -43,8 +45,10 @@ const useOnItemClick = ({ dispatch, selectedIndexesRef, itemsRef }: Props) => {
 				ids: itemIds,
 			});
 		} else if (shim.isMac() ? event.metaKey : event.ctrlKey) {
+			const index = findItemIndex();
+			const actionType = selectedIndexes.includes(index) ? 'REMOVE' : 'ADD';
 			dispatch({
-				type: `${action}_ADD`,
+				type: `${action}_${actionType}`,
 				id: id,
 			});
 		} else {
