@@ -1,6 +1,5 @@
 import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 
@@ -15,15 +14,8 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, body = '', isTodo = false) => {
-			let folderId = Setting.value('activeFolderId');
+			const folderId = await Folder.getValidActiveFolder();
 			if (!folderId) return;
-
-			const folder = await Folder.load(folderId);
-			if (!folder || !!folder.deleted_time) {
-				const defaultFolder = await Folder.defaultFolder();
-				if (!defaultFolder) return;
-				folderId = defaultFolder.id;
-			}
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
