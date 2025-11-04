@@ -662,16 +662,13 @@ export const getNotesParent = (state: State): NotesParent => {
 };
 
 interface ChangeSelectedTagOrFolderOptions {
-	clearSelectedNoteIds?: boolean;
 	extendSelection?: boolean;
 }
 
 function changeSelectedTagOrFolder(
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	draft: Draft<State>, action: any, { clearSelectedNoteIds, extendSelection = false }: ChangeSelectedTagOrFolderOptions = {},
+	draft: Draft<State>, action: any, { extendSelection = false }: ChangeSelectedTagOrFolderOptions = {},
 ) {
-	clearSelectedNoteIds ??= extendSelection;
-
 	const isFolder = action.type.startsWith('FOLDER');
 	const isTag = action.type.startsWith('TAG');
 	if (!isFolder && !isTag) {
@@ -703,6 +700,7 @@ function changeSelectedTagOrFolder(
 		draft.notesParentType = defaultNotesParentType(draft, isTag ? 'Tag' : 'Folder');
 	}
 
+	const clearSelectedNoteIds = !extendSelection;
 	if (clearSelectedNoteIds) draft.selectedNoteIds = [];
 }
 
@@ -1091,7 +1089,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'FOLDER_SELECT_ADD':
 		case 'FOLDER_SELECT':
 			changeSelectedTagOrFolder(draft, action, {
-				clearSelectedNoteIds: true,
 				extendSelection: action.type === 'FOLDER_SELECT_ADD',
 			});
 			break;

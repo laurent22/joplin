@@ -424,6 +424,19 @@ describe('reducer', () => {
 		expect(state.selectedTagId).toBe(expected.selectedIds[0]);
 	});
 
+	it('should not clear the selected note IDs when adding folders to the selection', async () => {
+		const folders = await createNTestFolders(3);
+		const notes = await createNTestNotes(1, folders[0]);
+		const expectedSelection = createExpectedState(notes, [0], [0]).selectedIds;
+
+		let state = initTestState(folders, 0, notes, [0]);
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[1].id });
+
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+	});
+
 	it('should select all notes', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
