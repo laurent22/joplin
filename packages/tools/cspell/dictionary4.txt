@@ -203,3 +203,13 @@ traspire
 Pokies
 Pokiesman
 Gamstop
+ESIGNER
+TOTP
+SPSSO
+IDPSSO
+nameid
+attrname
+dpkg
+onepkg
+ATTLIST
+Keycloak

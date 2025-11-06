@@ -11,4 +11,5 @@ import './styles/link-tooltip.css';
 import './styles/joplin-image-view.css';
 import './styles/alt-text-editor.css';
 import './styles/floating-button-bar.css';
+import './styles/action-button.css';
 

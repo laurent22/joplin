@@ -39,12 +39,28 @@ Type `import --format md /path/to/file.md` or `import --format md /path/to/direc
 
 ### Importing from OneNote
 
-Joplin can also import OneNote notebooks. To do this:
+Joplin can also import OneNote notebooks:
 
-- Visit [OneNote Web](https://www.onenote.com/notebooks). 
-- Right-click the desired notebook and choose *Export notebook*.
-- Follow the instructions to download the backup. It should be a ZIP file.
-- Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
+#### Importing from OneNote Online
+
+1. Visit [OneNote Web](https://www.onenote.com/notebooks). 
+2. Right-click the desired notebook and choose *Export notebook*.
+3. Follow the instructions to download the backup. It should be a ZIP file.
+4. Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
+
+**Note**: As of October 2025, some users are reporting [incomplete exports from OneNote Online](https://learn.microsoft.com/en-us/answers/questions/5585745/onenote-exported-zip-file-is-incomplete). Importing notebooks exported from the Windows desktop application may be more reliable.
+
+#### Importing from the OneNote Windows desktop app
+
+This requires Joplin >=v3.5.5 and the OneNote Windows desktop app. Confusingly, the OneNote desktop app [is *not* the same as "OneNote for Windows 10"](https://support.microsoft.com/en-us/office/what-s-the-difference-between-the-onenote-versions-a624e692-b78b-4c09-b07f-46181958118f#id0ebd=windows).
+
+1. Open the OneNote desktop application.
+2. Open the "File" menu, then open the "Export" tab.
+3. Select "Section", then "OneNote 2010-2016 Section (`*.one`/`*.onex`)".
+	- Alternatively, select "Notebook", then "OneNote Package (`*.onepkg`)". However, `*.onepkg` files can currently only be imported if Joplin is running on Windows.
+4. Open the Joplin desktop application.
+5. From the "File" > "Import" menu, select "ZIP - OneNote Notebook". In the file picker, select the just-exported file.
+
 
 ### Importing from other applications
 

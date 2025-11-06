@@ -15,21 +15,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && "
 "n%100<=19) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:611
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 "- Aparat foto: pentru a permite realizarea unei fotografii și atașarea "
 "acesteia la o notă."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:614
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:624
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Locație: pentru a permite atașarea de informații de localizare geografică "
 "la o notă."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:608
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:618
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -50,7 +50,7 @@ msgstr "(%s)"
 msgid "(In plugin: %s)"
 msgstr "(în plugin-ul: %s)"
 
-#: packages/app-mobile/components/side-menu-content.tsx:265
+#: packages/app-mobile/components/side-menu-content.tsx:270
 msgid "(level %d)"
 msgstr "(nivel %d)"
 
@@ -62,13 +62,13 @@ msgstr "(nimic)"
 msgid "(Read-only)"
 msgstr "(doar citire)"
 
-#: packages/lib/models/settings/builtInMetadata.ts:40
-#: packages/lib/models/settings/builtInMetadata.ts:41
+#: packages/lib/models/settings/builtInMetadata.ts:53
+#: packages/lib/models/settings/builtInMetadata.ts:54
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:800
-#: packages/lib/shim-init-node.ts:276
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
+#: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Poți dezactiva această solicitare în opțiuni)"
 
@@ -111,8 +111,8 @@ msgstr "&Vizualizează"
 msgid "&Window"
 msgstr "&Fereastră"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1655
-#: packages/lib/models/settings/builtInMetadata.ts:1945
+#: packages/lib/models/settings/builtInMetadata.ts:1696
+#: packages/lib/models/settings/builtInMetadata.ts:2010
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d zi"
@@ -131,9 +131,9 @@ msgstr "%d GO"
 msgid "%d GB storage space"
 msgstr "spațiu de stocare %d GO"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1377
-#: packages/lib/models/settings/builtInMetadata.ts:1378
-#: packages/lib/models/settings/builtInMetadata.ts:1379
+#: packages/lib/models/settings/builtInMetadata.ts:1408
+#: packages/lib/models/settings/builtInMetadata.ts:1409
+#: packages/lib/models/settings/builtInMetadata.ts:1410
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d oră"
@@ -152,9 +152,9 @@ msgstr "%d MO"
 msgid "%d MB per note or attachment"
 msgstr "%d MO per notiță sau atașament"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1374
-#: packages/lib/models/settings/builtInMetadata.ts:1375
-#: packages/lib/models/settings/builtInMetadata.ts:1376
+#: packages/lib/models/settings/builtInMetadata.ts:1405
+#: packages/lib/models/settings/builtInMetadata.ts:1406
+#: packages/lib/models/settings/builtInMetadata.ts:1407
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minut"
@@ -205,13 +205,13 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (pre-lansare)"
 
-#: packages/lib/models/settings/builtInMetadata.ts:682
-#: packages/lib/models/settings/builtInMetadata.ts:683
-#: packages/lib/models/settings/builtInMetadata.ts:684
+#: packages/lib/models/settings/builtInMetadata.ts:706
+#: packages/lib/models/settings/builtInMetadata.ts:707
+#: packages/lib/models/settings/builtInMetadata.ts:708
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/settings/builtInMetadata.ts:681
+#: packages/lib/models/settings/builtInMetadata.ts:705
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -308,7 +308,11 @@ msgstr ""
 "notiță obișnuită, aceasta va fi transformată în listă de făcut). Folosește "
 "„clear” pentru a converti lista de făcut înapoi la o notiță obișnuită."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1913
+#: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
+msgid "A brief description of the image:"
+msgstr "O descriere sumară a imaginii:"
+
+#: packages/lib/models/settings/builtInMetadata.ts:1970
 msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
@@ -320,19 +324,19 @@ msgstr ""
 msgid "A new update (%s) is available"
 msgstr "O nouă actualizare (%s) este disponibilă"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1403
+#: packages/lib/models/settings/builtInMetadata.ts:1434
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1401
+#: packages/lib/models/settings/builtInMetadata.ts:1432
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1404
+#: packages/lib/models/settings/builtInMetadata.ts:1435
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:75
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
 msgid "About"
 msgstr "Despre"
@@ -404,8 +408,8 @@ msgid "Action"
 msgstr "Acțiune"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:77
-#: packages/app-mobile/components/ScreenHeader/index.tsx:674
+#: packages/app-mobile/components/ModalDialog.tsx:87
+#: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Acțiuni"
 
@@ -418,12 +422,16 @@ msgstr "Activ"
 msgid "Actual Size"
 msgstr "Dimensiunea actuală"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1644
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Adaugă corp"
 
+#: packages/editor/ProseMirror/plugins/tablePlugin.ts:24
+msgid "Add column"
+msgstr ""
+
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
-#: packages/app-mobile/components/ComboBox.tsx:99
+#: packages/app-mobile/components/ComboBox.tsx:103
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:136
 msgid "Add new"
 msgstr "Adaugă un nou"
@@ -432,15 +440,20 @@ msgstr "Adaugă un nou"
 msgid "Add or remove tags:"
 msgstr "Adaugă sau elimină etichete:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Adaugă destinatar:"
 
-#: packages/app-mobile/components/TagEditor.tsx:265
+#: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
+#, fuzzy
+msgid "Add row"
+msgstr "Adaugă un nou"
+
+#: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
 msgstr "Adaugă etichete:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1726
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Adaugă titlu"
 
@@ -452,15 +465,15 @@ msgstr "Adaugă în dicționar"
 msgid "Add to note"
 msgstr "Adaugă la notiță"
 
-#: packages/app-mobile/components/ComboBox.tsx:89
+#: packages/app-mobile/components/ComboBox.tsx:93
 msgid "Added new: %s"
 msgstr "Adaugă nou: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:219
+#: packages/app-mobile/components/TagEditor.tsx:233
 msgid "Added tag: %s"
 msgstr "Etichetă adăugată: %s"
 
-#: packages/app-mobile/components/TagEditor.tsx:206
+#: packages/app-mobile/components/TagEditor.tsx:220
 msgid "Adds tag"
 msgstr "Adaugă etichete"
 
@@ -473,12 +486,11 @@ msgstr "Admin"
 msgid "Admin dashboard"
 msgstr "Panou de control administrativ"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:151
 msgid "Advanced options"
 msgstr "Opțiuni avansate"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:671
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:681
 msgid "Advanced settings"
 msgstr "Setări avansate"
 
@@ -502,9 +514,9 @@ msgid "All item sync failures have been marked as \"ignored\"."
 msgstr ""
 "Toate erorile de sincronizare ale elementelor au fost marcate ca „ignorate”."
 
-#: packages/app-desktop/gui/Sidebar/listItemComponents/AllNotesItem.tsx:73
+#: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:72
 #: packages/app-mobile/components/screens/Notes/Notes.tsx:208
-#: packages/app-mobile/components/side-menu-content.tsx:679
+#: packages/app-mobile/components/side-menu-content.tsx:684
 msgid "All notes"
 msgstr "Toate notițele"
 
@@ -517,7 +529,7 @@ msgstr ""
 msgid "All shared folders:"
 msgstr "Toate dosarele partajate:"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1008
+#: packages/lib/models/settings/builtInMetadata.ts:1032
 msgid "Allows debugging mobile plugins. See %s for details."
 msgstr ""
 "Permite depanarea plugin-urilor mobile. Vezi %s pentru mai multe detalii."
@@ -534,11 +546,11 @@ msgstr "Publică, de asemenea, notițele asociate"
 msgid "Alternative instance ID: %s"
 msgstr "ID instanță alternativ: %s"
 
-#: packages/lib/models/settings/builtInMetadata.ts:448
+#: packages/lib/models/settings/builtInMetadata.ts:470
 msgid "Always"
 msgstr "Mereu"
 
-#: packages/lib/models/settings/builtInMetadata.ts:964
+#: packages/lib/models/settings/builtInMetadata.ts:988
 msgid "Always ask"
 msgstr "Întreabă"
 
@@ -546,7 +558,7 @@ msgstr "Întreabă"
 msgid "Always open %s files without asking."
 msgstr "Deschide mereu fișierele %s fără să mai întrebi."
 
-#: packages/lib/models/settings/builtInMetadata.ts:965
+#: packages/lib/models/settings/builtInMetadata.ts:989
 msgid "Always resize"
 msgstr "Mereu"
 
@@ -573,6 +585,16 @@ msgid "An autosaved drawing was found. Attach a copy of it to the note?"
 msgstr ""
 "A fost găsit un desen salvat automat. Atașezi o copie a acestuia la notiță?"
 
+#: packages/app-mobile/components/FeedbackBanner.tsx:125
+msgid ""
+"An error occurred while sending the response. This can happen if the app is "
+"offline or cannot connect to the server.\n"
+"Error: %s"
+msgstr ""
+"A apărut o eroare la trimiterea răspunsului. Acest lucru se poate întîmpla "
+"dacă aplicația este offline sau nu se poate conecta la server.\n"
+"Eroare: %s"
+
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
 msgstr "S-a produs o eroare: %s"
@@ -594,16 +616,16 @@ msgstr ""
 "Orice e-mail trimis la această adresă va fi convertit într-o notiță și va fi "
 "adăugat la colecția ta. Notița va fi salvată în caietul Inbox"
 
-#: packages/lib/models/Setting.ts:1253
+#: packages/lib/models/Setting.ts:1294
 msgid "Appearance"
 msgstr "Aspect"
 
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1299
 msgid "Application"
 msgstr "Aplicație"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:58
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Aplică"
 
@@ -615,7 +637,7 @@ msgstr ""
 "Ești sigur că dorești să restaurezi aspectul implicit al barelor de unelte?\n"
 "Acest lucru nu poate fi anulat."
 
-#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:17
+#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:19
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
@@ -623,7 +645,6 @@ msgstr ""
 "Ești sigur că dorești să ștergi tot istoricul pentru această notă? Acest "
 "lucru nu poate fi anulat."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Ești sigur că dorești să reînnoiești jetonul de autorizare?"
@@ -640,15 +661,15 @@ msgstr ""
 msgid "Arguments:"
 msgstr "Argumente:"
 
-#: packages/lib/models/settings/builtInMetadata.ts:59
+#: packages/lib/models/settings/builtInMetadata.ts:72
 msgid "Aritim Dark"
 msgstr "Aritim întunecat"
 
-#: packages/app-mobile/components/TagEditor.tsx:172
+#: packages/app-mobile/components/TagEditor.tsx:188
 msgid "Associated tags:"
 msgstr "Etichete asociate:"
 
-#: packages/app-mobile/utils/lockToSingleInstance.ts:15
+#: packages/app-mobile/utils/lockToSingleInstance.ts:16
 msgid ""
 "At present, Joplin Web can only be open in one tab at a time. Please close "
 "the other instance of Joplin."
@@ -661,7 +682,7 @@ msgid "Attach"
 msgstr "Atașează"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:75
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:803
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:804
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:26
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:90
 msgid "Attach file"
@@ -671,7 +692,7 @@ msgstr "Atașează fișier..."
 msgid "Attach photo"
 msgstr "Atașează imagine"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1266
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Atașează..."
 
@@ -679,8 +700,8 @@ msgstr "Atașează..."
 msgid "Attaches the given file to the note."
 msgstr "Atașează fișierul în notiță."
 
-#: packages/server/src/models/UserModel.ts:328
-#: packages/server/src/models/UserModel.ts:345
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "atașament"
 
@@ -692,7 +713,7 @@ msgstr "Atașament"
 msgid "Attachment conflict: \"%s\""
 msgstr "Conflict atașament: „%s”"
 
-#: packages/lib/models/settings/builtInMetadata.ts:444
+#: packages/lib/models/settings/builtInMetadata.ts:466
 msgid "Attachment download behaviour"
 msgstr "Comportamentul de descărcare ale atașamentelor"
 
@@ -704,7 +725,7 @@ msgstr "Atașament"
 msgid "Attachments that could not be downloaded"
 msgstr "Acest fișier nu a putut fi descărcat: %s"
 
-#: packages/lib/models/settings/builtInMetadata.ts:44
+#: packages/lib/models/settings/builtInMetadata.ts:57
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -722,7 +743,6 @@ msgid ""
 msgstr ""
 "Autentificarea nu a fost finalizată (nu a primit un token de autentificare)."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
 msgid "Authorisation token:"
 msgstr "Token autorizare:"
@@ -732,7 +752,7 @@ msgstr "Token autorizare:"
 msgid "Authorise"
 msgstr "Autorizează"
 
-#: packages/lib/models/settings/builtInMetadata.ts:450
+#: packages/lib/models/settings/builtInMetadata.ts:472
 msgid "Auto"
 msgstr "Auto"
 
@@ -740,38 +760,37 @@ msgstr "Auto"
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Adaugă automat conturile dezactivate pentru ștergere"
 
-#: packages/lib/models/settings/builtInMetadata.ts:761
+#: packages/lib/models/settings/builtInMetadata.ts:785
 msgid "Auto-format Markdown in the Rich Text Editor"
 msgstr "Formatează automat Markdown în editorul de text îmbogățit"
 
-#: packages/lib/models/settings/builtInMetadata.ts:718
+#: packages/lib/models/settings/builtInMetadata.ts:742
 msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "Împerechează automat parantezele, ghilimelele etc."
 
-#: packages/lib/models/settings/builtInMetadata.ts:729
+#: packages/lib/models/settings/builtInMetadata.ts:753
 msgid "Autocomplete Markdown and HTML"
 msgstr "Autocompletare Markdown și HTML"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1348
+#: packages/lib/models/settings/builtInMetadata.ts:1379
 msgid "Automatically check for updates"
 msgstr "Verificarea automată a actualizărilor"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1932
+#: packages/lib/models/settings/builtInMetadata.ts:1997
 msgid "Automatically delete notes in the trash after a number of days"
 msgstr ""
 "Șterge automat notițele din coșul de gunoi după un anumit număr de zile"
 
-#: packages/lib/models/settings/builtInMetadata.ts:629
+#: packages/lib/models/settings/builtInMetadata.ts:653
 msgid "Automatically switch theme to match system theme"
 msgstr "Comută automat tema pentru a se potrivi cu tema sistemului"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:191
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:147
 #: packages/app-mobile/components/CameraView/CameraViewMultiPage.tsx:84
-#: packages/app-mobile/components/ScreenHeader/index.tsx:286
+#: packages/app-mobile/components/ScreenHeader/index.tsx:298
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
 msgstr "Înapoi"
@@ -781,13 +800,14 @@ msgid "Basic"
 msgstr "De bază"
 
 #: packages/app-mobile/components/BetaChip.tsx:37
-#: packages/app-mobile/components/ScreenHeader/WebBetaButton.tsx:38
-#: packages/app-mobile/components/ScreenHeader/WebBetaButton.tsx:46
+#: packages/app-mobile/components/ScreenHeader/WebBetaButton.tsx:62
+#: packages/app-mobile/components/ScreenHeader/WebBetaButton.tsx:70
 msgid "Beta"
 msgstr "Beta"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:65
+#: packages/app-mobile/components/NoteEditor/NoteEditor.test.tsx:101
 msgid "Bold"
 msgstr "Aldin"
 
@@ -839,12 +859,10 @@ msgstr "Se poate vizualiza și edita"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.min.js:38
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
-#: packages/app-desktop/gui/PromptDialog.min.js:249
-#: packages/app-desktop/gui/PromptDialog.tsx:299
+#: packages/app-desktop/gui/PromptDialog.tsx:297
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:150
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
@@ -855,18 +873,18 @@ msgstr "Se poate vizualiza și edita"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:116
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
-#: packages/app-mobile/components/screens/Note/Note.tsx:240
-#: packages/app-mobile/components/screens/Note/Note.tsx:803
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:59
+#: packages/app-mobile/components/screens/Note/Note.tsx:245
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
-#: packages/app-mobile/components/side-menu-content.tsx:348
-#: packages/app-mobile/components/side-menu-content.tsx:398
-#: packages/app-mobile/components/side-menu-content.tsx:434
-#: packages/app-mobile/components/side-menu-content.tsx:650
+#: packages/app-mobile/components/side-menu-content.tsx:354
+#: packages/app-mobile/components/side-menu-content.tsx:404
+#: packages/app-mobile/components/side-menu-content.tsx:440
+#: packages/app-mobile/components/side-menu-content.tsx:655
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:209
 #: packages/app-mobile/utils/makeShowMessageBox.ts:16
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
-#: packages/lib/shim-init-node.ts:277
+#: packages/lib/shim-init-node.ts:278
 msgid "Cancel"
 msgstr "Anulează"
 
@@ -883,7 +901,7 @@ msgstr ""
 "recuperat. Ești sigur că dorești să continui?"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.tsx:23
-#: packages/lib/Synchronizer.ts:206
+#: packages/lib/Synchronizer.ts:208
 msgid "Cancelling..."
 msgstr "Se amînă..."
 
@@ -891,7 +909,7 @@ msgstr "Se amînă..."
 msgid "Cancelling... Please wait."
 msgstr "Se anulează... Te rog să aștepți."
 
-#: packages/lib/shim-init-node.ts:337
+#: packages/lib/shim-init-node.ts:338
 msgid "Cannot access %s"
 msgstr "Nu se poate accesa %s"
 
@@ -899,7 +917,7 @@ msgstr "Nu se poate accesa %s"
 msgid "Cannot change encrypted item"
 msgstr "Nu se poate schimba itemul criptat"
 
-#: packages/lib/models/Note.ts:621
+#: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Nu se poate copia notița în caietul de notițe „%s”"
 
@@ -930,8 +948,8 @@ msgstr "Nu se poate create o notiță nouă: %s"
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
 #: packages/app-cli/app/command-use.ts:23
-#: packages/lib/services/interop/InteropService.ts:300
-#: packages/lib/services/interop/InteropService.ts:319
+#: packages/lib/services/interop/InteropService.ts:305
+#: packages/lib/services/interop/InteropService.ts:324
 msgid "Cannot find \"%s\"."
 msgstr "Nu poate fi găsit „%s”."
 
@@ -943,20 +961,20 @@ msgstr "Nu poate fi găsit „%s”"
 msgid "Cannot initialise synchroniser."
 msgstr "Nu se poate inițializa sincronizatorul."
 
-#: packages/lib/services/interop/InteropService.ts:267
+#: packages/lib/services/interop/InteropService.ts:272
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "Nu se poate încărca modulul „%s” pentru formatul „%s” și ieșirea „%s”"
 
-#: packages/lib/services/interop/InteropService.ts:280
+#: packages/lib/services/interop/InteropService.ts:285
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Nu se poate încărca modulul „%s” pentru formatul „%s” și ținta „%s”"
 
-#: packages/lib/models/Note.ts:634
+#: packages/lib/models/Note.ts:635
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe „%s”"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:939
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Nu se poate muta caietul de notițe în această locație"
 
@@ -968,12 +986,12 @@ msgstr ""
 "Nu se poate reactualiza token-ul: lipsesc datele de autentificare. Este "
 "posibil ca problema să fie rezolvată prin reluarea sincronizării."
 
-#: packages/server/src/models/UserModel.ts:327
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Nu se poate salva %s „%s” deoarece este mai mare decît limita permisă (%s)"
 
-#: packages/server/src/models/UserModel.ts:344
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -981,7 +999,7 @@ msgstr ""
 "Nu se poate salva %s „%s” pentru că ar depăși dimensiunea totală permisă "
 "(%s) pentru acest cont"
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -1033,7 +1051,7 @@ msgid "Check for updates..."
 msgstr "Verifică pentru actualizări..."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:286
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:483
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:492
 msgid "Check synchronisation configuration"
 msgstr "Verifică configurația de sincronizare"
 
@@ -1057,16 +1075,14 @@ msgstr "Se verifică... Te rog să aștepți."
 msgid "Choose an option"
 msgstr "Selectează o opțiune"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:17
 #: packages/app-desktop/gui/ExtensionBadge.tsx:72
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:150
-#: packages/app-desktop/gui/PromptDialog.min.js:256
-#: packages/app-desktop/gui/PromptDialog.tsx:306
+#: packages/app-desktop/gui/PromptDialog.tsx:304
 #: packages/app-mobile/components/screens/ConfigScreen/FileSystemPathSelector.tsx:105
-#: packages/app-mobile/components/screens/SearchScreen/index.tsx:111
+#: packages/app-mobile/components/screens/SearchScreen/index.tsx:137
 msgid "Clear"
 msgstr "Șterge"
 
@@ -1080,7 +1096,6 @@ msgstr "Șterge alarma"
 msgid "Clear search"
 msgstr "Șterge căutarea"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #: packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.ts:5
 msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
@@ -1106,12 +1121,12 @@ msgid "close"
 msgstr "închide"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
-#: packages/app-mobile/components/DismissibleDialog.tsx:83
+#: packages/app-mobile/components/DismissibleDialog.tsx:111
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
@@ -1119,11 +1134,11 @@ msgstr "închide"
 msgid "Close"
 msgstr "Închide"
 
-#: packages/app-mobile/components/Modal.tsx:139
+#: packages/app-mobile/components/Modal.tsx:155
 msgid "Close dialog"
 msgstr "Închide dialogul"
 
-#: packages/app-mobile/components/Dropdown.tsx:200
+#: packages/app-mobile/components/Dropdown.tsx:225
 msgid "Close dropdown"
 msgstr "Închide meniul derulant"
 
@@ -1146,7 +1161,7 @@ msgstr ""
 msgid "Close Window"
 msgstr "Închide fereastra"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:162
 msgid "Closing session..."
 msgstr "Se închide sesiunea..."
 
@@ -1163,15 +1178,15 @@ msgstr "Cmd-clic pentru a deschide: %s"
 msgid "Code"
 msgstr "Cod"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:813
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:814
 msgid "Code Block"
 msgstr "Bloc de cod"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1556
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Vizualizare code"
 
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:147
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:29
 msgid "Code:"
 msgstr "Cod:"
 
@@ -1180,12 +1195,18 @@ msgid "Collaborate on a notebook with others"
 msgstr "Colaborează la caiet cu alte persoane"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:177
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:123
 msgid "Collaborate on notebooks with others"
 msgstr "Colaborează la caiete cu alte persoane"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
 msgid "Collapse all notebooks"
 msgstr "Restrînge toate caietele"
+
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
+msgid "Collapse title"
+msgstr "Restrînge titlul"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1195,7 +1216,7 @@ msgstr "Restrîns"
 msgid "Coming alarms"
 msgstr "Alarmele următoare"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1550
+#: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -1243,7 +1264,6 @@ msgid "Complete to-do"
 msgstr "Sarcini de făcut finalizate"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
 msgid "Completed"
 msgstr "Finalizat"
@@ -1260,11 +1280,11 @@ msgstr ""
 "Finalizată cu atenționări:\n"
 "%s"
 
-#: packages/lib/Synchronizer.ts:207
+#: packages/lib/Synchronizer.ts:209
 msgid "Completed: %s (%s)"
 msgstr "Finalizat: %s (%s)"
 
-#: packages/lib/models/Note.ts:66
+#: packages/lib/models/Note.ts:67
 msgid "completion date"
 msgstr "data realizării"
 
@@ -1273,12 +1293,12 @@ msgid "Compress old changes"
 msgstr "Comprimă modificările vechi"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:126
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:837
-#: packages/app-mobile/components/side-menu-content.tsx:628
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:847
+#: packages/app-mobile/components/side-menu-content.tsx:633
 msgid "Configuration"
 msgstr "Configurare"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1261
+#: packages/lib/models/settings/builtInMetadata.ts:1292
 msgid "Configures the size of scrollbars used in the app."
 msgstr "Configurează mărimea barelor de derulare folosite în aplicație."
 
@@ -1309,12 +1329,12 @@ msgid "Conflicts (attachments)"
 msgstr "Conflicte (atașamente)"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:253
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:474
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:483
 msgid "Connect to Joplin Cloud"
 msgstr "Conectare la Joplin Cloud"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:274
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:476
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:485
 msgid "Connect using your organisation account"
 msgstr "Conectează-te folosind contul tău organizațional"
 
@@ -1333,7 +1353,7 @@ msgstr[2] "Conține %d de notițe"
 msgid "Content provided by %s"
 msgstr "Conținut asigurat de %s"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:102
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:101
 msgid "Content provided by: %s"
 msgstr "Conținut asigurat de: %s"
 
@@ -1347,7 +1367,7 @@ msgstr "Continuă"
 msgid "Control character"
 msgstr "Caracter de control"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:660
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 msgid "Convert it"
 msgstr "Convertește-o"
 
@@ -1355,15 +1375,15 @@ msgstr "Convertește-o"
 msgid "Convert note to Markdown"
 msgstr "Convertește notița în Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1332
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Convertește în notiță"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1332
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Conversie în todo"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:168
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:162
 msgid "Converting speech to text..."
 msgstr "Conversia vorbirii în text…"
 
@@ -1382,7 +1402,7 @@ msgstr "Copiază comanda dev mode în clipboard"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1350
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Copiază link-ul extern"
 
@@ -1400,7 +1420,7 @@ msgid "Copy link to website"
 msgstr "Copiază legătură către website"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1341
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Copiază link-ul Markdown"
 
@@ -1421,12 +1441,11 @@ msgstr[2] "Copiază legăturile partajabile"
 msgid "Copy to clipboard"
 msgstr "Copiază locația în clipboard"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
 msgstr "Copie token"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:629
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:639
 msgid "Copy version info"
 msgstr "Copiază informații versiune"
 
@@ -1464,7 +1483,7 @@ msgstr "Nu s-a putut conecta la repozitoriul de plugin-uri."
 msgid "Could not convert note to Markdown: %s"
 msgstr "Nu s-a putut converti notița în Markdown: %s"
 
-#: packages/app-desktop/InteropServiceHelper.ts:224
+#: packages/app-desktop/InteropServiceHelper.ts:230
 msgid "Could not export notes: %s"
 msgstr "Nu s-au putut exporta notițele: %s"
 
@@ -1504,8 +1523,7 @@ msgstr ""
 msgid "Could not verify your identity: %s"
 msgstr "Nu ți-am putut verifica identitatea: %s"
 
-#: packages/app-desktop/gui/PromptDialog.min.js:235
-#: packages/app-desktop/gui/PromptDialog.tsx:285
+#: packages/app-desktop/gui/PromptDialog.tsx:283
 msgid "Create"
 msgstr "Create"
 
@@ -1526,7 +1544,7 @@ msgstr "Creează un nou caiet"
 msgid "Create new profile..."
 msgstr "Creează un nou profil…"
 
-#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:169
+#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:212
 msgid "Create note"
 msgstr "Creează o notiță"
 
@@ -1539,16 +1557,15 @@ msgid "Create user"
 msgstr "Creează un utilizator"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:14
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:81
 msgid "Created"
 msgstr "Creat"
 
-#: packages/lib/models/Note.ts:63
+#: packages/lib/models/Note.ts:64
 msgid "created date"
 msgstr "data creării"
 
-#: packages/lib/Synchronizer.ts:199
+#: packages/lib/Synchronizer.ts:201
 msgid "Created local items: %d."
 msgstr "Elemente locale create: %d."
 
@@ -1556,7 +1573,7 @@ msgstr "Elemente locale create: %d."
 msgid "Created locally"
 msgstr "Creat local"
 
-#: packages/lib/Synchronizer.ts:201
+#: packages/lib/Synchronizer.ts:203
 msgid "Created remote items: %d."
 msgstr "Elemente la distanță create: %d."
 
@@ -1565,13 +1582,12 @@ msgid "Created: "
 msgstr "Creat: "
 
 #: packages/app-cli/app/command-import.ts:54
-#: packages/app-desktop/gui/ImportScreen.min.js:69
 #: packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
 msgstr "Creat: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1134
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Creat: %s"
 
@@ -1599,11 +1615,11 @@ msgstr "Se creează o nouă notiță…"
 msgid "Creating new to-do..."
 msgstr "Se creează o nouă listă de făcut…"
 
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:78
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:79
 msgid "Creating note \"%s\"..."
 msgstr "Se creează notița „%s”..."
 
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:130
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:142
 msgid "Creating note."
 msgstr "Se creează notița."
 
@@ -1631,7 +1647,7 @@ msgstr "Parola curentă"
 msgid "Current version is up-to-date."
 msgstr "Versiunea curentă este actualizată."
 
-#: packages/lib/models/Note.ts:64
+#: packages/lib/models/Note.ts:65
 msgid "custom order"
 msgstr "comandă personalizată"
 
@@ -1639,15 +1655,15 @@ msgstr "comandă personalizată"
 msgid "Custom order"
 msgstr "Comandă personalizată"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1317
+#: packages/lib/models/settings/builtInMetadata.ts:1348
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Stylesheet personalizat pentru stilurile aplicației Joplin-wide"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1300
+#: packages/lib/models/settings/builtInMetadata.ts:1331
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Stylesheet personalizat pentru Markdown redat"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1549
+#: packages/lib/models/settings/builtInMetadata.ts:1590
 msgid "Custom TLS certificates"
 msgstr "Certificate TLS cusomizate"
 
@@ -1661,7 +1677,7 @@ msgstr "Personalizează banner-ul de publicare a notițelor"
 msgid "Cut"
 msgstr "Decupează"
 
-#: packages/lib/models/settings/builtInMetadata.ts:54
+#: packages/lib/models/settings/builtInMetadata.ts:67
 msgid "Dark"
 msgstr "Întunecat"
 
@@ -1673,12 +1689,12 @@ msgstr "Dashboard"
 msgid "Date"
 msgstr "Data"
 
-#: packages/lib/models/settings/builtInMetadata.ts:510
+#: packages/lib/models/settings/builtInMetadata.ts:532
 msgid "Date format"
 msgstr "Format dată"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1655
-#: packages/lib/models/settings/builtInMetadata.ts:1945
+#: packages/lib/models/settings/builtInMetadata.ts:1696
+#: packages/lib/models/settings/builtInMetadata.ts:2010
 msgid "days"
 msgstr "zile"
 
@@ -1694,18 +1710,18 @@ msgstr "Elemente decriptate: %d"
 msgid "Decrypted items: %s / %s"
 msgstr "Se decriptează elementele: %s / %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:48
-#: packages/app-mobile/components/side-menu-content.tsx:637
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:47
+#: packages/app-mobile/components/side-menu-content.tsx:642
 msgid "Decrypting items: %d/%d"
 msgstr "Se decriptează elementele: %d/%d"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1193
-#: packages/lib/models/settings/builtInMetadata.ts:1200
-#: packages/lib/models/settings/builtInMetadata.ts:1439
+#: packages/lib/models/settings/builtInMetadata.ts:1224
+#: packages/lib/models/settings/builtInMetadata.ts:1231
+#: packages/lib/models/settings/builtInMetadata.ts:1470
 msgid "Default"
 msgstr "Mod implicit"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1924
+#: packages/lib/models/settings/builtInMetadata.ts:1981
 msgid "Default title to use for documents created by the scanner."
 msgstr "Titlul implicit de folosit pentru documentele create de la scanner."
 
@@ -1717,12 +1733,12 @@ msgstr "Mod implicit: %s"
 #: packages/app-desktop/gui/ResourceScreen.tsx:135
 #: packages/app-desktop/gui/ResourceScreen.tsx:232
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:135
-#: packages/app-mobile/components/ScreenHeader/index.tsx:402
-#: packages/app-mobile/components/ScreenHeader/index.tsx:472
-#: packages/app-mobile/components/ScreenHeader/index.tsx:550
+#: packages/app-mobile/components/ScreenHeader/index.tsx:414
+#: packages/app-mobile/components/ScreenHeader/index.tsx:484
+#: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1391
-#: packages/app-mobile/components/side-menu-content.tsx:427
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
+#: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
 msgstr "Șterge"
@@ -1730,6 +1746,11 @@ msgstr "Șterge"
 #: packages/app-desktop/gui/ResourceScreen.tsx:231
 msgid "Delete attachment \"%s\"?"
 msgstr "Ștergi atașamentul „%s”?"
+
+#: packages/editor/ProseMirror/plugins/tablePlugin.ts:34
+#, fuzzy
+msgid "Delete column"
+msgstr "Șterge linia"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1740,7 +1761,7 @@ msgid "Delete expired tokens"
 msgstr "Șterge token-urile expirate"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:190
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 msgid "Delete history"
 msgstr "Șterge istoricul"
 
@@ -1749,7 +1770,7 @@ msgstr "Șterge istoricul"
 msgid "Delete line"
 msgstr "Șterge linia"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1341
+#: packages/lib/models/settings/builtInMetadata.ts:1372
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 "Șterge datele locale și descarcă din nou de la destinația de sincronizare"
@@ -1770,12 +1791,17 @@ msgstr "Ștergi plugin-ul „%s”?"
 msgid "Delete profile \"%s\""
 msgstr "Ștergi profilul „%s”?"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:474
+#: packages/editor/ProseMirror/plugins/tablePlugin.ts:29
+#, fuzzy
+msgid "Delete row"
+msgstr "Șterge notița"
+
+#: packages/app-mobile/components/ScreenHeader/index.tsx:486
 msgid "Delete selected notes"
 msgstr "Șterge aceste notițe"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:22
-#: packages/app-mobile/components/side-menu-content.tsx:407
+#: packages/app-mobile/components/side-menu-content.tsx:413
 msgid ""
 "Delete the Inbox notebook?\n"
 "\n"
@@ -1787,7 +1813,7 @@ msgstr ""
 "Dacă ștergi caietul de notițe Inbox, orice e-mail trimis recent în acesta "
 "poate fi pierdut."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -1804,11 +1830,11 @@ msgstr "Ștergi acest profil?"
 msgid "Deleted"
 msgstr "Șters"
 
-#: packages/lib/Synchronizer.ts:203
+#: packages/lib/Synchronizer.ts:205
 msgid "Deleted local items: %d."
 msgstr "Elemente locale șterse: %d."
 
-#: packages/lib/Synchronizer.ts:204
+#: packages/lib/Synchronizer.ts:206
 msgid "Deleted remote items: %d."
 msgstr "Elemente șterse de la distanță: %d."
 
@@ -1832,11 +1858,11 @@ msgstr "Șterge notițele care se potrivesc cu <note-pattern>."
 msgid "Deletes the notes without asking for confirmation."
 msgstr "Șterge notițele fără a cere confirmare."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:569
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:579
 msgid "Deletion log"
 msgstr "Jurnal ștergeri"
 
-#: packages/app-mobile/components/NoteItem.tsx:151
+#: packages/app-mobile/components/NoteItem.tsx:152
 msgid "Deselect"
 msgstr "Deselectează"
 
@@ -1861,7 +1887,7 @@ msgstr "Dispozitiv: %s"
 msgid "Directory"
 msgstr "dosar"
 
-#: packages/lib/models/settings/builtInMetadata.ts:147
+#: packages/lib/models/settings/builtInMetadata.ts:169
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Directorul cu care se sincronizează (cale absolută)"
 
@@ -1882,7 +1908,6 @@ msgstr "Dezactivează modul de siguranță și repornește"
 msgid "Disable synchronisation"
 msgstr "Dezactivează sincronizarea"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:97
 msgid "Disable Web Clipper Service"
 msgstr "Dezactivează serviciul Web Clipper"
@@ -1892,7 +1917,7 @@ msgstr "Dezactivează serviciul Web Clipper"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:143
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:85
 #: packages/app-mobile/components/screens/encryption-config.tsx:353
-#: packages/lib/models/settings/builtInMetadata.ts:1373
+#: packages/lib/models/settings/builtInMetadata.ts:1404
 msgid "Disabled"
 msgstr "Dezactivat"
 
@@ -1916,15 +1941,16 @@ msgid "Discard"
 msgstr "Renunță"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:46
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
-#: packages/app-mobile/components/screens/Note/Note.tsx:240
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:290
+#: packages/app-mobile/components/screens/Note/Note.tsx:245
 msgid "Discard changes"
 msgstr "Renunță la schimbări"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/BannerContent.tsx:20
+#: packages/app-mobile/components/FeedbackBanner.tsx:203
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:23
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:154
-#: packages/app-mobile/root.tsx:1016
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:166
+#: packages/app-mobile/root.tsx:783
 msgid "Dismiss"
 msgstr "Respinge"
 
@@ -1984,7 +2010,9 @@ msgstr "Fă-o acum"
 msgid "Do not ask for confirmation."
 msgstr "Nu cere confirmarea."
 
+#: packages/app-cli/app/command-publish.ts:32
 #: packages/app-cli/app/command-share.ts:66
+#: packages/app-cli/app/command-unpublish.ts:29
 msgid "Do not ask for user confirmation."
 msgstr "Nu cere confirmarea utilizatorului."
 
@@ -1998,7 +2026,11 @@ msgstr ""
 "modalitate de decriptare a datelor! Pentru a activa criptarea, te rog să "
 "întroduci parola mai jos."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1923
+#: packages/app-mobile/components/FeedbackBanner.tsx:167
+msgid "Do you find the Joplin web app useful?"
+msgstr "Consideri că aplicația web Joplin este utilă?"
+
+#: packages/lib/models/settings/builtInMetadata.ts:1980
 msgid "Document scanner: Title template"
 msgstr "Scanner documente: Șablon titlu"
 
@@ -2010,18 +2042,19 @@ msgstr ""
 "Nu permite destinatarii partajării să scrie în caietul comun. Valid doar "
 "pentru subcomanda `add`."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:662
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr "Nu mai afișa acest mesaj"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1340
 msgid "Donate, website"
 msgstr "Donează, website"
 
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:145
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:200
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:146
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:194
+#: packages/editor/ProseMirror/plugins/imagePlugin.ts:162
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:28
 #: packages/lib/models/Resource.ts:34
 msgid "Done"
 msgstr "Realizat"
@@ -2030,7 +2063,6 @@ msgstr "Realizat"
 msgid "Download"
 msgstr "Descarcă"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:143
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Descarcă și instalează extensia relevantă pentru navigatorul tău web:"
@@ -2055,7 +2087,7 @@ msgstr "Descărcat și criptat"
 msgid "Downloading"
 msgstr "Descărcare"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:170
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:164
 msgid "Downloading %s language files..."
 msgstr "Descărcarea fișierelor de limbă %s…"
 
@@ -2063,20 +2095,20 @@ msgstr "Descărcarea fișierelor de limbă %s…"
 msgid "Downloading resources..."
 msgstr "Se descarcă resursele..."
 
-#: packages/lib/models/settings/builtInMetadata.ts:55
+#: packages/lib/models/settings/builtInMetadata.ts:68
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1273
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "Desenează imagine"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:967
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Desen"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1556
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Plasează notițe sau fișiere aici"
 
@@ -2092,13 +2124,13 @@ msgstr "Autentificare Dropbox"
 msgid "Due"
 msgstr "Scadență"
 
-#: packages/lib/models/Note.ts:65
+#: packages/lib/models/Note.ts:66
 msgid "due date"
 msgstr "data scadentă"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/duplicateNote.ts:7
-#: packages/app-mobile/components/ScreenHeader/index.tsx:512
-#: packages/app-mobile/components/ScreenHeader/index.tsx:556
+#: packages/app-mobile/components/ScreenHeader/index.tsx:524
+#: packages/app-mobile/components/ScreenHeader/index.tsx:568
 msgid "Duplicate"
 msgstr "Duplică"
 
@@ -2107,7 +2139,7 @@ msgstr "Duplică"
 msgid "Duplicate line"
 msgstr "Duplică linia"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:514
+#: packages/app-mobile/components/ScreenHeader/index.tsx:526
 msgid "Duplicate selected notes"
 msgstr "Duplicarea notelor selectate"
 
@@ -2130,18 +2162,18 @@ msgstr "Durată: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1692
-#: packages/app-mobile/components/side-menu-content.tsx:414
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
+#: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
-#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:201
+#: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Editează"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1368
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Editează ca Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1368
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Editează ca text îmbogățit"
 
@@ -2168,9 +2200,9 @@ msgstr "Editează configurările profilului…"
 
 #: packages/app-desktop/gui/MainScreen.tsx:132
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:144
-#: packages/lib/models/settings/builtInMetadata.ts:681
-#: packages/lib/models/settings/builtInMetadata.ts:682
-#: packages/lib/models/settings/builtInMetadata.ts:683
+#: packages/lib/models/settings/builtInMetadata.ts:705
+#: packages/lib/models/settings/builtInMetadata.ts:706
+#: packages/lib/models/settings/builtInMetadata.ts:707
 msgid "Editor"
 msgstr "Editor"
 
@@ -2178,23 +2210,23 @@ msgstr "Editor"
 msgid "Editor actions"
 msgstr "Acțiuni editor"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1186
+#: packages/lib/models/settings/builtInMetadata.ts:1217
 msgid "Editor font"
 msgstr "Font editor"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1212
+#: packages/lib/models/settings/builtInMetadata.ts:1243
 msgid "Editor font family"
 msgstr "Familie font editor"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1174
+#: packages/lib/models/settings/builtInMetadata.ts:1205
 msgid "Editor font size"
 msgstr "Mărime font editor"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1244
+#: packages/lib/models/settings/builtInMetadata.ts:1275
 msgid "Editor maximum width"
 msgstr "Lățimea maximă a editorului"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1225
+#: packages/lib/models/settings/builtInMetadata.ts:1256
 msgid "Editor monospace font family"
 msgstr "Familie font monospațiere editor"
 
@@ -2207,7 +2239,7 @@ msgstr "Editor: %s"
 msgid "Either \"text\" or \"json\""
 msgstr "Sau \"text\", sau \"json\""
 
-#: packages/lib/models/settings/builtInMetadata.ts:1440
+#: packages/lib/models/settings/builtInMetadata.ts:1471
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -2227,7 +2259,7 @@ msgstr "Email to note"
 msgid "Email to Note"
 msgstr "Email to Note"
 
-#: packages/lib/models/Setting.ts:1292
+#: packages/lib/models/Setting.ts:1333
 msgid "Email To Note, login information"
 msgstr "Email To Note, login information"
 
@@ -2242,8 +2274,8 @@ msgstr "text accentuat"
 
 #: packages/app-desktop/commands/emptyTrash.ts:16
 #: packages/app-desktop/commands/emptyTrash.ts:8
-#: packages/app-mobile/components/side-menu-content.tsx:338
-#: packages/app-mobile/components/side-menu-content.tsx:342
+#: packages/app-mobile/components/side-menu-content.tsx:344
+#: packages/app-mobile/components/side-menu-content.tsx:348
 msgid "Empty trash"
 msgstr "Golește coșul"
 
@@ -2253,27 +2285,27 @@ msgstr "Golește coșul"
 msgid "Enable"
 msgstr "Activează"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1076
+#: packages/lib/models/settings/builtInMetadata.ts:1100
 msgid "Enable ^sup^ syntax"
 msgstr "Activează sintaxa ^sup^"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1080
+#: packages/lib/models/settings/builtInMetadata.ts:1104
 msgid "Enable ++insert++ syntax"
 msgstr "Activează sintaxa ++insert++"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1072
+#: packages/lib/models/settings/builtInMetadata.ts:1096
 msgid "Enable ==mark== syntax"
 msgstr "Activează sintaxa ==mark=="
 
-#: packages/lib/models/settings/builtInMetadata.ts:1075
+#: packages/lib/models/settings/builtInMetadata.ts:1099
 msgid "Enable ~sub~ syntax"
 msgstr "Activează sintaxa ~sub~"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1078
+#: packages/lib/models/settings/builtInMetadata.ts:1102
 msgid "Enable abbreviation syntax"
 msgstr "Activează sintaxa abrevierii"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1069
+#: packages/lib/models/settings/builtInMetadata.ts:1093
 msgid "Enable audio player"
 msgstr "Activează playerul audio"
 
@@ -2281,7 +2313,7 @@ msgstr "Activează playerul audio"
 msgid "Enable biometrics authentication?"
 msgstr "Activează autentificarea biometrică?"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1077
+#: packages/lib/models/settings/builtInMetadata.ts:1101
 msgid "Enable deflist syntax"
 msgstr "Activează sintaxa deflist"
 
@@ -2290,96 +2322,95 @@ msgstr "Activează sintaxa deflist"
 msgid "Enable encryption"
 msgstr "Activează criptarea"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1092
+#: packages/lib/models/settings/builtInMetadata.ts:1116
 msgid "Enable file:// URLs for images and videos"
 msgstr "Activează URL-uri de tip file:// pentru imagini și videouri"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1073
+#: packages/lib/models/settings/builtInMetadata.ts:1097
 msgid "Enable footnotes"
 msgstr "Activează notele de subsol"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1066
+#: packages/lib/models/settings/builtInMetadata.ts:1090
 msgid "Enable Fountain syntax support"
 msgstr "Activează suportul pentru sintaxa Fountain"
 
-#: packages/lib/models/settings/builtInMetadata.ts:564
+#: packages/lib/models/settings/builtInMetadata.ts:586
 msgid "Enable handwritten transcription"
 msgstr "Activează transcrierea scrisului de mînă"
 
-#: packages/lib/models/settings/builtInMetadata.ts:741
+#: packages/lib/models/settings/builtInMetadata.ts:765
 msgid "Enable HTML-to-Markdown conversion banner"
 msgstr "Activează banner-ul de conversie HTML-la-Markdown"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1063
+#: packages/lib/models/settings/builtInMetadata.ts:1087
 msgid "Enable Linkify"
 msgstr "Activează Linkify"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1079
+#: packages/lib/models/settings/builtInMetadata.ts:1103
 msgid "Enable markdown emoji"
 msgstr "Activează emoji markdown"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1065
+#: packages/lib/models/settings/builtInMetadata.ts:1089
 msgid "Enable math expressions"
 msgstr "Activează expresiile matematice"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1067
+#: packages/lib/models/settings/builtInMetadata.ts:1091
 msgid "Enable Mermaid diagrams support"
 msgstr "Activează suportul pentru diagramele Mermaid"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1081
+#: packages/lib/models/settings/builtInMetadata.ts:1105
 msgid "Enable multimarkdown table extension"
 msgstr "Activează extensia de tabel multimarkdown"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1645
+#: packages/lib/models/settings/builtInMetadata.ts:1686
 msgid "Enable note history"
 msgstr "Activează istoricul notițelor"
 
-#: packages/lib/models/settings/builtInMetadata.ts:553
+#: packages/lib/models/settings/builtInMetadata.ts:575
 msgid "Enable optical character recognition (OCR)"
 msgstr "Activează recunoașterea optică a caracterelor (OCR)"
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1339
 msgid "Enable or disable plugins"
 msgstr "Activează sau dezactivează plugin-uri"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1071
+#: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable PDF viewer"
 msgstr "Activează vizualizatorul PDF"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
-#: packages/lib/models/settings/builtInMetadata.ts:1019
+#: packages/lib/models/settings/builtInMetadata.ts:1043
 msgid "Enable plugin support"
 msgstr "Activează suportul pentru plugin-uri"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1061
+#: packages/lib/models/settings/builtInMetadata.ts:1085
 msgid "Enable soft breaks"
 msgstr "Activează întreruperile ușoare"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1453
+#: packages/lib/models/settings/builtInMetadata.ts:1484
 msgid "Enable spell checking in Markdown editor"
 msgstr "Activează verificarea ortografică în editorul Markdown"
 
-#: packages/lib/models/settings/builtInMetadata.ts:903
+#: packages/lib/models/settings/builtInMetadata.ts:927
 msgid "Enable spellcheck in the text editor"
 msgstr "Activează verificarea ortografică în editorul de text"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1074
+#: packages/lib/models/settings/builtInMetadata.ts:1098
 msgid "Enable table of contents extension"
 msgstr "Activează extensia tabelului de conținut"
 
-#: packages/lib/models/settings/builtInMetadata.ts:914
+#: packages/lib/models/settings/builtInMetadata.ts:938
 msgid "Enable the Markdown toolbar"
 msgstr "Activează bara de instrumente Markdown"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1062
+#: packages/lib/models/settings/builtInMetadata.ts:1086
 msgid "Enable typographer support"
 msgstr "Activează suportul pentru tipografii"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1070
+#: packages/lib/models/settings/builtInMetadata.ts:1094
 msgid "Enable video player"
 msgstr "Activează playerul video"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
 msgstr "Activează Web Clipper Service"
@@ -2392,7 +2423,7 @@ msgstr "Activează Web Clipper Service"
 msgid "Enabled"
 msgstr "Activat"
 
-#: packages/lib/models/settings/builtInMetadata.ts:730
+#: packages/lib/models/settings/builtInMetadata.ts:754
 msgid ""
 "Enables Markdown list continuation, auto-closing HTML tags, and other markup "
 "autocompletions."
@@ -2400,7 +2431,7 @@ msgstr ""
 "Activează continuarea listei Markdown, auto-închiderea a tag-urilor HTML și "
 "alte auto-completări în markup."
 
-#: packages/lib/models/settings/builtInMetadata.ts:762
+#: packages/lib/models/settings/builtInMetadata.ts:786
 msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
@@ -2416,19 +2447,19 @@ msgstr ""
 "Activarea criptării înseamnă că *toate* notele și atașamentele dvs. vor fi "
 "resincronizate și trimise criptate către destinația de sincronizare."
 
-#: packages/lib/models/BaseItem.ts:921
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Criptat"
 
-#: packages/lib/models/BaseItem.ts:983
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "Elementele criptate nu pot fi editate"
 
-#: packages/lib/models/Setting.ts:1260
+#: packages/lib/models/Setting.ts:1301
 msgid "Encryption"
 msgstr "Criptare"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:548
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:558
 #: packages/app-mobile/components/screens/encryption-config.tsx:334
 msgid "Encryption Config"
 msgstr "Configurație de criptare"
@@ -2451,7 +2482,7 @@ msgstr "Criptare:"
 msgid "End-to-end encryption"
 msgstr "Criptare end-to-end"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:193
 msgid "Ends voice typing"
 msgstr "Termină transcrierea vocală"
 
@@ -2480,7 +2511,7 @@ msgstr "Întrodu codul"
 msgid "Enter the code:"
 msgstr "Întrodu codul:"
 
-#: packages/app-mobile/components/NoteItem.tsx:129
+#: packages/app-mobile/components/NoteItem.tsx:130
 msgid "Entering selection mode"
 msgstr "Se intră în modul de selecție"
 
@@ -2510,7 +2541,7 @@ msgstr "Eroare la pornirea camerei: %s"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:64
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginUploadButton.tsx:85
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:67
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:171
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:165
 #: packages/lib/commands/leaveSharedFolder.ts:38
 #: packages/lib/services/KeymapService.ts:221
 msgid "Error: %s"
@@ -2549,13 +2580,18 @@ msgstr "Fișiere export Evernote (dosar, ca Markdown)"
 msgid "Exits the application."
 msgstr "Ieșire din aplicație."
 
-#: packages/app-mobile/components/side-menu-content.tsx:212
+#: packages/app-mobile/components/side-menu-content.tsx:217
 msgid "Expand %s"
 msgstr "Extinde %s"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.tsx:28
 msgid "Expand all notebooks"
 msgstr "Extinde toate caietele"
+
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
+msgid "Expand title"
+msgstr "Extinde titlul"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2572,6 +2608,7 @@ msgstr "Exportă"
 msgid "Export all"
 msgstr "Exportă tot"
 
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.tsx:38
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:20
 msgid "Export all notes as JEX"
 msgstr "Exportă toate notițele în format JEX"
@@ -2592,6 +2629,7 @@ msgstr "Exportă jurnal ștergeri"
 msgid "Export profile"
 msgstr "Exportă profilul"
 
+#: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.tsx:42
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:70
 msgid "Exported successfully!"
 msgstr "Exportat cu succes!"
@@ -2600,7 +2638,7 @@ msgstr "Exportat cu succes!"
 msgid "Exporting profile..."
 msgstr "Se exportă profilul..."
 
-#: packages/app-desktop/InteropServiceHelper.ts:203
+#: packages/app-desktop/InteropServiceHelper.ts:209
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr "Se exportă către „%s” în format „%s”. Te rog să aștepți..."
 
@@ -2624,11 +2662,11 @@ msgstr "Exportă numai notița specificată."
 msgid "Exports only the given notebook."
 msgstr "Exportă doar caietul specificat."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1616
+#: packages/lib/models/settings/builtInMetadata.ts:1657
 msgid "Fail-safe"
 msgstr "Fail-safe"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1617
+#: packages/lib/models/settings/builtInMetadata.ts:1658
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2656,17 +2694,21 @@ msgstr "A eșuat conectarea la contul tău. Te rog încearcă din nou."
 msgid "Fatal error:"
 msgstr "Eroare fatală:"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:636
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:644
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:646
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:654
 msgid "Feature flags"
 msgstr "Feature Flags"
 
-#: packages/lib/Synchronizer.ts:205
+#: packages/app-mobile/components/FeedbackBanner.tsx:180
+msgid "Feedback"
+msgstr "Feedback"
+
+#: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
 msgstr "Elemente preluate: %d/%d."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:53
-#: packages/app-mobile/components/side-menu-content.tsx:642
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:52
+#: packages/app-mobile/components/side-menu-content.tsx:647
 msgid "Fetching resources: %d/%d"
 msgstr "Încărcarea resurselor: %d/%d"
 
@@ -2695,16 +2737,15 @@ msgstr "Găsește: "
 msgid "Finishes recording"
 msgstr "Finalizează înregistrarea"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:10
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
 msgstr "Extensie Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:570
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Fix search index"
 msgstr "Fix search index"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:570
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid "Fixing search index..."
 msgstr "Fixing search index…"
 
@@ -2718,13 +2759,13 @@ msgstr "Fixing search index…"
 msgid "Focus"
 msgstr "Focalizează pe"
 
-#: packages/lib/models/settings/builtInMetadata.ts:930
-#: packages/lib/models/settings/builtInMetadata.ts:947
+#: packages/lib/models/settings/builtInMetadata.ts:954
+#: packages/lib/models/settings/builtInMetadata.ts:971
 msgid "Focus body"
 msgstr "Focalizează pe corp"
 
-#: packages/lib/models/settings/builtInMetadata.ts:929
-#: packages/lib/models/settings/builtInMetadata.ts:946
+#: packages/lib/models/settings/builtInMetadata.ts:953
+#: packages/lib/models/settings/builtInMetadata.ts:970
 msgid "Focus title"
 msgstr "Focalizează pe titlu"
 
@@ -2740,7 +2781,7 @@ msgstr "Urmează legătura"
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Numai în scop de depanare: exportă profilul pe un card SD extern."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1596
+#: packages/lib/models/settings/builtInMetadata.ts:1637
 msgid "For example \"%s\""
 msgstr "De exemplu, „%s”"
 
@@ -2764,7 +2805,7 @@ msgstr ""
 "Pentru lista de scurtături de la tastatură și opțiuni de configurare, "
 "tastează `help keymap`"
 
-#: packages/lib/models/settings/builtInMetadata.ts:311
+#: packages/lib/models/settings/builtInMetadata.ts:333
 msgid "Force path style"
 msgstr "Forțează stil cale"
 
@@ -2773,7 +2814,6 @@ msgid "Forward"
 msgstr "Înainte"
 
 #: packages/app-cli/app/command-import.ts:53
-#: packages/app-desktop/gui/ImportScreen.min.js:68
 #: packages/app-desktop/gui/ImportScreen.tsx:89
 msgid "Found: %d."
 msgstr "Găsit: %d."
@@ -2790,7 +2830,7 @@ msgstr "Lista completă a modificărilor"
 msgid "Full name"
 msgstr "Nume și prenume"
 
-#: packages/lib/models/Setting.ts:1251
+#: packages/lib/models/Setting.ts:1292
 #: packages/server/src/services/MustacheService.ts:114
 msgid "General"
 msgstr "General"
@@ -2806,7 +2846,7 @@ msgstr[0] "Se generează legătura..."
 msgstr[1] "Se generează legăturile..."
 msgstr[2] "Se generează legăturile..."
 
-#: packages/lib/models/Setting.ts:1294
+#: packages/lib/models/Setting.ts:1335
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
 "Geolocație, verificare ortografică, bara de instrumente a editorului, "
@@ -2816,12 +2856,11 @@ msgstr ""
 msgid "Get a quote"
 msgstr "Obține un estimat"
 
-#: packages/app-desktop/gui/ExtensionBadge.min.js:44
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
 msgstr "Obține acum:"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1349
+#: packages/lib/models/settings/builtInMetadata.ts:1380
 msgid "Get pre-releases when checking for updates"
 msgstr "Obține versiuni preliminare la verificarea actualizărilor"
 
@@ -2856,7 +2895,7 @@ msgstr "Mergi la profilul Joplin Cloud"
 msgid "Go to line"
 msgstr "Mergi la linia"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1155
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Mergi la URL-ul sursă"
 
@@ -2884,7 +2923,7 @@ msgstr "Titlu"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:245
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Ajutor"
@@ -2943,7 +2982,7 @@ msgstr "Acasă"
 msgid "Horizontal Rule"
 msgstr "Linie orizontală"
 
-#: packages/lib/services/interop/InteropService.ts:190
+#: packages/lib/services/interop/InteropService.ts:195
 msgid "HTML Directory"
 msgstr "Dosar HTML"
 
@@ -2951,7 +2990,7 @@ msgstr "Dosar HTML"
 msgid "HTML document"
 msgstr "Document HTML"
 
-#: packages/lib/services/interop/InteropService.ts:183
+#: packages/lib/services/interop/InteropService.ts:188
 msgid "HTML File"
 msgstr "Fișier HTML"
 
@@ -2966,17 +3005,16 @@ msgstr "Pictogramă"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:168
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:79
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:80
 #: packages/app-desktop/gui/ResourceScreen.tsx:112
 msgid "ID"
 msgstr "ID"
 
-#: packages/lib/models/Resource.ts:31 packages/lib/Synchronizer.ts:324
+#: packages/lib/models/Resource.ts:31 packages/lib/Synchronizer.ts:326
 msgid "Idle"
 msgstr "Inactiv"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1474
+#: packages/lib/models/settings/builtInMetadata.ts:1505
 msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
@@ -2999,7 +3037,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignoră"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1575
+#: packages/lib/models/settings/builtInMetadata.ts:1616
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
 
@@ -3018,7 +3056,7 @@ msgstr "Imagini"
 msgid "Import"
 msgstr "Importă"
 
-#: packages/lib/models/Setting.ts:1265
+#: packages/lib/models/Setting.ts:1306
 msgid "Import and Export"
 msgstr "Import și export"
 
@@ -3038,7 +3076,7 @@ msgstr "Importă din JEX"
 msgid "Import notes from a JEX (Joplin Export) file."
 msgstr "Importă notițe dintr-un fișier JEX (Joplin Export)."
 
-#: packages/lib/models/Setting.ts:1297
+#: packages/lib/models/Setting.ts:1338
 msgid "Import or export your data"
 msgstr "Importă sau exportă datele tale"
 
@@ -3062,7 +3100,7 @@ msgstr "Se importă..."
 msgid "Imports data into Joplin."
 msgstr "Importă date în Joplin."
 
-#: packages/lib/models/settings/builtInMetadata.ts:445
+#: packages/lib/models/settings/builtInMetadata.ts:467
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -3083,18 +3121,6 @@ msgstr ""
 "prin titlu sau ID, sau folosind comenzile rapide `$n` sau `$b` pentru nota "
 "sau caietul selectat în acel moment. Se poate utiliza `$c` pentru a se "
 "referi la elementul selectat în mod curent."
-
-#: packages/app-mobile/components/screens/Note/Note.tsx:544
-msgid ""
-"In order to associate a geo-location with the note, the app needs your "
-"permission to access your location.\n"
-"\n"
-"You may turn off this option at any time in the Configuration screen."
-msgstr ""
-"Pentru a asocia o geolocație cu notița, aplicația are nevoie de permisiunea "
-"de a îți accesa locația.\n"
-"\n"
-"Poți dezactiva această opțiune în orice moment din ecranul de configurare."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:346
 msgid ""
@@ -3133,8 +3159,8 @@ msgstr ""
 "Pentru a utiliza sincronizarea, te rog actualizează aplicația la versiunea "
 "%s sau mai nouă"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:236
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:143
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:245
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
@@ -3142,16 +3168,15 @@ msgstr ""
 "Pentru a utiliza sincronizarea cu sistemul de fișiere, este necesară "
 "permisiunea de a scrie în spațiul de stocare extern."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Pentru a utiliza web clipper, trebuie să faci următoarele:"
 
-#: packages/lib/Synchronizer.ts:325
+#: packages/lib/Synchronizer.ts:327
 msgid "In progress"
 msgstr "În progres"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:608
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "În: %s"
 
@@ -3188,11 +3213,11 @@ msgstr "Indentează la dreapta"
 msgid "Info"
 msgstr "Info"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:235
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:244
 msgid "Information"
 msgstr "Informație"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:821
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:822
 msgid "Inline Code"
 msgstr "Inline Cod"
 
@@ -3206,7 +3231,7 @@ msgid "Insert Hyperlink"
 msgstr "Inserează hyperlink"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:105
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:854
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:855
 #: packages/app-mobile/components/screens/Note/commands/insertDateTime.ts:8
 msgid "Insert time"
 msgstr "Inserează data și ora"
@@ -3227,7 +3252,7 @@ msgstr "Instalează din fișier"
 msgid "Installed"
 msgstr "Instalat"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:202
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:197
 msgid "Installed (%d):"
 msgstr "Instalat (%d):"
 
@@ -3257,7 +3282,7 @@ msgstr "Comandă invalidă: „%s”"
 msgid "Invalid format. E.g.: 48.8581372, 2.2926735"
 msgstr "Format invalid. ex.: 48.8581372, 2.2926735"
 
-#: packages/lib/models/Setting.ts:744
+#: packages/lib/models/Setting.ts:769
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valoare nevalabilă a opțiunii: „%s”. Valorile posibile sînt: %s."
 
@@ -3301,6 +3326,7 @@ msgid "Join us on %s"
 msgstr "Alătură-te nouă pe %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:310
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:114
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
@@ -3308,7 +3334,8 @@ msgstr ""
 "Joplin îți poate sincroniza notițele folosind diverși furnizori. Selectează "
 "unul din lista de mai jos."
 
-#: packages/lib/models/Setting.ts:1263 packages/lib/SyncTargetJoplinCloud.ts:30
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:118
+#: packages/lib/models/Setting.ts:1304 packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
@@ -3329,12 +3356,12 @@ msgstr ""
 "Joplin nu recunoaște extensia %s. Deschiderea acestui fișier poate fi "
 "periculoasă. Ce dorești să faci?"
 
-#: packages/lib/services/interop/InteropService.ts:163
+#: packages/lib/services/interop/InteropService.ts:168
 #: packages/lib/services/interop/InteropService.ts:72
 msgid "Joplin Export Directory"
 msgstr "Dosar export Joplin"
 
-#: packages/lib/services/interop/InteropService.ts:157
+#: packages/lib/services/interop/InteropService.ts:162
 #: packages/lib/services/interop/InteropService.ts:66
 msgid "Joplin Export File"
 msgstr "Fișier export Joplin"
@@ -3353,7 +3380,7 @@ msgstr ""
 msgid "Joplin Forum"
 msgstr "Forum Joplin"
 
-#: packages/app-mobile/utils/lockToSingleInstance.ts:16
+#: packages/app-mobile/utils/lockToSingleInstance.ts:17
 msgid "Joplin is already running."
 msgstr "Joplin deja rulează."
 
@@ -3362,15 +3389,18 @@ msgid "Joplin Mobile"
 msgstr "Joplin mobil"
 
 #: packages/lib/SyncTargetJoplinServer.ts:62
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
 msgid "Joplin Server"
 msgstr "Server Joplin"
+
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
+msgid "Joplin Server (SAML)"
+msgstr "Server Joplin (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
 msgstr "Server Joplin Business"
 
-#: packages/lib/models/settings/builtInMetadata.ts:342
+#: packages/lib/models/settings/builtInMetadata.ts:364
 msgid "Joplin Server email"
 msgstr "Email Joplin Server"
 
@@ -3379,20 +3409,27 @@ msgstr "Email Joplin Server"
 msgid "Joplin Server Login"
 msgstr "Login server Joplin"
 
-#: packages/lib/models/settings/builtInMetadata.ts:354
+#: packages/lib/models/settings/builtInMetadata.ts:376
 msgid "Joplin Server password"
 msgstr "Parolă Joplin Server"
 
-#: packages/lib/models/settings/builtInMetadata.ts:323
-#: packages/lib/models/settings/builtInMetadata.ts:366
+#: packages/lib/models/settings/builtInMetadata.ts:345
+#: packages/lib/models/settings/builtInMetadata.ts:388
 msgid "Joplin Server URL"
 msgstr "URL server Joplin"
 
-#: packages/server/src/utils/saml.ts:54
+#: packages/server/src/utils/saml.ts:55
 msgid "Joplin SSO Authentication"
 msgstr "Autentificare SSO Joplin"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
+msgid ""
+"Joplin supports saving the location at which notes are saved or created. Do "
+"you want to enable it? This can be changed at any time in settings."
+msgstr ""
+"Joplin suportă salvarea locației în care notițele sînt salvate sau create. "
+"Dorești să o activezi? Acest lucru poate fi modificat oricînd din setări."
+
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
@@ -3401,10 +3438,11 @@ msgstr ""
 "Joplin Web Clipper permite salvarea paginilor web și a capturilor de ecran "
 "din navigatorul tău web în Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:623
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
 msgid "Joplin website"
 msgstr "Website Joplin"
 
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:119
 #: packages/lib/SyncTargetJoplinCloud.ts:34
 msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
@@ -3414,15 +3452,15 @@ msgstr ""
 "caracteristici specifice Joplin, cum ar fi publicarea de notițe sau "
 "colaborarea la caiete cu alte persoane."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1657
+#: packages/lib/models/settings/builtInMetadata.ts:1698
 msgid "Keep note history for"
 msgstr "Păstrează istoricul notițelor pentru"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1949
+#: packages/lib/models/settings/builtInMetadata.ts:2014
 msgid "Keep notes in the trash for"
 msgstr "Păstrează notițele în coș pentru"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1435
+#: packages/lib/models/settings/builtInMetadata.ts:1466
 msgid "Keyboard Mode"
 msgstr "Mod tastatură"
 
@@ -3430,7 +3468,7 @@ msgstr "Mod tastatură"
 msgid "Keyboard Shortcut"
 msgstr "Scurtătură de la tastatură"
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1303
 msgid "Keyboard Shortcuts"
 msgstr "Scurtături tastatură"
 
@@ -3442,23 +3480,27 @@ msgstr "Lanț de chei suportat: %s"
 msgid "Keys that need upgrading"
 msgstr "Chei care trebuie actualizate"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1412
+#: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
+msgid "Label"
+msgstr "Etichetă"
+
+#: packages/lib/models/settings/builtInMetadata.ts:1443
 msgid "Landscape"
 msgstr "Peisaj"
 
-#: packages/lib/models/settings/builtInMetadata.ts:498
+#: packages/lib/models/settings/builtInMetadata.ts:520
 msgid "Language"
 msgstr "Limbă"
 
-#: packages/lib/models/Setting.ts:1289
+#: packages/lib/models/Setting.ts:1330
 msgid "Language, date format"
 msgstr "Limbă, format dată"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1257
+#: packages/lib/models/settings/builtInMetadata.ts:1288
 msgid "Large"
 msgstr "Mare"
 
-#: packages/lib/Synchronizer.ts:208
+#: packages/lib/Synchronizer.ts:210
 msgid "Last error: %s"
 msgstr "Ultima eroare: %s"
 
@@ -3471,7 +3513,7 @@ msgid "Latitude"
 msgstr "Latitudine"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:639
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:239
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:240
 msgid "Layout"
 msgstr "Aspect"
 
@@ -3485,7 +3527,7 @@ msgstr "Secvența butoanelor de aspect"
 msgid "Learn more"
 msgstr "Află mai multe"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1883
+#: packages/lib/models/settings/builtInMetadata.ts:1939
 msgid "Leave it blank to download the language files from the default website"
 msgstr ""
 "Lăsați-l gol pentru a descărca fișierele de limbă de pe site-ul web implicit"
@@ -3498,15 +3540,15 @@ msgstr "Părăsește caietul"
 msgid "Leave notebook..."
 msgstr "Părăsește caietul…"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1406
+#: packages/lib/models/settings/builtInMetadata.ts:1437
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1402
+#: packages/lib/models/settings/builtInMetadata.ts:1433
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/settings/builtInMetadata.ts:53
+#: packages/lib/models/settings/builtInMetadata.ts:66
 msgid "Light"
 msgstr "Luminos"
 
@@ -3567,13 +3609,12 @@ msgid "Loaded"
 msgstr "Încărcat"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/FontSearch.tsx:43
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:117
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:164
-#: packages/app-mobile/root.tsx:883
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:116
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:158
+#: packages/app-mobile/root.tsx:685
 msgid "Loading..."
 msgstr "Se încarcă…"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:85
 msgid "Location"
 msgstr "Locație"
@@ -3587,7 +3628,7 @@ msgstr ""
 "Fișierul de blocare este deja luat. Dacă știi că nu are loc nicio "
 "sincronizare, poți șterge fișierul de blocare de la „%s” și relua operația."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:568
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:578
 #: packages/app-mobile/components/screens/LogScreen.tsx:215
 #: packages/server/src/services/MustacheService.ts:282
 msgid "Log"
@@ -3611,12 +3652,12 @@ msgstr "Autentifică-te cu Dropbox"
 msgid "Login with OneDrive"
 msgstr "Autentifică-te cu OneDrive"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:479
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:488
 #: packages/server/src/services/MustacheService.ts:285
 msgid "Logout"
 msgstr "Logout"
 
-#: packages/lib/models/Setting.ts:1296
+#: packages/lib/models/Setting.ts:1337
 msgid "Logs, profiles, sync status"
 msgstr "Locuri, profiluri, stare de sincronizare"
 
@@ -3625,7 +3666,7 @@ msgid "Longitude"
 msgstr "Longitudine"
 
 #: packages/app-desktop/gui/MenuBar.tsx:954
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:622
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:632
 msgid "Make a donation"
 msgstr "Donează"
 
@@ -3641,11 +3682,11 @@ msgstr "Gestionează parola master…"
 msgid "Manage multiple users"
 msgstr "Gestionează mai mulți utilizatori"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:566
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:576
 msgid "Manage profiles"
 msgstr "Gestionează profilul"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:573
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:583
 msgid "Manage shared notebooks"
 msgstr "Gestionează caiete partajate"
 
@@ -3666,32 +3707,36 @@ msgstr ""
 "Gestionează configurația E2EE. Comenzile sînt `enable`, `disable`, "
 "`decrypt`, `status`, `decrypt-file`, and `target-status`."
 
-#: packages/lib/models/settings/builtInMetadata.ts:449
+#: packages/lib/models/settings/builtInMetadata.ts:471
 msgid "Manual"
 msgstr "Manual"
 
 #: packages/app-desktop/gui/ToggleEditorsButton/ToggleEditorsButton.tsx:28
-#: packages/lib/models/Setting.ts:1256
+#: packages/lib/models/Setting.ts:1297
 #: packages/lib/services/interop/InteropService.ts:124
-#: packages/lib/services/interop/InteropService.ts:169
+#: packages/lib/services/interop/InteropService.ts:174
 msgid "Markdown"
 msgstr "Markdown"
 
 #: packages/lib/services/interop/InteropService.ts:132
-#: packages/lib/services/interop/InteropService.ts:175
+#: packages/lib/services/interop/InteropService.ts:180
 msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:383
-#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:269
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:397
+#: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:286
 msgid "Markdown editor"
 msgstr "Editor Markdown"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1473
+#: packages/lib/models/settings/builtInMetadata.ts:1515
+msgid "Markdown editor: Highlight active line"
+msgstr "Editor Markdown: Evidențiază linia activă"
+
+#: packages/lib/models/settings/builtInMetadata.ts:1504
 msgid "Markdown editor: Render images"
 msgstr "Editor Markdown: Redă imaginile"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1463
+#: packages/lib/models/settings/builtInMetadata.ts:1494
 msgid "Markdown editor: Render markup in editor"
 msgstr "Editor Markdown: Redă markup în editor"
 
@@ -3703,7 +3748,6 @@ msgstr "Marchează o sarcină ca fiind terminată."
 msgid "Marks a to-do as non-completed."
 msgstr "Marchează o sarcină ca fiind neterminată."
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:88
 msgid "Markup"
 msgstr "Markup"
@@ -3731,7 +3775,7 @@ msgstr "sensibil la verzale"
 msgid "Math"
 msgstr "Matematică"
 
-#: packages/lib/models/settings/builtInMetadata.ts:474
+#: packages/lib/models/settings/builtInMetadata.ts:496
 msgid "Max concurrent connections"
 msgstr "Conexiuni maxime simultane"
 
@@ -3747,11 +3791,11 @@ msgstr "Dimensiunea maximă a notiței sau a atașamentului"
 msgid "Max Total Size"
 msgstr "Dimensiunea totală maximă"
 
-#: packages/lib/models/Setting.ts:1293
+#: packages/lib/models/Setting.ts:1334
 msgid "Media player, math, diagrams, table of contents"
 msgstr "Media player, matematică, diagrame, cuprins"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1256
+#: packages/lib/models/settings/builtInMetadata.ts:1287
 msgid "Medium"
 msgstr "Medie"
 
@@ -3783,7 +3827,7 @@ msgstr "Lipsește argumentul necesar: %s"
 msgid "Missing required flag value: %s"
 msgstr "Lipsește valoarea indicatorului necesar: %s"
 
-#: packages/app-mobile/components/side-menu-content.tsx:663
+#: packages/app-mobile/components/side-menu-content.tsx:668
 msgid "Mobile data - auto-sync disabled"
 msgstr "Mobile data - auto-sync disabled"
 
@@ -3791,7 +3835,7 @@ msgstr "Mobile data - auto-sync disabled"
 msgid "More info"
 msgstr "Informații suplimentare"
 
-#: packages/lib/models/Setting.ts:1266
+#: packages/lib/models/Setting.ts:1307
 msgid "More information"
 msgstr "Informații suplimentare"
 
@@ -3807,7 +3851,7 @@ msgstr ""
 "Majoritatea plugin-urilor au codul sursă disponibil pentru revizuire pe "
 "website-ul plugin-ului."
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:588
+#: packages/app-mobile/components/ScreenHeader/index.tsx:600
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "Muți %d notiță în caietul „%s”?"
@@ -3824,7 +3868,7 @@ msgstr "Mută la stînga"
 
 #: packages/app-cli/app/command-rmbook.ts:37
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:20
-#: packages/app-mobile/components/side-menu-content.tsx:410
+#: packages/app-mobile/components/side-menu-content.tsx:416
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
@@ -3869,7 +3913,7 @@ msgstr "n"
 msgid "N"
 msgstr "N"
 
-#: packages/lib/models/settings/builtInMetadata.ts:966
+#: packages/lib/models/settings/builtInMetadata.ts:990
 msgid "Never resize"
 msgstr "Niciodată"
 
@@ -3885,7 +3929,7 @@ msgstr "Desen nou"
 msgid "New invitations"
 msgstr "Invitații noi"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:62
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:57
 msgid ""
 "New model available\n"
 "A new voice typing model is available. Do you want to download it?"
@@ -3907,11 +3951,10 @@ msgstr "Notiță nouă"
 msgid "New notebook"
 msgstr "Caiet nou"
 
-#: packages/app-mobile/components/side-menu-content.tsx:620
+#: packages/app-mobile/components/side-menu-content.tsx:625
 msgid "New Notebook"
 msgstr "Caiet nou"
 
-#: packages/app-desktop/gui/ImportScreen.min.js:61
 #: packages/app-desktop/gui/ImportScreen.tsx:81
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
@@ -3925,7 +3968,7 @@ msgstr "Titlu caiet nou"
 msgid "New photo"
 msgstr "Fotografie nouă"
 
-#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:212
+#: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:211
 msgid "New profile"
 msgstr "Profil nou"
 
@@ -3962,26 +4005,27 @@ msgstr "Următoarea potrivire"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/settings/builtInMetadata.ts:186
+#: packages/lib/models/settings/builtInMetadata.ts:208
 msgid "Nextcloud password"
 msgstr "Parolă Nextcloud"
 
-#: packages/lib/models/settings/builtInMetadata.ts:174
+#: packages/lib/models/settings/builtInMetadata.ts:196
 msgid "Nextcloud username"
 msgstr "Nume utilizator Nextcloud"
 
-#: packages/lib/models/settings/builtInMetadata.ts:161
+#: packages/lib/models/settings/builtInMetadata.ts:183
 msgid "Nextcloud WebDAV URL"
 msgstr "URL NextCloud WebDAV"
 
-#: packages/lib/models/settings/builtInMetadata.ts:41
+#: packages/lib/models/settings/builtInMetadata.ts:54
 msgid "no"
 msgstr "nu"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:802
-#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:19
-#: packages/lib/shim-init-node.ts:277 packages/lib/versionInfo.ts:92
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
+#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
+#: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
 msgstr "Nu"
 
@@ -4007,7 +4051,7 @@ msgstr ""
 "Nu ai niciun caiet de notițe creat. Creează unul făcînd click pe „Notiță "
 "nouă”."
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:202
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:197
 msgid "No plugins are installed."
 msgstr "Niciun plugin instalat."
 
@@ -4016,11 +4060,11 @@ msgid "No resources!"
 msgstr "Fără resurse!"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:83
-#: packages/app-mobile/components/ComboBox.tsx:366
+#: packages/app-mobile/components/ComboBox.tsx:377
 msgid "No results"
 msgstr "Fără rezultate"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 msgid "No revision selected"
 msgstr "Nicio revizie selectată"
 
@@ -4036,7 +4080,7 @@ msgstr "Fără sugestii"
 msgid "No tab selected"
 msgstr "Nicio filă selectată"
 
-#: packages/app-mobile/components/TagEditor.tsx:167
+#: packages/app-mobile/components/TagEditor.tsx:183
 msgid "No tags"
 msgstr "Fără etichete"
 
@@ -4057,7 +4101,7 @@ msgstr "Nu există actualizări"
 msgid "None"
 msgstr "Niciuna"
 
-#: packages/lib/models/settings/builtInMetadata.ts:58
+#: packages/lib/models/settings/builtInMetadata.ts:71
 msgid "Nord"
 msgstr "Nord"
 
@@ -4081,20 +4125,24 @@ msgstr "Nu sînt generate"
 msgid "Not now"
 msgstr "Nu acum"
 
+#: packages/app-mobile/components/FeedbackBanner.tsx:188
+msgid "Not useful"
+msgstr "Nu este utilă"
+
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:328
-#: packages/server/src/models/UserModel.ts:345
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "notiță"
 
 #: packages/app-desktop/gui/MainScreen.tsx:681
 #: packages/app-desktop/gui/NoteToolbar/NoteToolbar.tsx:41
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1295
 msgid "Note"
 msgstr "Notițe"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1721
+#: packages/lib/models/settings/builtInMetadata.ts:1762
 msgid "Note area growth factor"
 msgstr "Factor de creștere zonă notiță"
 
@@ -4115,7 +4163,7 @@ msgid "Note does not exist: \"%s\". Create it?"
 msgstr "Notița nu există: „%s”. Dorești să o creezi?"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
-#: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:61
+#: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:68
 msgid "Note editor"
 msgstr "Editor notiță"
 
@@ -4123,17 +4171,16 @@ msgstr "Editor notiță"
 msgid "Note has been saved."
 msgstr "Notița a fost salvată."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:226
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "Istoric notiță"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:87
-#: packages/lib/models/Setting.ts:1259
+#: packages/lib/models/Setting.ts:1300
 msgid "Note History"
 msgstr "Istoric notițe"
 
-#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:27
+#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:34
 msgid "Note history has been deleted."
 msgstr "Istoricul notiței a fost șters."
 
@@ -4148,7 +4195,7 @@ msgstr "Notița nu este o sarcină: „%s”"
 msgid "Note list"
 msgstr "Listă de notițe"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1706
+#: packages/lib/models/settings/builtInMetadata.ts:1747
 msgid "Note list growth factor"
 msgstr "Factor de creștere listă notițe"
 
@@ -4156,11 +4203,14 @@ msgstr "Factor de creștere listă notițe"
 msgid "Note list style"
 msgstr "Stilul listei de notițe"
 
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:128
+#: packages/app-cli/app/command-unpublish.ts:41
+msgid "Note not published: %s"
+msgstr "Notița nu a fost publicată: %s"
+
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
 msgstr "Previzualizare notiță"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:500
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts:7
 msgid "Note properties"
@@ -4176,7 +4226,7 @@ msgstr "Titlul notiței"
 msgid "Note viewer"
 msgstr "Vizualizator notiță"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1107
+#: packages/lib/models/settings/builtInMetadata.ts:1131
 msgid "Note: Does not work in all desktop environments."
 msgstr "Notă: Nu funcționează în toate mediile desktop."
 
@@ -4191,16 +4241,16 @@ msgid "Note&book"
 msgstr "&Caiet"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:600
-#: packages/lib/models/Setting.ts:1255
+#: packages/lib/models/Setting.ts:1296
 msgid "Notebook"
 msgstr "Caiet"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1691
+#: packages/lib/models/settings/builtInMetadata.ts:1732
 msgid "Notebook list growth factor"
 msgstr "Factor de mărire listă caiete de notițe"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:5
-#: packages/app-mobile/components/side-menu-content.tsx:441
+#: packages/app-mobile/components/side-menu-content.tsx:447
 msgid "Notebook: %s"
 msgstr "Caiet: %s"
 
@@ -4208,13 +4258,13 @@ msgstr "Caiet: %s"
 msgid "Notebook: %s (%s)"
 msgstr "Caiet: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:54
-#: packages/app-mobile/components/side-menu-content.tsx:686
+#: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:58
+#: packages/app-mobile/components/side-menu-content.tsx:691
 #: packages/lib/services/ReportService.ts:369
 msgid "Notebooks"
 msgstr "Caiete"
 
-#: packages/lib/models/Folder.ts:1005
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Caietele nu pot fi denumite „%s” deoarece este un titlu rezervat."
 
@@ -4224,7 +4274,7 @@ msgstr "Caietele nu pot fi denumite „%s” deoarece este un titlu rezervat."
 msgid "Notes"
 msgstr "Notițe"
 
-#: packages/lib/models/Setting.ts:1278
+#: packages/lib/models/Setting.ts:1319
 msgid "Notes and settings are stored in: %s"
 msgstr "Notițele și setările sînt stocate în: %s"
 
@@ -4241,16 +4291,16 @@ msgstr "Notificări"
 msgid "Numbered List"
 msgstr "Listă numerotată"
 
-#: packages/lib/models/settings/builtInMetadata.ts:594
+#: packages/lib/models/settings/builtInMetadata.ts:618
 msgid "OCR: Clear cache and re-download language data files"
 msgstr ""
 "OCR: Golește cache-ul și descarcă din nou fișierele cu date lingvistice"
 
-#: packages/lib/models/settings/builtInMetadata.ts:575
+#: packages/lib/models/settings/builtInMetadata.ts:599
 msgid "OCR: Language data URL or path"
 msgstr "OCR: URL sau cale date lingvistice"
 
-#: packages/lib/models/settings/builtInMetadata.ts:604
+#: packages/lib/models/settings/builtInMetadata.ts:628
 msgid "OCR: Search in extracted content"
 msgstr "OCR: Caută în conținutul extras"
 
@@ -4259,11 +4309,9 @@ msgstr "OCR: Caută în conținutul extras"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
-#: packages/app-desktop/gui/PromptDialog.min.js:242
-#: packages/app-desktop/gui/PromptDialog.tsx:292
+#: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:19
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:17
@@ -4271,20 +4319,20 @@ msgstr "OCR: Caută în conținutul extras"
 #: packages/app-mobile/components/DialogManager/hooks/useDialogControl.ts:30
 #: packages/app-mobile/components/DialogManager/TextInputDialog.tsx:66
 #: packages/app-mobile/components/plugins/dialogs/PluginDialogWebView.tsx:128
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:237
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:246
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:61
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:75
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:66
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:56
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:68
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:49
-#: packages/app-mobile/components/side-menu-content.tsx:392
+#: packages/app-mobile/components/side-menu-content.tsx:398
 #: packages/app-mobile/utils/makeShowMessageBox.ts:12
 #: packages/lib/components/shared/config/plugins/useOnInstallHandler.ts:72
 msgid "OK"
 msgstr "OK"
 
-#: packages/lib/models/settings/builtInMetadata.ts:60
+#: packages/lib/models/settings/builtInMetadata.ts:73
 msgid "OLED Dark"
 msgstr "OLED întunecat"
 
@@ -4325,7 +4373,7 @@ msgstr "OneDrive"
 msgid "OneDrive Login"
 msgstr "Autentificare OneDrive"
 
-#: packages/lib/services/interop/InteropService.ts:148
+#: packages/lib/services/interop/InteropService.ts:153
 msgid "OneNote Notebook"
 msgstr "Caiet OneNote"
 
@@ -4337,7 +4385,7 @@ msgstr "Doar o singură notiță se poate imprima."
 msgid "Open"
 msgstr "Deschide"
 
-#: packages/app-desktop/app.ts:211
+#: packages/app-desktop/app.ts:213
 msgid "Open %s"
 msgstr "Deschide %s"
 
@@ -4381,7 +4429,8 @@ msgstr "Deschide setări"
 msgid "Open Source"
 msgstr "Deschide sursa"
 
-#: packages/lib/models/settings/builtInMetadata.ts:94
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:557
+#: packages/lib/models/settings/builtInMetadata.ts:107
 msgid "Open Sync Wizard..."
 msgstr "Deschide ghidul de sincronizare…"
 
@@ -4389,19 +4438,19 @@ msgstr "Deschide ghidul de sincronizare…"
 msgid "Open..."
 msgstr "Deschide..."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:218
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:227
 msgid "Opening section %s"
 msgstr "Se deschide secțiunea %s"
 
-#: packages/app-mobile/components/Dropdown.tsx:216
+#: packages/app-mobile/components/Dropdown.tsx:241
 msgid "Opens dropdown"
 msgstr "Deschide caseta de derulare"
 
-#: packages/app-mobile/components/NoteItem.tsx:163
+#: packages/app-mobile/components/NoteItem.tsx:164
 msgid "Opens note"
 msgstr "Deschide notița"
 
-#: packages/app-mobile/components/side-menu-content.tsx:273
+#: packages/app-mobile/components/side-menu-content.tsx:279
 msgid "Opens notebook"
 msgstr "Deschide un caiet de notițe"
 
@@ -4421,6 +4470,10 @@ msgstr "Opțiuni"
 msgid "Ordered list"
 msgstr "Listă ordonată"
 
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:130
+msgid "Other"
+msgstr "Alta"
+
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
 msgstr "Alte aplicații…"
@@ -4429,11 +4482,11 @@ msgstr "Alte aplicații…"
 msgid "Output format: %s"
 msgstr "Formatul sursei: %s"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1409
+#: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Page orientation for PDF export"
 msgstr "Orientarea paginii pentru export PDF"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1399
+#: packages/lib/models/settings/builtInMetadata.ts:1430
 msgid "Page size for PDF export"
 msgstr "Dimensiunea paginii pentru exportul PDF"
 
@@ -4492,7 +4545,7 @@ msgstr "Per utilizator. Minim 2 utilizatori."
 msgid "Permanently delete note"
 msgstr "Șterge notița permanent"
 
-#: packages/lib/models/Note.ts:947
+#: packages/lib/models/Note.ts:965
 msgid "Permanently delete note \"%s\"?"
 msgstr "Șterge notițele „%s”?"
 
@@ -4506,7 +4559,7 @@ msgstr ""
 "\n"
 "Toate notițele și secțiunile din acest caiet vor fi șterse permanent."
 
-#: packages/lib/models/Note.ts:949
+#: packages/lib/models/Note.ts:967
 msgid "Permanently delete this note?"
 msgid_plural "Permanently delete these %d notes?"
 msgstr[0] "Ștergi permanent această notiță?"
@@ -4517,11 +4570,7 @@ msgstr[2] "Ștergi permanent aceste %d de notițe?"
 msgid "Permanently deletes the notebook, skipping the trash."
 msgstr "Șterge permanent caietul, omițînd coșul."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:545
-msgid "Permission needed"
-msgstr "Permisiune necesară"
-
-#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:93
+#: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:105
 msgid "Photo %d"
 msgstr "Fotografia %d"
 
@@ -4547,7 +4596,7 @@ msgstr ""
 "Te rog să îți întroduci parola în lista de chei principale de mai jos "
 "înainte de a-ți actualiza cheia."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4570,11 +4619,11 @@ msgstr ""
 "acestui dosar și nici la alte date personale. Nu se vor partaja date cu "
 "nicio terță parte."
 
-#: packages/lib/services/share/ShareService.ts:344
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr "Te rog furnizează adresa de e-mail a destinatarului"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:166
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:160
 msgid "Please record your voice..."
 msgstr "Te rog să îți înregistrezi vocea…"
 
@@ -4590,7 +4639,7 @@ msgstr "Te rog să selectezi mai întîi notița sau caietul care trebuie șters
 msgid "Please select where the sync status should be exported to"
 msgstr "Te rog să selectezi unde trebuie exportată starea sincronizării"
 
-#: packages/lib/services/interop/InteropService.ts:313
+#: packages/lib/services/interop/InteropService.ts:318
 msgid "Please specify import format for %s"
 msgstr "Te rog să specifici formatul de import pentru %s"
 
@@ -4604,7 +4653,7 @@ msgstr ""
 "Te rog să actualizezi Joplin la versiunea %s sau mai nouă pentru a utiliza "
 "acest plugin."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1556
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4612,7 +4661,7 @@ msgstr ""
 "Te rog să aștepți descărcarea și decriptarea tuturor atașamentelor. De "
 "asemenea, poți comuta la %s pentru a edita notița."
 
-#: packages/server/src/utils/saml.ts:57
+#: packages/server/src/utils/saml.ts:58
 msgid "Please wait while we load your organisation sign-in page..."
 msgstr ""
 "Te rog așteaptă cît timp se încarcă pagina de autentificare a organizației "
@@ -4627,15 +4676,15 @@ msgstr "Te rog să aștepți..."
 msgid "Plugin message"
 msgstr "Mesaj plugin"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:423
+#: packages/app-mobile/components/ScreenHeader/index.tsx:435
 msgid "Plugin panels"
 msgstr "Panouri plugin"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:111
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:110
 msgid "Plugin repository failed to load"
 msgstr "Repository-ul plugin-ului a eșuat să se încarce"
 
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:29
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:28
 msgid "Plugin search"
 msgstr "Plugin"
 
@@ -4647,14 +4696,14 @@ msgstr "Plugin"
 msgid "Plugin tools"
 msgstr "Instrumente Plugin"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1007
+#: packages/lib/models/settings/builtInMetadata.ts:1031
 msgid "Plugin WebView debugging"
 msgstr "Plugin depanare WebView"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:148
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:541
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:550
 #: packages/app-mobile/components/screens/ConfigScreen/SectionSelector/index.tsx:42
-#: packages/lib/models/Setting.ts:1257
+#: packages/lib/models/Setting.ts:1298
 msgid "Plugins"
 msgstr "Plugin-uri"
 
@@ -4666,7 +4715,7 @@ msgstr ""
 "Plugin-urile extind Joplin cu funcții care nu sînt implicit prezente. Plugin-"
 "urile pot extinde funcționalitatea editorului, vizualizatorului și mai multe."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1411
+#: packages/lib/models/settings/builtInMetadata.ts:1442
 msgid "Portrait"
 msgstr "Portret"
 
@@ -4690,19 +4739,15 @@ msgstr "Preferințe"
 msgid "Preferences..."
 msgstr "Preferințe..."
 
-#: packages/lib/models/settings/builtInMetadata.ts:659
+#: packages/lib/models/settings/builtInMetadata.ts:683
 msgid "Preferred dark theme"
 msgstr "Tema întunecată preferată"
 
-#: packages/lib/models/settings/builtInMetadata.ts:643
+#: packages/lib/models/settings/builtInMetadata.ts:667
 msgid "Preferred light theme"
 msgstr "Tema luminoasă preferată"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1894
-msgid "Preferred voice typing provider"
-msgstr "Furnizorul preferat de transcriere vocală"
-
-#: packages/lib/models/settings/builtInMetadata.ts:751
+#: packages/lib/models/settings/builtInMetadata.ts:775
 msgid "Preserve colours when pasting text in Rich Text Editor"
 msgstr "Păstrează culorile la lipirea textului în editorul de text îmbogățit"
 
@@ -4734,11 +4779,10 @@ msgstr "anterioara"
 msgid "Previous match"
 msgstr "Potrivirea anterioară"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1145
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 msgid "Previous versions"
 msgstr "Versiuni anterioare"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:433
 msgid "Previous versions of this note"
 msgstr "Versiunile anterioare ale acestei notițe"
@@ -4751,7 +4795,7 @@ msgstr "Tipărește"
 msgid "Priority support"
 msgstr "Suport prioritar"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:624
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:634
 msgid "Privacy Policy"
 msgstr "Politica de confidențialitate"
 
@@ -4799,19 +4843,19 @@ msgstr "Versiune profil: %s"
 msgid "Profiles"
 msgstr "Profiluri"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1359
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Proprietăți"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1585
+#: packages/lib/models/settings/builtInMetadata.ts:1626
 msgid "Proxy enabled"
 msgstr "Proxy activat"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1607
+#: packages/lib/models/settings/builtInMetadata.ts:1648
 msgid "Proxy timeout (seconds)"
 msgstr "Timeout proxy (secunde)"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1595
+#: packages/lib/models/settings/builtInMetadata.ts:1636
 msgid "Proxy URL"
 msgstr "URL proxy"
 
@@ -4823,6 +4867,10 @@ msgstr "Pereche de chei publice-private:"
 msgid "Publish Note"
 msgstr "Publică notița"
 
+#: packages/app-cli/app/command-publish.ts:47
+msgid "Publish note \"%s\" (in notebook \"%s\")?"
+msgstr "Publici notița „%s” (în caietul „%s”)?"
+
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
 msgstr "Publică notița…"
@@ -4832,26 +4880,36 @@ msgid "Publish Notes"
 msgstr "Publică notițele"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:176
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:122
 #: packages/lib/utils/joplinCloud/index.ts:162
 msgid "Publish notes to the internet"
 msgstr "Publică notițele pe internet"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1163
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr "Publică/Retrage"
+
+#: packages/app-cli/app/command-publish.ts:60
+msgid "Published at URL: %s"
+msgstr "Publicat la URL: %s"
+
+#: packages/app-cli/app/command-publish.ts:27
+#: packages/app-cli/app/command-unpublish.ts:24
+msgid "Publishes a note to Joplin Server or Joplin Cloud"
+msgstr "Publică o notiță pe un server Joplin sau în Cloud-ul Joplin"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
 msgstr "Cod QR"
 
-#: packages/app-desktop/app.ts:213
+#: packages/app-desktop/app.ts:215
 #: packages/app-desktop/ElectronAppWrapper.ts:179
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
 #: packages/app-desktop/gui/MenuBar.tsx:429
 msgid "Quit"
 msgstr "Ieșire"
 
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:190
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:184
 msgid "Re-download model"
 msgstr "Descarcă din nou modelul"
 
@@ -4867,7 +4925,7 @@ msgstr "Re-criptare"
 msgid "Re-enter password"
 msgstr "Întrodu parola din nou"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1330
+#: packages/lib/models/settings/builtInMetadata.ts:1361
 msgid "Re-upload local data to sync target"
 msgstr "Reîncărcarea datelor locale către destinația de sincronizare"
 
@@ -4889,21 +4947,25 @@ msgstr ""
 "Citirea comenzilor de la intrarea standard este disponibilă doar în modul "
 "CLI."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "Destinatarul a acceptat invitația"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Destinatarul nu a acceptat încă invitația"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "Destinatarul a respins invitația"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Destinatari:"
+
+#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
+msgid "Recognise text:"
+msgstr "Recunoaște textul:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -4931,7 +4993,7 @@ msgstr "Se înregistrează…"
 
 #: packages/app-desktop/gui/MenuBar.tsx:771
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:122
-#: packages/app-mobile/components/ScreenHeader/index.tsx:358
+#: packages/app-mobile/components/ScreenHeader/index.tsx:370
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:105
 msgid "Redo"
 msgstr "Refă"
@@ -4960,11 +5022,11 @@ msgstr "Se respinge partajarea..."
 msgid "Remove"
 msgstr "Șterge"
 
-#: packages/app-mobile/components/TagEditor.tsx:129
+#: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
 msgstr "Șterge %s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 msgid "Remove %s from share"
 msgstr "Elimină %s din partajare"
 
@@ -4980,7 +5042,7 @@ msgstr "Elimini această căutare din panoul lateral?"
 msgid "Removed %s from share."
 msgstr "S-a eliminat %s din partajare."
 
-#: packages/app-mobile/components/TagEditor.tsx:231
+#: packages/app-mobile/components/TagEditor.tsx:247
 msgid "Removed tag: %s"
 msgstr "Etichetă ștearsă: %s"
 
@@ -5001,11 +5063,10 @@ msgstr "Redenumește eticheta:"
 msgid "Renames the given <item> (note or notebook) to <name>."
 msgstr "Redenumește <item> dat (notiță sau caiet) în <name>."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1464
+#: packages/lib/models/settings/builtInMetadata.ts:1495
 msgid "Renders markup on all lines that don't include the cursor."
 msgstr "Redă markup pe toate liniile care nu includ cursorul."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
 msgstr "Reînnoiește jetonul"
@@ -5072,12 +5133,11 @@ msgstr "Resetează aspectul aplicației"
 msgid "Reset master password"
 msgstr "Resetare parolei master"
 
-#: packages/lib/models/settings/builtInMetadata.ts:960
+#: packages/lib/models/settings/builtInMetadata.ts:984
 msgid "Resize large images:"
 msgstr "Redimensionează imaginile mari:"
 
 #: packages/app-cli/app/command-import.ts:57
-#: packages/app-desktop/gui/ImportScreen.min.js:72
 #: packages/app-desktop/gui/ImportScreen.tsx:93
 msgid "Resources: %d."
 msgstr "Resurse: %d."
@@ -5096,13 +5156,12 @@ msgid "Restart now"
 msgstr "Repornește acum"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:96
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
-#: packages/app-mobile/components/ScreenHeader/index.tsx:492
-#: packages/app-mobile/components/ScreenHeader/index.tsx:494
-#: packages/app-mobile/components/screens/Note/Note.tsx:1377
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:198
-#: packages/app-mobile/components/side-menu-content.tsx:359
+#: packages/app-mobile/components/ScreenHeader/index.tsx:504
+#: packages/app-mobile/components/ScreenHeader/index.tsx:506
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
+#: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Restaurează"
 
@@ -5127,7 +5186,7 @@ msgstr ""
 msgid "Restored items"
 msgstr "Elemente restaurate"
 
-#: packages/lib/services/RevisionService.ts:250
+#: packages/lib/services/RevisionService.ts:270
 msgid "Restored Notes"
 msgstr "Notițe restaurate"
 
@@ -5136,7 +5195,7 @@ msgid "Results (%d):"
 msgstr "Rezultate (%d):"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:133
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:112
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:111
 #: packages/app-mobile/components/screens/status.tsx:197
 msgid "Retry"
 msgstr "Reîncearcă"
@@ -5152,8 +5211,8 @@ msgid "Reveal file in folder"
 msgstr "Afișează fișierul în dosar"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/settings/builtInMetadata.ts:800
-#: packages/lib/models/settings/builtInMetadata.ts:881
+#: packages/lib/models/settings/builtInMetadata.ts:824
+#: packages/lib/models/settings/builtInMetadata.ts:905
 msgid "Reverse sort order"
 msgstr "Inversează ordinea sortării"
 
@@ -5161,7 +5220,7 @@ msgstr "Inversează ordinea sortării"
 msgid "Reverses the sorting order."
 msgstr "Inversează ordinea sortării."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:206
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Revizie:"
 
@@ -5173,7 +5232,7 @@ msgstr "Revizie: %s (%s)"
 msgid "Rich Text"
 msgstr "Text îmbogățit"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:715
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:716
 msgid "Rich Text editor. Press Escape then Tab to escape focus."
 msgstr "Editor text îmbogățit. Apasă Escape, apoi Tab pentru a pierde focusul."
 
@@ -5189,23 +5248,23 @@ msgstr ""
 msgid "S3"
 msgstr "S3"
 
-#: packages/lib/models/settings/builtInMetadata.ts:287
+#: packages/lib/models/settings/builtInMetadata.ts:309
 msgid "S3 access key"
 msgstr "Cheie acces S3"
 
-#: packages/lib/models/settings/builtInMetadata.ts:244
+#: packages/lib/models/settings/builtInMetadata.ts:266
 msgid "S3 bucket"
 msgstr "Bucket S3"
 
-#: packages/lib/models/settings/builtInMetadata.ts:275
+#: packages/lib/models/settings/builtInMetadata.ts:297
 msgid "S3 region"
 msgstr "Regiune S3"
 
-#: packages/lib/models/settings/builtInMetadata.ts:299
+#: packages/lib/models/settings/builtInMetadata.ts:321
 msgid "S3 secret key"
 msgstr "Cheie secretă S3"
 
-#: packages/lib/models/settings/builtInMetadata.ts:260
+#: packages/lib/models/settings/builtInMetadata.ts:282
 msgid "S3 URL"
 msgstr "URL S3"
 
@@ -5241,9 +5300,9 @@ msgstr "Salvează ca..."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:353
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:51
-#: packages/app-mobile/components/ScreenHeader/index.tsx:309
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:281
-#: packages/app-mobile/components/screens/Note/Note.tsx:240
+#: packages/app-mobile/components/ScreenHeader/index.tsx:321
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:290
+#: packages/app-mobile/components/screens/Note/Note.tsx:245
 msgid "Save changes"
 msgstr "Salvează schimbările"
 
@@ -5251,9 +5310,13 @@ msgstr "Salvează schimbările"
 msgid "Save changes?"
 msgstr "Salvezi schimbările?"
 
-#: packages/lib/models/settings/builtInMetadata.ts:882
+#: packages/lib/models/settings/builtInMetadata.ts:906
 msgid "Save geo-location with notes"
 msgstr "Salvează geo-locația în notițe"
+
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
+msgid "Save geolocation?"
+msgstr "Salvezi geo-locația?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5263,16 +5326,16 @@ msgstr "Scanează un caiet"
 msgid "Scanned code"
 msgstr "Cod scanat"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1260
+#: packages/lib/models/settings/builtInMetadata.ts:1291
 msgid "Scrollbar size"
 msgstr "Mărime bară derulare"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:138
-#: packages/app-mobile/components/ScreenHeader/index.tsx:386
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:802
-#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:29
-#: packages/app-mobile/components/screens/SearchScreen/index.tsx:87
+#: packages/app-mobile/components/ScreenHeader/index.tsx:398
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:812
+#: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:28
+#: packages/app-mobile/components/screens/SearchScreen/index.tsx:112
 msgid "Search"
 msgstr "Caută"
 
@@ -5285,7 +5348,7 @@ msgstr "Caută plugin-uri…"
 msgid "Search for..."
 msgstr "Caută după…"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:182
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:191
 msgid "Search hidden"
 msgstr "Căutare ascunsă"
 
@@ -5301,11 +5364,11 @@ msgstr "Caută în notița curentă"
 msgid "Search results"
 msgstr "Rezultate căutare"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:182
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:191
 msgid "Search shown"
 msgstr "Căutare afișată"
 
-#: packages/app-mobile/components/TagEditor.tsx:273
+#: packages/app-mobile/components/TagEditor.tsx:289
 msgid "Search tags"
 msgstr "Caută etichete"
 
@@ -5315,10 +5378,9 @@ msgstr "Caută:"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:178
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:80
-#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/NoteSearchBar.tsx:194
 #: packages/app-desktop/gui/ResourceScreen.tsx:306
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:803
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:813
 msgid "Search..."
 msgstr "Caută..."
 
@@ -5330,21 +5392,21 @@ msgstr "Caută după <pattern> dat în toate notițele."
 msgid "See changelog"
 msgstr "Vezi lista de schimbări"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1349
+#: packages/lib/models/settings/builtInMetadata.ts:1380
 msgid "See the pre-release page for more details: %s"
 msgstr "Pentru mai multe detalii, consultă pagina de pre-release: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:207
-#: packages/app-mobile/components/NoteItem.tsx:151
+#: packages/app-mobile/components/NoteItem.tsx:152
 msgid "Select"
 msgstr "Selectează"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:237
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 msgid "Select a revision..."
 msgstr "Alege o revizie…"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
-#: packages/app-mobile/components/ScreenHeader/index.tsx:371
+#: packages/app-mobile/components/ScreenHeader/index.tsx:383
 msgid "Select all"
 msgstr "Selectează tot"
 
@@ -5356,15 +5418,19 @@ msgstr "Alege un emoji…"
 msgid "Select file..."
 msgstr "Alege o imagine…"
 
-#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:147
+#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:189
 msgid "Select notebook"
 msgstr "Selectează caiet"
+
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:131
+msgid "Select one of the other supported sync targets."
+msgstr "Selectează una din celelalte destinații de sincronizare suportate."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
 msgstr "Selectează caietul părinte"
 
-#: packages/app-mobile/components/ComboBox.tsx:367
+#: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
 msgstr "Selectat: %s"
 
@@ -5398,7 +5464,7 @@ msgid "Server is running on port %d"
 msgstr "Serverul rulează pe portul %d"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1280
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Setează alarma"
@@ -5407,7 +5473,7 @@ msgstr "Setează alarma"
 msgid "Set alarm:"
 msgstr "Setează alarma:"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1244
+#: packages/lib/models/settings/builtInMetadata.ts:1275
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -5436,10 +5502,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Setări"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1291
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Distribuie"
 
@@ -5460,7 +5526,7 @@ msgstr "Partajează un caiet cu alții"
 msgid "Share from %s (%s)"
 msgstr "Partajează din %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Partajează caiet"
 
@@ -5488,7 +5554,7 @@ msgstr ""
 "Partajează sau anulează partajarea pentru [caietul] specificat cu "
 "[utilizatorul]. Necesită Joplin Cloud sau server Joplin."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Se partajează caietul..."
 
@@ -5508,7 +5574,7 @@ msgstr "Afișează opțiunile avansate"
 msgid "Show all"
 msgstr "Afișează tot"
 
-#: packages/lib/models/settings/builtInMetadata.ts:690
+#: packages/lib/models/settings/builtInMetadata.ts:714
 msgid "Show completed to-dos"
 msgstr "Afișează sarcinile terminate"
 
@@ -5524,11 +5590,11 @@ msgstr "Afișează cheile dezactivate"
 msgid "Show monospace fonts only."
 msgstr "Afișează doar fonturi monospațiere."
 
-#: packages/lib/models/settings/builtInMetadata.ts:672
+#: packages/lib/models/settings/builtInMetadata.ts:696
 msgid "Show note counts"
 msgstr "Afișează numărul de notițe"
 
-#: packages/app-mobile/components/side-menu-content.tsx:258
+#: packages/app-mobile/components/side-menu-content.tsx:263
 msgid "Show notebook options"
 msgstr "Afișează opțiuni caiet"
 
@@ -5536,23 +5602,23 @@ msgstr "Afișează opțiuni caiet"
 msgid "Show password"
 msgstr "Afișează parola"
 
-#: packages/lib/models/settings/builtInMetadata.ts:812
+#: packages/lib/models/settings/builtInMetadata.ts:836
 msgid "Show sort order buttons"
 msgstr "Afișează butoanele de ordonare"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1105
+#: packages/lib/models/settings/builtInMetadata.ts:1129
 msgid "Show tray icon"
 msgstr "Afișează pictograma în zona de notificări"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:270
+#: packages/app-mobile/components/ScreenHeader/index.tsx:282
 msgid "Show/hide the sidebar"
 msgstr "Afișează/Ascunde panoul lateral"
 
-#: packages/app-mobile/components/screens/tags.tsx:76
+#: packages/app-mobile/components/screens/tags.tsx:81
 msgid "Shows notes for tag"
 msgstr "Afișează notițele pentru etichetă"
 
-#: packages/lib/models/settings/builtInMetadata.ts:961
+#: packages/lib/models/settings/builtInMetadata.ts:985
 msgid "Shrink large images before adding them to notes."
 msgstr "Micșorează imaginile mari înainte de a le adăuga la notițe."
 
@@ -5566,9 +5632,9 @@ msgstr "Meniu lateral deschis"
 
 #: packages/app-desktop/gui/MainScreen.tsx:130
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:10
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:77
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:76
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.ts:23
-#: packages/app-mobile/components/ScreenHeader/index.tsx:269
+#: packages/app-mobile/components/ScreenHeader/index.tsx:281
 msgid "Sidebar"
 msgstr "Panou lateral"
 
@@ -5591,20 +5657,19 @@ msgstr ""
 "decriptarea acestora)"
 
 #: packages/app-cli/app/command-import.ts:56
-#: packages/app-desktop/gui/ImportScreen.min.js:71
 #: packages/app-desktop/gui/ImportScreen.tsx:92
 msgid "Skipped: %d."
 msgstr "Omise: %d."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1255
+#: packages/lib/models/settings/builtInMetadata.ts:1286
 msgid "Small"
 msgstr "Mică"
 
-#: packages/lib/models/settings/builtInMetadata.ts:57
+#: packages/lib/models/settings/builtInMetadata.ts:70
 msgid "Solarised Dark"
 msgstr "Solarizat întunecat"
 
-#: packages/lib/models/settings/builtInMetadata.ts:56
+#: packages/lib/models/settings/builtInMetadata.ts:69
 msgid "Solarised Light"
 msgstr "Solarizat luminos"
 
@@ -5652,13 +5717,13 @@ msgstr "Sortează „%s” în ordine ascendentă"
 msgid "Sort \"%s\" in descending order"
 msgstr "Sortează „%s” în ordine descendentă"
 
-#: packages/lib/models/settings/builtInMetadata.ts:868
+#: packages/lib/models/settings/builtInMetadata.ts:892
 msgid "Sort notebooks by"
 msgstr "Sortează notițele după"
 
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
-#: packages/app-mobile/components/ScreenHeader/index.tsx:530
-#: packages/lib/models/settings/builtInMetadata.ts:698
+#: packages/app-mobile/components/ScreenHeader/index.tsx:542
+#: packages/lib/models/settings/builtInMetadata.ts:722
 msgid "Sort notes by"
 msgstr "Sortează notițele după"
 
@@ -5688,11 +5753,11 @@ msgstr "Formatul sursei: %s"
 msgid "Source: "
 msgstr "Sursă: "
 
-#: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:436
+#: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:437
 msgid "Spacer"
 msgstr "Distanțier"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1635
+#: packages/lib/models/settings/builtInMetadata.ts:1676
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -5705,13 +5770,13 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Corector ortografic"
 
-#: packages/lib/models/settings/builtInMetadata.ts:681
-#: packages/lib/models/settings/builtInMetadata.ts:683
-#: packages/lib/models/settings/builtInMetadata.ts:684
+#: packages/lib/models/settings/builtInMetadata.ts:705
+#: packages/lib/models/settings/builtInMetadata.ts:707
+#: packages/lib/models/settings/builtInMetadata.ts:708
 msgid "Split View"
 msgstr "Divizare vizualizare"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1120
+#: packages/lib/models/settings/builtInMetadata.ts:1144
 msgid "Start application minimised in the tray icon"
 msgstr "Pornește aplicația minimizat în zona de notificări a sistemului"
 
@@ -5758,17 +5823,14 @@ msgstr "Statistici..."
 msgid "Status"
 msgstr "Stare"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:91
 msgid "Status: %s"
 msgstr "Stare: %s"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:85
 msgid "Status: Started on port %d"
 msgstr "Stare: Portul %d"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:136
 msgid "Step 1: Enable the clipper service"
 msgstr "Pasul 1: Activează clipper service"
@@ -5787,7 +5849,6 @@ msgstr ""
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Pasul 2: Întrodu codul oferit de Dropbox:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:142
 msgid "Step 2: Install the extension"
 msgstr "Pasul 2: Instalează extensia"
@@ -5852,7 +5913,7 @@ msgid "Switch between note and to-do type"
 msgstr "Comută între notiță și listă de făcut"
 
 #: packages/app-desktop/gui/MenuBar.tsx:561
-#: packages/app-mobile/components/side-menu-content.tsx:625
+#: packages/app-mobile/components/side-menu-content.tsx:630
 msgid "Switch profile"
 msgstr "Comută profilul"
 
@@ -5898,11 +5959,15 @@ msgstr ""
 "Comută la [notebook] - toate operațiunile ulterioare vor avea loc în acest "
 "caiet."
 
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:111
+msgid "Sync"
+msgstr "Sincronizează"
+
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
 msgstr "Sincronizează cît de multe dispozitive dorești"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:567
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:577
 msgid "Sync Status"
 msgstr "Sync Status"
 
@@ -5931,18 +5996,19 @@ msgid "Sync Version: %s"
 msgstr "Versiunea de sincronizare: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:175
+#: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:121
 msgid "Sync your notes"
 msgstr "Sincronizează-ți notițele"
 
-#: packages/lib/models/Setting.ts:1291
+#: packages/lib/models/Setting.ts:1332
 msgid "Sync, encryption, proxy"
 msgstr "Sincronizare, criptare, proxy"
 
-#: packages/lib/models/Setting.ts:1252
+#: packages/lib/models/Setting.ts:1293
 msgid "Synchronisation"
 msgstr "Sincronizare"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1370
+#: packages/lib/models/settings/builtInMetadata.ts:1401
 msgid "Synchronisation interval"
 msgstr "Interval de sincronizare"
 
@@ -5955,7 +6021,7 @@ msgstr "Sincronizarea este deja în progres."
 msgid "Synchronisation Status"
 msgstr "Starea sincronizării"
 
-#: packages/lib/models/settings/builtInMetadata.ts:105
+#: packages/lib/models/settings/builtInMetadata.ts:127
 msgid "Synchronisation target"
 msgstr "Destinație sincronizare"
 
@@ -5964,12 +6030,12 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Destinație sincronizare: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
-#: packages/app-mobile/components/side-menu-content.tsx:650
-#: packages/lib/commands/synchronize.ts:8
+#: packages/app-mobile/components/side-menu-content.tsx:655
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Sincronizează"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1390
+#: packages/lib/models/settings/builtInMetadata.ts:1421
 msgid "Synchronise only over WiFi connection"
 msgstr "Sincronizare numai prin conexiune WiFi"
 
@@ -5977,11 +6043,13 @@ msgstr "Sincronizare numai prin conexiune WiFi"
 msgid "Synchronises with remote storage."
 msgstr "Sincronizarea cu stocarea de la distanță."
 
+#: packages/app-cli/app/command-publish.ts:55
+#: packages/app-cli/app/command-unpublish.ts:52
 #: packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.ts:12
 msgid "Synchronising..."
 msgstr "Se sincronizează..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Se sincronizează..."
 
@@ -5990,26 +6058,25 @@ msgid "Tab indents"
 msgstr "Tasta tab indentează"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
-#: packages/lib/models/settings/builtInMetadata.ts:781
+#: packages/lib/models/settings/builtInMetadata.ts:805
 msgid "Tab moves focus"
 msgstr "Tasta tab mută focalizarea"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1405
+#: packages/lib/models/settings/builtInMetadata.ts:1436
 msgid "Tabloid"
 msgstr "Tabloid"
 
 #: packages/app-cli/app/command-import.ts:58
-#: packages/app-desktop/gui/ImportScreen.min.js:73
 #: packages/app-desktop/gui/ImportScreen.tsx:94
 msgid "Tagged: %d."
 msgstr "Etichetate: %d."
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:10
-#: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:75
+#: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:79
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/setTags.ts:7
 #: packages/app-mobile/components/screens/Note/commands/setTags.ts:7
-#: packages/app-mobile/components/screens/tags.tsx:87
-#: packages/app-mobile/components/side-menu-content.tsx:622
+#: packages/app-mobile/components/screens/tags.tsx:92
+#: packages/app-mobile/components/side-menu-content.tsx:627
 msgid "Tags"
 msgstr "Etichete"
 
@@ -6017,6 +6084,10 @@ msgstr "Etichete"
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:96
 msgid "Take photo"
 msgstr "Fotografiază"
+
+#: packages/app-mobile/components/FeedbackBanner.tsx:164
+msgid "Take survey"
+msgstr "Completează chestionarul"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6039,9 +6110,17 @@ msgstr "Echipe"
 msgid "Text document"
 msgstr "Document text"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1398
+#: packages/lib/models/settings/builtInMetadata.ts:1429
 msgid "Text editor command"
 msgstr "Comandă editor de text"
+
+#: packages/app-mobile/components/FeedbackBanner.tsx:163
+msgid ""
+"Thank you for the feedback!\n"
+"Do you have time to complete a short survey?"
+msgstr ""
+"Mulțumim pentru feedback!\n"
+"Ai timp să completezi un scurt chestionar?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6078,7 +6157,7 @@ msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 "Aplicația trebuie repornită pentru ca aceste modificări să intre în vigoare."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:577
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6117,7 +6196,7 @@ msgstr ""
 msgid "The default profile cannot be deleted"
 msgstr "Profilul implicit nu poate fi șters"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1398
+#: packages/lib/models/settings/builtInMetadata.ts:1429
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -6126,9 +6205,9 @@ msgstr ""
 "deschide o notă. Dacă nu este furnizat niciunul, se va încerca să se "
 "detecteze automat editorul implicit."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1693
-#: packages/lib/models/settings/builtInMetadata.ts:1708
-#: packages/lib/models/settings/builtInMetadata.ts:1723
+#: packages/lib/models/settings/builtInMetadata.ts:1734
+#: packages/lib/models/settings/builtInMetadata.ts:1749
+#: packages/lib/models/settings/builtInMetadata.ts:1764
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -6141,14 +6220,14 @@ msgstr ""
 "de două ori mai mult spațiu decît un element cu un factor de 1. Repornește "
 "aplicația pentru a vedea modificările."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "Următorul atașament corespunde căutării tale:"
 msgstr[1] "Următoarele atașamente corespund căutării tale:"
 msgstr[2] "Următoarele atașamente corespund căutării tale:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:576
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "Următoarele atașamente sînt urmărite pentru modificări:"
 
@@ -6209,7 +6288,7 @@ msgstr ""
 "elementele dvs., însă aplicația nu are în prezent acces la ele. Este "
 "probabil ca acestea să fie descărcate în cele din urmă prin sincronizare."
 
-#: packages/lib/services/RevisionService.ts:274
+#: packages/lib/services/RevisionService.ts:294
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Notița „%s” a fost restaurată cu succes în caietul „%s”."
 
@@ -6237,7 +6316,6 @@ msgid "The notebook could not be saved: %s"
 msgstr "Caietul de notițe nu a puut fi salvat: %s"
 
 #: packages/app-cli/app/command-import.ts:76
-#: packages/app-desktop/gui/ImportScreen.min.js:88
 #: packages/app-desktop/gui/ImportScreen.tsx:110
 msgid "The notes have been imported: %s"
 msgstr "Notițele au fost importante: %s"
@@ -6246,7 +6324,7 @@ msgstr "Notițele au fost importante: %s"
 msgid "The possible commands are:"
 msgstr "Comenzile posibile sînt:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6293,11 +6371,11 @@ msgstr ""
 msgid "The synchronisation password is missing."
 msgstr "Lipsește parola de sincronizare."
 
-#: packages/lib/models/Tag.ts:233
+#: packages/lib/models/Tag.ts:236
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Eticheta „%s” există deja. Te rog să alegi un alt nume."
 
-#: packages/lib/models/settings/builtInMetadata.ts:107
+#: packages/lib/models/settings/builtInMetadata.ts:129
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -6328,12 +6406,10 @@ msgid "The web clipper service cannot be enabled in this instance of Joplin."
 msgstr ""
 "Serviciul web clipper nu poate fi activat în această instanță de Joplin."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Serviciul web clipper este activat și setat la pornire automată."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
 msgstr "Serviciul web clipper nu este activat."
@@ -6346,11 +6422,11 @@ msgstr ""
 "Implementarea WebDAV a lui %s este incompatibilă cu Joplin și, ca atare, nu "
 "mai este suportată. Te rog să folosești o altă metodă de sincronizare."
 
-#: packages/lib/models/settings/builtInMetadata.ts:616
+#: packages/lib/models/settings/builtInMetadata.ts:640
 msgid "Theme"
 msgstr "Temă"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1331
 msgid "Themes, editor font"
 msgstr "Teme, editor font"
 
@@ -6362,7 +6438,7 @@ msgstr "Momentan nu există notițe. Creează făcînd clic pe butonul (+)."
 msgid "There are no notes in the trash folder."
 msgstr "Nu există notițe în coșul de gunoi."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:280
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:289
 msgid "There are unsaved changes."
 msgstr "Există schimbări nesalvate."
 
@@ -6405,7 +6481,7 @@ msgstr ""
 "destinația de sincronizare. Pentru a găsi aceste elemente, caută fie titlul, "
 "fie ID-ul (care este afișat în paranteze mai sus)."
 
-#: packages/lib/models/Setting.ts:1275
+#: packages/lib/models/Setting.ts:1316
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -6444,7 +6520,6 @@ msgstr "Acest atașament nu are date OCR (Stare: %s)"
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Acest atașament nu este descărcat sau nu este încă decriptat"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:159
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
@@ -6484,37 +6559,37 @@ msgstr ""
 "legate la notițele tale. Te rog să fii atent dacă intenționezi să ștergi "
 "vreunul din ele, deoarece acestea nu pot fi restaurate ulterior."
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:244
+#: packages/app-mobile/components/ScreenHeader/index.tsx:256
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
 msgstr[0] "Această notiță nu a putut fi ștearsă: %s"
 msgstr[1] "Aceste notiție nu au putut fi șterse: %s"
 msgstr[2] "Aceste notițe nu au putut fi șterse: %s"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:231
+#: packages/app-mobile/components/ScreenHeader/index.tsx:243
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
 msgstr[0] "Această notiță nu a putut fi duplicată: %s"
 msgstr[1] "Aceste notițe nu au putut fi duplicate: %s"
 msgstr[2] "Aceste notițe nu au putut fi duplicate: %s"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:605
+#: packages/app-mobile/components/ScreenHeader/index.tsx:617
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
 msgstr[0] "Această notiță nu a putut fi mutată: %s"
 msgstr[1] "Aceste notițe nu au putut fi mutate: %s"
 msgstr[2] "Aceste notițe nu au putut fi mutate: %s"
 
-#: packages/lib/models/Note.ts:130
+#: packages/lib/models/Note.ts:131
 msgid "This note does not have geolocation information."
 msgstr "Această notă nu conține informații despre geolocalizare."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:239
+#: packages/app-mobile/components/screens/Note/Note.tsx:244
 msgid "This note has been modified:"
 msgstr "Această notiță a fost modificată:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:639
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:239
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:240
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -6522,12 +6597,11 @@ msgstr ""
 "Această notiță nu are conținut. Fă clic pe „%s” pentru a comuta editorul și "
 "a edita notița."
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:70
 msgid "This note has no history"
 msgstr "Această notă nu are istoric"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:658
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6547,7 +6621,6 @@ msgstr ""
 "Acest editor de text îmbogățit are o serie de limitări și este recomandat să "
 "le cunoști înainte de a-l utiliza."
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -6562,7 +6635,7 @@ msgstr ""
 msgid "This subfolder of the trash has no notes."
 msgstr "Acest sub-dosar din coșul de gunoi nu conține notițe."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1107
+#: packages/lib/models/settings/builtInMetadata.ts:1131
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -6578,7 +6651,7 @@ msgstr ""
 "Se va deschide un nou ecran. Dorești să îți salvezi modificările actuale?"
 
 #: packages/app-desktop/commands/emptyTrash.ts:14
-#: packages/app-mobile/components/side-menu-content.tsx:340
+#: packages/app-mobile/components/side-menu-content.tsx:346
 msgid "This will permanently delete all items in the trash. Continue?"
 msgstr ""
 "Acest lucru va șterge permanent toate elementele din coșul de gunoi. "
@@ -6593,11 +6666,11 @@ msgstr ""
 "Aceasta va elimina caietul din colecția ta și nu vei mai avea acces la "
 "conținutul său. Dorești să continui?"
 
-#: packages/lib/models/settings/builtInMetadata.ts:534
+#: packages/lib/models/settings/builtInMetadata.ts:556
 msgid "Time format"
 msgstr "Format oră"
 
-#: packages/lib/models/Folder.ts:48 packages/lib/models/Note.ts:61
+#: packages/lib/models/Folder.ts:48 packages/lib/models/Note.ts:62
 msgid "title"
 msgstr "titlu"
 
@@ -6639,7 +6712,7 @@ msgstr ""
 msgid "To continue, please enter your master password below."
 msgstr "Pentru a continua, te rog să întroduci parola principală mai jos."
 
-#: packages/app-mobile/components/ComboBox.tsx:569
+#: packages/app-mobile/components/ComboBox.tsx:581
 msgid "To create a new tag, type the name and press enter."
 msgstr ""
 "Pentru a crea o etichetă nouă, tastează numele acesteia și apasă enter."
@@ -6693,7 +6766,7 @@ msgstr ""
 "Pentru a schimba profilul, aplicația se va închide și va trebui să o "
 "reporniți."
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:605
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:615
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -6711,7 +6784,7 @@ msgstr "de făcut"
 msgid "To-do"
 msgstr "De făcut"
 
-#: packages/app-mobile/components/NoteItem.tsx:158
+#: packages/app-mobile/components/NoteItem.tsx:159
 msgid "to-do: %s"
 msgstr "de făcut: %s"
 
@@ -6751,7 +6824,7 @@ msgstr "Comută editare externă"
 msgid "Toggle menu bar"
 msgstr "Comută bară meniu"
 
-#: packages/lib/models/Setting.ts:1295
+#: packages/lib/models/Setting.ts:1336
 msgid "Toggle note history, keep notes for"
 msgstr "Comută istoricul notițelor, păstrează notițele pentru"
 
@@ -6763,7 +6836,7 @@ msgstr "Comută listă de notițe"
 msgid "Toggle own sort order"
 msgstr "Comută propria ordine de sortare"
 
-#: packages/app-mobile/components/ScreenHeader/index.tsx:455
+#: packages/app-mobile/components/ScreenHeader/index.tsx:467
 msgid "Toggle plugin editor"
 msgstr "Comută editor plugin"
 
@@ -6779,7 +6852,6 @@ msgstr "Comută panou lateral"
 msgid "Toggle sort order field"
 msgstr "Comută cîmpul de ordine de sortare"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:35
 msgid "Token has been copied to the clipboard!"
 msgstr "Token-ul a fost copiat în clipboard!"
@@ -6788,7 +6860,7 @@ msgstr "Token-ul a fost copiat în clipboard!"
 msgid "Toolbar"
 msgstr "Bara de instrumente"
 
-#: packages/lib/models/Setting.ts:1264
+#: packages/lib/models/Setting.ts:1305
 msgid "Tools"
 msgstr "Instrumente"
 
@@ -6845,25 +6917,29 @@ msgstr "Tastează un titlu de notiță pentru a-l căuta."
 msgid "Type: %s."
 msgstr "Tip: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1041
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "Nu se poate edita resursa de tip %s"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:108
 msgid "Unable to share log data. Reason: %s"
-msgstr "Imposibilitatea de a partaja datele din jurnal. Motivul: %s"
+msgstr "Imposibil de a partaja datele din jurnal. Motivul: %s"
+
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
+msgid "Unable to share note data. Reason: %s"
+msgstr "Imposibil de a partaja datele din notiță. Motivul: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
 msgstr "Debifat"
 
-#: packages/lib/models/settings/builtInMetadata.ts:689
+#: packages/lib/models/settings/builtInMetadata.ts:713
 msgid "Uncompleted to-dos on top"
 msgstr "Sarcini nefinalizate în partea de sus"
 
 #: packages/app-desktop/gui/MenuBar.tsx:767
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:118
-#: packages/app-mobile/components/ScreenHeader/index.tsx:348
+#: packages/app-mobile/components/ScreenHeader/index.tsx:360
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:104
 msgid "Undo"
 msgstr "Anulează"
@@ -6890,7 +6966,7 @@ msgstr "Tip de fișier necunoscut"
 msgid "Unknown flag: %s"
 msgstr "Unknown flag: %s"
 
-#: packages/lib/Synchronizer.ts:1145
+#: packages/lib/Synchronizer.ts:1182
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -6917,7 +6993,7 @@ msgstr "Retrage publicarea pentru „%s”"
 msgid "Unpublish note"
 msgstr "Notă de retragere a publicării"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Unsoare"
 
@@ -6929,7 +7005,7 @@ msgstr ""
 "Retragi partajarea pentru caietul „%s”? Acest lucru va face ca alți "
 "utilizatori să piardă accesul la caiet."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -6937,11 +7013,10 @@ msgstr ""
 "Anulezi partajarea acestui caiet? Destinatarii nu vor mai avea acces la "
 "conținutul acestuia."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:900
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Tip de imagine neacceptat: %s"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:155
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts:47
 msgid "Unsupported link or message: %s"
@@ -6956,7 +7031,7 @@ msgstr ""
 "Eroare: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:922 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Fără nume"
@@ -6986,21 +7061,20 @@ msgstr "Actualizează dimensiunile totale"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:15
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:82
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:171
 msgid "Updated"
 msgstr "Actualizat"
 
-#: packages/lib/models/Folder.ts:49 packages/lib/models/Note.ts:62
+#: packages/lib/models/Folder.ts:49 packages/lib/models/Note.ts:63
 msgid "updated date"
 msgstr "data actualizării"
 
-#: packages/lib/Synchronizer.ts:200
+#: packages/lib/Synchronizer.ts:202
 msgid "Updated local items: %d."
 msgstr "Elemente locale actualizate: %d."
 
-#: packages/lib/Synchronizer.ts:202
+#: packages/lib/Synchronizer.ts:204
 msgid "Updated remote items: %d."
 msgstr "Elemente la distanță actualizate: %d."
 
@@ -7009,12 +7083,11 @@ msgid "Updated: "
 msgstr "Actualizat: "
 
 #: packages/app-cli/app/command-import.ts:55
-#: packages/app-desktop/gui/ImportScreen.min.js:70
 #: packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
 msgstr "Actualizat: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1135
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Actualizat: %s"
 
@@ -7035,7 +7108,6 @@ msgstr "Actualizează destinația de sincronizare la cea mai recentă versiune."
 msgid "Upload photo"
 msgstr "Încarcă fotografie"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:86
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:109
 #: packages/app-mobile/components/NoteEditor/EditLinkDialog.tsx:112
@@ -7048,7 +7120,7 @@ msgstr "URL"
 msgid "Usage: %s"
 msgstr "Utilizare: %s"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1779
+#: packages/lib/models/settings/builtInMetadata.ts:1820
 msgid "Use biometrics to secure access to the app"
 msgstr "Folosește date biometrice pentru a securiza accesul la aplicație"
 
@@ -7078,11 +7150,11 @@ msgstr ""
 "Folosește săgețile pentru a muta elementele de aspect. Apasă „Escape” pentru "
 "a ieși."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1518
+#: packages/lib/models/settings/builtInMetadata.ts:1559
 msgid "Use the legacy Markdown editor"
 msgstr "Folosește editorul Markdown învechit"
 
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:570
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -7099,7 +7171,7 @@ msgstr ""
 "Folosește datele biometrice pentru a securiza accesul la aplicație. Poți "
 "oricînd să le configurezi mai tîrziu în Setări."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1214
+#: packages/lib/models/settings/builtInMetadata.ts:1245
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -7107,7 +7179,7 @@ msgstr ""
 "Folosit pentru majoritatea textului din editorul markdown. Dacă nu se "
 "găsește, se utilizează un font generic proporțional (cu lățime variabilă)."
 
-#: packages/lib/models/settings/builtInMetadata.ts:1227
+#: packages/lib/models/settings/builtInMetadata.ts:1258
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -7117,6 +7189,10 @@ msgstr ""
 "prezenta textul în mod lizibil (de exemplu, tabele, căsuțe de selectare, "
 "coduri). Dacă nu se găsește, se utilizează un font generic monospace (lățime "
 "fixă)."
+
+#: packages/app-mobile/components/FeedbackBanner.tsx:195
+msgid "Useful"
+msgstr "Utilă"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7146,7 +7222,7 @@ msgstr "Vizualizează"
 msgid "View OCR text"
 msgstr "Vizualizează textul OCR"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1139
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Vizualizează pe hartă"
 
@@ -7157,21 +7233,21 @@ msgid "View them now"
 msgstr "Vizualizează-le acum"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:145
-#: packages/lib/models/settings/builtInMetadata.ts:681
-#: packages/lib/models/settings/builtInMetadata.ts:682
-#: packages/lib/models/settings/builtInMetadata.ts:684
+#: packages/lib/models/settings/builtInMetadata.ts:705
+#: packages/lib/models/settings/builtInMetadata.ts:706
+#: packages/lib/models/settings/builtInMetadata.ts:708
 msgid "Viewer"
 msgstr "Vizualizator"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1238
+#: packages/lib/models/settings/builtInMetadata.ts:1269
 msgid "Viewer and Rich Text Editor font family"
 msgstr "Familie font vizualizator și editor text îmbogățit"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1160
+#: packages/lib/models/settings/builtInMetadata.ts:1191
 msgid "Viewer font size"
 msgstr "Mărime font vizualizator"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1441
+#: packages/lib/models/settings/builtInMetadata.ts:1472
 msgid "Vim"
 msgstr "Vim"
 
@@ -7179,22 +7255,18 @@ msgstr "Vim"
 msgid "Voice recorder"
 msgstr "Înregistrator vocal"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1884
+#: packages/lib/models/settings/builtInMetadata.ts:1940
 msgid "Voice typing language files (URL)"
 msgstr "Fișiere de limbă de tastare vocală (URL)"
 
-#: packages/lib/models/settings/builtInMetadata.ts:1912
+#: packages/lib/models/settings/builtInMetadata.ts:1969
 msgid "Voice typing: Glossary"
 msgstr "Transcriere vocală: Glosar"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1302
-#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
+#: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Tastarea vocală…"
-
-#: packages/lib/models/settings/builtInMetadata.ts:1901
-msgid "Vosk"
-msgstr "Vosk"
 
 #: packages/lib/services/joplinCloudUtils.ts:27
 msgid "Waiting for authorisation..."
@@ -7205,8 +7277,8 @@ msgid "Waiting: Notebook %s from %s"
 msgstr "Se așteaptă: Caiet %s de la %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
-#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:134
-#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:18
+#: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:143
+#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:20
 msgid "Warning"
 msgstr "Atenție"
 
@@ -7230,7 +7302,7 @@ msgstr ""
 "Marcăm plugin-urile dezvoltate de membri de încredere ai comunității Joplin "
 "ca „recomandate”."
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1302
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -7238,15 +7310,15 @@ msgstr "Web Clipper"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/settings/builtInMetadata.ts:224
+#: packages/lib/models/settings/builtInMetadata.ts:246
 msgid "WebDAV password"
 msgstr "Parolă WebDAV"
 
-#: packages/lib/models/settings/builtInMetadata.ts:199
+#: packages/lib/models/settings/builtInMetadata.ts:221
 msgid "WebDAV URL"
 msgstr "URL-ul WebDAV"
 
-#: packages/lib/models/settings/builtInMetadata.ts:212
+#: packages/lib/models/settings/builtInMetadata.ts:234
 msgid "WebDAV username"
 msgstr "Nume utilizator WebDAV"
 
@@ -7288,25 +7360,31 @@ msgstr "Bine ai venit!"
 msgid "What are plugins?"
 msgstr "Ce sînt plugin-urile?"
 
-#: packages/lib/models/settings/builtInMetadata.ts:943
+#: packages/lib/models/settings/builtInMetadata.ts:967
 msgid "When creating a new note:"
 msgstr "Cînd este creată o nouă notiță:"
 
-#: packages/lib/models/settings/builtInMetadata.ts:926
+#: packages/lib/models/settings/builtInMetadata.ts:950
 msgid "When creating a new to-do:"
 msgstr "Cînd este creată o nouă listă de făcut:"
 
-#: packages/lib/models/settings/builtInMetadata.ts:554
+#: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:167
+msgid ""
+"When enabled, requests that the images in the note be transcribed with a "
+"higher-quality on-server transcription service. Requires sync with a copy of "
+"the desktop app."
+msgstr ""
+"Cînd este activat, solicită ca imaginile din notiță să fie transcrise cu un "
+"serviciu de calitate mai bună de pe server. Necesită sincronizare cu "
+"aplicația desktop."
+
+#: packages/lib/models/settings/builtInMetadata.ts:576
 msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
 "Atunci cînd este activată, aplicația va scana atașamentele și va extrage "
 "textul din ele. Acest lucru îți va permite să cauți text în atașamente."
-
-#: packages/lib/models/settings/builtInMetadata.ts:1902
-msgid "Whisper"
-msgstr "Whisper"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:280
 msgid "Window unresponsive."
@@ -7325,19 +7403,20 @@ msgstr "y"
 msgid "Y"
 msgstr "Y"
 
-#: packages/lib/models/settings/builtInMetadata.ts:40
+#: packages/lib/models/settings/builtInMetadata.ts:53
 msgid "yes"
 msgstr "da"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:801
-#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:19
-#: packages/lib/shim-init-node.ts:277 packages/lib/versionInfo.ts:92
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
+#: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
+#: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Da"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:800
-#: packages/lib/shim-init-node.ts:276
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
+#: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
@@ -7440,6 +7519,29 @@ msgstr "Mărește"
 msgid "Zoom Out"
 msgstr "Micșorează"
 
+#~ msgid ""
+#~ "In order to associate a geo-location with the note, the app needs your "
+#~ "permission to access your location.\n"
+#~ "\n"
+#~ "You may turn off this option at any time in the Configuration screen."
+#~ msgstr ""
+#~ "Pentru a asocia o geolocație cu notița, aplicația are nevoie de "
+#~ "permisiunea de a îți accesa locația.\n"
+#~ "\n"
+#~ "Poți dezactiva această opțiune în orice moment din ecranul de configurare."
+
+#~ msgid "Permission needed"
+#~ msgstr "Permisiune necesară"
+
+#~ msgid "Preferred voice typing provider"
+#~ msgstr "Furnizorul preferat de transcriere vocală"
+
+#~ msgid "Vosk"
+#~ msgstr "Vosk"
+
+#~ msgid "Whisper"
+#~ msgstr "Whisper"
+
 #~ msgid "Ok"
 #~ msgstr "Ok"
 
@@ -7541,10 +7643,6 @@ msgstr "Micșorează"
 #~ msgid "Expanded, press space to collapse."
 #~ msgstr "Extins, apasă spațiu pentru a restrînge."
 
-#, fuzzy
-#~ msgid "Take picture"
-#~ msgstr "Desenați imaginea"
-
 #~ msgid ""
 #~ "Biometric unlock is not setup on the device. Please set it up in order to "
 #~ "unlock Joplin. If the device is on lockout, consider switching it off and "
@@ -7554,10 +7652,6 @@ msgstr "Micșorează"
 #~ "configurați pentru a debloca Joplin. Dacă dispozitivul este blocat, luați "
 #~ "în considerare oprirea și pornirea acestuia pentru a reseta scanarea "
 #~ "biometrică."
-
-#, fuzzy
-#~ msgid "Collapse %s"
-#~ msgstr "Restrînge"
 
 #~ msgid "Find and replace"
 #~ msgstr "Găsește și înlocuiește"

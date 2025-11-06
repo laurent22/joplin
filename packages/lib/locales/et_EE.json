@@ -110,6 +110,9 @@
 	"[None]": [
 		""
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -163,6 +166,9 @@
 	],
 	"Add body": [
 		"Lisa keha"
+	],
+	"Add column": [
+		""
 	],
 	"Add or remove tags:": [
 		"Siltide lisamine või eemaldamine:"
@@ -228,6 +234,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -753,6 +762,9 @@
 	"Do not ask for confirmation.": [
 		"Ära küsi kinnitust."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -981,6 +993,9 @@
 	"Feature flags": [
 		""
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Tõmmatud üksused: %d/%d."
 	],
@@ -1171,9 +1186,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Mis tahes käsu, Märkus või märkmiku saab viidatud pealkirja või ID või kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -1273,6 +1285,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper võimaldab salvestada veebilehti ja ekraanipilte brauserist Joplini."
 	],
@@ -1292,6 +1307,9 @@
 		""
 	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1529,6 +1547,9 @@
 	"Not generated": [
 		""
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"paberraha"
 	],
@@ -1630,6 +1651,9 @@
 	],
 	"Options": [
 		"Valikud"
+	],
+	"Other": [
+		""
 	],
 	"Page orientation for PDF export": [
 		"Lehekülje suund PDF-i eksportimiseks"
@@ -1739,9 +1763,6 @@
 	"Preferred light theme": [
 		""
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -1812,6 +1833,12 @@
 		""
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2014,6 +2041,9 @@
 	],
 	"Select all": [
 		"Vali kõik"
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Self-hosted": [
 		""
@@ -2225,6 +2255,9 @@
 	"Switch to note type": [
 		"Märkme tüübi aktiveerimine"
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2280,6 +2313,9 @@
 		""
 	],
 	"Teams": [
+		""
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
@@ -2541,6 +2577,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unable to share note data. Reason: %s": [
+		""
+	],
 	"Unchecked": [
 		""
 	],
@@ -2628,6 +2667,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -2659,9 +2701,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -2703,10 +2742,10 @@
 	"When creating a new note:": [
 		"Uue märkme loomisel:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

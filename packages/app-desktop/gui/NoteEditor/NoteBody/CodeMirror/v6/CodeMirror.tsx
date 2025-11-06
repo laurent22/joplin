@@ -31,6 +31,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventManager';
+import useSyncEditorValue from './utils/useSyncEditorValue';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -167,9 +168,8 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			},
 			scrollTo: (options: ScrollOptions) => {
 				if (options.type === ScrollOptionTypes.Hash) {
-					if (!webviewRef.current) return;
 					const hash: string = options.value;
-					webviewRef.current.send('scrollToHash', hash);
+					webviewRef.current?.send('scrollToHash', hash);
 					editorRef.current.jumpToHash(hash);
 				} else if (options.type === ScrollOptionTypes.Percent) {
 					const percent = options.value as number;
@@ -342,6 +342,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		} else if (event.kind === EditorEventType.Change) {
 			codeMirror_change(event.value);
 		} else if (event.kind === EditorEventType.SelectionRangeChange) {
+			props.onCursorMotion({ markdown: event.from });
 			setSelectionRange({ from: event.from, to: event.to });
 		} else if (event.kind === EditorEventType.UpdateSearchDialog) {
 			if (lastSearchState.current?.searchText !== event.searchState.searchText) {
@@ -355,7 +356,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		} else if (event.kind === EditorEventType.FollowLink) {
 			void CommandService.instance().execute('openItem', event.link);
 		}
-	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch]);
+	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch, props.onCursorMotion]);
 
 	const onSelectPastBeginning = useCallback(() => {
 		void CommandService.instance().execute('focusElement', 'noteTitle');
@@ -400,15 +401,17 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		props.tabMovesFocus,
 	]);
 
-	// Update the editor's value
-	useEffect(() => {
-		// Include the noteId in the update props to give plugins access
-		// to the current note ID.
-		const updateProps = { noteId: props.noteId };
-		if (editorRef.current?.updateBody(props.content, updateProps)) {
-			editorRef.current?.clearHistory();
-		}
-	}, [props.content, props.noteId]);
+	const initialCursorLocationRef = useRef(0);
+	initialCursorLocationRef.current = props.initialCursorLocation.markdown ?? 0;
+
+	useSyncEditorValue({
+		content: props.content,
+		visiblePanes: props.visiblePanes,
+		onMessage: props.onMessage,
+		editorRef,
+		noteId: props.noteId,
+		initialCursorLocationRef,
+	});
 
 	const renderEditor = () => {
 		return (
@@ -416,6 +419,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				<Editor
 					style={styles.editor}
 					initialText={props.content}
+					initialSelectionRef={initialCursorLocationRef}
 					initialNoteId={props.noteId}
 					ref={editorRef}
 					settings={editorSettings}

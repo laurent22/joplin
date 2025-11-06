@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v13.4.4](https://github.com/laurent22/joplin/releases/tag/ios-v13.4.4) - 2025-10-21T14:16:55Z
+
+- Improved: Removed donation link since Apple is blocking the release because of this (cff96b1)
+- Fixed: Change default content-type for Webdav connector to application/octet-stream (#13053) (#12249 by [@pedr](https://github.com/pedr))
+
 ## [ios-v13.4.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.4.3) - 2025-09-09T08:25:07Z
 
 - Fixed: Fix "scan notebook" tool on iOS (#13114) (#13111 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

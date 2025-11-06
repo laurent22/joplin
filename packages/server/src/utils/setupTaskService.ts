@@ -50,13 +50,6 @@ export default async function(env: Env, models: Models, config: Config, services
 		},
 
 		{
-			id: TaskId.DeleteExpiredSessions,
-			description: taskIdToLabel(TaskId.DeleteExpiredSessions),
-			schedule: '0 */6 * * *',
-			run: (models: Models) => models.session().deleteExpiredSessions(),
-		},
-
-		{
 			id: TaskId.ProcessOrphanedItems,
 			description: taskIdToLabel(TaskId.ProcessOrphanedItems),
 			schedule: '15 * * * *',
@@ -91,6 +84,15 @@ export default async function(env: Env, models: Models, config: Config, services
 			run: (models: Models) => models.user().deleteExpiredAuthCodes(),
 		},
 	];
+
+	if (config.DELETE_EXPIRED_SESSIONS_SCHEDULE) {
+		tasks.push({
+			id: TaskId.DeleteExpiredSessions,
+			description: taskIdToLabel(TaskId.DeleteExpiredSessions),
+			schedule: config.DELETE_EXPIRED_SESSIONS_SCHEDULE,
+			run: (models: Models) => models.session().deleteExpiredSessions(),
+		});
+	}
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {
 		tasks.push({

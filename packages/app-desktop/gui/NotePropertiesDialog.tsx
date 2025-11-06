@@ -501,7 +501,12 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 				<div role='table' aria-labelledby='note-properties-dialog-title'>
 					{noteComps}
 				</div>
-				<DialogButtonRow themeId={this.props.themeId} okButtonShow={!this.isReadOnly()} okButtonRef={this.okButton} onClick={this.buttonRow_click}/>
+				<DialogButtonRow
+					themeId={this.props.themeId}
+					okButtonShow={!this.isReadOnly()}
+					okButtonRef={this.okButton}
+					onClick={this.buttonRow_click}
+				/>
 			</Dialog>
 		);
 	}

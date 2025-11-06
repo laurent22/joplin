@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, TextInput, Platform } from 'react-native';
+import { View, StyleSheet, TextInput, Platform, ScrollView, Text as TextNative } from 'react-native';
 import { AppState } from '../../utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Revision from '@joplin/lib/models/Revision';
@@ -111,6 +111,7 @@ const useStyles = (themeId: number) => {
 				flex: 0,
 				flexDirection: 'row',
 				flexBasis: 'auto',
+				maxHeight: '40%',
 			},
 			titleText: {
 				flex: 1,
@@ -224,12 +225,25 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 
 	const titleComponent = (
 		<View style={styles.titleViewContainer}>
-			<TextInput
-				style={styles.titleText}
-				value={note?.title ?? ''}
-				editable={false}
-				multiline={multiline}
-			/>
+			{
+				multiline ?
+					<ScrollView
+						style={{ flex: 1 }}
+						showsVerticalScrollIndicator={false}
+					>
+						<TextNative
+							selectable
+							style={styles.titleText}
+						>
+							{note?.title ?? ''}
+						</TextNative>
+					</ScrollView> :
+					<TextInput
+						style={styles.titleText}
+						value={note?.title ?? ''}
+						editable={false}
+					/>
+			}
 			{ titleToggleButton }
 		</View>
 	);

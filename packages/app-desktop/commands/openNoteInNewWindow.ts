@@ -2,7 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
-import { createAppDefaultWindowState } from '../app.reducer';
+import { AppState, createAppDefaultWindowState } from '../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
 
 export const declaration: CommandDeclaration = {
@@ -25,7 +25,7 @@ export const runtime = (): CommandRuntime => {
 				folderId: note.parent_id,
 				windowId: `window-${noteId}-${idCounter++}`,
 				defaultAppWindowState: {
-					...createAppDefaultWindowState(),
+					...createAppDefaultWindowState(context.state as AppState),
 					noteVisiblePanes: Setting.value('noteVisiblePanes'),
 					editorCodeView: Setting.value('editor.codeView'),
 				},

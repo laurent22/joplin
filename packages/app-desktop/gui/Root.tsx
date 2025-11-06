@@ -71,7 +71,7 @@ async function initialize() {
 		panes: Setting.value('noteVisiblePanes'),
 	});
 
-	InteropService.instance().document = document;
+	InteropService.instance().domParser = new DOMParser();
 	InteropService.instance().xmlSerializer = new XMLSerializer();
 }
 

@@ -125,6 +125,9 @@
 	"[None]": [
 		""
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -178,6 +181,9 @@
 	],
 	"Add body": [
 		"Điền phần thân"
+	],
+	"Add column": [
+		""
 	],
 	"Add or remove tags:": [
 		"Gắn hoặc gỡ nhãn:"
@@ -243,6 +249,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -857,6 +866,9 @@
 	"Do not ask for confirmation.": [
 		"Không cần xác nhận."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1181,6 +1193,9 @@
 	"Feature flags": [
 		"Cờ nổi bật"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Số mục đã được lấy: %d/%d."
 	],
@@ -1397,9 +1412,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Với bất kỳ câu lệnh, một note hoặc notebook có thể được dẫn tới bằng cách sử dụng tiêu đề hoặc ID, hoặc sử dụng cụm `$n` hoặc `$b`, theo thứ tự, dành cho note hoặc notebook đã được lựa chọn. `$c` có thể sử dụng để dẫn tới mục đang được lựa chọn."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Để gắn một địa điểm vào ghi chú, ứng dụng cần được cấp quyền truy cập vị trí của bạn.\n\nBạn có thể tắt tuỳ chọn này bất cứ lúc nào tại giao diện Cài đặt."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Để làm được điều đó, toàn bộ dữ liệu sẽ phải được mã hoá và đồng bộ, tốt nhất là để nó chạy quay đêm.\n\nĐể bắt đầu, hãy làm theo hướng dẫn dưới đây:\n\n1. Đồng bộ hoá tất cả thiết bị của bạn.\n2. Ấn vào “%s”.\n3. Đợi đến khi chạy xong. Trong khi chạy, không thay đổi bất kỳ ghi chú nào trên các thiết bị để tránh xung đột.\n4. Khi đồng bộ đã hoàn tất trên thiết bị này, đồng tất cả thiết bị còn lại và đợi đến khi hoàn tất.\n\nQuan trọng: bạn chỉ cần thực hiện quá trình này một lần trên một thiết bị."
 	],
@@ -1529,6 +1541,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper cho phép lưu lại các trang web và screenshots trên trình duyệt web tới Joplin."
 	],
@@ -1552,6 +1567,9 @@
 	],
 	"Keychain Supported: %s": [
 		"Chuỗi khóa được hỗ trợ: %s"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Landscape"
@@ -1820,6 +1838,9 @@
 	"Not generated": [
 		""
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"ghi chú"
 	],
@@ -1958,6 +1979,9 @@
 	"Options": [
 		"Lựa chọn"
 	],
+	"Other": [
+		""
+	],
 	"Output format: %s": [
 		"Định dạng đầu ra: %s"
 	],
@@ -1999,9 +2023,6 @@
 	],
 	"Per user. Minimum of 2 users.": [
 		""
-	],
-	"Permission needed": [
-		"Cần được cấp quyền"
 	],
 	"Photo %d": [
 		""
@@ -2090,9 +2111,6 @@
 	"Preferred light theme": [
 		"Ưu tiên giao diện sáng"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2169,6 +2187,9 @@
 		""
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2374,6 +2395,9 @@
 	],
 	"Select all": [
 		"Chọn tất cả"
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Self-hosted": [
 		""
@@ -2624,6 +2648,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Chuyển tới [notebook] - tất cả những hoạt động tiếp theo sẽ được hoàn thành ở trên notebook này."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2707,6 +2734,9 @@
 	],
 	"Text editor command": [
 		"Câu lệnh trình duyệt chỉnh sửa văn bản"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
@@ -3005,6 +3035,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unable to share note data. Reason: %s": [
+		""
+	],
 	"Unchecked": [
 		""
 	],
@@ -3110,6 +3143,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Được sử dụng khi cần phông chữ có độ rộng cố định để bố cục văn bản dễ đọc (ví dụ: bảng, hộp kiểm, mã). Nếu không tìm thấy, phông chữ monospace (chiều rộng cố định) chung sẽ được sử dụng."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -3147,9 +3183,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -3197,10 +3230,10 @@
 	"When creating a new to-do:": [
 		"Khi tạo một to-do mới:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

@@ -167,6 +167,9 @@
 	"[None]": [
 		""
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -239,6 +242,9 @@
 	"Add body": [
 		""
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		""
 	],
@@ -246,6 +252,9 @@
 		""
 	],
 	"Add recipient:": [
+		""
+	],
+	"Add row": [
 		""
 	],
 	"Add tags:": [
@@ -333,6 +342,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -674,6 +686,9 @@
 	"Collapse all notebooks": [
 		""
 	],
+	"Collapse title": [
+		""
+	],
 	"Collapsed": [
 		""
 	],
@@ -1012,6 +1027,9 @@
 	"Delete attachment \"%s\"?": [
 		""
 	],
+	"Delete column": [
+		""
+	],
 	"Delete expired sessions": [
 		""
 	],
@@ -1037,6 +1055,9 @@
 		""
 	],
 	"Delete profile \"%s\"": [
+		""
+	],
+	"Delete row": [
 		""
 	],
 	"Delete selected notes": [
@@ -1169,6 +1190,9 @@
 		""
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		""
+	],
+	"Do you find the Joplin web app useful?": [
 		""
 	],
 	"Document scanner: Title template": [
@@ -1528,6 +1552,9 @@
 	"Expand all notebooks": [
 		""
 	],
+	"Expand title": [
+		""
+	],
 	"Expanded": [
 		""
 	],
@@ -1589,6 +1616,9 @@
 		""
 	],
 	"Feature flags": [
+		""
+	],
+	"Feedback": [
 		""
 	],
 	"Fetched items: %d/%d.": [
@@ -1850,9 +1880,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		""
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -2006,6 +2033,9 @@
 	"Joplin Server": [
 		""
 	],
+	"Joplin Server (SAML)": [
+		""
+	],
 	"Joplin Server Business": [
 		""
 	],
@@ -2022,6 +2052,9 @@
 		""
 	],
 	"Joplin SSO Authentication": [
+		""
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
 		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
@@ -2052,6 +2085,9 @@
 		""
 	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -2207,6 +2243,9 @@
 		""
 	],
 	"Markdown editor": [
+		""
+	],
+	"Markdown editor: Highlight active line": [
 		""
 	],
 	"Markdown editor: Render images": [
@@ -2468,6 +2507,9 @@
 	"Not now": [
 		""
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		""
 	],
@@ -2514,6 +2556,9 @@
 		""
 	],
 	"Note list style": [
+		""
+	],
+	"Note not published: %s": [
 		""
 	],
 	"Note preview": [
@@ -2675,6 +2720,9 @@
 	"Ordered list": [
 		""
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		""
 	],
@@ -2734,9 +2782,6 @@
 		""
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
-		""
-	],
-	"Permission needed": [
 		""
 	],
 	"Photo %d": [
@@ -2841,9 +2886,6 @@
 	"Preferred light theme": [
 		""
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2931,6 +2973,9 @@
 	"Publish Note": [
 		""
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		""
+	],
 	"Publish note...": [
 		""
 	],
@@ -2941,6 +2986,12 @@
 		""
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"QR Code": [
@@ -2986,6 +3037,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recognise text:": [
 		""
 	],
 	"Recognize handwritten image": [
@@ -3216,6 +3270,9 @@
 	"Save geo-location with notes": [
 		""
 	],
+	"Save geolocation?": [
+		""
+	],
 	"Scan notebook": [
 		""
 	],
@@ -3283,6 +3340,9 @@
 		""
 	],
 	"Select notebook": [
+		""
+	],
+	"Select one of the other supported sync targets.": [
 		""
 	],
 	"Select parent notebook": [
@@ -3621,6 +3681,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		""
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -3699,6 +3762,9 @@
 	"Take photo": [
 		""
 	],
+	"Take survey": [
+		""
+	],
 	"Task \"%s\" failed with error: %s": [
 		""
 	],
@@ -3715,6 +3781,9 @@
 		""
 	],
 	"Text editor command": [
+		""
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
@@ -4115,6 +4184,9 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unable to share note data. Reason: %s": [
+		""
+	],
 	"Unchecked": [
 		""
 	],
@@ -4259,6 +4331,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -4305,9 +4380,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Waiting for authorisation...": [
@@ -4367,10 +4439,10 @@
 	"When creating a new to-do:": [
 		""
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

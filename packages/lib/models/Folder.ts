@@ -556,7 +556,10 @@ export default class Folder extends BaseItem {
 				share_id: row.share_id || '',
 				parent_id: row.parent_id,
 				updated_time: Date.now(),
-			}, { autoTimestamp: false });
+			}, {
+				autoTimestamp: false,
+				disableReadOnlyCheck: true,
+			});
 		}
 	}
 

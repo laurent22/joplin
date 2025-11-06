@@ -23,6 +23,8 @@ const defaultEnvValues: EnvVariables = {
 	COOKIES_SECURE: false,
 	RUNNING_IN_DOCKER: false,
 	HEARTBEAT_MESSAGE_SCHEDULE: '* * * * *',
+	DELETE_EXPIRED_SESSIONS_SCHEDULE: '0 */6 * * *',
+	LOG_LEVEL: 'info',
 
 	// The admin panel is accessible only if this is an admin instance.
 	// Additionally, processing services (those defined in setupTaskService.ts)
@@ -184,6 +186,8 @@ export interface EnvVariables {
 	COOKIES_SECURE: boolean;
 	RUNNING_IN_DOCKER: boolean;
 	HEARTBEAT_MESSAGE_SCHEDULE: string;
+	DELETE_EXPIRED_SESSIONS_SCHEDULE: string;
+	LOG_LEVEL: string;
 
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;

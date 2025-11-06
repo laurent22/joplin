@@ -22,13 +22,24 @@ const removeListItemWrapperParagraphs = (container: HTMLElement) => {
 	}
 };
 
-
 const restoreOriginalLinks = (container: HTMLElement) => {
 	// Restore HREFs
 	const links = container.querySelectorAll<HTMLAnchorElement>('a[href="#"][data-original-href]');
 	for (const link of links) {
 		link.href = link.getAttribute('data-original-href');
 		link.removeAttribute('data-original-href');
+	}
+};
+
+const removeTableItemExtraPadding = (container: HTMLElement) => {
+	const cells = container.querySelectorAll<HTMLTableCellElement>('th, td');
+	for (const cell of cells) {
+		// Table cells can exist in Markdown without the need for invisible
+		// content.
+		// Remove single nonbreaking space padding:
+		if (cell.textContent === '\u00A0') {
+			cell.textContent = '';
+		}
 	}
 };
 
@@ -52,6 +63,7 @@ const postprocessEditorOutput = (node: Node|DocumentFragment) => {
 	fixResourceUrls(html);
 	restoreOriginalLinks(html);
 	removeListItemWrapperParagraphs(html);
+	removeTableItemExtraPadding(html);
 
 	return html;
 };

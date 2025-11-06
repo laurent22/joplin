@@ -7,6 +7,7 @@ import useKeyboardHandler from './DialogButtonRow/useKeyboardHandler';
 export interface ButtonSpec {
 	name: string;
 	label: string;
+	disabled?: boolean;
 }
 
 export interface ClickEvent {
@@ -51,21 +52,29 @@ export default function DialogButtonRow(props: Props) {
 		if (props.onClick) props.onClick(event);
 	}, [props.onClick]);
 
-	const onKeyDown = useKeyboardHandler({ onOkButtonClick, onCancelButtonClick });
+	const okButtonShow = props.okButtonShow ?? true;
+	const cancelButtonShow = props.cancelButtonShow ?? true;
+	const canClickOk = okButtonShow && !props.okButtonDisabled;
+	const canClickCancel = cancelButtonShow && !props.cancelButtonDisabled;
+
+	const onKeyDown = useKeyboardHandler({
+		onOkButtonClick: canClickOk ? onOkButtonClick : null,
+		onCancelButtonClick: canClickCancel ? onCancelButtonClick : null,
+	});
 
 	const buttonComps = [];
 
 	if (props.customButtons) {
 		for (const b of props.customButtons) {
 			buttonComps.push(
-				<button key={b.name} style={buttonStyle} onClick={() => onCustomButtonClick({ buttonName: b.name })} onKeyDown={onKeyDown}>
+				<button key={b.name} style={buttonStyle} onClick={() => onCustomButtonClick({ buttonName: b.name })} disabled={b.disabled} onKeyDown={onKeyDown}>
 					{b.label}
 				</button>,
 			);
 		}
 	}
 
-	if (props.okButtonShow !== false) {
+	if (okButtonShow) {
 		buttonComps.push(
 			<button disabled={props.okButtonDisabled} key="ok" style={buttonStyle} onClick={onOkButtonClick} ref={props.okButtonRef} onKeyDown={onKeyDown}>
 				{props.okButtonLabel ? props.okButtonLabel : _('OK')}
@@ -73,7 +82,7 @@ export default function DialogButtonRow(props: Props) {
 		);
 	}
 
-	if (props.cancelButtonShow !== false) {
+	if (cancelButtonShow) {
 		buttonComps.push(
 			<button disabled={props.cancelButtonDisabled} key="cancel" style={{ ...buttonStyle }} onClick={onCancelButtonClick}>
 				{props.cancelButtonLabel ? props.cancelButtonLabel : _('Cancel')}

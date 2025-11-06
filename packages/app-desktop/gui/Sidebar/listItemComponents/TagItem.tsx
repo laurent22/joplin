@@ -5,7 +5,6 @@ import { StyledListItemAnchor, StyledSpanFix } from '../styles';
 import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import BaseModel from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';
-import Tag from '@joplin/lib/models/Tag';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
 
@@ -15,6 +14,7 @@ interface Props {
 	anchorRef: ListItemRef;
 	selected: boolean;
 	tag: TagsWithNoteCountEntity;
+	label: string;
 	onTagDrop: React.DragEventHandler<HTMLElement>;
 	onContextMenu: React.MouseEventHandler<HTMLElement>;
 	onClick: (event: TagLinkClickEvent)=> void;
@@ -58,7 +58,7 @@ const TagItem = (props: Props) => {
 				onContextMenu={props.onContextMenu}
 				onClick={onClickHandler}
 			>
-				<StyledSpanFix className="tag-label">{Tag.displayTitle(tag)}</StyledSpanFix>
+				<StyledSpanFix className="tag-label">{props.label}</StyledSpanFix>
 				{noteCount}
 			</StyledListItemAnchor>
 		</ListItemWrapper>

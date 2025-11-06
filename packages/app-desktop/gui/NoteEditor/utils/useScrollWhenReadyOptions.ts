@@ -1,41 +1,48 @@
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { RefObject, useCallback, useRef } from 'react';
 import { NoteBodyEditorRef, ScrollOptions, ScrollOptionTypes } from './types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
-import type { EditorScrollPercents } from '../../../app.reducer';
+import type { NoteIdToScrollPercent } from '../../../app.reducer';
+import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 
 interface Props {
 	noteId: string;
+	editorName: string;
 	selectedNoteHash: string;
-	lastEditorScrollPercents: EditorScrollPercents;
+	lastEditorScrollPercents: NoteIdToScrollPercent;
 	editorRef: RefObject<NoteBodyEditorRef>;
 }
 
-const useScrollWhenReadyOptions = ({ noteId, selectedNoteHash, lastEditorScrollPercents, editorRef }: Props) => {
-	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions|null>(null);
+const useScrollWhenReadyOptions = ({ noteId, editorName, selectedNoteHash, lastEditorScrollPercents, editorRef }: Props) => {
+	const scrollWhenReadyRef = useRef<ScrollOptions|null>(null);
 
 	const previousNoteId = usePrevious(noteId);
-	const lastScrollPercentsRef = useRef<EditorScrollPercents>(null);
+	const noteIdChanged = noteId !== previousNoteId;
+	const previousEditor = usePrevious(editorName);
+	const editorChanged = editorName !== previousEditor;
+	const lastScrollPercentsRef = useRef<NoteIdToScrollPercent>(null);
 	lastScrollPercentsRef.current = lastEditorScrollPercents;
 
-	useEffect(() => {
-		if (noteId === previousNoteId) return;
+	// This needs to be a nowEffect to prevent race conditions
+	useNowEffect(() => {
+		if (!editorChanged && !noteIdChanged) return () => {};
 
 		if (editorRef.current) {
 			editorRef.current.resetScroll();
 		}
 
 		const lastScrollPercent = lastScrollPercentsRef.current[noteId] || 0;
-		setScrollWhenReady({
+		scrollWhenReadyRef.current = {
 			type: selectedNoteHash ? ScrollOptionTypes.Hash : ScrollOptionTypes.Percent,
 			value: selectedNoteHash ? selectedNoteHash : lastScrollPercent,
-		});
-	}, [noteId, previousNoteId, selectedNoteHash, editorRef]);
+		};
+		return () => {};
+	}, [editorChanged, noteIdChanged, noteId, selectedNoteHash, editorRef]);
 
 	const clearScrollWhenReady = useCallback(() => {
-		setScrollWhenReady(null);
+		scrollWhenReadyRef.current = null;
 	}, []);
 
-	return { scrollWhenReady, clearScrollWhenReady };
+	return { scrollWhenReadyRef, clearScrollWhenReady };
 };
 
 export default useScrollWhenReadyOptions;

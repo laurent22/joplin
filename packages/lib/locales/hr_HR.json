@@ -173,6 +173,9 @@
 	"[None]": [
 		"[Ništa]"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Popis riječi odvojenih zarezima. Može se koristiti za neobične riječi, kako bi se glasovnom tipkanju pomoglo da ih ispravno napiše."
 	],
@@ -244,6 +247,9 @@
 	],
 	"Add body": [
 		"Dodaj sadržaj"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Dodaj novu"
@@ -340,6 +346,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Pronađen je automatski spremljen crtež. Priložiti kopiju bilješci?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Dogodila se greška: %s"
@@ -1179,6 +1188,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nemoj izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za dešifriranje podataka! Za aktiviranje šifriranja dolje upiši svoju lozinku."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		"Skener dokumenata: Predložak naslova"
 	],
@@ -1599,6 +1611,9 @@
 	"Feature flags": [
 		"Oznake funkcija"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Dohvaćeni elementi: %d/%d."
 	],
@@ -1859,9 +1874,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"U bilo kojoj naredbi, na bilješku ili bilježnicu može se uputiti pomoću naslova ili ID oznake ili pomoću prečaca `$n` ili `$b` za trenutačno odabranu bilješku ili bilježnicu. `$c` se može koristiti za upućivanje na trenutačno odabrani element."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Za povezivanje geografskih podataka mjesta s bilješkom, programu moraš dozvoliti pristup tvom mjestu.\n\nOvu opciju možeš isključiti bilo kada u prozoru konfiguracije."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Da bi se to obavilo, svi tvoji skupovi podataka moraju se šifrirati i sinkronizirati, stoga pokreni postupak preko noći.\n\nPokreni na sljedeći način:\n\n1. Sinkroniziraj sve tvoje uređaje.\n2. Pritisni „%s”.\n3. Pričekaj da postupak završi. Dok radi, nemoj mijenjati bilješke na drugim uređajima kako bi se izbjegli konflikti.\n4. Kad sinkronizacija završi na ovom uređaju, sinkroniziraj sve ostale uređaje i pričekaj da sinkronizacija tih uređaja završi.\n\nVažno: ovo moraš pokrenuti samo JEDNOM na jednom uređaju."
 	],
@@ -2033,6 +2045,9 @@
 	"Joplin SSO Authentication": [
 		"Joplin SSO autentifikacija"
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper omogućuje spremanje web-stranica i slika ekrana iz tvog preglednika u Joplin."
 	],
@@ -2062,6 +2077,9 @@
 	],
 	"Keys that need upgrading": [
 		"Ključevi koji se moraju nadograditi"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Polegnuto"
@@ -2480,6 +2498,9 @@
 	"Not now": [
 		"Ne sada"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"bilješka"
 	],
@@ -2687,6 +2708,9 @@
 	"Ordered list": [
 		"Poredan popis"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Drugi programi …"
 	],
@@ -2748,9 +2772,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Zauvijek briše bilježnicu, preskakajući smeće."
-	],
-	"Permission needed": [
-		"Potrebna je dozvola"
 	],
 	"Photo %d": [
 		"Slika %d"
@@ -2854,9 +2875,6 @@
 	"Preferred light theme": [
 		"Preferirana svijetla tema"
 	],
-	"Preferred voice typing provider": [
-		"Preferirana usluga glasovnog tipkanja"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Očuvaj boje prilikom lijepljenja teksta u uređivaču formatiranog teksta"
 	],
@@ -2955,6 +2973,9 @@
 	],
 	"Publish/unpublish": [
 		"Objavi/Poništi objavljivanje"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
 	],
 	"QR Code": [
 		"QR kod"
@@ -3298,6 +3319,9 @@
 	"Select notebook": [
 		"Odaberi bilježnicu"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Odaberi nadređenu bilježnicu"
 	],
@@ -3634,6 +3658,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Prebacuje na bilježnicu [notebook] – sve daljnje operacije će se izvoditi u ovoj bilježnici."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Sinkroniziraj koliko god uređaja želiš"
 	],
@@ -3729,6 +3756,9 @@
 	],
 	"Text editor command": [
 		"Naredba za uređivača teksta"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktivni profil se ne može izbrisati. Prebaci se na jedan drugi profil i pokušaj ponovo."
@@ -4277,6 +4307,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Koristi se za tekst fiksne širine (npr. tablice, označiva polja, programski kod). Ako se ne pronađe, koristi se generički font fiksne širine."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Brisanja korisnika"
 	],
@@ -4324,9 +4357,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Glasovno tipkanje: Glosar"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Čeka se autorizacija …"
@@ -4385,11 +4415,11 @@
 	"When creating a new to-do:": [
 		"Prilikom stvaranja novog zadatka:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Kada je aktivirano, program će pregledati tvoje privitke i iz njih izdvojiti tekst. To omogućuje pretraživanje teksta u tim privicima."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"Prozor ne reagira."

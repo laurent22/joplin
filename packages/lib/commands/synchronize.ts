@@ -2,6 +2,7 @@ import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '../se
 import { _ } from '../locale';
 import { reg } from '../registry';
 import Setting from '../models/Setting';
+import NavService from '../services/NavService';
 
 export const declaration: CommandDeclaration = {
 	name: 'synchronize',
@@ -35,7 +36,18 @@ export const runtime = (): CommandRuntime => {
 					return 'auth';
 				}
 
-				reg.logger().error('Not authenticated with sync target - please check your credentials.');
+				const error = new Error('Not authenticated with sync target - please check your credentials.');
+
+				utils.store.dispatch({
+					type: 'SYNC_REPORT_UPDATE',
+					report: { errors: [error] },
+				});
+
+				if (Setting.value('sync.target') === 11) {
+					await NavService.go('JoplinServerSamlLogin');
+				}
+
+				reg.logger().error(error);
 				return 'error';
 			}
 

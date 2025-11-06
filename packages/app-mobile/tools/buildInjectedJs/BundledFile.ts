@@ -3,11 +3,11 @@
 // files: First here we convert the JS file to a plain string, and that string
 // is then loaded by eg. the Mermaid plugin, and finally injected in the WebView.
 
-import { dirname, extname, basename } from 'path';
+import { dirname, extname, basename, resolve } from 'path';
 
 import * as esbuild from 'esbuild';
 import copyAssets from './copyAssets';
-import { writeFile } from 'fs-extra';
+import { writeFile, readFile } from 'fs-extra';
 
 export default class BundledFile {
 	private readonly bundleOutputPathBase_: string;
@@ -51,6 +51,32 @@ export default class BundledFile {
 							}
 
 							return { path };
+						});
+					},
+				},
+				{
+					// Supports require(...)ing SVG images
+					name: 'joplin--require-svg',
+					setup: build => {
+						// A relative path to an SVG:
+						build.onResolve({ filter: /^\.{1,2}\/.*\.svg$/ }, args => ({
+							path: resolve(args.resolveDir, args.path),
+							namespace: 'joplin-require-svg',
+						}));
+
+						build.onLoad({ filter: /^.*$/, namespace: 'joplin-require-svg' }, async args => {
+							const fileContent = await readFile(args.path, 'utf-8');
+							return { contents: `
+								let svg = null;
+								export default () => {
+									svg ??= (() => {
+										const parser = new DOMParser();
+										const doc = parser.parseFromString(${JSON.stringify(fileContent)}, 'image/svg+xml');
+										return doc.querySelector('svg');
+									})();
+									return svg.cloneNode(true);
+								};
+							` };
 						});
 					},
 				},

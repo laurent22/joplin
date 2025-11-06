@@ -1,13 +1,13 @@
 import Note from '../../models/Note';
 import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
-import ShareService from './ShareService';
+import ShareService, { ApiShare } from './ShareService';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
-import { setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
+import { localSyncInfo, setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import { generateKeyPair } from '../e2ee/ppk/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
-import { loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
+import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
 import Logger, { LogLevel } from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Resource from '../../models/Resource';
@@ -18,10 +18,6 @@ import Setting from '../../models/Setting';
 import { ModelType } from '../../BaseModel';
 import { remoteNotesFoldersResources } from '../../testing/test-utils-synchronizer';
 import mockShareService from '../../testing/share/mockShareService';
-
-interface TestShareFolderServiceOptions {
-	master_key_id?: string;
-}
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
@@ -115,7 +111,13 @@ describe('ShareService', () => {
 	});
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}, options: TestShareFolderServiceOptions = {}) {
+	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}) {
+		let nextShareId = 1;
+		let shares: ApiShare[] = [];
+		const shareByFolderId = (folderId: string) => {
+			return shares.find(share => share.folder_id === folderId);
+		};
+
 		return mockShareService({
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			onExec: async (method: string, path: string, query: Record<string, any>, body: any) => {
@@ -123,19 +125,34 @@ describe('ShareService', () => {
 
 				if (method === 'GET' && path === 'api/shares') {
 					return {
-						items: [
-							{
-								id: 'share_1',
-								master_key_id: options.master_key_id,
-							},
-						],
+						items: [...shares],
 					};
 				}
 
 				if (method === 'POST' && path === 'api/shares') {
-					return {
-						id: 'share_1',
+					// Return the existing share, if it exists. This is to match the behavior
+					// of Joplin Server.
+					const existingShare = shareByFolderId(body.folder_id);
+					if (existingShare) {
+						return existingShare;
+					}
+
+					// Use a predictable ID:
+					const id = `share_${nextShareId++}`;
+
+					const share = {
+						id,
+						master_key_id: body.master_key_id,
+						folder_id: body.folder_id,
 					};
+					shares.push(share);
+					return share;
+				}
+
+				if (method === 'DELETE' && path.startsWith('api/shares/')) {
+					const id = path.replace(/^api\/shares\//, '');
+					shares = shares.filter(share => share.id !== id);
+					return;
 				}
 
 				throw new Error(`Unhandled: ${method} ${path}`);
@@ -176,7 +193,7 @@ describe('ShareService', () => {
 		const ppk = await generateKeyPair(encryptionService(), '111111');
 		setPpk(ppk);
 
-		let shareService = testShareFolderService();
+		const shareService = testShareFolderService();
 
 		expect(await MasterKey.count()).toBe(1);
 
@@ -206,12 +223,6 @@ describe('ShareService', () => {
 		expect(folder.master_key_id).toBe(folderKey.id);
 
 		await loadMasterKeysFromSettings(encryptionService());
-
-		// Reload the service so that the mocked calls use the newly created key
-		shareService = testShareFolderService({}, { master_key_id: folderKey.id });
-
-		BaseItem.shareService_ = shareService;
-		Resource.shareService_ = shareService;
 
 		try {
 			const serializedNote = await Note.serializeForSync(note);
@@ -247,13 +258,6 @@ describe('ShareService', () => {
 
 		const service = testShareFolderService({
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			'POST api/shares': (_query: Record<string, any>, body: any) => {
-				return {
-					id: 'share_1',
-					master_key_id: body.master_key_id,
-				};
-			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			'GET api/users/toto%40example.com/public_key': async (_query: Record<string, any>, _body: any) => {
 				return recipientPpk;
 			},
@@ -272,6 +276,46 @@ describe('ShareService', () => {
 
 		const content = JSON.parse(uploadedMasterKey.content);
 		expect(recipientPpk.id).toBe(content.ppkId);
+	});
+
+	it('should not update the folder\'s master_key_id when shareFolder is called multiple times', async () => {
+		await generateMasterKeyAndEnableEncryption(encryptionService(), 'testing!');
+		const ppk = await generateKeyPair(encryptionService(), '111111');
+		setPpk(ppk);
+
+		expect(localSyncInfo().e2ee).toBe(true);
+		expect(localSyncInfo().masterKeys).toHaveLength(1);
+
+		const service = testShareFolderService();
+		const { share, folder } = await testShareFolder(service);
+		// Should have created a new master key for the share
+		expect(localSyncInfo().masterKeys).toHaveLength(2);
+		expect(
+			localSyncInfo().masterKeys.some(key => key.id === share.master_key_id),
+		).toBe(true);
+
+		// Sharing an already-shared folder should keep the existing key:
+		const share2 = await service.shareFolder(folder.id);
+		expect(share2.master_key_id).toBe(share.master_key_id);
+		expect(await Folder.load(folder.id)).toHaveProperty('master_key_id', share.master_key_id);
+		// Should not have added a new master key
+		expect(localSyncInfo().masterKeys).toHaveLength(2);
+	});
+
+	it('should use a different master key when folders are unshared, then shared again', async () => {
+		await generateMasterKeyAndEnableEncryption(encryptionService(), 'testing!');
+		const ppk = await generateKeyPair(encryptionService(), '111111');
+		setPpk(ppk);
+
+		const service = testShareFolderService();
+		const { share, folder } = await testShareFolder(service);
+		await service.refreshShares();
+		await service.unshareFolder(folder.id);
+		const share2 = await service.shareFolder(folder.id);
+
+		expect(share2.master_key_id).toBeTruthy();
+		expect(share2.folder_id).toBe(folder.id);
+		expect(share.master_key_id).not.toBe(share2.master_key_id);
 	});
 
 	it('should leave folders that are no longer with the user', async () => {

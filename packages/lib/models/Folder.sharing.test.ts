@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep, resourceService } from '../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep, resourceService, simulateReadOnlyShareEnv } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { allNotesFolders } from '../testing/test-utils-synchronizer';
 import Note from '../models/Note';
@@ -180,6 +180,21 @@ describe('models/Folder.sharing', () => {
 			expect(folder2.share_id).toBe('abcd1234');
 		}
 	}));
+
+	it('should not fail to update share IDs when an outdated share ID is contained in a read-only folder', async () => {
+		const shareId = 'abcd1234';
+		const root = await Folder.save({ title: 'read-only', share_id: shareId });
+		// Save a child with a different share ID
+		const child = await Note.save({ title: 'Test', parent_id: root.id, share_id: `${shareId}-different` });
+
+		const reset = simulateReadOnlyShareEnv([shareId]);
+		try {
+			await Folder.updateAllShareIds(resourceService(), []);
+			expect(await Note.load(child.id)).toMatchObject({ share_id: shareId });
+		} finally {
+			reset();
+		}
+	});
 
 	it('should unshare a subfolder of a shared folder when it is moved to the root', (async () => {
 		let folder1 = await createFolderTree('', [

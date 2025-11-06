@@ -161,6 +161,9 @@
 	"[None]": [
 		"[Tidak ada]"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Daftar kata yang dipisah dengan koma. Dapat digunakan untuk kata-kata yang tidak umum, untuk membantu pengetikan suara mengejanya dengan benar."
 	],
@@ -232,6 +235,9 @@
 	],
 	"Add body": [
 		"Tambahkan isi"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Tambah baru"
@@ -328,6 +334,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Telah ditemukan gambar yang disimpan otomatis. Lampirkan salinan gambar ke catatan?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Sebuah galat telah terjadi: %s"
@@ -1163,6 +1172,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Jangan sampai kehilangan kata sandi, sebagai alasan keamanan, ini akan menjadi *satu-satunya* cara untuk mendekripsi data! Untuk menyalakan enkripsi, masukkan kata sandi Anda di bawah."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		"Pemindai dokumen: Templat judul"
 	],
@@ -1583,6 +1595,9 @@
 	"Feature flags": [
 		"Penanda fitur"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Benda yang diambil: %d/%d."
 	],
@@ -1841,9 +1856,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Dalam perintah apa pun, catatan atau buku catatan dapat dirujuk dengan judul atau ID, atau bisa juga dengan pintasan seperti `$n` atau `$b` untuk catatan atau buku catatan yang saat ini terpilih. `$c` dapat digunakan untuk merujuk pada benda yang saat ini terpilih."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Untuk menghubungkan geolokasi dengan catatan, aplikasi perlu izin dari Anda untuk mengakses lokasi Anda.\n\nAnda dapat mematikan pilihan ini kapan saja di layar Pengaturan."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Untuk melakukannya, seluruh data Anda harus dienkripsi and diselaraskan, lebih baik jika menjalankannya semalaman.\n\nUntuk memulai, silakan ikuti langkah-langkah berikut:\n\n1. Selaraskan semua perangkat Anda.\n2. Klik \"%s\".\n3. Biarkan proses berjalan sampai selesai. Saat proses berjalan, hindari mengubah catatan apa pun di perangkat Anda yang lain, untuk menghindari perbedaan.\n4. Ketika penyelarasan telah selesai pada perangkat ini, selaraskan semua perangkat Anda dan biarkan proses berjalan sampai selesai.\n\nPenting: Anda hanya perlu menjalankan ini SEKALI pada satu perangkat."
 	],
@@ -2015,6 +2027,9 @@
 	"Joplin SSO Authentication": [
 		"Otentikasi SSO Joplin"
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Web Clipper Joplin memungkinkan untuk menyimpan halaman web dan tangkapan layar dari peramban web Anda ke Joplin."
 	],
@@ -2044,6 +2059,9 @@
 	],
 	"Keys that need upgrading": [
 		"Kunci-kunci yang perlu ditingkatkan"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Mendatar"
@@ -2456,6 +2474,9 @@
 	"Not now": [
 		"Tidak sekarang"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"catatan"
 	],
@@ -2663,6 +2684,9 @@
 	"Ordered list": [
 		"Daftar berurutan"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Aplikasi lain..."
 	],
@@ -2722,9 +2746,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Hapus buku catatan selamanya, bukan ke tong sampah."
-	],
-	"Permission needed": [
-		"Perlu izin"
 	],
 	"Photo %d": [
 		"Foto %d"
@@ -2828,9 +2849,6 @@
 	"Preferred light theme": [
 		"Tema terang yang dipilih"
 	],
-	"Preferred voice typing provider": [
-		"Penyedia pengetikan suara yang dipilih"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Pertahankan warna ketika menempel teks di Penyunting Teks Kaya"
 	],
@@ -2929,6 +2947,9 @@
 	],
 	"Publish/unpublish": [
 		"Terbitkan/Batal terbitkan"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
 	],
 	"QR Code": [
 		"Kode QR"
@@ -3272,6 +3293,9 @@
 	"Select notebook": [
 		"Pilih buku catatan"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Pilih buku catatan induk"
 	],
@@ -3608,6 +3632,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Beralih ke [notebook] - semua kegiatan selanjutnya akan terjadi dalam buku catatan ini."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Selaraskan ke banyak perangkat sebanyak yang Anda mau"
 	],
@@ -3703,6 +3730,9 @@
 	],
 	"Text editor command": [
 		"Perintah penyunting teks"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Profil yang aktif tidak dapat dihapus. Pindah ke profil yang berbeda dan coba kembali."
@@ -4241,6 +4271,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Digunakan di mana fonta lebar tetap diperlukan untuk meletakkan teks dengan jelas (misalnya tabel, kotak centang, kode). Jika tidak ditemukan, fonta generik monospace (lebar tetap) digunakan."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Dihapus oleh pengguna"
 	],
@@ -4288,9 +4321,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Pengetikan suara: Glosarium"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Sedang menunggu otorisasi…"
@@ -4349,11 +4379,11 @@
 	"When creating a new to-do:": [
 		"Ketika membuat tugas baru:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Ketika dinyalakan, aplikasi akan memindai lampiran Anda dan mengambil teks darinya. Ini akan membuat Anda mampu mencari teks pada lampiran tersebut."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"Jendela tetap."

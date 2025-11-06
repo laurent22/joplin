@@ -356,6 +356,7 @@ const useOnRenderItem = (props: Props) => {
 				onClick={tagItem_click}
 				onTagDrop={onTagDrop_}
 				onContextMenu={onItemContextMenu}
+				label={item.label}
 				tag={tag}
 				itemCount={itemCount}
 				index={index}
@@ -384,7 +385,7 @@ const useOnRenderItem = (props: Props) => {
 				anchorRef={anchorRef}
 				selected={selected}
 				folderId={folder.id}
-				folderTitle={Folder.displayTitle(folder)}
+				folderTitle={item.label}
 				folderIcon={Folder.unserializeIcon(folder.icon)}
 				depth={item.depth}
 				isExpanded={isExpanded}

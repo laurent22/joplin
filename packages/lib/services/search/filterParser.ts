@@ -63,6 +63,7 @@ const getTerms = (query: string, validFilters: Set<string>): Term[] => {
 
 		currentTerm += c;
 	}
+	if (inQuote) currentTerm += '"'; // Treat unclosed quotes as fully quoted search terms, to get partial matches while the user types the search term
 	if (currentTerm) terms.push(makeTerm(currentCol, currentTerm));
 	return terms;
 };

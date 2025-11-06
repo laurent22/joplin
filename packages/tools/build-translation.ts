@@ -39,15 +39,21 @@ async function createPotFile(potFilePath: string) {
 	const excludedDirs = [
 		'./.git/*',
 		'./.github/*',
+		'./bootstrap.bundle.min.js',
 		'./**/*.bundle.js',
+		'./**/jest.setup.js',
+		'./**/jest.config.js',
+		'./**/gulpfile.js',
+		'./**/.eslintrc.js',
 		'./**/*.min.js',
+		'./**/*.test.js',
+		'./**/*.test.ts',
+		'./**/webpack.config.js',
 		'./**/node_modules/*',
 		'./Assets/*',
 		'./Assets/TinyMCE/*',
 		'./docs/*',
 		'./node_modules/*',
-		'./packages/renderer/MdToHtml/rules/katex_mhchem.js',
-		'./packages/renderer/MdToHtml/rules/mermaid_render.js',
 		'./packages/app-cli/build/*',
 		'./packages/app-cli/locales-build/*',
 		'./packages/app-cli/locales/*',
@@ -56,7 +62,10 @@ async function createPotFile(potFilePath: string) {
 		'./packages/app-clipper/*',
 		'./packages/app-desktop/build/*',
 		'./packages/app-desktop/dist/*',
+		'./packages/plugin-repo-cli/dist/index.js',
 		'./packages/app-desktop/gui/note-viewer/pluginAssets/*',
+		'./packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/icons.js',
+		'./packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js',
 		'./packages/app-desktop/gui/style/*',
 		'./packages/app-desktop/integration-tests/*',
 		'./packages/app-desktop/lib/*',
@@ -68,22 +77,26 @@ async function createPotFile(potFilePath: string) {
 		'./packages/app-mobile/pluginAssets/*',
 		'./packages/app-mobile/tools/*',
 		'./packages/default-plugins/plugin-sources/*',
+		'./packages/doc-builder/*',
 		'./packages/doc-builder/build/*',
 		'./packages/fork-*/*',
 		'./packages/lib/rnInjectedJs/*',
 		'./packages/lib/vendor/*',
 		'./packages/renderer/assets/*',
+		'./packages/renderer/MdToHtml/rules/katex_mhchem.js',
+		'./packages/renderer/MdToHtml/rules/mermaid_render.js',
 		'./packages/server/dist/*',
 		'./packages/tools/*',
 		'./packages/transcribe/dist/*',
 		'./packages/turndown-plugin-gfm/*',
 		'./packages/turndown/*',
 		'./packages/utils/dist/*',
-		'./packages/doc-builder/*',
 		'./patches/*',
 		'./readme/*',
 	];
 
+	// Note: this command is very slow because despite the exclusion list `find` is still iterating
+	// through all folders, including node_modules, but it's just not outputting them.
 	const findCommand = `find . -type f \\( -iname \\*.js -o -iname \\*.ts -o -iname \\*.tsx \\) -not -path '${excludedDirs.join('\' -not -path \'')}'`;
 	process.chdir(rootDir);
 	let files = (await execCommand(findCommand)).split('\n');
@@ -100,16 +113,6 @@ async function createPotFile(potFilePath: string) {
 
 		const nameNoExt = `${dirname(file)}/${filename(file)}`;
 
-		if (nameNoExt.endsWith('CodeMirror.bundle.min')) continue;
-		if (nameNoExt.endsWith('CodeMirror.bundle')) continue;
-		if (nameNoExt.endsWith('.test')) continue;
-		if (nameNoExt.endsWith('.eslintrc')) continue;
-		if (nameNoExt.endsWith('jest.config')) continue;
-		if (nameNoExt.endsWith('jest.setup')) continue;
-		if (nameNoExt.endsWith('webpack.config')) continue;
-		if (nameNoExt.endsWith('.prettierrc')) continue;
-		if (file.endsWith('.d.ts')) continue;
-
 		if (toProcess[nameNoExt] && ['ts', 'tsx'].includes(fileExtension(toProcess[nameNoExt]))) {
 			continue;
 		}
@@ -124,7 +127,12 @@ async function createPotFile(potFilePath: string) {
 
 	files.sort();
 
-	// console.info(files.filter(f => f.endsWith('.js')).join('\n'));
+	// for (const f of files) {
+	// 	if (!f.endsWith('.js')) continue;
+	// 	const fullPath = rootDir + '/' + f;
+	// 	const s = await stat(fullPath);
+	// 	console.info(s.size + ': ' + fullPath);
+	// }
 	// process.exit(0);
 
 	// Note: we previously used the xgettext utility, but it only partially
