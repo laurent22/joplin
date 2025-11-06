@@ -1,10 +1,16 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTargetId, synchronizerStart, msleep } from '../testing/test-utils';
+import {
+	afterAllCleanUp,
+	setupDatabaseAndSynchronizer,
+	switchClient,
+	syncTargetId,
+	synchronizerStart,
+	msleep,
+} from '../testing/test-utils';
 import BaseItem from './BaseItem';
 import Folder from './Folder';
 import Note from './Note';
 
 describe('BaseItem', () => {
-
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -115,24 +121,31 @@ https://joplinapp.org/ \\n
 	});
 
 	it('should not serialize the note title and body', async () => {
-		const note = await Note.save({ title: 'my note', body: `one line
+		const note = await Note.save({
+			title: 'my note',
+			body: `one line
 two line
-three line \\n no escape` });
+three line \\n no escape`,
+		});
 
 		const noteBefore = await Note.load(note.id);
 		const serialized = await Note.serialize(noteBefore);
-		expect(serialized.indexOf(`my note
+		expect(
+			serialized.indexOf(`my note
 
 one line
 two line
-three line \\n no escape`)).toBe(0);
+three line \\n no escape`),
+		).toBe(0);
 	});
 
 	it('should update item sync item', async () => {
-		const note1 = await Note.save({ });
+		const note1 = await Note.save({});
 
 		const syncTime = async (itemId: string) => {
-			const syncItem = await BaseItem.syncItem(syncTargetId(), itemId, { fields: ['sync_time'] });
+			const syncItem = await BaseItem.syncItem(syncTargetId(), itemId, {
+				fields: ['sync_time'],
+			});
 			return syncItem ? syncItem.sync_time : 0;
 		};
 
@@ -157,18 +170,40 @@ three line \\n no escape`)).toBe(0);
 		'Test\'',
 		'Test\'\'\'a\'\'',
 		'% test',
-	])('should support querying items with IDs containing special characters (id: %j)', async (id) => {
-		const note = await Note.save({ id }, { isNew: true });
-		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
-	});
+	])(
+		'should support querying items with IDs containing special characters (id: %j)',
+		async (id) => {
+			const note = await Note.save({ id }, { isNew: true });
+			expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
+		},
+	);
 
 	test.each([
-		{ input: '1b175bb38bba47baac22b0b47f778113.md', expected: true, description: 'return true for valid system path' },
+		{
+			input: '1b175bb38bba47baac22b0b47f778113.md',
+			expected: true,
+			description: 'return true for valid system path',
+		},
 		{ input: '', expected: false, description: 'return false for empty path' },
-		{ input: 'invalid-path', expected: false, description: 'return false for path without dot' },
-		{ input: 'short.md', expected: false, description: 'return false for short name before extension' },
-		{ input: '1b175bb38bba47baac22b0b47f778113.txt', expected: false, description: 'return false for non-md extension' },
-	])('should $description', ({ input, expected }: { input: string; expected: boolean }) => {
-		expect(BaseItem.isSystemPath(input)).toBe(expected);
-	});
-});''
+		{
+			input: 'invalid-path',
+			expected: false,
+			description: 'return false for path without dot',
+		},
+		{
+			input: 'short.md',
+			expected: false,
+			description: 'return false for short name before extension',
+		},
+		{
+			input: '1b175bb38bba47baac22b0b47f778113.txt',
+			expected: false,
+			description: 'return false for non-md extension',
+		},
+	])(
+		'should $description',
+		({ input, expected }: { input: string; expected: boolean }) => {
+			expect(BaseItem.isSystemPath(input)).toBe(expected);
+		},
+	);
+});
