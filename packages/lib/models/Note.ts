@@ -20,6 +20,7 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
+import NoteTag from './NoteTag';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -938,6 +939,7 @@ export default class Note extends BaseItem {
 				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
+				await NoteTag.deleteForNote(processIds, { ...options, sourceDescription: actionLogger });
 				const Revision = this.getClass<typeof RevisionClass>('Revision');
 				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
 			}
