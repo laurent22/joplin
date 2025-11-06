@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: VortexP\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
@@ -64,7 +62,7 @@ msgstr "(Vain luku)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Voit poistaa tämän kehotuksen käytöstä asetuksista)"
@@ -398,7 +396,7 @@ msgid "Action"
 msgstr "Toiminta"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Toiminnot"
@@ -412,7 +410,7 @@ msgstr "Aktiivinen"
 msgid "Actual Size"
 msgstr "Todellinen koko"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Lisää runko"
 
@@ -430,7 +428,7 @@ msgstr "Lisää uusi"
 msgid "Add or remove tags:"
 msgstr "Lisää tai poista tunnisteita:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Lisää vastaanottaja:"
 
@@ -442,7 +440,7 @@ msgstr "Lisää uusi rivi"
 msgid "Add tags:"
 msgstr "Lisää tunnisteet:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Lisää otsikko"
 
@@ -614,7 +612,7 @@ msgid "Application"
 msgstr "Sovellus"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Käytä"
 
@@ -683,7 +681,7 @@ msgstr "Liitä tiedosto"
 msgid "Attach photo"
 msgstr "Liitä valokuva"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Liitä..."
 
@@ -691,8 +689,8 @@ msgstr "Liitä..."
 msgid "Attaches the given file to the note."
 msgstr "Liittää annetun tiedoston muistiinpanoon."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "liite"
 
@@ -854,7 +852,7 @@ msgstr "Voi katsella ja muokata"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -869,8 +867,8 @@ msgstr "Voi katsella ja muokata"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -969,7 +967,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "Muistiinpanoa ei voi siirtää\"%s\" muistikirjaan"
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Muistikirjaa ei voi siirtää tähän sijaintiin"
 
@@ -981,12 +979,12 @@ msgstr ""
 "Tunnusta ei voi päivittää: todennustiedot puuttuvat. Synkronoinnin "
 "aloittaminen uudelleen saattaa korjata ongelman."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Tallennus ei onnistu %s \"%s\" koska se on suurempi kuin sallittu raja (%s)"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -994,7 +992,7 @@ msgstr ""
 "Kohdetta %s \"%s\" ei voida tallentaa, koska se ylittäisi tämän tilin "
 "sallitun kokonaiskoon (%s)"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -1004,7 +1002,7 @@ msgstr ""
 "ole ottanut päästä päähän -salausta käyttöön. Sen voi tehdä Asetukset> "
 "Salauksen määritys."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "Kirjainkoko"
 
@@ -1119,13 +1117,13 @@ msgid "close"
 msgstr "sulje"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1183,7 +1181,7 @@ msgstr "Koodi"
 msgid "Code Block"
 msgstr "Koodilohko"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Koodinäkymä"
 
@@ -1204,8 +1202,8 @@ msgstr "Tee yhteistyötä muistiinpanojen parissa muiden kanssa"
 msgid "Collapse all notebooks"
 msgstr "Pienennä kaikki muistikirjat"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Collapse title"
 msgstr "Pienennä otsikko"
 
@@ -1220,9 +1218,9 @@ msgstr "Tulevat hälytykset"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Pilkuilla erotettu luettelo hakemistoiden poluista, joilta varmenteet "
 "ladataan, tai polku yksittäisiin varmennetiedostoihin. Esimerkiksi: /my/"
@@ -1371,7 +1369,7 @@ msgstr "Jatkaa"
 msgid "Control character"
 msgstr "Merkit"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 #, fuzzy
 msgid "Convert it"
 msgstr "Muunna muistiinpanoksi"
@@ -1381,11 +1379,11 @@ msgstr "Muunna muistiinpanoksi"
 msgid "Convert note to Markdown"
 msgstr "Muunna tehtäväksi"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Muunna muistiinpanoksi"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Muunna tehtäväksi"
 
@@ -1409,7 +1407,7 @@ msgstr "Kopioi kehitystila komento leikepöydälle"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Kopioi ulkoinen linkki"
 
@@ -1428,7 +1426,7 @@ msgid "Copy link to website"
 msgstr "Joplin verkkosivusto"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Kopioi Merkinnän linkki"
 
@@ -1600,7 +1598,7 @@ msgid "Created: %d."
 msgstr "Luotu: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Luotu: %s"
 
@@ -1757,7 +1755,7 @@ msgstr "Oletus: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1781,7 +1779,7 @@ msgid "Delete expired tokens"
 msgstr "Poista vanhentuneet tunnukset"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 #, fuzzy
 msgid "Delete history"
 msgstr "Muistiinpanohistorian ottaminen käyttöön"
@@ -1831,7 +1829,7 @@ msgid ""
 "may be lost."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2065,7 +2063,7 @@ msgid ""
 "for the `add` subcommand."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr ""
 
@@ -2125,16 +2123,16 @@ msgstr "Ladataan resursseja..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr "Piirrä kuva"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Piirustus"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Pudota muistiinpanot tai tiedostot tähän"
 
@@ -2190,18 +2188,18 @@ msgstr "Kesto: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Muokkaa"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Muokkaa Markdown-muodossa"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Muokkaa Rich Text-muodossa"
 
@@ -2479,11 +2477,11 @@ msgstr ""
 "liitteesi synkronoidaan uudelleen ja lähetetään salattuina "
 "synkronointikohteeseen."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Salattu"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "Salattuja kohteita ei voi muokata"
 
@@ -2621,8 +2619,8 @@ msgstr "Laajenna %s"
 msgid "Expand all notebooks"
 msgstr "Laajenna kaikki muistikirjat"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Expand title"
 msgstr "Laajenna otsikko"
 
@@ -2759,7 +2757,7 @@ msgstr "Suodati"
 msgid "Find"
 msgstr "Etsi"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "Etsi: "
 
@@ -2920,7 +2918,7 @@ msgstr "Siirry Joplin Cloud -profiiliin"
 msgid "Go to line"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Siirry lähteen URL osoitteeseen"
 
@@ -2949,7 +2947,7 @@ msgstr "Otsikko"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Apua"
@@ -2967,7 +2965,7 @@ msgstr "Koko tekstin haku (FTS) Käytössä: %d"
 msgid "Hide %s"
 msgstr "Piilota %s"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "Piilota edistyneet"
 
@@ -3197,7 +3195,7 @@ msgstr "Jotta voit käyttää Web Clipperiä, sinun on tehtävä seuraavat toime
 msgid "In progress"
 msgstr "Käynnissä"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "Sisään: %s"
 
@@ -3415,7 +3413,7 @@ msgstr "Joplin mobiili"
 msgid "Joplin Server"
 msgstr "Joplin Palvelin"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 #, fuzzy
 msgid "Joplin Server (SAML)"
 msgstr "Joplin palvelimen URL-osoite"
@@ -3448,7 +3446,7 @@ msgstr "Joplin palvelimen URL-osoite"
 msgid "Joplin SSO Authentication"
 msgstr "Joplin SSO-todennus"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -4020,7 +4018,7 @@ msgstr "seuraava"
 msgid "Next"
 msgstr "Seuraava"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "Seuraava vastaavuus"
 
@@ -4045,8 +4043,8 @@ msgid "no"
 msgstr "ei"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4085,7 +4083,7 @@ msgstr "Ei resursseja!"
 msgid "No results"
 msgstr "Ei tuloksia"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 msgid "No revision selected"
 msgstr "Ei valittua versiota"
 
@@ -4152,8 +4150,8 @@ msgstr "Ei hyödyllinen"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "merkintä"
 
@@ -4192,7 +4190,7 @@ msgstr "Muistiinpano editori"
 msgid "Note has been saved."
 msgstr "Huomautus on tallennettu."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "Muistiinpanohistoria"
 
@@ -4285,7 +4283,7 @@ msgstr "Muistikirja: %s (%s)"
 msgid "Notebooks"
 msgstr "Muistikirjat"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Muistikirjoja ei voi nimetä \"%s\", joka on varattu otsikko."
 
@@ -4329,7 +4327,7 @@ msgstr "OCR: Hae poimitusta sisällöstä"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4614,7 +4612,7 @@ msgstr ""
 "Kirjoita salasana alla olevaan pääavainluetteloon ennen avaimen "
 "päivittämistä."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4636,7 +4634,7 @@ msgstr ""
 "tiedostoihin eikä muihin henkilötietoihin. Tietoja ei jaeta kolmannen "
 "osapuolen kanssa."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr "Anna vastaanottajan sähköpostiosoite"
 
@@ -4668,7 +4666,7 @@ msgstr "Määritä muistikirja, johon muistiinpanot tuodaan."
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr "Päivitä Joplin vähintään versioon %s käyttääksesi tätä laajennusta."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4789,11 +4787,11 @@ msgstr "Aseta salauksen purkuun salasana painamalla tätä."
 msgid "previous"
 msgstr "edellinen"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Edellinen vastaavuus"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 msgid "Previous versions"
 msgstr "Aiemmat versiot"
 
@@ -4857,7 +4855,7 @@ msgstr "Profiilin versio: %s"
 msgid "Profiles"
 msgstr "Profiilit"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Ominaisuudet"
 
@@ -4900,7 +4898,7 @@ msgstr "Julkaise muistiinpanot"
 msgid "Publish notes to the internet"
 msgstr "Julkaise muistiinpanot Internetissä"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr "Julkaise/peruuta julkaisu"
 
@@ -4961,19 +4959,19 @@ msgstr "Lukuaika: %s min"
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr "Komento \"%s\" on käytettävissä vain graafisessa tilassa"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "Vastaanottaja on hyväksynyt kutsun"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Vastaanottaja ei ole vielä hyväksynyt kutsua"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "Vastaanottaja on hylännyt kutsun"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Vastaanottajat:"
 
@@ -5020,7 +5018,7 @@ msgstr "Tee uudelleen"
 msgid "Refresh"
 msgstr "Päivitä"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "Säännöllinen lauseke"
 
@@ -5042,7 +5040,7 @@ msgstr "Poista"
 msgid "Remove %s"
 msgstr "Poista %s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 msgid "Remove %s from share"
 msgstr "Poista %s jaosta"
 
@@ -5092,7 +5090,7 @@ msgid "replace"
 msgstr "korvaa"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "Korvaa"
 
@@ -5100,15 +5098,15 @@ msgstr "Korvaa"
 msgid "replace all"
 msgstr "korvaa kaikki"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "Korvaa kaikki"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "Korvaa..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "Korvaa: "
 
@@ -5176,8 +5174,8 @@ msgstr "Käynnistä uudelleen nyt"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Palauttaa"
@@ -5236,7 +5234,7 @@ msgstr "Käänteinen lajittelujärjestys"
 msgid "Reverses the sorting order."
 msgstr "Kääntää lajittelujärjestyksen."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Versio:"
 
@@ -5330,7 +5328,7 @@ msgstr "Tallenna muutokset?"
 msgid "Save geo-location with notes"
 msgstr "Tallenna maantieteellinen sijainti muistiinpanojen avulla"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 msgid "Save geolocation?"
 msgstr "Tallennetaanko maantieteellinen sijainti?"
 
@@ -5360,7 +5358,7 @@ msgstr "Etsi"
 msgid "Search for plugins..."
 msgstr "Etsi laajennuksia..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "Etsii..."
 
@@ -5417,7 +5415,7 @@ msgstr "Lisätietoja on ennakkojulkaisusivulla: %s"
 msgid "Select"
 msgstr "Valitse"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 msgid "Select a revision..."
 msgstr "Valitse versio..."
 
@@ -5480,7 +5478,7 @@ msgid "Server is running on port %d"
 msgstr "Palvelin on käynnissä portissa %d"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Aseta hälytys"
@@ -5518,10 +5516,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Asetukset"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Jaa"
 
@@ -5544,7 +5542,7 @@ msgstr "Muistikirjojen yhteiskäyttö muiden kanssa"
 msgid "Share from %s (%s)"
 msgstr "%s = %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Jaa muistikirja"
 
@@ -5572,7 +5570,7 @@ msgstr ""
 "Jakaa tai poistaa määritetyn [notebook] jakamisen käyttäjän [user] kanssa. "
 "Vaatii Joplin Cloud:in tai Joplin Server:in."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Jaetaan muistikirjaa..."
 
@@ -5580,7 +5578,7 @@ msgstr "Jaetaan muistikirjaa..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Pikavalinnat eivät ole käytettävissä CLI tilassa."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "Näytä edistyneet"
 
@@ -6040,7 +6038,7 @@ msgstr "Synkronoinnin kohde: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Synkronoi"
 
@@ -6058,7 +6056,7 @@ msgstr "Synkronoi etätallennustilan."
 msgid "Synchronising..."
 msgstr "Synkronoidaan..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Synkronoidaan..."
 
@@ -6164,7 +6162,7 @@ msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 "Sovellus on käynnistettävä uudelleen, jotta nämä muutokset tulevat voimaan."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6224,13 +6222,13 @@ msgstr ""
 "kohde, jonka kerroin on 2, vie kaksi kertaa enemmän tilaa kuin kohde, jonka "
 "kerroin on 1.Restart sovellus muutosten näkemistä varten."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "Seuraava liite vastaa hakuasi:"
 msgstr[1] "Seuraavat liitteet vastaavat hakuasi:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "Seuraavia liitteitä tarkkaillaan muutosten vuoksi:"
 
@@ -6324,7 +6322,7 @@ msgstr "Muistiinpanot on tuotu: %s"
 msgid "The possible commands are:"
 msgstr "Mahdolliset komennot ovat:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6431,8 +6429,8 @@ msgstr "Teemat, editorin fontti"
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:17
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
-"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) "
-"-painiketta."
+"Tällä hetkellä ei ole muistiinpanoja. Luo sellainen napsauttamalla (+) -"
+"painiketta."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:9
 msgid "There are no notes in the trash folder."
@@ -6543,8 +6541,8 @@ msgstr ""
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr ""
-"Tämä ominaisuus on käytettävissä vain Joplin Cloud:issa ja Joplin "
-"Server:issä."
+"Tämä ominaisuus on käytettävissä vain Joplin Cloud:issa ja Joplin Server:"
+"issä."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
@@ -6599,7 +6597,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Tällä muistiinpanolla ei ole historiaa"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 #, fuzzy
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
@@ -6912,7 +6910,7 @@ msgstr "Kirjoita muistiinpanon otsikko etsiäksesi sitä."
 msgid "Type: %s."
 msgstr "Tyyppi: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 msgid "Unable to edit resource of type %s"
 msgstr "Resurssia, jonka tyyppi on %s, ei voida muokata"
 
@@ -6920,7 +6918,7 @@ msgstr "Resurssia, jonka tyyppi on %s, ei voida muokata"
 msgid "Unable to share log data. Reason: %s"
 msgstr "Lokitietojen jakaminen epäonnistui. Syy: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 msgid "Unable to share note data. Reason: %s"
 msgstr "Muistiinpanotietojen jakaminen epäonnistui. Syy: %s"
 
@@ -6988,7 +6986,7 @@ msgstr "Peruuta julkaisu \"%s\""
 msgid "Unpublish note"
 msgstr "Peruuta muistiinpanon julkaisu"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Poista jakaminen"
 
@@ -7000,7 +6998,7 @@ msgstr ""
 "Poistetaanko muistikirjan \"%s\" jakaminen? Tämä voi aiheuttaa sen, että "
 "muut käyttäjät menettävät pääsyn muistikirjaan."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -7008,7 +7006,7 @@ msgstr ""
 "Poistetaanko tämän muistikirjan jakaminen? Vastaanottajilla ei ole enää "
 "pääsyä sen sisältöön."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Kuvan tiedostotyyppiä ei tueta: %s"
 
@@ -7025,7 +7023,7 @@ msgid ""
 msgstr "Linkkiä tai viestiä ei tueta: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Nimetön"
@@ -7081,7 +7079,7 @@ msgstr "Päivitetty: "
 msgid "Updated: %d."
 msgstr "Päivitetty: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Päivitetty: %s"
 
@@ -7213,7 +7211,7 @@ msgstr "Näytä"
 msgid "View OCR text"
 msgstr "Näytä OCR teksti"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Näytä kartalla"
 
@@ -7256,7 +7254,7 @@ msgstr "Äänikirjoituskielitiedostot (URL)"
 msgid "Voice typing: Glossary"
 msgstr "Äänikirjoitus: Sanasto"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Äänikirjoitus..."
@@ -7393,14 +7391,14 @@ msgid "yes"
 msgstr "kyllä"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Kyllä"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

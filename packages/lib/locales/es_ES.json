@@ -243,7 +243,7 @@
 		"Añadir cuerpo"
 	],
 	"Add column": [
-		""
+		"Añadir columna"
 	],
 	"Add new": [
 		"Añadir nuevo"
@@ -253,6 +253,9 @@
 	],
 	"Add recipient:": [
 		"Agregar destinatario:"
+	],
+	"Add row": [
+		"Añadir fila"
 	],
 	"Add tags:": [
 		"Añadir etiquetas:"
@@ -1024,6 +1027,9 @@
 	"Delete attachment \"%s\"?": [
 		"¿Eliminar el archivo adjunto \"%s\"?"
 	],
+	"Delete column": [
+		"Borrar columna"
+	],
 	"Delete expired sessions": [
 		"Borrar sesiones expiradas"
 	],
@@ -1050,6 +1056,9 @@
 	],
 	"Delete profile \"%s\"": [
 		"¿Borrar perfil \"%s\"?"
+	],
+	"Delete row": [
+		"Borrar fila"
 	],
 	"Delete selected notes": [
 		"Borrar notas seleccionadas"
