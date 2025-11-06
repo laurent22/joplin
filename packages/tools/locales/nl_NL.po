@@ -63,7 +63,7 @@ msgstr "(Alleen lezen)"
 msgid "(wysiwyg: %s)"
 msgstr "(wuziwuk: %s)"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid "(You may disable this prompt in the options)"
 msgstr "(Je kan deze prompt uitschakelen in de opties)"
@@ -157,8 +157,10 @@ msgstr[1] "%d minuten"
 #: packages/app-cli/app/command-rmnote.ts:34
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
-msgstr[0] "Er komt %d notitie overeen met dit patroon. Wilt u deze verwijderen?"
-msgstr[1] "Er komen %d notities overeen met dit patroon. Wilt u ze verwijderen?"
+msgstr[0] ""
+"Er komt %d notitie overeen met dit patroon. Wilt u deze verwijderen?"
+msgstr[1] ""
+"Er komen %d notities overeen met dit patroon. Wilt u ze verwijderen?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
 #, fuzzy
@@ -394,7 +396,7 @@ msgid "Action"
 msgstr "Actie"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#: packages/app-mobile/components/ModalDialog.tsx:75
+#: packages/app-mobile/components/ModalDialog.tsx:87
 #: packages/app-mobile/components/ScreenHeader/index.tsx:686
 msgid "Actions"
 msgstr "Acties"
@@ -408,7 +410,7 @@ msgstr "Actief"
 msgid "Actual Size"
 msgstr "Ware Grootte"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1623
+#: packages/app-mobile/components/screens/Note/Note.tsx:1639
 msgid "Add body"
 msgstr "Inhoud toevoegen"
 
@@ -426,7 +428,7 @@ msgstr "Nieuw toevoegen"
 msgid "Add or remove tags:"
 msgstr "Labels toevoegen of verwijderen:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:266
 msgid "Add recipient:"
 msgstr "Voeg ontvanger toe:"
 
@@ -438,7 +440,7 @@ msgstr "Regel toevoegen"
 msgid "Add tags:"
 msgstr "Voeg labels toe:"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1714
+#: packages/app-mobile/components/screens/Note/Note.tsx:1731
 msgid "Add title"
 msgstr "Titel toevoegen"
 
@@ -604,7 +606,7 @@ msgid "Application"
 msgstr "Applicatie"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:39
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:65
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:69
 msgid "Apply"
 msgstr "Toepassen"
 
@@ -671,7 +673,7 @@ msgstr "Bestand bijvoegen"
 msgid "Attach photo"
 msgstr "Foto bijvoegen"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1245
+#: packages/app-mobile/components/screens/Note/Note.tsx:1261
 msgid "Attach..."
 msgstr "Bijvoegen..."
 
@@ -679,8 +681,8 @@ msgstr "Bijvoegen..."
 msgid "Attaches the given file to the note."
 msgstr "Voegt het opgegeven bestand bij de notitie."
 
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "attachment"
 msgstr "bijlage"
 
@@ -836,7 +838,7 @@ msgstr "Kan bekijken en bewerken"
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
-#: packages/app-desktop/gui/DialogButtonRow.tsx:79
+#: packages/app-desktop/gui/DialogButtonRow.tsx:88
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:99
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:11
 #: packages/app-desktop/gui/PromptDialog.tsx:297
@@ -851,8 +853,8 @@ msgstr "Kan bekijken en bewerken"
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:80
 #: packages/app-mobile/components/screens/encryption-config.tsx:212
 #: packages/app-mobile/components/screens/Note/Note.tsx:245
-#: packages/app-mobile/components/screens/Note/Note.tsx:822
-#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:66
+#: packages/app-mobile/components/screens/Note/Note.tsx:838
+#: packages/app-mobile/components/screens/NoteTagsDialog.tsx:70
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:172
 #: packages/app-mobile/components/side-menu-content.tsx:354
 #: packages/app-mobile/components/side-menu-content.tsx:404
@@ -949,7 +951,7 @@ msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan notitie niet verplaatsen naar notitieboek \"%s\""
 
 #: packages/app-mobile/components/screens/folder.js:73
-#: packages/lib/models/Folder.ts:943
+#: packages/lib/models/Folder.ts:946
 msgid "Cannot move notebook to this location"
 msgstr "Kan notitieboek niet verplaatsen naar deze locatie"
 
@@ -961,12 +963,12 @@ msgstr ""
 "Kan toegangssleutel niet verversen: de authenticatiegegevens ontbreken. "
 "Probeer de synchronisatie opnieuw te starten."
 
-#: packages/server/src/models/UserModel.ts:325
+#: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "%s \"%s\" kan niet worden opgeslagen omdat het groter is dan de limiet (%s)"
 
-#: packages/server/src/models/UserModel.ts:342
+#: packages/server/src/models/UserModel.ts:347
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -974,7 +976,7 @@ msgstr ""
 "%s \"%s\" kan niet worden opgeslagen omdat de totale grootte van dit account "
 "(%s) overschreid"
 
-#: packages/lib/services/share/ShareService.ts:356
+#: packages/lib/services/share/ShareService.ts:366
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -984,7 +986,7 @@ msgstr ""
 "geen end-to-end-codering heeft ingeschakeld. Ze kunnen dit doen via het "
 "scherm Configuratie > Encryptie."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:340
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:341
 msgid "Case sensitive"
 msgstr "Hoofdlettergevoelig"
 
@@ -1097,13 +1099,13 @@ msgid "close"
 msgstr "sluiten"
 
 #: packages/app-desktop/gui/MenuBar.tsx:364
-#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:175
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:412
+#: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:179
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:411
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:169
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:316
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:23
 #: packages/app-mobile/components/DismissibleDialog.tsx:111
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:210
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:211
 #: packages/app-mobile/components/plugins/PluginNotification.tsx:17
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:140
 #: packages/app-mobile/contentScripts/imageEditorBundle/useWebViewSetup.tsx:103
@@ -1155,7 +1157,7 @@ msgstr "Code"
 msgid "Code Block"
 msgstr "Code Blok"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Code View"
 msgstr "Codeweergave"
 
@@ -1176,8 +1178,8 @@ msgstr "Samenwerken aan notitieboeken met anderen"
 msgid "Collapse all notebooks"
 msgstr "Alle notitieboeken inklappen"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Collapse title"
 msgstr "Titel inklappen"
 
@@ -1221,7 +1223,9 @@ msgstr "Opdrachtpalet..."
 #: packages/app-cli/app/command-share.ts:59
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
-msgstr "Commando's: `add`, `remove`, `list`, `delete`, `accept`, `leave`, en `reject`."
+msgstr ""
+"Commando's: `add`, `remove`, `list`, `delete`, `accept`, `leave`, en "
+"`reject`."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1336,7 +1340,7 @@ msgstr "Doorgaan"
 msgid "Control character"
 msgstr "Controltekens"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:674
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:675
 msgid "Convert it"
 msgstr "Omzetten"
 
@@ -1344,11 +1348,11 @@ msgstr "Omzetten"
 msgid "Convert note to Markdown"
 msgstr "Notitie omzetten naar Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to note"
 msgstr "Omzetten naar notitie"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1311
+#: packages/app-mobile/components/screens/Note/Note.tsx:1327
 msgid "Convert to todo"
 msgstr "Omzetten naar taak"
 
@@ -1371,7 +1375,7 @@ msgstr "Ontwikkelaarsmodus commando kopiëren naar klembord"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:229
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:243
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1329
+#: packages/app-mobile/components/screens/Note/Note.tsx:1345
 msgid "Copy external link"
 msgstr "Kopieer externe link"
 
@@ -1389,7 +1393,7 @@ msgid "Copy link to website"
 msgstr "Kopieer link naar website"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:121
-#: packages/app-mobile/components/screens/Note/Note.tsx:1320
+#: packages/app-mobile/components/screens/Note/Note.tsx:1336
 msgid "Copy Markdown link"
 msgstr "Markdownlink kopiëren"
 
@@ -1555,7 +1559,7 @@ msgid "Created: %d."
 msgstr "Gecreëerd: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
-#: packages/app-mobile/components/screens/Note/Note.tsx:1176
+#: packages/app-mobile/components/screens/Note/Note.tsx:1192
 msgid "Created: %s"
 msgstr "Gecreëerd op: %s"
 
@@ -1705,7 +1709,7 @@ msgstr "Standaard: %s"
 #: packages/app-mobile/components/ScreenHeader/index.tsx:484
 #: packages/app-mobile/components/ScreenHeader/index.tsx:562
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#: packages/app-mobile/components/screens/Note/Note.tsx:1370
+#: packages/app-mobile/components/screens/Note/Note.tsx:1386
 #: packages/app-mobile/components/side-menu-content.tsx:433
 #: packages/lib/commands/permanentlyDeleteNote.ts:21
 msgid "Delete"
@@ -1729,7 +1733,7 @@ msgid "Delete expired tokens"
 msgstr "Verwijder verlopen tokens"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:185
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:188
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:189
 msgid "Delete history"
 msgstr "Verwijder geschiedenis"
 
@@ -1780,7 +1784,7 @@ msgstr ""
 "Als je het inbox-notitieboek weggooit, kunnen recent ontvangen emails kwijt "
 "raken.."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:247
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:235
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2007,7 +2011,7 @@ msgid ""
 "for the `add` subcommand."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:676
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:677
 msgid "Don't show this message again"
 msgstr "Dit bericht niet nogmaals tonen"
 
@@ -2064,16 +2068,16 @@ msgstr "Bronnen downloaden..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1252
+#: packages/app-mobile/components/screens/Note/Note.tsx:1268
 msgid "Draw picture"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:986
+#: packages/app-mobile/components/screens/Note/Note.tsx:1002
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
 msgstr "Tekenen"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid "Drop notes or files here"
 msgstr "Notities bestanden hier neerzetten"
 
@@ -2130,18 +2134,18 @@ msgstr "Uw versie: %s"
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:42
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:130
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:150
-#: packages/app-mobile/components/screens/Note/Note.tsx:1671
+#: packages/app-mobile/components/screens/Note/Note.tsx:1687
 #: packages/app-mobile/components/side-menu-content.tsx:420
 #: packages/app-mobile/contentScripts/rendererBundle/utils/useEditPopup.ts:133
 #: packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.ts:244
 msgid "Edit"
 msgstr "Bewerken"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Markdown"
 msgstr "Bewerken als Markdown"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1347
+#: packages/app-mobile/components/screens/Note/Note.tsx:1363
 msgid "Edit as Rich Text"
 msgstr "Bewerken als Rich Text"
 
@@ -2419,11 +2423,11 @@ msgstr ""
 "opnieuw worden gesynchroniseerd en gecodeerd naar het synchronisatiedoel "
 "worden verzonden."
 
-#: packages/lib/models/BaseItem.ts:943
+#: packages/lib/models/BaseItem.ts:939
 msgid "Encrypted"
 msgstr "Versleuteld"
 
-#: packages/lib/models/BaseItem.ts:1005
+#: packages/lib/models/BaseItem.ts:1001
 msgid "Encrypted items cannot be modified"
 msgstr "Versleutelde items kunnen niet worden bewerkt"
 
@@ -2565,8 +2569,8 @@ msgstr "Uitklappen %s"
 msgid "Expand all notebooks"
 msgstr "Alle notitieboek uitklappen"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1696
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:219
+#: packages/app-mobile/components/screens/Note/Note.tsx:1712
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Expand title"
 msgstr "Titel uitklappen"
 
@@ -2704,7 +2708,7 @@ msgstr "Filter labels"
 msgid "Find"
 msgstr "Zoek"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:262
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:263
 msgid "Find: "
 msgstr "Zoeken: "
 
@@ -2866,7 +2870,7 @@ msgstr "Gaan naar Joplin Cloud profiel"
 msgid "Go to line"
 msgstr "Ga naar regel"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1197
+#: packages/app-mobile/components/screens/Note/Note.tsx:1213
 msgid "Go to source URL"
 msgstr "Ga naar bron-URL"
 
@@ -2894,7 +2898,7 @@ msgstr "Kop"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:228
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 #: packages/app-desktop/gui/HelpButton.tsx:49
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:271
 #: packages/server/src/services/MustacheService.ts:284
 msgid "Help"
 msgstr "Help"
@@ -2911,7 +2915,7 @@ msgstr "Hermes ingeschakeld: %d"
 msgid "Hide %s"
 msgstr "%s verbergen"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:230
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:231
 msgid "Hide advanced"
 msgstr "Geavanceerd verbergen"
 
@@ -3142,7 +3146,7 @@ msgstr ""
 msgid "In progress"
 msgstr "Bezig"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:623
 msgid "In: %s"
 msgstr "In: %s"
 
@@ -3367,7 +3371,7 @@ msgstr "Joplin-website"
 msgid "Joplin Server"
 msgstr "Joplin Server"
 
-#: packages/lib/SyncTargetJoplinServerSAML.ts:64
+#: packages/lib/SyncTargetJoplinServerSAML.ts:67
 #, fuzzy
 msgid "Joplin Server (SAML)"
 msgstr "Joplin Server URL"
@@ -3400,7 +3404,7 @@ msgstr "Joplin Server URL"
 msgid "Joplin SSO Authentication"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:551
+#: packages/app-mobile/components/screens/Note/Note.tsx:552
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
@@ -3859,8 +3863,8 @@ msgid ""
 msgstr ""
 "Notitieboek \"%s\" naar de prullenbak verplaatsen?\n"
 "\n"
-"Alle notities en sub-notitieboeken in dit notitieboek worden eveneens "
-"naar de prullenbak verplaatst."
+"Alle notities en sub-notitieboeken in dit notitieboek worden eveneens naar "
+"de prullenbak verplaatst."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:75
 msgid "Move right"
@@ -3981,7 +3985,7 @@ msgstr ""
 msgid "Next"
 msgstr "Nextcloud"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:280
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:281
 msgid "Next match"
 msgstr "Volgende overeenkomt"
 
@@ -4006,8 +4010,8 @@ msgid "no"
 msgstr "nee"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:22
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:821
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:837
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "No"
@@ -4048,7 +4052,7 @@ msgstr "Geen resources!"
 msgid "No results"
 msgstr "Geen resultaten"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:264
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:278
 #, fuzzy
 msgid "No revision selected"
 msgstr "Geen notitieboek geselecteerd."
@@ -4120,8 +4124,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
-#: packages/server/src/models/UserModel.ts:326
-#: packages/server/src/models/UserModel.ts:343
+#: packages/server/src/models/UserModel.ts:331
+#: packages/server/src/models/UserModel.ts:348
 msgid "note"
 msgstr "notitie"
 
@@ -4160,7 +4164,7 @@ msgstr "Notitiebewerker"
 msgid "Note has been saved."
 msgstr "Notitie is opgeslagen."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:238
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:252
 msgid "Note history"
 msgstr "Notitiegeschiedenis"
 
@@ -4259,7 +4263,7 @@ msgstr "Notitieboek: %s"
 msgid "Notebooks"
 msgstr "Notitieboeken"
 
-#: packages/lib/models/Folder.ts:1009
+#: packages/lib/models/Folder.ts:1012
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notitieboeken mogen niet \"%s\" heten; dit is een gereserveerde titel."
 
@@ -4305,7 +4309,7 @@ msgstr "Alle notities doorzoeken"
 #: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
 #: packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
-#: packages/app-desktop/gui/DialogButtonRow.tsx:71
+#: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:616
 #: packages/app-desktop/gui/PromptDialog.tsx:290
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:25
@@ -4594,7 +4598,7 @@ msgstr ""
 "Voer uw wachtwoord in onderstaande hoofdsleutellijst voorafgaand aan "
 "bijwerken van de sleutel."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:381
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:369
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -4617,7 +4621,7 @@ msgstr ""
 "deze map, noch tot persoonlijke gegevens. Er worden geen gegevens gedeeld "
 "met een derde partij."
 
-#: packages/lib/services/share/ShareService.ts:350
+#: packages/lib/services/share/ShareService.ts:360
 msgid "Please provide the recipient email"
 msgstr ""
 
@@ -4651,7 +4655,7 @@ msgstr ""
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
 msgstr "Upgrade Joplin om deze plug-in te gebruiken"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1566
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1568
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -4774,11 +4778,11 @@ msgstr "Druk om het decryptie-wachtwoord in te stellen."
 msgid "previous"
 msgstr "Volgende overeenkomst"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:290
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:291
 msgid "Previous match"
 msgstr "Volgende overeenkomst"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1187
+#: packages/app-mobile/components/screens/Note/Note.tsx:1203
 #, fuzzy
 msgid "Previous versions"
 msgstr "Vorige versies van deze notitie"
@@ -4844,7 +4848,7 @@ msgstr "Profiel versie: %s"
 msgid "Profiles"
 msgstr "Profielen"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1338
+#: packages/app-mobile/components/screens/Note/Note.tsx:1354
 msgid "Properties"
 msgstr "Eigenschappen"
 
@@ -4888,7 +4892,7 @@ msgstr "Publiceer notities"
 msgid "Publish notes to the internet"
 msgstr "Publiceer notities op het internet"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1205
+#: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "Publish/unpublish"
 msgstr ""
 
@@ -4951,19 +4955,19 @@ msgstr "Leestijd: %s min"
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr "De opdracht \"%s\" is alleen beschikbaar in GUI-modus"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:314
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:302
 msgid "Recipient has accepted the invitation"
 msgstr "Ontvanger heeft de uitnodiging geaccepteerd"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:300
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Ontvanger heeft de uitnodiging nog niet geaccepteerd"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:313
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
 msgid "Recipient has rejected the invitation"
 msgstr "Ontvanger heeft de uitnodiging geweigerd"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:342
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:330
 msgid "Recipients:"
 msgstr "Ontvangers:"
 
@@ -5008,7 +5012,7 @@ msgstr "Herhalen"
 msgid "Refresh"
 msgstr "Verversen"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:325
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:326
 msgid "Regular expression"
 msgstr "Reguliere expressie"
 
@@ -5031,7 +5035,7 @@ msgstr "Verwijderen"
 msgid "Remove %s"
 msgstr "Verwijder %s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:331
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:319
 #, fuzzy
 msgid "Remove %s from share"
 msgstr "Label “%s” verwijderen van alle notities?"
@@ -5085,7 +5089,7 @@ msgid "replace"
 msgstr "Vervang"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:300
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:301
 msgid "Replace"
 msgstr "Vervang"
 
@@ -5093,15 +5097,15 @@ msgstr "Vervang"
 msgid "replace all"
 msgstr "alles vervangen"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:310
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:311
 msgid "Replace all"
 msgstr "Alles vervangen"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:248
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:249
 msgid "Replace with..."
 msgstr "Vervang door..."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:269
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:270
 msgid "Replace: "
 msgstr "Vervang: "
 
@@ -5170,8 +5174,8 @@ msgstr "Nu opnieuw opstarten"
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:184
 #: packages/app-mobile/components/ScreenHeader/index.tsx:504
 #: packages/app-mobile/components/ScreenHeader/index.tsx:506
-#: packages/app-mobile/components/screens/Note/Note.tsx:1356
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:196
+#: packages/app-mobile/components/screens/Note/Note.tsx:1372
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:197
 #: packages/app-mobile/components/side-menu-content.tsx:365
 msgid "Restore"
 msgstr "Herstel"
@@ -5231,7 +5235,7 @@ msgstr "Sorteervolgorde omdraaien"
 msgid "Reverses the sorting order."
 msgstr "Keert de sorteervolgorde om."
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:207
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:208
 msgid "Revision:"
 msgstr "Revisie:"
 
@@ -5326,7 +5330,7 @@ msgstr "Wijzigingen opslaan"
 msgid "Save geo-location with notes"
 msgstr "Locatie opslaan in notities"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:555
 #, fuzzy
 msgid "Save geolocation?"
 msgstr "Locatie opslaan in notities"
@@ -5358,7 +5362,7 @@ msgstr "Zoeken"
 msgid "Search for plugins..."
 msgstr "Zoek naar plugins…"
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:235
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:236
 msgid "Search for..."
 msgstr "Zoeken naar..."
 
@@ -5417,7 +5421,7 @@ msgstr "Zie de pre-release pagina voor meer details: %s"
 msgid "Select"
 msgstr "Selecteren"
 
-#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:249
+#: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:263
 #, fuzzy
 msgid "Select a revision..."
 msgstr "Selecteer emoji..."
@@ -5485,7 +5489,7 @@ msgid "Server is running on port %d"
 msgstr "Server wordt uitgevoerd op poort %d"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.ts:12
-#: packages/app-mobile/components/screens/Note/Note.tsx:1259
+#: packages/app-mobile/components/screens/Note/Note.tsx:1275
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:161
 msgid "Set alarm"
 msgstr "Alarm instellen"
@@ -5523,10 +5527,10 @@ msgstr ""
 msgid "Settings"
 msgstr "Instellingen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:282
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:270
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:44
 #: packages/app-mobile/components/screens/LogScreen.tsx:56
-#: packages/app-mobile/components/screens/Note/Note.tsx:1270
+#: packages/app-mobile/components/screens/Note/Note.tsx:1286
 msgid "Share"
 msgstr "Delen"
 
@@ -5547,7 +5551,7 @@ msgstr "Deel een notitieboek met anderen"
 msgid "Share from %s (%s)"
 msgstr "Delen van %s (%s)"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:400
 msgid "Share Notebook"
 msgstr "Deel Notitieboek"
 
@@ -5575,7 +5579,7 @@ msgid ""
 "Cloud or Joplin Server."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:365
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
 msgstr "Notitieboek delen..."
 
@@ -5583,7 +5587,7 @@ msgstr "Notitieboek delen..."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Sneltoetsen zijn niet beschikbaar in CLI-modus."
 
-#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:220
+#: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:221
 msgid "Show advanced"
 msgstr "Toon geavanceerde opties"
 
@@ -6002,7 +6006,8 @@ msgstr ""
 
 #: packages/app-cli/app/command-sync.ts:276
 msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr "Het synchronisatiedoel moet worden geüpgraded! Voer `%s` uit om door te gaan."
+msgstr ""
+"Het synchronisatiedoel moet worden geüpgraded! Voer `%s` uit om door te gaan."
 
 #: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.tsx:59
 msgid "Sync Target Upgrade"
@@ -6052,7 +6057,7 @@ msgstr "Synchronisatiedoel: %s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:27
 #: packages/app-mobile/components/side-menu-content.tsx:655
-#: packages/lib/commands/synchronize.ts:8
+#: packages/lib/commands/synchronize.ts:9
 msgid "Synchronise"
 msgstr "Synchroniseren"
 
@@ -6070,7 +6075,7 @@ msgstr "Synchroniseert met cloudopslag."
 msgid "Synchronising..."
 msgstr "Synchroniseren..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:364
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:352
 msgid "Synchronizing..."
 msgstr "Synchroniseren..."
 
@@ -6175,7 +6180,7 @@ msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 "De applicatie moet opnieuw worden gestart om deze wijzigingen door te voeren."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:592
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -6238,14 +6243,14 @@ msgstr ""
 "items. Zo zal een item met een factor 2 dus twee maal zoveel ruimte innemen "
 "als een item met een factor 1. Herstart de applicatie om wijzigingen te zien."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:607
 #, fuzzy
 msgid "The following attachment matches your search query:"
 msgid_plural "The following attachments match your search query:"
 msgstr[0] "De volgende bijlagen worden gecontroleerd op wijzigingen:"
 msgstr[1] "De volgende bijlagen worden gecontroleerd op wijzigingen:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:590
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:591
 msgid "The following attachments are being watched for changes:"
 msgstr "De volgende bijlagen worden gecontroleerd op wijzigingen:"
 
@@ -6339,7 +6344,7 @@ msgstr "De notities zijn geïmporteerd: %s"
 msgid "The possible commands are:"
 msgstr "De beschikbare opdrachten zijn:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:253
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:241
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -6595,7 +6600,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Deze notitie heeft geen geschiedenis"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:672
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:673
 msgid ""
 "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
@@ -6909,7 +6914,7 @@ msgstr "Typ nieuwe labels of kies ze uit de lijst"
 msgid "Type: %s."
 msgstr "Type: %s."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1060
+#: packages/app-mobile/components/screens/Note/Note.tsx:1076
 #, fuzzy
 msgid "Unable to edit resource of type %s"
 msgstr "De data kan niet gedeeld of geëxporteerd worden. Reden: %s"
@@ -6919,7 +6924,7 @@ msgstr "De data kan niet gedeeld of geëxporteerd worden. Reden: %s"
 msgid "Unable to share log data. Reason: %s"
 msgstr "De data kan niet gedeeld of geëxporteerd worden. Reden: %s"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1085
+#: packages/app-mobile/components/screens/Note/Note.tsx:1101
 #, fuzzy
 msgid "Unable to share note data. Reason: %s"
 msgstr "De data kan niet gedeeld of geëxporteerd worden. Reden: %s"
@@ -6988,7 +6993,7 @@ msgstr "Publicatie van notitie intrekken"
 msgid "Unpublish note"
 msgstr "Publicatie van notitie intrekken"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:169
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
 msgstr "Delen intrekken"
 
@@ -6998,7 +7003,7 @@ msgid ""
 "notebook."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:388
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:376
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -7006,7 +7011,7 @@ msgstr ""
 "Delen van dit notitieboek ongedaan maken? De ontvangers hebben geen toegang "
 "meer tot de inhoud ervan."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:919
+#: packages/app-mobile/components/screens/Note/Note.tsx:935
 msgid "Unsupported image type: %s"
 msgstr "Niet-ondersteunde afbeeldingssoort: %s"
 
@@ -7023,7 +7028,7 @@ msgid ""
 msgstr "Niet-ondersteunde link of bericht: %s"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:123
-#: packages/lib/models/BaseItem.ts:944 packages/lib/path-utils.ts:27
+#: packages/lib/models/BaseItem.ts:940 packages/lib/path-utils.ts:27
 #: packages/lib/path-utils.ts:71
 msgid "Untitled"
 msgstr "Naamloos"
@@ -7081,7 +7086,7 @@ msgstr "Bijgewerkt: "
 msgid "Updated: %d."
 msgstr "Bijgewerkt: %d."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note/Note.tsx:1193
 msgid "Updated: %s"
 msgstr "Bijgewerkt: %s"
 
@@ -7218,7 +7223,7 @@ msgstr "Beeld"
 msgid "View OCR text"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1181
+#: packages/app-mobile/components/screens/Note/Note.tsx:1197
 msgid "View on map"
 msgstr "Tonen op kaart"
 
@@ -7262,7 +7267,7 @@ msgstr "Taalbestanden voor steminvoer (URL)"
 msgid "Voice typing: Glossary"
 msgstr "Steminvoer..."
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:1281
+#: packages/app-mobile/components/screens/Note/Note.tsx:1297
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:199
 msgid "Voice typing..."
 msgstr "Steminvoer..."
@@ -7402,14 +7407,14 @@ msgid "yes"
 msgstr "ja"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:21
-#: packages/app-mobile/components/screens/Note/Note.tsx:553
-#: packages/app-mobile/components/screens/Note/Note.tsx:820
+#: packages/app-mobile/components/screens/Note/Note.tsx:554
+#: packages/app-mobile/components/screens/Note/Note.tsx:836
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:21
 #: packages/lib/shim-init-node.ts:278 packages/lib/versionInfo.ts:92
 msgid "Yes"
 msgstr "Ja"
 
-#: packages/app-mobile/components/screens/Note/Note.tsx:819
+#: packages/app-mobile/components/screens/Note/Note.tsx:835
 #: packages/lib/shim-init-node.ts:277
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

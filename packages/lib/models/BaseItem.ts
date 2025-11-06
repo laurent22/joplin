@@ -578,28 +578,24 @@ export default class BaseItem extends BaseModel {
 		const lines = content.split('\n');
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any = {};
-		let state = 'readingProps';
-		const body: string[] = [];
+		let body: string[] = [];
 
 		for (let i = lines.length - 1; i >= 0; i--) {
 			let line = lines[i];
 
-			if (state === 'readingProps') {
-				line = line.trim();
+			line = line.trim();
 
-				if (line === '') {
-					state = 'readingBody';
-					continue;
-				}
-
-				const p = line.indexOf(':');
-				if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
-				const key = line.substr(0, p).trim();
-				const value = line.substr(p + 1).trim();
-				output[key] = value;
-			} else if (state === 'readingBody') {
-				body.splice(0, 0, line);
+			// Props are separated from the body by a single blank line
+			if (line === '') {
+				body = lines.slice(0, i);
+				break;
 			}
+
+			const p = line.indexOf(':');
+			if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
+			const key = line.substr(0, p).trim();
+			const value = line.substr(p + 1).trim();
+			output[key] = value;
 		}
 
 		if (!output.type_) throw new Error(`Missing required property: type_: ${content}`);
