@@ -167,12 +167,18 @@ export default class ChangeModel extends BaseModel<Change> {
 		// 2025-11-06: Remove the "+ 0" because now it appears to make query slower by preventing
 		// the query planner from using the index. Using Postgres 16.8
 
+		const changesFieldsSql = fields
+			.map(f => `"changes"."${f}" AS "${f}"`)
+			.join(', ');
+
 		const subQuery2 = `
-			SELECT ${fieldsSql}
+			SELECT ${changesFieldsSql}
 			FROM "changes"
+			JOIN "user_items"
+				ON user_items.item_id = changes.item_id
 			WHERE counter > ?
 			AND type = ?
-			AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)
+			AND user_items.user_id = ?
 			ORDER BY "counter" ASC
 			${doCountQuery ? '' : 'LIMIT ?'}
 		`;
