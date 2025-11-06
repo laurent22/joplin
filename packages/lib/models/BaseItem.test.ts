@@ -161,35 +161,14 @@ three line \\n no escape`)).toBe(0);
 		const note = await Note.save({ id }, { isNew: true });
 		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
 	});
-});
 
-describe("isSystemPath - MC/DC", () => {
-  it("CT1: todas as condições verdadeiras", () => {
-    const result = BaseItem_1.default.isSystemPath(
-      "1b175bb38bba47baac22b0b47f778113.md"
-    );
-    expect(result).toBe(true);
-  });
-
-  it("CT2: path vazio (condição 1 falsa)", () => {
-    const result = BaseItem_1.default.isSystemPath("");
-    expect(result).toBe(false);
-  });
-
-  it("CT3: sem ponto (condição 2 falsa)", () => {
-    const result = BaseItem_1.default.isSystemPath("invalidpath");
-    expect(result).toBe(false);
-  });
-
-  it("CT4: nome curto antes do ponto (condição 3 falsa)", () => {
-    const result = BaseItem_1.default.isSystemPath("short.md");
-    expect(result).toBe(false);
-  });
-
-  it("CT5: extensão diferente de md (condição 4 falsa)", () => {
-    const result = BaseItem_1.default.isSystemPath(
-      "1b175bb38bba47baac22b0b47f778113.txt"
-    );
-    expect(result).toBe(false);
-  });
+	test.each([
+		{ input: '1b175bb38bba47baac22b0b47f778113.md', expected: true, description: 'return true for valid system path' },
+		{ input: '', expected: false, description: 'return false for empty path' },
+		{ input: 'invalid-path', expected: false, description: 'return false for path without dot' },
+		{ input: 'short.md', expected: false, description: 'return false for short name before extension' },
+		{ input: '1b175bb38bba47baac22b0b47f778113.txt', expected: false, description: 'return false for non-md extension' },
+	])('should $description', ({ input, expected }: { input: string; expected: boolean }) => {
+		expect(BaseItem.isSystemPath(input)).toBe(expected);
+	});
 });''
