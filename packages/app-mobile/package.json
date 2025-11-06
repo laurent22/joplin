@@ -29,7 +29,7 @@
     "@joplin/renderer": "~3.5",
     "@joplin/utils": "~3.5",
     "@react-native-clipboard/clipboard": "1.16.3",
-    "@react-native-community/datetimepicker": "8.4.3",
+    "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-community/geolocation": "3.4.0",
     "@react-native-community/netinfo": "11.4.1",
     "@react-native-community/push-notification-ios": "1.11.0",
