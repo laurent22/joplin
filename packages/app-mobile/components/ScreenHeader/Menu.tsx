@@ -29,7 +29,7 @@ interface Props {
 	options: MenuOptionType[];
 	children: React.ReactNode;
 	// By default, both short press and long press of the menu trigger will open the menu. Use this to set different behaviour on short press
-	onShortPress?: ()=> void;
+	onTriggerShortPress?: ()=> void;
 }
 
 const useStyles = (themeId: number) => {
@@ -172,7 +172,7 @@ const MenuComponent: React.FC<Props> = props => {
 			customStyles={{
 				TriggerTouchableComponent: TouchableOpacity,
 				triggerTouchable: {
-					onPress: props.onShortPress,
+					onPress: props.onTriggerShortPress,
 				},
 			}}
 		>
@@ -187,7 +187,7 @@ const MenuComponent: React.FC<Props> = props => {
 			onOpen={onMenuOpened}
 			style={styles.contextMenu}
 		>
-			{props.onShortPress ? dualActionMenuTrigger : singleActionMenuTrigger}
+			{props.onTriggerShortPress ? dualActionMenuTrigger : singleActionMenuTrigger}
 			<MenuOptions>
 				<FocusControl.ModalWrapper state={open ? ModalState.Open : ModalState.Closed}>
 					<ScrollView

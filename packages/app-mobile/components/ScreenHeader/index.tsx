@@ -324,7 +324,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			};
 
 			const backButtonWithMenu = (
-				<Menu themeId={themeId} options={backButtonMenuOptions} onShortPress={onPress}>
+				<Menu themeId={themeId} options={backButtonMenuOptions} onTriggerShortPress={onPress}>
 					<View
 						accessibilityLabel={_('Back')}
 						accessibilityRole="button"
