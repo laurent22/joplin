@@ -1309,6 +1309,7 @@ packages/lib/models/Migration.js
 packages/lib/models/Note.test.js
 packages/lib/models/Note.js
 packages/lib/models/NoteResource.js
+packages/lib/models/NoteTag.test.js
 packages/lib/models/NoteTag.js
 packages/lib/models/Resource.test.js
 packages/lib/models/Resource.js
