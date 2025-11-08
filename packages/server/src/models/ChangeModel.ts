@@ -164,29 +164,64 @@ export default class ChangeModel extends BaseModel<Change> {
 		// order, which is an extremely slow query plan. With "+ 0" it went from 2 minutes to 6
 		// seconds for a particular query. https://dba.stackexchange.com/a/338597/37012
 		//
-		// 2025-11-06: Remove the "+ 0" because now it appears to make query slower by preventing
-		// the query planner from using the index. Using Postgres 16.8
+		// ## 2025-11-06
+		//
+		// Remove the "+ 0" because now it appears to make query slower by preventing the query
+		// planner from using the index. Using Postgres 16.8
+		//
+		// ## 2025-11-08
+		//
+		// This query shape, with `ui AS MATERIALIZED` ensures that Postgres query planner will use
+		// the index `changes_item_id_counter_type2_index`, which was created specifically for that
+		// query. With the join (as previously) the planner uses the `counter` index and ends up
+		// walking through millions of rows in the `changes` table.
+		//
+		// This new query improves this part, however it's still not perfect because it will be
+		// relatively slow for users with hundreds of thousands of items. But at least the
+		// performance won't be bound to the size of the `changes` table anymore, and it will be
+		// fast for users with a normal amount of items.
+		//
+		// Keeping the previous query here because it's more readable and equivalent. It could be a
+		// use as a base for a refactoring:
+		//
+		// ```
+		// SELECT ${changesFieldsSql}
+		// FROM "changes"
+		// JOIN "user_items" ON user_items.item_id = changes.item_id
+		// WHERE counter > ?
+		// AND type = ?
+		// AND user_items.user_id = ?
+		// ORDER BY "counter" ASC
+		// ${doCountQuery ? '' : 'LIMIT ?'}
+		// ```
 
 		const changesFieldsSql = fields
 			.map(f => `"changes"."${f}" AS "${f}"`)
 			.join(', ');
 
 		const subQuery2 = `
+			WITH ui AS MATERIALIZED (
+				SELECT item_id
+				FROM user_items
+				WHERE user_id = ?
+			)
 			SELECT ${changesFieldsSql}
-			FROM "changes"
-			JOIN "user_items"
-				ON user_items.item_id = changes.item_id
-			WHERE counter > ?
-			AND type = ?
-			AND user_items.user_id = ?
-			ORDER BY "counter" ASC
+			FROM changes
+			WHERE type = ?
+				AND counter > ?
+				AND EXISTS (
+					SELECT 1
+					FROM ui
+					WHERE ui.item_id = changes.item_id
+				)
+			ORDER BY counter
 			${doCountQuery ? '' : 'LIMIT ?'}
 		`;
 
 		const subParams2 = [
-			fromCounter,
-			ChangeType.Update,
 			userId,
+			ChangeType.Update,
+			fromCounter,
 		];
 
 		if (!doCountQuery) subParams2.push(limit);
