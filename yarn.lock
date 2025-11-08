@@ -7829,7 +7829,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:~10.1.2":
+"@expo/config-plugins@npm:^9.0.0 || ^10.0.0, @expo/config-plugins@npm:~10.1.2":
   version: 10.1.2
   resolution: "@expo/config-plugins@npm:10.1.2"
   dependencies:
@@ -9120,7 +9120,7 @@ __metadata:
     react-native-fs: "npm:2.20.0"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
-    react-native-localize: "npm:3.4.2"
+    react-native-localize: "npm:3.5.0"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-paper: "npm:5.14.5"
     react-native-popup-menu: "npm:0.17.0"
@@ -41418,17 +41418,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.4.2":
-  version: 3.4.2
-  resolution: "react-native-localize@npm:3.4.2"
+"react-native-localize@npm:3.5.0":
+  version: 3.5.0
+  resolution: "react-native-localize@npm:3.5.0"
+  dependencies:
+    "@expo/config-plugins": "npm:^9.0.0 || ^10.0.0"
   peerDependencies:
-    react: ">=18.1.0"
-    react-native: ">=0.70.0"
-    react-native-macos: ">=0.70.0"
+    react: "*"
+    react-native: "*"
+    react-native-macos: "*"
   peerDependenciesMeta:
     react-native-macos:
       optional: true
-  checksum: 10/c1d5292725e2c8c8626a0760e933f1938deb08e32ebce5134e4247ebf3e504434cce185ab81698b655f8a980c2e736ac3aee1902048d444ebd83bda01cb8febe
+  checksum: 10/57e006603cbc024f0080ce273f0d44d7f45a6feabe357ceaa2e6d394e9a568fab172f2c170fb46f8c58b84577c60bdb118223cfcfbba6238ba764c68834739b9
   languageName: node
   linkType: hard
 
