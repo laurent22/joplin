@@ -1,12 +1,12 @@
 {
-  "name": "root",
+  "name": "lumina-notes",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laurent22/joplin.git"
+    "url": "git+https://github.com/caelum0x/joplin.git"
   },
   "engines": {
     "node": ">=18",
