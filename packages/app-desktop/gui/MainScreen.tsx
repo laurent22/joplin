@@ -46,6 +46,7 @@ import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { Dispatch } from 'redux';
+import { LuminaCommandPalette, LuminaOnboarding } from './LuminaTheme';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -104,6 +105,8 @@ interface State {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	shareNoteDialogOptions: any;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
+	showCommandPalette: boolean;
+	showOnboarding: boolean;
 }
 
 const StyledUserWebviewDialogContainer = styled.div`
@@ -158,6 +161,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 				visible: false,
 				folderId: '',
 			},
+			showCommandPalette: false,
+			showOnboarding: !Setting.value('lumina.onboardingComplete'),
 		};
 
 		this.updateMainLayout(this.buildLayout(props.plugins));
@@ -170,6 +175,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.window_resize = this.window_resize.bind(this);
 		this.rowHeight = this.rowHeight.bind(this);
 		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
+		this.commandPaletteKeyDown = this.commandPaletteKeyDown.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
 
@@ -190,6 +196,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 		if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
 		const { command, params } = parseCallbackUrl(url);
 		void CommandService.instance().execute(command.toString(), params.id);
+	}
+
+	private commandPaletteKeyDown(event: KeyboardEvent) {
+		// Cmd/Ctrl + K to open command palette
+		if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+			event.preventDefault();
+			this.setState({ showCommandPalette: !this.state.showCommandPalette });
+		}
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {
@@ -364,11 +378,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public componentDidMount() {
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
+		window.addEventListener('keydown', this.commandPaletteKeyDown);
 	}
 
 	public componentWillUnmount() {
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
+		window.removeEventListener('keydown', this.commandPaletteKeyDown);
 	}
 
 	public rootLayoutSize() {
@@ -818,6 +834,20 @@ class MainScreenComponent extends React.Component<Props, State> {
 				/>
 				{messageComp}
 				{layoutComp}
+				{this.state.showOnboarding && (
+					<LuminaOnboarding
+						onComplete={() => this.setState({ showOnboarding: false })}
+					/>
+				)}
+				{this.state.showCommandPalette && (
+					<LuminaCommandPalette
+						visible={this.state.showCommandPalette}
+						onClose={() => this.setState({ showCommandPalette: false })}
+						noteId={''}
+						selectedText={''}
+						noteBody={''}
+					/>
+				)}
 			</div>
 		);
 	}

@@ -65,6 +65,7 @@ import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import { AiService } from '@joplin/lib/services/ai';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -522,6 +523,12 @@ class Application extends BaseApplication {
 
 		addTask('app/set up custom CSS', async () => {
 			await this.setupCustomCss();
+		});
+
+		addTask('app/initialize AI service', async () => {
+			const aiService = AiService.instance();
+			await aiService.initialize();
+			reg.logger().info('Lumina AI Service initialized');
 		});
 
 		// const masterKeys = await MasterKey.all();
