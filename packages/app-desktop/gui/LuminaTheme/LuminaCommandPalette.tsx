@@ -157,7 +157,7 @@ interface Props {
 	noteBody?: string;
 }
 
-const LuminaCommandPalette: React.FC<Props> = ({ visible, onClose, noteId, selectedText = '', noteBody = '' }) => {
+const LuminaCommandPalette: React.FC<Props> = ({ visible, onClose, noteId: _noteId, selectedText = '', noteBody = '' }) => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const aiService = AiService.instance();

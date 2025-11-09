@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useCallback } from 'react';
 import { AiService } from '@joplin/lib/services/ai';
 import { _ } from '@joplin/lib/locale';
@@ -17,7 +16,8 @@ interface Props {
 	onClose: () => void;
 }
 
-const AiContextMenu: React.FC<Props> = ({ selectedText, noteBody, onResult, onClose }) => {
+// Custom hook to generate AI context menu items
+const useAiContextMenu = ({ selectedText, noteBody, onResult, onClose }: Props) => {
 	const aiService = AiService.instance();
 
 	const menuItems: MenuItem[] = [
@@ -84,4 +84,4 @@ const AiContextMenu: React.FC<Props> = ({ selectedText, noteBody, onResult, onCl
 	};
 };
 
-export default AiContextMenu;
+export default useAiContextMenu;

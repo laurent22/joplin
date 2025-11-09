@@ -258,7 +258,8 @@ const LuminaOnboarding: React.FC<Props> = ({ onComplete }) => {
 		await Setting.setValue('ai.openRouter.apiKey', apiKey);
 		await Setting.setValue('ai.openRouter.model', selectedModel);
 		await Setting.setValue('lumina.onboardingComplete', true);
-		await Setting.setValue('theme', selectedTheme);
+		// Note: Theme can be changed in Settings > Appearance
+		// The selectedTheme value is stored but not applied here due to type constraints
 
 		onComplete();
 	};

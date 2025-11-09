@@ -1,7 +1,7 @@
 {
-  "name": "@lumina/app-desktop",
-  "version": "1.0.0",
-  "description": "Lumina Notes - AI-Powered Note-Taking for Desktop",
+  "name": "@joplin/app-desktop",
+  "version": "3.5.1",
+  "description": "Lumina Notes - AI-Powered Note-Taking for Desktop (based on Joplin)",
   "main": "main.bundle.js",
   "private": true,
   "scripts": {
