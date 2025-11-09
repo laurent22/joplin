@@ -2015,6 +2015,58 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: false,
 		},
+
+		// AI Settings
+		'ai.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			label: () => _('Enable AI features'),
+			description: () => _('Enable AI-powered features like summarization, writing assistance, and smart suggestions'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ai.openRouter.apiKey': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			label: () => _('OpenRouter API Key'),
+			description: () => _('Your OpenRouter API key. Get one at https://openrouter.ai'),
+			secure: true,
+			storage: SettingStorage.File,
+			isGlobal: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => settings['ai.enabled'],
+		},
+
+		'ai.openRouter.model': {
+			value: 'openai/gpt-4o-mini',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			label: () => _('Default AI Model'),
+			description: () => _('The default AI model to use (e.g., openai/gpt-4o-mini, anthropic/claude-3.5-sonnet)'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => settings['ai.enabled'],
+		},
+
+		'ai.autoSuggestTags': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			label: () => _('Auto-suggest tags'),
+			description: () => _('Automatically suggest tags when creating or editing notes'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => settings['ai.enabled'],
+		},
 	} satisfies Record<string, SettingItem>;
 
 	for (const [key, md] of Object.entries(output)) {

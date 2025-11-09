@@ -1302,6 +1302,7 @@ class Setting extends BaseModel {
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
+		if (name === 'ai') return _('AI');
 		if (name === 'tools') return _('Tools');
 		if (name === 'importOrExport') return _('Import and Export');
 		if (name === 'moreInfo') return _('More information');
@@ -1334,6 +1335,7 @@ class Setting extends BaseModel {
 			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
 			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
 			'revisionService': _('Toggle note history, keep notes for'),
+			'ai': _('AI-powered features, OpenRouter API'),
 			'tools': _('Logs, profiles, sync status'),
 			'importOrExport': _('Import or export your data'),
 			'plugins': _('Enable or disable plugins'),
