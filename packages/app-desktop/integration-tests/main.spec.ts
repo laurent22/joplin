@@ -14,7 +14,7 @@ import setSettingValue from './util/setSettingValue';
 test.describe('main', () => {
 	test('app should launch', async ({ mainWindow }) => {
 		// A window should open with the correct title
-		expect(await mainWindow.title()).toMatch(/^Joplin/);
+		expect(await mainWindow.title()).toMatch(/^Lumina/);
 
 		const mainPage = await new MainScreen(mainWindow).setup();
 		await mainPage.waitFor();

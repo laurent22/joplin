@@ -254,7 +254,7 @@ export default function(props: Props) {
 	function renderRecommendedBadge() {
 		if (props.onToggle) return null;
 		if (!item.manifest._recommended) return null;
-		return <RecommendedBadge href="#" title={_('The Joplin team has vetted this plugin and it meets our standards for security and performance.')} onClick={onRecommendedClick}><i className="fas fa-crown"></i></RecommendedBadge>;
+		return <RecommendedBadge href="#" title={_('This plugin has been vetted and meets our standards for security and performance.')} onClick={onRecommendedClick}><i className="fas fa-crown"></i></RecommendedBadge>;
 	}
 
 	const nameLabelId = useId();

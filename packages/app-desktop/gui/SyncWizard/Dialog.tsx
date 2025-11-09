@@ -307,7 +307,7 @@ export default function(props: Props) {
 	function renderDialogWrapper() {
 		return (
 			<StyledRoot>
-				<DialogTitle title={_('Joplin can synchronise your notes using various providers. Select one from the list below.')} justifyContent="center"/>
+				<DialogTitle title={_('Lumina Notes can synchronise your notes using various providers. Select one from the list below.')} justifyContent="center"/>
 				{renderContent()}
 				<DialogButtonRow
 					themeId={props.themeId}

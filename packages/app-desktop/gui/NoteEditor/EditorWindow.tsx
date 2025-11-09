@@ -34,7 +34,7 @@ const useWindowTitle = (isNewWindow: boolean) => {
 		};
 	}
 
-	return { windowTitle: `Joplin - ${title}`, onNoteTitleChange: setTitle };
+	return { windowTitle: `Lumina Notes - ${title}`, onNoteTitleChange: setTitle };
 };
 
 const SecondaryWindow: React.FC<Props> = props => {

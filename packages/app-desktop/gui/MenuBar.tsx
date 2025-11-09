@@ -632,7 +632,7 @@ function useMenu(props: Props) {
 				// opens the first menu on Alt press if no hotkey assigned.
 				// Issue: https://github.com/laurent22/joplin/issues/934
 				submenu: [{
-					label: _('About Joplin'),
+					label: _('About Lumina Notes'),
 					visible: !!shim.isMac(),
 					click: () => _showAbout(),
 				}, {
@@ -980,7 +980,7 @@ function useMenu(props: Props) {
 						type: 'separator',
 						visible: !shim.isMac(),
 					}, {
-						label: _('About Joplin'),
+						label: _('About Lumina Notes'),
 						visible: !shim.isMac(),
 						click: () => _showAbout(),
 					}],

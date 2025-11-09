@@ -50,6 +50,7 @@
       "sign": "./sign.js",
       "rfc3161TimeStampServer": "http://timestamp.digicert.com",
       "icon": "../../Assets/ImageSources/Joplin.ico",
+      "_comment": "TODO: Replace with Lumina Notes icon",
       "target": [
         {
           "target": "nsis",
@@ -69,7 +70,8 @@
       "extraFiles": [
         {
           "from": "build-win/Joplin.VisualElementsManifest.xml",
-          "to": "."
+          "to": ".",
+          "_comment": "TODO: Rename to LuminaNotes.VisualElementsManifest.xml"
         }
       ],
       "extraResources": [

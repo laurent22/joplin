@@ -316,7 +316,7 @@ class Application extends BaseApplication {
 			const newSettings: PluginSettings = {};
 			for (const pluginId of Object.keys(oldSettings)) {
 				if (!service.pluginIds.includes(pluginId)) {
-					this.logger().warn('Found a plugin in the state that has not been loaded, which means the plugin might have been deleted outside Joplin - removing it from the state:', pluginId);
+					this.logger().warn('Found a plugin in the state that has not been loaded, which means the plugin might have been deleted - removing it from the state:', pluginId);
 					continue;
 				}
 				newSettings[pluginId] = oldSettings[pluginId];
