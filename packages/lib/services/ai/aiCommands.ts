@@ -70,7 +70,7 @@ export const aiCommands: CommandDeclaration[] = [
 	},
 ];
 
-export const aiCommandRuntime = (noteId: string, selectedText: string, noteBody: string): Record<string, CommandRuntime> => {
+export const aiCommandRuntime = (_noteId: string, selectedText: string, noteBody: string): Record<string, CommandRuntime> => {
 	return {
 		[AiCommandNames.aiSummarize]: {
 			execute: async (_context: CommandContext, text: string = null) => {

@@ -383,7 +383,7 @@ const LuminaOnboarding: React.FC<Props> = ({ onComplete }) => {
 							<FeatureCard>
 								<FeatureIcon>🔧</FeatureIcon>
 								<FeatureTitle>Settings</FeatureTitle>
-								<FeatureDescription>Configure AI & sync in Settings > AI</FeatureDescription>
+								<FeatureDescription>Configure AI & sync in Settings {'>'} AI</FeatureDescription>
 							</FeatureCard>
 						</FeatureGrid>
 					</Step>

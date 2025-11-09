@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { AiService } from '@joplin/lib/services/ai';
-import Setting from '@joplin/lib/models/Setting';
 import styled from 'styled-components';
 import { _ } from '@joplin/lib/locale';
 
@@ -160,7 +159,7 @@ interface Props {
 	onReplaceSelection: (text: string) => void;
 }
 
-const AiAssistantPanel: React.FC<Props> = ({ noteId, selectedText, noteBody, onInsertText, onReplaceSelection }) => {
+const AiAssistantPanel: React.FC<Props> = ({ noteId: _noteId, selectedText, noteBody, onInsertText, onReplaceSelection }) => {
 	const [aiService] = useState(() => AiService.instance());
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [hasApiKey, setHasApiKey] = useState(false);
