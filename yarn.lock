@@ -9114,7 +9114,7 @@ __metadata:
     react-dom: "npm:19.0.0"
     react-native: "npm:0.79.2"
     react-native-device-info: "npm:14.0.4"
-    react-native-dropdownalert: "npm:5.1.0"
+    react-native-dropdownalert: "npm:5.2.0"
     react-native-exit-app: "npm:2.0.0"
     react-native-file-viewer: "npm:2.1.5"
     react-native-fs: "npm:2.20.0"
@@ -41341,10 +41341,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-dropdownalert@npm:5.1.0":
-  version: 5.1.0
-  resolution: "react-native-dropdownalert@npm:5.1.0"
-  checksum: 10/8603cde8a02a2b95edfb1c1a6158fb60b131bd9891d74d9b21dc9817280d46aec15f816fed0bc69e8b9db660fcec1e2b3758946440ef3beef463d8496816483a
+"react-native-dropdownalert@npm:5.2.0":
+  version: 5.2.0
+  resolution: "react-native-dropdownalert@npm:5.2.0"
+  checksum: 10/a1509bbda4a27df74fba9a3fe17be135c51d02519fa6fafade5d947037eacec69c9de1e65841d3fb6fd6fa7b067ee645f548db0ed4fdb119d4b87ead73a70742
   languageName: node
   linkType: hard
 

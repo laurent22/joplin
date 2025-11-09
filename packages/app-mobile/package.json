@@ -53,7 +53,7 @@
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-device-info": "14.0.4",
-    "react-native-dropdownalert": "5.1.0",
+    "react-native-dropdownalert": "5.2.0",
     "react-native-exit-app": "2.0.0",
     "react-native-file-viewer": "2.1.5",
     "react-native-fs": "2.20.0",
