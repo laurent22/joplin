@@ -4,6 +4,30 @@ import shim from '../../shim';
 
 const logger = Logger.create('OpenRouterService');
 
+export enum OpenRouterErrorType {
+	NetworkError = 'NETWORK_ERROR',
+	AuthenticationError = 'AUTHENTICATION_ERROR',
+	RateLimitError = 'RATE_LIMIT_ERROR',
+	InvalidRequestError = 'INVALID_REQUEST_ERROR',
+	ServerError = 'SERVER_ERROR',
+	TimeoutError = 'TIMEOUT_ERROR',
+	UnknownError = 'UNKNOWN_ERROR',
+}
+
+export class OpenRouterError extends Error {
+	public type: OpenRouterErrorType;
+	public statusCode?: number;
+	public retryable: boolean;
+
+	constructor(message: string, type: OpenRouterErrorType, statusCode?: number, retryable: boolean = false) {
+		super(message);
+		this.name = 'OpenRouterError';
+		this.type = type;
+		this.statusCode = statusCode;
+		this.retryable = retryable;
+	}
+}
+
 export interface OpenRouterMessage {
 	role: 'system' | 'user' | 'assistant';
 	content: string;
@@ -45,6 +69,9 @@ export default class OpenRouterService extends BaseService {
 	private apiKey_: string = '';
 	private baseUrl_: string = 'https://openrouter.ai/api/v1';
 	private defaultModel_: string = 'openai/gpt-4o-mini';
+	private maxRetries_: number = 3;
+	private retryDelay_: number = 1000; // 1 second
+	private requestTimeout_: number = 60000; // 60 seconds
 
 	public setApiKey(key: string) {
 		this.apiKey_ = key;
@@ -52,6 +79,14 @@ export default class OpenRouterService extends BaseService {
 
 	public setDefaultModel(model: string) {
 		this.defaultModel_ = model;
+	}
+
+	public setMaxRetries(retries: number) {
+		this.maxRetries_ = retries;
+	}
+
+	public setRequestTimeout(timeout: number) {
+		this.requestTimeout_ = timeout;
 	}
 
 	public async testConnection(): Promise<boolean> {
@@ -65,8 +100,36 @@ export default class OpenRouterService extends BaseService {
 	}
 
 	public async chat(options: OpenRouterCompletionOptions): Promise<string> {
+		// Validate API key
 		if (!this.apiKey_) {
-			throw new Error('OpenRouter API key not set. Please configure it in Settings > AI.');
+			throw new OpenRouterError(
+				'OpenRouter API key not set. Please configure it in Settings > AI.',
+				OpenRouterErrorType.AuthenticationError,
+				undefined,
+				false
+			);
+		}
+
+		// Validate messages
+		if (!options.messages || options.messages.length === 0) {
+			throw new OpenRouterError(
+				'No messages provided for chat completion',
+				OpenRouterErrorType.InvalidRequestError,
+				undefined,
+				false
+			);
+		}
+
+		// Validate message content
+		for (const msg of options.messages) {
+			if (!msg.content || typeof msg.content !== 'string' || msg.content.trim().length === 0) {
+				throw new OpenRouterError(
+					'Invalid message content: messages must have non-empty string content',
+					OpenRouterErrorType.InvalidRequestError,
+					undefined,
+					false
+				);
+			}
 		}
 
 		const model = options.model || this.defaultModel_;
@@ -81,42 +144,167 @@ export default class OpenRouterService extends BaseService {
 				max_tokens: maxTokens,
 			});
 
-			if (!response.ok) {
-				const error = await response.text();
-				throw new Error(`OpenRouter API error: ${error}`);
-			}
-
 			const data: OpenRouterResponse = await response.json();
 
+			// Validate response structure
 			if (!data.choices || data.choices.length === 0) {
-				throw new Error('No response from OpenRouter API');
+				throw new OpenRouterError(
+					'Invalid response from OpenRouter API: no choices returned',
+					OpenRouterErrorType.UnknownError,
+					undefined,
+					false
+				);
+			}
+
+			if (!data.choices[0].message || !data.choices[0].message.content) {
+				throw new OpenRouterError(
+					'Invalid response from OpenRouter API: missing message content',
+					OpenRouterErrorType.UnknownError,
+					undefined,
+					false
+				);
 			}
 
 			return data.choices[0].message.content;
 		} catch (error) {
-			logger.error('OpenRouter API call failed:', error);
-			throw error;
+			// If it's already an OpenRouterError, just re-throw
+			if (error instanceof OpenRouterError) {
+				logger.error('OpenRouter API call failed:', error.message);
+				throw error;
+			}
+
+			// Wrap unexpected errors
+			logger.error('Unexpected error in OpenRouter API call:', error);
+			throw new OpenRouterError(
+				`Unexpected error: ${error.message || 'Unknown error'}`,
+				OpenRouterErrorType.UnknownError,
+				undefined,
+				false
+			);
 		}
 	}
 
-	private async makeRequest(endpoint: string, method: string = 'GET', body?: unknown) {
+	private async sleep(ms: number): Promise<void> {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	private async makeRequest(endpoint: string, method: string = 'GET', body?: unknown, retryCount: number = 0): Promise<Response> {
 		const url = `${this.baseUrl_}${endpoint}`;
 
 		const headers: Record<string, string> = {
 			'Authorization': `Bearer ${this.apiKey_}`,
-			'HTTP-Referer': 'https://joplin-app.org',
-			'X-Title': 'Joplin',
+			'HTTP-Referer': 'https://luminanotes.app',
+			'X-Title': 'Lumina Notes',
 		};
 
 		if (method === 'POST') {
 			headers['Content-Type'] = 'application/json';
 		}
 
-		return shim.fetch(url, {
-			method,
-			headers,
-			body: body ? JSON.stringify(body) : undefined,
-		});
+		try {
+			// Create timeout promise
+			const timeoutPromise = new Promise<never>((_, reject) => {
+				setTimeout(() => reject(new OpenRouterError(
+					`Request timeout after ${this.requestTimeout_}ms`,
+					OpenRouterErrorType.TimeoutError,
+					undefined,
+					true
+				)), this.requestTimeout_);
+			});
+
+			// Make the fetch request with timeout
+			const fetchPromise = shim.fetch(url, {
+				method,
+				headers,
+				body: body ? JSON.stringify(body) : undefined,
+			});
+
+			const response = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+
+			// Handle HTTP errors
+			if (!response.ok) {
+				const errorText = await response.text().catch(() => 'Unknown error');
+
+				// Determine error type based on status code
+				switch (response.status) {
+					case 401:
+					case 403:
+						throw new OpenRouterError(
+							`Authentication failed: ${errorText}. Please check your API key in Settings > AI.`,
+							OpenRouterErrorType.AuthenticationError,
+							response.status,
+							false
+						);
+
+					case 429:
+						const shouldRetry = retryCount < this.maxRetries_;
+						throw new OpenRouterError(
+							`Rate limit exceeded: ${errorText}. ${shouldRetry ? 'Retrying...' : 'Please try again later.'}`,
+							OpenRouterErrorType.RateLimitError,
+							response.status,
+							true
+						);
+
+					case 400:
+					case 422:
+						throw new OpenRouterError(
+							`Invalid request: ${errorText}`,
+							OpenRouterErrorType.InvalidRequestError,
+							response.status,
+							false
+						);
+
+					case 500:
+					case 502:
+					case 503:
+					case 504:
+						const serverRetry = retryCount < this.maxRetries_;
+						throw new OpenRouterError(
+							`Server error: ${errorText}. ${serverRetry ? 'Retrying...' : 'Please try again later.'}`,
+							OpenRouterErrorType.ServerError,
+							response.status,
+							true
+						);
+
+					default:
+						throw new OpenRouterError(
+							`HTTP ${response.status}: ${errorText}`,
+							OpenRouterErrorType.UnknownError,
+							response.status,
+							response.status >= 500
+						);
+				}
+			}
+
+			return response;
+
+		} catch (error) {
+			// If it's already an OpenRouterError, check if we should retry
+			if (error instanceof OpenRouterError && error.retryable && retryCount < this.maxRetries_) {
+				logger.warn(`Retrying request (attempt ${retryCount + 1}/${this.maxRetries_}):`, error.message);
+				await this.sleep(this.retryDelay_ * Math.pow(2, retryCount)); // Exponential backoff
+				return this.makeRequest(endpoint, method, body, retryCount + 1);
+			}
+
+			// If it's already an OpenRouterError, re-throw it
+			if (error instanceof OpenRouterError) {
+				throw error;
+			}
+
+			// Network or other errors
+			if (retryCount < this.maxRetries_) {
+				logger.warn(`Network error, retrying (attempt ${retryCount + 1}/${this.maxRetries_}):`, error);
+				await this.sleep(this.retryDelay_ * Math.pow(2, retryCount));
+				return this.makeRequest(endpoint, method, body, retryCount + 1);
+			}
+
+			throw new OpenRouterError(
+				`Network error: ${error.message || 'Unknown error'}. Please check your internet connection.`,
+				OpenRouterErrorType.NetworkError,
+				undefined,
+				false
+			);
+		}
 	}
 
 	// AI-powered features
