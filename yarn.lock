@@ -6096,8 +6096,8 @@ __metadata:
   linkType: hard
 
 "@crowdin/cli@npm:4":
-  version: 4.8.0
-  resolution: "@crowdin/cli@npm:4.8.0"
+  version: 4.11.0
+  resolution: "@crowdin/cli@npm:4.11.0"
   dependencies:
     command-exists-promise: "npm:^2.0.2"
     node-fetch: "npm:2.7.0"
@@ -6106,7 +6106,7 @@ __metadata:
     yauzl: "npm:^3.2.0"
   bin:
     crowdin: jdeploy-bundle/jdeploy.js
-  checksum: 10/68b70175d2431fcc636822ef8dcc737a79bf724911d6f00c3891a6248cdeb2777e684fb566fbf156f904c5f8baf64473b95cc979178b625bc74257c772d6dc98
+  checksum: 10/e5e53a07d9f397bcb195ccd51d02aa322c5d63ff7a5b42411423186be0969c72004907593481d5510090c5edf8090dae729b19d3defbef34bcb60dbdf82f4b40
   languageName: node
   linkType: hard
 
@@ -7829,7 +7829,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:~10.1.2":
+"@expo/config-plugins@npm:^9.0.0 || ^10.0.0, @expo/config-plugins@npm:~10.1.2":
   version: 10.1.2
   resolution: "@expo/config-plugins@npm:10.1.2"
   dependencies:
@@ -8971,7 +8971,7 @@ __metadata:
     "@joplin/renderer": "npm:~3.5"
     "@joplin/tools": "npm:~3.5"
     "@joplin/utils": "npm:~3.5"
-    "@playwright/test": "npm:1.53.2"
+    "@playwright/test": "npm:1.54.2"
     "@sentry/electron": "npm:4.24.0"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
@@ -9008,7 +9008,7 @@ __metadata:
     md5: "npm:2.3.0"
     moment: "npm:2.30.1"
     mustache: "npm:4.2.0"
-    nan: "npm:2.22.2"
+    nan: "npm:2.23.0"
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-rsa: "npm:1.1.1"
@@ -9063,7 +9063,7 @@ __metadata:
     "@react-native-community/cli": "npm:16.0.3"
     "@react-native-community/cli-platform-android": "npm:16.0.3"
     "@react-native-community/cli-platform-ios": "npm:16.0.3"
-    "@react-native-community/datetimepicker": "npm:8.4.3"
+    "@react-native-community/datetimepicker": "npm:8.4.4"
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:11.4.1"
     "@react-native-community/push-notification-ios": "npm:1.11.0"
@@ -9120,7 +9120,7 @@ __metadata:
     react-native-fs: "npm:2.20.0"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
-    react-native-localize: "npm:3.4.2"
+    react-native-localize: "npm:3.5.0"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-paper: "npm:5.14.5"
     react-native-popup-menu: "npm:0.17.0"
@@ -9574,7 +9574,7 @@ __metadata:
     jquery: "npm:3.7.1"
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
-    koa: "npm:2.16.2"
+    koa: "npm:2.16.3"
     ldapts: "npm:7.4.0"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
@@ -9670,7 +9670,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-expect-message: "npm:1.1.3"
     knex: "npm:3.1.0"
-    koa: "npm:2.16.2"
+    koa: "npm:2.16.3"
     koa-body: "npm:6.0.1"
     pg-boss: "npm:10.3.2"
     sharp: "npm:0.34.3"
@@ -11615,14 +11615,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.53.2":
-  version: 1.53.2
-  resolution: "@playwright/test@npm:1.53.2"
+"@playwright/test@npm:1.54.2":
+  version: 1.54.2
+  resolution: "@playwright/test@npm:1.54.2"
   dependencies:
-    playwright: "npm:1.53.2"
+    playwright: "npm:1.54.2"
   bin:
     playwright: cli.js
-  checksum: 10/063c4fd82e5022db7f53e85a3b31caa1c302e7d3f874b3acc751ee5fcf8f102068693e393dc5146cdeeb5850f2321366de4ebc5ef12ab81dae52e2c7113a6b49
+  checksum: 10/33d6c0780ef6cca12c008cae166ba06978ae975138a1654e14cd8691ad7826dbbc03e492ed42c65889c44ca893d0fd47d8ae4dc8d824020d7f767260b395dc6b
   languageName: node
   linkType: hard
 
@@ -12069,9 +12069,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:8.4.3":
-  version: 8.4.3
-  resolution: "@react-native-community/datetimepicker@npm:8.4.3"
+"@react-native-community/datetimepicker@npm:8.4.4":
+  version: 8.4.4
+  resolution: "@react-native-community/datetimepicker@npm:8.4.4"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -12084,7 +12084,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10/f2ddadc9c3eaff59bf174c9368ff8e8a8b62eec662427f913fe7346e7818e330e7f6bc7b83728ce48b02e4ac1a6f0b0a5b8d3efe6bd1b2e5bfdfb45791f775a1
+  checksum: 10/e7aa38ac032fc4a75e6892e860e0c83d50eb5824c6e0fd8716a5aa28d86e384b46ef40a8d6342b211aad3ab8a386745e867eae43c26bc444cca489eb0812c8b5
   languageName: node
   linkType: hard
 
@@ -33262,9 +33262,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"koa@npm:2.16.2":
-  version: 2.16.2
-  resolution: "koa@npm:2.16.2"
+"koa@npm:2.16.3":
+  version: 2.16.3
+  resolution: "koa@npm:2.16.3"
   dependencies:
     accepts: "npm:^1.3.5"
     cache-content-type: "npm:^1.0.0"
@@ -33289,7 +33289,7 @@ __metadata:
     statuses: "npm:^1.5.0"
     type-is: "npm:^1.6.16"
     vary: "npm:^1.1.2"
-  checksum: 10/741e389b31a36752c47543f06bcb9b63c19b2649487a266bd83ff363e651d864bbff5d1154a0b310f5db4d11e03060440df0113bad3ef82ac9f051874c789dee
+  checksum: 10/62b6bc4939003eab2b77d523207e252f4eed3f75471fce3b50fe46a80fb01b9f425d4094437f25e3579ad90bcf43b652c166ac5b58d277255ed82a0ea7069ac8
   languageName: node
   linkType: hard
 
@@ -36520,12 +36520,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:2.22.2":
-  version: 2.22.2
-  resolution: "nan@npm:2.22.2"
+"nan@npm:2.23.0":
+  version: 2.23.0
+  resolution: "nan@npm:2.23.0"
   dependencies:
     node-gyp: "npm:latest"
-  checksum: 10/bee49de633650213970596ffbdf036bfe2109ff283a40f7742c3aa6d1fc15b9836f62bfee82192b879f56ab5f9fa9a1e5c58a908a50e5c87d91fb2118ef70827
+  checksum: 10/9822b384189769ebb9d69160d9f5276bb2644467fe6a8e23ae849d607da5b34940f9abf03605f5f747395c17b0dac5e470aea29e72b4988918edb082d78b5858
   languageName: node
   linkType: hard
 
@@ -39379,27 +39379,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.53.2":
-  version: 1.53.2
-  resolution: "playwright-core@npm:1.53.2"
+"playwright-core@npm:1.54.2":
+  version: 1.54.2
+  resolution: "playwright-core@npm:1.54.2"
   bin:
     playwright-core: cli.js
-  checksum: 10/575c37b66aa62e1300d8b42d4b021c9304a35266ea47b6f0c36b429c40674082700b7172ee3641de7451cd2a4c736c42e0e39fd5f6a7ba4c81a6eefd8c104efd
+  checksum: 10/8eb8b37d7b02c2394f85567c5703464ee7c85929e1de7118946548a0277cacd41a6f247b8f7eb50c921433346f785356eff8132a9d3c6c2dcf3402c6a83e4f18
   languageName: node
   linkType: hard
 
-"playwright@npm:1.53.2":
-  version: 1.53.2
-  resolution: "playwright@npm:1.53.2"
+"playwright@npm:1.54.2":
+  version: 1.54.2
+  resolution: "playwright@npm:1.54.2"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.53.2"
+    playwright-core: "npm:1.54.2"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10/1c860c52a77f32793d7b1b5f5b15da9b809b8a09a82e5c89f79442fe9708ff6314b6ee6d13aa0961a6c9fddc9209f0a109ac524bdf586e0df52b641e96fa759d
+  checksum: 10/3f4fedc1e2290b6da6960eedf0d78b9097251848b499b0627186ca85e94178fe6be1590c4926246ff4dad5729fc80ab63fee6554fe736d29c0a1808ec483467f
   languageName: node
   linkType: hard
 
@@ -41418,17 +41418,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.4.2":
-  version: 3.4.2
-  resolution: "react-native-localize@npm:3.4.2"
+"react-native-localize@npm:3.5.0":
+  version: 3.5.0
+  resolution: "react-native-localize@npm:3.5.0"
+  dependencies:
+    "@expo/config-plugins": "npm:^9.0.0 || ^10.0.0"
   peerDependencies:
-    react: ">=18.1.0"
-    react-native: ">=0.70.0"
-    react-native-macos: ">=0.70.0"
+    react: "*"
+    react-native: "*"
+    react-native-macos: "*"
   peerDependenciesMeta:
     react-native-macos:
       optional: true
-  checksum: 10/c1d5292725e2c8c8626a0760e933f1938deb08e32ebce5134e4247ebf3e504434cce185ab81698b655f8a980c2e736ac3aee1902048d444ebd83bda01cb8febe
+  checksum: 10/57e006603cbc024f0080ce273f0d44d7f45a6feabe357ceaa2e6d394e9a568fab172f2c170fb46f8c58b84577c60bdb118223cfcfbba6238ba764c68834739b9
   languageName: node
   linkType: hard
 

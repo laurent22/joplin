@@ -39,7 +39,7 @@
     "html-entities": "1.4.0",
     "jquery": "3.7.1",
     "knex": "3.1.0",
-    "koa": "2.16.2",
+    "koa": "2.16.3",
     "ldapts": "7.4.0",
     "markdown-it": "13.0.2",
     "mustache": "4.2.0",
