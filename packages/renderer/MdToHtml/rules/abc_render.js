@@ -30,8 +30,10 @@
 		const elements = document.getElementsByClassName('joplin-abc-notation');
 
 		for (const element of elements) {
-			const options = getOptions(element);
-			lib.renderAbc(element.id, element.textContent, { ...options });
+			const sourceElement = element.querySelector('.joplin-source');
+			const renderedElement = element.querySelector('.joplin-rendered');
+			const options = getOptions(sourceElement);
+			lib.renderAbc(renderedElement, sourceElement.textContent, { ...options });
 		}
 
 		return true;

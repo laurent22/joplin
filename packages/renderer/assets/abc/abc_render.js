@@ -3,7 +3,7 @@
 
 	const getLibrary = () => {
 		return window?.ABCJS;
-	}
+	};
 
 	const getOptions = (element) => {
 		const options = element.getAttribute('data-abc-options');
@@ -17,8 +17,8 @@
 		}
 
 		return {};
-	}
-		
+	};
+
 	const initialize = () => {
 		if (initDone_) return true;
 
@@ -26,28 +26,30 @@
 		if (!lib) return false;
 
 		initDone_ = true;
-	
-		const elements = document.getElementsByClassName("joplin-abc-notation");
+
+		const elements = document.getElementsByClassName('joplin-abc-notation');
 
 		for (const element of elements) {
-			const options = getOptions(element);
-			lib.renderAbc(element.id, element.textContent, { ...options });
+			const sourceElement = element.querySelector('.joplin-source');
+			const renderedElement = element.querySelector('.joplin-rendered');
+			const options = getOptions(sourceElement);
+			lib.renderAbc(renderedElement, sourceElement.textContent, { ...options });
 		}
 
 		return true;
-	}
-	
+	};
+
 	document.addEventListener('joplin-noteDidUpdate', () => {
 		initDone_ = false;
 		initialize();
 	});
-	
+
 	const initIID_ = setInterval(() => {
 		if (initialize()) clearInterval(initIID_);
 	}, 100);
-	
+
 	document.addEventListener('DOMContentLoaded', () => {
 		if (initialize()) clearInterval(initIID_);
-	});	
+	});
 })();
 

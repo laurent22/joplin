@@ -52,12 +52,6 @@ const plugin = (markdownIt: MarkdownIt, ruleOptions: any) => {
 		const token = tokens[idx];
 		if (token.info !== 'abc') return defaultRender(tokens, idx, options, env, self);
 
-		const elementId = `abc_target_${Math.random()}_${Date.now()}`;
-
-		const cssClasses = [
-			'joplin-abc-notation',
-		];
-
 		ruleOptions.context.pluginWasUsed.abc = true;
 
 		try {
@@ -70,9 +64,9 @@ const plugin = (markdownIt: MarkdownIt, ruleOptions: any) => {
 			}));
 
 			return `
-				<div class="joplin-editable">
-					<pre class="joplin-source" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
-					<pre id="${elementId}" class="${cssClasses.join(' ')}" data-abc-options="${optionsHtml}">${contentHtml}</pre>
+				<div class="joplin-editable joplin-abc-notation">
+					<pre class="joplin-source" data-abc-options="${optionsHtml}" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
+					<pre class="joplin-rendered">${contentHtml}</pre>
 				</div>
 			`;
 		} catch (error) {
