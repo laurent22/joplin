@@ -204,10 +204,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'SYNC_WIZARD_VISIBLE_CHANGE':
 			newState = { ...state, syncWizardVisible: action.visible };
 			break;
-
-		case 'EDITOR_NOTE_NEEDS_RELOAD':
-			newState = { ...state, editorNoteReloadTimeRequest: Date.now() };
-			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
