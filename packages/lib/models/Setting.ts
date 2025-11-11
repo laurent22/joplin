@@ -162,7 +162,7 @@ interface UserSettingMigration {
 
 	// Currently the migration code only supports migrating a plugin setting to the regular settings
 	// (not a plugin setting to a different name). So "oldName" should be the plugin setting name
-	// and "oldName" should be the regular setting name. Additionally, it's expected that the
+	// and "newName" should be the regular setting name. Additionally, it's expected that the
 	// setting is stored in the database (as they all are as of Nov 2025).
 	isPluginSetting: boolean;
 }
