@@ -295,7 +295,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 	const note = await Note.load(comp.props.noteId);
 
 	const panes = comp.props.noteVisiblePanes;
-	let mode = panes[0] === 'editor' ? 'edit' : 'view';
+	let mode = panes.includes('editor') ? 'edit' : 'view';
 
 	if (isProvisionalNote && !comp.props.sharedData) {
 		mode = 'edit';
