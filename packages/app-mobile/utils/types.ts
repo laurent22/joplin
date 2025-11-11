@@ -12,4 +12,5 @@ export interface AppState extends State {
 	disableSideMenuGestures: boolean;
 	noteEditorVisible: boolean;
 	syncWizardVisible: boolean;
+	noteVisiblePanes: string[];
 }
