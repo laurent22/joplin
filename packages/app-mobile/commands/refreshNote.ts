@@ -8,7 +8,7 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
 			context.dispatch({
-				type: 'REFRESH_NOTE',
+				type: 'EDITOR_NOTE_NEEDS_RELOAD',
 			});
 		},
 	};

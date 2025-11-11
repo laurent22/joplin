@@ -3,7 +3,6 @@ import { AppState } from './types';
 import appDefaultState from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
-import uuid from '@joplin/lib/uuid';
 
 const logger = Logger.create('appReducer');
 
@@ -206,8 +205,8 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState = { ...state, syncWizardVisible: action.visible };
 			break;
 
-		case 'REFRESH_NOTE':
-			newState = { ...state, selectedNoteHash: uuid.create() };
+		case 'EDITOR_NOTE_NEEDS_RELOAD':
+			newState = { ...state, editorNoteReloadTimeRequest: Date.now() };
 			break;
 		}
 	} catch (error) {
