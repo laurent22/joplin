@@ -692,6 +692,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
+		// Allow the note contents to be refreshed by using the refreshNote command
+		if (this.props.noteHash && prevProps.noteHash !== this.props.noteHash && prevProps.noteId === this.props.noteId) {
+			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
+			if (!editorPlugin) {
+				void shared.reloadNote(this);
+			}
+		}
+
 		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
 			void this.editorPluginHandler_.emitActivationCheck({
 				noteId: this.props.noteId,

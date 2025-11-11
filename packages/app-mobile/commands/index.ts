@@ -3,6 +3,7 @@ import * as dismissPluginPanels from './dismissPluginPanels';
 import * as newNote from './newNote';
 import * as openItem from './openItem';
 import * as openNote from './openNote';
+import * as refreshNote from './refreshNote';
 import * as scrollToHash from './scrollToHash';
 
 const index: any[] = [
@@ -10,6 +11,7 @@ const index: any[] = [
 	newNote,
 	openItem,
 	openNote,
+	refreshNote,
 	scrollToHash,
 ];
 
