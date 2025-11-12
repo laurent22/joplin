@@ -227,12 +227,15 @@ export default class ShareModel extends BaseModel<Share> {
 			perfTimer.pop();
 		};
 
-		const handleUpdated = async (change: Change, item: Item, share: Share) => {
-			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
-			const previousShareId = previousItem.jop_share_id;
+		const getPreviousShareId = (change: Change) => {
+			return this.models().change().unserializePreviousItem(change.previous_item)?.jop_share_id;
+		};
+
+		const handleUpdated = async (change: Change, item: Item, share: Share, changesShareId: boolean) => {
+			const previousShareId = getPreviousShareId(change);
 			const shareId = share ? share.id : '';
 
-			if (previousShareId === shareId) {
+			if (previousShareId === shareId || !changesShareId) {
 				return;
 			}
 
@@ -322,15 +325,7 @@ export default class ShareModel extends BaseModel<Share> {
 			perfTimer.pop();
 
 			perfTimer.push('Get paginated changes');
-			const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '', {
-				// Ignore all updates that don't change the share_id
-				updatesEquivalent: (a, b) => {
-					const previousShareId = (change: Change) => {
-						return this.models().change().unserializePreviousItem(change.previous_item).jop_share_id;
-					};
-					return previousShareId(a) === previousShareId(b);
-				},
-			});
+			const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
 			perfTimer.pop();
 			const changes = paginatedChanges.items;
 
@@ -352,6 +347,18 @@ export default class ShareModel extends BaseModel<Share> {
 				await this.withTransaction(async () => {
 					perfTimer.push(`Processing ${changes.length} changes`);
 
+					const itemToUpdates = new Map<Uuid, Change[]>();
+					for (const change of changes) {
+						if (change.type === ChangeType.Update) {
+							const updates = itemToUpdates.get(change.item_id);
+							if (updates) {
+								updates.push(change);
+							} else {
+								itemToUpdates.set(change.item_id, [change]);
+							}
+						}
+					}
+
 					for (const change of changes) {
 						const item = items.find(i => i.id === change.item_id);
 
@@ -365,7 +372,11 @@ export default class ShareModel extends BaseModel<Share> {
 							}
 
 							if (change.type === ChangeType.Update) {
-								await handleUpdated(change, item, itemShare);
+								const allUpdates = itemToUpdates.get(item.id);
+								const nextChange = allUpdates[allUpdates.indexOf(change) + 1];
+								const shareIdChanged = !nextChange || getPreviousShareId(change) !== getPreviousShareId(nextChange);
+
+								await handleUpdated(change, item, itemShare, shareIdChanged);
 							}
 						}
 

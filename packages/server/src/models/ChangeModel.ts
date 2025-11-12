@@ -2,6 +2,7 @@ import { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
 import { DbConnection, SqliteMaxVariableNum, isPostgres } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
+import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
@@ -33,13 +34,6 @@ export interface ChangePreviousItem {
 	jop_parent_id: string;
 	jop_resource_ids: string[];
 	jop_share_id: string;
-}
-
-type OnCompareUpdates = (before: Change, after: Change)=> boolean;
-
-interface AllFromIdOptions {
-	limit?: number;
-	updatesEquivalent?: OnCompareUpdates;
 }
 
 export function defaultDeltaPagination(): ChangePagination {
@@ -89,10 +83,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return `${this.baseUrl}/changes`;
 	}
 
-	public async allFromId(id: string, {
-		limit = SqliteMaxVariableNum,
-		updatesEquivalent = ()=>true,
-	}: AllFromIdOptions = {}): Promise<PaginatedChanges> {
+	public async allFromId(id: string, limit: number = SqliteMaxVariableNum): Promise<PaginatedChanges> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
@@ -101,7 +92,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		const hasMore = !!results.length;
 		const cursor = results.length ? results[results.length - 1].id : id;
 		results = await this.removeDeletedItems(results);
-		results = await this.compressChanges(results, updatesEquivalent);
+		results = await this.compressChanges(results);
 		return {
 			items: results,
 			has_more: hasMore,
@@ -322,7 +313,7 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		let items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 
-		let processedChanges = this.compressChanges(changes, (_a, _b) => true);
+		let processedChanges = this.compressChanges(changes);
 		processedChanges = await this.removeDeletedItems(processedChanges, items);
 
 		if (this.deltaIncludesItems_) {
@@ -415,28 +406,19 @@ export default class ChangeModel extends BaseModel<Change> {
 	// (CREATED), then unshared (DELETED), then shared again (CREATED). When it
 	// happens, we want the user to get the item, thus we generate a CREATE
 	// event.
-	private compressChanges(changes: Change[], isUpdateEquivalentTo: OnCompareUpdates): Change[] {
+	private compressChanges(changes: Change[]): Change[] {
 		const itemChanges: Record<Uuid, Change> = {};
 
-		const uniqueUpdateChanges: Record<Uuid, Change[]> = {};
+		const uniqueUpdateChanges: Record<Uuid, Record<string, Change>> = {};
 
 		for (const change of changes) {
 			const itemId = change.item_id;
 			const previous = itemChanges[itemId];
 
 			if (change.type === ChangeType.Update) {
-				const uniqueChanges = uniqueUpdateChanges[itemId];
-				if (uniqueChanges) {
-					const lastChange = uniqueChanges[uniqueChanges.length - 1];
-					if (isUpdateEquivalentTo(lastChange, change)) {
-						// Prefer the later change, even if marked as equivalent
-						uniqueChanges[uniqueChanges.length - 1] = change;
-					} else {
-						uniqueChanges.push(change);
-					}
-				} else {
-					uniqueUpdateChanges[itemId] = [change];
-				}
+				const key = md5(itemId + change.previous_item);
+				if (!uniqueUpdateChanges[itemId]) uniqueUpdateChanges[itemId] = {};
+				uniqueUpdateChanges[itemId][key] = change;
 			}
 
 			if (previous) {
@@ -469,8 +451,8 @@ export default class ChangeModel extends BaseModel<Change> {
 		for (const itemId in itemChanges) {
 			const change = itemChanges[itemId];
 			if (change.type === ChangeType.Update) {
-				for (const uniqueChange of uniqueUpdateChanges[itemId]) {
-					output.push(uniqueChange);
+				for (const key of Object.keys(uniqueUpdateChanges[itemId])) {
+					output.push(uniqueUpdateChanges[itemId][key]);
 				}
 			} else {
 				output.push(change);
