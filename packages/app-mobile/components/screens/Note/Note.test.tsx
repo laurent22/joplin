@@ -156,8 +156,8 @@ const setupNoteWithPanes = async (panes: string[], noteTitle = 'Test note') => {
 	});
 	await openNewNote({ title: noteTitle, body: 'Test body' });
 	const renderResult = render(<WrappedNoteScreen />);
-	// HACK: Wait for component to finish loading
-	await screen.findByDisplayValue(noteTitle);
+	const titleInput = await screen.findByDisplayValue(noteTitle);
+	expect(titleInput).toBeVisible();
 	return renderResult;
 };
 
@@ -405,8 +405,8 @@ describe('screens/Note', () => {
 			provisional: true,
 		});
 		render(<WrappedNoteScreen />);
-		// Wait for component to finish loading
-		await screen.findByDisplayValue('Provisional note');
+		const titleInput = await screen.findByDisplayValue('Provisional note');
+		expect(titleInput).toBeVisible();
 		await expectToBeEditing(true);
 	});
 
@@ -432,8 +432,8 @@ describe('screens/Note', () => {
 			await openExistingNote(noteId);
 		});
 		render(<WrappedNoteScreen />);
-		await screen.findByDisplayValue('Test note');
-
+		const titleInput = await screen.findByDisplayValue('Test note');
+		expect(titleInput).toBeVisible();
 		// Should still be in the same mode
 		await expectToBeEditing(panes.includes('editor'));
 		expect(store.getState().noteVisiblePanes).toEqual(panes);
@@ -454,7 +454,8 @@ describe('screens/Note', () => {
 			return await openNewNote({ title: 'Note 1', body: 'Test body 1' });
 		});
 		const render1 = render(<WrappedNoteScreen />);
-		await screen.findByDisplayValue('Note 1');
+		const titleInput1 = await screen.findByDisplayValue('Note 1');
+		expect(titleInput1).toBeVisible();
 		await expectToBeEditing(panes.includes('editor'));
 		render1.unmount();
 
@@ -466,8 +467,8 @@ describe('screens/Note', () => {
 			await openExistingNote(note2Id);
 		});
 		render(<WrappedNoteScreen />);
-		await screen.findByDisplayValue('Note 2');
-
+		const titleInput2 = await screen.findByDisplayValue('Note 2');
+		expect(titleInput2).toBeVisible();
 		// Note 2 should be in the same mode
 		await expectToBeEditing(panes.includes('editor'));
 		expect(store.getState().noteVisiblePanes).toEqual(panes);
