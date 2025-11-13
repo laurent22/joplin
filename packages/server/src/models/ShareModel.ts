@@ -231,10 +231,11 @@ export default class ShareModel extends BaseModel<Share> {
 			return this.models().change().unserializePreviousItem(change.previous_item)?.jop_share_id;
 		};
 
-		const handleUpdated = async (change: Change, item: Item, share: Share, changesShareId: boolean) => {
+		const handleUpdated = async (change: Change, item: Item, share: Share, nextShareId: Uuid) => {
 			const previousShareId = getPreviousShareId(change);
 			const shareId = share ? share.id : '';
 
+			const changesShareId = previousShareId !== nextShareId;
 			if (previousShareId === shareId || !changesShareId) {
 				return;
 			}
@@ -375,16 +376,15 @@ export default class ShareModel extends BaseModel<Share> {
 								const allUpdates = itemToUpdates.get(item.id);
 								const changeIndex = allUpdates.indexOf(change);
 								const nextChange = allUpdates[changeIndex + 1];
-								const previousShareId = getPreviousShareId(change);
 
-								let shareIdChanged;
+								let nextShareId;
 								if (nextChange) {
-									shareIdChanged = previousShareId !== getPreviousShareId(nextChange);
+									nextShareId = getPreviousShareId(nextChange);
 								} else {
-									shareIdChanged = previousShareId !== item.jop_share_id;
+									nextShareId = item.jop_share_id;
 								}
 
-								await handleUpdated(change, item, itemShare, shareIdChanged);
+								await handleUpdated(change, item, itemShare, nextShareId);
 							}
 						}
 
