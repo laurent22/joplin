@@ -373,7 +373,9 @@ export default class ShareModel extends BaseModel<Share> {
 
 							if (change.type === ChangeType.Update) {
 								const allUpdates = itemToUpdates.get(item.id);
-								const nextChange = allUpdates[allUpdates.indexOf(change) + 1];
+								const changeIndex = allUpdates.indexOf(change);
+								const hasNextChange = changeIndex < allUpdates.length - 1;
+								const nextChange = hasNextChange ? allUpdates[changeIndex + 1] : null;
 								const shareIdChanged = !nextChange || getPreviousShareId(change) !== getPreviousShareId(nextChange);
 
 								await handleUpdated(change, item, itemShare, shareIdChanged);
