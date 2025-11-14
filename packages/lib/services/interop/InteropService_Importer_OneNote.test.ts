@@ -9,6 +9,7 @@ import InteropService from './InteropService';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { JSDOM } from 'jsdom';
 import { ImportModuleOutputFormat } from './types';
+import HtmlToMd from '../../HtmlToMd';
 
 const instructionMessage = `
 --------------------------------------
@@ -296,5 +297,14 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(
 			normalizeNoteForSnapshot(notes.find(n => n.title.startsWith('Test Todo')).body),
 		).toMatchSnapshot();
+	});
+
+	it('should correctly convert imported notes to Markdown', async () => {
+		const notes = await importNote(`${supportDir}/onenote/checkboxes_and_unicode.one`);
+		const checklistNote = notes.find(n => n.title.startsWith('Test Todo'));
+		const converter = new HtmlToMd();
+		const markdown = converter.parse(checklistNote.body);
+
+		expect(markdown).toMatchSnapshot('Test Todo: As Markdown');
 	});
 });

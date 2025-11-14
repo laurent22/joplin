@@ -128,6 +128,32 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 </html>"
 `;
 
+exports[`InteropService_Importer_OneNote should correctly convert imported notes to Markdown: Test Todo: As Markdown 1`] = `
+" Test Todo : cases à cocher lien vers doc sur partage 
+
+Test Todo : cases à cocher lien vers doc sur partage
+
+jeudi 23 octobre 2025
+
+09:24
+
+## Todo HBA
+
+-  [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
+-  [ ] Transmettre aux dev Joplin (case non cochée)
+    -  [x] Exporter le carnet en \\*.packageone (case cochée)
+    -  [ ] Exporter des page en \\*.one (case non cochée)
+
+&nbsp;
+
+## Todo Team appli
+
+-  [ ] Rédiger compte-rendu réunion de service
+-  [ ] Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS  
+    la doc sur le partage : [\\\\\\\\mondomaine.local\\\\partage\\\\DSI\\\\Projets Techniques 2025\\\\Remplacement Office\\\\JOPLIN_Alternatives_OneNote\\\\formation](file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation)
+    - [x] Documenter configuration synchro JBS saml pour un utilisateur (case cochée)"
+`;
+
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants 1`] = `
 "<!DOCTYPE HTML>
 <html lang="en"><head>
