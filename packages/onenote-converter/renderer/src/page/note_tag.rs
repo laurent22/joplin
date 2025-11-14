@@ -45,10 +45,6 @@ enum IconSize {
     Large,
 }
 
-pub(crate) struct CheckboxInfo {
-    pub(crate) checked: bool,
-}
-
 struct NoteTagIcon {
     html: Cow<'static, str>,
     size: IconSize,
@@ -96,7 +92,7 @@ impl<'a> Renderer<'a> {
         }
     }
 
-    fn get_note_tag_class_names(&mut self, icon: &NoteTagIcon) -> Vec<String> {
+    fn build_note_tag_class_names(&mut self, icon: &NoteTagIcon) -> Vec<String> {
         let mut icon_classes = vec!["note-tag-icon".to_string()];
 
         if icon.styles.len() > 0 {
@@ -108,6 +104,10 @@ impl<'a> Renderer<'a> {
                 .insert(format!(".{} > svg, .{} > img", class, class), icon.styles.clone());
         }
 
+        if icon.is_checkbox {
+            icon_classes.push("-checkbox".into());
+        }
+
         if icon.size == IconSize::Large {
             icon_classes.push("-large".into());
         } else if icon.size == IconSize::Normal {
@@ -115,6 +115,23 @@ impl<'a> Renderer<'a> {
         }
 
         icon_classes
+    }
+
+    fn get_note_tag_attrs(&mut self, icon: &NoteTagIcon, status: ActionItemStatus, class_names: &Vec<String>) -> AttributeSet {
+        let mut attrs = AttributeSet::new();
+        attrs.set("class", class_names.join(" "));
+
+        if icon.is_checkbox {
+            attrs.set("role", "checkbox".into());
+            attrs.set("aria-checked", if status.completed() {
+                "true"
+            } else {
+                "false"
+            }.into());
+            attrs.set("aria-disabled", "true".into());
+        }
+
+        attrs
     }
 
     pub(crate) fn render_note_tags(&mut self, note_tags: &[NoteTag]) -> Option<(String, StyleSet)> {
@@ -137,10 +154,8 @@ impl<'a> Renderer<'a> {
 
                 if def.shape() != NoteTagShape::NoIcon {
                     let icon = self.note_tag_icon(def.shape(), note_tag.item_status());
-                    let icon_classes = self.get_note_tag_class_names(&icon);
-
-                    let mut attrs = AttributeSet::new();
-                    attrs.set("class", icon_classes.join(" "));
+                    let icon_classes = self.build_note_tag_class_names(&icon);
+                    let attrs = self.get_note_tag_attrs(&icon, note_tag.item_status(), &icon_classes);
 
                     markup.push_str(&format!(
                         "<span {}>{}</span>",
@@ -152,30 +167,6 @@ impl<'a> Renderer<'a> {
         }
 
         Some((markup, styles))
-    }
-
-    pub(crate) fn checkbox_info(&self, element: &OutlineElement) -> Option<CheckboxInfo> {
-        element
-            .contents()
-            .iter()
-            .flat_map(|content| content.rich_text())
-            .flat_map(|rich_text| rich_text.note_tags())
-            .flat_map(|tag| {
-                if let Some(def) = tag.definition() && def.shape() != NoteTagShape::NoIcon {
-                    Some((def, tag))
-                } else {
-                    None
-                }
-            })
-            .find_map(|(def, tag)| {
-                let icon = self.note_tag_icon(def.shape(), tag.item_status());
-                if icon.is_checkbox {
-                    let status = tag.item_status();
-                    Some(CheckboxInfo { checked: status.completed() })
-                } else {
-                    None
-                }
-            })
     }
 
     pub(crate) fn has_note_tag(&self, element: &OutlineElement) -> bool {
