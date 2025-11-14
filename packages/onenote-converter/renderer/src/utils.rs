@@ -23,7 +23,7 @@ impl AttributeSet {
 }
 
 impl<const N: usize> From<[(&'static str, String); N]> for AttributeSet {
-    fn from(data: [(&'static str, String); N])->Self {
+    fn from(data: [(&'static str, String); N]) -> Self {
         Self(data.into())
     }
 }

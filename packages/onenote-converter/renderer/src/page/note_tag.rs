@@ -53,7 +53,7 @@ struct NoteTagIcon {
 }
 
 impl From<(Cow<'static, str>, IconSize)> for NoteTagIcon {
-    fn from((html, size): (Cow<'static, str>, IconSize))->Self {
+    fn from((html, size): (Cow<'static, str>, IconSize)) -> Self {
         Self {
             html,
             size,
@@ -64,7 +64,7 @@ impl From<(Cow<'static, str>, IconSize)> for NoteTagIcon {
 }
 
 impl From<(Cow<'static, str>, IconSize, StyleSet)> for NoteTagIcon {
-    fn from((html, size, styles): (Cow<'static, str>, IconSize, StyleSet))->Self {
+    fn from((html, size, styles): (Cow<'static, str>, IconSize, StyleSet)) -> Self {
         Self {
             html,
             size,
@@ -101,7 +101,10 @@ impl<'a> Renderer<'a> {
 
             self.global_styles
                 // Select both `svg` and `img`: `svg`s may be replaced with `img` later in the import process:
-                .insert(format!(".{} > svg, .{} > img", class, class), icon.styles.clone());
+                .insert(
+                    format!(".{} > svg, .{} > img", class, class),
+                    icon.styles.clone(),
+                );
         }
 
         if icon.is_checkbox {
@@ -117,17 +120,21 @@ impl<'a> Renderer<'a> {
         icon_classes
     }
 
-    fn get_note_tag_attrs(&mut self, icon: &NoteTagIcon, status: ActionItemStatus, class_names: &Vec<String>) -> AttributeSet {
+    fn get_note_tag_attrs(
+        &mut self,
+        icon: &NoteTagIcon,
+        status: ActionItemStatus,
+        class_names: &[String],
+    ) -> AttributeSet {
         let mut attrs = AttributeSet::new();
         attrs.set("class", class_names.join(" "));
 
         if icon.is_checkbox {
             attrs.set("role", "checkbox".into());
-            attrs.set("aria-checked", if status.completed() {
-                "true"
-            } else {
-                "false"
-            }.into());
+            attrs.set(
+                "aria-checked",
+                if status.completed() { "true" } else { "false" }.into(),
+            );
             attrs.set("aria-disabled", "true".into());
         }
 
@@ -155,13 +162,10 @@ impl<'a> Renderer<'a> {
                 if def.shape() != NoteTagShape::NoIcon {
                     let icon = self.note_tag_icon(def.shape(), note_tag.item_status());
                     let icon_classes = self.build_note_tag_class_names(&icon);
-                    let attrs = self.get_note_tag_attrs(&icon, note_tag.item_status(), &icon_classes);
+                    let attrs =
+                        self.get_note_tag_attrs(&icon, note_tag.item_status(), &icon_classes);
 
-                    markup.push_str(&format!(
-                        "<span {}>{}</span>",
-                        attrs,
-                        icon.html,
-                    ));
+                    markup.push_str(&format!("<span {}>{}</span>", attrs, icon.html,));
                 }
             }
         }
@@ -177,24 +181,14 @@ impl<'a> Renderer<'a> {
             .any(|text| !text.note_tags().is_empty())
     }
 
-    fn note_tag_icon(
-        &self,
-        shape: NoteTagShape,
-        status: ActionItemStatus,
-    ) -> NoteTagIcon {
+    fn note_tag_icon(&self, shape: NoteTagShape, status: ActionItemStatus) -> NoteTagIcon {
         match shape {
             NoteTagShape::GreenCheckBox => self.icon_checkbox(status, COLOR_GREEN),
             NoteTagShape::YellowCheckBox => self.icon_checkbox(status, COLOR_YELLOW),
             NoteTagShape::BlueCheckBox => self.icon_checkbox(status, COLOR_BLUE),
-            NoteTagShape::GreenStarCheckBox => {
-                self.icon_checkbox_with_star(status, COLOR_GREEN).into()
-            }
-            NoteTagShape::YellowStarCheckBox => {
-                self.icon_checkbox_with_star(status, COLOR_YELLOW)
-            }
-            NoteTagShape::BlueStarCheckBox => {
-                self.icon_checkbox_with_star(status, COLOR_BLUE)
-            }
+            NoteTagShape::GreenStarCheckBox => self.icon_checkbox_with_star(status, COLOR_GREEN),
+            NoteTagShape::YellowStarCheckBox => self.icon_checkbox_with_star(status, COLOR_YELLOW),
+            NoteTagShape::BlueStarCheckBox => self.icon_checkbox_with_star(status, COLOR_BLUE),
             NoteTagShape::GreenExclamationCheckBox => {
                 self.icon_checkbox_with_exclamation(status, COLOR_GREEN)
             }
@@ -217,45 +211,20 @@ impl<'a> Renderer<'a> {
                 let mut style = StyleSet::new();
                 style.set("fill", COLOR_YELLOW.to_string());
 
-                (
-                    Cow::from(ICON_STAR),
-                    IconSize::Normal,
-                    style,
-                ).into()
+                (Cow::from(ICON_STAR), IconSize::Normal, style).into()
             }
 
-            NoteTagShape::QuestionMark => (
-                Cow::from(ICON_QUESTION_MARK),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::QuestionMark => (Cow::from(ICON_QUESTION_MARK), IconSize::Normal).into(),
 
-            NoteTagShape::HighPriority => (
-                Cow::from(ICON_ERROR),
-                IconSize::Normal,
-            ).into(),
-            NoteTagShape::ContactInformation => (
-                Cow::from(ICON_PHONE),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::HighPriority => (Cow::from(ICON_ERROR), IconSize::Normal).into(),
+            NoteTagShape::ContactInformation => (Cow::from(ICON_PHONE), IconSize::Normal).into(),
 
-            NoteTagShape::LightBulb => (
-                Cow::from(ICON_LIGHT_BULB),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::LightBulb => (Cow::from(ICON_LIGHT_BULB), IconSize::Normal).into(),
 
-            NoteTagShape::Home => (
-                Cow::from(ICON_HOME),
-                IconSize::Normal,
-            ).into(),
-            NoteTagShape::CommentBubble => (
-                Cow::from(ICON_BUBBLE),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::Home => (Cow::from(ICON_HOME), IconSize::Normal).into(),
+            NoteTagShape::CommentBubble => (Cow::from(ICON_BUBBLE), IconSize::Normal).into(),
 
-            NoteTagShape::AwardRibbon => (
-                Cow::from(ICON_AWARD),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::AwardRibbon => (Cow::from(ICON_AWARD), IconSize::Normal).into(),
 
             NoteTagShape::BlueCheckBox1 => self.icon_checkbox_with_1(status, COLOR_BLUE),
 
@@ -284,89 +253,49 @@ impl<'a> Renderer<'a> {
             NoteTagShape::YellowCheckMark => self.icon_checkmark(COLOR_YELLOW),
             NoteTagShape::YellowCircle => self.icon_circle(COLOR_YELLOW),
 
-            NoteTagShape::BluePersonCheckBox => {
-                self.icon_checkbox_with_person(status, COLOR_BLUE)
-            }
+            NoteTagShape::BluePersonCheckBox => self.icon_checkbox_with_person(status, COLOR_BLUE),
             NoteTagShape::YellowPersonCheckBox => {
                 self.icon_checkbox_with_person(status, COLOR_YELLOW)
             }
             NoteTagShape::GreenPersonCheckBox => {
                 self.icon_checkbox_with_person(status, COLOR_GREEN)
             }
-            NoteTagShape::BlueFlagCheckBox => {
-                self.icon_checkbox_with_flag(status, COLOR_BLUE)
-            }
+            NoteTagShape::BlueFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_BLUE),
             NoteTagShape::RedFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_RED),
-            NoteTagShape::GreenFlagCheckBox => {
-                self.icon_checkbox_with_flag(status, COLOR_GREEN)
-            }
+            NoteTagShape::GreenFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_GREEN),
             NoteTagShape::RedSquare => self.icon_square(COLOR_RED),
             NoteTagShape::YellowSquare => self.icon_square(COLOR_YELLOW),
             NoteTagShape::BlueSquare => self.icon_square(COLOR_BLUE),
             NoteTagShape::GreenSquare => self.icon_square(COLOR_GREEN),
             NoteTagShape::OrangeSquare => self.icon_square(COLOR_ORANGE),
             NoteTagShape::PinkSquare => self.icon_square(COLOR_PINK),
-            NoteTagShape::EMailMessage => (
-                Cow::from(ICON_EMAIL),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::EMailMessage => (Cow::from(ICON_EMAIL), IconSize::Normal).into(),
 
-            NoteTagShape::Contact => (
-                Cow::from(ICON_CONTACT),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::Contact => (Cow::from(ICON_CONTACT), IconSize::Normal).into(),
 
-            NoteTagShape::MusicalNote => (
-                Cow::from(ICON_MUSIC),
-                IconSize::Normal,
-            ).into(),
-            NoteTagShape::MovieClip => (
-                Cow::from(ICON_FILM),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::MusicalNote => (Cow::from(ICON_MUSIC), IconSize::Normal).into(),
+            NoteTagShape::MovieClip => (Cow::from(ICON_FILM), IconSize::Normal).into(),
 
-            NoteTagShape::HyperlinkGlobe => (
-                Cow::from(ICON_LINK),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::HyperlinkGlobe => (Cow::from(ICON_LINK), IconSize::Normal).into(),
 
-            NoteTagShape::Padlock => (
-                Cow::from(ICON_LOCK),
-                IconSize::Normal,
-            ).into(),
-            NoteTagShape::OpenBook => (
-                Cow::from(ICON_BOOK),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::Padlock => (Cow::from(ICON_LOCK), IconSize::Normal).into(),
+            NoteTagShape::OpenBook => (Cow::from(ICON_BOOK), IconSize::Normal).into(),
 
-            NoteTagShape::BlankPaperWithLines => (
-                Cow::from(ICON_PAPER),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::BlankPaperWithLines => (Cow::from(ICON_PAPER), IconSize::Normal).into(),
 
-            NoteTagShape::Pen => (
-                Cow::from(ICON_PEN),
-                IconSize::Normal,
-            ).into(),
+            NoteTagShape::Pen => (Cow::from(ICON_PEN), IconSize::Normal).into(),
 
             shape => self.icon_fallback(shape),
-        }.into()
+        }
     }
 
     fn icon_fallback(&self, shape: NoteTagShape) -> NoteTagIcon {
         log_warn!("Unsupported icon type: {:?}", shape);
 
-        (
-            Cow::from(ICON_QUESTION_MARK),
-            IconSize::Normal,
-        ).into()
+        (Cow::from(ICON_QUESTION_MARK), IconSize::Normal).into()
     }
 
-    fn icon_checkbox(
-        &self,
-        status: ActionItemStatus,
-        color: &'static str,
-    ) -> NoteTagIcon {
+    fn icon_checkbox(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
         let mut styles = StyleSet::new();
         styles.set("fill", color.to_string());
 
@@ -416,27 +345,15 @@ impl<'a> Renderer<'a> {
         self.icon_checkbox_with(status, color, ICON_FLAG)
     }
 
-    fn icon_checkbox_with_1(
-        &self,
-        status: ActionItemStatus,
-        color: &'static str,
-    ) -> NoteTagIcon {
+    fn icon_checkbox_with_1(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
         self.icon_checkbox_with(status, color, "<span class=\"content\">1</span>")
     }
 
-    fn icon_checkbox_with_2(
-        &self,
-        status: ActionItemStatus,
-        color: &'static str,
-    ) -> NoteTagIcon {
+    fn icon_checkbox_with_2(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
         self.icon_checkbox_with(status, color, "<span class=\"content\">2</span>")
     }
 
-    fn icon_checkbox_with_3(
-        &self,
-        status: ActionItemStatus,
-        color: &'static str,
-    ) -> NoteTagIcon {
+    fn icon_checkbox_with_3(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
         self.icon_checkbox_with(status, color, "<span class=\"content\">3</span>")
     }
 
@@ -477,10 +394,7 @@ impl<'a> Renderer<'a> {
         }
     }
 
-    fn icon_checkmark(
-        &self,
-        color: &'static str,
-    ) -> NoteTagIcon {
+    fn icon_checkmark(&self, color: &'static str) -> NoteTagIcon {
         let mut style = StyleSet::new();
         style.set("fill", color.to_string());
 
@@ -492,31 +406,17 @@ impl<'a> Renderer<'a> {
         }
     }
 
-    fn icon_circle(
-        &self,
-        color: &'static str,
-    ) -> NoteTagIcon {
+    fn icon_circle(&self, color: &'static str) -> NoteTagIcon {
         let mut style = StyleSet::new();
         style.set("fill", color.to_string());
 
-        (
-            Cow::from(ICON_CIRCLE),
-            IconSize::Normal,
-            style,
-        ).into()
+        (Cow::from(ICON_CIRCLE), IconSize::Normal, style).into()
     }
 
-    fn icon_square(
-        &self,
-        color: &'static str,
-    ) -> NoteTagIcon {
+    fn icon_square(&self, color: &'static str) -> NoteTagIcon {
         let mut style = StyleSet::new();
         style.set("fill", color.to_string());
 
-        (
-            Cow::from(ICON_SQUARE),
-            IconSize::Large,
-            style,
-        ).into()
+        (Cow::from(ICON_SQUARE), IconSize::Large, style).into()
     }
 }

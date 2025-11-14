@@ -181,7 +181,7 @@ impl<'a> Renderer<'a> {
     }
 
     fn is_onenote_list(&self, element: &OutlineElement) -> bool {
-        element.list_contents().first().is_some()
+        !element.list_contents().is_empty()
     }
 
     fn is_tag_list(&self, element: &OutlineElement) -> bool {
