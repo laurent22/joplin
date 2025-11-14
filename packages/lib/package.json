@@ -40,7 +40,7 @@
     "typescript": "5.8.3"
   },
   "dependencies": {
-    "@adobe/css-tools": "4.4.3",
+    "@adobe/css-tools": "4.4.4",
     "@aws-sdk/client-s3": "3.296.0",
     "@aws-sdk/s3-request-presigner": "3.296.0",
     "@joplin/fork-htmlparser2": "^4.1.60",
