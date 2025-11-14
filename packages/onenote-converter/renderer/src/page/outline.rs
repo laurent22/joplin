@@ -77,8 +77,16 @@ impl<'a> Renderer<'a> {
         let mut contents = String::new();
         let is_list = self.is_list(element);
 
+        let mut class_names = vec!["outline-element"];
+        if let Some(checkbox_info) = self.checkbox_info(element) {
+            class_names.push("joplin-checklist-item");
+            if checkbox_info.checked {
+                class_names.push("checked");
+            }
+        }
+
         let mut attrs = AttributeSet::new();
-        attrs.set("class", "outline-element".to_string());
+        attrs.set("class", class_names.join(" "));
 
         let mut styles = StyleSet::new();
         styles.set("margin-left", px(indent_width as f32));
