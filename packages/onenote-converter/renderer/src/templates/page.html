@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>{{ name }}</title>
     <style>
+    /*** Start default CSS ***/
     * { margin: 0; padding: 0; font-weight: normal; }
     table, tr, td { border-color: #A3A3A3; }
     ul, ol { padding: 0; }
@@ -36,6 +37,7 @@
     .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
     .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
     .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+    /*** End default CSS ***/
 
     {% for entry in global_styles -%}
     {{ entry.0 }} { {{ entry.1 }} }
