@@ -241,6 +241,7 @@ describe('services_InteropService', () => {
 
 		await Folder.delete(folder1.id);
 		await Note.delete(note1.id);
+		await Tag.delete(tag1.id);
 
 		await service.import({ path: filePath });
 
