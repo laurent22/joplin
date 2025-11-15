@@ -545,7 +545,7 @@ export default class SearchEngine {
 		let allTerms: Term[] = [];
 
 		if (query.length && query[0] === '/') {
-			query = query.substr(1);
+			query = query.substring(1);
 		}
 
 		try {
