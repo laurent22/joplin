@@ -474,6 +474,10 @@ describe('services/SearchEngine', () => {
 			['"abcd efgh"', { _: ['abcd efgh'] }],
 			['"abcd efgh" ijkl', { _: ['abcd efgh', 'ijkl'] }],
 			['title:abcd title:efgh', { title: ['abcd', 'efgh'] }],
+			['/abcd efgh', { _: ['abcd', 'efgh'] }],
+			['/abcd   efgh', { _: ['abcd', 'efgh'] }],
+			['/"abcd efgh"', { _: ['abcd efgh'] }],
+			['/"abcd efgh" ijkl', { _: ['abcd efgh', 'ijkl'] }],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
