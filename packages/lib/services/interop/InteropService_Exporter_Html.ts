@@ -18,7 +18,7 @@ import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
 import Logger from '@joplin/utils/Logger';
 import { parseRenderedNoteMetadata } from './utils';
 import ResourceLocalState from '../../models/ResourceLocalState';
-import { ResourceInfos } from '@joplin/renderer/types';
+import { getGlobalSettings, ResourceInfos } from '@joplin/renderer/types';
 import { fromFilename } from '../../mime-utils';
 
 const logger = Logger.create('InteropService_Exporter_Html');
@@ -131,6 +131,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 						linkRenderingType: LinkRenderingType.HrefHandler,
 					},
 				},
+				globalSettings: getGlobalSettings(Setting),
 			});
 
 			const noteContent = [];

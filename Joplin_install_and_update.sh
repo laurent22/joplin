@@ -67,6 +67,45 @@ showHelp() {
   fi
 }
 
+# Accepts two versions in symver (a.b.c).
+# Echos -1 if the first version is less than the second,
+#        0 if they're equal,
+#        1 if the first version is greater than second.
+compareVersions() {
+  V_MAJOR1=$(echo "$1"|cut -d. -f1)
+  V_MAJOR2=$(echo "$2"|cut -d. -f1)
+
+  if [[ $V_MAJOR1 -lt $V_MAJOR2 ]] ; then
+    echo -1
+    return
+  elif [[ $V_MAJOR1 -gt $V_MAJOR2 ]] ; then
+    echo 1
+    return
+  fi
+
+  V_MINOR1=$(echo "$1"|cut -d. -f2)
+  V_MINOR2=$(echo "$2"|cut -d. -f2)
+
+  if [[ $V_MINOR1 -lt $V_MINOR2 ]] ; then
+    echo -1
+    return
+  elif [[ $V_MINOR1 -gt $V_MINOR2 ]] ; then
+    echo 1
+    return
+  fi
+
+  V_PATCH1=$(echo "$1"|cut -d. -f3)
+  V_PATCH2=$(echo "$2"|cut -d. -f3)
+
+  if [[ $V_PATCH1 -lt $V_PATCH2 ]] ; then
+    echo -1
+  elif [[ $V_PATCH1 -gt $V_PATCH2 ]] ; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
 #-----------------------------------------------------
 # Setup Download Helper: DL
 #-----------------------------------------------------
@@ -258,6 +297,15 @@ fi
 if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.*|.*i3.*|.*sway.* ]] || [[ `command -v update-desktop-database` ]]; then
   DATA_HOME=${XDG_DATA_HOME:-~/.local/share}
   DESKTOP_FILE_LOCATION="$DATA_HOME/applications"
+
+  # Only later versions of Joplin default to Wayland
+  IS_WAYLAND_BY_DEFAULT=$(compareVersions "$RELEASE_VERSION" "3.5.6")
+  # Joplin has a different startup WM class on Wayland and X11:
+  STARTUP_WM_CLASS=Joplin
+  if [[ $XDG_SESSION_TYPE != "x11" && $IS_WAYLAND_BY_DEFAULT == "1" ]]; then
+    STARTUP_WM_CLASS=@joplin/app-desktop
+  fi
+
   # Only delete the desktop file if it will be replaced
   rm -f "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop"
 
@@ -272,7 +320,9 @@ Name=Joplin
 Comment=Joplin for Desktop
 Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} %u
 Icon=joplin
-StartupWMClass=Joplin
+# This will be different between Wayland and X11. On Wayland, the startup
+# WM class is "@joplin/app-desktop". On X11, it's "Joplin".
+StartupWMClass=${STARTUP_WM_CLASS}
 Type=Application
 Categories=Office;
 MimeType=x-scheme-handler/joplin;

@@ -1,7 +1,7 @@
 import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
 
 export const newNoteEnabledConditions = 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
 
@@ -14,7 +14,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, body = '', isTodo = false) => {
-			const folderId = Setting.value('activeFolderId');
+			const folderId = await Folder.getValidActiveFolder();
 			if (!folderId) return;
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });

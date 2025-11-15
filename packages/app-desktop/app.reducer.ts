@@ -30,17 +30,6 @@ export interface NoteIdToScrollPercent {
 	[noteId: string]: number;
 }
 
-type RichTextEditorSelectionBookmark = unknown;
-
-export interface EditorCursorLocations {
-	readonly richText?: RichTextEditorSelectionBookmark;
-	readonly markdown?: number;
-}
-
-export interface NoteIdToEditorCursorLocations {
-	[noteId: string]: EditorCursorLocations;
-}
-
 export interface VisibleDialogs {
 	[dialogKey: string]: boolean;
 }
@@ -53,9 +42,6 @@ export interface AppWindowState extends WindowState {
 	devToolsVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	watchedResources: any;
-
-	lastEditorScrollPercents: NoteIdToScrollPercent;
-	lastEditorCursorLocations: NoteIdToEditorCursorLocations;
 }
 
 interface BackgroundWindowStates {
@@ -79,7 +65,7 @@ export interface AppState extends State, AppWindowState {
 	isResettingLayout: boolean;
 }
 
-export const createAppDefaultWindowState = (globalState: AppState|null): AppWindowState => {
+export const createAppDefaultWindowState = (): AppWindowState => {
 	return {
 		...defaultWindowState,
 		visibleDialogs: {},
@@ -88,12 +74,6 @@ export const createAppDefaultWindowState = (globalState: AppState|null): AppWind
 		editorCodeView: true,
 		devToolsVisible: false,
 		watchedResources: {},
-
-		// Maintain the scroll and cursor location for secondary windows separate from the
-		// main window. This prevents scrolling in a secondary window from changing/resetting
-		// the default scroll position in the main window:
-		lastEditorCursorLocations: globalState?.lastEditorCursorLocations ?? {},
-		lastEditorScrollPercents: globalState?.lastEditorScrollPercents ?? {},
 	};
 };
 
@@ -101,7 +81,7 @@ export const createAppDefaultWindowState = (globalState: AppState|null): AppWind
 export function createAppDefaultState(resourceEditWatcherDefaultState: any): AppState {
 	return {
 		...defaultState,
-		...createAppDefaultWindowState(null),
+		...createAppDefaultWindowState(),
 		route: {
 			type: 'NAV_GO',
 			routeName: 'Main',
@@ -304,28 +284,6 @@ export default function(state: AppState, action: any) {
 			if (state.watchedNoteFiles.length) {
 				newState = { ...state };
 				newState.watchedNoteFiles = [];
-			}
-			break;
-
-		case 'EDITOR_SCROLL_PERCENT_SET':
-
-			{
-				newState = { ...state };
-				const newPercents = { ...newState.lastEditorScrollPercents };
-				newPercents[action.noteId] = action.percent;
-				newState.lastEditorScrollPercents = newPercents;
-			}
-			break;
-
-		case 'EDITOR_CURSOR_POSITION_SET':
-			{
-				newState = { ...state };
-				const newCursorLocations = { ...newState.lastEditorCursorLocations };
-				newCursorLocations[action.noteId] = {
-					...(newCursorLocations[action.noteId] ?? {}),
-					...action.location,
-				};
-				newState.lastEditorCursorLocations = newCursorLocations;
 			}
 			break;
 

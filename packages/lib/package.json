@@ -40,7 +40,7 @@
     "typescript": "5.8.3"
   },
   "dependencies": {
-    "@adobe/css-tools": "4.4.3",
+    "@adobe/css-tools": "4.4.4",
     "@aws-sdk/client-s3": "3.296.0",
     "@aws-sdk/s3-request-presigner": "3.296.0",
     "@joplin/fork-htmlparser2": "^4.1.60",
@@ -73,7 +73,7 @@
     "html-minifier": "4.0.0",
     "image-data-uri": "2.0.1",
     "immer": "9.0.21",
-    "js-yaml": "4.1.0",
+    "js-yaml": "4.1.1",
     "markdown-it": "13.0.2",
     "md5": "2.3.0",
     "md5-file": "5.0.0",
