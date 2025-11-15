@@ -10775,7 +10775,7 @@ __metadata:
     markdown-it-sup: "npm:2.0.0"
     markdown-it-toc-done-right: "npm:4.2.0"
     md5: "npm:2.3.0"
-    mermaid: "npm:11.8.1"
+    mermaid: "npm:11.9.0"
     ts-jest: "npm:29.4.1"
     typescript: "npm:5.8.3"
   languageName: unknown
@@ -12263,7 +12263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mermaid-js/parser@npm:^0.6.1":
+"@mermaid-js/parser@npm:^0.6.2":
   version: 0.6.3
   resolution: "@mermaid-js/parser@npm:0.6.3"
   dependencies:
@@ -35127,14 +35127,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.16.9":
-  version: 0.16.10
-  resolution: "katex@npm:0.16.10"
+"katex@npm:^0.16.22":
+  version: 0.16.25
+  resolution: "katex@npm:0.16.25"
   dependencies:
     commander: "npm:^8.3.0"
   bin:
     katex: cli.js
-  checksum: 10/367034012311c695791de4553b3e4c7a9f36d126a0cae17b97f4e8832ced2559961f9fa6d39e0116e1374013e12ac8af159eb014678f06b4acf5e547292ea3e5
+  checksum: 10/a4653b5199af59e2960a61c54e3d7139b84ee81ada32c6f0a633daed35bb47298b1361487332d19c7d63a47c82dfe33a63303bf79b100b1b089898909c24e8cf
   languageName: node
   linkType: hard
 
@@ -36837,12 +36837,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:^15.0.7":
-  version: 15.0.12
-  resolution: "marked@npm:15.0.12"
+"marked@npm:^16.0.0":
+  version: 16.4.2
+  resolution: "marked@npm:16.4.2"
   bin:
     marked: bin/marked.js
-  checksum: 10/deeb619405c0c46af00c99b18b3365450abeb309104b24e3658f46142344f6b7c4117608c3b5834084d8738e92f81240c19f596e6ee369260f96e52b3457eaee
+  checksum: 10/6e40e40661dce97e271198daa2054fc31e6445892a735e416c248fba046bdfa4573cafa08dc254529f105e7178a34485eb7f82573979cfb377a4530f66e79187
   languageName: node
   linkType: hard
 
@@ -37134,13 +37134,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:11.8.1":
-  version: 11.8.1
-  resolution: "mermaid@npm:11.8.1"
+"mermaid@npm:11.9.0":
+  version: 11.9.0
+  resolution: "mermaid@npm:11.9.0"
   dependencies:
     "@braintree/sanitize-url": "npm:^7.0.4"
     "@iconify/utils": "npm:^2.1.33"
-    "@mermaid-js/parser": "npm:^0.6.1"
+    "@mermaid-js/parser": "npm:^0.6.2"
     "@types/d3": "npm:^7.4.3"
     cytoscape: "npm:^3.29.3"
     cytoscape-cose-bilkent: "npm:^4.1.0"
@@ -37150,15 +37150,15 @@ __metadata:
     dagre-d3-es: "npm:7.0.11"
     dayjs: "npm:^1.11.13"
     dompurify: "npm:^3.2.5"
-    katex: "npm:^0.16.9"
+    katex: "npm:^0.16.22"
     khroma: "npm:^2.1.0"
     lodash-es: "npm:^4.17.21"
-    marked: "npm:^15.0.7"
+    marked: "npm:^16.0.0"
     roughjs: "npm:^4.6.6"
     stylis: "npm:^4.3.6"
     ts-dedent: "npm:^2.2.0"
     uuid: "npm:^11.1.0"
-  checksum: 10/925ea7bc0f5d72f856a73502182ebc8e94caf219a91f03d4d7acc836c62696cb649a13b4cd67ae1a325ab04e35f2f007913615b3c01d05973a0ddad1361b074e
+  checksum: 10/33c6841d5c3e707dace508f0bd8ce117957352771a04450d3f385425295796ca7e7bccb31717e52e604d238625e04505267d86c38a1cc5911e650898f4c56a81
   languageName: node
   linkType: hard
 
