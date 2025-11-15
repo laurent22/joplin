@@ -119,7 +119,8 @@
       "category": "Office",
       "desktop": {
         "Icon": "joplin",
-        "MimeType": "x-scheme-handler/joplin;"
+        "MimeType": "x-scheme-handler/joplin;",
+        "StartupWMClass": "@joplin/app-desktop"
       },
       "target": [
         "AppImage",
@@ -161,7 +162,7 @@
     "compare-versions": "6.1.1",
     "countable": "3.0.1",
     "debounce": "1.2.1",
-    "electron": "37.7.0",
+    "electron": "39.0.0",
     "electron-builder": "24.13.3",
     "electron-updater": "6.6.2",
     "electron-window-state": "5.0.3",

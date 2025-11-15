@@ -6,6 +6,7 @@ _releases/
 *.min.js
 **/commands/index.ts
 **/node_modules/
+**/abcjs-basic-min.js
 packages/generator-joplin/generators/app/templates/api/
 Assets/
 docs/
@@ -1396,6 +1397,7 @@ packages/lib/services/KeymapService_keysRegExp.js
 packages/lib/services/KvStore.js
 packages/lib/services/MigrationService.js
 packages/lib/services/NavService.js
+packages/lib/services/NotePositionService.js
 packages/lib/services/PostMessageService.js
 packages/lib/services/ReportService.test.js
 packages/lib/services/ReportService.js
@@ -1411,6 +1413,7 @@ packages/lib/services/UndoRedoService.js
 packages/lib/services/WhenClause.test.js
 packages/lib/services/WhenClause.js
 packages/lib/services/commands/MenuUtils.js
+packages/lib/services/commands/ToolbarButtonUtils.test.js
 packages/lib/services/commands/ToolbarButtonUtils.js
 packages/lib/services/commands/commandsToMarkdownTable.js
 packages/lib/services/commands/focusEditorIfEditorCommand.js
@@ -1779,6 +1782,7 @@ packages/renderer/MdToHtml/createEventHandlingAttrs.js
 packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/linkReplacement.js
 packages/renderer/MdToHtml/renderMedia.js
+packages/renderer/MdToHtml/rules/abc.js
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/code_inline.js
 packages/renderer/MdToHtml/rules/fence.js

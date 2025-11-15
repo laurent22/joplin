@@ -9,6 +9,7 @@ pub(crate) fn px(inches: f32) -> String {
     format!("{}px", (inches * 48.0).round())
 }
 
+#[derive(Clone)]
 pub(crate) struct AttributeSet(HashMap<&'static str, String>);
 
 impl AttributeSet {
@@ -18,6 +19,12 @@ impl AttributeSet {
 
     pub(crate) fn set(&mut self, attribute: &'static str, value: String) {
         self.0.insert(attribute, value);
+    }
+}
+
+impl<const N: usize> From<[(&'static str, String); N]> for AttributeSet {
+    fn from(data: [(&'static str, String); N]) -> Self {
+        Self(data.into())
     }
 }
 

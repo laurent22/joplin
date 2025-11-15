@@ -1,5 +1,5 @@
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
-import type { MarkupToHtmlConverter, RenderOptions, FsDriver as RendererFsDriver, ResourceInfos } from '@joplin/renderer/types';
+import type { MarkupToHtmlConverter, RenderOptions, RenderOptionsGlobalSettings, FsDriver as RendererFsDriver, ResourceInfos } from '@joplin/renderer/types';
 import makeResourceModel from './utils/makeResourceModel';
 import addPluginAssets from './utils/addPluginAssets';
 import { ExtraContentScriptSource, ForwardedJoplinSettings, MarkupRecord } from '../types';
@@ -32,6 +32,7 @@ export interface RenderSettings {
 	destroyEditPopupSyntax: string;
 
 	pluginSettings: Record<string, unknown>;
+	globalSettings?: RenderOptionsGlobalSettings;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
 	readAssetBlob: (assetPath: string)=> Promise<Blob>;
 }
@@ -135,6 +136,7 @@ export default class Renderer {
 			splitted: settings.splitted,
 			mapsToLine: settings.mapsToLine,
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
+			globalSettings: settings.globalSettings,
 		};
 
 		const pluginSettingsCacheKey = JSON.stringify(settings.pluginSettings);

@@ -11,7 +11,7 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { friendlySafeFilename } = require('@joplin/lib/path-utils');
 import time from '@joplin/lib/time';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 const md5 = require('md5');
 const url = require('url');
 
@@ -62,8 +62,10 @@ export default class InteropServiceHelper {
 
 			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
 
-			const windowOptions = {
-				show: false,
+			const windowOptions: BrowserWindowConstructorOptions = {
+				// Work around a printing issue: As of Electron 39, if the window is initially hidden, printing crashes the app.
+				// This only seems to be necessary on Linux.
+				show: shim.isLinux(),
 			};
 
 			win = bridge().newBrowserWindow(windowOptions);
@@ -120,6 +122,9 @@ export default class InteropServiceHelper {
 							//
 							// 2025-05-03: Windows and MacOS also need the window.print() workaround.
 							// See https://github.com/electron/electron/pull/46937.
+							//
+							// 2025-10-30: window.print() now causes a crash on Linux -- switch back to the
+							// other method.
 
 							const applyWorkaround = true;
 							if (applyWorkaround) {

@@ -21,12 +21,10 @@ jobs:
           
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '24'
           cache: 'yarn'
-
-      - uses: dtolnay/rust-toolchain@stable
 
       - name: Install Yarn
         run: |
@@ -34,6 +32,13 @@ jobs:
 
       - name: Install
         run:  yarn install
+        env:
+          SKIP_ONENOTE_CONVERTER_BUILD: 1
+      
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
 
       - name: Assemble Android Release
         run: |

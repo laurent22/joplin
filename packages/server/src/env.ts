@@ -68,6 +68,12 @@ const defaultEnvValues: EnvVariables = {
 	DB_ALLOW_INCOMPLETE_MIGRATIONS: false,
 	DB_USE_SLAVE: false,
 
+	// The maximum number of active database connections. Only applies to PostgreSQL.
+	// This should usually be somewhat small.
+	// See https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+	// and https://wiki.postgresql.org/wiki/Number_Of_Database_Connections.
+	DB_MAX_CONNECTIONS: 10,
+
 	POSTGRES_PASSWORD: 'joplin',
 	POSTGRES_DATABASE: 'joplin',
 	POSTGRES_USER: 'joplin',
@@ -206,6 +212,7 @@ export interface EnvVariables {
 	DB_AUTO_MIGRATION: boolean;
 	DB_ALLOW_INCOMPLETE_MIGRATIONS: boolean;
 	DB_USE_SLAVE: boolean;
+	DB_MAX_CONNECTIONS: number;
 
 	POSTGRES_PASSWORD: string;
 	POSTGRES_DATABASE: string;

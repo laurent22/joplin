@@ -227,12 +227,18 @@ export default class ShareModel extends BaseModel<Share> {
 			perfTimer.pop();
 		};
 
-		const handleUpdated = async (change: Change, item: Item, share: Share) => {
-			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
-			const previousShareId = previousItem.jop_share_id;
+		const getPreviousShareId = (change: Change) => {
+			return this.models().change().unserializePreviousItem(change.previous_item)?.jop_share_id;
+		};
+
+		const handleUpdated = async (change: Change, item: Item, share: Share, nextShareId: Uuid) => {
+			const previousShareId = getPreviousShareId(change);
 			const shareId = share ? share.id : '';
 
-			if (previousShareId === shareId) return;
+			const changesShareId = previousShareId !== nextShareId;
+			if (previousShareId === shareId || !changesShareId) {
+				return;
+			}
 
 			perfTimer.push('handleUpdated');
 
@@ -342,6 +348,18 @@ export default class ShareModel extends BaseModel<Share> {
 				await this.withTransaction(async () => {
 					perfTimer.push(`Processing ${changes.length} changes`);
 
+					const itemToUpdates = new Map<Uuid, Change[]>();
+					for (const change of changes) {
+						if (change.type === ChangeType.Update) {
+							const updates = itemToUpdates.get(change.item_id);
+							if (updates) {
+								updates.push(change);
+							} else {
+								itemToUpdates.set(change.item_id, [change]);
+							}
+						}
+					}
+
 					for (const change of changes) {
 						const item = items.find(i => i.id === change.item_id);
 
@@ -355,7 +373,18 @@ export default class ShareModel extends BaseModel<Share> {
 							}
 
 							if (change.type === ChangeType.Update) {
-								await handleUpdated(change, item, itemShare);
+								const allUpdates = itemToUpdates.get(item.id);
+								const changeIndex = allUpdates.indexOf(change);
+								const nextChange = allUpdates[changeIndex + 1];
+
+								let nextShareId;
+								if (nextChange) {
+									nextShareId = getPreviousShareId(nextChange);
+								} else {
+									nextShareId = item.jop_share_id;
+								}
+
+								await handleUpdated(change, item, itemShare, nextShareId);
 							}
 						}
 
