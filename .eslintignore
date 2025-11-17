@@ -660,6 +660,7 @@ packages/app-mobile/components/ComboBox.js
 packages/app-mobile/components/DialogManager/PromptButton.js
 packages/app-mobile/components/DialogManager/PromptDialog.js
 packages/app-mobile/components/DialogManager/TextInputDialog.js
+packages/app-mobile/components/DialogManager/WebPromptDialog.js
 packages/app-mobile/components/DialogManager/hooks/useDialogControl.js
 packages/app-mobile/components/DialogManager/index.js
 packages/app-mobile/components/DialogManager/types.js

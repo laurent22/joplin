@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createContext, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { Platform, StyleSheet, useWindowDimensions } from 'react-native';
 import { Portal } from 'react-native-paper';
 import Modal from '../Modal';
 import shim from '@joplin/lib/shim';
@@ -10,6 +10,7 @@ import useDialogControl from './hooks/useDialogControl';
 import PromptDialog from './PromptDialog';
 import { themeStyle } from '../global-style';
 import TextInputDialog from './TextInputDialog';
+import WebPromptDialog from './WebPromptDialog';
 
 export type { DialogControl } from './types';
 export const DialogContext = createContext<DialogControl>(null);
@@ -70,8 +71,9 @@ const DialogManager: React.FC<Props> = props => {
 			themeId: props.themeId,
 		};
 		if (dialog.type === DialogType.Menu || dialog.type === DialogType.ButtonPrompt) {
+			const PromptDialogComponent = Platform.OS === 'web' ? WebPromptDialog : PromptDialog;
 			dialogComponents.push(
-				<PromptDialog
+				<PromptDialogComponent
 					dialog={dialog}
 					{...dialogProps}
 					key={dialog.key}
