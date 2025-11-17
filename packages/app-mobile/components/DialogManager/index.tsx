@@ -71,6 +71,7 @@ const DialogManager: React.FC<Props> = props => {
 			themeId: props.themeId,
 		};
 		if (dialog.type === DialogType.Menu || dialog.type === DialogType.ButtonPrompt) {
+			// Use a different component on web, to avoid the dialog opening under the parent dialog if the dialog is nested
 			const PromptDialogComponent = Platform.OS === 'web' ? WebPromptDialog : PromptDialog;
 			dialogComponents.push(
 				<PromptDialogComponent
