@@ -70,6 +70,7 @@ export interface DatabaseConfig {
 	asyncStackTraces?: boolean;
 	slowQueryLogEnabled?: boolean;
 	slowQueryLogMinDuration?: number;
+	maxConnections?: number;
 	autoMigration?: boolean;
 }
 

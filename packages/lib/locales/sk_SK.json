@@ -249,7 +249,7 @@
 		"Pridať telo"
 	],
 	"Add column": [
-		""
+		"Pridať stĺpec"
 	],
 	"Add new": [
 		"Pridať novú"
@@ -259,6 +259,9 @@
 	],
 	"Add recipient:": [
 		"Pridať príjemcu:"
+	],
+	"Add row": [
+		"Pridať riadok"
 	],
 	"Add tags:": [
 		"Pridať štítky:"
@@ -1032,6 +1035,9 @@
 	"Delete attachment \"%s\"?": [
 		"Vymazať prílohu \"%s\"?"
 	],
+	"Delete column": [
+		"Vymazať stĺpec"
+	],
 	"Delete expired sessions": [
 		"Vymazať relácie s uplynutou platnosťou"
 	],
@@ -1058,6 +1064,9 @@
 	],
 	"Delete profile \"%s\"": [
 		"Vymazať profil \"%s\""
+	],
+	"Delete row": [
+		"Vymazať riadok"
 	],
 	"Delete selected notes": [
 		"Vymazať vybrané poznámky"

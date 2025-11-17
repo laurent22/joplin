@@ -1,3 +1,4 @@
+import { _ } from '../../locale';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
 import { authenticateWithCode } from '../../SyncTargetJoplinServerSAML';
@@ -6,7 +7,15 @@ import SsoScreenShared from './SsoScreenShared';
 
 export default class SamlShared implements SsoScreenShared {
 	public openLoginPage() {
-		shim.openUrl(`${prefixWithHttps(Setting.value('sync.11.path'))}/login/sso-saml-app`);
+		const samlUrl = Setting.value('sync.11.path');
+		if (!samlUrl) {
+			const message = _('No URL for SAML authentication set.');
+			void shim.showErrorDialog(message);
+
+			throw new Error(message);
+		}
+
+		shim.openUrl(`${prefixWithHttps(samlUrl)}/login/sso-saml-app`);
 		return Promise.resolve();
 	}
 

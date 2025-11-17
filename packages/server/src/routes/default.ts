@@ -8,6 +8,7 @@ import { AppContext, RouteType } from '../utils/types';
 import { localFileFromUrl } from '../utils/joplinUtils';
 import { homeUrl, loginUrl } from '../utils/urlUtils';
 import * as mime from '@joplin/lib/mime-utils';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 
@@ -33,7 +34,7 @@ async function findLocalFile(path: string): Promise<string> {
 	const appFilePath = await localFileFromUrl(path);
 	if (appFilePath) return appFilePath;
 
-	if (path in pathToFileMap) return pathToFileMap[path];
+	if (hasOwnProperty(pathToFileMap, path)) return pathToFileMap[path];
 	// For now a bit of a hack to load FontAwesome fonts.
 	if (path.indexOf('css/fontawesome/webfonts/fa-') === 0) return `node_modules/@fortawesome/fontawesome-free/${path.substr(16)}`;
 

@@ -33,6 +33,7 @@ describe('db.migrations', () => {
 			'20220121172409_email_recipient_default',
 			'20240413141308_changes_optimization',
 			'20250219183745_changes_optimization',
+			'20251107113000_fix_delta_performance',
 		];
 
 		let startProcessing = false;
