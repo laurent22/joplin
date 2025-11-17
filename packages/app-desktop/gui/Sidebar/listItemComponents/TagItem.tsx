@@ -6,12 +6,12 @@ import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import NoteCount from './NoteCount';
 import EmptyExpandLink from './EmptyExpandLink';
-import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
+import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 import { ItemClickEvent } from '../hooks/useOnItemClick';
 
 interface Props {
 	anchorRef: ListItemRef;
-	selected: boolean;
+	selectionState: ItemSelectionState;
 	tag: TagsWithNoteCountEntity;
 	label: string;
 	onTagDrop: React.DragEventHandler<HTMLElement>;
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const TagItem = (props: Props) => {
-	const { tag, selected } = props;
+	const { tag, selectionState } = props;
 
 	let noteCount = null;
 	if (Setting.value('showNoteCounts')) {
@@ -38,23 +38,22 @@ const TagItem = (props: Props) => {
 	return (
 		<ListItemWrapper
 			containerRef={props.anchorRef}
-			selected={selected}
+			selectionState={selectionState}
 			depth={1}
-			className={`list-item-container ${selected ? 'selected' : ''}`}
+			className={`list-item-container ${selectionState.selected ? 'selected' : ''}`}
 			highlightOnHover={true}
 			onDrop={props.onTagDrop}
 			onContextMenu={props.onContextMenu}
 			data-id={tag.id}
 			data-tag-id={tag.id}
 			data-type={ModelType.Tag}
-			aria-selected={selected}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
 		>
 			<EmptyExpandLink/>
 			<StyledListItemAnchor
 				className="list-item"
-				selected={selected}
+				selected={selectionState.selected}
 				data-id={tag.id}
 				data-type={BaseModel.TYPE_TAG}
 				onClick={onClickHandler}

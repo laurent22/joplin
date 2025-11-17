@@ -696,7 +696,7 @@ function changeSelectedTagOrFolder(
 	const lastParentType = draft.notesParentType;
 	draft.notesParentType = isTag ? 'Tag' : 'Folder';
 	draft[propertyNamePlural] = extendSelection ? unique([...draft[propertyNamePlural], ...itemIds]) : itemIds;
-	draft[propertyNameSingular] = draft[propertyNamePlural][0];
+	draft[propertyNameSingular] = itemIds[itemIds.length - 1];
 
 	const hasItem = !!draft[propertyNameSingular];
 	if (!hasItem) {
@@ -782,8 +782,10 @@ const getContextFromHistory = (ctx: any) => {
 	result.notesParentType = ctx.notesParentType;
 	if (result.notesParentType === 'Folder') {
 		result.selectedFolderId = ctx.selectedFolderId;
+		result.selectedFolderIds = [result.selectedFolderId];
 	} else if (result.notesParentType === 'Tag') {
 		result.selectedTagId = ctx.selectedTagId;
+		result.selectedTagIds = [result.selectedTagIds];
 	} else if (result.notesParentType === 'Search') {
 		result.selectedSearchId = ctx.selectedSearchId;
 		result.searches = ctx.searches;
@@ -1097,7 +1099,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 		case 'FOLDER_SELECT_REMOVE':
 			draft.selectedFolderIds = draft.selectedFolderIds.filter(id => id !== action.id);
-			draft.selectedFolderId = draft.selectedFolderIds[0];
+			if (!draft.selectedFolderIds.includes(draft.selectedFolderId)) {
+				draft.selectedFolderId = draft.selectedFolderIds[draft.selectedFolderIds.length - 1];
+			}
 			draft.selectedNoteIds = [];
 			break;
 
@@ -1326,7 +1330,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'TAG_SELECT_REMOVE':
 			draft.selectedTagIds = draft.selectedTagIds.filter(id => id !== action.id);
-			draft.selectedTagId = draft.selectedTagIds[0];
+			if (!draft.selectedTagIds.includes(draft.selectedTagId)) {
+				draft.selectedTagId = draft.selectedTagIds[draft.selectedTagIds.length - 1];
+			}
 			draft.selectedNoteIds = [];
 			break;
 

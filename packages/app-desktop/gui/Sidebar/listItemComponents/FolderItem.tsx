@@ -10,7 +10,7 @@ import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import NoteCount from './NoteCount';
-import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
+import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 import { useId } from 'react';
 import { ItemClickEvent } from '../hooks/useOnItemClick';
 
@@ -46,14 +46,14 @@ interface FolderItemProps {
 	folderItem_click: (event: ItemClickEvent)=> void;
 	onFolderToggleClick_: ItemClickListener;
 	shareId: string;
-	selected: boolean;
+	selectionState: ItemSelectionState;
 
 	index: number;
 	itemCount: number;
 }
 
 function FolderItem(props: FolderItemProps) {
-	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
+	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selectionState, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
 	const shareTitle = _('Shared');
 	const shareIcon = shareId && !parentId ? <StyledShareIcon aria-label={shareTitle} title={shareTitle} className="fas fa-share-alt"/> : null;
@@ -74,11 +74,11 @@ function FolderItem(props: FolderItemProps) {
 			containerRef={props.anchorRef}
 			// Folders are contained within the "Notebooks" section (which has depth 0):
 			depth={depth + 1}
-			selected={selected}
+			selectionState={selectionState}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
 			expanded={hasChildren ? props.isExpanded : undefined}
-			className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`}
+			className={`list-item-container list-item-depth-${depth} ${selectionState.selected ? 'selected' : ''}`}
 			highlightOnHover={true}
 			onDragStart={onFolderDragStart_}
 			onDragOver={onFolderDragOver_}
@@ -96,7 +96,7 @@ function FolderItem(props: FolderItemProps) {
 				className="list-item"
 				id={titleId}
 				isConflictFolder={folderId === Folder.conflictFolderId()}
-				selected={selected}
+				selected={selectionState.selected}
 				shareId={shareId}
 				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}

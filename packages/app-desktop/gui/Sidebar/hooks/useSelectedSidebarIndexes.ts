@@ -11,13 +11,15 @@ interface Props {
 	listItems: ListItem[];
 
 	notesParentType: string;
+	selectedTagId: string;
 	selectedTagIds: string[];
+	selectedFolderId: string;
 	selectedFolderIds: string[];
 	selectedSmartFilterId: string;
 }
 
-const useSelectedSidebarIndex = (props: Props) => {
-	const isIndexSelected = useCallback((index: number) => {
+const useSelectedSidebarIndexes = (props: Props) => {
+	const isIndexInSelection = useCallback((index: number) => {
 		const listItem = props.listItems[index];
 
 		let selected = false;
@@ -40,17 +42,38 @@ const useSelectedSidebarIndex = (props: Props) => {
 		return selected;
 	}, [props.listItems, props.selectedFolderIds, props.selectedTagIds, props.selectedSmartFilterId, props.notesParentType]);
 
+	const isIndexPrimarySelected = useCallback((index: number) => {
+		const listItem = props.listItems[index];
+
+		if (listItem.kind === ListItemType.Folder) {
+			return isFolderSelected(listItem.folder, {
+				selectedFolderIds: [props.selectedFolderId],
+				notesParentType: props.notesParentType,
+			});
+		} else if (listItem.kind === ListItemType.Tag) {
+			return isTagSelected(listItem.tag, { selectedTagIds: [props.selectedTagId], notesParentType: props.notesParentType });
+		} else {
+			return isIndexInSelection(index);
+		}
+	}, [props.listItems, isIndexInSelection, props.selectedFolderId, props.selectedTagId, props.notesParentType]);
+
 	const appStateSelectedIndexes = useMemo(() => {
 		const selectedIndexes = [];
 		for (let i = 0; i < props.listItems.length; i++) {
-			if (isIndexSelected(i)) {
+			if (isIndexInSelection(i)) {
 				selectedIndexes.push(i);
 			}
 		}
 		return selectedIndexes;
-	}, [props.listItems, isIndexSelected]);
+	}, [props.listItems, isIndexInSelection]);
 
-	const appStateSelectedIndex = appStateSelectedIndexes[0];
+	const appStateSelectedIndex = useMemo(() => {
+		return props.listItems.findIndex((_item, index) => isIndexPrimarySelected(index));
+	}, [props.listItems, isIndexPrimarySelected]);
+
+	// The main index of all selected indexes. This is where the focus will go.
+	// Ignored if not included in appStateSelectedIndexes.
+	const [primarySelectedIndex, setPrimarySelectedIndex] = useState(0);
 
 	// Not all list items correspond with selectable Joplin folders/tags, but we want to
 	// be able to select them anyway. This is handled with selectedIndexOverride.
@@ -60,11 +83,8 @@ const useSelectedSidebarIndex = (props: Props) => {
 	const [selectedIndexOverride, setSelectedIndexOverride] = useState(-1);
 	useEffect(() => {
 		setSelectedIndexOverride(-1);
+		setPrimarySelectedIndex(appStateSelectedIndex);
 	}, [appStateSelectedIndex]);
-
-	// The main index of all selected indexes. This is where the focus will go.
-	// Ignored if not included in appStateSelectedIndexes.
-	const [primarySelectedIndex, setPrimarySelectedIndex] = useState(0);
 
 	const updateSelectedIndex = useCallback((newIndex: number, options: UpdateSelectedIndexOptions) => {
 		if (newIndex < 0) {
@@ -109,4 +129,4 @@ const useSelectedSidebarIndex = (props: Props) => {
 	};
 };
 
-export default useSelectedSidebarIndex;
+export default useSelectedSidebarIndexes;

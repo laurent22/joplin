@@ -9,7 +9,7 @@ import { useMemo, useRef, useState } from 'react';
 import ItemList from '../ItemList';
 import useElementHeight from '../hooks/useElementHeight';
 import useSidebarListData from './hooks/useSidebarListData';
-import useSelectedSidebarIndex from './hooks/useSelectedSidebarIndex';
+import useSelectedSidebarIndexes from './hooks/useSelectedSidebarIndexes';
 import useOnSidebarKeyDownHandler from './hooks/useOnSidebarKeyDownHandler';
 import useFocusHandler from './hooks/useFocusHandler';
 import useOnRenderItem from './hooks/useOnRenderItem';
@@ -27,7 +27,9 @@ interface Props {
 	folders: FolderEntity[];
 	notesParentType: string;
 	selectedTagIds: string[];
+	selectedTagId: string;
 	selectedFolderIds: string[];
+	selectedFolderId: string;
 	selectedSmartFilterId: string;
 	collapsedFolderIds: string[];
 	folderHeaderIsExpanded: boolean;
@@ -37,7 +39,7 @@ interface Props {
 
 const FolderAndTagList: React.FC<Props> = props => {
 	const listItems = useSidebarListData(props);
-	const { selectedIndex, selectedIndexes, updateSelectedIndex } = useSelectedSidebarIndex({
+	const { selectedIndex, selectedIndexes, updateSelectedIndex } = useSelectedSidebarIndexes({
 		...props,
 		listItems: listItems,
 	});
@@ -111,6 +113,8 @@ const mapStateToProps = (state: AppState) => {
 		notesParentType: mainWindowState.notesParentType,
 		selectedFolderIds: mainWindowState.selectedFolderIds,
 		selectedTagIds: mainWindowState.selectedTagIds,
+		selectedFolderId: mainWindowState.selectedFolderId,
+		selectedTagId: mainWindowState.selectedTagId,
 		collapsedFolderIds: state.collapsedFolderIds,
 		selectedSmartFilterId: mainWindowState.selectedSmartFilterId,
 		plugins: state.pluginService.plugins,

@@ -405,7 +405,8 @@ describe('reducer', () => {
 
 		expect(getIds(state.folders)).toEqual(getIds(expected.items));
 		expect(state.selectedFolderIds).toEqual(expected.selectedIds);
-		expect(state.selectedFolderId).toBe(expected.selectedIds[0]);
+		// Should match the last-added item
+		expect(state.selectedFolderId).toBe(expected.selectedIds[expected.selectedIds.length - 1]);
 	});
 
 	it.each([false, true])('should select multiple tags (extend:%j)', async (extendSelection) => {
@@ -422,7 +423,7 @@ describe('reducer', () => {
 
 		expect(getIds(state.tags)).toEqual(getIds(expected.items));
 		expect(state.selectedTagIds).toEqual(expected.selectedIds);
-		expect(state.selectedTagId).toBe(expected.selectedIds[0]);
+		expect(state.selectedTagId).toBe(expected.selectedIds[expected.selectedIds.length - 1]);
 	});
 
 	it('should not clear the selected note IDs when adding folders to the selection', async () => {
@@ -461,10 +462,11 @@ describe('reducer', () => {
 
 		state = reducer(state, { type: 'FOLDER_SELECT_ADD', ids: [folders[1].id, folders[2].id] });
 		expect(state.selectedFolderIds).toEqual([folders[0].id, folders[1].id, folders[2].id]);
+		expect(state.selectedFolderId).toBe(folders[2].id);
 
 		state = reducer(state, { type: 'FOLDER_SELECT_REMOVE', id: folders[0].id });
 		expect(state.selectedFolderIds).toEqual([folders[1].id, folders[2].id]);
-		expect(state.selectedFolderId).toBe(folders[1].id);
+		expect(state.selectedFolderId).toBe(folders[2].id);
 	});
 
 	it('should select all notes', (async () => {

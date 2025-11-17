@@ -27,7 +27,7 @@ import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../listItemComponents/HeaderItem';
 import AllNotesItem from '../listItemComponents/AllNotesItem';
-import ListItemWrapper from '../listItemComponents/ListItemWrapper';
+import ListItemWrapper, { ItemSelectionState } from '../listItemComponents/ListItemWrapper';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
 import useOnItemClick from './useOnItemClick';
@@ -357,6 +357,12 @@ const useOnRenderItem = (props: Props) => {
 	return useCallback((item: ListItem, index: number) => {
 		const primarySelected = props.selectedIndex === index;
 		const selected = primarySelected || props.selectedIndexes.includes(index);
+		const selectionState: ItemSelectionState = {
+			primarySelected,
+			selected,
+			multipleItemsSelected: props.selectedIndexes.length > 1,
+		};
+
 		const focusInList = document.hasFocus() && props.containerRef.current?.contains(document.activeElement);
 		const anchorRef = (focusInList && primarySelected) ? focusListItem : noFocusListItem;
 
@@ -365,7 +371,7 @@ const useOnRenderItem = (props: Props) => {
 			return <TagItem
 				key={item.key}
 				anchorRef={anchorRef}
-				selected={selected}
+				selectionState={selectionState}
 				onClick={onItemClick}
 				onTagDrop={onTagDrop_}
 				onContextMenu={onItemContextMenu}
@@ -396,7 +402,7 @@ const useOnRenderItem = (props: Props) => {
 			return <FolderItem
 				key={item.key}
 				anchorRef={anchorRef}
-				selected={selected}
+				selectionState={selectionState}
 				folderId={folder.id}
 				folderTitle={item.label}
 				folderIcon={Folder.unserializeIcon(folder.icon)}
@@ -421,7 +427,7 @@ const useOnRenderItem = (props: Props) => {
 				key={item.id}
 				anchorRef={anchorRef}
 				item={item}
-				isSelected={selected}
+				selectionState={selectionState}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
 				index={index}
 				itemCount={itemCount}
@@ -430,7 +436,7 @@ const useOnRenderItem = (props: Props) => {
 			return <AllNotesItem
 				key={item.key}
 				anchorRef={anchorRef}
-				selected={selected}
+				selectionState={selectionState}
 				item={item}
 				index={index}
 				itemCount={itemCount}
@@ -441,7 +447,7 @@ const useOnRenderItem = (props: Props) => {
 					key={item.key}
 					containerRef={anchorRef}
 					depth={1}
-					selected={selected}
+					selectionState={selectionState}
 					itemIndex={index}
 					itemCount={itemCount}
 					highlightOnHover={false}
