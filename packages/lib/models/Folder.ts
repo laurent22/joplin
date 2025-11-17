@@ -18,6 +18,7 @@ import { getTrashFolder } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { getCollator } from './utils/getCollator';
+import Setting from './Setting';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -918,7 +919,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static defaultFolder() {
-		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
+		return this.modelSelectOne('SELECT * FROM folders WHERE deleted_time = 0 ORDER BY created_time DESC LIMIT 1');
 	}
 
 	public static async canNestUnder(folderId: string, targetFolderId: string) {
@@ -1074,6 +1075,20 @@ export default class Folder extends BaseItem {
 	public static atLeastOneRealFolderExists(folders: FolderEntity[]) {
 		// returns true if at least one folder exists other than trash folder and deleted folders
 		return this.getRealFolders(folders).length > 0;
+	}
+
+	public static async getValidActiveFolder() {
+		const folderId = Setting.value('activeFolderId');
+		if (!folderId) return null;
+
+		const folder = await Folder.load(folderId);
+		if (!folder || !!folder.deleted_time) {
+			const defaultFolder = await Folder.defaultFolder();
+			if (!defaultFolder) return null;
+			return defaultFolder.id;
+		}
+
+		return folderId;
 	}
 
 }

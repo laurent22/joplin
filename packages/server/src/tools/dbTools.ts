@@ -16,6 +16,7 @@ export interface DropDbOptions {
 
 const getPostgresToolPath = async (name: string) => {
 	const candidates = [
+		'/opt/homebrew/opt/postgresql@16/bin',
 		'/usr/local/opt/postgresql@16/bin',
 	];
 

@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Christoph Eder\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -302,7 +304,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "Eine kurze Beschreibung des Bildes:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1970
 msgid ""
@@ -421,7 +423,7 @@ msgstr "Text hinzufügen"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:24
 msgid "Add column"
-msgstr ""
+msgstr "Spalte hinzufügen"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -438,9 +440,8 @@ msgid "Add recipient:"
 msgstr "Füge Empfänger hinzu:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
-#, fuzzy
 msgid "Add row"
-msgstr "Neu hinzufügen"
+msgstr "Zeile hinzufügen"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -586,6 +587,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Beim Senden der Antwort ist ein Fehler aufgetreten. Dies kann passieren, "
+"wenn die App offline ist oder keine Verbindung zum Server herstellen kann.\n"
+"Fehler: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1216,9 +1220,8 @@ msgstr "Alle Notizbücher einklappen"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Collapse title"
-msgstr "Einklappen %s"
+msgstr "Titel einklappen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1231,9 +1234,9 @@ msgstr "Anstehende Alarme"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Kommagetrennte Liste von Pfaden zu Verzeichnissen, aus denen die Zertifikate "
 "geladen werden, oder Pfad zu einzelnen Zertifikatsdateien. Zum Beispiel: /my/"
@@ -1481,7 +1484,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Es konnte keine Verbindung zum Joplin-Server hergestellt werden. Bitte "
+"Es konnte keine Verbindung zu Joplin Server hergestellt werden. Bitte "
 "überprüfe die Synchronisationsoptionen im Konfigurationsmenü. Vollständiger "
 "Fehler:\n"
 "\n"
@@ -1761,9 +1764,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Anhang „%s“ löschen?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:34
-#, fuzzy
 msgid "Delete column"
-msgstr "Zeile löschen"
+msgstr "Spalte löschen"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1805,9 +1807,8 @@ msgid "Delete profile \"%s\""
 msgstr "Lösche Profil „%s“"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:29
-#, fuzzy
 msgid "Delete row"
-msgstr "Notiz löschen"
+msgstr "Zeile löschen"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:486
 msgid "Delete selected notes"
@@ -2042,7 +2043,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Findest du die Joplin-Webanwendung nützlich?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1980
 msgid "Document scanner: Title template"
@@ -2354,11 +2355,11 @@ msgstr "Fountain-Syntaxunterstützung aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:586
 msgid "Enable handwritten transcription"
-msgstr "Handschriftumwandlung aktivieren"
+msgstr "Handschrifttranskription aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:765
 msgid "Enable HTML-to-Markdown conversion banner"
-msgstr "Umwandlungsbanner für HTML zu Markdown aktivieren"
+msgstr "Banner für Umwandlung von HTML zu Markdown aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1087
 msgid "Enable Linkify"
@@ -2607,9 +2608,8 @@ msgstr "Alle Notizbücher ausklappen"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Expand title"
-msgstr "Ausgeklappt"
+msgstr "Titel ausklappen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2723,7 +2723,7 @@ msgstr "Funktionsargumente"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3415,9 +3415,8 @@ msgid "Joplin Server"
 msgstr "Joplin Server"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:67
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "Joplin Server-URL"
+msgstr "Joplin Server (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3450,6 +3449,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin unterstützt das Speichern des Standortes, an dem Notizen gespeichert "
+"oder erstellt werden. Möchtest du das aktivieren? Dies kann jederzeit in den "
+"Einstellungen geändert werden."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3470,7 +3472,7 @@ msgid ""
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
 "Joplins eigener Synchronisationsdienst. Ermöglicht auch den Zugriff auf "
-"Joplin-spezifische Funktionen wie das Veröffentlichen von Notizen oder die "
+"joplinspezifische Funktionen wie das Veröffentlichen von Notizen oder die "
 "Zusammenarbeit an Notizbüchern mit anderen."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1698
@@ -3503,7 +3505,7 @@ msgstr "Hauptschlüssel, die aktualisiert werden müssen"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Beschriftung"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1443
 msgid "Landscape"
@@ -3749,9 +3751,8 @@ msgid "Markdown editor"
 msgstr "Markdown-Editor"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1515
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown-Editor: Bilder darstellen"
+msgstr "Markdown-Editor: Aktive Zeile hervorheben"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1504
 msgid "Markdown editor: Render images"
@@ -4152,7 +4153,7 @@ msgstr "Nicht jetzt"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Nicht nützlich"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4229,9 +4230,8 @@ msgid "Note list style"
 msgstr "Stil der Notiz-Liste"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Von %s bereitgestellte Inhalte"
+msgstr "Notiz nicht veröffentlicht: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4502,7 +4502,7 @@ msgstr "Geordnete Liste"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:130
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4905,9 +4905,8 @@ msgid "Publish Note"
 msgstr "Notiz veröffentlichen"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "%d Notiz in das Notizbuch „%s“ verschieben?"
+msgstr "Notiz \"%s\" (im Notizbuch \"%s\") veröffentlichen?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4928,14 +4927,13 @@ msgid "Publish/unpublish"
 msgstr "Veröffentlichen / nicht veröffentlichen"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Notizen veröffentlichen"
+msgstr "Veröffentlicht unter URL: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Veröffentlicht eine Notiz auf Joplin Server oder Joplin Cloud"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -5002,9 +5000,8 @@ msgid "Recipients:"
 msgstr "Empfänger:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "hervorgehobener Text"
+msgstr "Text erkennen:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5358,9 +5355,8 @@ msgid "Save geo-location with notes"
 msgstr "Geografischen Standort zusammen mit Notizen speichern"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:555
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Geografischen Standort zusammen mit Notizen speichern"
+msgstr "Geografischen Standort speichern?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5468,7 +5464,7 @@ msgstr "Notizbuch auswählen"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:131
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Wähle eines der anderen unterstützten Synchronisationsziele."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5528,7 +5524,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen.tsx:534
 #: packages/app-desktop/gui/MainScreen.tsx:581
 msgid "Set the password"
-msgstr "Gib das Passwort ein"
+msgstr "Passwort festlegen"
 
 #: packages/app-cli/app/command-set.ts:22
 msgid ""
@@ -5558,12 +5554,12 @@ msgid ""
 "Share a copy of all notes in a file format that can be imported by Joplin on "
 "a computer."
 msgstr ""
-"Teile eine Kopie aller Notizen in einem Dateiformat, welches von Joplin auf "
-"einem anderen Computer importiert werden kann."
+"Gib eine Kopie aller Notizen in einem Dateiformat frei, welches von Joplin "
+"auf einem Computer importiert werden kann."
 
 #: packages/lib/utils/joplinCloud/index.ts:134
 msgid "Share a notebook with others"
-msgstr "Teile ein Notizbuch mit anderen"
+msgstr "Gib ein Notizbuch für andere frei"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
@@ -5600,7 +5596,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
-msgstr "Notizbuch teilen..."
+msgstr "Notizbuch freigeben..."
 
 #: packages/app-cli/app/command-help.ts:45
 msgid "Shortcuts are not available in CLI mode."
@@ -6008,7 +6004,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:111
 msgid "Sync"
-msgstr ""
+msgstr "Synchronisieren"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6133,9 +6129,8 @@ msgid "Take photo"
 msgstr "Foto aufnehmen"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Bild zeichnen"
+msgstr "An Umfrage teilnehmen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6167,6 +6162,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Danke für das Feedback!\n"
+"Hast du Zeit, eine kurze Umfrage auszufüllen?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6594,7 +6591,7 @@ msgid ""
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
 "Diese Funktion ist per Voreinstellung deaktiviert. Du musst sie manuell "
-"aktivieren, indem du die Option ‚Handschriftumwandlung aktivieren‘ "
+"aktivieren, indem du die Option ‚Handschrifttranskription aktivieren‘ "
 "einschaltest."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
@@ -6981,9 +6978,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "Protokolldaten können nicht geteilt werden. Grund: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1101
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "Protokolldaten können nicht geteilt werden. Grund: %s"
+msgstr "Notizdaten können nicht geteilt werden. Grund: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7039,15 +7035,15 @@ msgstr "Ungeordnete Liste"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
 msgid "Unpublish"
-msgstr "Nicht veröffentlichen"
+msgstr "Nicht mehr veröffentlichen"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
 msgid "Unpublish \"%s\""
-msgstr "„%s“ nicht veröffentlichen"
+msgstr "„%s“ nicht mehr veröffentlichen"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:116
 msgid "Unpublish note"
-msgstr "Notiz nicht veröffentlichen"
+msgstr "Notiz nicht mehr veröffentlichen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:389
 msgid "Unshare"
@@ -7247,7 +7243,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Nützlich"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7428,6 +7424,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Wenn aktiviert, werden die Bilder in der Notiz mit einem qualitativ "
+"höherwertigen serverseitigen Transkriptionsdienst umgewandelt. Erfordert die "
+"Synchronisation mit einer Kopie der Desktop-App."
 
 #: packages/lib/models/settings/builtInMetadata.ts:576
 msgid ""
@@ -7555,8 +7554,8 @@ msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Dein Passwort ist nötig um einige deiner Daten zu entschlüsseln. Tippe „:"
-"e2ee decrypt“ um es zu setzen."
+"Dein Passwort ist nötig um einige deiner Daten zu entschlüsseln. Tippe "
+"„:e2ee decrypt“ um es zu setzen."
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"
@@ -8281,8 +8280,8 @@ msgstr "Herauszoomen"
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit "
-#~ "dem Dateisystem synchronisiert werden soll, setze den Wert zu `sync.2."
-#~ "path`, um den Zielpfad zu spezifizieren."
+#~ "dem Dateisystem synchronisiert werden soll, setze den Wert zu "
+#~ "`sync.2.path`, um den Zielpfad zu spezifizieren."
 
 #~ msgid "To-do title:"
 #~ msgstr "Aufgabentitel:"

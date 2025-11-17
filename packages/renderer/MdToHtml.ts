@@ -53,6 +53,7 @@ const rules: RendererRules = {
 	highlight_keywords: require('./MdToHtml/rules/highlight_keywords').default,
 	code_inline: require('./MdToHtml/rules/code_inline').default,
 	fountain: require('./MdToHtml/rules/fountain').default,
+	abc: require('./MdToHtml/rules/abc').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
 	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
@@ -144,6 +145,7 @@ interface PluginContext {
 	pluginWasUsed: {
 		mermaid: boolean;
 		katex: boolean;
+		abc: boolean;
 	};
 }
 
@@ -518,6 +520,7 @@ export default class MdToHtml implements MarkupRenderer {
 			pluginWasUsed: {
 				mermaid: false,
 				katex: false,
+				abc: false,
 			},
 		};
 
@@ -654,6 +657,7 @@ export default class MdToHtml implements MarkupRenderer {
 		output.pluginAssets = output.pluginAssets.filter(pa => {
 			if (!context.pluginWasUsed.mermaid && pa.source === 'mermaid') return false;
 			if (!context.pluginWasUsed.katex && pa.source === 'katex') return false;
+			if (!context.pluginWasUsed.abc && pa.source === 'abc') return false;
 			return true;
 		});
 

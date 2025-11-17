@@ -73,6 +73,7 @@ const useSettingButtonInfo = (setSettingsVisible: SetSettingsVisible) => {
 		name: 'showToolbarSettings',
 		tooltip: _('Settings'),
 		iconName: 'material cogs',
+		visible: true,
 		enabled: true,
 		onClick: () => setSettingsVisible(true),
 		title: '',

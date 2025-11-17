@@ -104,19 +104,9 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
     <meta charset="UTF-8">
     <title>title</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -138,25 +128,41 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 </html>"
 `;
 
+exports[`InteropService_Importer_OneNote should correctly convert imported notes to Markdown: Test Todo: As Markdown 1`] = `
+" Test Todo : cases à cocher lien vers doc sur partage 
+
+Test Todo : cases à cocher lien vers doc sur partage
+
+jeudi 23 octobre 2025
+
+09:24
+
+## Todo HBA
+
+-  [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
+-  [ ] Transmettre aux dev Joplin (case non cochée)
+    -  [x] Exporter le carnet en \\*.packageone (case cochée)
+    -  [ ] Exporter des page en \\*.one (case non cochée)
+
+&nbsp;
+
+## Todo Team appli
+
+-  [ ] Rédiger compte-rendu réunion de service
+-  [ ] Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS  
+    la doc sur le partage : [\\\\\\\\mondomaine.local\\\\partage\\\\DSI\\\\Projets Techniques 2025\\\\Remplacement Office\\\\JOPLIN_Alternatives_OneNote\\\\formation](file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation)
+    - [x] Documenter configuration synchro JBS saml pour un utilisateur (case cochée)"
+`;
+
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants 1`] = `
 "<!DOCTYPE HTML>
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A page can have any width it wants?</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -186,19 +192,9 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     <meta charset="UTF-8">
     <title>A page with a lot of svgs</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -226,19 +222,9 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     <meta charset="UTF-8">
     <title>A page with text and drawing above it</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -272,19 +258,9 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     <meta charset="UTF-8">
     <title>A simple filename</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -312,19 +288,9 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     <meta charset="UTF-8">
     <title>Page with more than one font size</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -462,19 +428,9 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     <meta charset="UTF-8">
     <title>text</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -814,19 +770,9 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
     <meta charset="UTF-8">
     <title>Action research - Wikipedia</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     .list-0 li { padding-left: 10px; }
     .list-0 li::marker { content: '•'; font-family: Georgia; }
@@ -887,19 +833,9 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
     <meta charset="UTF-8">
     <title>Page title</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1031,19 +967,9 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tip
     <meta charset="UTF-8">
     <title>Tips from a Pro: Using Trees for Dramatic Landscape Photography</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1072,19 +998,9 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
     <meta charset="UTF-8">
     <title>wikipedia link</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1113,19 +1029,9 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
     <meta charset="UTF-8">
     <title>风景  (Web view)</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1154,19 +1060,9 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
     <meta charset="UTF-8">
     <title>风景</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1194,19 +1090,9 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
     <meta charset="UTF-8">
     <title>My title</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1337,19 +1223,9 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
     <meta charset="UTF-8">
     <title>Is Mexico safe for shooting Street Photography?</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1476,27 +1352,17 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
     <meta charset="UTF-8">
     <title>Test Todo : cases à cocher lien vers doc sur partage</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
 
-    .icon-0 > svg, .icon-0 > img { fill: #4673b7; height: 20px; left: -25px; width: 20px; }
-    .icon-1 > svg, .icon-1 > img { fill: #4673b7; height: 20px; left: -25px; width: 20px; }
-    .icon-2 > svg, .icon-2 > img { fill: #4673b7; height: 20px; left: -25px; width: 20px; }
-    .icon-3 > svg, .icon-3 > img { fill: #4673b7; height: 20px; left: -25px; width: 20px; }
-    .icon-4 > svg, .icon-4 > img { fill: #4673b7; height: 20px; left: -25px; width: 20px; }
-    .icon-5 > svg, .icon-5 > img { fill: #4673b7; height: 20px; left: -25px; width: 20px; }
-    .icon-6 > svg, .icon-6 > img { fill: #4673b7; height: 20px; left: -25px; width: 20px; }
+
+    .icon-0 > svg, .icon-0 > img { fill: #4673b7; }
+    .icon-1 > svg, .icon-1 > img { fill: #4673b7; }
+    .icon-2 > svg, .icon-2 > img { fill: #4673b7; }
+    .icon-3 > svg, .icon-3 > img { fill: #4673b7; }
+    .icon-4 > svg, .icon-4 > img { fill: #4673b7; }
+    .icon-5 > svg, .icon-5 > img { fill: #4673b7; }
+    .icon-6 > svg, .icon-6 > img { fill: #4673b7; }
     
     </style>
 </head>
@@ -1506,23 +1372,23 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 </div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">jeudi 23 octobre 2025</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">09:24</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt; line-height: 22px;">Todo HBA</h2></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="note-tag-icon icon-0"><img alt="Checked" src=":/id-here">
-</span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="note-tag-icon icon-1"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Transmettre aux dev Joplin (case non cochée)</p></div><div class="outline-element" style="margin-left: 36px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="note-tag-icon icon-2"><img alt="Checked" src=":/id-here">
-</span>Exporter le carnet en *.packageone (case cochée)</p></div>
-<div class="outline-element" style="margin-left: 36px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="note-tag-icon icon-3"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Exporter des page en *.one (case non cochée)</p></div>
-
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
+</span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+</span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
+</span>Exporter le carnet en *.packageone (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+</span>Exporter des page en *.one (case non cochée)</span></li>
+</ul></li>
+</ul><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 <div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt; line-height: 22px;">Todo Team appli</h2></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="note-tag-icon icon-4"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Rédiger compte-rendu réunion de service</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="note-tag-icon icon-5"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </p></div><div class="outline-element" style="margin-left: 36px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="note-tag-icon icon-6"><img alt="Checked" src=":/id-here">
-</span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</p></div>
-
-</div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+</span>Rédiger compte-rendu réunion de service</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+</span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
+</span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</span></li>
+</ul></li>
+</ul></div>
 
 <script>
     if (window.parent !== null) {
@@ -1539,19 +1405,9 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
     <meta charset="UTF-8">
     <title>Marketing Funnel &amp; Training</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>
@@ -1586,19 +1442,9 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
     <meta charset="UTF-8">
     <title>Decrease support costs</title>
     <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
     
-    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+/* (For testing: Removed default CSS) */
+
 
     
     </style>

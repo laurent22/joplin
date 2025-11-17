@@ -3,6 +3,7 @@ import { FolderEntity } from '../services/database/types';
 import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
+import Setting from './Setting';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -438,6 +439,42 @@ describe('models/Folder', () => {
 		await Folder.delete(f1.id, { toTrash: true });
 		folders = await Folder.all({ includeTrash: true });
 		expect(Folder.atLeastOneRealFolderExists(folders)).toBe(false);
+	});
+
+	it('should get active folder when activeFolderId is valid', async () => {
+		const activeFolder = await Folder.save({ title: 'folder' });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBe(activeFolder.id);
+	});
+
+	it('should get default folder when activeFolderId is trashed', async () => {
+		const defaultFolder = await Folder.save({ title: 'default' });
+		const activeFolder = await Folder.save({ title: 'folder' });
+		await Folder.delete(activeFolder.id, { toTrash: true });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBe(defaultFolder.id);
+	});
+
+	it('should get no folder when activeFolderId is undefined', async () => {
+		Setting.setValue('activeFolderId', undefined);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
+	});
+
+	it('should get no folder when activeFolderId is trashed and there are no other not trashed folders', async () => {
+		const activeFolder = await Folder.save({ title: 'folder' });
+		const otherFolder = await Folder.save({ title: 'other' });
+		await Folder.delete(activeFolder.id, { toTrash: true });
+		await Folder.delete(otherFolder.id, { toTrash: true });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
 	});
 
 });
