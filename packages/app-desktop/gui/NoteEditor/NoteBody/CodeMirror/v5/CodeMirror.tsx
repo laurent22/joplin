@@ -183,6 +183,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						textCopy: () => {
 							editorCopyText();
 						},
+						'editor.copy': ()=>{
+							editorCopyText();
+						},
 						textCut: () => {
 							editorCutText();
 						},
