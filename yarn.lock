@@ -9467,15 +9467,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:0.2.3":
-  version: 0.2.3
-  resolution: "@fortawesome/react-fontawesome@npm:0.2.3"
+"@fortawesome/react-fontawesome@npm:0.2.5":
+  version: 0.2.5
+  resolution: "@fortawesome/react-fontawesome@npm:0.2.5"
   dependencies:
     prop-types: "npm:^15.8.1"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~1 || ~6 || ~7
     react: ^16.3 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/cd0da6a27748c7c8efa22ea9b3449bc0d0fbd0010623d462771d17e77a915cd1abbc1b2b73663a1c888a0510bdde2eb483760b61e80780d8b684714d18728983
+  checksum: 10/c6dab486b2f4e01f124eece70fda800d510bf6ce6434b28986b5c6bd9ab07856c0f43eeaccc75885ab7677d89e0a9c2c498486ecd3bd676d3561827fed6276c4
   languageName: node
   linkType: hard
 
@@ -10660,7 +10660,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": "npm:6.1.2"
     "@fortawesome/free-solid-svg-icons": "npm:6.1.2"
-    "@fortawesome/react-fontawesome": "npm:0.2.3"
+    "@fortawesome/react-fontawesome": "npm:0.2.5"
     "@joplin/lib": "npm:~3.5"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
@@ -10805,7 +10805,7 @@ __metadata:
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
     "@types/node-os-utils": "npm:1.3.4"
-    "@types/nodemailer": "npm:6.4.18"
+    "@types/nodemailer": "npm:6.4.19"
     "@types/uuid": "npm:10.0.0"
     "@types/yargs": "npm:17.0.33"
     "@types/zxcvbn": "npm:4.4.5"
@@ -16405,13 +16405,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.18":
-  version: 6.4.18
-  resolution: "@types/nodemailer@npm:6.4.18"
+"@types/nodemailer@npm:6.4.19":
+  version: 6.4.19
+  resolution: "@types/nodemailer@npm:6.4.19"
   dependencies:
     "@aws-sdk/client-ses": "npm:^3.731.1"
     "@types/node": "npm:*"
-  checksum: 10/1cd18544bc28f4fe1ac59e010c3004dcd8d1fec06a09820ffd1ffee061b0c0285c6520bf0fe5eaf1fb81840d53f067abd72fd83c7c797c3ecdda20e1cce563c1
+  checksum: 10/f903e32f3d80e64fc101275ea8b244ee1afb95640facdbd031eeb70d658941e8871a54b4c0918593a5e90eb5433fd65dea7924a7caa47898c8a3b08dcb856ed4
   languageName: node
   linkType: hard
 
