@@ -1,6 +1,7 @@
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import type MainScreen from './MainScreen';
 import { ElectronApplication, Locator, Page } from '@playwright/test';
+import expect from '../util/extendedExpect';
 
 export default class Sidebar {
 	public readonly container: Locator;
@@ -41,5 +42,15 @@ export default class Sidebar {
 		// Change the notebook list sort order to force an immediate refresh.
 		await this.sortByDate(electronApp);
 		await this.sortByTitle(electronApp);
+	}
+
+	// Checks the indentation level of each folder. Useful for determining whether folders are subfolders.
+	public async expectToHaveDepths(folderToDepth: [Locator, number][]) {
+		for (let i = 0; i < folderToDepth.length; i++) {
+			const [folder, depth] = folderToDepth[i];
+			await expect(
+				folder, { message: `Folder ${i} should have depth ${depth}.` },
+			).toHaveJSProperty('ariaLevel', String(depth));
+		}
 	}
 }

@@ -150,7 +150,7 @@ const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Optio
 				} catch (error) {
 					// We don't throw an exception but we log it since
 					// it shouldn't happen
-					console.warn('Tried to remove an asset but got an error', error);
+					console.warn('Tried to remove an asset but got an error. On asset:', asset, error);
 				}
 				pluginAssetsAdded_[assetId] = null;
 			}

@@ -3,7 +3,7 @@ import BaseModel, { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
 import { isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
-import { FolderEntity, NoteEntity } from '../database/types';
+import { NoteEntity } from '../database/types';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
@@ -11,12 +11,15 @@ import getActivePluginEditorView from '../plugins/utils/getActivePluginEditorVie
 
 export interface WhenClauseContextOptions {
 	commandFolderId?: string;
+	commandFolderIds?: string[];
 	commandNoteId?: string;
 	windowId?: string;
 }
 
 export interface WhenClauseContext {
 	allSelectedNotesAreDeleted: boolean;
+	foldersAreDeleted: boolean;
+	foldersIncludeReadOnly: boolean;
 	folderIsDeleted: boolean;
 	folderIsReadOnly: boolean;
 	folderIsShared: boolean;
@@ -49,8 +52,7 @@ export interface WhenClauseContext {
 
 export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
 	options = {
-		commandFolderId: '',
-		commandNoteId: '',
+		commandFolderIds: options?.commandFolderId ? [options.commandFolderId] : null,
 		...options,
 	};
 	const windowState = options.windowId ? stateUtils.windowStateById(state, options.windowId) : state;
@@ -60,8 +62,10 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const selectedNote: NoteEntity = selectedNoteId ? BaseModel.byId(windowState.notes, selectedNoteId) : null;
 	const selectedNotes = BaseModel.modelsByIds(windowState.notes ?? [], selectedNoteIds);
 
-	const commandFolderId = state.notesParentType === 'Folder' ? (options.commandFolderId || windowState.selectedFolderId) : '';
-	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
+	const selectedFolderIds = windowState.selectedFolderIds || [];
+	const commandFolderIds = state.notesParentType === 'Folder' ? (options.commandFolderIds || selectedFolderIds) : [];
+	const commandFolders = commandFolderIds.length ? BaseModel.modelsByIds(state.folders, commandFolderIds) : [];
+	const commandFolder = commandFolders.length ? commandFolders[0] : null;
 
 	const { editorPlugin } = state.pluginService ? getActivePluginEditorView(state.pluginService.plugins, windowState.windowId) : { editorPlugin: null };
 
@@ -90,7 +94,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		historyhasForwardNotes: windowState.forwardHistoryNotes && windowState.forwardHistoryNotes.length > 0,
 
 		// Folder selection
-		oneFolderSelected: !!windowState.selectedFolderId,
+		oneFolderSelected: selectedFolderIds.length === 1,
 
 		// Current note properties
 		noteIsTodo: selectedNote ? !!selectedNote.is_todo : false,
@@ -100,7 +104,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteIsReadOnly: selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 
-		// Current context folder
+		// Current context folder -- if multiple folders are selected, this only applies to one
 		folderIsShareRoot: commandFolder ? isRootSharedFolder(commandFolder) : false,
 		folderIsShareRootAndNotOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && !isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
@@ -108,6 +112,10 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsDeleted: commandFolder ? !!commandFolder.deleted_time : false,
 		folderIsTrash: commandFolder ? commandFolder.id === getTrashFolderId() : false,
 		folderIsReadOnly: commandFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, commandFolder as ItemSlice, settings['sync.userId'], state.shareService) : false,
+
+		// All context folders
+		foldersAreDeleted: commandFolders.every(f => !!f.deleted_time),
+		foldersIncludeReadOnly: commandFolders.some(f => itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, f as ItemSlice, settings['sync.userId'], state.shareService)),
 
 		joplinServerConnected: [9, 10, 11].includes(settings['sync.target']),
 		joplinCloudAccountType: settings['sync.target'] === 10 ? settings['sync.10.accountType'] : 0,

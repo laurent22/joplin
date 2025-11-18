@@ -43,8 +43,7 @@ interface Props {
 	folders: FolderEntity[];
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
-	selectedFolderId: string;
-	selectedTagId: string;
+	selectedFolderIds: string[];
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -564,7 +563,7 @@ const SideMenuContentComponent = (props: Props) => {
 			hasChildren={hasChildren}
 			depth={depth}
 			collapsed={props.collapsedFolderIds.includes(folder.id)}
-			selected={isFolderSelected(folder, { selectedFolderId: props.selectedFolderId, notesParentType: props.notesParentType })}
+			selected={isFolderSelected(folder, { selectedFolderIds: props.selectedFolderIds, notesParentType: props.notesParentType })}
 			styles={styles_}
 			folder={folder}
 			alwaysShowFolderIcons={alwaysShowFolderIcons}
@@ -730,8 +729,7 @@ export default connect((state: AppState) => {
 		folders: state.folders,
 		syncStarted: state.syncStarted,
 		syncReport: state.syncReport,
-		selectedFolderId: state.selectedFolderId,
-		selectedTagId: state.selectedTagId,
+		selectedFolderIds: state.selectedFolderIds,
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,

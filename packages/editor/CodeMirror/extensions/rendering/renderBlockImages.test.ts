@@ -22,11 +22,11 @@ const createEditor = async (initialMarkdown: string, hasImage: boolean) => {
 };
 
 const findImages = (editor: EditorView) => {
-	return editor.dom.querySelectorAll<HTMLDivElement>('div.cm-md-image > .image');
+	return editor.dom.querySelectorAll<HTMLImageElement>('div.cm-md-image > .image');
 };
 
-const getImageBackgroundUrls = (editor: EditorView) => {
-	return [...findImages(editor)].map(image => image.style.backgroundImage);
+const getImageUrls = (editor: EditorView) => {
+	return [...findImages(editor)].map(image => image.getAttribute('src'));
 };
 
 describe('renderBlockImages', () => {
@@ -60,9 +60,9 @@ describe('renderBlockImages', () => {
 		const editor = await createEditor('![test](:/a123456789abcdef0123456789abcdef)\n![test 2](:/b123456789abcdef0123456789abcde2)', true);
 
 		// Should have the expected original image URLs
-		expect(getImageBackgroundUrls(editor)).toMatchObject([
-			'url(:/a123456789abcdef0123456789abcdef?r=0)',
-			'url(:/b123456789abcdef0123456789abcde2?r=0)',
+		expect(getImageUrls(editor)).toMatchObject([
+			':/a123456789abcdef0123456789abcdef?r=0',
+			':/b123456789abcdef0123456789abcde2?r=0',
 		]);
 
 		editor.dispatch({
@@ -70,9 +70,9 @@ describe('renderBlockImages', () => {
 		});
 		await allowImageUrlsToBeFetched();
 
-		expect(getImageBackgroundUrls(editor)).toMatchObject([
-			'url(:/a123456789abcdef0123456789abcdef?r=1)',
-			'url(:/b123456789abcdef0123456789abcde2?r=0)',
+		expect(getImageUrls(editor)).toMatchObject([
+			':/a123456789abcdef0123456789abcdef?r=1',
+			':/b123456789abcdef0123456789abcde2?r=0',
 		]);
 
 		editor.dispatch({
@@ -83,9 +83,9 @@ describe('renderBlockImages', () => {
 		});
 		await allowImageUrlsToBeFetched();
 
-		expect(getImageBackgroundUrls(editor)).toMatchObject([
-			'url(:/a123456789abcdef0123456789abcdef?r=2)',
-			'url(:/b123456789abcdef0123456789abcde2?r=1)',
+		expect(getImageUrls(editor)).toMatchObject([
+			':/a123456789abcdef0123456789abcdef?r=2',
+			':/b123456789abcdef0123456789abcde2?r=1',
 		]);
 	});
 });

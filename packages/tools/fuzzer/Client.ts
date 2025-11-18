@@ -13,12 +13,15 @@ import { quotePath } from '@joplin/utils/path';
 import getNumberProperty from './utils/getNumberProperty';
 import retryWithCount from './utils/retryWithCount';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
-import { msleep, Second } from '@joplin/utils/time';
+import { formatMsToDateTimeLocal, msleep, Second } from '@joplin/utils/time';
 import shim from '@joplin/lib/shim';
 import { spawn } from 'child_process';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { createInterface } from 'readline/promises';
 import Stream = require('stream');
+import ProgressBar from './utils/ProgressBar';
+import logDiffDebug from './utils/logDiffDebug';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 const logger = Logger.create('Client');
 
@@ -26,7 +29,7 @@ type AccountData = Readonly<{
 	email: string;
 	password: string;
 	serverId: string;
-	e2eePassword: string;
+	e2eePassword: string|null;
 	associatedClientCount: number;
 	onClientConnected: ()=> void;
 	onClientDisconnected: ()=> Promise<void>;
@@ -36,6 +39,7 @@ const createNewAccount = async (email: string, context: FuzzContext): Promise<Ac
 	const password = createSecureRandom();
 	const apiOutput = await context.execApi('POST', 'api/users', {
 		email,
+		full_name: `Fuzzer user from ${formatMsToDateTimeLocal(Date.now())}`,
 	});
 	const serverId = getStringProperty(apiOutput, 'id');
 
@@ -55,7 +59,7 @@ const createNewAccount = async (email: string, context: FuzzContext): Promise<Ac
 	return {
 		email,
 		password,
-		e2eePassword: createSecureRandom().replace(/^-/, '_'),
+		e2eePassword: context.enableE2ee ? createSecureRandom().replace(/^-/, '_') : null,
 		serverId,
 		get associatedClientCount() {
 			return referenceCounter;
@@ -66,7 +70,7 @@ const createNewAccount = async (email: string, context: FuzzContext): Promise<Ac
 		onClientDisconnected: async () => {
 			referenceCounter --;
 			assert.ok(referenceCounter >= 0, 'reference counter should be non-negative');
-			if (referenceCounter === 0) {
+			if (referenceCounter === 0 && !context.keepAccounts) {
 				await closeAccount();
 			}
 		},
@@ -90,6 +94,10 @@ type ChildProcessWrapper = {
 // Should match the prompt used by the CLI "batch" command.
 const cliProcessPromptString = 'command> ';
 
+interface CreateOrUpdateOptions {
+	quiet?: boolean;
+}
+
 class Client implements ActionableClient {
 	public readonly email: string;
 
@@ -97,7 +105,8 @@ class Client implements ActionableClient {
 		const account = await createNewAccount(`${uuid.create()}@localhost`, context);
 
 		try {
-			return await this.fromAccount(account, actionTracker, context);
+			const client = await this.fromAccount(account, actionTracker, context);
+			return client;
 		} catch (error) {
 			logger.error('Error creating client:', error);
 			await account.onClientDisconnected();
@@ -136,7 +145,9 @@ class Client implements ActionableClient {
 		await client.execCliCommand_('config', 'api.token', apiData.token);
 		await client.execCliCommand_('config', 'api.port', String(apiData.port));
 
-		await client.execCliCommand_('e2ee', 'enable', '--password', account.e2eePassword);
+		if (account.e2eePassword) {
+			await client.execCliCommand_('e2ee', 'enable', '--password', account.e2eePassword);
+		}
 		logger.info('Created and configured client');
 
 		await client.startClipperServer_();
@@ -420,6 +431,8 @@ class Client implements ActionableClient {
 	}
 
 	private async decrypt_() {
+		if (!this.context_.enableE2ee) return;
+
 		const result = await this.execCliCommand_('e2ee', 'decrypt', '--force');
 		if (!result.stdout.includes('Completed decryption.')) {
 			throw new Error(`Decryption did not complete: ${result.stdout}`);
@@ -449,8 +462,75 @@ class Client implements ActionableClient {
 		});
 	}
 
-	public async createFolder(folder: FolderData) {
-		logger.info('Create folder', folder.id, 'in', `${folder.parentId ?? 'root'}/${this.label}`);
+	public async createOrUpdateMany(actionCount: number) {
+		logger.info(`Creating/updating ${actionCount} items...`);
+		const bar = new ProgressBar('Creating/updating');
+
+		const actions = {
+			create: async () => {
+				let parentId = (await this.randomFolder({ includeReadOnly: false }))?.id;
+				const createSubfolder = this.context_.randInt(0, 100) < 10;
+				if (!parentId || createSubfolder) {
+					const folder = await this.createRandomFolder(parentId, { quiet: true });
+					parentId = folder.id;
+				}
+
+				await this.createRandomNote(parentId, { quiet: true });
+			},
+			update: async (targetNote: NoteData) => {
+				const keep = targetNote.body.substring(
+					// Problems start to appear when notes get long.
+					// See https://github.com/laurent22/joplin/issues/13644.
+					0, Math.min(this.context_.randInt(0, targetNote.body.length), 5000),
+				);
+				const append = this.context_.randomString(this.context_.randInt(0, 5000));
+				await this.updateNote({
+					...targetNote,
+					body: keep + append,
+				}, { quiet: true });
+			},
+			delete: async (targetNote: NoteData) => {
+				await this.deleteNote(targetNote.id, { quiet: true });
+			},
+		};
+
+		for (let i = 0; i < actionCount; i++) {
+			bar.update(i, actionCount);
+
+			const actionId = this.context_.randInt(0, 100);
+
+			const targetNote = await this.randomNote({ includeReadOnly: false });
+			if (!targetNote) {
+				await actions.create();
+			} else if (actionId > 60) {
+				await actions.update(targetNote);
+			} else if (actionId > 50) {
+				await actions.delete(targetNote);
+			} else {
+				await actions.create();
+			}
+		}
+		bar.complete();
+	}
+
+	public async createRandomFolder(parentId: ItemId, options: CreateOrUpdateOptions) {
+		const titleLength = this.context_.randInt(1, 128);
+		const folderId = uuid.create();
+		const folder = {
+			parentId: parentId,
+			id: folderId,
+			title: this.context_.randomString(titleLength).replace(/\n/g, ' '),
+		};
+
+		await this.createFolder(folder, options);
+
+		return folder;
+	}
+
+	public async createFolder(folder: FolderData, { quiet = false }: CreateOrUpdateOptions = {}) {
+		if (!quiet) {
+			logger.info('Create folder', folder.id, 'in', `${folder.parentId ?? 'root'}/${this.label}`);
+		}
 		await this.tracker_.createFolder(folder);
 
 		await this.execApiCommand_('POST', '/folders', {
@@ -461,27 +541,67 @@ class Client implements ActionableClient {
 	}
 
 	private async assertNoteMatchesState_(expected: NoteData) {
-		await retryWithCount(async () => {
-			const noteContent = (await this.execCliCommand_('cat', expected.id)).stdout;
-			assert.equal(
-				// Compare without trailing newlines for consistency, the output from "cat"
-				// can sometimes have an extra newline (due to the CLI prompt)
-				noteContent.trimEnd(),
-				`${expected.title}\n\n${expected.body.trimEnd()}`,
-				'note should exist',
-			);
-		}, {
-			count: 3,
-			onFail: async () => {
-				// Send an event to the server and wait for it to be processed -- it's possible that the server
-				// hasn't finished processing the API event for creating the note:
-				await this.execApiCommand_('GET', '/ping');
-			},
-		});
+		const normalizeForCompare = (text: string) => {
+			// Handle invalid unicode (replace with placeholder characters)
+			return Buffer.from(new TextEncoder().encode(text))
+				.toString()
+				// Rule out differences caused by control characters:
+				.replace(/\p{C}/ug, '')
+				.trimEnd();
+		};
+
+		let lastActualNote: NoteEntity|null = null;
+		try {
+			await retryWithCount(async () => {
+				const noteResult = JSON.parse(
+					await this.execApiCommand_('GET', `/notes/${encodeURIComponent(expected.id)}?fields=title,body`),
+				);
+				lastActualNote = noteResult;
+
+				assert.equal(
+					normalizeForCompare(noteResult.title),
+					normalizeForCompare(expected.title),
+					'note title should match',
+				);
+				assert.equal(
+					normalizeForCompare(noteResult.body),
+					normalizeForCompare(expected.body),
+					'note body should match',
+				);
+			}, {
+				count: 3,
+				onFail: async () => {
+					// Send an event to the server and wait for it to be processed -- it's possible that the server
+					// hasn't finished processing the API event for creating the note:
+					await this.execApiCommand_('GET', '/ping');
+				},
+			});
+		} catch (error) {
+			// Log additional information to help debug binary differences
+			if (lastActualNote) {
+				logDiffDebug(lastActualNote.title, expected.title);
+				logDiffDebug(lastActualNote.body, expected.body);
+			}
+			throw error;
+		}
 	}
 
-	public async createNote(note: NoteData) {
-		logger.info('Create note', note.id, 'in', `${note.parentId}/${this.label}`);
+	public async createRandomNote(parentId: string, { quiet = false }: CreateOrUpdateOptions = { }) {
+		const titleLength = this.context_.randInt(0, 256);
+		const bodyLength = this.context_.randInt(0, 2000);
+		await this.createNote({
+			published: false,
+			parentId,
+			title: this.context_.randomString(titleLength),
+			body: this.context_.randomString(bodyLength),
+			id: uuid.create(),
+		}, { quiet });
+	}
+
+	public async createNote(note: NoteData, { quiet = false }: CreateOrUpdateOptions = { }) {
+		if (!quiet) {
+			logger.info('Create note', note.id, 'in', `${note.parentId}/${this.label}`);
+		}
 		await this.tracker_.createNote(note);
 
 		await this.execApiCommand_('POST', '/notes', {
@@ -493,8 +613,11 @@ class Client implements ActionableClient {
 		await this.assertNoteMatchesState_(note);
 	}
 
-	public async updateNote(note: NoteData) {
-		logger.info('Update note', note.id, 'in', `${note.parentId}/${this.label}`);
+	public async updateNote(note: NoteData, { quiet = false }: CreateOrUpdateOptions = { }) {
+		if (!quiet) {
+			logger.info('Update note', note.id, 'in', `${note.parentId}/${this.label}`);
+		}
+
 		await this.tracker_.updateNote(note);
 		await this.execApiCommand_('PUT', `/notes/${encodeURIComponent(note.id)}`, {
 			title: note.title,
@@ -504,8 +627,11 @@ class Client implements ActionableClient {
 		await this.assertNoteMatchesState_(note);
 	}
 
-	public async deleteNote(id: ItemId) {
-		logger.info('Delete note', id, 'in', this.label);
+	public async deleteNote(id: ItemId, { quiet }: CreateOrUpdateOptions = {}) {
+		if (!quiet) {
+			logger.info('Delete note', id, 'in', this.label);
+		}
+
 		await this.tracker_.deleteNote(id);
 
 		await this.execCliCommand_('rmnote', '--permanent', '--force', id);

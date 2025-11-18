@@ -5,9 +5,6 @@ import { RenderedContentContext } from './types';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 
 const imageClassName = 'cm-md-image';
-// Pre-set the image height for performance (allows CodeMirror to better calculate
-// the document height while scrolling).
-const imageHeight = 200;
 
 class ImageWidget extends WidgetType {
 	private resolvedSrc_: string;
@@ -26,7 +23,7 @@ class ImageWidget extends WidgetType {
 	}
 
 	public updateDOM(dom: HTMLElement): boolean {
-		const image = dom.querySelector<HTMLDivElement>('div.image');
+		const image = dom.querySelector<HTMLImageElement>('img.image');
 		if (!image) return false;
 
 		image.ariaLabel = this.alt_;
@@ -36,7 +33,7 @@ class ImageWidget extends WidgetType {
 			if (this.resolvedSrc_) {
 				// Use a background-image style property rather than img[src=]. This
 				// simplifies setting the image to the correct size/position.
-				image.style.backgroundImage = `url(${JSON.stringify(this.resolvedSrc_)})`;
+				image.src = this.resolvedSrc_;
 			}
 		};
 
@@ -56,7 +53,7 @@ class ImageWidget extends WidgetType {
 		const container = document.createElement('div');
 		container.classList.add(imageClassName);
 
-		const image = document.createElement('div');
+		const image = document.createElement('img');
 		image.classList.add('image');
 
 		container.appendChild(image);
@@ -66,7 +63,7 @@ class ImageWidget extends WidgetType {
 	}
 
 	public get estimatedHeight() {
-		return imageHeight;
+		return -1;
 	}
 }
 
@@ -105,12 +102,14 @@ export const testing__resetImageRefreshCounterCache = () => {
 
 const renderBlockImages = (context: RenderedContentContext) => [
 	EditorView.theme({
-		[`& .${imageClassName} > div`]: {
-			height: `${imageHeight}px`,
-			backgroundSize: 'contain',
-			backgroundRepeat: 'no-repeat',
-			backgroundPosition: 'center',
+		[`& .${imageClassName} > .image`]: {
+			maxWidth: '100%',
+			minWidth: 0,
 			display: 'block',
+
+			// Center
+			marginLeft: 'auto',
+			marginRight: 'auto',
 		},
 	}),
 	makeBlockReplaceExtension({

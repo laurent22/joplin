@@ -18,18 +18,19 @@ function initTestState(folders: FolderEntity[], selectedFolderIndex: number, not
 	if (notes !== null) {
 		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, noteSource: 'test' });
 	}
+	if (tags !== null) {
+		state = reducer(state, { type: 'TAG_UPDATE_ALL', items: tags });
+	}
+	if (selectedTagIndex !== null) {
+		state = reducer(state, { type: 'TAG_SELECT', id: tags[selectedTagIndex].id });
+	}
+	// Select notes last: Selecting a tag or folder can clear the note selection
 	if (selectedNoteIndexes !== null) {
 		const selectedIds = [];
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
 			selectedIds.push(notes[selectedNoteIndexes[i]].id);
 		}
 		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds });
-	}
-	if (tags !== null) {
-		state = reducer(state, { type: 'TAG_UPDATE_ALL', items: tags });
-	}
-	if (selectedTagIndex !== null) {
-		state = reducer(state, { type: 'TAG_SELECT', id: tags[selectedTagIndex].id });
 	}
 
 	return state;
@@ -389,6 +390,84 @@ describe('reducer', () => {
 		expect(getIds(state.tags)).toEqual(getIds(expected.items));
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
+
+	it.each([false, true])('should select multiple folders (extend:%j)', async (extendSelection) => {
+		const folders = await createNTestFolders(3);
+		let state = initTestState(folders, 0, [], []);
+
+		if (extendSelection) {
+			state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[1].id });
+		} else {
+			state = reducer(state, { type: 'FOLDER_SELECT', ids: [folders[0].id, folders[1].id] });
+		}
+
+		const expected = createExpectedState(folders, [0, 1, 2], [0, 1]);
+
+		expect(getIds(state.folders)).toEqual(getIds(expected.items));
+		expect(state.selectedFolderIds).toEqual(expected.selectedIds);
+		// Should match the last-added item
+		expect(state.selectedFolderId).toBe(expected.selectedIds[expected.selectedIds.length - 1]);
+	});
+
+	it.each([false, true])('should select multiple tags (extend:%j)', async (extendSelection) => {
+		const tags = await createNTestTags(3);
+		let state = initTestState([], null, [], [], tags, 0);
+
+		if (extendSelection) {
+			state = reducer(state, { type: 'TAG_SELECT_ADD', id: tags[2].id });
+		} else {
+			state = reducer(state, { type: 'TAG_SELECT', ids: [tags[0].id, tags[2].id] });
+		}
+
+		const expected = createExpectedState(tags, [0, 1, 2], [0, 2]);
+
+		expect(getIds(state.tags)).toEqual(getIds(expected.items));
+		expect(state.selectedTagIds).toEqual(expected.selectedIds);
+		expect(state.selectedTagId).toBe(expected.selectedIds[expected.selectedIds.length - 1]);
+	});
+
+	it('should not clear the selected note IDs when adding folders to the selection', async () => {
+		const folders = await createNTestFolders(3);
+		const notes = await createNTestNotes(1, folders[0]);
+		const expectedSelection = createExpectedState(notes, [0], [0]).selectedIds;
+
+		let state = initTestState(folders, 0, notes, [0]);
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[1].id });
+
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+	});
+
+	it('should clear the selected note IDs if adding a folder to the selection changes the selection type', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const tags = await createNTestTags(1);
+		const expectedSelection = createExpectedState(notes, [0], [0]).selectedIds;
+
+		let state = initTestState(folders, 0, notes, [0], tags, 0);
+
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+		expect(state.notesParentType).toBe('Tag');
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[0].id });
+
+		expect(state.notesParentType).toBe('Folder');
+		expect(state.selectedNoteIds).toEqual([]);
+	});
+
+	it('should add and remove a folders from the selection', async () => {
+		const folders = await createNTestFolders(3);
+		let state = initTestState(folders, 0, [], []);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', ids: [folders[1].id, folders[2].id] });
+		expect(state.selectedFolderIds).toEqual([folders[0].id, folders[1].id, folders[2].id]);
+		expect(state.selectedFolderId).toBe(folders[2].id);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_REMOVE', id: folders[0].id });
+		expect(state.selectedFolderIds).toEqual([folders[1].id, folders[2].id]);
+		expect(state.selectedFolderId).toBe(folders[2].id);
+	});
 
 	it('should select all notes', (async () => {
 		const folders = await createNTestFolders(2);

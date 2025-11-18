@@ -12,13 +12,15 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext, folderId: string = null) => {
-			if (folderId === null) folderId = context.state.selectedFolderId;
+		execute: async (context: CommandContext, folderIds: string|string[] = null) => {
+			if (folderIds === null) folderIds = context.state.selectedFolderIds;
+			if (!Array.isArray(folderIds)) {
+				folderIds = [folderIds];
+			}
 
-			const folder = await Folder.load(folderId);
-			if (!folder) throw new Error(`No such folder: ${folderId}`);
-			await restoreItems(ModelType.Folder, [folder]);
+			const folders = await Folder.loadItemsByIdsOrFail(folderIds);
+			await restoreItems(ModelType.Folder, folders);
 		},
-		enabledCondition: 'folderIsDeleted',
+		enabledCondition: 'foldersAreDeleted',
 	};
 };

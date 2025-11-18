@@ -9,11 +9,21 @@ const markdownEditorOnlyCommands = [
 	EditorCommandType.SwapLineDown,
 ].map(command => `editor.${command}`);
 
+
+
+const richTextEditorOnlyCommands = [
+	EditorCommandType.InsertTable,
+].map(command => `editor.${command}`);
+
 export const visibleCondition = (commandName: string) => {
 	const output = [];
 
 	if (markdownEditorOnlyCommands.includes(commandName)) {
 		output.push('!richTextEditorVisible');
+	}
+
+	if (richTextEditorOnlyCommands.includes(commandName)) {
+		output.push('!markdownEditorPaneVisible');
 	}
 
 	return output.join(' && ');
@@ -101,6 +111,11 @@ const declarations: CommandDeclaration[] = [
 		name: EditorCommandType.ToggleCheckList,
 		label: () => _('Task list'),
 		iconName: 'material format-list-checks',
+	},
+	{
+		name: `editor.${EditorCommandType.InsertTable}`,
+		label: () => _('Table'),
+		iconName: 'material table',
 	},
 	{
 		name: EditorCommandType.IndentLess,
