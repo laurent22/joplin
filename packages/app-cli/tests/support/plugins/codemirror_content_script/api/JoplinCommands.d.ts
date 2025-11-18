@@ -81,7 +81,7 @@ export default class JoplinCommands {
      * Registers a new command.
      *
      * ```typescript
-     * // Register a new commmand called "testCommand1"
+     * // Register a new command called "testCommand1"
      *
      * await joplin.commands.register({
      *     name: 'testCommand1',
