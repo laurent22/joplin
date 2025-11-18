@@ -668,6 +668,11 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			{pluginPanelsComp}
 			{betaIconComp}
 			{togglePluginEditorButton}
+			{selectAllButtonComp}
+			{searchButtonComp}
+			{deleteButtonComp}
+			{customDeleteButtonComp}
+			{restoreButtonComp}
 		</>;
 
 		const titleComp = createTitleComponent(hideableRightComponents);
@@ -706,11 +711,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						this.props.showSaveButton === true,
 					)}
 					{titleComp}
-					{selectAllButtonComp}
-					{searchButtonComp}
-					{deleteButtonComp}
-					{customDeleteButtonComp}
-					{restoreButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}
 					{menuComp}
