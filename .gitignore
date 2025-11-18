@@ -397,10 +397,11 @@ packages/app-desktop/gui/Sidebar/Sidebar.js
 packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js
 packages/app-desktop/gui/Sidebar/commands/index.js
 packages/app-desktop/gui/Sidebar/hooks/useFocusHandler.js
+packages/app-desktop/gui/Sidebar/hooks/useOnItemClick.js
 packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.js
 packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.js
 packages/app-desktop/gui/Sidebar/hooks/useOnSidebarKeyDownHandler.js
-packages/app-desktop/gui/Sidebar/hooks/useSelectedSidebarIndex.js
+packages/app-desktop/gui/Sidebar/hooks/useSelectedSidebarIndexes.js
 packages/app-desktop/gui/Sidebar/hooks/useSidebarCommandHandler.js
 packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.js
 packages/app-desktop/gui/Sidebar/hooks/utils/toggleHeader.js
@@ -1117,6 +1118,7 @@ packages/editor/ProseMirror/utils/dom/showModal.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.test.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.js
 packages/editor/ProseMirror/utils/forEachHeading.js
+packages/editor/ProseMirror/utils/insertRenderedMarkdown.js
 packages/editor/ProseMirror/utils/jumpToHash.js
 packages/editor/ProseMirror/utils/makeLinksClickableInElement.js
 packages/editor/ProseMirror/utils/postprocessEditorOutput.test.js

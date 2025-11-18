@@ -115,21 +115,21 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async delete(folderId: string, options?: DeleteOptions) {
+	public static async batchDelete(folderIds: string[], options: DeleteOptions): Promise<void> {
 		options = {
 			deleteChildren: true,
 			...options,
 		};
 
-		if (folderId === getTrashFolderId()) throw new Error('The trash folder cannot be deleted');
+		if (folderIds.includes(getTrashFolderId())) throw new Error('The trash folder cannot be deleted');
 
 		const toTrash = !!options.toTrash;
 
-		const folder = await Folder.load(folderId);
-		if (!folder) return; // noop
+		const folders: FolderEntity[] = await Folder.loadItemsByIds(folderIds);
+		if (!folders.length) return; // noop
 
 		const actionLogger = ActionLogger.from(options.sourceDescription);
-		actionLogger.addDescription(`folder title: ${JSON.stringify(folder.title)}`);
+		actionLogger.addDescription(`folder titles: ${JSON.stringify(folders.map(folder => folder.title))}`);
 		options.sourceDescription = actionLogger;
 
 		if (options.deleteChildren) {
@@ -140,28 +140,37 @@ export default class Folder extends BaseItem {
 				toTrash,
 			};
 
-			const noteIds = await Folder.noteIds(folderId);
-			await Note.batchDelete(noteIds, childrenDeleteOptions);
+			for (const folderId of folderIds) {
+				const noteIds = await Folder.noteIds(folderId);
+				await Note.batchDelete(noteIds, childrenDeleteOptions);
 
-			const subFolderIds = await Folder.subFolderIds(folderId);
-			for (let i = 0; i < subFolderIds.length; i++) {
-				await Folder.delete(subFolderIds[i], childrenDeleteOptions);
+				const subFolderIds = await Folder.subFolderIds(folderId);
+				await Folder.batchDelete(subFolderIds, childrenDeleteOptions);
 			}
 		}
 
 		if (toTrash) {
-			const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
-			if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
-			if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
-			await this.save(newFolder);
-		} else {
-			await super.delete(folderId, options);
-		}
+			for (const folderId of folderIds) {
+				const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
+				if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
+				if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
+				await this.save(newFolder);
 
-		this.dispatch({
-			type: 'FOLDER_DELETE',
-			id: folderId,
-		});
+				this.dispatch({
+					type: 'FOLDER_DELETE',
+					id: folderId,
+				});
+			}
+		} else {
+			await super.batchDelete(folderIds, options);
+
+			for (const folderId of folderIds) {
+				this.dispatch({
+					type: 'FOLDER_DELETE',
+					id: folderId,
+				});
+			}
+		}
 	}
 
 	public static conflictFolderTitle() {

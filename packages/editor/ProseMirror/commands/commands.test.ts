@@ -77,4 +77,20 @@ describe('ProseMirror/commands', () => {
 		expect(jumpToHash('test-heading-2')).toBe(true);
 		expect(editor.state.selection.$anchor.parent.textContent).toBe('Test heading 2');
 	});
+
+	test('textTable should insert a table', () => {
+		const editor = createTestEditor({ html: '<p></p>' });
+
+		commands[EditorCommandType.InsertTable](editor.state, editor.dispatch, editor);
+
+		expect(editor.state.doc.toJSON()).toMatchObject({
+			content: [{
+				content: [
+					{ type: 'table_row' },
+					{ type: 'table_row' },
+				],
+				type: 'table',
+			}],
+		});
+	});
 });

@@ -49,7 +49,7 @@ iOS | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Ge
 
 Système d'exploitation | Méthode
 -----------------|----------------
-macOS, Linux ou Windows (via [WSL] (https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)) | **Important :** Tout d'abord, [installez Node 12+] (https://nodejs.org/en/download/package-manager/). <br/><br/><br><br>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin` `sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin `Par défaut, le binaire de l'application sera installé sous <br/> `~/.joplin-bin`. Vous pouvez modifier ce répertoire si nécessaire. Sinon, si vos autorisations npm sont configurées comme décrit [ici] (https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2), il suffit d'exécuter `npm -g install joplin`.
+macOS, Linux ou Windows (via [WSL] (https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)) | **Important :** Tout d'abord, [installez Node 12+] (https://nodejs.org/en/download/package-manager/). <br/><br/><br><br>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install --loglevel=error -g joplin` `sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin `Par défaut, le binaire de l'application sera installé sous <br/> `~/.joplin-bin`. Vous pouvez modifier ce répertoire si nécessaire. Sinon, si vos autorisations npm sont configurées comme décrit [ici] (https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2), il suffit d'exécuter `npm -g install joplin`.
 
 Pour le démarrer, tapez `joplin`.
 

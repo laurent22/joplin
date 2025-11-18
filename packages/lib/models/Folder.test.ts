@@ -391,6 +391,22 @@ describe('models/Folder', () => {
 		expect((await Note.load(note3.id)).deleted_time).toBe(0);
 	});
 
+	it('should allow deleting multiple folders to trash', async () => {
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		const folder3 = await Folder.save({ parent_id: folder2.id });
+		const folder4 = await Folder.save({ parent_id: folder2.id });
+
+		const beforeTime = Date.now();
+		await Folder.batchDelete([folder1.id, folder2.id, folder3.id], { toTrash: true, deleteChildren: true });
+
+		const folders = await Folder.loadItemsByIds([folder1.id, folder2.id, folder3.id, folder4.id]);
+		expect(folders[0].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[1].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[2].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[3].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+	});
+
 	it('should delete and set the parent ID', async () => {
 		const folder1 = await Folder.save({});
 		const folder2 = await Folder.save({});
