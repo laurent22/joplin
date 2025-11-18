@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Dialog, Surface, Text } from 'react-native-paper';
 import { TextInputDialogData } from './types';
 import { StyleSheet, ViewStyle } from 'react-native';
-import { useId, useMemo, useState } from 'react';
+import { useId, useMemo, useState, useEffect } from 'react';
 import PromptButton from './PromptButton';
 import { _ } from '@joplin/lib/locale';
 import TextInput from '../TextInput';
@@ -29,8 +29,13 @@ const useStyles = () => {
 
 const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) => {
 	const styles = useStyles();
-	const [text, setText] = useState('');
+	const [text, setText] = useState(dialog.initialValue ?? '');
 	const labelId = useId();
+
+	// Reset text when dialog key changes
+	useEffect(() => {
+		setText(dialog.initialValue ?? '');
+	}, [dialog.key, dialog.initialValue]);
 
 	return (
 		<Surface
