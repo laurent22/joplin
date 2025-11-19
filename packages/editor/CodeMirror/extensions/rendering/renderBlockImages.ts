@@ -14,12 +14,13 @@ class ImageWidget extends WidgetType {
 		private readonly src_: string,
 		private readonly alt_: string,
 		private readonly reloadCounter_ = 0,
+		private readonly width_: string | null = null,
 	) {
 		super();
 	}
 
 	public eq(other: ImageWidget) {
-		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_;
+		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_ && this.width_ === other.width_;
 	}
 
 	public updateDOM(dom: HTMLElement): boolean {
@@ -28,6 +29,12 @@ class ImageWidget extends WidgetType {
 
 		image.ariaLabel = this.alt_;
 		image.role = 'image';
+
+		// Apply width if specified
+		if (this.width_) {
+			image.style.width = `${this.width_}px`;
+			image.style.height = 'auto';
+		}
 
 		const updateImageUrl = () => {
 			if (this.resolvedSrc_) {
@@ -55,6 +62,12 @@ class ImageWidget extends WidgetType {
 
 		const image = document.createElement('img');
 		image.classList.add('image');
+
+		// Apply width if specified
+		if (this.width_) {
+			image.style.width = `${this.width_}px`;
+			image.style.height = 'auto';
+		}
 
 		container.appendChild(image);
 		this.updateDOM(container);
@@ -90,6 +103,39 @@ const getImageAlt = (node: SyntaxNodeRef, state: EditorState) => {
 	}
 };
 
+interface HtmlImageInfo {
+	src: string;
+	alt: string | null;
+	width: string | null;
+}
+
+const parseHtmlImage = (node: SyntaxNodeRef, state: EditorState): HtmlImageInfo | null => {
+	const nodeText = state.sliceDoc(node.from, node.to);
+
+	// Check if this is an img tag (handles both /> and > closing styles)
+	if (!nodeText.match(/<img\s/i)) {
+		return null;
+	}
+
+	// Extract src (only Joplin resource images with double quotes)
+	const srcMatch = nodeText.match(/src="(:\/[a-zA-Z0-9]{32})"/i);
+	if (!srcMatch) {
+		return null;
+	}
+
+	// Extract alt attribute (optional)
+	const altMatch = nodeText.match(/alt="([^"]*)"/i);
+
+	// Extract width attribute (optional)
+	const widthMatch = nodeText.match(/width="(\d+)"/i);
+
+	return {
+		src: srcMatch[1],
+		alt: altMatch ? altMatch[1] : null,
+		width: widthMatch ? widthMatch[1] : null,
+	};
+};
+
 // In Electron: To work around browser caching, these counters should continue to increase even if an old
 // editor is destroyed and a new one is created in the same window.
 const imageToRefreshCounters = new Map<string, number>();
@@ -114,6 +160,7 @@ const renderBlockImages = (context: RenderedContentContext) => [
 	}),
 	makeBlockReplaceExtension({
 		createDecoration: (node, state) => {
+			// Handle markdown images
 			if (node.name === 'Image') {
 				const lineFrom = state.doc.lineAt(node.from);
 				const lineTo = state.doc.lineAt(node.to);
@@ -126,7 +173,7 @@ const renderBlockImages = (context: RenderedContentContext) => [
 					if (src) {
 						const isLastLine = lineTo.number === state.doc.lines;
 						return Decoration.widget({
-							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0),
+							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, null),
 							// "side: -1": In general, when the cursor is at the widget's location, it should be at
 							// the start of the next line (and so "side" should be -1).
 							//
@@ -141,6 +188,33 @@ const renderBlockImages = (context: RenderedContentContext) => [
 					}
 				}
 			}
+
+			// Handle HTML img tags (both HTMLTag for self-closing and HTMLBlock for non-self-closing)
+			if (node.name === 'HTMLTag' || node.name === 'HTMLBlock') {
+				const lineFrom = state.doc.lineAt(node.from);
+				const lineTo = state.doc.lineAt(node.to);
+				const textBefore = state.sliceDoc(lineFrom.from, node.from);
+				const textAfter = state.sliceDoc(node.to, lineTo.to);
+				if (textBefore.trim() === '' && textAfter.trim() === '') {
+					const imageInfo = parseHtmlImage(node, state);
+
+					if (imageInfo) {
+						const isLastLine = lineTo.number === state.doc.lines;
+						return Decoration.widget({
+							widget: new ImageWidget(
+								context,
+								imageInfo.src,
+								imageInfo.alt ?? '',
+								imageToRefreshCounters.get(imageInfo.src) ?? 0,
+								imageInfo.width,
+							),
+							side: isLastLine ? 1 : -1,
+							block: true,
+						});
+					}
+				}
+			}
+
 			return null;
 		},
 		getDecorationRange: (node, state) => {
