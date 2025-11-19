@@ -30,10 +30,13 @@ class ImageWidget extends WidgetType {
 		image.ariaLabel = this.alt_;
 		image.role = 'image';
 
-		// Apply width if specified
+		// Apply width if specified, otherwise clear it
 		if (this.width_) {
 			image.style.width = `${this.width_}px`;
 			image.style.height = 'auto';
+		} else {
+			image.style.width = '';
+			image.style.height = '';
 		}
 
 		const updateImageUrl = () => {
@@ -63,10 +66,13 @@ class ImageWidget extends WidgetType {
 		const image = document.createElement('img');
 		image.classList.add('image');
 
-		// Apply width if specified
+		// Apply width if specified, otherwise clear it
 		if (this.width_) {
 			image.style.width = `${this.width_}px`;
 			image.style.height = 'auto';
+		} else {
+			image.style.width = '';
+			image.style.height = '';
 		}
 
 		container.appendChild(image);
