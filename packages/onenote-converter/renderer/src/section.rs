@@ -80,7 +80,7 @@ impl Renderer {
         };
 
         let toc_html = templates::section::render(section.display_name(), toc)?;
-        let toc_path = self.write_item_file(&output_dir, section.display_name(), &toc_html)?;
+        let toc_path = self.write_html_file(&output_dir, section.display_name(), &toc_html)?;
         log!("ToC: {}", toc_path);
 
         if let Some(errors_path) = errors_path {
@@ -113,7 +113,7 @@ impl Renderer {
         let mut renderer = page::Renderer::new(section_dir.into(), self);
         let page_html = renderer.render_page(page)?;
 
-        let page_path = self.write_item_file(section_dir, &title, &page_html)?;
+        let page_path = self.write_html_file(section_dir, &title, &page_html)?;
         log!("Created page file: {:?}", page_path);
 
         let page_path_without_basedir =
@@ -132,7 +132,7 @@ impl Renderer {
         output_dir: &str,
     ) -> Result<TocEntry> {
         let error_html = templates::errors::render(&errors)?;
-        let errors_path = self.write_item_file(&output_dir, "Errors", &error_html)?;
+        let errors_path = self.write_html_file(&output_dir, "Errors", &error_html)?;
         log!("Errors: {}", errors_path);
 
         Ok(TocEntry {
@@ -143,14 +143,14 @@ impl Renderer {
         })
     }
 
-    fn write_item_file(
+    fn write_html_file(
         &mut self,
-        output_dir: &str,
-        item_title: &str,
-        item_html: &str,
+        parent_dir: &str,
+        title: &str,
+        html: &str,
     ) -> Result<String> {
-        let file_path = fs_driver().join(&output_dir, &self.determine_page_filename(item_title)?);
-        fs_driver().write_file(file_path.as_str(), item_html.as_bytes())?;
+        let file_path = fs_driver().join(&parent_dir, &self.determine_page_filename(title)?);
+        fs_driver().write_file(file_path.as_str(), html.as_bytes())?;
         Ok(file_path)
     }
 
