@@ -6,7 +6,9 @@
 <nav>
     <ul>
         {% for page in pages %}
-        <li class="l{{page.level}}"><a href="{{ page.path|urlencode }}" target="content" title="{{ page.name }}">{{ page.name }}</a></li>
+        <li class="l{{page.level}} {% if page.is_error %}-error{% endif %}">
+            <a href="{{ page.relative_path|urlencode }}" target="content" title="{{ page.name }}">{{ page.name }}</a>
+        </li>
         {% endfor %}
     </ul>
 </nav>
@@ -17,6 +19,10 @@
     .l3 { padding: 10px 20px 10px 60px }
     .l4 { padding: 10px 20px 10px 80px }
     .l5 { padding: 10px 20px 10px 100px }
+    li.-error a {
+        font-weight: bold;
+        color: red;
+    }
 </style>
 <script>
     document.addEventListener('click', function (event) {
