@@ -1,4 +1,4 @@
-use color_eyre::eyre::{ Error as ColorError };
+use color_eyre::eyre::Error as ColorError;
 use thiserror::Error;
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -12,7 +12,7 @@ pub struct Error {
 impl From<parser_utils::errors::Error> for Error {
     fn from(value: parser_utils::errors::Error) -> Self {
         Self {
-            kind: ErrorKind::ParserError(value)
+            kind: ErrorKind::ParseFailed(value),
         }
     }
 }
@@ -20,7 +20,7 @@ impl From<parser_utils::errors::Error> for Error {
 impl From<ColorError> for Error {
     fn from(value: ColorError) -> Self {
         Self {
-            kind: ErrorKind::OtherError(value)
+            kind: ErrorKind::OtherError(value),
         }
     }
 }
@@ -28,30 +28,28 @@ impl From<ColorError> for Error {
 impl From<std::io::Error> for Error {
     fn from(value: std::io::Error) -> Self {
         Self {
-            kind: ErrorKind::IoError(value)
+            kind: ErrorKind::IoError(value),
         }
     }
 }
 
 impl From<ErrorKind> for Error {
     fn from(kind: ErrorKind) -> Self {
-        Self {
-            kind
-        }
+        Self { kind }
     }
 }
 
 #[derive(Error, Debug)]
 pub enum ErrorKind {
     #[error("Parsing failed: {0}")]
-    ParserError(parser_utils::errors::Error),
+    ParseFailed(parser_utils::errors::Error),
 
     #[error("Rendering failed: {0}")]
-    RenderError(String),
+    RenderFailed(String),
 
     #[error("IO failure: {0}")]
     IoError(std::io::Error),
 
     #[error("Failure: {0}")]
-    OtherError(ColorError)
+    OtherError(ColorError),
 }

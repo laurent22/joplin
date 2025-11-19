@@ -16,12 +16,8 @@ pub(crate) struct TocEntry {
     pub(crate) level: i32,
 }
 
-
 pub(crate) fn render(name: &str, pages: Vec<TocEntry>) -> Result<String> {
-    let template = NotebookTemplate {
-        name,
-        pages,
-    };
+    let template = NotebookTemplate { name, pages };
 
     template
         .render()

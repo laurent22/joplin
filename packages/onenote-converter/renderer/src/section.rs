@@ -51,18 +51,19 @@ impl Renderer {
             }
 
             for page in page_series.pages() {
-                let render_result = self.render_page_to_file(&page, &section_dir, &output_dir, || {
-                    fallback_title_index+=1;
-                    return fallback_title_index
-                });
+                let render_result =
+                    self.render_page_to_file(page, &section_dir, &output_dir, || {
+                        fallback_title_index += 1;
+                        fallback_title_index
+                    });
                 match render_result {
                     Ok(toc_entry) => {
                         toc.push(toc_entry);
-                    },
+                    }
                     Err(error) => {
                         log_warn!("Error rendering page: {:?}", error);
                         errors.push(format!("Render error: {:?}", error));
-                    },
+                    }
                 }
             }
         }
@@ -82,17 +83,31 @@ impl Renderer {
         log!("ToC: {}", toc_path);
 
         if let Some(errors_path) = errors_path {
-            Err(ErrorKind::RenderError(format!("Some pages failed to render. First error: {:?}. Full error report written to {}", errors.first(), errors_path)).into())
+            Err(ErrorKind::RenderFailed(format!(
+                "Some pages failed to render. First error: {:?}. Full error report written to {}",
+                errors.first(),
+                errors_path
+            ))
+            .into())
         } else {
             Ok(RenderedSection { section_dir })
         }
     }
 
-    fn render_page_to_file<F>(&mut self, page: &Page, section_dir: &str, output_dir: &str, fallback_title_idx: F) -> Result<TocEntry>
-    where F: FnOnce()->u32 {
-        let title = page.title_text().map(|s| s.to_string()).unwrap_or_else(|| {
-            format!("Untitled Page {}", fallback_title_idx())
-        });
+    fn render_page_to_file<F>(
+        &mut self,
+        page: &Page,
+        section_dir: &str,
+        output_dir: &str,
+        fallback_title_idx: F,
+    ) -> Result<TocEntry>
+    where
+        F: FnOnce() -> u32,
+    {
+        let title = page
+            .title_text()
+            .map(|s| s.to_string())
+            .unwrap_or_else(|| format!("Untitled Page {}", fallback_title_idx()));
 
         let mut renderer = page::Renderer::new(section_dir.into(), self);
         let page_html = renderer.render_page(page)?;
@@ -110,7 +125,11 @@ impl Renderer {
         })
     }
 
-    fn render_errors_to_file(&mut self, errors: &Vec<String>, output_dir: &str) -> Result<TocEntry> {
+    fn render_errors_to_file(
+        &mut self,
+        errors: &Vec<String>,
+        output_dir: &str,
+    ) -> Result<TocEntry> {
         let error_html = templates::errors::render(&errors)?;
         let errors_path = self.write_item_file(&output_dir, "Errors", &error_html)?;
         log!("Errors: {}", errors_path);
@@ -123,11 +142,13 @@ impl Renderer {
         })
     }
 
-    fn write_item_file(&mut self, output_dir: &str, item_title: &str, item_html: &str) -> Result<String> {
-        let file_path = fs_driver().join(
-            &output_dir,
-            &self.determine_page_filename(item_title)?,
-        );
+    fn write_item_file(
+        &mut self,
+        output_dir: &str,
+        item_title: &str,
+        item_html: &str,
+    ) -> Result<String> {
+        let file_path = fs_driver().join(&output_dir, &self.determine_page_filename(item_title)?);
         fs_driver().write_file(file_path.as_str(), item_html.as_bytes())?;
         Ok(file_path)
     }

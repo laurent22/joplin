@@ -8,12 +8,8 @@ struct ErrorPageTemplate<'a> {
     errors: &'a Vec<String>,
 }
 
-pub(crate) fn render(
-    errors: &Vec<String>
-) -> Result<String> {
-    ErrorPageTemplate {
-        errors
-    }
-    .render()
-    .wrap_err("Failed to render error list template")
+pub(crate) fn render(errors: &Vec<String>) -> Result<String> {
+    ErrorPageTemplate { errors }
+        .render()
+        .wrap_err("Failed to render error list template")
 }

@@ -20,7 +20,7 @@ pub struct PageSeries {
     errors: Rc<Vec<String>>,
 }
 
-impl <'a> PageSeries {
+impl<'a> PageSeries {
     /// The pages contained in this page series.
     pub fn pages(&self) -> &[Page] {
         &self.pages
@@ -55,14 +55,10 @@ pub(crate) fn parse_page_series(id: ExGuid, store: Rc<dyn OneStore>) -> Result<P
         })
         .map(|page_space: Result<ObjectSpaceRef>| parse_page(page_space?));
 
-    let (pages, errors) = pages_and_errors.partition_map(
-        |result| {
-            match result {
-                Ok(page) => Either::Left(page),
-                Err(error) => Either::Right(format!("Failed to parse page: {:?}", error)),
-            }
-        }
-    );
+    let (pages, errors) = pages_and_errors.partition_map(|result| match result {
+        Ok(page) => Either::Left(page),
+        Err(error) => Either::Right(format!("Failed to parse page: {:?}", error)),
+    });
 
     Ok(PageSeries {
         pages,
