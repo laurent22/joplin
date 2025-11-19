@@ -46,9 +46,14 @@ export const assertIsFolder: (item: TreeItem)=> asserts item is FolderRecord = i
 export interface FuzzContext {
 	serverUrl: string;
 	isJoplinCloud: boolean;
+	keepAccounts: boolean;
+	enableE2ee: boolean;
 	baseDir: string;
+
 	execApi: (method: HttpMethod, route: string, debugAction: Json)=> Promise<Json>;
 	randInt: (low: number, high: number)=> number;
+	randomString: (targetLength: number)=> string;
+	randomFrom: <T> (data: T[])=> T;
 }
 
 export interface RandomFolderOptions {

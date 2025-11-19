@@ -22,7 +22,30 @@
 		background: var(--joplin-selected-color2);
 	}
 
-	&.-highlight-on-hover:hover {
+	// When multiple items are selected, show an outline (similar to the focus outline) to indicate
+	// which folder has the primary selection.
+	&.-selected-primary {
+		--outline-color: var(--joplin-focus-outline-color-dimmed);
+		outline: 1px solid var(--outline-color);
+
+		// Also adjust the background color: This makes it clearer which item has primary focus,
+		// especially when using a dimmed outline.
+		background-color: color-mix(
+			in srgb,
+			var(--outline-color) 12%,
+			var(--joplin-selected-color2) 92%
+		);
+
+		// For accessibility, use a different style when actually focused. This makes it easier to
+		// tell where the keyboard focus is.
+		&:focus {
+			--outline-color: var(--joplin-focus-outline-color);
+		}
+	}
+
+	// Don't highlight selected items on hover -- doing so makes it
+	// difficult to tell whether the hovered item is selected or not.
+	&.-highlight-on-hover:not(.-selected):hover {
 		background-color: var(--joplin-background-color-hover2);
 	}
 }

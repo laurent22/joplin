@@ -6,6 +6,7 @@ _releases/
 *.min.js
 **/commands/index.ts
 **/node_modules/
+**/abcjs-basic-min.js
 packages/generator-joplin/generators/app/templates/api/
 Assets/
 docs/
@@ -424,10 +425,11 @@ packages/app-desktop/gui/Sidebar/Sidebar.js
 packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js
 packages/app-desktop/gui/Sidebar/commands/index.js
 packages/app-desktop/gui/Sidebar/hooks/useFocusHandler.js
+packages/app-desktop/gui/Sidebar/hooks/useOnItemClick.js
 packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.js
 packages/app-desktop/gui/Sidebar/hooks/useOnRenderListWrapper.js
 packages/app-desktop/gui/Sidebar/hooks/useOnSidebarKeyDownHandler.js
-packages/app-desktop/gui/Sidebar/hooks/useSelectedSidebarIndex.js
+packages/app-desktop/gui/Sidebar/hooks/useSelectedSidebarIndexes.js
 packages/app-desktop/gui/Sidebar/hooks/useSidebarCommandHandler.js
 packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.js
 packages/app-desktop/gui/Sidebar/hooks/utils/toggleHeader.js
@@ -1144,6 +1146,7 @@ packages/editor/ProseMirror/utils/dom/showModal.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.test.js
 packages/editor/ProseMirror/utils/extractSelectedLinesTo.js
 packages/editor/ProseMirror/utils/forEachHeading.js
+packages/editor/ProseMirror/utils/insertRenderedMarkdown.js
 packages/editor/ProseMirror/utils/jumpToHash.js
 packages/editor/ProseMirror/utils/makeLinksClickableInElement.js
 packages/editor/ProseMirror/utils/postprocessEditorOutput.test.js
@@ -1396,6 +1399,7 @@ packages/lib/services/KeymapService_keysRegExp.js
 packages/lib/services/KvStore.js
 packages/lib/services/MigrationService.js
 packages/lib/services/NavService.js
+packages/lib/services/NotePositionService.js
 packages/lib/services/PostMessageService.js
 packages/lib/services/ReportService.test.js
 packages/lib/services/ReportService.js
@@ -1411,6 +1415,7 @@ packages/lib/services/UndoRedoService.js
 packages/lib/services/WhenClause.test.js
 packages/lib/services/WhenClause.js
 packages/lib/services/commands/MenuUtils.js
+packages/lib/services/commands/ToolbarButtonUtils.test.js
 packages/lib/services/commands/ToolbarButtonUtils.js
 packages/lib/services/commands/commandsToMarkdownTable.js
 packages/lib/services/commands/focusEditorIfEditorCommand.js
@@ -1644,6 +1649,7 @@ packages/lib/services/synchronizer/Synchronizer.sharing.test.js
 packages/lib/services/synchronizer/Synchronizer.tags.test.js
 packages/lib/services/synchronizer/Synchronizer.tools.test.js
 packages/lib/services/synchronizer/gui/useSyncTargetUpgrade.js
+packages/lib/services/synchronizer/handleConflictAction.test.js
 packages/lib/services/synchronizer/migrations/1.js
 packages/lib/services/synchronizer/migrations/2.js
 packages/lib/services/synchronizer/migrations/3.js
@@ -1778,6 +1784,7 @@ packages/renderer/MdToHtml/createEventHandlingAttrs.js
 packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/linkReplacement.js
 packages/renderer/MdToHtml/renderMedia.js
+packages/renderer/MdToHtml/rules/abc.js
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/code_inline.js
 packages/renderer/MdToHtml/rules/fence.js
@@ -1820,14 +1827,18 @@ packages/tools/fuzzer/Client.js
 packages/tools/fuzzer/ClientPool.js
 packages/tools/fuzzer/Server.js
 packages/tools/fuzzer/constants.js
+packages/tools/fuzzer/doRandomAction.js
 packages/tools/fuzzer/model/FolderRecord.js
 packages/tools/fuzzer/sync-fuzzer.js
 packages/tools/fuzzer/types.js
+packages/tools/fuzzer/utils/ProgressBar.js
 packages/tools/fuzzer/utils/SeededRandom.js
 packages/tools/fuzzer/utils/getNumberProperty.js
 packages/tools/fuzzer/utils/getProperty.js
 packages/tools/fuzzer/utils/getStringProperty.js
+packages/tools/fuzzer/utils/logDiffDebug.js
 packages/tools/fuzzer/utils/openDebugSession.js
+packages/tools/fuzzer/utils/randomString.js
 packages/tools/fuzzer/utils/retryWithCount.js
 packages/tools/generate-database-types.js
 packages/tools/generate-images.js

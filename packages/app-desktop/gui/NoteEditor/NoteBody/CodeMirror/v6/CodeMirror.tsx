@@ -32,6 +32,7 @@ import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventManager';
 import useSyncEditorValue from './utils/useSyncEditorValue';
+import { getGlobalSettings } from '@joplin/renderer/types';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -248,6 +249,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
+				globalSettings: getGlobalSettings(Setting),
 			}));
 
 			if (cancelled) return;

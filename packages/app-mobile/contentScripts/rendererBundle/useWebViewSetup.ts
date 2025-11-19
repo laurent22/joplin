@@ -228,6 +228,9 @@ const useWebViewSetup = (props: Props): Result => {
 					return shim.fsDriver().fileAtPath(resolvedPath);
 				},
 				removeUnusedPluginAssets: options.removeUnusedPluginAssets,
+				globalSettings: {
+					'markdown.plugin.abc.options': Setting.value('markdown.plugin.abc.options'),
+				},
 			});
 
 			await transferResources(options.resources);

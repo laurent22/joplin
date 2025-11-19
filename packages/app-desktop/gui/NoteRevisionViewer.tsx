@@ -25,6 +25,8 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
+import { getGlobalSettings } from '@joplin/renderer/types';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	themeId: number;
@@ -72,6 +74,7 @@ const useNoteContent = (
 		const result = await markupToHtml(markupLanguage, noteBody, {
 			resources: await shared.attachedResources(noteBody),
 			whiteBackgroundNoteRendering: markupLanguage === MarkupLanguage.Html,
+			globalSettings: getGlobalSettings(Setting),
 		});
 
 		viewerRef.current.setHtml(result.html, {
