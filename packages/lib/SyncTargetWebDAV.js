@@ -37,8 +37,13 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 	}
 
 	static async newFileApi_(syncTargetId, options) {
+		// the syncPath might contain non-ASCII characters
+		// /[^\u0021-\u00ff]/ is used in Node.js to detect the unescaped characters.
+		// See https://github.com/nodejs/node/blob/bbbf97b6dae63697371082475dc8651a6a220336/lib/_http_client.js#L176
+		const charsReg = /[^\u0021-\u00ff]/;
+		const pathUrl = charsReg.exec(options.path()) !== null ? encodeURI(options.path()) : options.path();
 		const apiOptions = {
-			baseUrl: () => options.path(),
+			baseUrl: () => pathUrl,
 			username: () => options.username(),
 			password: () => options.password(),
 			ignoreTlsErrors: () => options.ignoreTlsErrors(),

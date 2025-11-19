@@ -42,14 +42,8 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 	}
 
 	async initFileApi() {
-		const syncPath = Setting.value('sync.5.path');
-		// the syncPath might contain non-ASCII characters
-		// /[^\u0021-\u00ff]/ is used in Node.js to detect the unescaped characters.
-		// See https://github.com/nodejs/node/blob/bbbf97b6dae63697371082475dc8651a6a220336/lib/_http_client.js#L176
-		const charsReg = /[^\u0021-\u00ff]/;
-		const syncPathUrl = charsReg.exec(syncPath) !== null ? encodeURI(syncPath) : syncPath;
 		const fileApi = await SyncTargetWebDAV.newFileApi_(SyncTargetNextcloud.id(), {
-			path: () => syncPathUrl,
+			path: () => Setting.value('sync.5.path'),
 			username: () => Setting.value('sync.5.username'),
 			password: () => Setting.value('sync.5.password'),
 			ignoreTlsErrors: () => Setting.value('net.ignoreTlsErrors'),
