@@ -149,19 +149,20 @@ impl Renderer {
         title: &str,
         html: &str,
     ) -> Result<String> {
-        let file_path = fs_driver().join(&parent_dir, &self.determine_page_filename(title)?);
+        let file_path = fs_driver().join(&parent_dir, &self.title_to_filename(parent_dir, title)?);
         fs_driver().write_file(file_path.as_str(), html.as_bytes())?;
         Ok(file_path)
     }
 
-    fn determine_page_filename(&mut self, filename: &str) -> Result<String> {
+    fn title_to_filename(&mut self, parent_dir: &str, filename: &str) -> Result<String> {
         let filename = filename.trim().replace("/", "_");
         let mut i = 0;
         let mut current_filename = format!("{}.html", sanitize_filename::sanitize(&filename));
 
         loop {
-            if !self.pages.contains(&current_filename) {
-                self.pages.insert(current_filename.clone());
+            let current_full_path = fs_driver().join(parent_dir, &current_filename);
+            if !self.pages.contains(&current_full_path) {
+                self.pages.insert(current_full_path);
 
                 return Ok(current_filename);
             }
