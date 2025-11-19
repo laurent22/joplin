@@ -62,7 +62,8 @@ impl Renderer {
                     }
                     Err(error) => {
                         log_warn!("Error rendering page: {:?}", error);
-                        errors.push(format!("Render error: {:?}", error));
+                        let title = page.title_text().unwrap_or_default();
+                        errors.push(format!("Render error for page {}: {:?}", title, error));
                     }
                 }
             }

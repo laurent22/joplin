@@ -5,7 +5,7 @@ use itertools::Itertools;
 use parser_utils::errors::{ErrorKind, Result};
 
 /// A OneNote notebook.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Notebook {
     pub(crate) entries: Vec<SectionEntry>,
 }
