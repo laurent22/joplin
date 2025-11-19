@@ -15,6 +15,7 @@ import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getColl
 import { DialogContext } from '../DialogManager';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { PromptButtonSpec } from '../DialogManager/types';
 
 interface Props {
 	dispatch: Dispatch;
@@ -110,8 +111,7 @@ const TagsScreenComponent: React.FC<Props> = props => {
 	}, [props.dispatch]);
 
 	const onTagItemLongPress = useCallback(async (tag: TagEntity) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-		const menuItems: any[] = [];
+		const menuItems: PromptButtonSpec[] = [];
 
 		const generateTagDeletion = () => {
 			return () => {
