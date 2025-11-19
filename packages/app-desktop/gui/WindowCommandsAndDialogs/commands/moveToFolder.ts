@@ -31,7 +31,7 @@ export const runtime = (comp: any): CommandRuntime => {
 				}
 			}
 
-			const folders = await Folder.sortFolderTree();
+			const folders = await Folder.sortFolderTree(null, { removeDeletedFolders: true });
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const startFolders: any[] = [];
 			const maxDepth = 15;
@@ -52,10 +52,6 @@ export const runtime = (comp: any): CommandRuntime => {
 
 					// Disallow making a folder a subfolder of itself.
 					if (itemIdToType.has(folder.id)) {
-						continue;
-					}
-
-					if (folder.deleted_time) {
 						continue;
 					}
 

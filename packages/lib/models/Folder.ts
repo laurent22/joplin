@@ -878,11 +878,13 @@ export default class Folder extends BaseItem {
 		return rootFolders;
 	}
 
-	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null) {
-		const output = folders ? folders : await this.allAsTree();
+	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null, options: { removeDeletedFolders?: boolean } = null) {
+		let output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
 			const collator = getCollator();
+			if (options && !!options.removeDeletedFolders) folders = folders.filter(folder => !folder.deleted_time);
+
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
 					return collator.compare(a.title, b.title);
@@ -903,7 +905,7 @@ export default class Folder extends BaseItem {
 			return folders;
 		};
 
-		sortFolders(sortFoldersAlphabetically(output));
+		output = sortFolders(sortFoldersAlphabetically(output));
 		return output;
 	}
 
