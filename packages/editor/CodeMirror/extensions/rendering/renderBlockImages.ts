@@ -66,15 +66,6 @@ class ImageWidget extends WidgetType {
 		const image = document.createElement('img');
 		image.classList.add('image');
 
-		// Apply width if specified, otherwise clear it
-		if (this.width_) {
-			image.style.width = `${this.width_}px`;
-			image.style.height = 'auto';
-		} else {
-			image.style.width = '';
-			image.style.height = '';
-		}
-
 		container.appendChild(image);
 		this.updateDOM(container);
 
