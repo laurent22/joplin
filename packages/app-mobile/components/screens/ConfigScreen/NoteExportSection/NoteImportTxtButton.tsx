@@ -71,7 +71,7 @@ const runImportTask = async (
 		return { success: true, warnings: status.warnings };
 	} catch (error) {
 		logger.error('Import failed with error', error);
-		throw new Error(_('Import failed. Make sure a Markdown file was selected.\nDetails: %s', error.toString()));
+		throw new Error(_('Import failed. Make sure a Text file was selected.\nDetails: %s', error.toString()));
 	}
 };
 
