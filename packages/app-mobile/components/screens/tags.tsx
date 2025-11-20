@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import Tag from '@joplin/lib/models/Tag';
 import { themeStyle } from '../global-style';
@@ -12,7 +12,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Dispatch } from 'redux';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
-import IconButton from '../IconButton';
+import SearchBar from './SearchScreen/SearchBar';
 
 interface Props {
 	dispatch: Dispatch;
@@ -40,25 +40,6 @@ const useStyles = (themeId: number) => {
 				fontSize: theme.fontSize,
 			},
 			rootStyle: theme.rootStyle,
-			searchContainer: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				borderWidth: 1,
-				borderColor: theme.dividerColor,
-			},
-			searchTextInput: {
-				...theme.lineInput,
-				paddingLeft: theme.marginLeft,
-				flex: 1,
-				backgroundColor: theme.backgroundColor,
-				color: theme.color,
-			},
-			clearIcon: {
-				...theme.icon,
-				color: theme.colorFaded,
-				paddingRight: theme.marginRight,
-				backgroundColor: theme.backgroundColor,
-			},
 		});
 	}, [themeId]);
 };
@@ -69,7 +50,6 @@ const TagsScreenComponent: React.FC<Props> = props => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [showSearch, setShowSearch] = useState(false);
 	const styles = useStyles(props.themeId);
-	const theme = themeStyle(props.themeId);
 	const collatorLocale = getCollatorLocale();
 	const collator = useMemo(() => {
 		return getCollator(collatorLocale);
@@ -148,26 +128,14 @@ const TagsScreenComponent: React.FC<Props> = props => {
 				onSearchButtonPress={onSearchButtonPress}
 			/>
 			{showSearch && (
-				<View style={styles.searchContainer}>
-					<TextInput
-						style={styles.searchTextInput}
-						autoFocus={true}
-						underlineColorAndroid="#ffffff00"
-						onChangeText={setSearchQuery}
-						value={searchQuery}
-						placeholder={_('Search tags')}
-						placeholderTextColor={theme.colorFaded}
-						selectionColor={theme.textSelectionColor}
-						keyboardAppearance={theme.keyboardAppearance}
-					/>
-					<IconButton
-						themeId={props.themeId}
-						iconStyle={styles.clearIcon}
-						iconName='ionicon close-circle'
-						onPress={clearButton_press}
-						description={_('Clear')}
-					/>
-				</View>
+				<SearchBar
+					themeId={props.themeId}
+					autoFocus={true}
+					placeholder={_('Search tags')}
+					value={searchQuery}
+					onChangeText={setSearchQuery}
+					onClearButtonPress={clearButton_press}
+				/>
 			)}
 			<FlatList style={{ flex: 1 }} data={tags} renderItem={onRenderItem} keyExtractor={tag => tag.id} />
 		</View>
