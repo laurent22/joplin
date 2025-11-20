@@ -166,20 +166,38 @@ const renderBlockImages = (context: RenderedContentContext) => [
 	}),
 	makeBlockReplaceExtension({
 		createDecoration: (node, state) => {
-			// Handle markdown images
-			if (node.name === 'Image') {
+			// Handle both markdown images and HTML img tags
+			if (node.name === 'Image' || node.name === 'HTMLTag' || node.name === 'HTMLBlock') {
 				const lineFrom = state.doc.lineAt(node.from);
 				const lineTo = state.doc.lineAt(node.to);
 				const textBefore = state.sliceDoc(lineFrom.from, node.from);
 				const textAfter = state.sliceDoc(node.to, lineTo.to);
+
+				// Only render images on their own line
 				if (textBefore.trim() === '' && textAfter.trim() === '') {
-					const src = getImageSrc(node, state);
-					const alt = getImageAlt(node, state);
+					let src: string | null = null;
+					let alt: string | null = null;
+					let width: string | null = null;
+
+					// Parse image data based on node type
+					if (node.name === 'Image') {
+						// Markdown image: ![alt](src)
+						src = getImageSrc(node, state);
+						alt = getImageAlt(node, state);
+					} else {
+						// HTML img tag: <img src="..." alt="..." width="..." />
+						const imageInfo = parseHtmlImage(node, state);
+						if (imageInfo) {
+							src = imageInfo.src;
+							alt = imageInfo.alt;
+							width = imageInfo.width;
+						}
+					}
 
 					if (src) {
 						const isLastLine = lineTo.number === state.doc.lines;
 						return Decoration.widget({
-							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, null),
+							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, width),
 							// "side: -1": In general, when the cursor is at the widget's location, it should be at
 							// the start of the next line (and so "side" should be -1).
 							//
@@ -188,32 +206,6 @@ const renderBlockImages = (context: RenderedContentContext) => [
 							// position from being outside the document, which would break CodeMirror).
 							// This means that we need "side: 1" to put the cursor before the widget
 							// when at the end of the document.
-							side: isLastLine ? 1 : -1,
-							block: true,
-						});
-					}
-				}
-			}
-
-			// Handle HTML img tags (both HTMLTag for self-closing and HTMLBlock for non-self-closing)
-			if (node.name === 'HTMLTag' || node.name === 'HTMLBlock') {
-				const lineFrom = state.doc.lineAt(node.from);
-				const lineTo = state.doc.lineAt(node.to);
-				const textBefore = state.sliceDoc(lineFrom.from, node.from);
-				const textAfter = state.sliceDoc(node.to, lineTo.to);
-				if (textBefore.trim() === '' && textAfter.trim() === '') {
-					const imageInfo = parseHtmlImage(node, state);
-
-					if (imageInfo) {
-						const isLastLine = lineTo.number === state.doc.lines;
-						return Decoration.widget({
-							widget: new ImageWidget(
-								context,
-								imageInfo.src,
-								imageInfo.alt ?? '',
-								imageToRefreshCounters.get(imageInfo.src) ?? 0,
-								imageInfo.width,
-							),
 							side: isLastLine ? 1 : -1,
 							block: true,
 						});
