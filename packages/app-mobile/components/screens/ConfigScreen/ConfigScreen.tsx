@@ -31,6 +31,7 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
 import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
+import NoteImportTxtButton, { importTxtButtonDefaultTitle, importTxtButtonDescription } from './NoteExportSection/NoteImportTxtButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
@@ -592,6 +593,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingComponent(
 				<NoteImportButton key='import_as_jex_button' styles={this.styles()} />,
 				[importButtonDefaultTitle(), importButtonDescription()],
+			);
+			addSettingComponent(
+				<NoteImportTxtButton key='import_as_txt_button' styles={this.styles()} />,
+				[importTxtButtonDefaultTitle(), importTxtButtonDescription()],
 			);
 			addSettingComponent(
 				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,

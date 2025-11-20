@@ -921,9 +921,11 @@ export default class Folder extends BaseItem {
 		return await this.modelSelectOne(`SELECT ${this.selectFields(options)} FROM folders WHERE title = ? and parent_id = ?`, [title, parentId]);
 	}
 
-	public static load(id: string, options: LoadOptions = null): Promise<FolderEntity> {
-		if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
-		if (id === getTrashFolderId()) return Promise.resolve(getTrashFolder());
+	public static load(id: string, options: LoadOptions = null, excludeVirtualFolders = false): Promise<FolderEntity> {
+		if (!excludeVirtualFolders) {
+			if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
+			if (id === getTrashFolderId()) return Promise.resolve(getTrashFolder());
+		}
 		return super.load(id, options);
 	}
 
@@ -1090,7 +1092,7 @@ export default class Folder extends BaseItem {
 		const folderId = Setting.value('activeFolderId');
 		if (!folderId) return null;
 
-		const folder = await Folder.load(folderId);
+		const folder = await Folder.load(folderId, null, true);
 		if (!folder || !!folder.deleted_time) {
 			const defaultFolder = await Folder.defaultFolder();
 			if (!defaultFolder) return null;
