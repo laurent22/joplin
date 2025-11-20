@@ -1,5 +1,6 @@
 import { ErrorCode } from '../errors';
 import { FolderEntity } from '../services/database/types';
+import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
@@ -488,6 +489,13 @@ describe('models/Folder', () => {
 		await Folder.delete(activeFolder.id, { toTrash: true });
 		await Folder.delete(otherFolder.id, { toTrash: true });
 		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
+	});
+
+	it('should get no folder when activeFolderId is a virtual folder', async () => {
+		Setting.setValue('activeFolderId', getTrashFolderId());
 
 		const validFolder = await Folder.getValidActiveFolder();
 		expect(validFolder).toBeNull();
