@@ -48,7 +48,7 @@ import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatter
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import useCursorPositioning from './utils/useCursorPositioning';
-
+const bridge = require('electron').ipcRenderer
 const logger = Logger.create('TinyMCE');
 
 // In TinyMCE 5.2, when setting the body to '<div id="rendered-md"></div>',
@@ -807,6 +807,18 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 							editor.execCommand('joplinAttach');
 						},
 					});
+					editor.ui.addButton('copyCodeBlac' , {
+						icon: 'copy',
+						tooltip : 'Copy code',
+						onAction : ()=>{
+                          const seletedText = editor.selection.getContent({
+							format: 'text'
+						  });
+
+						  bridge().clipbordCopy(seletedText)
+						},
+
+					});
 
 					setupToolbarButtons(editor);
 
@@ -818,6 +830,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						},
 					});
 
+
 					editor.ui.registry.addToggleButton('joplinInlineCode', {
 						tooltip: _('Inline Code'),
 						icon: 'sourcecode',
@@ -825,7 +838,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' } as any);
 						},
-						onSetup: function(api) {
+						onSetup: (api) => {
 							api.setActive(editor.formatter.match('code'));
 							const handle = editor.formatter.formatChanged('code', active => api.setActive(active));
 
