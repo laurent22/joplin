@@ -20,7 +20,6 @@ pub trait FileApiDriver: Send + Sync {
     fn join(&self, path_1: &str, path_2: &str) -> String;
 
     /// Splits filename into (base, extension).
-    /// Note: May include the file extension in "base" in some edge cases (but should not).
     fn split_file_name(&self, filename: &str) -> (String, String) {
         let ext = self.get_file_extension(filename);
         let base = filename.strip_suffix(&ext).unwrap_or(filename);
