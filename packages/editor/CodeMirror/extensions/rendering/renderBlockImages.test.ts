@@ -146,4 +146,17 @@ describe('renderBlockImages', () => {
 		expect(images[0].style.width).toBe(''); // markdown - no width
 		expect(images[1].style.width).toBe('400px'); // HTML with width
 	});
+
+	test('should render HTML img tags with single-quoted attributes', async () => {
+		const editor = await createEditor(
+			// eslint-disable-next-line quotes
+			"<img src=':/0123456789abcdef0123456789abcdef' alt='test' width='250' />",
+			false,
+		);
+
+		const images = findImages(editor);
+		expect(images).toHaveLength(1);
+		expect(images[0].ariaLabel).toBe('test');
+		expect(images[0].style.width).toBe('250px');
+	});
 });

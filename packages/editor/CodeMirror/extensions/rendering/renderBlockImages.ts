@@ -114,22 +114,22 @@ const parseHtmlImage = (node: SyntaxNodeRef, state: EditorState): HtmlImageInfo 
 		return null;
 	}
 
-	// Extract src (only Joplin resource images with double quotes)
-	const srcMatch = nodeText.match(/src="(:\/[a-zA-Z0-9]{32})"/i);
+	// Extract src (only Joplin resource images, accepts single or double quotes)
+	const srcMatch = nodeText.match(/src=(["'])(:\/[a-zA-Z0-9]{32})\1/i);
 	if (!srcMatch) {
 		return null;
 	}
 
-	// Extract alt attribute (optional)
-	const altMatch = nodeText.match(/alt="([^"]*)"/i);
+	// Extract alt attribute (optional, accepts single or double quotes)
+	const altMatch = nodeText.match(/alt=(["'])([^"']*)\1/i);
 
-	// Extract width attribute (optional)
-	const widthMatch = nodeText.match(/width="(\d+)"/i);
+	// Extract width attribute (optional, accepts single or double quotes)
+	const widthMatch = nodeText.match(/width=(["'])(\d+)\1/i);
 
 	return {
-		src: srcMatch[1],
-		alt: altMatch ? altMatch[1] : null,
-		width: widthMatch ? widthMatch[1] : null,
+		src: srcMatch[2],
+		alt: altMatch ? altMatch[2] : null,
+		width: widthMatch ? widthMatch[2] : null,
 	};
 };
 
