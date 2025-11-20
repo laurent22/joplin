@@ -10,7 +10,6 @@ use std::collections::HashSet;
 
 pub(crate) struct Renderer {
     pub(crate) files: HashSet<String>,
-    pub(crate) pages: HashSet<String>,
 }
 
 pub(crate) struct RenderedSection {
@@ -21,7 +20,6 @@ impl Renderer {
     pub fn new() -> Self {
         Renderer {
             files: Default::default(),
-            pages: Default::default(),
         }
     }
 
@@ -149,27 +147,33 @@ impl Renderer {
         title: &str,
         html: &str,
     ) -> Result<String> {
-        let file_path = fs_driver().join(&parent_dir, &self.title_to_filename(parent_dir, title)?);
-        fs_driver().write_file(file_path.as_str(), html.as_bytes())?;
-        Ok(file_path)
+        let filename = self.title_to_unique_safe_filename(parent_dir, title, ".html")?;
+        let path = fs_driver().join(&parent_dir, &filename);
+        fs_driver().write_file(&path, html.as_bytes())?;
+        Ok(path)
     }
 
-    fn title_to_filename(&mut self, parent_dir: &str, filename: &str) -> Result<String> {
-        let filename = filename.trim().replace("/", "_");
+    pub(crate) fn to_unique_safe_filename(&mut self, parent_dir: &str, filename: &str) -> Result<String> {
+        let (base, ext) = fs_driver().split_file_name(filename);
+        self.title_to_unique_safe_filename(parent_dir, &base, &ext)
+    }
+
+    fn title_to_unique_safe_filename(&mut self, parent_dir: &str, filename_base: &str, extension: &str) -> Result<String> {
+        let filename = filename_base.trim().replace("/", "_");
         let mut i = 0;
-        let mut current_filename = format!("{}.html", sanitize_filename::sanitize(&filename));
+        let mut current_filename = sanitize_filename::sanitize(format!("{}{}", filename, extension));
 
         loop {
             let current_full_path = fs_driver().join(parent_dir, &current_filename);
-            if !self.pages.contains(&current_full_path) {
-                self.pages.insert(current_full_path);
-
-                return Ok(current_filename);
+            if !self.files.contains(&current_full_path) {
+                self.files.insert(current_full_path);
+                break;
             }
 
             i += 1;
-
-            current_filename = format!("{}_{}.html", filename, i);
+            current_filename = sanitize_filename::sanitize(format!("{}_{}{}", filename, i, extension));
         }
+
+        Ok(current_filename)
     }
 }
