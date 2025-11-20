@@ -55,10 +55,7 @@ impl<'a> Renderer<'a> {
 
     fn determine_image_filename(&mut self, image: &Image) -> Result<String> {
         if let Some(name) = image.image_filename() {
-            let filename = self.section.to_unique_safe_filename(
-                &self.output,
-                name,
-            )?;
+            let filename = self.section.to_unique_safe_filename(&self.output, name)?;
             return Ok(filename);
         }
 
@@ -66,10 +63,9 @@ impl<'a> Renderer<'a> {
             log_warn!("Image missing extension. Defaulting to .png.");
             ".png"
         });
-        let filename = self.section.to_unique_safe_filename(
-            &self.output,
-            &format!("image{}", ext),
-        )?;
+        let filename = self
+            .section
+            .to_unique_safe_filename(&self.output, &format!("image{}", ext))?;
         Ok(filename)
     }
 }

@@ -141,27 +141,32 @@ impl Renderer {
         })
     }
 
-    fn write_html_file(
-        &mut self,
-        parent_dir: &str,
-        title: &str,
-        html: &str,
-    ) -> Result<String> {
+    fn write_html_file(&mut self, parent_dir: &str, title: &str, html: &str) -> Result<String> {
         let filename = self.title_to_unique_safe_filename(parent_dir, title, ".html")?;
         let path = fs_driver().join(&parent_dir, &filename);
         fs_driver().write_file(&path, html.as_bytes())?;
         Ok(path)
     }
 
-    pub(crate) fn to_unique_safe_filename(&mut self, parent_dir: &str, filename: &str) -> Result<String> {
+    pub(crate) fn to_unique_safe_filename(
+        &mut self,
+        parent_dir: &str,
+        filename: &str,
+    ) -> Result<String> {
         let (base, ext) = fs_driver().split_file_name(filename);
         self.title_to_unique_safe_filename(parent_dir, &base, &ext)
     }
 
-    fn title_to_unique_safe_filename(&mut self, parent_dir: &str, filename_base: &str, extension: &str) -> Result<String> {
+    fn title_to_unique_safe_filename(
+        &mut self,
+        parent_dir: &str,
+        filename_base: &str,
+        extension: &str,
+    ) -> Result<String> {
         let filename = filename_base.trim().replace("/", "_");
         let mut i = 0;
-        let mut current_filename = sanitize_filename::sanitize(format!("{}{}", filename, extension));
+        let mut current_filename =
+            sanitize_filename::sanitize(format!("{}{}", filename, extension));
 
         loop {
             let current_full_path = fs_driver().join(parent_dir, &current_filename);
@@ -171,7 +176,8 @@ impl Renderer {
             }
 
             i += 1;
-            current_filename = sanitize_filename::sanitize(format!("{}_{}{}", filename, i, extension));
+            current_filename =
+                sanitize_filename::sanitize(format!("{}_{}{}", filename, i, extension));
         }
 
         Ok(current_filename)

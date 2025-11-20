@@ -8,7 +8,9 @@ impl<'a> Renderer<'a> {
     pub(crate) fn render_embedded_file(&mut self, file: &EmbeddedFile) -> Result<String> {
         let content;
 
-        let filename = self.section.to_unique_safe_filename(&self.output, file.filename())?;
+        let filename = self
+            .section
+            .to_unique_safe_filename(&self.output, file.filename())?;
         let path = fs_driver().join(&self.output, &filename);
         log!("Rendering embedded file: {:?}", path);
         fs_driver().write_file(&path, file.data())?;
