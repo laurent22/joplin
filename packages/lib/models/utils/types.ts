@@ -32,6 +32,7 @@ export interface LoadOptions {
 	limit?: number;
 	includeConflicts?: boolean;
 	includeDeleted?: boolean;
+	excludeVirtualFolders?: boolean;
 }
 
 export interface FolderLoadOptions extends LoadOptions {
