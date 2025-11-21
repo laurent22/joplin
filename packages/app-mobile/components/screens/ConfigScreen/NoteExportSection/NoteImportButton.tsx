@@ -10,68 +10,84 @@ import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirecto
 import shim from '@joplin/lib/shim';
 import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
 import { Platform } from 'react-native';
+import Folder from '@joplin/lib/models/Folder';
 
 const logger = Logger.create('NoteImportButton');
 
 interface Props {
 	styles: ConfigScreenStyles;
+	defaultTitle: string;
+	description: string;
+	format: string;
 }
 
-// Exported for search filtering
-export const importButtonDefaultTitle = () => _('Import from JEX');
-export const importButtonDescription = () => _('Import notes from a JEX (Joplin Export) file.');
+const NoteImportButton: FunctionComponent<Props> = props => {
+	const getTitle = (taskStatus: TaskStatus) => {
+		if (taskStatus === TaskStatus.InProgress) {
+			return _('Importing...');
+		} else {
+			return props.defaultTitle;
+		}
+	};
 
-const getTitle = (taskStatus: TaskStatus) => {
-	if (taskStatus === TaskStatus.InProgress) {
-		return _('Importing...');
-	} else {
-		return importButtonDefaultTitle();
-	}
-};
+	const runImportTask = async (
+		_onProgress: OnProgressCallback,
+		setAfterCompleteListener: SetAfterCompleteListenerCallback,
+	) => {
+		logger.info(`Importing ${props.format}...`);
 
-const runImportTask = async (
-	_onProgress: OnProgressCallback,
-	setAfterCompleteListener: SetAfterCompleteListenerCallback,
-) => {
-	const importTargetPath = join(await makeImportExportCacheDirectory(), 'to-import.jex');
-	logger.info('Importing...');
+		const importFiles = await pickDocument({ multiple: false });
+		if (importFiles.length === 0) {
+			logger.info('Canceled.');
+			return { success: false, warnings: [] };
+		}
 
-	setAfterCompleteListener(async (_success: boolean) => {
-		await shim.fsDriver().remove(importTargetPath);
-	});
-
-	const importFiles = await pickDocument({ multiple: false });
-	if (importFiles.length === 0) {
-		logger.info('Canceled.');
-		return { success: false, warnings: [] };
-	}
-
-	const sourceFileUri = importFiles[0].uri;
-	const sourceFilePath = Platform.select({
-		default: sourceFileUri,
-		ios: decodeURI(sourceFileUri),
-	});
-	await shim.fsDriver().copy(sourceFilePath, importTargetPath);
-
-	try {
-		const status = await InteropService.instance().import({
-			path: importTargetPath,
-			format: 'jex',
+		const sourceFileUri = importFiles[0].uri;
+		const sourceFilePath = Platform.select({
+			default: sourceFileUri,
+			ios: decodeURI(sourceFileUri),
 		});
 
-		logger.info('Imported successfully');
-		return { success: true, warnings: status.warnings };
-	} catch (error) {
-		logger.error('Import failed with error', error);
-		throw new Error(_('Import failed. Make sure a JEX file was selected.\nDetails: %s', error.toString()));
-	}
-};
+		const importTargetPath = join(await makeImportExportCacheDirectory(), importFiles[0].fileName);
+		setAfterCompleteListener(async (_success: boolean) => {
+			await shim.fsDriver().remove(importTargetPath);
+		});
 
-const NoteImportButton: FunctionComponent<Props> = props => {
+		await shim.fsDriver().copy(sourceFilePath, importTargetPath);
+
+		try {
+			let status;
+
+			if (props.format === 'jex') {
+				status = await InteropService.instance().import({
+					path: importTargetPath,
+					format: props.format,
+				});
+			} else if (props.format === 'txt') {
+				const folder = await Folder.getValidActiveFolder();
+				if (!folder) {
+					throw new Error(_('Cannot find the selected notebook. Please select a different notebook.'));
+				}
+
+				status = await InteropService.instance().import({
+					path: importTargetPath,
+					format: props.format,
+					destinationFolderId: folder,
+				});
+			}
+
+			logger.info('Imported successfully');
+			return { success: true, warnings: status.warnings };
+		} catch (error) {
+			logger.error('Import failed with error', error);
+			throw new Error(_('Import failed. Make sure a %s file was selected.\nDetails: %s', props.format, error.toString()));
+		}
+	};
+
 	return (
 		<TaskButton
-			taskName={importButtonDefaultTitle()}
-			description={importButtonDescription()}
+			taskName={props.defaultTitle}
+			description={props.description}
 			buttonLabel={getTitle}
 			finishedLabel={_('Imported successfully!')}
 			styles={props.styles}

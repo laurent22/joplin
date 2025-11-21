@@ -790,7 +790,6 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProf
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.js
-packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportTxtButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportAllFolders.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportDebugReport.js

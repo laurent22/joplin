@@ -30,8 +30,7 @@ import { TextInput, List } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
-import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
-import NoteImportTxtButton, { importTxtButtonDefaultTitle, importTxtButtonDescription } from './NoteExportSection/NoteImportTxtButton';
+import NoteImportButton from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
@@ -590,13 +589,17 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
 				[exportButtonDefaultTitle(), exportButtonDescription()],
 			);
+			const importJexLabel = () => _('Import from JEX');
+			const importJexDescription = () => _('Import notes from a JEX (Joplin Export) file.');
 			addSettingComponent(
-				<NoteImportButton key='import_as_jex_button' styles={this.styles()} />,
-				[importButtonDefaultTitle(), importButtonDescription()],
+				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' />,
+				[importJexLabel(), importJexDescription()],
 			);
+			const importTxtLabel = () => _('Import from TXT');
+			const importTxtDescription = () => _('Import note from a Text file.');
 			addSettingComponent(
-				<NoteImportTxtButton key='import_as_txt_button' styles={this.styles()} />,
-				[importTxtButtonDefaultTitle(), importTxtButtonDescription()],
+				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' />,
+				[importTxtLabel(), importTxtDescription()],
 			);
 			addSettingComponent(
 				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,
