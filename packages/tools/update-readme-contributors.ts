@@ -1,6 +1,5 @@
 import { rootDir } from './tool-utils';
-
-const request = require('request');
+import fetch from 'node-fetch';
 
 interface Contributor {
 	avatar_url: string;
@@ -12,22 +11,16 @@ const readmePath = `${rootDir}/README.md`;
 const { insertContentIntoFile } = require('./tool-utils.js');
 
 async function gitHubContributors(page: number): Promise<Contributor[]> {
-	return new Promise((resolve, reject) => {
-		request.get({
-			url: `https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`,
-			json: true,
-			headers: { 'User-Agent': 'Joplin Readme Updater' },
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		}, (error: any, response: any, data: any) => {
-			if (error) {
-				reject(error);
-			} else if (response.statusCode !== 200) {
-				reject(new Error(`Error HTTP ${response.statusCode}`));
-			} else {
-				resolve(data);
-			}
-		});
+	const url = `https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`;
+	const response = await fetch(url, {
+		headers: { 'User-Agent': 'Joplin Readme Updater' },
 	});
+
+	if (!response.ok) {
+		throw new Error(`Error HTTP ${response.status}`);
+	}
+
+	return await response.json() as Contributor[];
 }
 
 function contributorTable(contributors: Contributor[]) {
