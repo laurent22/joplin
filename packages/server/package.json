@@ -40,7 +40,7 @@
     "jquery": "3.7.1",
     "knex": "3.1.0",
     "koa": "2.16.3",
-    "ldapts": "7.4.0",
+    "ldapts": "8.0.0",
     "markdown-it": "13.0.2",
     "mustache": "4.2.0",
     "node-cron": "3.0.3",
