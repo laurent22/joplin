@@ -77,10 +77,11 @@ impl Renderer {
         base_dir: String,
     ) -> Result<templates::notebook::Section> {
         let mut renderer = section::Renderer::new();
-        let section_path = renderer.render(section, notebook_dir)?;
+        let rendered_section = renderer.render(section, notebook_dir)?;
+        let section_path = &rendered_section.section_dir;
         log!("section_path: {:?}", section_path);
 
-        let path_from_base_dir = String::from(fs_driver().remove_prefix(&section_path, &base_dir));
+        let path_from_base_dir = String::from(fs_driver().remove_prefix(section_path, &base_dir));
         log!("path_from_base_dir: {:?}", path_from_base_dir);
         Ok(templates::notebook::Section {
             name: section.display_name().to_string(),
