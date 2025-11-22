@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import Tag from '@joplin/lib/models/Tag';
 import { themeStyle } from '../global-style';
@@ -16,6 +16,7 @@ import { DialogContext } from '../DialogManager';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import { PromptButtonSpec } from '../DialogManager/types';
+import MultiTouchableOpacity from '../buttons/MultiTouchableOpacity';
 
 interface Props {
 	dispatch: Dispatch;
@@ -56,22 +57,26 @@ interface TagItemProps {
 
 const TagItem: React.FC<TagItemProps> = ({ tag, themeId, onPress, onLongPress }) => {
 	const styles = useStyles(themeId);
-	const longPressProps = useOnLongPressProps({
-		onLongPress: () => onLongPress(tag),
-		actionDescription: _('Edit tag'),
-	});
+	const onLongPressProps = useOnLongPressProps({ onLongPress: () => onLongPress(tag), actionDescription: _('Edit tag') });
+	const pressableProps = {
+		accessibilityRole: 'button',
+		accessibilityHint: _('Shows notes for tag'),
+		...onLongPressProps,
+	};
 
 	return (
-		<TouchableOpacity
+		<MultiTouchableOpacity
+			{...pressableProps}
+			containerProps={{
+				style: {},
+			}}
 			onPress={() => onPress(tag.id)}
-			accessibilityRole='button'
-			accessibilityHint={_('Shows notes for tag')}
-			{...longPressProps}
+			beforePressable={null}
 		>
 			<View style={styles.listItem}>
 				<Text style={styles.listItemText}>{tag.title}</Text>
 			</View>
-		</TouchableOpacity>
+		</MultiTouchableOpacity>
 	);
 };
 
@@ -138,7 +143,7 @@ const TagsScreenComponent: React.FC<Props> = props => {
 				const newName = await dialogs.promptForText(_('Rename tag:'), tag.title);
 				if (newName && newName.trim() && newName.trim() !== tag.title) {
 					try {
-						const updatedTag = { ...tag, title: newName.trim() };
+						const updatedTag = { ...tag, title: newName };
 						await Tag.save(updatedTag, { fields: ['title'], userSideValidation: true });
 						setRefreshTrigger(prev => prev + 1);
 					} catch (error) {
