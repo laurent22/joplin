@@ -8,6 +8,7 @@ import * as exportDeletionLog from './exportDeletionLog';
 import * as exportFolders from './exportFolders';
 import * as exportNotes from './exportNotes';
 import * as focusElement from './focusElement';
+import * as manageProfiles from './manageProfiles';
 import * as openNoteInNewWindow from './openNoteInNewWindow';
 import * as openPrimaryAppInstance from './openPrimaryAppInstance';
 import * as openProfileDirectory from './openProfileDirectory';
@@ -34,6 +35,7 @@ const index: any[] = [
 	exportFolders,
 	exportNotes,
 	focusElement,
+	manageProfiles,
 	openNoteInNewWindow,
 	openPrimaryAppInstance,
 	openProfileDirectory,

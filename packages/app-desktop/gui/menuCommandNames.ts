@@ -73,6 +73,7 @@ export default function() {
 		'commandPalette',
 		'openMasterPasswordDialog',
 		'addProfile',
+		'manageProfiles',
 		'editProfileConfig',
 		'switchProfile1',
 		'switchProfile2',

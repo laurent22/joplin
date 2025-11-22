@@ -149,6 +149,7 @@ packages/app-desktop/commands/exportFolders.js
 packages/app-desktop/commands/exportNotes.js
 packages/app-desktop/commands/focusElement.js
 packages/app-desktop/commands/index.js
+packages/app-desktop/commands/manageProfiles.js
 packages/app-desktop/commands/openNoteInNewWindow.js
 packages/app-desktop/commands/openPrimaryAppInstance.js
 packages/app-desktop/commands/openProfileDirectory.js
@@ -365,6 +366,7 @@ packages/app-desktop/gui/PopupNotification/NotificationItem.js
 packages/app-desktop/gui/PopupNotification/PopupNotificationList.js
 packages/app-desktop/gui/PopupNotification/PopupNotificationProvider.js
 packages/app-desktop/gui/PopupNotification/types.js
+packages/app-desktop/gui/ProfileManagementScreen.js
 packages/app-desktop/gui/PromptDialog.js
 packages/app-desktop/gui/ResizableLayout/LayoutItemContainer.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
