@@ -13,6 +13,9 @@ import { Dispatch } from 'redux';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 import SearchBar from './SearchScreen/SearchBar';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('tags');
 
 interface Props {
 	dispatch: Dispatch;
@@ -78,6 +81,7 @@ const TagsScreenComponent: React.FC<Props> = props => {
 				setTags(fetchedTags);
 			}
 		} catch (error) {
+			logger.error('Error fetching tags', error);
 			if (!event.cancelled) {
 				setTags([]);
 			}
@@ -86,9 +90,6 @@ const TagsScreenComponent: React.FC<Props> = props => {
 
 	const onSearchButtonPress = useCallback(() => {
 		setShowSearch(!showSearch);
-		if (showSearch) {
-			setSearchQuery('');
-		}
 	}, [showSearch]);
 
 	const clearButton_press = useCallback(() => {
