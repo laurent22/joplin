@@ -10,7 +10,6 @@ import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirecto
 import shim from '@joplin/lib/shim';
 import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
 import { Platform } from 'react-native';
-import Folder from '@joplin/lib/models/Folder';
 
 const logger = Logger.create('NoteImportButton');
 
@@ -19,7 +18,7 @@ interface Props {
 	defaultTitle: string;
 	description: string;
 	format: string;
-	disabled?: boolean;
+	activeFolderId?: string;
 }
 
 const NoteImportButton: FunctionComponent<Props> = props => {
@@ -57,25 +56,11 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 		await shim.fsDriver().copy(sourceFilePath, importTargetPath);
 
 		try {
-			let status;
-
-			if (props.format === 'jex') {
-				status = await InteropService.instance().import({
-					path: importTargetPath,
-					format: props.format,
-				});
-			} else if (props.format === 'txt') {
-				const folder = await Folder.getValidActiveFolder();
-				if (!folder) {
-					throw new Error(_('Cannot find the selected notebook. Please select a different notebook.'));
-				}
-
-				status = await InteropService.instance().import({
-					path: importTargetPath,
-					format: props.format,
-					destinationFolderId: folder,
-				});
-			}
+			const status = await InteropService.instance().import({
+				path: importTargetPath,
+				format: props.format,
+				destinationFolderId: props.activeFolderId,
+			});
 
 			logger.info('Imported successfully');
 			return { success: true, warnings: status.warnings };
@@ -85,6 +70,8 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 		}
 	};
 
+	const disabled = !props.activeFolderId && props.format === 'txt';
+
 	return (
 		<TaskButton
 			taskName={props.defaultTitle}
@@ -93,7 +80,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			finishedLabel={_('Imported successfully!')}
 			styles={props.styles}
 			onRunTask={runImportTask}
-			disabled={props.disabled}
+			disabled={disabled}
 		/>
 	);
 };

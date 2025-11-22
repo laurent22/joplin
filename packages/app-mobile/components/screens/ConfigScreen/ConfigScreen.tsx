@@ -54,7 +54,7 @@ interface ConfigScreenState {
 
 	selectedSectionName: string|null;
 	sidebarWidth: number;
-	hasDefaultFolder: boolean;
+	activeFolderId: string;
 }
 
 interface ConfigScreenProps {
@@ -86,7 +86,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			sidebarWidth: 100,
 			searchQuery: '',
 			searching: false,
-			hasDefaultFolder: false,
+			activeFolderId: null,
 		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
@@ -351,8 +351,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		Dimensions.addEventListener('change', this.updateSidebarWidth);
 		this.updateSidebarWidth();
 
-		const hasDefaultFolder = await Folder.defaultFolder();
-		this.setState({ hasDefaultFolder });
+		const activeFolderId = await Folder.getValidActiveFolder();
+		this.setState({ activeFolderId });
 	}
 
 	public componentWillUnmount() {
@@ -604,7 +604,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			const importTxtLabel = () => _('Import from TXT');
 			const importTxtDescription = () => _('Import note from a Text file.');
 			addSettingComponent(
-				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' disabled={!this.state.hasDefaultFolder} />,
+				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolderId={this.state.activeFolderId} />,
 				[importTxtLabel(), importTxtDescription()],
 			);
 			addSettingComponent(
