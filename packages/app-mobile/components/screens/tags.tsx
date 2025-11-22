@@ -90,6 +90,11 @@ const TagsScreenComponent: React.FC<Props> = props => {
 
 	const onSearchButtonPress = useCallback(() => {
 		setShowSearch(!showSearch);
+
+		// If the search button is pressed while the search bar is open, in addition to hiding the search bar, it should clear the search
+		if (showSearch) {
+			setSearchQuery('');
+		}
 	}, [showSearch]);
 
 	const clearButton_press = useCallback(() => {
