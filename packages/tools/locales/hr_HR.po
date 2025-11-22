@@ -4279,7 +4279,7 @@ msgstr "OCR: URL podataka jezika ili putanja"
 
 #: packages/lib/models/settings/builtInMetadata.ts:628
 msgid "OCR: Search in extracted content"
-msgstr "OCR: Tra#i u izdvojenom sadržaju"
+msgstr "OCR: Traži u izdvojenom sadržaju"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
