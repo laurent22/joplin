@@ -922,7 +922,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static load(id: string, options: FolderLoadOptions = null): Promise<FolderEntity> {
-		if (options && !options.excludeVirtualFolders) {
+		if (!options || !options.excludeVirtualFolders) {
 			if (id === this.conflictFolderId()) return Promise.resolve(this.conflictFolder());
 			if (id === getTrashFolderId()) return Promise.resolve(getTrashFolder());
 		}
