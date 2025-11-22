@@ -1197,7 +1197,7 @@ msgstr "Sklopi sve bilježnice"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Collapse title"
-msgstr "Sklopi nasolv"
+msgstr "Sklopi naslov"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
