@@ -10820,7 +10820,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
-    ldapts: "npm:8.0.0"
+    ldapts: "npm:8.0.9"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -24570,15 +24570,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4.4.0, debug@npm:^4.3.5":
-  version: 4.4.0
-  resolution: "debug@npm:4.4.0"
+"debug@npm:4.4.1, debug@npm:^4.4.0":
+  version: 4.4.1
+  resolution: "debug@npm:4.4.1"
   dependencies:
     ms: "npm:^2.1.3"
   peerDependenciesMeta:
     supports-color:
       optional: true
-  checksum: 10/1847944c2e3c2c732514b93d11886575625686056cd765336212dc15de2d2b29612b6cd80e1afba767bb8e1803b778caf9973e98169ef1a24a7a7009e1820367
+  checksum: 10/8e2709b2144f03c7950f8804d01ccb3786373df01e406a0f66928e47001cf2d336cbed9ee137261d4f90d68d8679468c755e3548ed83ddacdc82b194d2468afe
   languageName: node
   linkType: hard
 
@@ -24591,15 +24591,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.4.0":
-  version: 4.4.1
-  resolution: "debug@npm:4.4.1"
+"debug@npm:^4.3.5":
+  version: 4.4.0
+  resolution: "debug@npm:4.4.0"
   dependencies:
     ms: "npm:^2.1.3"
   peerDependenciesMeta:
     supports-color:
       optional: true
-  checksum: 10/8e2709b2144f03c7950f8804d01ccb3786373df01e406a0f66928e47001cf2d336cbed9ee137261d4f90d68d8679468c755e3548ed83ddacdc82b194d2468afe
+  checksum: 10/1847944c2e3c2c732514b93d11886575625686056cd765336212dc15de2d2b29612b6cd80e1afba767bb8e1803b778caf9973e98169ef1a24a7a7009e1820367
   languageName: node
   linkType: hard
 
@@ -35518,17 +35518,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:8.0.0":
-  version: 8.0.0
-  resolution: "ldapts@npm:8.0.0"
+"ldapts@npm:8.0.9":
+  version: 8.0.9
+  resolution: "ldapts@npm:8.0.9"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
     asn1: "npm:0.2.6"
-    debug: "npm:4.4.0"
+    debug: "npm:4.4.1"
     strict-event-emitter-types: "npm:2.0.0"
     uuid: "npm:11.1.0"
     whatwg-url: "npm:14.2.0"
-  checksum: 10/00f4a6861d3562448d4014a4655738335928c47e4c766d98e304123a1304045f386922909f9f9af42ecde65bfb1f82284b3ab9491922930c6cfa766d07e427bd
+  checksum: 10/512bfec21e2c5d8a257ffda0c426221023043718b235dcc21d5ea81ba43d1999a2f14c1e9d6f7db7af1af2c467b46ee7016cac8da74ebae900fe208c54435b0e
   languageName: node
   linkType: hard
 
