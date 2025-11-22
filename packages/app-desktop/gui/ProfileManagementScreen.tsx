@@ -22,7 +22,7 @@ interface Style {
 interface Props {
 	themeId: number;
 	style: Style;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Assigning types to these variables would be too big of a refactoring
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Changing types for these variables would be too big of a refactoring
 	dispatch: Function;
 	profileConfig: ProfileConfig;
 }
