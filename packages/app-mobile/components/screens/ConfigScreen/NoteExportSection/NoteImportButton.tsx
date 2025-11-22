@@ -19,6 +19,7 @@ interface Props {
 	defaultTitle: string;
 	description: string;
 	format: string;
+	disabled?: boolean;
 }
 
 const NoteImportButton: FunctionComponent<Props> = props => {
@@ -92,6 +93,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			finishedLabel={_('Imported successfully!')}
 			styles={props.styles}
 			onRunTask={runImportTask}
+			disabled={props.disabled}
 		/>
 	);
 };

@@ -36,6 +36,7 @@ interface Props {
 		setProgress: OnProgressCallback,
 		setAfterCompleteListener: SetAfterCompleteListenerCallback,
 	)=> Promise<TaskResult>;
+	disabled?: boolean;
 }
 
 const TaskButton: FunctionComponent<Props> = props => {
@@ -106,7 +107,7 @@ const TaskButton: FunctionComponent<Props> = props => {
 	return (
 		<SettingsButton
 			title={props.buttonLabel(taskStatus)}
-			disabled={taskStatus === TaskStatus.InProgress}
+			disabled={taskStatus === TaskStatus.InProgress || props.disabled}
 			description={buttonDescription}
 			statusComponent={statusComponent}
 			clickHandler={startTask}

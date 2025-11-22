@@ -38,6 +38,7 @@ import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './J
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
+import Folder from '@joplin/lib/models/Folder';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -53,6 +54,7 @@ interface ConfigScreenState {
 
 	selectedSectionName: string|null;
 	sidebarWidth: number;
+	hasDefaultFolder: boolean;
 }
 
 interface ConfigScreenProps {
@@ -84,6 +86,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			sidebarWidth: 100,
 			searchQuery: '',
 			searching: false,
+			hasDefaultFolder: false,
 		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
@@ -331,7 +334,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return false;
 	};
 
-	public componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
 			this.setState({ selectedSectionName: this.props.navigation.state.sectionName });
 			setTimeout(() => {
@@ -347,6 +350,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		NavService.addHandler(this.handleNavigateToNewScreen);
 		Dimensions.addEventListener('change', this.updateSidebarWidth);
 		this.updateSidebarWidth();
+
+		const hasDefaultFolder = await Folder.defaultFolder();
+		this.setState({ hasDefaultFolder });
 	}
 
 	public componentWillUnmount() {
@@ -598,7 +604,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			const importTxtLabel = () => _('Import from TXT');
 			const importTxtDescription = () => _('Import note from a Text file.');
 			addSettingComponent(
-				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' />,
+				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' disabled={!this.state.hasDefaultFolder} />,
 				[importTxtLabel(), importTxtDescription()],
 			);
 			addSettingComponent(
