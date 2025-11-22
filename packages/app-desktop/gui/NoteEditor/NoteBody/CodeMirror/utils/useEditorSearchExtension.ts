@@ -8,27 +8,15 @@ const logger = Logger.create('useEditorSearch');
 // Registers a helper CodeMirror extension to be used with
 // useEditorSearchHandler.
 
-type Mark = { clear: ()=> void };
-interface SearchHighlightState {
-	previousKeywordValue: string;
-	previousIndex: number;
-	previousSearchTimestamp: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-	overlayTimeoutRef: { current: any };
-	clearMarkers(): void;
-	clearOverlay(editor: CodeMirror5Emulation): void;
-	getSearchTerm(keyword: string): RegExp;
-	highlightSearch(cm: CodeMirror5Emulation, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean): Mark;
-	setMarkers(marker: Mark[]): void;
-	setPreviousIndex(index: number): void;
-	setPreviousSearchTimestamp(timestamp: number): void;
-	setPreviousKeywordValue(value: string): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-	setScrollbarMarks(marks: any): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-	setOverlay(overlay: any): void;
-	setOverlayTimeout(timeout: number): void;
+interface SetMarkersOptions {
+	selectedIndex: number;
+	searchTimestamp: number;
+	showEditorMarkers?: boolean;
+	withSelection?: boolean;
 }
+type Keyword = { value: string };
+
+export type OnSetMarkers = (cm: CodeMirror5Emulation, keywords: Keyword[], options: SetMarkersOptions)=> number;
 
 
 // Modified from codemirror/addons/search/search.js
@@ -49,99 +37,7 @@ const searchOverlay = (query: RegExp) => {
 	} };
 };
 
-const addCodeMirrorExtension = (CodeMirror: CodeMirror5Emulation) => {
-	CodeMirror.defineOption('joplin.search-highlight-state', null, ()=>{});
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	CodeMirror?.defineExtension('setMarkers', function(keywords: any, options: any) {
-		// Pass arguments in via options to allow the extension to work if multiple editors are open simultaneously
-		// See https://github.com/laurent22/joplin/issues/13399.
-		const state: SearchHighlightState = this.getOption('joplin.search-highlight-state');
-		if (!options) {
-			options = { selectedIndex: 0, searchTimestamp: 0 };
-		}
-
-		if (options.showEditorMarkers === false) {
-			state.clearMarkers();
-			state.clearOverlay(this);
-			return;
-		}
-
-		state.clearMarkers();
-
-		// HIGHLIGHT KEYWORDS
-		// When doing a global search it's possible to have multiple keywords
-		// This means we need to highlight each one
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const marks: any = [];
-		for (let i = 0; i < keywords.length; i++) {
-			const keyword = keywords[i];
-
-			if (keyword.value === '') continue;
-
-			const searchTerm = state.getSearchTerm(keyword);
-
-			// We only want to scroll the first keyword into view in the case of a multi keyword search
-			const scrollTo = i === 0 && (state.previousKeywordValue !== keyword.value || state.previousIndex !== options.selectedIndex || options.searchTimestamp !== state.previousSearchTimestamp);
-
-			try {
-				const match = state.highlightSearch(this, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
-				if (match) marks.push(match);
-			} catch (error) {
-				if (error.name !== 'SyntaxError') {
-					throw error;
-				}
-				// An error of 'Regular expression too large' might occur in the markJs library
-				// when the input is really big, this catch is here to avoid the application crashing
-				// https://github.com/laurent22/joplin/issues/7634
-				console.error('Error while trying to highlight words from search: ', error);
-			}
-		}
-
-		state.setMarkers(marks);
-		state.setPreviousIndex(options.selectedIndex);
-		state.setPreviousSearchTimestamp(options.searchTimestamp);
-
-		// SEARCHOVERLAY
-		// We only want to highlight all matches when there is only 1 search term
-		if (keywords.length !== 1 || keywords[0].value === '') {
-			state.clearOverlay(this);
-			const prev = keywords.length > 1 ? keywords[0].value : '';
-			state.setPreviousKeywordValue(prev);
-			return 0;
-		}
-
-		const searchTerm = state.getSearchTerm(keywords[0]);
-
-		// Determine the number of matches in the source, this is passed on
-		// to the NoteEditor component
-		const regexMatches = this.getValue().match(searchTerm);
-		const nMatches = regexMatches ? regexMatches.length : 0;
-
-		// Don't bother clearing and re-calculating the overlay if the search term
-		// hasn't changed
-		if (keywords[0].value === state.previousKeywordValue) return nMatches;
-
-		state.clearOverlay(this);
-		state.setPreviousKeywordValue(keywords[0].value);
-
-		// These operations are pretty slow, so we won't add use them until the user
-		// has finished typing, 500ms is probably enough time
-		const timeout = shim.setTimeout(() => {
-			const scrollMarks = this.showMatchesOnScrollbar?.(searchTerm, true, 'cm-search-marker-scrollbar');
-			const overlay = searchOverlay(searchTerm);
-			this.addOverlay(overlay);
-			state.setOverlay(overlay);
-			state.setScrollbarMarks(scrollMarks);
-		}, 500);
-
-		state.setOverlayTimeout(timeout);
-		state.overlayTimeoutRef.current = timeout;
-
-		return nMatches;
-	});
-};
-
-export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulation) {
+export default function useEditorSearchExtension() {
 
 	const [markers, setMarkers] = useState([]);
 	const [overlay, setOverlay] = useState(null);
@@ -231,25 +127,94 @@ export default function useEditorSearchExtension(CodeMirror: CodeMirror5Emulatio
 		};
 	}, []);
 
-	if (CodeMirror) {
-		const state: SearchHighlightState = {
-			previousKeywordValue,
-			previousIndex,
-			previousSearchTimestamp,
-			overlayTimeoutRef,
-			clearMarkers,
-			clearOverlay,
-			getSearchTerm,
-			highlightSearch,
-			setMarkers,
-			setPreviousIndex,
-			setPreviousSearchTimestamp,
-			setPreviousKeywordValue,
-			setScrollbarMarks,
-			setOverlay,
-			setOverlayTimeout,
-		};
-		addCodeMirrorExtension(CodeMirror);
-		CodeMirror.setOption('joplin.search-highlight-state', state);
-	}
+	const onSetMarkers: OnSetMarkers = (cm, keywords, options) => {
+		// Pass arguments in via options to allow the extension to work if multiple editors are open simultaneously
+		// See https://github.com/laurent22/joplin/issues/13399.
+		if (!options) {
+			options = { selectedIndex: 0, searchTimestamp: 0 };
+		}
+
+		if (options.showEditorMarkers === false) {
+			clearMarkers();
+			clearOverlay(cm);
+			return 0;
+		}
+
+		clearMarkers();
+
+		// HIGHLIGHT KEYWORDS
+		// When doing a global search it's possible to have multiple keywords
+		// This means we need to highlight each one
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const marks: any = [];
+		for (let i = 0; i < keywords.length; i++) {
+			const keyword = keywords[i];
+
+			if (keyword.value === '') continue;
+
+			const searchTerm = getSearchTerm(keyword);
+
+			// We only want to scroll the first keyword into view in the case of a multi keyword search
+			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
+
+			try {
+				const match = highlightSearch(cm, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
+				if (match) marks.push(match);
+			} catch (error) {
+				if (error.name !== 'SyntaxError') {
+					throw error;
+				}
+				// An error of 'Regular expression too large' might occur in the markJs library
+				// when the input is really big, this catch is here to avoid the application crashing
+				// https://github.com/laurent22/joplin/issues/7634
+				console.error('Error while trying to highlight words from search: ', error);
+			}
+		}
+
+		setMarkers(marks);
+		setPreviousIndex(options.selectedIndex);
+		setPreviousSearchTimestamp(options.searchTimestamp);
+
+		// SEARCHOVERLAY
+		// We only want to highlight all matches when there is only 1 search term
+		if (keywords.length !== 1 || keywords[0].value === '') {
+			clearOverlay(cm);
+			const prev = keywords.length > 1 ? keywords[0].value : '';
+			setPreviousKeywordValue(prev);
+			return 0;
+		}
+
+		const searchTerm = getSearchTerm(keywords[0]);
+
+		// Determine the number of matches in the source, this is passed on
+		// to the NoteEditor component
+		const regexMatches = cm.getValue().match(searchTerm);
+		const nMatches = regexMatches ? regexMatches.length : 0;
+
+		// Don't bother clearing and re-calculating the overlay if the search term
+		// hasn't changed
+		if (keywords[0].value === previousKeywordValue) return nMatches;
+
+		clearOverlay(cm);
+		setPreviousKeywordValue(keywords[0].value);
+
+		// These operations are pretty slow, so we won't add use them until the user
+		// has finished typing, 500ms is probably enough time
+		const timeout = shim.setTimeout(() => {
+			const scrollMarks = cm.showMatchesOnScrollbar?.(searchTerm, true, 'cm-search-marker-scrollbar');
+			const overlay = searchOverlay(searchTerm);
+			cm.addOverlay(overlay);
+			setOverlay(overlay);
+			setScrollbarMarks(scrollMarks);
+		}, 500);
+
+		setOverlayTimeout(timeout);
+		overlayTimeoutRef.current = timeout;
+
+		return nMatches;
+	};
+	const onSetMarkersRef = useRef(onSetMarkers);
+	onSetMarkersRef.current = onSetMarkers;
+
+	return { onSetMarkersRef };
 }

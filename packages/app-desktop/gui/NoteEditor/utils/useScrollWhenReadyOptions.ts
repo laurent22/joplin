@@ -6,21 +6,25 @@ import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 
 interface Props {
 	noteId: string;
+	editorName: string;
 	selectedNoteHash: string;
 	lastEditorScrollPercents: NoteIdToScrollPercent;
 	editorRef: RefObject<NoteBodyEditorRef>;
 }
 
-const useScrollWhenReadyOptions = ({ noteId, selectedNoteHash, lastEditorScrollPercents, editorRef }: Props) => {
+const useScrollWhenReadyOptions = ({ noteId, editorName, selectedNoteHash, lastEditorScrollPercents, editorRef }: Props) => {
 	const scrollWhenReadyRef = useRef<ScrollOptions|null>(null);
 
 	const previousNoteId = usePrevious(noteId);
+	const noteIdChanged = noteId !== previousNoteId;
+	const previousEditor = usePrevious(editorName);
+	const editorChanged = editorName !== previousEditor;
 	const lastScrollPercentsRef = useRef<NoteIdToScrollPercent>(null);
 	lastScrollPercentsRef.current = lastEditorScrollPercents;
 
 	// This needs to be a nowEffect to prevent race conditions
 	useNowEffect(() => {
-		if (noteId === previousNoteId) return () => {};
+		if (!editorChanged && !noteIdChanged) return () => {};
 
 		if (editorRef.current) {
 			editorRef.current.resetScroll();
@@ -32,7 +36,7 @@ const useScrollWhenReadyOptions = ({ noteId, selectedNoteHash, lastEditorScrollP
 			value: selectedNoteHash ? selectedNoteHash : lastScrollPercent,
 		};
 		return () => {};
-	}, [noteId, previousNoteId, selectedNoteHash, editorRef]);
+	}, [editorChanged, noteIdChanged, noteId, selectedNoteHash, editorRef]);
 
 	const clearScrollWhenReady = useCallback(() => {
 		scrollWhenReadyRef.current = null;

@@ -11,7 +11,6 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import setupVim from '@joplin/editor/CodeMirror/utils/setupVim';
 import { dirname } from 'path';
 import useKeymap from './utils/useKeymap';
-import useEditorSearch from '../utils/useEditorSearchExtension';
 import CommandService from '@joplin/lib/services/CommandService';
 import { SearchMarkers } from '../../../utils/useSearchMarkers';
 import localisation from './utils/localisation';
@@ -43,8 +42,6 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		onEventRef.current = props.onEvent;
 		onLogMessageRef.current = props.onLogMessage;
 	}, [props.onEvent, props.onLogMessage]);
-
-	useEditorSearch(editor);
 
 	useEffect(() => {
 		if (!editor) {

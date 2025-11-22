@@ -243,7 +243,7 @@
 		"Afegeix contingut"
 	],
 	"Add column": [
-		""
+		"Afegeix una columna"
 	],
 	"Add new": [
 		"Afegeix-ne un"
@@ -253,6 +253,9 @@
 	],
 	"Add recipient:": [
 		"Afegeix un destinatari:"
+	],
+	"Add row": [
+		"Afegeix una fila"
 	],
 	"Add tags:": [
 		"Afegir etiquetes:"
@@ -1024,6 +1027,9 @@
 	"Delete attachment \"%s\"?": [
 		"Voleu suprimir l'adjunt \"%s\"?"
 	],
+	"Delete column": [
+		"Suprimeix la columna"
+	],
 	"Delete expired sessions": [
 		"Suprimeix les sessions expirades"
 	],
@@ -1050,6 +1056,9 @@
 	],
 	"Delete profile \"%s\"": [
 		"Suprimeix el perfil \"%s\"?"
+	],
+	"Delete row": [
+		"Suprimeix la fila"
 	],
 	"Delete selected notes": [
 		"Suprimeix les notes seleccionades"

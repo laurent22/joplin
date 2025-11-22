@@ -25,8 +25,8 @@
     "@types/node": "18.19.130",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "mermaid": "11.7.0",
-    "ts-jest": "29.3.4",
+    "mermaid": "11.8.1",
+    "ts-jest": "29.4.1",
     "typescript": "5.8.3"
   },
   "dependencies": {
