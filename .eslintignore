@@ -169,7 +169,6 @@ packages/app-desktop/commands/convertNoteToMarkdown.test.js
 packages/app-desktop/commands/convertNoteToMarkdown.js
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyToClipboard.js
-packages/app-desktop/commands/editProfileConfig.js
 packages/app-desktop/commands/emptyTrash.js
 packages/app-desktop/commands/exportDeletionLog.test.js
 packages/app-desktop/commands/exportDeletionLog.js

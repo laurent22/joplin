@@ -117,7 +117,6 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 		switchProfileMenuItems.push({ type: 'separator' });
 		switchProfileMenuItems.push(menuItemDic.addProfile);
 		switchProfileMenuItems.push(menuItemDic.manageProfiles);
-		switchProfileMenuItems.push(menuItemDic.editProfileConfig);
 
 		return switchProfileMenuItems;
 	}, [profileConfig, menuItemDic]);

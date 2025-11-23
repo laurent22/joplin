@@ -74,7 +74,6 @@ export default function() {
 		'openMasterPasswordDialog',
 		'addProfile',
 		'manageProfiles',
-		'editProfileConfig',
 		'switchProfile1',
 		'switchProfile2',
 		'switchProfile3',

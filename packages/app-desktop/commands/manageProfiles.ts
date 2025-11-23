@@ -14,6 +14,7 @@ export const runtime = (): CommandRuntime => {
 				routeName: 'ProfileManagement',
 			});
 		},
+		enabledCondition: 'hasMultiProfiles',
 	};
 };
 
