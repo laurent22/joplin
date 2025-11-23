@@ -1049,6 +1049,7 @@ packages/editor/CodeMirror/extensions/rendering/addFormattingClasses.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.test.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.js
 packages/editor/CodeMirror/extensions/rendering/renderingExtension.js
+packages/editor/CodeMirror/extensions/rendering/replaceBackslashEscapes.js
 packages/editor/CodeMirror/extensions/rendering/replaceBulletLists.js
 packages/editor/CodeMirror/extensions/rendering/replaceCheckboxes.js
 packages/editor/CodeMirror/extensions/rendering/replaceDividers.js
