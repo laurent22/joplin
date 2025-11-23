@@ -11,17 +11,14 @@ import { deleteProfileById, saveProfileConfig } from '@joplin/lib/services/profi
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
+import { CSSProperties } from 'react';
+import { AppState } from '../app.reducer';
 
 const logger = Logger.create('ProfileManagementScreen');
 
-interface Style {
-	width: number;
-	height: number;
-}
-
 interface Props {
 	themeId: number;
-	style: Style;
+	style: CSSProperties;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Changing types for these variables would be too big of a refactoring
 	dispatch: Function;
 	profileConfig: ProfileConfig;
@@ -35,13 +32,11 @@ interface State {
 interface ProfileTable {
 	profiles: Profile[];
 	currentProfileId: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	onProfileRename: (profile: Profile)=> any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	onProfileDelete: (profile: Profile)=> any;
+	onProfileRename: (profile: Profile)=> void;
+	onProfileDelete: (profile: Profile)=> void;
 	filter: string;
 	themeId: number;
-	style: Style;
+	style: CSSProperties;
 }
 
 const ProfileTableComp = (props: ProfileTable) => {
@@ -226,8 +221,7 @@ class ProfileManagementScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-		const rootStyle: any = {
+		const rootStyle: CSSProperties = {
 			...style,
 			overflowY: 'scroll',
 			color: theme.color,
@@ -273,8 +267,7 @@ class ProfileManagementScreenComponent extends React.Component<Props, State> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppState) => ({
 	themeId: state.settings.theme,
 	profileConfig: state.profileConfig,
 });
