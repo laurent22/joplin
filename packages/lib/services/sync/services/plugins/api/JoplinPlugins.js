@@ -1,0 +1,79 @@
+"use strict";
+/* eslint-disable multiline-comment-style */
+Object.defineProperty(exports, "__esModule", { value: true });
+const Logger_1 = require("@joplin/utils/Logger");
+const logger = Logger_1.default.create('joplin.plugins');
+/**
+ * This class provides access to plugin-related features.
+ */
+class JoplinPlugins {
+    constructor(plugin) {
+        this.plugin = plugin;
+    }
+    /**
+     * Registers a new plugin. This is the entry point when creating a plugin. You should pass a simple object with an `onStart` method to it.
+     * That `onStart` method will be executed as soon as the plugin is loaded.
+     *
+     * ```typescript
+     * joplin.plugins.register({
+     *     onStart: async function() {
+     *         // Run your plugin code here
+     *     }
+     * });
+     * ```
+     */
+    async register(script) {
+        if (script.onStart) {
+            const startTime = Date.now();
+            logger.info(`Starting plugin: ${this.plugin.id}`);
+            // We don't use `await` when calling onStart because the plugin might be awaiting
+            // in that call too (for example, when opening a dialog on startup) so we don't
+            // want to get stuck here.
+            // eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+            void script.onStart({}).catch((error) => {
+                // For some reason, error thrown from the executed script do not have the type "Error"
+                // but are instead plain object. So recreate the Error object here so that it can
+                // be handled correctly by loggers, etc.
+                const newError = new Error(error.message);
+                newError.stack = error.stack;
+                logger.error(`Uncaught exception in plugin "${this.plugin.id}":`, newError);
+                // eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+            }).then(() => {
+                logger.info(`Finished running onStart handler: ${this.plugin.id} (Took ${Date.now() - startTime}ms)`);
+                this.plugin.emit('started');
+            });
+        }
+    }
+    /**
+     * @deprecated Use joplin.contentScripts.register()
+     */
+    async registerContentScript(type, id, scriptPath) {
+        this.plugin.deprecationNotice('1.8', 'joplin.plugins.registerContentScript() is deprecated in favour of joplin.contentScripts.register()', true);
+        return this.plugin.registerContentScript(type, id, scriptPath);
+    }
+    /**
+     * Gets the plugin own data directory path. Use this to store any
+     * plugin-related data. Unlike [[installationDir]], any data stored here
+     * will be persisted.
+     */
+    async dataDir() {
+        return this.plugin.createAndGetDataDir();
+    }
+    /**
+     * Gets the plugin installation directory. This can be used to access any
+     * asset that was packaged with the plugin. This directory should be
+     * considered read-only because any data you store here might be deleted or
+     * re-created at any time. To store new persistent data, use [[dataDir]].
+     */
+    async installationDir() {
+        return this.plugin.baseDir;
+    }
+    /**
+     * @deprecated Use joplin.require()
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+    require(_path) {
+        // Just a stub. Implementation has to be done within plugin process, in plugin_index.js
+    }
+}
+exports.default = JoplinPlugins;

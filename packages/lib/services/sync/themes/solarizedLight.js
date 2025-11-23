@@ -1,0 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const light_1 = require("./light");
+const theme = Object.assign(Object.assign({}, light_1.default), { backgroundColor: '#fdf6e3', backgroundColorTransparent: 'rgba(253, 246, 227, 0.9)', oddBackgroundColor: '#eee8d5', color: '#657b83', colorError: '#dc322f', colorWarn: '#cb4b16', colorFaded: '#839496', dividerColor: '#eee8d5', selectedColor: '#eee8d5', urlColor: '#268bd2', backgroundColor2: '#002b36', color2: '#eee8d5', selectedColor2: '#6c71c4', colorError2: '#cb4b16', raisedBackgroundColor: '#eee8d5', raisedColor: '#073642', warningBackgroundColor: '#b5890055', tableBackgroundColor: '#fdf6e3', codeBackgroundColor: '#fdf6e3', codeBorderColor: '#eee8d5', codeColor: '#002b36', codeMirrorTheme: 'solarized light', codeThemeCss: 'atom-one-light.css' });
+exports.default = theme;
