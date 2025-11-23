@@ -71,3 +71,28 @@ impl FileApiDriver for FileApiDriverImpl {
         Path::new(path_1).join(path_2).to_string_lossy().into()
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::file_api::FileApiDriver;
+
+    use super::FileApiDriverImpl;
+
+    #[test]
+    fn should_split_file_name() {
+        let fs_driver = FileApiDriverImpl {};
+
+        assert_eq!(
+            fs_driver.split_file_name("a.txt"),
+            (String::from("a"), String::from(".txt"))
+        );
+        assert_eq!(
+            fs_driver.split_file_name("a"),
+            (String::from("a"), String::from(""))
+        );
+        assert_eq!(
+            fs_driver.split_file_name("a test.a.b"),
+            (String::from("a test.a"), String::from(".b"))
+        );
+    }
+}

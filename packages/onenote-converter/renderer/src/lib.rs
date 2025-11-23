@@ -5,6 +5,7 @@ use wasm_bindgen::{JsError, prelude::wasm_bindgen};
 
 use parser_utils::{fs_driver, log};
 
+mod errors;
 mod notebook;
 mod page;
 mod section;
