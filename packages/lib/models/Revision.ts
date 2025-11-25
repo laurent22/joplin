@@ -251,33 +251,12 @@ export default class Revision extends BaseItem {
 		return revs;
 	}
 
-	private static async revisionsForMerge(revision: RevisionEntity) {
-		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [revision.item_type, revision.item_id, revision.item_updated_time]);
-	}
-
-	private static async findAllRevisionsToKeep(itemType: ModelType, itemId: string, cutOffDate: number) {
-		return this.modelSelectAll(`
-				SELECT child.*
-				FROM revisions AS child
-				JOIN revisions AS parent
-				ON child.parent_id = parent.id
-				WHERE child.item_type = ?
-				AND child.item_id = ?
-				AND child.item_updated_time >= ?
-				AND parent.item_type = ?
-				AND parent.item_id = ?
-				AND parent.item_updated_time < ?
-				ORDER BY child.item_updated_time ASC`,
-		[itemType, itemId, cutOffDate, itemType, itemId, cutOffDate],
-		);
-	}
-
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
 	public static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null, arrayContainsRevision = true) {
 		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
 
 		if (!revs) {
-			revs = await this.revisionsForMerge(revision);
+			revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [revision.item_type, revision.item_id, revision.item_updated_time]);
 		} else {
 			revs = revs.slice();
 		}
@@ -324,6 +303,23 @@ export default class Revision extends BaseItem {
 		return output;
 	}
 
+	private static async findAllRevisionsToKeep(itemType: ModelType, itemId: string, cutOffDate: number) {
+		return this.modelSelectAll(`
+				SELECT child.*
+				FROM revisions AS child
+				JOIN revisions AS parent
+				ON child.parent_id = parent.id
+				WHERE child.item_type = ?
+				AND child.item_id = ?
+				AND child.item_updated_time >= ?
+				AND parent.item_type = ?
+				AND parent.item_id = ?
+				AND parent.item_updated_time < ?
+				ORDER BY child.item_updated_time ASC`,
+		[itemType, itemId, cutOffDate, itemType, itemId, cutOffDate],
+		);
+	}
+
 	public static async deleteOldRevisions(ttl: number) {
 		// When deleting old revisions, we need to make sure that the oldest surviving revision
 		// is a "merged" one (as opposed to a diff from a now deleted revision). So every time
@@ -332,7 +328,7 @@ export default class Revision extends BaseItem {
 
 		const cutOffDate = Date.now() - ttl;
 		const allOldRevisions: RevisionEntity[] = await this.modelSelectAll(
-			'SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time DESC',
+			'SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time ASC',
 			[cutOffDate],
 		);
 
@@ -361,15 +357,12 @@ export default class Revision extends BaseItem {
 				}
 			} else {
 				const revsToMerge = await this.findAllRevisionsToKeep(itemType, itemId, cutOffDate);
-				let revs = await this.revisionsForMerge(firstKeptRev);
-				revs = this.moveRevisionToTop(firstKeptRev, revs);
-				revs.pop();
 
 				for (const keptRev of revsToMerge) {
 					// Note: we don't need to check for encrypted rev here because
 					// mergeDiff will already throw the revision_encrypted exception
 					// if a rev is encrypted.
-					const merged = await this.mergeDiffs(keptRev, revs, false);
+					const merged = await this.mergeDiffs(keptRev, oldRevisions, false);
 
 					const titleDiff = this.createTextPatch('', merged.title);
 					const bodyDiff = this.createTextPatch('', merged.body);
