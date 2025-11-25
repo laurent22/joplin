@@ -299,6 +299,38 @@ export default class Revision extends BaseItem {
 		return output;
 	}
 
+	public static async findAllRevisionsToKeep(revision: RevisionEntity) {
+		const keptRevs = [];
+		const unmatchedRevisions = [];
+		let revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [revision.item_type, revision.item_id, revision.item_updated_time]);
+		revs = this.moveRevisionToTop(revision, revs);
+		revs.pop();
+
+		while (revs.length > 0) {
+			unmatchedRevisions.length = 0;
+			const topRevision = revs[revs.length - 1];
+			let parentId = topRevision.parent_id;
+
+			for (let i = revs.length - 1; i >= 0; i--) {
+				const rev = revs[i];
+				if (rev.id !== parentId) {
+					unmatchedRevisions.push(rev);
+					continue;
+				}
+				parentId = rev.parent_id;
+			}
+
+			revs = unmatchedRevisions;
+			const childRevs: RevisionEntity[] = await this.modelSelectAll(
+				'SELECT * FROM revisions WHERE parent_id = ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC',
+				[topRevision.id, revision.item_type, revision.item_id],
+			);
+			keptRevs.push(...childRevs);
+		}
+
+		return keptRevs;
+	}
+
 	public static async deleteOldRevisions(ttl: number) {
 		// When deleting old revisions, we need to make sure that the oldest surviving revision
 		// is a "merged" one (as opposed to a diff from a now deleted revision). So every time
@@ -321,12 +353,12 @@ export default class Revision extends BaseItem {
 		}
 
 		const deleteOldRevisionsForItem = async (itemType: ModelType, itemId: string, oldRevisions: RevisionEntity[]) => {
-			const keptRev = await this.modelSelectOne(
+			const firstKeptRev = await this.modelSelectOne(
 				'SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1',
 				[cutOffDate, itemType, itemId],
 			);
 			const queries: StringOrSqlQuery[] = [];
-			if (!keptRev) {
+			if (!firstKeptRev) {
 				const hasEncrypted = await this.modelSelectOne(
 					'SELECT * FROM revisions WHERE encryption_applied = 1 AND item_updated_time < ? AND item_id = ?',
 					[cutOffDate, itemId],
@@ -335,18 +367,22 @@ export default class Revision extends BaseItem {
 					throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
 				}
 			} else {
-				// Note: we don't need to check for encrypted rev here because
-				// mergeDiff will already throw the revision_encrypted exception
-				// if a rev is encrypted.
-				const merged = await this.mergeDiffs(keptRev);
+				const revsToMerge = await this.findAllRevisionsToKeep(firstKeptRev);
 
-				const titleDiff = this.createTextPatch('', merged.title);
-				const bodyDiff = this.createTextPatch('', merged.body);
-				const metadataDiff = this.createObjectPatch({}, merged.metadata);
-				queries.push({
-					sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ? WHERE id = ?',
-					params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), keptRev.id],
-				});
+				for (const keptRev of revsToMerge) {
+					// Note: we don't need to check for encrypted rev here because
+					// mergeDiff will already throw the revision_encrypted exception
+					// if a rev is encrypted.
+					const merged = await this.mergeDiffs(keptRev);
+
+					const titleDiff = this.createTextPatch('', merged.title);
+					const bodyDiff = this.createTextPatch('', merged.body);
+					const metadataDiff = this.createObjectPatch({}, merged.metadata);
+					queries.push({
+						sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ? WHERE id = ?',
+						params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), keptRev.id],
+					});
+				}
 			}
 
 			await this.batchDelete(oldRevisions.map(item => item.id), { sourceDescription: 'Revision.deleteOldRevisions' });
