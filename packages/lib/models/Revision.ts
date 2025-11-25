@@ -251,12 +251,33 @@ export default class Revision extends BaseItem {
 		return revs;
 	}
 
+	private static async revisionsForMerge(revision: RevisionEntity) {
+		return this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [revision.item_type, revision.item_id, revision.item_updated_time]);
+	}
+
+	private static async findAllRevisionsToKeep(itemType: ModelType, itemId: string, cutOffDate: number) {
+		return this.modelSelectAll(`
+				SELECT child.*
+				FROM revisions AS child
+				JOIN revisions AS parent
+				ON child.parent_id = parent.id
+				WHERE child.item_type = ?
+				AND child.item_id = ?
+				AND child.item_updated_time >= ?
+				AND parent.item_type = ?
+				AND parent.item_id = ?
+				AND parent.item_updated_time < ?
+				ORDER BY child.item_updated_time ASC`,
+		[itemType, itemId, cutOffDate, itemType, itemId, cutOffDate],
+		);
+	}
+
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
 	public static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null, arrayContainsRevision = true) {
 		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
 
 		if (!revs) {
-			revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [revision.item_type, revision.item_id, revision.item_updated_time]);
+			revs = await this.revisionsForMerge(revision);
 		} else {
 			revs = revs.slice();
 		}
@@ -303,34 +324,6 @@ export default class Revision extends BaseItem {
 		return output;
 	}
 
-	public static async findAllRevisionsToKeep(revision: RevisionEntity, revsToDelete: RevisionEntity[]) {
-		const keptRevs = [];
-		const revs = revsToDelete.slice();
-
-		while (revs.length > 0) {
-			const topRevision = revs[revs.length - 1];
-			let parentId = topRevision.parent_id;
-			revs.pop();
-
-			// Remove all revisions for the branch of the top revision
-			for (let i = revs.length - 1; i >= 0; i--) {
-				const rev = revs[i];
-				if (rev.id !== parentId) continue;
-				parentId = rev.parent_id;
-				revs.pop();
-			}
-
-			// TODO add the sql queries to an array and execute in batch
-			const childRevs: RevisionEntity[] = await this.modelSelectAll(
-				'SELECT * FROM revisions WHERE parent_id = ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC',
-				[topRevision.id, revision.item_type, revision.item_id],
-			);
-			keptRevs.push(...childRevs);
-		}
-
-		return keptRevs;
-	}
-
 	public static async deleteOldRevisions(ttl: number) {
 		// When deleting old revisions, we need to make sure that the oldest surviving revision
 		// is a "merged" one (as opposed to a diff from a now deleted revision). So every time
@@ -367,10 +360,10 @@ export default class Revision extends BaseItem {
 					throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
 				}
 			} else {
-				let revs = await this.modelSelectAll('SELECT * FROM revisions WHERE item_type = ? AND item_id = ? AND item_updated_time <= ? ORDER BY item_updated_time ASC', [firstKeptRev.item_type, firstKeptRev.item_id, firstKeptRev.item_updated_time]);
+				const revsToMerge = await this.findAllRevisionsToKeep(itemType, itemId, cutOffDate);
+				let revs = await this.revisionsForMerge(firstKeptRev);
 				revs = this.moveRevisionToTop(firstKeptRev, revs);
 				revs.pop();
-				const revsToMerge = await this.findAllRevisionsToKeep(firstKeptRev, revs);
 
 				for (const keptRev of revsToMerge) {
 					// Note: we don't need to check for encrypted rev here because
