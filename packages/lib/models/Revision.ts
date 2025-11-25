@@ -310,6 +310,7 @@ export default class Revision extends BaseItem {
 		while (revs.length > 0) {
 			const topRevision = revs[revs.length - 1];
 			let parentId = topRevision.parent_id;
+			revs.pop();
 
 			// Remove all revisions for the branch of the top revision
 			for (let i = revs.length - 1; i >= 0; i--) {
@@ -319,6 +320,7 @@ export default class Revision extends BaseItem {
 				revs.pop();
 			}
 
+			// TODO add the sql queries to an array and execute in batch
 			const childRevs: RevisionEntity[] = await this.modelSelectAll(
 				'SELECT * FROM revisions WHERE parent_id = ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC',
 				[topRevision.id, revision.item_type, revision.item_id],
