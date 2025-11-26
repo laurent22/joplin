@@ -316,8 +316,8 @@ describe('models/Revision', () => {
 		expect(revs[5].title_diff).toBe(newRevPos5.title_diff);
 
 		// Ensure the merged revisions will be synced
-		expect(newRevPos3.updated_time).not.toBe(timeBeforeCleaning);
-		expect(newRevPos4.updated_time).not.toBe(timeBeforeCleaning);
+		expect(newRevPos3.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+		expect(newRevPos4.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
 
 		const remainingRevs = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(remainingRevs.length).toBe(3);
@@ -355,9 +355,9 @@ describe('models/Revision', () => {
 		expect(newRevPos4.title_diff).not.toBe(revs[4].title_diff);
 
 		// Ensure the merged revisions will be synced
-		expect(newRevPos2.updated_time).not.toBe(timeBeforeCleaning);
-		expect(newRevPos3.updated_time).not.toBe(timeBeforeCleaning);
-		expect(newRevPos4.updated_time).not.toBe(timeBeforeCleaning);
+		expect(newRevPos2.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+		expect(newRevPos3.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+		expect(newRevPos4.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
 
 		const remainingRevs = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		expect(remainingRevs.length).toBe(3);
