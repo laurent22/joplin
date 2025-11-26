@@ -45,10 +45,13 @@ function StatusScreen(props: Props) {
 
 	async function refreshScreen() {
 		setLoading(true);
-		const service = new ReportService();
-		const r = await service.status(Setting.value('sync.target'));
-		setReport(r);
-		setLoading(false);
+		try {
+			const service = new ReportService();
+			const r = await service.status(Setting.value('sync.target'));
+			setReport(r);
+		} finally {
+			setLoading(false);
+		}
 	}
 
 	useEffect(() => {
