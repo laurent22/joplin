@@ -14,7 +14,7 @@ const ModalMessageOverlay: React.FC<Props> = ({ message }) => {
 
 	return <Dialog contentFillsScreen={true}>
 		<div className="modal-message">
-			<div id="loading-animation" />
+			<div className="loading-animation" />
 			<div className="text" role="status">
 				{lines}
 			</div>
