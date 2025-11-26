@@ -458,6 +458,11 @@ const shim = {
 		return await shim.showMessageBox(message, { type: MessageBoxType.Confirm }) === 0;
 	},
 
+	showToast: async (message: string): Promise<void> => {
+		// Should usually be overridden by implementers
+		await shim.showMessageBox(message, { type: MessageBoxType.Info });
+	},
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	writeImageToFile: (_image: any, _format: any, _filePath: string): void => {
 		throw new Error('Not implemented');

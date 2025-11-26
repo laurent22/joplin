@@ -137,8 +137,6 @@ packages/app-desktop/app.reducer.js
 packages/app-desktop/app.js
 packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
-packages/app-desktop/commands/convertNoteToMarkdown.test.js
-packages/app-desktop/commands/convertNoteToMarkdown.js
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyToClipboard.js
 packages/app-desktop/commands/editProfileConfig.js
@@ -179,7 +177,6 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
-packages/app-desktop/gui/ConversionNotification/ConversionNotification.js
 packages/app-desktop/gui/Dialog.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
@@ -1208,6 +1205,8 @@ packages/lib/callbackUrlUtils.js
 packages/lib/clipperUtils.js
 packages/lib/commands/convertHtmlToMarkdown.test.js
 packages/lib/commands/convertHtmlToMarkdown.js
+packages/lib/commands/convertNoteToMarkdown.test.js
+packages/lib/commands/convertNoteToMarkdown.js
 packages/lib/commands/deleteNote.js
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyForward.js

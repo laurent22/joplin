@@ -1,16 +1,16 @@
 import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
-import { AppState, createAppDefaultState } from '../app.reducer';
-import Note from '@joplin/lib/models/Note';
+import { defaultState, State } from '../reducer';
+import Note from '../models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import Folder from '@joplin/lib/models/Folder';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import Folder from '../models/Folder';
+import { NoteEntity } from '../services/database/types';
 
 describe('convertNoteToMarkdown', () => {
-	let state: AppState = undefined;
+	let state: State = undefined;
 
 	beforeEach(async () => {
-		state = createAppDefaultState({});
+		state = defaultState;
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
@@ -63,14 +63,7 @@ describe('convertNoteToMarkdown', () => {
 	});
 
 	it('should generate action to trigger notification', async () => {
-		let originalHtmlNoteId = '';
-		let actionType = '';
-		const dispatchFn = jest.fn()
-			.mockImplementationOnce(action => {
-				originalHtmlNoteId = action.value;
-				actionType = action.type;
-			})
-			.mockImplementationOnce(() => {});
+		const dispatchFn = jest.fn();
 
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
@@ -87,10 +80,8 @@ describe('convertNoteToMarkdown', () => {
 
 		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: dispatchFn });
 
-		expect(dispatchFn).toHaveBeenCalledTimes(2);
+		expect(dispatchFn).toHaveBeenCalledTimes(1);
 
-		expect(originalHtmlNoteId).toBe(htmlNote.id);
-		expect(actionType).toBe('NOTE_HTML_TO_MARKDOWN_DONE');
 	});
 
 });
