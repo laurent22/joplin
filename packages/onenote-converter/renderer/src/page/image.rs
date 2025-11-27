@@ -10,9 +10,9 @@ impl<'a> Renderer<'a> {
 
         if let Some(data) = image.data() {
             let filename = self.determine_image_filename(image)?;
-            let path = fs_driver().join(self.output.as_str(), filename.as_str());
+            let path = fs_driver().join(&self.output, &filename);
             log!("Rendering image: {:?}", path);
-            fs_driver().write_file(path.as_str(), &data[..])?;
+            fs_driver().write_file(&path, &data[..])?;
 
             let mut attrs = AttributeSet::new();
             let mut styles = StyleSet::new();
@@ -55,25 +55,17 @@ impl<'a> Renderer<'a> {
 
     fn determine_image_filename(&mut self, image: &Image) -> Result<String> {
         if let Some(name) = image.image_filename() {
-            return self.determine_filename(name);
+            let filename = self.section.to_unique_safe_filename(&self.output, name)?;
+            return Ok(filename);
         }
 
         let ext = image.extension().unwrap_or_else(|| {
             log_warn!("Image missing extension. Defaulting to .png.");
             ".png"
         });
-
-        let mut i = 0;
-        loop {
-            let filename = format!("image{}{}", i, ext);
-
-            if !self.section.files.contains(&filename) {
-                self.section.files.insert(filename.clone());
-
-                return Ok(filename);
-            }
-
-            i += 1;
-        }
+        let filename = self
+            .section
+            .to_unique_safe_filename(&self.output, &format!("image{}", ext))?;
+        Ok(filename)
     }
 }

@@ -14,12 +14,13 @@ class ImageWidget extends WidgetType {
 		private readonly src_: string,
 		private readonly alt_: string,
 		private readonly reloadCounter_ = 0,
+		private readonly width_: string | null = null,
 	) {
 		super();
 	}
 
 	public eq(other: ImageWidget) {
-		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_;
+		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_ && this.width_ === other.width_;
 	}
 
 	public updateDOM(dom: HTMLElement): boolean {
@@ -28,6 +29,15 @@ class ImageWidget extends WidgetType {
 
 		image.ariaLabel = this.alt_;
 		image.role = 'image';
+
+		// Apply width if specified, otherwise clear it
+		if (this.width_) {
+			image.style.width = `${this.width_}px`;
+			image.style.height = 'auto';
+		} else {
+			image.style.width = '';
+			image.style.height = '';
+		}
 
 		const updateImageUrl = () => {
 			if (this.resolvedSrc_) {
@@ -90,6 +100,39 @@ const getImageAlt = (node: SyntaxNodeRef, state: EditorState) => {
 	}
 };
 
+interface HtmlImageInfo {
+	src: string;
+	alt: string | null;
+	width: string | null;
+}
+
+const parseHtmlImage = (node: SyntaxNodeRef, state: EditorState): HtmlImageInfo | null => {
+	const nodeText = state.sliceDoc(node.from, node.to);
+
+	// Check if this is an img tag (handles both /> and > closing styles)
+	if (!nodeText.match(/<img\s/i)) {
+		return null;
+	}
+
+	// Extract src (only Joplin resource images, accepts single or double quotes)
+	const srcMatch = nodeText.match(/src=(["'])(:\/[a-zA-Z0-9]{32})\1/i);
+	if (!srcMatch) {
+		return null;
+	}
+
+	// Extract alt attribute (optional, accepts single or double quotes)
+	const altMatch = nodeText.match(/alt=(["'])([^"']*)\1/i);
+
+	// Extract width attribute (optional, accepts single or double quotes)
+	const widthMatch = nodeText.match(/width=(["'])(\d+)\1/i);
+
+	return {
+		src: srcMatch[2],
+		alt: altMatch ? altMatch[2] : null,
+		width: widthMatch ? widthMatch[2] : null,
+	};
+};
+
 // In Electron: To work around browser caching, these counters should continue to increase even if an old
 // editor is destroyed and a new one is created in the same window.
 const imageToRefreshCounters = new Map<string, number>();
@@ -114,19 +157,38 @@ const renderBlockImages = (context: RenderedContentContext) => [
 	}),
 	makeBlockReplaceExtension({
 		createDecoration: (node, state) => {
-			if (node.name === 'Image') {
+			// Handle both markdown images and HTML img tags
+			if (node.name === 'Image' || node.name === 'HTMLTag' || node.name === 'HTMLBlock') {
 				const lineFrom = state.doc.lineAt(node.from);
 				const lineTo = state.doc.lineAt(node.to);
 				const textBefore = state.sliceDoc(lineFrom.from, node.from);
 				const textAfter = state.sliceDoc(node.to, lineTo.to);
+
+				// Only render images on their own line
 				if (textBefore.trim() === '' && textAfter.trim() === '') {
-					const src = getImageSrc(node, state);
-					const alt = getImageAlt(node, state);
+					let src: string | null = null;
+					let alt: string | null = null;
+					let width: string | null = null;
+
+					// Parse image data based on node type
+					if (node.name === 'Image') {
+						// Markdown image: ![alt](src)
+						src = getImageSrc(node, state);
+						alt = getImageAlt(node, state);
+					} else {
+						// HTML img tag: <img src="..." alt="..." width="..." />
+						const imageInfo = parseHtmlImage(node, state);
+						if (imageInfo) {
+							src = imageInfo.src;
+							alt = imageInfo.alt;
+							width = imageInfo.width;
+						}
+					}
 
 					if (src) {
 						const isLastLine = lineTo.number === state.doc.lines;
 						return Decoration.widget({
-							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0),
+							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, width),
 							// "side: -1": In general, when the cursor is at the widget's location, it should be at
 							// the start of the next line (and so "side" should be -1).
 							//
@@ -141,6 +203,7 @@ const renderBlockImages = (context: RenderedContentContext) => [
 					}
 				}
 			}
+
 			return null;
 		},
 		getDecorationRange: (node, state) => {
