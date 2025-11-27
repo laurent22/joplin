@@ -13,14 +13,14 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { CSSProperties } from 'react';
 import { AppState } from '../app.reducer';
+import { Dispatch } from 'redux';
 
 const logger = Logger.create('ProfileManagementScreen');
 
 interface Props {
 	themeId: number;
 	style: CSSProperties;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Changing types for these variables would be too big of a refactoring
-	dispatch: Function;
+	dispatch: Dispatch;
 	profileConfig: ProfileConfig;
 }
 
