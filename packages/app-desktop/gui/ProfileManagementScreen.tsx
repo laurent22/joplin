@@ -1,17 +1,15 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
-
-const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
+import { connect } from 'react-redux';
+import { themeStyle } from '@joplin/lib/theme';
 import bridge from '../services/bridge';
 import dialogs from './dialogs';
-import { ProfileConfig, Profile } from '@joplin/lib/services/profileConfig/types';
+import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { deleteProfileById, saveProfileConfig } from '@joplin/lib/services/profileConfig';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-import { CSSProperties } from 'react';
 import { AppState } from '../app.reducer';
 import { Dispatch } from 'redux';
 
@@ -19,64 +17,34 @@ const logger = Logger.create('ProfileManagementScreen');
 
 interface Props {
 	themeId: number;
-	style: CSSProperties;
 	dispatch: Dispatch;
 	profileConfig: ProfileConfig;
 }
 
-interface State {
-	profiles: Profile[];
-	filter: string;
-}
-
-interface ProfileTable {
+interface ProfileTableProps {
 	profiles: Profile[];
 	currentProfileId: string;
-	onProfileRename: (profile: Profile)=> void;
-	onProfileDelete: (profile: Profile)=> void;
+	onProfileRename: (profile: Profile) => void;
+	onProfileDelete: (profile: Profile) => void;
 	filter: string;
 	themeId: number;
-	style: CSSProperties;
 }
 
-const ProfileTableComp = (props: ProfileTable) => {
+const ProfileTableComp: React.FC<ProfileTableProps> = props => {
 	const theme = themeStyle(props.themeId);
-
-	const nameCellStyle = {
-		...theme.textStyle,
-		textOverflow: 'ellipsis',
-		overflowX: 'hidden',
-		maxWidth: 1,
-		width: '100%',
-		whiteSpace: 'nowrap',
-	};
-
-	const cellStyle = {
-		...theme.textStyle,
-		whiteSpace: 'nowrap',
-		color: theme.colorFaded,
-		width: 1,
-	};
-
-	const headerStyle = {
-		...theme.textStyle,
-		whiteSpace: 'nowrap',
-		width: 1,
-		fontWeight: 'bold',
-	};
 
 	const filteredProfiles = props.profiles.filter(
 		(profile: Profile) => !props.filter || profile.name?.toLowerCase().includes(props.filter.toLowerCase()) || profile.id.includes(props.filter),
 	);
 
 	return (
-		<table style={{ width: '100%' }}>
+		<table className="profile-table">
 			<thead>
 				<tr>
-					<th style={headerStyle}>{_('Profile name')}</th>
-					<th style={headerStyle}>{_('ID')}</th>
-					<th style={headerStyle}>{_('Status')}</th>
-					<th style={headerStyle}>{_('Actions')}</th>
+					<th className="headercell">{_('Profile name')}</th>
+					<th className="headercell">{_('ID')}</th>
+					<th className="headercell">{_('Status')}</th>
+					<th className="headercell">{_('Actions')}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -84,20 +52,20 @@ const ProfileTableComp = (props: ProfileTable) => {
 					const isCurrentProfile = profile.id === props.currentProfileId;
 					return (
 						<tr key={index}>
-							<td id={`name-${profile.id}`} style={nameCellStyle} className="nameCell">
+							<td id={`name-${profile.id}`} className="namecell">
 								<span style={{ fontWeight: isCurrentProfile ? 'bold' : 'normal' }}>
 									{profile.name || `(${_('Untitled')})`}
 								</span>
 							</td>
-							<td style={cellStyle} className="dataCell">{profile.id}</td>
-							<td style={cellStyle} className="dataCell">
+							<td className="datacell">{profile.id}</td>
+							<td className="datacell">
 								{isCurrentProfile ? _('Active') : ''}
 							</td>
-							<td style={cellStyle} className="dataCell">
+							<td className="datacell profileactions">
 								<button
 									id={`rename-${profile.id}`}
 									aria-labelledby={`rename-${profile.id} name-${profile.id}`}
-									style={{ ...theme.buttonStyle, marginRight: 10 }}
+									style={theme.buttonStyle}
 									onClick={() => props.onProfileRename(profile)}
 								>
 									{_('Rename')}
@@ -121,26 +89,20 @@ const ProfileTableComp = (props: ProfileTable) => {
 	);
 };
 
-class ProfileManagementScreenComponent extends React.Component<Props, State> {
-	public constructor(props: Props) {
-		super(props);
-		this.state = {
-			profiles: props.profileConfig.profiles,
-			filter: '',
-		};
-	}
+const ProfileManagementScreenComponent: React.FC<Props> = props => {
+	const { profileConfig, themeId, dispatch } = props;
+	const theme = themeStyle(themeId);
 
-	public componentDidUpdate(prevProps: Props) {
-		if (prevProps.profileConfig !== this.props.profileConfig) {
-			this.setState({ profiles: this.props.profileConfig.profiles });
-		}
-	}
+	const [profiles, setProfiles] = useState<Profile[]>(profileConfig.profiles);
+	const [filter, setFilter] = useState('');
 
-	public onProfileRename = async (profile: Profile) => {
+	useEffect(() => {
+		setProfiles(profileConfig.profiles);
+	}, [profileConfig]);
+
+	const onProfileRename = async (profile: Profile) => {
 		const newName = await dialogs.prompt(_('Profile name:'), '', profile.name);
-		if (newName === null || newName === undefined || newName === profile.name) {
-			return;
-		}
+		if (newName === null || newName === undefined || newName === profile.name) return;
 
 		if (!newName.trim()) {
 			bridge().showErrorMessageBox(_('Profile name cannot be empty'));
@@ -148,23 +110,17 @@ class ProfileManagementScreenComponent extends React.Component<Props, State> {
 		}
 
 		try {
-			const newProfiles = this.props.profileConfig.profiles.map(p => {
-				if (p.id === profile.id) {
-					return {
-						...p,
-						name: newName.trim(),
-					};
-				}
-				return p;
-			});
+			const newProfiles = profileConfig.profiles.map(p =>
+				p.id === profile.id ? { ...p, name: newName.trim() } : p,
+			);
 
 			const newProfileConfig = {
-				...this.props.profileConfig,
+				...profileConfig,
 				profiles: newProfiles,
 			};
 
 			await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newProfileConfig);
-			this.props.dispatch({
+			dispatch({
 				type: 'PROFILE_CONFIG_SET',
 				value: newProfileConfig,
 			});
@@ -174,8 +130,8 @@ class ProfileManagementScreenComponent extends React.Component<Props, State> {
 		}
 	};
 
-	public onProfileDelete = async (profile: Profile) => {
-		const isCurrentProfile = profile.id === this.props.profileConfig.currentProfileId;
+	const onProfileDelete = async (profile: Profile) => {
+		const isCurrentProfile = profile.id === profileConfig.currentProfileId;
 		if (isCurrentProfile) {
 			bridge().showErrorMessageBox(_('The active profile cannot be deleted. Switch to a different profile and try again.'));
 			return;
@@ -185,9 +141,7 @@ class ProfileManagementScreenComponent extends React.Component<Props, State> {
 			buttons: [_('Delete'), _('Cancel')],
 			defaultId: 1,
 		});
-		if (!ok) {
-			return;
-		}
+		if (!ok) return;
 
 		const rootDir = Setting.value('rootProfileDir');
 		const profileDir = `${rootDir}/profile-${profile.id}`;
@@ -201,9 +155,9 @@ class ProfileManagementScreenComponent extends React.Component<Props, State> {
 		}
 
 		try {
-			const newConfig = deleteProfileById(this.props.profileConfig, profile.id);
+			const newConfig = deleteProfileById(profileConfig, profile.id);
 			await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
-			this.props.dispatch({
+			dispatch({
 				type: 'PROFILE_CONFIG_SET',
 				value: newConfig,
 			});
@@ -213,65 +167,40 @@ class ProfileManagementScreenComponent extends React.Component<Props, State> {
 		}
 	};
 
-	public onFilterUpdate = (updateEvent: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ filter: updateEvent.target.value });
-	};
-
-	public render() {
-		const style = this.props.style;
-		const theme = themeStyle(this.props.themeId);
-
-		const rootStyle: CSSProperties = {
-			...style,
-			overflowY: 'scroll',
-			color: theme.color,
-			padding: 20,
-			boxSizing: 'border-box',
-			flex: 1,
-		};
-		delete rootStyle.height;
-		delete rootStyle.width;
-
-		const containerHeight = style.height;
-
-		return (
-			<div style={{ ...theme.containerStyle, fontFamily: theme.fontFamily, height: containerHeight, display: 'flex', flexDirection: 'column' }}>
-				<div style={rootStyle}>
-					<div style={{ ...theme.notificationBox, marginBottom: 10 }}>
-						{_('Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.')}
-					</div>
-					<div style={{ float: 'right' }}>
-						<input
-							style={theme.inputStyle}
-							type="search"
-							value={this.state.filter}
-							onChange={this.onFilterUpdate}
-							placeholder={_('Search...')}
-						/>
-					</div>
-					<ProfileTableComp
-						themeId={this.props.themeId}
-						style={style}
-						profiles={this.state.profiles}
-						currentProfileId={this.props.profileConfig.currentProfileId}
-						filter={this.state.filter}
-						onProfileRename={(profile) => this.onProfileRename(profile)}
-						onProfileDelete={(profile) => this.onProfileDelete(profile)}
+	return (
+		<div className="profile-management" style={theme.containerStyle}>
+			<div className="tablecontainer">
+				<div className="notification" style={theme.notificationBox}>
+					{_('Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.')}
+				</div>
+				<div className="searchcontainer">
+					<input
+						style={theme.inputStyle}
+						type="search"
+						value={filter}
+						onChange={e => setFilter(e.target.value)}
+						placeholder={_('Search...')}
 					/>
 				</div>
-				<ButtonBar
-					onCancelClick={() => this.props.dispatch({ type: 'NAV_BACK' })}
+				<ProfileTableComp
+					themeId={themeId}
+					profiles={profiles}
+					currentProfileId={profileConfig.currentProfileId}
+					filter={filter}
+					onProfileRename={onProfileRename}
+					onProfileDelete={onProfileDelete}
 				/>
 			</div>
-		);
-	}
-}
+			<ButtonBar
+				onCancelClick={() => dispatch({ type: 'NAV_BACK' })}
+			/>
+		</div>
+	);
+};
 
 const mapStateToProps = (state: AppState) => ({
 	themeId: state.settings.theme,
 	profileConfig: state.profileConfig,
 });
 
-const ProfileManagementScreen = connect(mapStateToProps)(ProfileManagementScreenComponent);
-
-export default ProfileManagementScreen;
+export default connect(mapStateToProps)(ProfileManagementScreenComponent);
