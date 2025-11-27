@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useEffect, CSSProperties } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
@@ -18,14 +19,15 @@ const logger = Logger.create('ProfileManagementScreen');
 interface Props {
 	themeId: number;
 	dispatch: Dispatch;
+	style: CSSProperties;
 	profileConfig: ProfileConfig;
 }
 
 interface ProfileTableProps {
 	profiles: Profile[];
 	currentProfileId: string;
-	onProfileRename: (profile: Profile) => void;
-	onProfileDelete: (profile: Profile) => void;
+	onProfileRename: (profile: Profile)=> void;
+	onProfileDelete: (profile: Profile)=> void;
 	filter: string;
 	themeId: number;
 }
@@ -41,10 +43,10 @@ const ProfileTableComp: React.FC<ProfileTableProps> = props => {
 		<table className="profile-table">
 			<thead>
 				<tr>
-					<th className="headercell">{_('Profile name')}</th>
-					<th className="headercell">{_('ID')}</th>
-					<th className="headercell">{_('Status')}</th>
-					<th className="headercell">{_('Actions')}</th>
+					<th className="headerCell">{_('Profile name')}</th>
+					<th className="headerCell">{_('ID')}</th>
+					<th className="headerCell">{_('Status')}</th>
+					<th className="headerCell">{_('Actions')}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -52,16 +54,16 @@ const ProfileTableComp: React.FC<ProfileTableProps> = props => {
 					const isCurrentProfile = profile.id === props.currentProfileId;
 					return (
 						<tr key={index}>
-							<td id={`name-${profile.id}`} className="namecell">
+							<td id={`name-${profile.id}`} className="nameCell">
 								<span style={{ fontWeight: isCurrentProfile ? 'bold' : 'normal' }}>
 									{profile.name || `(${_('Untitled')})`}
 								</span>
 							</td>
-							<td className="datacell">{profile.id}</td>
-							<td className="datacell">
+							<td className="dataCell">{profile.id}</td>
+							<td className="dataCell">
 								{isCurrentProfile ? _('Active') : ''}
 							</td>
-							<td className="datacell profileactions">
+							<td className="dataCell profileActions">
 								<button
 									id={`rename-${profile.id}`}
 									aria-labelledby={`rename-${profile.id} name-${profile.id}`}
@@ -92,6 +94,8 @@ const ProfileTableComp: React.FC<ProfileTableProps> = props => {
 const ProfileManagementScreenComponent: React.FC<Props> = props => {
 	const { profileConfig, themeId, dispatch } = props;
 	const theme = themeStyle(themeId);
+	const style = props.style;
+	const containerHeight = style.height;
 
 	const [profiles, setProfiles] = useState<Profile[]>(profileConfig.profiles);
 	const [filter, setFilter] = useState('');
@@ -168,12 +172,12 @@ const ProfileManagementScreenComponent: React.FC<Props> = props => {
 	};
 
 	return (
-		<div className="profile-management" style={theme.containerStyle}>
-			<div className="tablecontainer">
+		<div className="profile-management" style={{ ...theme.containerStyle, height: containerHeight }}>
+			<div className="tableContainer">
 				<div className="notification" style={theme.notificationBox}>
 					{_('Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.')}
 				</div>
-				<div className="searchcontainer">
+				<div className="searchContainer">
 					<input
 						style={theme.inputStyle}
 						type="search"

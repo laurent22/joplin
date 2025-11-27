@@ -1,20 +1,20 @@
 .profile-management {
 	font-family: var(--joplin-font-family);
-	display: 'flex';
-	flex-direction: 'column';
+	display: flex;
+	flex-direction: column;
 
-	> .tablecontainer {
+	> .tableContainer {
 		overflow-y: scroll;
 		padding: 20px;
 		box-sizing: border-box;
-		flex: 1;
+		flex: 1 1 0%;
 		color: var(--joplin-color);
 
 		> .notification {
 			margin-bottom: 10px;
 		}
 
-		> .searchcontainer {
+		> .searchContainer {
 			float: right;
 		}
 	}
@@ -23,14 +23,14 @@
 .profile-table {
 	width: 100%;
 
-	> thead > tr > .headercell {
+	> thead > tr > .headerCell {
 		white-space: nowrap;
 		font-weight: bold;
 		width: 1px;
 	}
 
 	> tbody > tr {
-		> .namecell {
+		> .nameCell {
 			text-overflow: ellipsis;
 			overflow-x: hidden;
 			max-width: 1px;
@@ -38,13 +38,13 @@
 			white-space: nowrap;
 		}
 		
-		> .datacell {
+		> .dataCell {
 			white-space: nowrap;
 			width: 1px;
 			color: var(--joplin-color-faded);
 		}
 		
-		> .profileactions > button {
+		> .profileActions > button {
 			margin-right: 10px;
 		}
 	}
