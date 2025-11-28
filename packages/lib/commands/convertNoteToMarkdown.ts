@@ -3,7 +3,7 @@ import Note from '../models/Note';
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { MarkupLanguage } from '@joplin/renderer';
 import { runtime as convertHtmlToMarkdown } from './convertHtmlToMarkdown';
-import shim from '../shim';
+import shim, { ToastType } from '../shim';
 import { NoteEntity } from '../services/database/types';
 import { itemIsReadOnly } from '../models/utils/readOnly';
 import { ModelType } from '../BaseModel';
@@ -65,7 +65,7 @@ export const runtime = (): CommandRuntime => {
 					'The note has been converted to Markdown and the original note has been moved to the trash',
 					'The notes have been converted to Markdown and the original notes have been moved to the trash',
 					processedCount,
-				));
+				), { type: ToastType.Success });
 			} catch (error) {
 				await shim.showErrorDialog(_('Could not convert notes to Markdown: %s', error.message));
 			}

@@ -115,8 +115,8 @@ const PopupNotificationProvider: React.FC<Props> = props => {
 
 	useEffect(() => {
 		const defaultShowToast = shim.showToast;
-		shim.showToast = async (message: string) => {
-			const popup = popupManager.createPopup(() => message, { type: NotificationType.Info });
+		shim.showToast = async (message: string, options) => {
+			const popup = popupManager.createPopup(() => message, { type: options?.type ?? NotificationType.Info });
 			popup.scheduleDismiss();
 		};
 

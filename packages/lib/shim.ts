@@ -54,6 +54,16 @@ export interface ShowMessageBoxOptions {
 	cancelId?: number;
 }
 
+export enum ToastType {
+	Info = 'info',
+	Error = 'error',
+	Success = 'success',
+}
+
+export interface ShowToastOptions {
+	type: ToastType;
+}
+
 export enum MobilePlatform {
 	None = '',
 	Android = 'android',
@@ -458,9 +468,9 @@ const shim = {
 		return await shim.showMessageBox(message, { type: MessageBoxType.Confirm }) === 0;
 	},
 
-	showToast: async (message: string): Promise<void> => {
+	showToast: async (message: string, { type = ToastType.Info }: ShowToastOptions = null): Promise<void> => {
 		// Should usually be overridden by implementers
-		await shim.showMessageBox(message, { type: MessageBoxType.Info });
+		await shim.showMessageBox(message, { type: type === ToastType.Error ? MessageBoxType.Error : MessageBoxType.Info });
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
