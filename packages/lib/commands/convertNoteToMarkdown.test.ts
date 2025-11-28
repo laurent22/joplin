@@ -5,6 +5,7 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { NoteEntity } from '../services/database/types';
+import shim from '../shim';
 
 describe('convertNoteToMarkdown', () => {
 	let state: State = undefined;
@@ -13,6 +14,7 @@ describe('convertNoteToMarkdown', () => {
 		state = defaultState;
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		shim.showToast = jest.fn();
 	});
 
 	it('should set the original note to be trashed', async () => {
@@ -29,13 +31,6 @@ describe('convertNoteToMarkdown', () => {
 	});
 
 	it('should recreate a new note that is a clone of the original', async () => {
-		let noteConvertedToMarkdownId = '';
-		const dispatchFn = jest.fn()
-			.mockImplementationOnce(() => {})
-			.mockImplementationOnce(action => {
-				noteConvertedToMarkdownId = action.id;
-			});
-
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
 			title: 'test',
@@ -49,10 +44,11 @@ describe('convertNoteToMarkdown', () => {
 		const htmlNote = await Note.save(htmlNoteProperties);
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: dispatchFn });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
-		expect(dispatchFn).toHaveBeenCalledTimes(2);
-		expect(noteConvertedToMarkdownId).not.toBe('');
+		const notes = await Note.previews(folder.id);
+		expect(notes).toHaveLength(1);
+		const noteConvertedToMarkdownId = notes[0].id;
 
 		const markdownNote = await Note.load(noteConvertedToMarkdownId);
 
@@ -63,8 +59,6 @@ describe('convertNoteToMarkdown', () => {
 	});
 
 	it('should generate action to trigger notification', async () => {
-		const dispatchFn = jest.fn();
-
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
 			title: 'test',
@@ -78,10 +72,9 @@ describe('convertNoteToMarkdown', () => {
 		const htmlNote = await Note.save(htmlNoteProperties);
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: dispatchFn });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
-		expect(dispatchFn).toHaveBeenCalledTimes(1);
-
+		expect(shim.showToast).toHaveBeenCalled();
 	});
 
 });
