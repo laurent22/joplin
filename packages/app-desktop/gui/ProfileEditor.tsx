@@ -14,7 +14,7 @@ import Logger from '@joplin/utils/Logger';
 import { AppState } from '../app.reducer';
 import { Dispatch } from 'redux';
 
-const logger = Logger.create('ProfileManagementScreen');
+const logger = Logger.create('ProfileEditor');
 
 interface Props {
 	themeId: number;
@@ -91,7 +91,7 @@ const ProfileTableComp: React.FC<ProfileTableProps> = props => {
 	);
 };
 
-const ProfileManagementScreenComponent: React.FC<Props> = props => {
+const ProfileEditorComponent: React.FC<Props> = props => {
 	const { profileConfig, themeId, dispatch } = props;
 	const theme = themeStyle(themeId);
 	const style = props.style;
@@ -206,4 +206,4 @@ const mapStateToProps = (state: AppState) => ({
 	profileConfig: state.profileConfig,
 });
 
-export default connect(mapStateToProps)(ProfileManagementScreenComponent);
+export default connect(mapStateToProps)(ProfileEditorComponent);
