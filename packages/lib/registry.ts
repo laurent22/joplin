@@ -3,6 +3,7 @@ import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
+import Synchronizer from './Synchronizer';
 
 class Registry {
 
@@ -129,6 +130,11 @@ class Registry {
 			if (this.scheduleSyncId_) {
 				shim.clearTimeout(this.scheduleSyncId_);
 				this.scheduleSyncId_ = null;
+			}
+
+			if (syncOptions.syncSteps?.toString() === Synchronizer.partialSyncSteps.toString()) {
+				// Only dispatch the event if a partial sync is scheduled, which is triggered by making a change
+				this.dispatch({ type: 'SYNC_PENDING' });
 			}
 
 			if (Setting.value('env') === 'dev' && delay !== 0) {

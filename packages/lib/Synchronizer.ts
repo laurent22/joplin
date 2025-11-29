@@ -59,6 +59,7 @@ function isCannotSyncError(error: any): boolean {
 export default class Synchronizer {
 
 	public static verboseMode = true;
+	public static partialSyncSteps = ['update_remote', 'delete_remote'];
 
 	private db_: JoplinDatabase;
 	private api_: FileApi;
@@ -422,6 +423,7 @@ export default class Synchronizer {
 
 		this.progressReport_.startTime = time.unixMs();
 
+		this.dispatch({ type: 'SYNC_PENDING_RESET' });
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit(EventName.SyncStart);
 
