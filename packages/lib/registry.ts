@@ -132,7 +132,11 @@ class Registry {
 				this.scheduleSyncId_ = null;
 			}
 
-			if (syncOptions.syncSteps?.toString() === Synchronizer.partialSyncSteps.toString()) {
+			const syncTargetId = Setting.value('sync.target');
+			const isAuthenticated = syncTargetId ? await this.syncTarget(syncTargetId).isAuthenticated() : false;
+			const isPartialSync = syncOptions.syncSteps?.toString() === Synchronizer.partialSyncSteps.toString();
+
+			if (isAuthenticated && isPartialSync) {
 				// Only dispatch the event if a partial sync is scheduled, which is triggered by making a change
 				this.dispatch({ type: 'SYNC_PENDING' });
 			}
@@ -149,6 +153,7 @@ class Registry {
 				try {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
+					this.dispatch({ type: 'SYNC_PENDING_RESET' });
 
 					if (doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
 						this.logger().info('Sync cancelled because we\'re on mobile data');

@@ -423,7 +423,6 @@ export default class Synchronizer {
 
 		this.progressReport_.startTime = time.unixMs();
 
-		this.dispatch({ type: 'SYNC_PENDING_RESET' });
 		this.dispatch({ type: 'SYNC_STARTED' });
 		eventManager.emit(EventName.SyncStart);
 
