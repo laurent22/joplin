@@ -104,25 +104,9 @@ const ProfileManagementScreenComponent: React.FC<Props> = props => {
 		setProfiles(profileConfig.profiles);
 	}, [profileConfig]);
 
-	const onProfileRename = async (profile: Profile) => {
-		const newName = await dialogs.prompt(_('Profile name:'), '', profile.name);
-		if (newName === null || newName === undefined || newName === profile.name) return;
-
-		if (!newName.trim()) {
-			bridge().showErrorMessageBox(_('Profile name cannot be empty'));
-			return;
-		}
-
+	const saveNewProfileConfig = async (makeNewProfileConfig: ()=> ProfileConfig) => {
 		try {
-			const newProfiles = profileConfig.profiles.map(p =>
-				p.id === profile.id ? { ...p, name: newName.trim() } : p,
-			);
-
-			const newProfileConfig = {
-				...profileConfig,
-				profiles: newProfiles,
-			};
-
+			const newProfileConfig = makeNewProfileConfig();
 			await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newProfileConfig);
 			dispatch({
 				type: 'PROFILE_CONFIG_SET',
@@ -132,6 +116,31 @@ const ProfileManagementScreenComponent: React.FC<Props> = props => {
 			logger.error(error);
 			bridge().showErrorMessageBox(error.message);
 		}
+	};
+
+	const onProfileRename = async (profile: Profile) => {
+		const newName = await dialogs.prompt(_('Profile name:'), '', profile.name);
+		if (newName === null || newName === undefined || newName === profile.name) return;
+
+		if (!newName.trim()) {
+			bridge().showErrorMessageBox(_('Profile name cannot be empty'));
+			return;
+		}
+
+		const makeNewProfileConfig = () => {
+			const newProfiles = profileConfig.profiles.map(p =>
+				p.id === profile.id ? { ...p, name: newName.trim() } : p,
+			);
+
+			const newProfileConfig = {
+				...profileConfig,
+				profiles: newProfiles,
+			};
+
+			return newProfileConfig;
+		};
+
+		await saveNewProfileConfig(makeNewProfileConfig);
 	};
 
 	const onProfileDelete = async (profile: Profile) => {
@@ -158,17 +167,7 @@ const ProfileManagementScreenComponent: React.FC<Props> = props => {
 			bridge().showErrorMessageBox(error.message);
 		}
 
-		try {
-			const newConfig = deleteProfileById(profileConfig, profile.id);
-			await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
-			dispatch({
-				type: 'PROFILE_CONFIG_SET',
-				value: newConfig,
-			});
-		} catch (error) {
-			logger.error(error);
-			bridge().showErrorMessageBox(error.message);
-		}
+		await saveNewProfileConfig(() => deleteProfileById(profileConfig, profile.id));
 	};
 
 	return (

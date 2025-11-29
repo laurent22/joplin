@@ -20,7 +20,7 @@ import Dialog from './Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 import ImportScreen from './ImportScreen';
 import ResourceScreen from './ResourceScreen';
-import ProfileManagementScreen from './ProfileManagementScreen';
+import ProfileEditor from './ProfileEditor';
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
@@ -166,7 +166,7 @@ class RootComponent extends React.Component<Props, any> {
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },
-			ProfileManagement: { screen: ProfileManagementScreen, title: () => _('Manage profiles') },
+			ProfileEditor: { screen: ProfileEditor, title: () => _('Manage profiles') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
 		};
 

@@ -2,7 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 
 export const declaration: CommandDeclaration = {
-	name: 'manageProfiles',
+	name: 'showProfileEditor',
 	label: () => _('Manage profiles'),
 };
 
@@ -11,7 +11,7 @@ export const runtime = (): CommandRuntime => {
 		execute: async (context: CommandContext) => {
 			context.dispatch({
 				type: 'NAV_GO',
-				routeName: 'ProfileManagement',
+				routeName: 'ProfileEditor',
 			});
 		},
 		enabledCondition: 'hasMultiProfiles',
