@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.5.6",
+  "version": "3.5.7",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -160,7 +160,6 @@
     "codemirror": "5.65.9",
     "color": "3.2.1",
     "compare-versions": "6.1.1",
-    "countable": "3.0.1",
     "debounce": "1.2.1",
     "electron": "39.0.0",
     "electron-builder": "24.13.3",

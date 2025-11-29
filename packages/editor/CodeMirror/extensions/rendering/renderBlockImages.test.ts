@@ -22,11 +22,11 @@ const createEditor = async (initialMarkdown: string, hasImage: boolean) => {
 };
 
 const findImages = (editor: EditorView) => {
-	return editor.dom.querySelectorAll<HTMLDivElement>('div.cm-md-image > .image');
+	return editor.dom.querySelectorAll<HTMLImageElement>('div.cm-md-image > .image');
 };
 
-const getImageBackgroundUrls = (editor: EditorView) => {
-	return [...findImages(editor)].map(image => image.style.backgroundImage);
+const getImageUrls = (editor: EditorView) => {
+	return [...findImages(editor)].map(image => image.getAttribute('src'));
 };
 
 describe('renderBlockImages', () => {
@@ -60,9 +60,9 @@ describe('renderBlockImages', () => {
 		const editor = await createEditor('![test](:/a123456789abcdef0123456789abcdef)\n![test 2](:/b123456789abcdef0123456789abcde2)', true);
 
 		// Should have the expected original image URLs
-		expect(getImageBackgroundUrls(editor)).toMatchObject([
-			'url(:/a123456789abcdef0123456789abcdef?r=0)',
-			'url(:/b123456789abcdef0123456789abcde2?r=0)',
+		expect(getImageUrls(editor)).toMatchObject([
+			':/a123456789abcdef0123456789abcdef?r=0',
+			':/b123456789abcdef0123456789abcde2?r=0',
 		]);
 
 		editor.dispatch({
@@ -70,9 +70,9 @@ describe('renderBlockImages', () => {
 		});
 		await allowImageUrlsToBeFetched();
 
-		expect(getImageBackgroundUrls(editor)).toMatchObject([
-			'url(:/a123456789abcdef0123456789abcdef?r=1)',
-			'url(:/b123456789abcdef0123456789abcde2?r=0)',
+		expect(getImageUrls(editor)).toMatchObject([
+			':/a123456789abcdef0123456789abcdef?r=1',
+			':/b123456789abcdef0123456789abcde2?r=0',
 		]);
 
 		editor.dispatch({
@@ -83,9 +83,80 @@ describe('renderBlockImages', () => {
 		});
 		await allowImageUrlsToBeFetched();
 
-		expect(getImageBackgroundUrls(editor)).toMatchObject([
-			'url(:/a123456789abcdef0123456789abcdef?r=2)',
-			'url(:/b123456789abcdef0123456789abcde2?r=1)',
+		expect(getImageUrls(editor)).toMatchObject([
+			':/a123456789abcdef0123456789abcdef?r=2',
+			':/b123456789abcdef0123456789abcde2?r=1',
 		]);
+	});
+
+	test.each([
+		{ spaceBefore: '', spaceAfter: '\n\n', alt: 'test', width: null },
+		{ spaceBefore: '', spaceAfter: '', alt: 'This is a test!', width: null },
+		{ spaceBefore: '   ', spaceAfter: ' ', alt: 'test', width: null },
+		{ spaceBefore: '', spaceAfter: '', alt: '!!!!', width: '500' },
+	])('should render HTML img tags (case %#)', async ({ spaceBefore, spaceAfter, alt, width }) => {
+		const widthAttr = width ? ` width="${width}"` : '';
+		const editor = await createEditor(
+			`${spaceBefore}<img src=":/0123456789abcdef0123456789abcdef" alt="${alt}"${widthAttr} />${spaceAfter}`,
+			false,
+		);
+
+		const images = findImages(editor);
+		expect(images).toHaveLength(1);
+		expect(images[0].role).toBe('image');
+		expect(images[0].ariaLabel).toBe(alt);
+
+		if (width) {
+			expect(images[0].style.width).toBe(`${width}px`);
+			expect(images[0].style.height).toBe('auto');
+		} else {
+			expect(images[0].style.width).toBe('');
+		}
+	});
+
+	test('should render non-self-closing HTML img tags', async () => {
+		const editor = await createEditor(
+			'<img src=":/0123456789abcdef0123456789abcdef" alt="test" width="300">',
+			false,
+		);
+
+		const images = findImages(editor);
+		expect(images).toHaveLength(1);
+		expect(images[0].style.width).toBe('300px');
+	});
+
+	test('should not render HTML img tags with web URLs', async () => {
+		const editor = await createEditor(
+			'<img src="https://example.com/test.png" alt="test" />',
+			false,
+		);
+
+		const images = findImages(editor);
+		expect(images).toHaveLength(0);
+	});
+
+	test('should render both markdown and HTML images in same document', async () => {
+		const editor = await createEditor(
+			'![markdown](:/a123456789abcdef0123456789abcdef)\n\n<img src=":/b123456789abcdef0123456789abcde2" alt="html" width="400" />',
+			true,
+		);
+
+		const images = findImages(editor);
+		expect(images).toHaveLength(2);
+		expect(images[0].style.width).toBe(''); // markdown - no width
+		expect(images[1].style.width).toBe('400px'); // HTML with width
+	});
+
+	test('should render HTML img tags with single-quoted attributes', async () => {
+		const editor = await createEditor(
+			// eslint-disable-next-line quotes
+			"<img src=':/0123456789abcdef0123456789abcdef' alt='test' width='250' />",
+			false,
+		);
+
+		const images = findImages(editor);
+		expect(images).toHaveLength(1);
+		expect(images[0].ariaLabel).toBe('test');
+		expect(images[0].style.width).toBe('250px');
 	});
 });

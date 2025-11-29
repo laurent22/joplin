@@ -683,7 +683,7 @@ function changeSelectedTagOrFolder(
 	} else if ('ids' in action) {
 		itemIds = [...action.ids];
 	} else {
-		if (!action.id) {
+		if (!('id' in action)) {
 			throw new Error(`Missing id in ${action.type} action.`);
 		}
 

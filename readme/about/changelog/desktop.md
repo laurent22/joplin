@@ -1,5 +1,33 @@
 # Joplin Desktop Changelog
 
+## [v3.5.7](https://github.com/laurent22/joplin/releases/tag/v3.5.7) (Pre-release) - 2025-11-22T08:35:36Z
+
+- Improved: Add support for rendering html images when "Markdown editor: Render images" is enabled ([#13743](https://github.com/laurent22/joplin/issues/13743) by [@bwat47](https://github.com/bwat47))
+- Improved: Allow using share permission with Joplin Server Business ([f340960](https://github.com/laurent22/joplin/commit/f340960))
+- Improved: Apache Tomcat WebDAV compatibility for sync ([#13614](https://github.com/laurent22/joplin/issues/13614) by [@horvatkm](https://github.com/horvatkm))
+- Improved: Move ABC rendering from plugin to main app ([#13599](https://github.com/laurent22/joplin/issues/13599))
+- Improved: OneNote importer: Don't stop the import process if a style object can't be found ([#13719](https://github.com/laurent22/joplin/issues/13719) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: OneNote importer: Don't stop the import process when a page fails to render ([#13736](https://github.com/laurent22/joplin/issues/13736)) ([#13464](https://github.com/laurent22/joplin/issues/13464) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Preserve scroll when switching between Markdown and Rich Text Editors ([#13587](https://github.com/laurent22/joplin/issues/13587)) ([#13586](https://github.com/laurent22/joplin/issues/13586) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove image height limit in Markdown editor ([#13717](https://github.com/laurent22/joplin/issues/13717)) ([#12959](https://github.com/laurent22/joplin/issues/12959) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Skip over unsupported image formats during processing paste event ([#13630](https://github.com/laurent22/joplin/issues/13630)) ([#13625](https://github.com/laurent22/joplin/issues/13625) by [@horvatkm](https://github.com/horvatkm))
+- Improved: Support selecting multiple notebooks ([#13612](https://github.com/laurent22/joplin/issues/13612)) ([#1556](https://github.com/laurent22/joplin/issues/1556) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.4.4), @electron/remote (v2.1.3), @fortawesome/react-fontawesome (v0.2.6), @playwright/test (v1.54.2), follow-redirects (v1.15.11), mermaid (v11.9.0), nan (v2.23.0), turndown (v7.2.1)
+- Fixed: Accessibility: Fix last items in note actions menu cannot be accessed on small screens ([#13756](https://github.com/laurent22/joplin/issues/13756) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix crash when opening the legacy Markdown editor ([#13576](https://github.com/laurent22/joplin/issues/13576)) ([#13574](https://github.com/laurent22/joplin/issues/13574) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix issue with shared notebooks and SAML sync ([9f36b44](https://github.com/laurent22/joplin/commit/9f36b44))
+- Fixed: Fix settings aren't saved before opening the SAML login screen ([#13696](https://github.com/laurent22/joplin/issues/13696)) ([#13694](https://github.com/laurent22/joplin/issues/13694) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix text contrast issues with Aritim, Dracula, and Nord themes ([#13740](https://github.com/laurent22/joplin/issues/13740)) ([#13707](https://github.com/laurent22/joplin/issues/13707) by [@bwat47](https://github.com/bwat47))
+- Fixed: Fix text highlighting in basic search mode ([#13703](https://github.com/laurent22/joplin/issues/13703) by Self Not Found)
+- Fixed: Improve performance of item deserialization ([#13585](https://github.com/laurent22/joplin/issues/13585)) ([#13291](https://github.com/laurent22/joplin/issues/13291) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Location: Remove geoplugin.net from location providers ([#13583](https://github.com/laurent22/joplin/issues/13583)) ([#13177](https://github.com/laurent22/joplin/issues/13177) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OneNote importer: Support converting checklists to Markdown ([#13698](https://github.com/laurent22/joplin/issues/13698)) ([#13549](https://github.com/laurent22/joplin/issues/13549) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Prevent new notes from being created in trashed or missing notebooks in certain cases ([#13575](https://github.com/laurent22/joplin/issues/13575)) ([#13258](https://github.com/laurent22/joplin/issues/13258) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Rich Text Editor: Make cursor jump during editing less likely ([#13581](https://github.com/laurent22/joplin/issues/13581)) ([#13579](https://github.com/laurent22/joplin/issues/13579) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Treat unclosed quotes as fully quoted search terms, to prevent malformed match expression error ([#13564](https://github.com/laurent22/joplin/issues/13564)) ([#13319](https://github.com/laurent22/joplin/issues/13319) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Upgrade to Electron 39 ([#13567](https://github.com/laurent22/joplin/issues/13567)) ([#13561](https://github.com/laurent22/joplin/issues/13561) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: When creating a conflict, ensure the latest note contents are used to create the conflict ([#13552](https://github.com/laurent22/joplin/issues/13552)) ([#13531](https://github.com/laurent22/joplin/issues/13531) by [@mrjo118](https://github.com/mrjo118))
+
 ## [v3.5.6](https://github.com/laurent22/joplin/releases/tag/v3.5.6) (Pre-release) - 2025-10-29T14:48:46Z
 
 - Improved: Accessibility: Improve dialog keyboard handling ([#13536](https://github.com/laurent22/joplin/issues/13536) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
