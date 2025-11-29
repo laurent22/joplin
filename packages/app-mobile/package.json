@@ -134,7 +134,7 @@
     "sqlite3": "5.1.6",
     "timers-browserify": "2.0.12",
     "ts-jest": "29.4.1",
-    "ts-loader": "9.5.2",
+    "ts-loader": "9.5.4",
     "ts-node": "10.9.2",
     "typescript": "5.8.3",
     "url-loader": "4.1.1",
