@@ -49,6 +49,9 @@
 	],
 	"ignoreDeps": [
 		"@babel/core",
+		// ProseMirror and CodeMirror often need to be deduplicated after updating (e.g. with
+		// yarn dedupe 'prosemirror-*'). Renovate doesn't do this, and, without the deduplication,
+		// multiple instances of some parts of the libraries can be loaded, breaking parts of the editor. 
 		"@codemirror/autocomplete",
 		"@codemirror/commands",
 		"@codemirror/lang-cpp",
@@ -69,6 +72,9 @@
 		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/markdown",
+		"prosemirror-model",
+		"prosemirror-state",
+		"prosemirror-view",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",

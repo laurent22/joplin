@@ -1,30 +1,13 @@
 import time from '@joplin/lib/time';
-import { DbConnection, dropTables, migrateLatest, truncateTables } from '../db';
-import newModelFactory from '../models/factory';
-import { AccountType } from '../models/UserModel';
-import { User, UserFlagType } from '../services/database/types';
-import { Minute, Second } from '../utils/time';
-import { Config } from '../utils/types';
+import { DbConnection, truncateTables } from '../../db';
+import newModelFactory from '../../models/factory';
+import { AccountType } from '../../models/UserModel';
+import { User, UserFlagType } from '../../services/database/types';
+import { Config } from '../../utils/types';
 
 export interface CreateTestUsersOptions {
 	count?: number;
 	fromNum?: number;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function handleDebugCommands(argv: any, db: DbConnection, config: Config): Promise<boolean> {
-	if (argv.debugCreateTestUsers) {
-		await createTestUsers(db, config);
-	} else {
-		return false;
-	}
-
-	return true;
-}
-
-export async function clearDatabase(db: DbConnection) {
-	await dropTables(db);
-	await migrateLatest(db);
 }
 
 const includedTables = [
@@ -46,7 +29,7 @@ const includedTables = [
 	'users',
 ];
 
-export async function createTestUsers(db: DbConnection, config: Config, options: CreateTestUsersOptions = null) {
+export default async function createTestUsers(db: DbConnection, config: Config, options: CreateTestUsersOptions = null) {
 	options = {
 		count: 0,
 		fromNum: 1,
@@ -125,16 +108,3 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 		}
 	}
 }
-
-export async function createUserDeletions(db: DbConnection, config: Config) {
-	const models = newModelFactory(db, db, config);
-
-	const users = await models.user().all();
-
-	for (let i = 0; i < 3; i++) {
-		if (i >= users.length) break;
-		if (users[i].is_admin) continue;
-		await models.userDeletion().add(users[i].id, Date.now() + 60 * Second + (i * 10 * Minute));
-	}
-}
-

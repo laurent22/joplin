@@ -39,6 +39,7 @@ interface Context {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	currentLinkAttrs?: any;
 	inFence?: boolean;
+	fenceStarting?: string;
 	processedFiles?: string[];
 	isNews?: boolean;
 	donateLinks?: string;
@@ -159,7 +160,8 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		}
 	} else if (type === 'fence') {
 		context.inFence = true;
-		content.push(`\`\`\`${token.info || ''}\n`);
+		context.fenceStarting = token.markup;
+		content.push(`${token.markup}${token.info || ''}\n`);
 	} else if (type === 'html_block') {
 		contentProcessed = true;
 		content.push(parseHtml(token.content.trim()));
@@ -252,7 +254,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	}
 
 	if (type === 'fence') {
-		content.push('```');
+		content.push(context.fenceStarting);
 		content.push(paragraphBreak);
 		context.inFence = false;
 	}

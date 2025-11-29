@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.5.7",
+  "version": "3.5.9",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -161,7 +161,7 @@
     "color": "3.2.1",
     "compare-versions": "6.1.1",
     "debounce": "1.2.1",
-    "electron": "39.0.0",
+    "electron": "39.2.3",
     "electron-builder": "24.13.3",
     "electron-updater": "6.6.2",
     "electron-window-state": "5.0.3",
