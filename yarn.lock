@@ -38928,6 +38928,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-gyp@npm:11.3.0":
+  version: 11.3.0
+  resolution: "node-gyp@npm:11.3.0"
+  dependencies:
+    env-paths: "npm:^2.2.0"
+    exponential-backoff: "npm:^3.1.1"
+    graceful-fs: "npm:^4.2.6"
+    make-fetch-happen: "npm:^14.0.3"
+    nopt: "npm:^8.0.0"
+    proc-log: "npm:^5.0.0"
+    semver: "npm:^7.3.5"
+    tar: "npm:^7.4.3"
+    tinyglobby: "npm:^0.2.12"
+    which: "npm:^5.0.0"
+  bin:
+    node-gyp: bin/node-gyp.js
+  checksum: 10/e7fb17ba72172d743ee791ea470cba1a579d1c37bcaa67a45d221d07df055baf1367d0684b3c7ee2b9b61f260cea77b2016aaac47027dbc0f43030c90b21527d
+  languageName: node
+  linkType: hard
+
 "node-gyp@npm:8.x":
   version: 8.4.1
   resolution: "node-gyp@npm:8.4.1"
@@ -45645,7 +45665,7 @@ __metadata:
     lerna: "npm:3.22.1"
     lint-staged: "npm:15.5.2"
     madge: "npm:8.0.0"
-    node-gyp: "npm:11.2.0"
+    node-gyp: "npm:11.3.0"
     nodemon: "npm:3.1.10"
     npm-package-json-lint: "npm:8.0.0"
     typescript: "npm:5.8.3"
