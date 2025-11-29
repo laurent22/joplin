@@ -8,6 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Milo Ivir <mail@mivirtype.de>\n"
 "Language-Team: \n"
 "Language: hr_HR\n"
@@ -16,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -154,9 +156,9 @@ msgstr "%d MB po bilješci ili privitku"
 #: packages/lib/models/settings/builtInMetadata.ts:1407
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minunta"
-msgstr[1] "%d minunte"
-msgstr[2] "%d minunta"
+msgstr[0] "%d minuta"
+msgstr[1] "%d minute"
+msgstr[2] "%d minuta"
 
 #: packages/app-cli/app/command-rmnote.ts:34
 msgid "%d note matches this pattern. Delete it?"
@@ -307,7 +309,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "Kratki opis slike:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1970
 msgid ""
@@ -424,7 +426,7 @@ msgstr "Dodaj sadržaj"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:24
 msgid "Add column"
-msgstr ""
+msgstr "Dodaj stupac"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -441,9 +443,8 @@ msgid "Add recipient:"
 msgstr "Dodaj primaoca:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
-#, fuzzy
 msgid "Add row"
-msgstr "Dodaj novu"
+msgstr "Dodaj redak"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -583,6 +584,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Dogodila se greška prilikom slanja odgovora. To se može dogoditi ako je "
+"aplikacija offline ili se ne može spojiti na server.\n"
+"Greška: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1163,7 +1167,7 @@ msgstr "Cmd-klik za otvaranje: %s"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:70
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:76
 msgid "Code"
-msgstr "Kȏd"
+msgstr "Kod"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:814
 msgid "Code Block"
@@ -1192,13 +1196,12 @@ msgstr "Sklopi sve bilježnice"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Collapse title"
-msgstr "Sklopi"
+msgstr "Sklopi naslov"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
-msgstr "Skupljeno"
+msgstr "Sklopljeno"
 
 #: packages/lib/services/ReportService.ts:386
 msgid "Coming alarms"
@@ -1207,9 +1210,9 @@ msgstr "Nadolazeća upozorenja"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Zarezima odvojen popis putanja do mapa iz kojih se učitavaju certifikati ili "
 "putanja do pojedinih datoteka certifikata. Na primjer: /my/cert_dir, /other/"
@@ -1458,8 +1461,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Neuspjelo povezivanje s Joplin poslužiteljem. Provjeri opcije sinkronizacije "
-"u prozoru konfiguracije. Potpuna greška glasi:\n"
+"Neuspjelo povezivanje s Joplin Server. Provjeri opcije sinkronizacije u "
+"prozoru konfiguracije. Potpuna greška glasi:\n"
 "\n"
 "%s"
 
@@ -1737,9 +1740,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Izbrisati privitak „%s”?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:34
-#, fuzzy
 msgid "Delete column"
-msgstr "Izbriši redak"
+msgstr "Izbriši stupac"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1780,9 +1782,8 @@ msgid "Delete profile \"%s\""
 msgstr "Izbriši profil „%s”"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:29
-#, fuzzy
 msgid "Delete row"
-msgstr "Izbriši bilješku"
+msgstr "Izbriši redak"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:486
 msgid "Delete selected notes"
@@ -2015,7 +2016,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Smatraš li web aplikaciju Joplin korisnom?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1980
 msgid "Document scanner: Title template"
@@ -2577,9 +2578,8 @@ msgstr "Rasklopi sve bilježnice"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Expand title"
-msgstr "Rasklopljeno"
+msgstr "Rasklopi naslov"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2689,7 +2689,7 @@ msgstr "Oznake funkcija"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Povratne informacije"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -2895,7 +2895,7 @@ msgstr "Odobri autorizaciju"
 
 #: packages/app-cli/app/command-sync.ts:117
 msgid "Have you authorised the application login in the above URL?"
-msgstr "Jesi li autorizirao/la prijavu program u gore navedenom URL-u?"
+msgstr "Jesi li autorizirao/la prijavu programa u gore navedenom URL-u?"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:30
 msgid "Header %d"
@@ -3200,7 +3200,7 @@ msgstr "Informacije"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:822
 msgid "Inline Code"
-msgstr "Umetnuti kȏd"
+msgstr "Umetnuti kod"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:24
 msgid "Insert"
@@ -3374,9 +3374,8 @@ msgid "Joplin Server"
 msgstr "Joplin Server"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:67
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "Joplin Server URL"
+msgstr "Joplin Server (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3409,6 +3408,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin podržava spremanje mjesta na kojoj se bilješke spremaju ili stvaraju. "
+"Želiš li to aktivirati? To možeš promijeniti u bilo kojem trenutku u "
+"postavkama."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3462,7 +3464,7 @@ msgstr "Ključevi koji se moraju nadograditi"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Etiketa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1443
 msgid "Landscape"
@@ -3710,9 +3712,8 @@ msgid "Markdown editor"
 msgstr "Markdown uređivač"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1515
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown uređivač: Prikazivanje slika"
+msgstr "Markdown uređivač: Istakni aktivni redak"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1504
 msgid "Markdown editor: Render images"
@@ -4104,7 +4105,7 @@ msgstr "Ne sada"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Nije korisno"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4181,9 +4182,8 @@ msgid "Note list style"
 msgstr "Stil popisa bilježaka"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Sadržaj pruža: %s"
+msgstr "Bilješka nije objavljena: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4279,7 +4279,7 @@ msgstr "OCR: URL podataka jezika ili putanja"
 
 #: packages/lib/models/settings/builtInMetadata.ts:628
 msgid "OCR: Search in extracted content"
-msgstr "OCR: Tra#i u izdvojenom sadržaju"
+msgstr "OCR: Traži u izdvojenom sadržaju"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4448,7 +4448,7 @@ msgstr "Poredan popis"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:130
 msgid "Other"
-msgstr ""
+msgstr "Drugi"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4836,9 +4836,8 @@ msgid "Publish Note"
 msgstr "Objavi bilješku"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Premjestiti %d bilješku u bilježnicu „%s”?"
+msgstr "Objaviti bilješku „%s“ (u bilježnici „%s“)?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4859,14 +4858,13 @@ msgid "Publish/unpublish"
 msgstr "Objavi/Poništi objavljivanje"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Objavi bilješke"
+msgstr "Objavljeno na URL-u: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Objavljuje bilješku na Joplin Server ili Joplin Cloud"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4934,9 +4932,8 @@ msgid "Recipients:"
 msgstr "Primaoci:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "istaknuti tekst"
+msgstr "Prepoznaj tekst:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5287,9 +5284,8 @@ msgid "Save geo-location with notes"
 msgstr "Spremi geografske podatke mjesta s bilješkama"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:555
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Spremi geografske podatke mjesta s bilješkama"
+msgstr "Spremiti geografske podatke mjesta?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5397,7 +5393,7 @@ msgstr "Odaberi bilježnicu"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:131
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Odaberi jedan od drugih podržanih ciljeva sinkronizacije."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5930,7 +5926,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:111
 msgid "Sync"
-msgstr ""
+msgstr "Sinkronizraj"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6053,9 +6049,8 @@ msgid "Take photo"
 msgstr "Snimi sliku"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Snimi sliku"
+msgstr "Sudjeluj u anketi"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6087,6 +6082,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Hvala na povratnoj informaciji!\n"
+"Imaš li vremena ispuniti kratku anketu?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6493,7 +6490,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr "Ova je funkcija dostupna samo na Joplin Cloudu i Joplin Serveru."
+msgstr "Ova je funkcija dostupna samo na Joplin Cloud i Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
@@ -6863,9 +6860,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "Nije moguće izvesti ili dijeliti podatke dnevnika. Razlog: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1101
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "Nije moguće izvesti ili dijeliti podatke dnevnika. Razlog: %s"
+msgstr "Nije moguće dijeliti podatke bilješke. Razlog: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7125,7 +7121,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Korisno"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7304,6 +7300,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Kada je aktivirano, traži da se slike u bilješci transkribiraju "
+"kvalitetnijom uslugom transkripcije na serveru. Zahtijeva sinkronizaciju s "
+"kopijom desktop aplikacije."
 
 #: packages/lib/models/settings/builtInMetadata.ts:576
 msgid ""

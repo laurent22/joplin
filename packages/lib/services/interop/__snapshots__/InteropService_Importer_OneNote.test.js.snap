@@ -66,6 +66,7 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
     .l3 { padding: 10px 20px 10px 60px }
     .l4 { padding: 10px 20px 10px 80px }
     .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
 </style>
 <script>
     document.addEventListener('click', function (event) {
@@ -115,7 +116,7 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 
 <div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">title</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Untitled</a></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/6">Untitled-0.</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/6">Untitled_1</a></p></div>
 </div><div class="container-outline" style="left: 909px; position: absolute; top: 132px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div>
 
@@ -391,6 +392,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     .l3 { padding: 10px 20px 10px 60px }
     .l4 { padding: 10px 20px 10px 80px }
     .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
 </style>
 <script>
     document.addEventListener('click', function (event) {
@@ -929,6 +931,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Qui
     .l3 { padding: 10px 20px 10px 60px }
     .l4 { padding: 10px 20px 10px 80px }
     .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
 </style>
 <script>
     document.addEventListener('click', function (event) {
@@ -1185,6 +1188,7 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
     .l3 { padding: 10px 20px 10px 60px }
     .l4 { padding: 10px 20px 10px 80px }
     .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
 </style>
 <script>
     document.addEventListener('click', function (event) {
@@ -1315,6 +1319,7 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
     .l3 { padding: 10px 20px 10px 60px }
     .l4 { padding: 10px 20px 10px 80px }
     .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
 </style>
 <script>
     document.addEventListener('click', function (event) {

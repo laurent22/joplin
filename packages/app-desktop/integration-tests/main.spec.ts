@@ -212,5 +212,28 @@ test.describe('main', () => {
 
 		await electronApp.close();
 	});
+
+	test('should import an HTML directory', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
+		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
+		await importedFolder.click();
+
+		const importedNote1 = await mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		await expect(importedNote1).toBeAttached();
+		const importedNote2 = await mainScreen.noteList.getNoteItemByTitle('test-html-file-2');
+		await expect(importedNote2).toBeAttached();
+	});
+
+	test('should import a single HTML file', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.importHtmlFile(electronApp, join(__dirname, 'resources', 'html-import', 'test-html-file-with-image.html'));
+		const importedNote = await mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		await expect(importedNote).toBeAttached();
+	});
 });
 

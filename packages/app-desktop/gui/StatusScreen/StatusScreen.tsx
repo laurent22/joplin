@@ -40,12 +40,18 @@ async function exportDebugReportClick() {
 }
 
 function StatusScreen(props: Props) {
+	const [loading, setLoading] = useState(false);
 	const [report, setReport] = useState<ReportSection[]>([]);
 
 	async function refreshScreen() {
-		const service = new ReportService();
-		const r = await service.status(Setting.value('sync.target'));
-		setReport(r);
+		setLoading(true);
+		try {
+			const service = new ReportService();
+			const r = await service.status(Setting.value('sync.target'));
+			setReport(r);
+		} finally {
+			setLoading(false);
+		}
 	}
 
 	useEffect(() => {
@@ -208,6 +214,7 @@ function StatusScreen(props: Props) {
 		<div style={style}>
 			<div style={containerStyle}>
 				{renderTools()}
+				{loading && <p><span className='loading-animation'/> {_('Loading...')}</p>}
 				{body}
 			</div>
 			<ButtonBar

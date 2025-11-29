@@ -6,6 +6,7 @@ import setFilePickerResponse from './util/setFilePickerResponse';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import setSettingValue from './util/setSettingValue';
 import { toForwardSlashes } from '@joplin/utils/path';
+import mockClipboard from './util/mockClipboard';
 
 
 test.describe('markdownEditor', () => {
@@ -336,6 +337,49 @@ test.describe('markdownEditor', () => {
 
 		// Should show the legacy editor
 		await expect(mainWindow.locator('.rli-editor .CodeMirror5')).toBeVisible();
+	});
+
+	test('should support the textCopy command', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test copy');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('Test content.');
+
+		const { expectClipboardToMatch } = await mockClipboard(electronApp, 'original');
+
+		await mainScreen.goToAnything.runCommand(electronApp, 'textCopy');
+		await expectClipboardToMatch('Test content.\n');
+	});
+
+	test('should support the textCut and textPaste commands', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test paste');
+		const { expectClipboardToMatch } = await mockClipboard(electronApp, 'test!');
+		await expectClipboardToMatch('test!');
+
+		// Should paste text using the textPaste command
+		const goToAnything = mainScreen.goToAnything;
+		await goToAnything.runCommand(electronApp, 'textPaste');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.expectToHaveText('test!');
+
+		// Should cut text using the textCut command
+		await mainScreen.createNewNote('Test cut');
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('Test (new content!)');
+
+		await goToAnything.runCommand(electronApp, 'textCut');
+		await noteEditor.expectToHaveText('\n');
+		await expectClipboardToMatch('Test (new content!)\n');
+
+		// Should paste the content again with textPaste
+		await goToAnything.runCommand(electronApp, 'textPaste');
+		await noteEditor.expectToHaveText(/^Test \(new content!\)[\n]+/);
 	});
 });
 

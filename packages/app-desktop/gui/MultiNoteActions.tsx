@@ -22,12 +22,6 @@ interface MultiNoteActionsProps {
 function styles_(props: MultiNoteActionsProps) {
 	return buildStyle('MultiNoteActions', props.themeId, (theme: ThemeStyle) => {
 		return {
-			root: {
-				display: 'inline-flex',
-				justifyContent: 'center',
-				paddingTop: theme.marginTop,
-				width: '100%',
-			},
 			itemList: {
 				display: 'flex',
 				flexDirection: 'column',
@@ -90,7 +84,7 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 	}
 
 	return (
-		<div style={styles.root}>
+		<div style={styles.root} className='multi-note-actions'>
 			<div style={styles.itemList}>{itemComps}</div>
 		</div>
 	);

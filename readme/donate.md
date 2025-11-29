@@ -8,7 +8,7 @@ Most of all, your donation will make it possible to keep up the current developm
 
 Platform | Link
 --- | ---
-PayPal | [![Donate on PayPal](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?business=E8JMYD2LQ8MMA&no_recurring=0&item_name=I+rely+on+donations+to+maintain+and+improve+the+Joplin+open+source+project.+Thank+you+for+your+help+-+it+makes+a+difference%21&currency_code=EUR) | 
+PayPal | [![Donate on PayPal](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=WQCERTSSLCC7U) | 
 GitHub Sponsor | [![Sponsor on GitHub](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg)](https://github.com/sponsors/laurent22/)
 Patreon | [![Become a patron](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin)
 Liberapay | [![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/laurent22/donate)
