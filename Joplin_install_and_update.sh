@@ -275,7 +275,7 @@ if command -v lsb_release &> /dev/null; then
   # without writing the AppImage to a non-user-writable location (without invalidating other security
   # controls). See https://discourse.joplinapp.org/t/possible-future-requirement-for-no-sandbox-flag-for-ubuntu-23-10/.
   HAS_USERNS_RESTRICTIONS=false
-  if [[ "$DISTVER" =~ ^Ubuntu && $DISTMAJOR -ge 23 ]]; then
+  if [[ "$DISTVER" =~ ^(Ubuntu|Tuxedo) && $DISTMAJOR -ge 23 ]]; then
     HAS_USERNS_RESTRICTIONS=true
   fi
 
