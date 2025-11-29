@@ -1,17 +1,18 @@
-import { htmlentities } from '@joplin/utils/html';
-import { RenderResult } from '../../../../renderer/types';
 import createTestEditor from '../../testing/createTestEditor';
-import joplinEditorApiPlugin, { getEditorApi, setEditorApi } from '../joplinEditorApiPlugin';
 import joplinEditablePlugin, { editSourceBlockAt, hideSourceBlockEditor } from './joplinEditablePlugin';
 import { Second } from '@joplin/utils/time';
 import { EditorView } from 'prosemirror-view';
 import selectFirstInstanceOfNode from '../../utils/selectFirstInstanceOfNode';
+import mockEditorApi from '../../testing/mockEditorApi';
 
 const createEditor = (html: string) => {
-	return createTestEditor({
-		plugins: [joplinEditablePlugin, joplinEditorApiPlugin],
+	const editorApi = mockEditorApi();
+	const editor = createTestEditor({
+		plugins: [joplinEditablePlugin, editorApi.plugin],
 		html,
 	});
+	editorApi.setup(editor);
+	return editor;
 };
 
 const findEditButton = (editor: EditorView): HTMLButtonElement => {
@@ -72,17 +73,6 @@ describe('joplinEditablePlugin', () => {
 
 	test('editing the content of an editor dialog should update the source block', async () => {
 		const editor = createEditor('<div class="joplin-editable"><pre class="joplin-source">test source</pre>rendered</div>');
-
-		// Mock render functions:
-		editor.dispatch(setEditorApi(editor.state.tr, {
-			...getEditorApi(editor.state),
-			renderer: {
-				renderMarkupToHtml: jest.fn(async source => ({
-					html: `<pre class="joplin-source">${htmlentities(source)}</pre><p class="test-content">Mocked!</p></div>`,
-				} as RenderResult)),
-				renderHtmlToMarkup: jest.fn(),
-			},
-		}));
 
 		const editButton = findEditButton(editor);
 		editButton.click();

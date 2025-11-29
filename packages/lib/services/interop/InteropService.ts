@@ -141,7 +141,7 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Md()),
 
 				makeImportModule({
-					format: 'zip',
+					format: 'one',
 					fileExtensions: [
 						'zip',
 						'one',
@@ -229,7 +229,7 @@ export default class InteropService {
 	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
 	// is returned. This is useful to auto-detect the module based on the format.
 	// For more precise matching, newModuleFromPath_ should be used.
-	private findModuleByFormat_(type: ModuleType, format: string, target: FileSystemItem = null, outputFormat: ImportModuleOutputFormat = null) {
+	public findModuleByFormat(type: ModuleType, format: string, target: FileSystemItem = null, outputFormat: ImportModuleOutputFormat = null) {
 		const modules = this.modules();
 		const matches = [];
 
@@ -268,7 +268,7 @@ export default class InteropService {
 	// https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
 	// we can do it if it ever becomes necessary.
 	private newModuleByFormat_(type: ModuleType, format: string, outputFormat: ImportModuleOutputFormat = ImportModuleOutputFormat.Markdown) {
-		const moduleMetadata = this.findModuleByFormat_(type, format, null, outputFormat);
+		const moduleMetadata = this.findModuleByFormat(type, format, null, outputFormat);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
 
 		return moduleMetadata.factory();
@@ -281,7 +281,7 @@ export default class InteropService {
 	//
 	// https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
 	private newModuleFromPath_(type: ModuleType, options: ExportOptions&ImportOptions) {
-		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
+		const moduleMetadata = this.findModuleByFormat(type, options.format, options.target);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
 
 		return moduleMetadata.factory(options);

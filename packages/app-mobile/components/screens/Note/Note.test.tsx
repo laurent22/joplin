@@ -166,19 +166,21 @@ describe('screens/Note', () => {
 
 	it('should show the currently selected note', async () => {
 		await openNewNote({ title: 'Test note (title)', body: '# Testing...' });
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 
 		const titleInput = await screen.findByDisplayValue('Test note (title)');
 		expect(titleInput).toBeVisible();
 
 		const renderedNote = await getNoteViewerDom();
 		expect(renderedNote.querySelector('h1')).toMatchObject({ textContent: 'Testing...' });
+
+		unmount();
 	});
 
 	it('changing the note title input should update the note\'s title', async () => {
 		const noteId = await openNewNote({ title: 'Change me!', body: 'Unchanged body' });
 
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 
 		const titleInput = await screen.findByDisplayValue('Change me!');
 
@@ -205,6 +207,8 @@ describe('screens/Note', () => {
 				await waitForNoteToMatch(noteId, { title: expectedTitle });
 			}
 		});
+
+		unmount();
 	});
 
 	it('changing the note body in the editor should update the note\'s body', async () => {
@@ -237,7 +241,7 @@ describe('screens/Note', () => {
 
 	it('pressing "delete" should move the note to the trash', async () => {
 		const noteId = await openNewNote({ title: 'To be deleted', body: '...' });
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 
 		await openNoteActionsMenu();
 		const deleteButton = await screen.findByText('Delete');
@@ -246,11 +250,13 @@ describe('screens/Note', () => {
 		await waitFor(async () => {
 			expect((await Note.load(noteId)).deleted_time).toBeGreaterThan(0);
 		});
+
+		unmount();
 	});
 
 	it('pressing "delete permanently" should permanently delete a note', async () => {
 		const noteId = await openNewNote({ title: 'To be deleted', body: '...', deleted_time: Date.now() });
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 
 		// Permanently delete note shows a confirmation dialog -- mock it.
 		const deleteId = 0;
@@ -264,6 +270,8 @@ describe('screens/Note', () => {
 			expect(await Note.load(noteId)).toBeUndefined();
 		});
 		expect(shim.showMessageBox).toHaveBeenCalled();
+
+		unmount();
 	});
 
 	it('delete should be disabled in a read-only note', async () => {
@@ -284,7 +292,7 @@ describe('screens/Note', () => {
 			),
 		).toBe(true);
 
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 
 		const titleInput = await screen.findByDisplayValue('Title: Read-only note');
 		expect(titleInput).toBeVisible();
@@ -295,6 +303,7 @@ describe('screens/Note', () => {
 		expect(deleteButton).toHaveProp('disabled', true);
 
 		act(() => cleanup());
+		unmount();
 	});
 
 	it.each([
@@ -317,7 +326,7 @@ describe('screens/Note', () => {
 
 		await openExistingNote(note.id);
 
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 
 		// Note should render
 		const titleInput = await screen.findByDisplayValue('Note 1');
@@ -339,16 +348,20 @@ describe('screens/Note', () => {
 				throw new Error(`Should not be testing downloadMode: ${downloadMode}.`);
 			}
 		});
+
+		unmount();
 	});
 
 	it('the toggleVisiblePanes command should start and stop editing', async () => {
 		await openNewNote({ title: 'To be edited', body: '...' });
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 
 		await expectToBeEditing(false);
 		await runEditorCommand('toggleVisiblePanes');
 		await expectToBeEditing(true);
 		await runEditorCommand('toggleVisiblePanes');
 		await expectToBeEditing(false);
+
+		unmount();
 	});
 });

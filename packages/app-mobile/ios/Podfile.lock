@@ -1514,9 +1514,9 @@ PODS:
     - Yoga
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.5.0):
+  - react-native-saf-x (3.5.1):
     - React-Core
-  - react-native-safe-area-context (5.4.1):
+  - react-native-safe-area-context (5.5.2):
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
@@ -1874,7 +1874,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
-  - RNDateTimePicker (8.4.2):
+  - RNDateTimePicker (8.4.4):
     - React-Core
   - RNDeviceInfo (14.0.4):
     - React-Core
@@ -1884,13 +1884,13 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNLocalize (3.4.2):
+  - RNLocalize (3.5.2):
     - React-Core
   - RNQuickAction (0.3.13):
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (12.1.0):
+  - RNShare (12.1.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1916,7 +1916,7 @@ PODS:
     - Yoga
   - RNSVG (15.13.0):
     - React-Core
-  - RNVectorIcons (10.2.0):
+  - RNVectorIcons (10.3.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2290,7 +2290,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXAV: ae28256069c4cdde93d185c007d8f68d92902c2e
   EXConstants: 98bcf0f22b820f9b28f9fee55ff2daededadd2f8
   Expo: b527631da3b11e085809e877b845f9e6cdd68f9c
@@ -2303,7 +2303,7 @@ SPEC CHECKSUMS:
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 84b955f7b4da8b895faf5946f73748267347c975
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
+  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: e158a4b53ee0aa9cd3037a16221dc8adbd6f7860
@@ -2348,8 +2348,8 @@ SPEC CHECKSUMS:
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-quick-crypto: b475b71e7fa4dbf3446be55e8ad4ef2c58ac4f7f
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-saf-x: 8a349c8348f43ff7c14770da4b0d618d62593346
-  react-native-safe-area-context: dde2052b903c11d677c320b599c3244021c34ce8
+  react-native-saf-x: 404f0f9a29cc6bf21d88582e054c45a11b28c22b
+  react-native-safe-area-context: 0f7bf11598f9a61b7ceac8dc3f59ef98697e99e1
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-version-info: f0b04e16111c4016749235ff6d9a757039189141
   react-native-webview: 0dceb35a9d050f5fa55f7fe2d8c4d1903651eb7d
@@ -2387,17 +2387,17 @@ SPEC CHECKSUMS:
   rn-fetch-blob: 25612b6d6f6e980c6f17ed98ba2f58f5696a51ca
   RNCClipboard: f6679d470d0da2bce2a37b0af7b9e0bf369ecda5
   RNCPushNotificationIOS: 6c4ca3388c7434e4a662b92e4dfeeee858e6f440
-  RNDateTimePicker: 392bdc0d6863b5de2fe9b957c82c25b6a038db29
+  RNDateTimePicker: 7d93eacf4bdf56350e4b7efd5cfc47639185e10c
   RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
-  RNLocalize: 6a87f0490f1793d7a70042e4c55eb9a1ba6dd5b4
+  RNLocalize: 3c4d0abd777a546fa77bdb6caef85a87fb9ea349
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
-  RNShare: 9528acd4e374d3cb76b994b9e167d4a75cd8f452
+  RNShare: 6496fc1ea6e8fce76b769513b6c2852f9c3ded82
   RNSVG: 295a96bc43f2baa5958d64aeec9847a1d8ca7a3d
-  RNVectorIcons: d53917643fddb261b22bd6d889776f336893622b
+  RNVectorIcons: e431ef1e6bef75d6ad0e33a83d376e6207962a9d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5

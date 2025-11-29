@@ -9467,15 +9467,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:0.2.5":
-  version: 0.2.5
-  resolution: "@fortawesome/react-fontawesome@npm:0.2.5"
+"@fortawesome/react-fontawesome@npm:0.2.6":
+  version: 0.2.6
+  resolution: "@fortawesome/react-fontawesome@npm:0.2.6"
   dependencies:
     prop-types: "npm:^15.8.1"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~1 || ~6 || ~7
     react: ^16.3 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/c6dab486b2f4e01f124eece70fda800d510bf6ce6434b28986b5c6bd9ab07856c0f43eeaccc75885ab7677d89e0a9c2c498486ecd3bd676d3561827fed6276c4
+  checksum: 10/e1660d528e3b76eb7e8080a6179188adb9a9eb6ec76a3d18443a8a30bb4a12515fdec456c5c23ae805cdff75c8bae636249863d587f66745a889f3df630d05a4
   languageName: node
   linkType: hard
 
@@ -10231,9 +10231,8 @@ __metadata:
     codemirror: "npm:5.65.9"
     color: "npm:3.2.1"
     compare-versions: "npm:6.1.1"
-    countable: "npm:3.0.1"
     debounce: "npm:1.2.1"
-    electron: "npm:39.0.0"
+    electron: "npm:39.2.3"
     electron-builder: "npm:24.13.3"
     electron-updater: "npm:6.6.2"
     electron-window-state: "npm:5.0.3"
@@ -10323,7 +10322,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.0.14"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.150"
+    "@types/serviceworker": "npm:0.0.152"
     "@types/tar-stream": "npm:3.1.4"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -10378,7 +10377,7 @@ __metadata:
     react-native-sqlite-storage: "npm:6.0.1"
     react-native-svg: "npm:15.13.0"
     react-native-url-polyfill: "npm:2.0.0"
-    react-native-vector-icons: "npm:10.2.0"
+    react-native-vector-icons: "npm:10.3.0"
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.20.0"
     react-native-webview: "npm:13.15.0"
@@ -10578,7 +10577,6 @@ __metadata:
     "@types/jsdom": "npm:21.1.7"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/nanoid": "npm:3.0.0"
     "@types/node": "npm:18.19.130"
     "@types/node-rsa": "npm:1.1.4"
     "@types/react": "npm:18.3.23"
@@ -10619,7 +10617,6 @@ __metadata:
     node-persist: "npm:3.1.3"
     node-rsa: "npm:1.1.1"
     pdfjs-dist: "npm:3.11.174"
-    promise: "npm:8.3.0"
     query-string: "npm:7.1.3"
     re-reselect: "npm:4.0.1"
     react: "npm:18.3.1"
@@ -10660,7 +10657,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": "npm:6.1.2"
     "@fortawesome/free-solid-svg-icons": "npm:6.1.2"
-    "@fortawesome/react-fontawesome": "npm:0.2.5"
+    "@fortawesome/react-fontawesome": "npm:0.2.6"
     "@joplin/lib": "npm:~3.5"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
@@ -10812,7 +10809,7 @@ __metadata:
     bcryptjs: "npm:2.4.3"
     bulma: "npm:1.0.4"
     compare-versions: "npm:6.1.1"
-    dayjs: "npm:1.11.13"
+    dayjs: "npm:1.11.18"
     formidable: "npm:2.1.2"
     fs-extra: "npm:11.2.0"
     gulp: "npm:4.0.2"
@@ -10823,7 +10820,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
-    ldapts: "npm:7.4.0"
+    ldapts: "npm:8.0.9"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -10867,7 +10864,7 @@ __metadata:
     "@types/node-fetch": "npm:2.6.13"
     "@types/yargs": "npm:17.0.33"
     compare-versions: "npm:6.1.1"
-    dayjs: "npm:1.11.13"
+    dayjs: "npm:1.11.18"
     execa: "npm:4.1.0"
     fs-extra: "npm:11.2.0"
     gettext-extractor: "npm:3.8.0"
@@ -10966,7 +10963,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/node-fetch": "npm:2.6.13"
     async-mutex: "npm:0.5.0"
-    dayjs: "npm:1.11.13"
+    dayjs: "npm:1.11.18"
     execa: "npm:5.1.1"
     fs-extra: "npm:11.2.0"
     glob: "npm:11.0.3"
@@ -16329,15 +16326,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nanoid@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@types/nanoid@npm:3.0.0"
-  dependencies:
-    nanoid: "npm:*"
-  checksum: 10/6e84d71ce2b8a2e23b20a018249a2e6a1c36b4ea0f45ff0265e8db514010ccf13141d87d6892f35b8e50ca5832d1d04ddc27062b5e69f91db2d5b3c5321c8c56
-  languageName: node
-  linkType: hard
-
 "@types/node-fetch@npm:2.6.13":
   version: 2.6.13
   resolution: "@types/node-fetch@npm:2.6.13"
@@ -16717,10 +16705,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.150":
-  version: 0.0.150
-  resolution: "@types/serviceworker@npm:0.0.150"
-  checksum: 10/2bddbacdcca1d9c2e7fa477db47b932335bb1f3e15c9cb7adb5c5d577648b2f55f5e77c9162ff9f723ab5431c3a92031f45de2279f5d85a2543b2ceaf6ed5d7e
+"@types/serviceworker@npm:0.0.152":
+  version: 0.0.152
+  resolution: "@types/serviceworker@npm:0.0.152"
+  checksum: 10/9df1fab7fd8efcfd791000fcd0fbd39f02c87064c972dce9354d529c5c6495762e15f94bedfd3bfa6f7547aaf9515c2721b3e5d8d09fb17409f2d6448bcb98be
   languageName: node
   linkType: hard
 
@@ -23238,13 +23226,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"countable@npm:3.0.1":
-  version: 3.0.1
-  resolution: "countable@npm:3.0.1"
-  checksum: 10/4ace30b6922e6672116a97c756d80094201f5a57879873bad18e166f7688230d7ccff63af79e974ae636fe5a278914169172b539d45e4c674433d664b416776e
-  languageName: node
-  linkType: hard
-
 "coveralls@npm:3.1.1":
   version: 3.1.1
   resolution: "coveralls@npm:3.1.1"
@@ -24507,7 +24488,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:1.11.13, dayjs@npm:^1.11.13":
+"dayjs@npm:1.11.18":
+  version: 1.11.18
+  resolution: "dayjs@npm:1.11.18"
+  checksum: 10/7d29a90834cf4da2feb437c2f34b8235c3f94493a06d2f1bf9f506f1fa49eadf796f26e1d685b9fe8cb5e75ce6ee067825115e196f1af3d07b3552ff857bfc39
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.13":
   version: 1.11.13
   resolution: "dayjs@npm:1.11.13"
   checksum: 10/7374d63ab179b8d909a95e74790def25c8986e329ae989840bacb8b1888be116d20e1c4eee75a69ea0dfbae13172efc50ef85619d304ee7ca3c01d5878b704f5
@@ -24589,15 +24577,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4.4.0, debug@npm:^4.3.5":
-  version: 4.4.0
-  resolution: "debug@npm:4.4.0"
+"debug@npm:4.4.1, debug@npm:^4.4.0":
+  version: 4.4.1
+  resolution: "debug@npm:4.4.1"
   dependencies:
     ms: "npm:^2.1.3"
   peerDependenciesMeta:
     supports-color:
       optional: true
-  checksum: 10/1847944c2e3c2c732514b93d11886575625686056cd765336212dc15de2d2b29612b6cd80e1afba767bb8e1803b778caf9973e98169ef1a24a7a7009e1820367
+  checksum: 10/8e2709b2144f03c7950f8804d01ccb3786373df01e406a0f66928e47001cf2d336cbed9ee137261d4f90d68d8679468c755e3548ed83ddacdc82b194d2468afe
   languageName: node
   linkType: hard
 
@@ -24610,15 +24598,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.4.0":
-  version: 4.4.1
-  resolution: "debug@npm:4.4.1"
+"debug@npm:^4.3.5":
+  version: 4.4.0
+  resolution: "debug@npm:4.4.0"
   dependencies:
     ms: "npm:^2.1.3"
   peerDependenciesMeta:
     supports-color:
       optional: true
-  checksum: 10/8e2709b2144f03c7950f8804d01ccb3786373df01e406a0f66928e47001cf2d336cbed9ee137261d4f90d68d8679468c755e3548ed83ddacdc82b194d2468afe
+  checksum: 10/1847944c2e3c2c732514b93d11886575625686056cd765336212dc15de2d2b29612b6cd80e1afba767bb8e1803b778caf9973e98169ef1a24a7a7009e1820367
   languageName: node
   linkType: hard
 
@@ -25965,16 +25953,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:39.0.0":
-  version: 39.0.0
-  resolution: "electron@npm:39.0.0"
+"electron@npm:39.2.3":
+  version: 39.2.3
+  resolution: "electron@npm:39.2.3"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^22.7.7"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10/c2bb9f84bd06d12a90c650b2741ee618426e1ce20be18ff3708bf5f373e942e75e6a8cade94c15d96a06077f7f1fae6709b95f53784456d1db09f493928b47f3
+  checksum: 10/52e3af56a2a1796bbb681f532c6c2a62ccea3464550fd85caaa001abbc69a70d28e1e2760a17865a71e7840e91f3589694e01fe4420014d390c7424c69136189
   languageName: node
   linkType: hard
 
@@ -35537,17 +35525,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:7.4.0":
-  version: 7.4.0
-  resolution: "ldapts@npm:7.4.0"
+"ldapts@npm:8.0.9":
+  version: 8.0.9
+  resolution: "ldapts@npm:8.0.9"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
     asn1: "npm:0.2.6"
-    debug: "npm:4.4.0"
+    debug: "npm:4.4.1"
     strict-event-emitter-types: "npm:2.0.0"
     uuid: "npm:11.1.0"
     whatwg-url: "npm:14.2.0"
-  checksum: 10/d36416a4a912f75df02ee1a3c75095396008c79fae5e437f104d94c32ff5601382a4bdf9c1301707fab4a425baf70e23f0898f7363c03319289f33ec917184ff
+  checksum: 10/512bfec21e2c5d8a257ffda0c426221023043718b235dcc21d5ea81ba43d1999a2f14c1e9d6f7db7af1af2c467b46ee7016cac8da74ebae900fe208c54435b0e
   languageName: node
   linkType: hard
 
@@ -42460,21 +42448,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise@npm:8.3.0, promise@npm:^8.3.0":
-  version: 8.3.0
-  resolution: "promise@npm:8.3.0"
-  dependencies:
-    asap: "npm:~2.0.6"
-  checksum: 10/55e9d0d723c66810966bc055c6c77a3658c0af7e4a8cc88ea47aeaf2949ca0bd1de327d9c631df61236f5406ad478384fa19a77afb3f88c0303eba9e5eb0a8d8
-  languageName: node
-  linkType: hard
-
 "promise@npm:^7.1.1":
   version: 7.3.1
   resolution: "promise@npm:7.3.1"
   dependencies:
     asap: "npm:~2.0.3"
   checksum: 10/37dbe58ca7b0716cc881f0618128f1fd6ff9c46cdc529a269fd70004e567126a449a94e9428e2d19b53d06182d11b45d0c399828f103e06b2bb87643319bd2e7
+  languageName: node
+  linkType: hard
+
+"promise@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "promise@npm:8.3.0"
+  dependencies:
+    asap: "npm:~2.0.6"
+  checksum: 10/55e9d0d723c66810966bc055c6c77a3658c0af7e4a8cc88ea47aeaf2949ca0bd1de327d9c631df61236f5406ad478384fa19a77afb3f88c0303eba9e5eb0a8d8
   languageName: node
   linkType: hard
 
@@ -42634,21 +42622,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-model@npm:1.25.3":
+"prosemirror-model@npm:1.25.3, prosemirror-model@npm:^1.0.0, prosemirror-model@npm:^1.20.0, prosemirror-model@npm:^1.21.0, prosemirror-model@npm:^1.25.0":
   version: 1.25.3
   resolution: "prosemirror-model@npm:1.25.3"
   dependencies:
     orderedmap: "npm:^2.0.0"
   checksum: 10/e7dfdca2b515f3bbfabd29062bdd341b47b196c11f598ca9975245962ae61d1d44935879c3e6a0c35ed6f510cab508f232abe95d34dda2e12cf19b5fa2591372
-  languageName: node
-  linkType: hard
-
-"prosemirror-model@npm:^1.0.0, prosemirror-model@npm:^1.20.0, prosemirror-model@npm:^1.21.0, prosemirror-model@npm:^1.25.0":
-  version: 1.25.2
-  resolution: "prosemirror-model@npm:1.25.2"
-  dependencies:
-    orderedmap: "npm:^2.0.0"
-  checksum: 10/de708e22b52b97081ae8012c37136e3a39552a13b64b9fadeddca1c4bb3d7b865f390123cbe1fee7e98c6b7d85776a292be9fdc5140b6ebbe9f60987de980345
   languageName: node
   linkType: hard
 
@@ -43674,9 +43653,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vector-icons@npm:10.2.0":
-  version: 10.2.0
-  resolution: "react-native-vector-icons@npm:10.2.0"
+"react-native-vector-icons@npm:10.3.0":
+  version: 10.3.0
+  resolution: "react-native-vector-icons@npm:10.3.0"
   dependencies:
     prop-types: "npm:^15.7.2"
     yargs: "npm:^16.1.1"
@@ -43685,7 +43664,7 @@ __metadata:
     fa5-upgrade: bin/fa5-upgrade.sh
     fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
-  checksum: 10/ac3b05bb353807d0ed94256bd6de4291e8261afb320ce69c06270fba3be2ed3c7b3a81ecbda29191cfe906e89bf853d4b4f016465b6b56a428315c7b6630eff1
+  checksum: 10/8f83860985f89be7c6a46298e23802aad12d1743987b015d7eaf4eb206d03e1818d3b48c1ad9a19ec1e0a3a17a8ecf22385ab52b0cfb16f6602a3df264ec87cb
   languageName: node
   linkType: hard
 

@@ -1,17 +1,17 @@
 use crate::page::Renderer;
 use color_eyre::Result;
-use color_eyre::eyre::ContextCompat;
 use parser::contents::EmbeddedFile;
 use parser::property::embedded_file::FileType;
 use parser_utils::{fs_driver, log};
-use std::path::PathBuf;
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_embedded_file(&mut self, file: &EmbeddedFile) -> Result<String> {
         let content;
 
-        let filename = self.determine_filename(file.filename())?;
-        let path = fs_driver().join(self.output.as_str(), filename.as_str());
+        let filename = self
+            .section
+            .to_unique_safe_filename(&self.output, file.filename())?;
+        let path = fs_driver().join(&self.output, &filename);
         log!("Rendering embedded file: {:?}", path);
         fs_driver().write_file(&path, file.data())?;
 
@@ -51,32 +51,5 @@ impl<'a> Renderer<'a> {
             }
         }
         FileType::Unknown
-    }
-
-    pub(crate) fn determine_filename(&mut self, filename: &str) -> Result<String> {
-        let mut i = 0;
-        let mut current_filename = filename.to_string();
-
-        loop {
-            if !self.section.files.contains(&current_filename) {
-                self.section.files.insert(current_filename.clone());
-
-                return Ok(current_filename);
-            }
-
-            let path = PathBuf::from(filename);
-            let ext = path.extension().unwrap_or_default();
-            let base = path
-                .as_os_str()
-                .to_str()
-                .wrap_err("Embedded file name is non utf-8")?
-                .strip_suffix(ext.to_string_lossy().as_ref())
-                .wrap_err("Failed to strip extension from file name")?
-                .trim_matches('.');
-
-            current_filename = format!("{}-{}.{}", base, i, ext.to_string_lossy());
-
-            i += 1;
-        }
     }
 }

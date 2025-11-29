@@ -3,7 +3,8 @@
 import config from '../../../config';
 import { Item } from '../../../services/database/types';
 import { CustomErrorCode } from '../../../utils/errors';
-import { createUserAndSession, db, dbSlave, makeNoteSerializedBody, models } from '../../../utils/testing/testUtils';
+import { makeNoteSerializedBody } from '../../../utils/testing/serializedItems';
+import { createUserAndSession, db, dbSlave, models } from '../../../utils/testing/testUtils';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../../../utils/types';
 import newModelFactory from '../../factory';
 import loadStorageDriver from './loadStorageDriver';
