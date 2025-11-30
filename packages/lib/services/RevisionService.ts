@@ -272,7 +272,7 @@ export default class RevisionService extends BaseService {
 
 	public async restoreFolder() {
 		let folder = await Folder.loadByTitle(this.restoreFolderTitle());
-		if (!folder) {
+		if (!folder || !!folder.deleted_time) {
 			folder = await Folder.save({ title: this.restoreFolderTitle() });
 		}
 		return folder;
