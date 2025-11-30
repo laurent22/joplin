@@ -13,8 +13,8 @@ import extractSelectedLinesTo from '../utils/extractSelectedLinesTo';
 import { EditorView } from 'prosemirror-view';
 import jumpToHash from '../utils/jumpToHash';
 import focusEditor from './focusEditor';
-import insertRenderedMarkdown from '../utils/insertRenderedMarkdown';
 import canReplaceSelectionWith from '../utils/canReplaceSelectionWith';
+import showCreateEditablePrompt from '../plugins/joplinEditablePlugin/showCreateEditablePrompt';
 
 type Dispatch = (tr: Transaction)=> void;
 type ExtendedCommand = (state: EditorState, dispatch: Dispatch, view?: EditorView, options?: string[])=> boolean;
@@ -85,17 +85,14 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.ToggleBolded]: toggleMark(schema.marks.strong),
 	[EditorCommandType.ToggleItalicized]: toggleMark(schema.marks.emphasis),
 	[EditorCommandType.ToggleCode]: toggleCode,
-	[EditorCommandType.ToggleMath]: (state, _dispatch, view) => {
+	[EditorCommandType.ToggleMath]: (state, dispatch, view) => {
 		const selectedText = state.doc.textBetween(state.selection.from, state.selection.to);
 		const block = selectedText.includes('\n');
 		const nodeType = block ? schema.nodes.joplinEditableBlock : schema.nodes.joplinEditableInline;
 
 		if (canReplaceSelectionWith(state.selection, nodeType)) {
 			if (view) {
-				const separator = block ? '$$' : '$';
-				void insertRenderedMarkdown(view,
-					`${separator}${selectedText}${separator}`,
-				);
+				return showCreateEditablePrompt(block ? '$$\n\t...\n$$' : '$...$', !block)(state, dispatch, view);
 			}
 			return true;
 		}
@@ -136,6 +133,9 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 		}
 
 		return true;
+	},
+	[EditorCommandType.InsertCodeBlock]: (state, dispatch, view) => {
+		return showCreateEditablePrompt('```\n\n```', false)(state, dispatch, view);
 	},
 	[EditorCommandType.ToggleSearch]: (state, dispatch, view) => {
 		const command = setSearchVisible(!getSearchVisible(state));

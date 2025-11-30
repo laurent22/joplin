@@ -155,7 +155,7 @@ export default class Renderer {
 		// Adding plugin assets can be slow -- run it asynchronously.
 		if (settings.pluginAssetContainerSelector) {
 			void (async () => {
-				await addPluginAssets(result.pluginAssets, {
+				const addedCount = await addPluginAssets(result.pluginAssets, {
 					inlineAssets: this.setupOptions_.useTransferredFiles,
 					readAssetBlob: settings.readAssetBlob,
 					container: document.querySelector(settings.pluginAssetContainerSelector),
@@ -163,7 +163,12 @@ export default class Renderer {
 				});
 
 				// Some plugins require this event to be dispatched just after being added.
-				document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+				// Avoid dispatching unless the plugins actually changed to avoid unnecessary
+				// rerenders in the background (which can cause content to flicker in the Rich
+				// Text Editor).
+				if (addedCount) {
+					document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+				}
 			})();
 		}
 

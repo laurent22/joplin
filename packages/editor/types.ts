@@ -31,6 +31,7 @@ export enum EditorCommandType {
 
 	InsertHorizontalRule = 'textHorizontalRule',
 	InsertTable = 'textTable',
+	InsertCodeBlock = 'textCodeBlock',
 
 	// Find commands
 	ToggleSearch = 'textSearch',

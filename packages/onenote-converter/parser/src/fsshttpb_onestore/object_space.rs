@@ -7,7 +7,7 @@ use crate::fsshttpb_onestore::revision_role::RevisionRole;
 use crate::onestore;
 use crate::shared::cell_id::CellId;
 use crate::shared::exguid::ExGuid;
-use parser_utils::errors::{ErrorKind, Result};
+use parser_utils::errors::Result;
 use std::collections::HashMap;
 
 pub(crate) type GroupData<'a> = HashMap<(ExGuid, u64), &'a ObjectGroupData>;
@@ -59,11 +59,14 @@ impl<'b> ObjectSpace {
         let object_space_id = cell_id.1;
 
         let cell_manifest_id = ObjectSpace::find_cell_manifest_id(mapping.id, packaging)
-            .ok_or_else(|| ErrorKind::MalformedOneStoreData("cell manifest id not found".into()))?;
+            .ok_or_else(|| parser_error!(MalformedOneStoreData, "cell manifest id not found"))?;
         let revision_manifest_id = storage_index
             .find_revision_mapping_id(cell_manifest_id)
             .ok_or_else(|| {
-                ErrorKind::MalformedOneStoreData("no revision manifest id found".into())
+                parser_error!(
+                    MalformedOneStoreData,
+                    "No revision manifest id found. (Unable to find revision?)."
+                )
             })?;
 
         let mut objects = HashMap::new();

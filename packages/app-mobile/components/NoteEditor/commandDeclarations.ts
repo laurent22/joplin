@@ -13,6 +13,7 @@ const markdownEditorOnlyCommands = [
 
 const richTextEditorOnlyCommands = [
 	EditorCommandType.InsertTable,
+	EditorCommandType.InsertCodeBlock,
 ].map(command => `editor.${command}`);
 
 export const visibleCondition = (commandName: string) => {
@@ -116,6 +117,11 @@ const declarations: CommandDeclaration[] = [
 		name: `editor.${EditorCommandType.InsertTable}`,
 		label: () => _('Table'),
 		iconName: 'material table',
+	},
+	{
+		name: `editor.${EditorCommandType.InsertCodeBlock}`,
+		label: () => _('Block code'),
+		iconName: 'material code-tags',
 	},
 	{
 		name: EditorCommandType.IndentLess,
