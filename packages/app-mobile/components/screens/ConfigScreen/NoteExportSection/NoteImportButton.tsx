@@ -23,7 +23,7 @@ interface Props {
 	activeFolder?: FolderEntity;
 }
 
-const importedFolderTitle = () => {
+export const importedFolderTitle = () => {
 	return _('Imported Notes');
 };
 

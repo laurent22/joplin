@@ -30,7 +30,7 @@ import { TextInput, List } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
-import NoteImportButton from './NoteExportSection/NoteImportButton';
+import NoteImportButton, { importedFolderTitle } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
@@ -605,12 +605,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			);
 			const importTxtLabel = () => _('Import from TXT');
 			const importTxtDescription = () => {
-				if (this.state.activeFolder) {
-					const folderTitle = substrWithEllipsis(this.state.activeFolder.title, 0, 32);
-					return _('Import note from a Text file. The note will be imported into notebook: %s', folderTitle);
-				} else {
-					return _('Import note from a Text file. The note will be imported into a new notebook');
-				}
+				let folderTitle = importedFolderTitle();
+				if (this.state.activeFolder) folderTitle = this.state.activeFolder.title;
+				return _('Import a note from a Text file. The note will be imported into notebook \'%s\'.', substrWithEllipsis(folderTitle, 0, 32));
 			};
 			addSettingComponent(
 				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} />,
