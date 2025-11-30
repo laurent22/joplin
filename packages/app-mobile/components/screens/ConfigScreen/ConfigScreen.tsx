@@ -39,6 +39,8 @@ import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -54,7 +56,7 @@ interface ConfigScreenState {
 
 	selectedSectionName: string|null;
 	sidebarWidth: number;
-	activeFolderId: string;
+	activeFolder: FolderEntity;
 }
 
 interface ConfigScreenProps {
@@ -86,7 +88,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			sidebarWidth: 100,
 			searchQuery: '',
 			searching: false,
-			activeFolderId: null,
+			activeFolder: null,
 		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
@@ -351,8 +353,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		Dimensions.addEventListener('change', this.updateSidebarWidth);
 		this.updateSidebarWidth();
 
-		const activeFolderId = await Folder.getValidActiveFolder();
-		this.setState({ activeFolderId });
+		const activeFolder = await Folder.getValidActiveFolder();
+		this.setState({ activeFolder });
 	}
 
 	public componentWillUnmount() {
@@ -602,9 +604,16 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				[importJexLabel(), importJexDescription()],
 			);
 			const importTxtLabel = () => _('Import from TXT');
-			const importTxtDescription = () => _('Import note from a Text file.');
+			const importTxtDescription = () => {
+				if (this.state.activeFolder) {
+					const folderTitle = substrWithEllipsis(this.state.activeFolder.title, 0, 32);
+					return _('Import note from a Text file. The note will be imported into notebook: %s', folderTitle);
+				} else {
+					return _('Import note from a Text file. The note will be imported into a new notebook');
+				}
+			};
 			addSettingComponent(
-				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolderId={this.state.activeFolderId} />,
+				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} />,
 				[importTxtLabel(), importTxtDescription()],
 			);
 			addSettingComponent(

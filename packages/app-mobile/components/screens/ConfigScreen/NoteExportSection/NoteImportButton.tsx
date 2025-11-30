@@ -10,6 +10,8 @@ import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirecto
 import shim from '@joplin/lib/shim';
 import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
 import { Platform } from 'react-native';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import Folder from '@joplin/lib/models/Folder';
 
 const logger = Logger.create('NoteImportButton');
 
@@ -18,8 +20,20 @@ interface Props {
 	defaultTitle: string;
 	description: string;
 	format: string;
-	activeFolderId?: string;
+	activeFolder?: FolderEntity;
 }
+
+const importedFolderTitle = () => {
+	return _('Imported Notes');
+};
+
+const importedFolder = async () => {
+	let folder = await Folder.loadByTitle(importedFolderTitle());
+	if (!folder || !!folder.deleted_time) {
+		folder = await Folder.save({ title: importedFolderTitle() });
+	}
+	return folder;
+};
 
 const NoteImportButton: FunctionComponent<Props> = props => {
 	const getTitle = (taskStatus: TaskStatus) => {
@@ -55,11 +69,16 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 
 		await shim.fsDriver().copy(sourceFilePath, importTargetPath);
 
+		let activeFolderId = props.activeFolder ? props.activeFolder.id : null;
+		if (props.format === 'txt' && !activeFolderId) {
+			activeFolderId = (await importedFolder()).id;
+		}
+
 		try {
 			const status = await InteropService.instance().import({
 				path: importTargetPath,
 				format: props.format,
-				destinationFolderId: props.activeFolderId,
+				destinationFolderId: activeFolderId,
 			});
 
 			logger.info('Imported successfully');
@@ -70,8 +89,6 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 		}
 	};
 
-	const disabled = !props.activeFolderId && props.format === 'txt';
-
 	return (
 		<TaskButton
 			taskName={props.defaultTitle}
@@ -80,7 +97,6 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			finishedLabel={_('Imported successfully!')}
 			styles={props.styles}
 			onRunTask={runImportTask}
-			disabled={disabled}
 		/>
 	);
 };

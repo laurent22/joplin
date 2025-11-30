@@ -462,7 +462,7 @@ describe('models/Folder', () => {
 		Setting.setValue('activeFolderId', activeFolder.id);
 
 		const validFolder = await Folder.getValidActiveFolder();
-		expect(validFolder).toBe(activeFolder.id);
+		expect(validFolder.id).toBe(activeFolder.id);
 	});
 
 	it('should get default folder when activeFolderId is trashed', async () => {
@@ -472,7 +472,7 @@ describe('models/Folder', () => {
 		Setting.setValue('activeFolderId', activeFolder.id);
 
 		const validFolder = await Folder.getValidActiveFolder();
-		expect(validFolder).toBe(defaultFolder.id);
+		expect(validFolder.id).toBe(defaultFolder.id);
 	});
 
 	it('should get no folder when activeFolderId is undefined', async () => {

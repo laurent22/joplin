@@ -1094,10 +1094,10 @@ export default class Folder extends BaseItem {
 		if (!folder || !!folder.deleted_time) {
 			const defaultFolder = await Folder.defaultFolder();
 			if (!defaultFolder) return null;
-			return defaultFolder.id;
+			return defaultFolder;
 		}
 
-		return folderId;
+		return folder;
 	}
 
 }
