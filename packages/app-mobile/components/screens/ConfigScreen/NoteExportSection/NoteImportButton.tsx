@@ -28,7 +28,10 @@ export const importedFolderTitle = () => {
 };
 
 const importedFolder = async () => {
-	let folder = await Folder.loadByTitleExcludingTrashed(importedFolderTitle());
+	let folder = await Folder.loadByFields({
+		title: importedFolderTitle(),
+		deleted_time: 0,
+	});
 	if (!folder) {
 		folder = await Folder.save({ title: importedFolderTitle() });
 	}
