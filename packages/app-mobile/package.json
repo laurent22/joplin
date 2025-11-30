@@ -127,7 +127,7 @@
     "nodemon": "3.1.10",
     "punycode": "2.3.1",
     "react-dom": "19.0.0",
-    "react-native-web": "0.21.0",
+    "react-native-web": "0.21.1",
     "react-refresh": "0.17.0",
     "react-test-renderer": "19.0.0",
     "sharp": "0.34.3",

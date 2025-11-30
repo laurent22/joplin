@@ -10379,7 +10379,7 @@ __metadata:
     react-native-url-polyfill: "npm:2.0.0"
     react-native-vector-icons: "npm:10.3.0"
     react-native-version-info: "npm:1.1.1"
-    react-native-web: "npm:0.21.0"
+    react-native-web: "npm:0.21.1"
     react-native-webview: "npm:13.15.0"
     react-native-zip-archive: "npm:7.0.2"
     react-redux: "npm:8.1.3"
@@ -43673,9 +43673,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-web@npm:0.21.0":
-  version: 0.21.0
-  resolution: "react-native-web@npm:0.21.0"
+"react-native-web@npm:0.21.1":
+  version: 0.21.1
+  resolution: "react-native-web@npm:0.21.1"
   dependencies:
     "@babel/runtime": "npm:^7.18.6"
     "@react-native/normalize-colors": "npm:^0.74.1"
@@ -43688,7 +43688,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
     react-dom: ^18.0.0 || ^19.0.0
-  checksum: 10/269944f669ee7301bca6a8215f845a882c79c02fb2db2ae07702faddb66faa9f4cf28049a16bd2131a7a58c8b8dd792417f258f50ff29a1755940e65bc92b53f
+  checksum: 10/62cc21b514fd4abe3f9705bd9c835a7f6b910b41869f3c52d136e7ce758bbfa03f04e5df08ad430834faae236c575611430d69b4ca9cb87fb086c1a90392a784
   languageName: node
   linkType: hard
 
