@@ -10328,7 +10328,7 @@ __metadata:
     babel-jest: "npm:29.7.0"
     babel-loader: "npm:9.1.3"
     babel-plugin-module-resolver: "npm:4.1.0"
-    babel-plugin-react-native-web: "npm:0.21.0"
+    babel-plugin-react-native-web: "npm:0.21.1"
     buffer: "npm:6.0.3"
     color: "npm:3.2.1"
     constants-browserify: "npm:1.0.0"
@@ -19832,10 +19832,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-react-native-web@npm:0.21.0":
-  version: 0.21.0
-  resolution: "babel-plugin-react-native-web@npm:0.21.0"
-  checksum: 10/a55934c291bb78cf3f27d11ff7f77a42262da2a681d42e066f2cdbdcb1cfe8c4a64589b0107d613c435d1d0ad1824ebd1863d6b1978c70f9aed61ecd8db4b365
+"babel-plugin-react-native-web@npm:0.21.1":
+  version: 0.21.1
+  resolution: "babel-plugin-react-native-web@npm:0.21.1"
+  checksum: 10/2f52362760466f63068be3bd2da7f9ab187e65093480aade04c8b611974ee68039306b0b011dbd7fa026e9d2472216a631cdc2c8af8ab4768b1300d4532797e6
   languageName: node
   linkType: hard
 
