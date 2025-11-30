@@ -1100,4 +1100,8 @@ export default class Folder extends BaseItem {
 		return folderId;
 	}
 
+	public static loadByTitleExcludingTrashed(title: string) {
+		return this.modelSelectOne('SELECT * FROM folders WHERE title = ? AND deleted_time = 0', [title]);
+	}
+
 }
