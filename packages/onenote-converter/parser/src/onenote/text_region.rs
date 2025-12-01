@@ -79,7 +79,13 @@ impl TextRegion {
 
                 let part: Vec<u8> = text_iter.by_ref().take(count_utf_16).collect();
                 let part_text = part.as_slice().utf16_to_string()?;
-                texts.push(part_text);
+
+                // TODO: When the bell character is at the start of the paragraph it shifts
+                // all styles and attributes by one. For now, ignore leading segments that contain
+                // only the bell character. In the future, look into why this issue is happening.
+                if !texts.is_empty() || part_text != "\u{000B}" {
+                    texts.push(part_text);
+                }
                 last_index = index;
             }
             let end_text: Vec<u8> = text_iter.collect();
@@ -95,6 +101,7 @@ struct TextRegionParser {
     parts: Vec<TextRegion>,
 
     hyperlink_href: Option<String>,
+    hyperlink_next_prefix: Option<String>,
     hyperlink_href_finished: bool,
 }
 
@@ -117,7 +124,8 @@ impl TextRegionParser {
             parts: Vec::new(),
 
             hyperlink_href: None,
-            hyperlink_href_finished: false,
+            hyperlink_next_prefix: None,
+            hyperlink_href_finished: true,
         }
     }
 
@@ -126,9 +134,22 @@ impl TextRegionParser {
         text: &str,
         styles: Option<&ParagraphStyling>,
     ) -> Result<()> {
+        let text = if let Some(prefix) = &self.hyperlink_next_prefix {
+            let prefixed = format!("{prefix}{text}");
+            self.hyperlink_next_prefix = None;
+            prefixed
+        } else {
+            text.into()
+        };
+
         const HYPERLINK_MARKER: &str = "\u{fddf}HYPERLINK \"";
 
-        if text.starts_with(HYPERLINK_MARKER) {
+        if text == "\u{fddf}" && self.parts.is_empty() {
+            self.hyperlink_next_prefix = Some(text);
+        } else if text.starts_with(HYPERLINK_MARKER) {
+            // Ensure that the previous link (if any) has ended
+            self.end_link();
+
             let url = text
                 .strip_prefix(HYPERLINK_MARKER)
                 .ok_or_else(|| parser_error!(MalformedOneNoteData, "Hyperlink has no start marker"))?;
@@ -145,12 +166,22 @@ impl TextRegionParser {
         } else if let Some(href) = self.hyperlink_href.clone() && self.hyperlink_href_finished {
             self.hyperlink_href = None;
 
+            let is_link_start = if let Some(last) = self.parts.last() {
+                if let Some(link) = &last.hyperlink {
+                    !link.is_link_end
+                } else {
+                    true
+                }
+            } else {
+                true
+            };
+
             self.parts.push(TextRegion {
                 text: text.into(),
                 style: styles.cloned(),
                 hyperlink: Some(Hyperlink {
-                    is_link_start: false,
-                    is_link_end: true,
+                    is_link_start,
+                    is_link_end: false,
                     href: href,
                 }),
                 math: None,
@@ -164,16 +195,15 @@ impl TextRegionParser {
                 self.hyperlink_href = Some(format!("{href_start}{text}"));
             }
         } else {
-            self.hyperlink_href_finished = true;
-            self.hyperlink_href = None;
+            self.end_link();
 
             self.parts.push(TextRegion {
-                text: text.into(),
+                text: text.clone(),
                 style: styles.cloned(),
                 hyperlink: Some(Hyperlink {
                     is_link_start: true,
                     is_link_end: true,
-                    href: text.into(),
+                    href: text,
                 }),
                 math: None,
             })
@@ -215,6 +245,18 @@ impl TextRegionParser {
         }
     }
 
+    /// Updates the last item (if math) to mark it as a math-end region
+    fn end_link(&mut self) {
+        if let Some(last) = self.parts.last_mut() {
+            if let Some(link) = &mut last.hyperlink {
+                link.is_link_end = true;
+                // Reset link state
+                self.hyperlink_href_finished = true;
+                self.hyperlink_href = None;
+            }
+        }
+    }
+
     fn push(&mut self, text: &str, style: Option<&ParagraphStyling>, additional_data: Option<&PropertySet>) -> Result<()> {
         let (hyperlink, math) = match style {
             Some(style) => {
@@ -223,15 +265,16 @@ impl TextRegionParser {
             None => (false, false),
         };
 
-        let text = if text.len() == 0 { "{{e}}" } else { text };
-
         if hyperlink {
+            self.end_math();
             self.push_hyperlink(text, style)?;
         } else if math {
+            self.end_link();
             self.push_math(text, style, additional_data)?;
         } else {
-            // Correct
+            // Correct end information
             self.end_math();
+            self.end_link();
 
             self.parts.push(TextRegion {
                 text: text.into(),
@@ -246,6 +289,7 @@ impl TextRegionParser {
 
     fn finish(mut self) -> Result<Vec<TextRegion>> {
         self.end_math();
+        self.end_link();
 
         Ok(self.parts)
     }

@@ -111,7 +111,12 @@ impl<'a> Renderer<'a> {
             })
             .collect::<Result<String>>()?;
 
-        Ok(fix_newlines(&content))
+        let content = fix_newlines(&content);
+        if content == "" {
+            Ok(String::from("&nbsp;"))
+        } else {
+            Ok(content)
+        }
     }
 
     fn parse_paragraph_styles(&self, text: &RichText) -> StyleSet {

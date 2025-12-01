@@ -31,7 +31,7 @@ impl<'a> Renderer<'a> {
             style.to_html_attr(),
         );
         let source_html = format!(
-            "<span class=\"joplin-source\" data-joplin-language=\"katex\" data-joplin-source-open=\"$\" data-joplin-source-close=\"$\">{}</span>",
+            "<span class=\"joplin-source\" data-joplin-language=\"katex\" data-joplin-source-open=\"$\" data-joplin-source-close=\"$\" style=\"display: none;\">{}</span>",
             html_entities(source.trim()),
         );
 
