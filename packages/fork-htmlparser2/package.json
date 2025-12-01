@@ -47,10 +47,10 @@
   "devDependencies": {
     "@types/jest": "29.5.14",
     "@types/node": "18.19.130",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "@typescript-eslint/parser": "6.21.0",
+    "@typescript-eslint/eslint-plugin": "8.32.1",
+    "@typescript-eslint/parser": "8.32.1",
     "coveralls": "3.1.1",
-    "eslint": "8.57.1",
+    "eslint": "9.26.0",
     "jest": "29.7.0",
     "prettier": "3.6.2",
     "ts-jest": "29.4.1",
