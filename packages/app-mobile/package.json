@@ -136,7 +136,7 @@
     "ts-jest": "29.4.1",
     "ts-loader": "9.5.4",
     "ts-node": "10.9.2",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "url-loader": "4.1.1",
     "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
