@@ -10,7 +10,6 @@ import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { JSDOM } from 'jsdom';
 import { ImportModuleOutputFormat } from './types';
 import HtmlToMd from '../../HtmlToMd';
-import uuid from '../../uuid';
 
 const instructionMessage = `
 --------------------------------------
@@ -67,7 +66,6 @@ describe('InteropService_Importer_OneNote', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		tempDir = await createTempDir();
-		BaseModel.setIdGenerator(() => uuid.create());
 	});
 	afterEach(async () => {
 		await remove(tempDir);

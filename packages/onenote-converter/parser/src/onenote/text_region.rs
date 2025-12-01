@@ -254,7 +254,6 @@ impl TextRegionParser {
         }
     }
 
-    /// Updates the last item (if math) to mark it as a math-end region
     fn end_link(&mut self) {
         if let Some(last) = self.parts.last_mut() {
             if let Some(link) = &mut last.hyperlink {

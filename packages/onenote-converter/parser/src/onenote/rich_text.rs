@@ -207,7 +207,7 @@ impl EmbeddedInkSpace {
 ///
 /// [\[MS-ONE\] 2.2.43]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/38eb9b74-cfaf-4df7-b061-a83968c7ff5b
 /// [\[MS-ONE\] 2.2.44]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/f0baabae-f42a-42e0-8cb2-869d420e865f
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct ParagraphStyling {
     pub(crate) charset: Option<Charset>,
     pub(crate) bold: bool,
