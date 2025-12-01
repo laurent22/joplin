@@ -5,7 +5,7 @@ use itertools::Itertools;
 use once_cell::sync::Lazy;
 use parser::contents::{EmbeddedObject, RichText};
 use parser::property::common::ColorRef;
-use parser::property::rich_text::{ParagraphAlignment, ParagraphStyling};
+use parser::property::rich_text::{MathExpression, ParagraphAlignment, ParagraphStyling};
 use parser_utils::log_warn;
 use regex::{Captures, Regex};
 
@@ -61,6 +61,8 @@ impl<'a> Renderer<'a> {
         }
 
         let parts = data.text_segments();
+        // Stores LaTeX and original text data
+        let mut math_parts: Vec<MathExpression> = Vec::new();
 
         let content = parts
             .into_iter()
@@ -87,7 +89,16 @@ impl<'a> Renderer<'a> {
                     let content_html = html_entities(part.text());
                     Ok(format!("{hyperlink_start_html}{content_html}{hyperlink_end_html}"))
                 } else if let Some(math) = part.math() {
-                    Ok(self.render_math(&math, &style)?)
+                    if math.is_math_start {
+                        math_parts.clear();
+                    }
+                    math_parts.push(math.clone());
+
+                    if math.is_math_end {
+                        Ok(self.render_math(&math_parts, &style)?)
+                    } else {
+                        Ok("".into())
+                    }
                 } else {
                     let text_html = html_entities(part.text());
                     if style.len() > 0 {

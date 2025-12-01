@@ -257,6 +257,8 @@ fn text_region_to_latex(text: &str, additional_data: &PropertySet) -> Result<Str
         .map(|operator_value| operator_value.to_u32()).flatten()
     {
         Some(21) => {
+            // TODO: This operator type is also used for summation. Other properties
+            // (e.g. MathUnknown1?) may be needed to determine the operator subtype.
             "matInt".into()
         },
         Some(13) => {
@@ -265,14 +267,20 @@ fn text_region_to_latex(text: &str, additional_data: &PropertySet) -> Result<Str
         Some(17) => {
             "fnCall".into()
         },
-        Some(16) => {
+        Some(19) => {
+            "withSubscript".into()
+        },
+        Some(16|26) => {
             "frac".into()
+        },
+        Some(11) => {
+            "mathrm".into()
         },
         Some(31) => {
             "pow".into()
         },
         Some(other) => {
-            format!("op{}", other)
+            format!("unknown{{{}}}", other)
         },
         None => "".into(),
     };
