@@ -144,8 +144,8 @@ export default class NoteListUtils {
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
-			const onlyHtmlNotes = notes.every(n => n.markup_language === MarkupLanguage.Html);
-			if (onlyHtmlNotes) {
+			const includesHtmlNotes = notes.some(n => n.markup_language === MarkupLanguage.Html);
+			if (includesHtmlNotes) {
 				menu.append(
 					new MenuItem(
 						menuUtils.commandToStatefulMenuItem('convertNoteToMarkdown', noteIds),
