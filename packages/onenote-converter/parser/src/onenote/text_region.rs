@@ -1,5 +1,5 @@
 use crate::{one::property::{PropertyType}, onenote::rich_text::ParagraphStyling, shared::{prop_set::PropertySet, property::PropertyId}};
-use parser_utils::errors::Result;
+use parser_utils::{Utf16ToString, errors::Result};
 
 /// Stores information about a part of a [RichText] region.
 #[derive(Debug, Clone)]
@@ -43,36 +43,16 @@ impl TextRegion {
     }
 
     pub(crate) fn parse(
-        text: &str,
+        raw_text: &Vec<u8>,
         text_run_indices: &Vec<u32>,
         styles: &Vec<ParagraphStyling>,
         text_run_data_values: &Vec<PropertySet>,
     ) -> Result<Vec<TextRegion>> {
-        let mut indices = text_run_indices.clone();
-        let mut styles = styles.clone();
-
-        // TODO: Maybe this shouldn't be here
-        // When the this character is at the start of the paragraph it makes
-        // all the styles to be shifted by minus one.
-        // A better solution would be to look if there isn't anything wrong with the parser,
-        // but I haven't found what could be causing this yet.
-        if text.starts_with("\u{000B}") && !indices.is_empty() {
-            indices.remove(0);
-            styles.pop();
-        }
-
-        // Probably the best solution here would be to rewrite the render_hyperlink to take this
-        // case in account, backtracking if necessary, but this will do for now
-        // https://github.com/laurent22/joplin/issues/11617
-        if text.starts_with("\u{fddf}") {
-            let first_indice = *indices.get(0).unwrap_or(&0);
-            if first_indice == 1 {
-                indices.remove(0);
-                styles.pop();
-            }
-        }
+        let indices = text_run_indices.clone();
+        let styles = styles.clone();
 
         if indices.is_empty() {
+            let text = raw_text.as_slice().utf16_to_string()?;
             return Ok(vec![ TextRegion::from_text(&text) ]);
         }
 
@@ -89,20 +69,21 @@ impl TextRegion {
 
         // Split text into parts specified by indices
         let texts = {
-            let mut text_iter = text.chars();
+            let mut text_iter = raw_text.iter().copied();
             let mut texts: Vec<String> = Vec::new();
 
             let mut last_index = 0;
             for index in indices.iter().copied() {
                 let count = (index - last_index) as usize;
+                let count_utf_16 = count * 2;
 
-                let part = text_iter.by_ref().take(count).collect();
-                println!("idx: {index}, {part}");
-                texts.push(part);
+                let part: Vec<u8> = text_iter.by_ref().take(count_utf_16).collect();
+                let part_text = part.as_slice().utf16_to_string()?;
+                texts.push(part_text);
                 last_index = index;
             }
-            texts.push(text_iter.collect());
-            println!("texts: {texts:?}");
+            let end_text: Vec<u8> = text_iter.collect();
+            texts.push(end_text.as_slice().utf16_to_string()?);
             texts
         };
 
@@ -271,28 +252,42 @@ impl TextRegionParser {
 }
 
 fn text_region_to_latex(text: &str, additional_data: &PropertySet) -> Result<String> {
-    let text = format!("[{text}]");
-
     let op_type = match additional_data
         .get(PropertyId::new(PropertyType::MathOperator as u32))
         .map(|operator_value| operator_value.to_u32()).flatten()
     {
-        Some(2415919104) => {
-            "OP1"
+        Some(21) => {
+            "matInt".into()
         },
-        Some(94) => {
-            "frac"
+        Some(13) => {
+            "inParens".into()
         },
-        Some(_) => {
-            "Unknown"
+        Some(17) => {
+            "fnCall".into()
         },
-        None => "",
+        Some(16) => {
+            "frac".into()
+        },
+        Some(31) => {
+            "pow".into()
+        },
+        Some(other) => {
+            format!("op{}", other)
+        },
+        None => "".into(),
     };
+
+    let operator_name = if op_type != "" {
+        format!("\\{op_type}")
+    } else {
+        String::from("")
+    };
+
     // See https://devblogs.microsoft.com/math-in-office/officemath/
     let tex = text
-        .replace("\u{FDD0}", &format!("{{_{} ", op_type))
+        .replace("\u{FDD0}", &format!("{operator_name}{{"))
         .replace("\u{FDEF}", "}")
-        .replace("\u{FDEE}", "<arg>")
+        .replace("\u{FDEE}", "}{")
         .replace("\u{FFFC}", "<obj>");
 
     println!("Additional data: {:?}, for {}", additional_data, tex);

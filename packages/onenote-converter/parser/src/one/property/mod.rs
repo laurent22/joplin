@@ -207,5 +207,5 @@ pub(crate) enum PropertyType {
     ImageEmbeddedUrl = 0x1C0035F3,
 
     MathUnknown1 = 0x10003453, // Unknown 16-bit math-related property
-    MathOperator = 0x14003ff4, // Unknown 32-bit math-related property (operator?)
+    MathOperator = 0x1400344f, // Unknown 32-bit math-related property (operator?)
 }

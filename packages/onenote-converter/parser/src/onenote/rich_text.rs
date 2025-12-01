@@ -468,7 +468,7 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
 
     let text = RichText {
         text_regions: TextRegion::parse(
-            &text,
+            &data.text_utf_16.unwrap_or_default(),
             &data.text_run_indices,
             &styles,
             &data.text_run_data_values,
