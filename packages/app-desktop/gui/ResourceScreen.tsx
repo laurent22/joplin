@@ -85,7 +85,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 
 	const filteredResources = props.resources.filter(
 		(resource: InnerResource) => {
-			if (!props.filter) {
+			if (props.filter) {
 				const filterLowerCase = props.filter.toLowerCase();
 				return resource.title?.toLocaleLowerCase().includes(filterLowerCase) || resource.id.toLowerCase().includes(filterLowerCase);
 			}
