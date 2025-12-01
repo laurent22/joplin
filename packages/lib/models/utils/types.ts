@@ -37,7 +37,6 @@ export interface LoadOptions {
 export interface FolderLoadOptions extends LoadOptions {
 	includeConflictFolder?: boolean;
 	includeTrash?: boolean;
-	excludeVirtualFolders?: boolean;
 }
 
 export interface SaveOptions {
