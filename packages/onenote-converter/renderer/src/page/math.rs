@@ -10,7 +10,7 @@ impl<'a> Renderer<'a> {
 
         let opening = if math.is_math_start {
             format!(
-                "<span class=\"joplin-editable\"><pre class=\"joplin-source\" data-joplin-language=\"katex\" data-joplin-source-open=\"$$&#10;\" data-joplin-source-close=\"&#10;$$&#10;\" {}>{}{}{}{}",
+                "<span class=\"joplin-editable\"><span class=\"joplin-source\" data-joplin-language=\"katex\" data-joplin-source-open=\"$\" data-joplin-source-close=\"$\" {}>{}{}{}{}",
                 style.to_html_attr(),
                 r"\def\matInt#1#2#3{\int_{#1}^{#2}{#3}}",
                 r"\def\inParens#1{\left( {#1} \right)}",
