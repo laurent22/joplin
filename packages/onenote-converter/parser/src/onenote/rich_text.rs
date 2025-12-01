@@ -6,6 +6,7 @@ use crate::one::property::layout_alignment::LayoutAlignment;
 use crate::one::property::paragraph_alignment::ParagraphAlignment;
 use crate::one::property_set::{embedded_ink_container, paragraph_style_object, rich_text_node};
 use crate::onenote::ink::{Ink, InkBoundingBox, parse_ink_data};
+use crate::onenote::text_region::TextRegion;
 use crate::onenote::note_tag::{NoteTag, parse_note_tags};
 use crate::onestore::object::Object;
 use crate::onestore::object_space::ObjectSpaceRef;
@@ -32,6 +33,7 @@ use parser_utils::log_warn;
 #[derive(Clone, Debug)]
 pub struct RichText {
     pub(crate) text: String,
+    pub(crate) text_regions: Vec<TextRegion>,
 
     pub(crate) text_run_formatting: Vec<ParagraphStyling>,
     pub(crate) text_run_indices: Vec<u32>,
@@ -53,6 +55,11 @@ impl RichText {
     /// The paragraph text content.
     pub fn text(&self) -> &str {
         &self.text
+    }
+
+    /// Computes which styles are associated with which text
+    pub fn text_segments(&self) -> &Vec<TextRegion> {
+        &self.text_regions
     }
 
     /// The formatting of each text run.
@@ -200,7 +207,7 @@ impl EmbeddedInkSpace {
 ///
 /// [\[MS-ONE\] 2.2.43]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/38eb9b74-cfaf-4df7-b061-a83968c7ff5b
 /// [\[MS-ONE\] 2.2.44]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/f0baabae-f42a-42e0-8cb2-869d420e865f
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct ParagraphStyling {
     pub(crate) charset: Option<Charset>,
     pub(crate) bold: bool,
@@ -460,6 +467,13 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
     };
 
     let text = RichText {
+        text_regions: TextRegion::parse(
+            &text,
+            &data.text_run_indices,
+            &styles,
+            &data.text_run_data_values,
+        )?,
+
         text,
         embedded_objects,
         text_run_formatting: styles,

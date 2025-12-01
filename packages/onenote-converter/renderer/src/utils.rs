@@ -42,7 +42,7 @@ impl Display for AttributeSet {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub(crate) struct StyleSet(HashMap<&'static str, String>);
 
 impl StyleSet {
@@ -60,6 +60,11 @@ impl StyleSet {
 
     pub(crate) fn len(&self) -> usize {
         self.0.len()
+    }
+
+    pub(crate) fn to_html_attr(&self) -> String {
+        let attr_content = format!("{}", self);
+        format!("style=\"{}\"", html_entities(&attr_content))
     }
 }
 
@@ -91,5 +96,27 @@ impl Utf16ToString for &[u8] {
 
         let value = U16CString::from_vec_truncate(data);
         Ok(value.to_string().unwrap())
+    }
+}
+
+pub(crate) fn html_entities(text: &str) -> String {
+    // Match the "special chars" mode of the html-entities library:
+    // https://github.com/mdevils/html-entities/blob/9ee63a120597292967f7d0d704d68d33950625ee/src/index.ts#L30
+    text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&apos;")
+}
+
+#[cfg(test)]
+mod test {
+    use super::html_entities;
+
+    #[test]
+    fn should_encode_html_entities() {
+        assert_eq!(html_entities("<a href=\"http://example.com/\">test</a>"), "&lt;a href=&quot;http://example.com/&quot;&gt;test&lt;/a&gt;");
+        assert_eq!(html_entities("&gt;"), "&amp;gt;");
+        assert_eq!(html_entities("'&gt;'"), "&apos;&amp;gt;&apos;");
     }
 }

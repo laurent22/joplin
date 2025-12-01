@@ -7,6 +7,7 @@ use crate::one::property_set::PropertySetId;
 use crate::one::property_set::note_tag_container::Data as NoteTagData;
 use crate::onestore::object::Object;
 use crate::shared::exguid::ExGuid;
+use crate::shared::prop_set::PropertySet;
 use parser_utils::errors::{ErrorKind, Result};
 use parser_utils::log_warn;
 
@@ -23,6 +24,7 @@ pub(crate) struct Data {
     pub(crate) text_run_formatting: Vec<ExGuid>,
     pub(crate) text_run_indices: Vec<u32>,
     pub(crate) text_run_data_object: Vec<ExGuid>,
+    pub(crate) text_run_data_values: Vec<PropertySet>,
     pub(crate) paragraph_style: ExGuid,
     pub(crate) paragraph_space_before: f32,
     pub(crate) paragraph_space_after: f32,
@@ -57,6 +59,8 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         simple::parse_vec_u32(PropertyType::TextRunIndex, object)?.unwrap_or_default();
     let text_run_data_object =
         ObjectReference::parse_vec(PropertyType::TextRunDataObject, object)?.unwrap_or_default();
+    let text_run_data_array =
+        simple::parse_property_values(PropertyType::TextRunData, object)?.unwrap_or_else(|| &[]);
 
     let paragraph_style_result = ObjectReference::parse(PropertyType::ParagraphStyle, object);
     let paragraph_style = match paragraph_style_result {
@@ -103,6 +107,7 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         tight_layout,
         text_run_formatting,
         text_run_indices,
+        text_run_data_values: text_run_data_array.into(),
         text_run_data_object,
         paragraph_style,
         paragraph_space_before,

@@ -1,7 +1,6 @@
 use crate::page::Renderer;
-use crate::utils::{AttributeSet, StyleSet, px};
+use crate::utils::{AttributeSet, StyleSet, html_entities, px};
 use color_eyre::Result;
-use color_eyre::eyre::ContextCompat;
 use itertools::Itertools;
 use once_cell::sync::Lazy;
 use parser::contents::{EmbeddedObject, RichText};
@@ -61,141 +60,47 @@ impl<'a> Renderer<'a> {
                 .join(""));
         }
 
-        let mut indices = data.text_run_indices().to_vec();
-        let mut styles = data.text_run_formatting().to_vec();
-
-        let mut text = data.text().to_string();
-
-        if text.is_empty() {
-            text = "&nbsp;".to_string();
-        }
-
-        // TODO: Maybe this shouldn't be here
-        // When the this character is at the start of the paragraph it makes
-        // all the styles to be shifted by minus one.
-        // A better solution would be to look if there isn't anything wrong with the parser,
-        // but I haven't found what could be causing this yet.
-        if text.starts_with("\u{000B}") && !indices.is_empty() {
-            indices.remove(0);
-            styles.pop();
-        }
-
-        // Probably the best solution here would be to rewrite the render_hyperlink to take this
-        // case in account, backtracking if necessary, but this will do for now
-        // https://github.com/laurent22/joplin/issues/11617
-        if text.starts_with("\u{fddf}") {
-            let first_indice = match indices.get(0) {
-                Some(i) => *i,
-                None => 0,
-            };
-            if first_indice == 1 {
-                indices.remove(0);
-                styles.pop();
-            }
-        }
-
-        if indices.is_empty() {
-            return Ok(fix_newlines(&text));
-        }
-
-        assert!(indices.len() + 1 >= styles.len());
-
-        // Split text into parts specified by indices
-        let mut parts: Vec<String> = vec![];
-
-        for i in indices.iter().copied().rev() {
-            let part = text.chars().skip(i as usize).collect();
-            text = text.chars().take(i as usize).collect();
-
-            parts.push(part);
-        }
-
-        if !indices.is_empty() {
-            parts.push(text);
-        }
-
-        let mut in_hyperlink = false;
-        let mut is_href_finished = true;
+        let parts = data.text_segments();
 
         let content = parts
             .into_iter()
-            .rev()
-            .zip(styles.iter())
-            .map(|(text, style)| {
-                if style.hyperlink() {
-                    let result =
-                        self.render_hyperlink(text.clone(), style, in_hyperlink, is_href_finished);
-                    if result.is_ok() {
-                        in_hyperlink = true;
-                        is_href_finished = result.as_ref().unwrap().1;
-                        Ok(result.unwrap().0)
+            .map(|part| -> Result<String> {
+                let style = part.style()
+                    .map(|style| self.parse_style(style))
+                    .unwrap_or_default();
+                if let Some(hyperlink) = part.hyperlink() {
+                    let hyperlink_start_html = if hyperlink.is_link_start {
+                        format!(
+                            "<a href=\"{}\" {}>",
+                            html_entities(&hyperlink.href),
+                            style.to_html_attr(),
+                        )
                     } else {
-                        Ok(text)
-                    }
+                        String::from("")
+                    };
+                    let hyperlink_end_html = if hyperlink.is_link_end {
+                        "</a>"
+                    } else {
+                        ""
+                    };
+
+                    let content_html = html_entities(part.text());
+                    Ok(format!("{hyperlink_start_html}{content_html}{hyperlink_end_html}"))
+                } else if let Some(math) = part.math() {
+                    Ok(self.render_math(&math, &style)?)
                 } else {
-                    in_hyperlink = false;
-                    is_href_finished = true;
-
-                    let style = self.parse_style(style);
-
+                    let text_html = html_entities(part.text());
                     if style.len() > 0 {
-                        Ok(format!("<span style=\"{}\">{}</span>", style, text))
+                        let style_attr = style.to_html_attr();
+                        Ok(format!("<span {style_attr}>{text_html}</span>"))
                     } else {
-                        Ok(text)
+                        Ok(text_html)
                     }
                 }
             })
             .collect::<Result<String>>()?;
 
         Ok(fix_newlines(&content))
-    }
-
-    /// The hyperlink is delimited by the HYPERLINK_MARKER until the closing double quote
-    /// In some cases the hyperlink is broken in more than one style (e.g.: when there are
-    /// chinese characters on the url path), so we must keep track of the href status
-    /// https://github.com/laurent22/joplin/issues/11600
-    fn render_hyperlink(
-        &self,
-        text: String,
-        style: &ParagraphStyling,
-        in_hyperlink: bool,
-        is_href_finished: bool,
-    ) -> Result<(String, bool)> {
-        const HYPERLINK_MARKER: &str = "\u{fddf}HYPERLINK \"";
-
-        let style = self.parse_style(style);
-
-        if text.starts_with(HYPERLINK_MARKER) {
-            let url = text
-                .strip_prefix(HYPERLINK_MARKER)
-                .wrap_err("Hyperlink has no start marker")?;
-
-            let url_2 = url.strip_suffix('"');
-
-            if url_2.is_some() {
-                return Ok((
-                    format!("<a href=\"{}\" style=\"{}\">", url_2.unwrap(), style),
-                    true,
-                ));
-            } else {
-                // If we didn't find the double quotes means that href still has content in following styles
-                Ok((format!("<a href=\"{}", url), false))
-            }
-        } else if in_hyperlink && is_href_finished {
-            Ok((text + "</a>", true))
-        } else if in_hyperlink && !is_href_finished {
-            let url = text.strip_suffix('"');
-            if url.is_some() {
-                return Ok((format!("{}\" style=\"{}\">", url.unwrap(), style), true));
-            } else {
-                Ok((text, false))
-            }
-        } else {
-            Ok((
-                format!("<a href=\"{}\" style=\"{}\">{}</a>", text, style, text),
-                true,
-            ))
-        }
     }
 
     fn parse_paragraph_styles(&self, text: &RichText) -> StyleSet {

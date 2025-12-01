@@ -13,6 +13,7 @@ pub(crate) mod note_tag;
 pub(crate) mod outline;
 pub(crate) mod rich_text;
 pub(crate) mod table;
+pub(crate) mod math;
 
 pub(crate) struct Renderer<'a> {
     output: String,
