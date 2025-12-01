@@ -104,8 +104,10 @@ struct TextRegionParser {
     parts: Vec<TextRegion>,
 
     hyperlink_href: Option<String>,
-    hyperlink_next_prefix: Option<String>,
+    // If true and hyperlink_href is Some, hyperlink_href contains a full HREF. Otherwise,
+    // hyperlink_href may be partial (in the process of being built).
     hyperlink_href_finished: bool,
+    hyperlink_next_prefix: Option<String>,
 }
 
 impl TextRegionParser {
@@ -161,7 +163,7 @@ impl TextRegionParser {
                 self.hyperlink_href = Some(url.into());
                 self.hyperlink_href_finished = true;
             } else {
-                // If we didn't find the double quotes means that href still has content in
+                // If we didn't find the double quotes, the HREF will be continued in
                 // the text regions that follow.
                 self.hyperlink_href = Some(url.into());
                 self.hyperlink_href_finished = false;
