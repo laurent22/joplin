@@ -18542,17 +18542,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-styles@npm:^6.0.0, ansi-styles@npm:^6.2.1":
-  version: 6.2.1
-  resolution: "ansi-styles@npm:6.2.1"
-  checksum: 10/70fdf883b704d17a5dfc9cde206e698c16bcd74e7f196ab821511651aee4f9f76c9514bdfa6ca3a27b5e49138b89cb222a28caf3afe4567570139577f991df32
-  languageName: node
-  linkType: hard
-
 "ansi-styles@npm:^6.1.0":
   version: 6.1.0
   resolution: "ansi-styles@npm:6.1.0"
   checksum: 10/eb291cf9de71d1b251c1e870a65733a12d422f61aa605cdb3bd54d2c10c7be88cdf7712185e27c3b6d54b9eb0427cce760a9372a437ed5cbf1cb984b30def7cc
+  languageName: node
+  linkType: hard
+
+"ansi-styles@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "ansi-styles@npm:6.2.1"
+  checksum: 10/70fdf883b704d17a5dfc9cde206e698c16bcd74e7f196ab821511651aee4f9f76c9514bdfa6ca3a27b5e49138b89cb222a28caf3afe4567570139577f991df32
   languageName: node
   linkType: hard
 
@@ -21580,10 +21580,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "chalk@npm:5.4.1"
-  checksum: 10/29df3ffcdf25656fed6e95962e2ef86d14dfe03cd50e7074b06bad9ffbbf6089adbb40f75c00744d843685c8d008adaf3aed31476780312553caf07fa86e5bc7
+"chalk@npm:^5.6.0":
+  version: 5.6.2
+  resolution: "chalk@npm:5.6.2"
+  checksum: 10/1b2f48f6fba1370670d5610f9cd54c391d6ede28f4b7062dd38244ea5768777af72e5be6b74fb6c6d54cb84c4a2dff3f3afa9b7cb5948f7f022cfd3d087989e0
   languageName: node
   linkType: hard
 
@@ -22034,13 +22034,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-truncate@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "cli-truncate@npm:4.0.0"
+"cli-truncate@npm:^5.0.0":
+  version: 5.1.1
+  resolution: "cli-truncate@npm:5.1.1"
   dependencies:
-    slice-ansi: "npm:^5.0.0"
-    string-width: "npm:^7.0.0"
-  checksum: 10/d5149175fd25ca985731bdeec46a55ec237475cf74c1a5e103baea696aceb45e372ac4acbaabf1316f06bd62e348123060f8191ffadfeedebd2a70a2a7fb199d
+    slice-ansi: "npm:^7.1.0"
+    string-width: "npm:^8.0.0"
+  checksum: 10/994262b5fc8691657a06aeb352d4669354252989e5333b5fc74beb5cec75ceaad9de779864e68e6a1fe83b7cca04fa35eb505de67b20668896880728876631ba
   languageName: node
   linkType: hard
 
@@ -29682,6 +29682,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"get-east-asian-width@npm:^1.3.0":
+  version: 1.4.0
+  resolution: "get-east-asian-width@npm:1.4.0"
+  checksum: 10/c9ae85bfc2feaf4cc71cdb236e60f1757ae82281964c206c6aa89a25f1987d326ddd8b0de9f9ccd56e37711b9fcd988f7f5137118b49b0b45e19df93c3be8f45
+  languageName: node
+  linkType: hard
+
 "get-intrinsic@npm:^1.0.2, get-intrinsic@npm:^1.1.0, get-intrinsic@npm:^1.1.1":
   version: 1.1.1
   resolution: "get-intrinsic@npm:1.1.1"
@@ -32937,13 +32944,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-fullwidth-code-point@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "is-fullwidth-code-point@npm:4.0.0"
-  checksum: 10/8ae89bf5057bdf4f57b346fb6c55e9c3dd2549983d54191d722d5c739397a903012cc41a04ee3403fd872e811243ef91a7c5196da7b5841dc6b6aae31a264a8d
-  languageName: node
-  linkType: hard
-
 "is-fullwidth-code-point@npm:^5.0.0":
   version: 5.0.0
   resolution: "is-fullwidth-code-point@npm:5.0.0"
@@ -35801,37 +35801,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:16.1.2":
-  version: 16.1.2
-  resolution: "lint-staged@npm:16.1.2"
+"lint-staged@npm:16.1.6":
+  version: 16.1.6
+  resolution: "lint-staged@npm:16.1.6"
   dependencies:
-    chalk: "npm:^5.4.1"
+    chalk: "npm:^5.6.0"
     commander: "npm:^14.0.0"
     debug: "npm:^4.4.1"
     lilconfig: "npm:^3.1.3"
-    listr2: "npm:^8.3.3"
+    listr2: "npm:^9.0.3"
     micromatch: "npm:^4.0.8"
     nano-spawn: "npm:^1.0.2"
     pidtree: "npm:^0.6.0"
     string-argv: "npm:^0.3.2"
-    yaml: "npm:^2.8.0"
+    yaml: "npm:^2.8.1"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10/90df77c2f59cdc5ebeb8a60767f07025a8aed9161f604fea6cf1ca895ff3b56995a00145a3e0b5c0bf22e8f667a6182256b68e001e5f3118e46a3c5150bede82
+  checksum: 10/922b4392ae5d3d56130e4eba706c2fa6151d5da5e21f57ab601b1d6ce9cc635ceb5e4c3dc00e7da83ba8f0cb244b82604469c7ea1470b1e6b6ea0fc12454aa08
   languageName: node
   linkType: hard
 
-"listr2@npm:^8.3.3":
-  version: 8.3.3
-  resolution: "listr2@npm:8.3.3"
+"listr2@npm:^9.0.3":
+  version: 9.0.5
+  resolution: "listr2@npm:9.0.5"
   dependencies:
-    cli-truncate: "npm:^4.0.0"
+    cli-truncate: "npm:^5.0.0"
     colorette: "npm:^2.0.20"
     eventemitter3: "npm:^5.0.1"
     log-update: "npm:^6.1.0"
     rfdc: "npm:^1.4.1"
     wrap-ansi: "npm:^9.0.0"
-  checksum: 10/92f1bb60e9a0f4fed9bff89fbab49d80fc889d29cf47c0a612f5a62a036dead49d3f697d3a79e36984768529bd3bfacb3343859eafceba179a8e66c034d99300
+  checksum: 10/b78ffd60443aed9a8e0fc9162eb941ea4d63210700d61a895eb29348f23fc668327e26bbca87a9e6a6208e7fa96c475fe1f1c6c19b46f376f547e0cba3b935ae
   languageName: node
   linkType: hard
 
@@ -45651,7 +45651,7 @@ __metadata:
     http-server: "npm:14.1.1"
     husky: "npm:9.1.7"
     lerna: "npm:3.22.1"
-    lint-staged: "npm:16.1.2"
+    lint-staged: "npm:16.1.6"
     madge: "npm:8.0.0"
     node-gyp: "npm:11.3.0"
     nodemon: "npm:3.1.10"
@@ -47076,16 +47076,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slice-ansi@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "slice-ansi@npm:5.0.0"
-  dependencies:
-    ansi-styles: "npm:^6.0.0"
-    is-fullwidth-code-point: "npm:^4.0.0"
-  checksum: 10/7e600a2a55e333a21ef5214b987c8358fe28bfb03c2867ff2cbf919d62143d1812ac27b4297a077fdaf27a03da3678e49551c93e35f9498a3d90221908a1180e
-  languageName: node
-  linkType: hard
-
 "slice-ansi@npm:^7.1.0":
   version: 7.1.0
   resolution: "slice-ansi@npm:7.1.0"
@@ -48076,6 +48066,16 @@ __metadata:
     get-east-asian-width: "npm:^1.0.0"
     strip-ansi: "npm:^7.1.0"
   checksum: 10/bc0de5700a2690895169fce447ec4ed44bc62de80312c2093d5606bfd48319bb88e48a99e97f269dff2bc9577448b91c26b3804c16e7d9b389699795e4655c3b
+  languageName: node
+  linkType: hard
+
+"string-width@npm:^8.0.0":
+  version: 8.1.0
+  resolution: "string-width@npm:8.1.0"
+  dependencies:
+    get-east-asian-width: "npm:^1.3.0"
+    strip-ansi: "npm:^7.1.0"
+  checksum: 10/51ee97c4ffee7b94f8a2ee785fac14f81ec9809b9fcec9a4db44e25c717c263af0cc4387c111aef76195c0718dc43766f3678c07fb542294fb0244f7bfbde883
   languageName: node
   linkType: hard
 
@@ -53492,7 +53492,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.8.0":
+"yaml@npm:^2.8.1":
   version: 2.8.2
   resolution: "yaml@npm:2.8.2"
   bin:
