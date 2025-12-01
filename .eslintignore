@@ -470,6 +470,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/exportPdf.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/hideModalMessage.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/index.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.js
@@ -512,6 +513,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleVisiblePanes.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/types.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/appDialogs.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/utils/showFolderPicker.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/usePrintToCallback.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useSyncDialogState.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowCommands.js
@@ -563,6 +565,7 @@ packages/app-desktop/integration-tests/util/evaluateWithRetry.js
 packages/app-desktop/integration-tests/util/extendedExpect.js
 packages/app-desktop/integration-tests/util/getImageSourceSize.js
 packages/app-desktop/integration-tests/util/getMainWindow.js
+packages/app-desktop/integration-tests/util/mockClipboard.js
 packages/app-desktop/integration-tests/util/retryOnFailure.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
@@ -851,6 +854,7 @@ packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.js
 packages/app-mobile/components/screens/Notes/Notes.js
+packages/app-mobile/components/screens/SearchScreen/SearchBar.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.test.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.js
 packages/app-mobile/components/screens/SearchScreen/index.js
@@ -1007,6 +1011,7 @@ packages/editor/CodeMirror/CodeMirrorControl.js
 packages/editor/CodeMirror/configFromSettings.js
 packages/editor/CodeMirror/createEditor.test.js
 packages/editor/CodeMirror/createEditor.js
+packages/editor/CodeMirror/editorCommands/cutOrCopyText.js
 packages/editor/CodeMirror/editorCommands/duplicateLine.test.js
 packages/editor/CodeMirror/editorCommands/duplicateLine.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
@@ -1049,6 +1054,7 @@ packages/editor/CodeMirror/extensions/rendering/addFormattingClasses.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.test.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.js
 packages/editor/CodeMirror/extensions/rendering/renderingExtension.js
+packages/editor/CodeMirror/extensions/rendering/replaceBackslashEscapes.js
 packages/editor/CodeMirror/extensions/rendering/replaceBulletLists.js
 packages/editor/CodeMirror/extensions/rendering/replaceCheckboxes.js
 packages/editor/CodeMirror/extensions/rendering/replaceDividers.js
@@ -1115,10 +1121,12 @@ packages/editor/ProseMirror/plugins/detailsPlugin.js
 packages/editor/ProseMirror/plugins/imagePlugin.test.js
 packages/editor/ProseMirror/plugins/imagePlugin.js
 packages/editor/ProseMirror/plugins/inputRulesPlugin.js
-packages/editor/ProseMirror/plugins/joplinEditablePlugin/createEditorDialog.js
 packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.test.js
 packages/editor/ProseMirror/plugins/joplinEditablePlugin/joplinEditablePlugin.js
-packages/editor/ProseMirror/plugins/joplinEditablePlugin/postProcessRenderedHtml.js
+packages/editor/ProseMirror/plugins/joplinEditablePlugin/showCreateEditablePrompt.test.js
+packages/editor/ProseMirror/plugins/joplinEditablePlugin/showCreateEditablePrompt.js
+packages/editor/ProseMirror/plugins/joplinEditablePlugin/utils/createEditorDialog.js
+packages/editor/ProseMirror/plugins/joplinEditablePlugin/utils/postProcessRenderedHtml.js
 packages/editor/ProseMirror/plugins/joplinEditorApiPlugin.js
 packages/editor/ProseMirror/plugins/keymapPlugin.js
 packages/editor/ProseMirror/plugins/linkTooltipPlugin.test.js
@@ -1133,6 +1141,7 @@ packages/editor/ProseMirror/schema.js
 packages/editor/ProseMirror/styles.js
 packages/editor/ProseMirror/testing/createTestEditor.js
 packages/editor/ProseMirror/testing/createTestEditorWithSerializer.js
+packages/editor/ProseMirror/testing/mockEditorApi.js
 packages/editor/ProseMirror/types.js
 packages/editor/ProseMirror/utils/SelectableNodeView.js
 packages/editor/ProseMirror/utils/UndoStackSynchronizer.js

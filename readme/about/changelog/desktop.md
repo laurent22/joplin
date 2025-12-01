@@ -1,5 +1,16 @@
 # Joplin Desktop Changelog
 
+## [v3.5.9](https://github.com/laurent22/joplin/releases/tag/v3.5.9) (Pre-release) - 2025-11-30T19:11:11Z
+
+- New: Add loading indicator to the sync status screen ([#13796](https://github.com/laurent22/joplin/issues/13796) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Plugins: Add an "importFrom" command to allow importing notes and notebooks ([#13534](https://github.com/laurent22/joplin/issues/13534) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Disable the loading animation when 'reduce motion' is enabled ([#13797](https://github.com/laurent22/joplin/issues/13797) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Hide backslash escapes when "Markdown editor: Render markup in editor" is enabled ([#13773](https://github.com/laurent22/joplin/issues/13773) by [@bwat47](https://github.com/bwat47))
+- Improved: OneNote importer: Change source label from ZIP to ONE ([#13778](https://github.com/laurent22/joplin/issues/13778) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: OneNote importer: Handle the case where an entity GUID is missing ([#13789](https://github.com/laurent22/joplin/issues/13789) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade to Electron 39.2.3 ([#13767](https://github.com/laurent22/joplin/issues/13767) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Prevent cut events from being merged with other actions in the undo history ([#13791](https://github.com/laurent22/joplin/issues/13791)) ([#13745](https://github.com/laurent22/joplin/issues/13745) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.5.7](https://github.com/laurent22/joplin/releases/tag/v3.5.7) (Pre-release) - 2025-11-22T08:35:36Z
 
 - Improved: Add support for rendering html images when "Markdown editor: Render images" is enabled ([#13743](https://github.com/laurent22/joplin/issues/13743) by [@bwat47](https://github.com/bwat47))

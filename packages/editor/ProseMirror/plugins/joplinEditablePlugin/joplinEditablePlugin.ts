@@ -2,10 +2,10 @@ import { Plugin } from 'prosemirror-state';
 import { Node, NodeSpec, TagParseRule } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import sanitizeHtml from '../../utils/sanitizeHtml';
-import createEditorDialog from './createEditorDialog';
+import createEditorDialog from './utils/createEditorDialog';
 import { getEditorApi } from '../joplinEditorApiPlugin';
 import { msleep } from '@joplin/utils/time';
-import postProcessRenderedHtml from './postProcessRenderedHtml';
+import postProcessRenderedHtml from './utils/postProcessRenderedHtml';
 import makeLinksClickableInElement from '../../utils/makeLinksClickableInElement';
 import SelectableNodeView from '../../utils/SelectableNodeView';
 import createExternalEditorPlugin, { OnHide } from '../utils/createExternalEditorPlugin';
@@ -23,24 +23,21 @@ const createEditorDialogForNode = (nodePosition: number, view: EditorView, onHid
 		view.state.doc.nodeAt(nodePosition)
 	);
 
-	const { localize: _ } = getEditorApi(view.state);
 	const { dismiss } = createEditorDialog({
-		doneLabel: _('Done'),
-		editorLabel: _('Code:'),
 		editorApi: getEditorApi(view.state),
-		block: {
-			content: getNode().attrs.source,
-			start: getNode().attrs.openCharacters,
-			end: getNode().attrs.closeCharacters,
-		},
-		onSave: async (block) => {
+		source: [
+			getNode().attrs.openCharacters,
+			getNode().attrs.source,
+			getNode().attrs.closeCharacters,
+		].join(''),
+		onSave: async (source) => {
 			view.dispatch(
 				view.state.tr.setNodeAttribute(
-					nodePosition, 'source', block.content,
+					nodePosition, 'source', source,
 				).setNodeAttribute(
-					nodePosition, 'openCharacters', block.start,
+					nodePosition, 'openCharacters', '',
 				).setNodeAttribute(
-					nodePosition, 'closeCharacters', block.end,
+					nodePosition, 'closeCharacters', '',
 				),
 			);
 
@@ -53,7 +50,7 @@ const createEditorDialogForNode = (nodePosition: number, view: EditorView, onHid
 			if (cancelled()) return;
 
 			const rendered = await getEditorApi(view.state).renderer.renderMarkupToHtml(
-				`${block.start}${block.content}${block.end}`,
+				source,
 				{ forceMarkdown: true, isFullPageRender: false },
 			);
 			if (cancelled()) return;
@@ -64,6 +61,10 @@ const createEditorDialogForNode = (nodePosition: number, view: EditorView, onHid
 					nodePosition, 'contentHtml', html,
 				),
 			);
+
+			// Certain rendered blocks (e.g. ABC sheet music) have an external script that listen for "joplin-noteDidUpdate"
+			// to re-render the block content.
+			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
 		},
 		onDismiss: () => {
 			onHide();
@@ -79,7 +80,7 @@ const createEditorDialogForNode = (nodePosition: number, view: EditorView, onHid
 };
 
 
-interface JoplinEditableAttributes {
+export interface JoplinEditableAttributes {
 	contentHtml: string;
 	source: string;
 	language: string;

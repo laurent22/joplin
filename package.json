@@ -86,7 +86,7 @@
     "gulp": "4.0.2",
     "husky": "9.1.7",
     "lerna": "3.22.1",
-    "lint-staged": "15.5.2",
+    "lint-staged": "16.1.6",
     "madge": "8.0.0",
     "npm-package-json-lint": "8.0.0",
     "typescript": "5.8.3"
@@ -95,7 +95,7 @@
     "@types/fs-extra": "11.0.4",
     "eslint-plugin-github": "4.10.2",
     "http-server": "14.1.1",
-    "node-gyp": "11.2.0",
+    "node-gyp": "11.3.0",
     "nodemon": "3.1.10"
   },
   "packageManager": "yarn@4.9.2",

@@ -1,20 +1,14 @@
-import { execCommand } from '@joplin/utils';
 import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
+import { yarnVersionPatch } from '@joplin/utils/version';
 
 const serverDir = `${rootDir}/packages/server`;
 
 async function main() {
-	// const argv = require('yargs').argv;
-	// if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
-	// const isPreRelease = argv.type === 'prerelease';
-
-	// const isPreRelease = false;
-
 	await gitPullTry();
 
 	process.chdir(serverDir);
-	const version = (await execCommand('npm version patch')).trim();
-	const versionSuffix = ''; // isPreRelease ? '-beta' : '';
+	const version = await yarnVersionPatch();
+	const versionSuffix = '';
 	const tagName = `server-${version}${versionSuffix}`;
 
 	const changelogPath = `${rootDir}/readme/about/changelog/server.md`;
