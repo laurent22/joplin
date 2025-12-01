@@ -6,8 +6,8 @@ use crate::one::property::layout_alignment::LayoutAlignment;
 use crate::one::property::paragraph_alignment::ParagraphAlignment;
 use crate::one::property_set::{embedded_ink_container, paragraph_style_object, rich_text_node};
 use crate::onenote::ink::{Ink, InkBoundingBox, parse_ink_data};
-use crate::onenote::text_region::TextRegion;
 use crate::onenote::note_tag::{NoteTag, parse_note_tags};
+use crate::onenote::text_region::TextRegion;
 use crate::onestore::object::Object;
 use crate::onestore::object_space::ObjectSpaceRef;
 use crate::shared::exguid::ExGuid;
@@ -393,15 +393,16 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
         .text_run_formatting
         .iter()
         .filter_map(|style_id| {
-            space
-                .get_object(*style_id)
-                .or_else(|| {
-                    // Handle the case where styles are missing gracefully. It seems that style objects
-                    // are sometimes missing, or can't be found:
-                    // https://discourse.joplinapp.org/t/onenote-zip-file-import-not-working/47499/12
-                    log_warn!("Paragraph styling not found: Unable to locate object with ID {:?}.", style_id);
-                    None
-                })
+            space.get_object(*style_id).or_else(|| {
+                // Handle the case where styles are missing gracefully. It seems that style objects
+                // are sometimes missing, or can't be found:
+                // https://discourse.joplinapp.org/t/onenote-zip-file-import-not-working/47499/12
+                log_warn!(
+                    "Paragraph styling not found: Unable to locate object with ID {:?}.",
+                    style_id
+                );
+                None
+            })
         })
         .map(|style_object| paragraph_style_object::parse(&style_object))
         .collect::<Result<Vec<_>>>()?;

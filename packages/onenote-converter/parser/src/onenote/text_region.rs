@@ -1,4 +1,8 @@
-use crate::{one::property::{PropertyType}, onenote::rich_text::ParagraphStyling, shared::{prop_set::PropertySet, property::PropertyId}};
+use crate::{
+    one::property::PropertyType,
+    onenote::rich_text::ParagraphStyling,
+    shared::{prop_set::PropertySet, property::PropertyId},
+};
 use parser_utils::{Utf16ToString, errors::Result};
 
 /// Stores information about a part of a [RichText] region.
@@ -53,18 +57,17 @@ impl TextRegion {
 
         if indices.is_empty() {
             let text = raw_text.as_slice().utf16_to_string()?;
-            return Ok(vec![ TextRegion::from_text(&text) ]);
+            return Ok(vec![TextRegion::from_text(&text)]);
         }
 
         let style_count = styles.len();
         let index_count = indices.len();
         if index_count + 1 < style_count {
-            return Err(
-                parser_error!(
-                    MalformedOneNoteData,
-                    "Wrong number of styles in paragraph (styles: {style_count}, ranges: {index_count})"
-                ).into()
-            );
+            return Err(parser_error!(
+                MalformedOneNoteData,
+                "Wrong number of styles in paragraph (styles: {style_count}, ranges: {index_count})"
+            )
+            .into());
         }
 
         // Split text into parts specified by indices
@@ -106,7 +109,11 @@ struct TextRegionParser {
 }
 
 impl TextRegionParser {
-    fn parse(texts: Vec<String>, styles: Vec<ParagraphStyling>, additional_data: &Vec<PropertySet>) -> Result<Vec<TextRegion>> {
+    fn parse(
+        texts: Vec<String>,
+        styles: Vec<ParagraphStyling>,
+        additional_data: &Vec<PropertySet>,
+    ) -> Result<Vec<TextRegion>> {
         let mut style_iterator = styles.iter();
         let mut additional_data_iterator = additional_data.iter();
         let mut text_region_parser = TextRegionParser::new();
@@ -129,11 +136,7 @@ impl TextRegionParser {
         }
     }
 
-    fn push_hyperlink(
-        &mut self,
-        text: &str,
-        styles: Option<&ParagraphStyling>,
-    ) -> Result<()> {
+    fn push_hyperlink(&mut self, text: &str, styles: Option<&ParagraphStyling>) -> Result<()> {
         let text = if let Some(prefix) = &self.hyperlink_next_prefix {
             let prefixed = format!("{prefix}{text}");
             self.hyperlink_next_prefix = None;
@@ -150,9 +153,9 @@ impl TextRegionParser {
             // Ensure that the previous link (if any) has ended
             self.end_link();
 
-            let url = text
-                .strip_prefix(HYPERLINK_MARKER)
-                .ok_or_else(|| parser_error!(MalformedOneNoteData, "Hyperlink has no start marker"))?;
+            let url = text.strip_prefix(HYPERLINK_MARKER).ok_or_else(|| {
+                parser_error!(MalformedOneNoteData, "Hyperlink has no start marker")
+            })?;
 
             if let Some(url) = url.strip_suffix('"') {
                 self.hyperlink_href = Some(url.into());
@@ -163,7 +166,9 @@ impl TextRegionParser {
                 self.hyperlink_href = Some(url.into());
                 self.hyperlink_href_finished = false;
             }
-        } else if let Some(href) = self.hyperlink_href.clone() && self.hyperlink_href_finished {
+        } else if let Some(href) = self.hyperlink_href.clone()
+            && self.hyperlink_href_finished
+        {
             self.hyperlink_href = None;
 
             let is_link_start = if let Some(last) = self.parts.last() {
@@ -186,7 +191,9 @@ impl TextRegionParser {
                 }),
                 math: None,
             });
-        } else if let Some(href_start) = &self.hyperlink_href && !self.hyperlink_href_finished {
+        } else if let Some(href_start) = &self.hyperlink_href
+            && !self.hyperlink_href_finished
+        {
             let url = text.strip_suffix('"');
             if let Some(url) = url {
                 self.hyperlink_href = Some(format!("{href_start}{url}"));
@@ -213,14 +220,16 @@ impl TextRegionParser {
     }
 
     fn push_math(
-        &mut self, 
+        &mut self,
         text: &str,
         styles: Option<&ParagraphStyling>,
         additional_data: Option<&PropertySet>,
     ) -> Result<()> {
-        let last_was_math = self.parts
+        let last_was_math = self
+            .parts
             .last()
-            .map(|last| last.math.is_some()).unwrap_or(false);
+            .map(|last| last.math.is_some())
+            .unwrap_or(false);
 
         let additional_data = additional_data.cloned().unwrap_or_default();
         self.parts.push(TextRegion {
@@ -257,11 +266,14 @@ impl TextRegionParser {
         }
     }
 
-    fn push(&mut self, text: &str, style: Option<&ParagraphStyling>, additional_data: Option<&PropertySet>) -> Result<()> {
+    fn push(
+        &mut self,
+        text: &str,
+        style: Option<&ParagraphStyling>,
+        additional_data: Option<&PropertySet>,
+    ) -> Result<()> {
         let (hyperlink, math) = match style {
-            Some(style) => {
-                (style.hyperlink(), style.math_formatting())
-            },
+            Some(style) => (style.hyperlink(), style.math_formatting()),
             None => (false, false),
         };
 
@@ -298,34 +310,23 @@ impl TextRegionParser {
 fn text_region_to_latex(text: &str, additional_data: &PropertySet) -> Result<String> {
     let op_type = match additional_data
         .get(PropertyId::new(PropertyType::MathOperator as u32))
-        .map(|operator_value| operator_value.to_u32()).flatten()
+        .map(|operator_value| operator_value.to_u32())
+        .flatten()
     {
         Some(21) => {
             // TODO: This operator type is also used for summation. Other properties
             // (e.g. MathUnknown1?) may be needed to determine the operator subtype.
             "matInt".into()
-        },
-        Some(13) => {
-            "inParens".into()
-        },
-        Some(17) => {
-            "fnCall".into()
-        },
-        Some(19) => {
-            "withSubscript".into()
-        },
-        Some(16|26) => {
-            "frac".into()
-        },
-        Some(11) => {
-            "mathrm".into()
-        },
-        Some(31) => {
-            "pow".into()
-        },
+        }
+        Some(13) => "inParens".into(),
+        Some(17) => "fnCall".into(),
+        Some(19) => "withSubscript".into(),
+        Some(16 | 26) => "frac".into(),
+        Some(11) => "mathrm".into(),
+        Some(31) => "pow".into(),
         Some(other) => {
             format!("unknown{{{}}}", other)
-        },
+        }
         None => "".into(),
     };
 

@@ -67,7 +67,8 @@ impl<'a> Renderer<'a> {
         let content = parts
             .into_iter()
             .map(|part| -> Result<String> {
-                let style = part.style()
+                let style = part
+                    .style()
                     .map(|style| self.parse_style(style))
                     .unwrap_or_default();
                 if let Some(hyperlink) = part.hyperlink() {
@@ -80,14 +81,12 @@ impl<'a> Renderer<'a> {
                     } else {
                         String::from("")
                     };
-                    let hyperlink_end_html = if hyperlink.is_link_end {
-                        "</a>"
-                    } else {
-                        ""
-                    };
+                    let hyperlink_end_html = if hyperlink.is_link_end { "</a>" } else { "" };
 
                     let content_html = html_entities(part.text());
-                    Ok(format!("{hyperlink_start_html}{content_html}{hyperlink_end_html}"))
+                    Ok(format!(
+                        "{hyperlink_start_html}{content_html}{hyperlink_end_html}"
+                    ))
                 } else if let Some(math) = part.math() {
                     if math.is_math_start {
                         math_parts.clear();
@@ -209,21 +208,19 @@ impl<'a> Renderer<'a> {
         }
 
         if let Some(align) = &style.paragraph_alignment() {
-            styles.set("text-align", match align {
-                ParagraphAlignment::Center => {
-                    "center"
-                },
-                ParagraphAlignment::Left => {
-                    "left"
-                },
-                ParagraphAlignment::Right => {
-                    "right"
-                },
-                other => {
-                    log_warn!("Unknown/unsupported text-align value: {:?}", other);
-                    ""
+            styles.set(
+                "text-align",
+                match align {
+                    ParagraphAlignment::Center => "center",
+                    ParagraphAlignment::Left => "left",
+                    ParagraphAlignment::Right => "right",
+                    other => {
+                        log_warn!("Unknown/unsupported text-align value: {:?}", other);
+                        ""
+                    }
                 }
-            }.into());
+                .into(),
+            );
         }
 
         if let Some(space) = style.paragraph_space_before() {
@@ -241,10 +238,7 @@ impl<'a> Renderer<'a> {
 
         if let Some(space) = style.paragraph_line_spacing_exact() {
             if space != 0.0 {
-                styles.set(
-                    "line-height",
-                    format!("{}in", space / 2.),
-                )
+                styles.set("line-height", format!("{}in", space / 2.))
             } else if let Some(size) = style.font_size() {
                 styles.set(
                     "line-height",

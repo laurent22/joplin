@@ -92,18 +92,18 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         .map(|data| data.as_slice().utf16_to_string())
         .transpose()?
         .or(text_ascii);
-    let text_utf_16_bytes = text_utf_16_bytes
-        .or_else(|| {
-            // Fall back to re-encoding the ASCII representation as UTF-16, if it exists.
-            if let Some(text) = &text_string {
-                Some(text
-                    .encode_utf16()
+    let text_utf_16_bytes = text_utf_16_bytes.or_else(|| {
+        // Fall back to re-encoding the ASCII representation as UTF-16, if it exists.
+        if let Some(text) = &text_string {
+            Some(
+                text.encode_utf16()
                     .flat_map(|two_bytes| two_bytes.to_le_bytes())
-                    .collect())
-            } else {
-                None
-            }
-        });
+                    .collect(),
+            )
+        } else {
+            None
+        }
+    });
 
     let layout_alignment_in_parent =
         LayoutAlignment::parse(PropertyType::LayoutAlignmentInParent, object)?;
