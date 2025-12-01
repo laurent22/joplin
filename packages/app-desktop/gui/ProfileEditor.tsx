@@ -28,16 +28,11 @@ interface ProfileTableProps {
 	currentProfileId: string;
 	onProfileRename: (profile: Profile)=> void;
 	onProfileDelete: (profile: Profile)=> void;
-	filter: string;
 	themeId: number;
 }
 
 const ProfileTableComp: React.FC<ProfileTableProps> = props => {
 	const theme = themeStyle(props.themeId);
-
-	const filteredProfiles = props.profiles.filter(
-		(profile: Profile) => !props.filter || profile.name?.toLowerCase().includes(props.filter.toLowerCase()) || profile.id.includes(props.filter),
-	);
 
 	return (
 		<table className="profile-table">
@@ -50,7 +45,7 @@ const ProfileTableComp: React.FC<ProfileTableProps> = props => {
 				</tr>
 			</thead>
 			<tbody>
-				{filteredProfiles.map((profile: Profile, index: number) => {
+				{props.profiles.map((profile: Profile, index: number) => {
 					const isCurrentProfile = profile.id === props.currentProfileId;
 					return (
 						<tr key={index}>
@@ -98,7 +93,6 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 	const containerHeight = style.height;
 
 	const [profiles, setProfiles] = useState<Profile[]>(profileConfig.profiles);
-	const [filter, setFilter] = useState('');
 
 	useEffect(() => {
 		setProfiles(profileConfig.profiles);
@@ -176,20 +170,10 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 				<div className="notification" style={theme.notificationBox}>
 					{_('Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.')}
 				</div>
-				<div className="searchContainer">
-					<input
-						style={theme.inputStyle}
-						type="search"
-						value={filter}
-						onChange={e => setFilter(e.target.value)}
-						placeholder={_('Search...')}
-					/>
-				</div>
 				<ProfileTableComp
 					themeId={themeId}
 					profiles={profiles}
 					currentProfileId={profileConfig.currentProfileId}
-					filter={filter}
 					onProfileRename={onProfileRename}
 					onProfileDelete={onProfileDelete}
 				/>
