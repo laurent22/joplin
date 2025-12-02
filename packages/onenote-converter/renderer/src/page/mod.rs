@@ -9,11 +9,11 @@ pub(crate) mod embedded_file;
 pub(crate) mod image;
 pub(crate) mod ink;
 pub(crate) mod list;
+pub(crate) mod math;
 pub(crate) mod note_tag;
 pub(crate) mod outline;
 pub(crate) mod rich_text;
 pub(crate) mod table;
-pub(crate) mod math;
 
 pub(crate) struct Renderer<'a> {
     output: String,

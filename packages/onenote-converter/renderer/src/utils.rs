@@ -115,7 +115,10 @@ mod test {
 
     #[test]
     fn should_encode_html_entities() {
-        assert_eq!(html_entities("<a href=\"http://example.com/\">test</a>"), "&lt;a href=&quot;http://example.com/&quot;&gt;test&lt;/a&gt;");
+        assert_eq!(
+            html_entities("<a href=\"http://example.com/\">test</a>"),
+            "&lt;a href=&quot;http://example.com/&quot;&gt;test&lt;/a&gt;"
+        );
         assert_eq!(html_entities("&gt;"), "&amp;gt;");
         assert_eq!(html_entities("'&gt;'"), "&apos;&amp;gt;&apos;");
     }

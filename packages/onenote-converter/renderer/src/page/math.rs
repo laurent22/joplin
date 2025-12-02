@@ -12,11 +12,7 @@ impl<'a> Renderer<'a> {
     ) -> Result<String> {
         let tex = math.iter().map(|tex| &tex.latex).join("");
 
-        let source = format!(
-            "{}{}",
-            self.render_tex_macros(&tex),
-            tex,
-        );
+        let source = format!("{}{}", self.render_tex_macros(&tex), tex,);
 
         let opening_html = format!("<span class=\"joplin-editable\" {}>", style.to_html_attr(),);
         let source_html = format!(
