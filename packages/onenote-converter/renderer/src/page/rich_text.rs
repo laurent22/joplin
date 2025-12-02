@@ -65,7 +65,7 @@ impl<'a> Renderer<'a> {
         let mut math_parts: Vec<MathExpression> = Vec::new();
 
         let content = parts
-            .into_iter()
+            .iter()
             .map(|part| -> Result<String> {
                 let style = part
                     .style()
@@ -111,7 +111,7 @@ impl<'a> Renderer<'a> {
             .collect::<Result<String>>()?;
 
         let content = fix_newlines(&content);
-        if content == "" {
+        if content.is_empty() {
             Ok(String::from("&nbsp;"))
         } else {
             Ok(content)

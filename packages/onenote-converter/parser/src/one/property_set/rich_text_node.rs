@@ -61,7 +61,7 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
     let text_run_data_object =
         ObjectReference::parse_vec(PropertyType::TextRunDataObject, object)?.unwrap_or_default();
     let text_run_data_array =
-        simple::parse_property_values(PropertyType::TextRunData, object)?.unwrap_or_else(|| &[]);
+        simple::parse_property_values(PropertyType::TextRunData, object)?.unwrap_or(&[]);
 
     let paragraph_style_result = ObjectReference::parse(PropertyType::ParagraphStyle, object);
     let paragraph_style = match paragraph_style_result {
@@ -94,15 +94,11 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         .or(text_ascii);
     let text_utf_16_bytes = text_utf_16_bytes.or_else(|| {
         // Fall back to re-encoding the ASCII representation as UTF-16, if it exists.
-        if let Some(text) = &text_string {
-            Some(
-                text.encode_utf16()
-                    .flat_map(|two_bytes| two_bytes.to_le_bytes())
-                    .collect(),
-            )
-        } else {
-            None
-        }
+        text_string.as_ref().map(|text| {
+            text.encode_utf16()
+                .flat_map(|two_bytes| two_bytes.to_le_bytes())
+                .collect()
+        })
     });
 
     let layout_alignment_in_parent =

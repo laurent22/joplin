@@ -46,21 +46,18 @@ impl TextRegion {
     }
 
     pub(crate) fn parse(
-        raw_text: &Vec<u8>,
-        text_run_indices: &Vec<u32>,
-        styles: &Vec<ParagraphStyling>,
-        text_run_data_values: &Vec<PropertySet>,
+        raw_text: &[u8],
+        text_run_indices: &[u32],
+        styles: &[ParagraphStyling],
+        text_run_data_values: &[PropertySet],
     ) -> Result<Vec<TextRegion>> {
-        let indices = text_run_indices.clone();
-        let styles = styles.clone();
-
-        if indices.is_empty() {
-            let text = raw_text.as_slice().utf16_to_string()?;
+        if text_run_indices.is_empty() {
+            let text = raw_text.utf16_to_string()?;
             return Ok(vec![TextRegion::from_text(&text)]);
         }
 
         let style_count = styles.len();
-        let index_count = indices.len();
+        let index_count = text_run_indices.len();
         if index_count + 1 < style_count {
             return Err(parser_error!(
                 MalformedOneNoteData,
@@ -75,7 +72,7 @@ impl TextRegion {
             let mut texts: Vec<String> = Vec::new();
 
             let mut last_index = 0;
-            for index in indices.iter().copied() {
+            for index in text_run_indices.iter().copied() {
                 let count = (index - last_index) as usize;
                 let count_utf_16 = count * 2;
 
@@ -112,8 +109,8 @@ struct TextRegionParser {
 impl TextRegionParser {
     fn parse(
         texts: Vec<String>,
-        styles: Vec<ParagraphStyling>,
-        additional_data: &Vec<PropertySet>,
+        styles: &[ParagraphStyling],
+        additional_data: &[PropertySet],
     ) -> Result<Vec<TextRegion>> {
         let mut style_iterator = styles.iter();
         let mut additional_data_iterator = additional_data.iter();
@@ -183,12 +180,12 @@ impl TextRegionParser {
             };
 
             self.parts.push(TextRegion {
-                text: text.into(),
+                text: text,
                 style: styles.cloned(),
                 hyperlink: Some(Hyperlink {
                     is_link_start,
                     is_link_end: false,
-                    href: href,
+                    href,
                 }),
                 math: None,
             });
@@ -248,21 +245,21 @@ impl TextRegionParser {
 
     /// Updates the last item (if math) to mark it as a math-end region
     fn end_math(&mut self) {
-        if let Some(last) = self.parts.last_mut() {
-            if let Some(math) = &mut last.math {
-                math.is_math_end = true;
-            }
+        if let Some(last) = self.parts.last_mut()
+            && let Some(math) = &mut last.math
+        {
+            math.is_math_end = true;
         }
     }
 
     fn end_link(&mut self) {
-        if let Some(last) = self.parts.last_mut() {
-            if let Some(link) = &mut last.hyperlink {
-                link.is_link_end = true;
-                // Reset link state
-                self.hyperlink_href_finished = true;
-                self.hyperlink_href = None;
-            }
+        if let Some(last) = self.parts.last_mut()
+            && let Some(link) = &mut last.hyperlink
+        {
+            link.is_link_end = true;
+            // Reset link state
+            self.hyperlink_href_finished = true;
+            self.hyperlink_href = None;
         }
     }
 
@@ -310,14 +307,12 @@ impl TextRegionParser {
 fn text_region_to_latex(text: &str, additional_data: &PropertySet) -> Result<String> {
     let op_type = match additional_data
         .get_from_type(PropertyType::MathOperator)
-        .map(|operator_value| operator_value.to_u32())
-        .flatten()
+        .and_then(|operator_value| operator_value.to_u32())
     {
         Some(21) => {
             let variant = additional_data
                 .get_from_type(PropertyType::MathUnknown1)
-                .map(|variant| variant.to_u16())
-                .flatten()
+                .and_then(|variant| variant.to_u16())
                 .unwrap_or_default();
             if variant == 8721 {
                 "∑".into()
@@ -337,7 +332,7 @@ fn text_region_to_latex(text: &str, additional_data: &PropertySet) -> Result<Str
         None => "".into(),
     };
 
-    let operator_name = if op_type != "" {
+    let operator_name = if !op_type.is_empty() {
         format!("\\{op_type}")
     } else {
         String::from("")

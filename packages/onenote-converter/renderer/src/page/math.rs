@@ -7,7 +7,7 @@ use parser::property::rich_text::MathExpression;
 impl<'a> Renderer<'a> {
     pub(crate) fn render_math(
         &mut self,
-        math: &Vec<MathExpression>,
+        math: &[MathExpression],
         style: &StyleSet,
     ) -> Result<String> {
         let tex = math.iter().map(|tex| &tex.latex).join("");
