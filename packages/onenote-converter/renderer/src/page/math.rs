@@ -14,17 +14,7 @@ impl<'a> Renderer<'a> {
 
         let source = format!(
             "{}{}",
-            // LaTeX macros used by the math definitions.
-            // TODO: This simplifies the parser implementation, but it would be
-            // good to replace these with standard KaTeX operators.
-            r"\def\matInt#1#2#3{\int_{#1}^{#2}{#3}}
-            \def\inParens#1{\left( {#1} \right)}
-            \def\fnCall#1#2{{ \rm #1 }\ {#2}}
-            \def\withSubscript#1#2{{#1}_{#2}}
-            \def\pow#1#2{{#1}^{#2}}
-            \def\unknown#1{\textsf{Unknown}(#1)}"
-                .replace("\n", "")
-                .replace("    ", ""),
+            self.render_tex_macros(&tex),
             tex,
         );
 
@@ -38,5 +28,33 @@ impl<'a> Renderer<'a> {
         let rendered_html = html_entities(tex.trim());
 
         Ok(format!("{opening_html}{source_html}{rendered_html}</span>"))
+    }
+
+    /// Returns definitions for non-standard KaTeX macros used in `tex`.
+    fn render_tex_macros(&self, tex: &str) -> String {
+        let mut result = vec![];
+        if tex.contains("\\∫") {
+            result.push(r"\def\∫#1#2#3{\int_{#1}^{#2}{#3}}");
+        }
+        if tex.contains("\\∑") {
+            result.push(r"\def\∑#1#2#3{\sum_{#1}^{#2}{#3}}");
+        }
+        if tex.contains("\\parens") {
+            result.push(r"\def\parens#1{\left( {#1} \right)}");
+        }
+        if tex.contains("\\withSubscript") {
+            result.push(r"\def\withSubscript#1#2{{#1}_{#2}}");
+        }
+        if tex.contains("\\pow") {
+            result.push(r"\def\pow#1#2{{#1}^{#2}}");
+        }
+        if tex.contains("\\fnCall") {
+            result.push(r"\def\fnCall#1#2{{ \rm #1 }\ {#2}}");
+        }
+        if tex.contains("\\unknown") {
+            result.push(r"\def\unknown#1{\textsf{Unknown}(#1)}");
+        }
+
+        result.join("")
     }
 }

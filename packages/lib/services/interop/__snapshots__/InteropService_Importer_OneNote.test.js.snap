@@ -164,31 +164,31 @@ Friday, November 28, 2025
 
 2:47 PM
 
-Cauchy's Integral Formula: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}𝑓\\inParens{𝑥}=\\matInt{𝛾}{}{\\frac{𝑓(𝑧)}{𝑧−𝑥}𝑑𝑧}$
+Cauchy's Integral Formula: $\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\parens#1{\\left( {#1} \\right)}𝑓\\parens{𝑥}=\\∫{𝛾}{}{\\frac{𝑓(𝑧)}{𝑧−𝑥}𝑑𝑧}$
 
-Pythagorean Theorem: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}$
+Pythagorean Theorem: $\\def\\pow#1#2{{#1}^{#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}$
 
-Law of Cosines: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}+2𝑎𝑏\\fnCall{cos}{𝐶}$
+Law of Cosines: $\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}+2𝑎𝑏\\fnCall{cos}{𝐶}$
 
-Euler's Formula: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\pow{𝑒}{𝑖𝜃}=\\fnCall{cos}{𝜃}+𝑖\\fnCall{sin}{𝜃}$
+Euler's Formula: $\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑒}{𝑖𝜃}=\\fnCall{cos}{𝜃}+𝑖\\fnCall{sin}{𝜃}$
 
-Determinant of a 2x2 matrix: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\inParens{\\unknown{20}{𝑎}{𝑏}{𝑐}{𝑑}}=𝑎𝑑−𝑏𝑐$
+Determinant of a 2x2 matrix: $\\def\\parens#1{\\left( {#1} \\right)}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\parens{\\unknown{20}{𝑎}{𝑏}{𝑐}{𝑑}}=𝑎𝑑−𝑏𝑐$
 
-Empty formula: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\mathrm{Type equation here.}$
+Empty formula: $\\mathrm{Type equation here.}$
 
-Fractions: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\frac{𝑎}{𝑏}, \\frac{𝑎}{𝑏},\\mathrm{\\frac{𝑎}{𝑏}}, \\frac{𝑎}{𝑏}$.
+Fractions: $\\frac{𝑎}{𝑏}, \\frac{𝑎}{𝑏},\\mathrm{\\frac{𝑎}{𝑏}}, \\frac{𝑎}{𝑏}$.
 
-Summation: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\fnCall{\\withSubscript{lim}{𝑛→∞}}{\\matInt{𝑘=0}{𝑛 }{\\frac{1}{𝑘}}}=∞$.
+Summation: $\\def\\∑#1#2#3{\\sum_{#1}^{#2}{#3}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\fnCall{\\withSubscript{lim}{𝑛→∞}}{\\∑{𝑘=0}{𝑛 }{\\frac{1}{𝑘}}}=∞$.
 
-Definite integral: $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\matInt{0}{1}{𝑥}ⅆ𝑥=\\frac{1}{2}$
+Definite integral: $\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\∫{0}{1}{𝑥}ⅆ𝑥=\\frac{1}{2}$
 
 &nbsp;
 
-Integral identities (see https://en.wikipedia.org/wiki/Lists_of_integrals), below, $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}𝐶∈ℝ$:
+Integral identities (see https://en.wikipedia.org/wiki/Lists_of_integrals), below, $𝐶∈ℝ$:
 
-- $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}∫\\mathrm{\\frac{1}{𝑥}𝑑𝑥}=\\fnCall{ln}{\\inParens{𝑥}}+𝐶$.
-- $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}∫\\pow{𝑒}{𝑎𝑥}𝑑𝑥=\\frac{1}{𝑎}\\pow{𝑒}{𝑎𝑥}+𝐶$
-- $\\def\\matInt#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\inParens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\pow#1#2{{#1}^{#2}}\\def\\unknown#1{\\textsf{Unknown}(#1)}∫\\inParens{\\fnCall{sin}{𝑥}}𝑑𝑥=−\\fnCall{cos}{𝑥}+𝐶$
+- $\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\mathrm{\\frac{1}{𝑥}𝑑𝑥}=\\fnCall{ln}{\\parens{𝑥}}+𝐶$.
+- $\\def\\pow#1#2{{#1}^{#2}}∫\\pow{𝑒}{𝑎𝑥}𝑑𝑥=\\frac{1}{𝑎}\\pow{𝑒}{𝑎𝑥}+𝐶$
+- $\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\parens{\\fnCall{sin}{𝑥}}𝑑𝑥=−\\fnCall{cos}{𝑥}+𝐶$
 
 &nbsp;"
 `;

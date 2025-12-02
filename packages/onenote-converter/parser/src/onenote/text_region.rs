@@ -315,11 +315,18 @@ fn text_region_to_latex(text: &str, additional_data: &PropertySet) -> Result<Str
         .flatten()
     {
         Some(21) => {
-            // TODO: This operator type is also used for summation. Other properties
-            // (e.g. MathUnknown1?) may be needed to determine the operator subtype.
-            "matInt".into()
+            let variant = additional_data
+                .get(PropertyId::new(PropertyType::MathUnknown1 as u32))
+                .map(|variant| variant.to_u16())
+                .flatten()
+                .unwrap_or_default();
+            if variant == 8721 {
+                "∑".into()
+            } else {
+                "∫".into()
+            }
         }
-        Some(13) => "inParens".into(),
+        Some(13) => "parens".into(),
         Some(17) => "fnCall".into(),
         Some(19) => "withSubscript".into(),
         Some(16 | 26) => "frac".into(),
