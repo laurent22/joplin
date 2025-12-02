@@ -184,7 +184,6 @@ interface Props {
 	windowId: string;
 	secondaryWindowFocused: boolean;
 	showMenuBar: boolean;
-	syncStarted: boolean;
 	syncPending: boolean;
 }
 
@@ -364,7 +363,7 @@ function useMenu(props: Props) {
 			const quitMenuItem = {
 				label: _('Quit'),
 				accelerator: keymapService.getAccelerator('quit'),
-				click: () => { void bridge().electronApp().quitWithConfirmation(props.syncStarted, props.syncPending); },
+				click: () => { void bridge().electronApp().quitWithConfirmation(props.syncPending); },
 			};
 
 			const sortNoteFolderItems = (type: string) => {
@@ -1038,7 +1037,6 @@ function useMenu(props: Props) {
 		props.profileConfig,
 		switchProfileMenuItems,
 		menuItemDic,
-		props.syncStarted,
 		props.syncPending,
 	]);
 
@@ -1126,7 +1124,6 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		noteListRendererIds: state.noteListRendererIds,
 		noteListRendererId: state.settings['notes.listRendererId'],
 		showMenuBar: state.settings.showMenuBar,
-		syncStarted: state.syncStarted,
 		syncPending: state.syncPending,
 	};
 };

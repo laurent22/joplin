@@ -138,7 +138,7 @@ class Registry {
 
 			if (isAuthenticated && isPartialSync) {
 				// Only dispatch the event if a partial sync is scheduled, which is triggered by making a change
-				this.dispatch({ type: 'SYNC_PENDING' });
+				this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: true });
 			}
 
 			if (Setting.value('env') === 'dev' && delay !== 0) {
@@ -150,10 +150,11 @@ class Registry {
 
 			const timeoutCallback = async () => {
 				this.timerCallbackCalls_.push(true);
+				let newContext;
+
 				try {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
-					this.dispatch({ type: 'SYNC_PENDING_RESET' });
 
 					if (doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
 						this.logger().info('Sync cancelled because we\'re on mobile data');
@@ -208,7 +209,7 @@ class Registry {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
 							}
-							const newContext = await sync.start(options);
+							newContext = await sync.start(options);
 							Setting.setValue(contextKey, JSON.stringify(newContext));
 						} catch (error) {
 							if (error.code === 'alreadyStarted') {
@@ -226,6 +227,12 @@ class Registry {
 					promiseResolve();
 
 				} finally {
+					if (!newContext) {
+						// The synchronizer may run scheduleSync before completing execution, so avoid potentially resetting sync pending immediately
+						// after scheduling sync, where the sync completed successfully. A successful sync will handle the sync pending reset instead
+						this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
+					}
+
 					this.timerCallbackCalls_.pop();
 				}
 			};

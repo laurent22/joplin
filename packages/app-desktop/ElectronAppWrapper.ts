@@ -569,10 +569,9 @@ export default class ElectronAppWrapper {
 		this.electronApp_.quit();
 	}
 
-	public quitWithConfirmation(syncStarted: boolean, syncPending: boolean) {
-		if (syncStarted || syncPending) {
-			const message = syncStarted ? _('Sync is currently in progress. Are you sure you want to quit?') : _('Not all changes have been synced. Are you sure you want to quit?');
-			const ok = bridge().showConfirmMessageBox(message, {
+	public quitWithConfirmation(syncPending: boolean) {
+		if (syncPending) {
+			const ok = bridge().showConfirmMessageBox(_('Not all changes have been synced. Are you sure you want to quit?'), {
 				buttons: [_('Yes'), _('No')],
 				defaultId: 1,
 			});

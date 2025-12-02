@@ -1237,6 +1237,7 @@ export default class Synchronizer {
 		this.progressReport_ = {};
 
 		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
+		this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
 
 		this.state_ = 'idle';
 
