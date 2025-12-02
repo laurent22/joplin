@@ -219,4 +219,5 @@ tablatures
 tablature
 REVO
 REVOGB
+Bopomofo
 Linkosed
