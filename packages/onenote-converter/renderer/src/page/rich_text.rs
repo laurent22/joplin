@@ -1,5 +1,5 @@
 use crate::page::Renderer;
-use crate::utils::{AttributeSet, StyleSet, html_entities, px};
+use crate::utils::{AttributeSet, StyleSet, html_entities, px, url_encode};
 use color_eyre::Result;
 use itertools::Itertools;
 use once_cell::sync::Lazy;
@@ -11,19 +11,19 @@ use regex::{Captures, Regex};
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_rich_text(&mut self, text: &RichText) -> Result<String> {
-        let mut content = String::new();
+        let mut content_html = String::new();
         let mut attrs = AttributeSet::new();
         let mut style = self.parse_paragraph_styles(text);
 
         if let Some((note_tag_html, note_tag_styles)) = self.render_note_tags(text.note_tags()) {
-            content.push_str(&note_tag_html);
+            content_html.push_str(&note_tag_html);
             style.extend(note_tag_styles);
         }
 
-        content.push_str(&self.parse_content(text)?);
+        content_html.push_str(&self.parse_content(text)?);
 
-        if content.starts_with("http://") || content.starts_with("https://") {
-            content = format!("<a href=\"{}\">{}</a>", content, content);
+        if content_html.starts_with("http://") || content_html.starts_with("https://") {
+            content_html = format!("<a href=\"{}\">{}</a>", url_encode(&content_html), content_html);
         }
 
         if style.len() > 0 {
@@ -32,10 +32,10 @@ impl<'a> Renderer<'a> {
 
         match text.paragraph_style().style_id() {
             Some(t) if !self.in_list && is_tag(t) => {
-                Ok(format!("<{} {}>{}</{}>", t, attrs, content, t))
+                Ok(format!("<{} {}>{}</{}>", t, attrs, content_html, t))
             }
-            _ if style.len() > 0 => Ok(format!("<span style=\"{}\">{}</span>", style, content)),
-            _ => Ok(content),
+            _ if style.len() > 0 => Ok(format!("<span {}>{}</span>", style.to_html_attr(), content_html)),
+            _ => Ok(content_html),
         }
     }
 
@@ -75,7 +75,7 @@ impl<'a> Renderer<'a> {
                     let hyperlink_start_html = if hyperlink.is_link_start {
                         format!(
                             "<a href=\"{}\" {}>",
-                            html_entities(&hyperlink.href),
+                            url_encode(&hyperlink.href),
                             style.to_html_attr(),
                         )
                     } else {

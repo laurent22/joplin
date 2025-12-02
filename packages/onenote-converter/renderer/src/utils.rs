@@ -1,5 +1,6 @@
 use itertools::Itertools;
 use parser_utils::errors::Result;
+use percent_encoding::{AsciiSet, CONTROLS, utf8_percent_encode};
 use std::collections::HashMap;
 use std::fmt;
 use std::fmt::Display;
@@ -109,8 +110,15 @@ pub(crate) fn html_entities(text: &str) -> String {
         .replace("'", "&apos;")
 }
 
+pub(crate) fn url_encode(url: &str) -> String {
+    const ENCODED_CHARS: &AsciiSet = &CONTROLS.add(b'\'').add(b'\n').add(b'"').add(b'<').add(b'>');
+    utf8_percent_encode(url, ENCODED_CHARS).to_string()
+}
+
 #[cfg(test)]
 mod test {
+    use crate::utils::url_encode;
+
     use super::html_entities;
 
     #[test]
@@ -121,5 +129,11 @@ mod test {
         );
         assert_eq!(html_entities("&gt;"), "&amp;gt;");
         assert_eq!(html_entities("'&gt;'"), "&apos;&amp;gt;&apos;");
+    }
+
+    #[test]
+    fn should_encode_urls() {
+        assert_eq!(url_encode("http://example.com/"), "http://example.com/");
+        assert_eq!(url_encode("http://example.com/\""), "http://example.com/%22");
     }
 }
