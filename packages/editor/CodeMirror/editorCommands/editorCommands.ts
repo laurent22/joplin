@@ -54,6 +54,13 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 			'',
 		].join('\n'));
 	},
+	[EditorCommandType.InsertCodeBlock]: editor => {
+		replaceSelectionCommand(editor, [
+			'```',
+			'',
+			'```',
+		].join('\n'));
+	},
 
 	[EditorCommandType.ScrollSelectionIntoView]: editor => {
 		editor.dispatch(editor.state.update({

@@ -7,14 +7,7 @@ export interface Options {
 	batchSize?: number;
 }
 
-export default async (db: DbConnection, options: Options = null) => {
-	options = {
-		batchSize: 10000,
-		...options,
-	};
-
-	const cutOffTime = Date.now() - options.interval;
-
+const collectChanges = async (db: DbConnection, options: Options) => {
 	interface ChangeSlice {
 		user_id: Uuid;
 		updated_time: number;
@@ -23,19 +16,10 @@ export default async (db: DbConnection, options: Options = null) => {
 		item_id: Uuid;
 	}
 
-	interface GroupedChange {
-		user_id: Uuid;
-		total_count: number;
-		create_count: number;
-		update_count: number;
-		delete_count: number;
-		uploaded_size: number;
-	}
-
-	type ItemSlice = Pick<Item, 'content_size' | 'id'>;
-
 	let changes: ChangeSlice[] = [];
 	let counter = 0;
+
+	const cutOffTime = Date.now() - options.interval;
 
 	while (true) {
 		const query = db('changes')
@@ -58,16 +42,44 @@ export default async (db: DbConnection, options: Options = null) => {
 		counter = filteredResults[filteredResults.length - 1].counter;
 	}
 
+	return changes;
+};
+
+export default async (db: DbConnection, options: Options = null) => {
+	options = {
+		batchSize: 10000,
+		...options,
+	};
+
+	interface GroupedChange {
+		user_id: Uuid;
+		total_count: number;
+		create_count: number;
+		update_count: number;
+		delete_count: number;
+		uploaded_size: number;
+	}
+
+	type ItemSlice = Pick<Item, 'content_size' | 'id'>;
+
+	const changes = await collectChanges(db, options);
 	const itemIds = unique(changes.map(c => c.item_id));
 
-	const items: ItemSlice[] = await db('items')
-		.select('id', 'content_size')
-		.whereIn('id', itemIds);
+	const batchSize = 1000;
+	const idToItem = new Map<string, ItemSlice>();
+	for (let i = 0; i < itemIds.length; i += batchSize) {
+		const itemBatch: ItemSlice[] = await db('items')
+			.select('id', 'content_size')
+			.whereIn('id', itemIds.slice(i, i + batchSize));
+		for (const item of itemBatch) {
+			idToItem.set(item.id, item);
+		}
+	}
 
-	const groupedChanges: GroupedChange[] = [];
+	const groupedChanges = new Map<string, GroupedChange>();
 
 	for (const c of changes) {
-		let grouped = groupedChanges.find(g => g.user_id === c.user_id);
+		let grouped = groupedChanges.get(c.user_id);
 		if (!grouped) {
 			grouped = {
 				user_id: c.user_id,
@@ -78,7 +90,7 @@ export default async (db: DbConnection, options: Options = null) => {
 				uploaded_size: 0,
 			};
 
-			groupedChanges.push(grouped);
+			groupedChanges.set(c.user_id, grouped);
 		}
 
 		if (c.type === ChangeType.Create) grouped.create_count++;
@@ -86,21 +98,19 @@ export default async (db: DbConnection, options: Options = null) => {
 		if (c.type === ChangeType.Delete) grouped.delete_count++;
 		grouped.total_count++;
 
-		const item = items.find(it => it.id === c.item_id);
+		const item = idToItem.get(c.item_id);
 		if (item) {
 			if ([ChangeType.Create, ChangeType.Update].includes(c.type)) {
 				grouped.uploaded_size += item.content_size;
 			}
 		}
-
-		if (!itemIds.includes(c.item_id)) itemIds.push(c.item_id);
 	}
 
-	groupedChanges.sort((a, b) => {
+	const groupedChangesList = Array.from(groupedChanges.values());
+	groupedChangesList.sort((a, b) => {
 		if (a.total_count > b.total_count) return -1;
 		if (a.total_count < b.total_count) return +1;
 		return 0;
 	});
-
-	return groupedChanges;
+	return groupedChangesList;
 };
