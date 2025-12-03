@@ -23,7 +23,7 @@ use parser_utils::{
 #[derive(Debug)]
 pub struct Revision {
     pub id: ExGuid,
-    pub _parent_id: ExGuid,
+    _parent_id: ExGuid,
     pub object_groups: Vec<ObjectGroupList>,
     pub global_id_tables: Vec<GlobalIdTable>,
     root_objects: HashMap<RootRole, ExGuid>,
