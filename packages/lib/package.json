@@ -66,7 +66,7 @@
     "file-type": "16.5.4",
     "follow-redirects": "1.15.11",
     "form-data": "4.0.4",
-    "fs-extra": "11.2.0",
+    "fs-extra": "11.3.1",
     "hpagent": "1.2.0",
     "html-entities": "1.4.0",
     "html-minifier": "4.0.0",
