@@ -77,11 +77,7 @@ impl RevisionManifestList {
                     })?;
                     let revision_ref = Rc::new(revision);
                     revisions.push(revision_ref.clone());
-                    let original = revisions_map.insert(revision_ref.id, revision_ref);
-
-                    if let Some(original) = original {
-                        log_warn!("Multiple revisions with the same ID! {:?}", original.id);
-                    }
+                    revisions_map.insert(revision_ref.id, revision_ref);
                 }
             }
 
@@ -89,7 +85,6 @@ impl RevisionManifestList {
             assert_ne!(index, last_index);
             last_index = index;
         }
-
         Ok(RevisionManifestList { revisions })
     }
 }
