@@ -142,7 +142,7 @@ jeudi 23 octobre 2025
 
 -  [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
 -  [ ] Transmettre aux dev Joplin (case non cochée)
-    -  [x] Exporter le carnet en \\*.packageone (case cochée)
+    -  [x] Exporter le carnet en \\*.onepkg (case cochée)
     -  [ ] Exporter des page en \\*.one (case non cochée)
 
 &nbsp;
@@ -1381,7 +1381,7 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 </span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
 </span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Exporter le carnet en *.packageone (case cochée)</span></li>
+</span>Exporter le carnet en *.onepkg (case cochée)</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
 </span>Exporter des page en *.one (case non cochée)</span></li>
 </ul></li>
