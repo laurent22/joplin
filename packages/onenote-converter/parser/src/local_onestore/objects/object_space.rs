@@ -94,7 +94,6 @@ impl crate::onestore::object_space::ObjectSpace for ObjectSpace {
         self.revision_list
             .revisions
             .iter()
-            .rev()
             .find_map(|revision| revision.content_root())
     }
 
@@ -102,7 +101,6 @@ impl crate::onestore::object_space::ObjectSpace for ObjectSpace {
         self.revision_list
             .revisions
             .iter()
-            .rev()
             .find_map(|revision| revision.metadata_root())
     }
 }

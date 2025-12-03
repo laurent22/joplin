@@ -23,7 +23,7 @@ use parser_utils::{
 #[derive(Debug)]
 pub struct Revision {
     pub id: ExGuid,
-    _parent_id: ExGuid,
+    pub _parent_id: ExGuid,
     pub object_groups: Vec<ObjectGroupList>,
     pub global_id_tables: Vec<GlobalIdTable>,
     root_objects: HashMap<RootRole, ExGuid>,
@@ -95,6 +95,7 @@ impl Revision {
         let mut last_index = iterator.get_index();
         while let Some(current) = iterator.peek() {
             if let FileNodeData::RevisionManifestEndFND = current {
+                iterator.next();
                 break;
             } else if let Some(object_group_list) = ObjectGroupList::try_parse(iterator, context)? {
                 // Skip: Used for reference counting (which we can ignore here)
