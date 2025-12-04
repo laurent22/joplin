@@ -1,3 +1,13 @@
+project.ext.vectoricons = [
+    iconFontNames: [
+        'MaterialCommunityIcons.ttf',
+        'MaterialIcons.ttf',
+        'FontAwesome.ttf',
+        'Ionicons.ttf'
+    ]
+]
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
@@ -131,6 +141,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            shrinkResources false
         }
     }
 }
@@ -145,5 +156,3 @@ dependencies {
         implementation jscFlavor
     }
 }
-
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
