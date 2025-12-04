@@ -83,7 +83,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
-		void query.limit(limit);
+		void query.limit(limit).orderBy('counter', 'asc');
 		let results: Change[] = await query;
 		const hasMore = !!results.length;
 		const cursor = results.length ? results[results.length - 1].id : id;
