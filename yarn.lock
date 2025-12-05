@@ -10371,7 +10371,7 @@ __metadata:
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-crypto: "npm:0.7.17"
     react-native-rsa-native: "npm:2.0.5"
-    react-native-safe-area-context: "npm:5.5.2"
+    react-native-safe-area-context: "npm:5.6.0"
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.1.2"
     react-native-sqlite-storage: "npm:6.0.1"
@@ -43599,13 +43599,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:5.5.2":
-  version: 5.5.2
-  resolution: "react-native-safe-area-context@npm:5.5.2"
+"react-native-safe-area-context@npm:5.6.0":
+  version: 5.6.0
+  resolution: "react-native-safe-area-context@npm:5.6.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/3f0ba6a09ba7dfeb34147f9625700e5cc05b4590a94cc6bc982ac0e4db337caa461f83f619e925ac52dffe9fc207346036e880d47cbb4a2c9884f2d767e56687
+  checksum: 10/409a59ab249cec6c22e2df423945a7c0e991e44b7650e0c558eb01a2a1f932c97f90302e2e2ef9263f86df1bd81ed6399db022900d79f517902342dbb5e6c3bd
   languageName: node
   linkType: hard
 
