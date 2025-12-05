@@ -8,7 +8,7 @@ import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
 	dropCursor,
 } from '@codemirror/view';
-import { history, undoDepth, redoDepth, standardKeymap, insertTab } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, standardKeymap, insertTab, simplifySelection } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
@@ -235,6 +235,11 @@ const createEditor = (
 		}, true),
 
 		...standardKeymap, ...historyKeymap, ...searchKeymap,
+
+		// The escape -> simplifySelection mapping is present in "defaultKeymap",
+		// which is disabled on desktop but enabled on mobile. Enable this mapping
+		// globally for consistency:
+		keyCommand('Escape', simplifySelection, true),
 	]));
 
 	const editor = new EditorView({
