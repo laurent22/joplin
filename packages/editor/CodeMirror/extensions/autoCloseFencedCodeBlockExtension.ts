@@ -23,14 +23,14 @@ const autoCloseFencedCodeBlockExtension = () => {
 
 		// Check if we just typed the third backtick in a sequence
 		// Pattern: line starts with exactly two backticks (possibly with leading whitespace)
-		const tripleBacktickMatch = /^(\s*)``$/.test(textBeforeCursor);
+		const match = /^(\s*)``$/.exec(textBeforeCursor);
 
-		if (!tripleBacktickMatch) {
+		if (!match) {
 			return false;
 		}
 
 		// Insert: backtick + newline + three backticks
-		const indent = textBeforeCursor.match(/^(\s*)/)?.[1] || '';
+		const indent = match[1];
 		const insert = `\`\n${indent}\`\`\``;
 
 		const changes = state.changes({
