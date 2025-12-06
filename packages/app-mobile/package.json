@@ -66,7 +66,7 @@
     "react-native-quick-actions": "0.3.13",
     "react-native-quick-crypto": "0.7.17",
     "react-native-rsa-native": "2.0.5",
-    "react-native-safe-area-context": "5.6.0",
+    "react-native-safe-area-context": "5.6.1",
     "react-native-securerandom": "1.0.1",
     "react-native-share": "12.1.2",
     "react-native-sqlite-storage": "6.0.1",
