@@ -18,6 +18,7 @@ import renderingExtension from './extensions/rendering/renderingExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
 import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
 import renderBlockImages from './extensions/rendering/renderBlockImages';
+import autoCloseFencedCodeBlockExtension from './extensions/autoCloseFencedCodeBlockExtension';
 
 const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
@@ -76,6 +77,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	if (settings.automatchBraces) {
 		extensions.push(closeBrackets());
 		extensions.push(keymap.of(closeBracketsKeymap));
+		extensions.push(autoCloseFencedCodeBlockExtension());
 	}
 
 	if (settings.keymap === EditorKeymap.Vim) {

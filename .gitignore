@@ -997,6 +997,7 @@ packages/editor/CodeMirror/editorCommands/markdownCommands.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
+packages/editor/CodeMirror/extensions/autoCloseFencedCodeBlockExtension.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickCheckboxExtension.js
