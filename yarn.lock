@@ -10301,7 +10301,7 @@ __metadata:
     "@joplin/turndown": "npm:~4.0.80"
     "@joplin/turndown-plugin-gfm": "npm:~1.0.62"
     "@joplin/utils": "npm:~3.5"
-    "@js-draw/material-icons": "npm:1.30.1"
+    "@js-draw/material-icons": "npm:1.32.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.0"
     "@react-native-clipboard/clipboard": "npm:1.16.3"
     "@react-native-community/cli": "npm:16.0.3"
@@ -10346,7 +10346,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     jetifier: "npm:2.0.0"
-    js-draw: "npm:1.30.1"
+    js-draw: "npm:1.32.0"
     jsdom: "npm:26.1.0"
     lodash: "npm:4.17.21"
     md5: "npm:2.3.0"
@@ -11136,21 +11136,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@js-draw/material-icons@npm:1.30.1":
-  version: 1.30.1
-  resolution: "@js-draw/material-icons@npm:1.30.1"
+"@js-draw/material-icons@npm:1.32.0":
+  version: 1.32.0
+  resolution: "@js-draw/material-icons@npm:1.32.0"
   peerDependencies:
     js-draw: ^1.0.1
-  checksum: 10/3e06209c066c2765f70fbc15e222195eea1c5d1ff3d3acf273ced0852c94a76aeec8136c93b4e5fe7dfebbb2ef19a5928fa185a68f0604724cffe19d2df6684d
+  checksum: 10/89f2b1cf13ccb2146743f13ea6c85e0f086a926eafeb22f5fef7c1622826181a0c0f59dd571e5975a67eb3407f2388b21e32218dad4eafef43cc2d1c4d059337
   languageName: node
   linkType: hard
 
-"@js-draw/math@npm:^1.30.1":
-  version: 1.31.1
-  resolution: "@js-draw/math@npm:1.31.1"
+"@js-draw/math@npm:^1.32.0":
+  version: 1.32.0
+  resolution: "@js-draw/math@npm:1.32.0"
   dependencies:
     bezier-js: "npm:6.1.3"
-  checksum: 10/c1dc1d4c7b44904e15a85dd10fa659600247ebd71dcc1e3be95663b1808170e48560734b3de3c3a7e4ea3d077d57de03608ead488367b53124566bc496698886
+  checksum: 10/3fd9d9fb8fb7ae231851e43eb2503d03fd963f665ecdebd99bf74feef24086eee07680d431f413b9b1a72ecd6c3b46ab539d8116bc3a10f1f3cfaefb168a28e7
   languageName: node
   linkType: hard
 
@@ -34587,13 +34587,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-draw@npm:1.30.1":
-  version: 1.30.1
-  resolution: "js-draw@npm:1.30.1"
+"js-draw@npm:1.32.0":
+  version: 1.32.0
+  resolution: "js-draw@npm:1.32.0"
   dependencies:
-    "@js-draw/math": "npm:^1.30.1"
+    "@js-draw/math": "npm:^1.32.0"
     "@melloware/coloris": "npm:0.22.0"
-  checksum: 10/7c772f7cd62461811467a0c93801b149c822616a8127f4f26e92383df1218591822ea40e1fdc743070b98229f1708c3e6f49437e7a051c6d66caa2d470456b9e
+  checksum: 10/3da563efc659e5081fa102bb570791581edcddedc40b2ba60596b7edd3dfe5dcd96b39a3486f266f6489a0ace4a335f5ee54d4aa726cab13e90d3d38a415a23a
   languageName: node
   linkType: hard
 

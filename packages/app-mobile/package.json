@@ -28,6 +28,7 @@
     "@joplin/react-native-saf-x": "~3.5",
     "@joplin/renderer": "~3.5",
     "@joplin/utils": "~3.5",
+    "@js-draw/material-icons": "1.32.0",
     "@react-native-clipboard/clipboard": "1.16.3",
     "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-community/geolocation": "3.4.0",
@@ -45,6 +46,7 @@
     "expo-av": "15.1.7",
     "expo-camera": "16.1.11",
     "expo-local-authentication": "16.0.5",
+    "js-draw": "1.32.0",
     "lodash": "4.17.21",
     "md5": "2.3.0",
     "path-browserify": "1.0.1",
@@ -84,9 +86,7 @@
     "string-natural-compare": "3.0.1",
     "tar-stream": "3.1.7",
     "timers": "0.1.1",
-    "url": "0.11.4",
-    "@js-draw/material-icons": "1.32.0",
-    "js-draw": "1.32.0"
+    "url": "0.11.4"
   },
   "devDependencies": {
     "@babel/core": "7.26.0",
