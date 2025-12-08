@@ -45,7 +45,6 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 	};
 
 	const emptyLibraryMock = path.resolve(__dirname, 'mocks/empty.js');
-	const throwOnLoadLibraryMock = path.resolve(__dirname, 'mocks/throwOnLoad.js');
 
 	return {
 		output: {
@@ -79,8 +78,7 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'@react-native-documents/picker': emptyLibraryMock,
 				'react-native-exit-app': emptyLibraryMock,
 				'expo-camera': emptyLibraryMock,
-				// Remove this after upgrading react-native-vector-icons.
-				'@react-native-vector-icons/material-design-icons': throwOnLoadLibraryMock,
+				'react-native-vector-icons/MaterialCommunityIcons': emptyLibraryMock,
 
 				// Workaround for applying serviceworker types to a single file.
 				// See https://joshuatz.com/posts/2021/strongly-typed-service-workers/.

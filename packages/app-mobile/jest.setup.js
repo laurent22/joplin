@@ -113,7 +113,7 @@ jest.doMock('@expo/vector-icons/MaterialCommunityIcons', () => {
 });
 
 // Used by the renderer
-jest.doMock('react-native-vector-icons/Ionicons', () => {
+jest.doMock('@react-native-vector-icons/ionicons', () => {
 	return {
 		default: class extends require('react-native').View {
 			static getImageSourceSync = () => ({ uri: '' });

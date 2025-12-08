@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { extname } from 'path';
 import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 
 export const editPopupClass = 'joplin-editPopup';
 
