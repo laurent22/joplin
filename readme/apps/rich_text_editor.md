@@ -1,6 +1,6 @@
 # About the Rich Text editor
 
-**TLDR:** Avoid using Markdown [plugins](https://joplinapp.org/help/apps/plugins) if you primarily intend to use the Rich Text editor, and be aware of the editor's limitations.
+**TLDR:** Avoid using [Markdown plugins](https://joplinapp.org/help/apps/markdown/#markdown-plugins) if you primarily intend to use the Rich Text editor, and be aware of the editor's limitations.
 
 At its core, Joplin stores notes in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md). Markdown is a simple way to format text that looks great on any device and, while it's formatted text, it still looks perfectly readable in a plain text editor.
 
