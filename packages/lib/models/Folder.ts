@@ -1090,6 +1090,7 @@ export default class Folder extends BaseItem {
 		const folderId = Setting.value('activeFolderId');
 		if (!folderId) return null;
 
+		// Use super.load because the local load function returns folders which do not actually exist in the db, such as the trash
 		const folder = await super.load(folderId);
 		if (!folder || !!folder.deleted_time) {
 			const defaultFolder = await Folder.defaultFolder();
