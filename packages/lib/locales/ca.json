@@ -167,6 +167,9 @@
 	"[None]": [
 		"[None]"
 	],
+	"A brief description of the image:": [
+		"Una breu descripció de la imatge:"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Una llista de paraules separades per comes. Es pot utilitzar per a paraules poc comunes, per ajudar a escriure la veu a escriure-les correctament."
 	],
@@ -239,6 +242,9 @@
 	"Add body": [
 		"Afegeix contingut"
 	],
+	"Add column": [
+		"Afegeix una columna"
+	],
 	"Add new": [
 		"Afegeix-ne un"
 	],
@@ -247,6 +253,12 @@
 	],
 	"Add recipient:": [
 		"Afegeix un destinatari:"
+	],
+	"Add row": [
+		"Afegeix una fila"
+	],
+	"Add tags:": [
+		"Afegir etiquetes:"
 	],
 	"Add title": [
 		"Afegeix títol"
@@ -257,8 +269,14 @@
 	"Add to note": [
 		"Afegeix a la nota"
 	],
+	"Added new: %s": [
+		"S'ha afegit una nova: %s"
+	],
+	"Added tag: %s": [
+		"Etiqueta afegida: %s"
+	],
 	"Adds tag": [
-		""
+		"Afegeix una etiqueta"
 	],
 	"Admin": [
 		"Administració"
@@ -326,6 +344,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"S'ha trobat un dibuix desat automàticament. Voleu adjuntar-ne una còpia a la nota?"
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		"S'ha produït un error en enviar la resposta. Això pot passar si l'aplicació està fora de línia o no es pot connectar al servidor.\nError: %s"
+	],
 	"An error occurred: %s": [
 		"S'ha produït un error: %s"
 	],
@@ -366,7 +387,7 @@
 		"Aritim fosc"
 	],
 	"Associated tags:": [
-		""
+		"Etiquetes associades:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Actualment, Joplin Web només es pot obrir en una pestanya alhora. Si us plau, tanqueu l'altra instància de Joplin."
@@ -653,6 +674,9 @@
 	"Code View": [
 		"Vista de codi"
 	],
+	"Code:": [
+		"Codi:"
+	],
 	"Collaborate on a notebook with others": [
 		"Col·laborar en una llibreta amb altres"
 	],
@@ -661,6 +685,9 @@
 	],
 	"Collapse all notebooks": [
 		"Redueix totes les llibretes"
+	],
+	"Collapse title": [
+		"Replega el títol"
 	],
 	"Collapsed": [
 		"Col·lapsat"
@@ -762,6 +789,12 @@
 	"Control character": [
 		"Caràcter de control"
 	],
+	"Convert it": [
+		"Converteix-lo"
+	],
+	"Convert note to Markdown": [
+		"Converteix la nota a Markdown"
+	],
 	"Convert to note": [
 		"Converteix a nota"
 	],
@@ -817,6 +850,9 @@
 	"Could not connect to plugin repository.": [
 		"No s'ha pogut connectar al repositori d'extensions."
 	],
+	"Could not convert note to Markdown: %s": [
+		"No s'ha pogut convertir la nota a Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"No s'han pogut exportar les notes: %s"
 	],
@@ -847,8 +883,14 @@
 	"Create a notebook": [
 		"Crear una llibreta"
 	],
+	"Create new notebook": [
+		"Crea una llibreta nova"
+	],
 	"Create new profile...": [
 		"Crea un perfil nou..."
+	],
+	"Create note": [
+		"Crea una nota"
 	],
 	"Create notebook": [
 		"Crea una llibreta"
@@ -897,6 +939,12 @@
 	],
 	"Creating new to-do...": [
 		"Creant una tasca nova..."
+	],
+	"Creating note \"%s\"...": [
+		"S'està creant la nota \"%s\"..."
+	],
+	"Creating note.": [
+		"S'està creant una nota."
 	],
 	"Creating report...": [
 		"Creant informe..."
@@ -968,7 +1016,7 @@
 		"Per defecte"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Títol per defecte que s'utilitzarà per als documents creats per l'escàner."
 	],
 	"Default: %s": [
 		"Per defecte: %s"
@@ -978,6 +1026,9 @@
 	],
 	"Delete attachment \"%s\"?": [
 		"Voleu suprimir l'adjunt \"%s\"?"
+	],
+	"Delete column": [
+		"Suprimeix la columna"
 	],
 	"Delete expired sessions": [
 		"Suprimeix les sessions expirades"
@@ -1005,6 +1056,9 @@
 	],
 	"Delete profile \"%s\"": [
 		"Suprimeix el perfil \"%s\"?"
+	],
+	"Delete row": [
+		"Suprimeix la fila"
 	],
 	"Delete selected notes": [
 		"Suprimeix les notes seleccionades"
@@ -1138,14 +1192,17 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"No perdeu les contrasenyes perquè, per motius de seguretat, és l'única forma de desxifrar les dades. Per habilitar el xifrat, introduïu la vostra contrasenya."
 	],
+	"Do you find the Joplin web app useful?": [
+		"Trobes útil l'aplicació web Joplin?"
+	],
 	"Document scanner: Title template": [
-		""
+		"Escàner de documents: plantilla de títol"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
 		"No permetis que el destinatari compartit escrigui a la llibreta compartida. Vàlid només per a la subordre 'add'."
 	],
 	"Don't show this message again": [
-		""
+		"No tornis a mostrar aquest missatge"
 	],
 	"Donate, website": [
 		"Dona, lloc web"
@@ -1221,6 +1278,12 @@
 	],
 	"Edit": [
 		"Edita"
+	],
+	"Edit as Markdown": [
+		"Edita com a Markdown"
+	],
+	"Edit as Rich Text": [
+		"Edita com a text enriquit"
 	],
 	"Edit link": [
 		"Edita l'enllaç"
@@ -1323,6 +1386,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Activa el suport de sintaxi de Fountain"
+	],
+	"Enable handwritten transcription": [
+		"Habilita la transcripció manuscrita"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Activar el bàner de conversió d'HTML a Markdown"
 	],
 	"Enable Linkify": [
 		"Activa Linkify"
@@ -1483,6 +1552,9 @@
 	"Expand all notebooks": [
 		"Desplegar totes les llibretes"
 	],
+	"Expand title": [
+		"Expandeix el títol"
+	],
 	"Expanded": [
 		"Expandit"
 	],
@@ -1545,6 +1617,9 @@
 	],
 	"Feature flags": [
 		"Interruptors de funcions"
+	],
+	"Feedback": [
+		"Comentaris"
 	],
 	"Fetched items: %d/%d.": [
 		"Elements obtinguts: %d/%d."
@@ -1715,6 +1790,9 @@
 	"Hide password": [
 		"Amaga la contrasenya"
 	],
+	"Hides warning": [
+		"Amaga l'avís"
+	],
 	"Highlight": [
 		"Ressalta"
 	],
@@ -1746,7 +1824,7 @@
 		"Ociós"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Si un adjunt d'imatge està en la seva pròpia línia i seguit d'una línia en blanc, es mostrarà just a sota de la seva font Markdown."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Si ja heu autoritzat, espereu que l'aplicació es sincronitzi amb Joplin Cloud."
@@ -1801,9 +1879,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"En qualsevol ordre, es pot fer referència a una nota o llibreta per títol o ID, o utilitzant les dreceres \"$n\" o \"$b\" per, respectivament, la nota o llibreta seleccionada actualment. '$c' es pot utilitzar per referir-se a l'element seleccionat actualment."
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Per tal d'associar una geolocalització a la nota, l'aplicació necessita permís per a accedir a la vostra ubicació.\n\nPodeu desactivar aquesta opció en qualsevol moment a la pantalla de configuració."
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Per a fer-ho, totes les vostres dades hauran de ser encriptades i sincronitzades, per tant és millor executar-ho durant la nit.\n\nPer a començar, seguiu aquestes instruccions:\n\n1. Sincronitzeu tots els vostres dispositius.\n2. Feu click en \"%s\".\n3. Deixeu-lo executant-se fins que acabi. Mentre s'executa, eviteu fer canvis en cap nota des dels altres dispositius per a evitar els conflictes.\n4. Un cop la sincronització està acabada en aquest dispositiu, sincronitzeu tots els altres dispositius, i deixeu-los executant-se fins que acabin.\n\nImportant: només cal executar això UNA SOLA VEGADA en un dispositiu."
@@ -1958,6 +2033,9 @@
 	"Joplin Server": [
 		"Servidor del Joplin"
 	],
+	"Joplin Server (SAML)": [
+		"Servidor Joplin (SAML)"
+	],
 	"Joplin Server Business": [
 		"Joplin Servidor d'empreses"
 	],
@@ -1975,6 +2053,9 @@
 	],
 	"Joplin SSO Authentication": [
 		"Autenticació SSO de Joplin"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		"Joplin admet desar la ubicació a la qual es desen o es creen les notes. Voleu habilitar-lo? Això es pot canviar en qualsevol moment a la configuració."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"El porta-retalls de webs del Joplin us permet desar pàgines web i captures de pantalla del navegador web al Joplin."
@@ -2005,6 +2086,9 @@
 	],
 	"Keys that need upgrading": [
 		"Claus que requereixen actualització"
+	],
+	"Label": [
+		"Etiqueta"
 	],
 	"Landscape": [
 		"Paisatge"
@@ -2161,8 +2245,14 @@
 	"Markdown editor": [
 		"Editor Markdown"
 	],
+	"Markdown editor: Highlight active line": [
+		"Editor Markdown: ressalta la línia activa"
+	],
+	"Markdown editor: Render images": [
+		"Editor Markdown: Renderització d'imatges"
+	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Editor de Markdown: Renderitza el marcatge a l'editor"
 	],
 	"Marks a to-do as done.": [
 		"Marca un llistat de tasques pendents com a fet."
@@ -2306,6 +2396,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Es crearà una nova llibreta \"%s\" i s'hi importarà el fitxer \"%s\""
 	],
+	"New notebook title": [
+		"Nou títol de llibreta"
+	],
 	"New photo": [
 		"Nova foto"
 	],
@@ -2384,6 +2477,9 @@
 	"No tab selected": [
 		"No hi ha cap pestanya seleccionada"
 	],
+	"No tags": [
+		"Sense etiquetes"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"No hi ha definit cap editor de text. Establiu-ne un usant \"config editor <editor-path>\""
 	],
@@ -2410,6 +2506,9 @@
 	],
 	"Not now": [
 		"No ara"
+	],
+	"Not useful": [
+		"No és útil"
 	],
 	"note": [
 		"nota"
@@ -2458,6 +2557,12 @@
 	],
 	"Note list style": [
 		"Estil de llista de notes"
+	],
+	"Note not published: %s": [
+		"Nota no publicada: %s"
+	],
+	"Note preview": [
+		"Vista prèvia de la nota"
 	],
 	"Note properties": [
 		"Propietats de la nota"
@@ -2515,6 +2620,9 @@
 	],
 	"OCR: Language data URL or path": [
 		"OCR: URL o camí de dades de l'idioma"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Cerca en el contingut extret"
 	],
 	"OK": [
 		"D'acord"
@@ -2612,6 +2720,9 @@
 	"Ordered list": [
 		"Llista ordenada"
 	],
+	"Other": [
+		"Altres"
+	],
 	"Other applications...": [
 		"Altres aplicacions."
 	],
@@ -2673,11 +2784,8 @@
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Elimina permanentment la llibreta, ometent la paperera."
 	],
-	"Permission needed": [
-		"Cal permís"
-	],
 	"Photo %d": [
-		""
+		"Foto %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Feu clic a \"%s\" per a continuar, o definiu les contrasenyes a la llista \"%s\" inferior."
@@ -2778,9 +2886,6 @@
 	"Preferred light theme": [
 		"Tema clar preferit"
 	],
-	"Preferred voice typing provider": [
-		"Proveïdor preferit d'escriptura per veu"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Conserva els colors en enganxar text a l'editor de text enriquit"
 	],
@@ -2868,6 +2973,9 @@
 	"Publish Note": [
 		"Publica la nota"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Publicar la nota \"%s\" (a la llibreta \"%s\")?"
+	],
 	"Publish note...": [
 		"Publica la nota..."
 	],
@@ -2879,6 +2987,12 @@
 	],
 	"Publish/unpublish": [
 		"Publica/despublica"
+	],
+	"Published at URL: %s": [
+		"Publicat a la URL: %s"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		"Publica una nota a Joplin Server o Joplin Cloud"
 	],
 	"QR Code": [
 		"Codi QR"
@@ -2901,11 +3015,17 @@
 	"Re-upload local data to sync target": [
 		"Torna a pujar les dades locals per a sincronitzar la destinació"
 	],
+	"Read more": [
+		"Llegeix més"
+	],
 	"Read more about it": [
 		"Llegiu-ne més sobre ell"
 	],
 	"Read time: %s min": [
 		"Temps de lectura: %s min"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"La lectura d'ordres des de l'entrada estàndard només està disponible en mode CLI."
 	],
 	"Recipient has accepted the invitation": [
 		"El destinatari ha acceptat la invitació"
@@ -2918,6 +3038,12 @@
 	],
 	"Recipients:": [
 		"Destinataris:"
+	],
+	"Recognise text:": [
+		"Reconeix el text:"
+	],
+	"Recognize handwritten image": [
+		"Reconeix la imatge manuscrita"
 	],
 	"Recommended": [
 		"Recomanat"
@@ -2952,6 +3078,9 @@
 	"Remove": [
 		"Elimina"
 	],
+	"Remove %s": [
+		"Elimina %s"
+	],
 	"Remove %s from share": [
 		"Elimina %s de la compartició"
 	],
@@ -2963,6 +3092,9 @@
 	],
 	"Removed %s from share.": [
 		"S'ha eliminat %s de la compartició."
+	],
+	"Removed tag: %s": [
+		"Etiqueta eliminada: %s"
 	],
 	"Rename": [
 		"Canvia el nom"
@@ -2977,7 +3109,7 @@
 		"Canvia el nom de la nota o de la llibreta indicat de <item> a <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Representa el marcatge en totes les línies que no inclouen el cursor."
 	],
 	"Renew token": [
 		"Renova el testimoni"
@@ -3138,6 +3270,12 @@
 	"Save geo-location with notes": [
 		"Desa la geolocalització a les notes"
 	],
+	"Save geolocation?": [
+		"Voleu desar la geolocalització?"
+	],
+	"Scan notebook": [
+		"Escaneja la llibreta"
+	],
 	"Scanned code": [
 		"Codi escanejat"
 	],
@@ -3167,6 +3305,9 @@
 	],
 	"Search shown": [
 		"Cerca mostrada"
+	],
+	"Search tags": [
+		"Cercar etiquetes"
 	],
 	"Search...": [
 		"Cerca..."
@@ -3198,8 +3339,17 @@
 	"Select file...": [
 		"Selecciona un fitxer..."
 	],
+	"Select notebook": [
+		"Selecciona la llibreta"
+	],
+	"Select one of the other supported sync targets.": [
+		"Seleccioneu un dels altres objectius de sincronització admesos."
+	],
 	"Select parent notebook": [
 		"Selecciona la llibreta principal"
+	],
+	"Selected: %s": [
+		"Seleccionat: %s"
 	],
 	"Selection deleted": [
 		"Selecció eliminada"
@@ -3531,6 +3681,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Canvia a [notebook] - totes les operacions posteriors s'aplicaran en aquesta llibreta."
 	],
+	"Sync": [
+		"Sincronitza"
+	],
 	"Sync as many devices as you want": [
 		"Sincronitza tants dispositius com vulguis"
 	],
@@ -3609,6 +3762,9 @@
 	"Take photo": [
 		"Fes una foto"
 	],
+	"Take survey": [
+		"Fer enquesta"
+	],
 	"Task \"%s\" failed with error: %s": [
 		"La tasca \"%s\" ha fallat amb l'error: %s"
 	],
@@ -3626,6 +3782,9 @@
 	],
 	"Text editor command": [
 		"Ordre de l'editor de text"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		"Gràcies pels comentaris!\nTens temps per fer una petita enquesta?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"El perfil actiu no es pot esborrar. Canvia a un perfil diferent i torna-ho a provar."
@@ -3699,6 +3858,9 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"La nota \"%s\" s'ha restaurat correctament a la llibreta \"%s\"."
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"La nota s'ha convertit a Markdown i la nota original s'ha traslladat a la paperera"
 	],
 	"The note was successfully moved to the trash.": [
 		"La nota s'ha traslladat amb èxit a la paperera.",
@@ -3804,13 +3966,13 @@
 		"Aquest dibuix pot tenir canvis sense desar."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Aquesta funció està desactivada per defecte, cal activar-la manualment activant l'opció \"Activa la transcripció manuscrita\"."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Aquesta funció només està disponible a Joplin Cloud i Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Aquest tipus d'imatge no és compatible amb el sistema de reconeixement."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Aquesta és una eina avançada per a mostrar els adjunts que estan enllaçats a les vostres notes. Tingueu precaució en suprimir-ne un, ja que després no es poden restaurar."
@@ -3840,7 +4002,7 @@
 		"Aquesta nota no té historial"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Aquesta nota està en format HTML. Converteix-la a Markdown per editar-la més fàcilment."
 	],
 	"This plugin doesn't support %s.": [
 		"Aquest connector no admet %s."
@@ -3888,7 +4050,7 @@
 		"Per a continuar, introduïu la contrasenya mestra."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Per crear una etiqueta nova, escriviu el nom i premeu Retorn."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Per a suprimir una etiqueta, traieu l'etiqueta en les notes associades."
@@ -4022,6 +4184,9 @@
 	"Unable to share log data. Reason: %s": [
 		"No s'han pogut compartir les dades del registre. Motiu: %s"
 	],
+	"Unable to share note data. Reason: %s": [
+		"No s'han pogut compartir les dades de la nota. Motiu: %s"
+	],
 	"Unchecked": [
 		"Desmarcat"
 	],
@@ -4127,6 +4292,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Actualitza la destinació de sincronització a la versió més recent."
 	],
+	"Upload photo": [
+		"Pujar la foto"
+	],
 	"URL": [
 		"URL"
 	],
@@ -4162,6 +4330,9 @@
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"S'utilitza quan es necessita un tipus de lletra d'amplada fixa per a mostrar text de manera llegible (p. ex. taules, caselles de selecció, codi). Si no es troba, s'utilitza un tipus de lletra genèric monoespai (amplada fixa)."
+	],
+	"Useful": [
+		"Útil"
 	],
 	"User deletions": [
 		"Supressions d'usuari"
@@ -4210,9 +4381,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Escriptura per veu: Glossari"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"S'està esperant autorització..."
@@ -4271,11 +4439,11 @@
 	"When creating a new to-do:": [
 		"En crear una tasca nova:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Quan està activat, sol·licita que les imatges de la nota es transcriguin amb un servei de transcripció al servidor de més qualitat. Requereix sincronització amb una còpia de l'aplicació d'escriptori."
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Quan estigui activada, l'aplicació escanejarà els adjunts i n'extraurà el text. Això us permetrà cercar text en aquests adjunts."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"La finestra no respon."

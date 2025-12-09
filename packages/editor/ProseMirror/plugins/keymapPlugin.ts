@@ -3,7 +3,7 @@ import schema from '../schema';
 import { keymap } from 'prosemirror-keymap';
 import { baseKeymap, chainCommands, exitCode, liftEmptyBlock, newlineInCode } from 'prosemirror-commands';
 import { liftListItem, sinkListItem, splitListItem } from 'prosemirror-schema-list';
-import commands from '../commands';
+import commands from '../commands/commands';
 import { EditorCommandType } from '../../types';
 import { Command, EditorState, TextSelection, Plugin } from 'prosemirror-state';
 import splitBlockAs from '../vendor/splitBlockAs';

@@ -544,6 +544,10 @@ export default class SearchEngine {
 
 		let allTerms: Term[] = [];
 
+		if (query.length && query[0] === '/') {
+			query = query.substring(1);
+		}
+
 		try {
 			allTerms = filterParser(query);
 		} catch (error) {

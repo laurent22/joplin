@@ -17,6 +17,7 @@ const createEditorSettings = (themeId: number) => {
 		highlightActiveLine: false,
 
 		keymap: EditorKeymap.Default,
+		preferMacShortcuts: false,
 		language: EditorLanguageType.Markdown,
 		themeData,
 

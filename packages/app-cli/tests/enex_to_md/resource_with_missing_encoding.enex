@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export4.dtd">
+<en-export export-date="20230724T173816Z" application="Evernote" version="10.58.8">
+<note>
+	<title>test.json</title>
+	<content><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+<en-note><en-media hash="ac91cc691d21261b222681dd38c1e4ad" type="application/json"/></en-note>
+]]>
+</content>
+<created>20191002T075850Z</created>
+<updated>20191002T075850Z</updated>
+<note-attributes><latitude>48.79547119140625</latitude><longitude>9.809423921920198</longitude><altitude>398.0</altitude><author>Laurent</author><source>desktop.mac</source></note-attributes>
+<resource><data>eyAidGVzdCI6IDEyMyB9</data><mime>application/json</mime><width>0</width><height>0</height><resource-attributes><file-name>test.json</file-name><attachment>false</attachment></resource-attributes></resource></note></en-export>

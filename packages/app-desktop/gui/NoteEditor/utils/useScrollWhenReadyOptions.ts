@@ -1,41 +1,49 @@
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { RefObject, useCallback, useContext, useRef } from 'react';
 import { NoteBodyEditorRef, ScrollOptions, ScrollOptionTypes } from './types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
-import type { EditorScrollPercents } from '../../../app.reducer';
+import NotePositionService from '@joplin/lib/services/NotePositionService';
+import useNowEffect from '@joplin/lib/hooks/useNowEffect';
+import { WindowIdContext } from '../../NewWindowOrIFrame';
 
 interface Props {
 	noteId: string;
+	editorName: string;
 	selectedNoteHash: string;
-	lastEditorScrollPercents: EditorScrollPercents;
 	editorRef: RefObject<NoteBodyEditorRef>;
 }
 
-const useScrollWhenReadyOptions = ({ noteId, selectedNoteHash, lastEditorScrollPercents, editorRef }: Props) => {
-	const [scrollWhenReady, setScrollWhenReady] = useState<ScrollOptions|null>(null);
+const useScrollWhenReadyOptions = ({ noteId, editorName, selectedNoteHash, editorRef }: Props) => {
+	const scrollWhenReadyRef = useRef<ScrollOptions|null>(null);
 
 	const previousNoteId = usePrevious(noteId);
-	const lastScrollPercentsRef = useRef<EditorScrollPercents>(null);
-	lastScrollPercentsRef.current = lastEditorScrollPercents;
+	const previousEditor = usePrevious(editorName);
+	const windowId = useContext(WindowIdContext);
 
-	useEffect(() => {
-		if (noteId === previousNoteId) return;
+
+	// This needs to be a nowEffect to prevent race conditions
+	useNowEffect(() => {
+		const editorChanged = editorName !== previousEditor;
+		const noteIdChanged = noteId !== previousNoteId;
+		if (!editorChanged && !noteIdChanged) return () => {};
+
+		const lastScrollPercent = NotePositionService.instance().getScrollPercent(noteId, windowId) || 0;
+		scrollWhenReadyRef.current = {
+			type: selectedNoteHash ? ScrollOptionTypes.Hash : ScrollOptionTypes.Percent,
+			value: selectedNoteHash ? selectedNoteHash : lastScrollPercent,
+		};
 
 		if (editorRef.current) {
 			editorRef.current.resetScroll();
 		}
 
-		const lastScrollPercent = lastScrollPercentsRef.current[noteId] || 0;
-		setScrollWhenReady({
-			type: selectedNoteHash ? ScrollOptionTypes.Hash : ScrollOptionTypes.Percent,
-			value: selectedNoteHash ? selectedNoteHash : lastScrollPercent,
-		});
-	}, [noteId, previousNoteId, selectedNoteHash, editorRef]);
+		return () => {};
+	}, [editorName, previousEditor, noteId, previousNoteId, selectedNoteHash, editorRef, windowId]);
 
 	const clearScrollWhenReady = useCallback(() => {
-		setScrollWhenReady(null);
+		scrollWhenReadyRef.current = null;
 	}, []);
 
-	return { scrollWhenReady, clearScrollWhenReady };
+	return { scrollWhenReadyRef, clearScrollWhenReady };
 };
 
 export default useScrollWhenReadyOptions;

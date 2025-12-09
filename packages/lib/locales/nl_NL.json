@@ -2,11 +2,19 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\" mist de vereiste \"%s\" eigenschap."
 	],
+	"%d day": [
+		"%d dag",
+		"%d dagen"
+	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB opslagruimte"
+	],
+	"%d hour": [
+		"%d uur",
+		"%d uur"
 	],
 	"%d MB": [
 		"%d MB"
@@ -14,11 +22,19 @@
 	"%d MB per note or attachment": [
 		"%d MB per notitie of bijlage"
 	],
+	"%d minute": [
+		"%d minuut",
+		"%d minuten"
+	],
+	"%d note matches this pattern. Delete it?": [
+		"Er komt %d notitie overeen met dit patroon. Wilt u deze verwijderen?",
+		"Er komen %d notities overeen met dit patroon. Wilt u ze verwijderen?"
+	],
 	"%d photo(s) taken": [
-		""
+		"%d foto's gemaakt"
 	],
 	"%s": [
-		"(%s)"
+		"%s"
 	],
 	"%s %s (%s, %s)": [
 		"%s %s (%s, %s)"
@@ -36,7 +52,7 @@
 		"%s (pre-release)"
 	],
 	"%s - Copy": [
-		"%s - kopiëren"
+		"%s - Kopiëren"
 	],
 	"%s / %s": [
 		"%s / %s"
@@ -50,26 +66,39 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be greater than %s": [
+		"%s kan niet groter zijn van %s"
+	],
 	"%s cannot be less than %s": [
-		""
+		"%s kan niet kleiner zijn dan %s"
+	],
+	"%s from %s": [
+		"%s van %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		""
 	],
 	"%s must be a valid whole number": [
-		""
+		"%s moet een geldig geheel getal zijn"
 	],
 	"%s tab opened": [
-		""
+		"%s tab geopend"
 	],
 	"%s: %d": [
 		"%s: %d"
+	],
+	"%s: %d note": [
+		"%s: %d notitie",
+		"%s: %d notities"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
 	],
 	"%s: %s": [
 		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: Ontbrekend wachtwoord"
 	],
 	"&Edit": [
 		"Be&werken"
@@ -78,7 +107,7 @@
 		"&Bestand"
 	],
 	"&Go": [
-		"&Gaan"
+		"&Ga"
 	],
 	"&Help": [
 		"&Help"
@@ -92,6 +121,9 @@
 	"&View": [
 		"Beel&d"
 	],
+	"&Window": [
+		"V&enster"
+	],
 	"(%s)": [
 		"(%s)"
 	],
@@ -99,19 +131,19 @@
 		"(In toepassing: %s)"
 	],
 	"(level %d)": [
-		""
+		"(niveau %d)"
 	],
 	"(None)": [
 		"(Geen)"
 	],
 	"(Read-only)": [
-		""
+		"(Alleen lezen)"
 	],
 	"(wysiwyg: %s)": [
 		"(wuziwuk: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		""
+		"(Je kan deze prompt uitschakelen in de opties)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Camera: zodat u een foto kunt maken en deze bij een notitie kunt voegen."
@@ -128,8 +160,17 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> kan \"toggle\" of \"clear\" zijn. Gebruik \"toggle\" om de status van de opgegeven taak te wijzigen in afgerond of niet-afgerond (als het doel een reguliere notitie is, dan wordt deze omgezet in een taak). Gebruik \"clear\" om de taak weer om te zetten naar een reguliere notitie."
 	],
+	"[None]": [
+		"[Geen]"
+	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
+	],
+	"A new update (%s) is available": [
+		"Een nieuwe update (%s) is beschikbaar"
 	],
 	"A3": [
 		"A3"
@@ -141,7 +182,7 @@
 		"A5"
 	],
 	"About": [
-		""
+		"Over"
 	],
 	"About Joplin": [
 		"Over Joplin"
@@ -158,6 +199,12 @@
 	"Accept": [
 		"Accepteren"
 	],
+	"Accepted invitations": [
+		"Geaccepteerde uitnodigingen"
+	],
+	"Accepted: Notebook %s from %s": [
+		"Geaccepteerd: Notitieboek %s van %s"
+	],
 	"Access denied: Please check your username and password": [
 		"Geen toegang: Controleer je inlognaam en wachtwoord"
 	],
@@ -166,6 +213,12 @@
 	],
 	"Account": [
 		"Inloggegevens"
+	],
+	"Account information": [
+		"Accountinformatie"
+	],
+	"Account type": [
+		"Accounttype"
 	],
 	"Action": [
 		"Actie"
@@ -182,6 +235,9 @@
 	"Add body": [
 		"Inhoud toevoegen"
 	],
+	"Add column": [
+		"Kolom toevoegen"
+	],
 	"Add new": [
 		"Nieuw toevoegen"
 	],
@@ -191,17 +247,29 @@
 	"Add recipient:": [
 		"Voeg ontvanger toe:"
 	],
+	"Add row": [
+		"Regel toevoegen"
+	],
+	"Add tags:": [
+		"Voeg labels toe:"
+	],
 	"Add title": [
-		"Toevoegen titel"
+		"Titel toevoegen"
 	],
 	"Add to dictionary": [
 		"Toevoegen aan woordenboek"
 	],
+	"Add to note": [
+		"Voeg toe aan notitie"
+	],
+	"Added new: %s": [
+		"Nieuw toegevoegd: %s"
+	],
 	"Added tag: %s": [
-		""
+		"Toegevoegd label: %s"
 	],
 	"Adds tag": [
-		""
+		"Voegt een label toe"
 	],
 	"Admin": [
 		"Admin"
@@ -212,8 +280,14 @@
 	"Advanced options": [
 		"Geavanceerde opties"
 	],
+	"Advanced settings": [
+		"Geavanceerde instellingen"
+	],
 	"Advanced tools": [
 		"Geavanceerde hulpmiddelen"
+	],
+	"all": [
+		"alle"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		"Alle gegevens, inclusief notities, notitieboeken en labels worden permanent verwijderd."
@@ -239,8 +313,14 @@
 	"Also publish linked notes": [
 		"Ook gekoppelde notities publiceren"
 	],
+	"Alternative instance ID: %s": [
+		"Alternatieve instance ID: %s"
+	],
 	"Always": [
 		"Altijd"
+	],
+	"Always ask": [
+		"Altijd vragen"
 	],
 	"Always open %s files without asking.": [
 		""
@@ -252,6 +332,9 @@
 		"Niet eenduidig notitieboek \"%s\". Gebruik het id van het notitieboek - toets \"ti\" om het korte notitieboek id te zien"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -309,7 +392,10 @@
 		"Voegt het opgegeven bestand bij de notitie."
 	],
 	"attachment": [
-		"bijlagen"
+		"bijlage"
+	],
+	"Attachment": [
+		"Bijlage"
 	],
 	"Attachment conflict: \"%s\"": [
 		"Conflict in bijlage: \"%s\""
@@ -327,10 +413,13 @@
 		"Let op: Als u deze locatie wijzigt, zorg dan dat u eerst alle inhoud hier naartoe kopieert voor synchronisatie. Anders worden alle bestanden verwijderd! Zie de FAQ voor meer details: %s"
 	],
 	"Authentication was not completed (did not receive an authentication token).": [
-		"Authenticatie is niet voltooid (geen authenticatiesleutel ontvangen)."
+		"Authenticatie is niet voltooid (geen authenticatietoken ontvangen)."
 	],
 	"Authorisation token:": [
-		"Autorisatie-token:"
+		"Autorisatietoken:"
+	],
+	"Authorise": [
+		"Autoriseer"
 	],
 	"Auto": [
 		"Auto"
@@ -345,13 +434,13 @@
 		"Auto-paar accolades, haakjes, citaten, enz."
 	],
 	"Autocomplete Markdown and HTML": [
-		""
+		"Markdown en HTML automatisch aanvullen"
 	],
 	"Automatically check for updates": [
 		"Automatisch controleren op updates"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"Verwijder notities automatisch uit de prullenbak na een aantal dagen"
 	],
 	"Automatically switch theme to match system theme": [
 		"Automatisch omschakelen thema op basis van systeemthema"
@@ -363,7 +452,7 @@
 		"Standaard"
 	],
 	"Beta": [
-		""
+		"Beta"
 	],
 	"Bold": [
 		"Vetgedrukt"
@@ -375,22 +464,22 @@
 		"Bladeren..."
 	],
 	"Built-in": [
-		""
+		"Ingebouwd"
 	],
 	"Bulleted List": [
 		"Opsommingslijst"
 	],
 	"by %s": [
-		""
+		"door %s"
 	],
 	"by word": [
-		""
+		"per woord"
 	],
 	"Camera": [
-		""
+		"Camera"
 	],
 	"Can Share": [
-		"Mag Delen"
+		"Kan delen"
 	],
 	"Can view": [
 		"Kan bekijken"
@@ -456,7 +545,7 @@
 		"%s \"%s\" kan niet worden opgeslagen omdat de totale grootte van dit account (%s) overschreid"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
-		"Kan een gecodeerd notitieblok niet delen met %s van de ontvanger omdat deze geen end-to-end-codering heeft ingeschakeld. Ze kunnen dit doen via het scherm Configuratie > Encryptie."
+		"Kan een gecodeerd notitieboek niet delen met %s van de ontvanger omdat deze geen end-to-end-codering heeft ingeschakeld. Ze kunnen dit doen via het scherm Configuratie > Encryptie."
 	],
 	"Case sensitive": [
 		"Hoofdlettergevoelig"
@@ -467,14 +556,20 @@
 	"Change language": [
 		"Taal veranderen"
 	],
+	"Change ratio": [
+		"Ratio aanpassen"
+	],
 	"Change shortcut for \"%s\"": [
-		""
+		"Sneltoets voor \"%s\" wijzigen"
 	],
 	"Characters": [
 		"Karakters"
 	],
 	"Characters excluding spaces": [
 		"Karakters zonder spaties"
+	],
+	"Check": [
+		"Selectievakje"
 	],
 	"Check elements to display in the toolbar": [
 		""
@@ -486,10 +581,13 @@
 		"Synchronisatieconfiguratie controleren"
 	],
 	"Checkbox": [
-		"Checkbox"
+		"Selectievakje"
 	],
 	"Checkbox list": [
-		"Checkboxlijst"
+		"Selectievakjeslijst"
+	],
+	"Checked": [
+		"Aangevinkt"
 	],
 	"Checking... Please wait.": [
 		"Controleren... Even geduld."
@@ -506,11 +604,14 @@
 	"Clear alarm": [
 		"Alarm wissen"
 	],
+	"Clear search": [
+		"Zoekresultaten wissen"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Klik “%s” om de notitie te herstellen. Het wordt gekopieerd naar het notitieboek genaamd “%s”. De huidige versie van de notitie wordt niet vervangen of aangepast."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
-		""
+		"Klik \"start\" om een nieuwe voicememo toe te voegen aan de notitie"
 	],
 	"Click to add tags...": [
 		"Klik om labels toe te voegen…"
@@ -518,14 +619,20 @@
 	"Client ID: %s": [
 		"Client ID: %s"
 	],
+	"close": [
+		"sluiten"
+	],
 	"Close": [
 		"Sluiten"
+	],
+	"Close dialog": [
+		"Venster sluiten"
 	],
 	"Close dropdown": [
 		"Lijst sluiten"
 	],
 	"Close side menu": [
-		""
+		"Zijmenu sluiten"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
@@ -534,13 +641,13 @@
 		"Venster afsluiten"
 	],
 	"Closing session...": [
-		""
+		"Sessie sluiten..."
 	],
 	"Cmd-click to open": [
-		""
+		"Cmd-klik om te openen"
 	],
 	"Cmd-click to open: %s": [
-		""
+		"Cmd-klik om %s te openen"
 	],
 	"Code": [
 		"Code"
@@ -551,8 +658,23 @@
 	"Code View": [
 		"Codeweergave"
 	],
+	"Code:": [
+		"Code:"
+	],
+	"Collaborate on a notebook with others": [
+		"Samenwerken aan een notitieboek met anderen"
+	],
 	"Collaborate on notebooks with others": [
-		"Samenwerken aan notitieblokken met anderen"
+		"Samenwerken aan notitieboeken met anderen"
+	],
+	"Collapse all notebooks": [
+		"Alle notitieboeken inklappen"
+	],
+	"Collapse title": [
+		"Titel inklappen"
+	],
+	"Collapsed": [
+		"Ingeklapt"
 	],
 	"Coming alarms": [
 		"Aankomende alarmen"
@@ -573,7 +695,16 @@
 		"Opdrachtpalet..."
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"Commando's: `add`, `remove`, `list`, `delete`, `accept`, `leave`, en `reject`."
+	],
+	"Compact": [
+		"Compact"
+	],
+	"Complete": [
+		"Voltooid"
+	],
+	"Complete to-do": [
+		"Voltooi taak"
 	],
 	"Completed": [
 		"Voltooid"
@@ -617,17 +748,36 @@
 	"Conflicts (attachments)": [
 		"Conflicten (bijlagen)"
 	],
+	"Connect to Joplin Cloud": [
+		"Verbinding maken met Joplin Cloud"
+	],
 	"Connect using your organisation account": [
-		""
+		"Verbinden met de account van jouw organisatie"
 	],
 	"Consolidated billing": [
-		"Samengevoegde rekeling"
+		"Samengevoegde rekening"
+	],
+	"Contains %d note": [
+		"Bevat %d notitie",
+		"Bevat %d notities"
 	],
 	"Content provided by %s": [
 		"Inhoud geleverd door %s"
 	],
+	"Content provided by: %s": [
+		"Inhoud geleverd door: %s"
+	],
 	"Continue": [
 		"Doorgaan"
+	],
+	"Control character": [
+		"Controltekens"
+	],
+	"Convert it": [
+		"Omzetten"
+	],
+	"Convert note to Markdown": [
+		"Notitie omzetten naar Markdown"
 	],
 	"Convert to note": [
 		"Omzetten naar notitie"
@@ -653,6 +803,9 @@
 	"Copy Link Address": [
 		"Linkadres kopiëren"
 	],
+	"Copy link to website": [
+		"Kopieer link naar website"
+	],
 	"Copy Markdown link": [
 		"Markdownlink kopiëren"
 	],
@@ -669,6 +822,9 @@
 	"Copy token": [
 		"Kopieer token"
 	],
+	"Copy version info": [
+		"Kopieer versie-informatie"
+	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"Kon applicatie niet autoriseren:\n\n%s\n\nProbeer opnieuw."
 	],
@@ -678,6 +834,9 @@
 	"Could not connect to plugin repository.": [
 		"Kan geen verbinding maken met de plugin bibliotheek."
 	],
+	"Could not convert note to Markdown: %s": [
+		"Kon notitie niet converteren naar Markdown: %s"
+	],
 	"Could not export notes: %s": [
 		"Kon geen notities exporteren: %s"
 	],
@@ -685,7 +844,7 @@
 		"Kon plugin niet installeren: %s"
 	],
 	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
-		"Kon niet reageren op de uitnodiging. Probeer het opnieuw of neem contact op met de eigenaar van het notitieblok of deze het nog steeds deelt.\n\n De fout was: \"%s\""
+		"Kon niet reageren op de uitnodiging. Probeer het opnieuw of neem contact op met de eigenaar van het notitieboek of deze het nog steeds deelt.\n\n De fout was: \"%s\""
 	],
 	"Could not switch profile: %s": [
 		"Kan niet omschakelen naar profiel : %s"
@@ -694,7 +853,7 @@
 		"Kon hoofdsleutel niet bijwerken: %s"
 	],
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
-		"Kan de sharestatus van dit notitieblok - aborteren - niet controleren. Probeer het opnieuw wanneer u verbonden bent met internet."
+		"Kan de sharestatus van dit notitieboek - afbreken - niet controleren. Probeer het opnieuw wanneer u verbonden bent met internet."
 	],
 	"Could not verify your identity: %s": [
 		"Identiteit niet gecontroleerd: %s"
@@ -708,8 +867,14 @@
 	"Create a notebook": [
 		"Creëer een notitieboek"
 	],
+	"Create new notebook": [
+		"Creëer een nieuw notitieboek."
+	],
 	"Create new profile...": [
 		"Creëer nieuw profiel..."
+	],
+	"Create note": [
+		"Creëer notitie"
 	],
 	"Create notebook": [
 		"Creëer notitieboek"
@@ -741,6 +906,9 @@
 	"Created: %s": [
 		"Gecreëerd op: %s"
 	],
+	"Creates a new note with an attachment of type %s": [
+		"Creëert een nieuwe notitie met een bijlage van type %s"
+	],
 	"Creates a new note.": [
 		"Creëert een nieuwe notitie."
 	],
@@ -750,14 +918,32 @@
 	"Creates a new to-do.": [
 		"Creëert een nieuwe taak."
 	],
+	"Creating new note...": [
+		"Bezig met creëren van nieuw notitie..."
+	],
+	"Creating new to-do...": [
+		"Bezig met creëren van nieuw taak..."
+	],
+	"Creating note \"%s\"...": [
+		"Bezig met creëren van notitie \"%s\"..."
+	],
+	"Creating note.": [
+		"Bezig met creëren van notitie."
+	],
 	"Creating report...": [
 		"Rapport maken..."
 	],
 	"Ctrl-click to open": [
-		""
+		"Ctrl-klik om te openen"
 	],
 	"Ctrl-click to open: %s": [
-		""
+		"Ctrl-klik om %s te openen"
+	],
+	"current match": [
+		"huidige overeenkomt"
+	],
+	"Current password": [
+		"Huidig wachtwoord"
 	],
 	"Current version is up-to-date.": [
 		"De huidige versie is up-to-date."
@@ -831,8 +1017,11 @@
 	"Delete expired tokens": [
 		"Verwijder verlopen tokens"
 	],
+	"Delete history": [
+		"Verwijder geschiedenis"
+	],
 	"Delete line": [
-		"Regel verwijderen"
+		"Verwijder regel"
 	],
 	"Delete local data and re-download from sync target": [
 		"Lokale gegevens verwijderen en opnieuw downloaden van het synchronisatiedoel"
@@ -849,6 +1038,9 @@
 	"Delete profile \"%s\"": [
 		"Verwijder profiel “%s”"
 	],
+	"Delete row": [
+		"Verwijder regel"
+	],
 	"Delete selected notes": [
 		"Geselecteerde notities verwijderen"
 	],
@@ -856,7 +1048,7 @@
 		"Wil je het notitieboek inbox verwijderen?\n\nAls je het inbox-notitieboek weggooit, kunnen recent ontvangen emails kwijt raken.."
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
-		"Deze uitnodiging verwijderen? De ontvanger heeft geen toegang meer tot dit gedeelde notitieblok."
+		"Deze uitnodiging verwijderen? De ontvanger heeft geen toegang meer tot dit gedeelde notitieboek."
 	],
 	"Delete this profile?": [
 		"Dit profiel verwijderen?"
@@ -868,7 +1060,7 @@
 		"Externe items verwijderd: %d."
 	],
 	"Deletes notes permanently, skipping the trash.": [
-		""
+		"Verwijder notities permanent, zonder ze in de prullenbak te gooien."
 	],
 	"Deletes the given notebook.": [
 		"Verwijdert het opgegeven notitieboek."
@@ -882,6 +1074,9 @@
 	"Deletes the notes without asking for confirmation.": [
 		"Verwijdert de notities zonder te vragen om bevestiging."
 	],
+	"Deselect": [
+		"Deselecteren"
+	],
 	"Destination format: %s": [
 		"Bestemmingsformaat: %s"
 	],
@@ -892,7 +1087,7 @@
 		""
 	],
 	"Device: %s": [
-		""
+		"Device: %s"
 	],
 	"Directory": [
 		"Map"
@@ -909,14 +1104,23 @@
 	"Disable safe mode and restart": [
 		"Schakel de veilige modus uit en start opnieuw op"
 	],
+	"Disable synchronisation": [
+		"Synchronisatie uitschakelen"
+	],
 	"Disable Web Clipper Service": [
 		"Webclipper-dienst uitschakelen"
 	],
 	"Disabled": [
 		"Uitgeschakeld"
 	],
+	"Disabled keys": [
+		"Uitgeschakelde sleutels"
+	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
 		"Door encryptie uit te schakelen worden *alle* notities en bijlagen opnieuw gesynchroniseerd, maar dan onversleuteld. Wilt u doorgaan?"
+	],
+	"Discard": [
+		"Verwerpen"
 	],
 	"Discard changes": [
 		"Wijzigingen verwerpen"
@@ -957,8 +1161,14 @@
 	"Do not ask for confirmation.": [
 		"Niet vragen om bevestiging."
 	],
+	"Do not ask for user confirmation.": [
+		"Vraag gebruiker niet om bevestiging."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
-		"Verlies het wachtwoord niet, want voor veiligheidsdoeleinden is dit de * enige * manier om de gegevens te decoderen! Voer hieronder uw wachtwoord in om versleuteling in te schakelen."
+		"Verlies het wachtwoord niet, want voor veiligheidsdoeleinden is dit de * enige* manier om de gegevens te decoderen! Voer hieronder uw wachtwoord in om versleuteling in te schakelen."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -967,7 +1177,10 @@
 		""
 	],
 	"Don't show this message again": [
-		""
+		"Dit bericht niet nogmaals tonen"
+	],
+	"Donate, website": [
+		"Doneer, website"
 	],
 	"Done": [
 		"Klaar"
@@ -977,6 +1190,9 @@
 	],
 	"Download and install the relevant extension for your browser:": [
 		"Download en installeer de bijbehorende extensie in uw browser:"
+	],
+	"Download it now": [
+		"Nu downloaden"
 	],
 	"Downloaded": [
 		"Gedownload"
@@ -1003,7 +1219,7 @@
 		""
 	],
 	"Drawing": [
-		""
+		"Tekenen"
 	],
 	"Drop notes or files here": [
 		"Notities bestanden hier neerzetten"
@@ -1032,8 +1248,11 @@
 	"Edit": [
 		"Bewerken"
 	],
+	"Edit as Markdown": [
+		"Bewerken als Markdown"
+	],
 	"Edit as Rich Text": [
-		""
+		"Bewerken als Rich Text"
 	],
 	"Edit link": [
 		"Link bewerken"
@@ -1081,10 +1300,10 @@
 		"E-mail"
 	],
 	"Email to note": [
-		"Email naar notitie"
+		"E-mail naar notitie"
 	],
 	"Email to Note": [
-		"Email naar notitie"
+		"E-mail naar Notitie"
 	],
 	"Emails": [
 		"E-mails"
@@ -1093,7 +1312,7 @@
 		"benadrukte tekst"
 	],
 	"Empty trash": [
-		""
+		"Prullenbak leegmaken"
 	],
 	"Enable": [
 		"Inschakelen"
@@ -1237,7 +1456,7 @@
 		"Fout bij openen van notitie in editor: %s"
 	],
 	"Error starting camera: %s": [
-		""
+		"Fout bij starten camera: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Fout. Controleer of de URL, gebruikersnaam, wachtwoord, etc. kloppen en dat het synchronisatiedoel toegankelijk is. De gemelde fout :"
@@ -1256,6 +1475,18 @@
 	],
 	"Exits the application.": [
 		"Sluit de applicatie af."
+	],
+	"Expand %s": [
+		"Uitklappen %s"
+	],
+	"Expand all notebooks": [
+		"Alle notitieboek uitklappen"
+	],
+	"Expand title": [
+		"Titel uitklappen"
+	],
+	"Expanded": [
+		"Uitgeklapt"
 	],
 	"Export": [
 		"Exporteren"
@@ -1314,6 +1545,9 @@
 	"Feature flags": [
 		"Optie vlaggen"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Items opgehaald: %d/%d."
 	],
@@ -1326,8 +1560,11 @@
 	"File system": [
 		"Bestandssysteem"
 	],
+	"Find": [
+		"Zoek"
+	],
 	"Find: ": [
-		"Gevonden: "
+		"Zoeken: "
 	],
 	"Finishes recording": [
 		""
@@ -1415,16 +1652,19 @@
 		"Verkrijgt of stelt een configuratiewaarde in. Als [value] niet is opgegeven, dan wordt de waarde van [name] getoond. Als zowel [name] als [value] niet zijn opgegeven, dan wordt de huidige configuratie getoond."
 	],
 	"Glossary:": [
-		""
+		"Woordenlijst:"
 	],
 	"go": [
-		""
+		"ga"
 	],
 	"Go back": [
-		""
+		"Ga terug"
+	],
+	"Go to Joplin Cloud profile": [
+		"Gaan naar Joplin Cloud profiel"
 	],
 	"Go to line": [
-		""
+		"Ga naar regel"
 	],
 	"Go to source URL": [
 		"Ga naar bron-URL"
@@ -1471,6 +1711,12 @@
 	"Hide keyboard": [
 		"Toetsenbord verbergen"
 	],
+	"Hide password": [
+		"Wachtwoord verbergen"
+	],
+	"Hides warning": [
+		"Waarschuwing verbergen"
+	],
 	"Highlight": [
 		"Arceren"
 	],
@@ -1484,7 +1730,7 @@
 		"HTML-map"
 	],
 	"HTML document": [
-		""
+		"HTML-document"
 	],
 	"HTML File": [
 		"HTML-bestand"
@@ -1542,9 +1788,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"In elke opdracht kan middels een titel of ID worden verwezen naar een notitie of notitieboek. Dit kan ook met de sneltoetsen `$n` of `$b` voor respectievelijk de huidige geselecteerde notitie of het notitieboek. `$c` kan worden gebruikt om te verwijzen naar het huidige geselecteerde item."
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Om een geolocatie aan de notitie te koppelen, heeft de app uw toestemming nodig om toegang te krijgen tot uw locatie.\n\nU kunt deze optie op elk moment uitschakelen in het 'Configuratie'-scherm."
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Om dit te kunnen doen moet uw volledige dataset opnieuw worden versleuteld en gesynchroniseerd, daarom kan dit het best 's nachts uit te voeren.\n\nVolg deze instructies om te starten:\n\n1. Synchroniseer al uw apparaten\n2. Klik \"%s\".\n3. Laat dit volledig afronden. Zolang dit loopt, vermijdt u het wijzigen van enige notitie op uw andere apparaten om conflicten te voorkomen.\n4. Zodra synchronisatie op dit apparaat is afgerond, synchroniseert u al uw andere apparaten en laat dit volledig afronden."
@@ -1678,6 +1921,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Webclipper stelt u in staat om webpagina's en schermafbeeldingen van uw browser op te slaan in Joplin."
 	],
@@ -1685,10 +1931,13 @@
 		"Joplin-website"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		"Joplin's eigen synchronisatieservice. Geeft ook toegang tot Joplin-specifieke functies zoals het publiceren van notities of samenwerken aan notitieblokken met anderen."
+		"Joplin's eigen synchronisatieservice. Geeft ook toegang tot Joplin-specifieke functies zoals het publiceren van notities of samenwerken aan notitieboeken met anderen."
 	],
 	"Keep note history for": [
 		"Bewaar geschiedenis van notities voor"
+	],
+	"Keep notes in the trash for": [
+		"Bewaar notities in prullenbak voor"
 	],
 	"Keyboard Mode": [
 		"Toetsenbordmodus"
@@ -1704,6 +1953,9 @@
 	],
 	"Keys that need upgrading": [
 		"Hoofdsleutels die moeten worden bijgewerkt"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Landschap"
@@ -1752,6 +2004,10 @@
 	],
 	"Link": [
 		"Koppeling"
+	],
+	"Link created!": [
+		"Koppeling gemaakt!",
+		"Koppelingen gemaakt!"
 	],
 	"Link description": [
 		"Beschrijving van link"
@@ -1901,11 +2157,18 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
+	"Move %d note to notebook \"%s\"?": [
+		"Verplaats %d notitie naar notitieboek \"%s\"?",
+		"Verplaats %d notities naar notitieboek \"%s\"?"
+	],
+	"Move down": [
+		"Verplaats naar beneden"
+	],
 	"Move left": [
-		""
+		"Verplaats naar links"
 	],
 	"Move right": [
-		""
+		"Verplaats naar rechts"
 	],
 	"Move to notebook": [
 		"Verplaatsen naar notitieboek"
@@ -1917,7 +2180,7 @@
 		"Verplaatsen naar notitieboek:"
 	],
 	"Move up": [
-		""
+		"Verplaats naar boven"
 	],
 	"Moves the given <item> to [notebook]": [
 		"Verplaatst het <item>  naar [notebook]."
@@ -1931,6 +2194,15 @@
 	"Never resize": [
 		""
 	],
+	"New attachment": [
+		"Nieuwe bijlagen"
+	],
+	"New drawing": [
+		"Nieuwe tekening"
+	],
+	"New invitations": [
+		"Nieuwe uitnodiging"
+	],
 	"New note": [
 		"Nieuwe notitie"
 	],
@@ -1942,6 +2214,15 @@
 	],
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Het nieuwe notitieboek \"%s\" wordt gecreëerd en het bestand \"%s\" wordt ernaar geïmporteerd"
+	],
+	"New notebook title": [
+		"Nieuwe titel van notitieboek"
+	],
+	"New photo": [
+		"Nieuwe foto"
+	],
+	"New profile": [
+		"Nieuwe profiel"
 	],
 	"New sub-notebook": [
 		"Nieuw sub-notitieboek"
@@ -2022,10 +2303,13 @@
 		"Niet gedownload"
 	],
 	"Not generated": [
-		"Niet  gegenereerd"
+		"Niet gegenereerd"
 	],
 	"Not now": [
 		"Niet nu"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"notitie"
@@ -2054,8 +2338,14 @@
 	"Note has been saved.": [
 		"Notitie is opgeslagen."
 	],
+	"Note history": [
+		"Notitiegeschiedenis"
+	],
 	"Note History": [
 		"Notitiegeschiedenis"
+	],
+	"Note history has been deleted.": [
+		"Notitiegeschiedenis is verwijderd."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"Notitie is geen taak: \"%s\""
@@ -2105,6 +2395,9 @@
 	"Notes can only be created within a notebook.": [
 		"Notities kunnen alleen worden gecreëerd in een notitieboek."
 	],
+	"Notifications": [
+		"Notificaties"
+	],
 	"Numbered List": [
 		"Genummerde lijst"
 	],
@@ -2112,7 +2405,7 @@
 		""
 	],
 	"OK": [
-		"Oké"
+		"OK"
 	],
 	"OLED Dark": [
 		"OLED Donker"
@@ -2121,7 +2414,7 @@
 		"Op %s: %s"
 	],
 	"on line": [
-		""
+		"online"
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Een of meer hoofdsleutels gebruikt een verouderde verslehtelmethode."
@@ -2138,6 +2431,9 @@
 	"OneDrive Login": [
 		"Inloggen op OneDrive"
 	],
+	"OneNote Notebook": [
+		"OneNote notitieboek"
+	],
 	"Only one note can be printed at a time.": [
 		"Slechts één notitie kan gelijktijdig worden afgedrukt."
 	],
@@ -2147,8 +2443,11 @@
 	"Open %s": [
 		"Open %s"
 	],
+	"Open in external editor": [
+		"Openen in externe editor"
+	],
 	"Open in new window": [
-		""
+		"Openen in nieuw venster"
 	],
 	"Open PDF viewer": [
 		"Open de PDF weergave"
@@ -2161,6 +2460,12 @@
 	],
 	"Open secondary app instance...": [
 		""
+	],
+	"Open settings": [
+		"Open instellingen"
+	],
+	"Open Source": [
+		"Open Bron"
 	],
 	"Open Sync Wizard...": [
 		"Open Sync Wizard..."
@@ -2179,6 +2484,9 @@
 	],
 	"Ordered list": [
 		"Geordende lijst"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"Overige applicaties..."
@@ -2202,7 +2510,7 @@
 		"Wachtwoord"
 	],
 	"Password cannot be empty": [
-		"Wachtwoord mag niet blanco zijn"
+		"Wachtwoord mag niet leeg zijn"
 	],
 	"Password:": [
 		"Wachtwoord:"
@@ -2222,11 +2530,21 @@
 	"PDF File": [
 		"PDF-bestand"
 	],
-	"Permission needed": [
-		"Toestemming vereist"
+	"Per user. Minimum of 2 users.": [
+		"Per gebruiker. Minimum van %d gebruikers."
+	],
+	"Permanently delete note": [
+		"Notities permanent verwijderen"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Notitie \"%s\" permanent verwijderen?"
+	],
+	"Permanently delete this note?": [
+		"Deze notitie permanent verwijderen?",
+		"Deze notities permanent verwijderen?"
 	],
 	"Photo %d": [
-		""
+		"Foto %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Klik op %s om door te gaan, of zet het wachtwoord in de %s lijst hieronder."
@@ -2238,7 +2556,7 @@
 		"Voer uw wachtwoord in onderstaande hoofdsleutellijst voorafgaand aan bijwerken van de sleutel."
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
-		"Houd er rekening mee dat als het een groot notitieblok is, het enkele minuten kan duren voordat alle notities op het apparaat van de ontvanger worden weergegeven."
+		"Houd er rekening mee dat als het een groot notitieboek is, het enkele minuten kan duren voordat alle notities op het apparaat van de ontvanger worden weergegeven."
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Open de volgende URL in uw browser om de applicatie te verifiëren. De applicatie creëert een map in \"Apps/Joplin\" en zal alleen bestanden lezen uit en wegschrijven naar deze map. Er is geen toegang tot bestanden buiten deze map, noch tot persoonlijke gegevens. Er worden geen gegevens gedeeld met een derde partij."
@@ -2311,9 +2629,6 @@
 	],
 	"Preferred light theme": [
 		"Voorkeur licht thema"
-	],
-	"Preferred voice typing provider": [
-		""
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
@@ -2402,6 +2717,12 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
+	"QR Code": [
+		"QR-Code"
+	],
 	"Quit": [
 		"Afsluiten"
 	],
@@ -2417,8 +2738,11 @@
 	"Re-upload local data to sync target": [
 		"Lokale gegevens opnieuw uploaden om het doel te synchroniseren"
 	],
-	"Read more about it": [
+	"Read more": [
 		"Lees meer"
+	],
+	"Read more about it": [
+		"Lees er meer over"
 	],
 	"Read time: %s min": [
 		"Leestijd: %s min"
@@ -2435,11 +2759,26 @@
 	"Recipients:": [
 		"Ontvangers:"
 	],
+	"Recognise text:": [
+		"Herken tekst:"
+	],
 	"Recognize handwritten image": [
-		""
+		"Herkan handgeschreven plaatje"
+	],
+	"Recommended": [
+		"Aanbevolen"
+	],
+	"Recommended plugins": [
+		"Aanbevolen plug-ins"
 	],
 	"Record audio": [
-		""
+		"Audio opnemen"
+	],
+	"Recording": [
+		"Opnemen"
+	],
+	"Recording...": [
+		"Opnemen..."
 	],
 	"Redo": [
 		"Herhalen"
@@ -2455,6 +2794,9 @@
 	],
 	"Remove": [
 		"Verwijderen"
+	],
+	"Remove %s": [
+		"Verwijder %s"
 	],
 	"Remove tag \"%s\" from all notes?": [
 		"Label “%s” verwijderen van alle notities?"
@@ -2480,8 +2822,14 @@
 	"Renew token": [
 		"Vernieuw token"
 	],
+	"replace": [
+		"Vervang"
+	],
 	"Replace": [
 		"Vervang"
+	],
+	"replace all": [
+		"alles vervangen"
 	],
 	"Replace all": [
 		"Alles vervangen"
@@ -2499,13 +2847,16 @@
 		""
 	],
 	"Report an issue": [
-		""
+		"Meldt een probleem"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"Meldt een probleem met de plug-in"
 	],
 	"Report fraudulent plugin": [
-		""
+		"Meldt een frauduleuze plug-in"
+	],
+	"Reports": [
+		"Rapporten"
 	],
 	"Reset application layout": [
 		"Herstel de layout van de applicatie"
@@ -2528,6 +2879,18 @@
 	"Restore": [
 		"Herstel"
 	],
+	"Restore defaults": [
+		"Standaardinstellingen herstellen"
+	],
+	"Restore note": [
+		"Herstel notities"
+	],
+	"Restore notebook": [
+		"Herstel notitieboek"
+	],
+	"Restored items": [
+		"Herstelde items"
+	],
 	"Restored Notes": [
 		"Herstelde notities"
 	],
@@ -2549,11 +2912,14 @@
 	"Reverses the sorting order.": [
 		"Keert de sorteervolgorde om."
 	],
+	"Revision:": [
+		"Revisie:"
+	],
 	"Revision: %s (%s)": [
 		"Revisie: %s (%s)"
 	],
 	"Rich Text": [
-		""
+		"Rich Text"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		""
@@ -2565,7 +2931,7 @@
 		"S3"
 	],
 	"S3 access key": [
-		"S3 toegangs sleutel"
+		"S3 toegangssleutel"
 	],
 	"S3 bucket": [
 		"S3 bucket"
@@ -2615,11 +2981,20 @@
 	"Search for...": [
 		"Zoeken naar..."
 	],
+	"Search hidden": [
+		"Zoek verborgen"
+	],
 	"Search in all the notes": [
 		"Alle notities doorzoeken"
 	],
 	"Search in current note": [
 		"Huidige notitie doorzoeken"
+	],
+	"Search results": [
+		"Zoekresultaten"
+	],
+	"Search tags": [
+		"Zoek labels"
 	],
 	"Search...": [
 		"Zoeken..."
@@ -2645,8 +3020,14 @@
 	"Select file...": [
 		"Selecteer bestand..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Kies hoofdnotitieboek"
+	],
+	"Selects a notebook": [
+		"Selecteer een notitieboek"
 	],
 	"Self-hosted": [
 		""
@@ -2676,13 +3057,19 @@
 		"Stelt de <name> in van de opgegeven notitie op de opgegeven [value]. Mogelijkheden zijn:\n\n%s"
 	],
 	"Settings": [
-		""
+		"Instellingen"
 	],
 	"Share": [
 		"Delen"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
 		"Deel een kopie van alle notities in een formaat dat geïmporteerd kan worden door Joplin op een computer."
+	],
+	"Share a notebook with others": [
+		"Deel een notitieboek met anderen"
+	],
+	"Share from %s (%s)": [
+		"Delen van %s (%s)"
 	],
 	"Share Notebook": [
 		"Deel Notitieboek"
@@ -2723,6 +3110,9 @@
 	"Show note counts": [
 		"Toon notitietellingen"
 	],
+	"Show password": [
+		"Wachtwoord tonen"
+	],
 	"Show sort order buttons": [
 		"Sorteervolgordeknoppen weergeven"
 	],
@@ -2741,6 +3131,9 @@
 	"Sidebar": [
 		"Zijbalk"
 	],
+	"Sign up to Joplin Cloud": [
+		"Aanmelden bij Joplin Cloud"
+	],
 	"Size": [
 		"Grootte"
 	],
@@ -2754,7 +3147,7 @@
 		"Overgeslagen: %d."
 	],
 	"Small": [
-		""
+		"Klein"
 	],
 	"Solarised Dark": [
 		"Solarised Dark"
@@ -2778,10 +3171,10 @@
 		"Sommige items kunnen niet worden gesynchroniseerd. Klik voor meer informatie."
 	],
 	"Sort \"%s\" in ascending order": [
-		""
+		"Sorteer \"%s\" in oplopende volgorde"
 	],
 	"Sort \"%s\" in descending order": [
-		""
+		"Sorteer \"%s\" in aflopende volgorde"
 	],
 	"Sort notebooks by": [
 		"Notitieboeken sorteren op"
@@ -2797,6 +3190,9 @@
 	],
 	"Source": [
 		"Bron"
+	],
+	"Source code available": [
+		"Broncode beschikbaar"
 	],
 	"Source format: %s": [
 		"Bronformaat: %s"
@@ -2820,7 +3216,7 @@
 		"Start applicatie geminimaliseerd in het systeemvak"
 	],
 	"Start recording": [
-		""
+		"Begin met opnemen"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Start, stop of controleer de API-server. Stel de api.port configuratievariabele in om te specificeren op welke poort deze draait. Commando's zijn (%s)."
@@ -2882,6 +3278,9 @@
 	"Subscript": [
 		"Onderschrift"
 	],
+	"Success": [
+		"Succes"
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Succes! Configuratie van synchronisatie lijkt correct te zijn."
 	],
@@ -2910,10 +3309,13 @@
 		"Overschakelen naar profiel %d"
 	],
 	"Switch to to-do type": [
-		"Overschakelen naar todo-type"
+		"Overschakelen naar taak"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Schakelt over naar [notebook] - alle toekomstige handelingen worden gedaan in dit notitieboek."
+	],
+	"Sync": [
+		""
 	],
 	"Sync as many devices as you want": [
 		"Synchroniseer met zoveel apparaten als je wil"
@@ -2925,7 +3327,7 @@
 		"Synchronisatiestatus (aantal gesynchroniseerde items / totaal aantal items)"
 	],
 	"Sync target must be upgraded! Run `%s` to proceed.": [
-		"Het synchronisatiedoel moet worden geüpgraded! Voer `% s` uit om door te gaan."
+		"Het synchronisatiedoel moet worden geüpgraded! Voer `%s` uit om door te gaan."
 	],
 	"Sync Target Upgrade": [
 		"Sync Target Upgrade"
@@ -2938,6 +3340,9 @@
 	],
 	"Sync your notes": [
 		"Synchroniseer je notities"
+	],
+	"Sync, encryption, proxy": [
+		"Synchroniseer, encryptie, proxy"
 	],
 	"Synchronisation": [
 		"Synchronisatie"
@@ -3002,8 +3407,14 @@
 	"Teams": [
 		"Teams"
 	],
+	"Text document": [
+		"Tekstdocument"
+	],
 	"Text editor command": [
 		"Tekst editor commando"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Het huiduge profiel kan niet worden verwijderd. Schakel naar een ander profiel en probeer het opnieuw."
@@ -3119,8 +3530,14 @@
 	"Theme": [
 		"Thema"
 	],
+	"Themes, editor font": [
+		"Thema's, lettertype van editor"
+	],
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"Er zijn momenteel geen notities. Creëer een notitie door te drukken op de knop (+)."
+	],
+	"There are no notes in the trash folder.": [
+		"Er staan geen notities in de prullenbak."
 	],
 	"There are unsaved changes.": [
 		"Er zijn niet opgeslagen wijzigingen."
@@ -3216,7 +3633,7 @@
 		""
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
-		"Hiermee wordt het notitieblok uit uw verzameling verwijderd en hebt u geen toegang meer tot de inhoud ervan. Wilt u doorgaan?"
+		"Hiermee wordt het notitieboek uit uw verzameling verwijderd en hebt u geen toegang meer tot de inhoud ervan. Wilt u doorgaan?"
 	],
 	"Time format": [
 		"Tijdopmaak"
@@ -3269,6 +3686,9 @@
 	"to-do": [
 		"taak"
 	],
+	"To-do": [
+		"Taak"
+	],
 	"to-do: %s": [
 		"taak: %s"
 	],
@@ -3315,7 +3735,7 @@
 		"Totaal: %d/%d"
 	],
 	"Trash": [
-		""
+		"Prullenbak"
 	],
 	"Try again": [
 		"Probeer opnieuw"
@@ -3452,6 +3872,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Wordt gebruikt wanneer een lettertype met een vaste breedte nodig is om tekst leesbaar in te delen (bijv. tabellen, selectievakjes, code). Als dit niet wordt gevonden, wordt een generiek monospace-lettertype (vaste breedte) gebruikt."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Gebruiker verwijderen"
 	],
@@ -3490,9 +3913,6 @@
 	],
 	"Voice typing...": [
 		"Steminvoer..."
-	],
-	"Vosk": [
-		""
 	],
 	"Warning": [
 		"Waarschuwing"
@@ -3539,10 +3959,10 @@
 	"When creating a new to-do:": [
 		"Bij het creëren van een nieuwe taak:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

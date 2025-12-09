@@ -1,9 +1,12 @@
+import Logger from '@joplin/utils/Logger';
 import ActionTracker from './ActionTracker';
 import Client from './Client';
 import { CleanupTask, FuzzContext } from './types';
 
 type AddCleanupTask = (task: CleanupTask)=> void;
 type ClientFilter = (client: Client)=> boolean;
+
+const logger = Logger.create('ClientPool');
 
 export default class ClientPool {
 	public static async create(
@@ -23,7 +26,7 @@ export default class ClientPool {
 
 		return new ClientPool(context, clientPool);
 	}
-	public constructor(
+	private constructor(
 		private readonly context_: FuzzContext,
 		private clients_: Client[],
 	) {
@@ -36,6 +39,16 @@ export default class ClientPool {
 		client.onClose(() => {
 			this.clients_ = this.clients_.filter(other => other !== client);
 		});
+	}
+
+	public async createInitialItemsAndSync() {
+		for (const client of this.clients) {
+			logger.info('Creating items for ', client.email);
+			const actionCount = this.context_.randomFrom([0, 10, 100]);
+			await client.createOrUpdateMany(actionCount);
+
+			await client.sync();
+		}
 	}
 
 	public clientsByEmail(email: string) {
@@ -67,9 +80,12 @@ export default class ClientPool {
 	}
 
 	public async syncAll() {
-		for (const client of this.clients_) {
-			await client.sync();
-		}
+		// Sync all clients at roughly the same time. Some sync bugs are only apparent
+		// when multiple clients are syncing simultaneously.
+		await Promise.all(this.clients_.map(c => c.sync()));
+
+		// Note: For more deterministic behavior, sync clients individually instead:
+		//   for (const client of this.clients_) { await client.sync(); }
 	}
 
 	public get clients() {

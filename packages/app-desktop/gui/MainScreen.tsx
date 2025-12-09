@@ -38,14 +38,12 @@ import restart from '../services/restart';
 import { connect } from 'react-redux';
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from './NoteListHeader/utils/validateColumns';
-import ConversionNotification from './ConversionNotification/ConversionNotification';
 import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
 import NoteEditor from './NoteEditor/NoteEditor';
 import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-import { Dispatch } from 'redux';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -86,7 +84,6 @@ interface Props {
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
-	noteHtmlToMarkdownDone: string;
 }
 
 interface ShareFolderDialogOptions {
@@ -800,10 +797,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		return (
 			<div style={style}>
-				<ConversionNotification
-					noteId={this.props.noteHtmlToMarkdownDone}
-					dispatch={this.props.dispatch as Dispatch}
-				/>
 				<TrashNotification
 					lastDeletion={this.props.lastDeletion}
 					lastDeletionNotificationTime={this.props.lastDeletionNotificationTime}
@@ -860,7 +853,6 @@ const mapStateToProps = (state: AppState) => {
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && process.arch !== 'arm64',
-		noteHtmlToMarkdownDone: state.noteHtmlToMarkdownDone,
 	};
 };
 

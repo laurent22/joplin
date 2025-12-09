@@ -1,6 +1,9 @@
 import { StateEffect, StateField, Transaction } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
+import { editorSettingsFacet } from './editorSettingsExtension';
 
+// On MacOS: Tracks the meta key
+// On other platforms: Tracks the ctrl key.
 const ctrlOrMetaChangedEffect = StateEffect.define<boolean>();
 
 const ctrlOrMetaPressedField = StateField.define<boolean>({
@@ -18,11 +21,13 @@ const ctrlOrMetaPressedField = StateField.define<boolean>({
 		})),
 		...(() => {
 			const onEvent = (event: KeyboardEvent|MouseEvent, view: EditorView) => {
-				const ctrlOrCmdPressed = event.ctrlKey || event.metaKey;
-				if (ctrlOrCmdPressed !== view.state.field(ctrlOrMetaPressedField)) {
+				const editorSettings = view.state.facet(editorSettingsFacet);
+				const hasModifier = editorSettings.preferMacShortcuts ? event.metaKey : event.ctrlKey;
+
+				if (hasModifier !== view.state.field(ctrlOrMetaPressedField)) {
 					view.dispatch({
 						effects: [
-							ctrlOrMetaChangedEffect.of(ctrlOrCmdPressed),
+							ctrlOrMetaChangedEffect.of(hasModifier),
 						],
 					});
 				}

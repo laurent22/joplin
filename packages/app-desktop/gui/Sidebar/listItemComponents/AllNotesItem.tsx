@@ -7,10 +7,9 @@ import Setting from '@joplin/lib/models/Setting';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
-import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
-import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
+import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 import { ListItem } from '../types';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
@@ -20,7 +19,7 @@ const MenuItem = bridge().MenuItem;
 interface Props {
 	dispatch: Dispatch;
 	anchorRef: ListItemRef;
-	selected: boolean;
+	selectionState: ItemSelectionState;
 	item: ListItem;
 	index: number;
 	itemCount: number;
@@ -54,7 +53,7 @@ const AllNotesItem: React.FC<Props> = props => {
 		<ListItemWrapper
 			containerRef={props.anchorRef}
 			key="allNotesHeader"
-			selected={props.selected}
+			selectionState={props.selectionState}
 			depth={props.item.depth}
 			className={'list-item-container list-item-depth-0 all-notes'}
 			highlightOnHover={true}
@@ -66,11 +65,11 @@ const AllNotesItem: React.FC<Props> = props => {
 			<StyledListItemAnchor
 				className="list-item"
 				isSpecialItem={true}
-				selected={props.selected}
+				selected={props.selectionState.selected}
 				onClick={onAllNotesClick_}
 				onContextMenu={toggleAllNotesContextMenu}
 			>
-				{_('All notes')}
+				{props.item.label}
 			</StyledListItemAnchor>
 		</ListItemWrapper>
 	);

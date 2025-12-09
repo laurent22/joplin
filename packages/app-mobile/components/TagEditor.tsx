@@ -54,7 +54,6 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 			},
 			tagBoxRoot: {
 				flexDirection: 'column',
-				flexGrow: 0.5,
 				flexShrink: 1,
 			},
 			tagBoxScrollView: {
@@ -86,6 +85,7 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 				backgroundColor: theme.dividerColor,
 			},
 			tagSearch: {
+				flexGrow: 1,
 				flexShrink: 1,
 			},
 			noTagsLabel: {

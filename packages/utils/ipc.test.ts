@@ -2,13 +2,17 @@ import { readFile } from 'fs/promises';
 import { createTempDir } from './fs.test';
 import { newHttpError, sendMessage, startServer, stopServer } from './ipc';
 
+const getRandomPort = () => {
+	return Math.floor(Math.random() * (65535 - 20000 + 1)) + 20000;
+};
+
 describe('ipc', () => {
 
 	it('should send and receive messages', async () => {
 		const tempDir = await createTempDir();
 		const secretFilePath = `${tempDir}/secret.txt`;
-		const serverPort1 = 41110;
-		const serverPort2 = 41115;
+		const serverPort1 = getRandomPort();
+		const serverPort2 = serverPort1 + 5;
 
 		const server1 = await startServer(serverPort1, secretFilePath, async (request) => {
 			if (request.action === 'testing') {
@@ -87,7 +91,7 @@ describe('ipc', () => {
 	it('should not process message if secret is invalid', async () => {
 		const tempDir = await createTempDir();
 		const secretFilePath = `${tempDir}/secret.txt`;
-		const serverPort = 41120;
+		const serverPort = getRandomPort();
 
 		const server = await startServer(serverPort, secretFilePath, async (request) => {
 			if (request.action === 'testing') {

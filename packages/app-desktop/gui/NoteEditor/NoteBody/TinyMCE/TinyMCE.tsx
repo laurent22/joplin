@@ -23,7 +23,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
-import type { Editor, EditorEvent } from 'tinymce';
+import type { Bookmark, Editor, EditorEvent } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
@@ -47,6 +47,7 @@ import Setting from '@joplin/lib/models/Setting';
 import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatternsLookup';
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
+import useCursorPositioning from './utils/useCursorPositioning';
 
 const logger = Logger.create('TinyMCE');
 
@@ -918,8 +919,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 					editor.on('SetContent', () => {
 						preprocessContent();
-
-						props_onMessage.current({ channel: 'noteRenderComplete' });
 					});
 				},
 			});
@@ -1046,6 +1045,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		return true;
 	}
 
+	const { onRestoreCursorPosition } = useCursorPositioning({
+		initialCursorLocation: props.initialCursorLocation.richText as Bookmark,
+		onCursorUpdate: props.onCursorMotion,
+		editor,
+	});
+
 	const lastNoteIdRef = useRef(props.noteId);
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -1113,8 +1118,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					// times would result in an empty note.
 					// https://github.com/laurent22/joplin/issues/3534
 					editor.undoManager.reset();
+
+					// Only restore the cursor position from the global state when switching notes.
+					// See https://github.com/laurent22/joplin/issues/13579
+					onRestoreCursorPosition();
 				} else {
-					// Restore the cursor location
+					// Restore the cursor location from the current note
 					editor.selection.bookmarkManager.moveToBookmark(bookmark);
 				}
 
@@ -1123,6 +1132,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					resourceInfos: props.resourceInfos,
 					contentKey: props.contentKey,
 				};
+				props_onMessage.current({ channel: 'noteRenderComplete' });
 			}
 
 			const allAssetsOptions: NoteStyleOptions = {

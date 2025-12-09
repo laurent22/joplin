@@ -16,9 +16,9 @@ import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
 import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, readManifestOverrides } from './lib/overrideUtils';
 import { execCommand } from '@joplin/utils';
 import validateUntrustedManifest from './lib/validateUntrustedManifest';
+import searchPlugins, { PackageInfo } from './lib/searchPlugins';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
+function pluginInfoFromSearchResults(results: PackageInfo[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
 
 	for (const r of results) {
@@ -245,8 +245,7 @@ async function commandBuild(args: CommandBuildArgs) {
 
 	chdir(previousDir);
 
-	const searchResults = (await execCommand('npm search keywords:joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
-	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
+	const npmPackages = pluginInfoFromSearchResults(await searchPlugins());
 
 	for (const npmPackage of npmPackages) {
 		await processNpmPackage(npmPackage, repoDir, dryRun);

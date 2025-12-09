@@ -34,7 +34,7 @@ export default class InteropService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private eventEmitter_: any = null;
 	private static instance_: InteropService;
-	private document_: Document;
+	private domParser_: DOMParser;
 	private xmlSerializer_: XMLSerializer;
 
 	public static instance(): InteropService {
@@ -141,8 +141,13 @@ export default class InteropService {
 				}, () => new InteropService_Importer_Md()),
 
 				makeImportModule({
-					format: 'zip',
-					fileExtensions: ['zip'],
+					format: 'one',
+					fileExtensions: [
+						'zip',
+						'one',
+						// .onepkg is a CAB archive, which Joplin can currently only extract on Windows
+						...(shim.isWindows() ? ['onepkg'] : []),
+					],
 					sources: [FileSystemItem.File],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('OneNote Notebook'),
@@ -211,12 +216,12 @@ export default class InteropService {
 		return this.xmlSerializer_;
 	}
 
-	public set document(document: Document) {
-		this.document_ = document;
+	public set domParser(domParser: DOMParser) {
+		this.domParser_ = domParser;
 	}
 
-	public get document() {
-		return this.document_;
+	public get domParser() {
+		return this.domParser_;
 	}
 
 	// Find the module that matches the given type ("importer" or "exporter")
@@ -224,7 +229,7 @@ export default class InteropService {
 	// or exporters, such as ENEX. In this case, the one marked as "isDefault"
 	// is returned. This is useful to auto-detect the module based on the format.
 	// For more precise matching, newModuleFromPath_ should be used.
-	private findModuleByFormat_(type: ModuleType, format: string, target: FileSystemItem = null, outputFormat: ImportModuleOutputFormat = null) {
+	public findModuleByFormat(type: ModuleType, format: string, target: FileSystemItem = null, outputFormat: ImportModuleOutputFormat = null) {
 		const modules = this.modules();
 		const matches = [];
 
@@ -263,7 +268,7 @@ export default class InteropService {
 	// https://github.com/laurent22/joplin/pull/1795#discussion_r322379121) but
 	// we can do it if it ever becomes necessary.
 	private newModuleByFormat_(type: ModuleType, format: string, outputFormat: ImportModuleOutputFormat = ImportModuleOutputFormat.Markdown) {
-		const moduleMetadata = this.findModuleByFormat_(type, format, null, outputFormat);
+		const moduleMetadata = this.findModuleByFormat(type, format, null, outputFormat);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and output "%s"', type, format, outputFormat));
 
 		return moduleMetadata.factory();
@@ -276,7 +281,7 @@ export default class InteropService {
 	//
 	// https://github.com/laurent22/joplin/pull/1795#pullrequestreview-281574417
 	private newModuleFromPath_(type: ModuleType, options: ExportOptions&ImportOptions) {
-		const moduleMetadata = this.findModuleByFormat_(type, options.format, options.target);
+		const moduleMetadata = this.findModuleByFormat(type, options.format, options.target);
 		if (!moduleMetadata) throw new Error(_('Cannot load "%s" module for format "%s" and target "%s"', type, options.format, options.target));
 
 		return moduleMetadata.factory(options);
@@ -304,7 +309,7 @@ export default class InteropService {
 			destinationFolderId: null,
 			destinationFolder: null,
 			xmlSerializer: this.xmlSerializer,
-			document: this.document,
+			domParser: this.domParser,
 			...options,
 		};
 

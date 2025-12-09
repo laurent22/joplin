@@ -497,4 +497,28 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should generate a unique SSO code', async () => {
+		const createExternalUser = async (index: number) => {
+			const user = await createUser(index);
+			return await models().user().save({
+				id: user.id,
+				is_external: 1,
+			}, { skipValidation: true });
+		};
+		const user1 = await createExternalUser(1);
+		const user2 = await createExternalUser(2);
+		config().SAML_ENABLED = true;
+
+		try {
+			await models().user().generateSsoCode(user1);
+			await models().user().generateSsoCode(user2);
+
+			const code1 = (await models().user().load(user1.id)).sso_auth_code;
+			const code2 = (await models().user().load(user2.id)).sso_auth_code;
+			expect(code1).not.toBe(code2);
+		} finally {
+			config().SAML_ENABLED = false;
+		}
+	});
+
 });

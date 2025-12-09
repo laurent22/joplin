@@ -488,6 +488,14 @@ const buildStartupTasks = (
 
 		// await printTestData();
 	});
+	addTask('buildStartupTasks/optionally show sync wizard', async () => {
+		if (Setting.value('sync.wizard.autoShowOnStartup') && Setting.value('sync.target') === 0) {
+			dispatch({
+				type: 'SYNC_WIZARD_VISIBLE_CHANGE',
+				visible: true,
+			});
+		}
+	});
 
 	return startupTasks;
 };

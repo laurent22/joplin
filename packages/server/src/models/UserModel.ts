@@ -191,14 +191,19 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async generateSsoCode(user: User) {
-		let authCode;
+		const codeInUse = async (authCode: string) => {
+			return !!await this.loadBySsoAuthCode(authCode);
+		};
 
-		// Make sure that the code is not already in use.
-		do {
-			authCode = randomInt(0, 999999999).toString().padStart(9, '0');
-		} while (await this.loadBySsoAuthCode(authCode) === null);
+		const getUniqueAuthCode = async () => {
+			let authCode;
+			do {
+				authCode = randomInt(0, 999999999).toString().padStart(9, '0');
+			} while (await codeInUse(authCode));
+			return authCode;
+		};
 
-		user.sso_auth_code = authCode;
+		user.sso_auth_code = await getUniqueAuthCode();
 		user.sso_auth_code_expire_at = Date.now() + this.authCodeTtl;
 
 		await this.save(user, { skipValidation: true });

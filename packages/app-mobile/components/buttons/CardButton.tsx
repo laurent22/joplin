@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Card, TouchableRipple } from 'react-native-paper';
 import { useMemo } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, View, ViewStyle } from 'react-native';
 
 export enum InstallState {
 	NotInstalled,
@@ -11,7 +11,7 @@ export enum InstallState {
 
 interface Props {
 	onPress: ()=> void;
-	disabled: boolean;
+	disabled?: boolean;
 	children: React.ReactNode;
 	style?: ViewStyle;
 	testID?: string;
@@ -20,16 +20,25 @@ interface Props {
 const useStyles = (disabled: boolean) => {
 	return useMemo(() => {
 		// For the TouchableRipple to work on Android, the card needs a transparent background.
-		const baseCard = { backgroundColor: 'transparent' };
+		const borderRadius = 12;
+		const baseCard = { backgroundColor: 'transparent', borderRadius };
 		return StyleSheet.create({
 			cardOuterWrapper: {
 				margin: 0,
 				padding: 0,
-				borderRadius: 12,
+				borderRadius,
 				overflow: 'hidden',
+				// Accessibility: Prevent the 'overflow: hidden' from hiding the focus indicator
+				// on web. Only apply to web, as this causes the touchable ripple
+				// from being completely contained within the card on non-web platforms.
+				...(Platform.OS === 'web' ? {
+					margin: -2,
+					padding: 2,
+				} : {}),
 			},
 			cardInnerWrapper: {
 				width: '100%',
+				borderRadius,
 			},
 			card: disabled ? {
 				...baseCard,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ForwardedRef } from 'react';
+import { ForwardedRef, RefObject } from 'react';
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { EditorProps, LogMessageCallback, OnEventCallback, ContentScriptData } from '@joplin/editor/types';
 import createEditor from '@joplin/editor/CodeMirror/createEditor';
@@ -11,7 +11,6 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import setupVim from '@joplin/editor/CodeMirror/utils/setupVim';
 import { dirname } from 'path';
 import useKeymap from './utils/useKeymap';
-import useEditorSearch from '../utils/useEditorSearchExtension';
 import CommandService from '@joplin/lib/services/CommandService';
 import { SearchMarkers } from '../../../utils/useSearchMarkers';
 import localisation from './utils/localisation';
@@ -23,6 +22,7 @@ import getResourceBaseUrl from '../../../utils/getResourceBaseUrl';
 interface Props extends EditorProps {
 	style: React.CSSProperties;
 	pluginStates: PluginStates;
+	initialSelectionRef: RefObject<number>;
 
 	onEditorPaste: (event: Event)=> void;
 	externalSearch: SearchMarkers;
@@ -42,8 +42,6 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		onEventRef.current = props.onEvent;
 		onLogMessageRef.current = props.onLogMessage;
 	}, [props.onEvent, props.onLogMessage]);
-
-	useEditorSearch(editor);
 
 	useEffect(() => {
 		if (!editor) {
@@ -127,6 +125,9 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 				direction: 'unset',
 			},
 		});
+		const cursor = props.initialSelectionRef.current;
+		editor.select(cursor, cursor);
+
 		setEditor(editor);
 
 		return () => {

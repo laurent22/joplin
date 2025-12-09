@@ -13,6 +13,7 @@ import Setting from '@joplin/lib/models/Setting';
 const { clipboard } = require('electron');
 import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { MarkupLanguage } from '@joplin/renderer';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -143,6 +144,16 @@ export default class NoteListUtils {
 
 			menu.append(new MenuItem({ type: 'separator' }));
 
+			const includesHtmlNotes = notes.some(n => n.markup_language === MarkupLanguage.Html);
+			if (includesHtmlNotes) {
+				menu.append(
+					new MenuItem(
+						menuUtils.commandToStatefulMenuItem('convertNoteToMarkdown', noteIds),
+					),
+				);
+				menu.append(new MenuItem({ type: 'separator' }));
+			}
+
 			if ([9, 10, 11].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
@@ -203,7 +214,6 @@ export default class NoteListUtils {
 				),
 			);
 		}
-
 
 		const pluginViewInfos = pluginUtils.viewInfosByType(props.plugins, 'menuItem');
 

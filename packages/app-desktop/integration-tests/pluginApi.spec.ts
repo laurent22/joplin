@@ -30,7 +30,7 @@ test.describe('pluginApi', () => {
 		await mainScreen.createNewNote('First note');
 
 		const editor = mainScreen.noteEditor;
-		await editor.expectToHaveText('');
+		await editor.expectToHaveText('\n');
 
 		await mainScreen.goToAnything.runCommand(app, 'showTestDialog');
 		// Wait for the iframe to load

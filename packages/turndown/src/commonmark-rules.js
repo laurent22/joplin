@@ -864,8 +864,12 @@ function joplinCheckboxInfo(liNode) {
     };
   }
 
+  // Should handle both <ul class='joplin-checklist'><li>...</li></ul>
+  // and <ul><li class='joplin-checklist-item'>...</li></ul>. The second is present
+  // in certain types of imported notes.
   const parentChecklist = findParent(liNode, 'class', 'joplin-checklist');
-  if (parentChecklist) {
+  const currentChecklist = liNode.classList.contains('joplin-checklist-item');
+  if (parentChecklist || currentChecklist) {
     return {
       checked: !!liNode.classList && liNode.classList.contains('checked'),
       renderingType: 2,

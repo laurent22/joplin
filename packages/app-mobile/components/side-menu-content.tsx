@@ -26,6 +26,7 @@ import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import { TouchableRipple } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
+import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
@@ -43,8 +44,7 @@ interface Props {
 	folders: FolderEntity[];
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
-	selectedFolderId: string;
-	selectedTagId: string;
+	selectedFolderIds: string[];
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -339,6 +339,8 @@ const SideMenuContentComponent = (props: Props) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const menuItems: any[] = [];
 
+		if (folder && folder.id === getConflictFolderId()) return;
+
 		if (folder && folder.id === getTrashFolderId()) {
 			menuItems.push({
 				text: _('Empty trash'),
@@ -564,7 +566,7 @@ const SideMenuContentComponent = (props: Props) => {
 			hasChildren={hasChildren}
 			depth={depth}
 			collapsed={props.collapsedFolderIds.includes(folder.id)}
-			selected={isFolderSelected(folder, { selectedFolderId: props.selectedFolderId, notesParentType: props.notesParentType })}
+			selected={isFolderSelected(folder, { selectedFolderIds: props.selectedFolderIds, notesParentType: props.notesParentType })}
 			styles={styles_}
 			folder={folder}
 			alwaysShowFolderIcons={alwaysShowFolderIcons}
@@ -730,8 +732,7 @@ export default connect((state: AppState) => {
 		folders: state.folders,
 		syncStarted: state.syncStarted,
 		syncReport: state.syncReport,
-		selectedFolderId: state.selectedFolderId,
-		selectedTagId: state.selectedTagId,
+		selectedFolderIds: state.selectedFolderIds,
 		notesParentType: state.notesParentType,
 		locale: state.settings.locale,
 		themeId: state.settings.theme,

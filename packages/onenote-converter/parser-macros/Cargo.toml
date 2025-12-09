@@ -1,0 +1,12 @@
+[package]
+name = "parser-macros"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+syn = "2.0.106"
+quote = "1.0.41"
+proc-macro2 = "1.0.101"
+
+[lib]
+proc-macro = true

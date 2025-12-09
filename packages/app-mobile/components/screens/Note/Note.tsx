@@ -515,6 +515,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			paddingLeft: theme.marginLeft,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
+			maxHeight: '40%',
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
@@ -659,6 +660,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
+		// Reset undo/redo button state when switching to edit mode or when switching between markdown and rich text editors, since the editor is
+		// recreated and loses its undo/redo history
+		if (this.state.mode === 'edit' && (prevState.mode !== this.state.mode || prevProps.editorType !== this.props.editorType)) {
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: false,
+					canRedo: false,
+				},
+			});
+		}
+
 		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
 			// Easier to just go back, then go to the note since
 			// the Note screen doesn't handle reloading a different note
@@ -689,6 +701,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		if (prevState.note.body !== this.state.note.body) {
 			this.emitEditorPluginUpdate_();
+		}
+
+		if (prevState.multiline !== this.state.multiline && this.titleTextFieldRef.current) {
+			focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
 		}
 	}
 
@@ -1703,6 +1719,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
+					key={this.state.multiline ? 'multiLine' : 'singleLine'}
 					ref={this.titleTextFieldRef}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"

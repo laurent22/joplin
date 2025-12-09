@@ -51,9 +51,9 @@ runs:
     - uses: dtolnay/rust-toolchain@stable
       if: ${{ runner.os != 'Windows' }}
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
-        node-version: '18.20.8'
+        node-version: '24'
         # Disable the cache on ARM runners. For now, we don't run "yarn install" on these
         # environments and this breaks actions/setup-node.
         # See https://github.com/laurent22/joplin/commit/47d0d3eb9e89153a609fb5441344da10904c6308#commitcomment-159577783.

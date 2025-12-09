@@ -23,6 +23,8 @@ const defaultEnvValues: EnvVariables = {
 	COOKIES_SECURE: false,
 	RUNNING_IN_DOCKER: false,
 	HEARTBEAT_MESSAGE_SCHEDULE: '* * * * *',
+	DELETE_EXPIRED_SESSIONS_SCHEDULE: '0 */6 * * *',
+	LOG_LEVEL: 'info',
 
 	// The admin panel is accessible only if this is an admin instance.
 	// Additionally, processing services (those defined in setupTaskService.ts)
@@ -65,6 +67,12 @@ const defaultEnvValues: EnvVariables = {
 	DB_AUTO_MIGRATION: true,
 	DB_ALLOW_INCOMPLETE_MIGRATIONS: false,
 	DB_USE_SLAVE: false,
+
+	// The maximum number of active database connections. Only applies to PostgreSQL.
+	// This should usually be somewhat small.
+	// See https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+	// and https://wiki.postgresql.org/wiki/Number_Of_Database_Connections.
+	DB_MAX_CONNECTIONS: 10,
 
 	POSTGRES_PASSWORD: 'joplin',
 	POSTGRES_DATABASE: 'joplin',
@@ -184,6 +192,8 @@ export interface EnvVariables {
 	COOKIES_SECURE: boolean;
 	RUNNING_IN_DOCKER: boolean;
 	HEARTBEAT_MESSAGE_SCHEDULE: string;
+	DELETE_EXPIRED_SESSIONS_SCHEDULE: string;
+	LOG_LEVEL: string;
 
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
@@ -202,6 +212,7 @@ export interface EnvVariables {
 	DB_AUTO_MIGRATION: boolean;
 	DB_ALLOW_INCOMPLETE_MIGRATIONS: boolean;
 	DB_USE_SLAVE: boolean;
+	DB_MAX_CONNECTIONS: number;
 
 	POSTGRES_PASSWORD: string;
 	POSTGRES_DATABASE: string;

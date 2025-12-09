@@ -281,6 +281,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		// bundle them all up in a single "Updated translations" at the end.
 		if (log.message.match(/Translation:\sUpdate\s.*?(\.po|[a-zA-Z][a-zA-Z]|[a-zA-Z][a-zA-Z]_[a-zA-Z][a-zA-Z])/)
 			|| log.message.match(/Update.+\.po/)
+			|| log.message.match(/^All: Update translations/)
 		) {
 			// updatedTranslations = true;
 			addIt = false;

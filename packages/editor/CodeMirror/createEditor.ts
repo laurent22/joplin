@@ -8,7 +8,7 @@ import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
 	dropCursor,
 } from '@codemirror/view';
-import { history, undoDepth, redoDepth, standardKeymap, insertTab } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, standardKeymap, insertTab, simplifySelection } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
@@ -40,6 +40,7 @@ import ctrlKeyStateClassExtension from './extensions/modifierKeyCssExtension';
 import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
 import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
+import editorSettingsExtension, { setEditorSettingsEffect } from './extensions/editorSettingsExtension';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant
@@ -235,6 +236,11 @@ const createEditor = (
 		}, true),
 
 		...standardKeymap, ...historyKeymap, ...searchKeymap,
+
+		// The escape -> simplifySelection mapping is present in "defaultKeymap",
+		// which is disabled on desktop but enabled on mobile. Enable this mapping
+		// globally for consistency:
+		keyCommand('Escape', simplifySelection, true),
 	]));
 
 	const editor = new EditorView({
@@ -295,6 +301,7 @@ const createEditor = (
 				biDirectionalTextExtension,
 				overwriteModeExtension,
 				ctrlKeyStateClassExtension,
+				editorSettingsExtension(settings),
 
 				selectedNoteIdExtension,
 
@@ -340,9 +347,12 @@ const createEditor = (
 		onSettingsChange: (newSettings: EditorSettings) => {
 			settings = newSettings;
 			editor.dispatch({
-				effects: dynamicConfig.reconfigure(
-					configFromSettings(newSettings, context),
-				),
+				effects: [
+					dynamicConfig.reconfigure(
+						configFromSettings(newSettings, context),
+					),
+					setEditorSettingsEffect.of(newSettings),
+				],
 			});
 		},
 		onUndoRedo: () => {

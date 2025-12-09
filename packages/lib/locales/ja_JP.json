@@ -128,6 +128,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定すると、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノートであれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換できます。"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -182,6 +185,9 @@
 	"Add body": [
 		"本文を追加"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"新規追加"
 	],
@@ -190,6 +196,9 @@
 	],
 	"Add recipient:": [
 		"受信者を追加:"
+	],
+	"Add tags:": [
+		"タグを追加:"
 	],
 	"Add title": [
 		"題名を追加"
@@ -201,7 +210,7 @@
 		""
 	],
 	"Adds tag": [
-		""
+		"タグを追加"
 	],
 	"Admin": [
 		"管理者"
@@ -263,6 +272,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		"エラーが発生しました: %s"
 	],
@@ -297,7 +309,7 @@
 		"Aritim Dark"
 	],
 	"Associated tags:": [
-		""
+		"関連タグ:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -372,7 +384,7 @@
 		"Basic"
 	],
 	"Beta": [
-		""
+		"ベータ版"
 	],
 	"Bold": [
 		"太字"
@@ -396,7 +408,7 @@
 		""
 	],
 	"Camera": [
-		""
+		"カメラ"
 	],
 	"Can Share": [
 		"共有可能"
@@ -600,7 +612,7 @@
 		"完了: %s (%s)"
 	],
 	"completion date": [
-		""
+		"完了日"
 	],
 	"Compress old changes": [
 		"古い変更を圧縮する"
@@ -902,6 +914,9 @@
 	"Deletes the notes without asking for confirmation.": [
 		"ノートを確認なしで削除します。"
 	],
+	"Deletion log": [
+		"削除ログ"
+	],
 	"Destination format: %s": [
 		"場所の形式: %s"
 	],
@@ -909,7 +924,7 @@
 		"詳細"
 	],
 	"Device: %s": [
-		""
+		"デバイス: %s"
 	],
 	"Directory": [
 		"ディレクトリ"
@@ -977,6 +992,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"パスワードはなくさないようにしてください。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1020,10 +1038,10 @@
 		"Dracula"
 	],
 	"Draw picture": [
-		""
+		"絵を描く"
 	],
 	"Drawing": [
-		""
+		"描画"
 	],
 	"Drop notes or files here": [
 		"ノートやファイルをここにドロップします"
@@ -1056,7 +1074,7 @@
 		"編集"
 	],
 	"Edit as Rich Text": [
-		""
+		"リッチテキストとして編集"
 	],
 	"Edit link": [
 		"リンクの編集"
@@ -1340,6 +1358,9 @@
 	"Feature flags": [
 		"フィーチャーフラグ"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"取得したアイテム: %d/%d."
 	],
@@ -1556,6 +1577,9 @@
 	"Import notes from a JEX (Joplin Export) file.": [
 		"JEX(Joplin エクスポート)ファイルからノートをインポートします。"
 	],
+	"Import or export your data": [
+		"データのインポートまたはエクスポート"
+	],
 	"Imported successfully!": [
 		"インポート成功!"
 	],
@@ -1576,9 +1600,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"すべてのコマンドで、ノートまたはノートブックは、題名またはID、または選択中の物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選択中のアイテムを参照できます。"
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"ノートに位置情報を保存するには、ユーザーの許可が必要です。\n\n位置情報を保存するかどうかは、設定画面でいつでも変更できます。"
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"この処理では、既存データをすべて再暗号化し、同期しなおす必要がありますので、夜間等の実行をおすすめします。\n\nデータを再暗号化するには以下の手順にしたがってください。\n\n1. すべてのデバイスで同期を取ります。\n2. \"%s\" をクリックします。\n3. 再暗号化処理が完了するまでお待ちください。不整合を避けるため、処理中に他のデバイスでノートを変更しないように気をつけてください。\n4. 本デバイスの同期が完了したら、他のデバイスをすべて同期してください。\n\n重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
@@ -1712,6 +1733,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保存します。"
 	],
@@ -1723,6 +1747,9 @@
 	],
 	"Keep note history for": [
 		"ノート履歴の保存期間"
+	],
+	"Keep notes in the trash for": [
+		"ゴミ箱の保存期間"
 	],
 	"Keyboard Mode": [
 		"キーバインド"
@@ -1738,6 +1765,9 @@
 	],
 	"Keys that need upgrading": [
 		"アップグレードが必要なキー"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"横"
@@ -2048,6 +2078,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"テキストエディターが定義されていません。`config editor <editor-path>`で設定を行ってください"
 	],
+	"None": [
+		"なし"
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2065,6 +2098,9 @@
 	],
 	"Not now": [
 		"あとで"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"ノート"
@@ -2225,6 +2261,9 @@
 	"Ordered list": [
 		"番号付きリスト"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"その他のアプリケーション..."
 	],
@@ -2266,9 +2305,6 @@
 	],
 	"PDF File": [
 		"PDF ファイル"
-	],
-	"Permission needed": [
-		"許可が必要"
 	],
 	"Photo %d": [
 		""
@@ -2363,9 +2399,6 @@
 	"Preferred light theme": [
 		"優先ライトテーマ"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2453,6 +2486,9 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"終了"
 	],
@@ -2493,7 +2529,10 @@
 		"おすすめのプラグイン"
 	],
 	"Record audio": [
-		""
+		"音声を録音"
+	],
+	"Recording": [
+		"録音"
 	],
 	"Redo": [
 		"やり直す"
@@ -2704,6 +2743,9 @@
 	],
 	"Select file...": [
 		"ファイルの選択..."
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Select parent notebook": [
 		"親ノートブックを選択"
@@ -2981,6 +3023,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"ノートブック [notebook]に切り替え - これ以降の作業は、指定のノートブック内で行われます。"
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"同期対象デバイス数無制限"
 	],
@@ -3073,6 +3118,9 @@
 	],
 	"Text editor command": [
 		"テキストエディターのコマンド"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"使用中のプロファイルは削除できません。他のプロファイルに切り替えてから削除してください。"
@@ -3533,6 +3581,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"表、チェックボックス、コードなど、等幅フォントのほうが読みやすい場所に使用。指定フォントが見つからない場合は一般的な等幅フォントを使用します。"
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"ユーザー削除"
 	],
@@ -3560,6 +3611,9 @@
 	"Viewer": [
 		"ビューアー"
 	],
+	"Viewer font size": [
+		"ビューアーのフォントサイズ"
+	],
 	"Vim": [
 		"Vim"
 	],
@@ -3572,8 +3626,8 @@
 	"Voice typing...": [
 		"音声入力…"
 	],
-	"Vosk": [
-		""
+	"Voice typing: Glossary": [
+		"音声入力: 用語集"
 	],
 	"Warning": [
 		"警告"
@@ -3623,10 +3677,10 @@
 	"When creating a new to-do:": [
 		"新しいToDoを作成した場合:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

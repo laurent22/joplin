@@ -1,0 +1,35 @@
+[package]
+name = "parser"
+version = "0.0.1"
+authors = ["Pedro Luiz <pedrlz.frn@gmail.com>"]
+edition = "2024"
+description = "Parse Microsoft OneNote® notebooks"
+license = "MPL-2.0-no-copyleft-exception"
+repository = "https://github.com/laurent22/joplin"
+keywords = ["onenote"]
+
+[dependencies]
+color-eyre = "0.5"
+log = "0.4.11"
+mime_guess = "2.0.3"
+palette = "0.5.0"
+regex = "1"
+sanitize-filename = "0.3.0"
+console_error_panic_hook = "0.1.7"
+encoding_rs = "0.8.31"
+enum-primitive-derive = "0.2.2"
+itertools = "0.10.3"
+num-traits = "0.2"
+uuid = "1.1.2"
+lazy_static = "1.4"
+parser-utils = { path = "../parser-utils" }
+parser-macros = { path = "../parser-macros" }
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "console"
+]
+
+[lib]
+crate-type = ["cdylib", "lib"]

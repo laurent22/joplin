@@ -173,6 +173,9 @@
 	"[None]": [
 		"[Brak]"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Lista słów rozdzielonych przecinkami. Może być używana w przypadku rzadkich słów, aby pomóc w poprawnym wpisywaniu ich podczas pisania głosowego."
 	],
@@ -244,6 +247,9 @@
 	],
 	"Add body": [
 		"Dodaj treść"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Dodaj nowy"
@@ -331,6 +337,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Znaleziono automatycznie zapisany rysunek. Czy chcesz dołączyć jego kopię do notatki?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Wystąpił błąd: %s"
@@ -1143,6 +1152,9 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Nie zgub hasła, ponieważ ze względów bezpieczeństwa będzie to *jedyny* sposób na odszyfrowanie danych! Aby włączyć szyfrowanie, wprowadź poniżej swoje hasło."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
 	"Document scanner: Title template": [
 		""
 	],
@@ -1545,6 +1557,9 @@
 	"Feature flags": [
 		"Flagi funkcji"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Pobrane elementy: %d/%d."
 	],
@@ -1793,9 +1808,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"W każdym poleceniu, do notatki lub notatnika można odwołać się poprzez tytuł lub ID, bądź też przy użyciu skrótów `$n` dla aktualnie wybranej notatki lub `$b` dla aktualnie wybranego notatnika. Z kolei skrót `$c` może być użyty do odniesienia się do aktualnie wybranego elementu."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Aby powiązać geolokalizację z notatką, aplikacja potrzebuje Twojej zgody na dostęp do lokalizacji.\n\nOpcję tę można wyłączyć w dowolnym momencie w sekcji Konfiguracja."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Aby to zrobić, cały Twój zestaw danych musi zostać zaszyfrowany i zsynchronizowany, dlatego najlepiej uruchomić ten proces na noc.\n\nAby rozpocząć, wykonaj poniższe kroki:\n\n1. Zsynchronizuj wszystkie swoje urządzenia.\n2. Kliknij „%s”.\n3. Poczekaj na zakończenie synchronizacji. W międzyczasie nie wprowadzaj żadnych zmian w notatkach na innych urządzeniach, aby uniknąć konfliktów.\n4. Gdy synchronizacja na tym urządzeniu się zakończy, zsynchronizuj wszystkie pozostałe urządzenia i również pozwól, by proces dobiegł końca.\n\nWażne: ten proces należy wykonać TYLKO RAZ, na jednym urządzeniu."
 	],
@@ -1967,6 +1979,9 @@
 	"Joplin SSO Authentication": [
 		"Uwierzytelnianie Joplin SSO"
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper umożliwia zapisywanie stron internetowych i zrzutów ekranu z przeglądarki do aplikacji Joplin."
 	],
@@ -1996,6 +2011,9 @@
 	],
 	"Keys that need upgrading": [
 		"Klucze wymagające aktualizacji"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Poziomo"
@@ -2405,6 +2423,9 @@
 	"Not now": [
 		"Nie teraz"
 	],
+	"Not useful": [
+		""
+	],
 	"note": [
 		"notatka"
 	],
@@ -2600,6 +2621,9 @@
 	"Ordered list": [
 		"Lista uporządkowana"
 	],
+	"Other": [
+		""
+	],
 	"Other applications...": [
 		"Inne aplikacje..."
 	],
@@ -2661,9 +2685,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Trwale usuwa notatnik, pomijając kosz."
-	],
-	"Permission needed": [
-		"Wymagane uprawnienie"
 	],
 	"Photo %d": [
 		""
@@ -2764,9 +2785,6 @@
 	"Preferred light theme": [
 		"Preferuj jasny motyw"
 	],
-	"Preferred voice typing provider": [
-		"Preferowany dostawca usług pisania głosowego"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Zachowaj kolory podczas wklejania tekstu w edytorze tekstu sformatowanego"
 	],
@@ -2862,6 +2880,9 @@
 	],
 	"Publish/unpublish": [
 		"Opublikuj/wycofaj publikację"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
 	],
 	"QR Code": [
 		"Kod QR"
@@ -3177,6 +3198,9 @@
 	],
 	"Select file...": [
 		"Wybierz plik..."
+	],
+	"Select one of the other supported sync targets.": [
+		""
 	],
 	"Select parent notebook": [
 		"Wybierz notatnik nadrzędny"
@@ -3505,6 +3529,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Przełącza na [Notatnik] — wszystkie dalsze operacje będą wykonywane w tym notatniku."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Synchronizuj tyle urządzeń, ile chcesz"
 	],
@@ -3597,6 +3624,9 @@
 	],
 	"Text editor command": [
 		"Ścieżka edytora tekstu"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Nie można usunąć aktywnego profilu. Zmień profil i spróbuj ponownie."
@@ -4136,6 +4166,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Używana w przypadku, gdy potrzebna jest czcionka o stałej szerokości, aby tekst był czytelny (np. tabele, pola wyboru, kod). Jeśli nie zostanie znaleziona, używana jest ogólna czcionka o stałej szerokości (monospace)."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Usunięcia użytkownika"
 	],
@@ -4183,9 +4216,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Pisanie głosowe: Słownik"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Oczekiwanie na autoryzację..."
@@ -4244,11 +4274,11 @@
 	"When creating a new to-do:": [
 		"Podczas tworzenia nowego zadania:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Po włączeniu tej funkcji aplikacja przeskanuje załączniki i wyodrębni z nich tekst. Umożliwi to wyszukiwanie tekstu w tych załącznikach."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"Okno nie reaguje."

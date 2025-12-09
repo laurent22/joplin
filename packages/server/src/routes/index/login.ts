@@ -44,12 +44,12 @@ router.get('login', async (_path: SubPath, ctx: AppContext) => {
 router.get('login/:id', async (path: SubPath, ctx: AppContext) => {
 	if (!config().saml.enabled) throw new ErrorForbidden('SAML not enabled');
 
-	if (ctx.joplin.owner) { // Already logged-in
-		return redirect(ctx, homeUrl());
-	} else if (config().saml.enabled && path.id === 'sso-saml') { // Server page, SAML
+	if (config().saml.enabled && path.id === 'sso-saml') { // Server page, SAML
 		return await generateRedirectHtml('web-login');
 	} else if (config().saml.enabled && path.id === 'sso-saml-app') { // Client, SAML
 		return await generateRedirectHtml('app-login');
+	} else if (ctx.joplin.owner) { // Already logged-in
+		return redirect(ctx, homeUrl());
 	} else {
 		return makeView();
 	}

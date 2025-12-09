@@ -138,6 +138,7 @@ export enum TaskId {
 	LogHeartbeatMessage,
 	DeleteOldEvents,
 	DeleteExpiredAuthCodes,
+	DeleteArchivedBackups,
 }
 
 // AUTO-GENERATED-TYPES

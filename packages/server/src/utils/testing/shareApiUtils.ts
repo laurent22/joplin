@@ -4,7 +4,8 @@ import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
-import { checkContextError, createFolder, createItem, koaAppContext, models, makeFolderSerializedBody, makeNoteSerializedBody, updateFolder, createResource } from './testUtils';
+import { checkContextError, createFolder, createItem, koaAppContext, models, updateFolder, createResource } from './testUtils';
+import { makeFolderSerializedBody, makeNoteSerializedBody } from './serializedItems';
 
 interface ShareResult {
 	share: Share;

@@ -350,7 +350,7 @@ class WebDavApi {
 		// https://github.com/facebook/react-native/issues/30176
 		if (!headers['Content-Type']) {
 			if (method === 'PROPFIND') headers['Content-Type'] = 'text/xml';
-			if (method === 'PUT') headers['Content-Type'] = 'text/plain';
+			if (method === 'PUT') headers['Content-Type'] = 'application/octet-stream';
 		}
 
 		// React-native has caching enabled by at least on Android (see https://github.com/laurent22/joplin/issues/4706 and the related PR).
@@ -369,7 +369,7 @@ class WebDavApi {
 		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
-		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `"JoplinIgnore-${Math.floor(Math.random() * 100000)}"`;
 		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
 		const fetchOptions = {};

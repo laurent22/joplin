@@ -1,4 +1,4 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree, expectHttpError, createNote, expectNoHttpError, getItem, deleteItem, createBaseAppContext } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, createItemTree, expectHttpError, createNote, expectNoHttpError, getItem, deleteItem, createBaseAppContext } from '../../utils/testing/testUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
@@ -8,6 +8,7 @@ import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
 import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
+import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 describe('api/items', () => {
 
