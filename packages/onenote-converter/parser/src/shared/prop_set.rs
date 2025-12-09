@@ -1,3 +1,4 @@
+use crate::one::property::PropertyType;
 use crate::shared::property::{PropertyId, PropertyValue};
 use parser_utils::Reader;
 use parser_utils::errors::Result;
@@ -60,6 +61,10 @@ impl PropertySet {
 
     pub(crate) fn get(&self, id: PropertyId) -> Option<&PropertyValue> {
         self.values.get(&id.id()).map(|(_, value)| value)
+    }
+
+    pub(crate) fn get_from_type(&self, prop_type: PropertyType) -> Option<&PropertyValue> {
+        self.get(PropertyId::new(prop_type as u32))
     }
 
     pub(crate) fn index(&self, id: PropertyId) -> Option<usize> {

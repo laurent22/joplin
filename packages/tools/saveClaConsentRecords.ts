@@ -83,8 +83,22 @@ const validateComments = (comments: IssueComment[], expectedClaAuthorId: number)
 	return false;
 };
 
+const findDuplicates = (array: (string|number|symbol)[])=> {
+	const counts: Record<string|number|symbol, number> = {};
+	const dupes = [];
+
+	for (const item of array) {
+		counts[item] = (counts[item] || 0) + 1;
+		if (counts[item] === 2) {
+			dupes.push(item);
+		}
+	}
+
+	return dupes;
+};
+
 const main = async () => {
-	console.info('To generate an accurate record, remember to merge the cla_signatures branch into dev first.');
+	console.info('⚠️ To generate an accurate record, remember to merge the cla_signatures branch into dev first ⚠️');
 
 	const consentRecordsDir = `${await getRootDir()}/readme/cla/consent_records`;
 	await mkdirp(consentRecordsDir);
@@ -95,6 +109,7 @@ const main = async () => {
 		7785, // Not merged
 		8531, // Not merged
 		11567, // Changed year on license file: https://github.com/laurent22/joplin/commit/2b43a9a4d667fe6b81bc97b66e0b3700688ec3cf
+		13790, // Manually added for Linkosed
 	];
 
 	const signedContributors = await getSignedContributors();
@@ -119,6 +134,35 @@ const main = async () => {
 	const contributorCount = signedContributors.length - excludedIssueIds.length;
 
 	if (files.length !== contributorCount) {
+		const notOk = [];
+
+		for (const contributor of signedContributors) {
+			let found = false;
+			for (const file of files) {
+				if (file.startsWith(contributor.name)) {
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				if (!excludedIssueIds.includes(contributor.pullRequestNo)) {
+					notOk.push(contributor);
+				}
+			}
+		}
+
+		if (notOk.length) {
+			console.info('In signatures.json but not in archived issues:', notOk);
+		}
+
+		const userIds = signedContributors.map(s => s.id);
+		const duplicates = findDuplicates(userIds);
+
+		if (duplicates.length) {
+			console.info('Duplicate user Ids in signatures.json:', duplicates);
+		}
+
 		throw new Error(`‼️ Found ${contributorCount} contributors in signatures.json but ${files.length} archived issues.`);
 	} else {
 		console.info(`👍 Found ${contributorCount} contributors in signatures.json and ${files.length} archived issues.`);

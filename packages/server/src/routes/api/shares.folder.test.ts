@@ -1,5 +1,5 @@
 import { ChangeType, Session, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource, expectNotThrow } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, updateNote, expectHttpError, createResource, expectNotThrow } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel';
 import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
@@ -8,6 +8,7 @@ import { ErrorForbidden } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 const createSingleFolderShare = async (session1: Session, session2: Session) => {
 	const folderItem = await createFolder(session1.id, { title: 'created by sharer' });

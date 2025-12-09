@@ -26,6 +26,7 @@ import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import { TouchableRipple } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
+import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
@@ -337,6 +338,8 @@ const SideMenuContentComponent = (props: Props) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const menuItems: any[] = [];
+
+		if (folder && folder.id === getConflictFolderId()) return;
 
 		if (folder && folder.id === getTrashFolderId()) {
 			menuItems.push({

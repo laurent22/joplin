@@ -27,13 +27,15 @@
 
 		initDone_ = true;
 
-		const elements = document.getElementsByClassName('joplin-abc-notation');
+		const elements = document.querySelectorAll('.joplin-editable > .joplin-abc-notation-rendered');
 
-		for (const element of elements) {
-			const sourceElement = element.querySelector('.joplin-source');
-			const renderedElement = element.querySelector('.joplin-rendered');
+		for (const renderContainer of elements) {
+			const block = renderContainer.parentElement;
+			const sourceElement = block.querySelector('.joplin-source');
+			if (!sourceElement) continue;
+
 			const options = getOptions(sourceElement);
-			lib.renderAbc(renderedElement, sourceElement.textContent, { ...options });
+			lib.renderAbc(renderContainer, sourceElement.textContent, { ...options });
 		}
 
 		return true;

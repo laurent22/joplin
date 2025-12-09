@@ -29,6 +29,7 @@ pub struct Revision {
     root_objects: HashMap<RootRole, ExGuid>,
 }
 
+// See [MS-ONE 2.1.8](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-one/037e31c0-4484-4a14-819a-0ddece2cacbc) 
 #[derive(Eq, PartialEq, Hash, Debug)]
 pub enum RootRole {
     DefaultContent,
@@ -95,6 +96,7 @@ impl Revision {
         let mut last_index = iterator.get_index();
         while let Some(current) = iterator.peek() {
             if let FileNodeData::RevisionManifestEndFND = current {
+                iterator.next();
                 break;
             } else if let Some(object_group_list) = ObjectGroupList::try_parse(iterator, context)? {
                 // Skip: Used for reference counting (which we can ignore here)

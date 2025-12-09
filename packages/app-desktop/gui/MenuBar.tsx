@@ -9,7 +9,6 @@ import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
-import makeDiscourseDebugUrl from '@joplin/lib/makeDiscourseDebugUrl';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
@@ -29,6 +28,8 @@ import { EventName } from '@joplin/lib/eventManager';
 import { ipcRenderer } from 'electron';
 import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
+import { ImportCommandOptions } from './WindowCommandsAndDialogs/commands/importFrom';
+import { FileSystemItem } from '@joplin/lib/services/interop/types';
 
 const logger = Logger.create('MenuBar');
 
@@ -116,7 +117,7 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 
 		switchProfileMenuItems.push({ type: 'separator' });
 		switchProfileMenuItems.push(menuItemDic.addProfile);
-		switchProfileMenuItems.push(menuItemDic.editProfileConfig);
+		switchProfileMenuItems.push(menuItemDic.showProfileEditor);
 
 		return switchProfileMenuItems;
 	}, [profileConfig, menuItemDic]);
@@ -304,83 +305,16 @@ function useMenu(props: Props) {
 		void CommandService.instance().execute(commandName);
 	}, []);
 
-	const onImportModuleClick = useCallback(async (module: ImportModule, moduleSource: string) => {
-		let path = null;
-
-		if (moduleSource === 'file') {
-			path = await bridge().showOpenDialog({
-				filters: [{ name: module.description, extensions: module.fileExtensions }],
-			});
-		} else {
-			path = await bridge().showOpenDialog({
-				properties: ['openDirectory', 'createDirectory'],
-			});
-		}
-
-		if (!path || (Array.isArray(path) && !path.length)) return;
-
-		if (Array.isArray(path)) path = path[0];
-
-		const modalMessage = _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
-
-		void CommandService.instance().execute('showModalMessage', modalMessage);
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const errors: any[] = [];
-
-		const importOptions = {
-			path,
-			format: module.format,
-			outputFormat: module.outputFormat,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onProgress: (status: any) => {
-				const statusStrings: string[] = Object.keys(status).map((key: string) => {
-					return `${key}: ${status[key]}`;
-				});
-
-				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
-			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onError: (error: any) => {
-				errors.push(error);
-				console.warn(error);
-			},
+	const onImportModuleClick = useCallback(async (module: ImportModule, moduleSource: FileSystemItem) => {
+		const options: ImportCommandOptions = {
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
+			sourcePath: undefined, // Show a file picker
+			sourceType: moduleSource,
+			importFormat: module.format,
+			outputFormat: module.outputFormat,
 		};
-
-		const service = InteropService.instance();
-		try {
-			const result = await service.import(importOptions);
-			// eslint-disable-next-line no-console
-			console.info('Import result: ', result);
-		} catch (error) {
-			bridge().showErrorMessageBox(error.message);
-		}
-
-		void CommandService.instance().execute('hideModalMessage');
-
-		if (errors.length) {
-			const response = bridge().showErrorMessageBox('There was some errors importing the notes - check the console for more details.\n\nPlease consider sending a bug report to the forum!', {
-				buttons: [_('Close'), _('Send bug report')],
-			});
-
-			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
-
-			if (response === 1) {
-				const url = makeDiscourseDebugUrl(
-					`Error importing notes from format: ${module.format}`,
-					`- Input format: ${module.format}\n- Output format: ${module.outputFormat}`,
-					errors,
-					packageInfo,
-					PluginService.instance(),
-					props.pluginSettings,
-				);
-
-				void bridge().openExternal(url);
-			}
-		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.selectedFolderId, props.pluginSettings]);
+		await CommandService.instance().execute('importFrom', options);
+	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
 	onMenuItemClickRef.current = onMenuItemClick;

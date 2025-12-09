@@ -122,12 +122,14 @@ Joplin can renders [ABC notation](https://abcnotation.com) into sheet music. You
 
 <!-- cSpell:disable -->
 
-	```abc
-	K:F
-	!f!(fgag-g2c2)|
-	```
+````md
+```abc
+K:F
+!f!(fgag-g2c2)|
+```
+````
 
-`<!-- cSpell:enable -->
+<!-- cSpell:enable -->
 
 For example:
 
@@ -150,20 +152,20 @@ You can also activate options for a particular sheet music. To do so, add a head
 For example, this would add violin tablatures to the sheet music:
 
 <!-- cSpell:disable -->
+````md
+```abc
+{tablature: [{instrument: 'violin'}]}
+---
 
-	```abc
-	{tablature: [{instrument: 'violin'}]}
-	---
-
-	X:1
-	T: Cooley's
-	M: 4/4
-	L: 1/8
-	R: reel
-	K: G
-	|:D2|EB{c}BA B2 EB|~B2 AB dBAG|FDAD BDAD|FDAD dAFD|
-	```
-
+X:1
+T: Cooley's
+M: 4/4
+L: 1/8
+R: reel
+K: G
+|:D2|EB{c}BA B2 EB|~B2 AB dBAG|FDAD BDAD|FDAD dAFD|
+```
+````
 <!-- cSpell:enable -->
 
 ![Sheet music and guitar tablature for the Irish reel "Cooley's" in D major](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/abc/Tablature.png)

@@ -1,6 +1,5 @@
 use super::{
-    object_stream_header::ObjectStreamHeader, prop_set::PropertySet, property::PropertyId,
-    property::PropertyValue,
+    object_stream_header::ObjectStreamHeader, prop_set::PropertySet, property::PropertyValue,
 };
 use crate::one::property::PropertyType;
 use crate::shared::compact_id::CompactId;
@@ -77,6 +76,6 @@ impl Parse for ObjectPropSet {
 
 impl ObjectPropSet {
     pub(crate) fn get(&self, prop_type: PropertyType) -> Option<&PropertyValue> {
-        self.properties.get(PropertyId::new(prop_type as u32))
+        self.properties.get_from_type(prop_type)
     }
 }

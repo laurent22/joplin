@@ -75,6 +75,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.where('user_items.user_id', '=', userId);
 	}
 
+	public async countWithUserId(userId: Uuid): Promise<number> {
+		const count = await this.db(this.tableName).count('*').where('user_id', '=', userId);
+		return count[0].count;
+	}
+
 	public async byUserId(userId: Uuid): Promise<UserItem[]> {
 		return this.db(this.tableName).where('user_id', '=', userId);
 	}
