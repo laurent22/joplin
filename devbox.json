@@ -9,7 +9,7 @@
     "vips.dev": {
       "platforms": ["aarch64-darwin"],
     },
-    "nodejs":     "24.4.1",
+    "nodejs":     "24.5.0",
     "pkg-config": "latest",
     "darwin.apple_sdk.frameworks.Foundation": { // satisfies missing CoreText/CoreText.h
       // https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/default.nix
