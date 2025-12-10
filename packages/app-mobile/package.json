@@ -99,7 +99,7 @@
     "@react-native-community/cli": "16.0.3",
     "@react-native-community/cli-platform-android": "16.0.3",
     "@react-native-community/cli-platform-ios": "16.0.3",
-    "@react-native/babel-preset": "0.81.0",
+    "@react-native/babel-preset": "0.80.1",
     "@react-native/metro-config": "0.79.5",
     "@react-native/typescript-config": "0.80.2",
     "@sqlite.org/sqlite-wasm": "3.46.0-build2",
