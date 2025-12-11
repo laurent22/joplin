@@ -10917,7 +10917,7 @@ __metadata:
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
     koa-body: "npm:6.0.1"
-    pg-boss: "npm:10.3.2"
+    pg-boss: "npm:10.3.3"
     sharp: "npm:0.34.3"
     sqlite3: "npm:5.1.6"
     typescript: "npm:5.8.3"
@@ -41175,14 +41175,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-boss@npm:10.3.2":
-  version: 10.3.2
-  resolution: "pg-boss@npm:10.3.2"
+"pg-boss@npm:10.3.3":
+  version: 10.3.3
+  resolution: "pg-boss@npm:10.3.3"
   dependencies:
     cron-parser: "npm:^4.9.0"
-    pg: "npm:^8.16.0"
+    pg: "npm:^8.16.3"
     serialize-error: "npm:^8.1.0"
-  checksum: 10/89dbc4dc33f4e4f5f21698e8172ccd8414286a313c6a789a588ccd8fa4e4f586906f1602b839d84527c0c14a4987cb73842916fc39ee805001ac55bc545979eb
+  checksum: 10/f9568016ecf79244895b8fc8687c4cb24e6986f2a997598163ac387b4598c979e37e500422963585d3cf3010c6bfaf49d17fda5a9cfac1e36c904cfb6552de4a
   languageName: node
   linkType: hard
 
@@ -41250,7 +41250,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.16.3, pg@npm:^8.16.0":
+"pg@npm:8.16.3, pg@npm:^8.16.3":
   version: 8.16.3
   resolution: "pg@npm:8.16.3"
   dependencies:
