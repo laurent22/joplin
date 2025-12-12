@@ -18,7 +18,7 @@ const addFormattingClasses = [
 	makeInlineReplaceExtension({
 		getRevealStrategy: (node) => {
 			// Links: use 'select' because the Link's parent is Paragraph,
-			// which spans the whole line - 'active' would hide all links on the line
+			// which spans the whole line - 'active' would hide all link decorations on the line
 			if (node.name === 'URL' || node.name === 'Link') {
 				return 'select';
 			}
