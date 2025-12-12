@@ -34560,7 +34560,7 @@ __metadata:
     typescript: "npm:5.8.3"
     url-parse: "npm:1.5.10"
     word-wrap: "npm:1.2.5"
-    yargs-parser: "npm:21.1.1"
+    yargs-parser: "npm:22.0.0"
   bin:
     joplin: ./main.js
   languageName: unknown
@@ -53510,10 +53510,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:21.1.1, yargs-parser@npm:^21.1.1":
-  version: 21.1.1
-  resolution: "yargs-parser@npm:21.1.1"
-  checksum: 10/9dc2c217ea3bf8d858041252d43e074f7166b53f3d010a8c711275e09cd3d62a002969a39858b92bbda2a6a63a585c7127014534a560b9c69ed2d923d113406e
+"yargs-parser@npm:22.0.0":
+  version: 22.0.0
+  resolution: "yargs-parser@npm:22.0.0"
+  checksum: 10/f13c42bad6ebed1a587a72f2db5694f5fa772bcaf409a701691d13cf74eb5adfcf61a2611de08807e319b829d3e5e6e1578b16ebe174cae8e8be3bf7b8e7a19e
   languageName: node
   linkType: hard
 
@@ -53548,6 +53548,13 @@ __metadata:
   version: 21.0.0
   resolution: "yargs-parser@npm:21.0.0"
   checksum: 10/bbfa0daa49d46d07954fc9c9088037628d603a4862b08fb97183d5cf905791a9b0beb95866637c63453b73475a4187d76cfba7503ccfc79fd66bbd11a8afb032
+  languageName: node
+  linkType: hard
+
+"yargs-parser@npm:^21.1.1":
+  version: 21.1.1
+  resolution: "yargs-parser@npm:21.1.1"
+  checksum: 10/9dc2c217ea3bf8d858041252d43e074f7166b53f3d010a8c711275e09cd3d62a002969a39858b92bbda2a6a63a585c7127014534a560b9c69ed2d923d113406e
   languageName: node
   linkType: hard
 
