@@ -58,13 +58,24 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				enter: node => {
 					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) + 1);
 
-					const nodeLineFrom = doc.lineAt(node.from);
-					const nodeLineTo = doc.lineAt(node.from);
-					const nodeLineContainsSelection = cursorLine.number === nodeLineFrom.number || cursorLine.number === nodeLineTo.number;
+					const strategy = extensionSpec.getRevealStrategy?.(node, view.state) ?? 'line';
+
+					let isSelected = false;
+					if (typeof strategy === 'boolean') {
+						isSelected = strategy;
+					} else if (strategy === 'line') {
+						const nodeLine = doc.lineAt(node.from);
+						const lineContainsSelection = cursorLine.number === nodeLine.number;
+						isSelected = lineContainsSelection || nodeIntersectsSelection(selection, node);
+					} else if (strategy === 'select') {
+						isSelected = nodeIntersectsSelection(selection, node);
+					} else if (strategy === 'active') {
+						const parent = node.node.parent;
+						isSelected = nodeIntersectsSelection(selection, node) || (!!parent && nodeIntersectsSelection(selection, parent));
+					}
+
 					const shouldHide = (
-						(extensionSpec.hideWhenContainsSelection ?? true) && (
-							nodeIntersectsSelection(selection, node) || nodeLineContainsSelection
-						)
+						(extensionSpec.hideWhenContainsSelection ?? true) && isSelected
 					);
 
 					if (!shouldHide) {

@@ -92,6 +92,25 @@ const replaceCheckboxes = [
 		},
 	}),
 	makeReplaceExtension({
+		getRevealStrategy: (node, state) => {
+			if (node.name === 'TaskMarker') {
+				const container = node.node.parent?.parent;
+				const listMarker = container?.getChild('ListMark');
+
+				// Intersection check logic similar to nodeIntersectsSelection but with custom range
+				const selection = state.selection.main;
+				const rangeFrom = listMarker ? listMarker.from : node.from;
+				const rangeTo = node.to;
+
+				const rangeContains = (point: number) => point >= rangeFrom && point <= rangeTo;
+				const selectionContains = (point: number) => point >= selection.from && point <= selection.to;
+
+				// Reveal if cursor touches the checkbox or the list bullet point
+				return rangeContains(selection.from) || rangeContains(selection.to)
+					|| selectionContains(rangeFrom) || selectionContains(rangeTo);
+			}
+			return 'line';
+		},
 		createDecoration: (node, state, parentTags) => {
 			const markerIsChecked = (marker: SyntaxNodeRef) => {
 				const content = state.doc.sliceString(marker.from, marker.to);
