@@ -10238,7 +10238,7 @@ __metadata:
     electron-window-state: "npm:5.0.3"
     esbuild: "npm:^0.25.3"
     formatcoords: "npm:1.1.3"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     glob: "npm:11.0.3"
     gulp: "npm:4.0.2"
     highlight.js: "npm:11.11.1"
@@ -10341,7 +10341,7 @@ __metadata:
     expo-camera: "npm:16.1.11"
     expo-local-authentication: "npm:16.0.5"
     fast-deep-equal: "npm:3.1.3"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
@@ -10413,7 +10413,7 @@ __metadata:
   dependencies:
     "@joplin/utils": "npm:~3.5"
     "@types/yargs": "npm:17.0.33"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.8.3"
     yargs: "npm:17.7.2"
@@ -10545,7 +10545,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     datauri: "npm:4.1.0"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
     typescript: "npm:5.8.3"
@@ -10595,7 +10595,7 @@ __metadata:
     file-type: "npm:16.5.4"
     follow-redirects: "npm:1.15.11"
     form-data: "npm:4.0.4"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     hpagent: "npm:1.2.0"
     html-entities: "npm:1.4.0"
     html-minifier: "npm:4.0.0"
@@ -10692,7 +10692,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.130"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     gh-release-assets: "npm:2.0.1"
     jest: "npm:29.7.0"
     node-fetch: "npm:2.6.7"
@@ -10750,7 +10750,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     abcjs: "npm:6.5.2"
     font-awesome-filetypes: "npm:2.1.0"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     highlight.js: "npm:11.11.1"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
@@ -10811,7 +10811,7 @@ __metadata:
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.18"
     formidable: "npm:2.1.2"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
@@ -10866,7 +10866,7 @@ __metadata:
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.18"
     execa: "npm:4.1.0"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     gettext-extractor: "npm:3.8.0"
     gettext-parser: "npm:7.0.1"
     glob: "npm:11.0.3"
@@ -10910,7 +10910,7 @@ __metadata:
     "@types/uuid": "npm:10.0.0"
     dotenv: "npm:16.6.1"
     file-type: "npm:16.5.4"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
     jest: "npm:29.7.0"
     jest-expect-message: "npm:1.1.3"
@@ -10965,7 +10965,7 @@ __metadata:
     async-mutex: "npm:0.5.0"
     dayjs: "npm:1.11.18"
     execa: "npm:5.1.1"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     glob: "npm:11.0.3"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
@@ -29318,14 +29318,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:11.3.1":
-  version: 11.3.1
-  resolution: "fs-extra@npm:11.3.1"
+"fs-extra@npm:11.3.2":
+  version: 11.3.2
+  resolution: "fs-extra@npm:11.3.2"
   dependencies:
     graceful-fs: "npm:^4.2.0"
     jsonfile: "npm:^6.0.1"
     universalify: "npm:^2.0.0"
-  checksum: 10/2b893213411b1da11f9b061ccb0bcff4d6dd66fe90aa8f5b1616219a5e7ca659da869f454ebd8e94aa21c58342730fb43a2e5c98b5c6c5124f0c54a4633f64b0
+  checksum: 10/d559545c73fda69c75aa786f345c2f738b623b42aea850200b1582e006a35278f63787179e3194ba19413c26a280441758952b0c7e88dd96762d497e365a6c3e
   languageName: node
   linkType: hard
 
@@ -34537,7 +34537,7 @@ __metadata:
     chalk: "npm:4.1.2"
     compare-version: "npm:0.1.2"
     file-type: "npm:16.5.4"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
@@ -45654,7 +45654,7 @@ __metadata:
     eslint-plugin-promise: "npm:6.6.0"
     eslint-plugin-react: "npm:7.37.5"
     execa: "npm:5.1.1"
-    fs-extra: "npm:11.3.1"
+    fs-extra: "npm:11.3.2"
     glob: "npm:11.0.3"
     gulp: "npm:4.0.2"
     http-server: "npm:14.1.1"

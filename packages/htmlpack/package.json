@@ -28,7 +28,7 @@
     "@adobe/css-tools": "4.4.4",
     "@joplin/fork-htmlparser2": "^4.1.60",
     "datauri": "4.1.0",
-    "fs-extra": "11.3.1",
+    "fs-extra": "11.3.2",
     "html-entities": "1.4.0"
   },
   "devDependencies": {
