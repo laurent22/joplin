@@ -296,23 +296,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				flex: 0,
 			};
 
-			const backButton = (
-				<TouchableOpacity
-					onPress={onPress}
-					disabled={disabled}
-
-					accessibilityLabel={_('Back')}
-					accessibilityRole="button">
-					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
-						<Icon
-							name="arrow-back"
-							style={iconStyle}
-						/>
-					</View>
-				</TouchableOpacity>
-			);
-
-			// In order to maintain visual parity when transitioning between both modes, the icon must use the same styling but not the container
 			const containerStyle: ViewStyle = {
 				...styles.backButton,
 				flex: 0,
@@ -323,7 +306,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				flex: 0,
 			};
 
-			const backButtonWithMenu = (
+			const backButton = (
 				<Menu themeId={themeId} options={backButtonMenuOptions} onTriggerShortPress={onPress}>
 					<View
 						accessibilityLabel={_('Back')}
@@ -338,7 +321,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				</Menu>
 			);
 
-			return backButtonMenuOptions ? backButtonWithMenu : backButton;
+			return backButton;
 		}
 
 		function saveButton(

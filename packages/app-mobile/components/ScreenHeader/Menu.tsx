@@ -105,29 +105,31 @@ const MenuComponent: React.FC<Props> = props => {
 
 	let keyCounter = 0;
 	let isFirst = true;
-	for (const option of props.options) {
-		if (option.isDivider === true) {
-			menuOptionComponents.push(
-				<View key={`menuOption_divider_${keyCounter++}`} style={styles.divider} />,
-			);
-		} else {
-			// Don't auto-focus on iOS -- as of RN 0.74, this causes focus to get stuck. However,
-			// the auto-focus seems to be necessary on web (and possibly Android) to avoid first focusing
-			// the dismiss button and other items not in the menu:
-			const canAutoFocus = isFirst && Platform.OS !== 'ios';
-			const key = `menuOption_${option.key ?? keyCounter++}`;
-			menuOptionComponents.push(
-				<MenuOptionComponent value={option.onPress} key={key} style={styles.contextMenuItem} disabled={!!option.disabled}>
-					<AccessibleView refocusCounter={canAutoFocus ? refocusCounter : undefined} testID={key}>
-						<Text
-							style={option.disabled ? styles.contextMenuItemTextDisabled : styles.contextMenuItemText}
-							disabled={option.disabled}
-						>{option.title}</Text>
-					</AccessibleView>
-				</MenuOptionComponent>,
-			);
+	if (props.options) {
+		for (const option of props.options) {
+			if (option.isDivider === true) {
+				menuOptionComponents.push(
+					<View key={`menuOption_divider_${keyCounter++}`} style={styles.divider} />,
+				);
+			} else {
+				// Don't auto-focus on iOS -- as of RN 0.74, this causes focus to get stuck. However,
+				// the auto-focus seems to be necessary on web (and possibly Android) to avoid first focusing
+				// the dismiss button and other items not in the menu:
+				const canAutoFocus = isFirst && Platform.OS !== 'ios';
+				const key = `menuOption_${option.key ?? keyCounter++}`;
+				menuOptionComponents.push(
+					<MenuOptionComponent value={option.onPress} key={key} style={styles.contextMenuItem} disabled={!!option.disabled}>
+						<AccessibleView refocusCounter={canAutoFocus ? refocusCounter : undefined} testID={key}>
+							<Text
+								style={option.disabled ? styles.contextMenuItemTextDisabled : styles.contextMenuItemText}
+								disabled={option.disabled}
+							>{option.title}</Text>
+						</AccessibleView>
+					</MenuOptionComponent>,
+				);
 
-			isFirst = false;
+				isFirst = false;
+			}
 		}
 	}
 
@@ -164,11 +166,13 @@ const MenuComponent: React.FC<Props> = props => {
 		</MenuTrigger>
 	);
 
+	// If there are no options defined when using dualActionMenuTrigger, make the menu trigger behave like a normal button instead of opening a menu.
+	// This may be used to ensure visual parity with buttons which are visually the same, but do not have a menu when long pressed on some screens
 	const dualActionMenuTrigger = (
 		<MenuTrigger
 			style={styles.contextMenuButton}
 			testID='screen-header-dual-action-menu-trigger'
-			triggerOnLongPress={true}
+			triggerOnLongPress={!!props.options}
 			customStyles={{
 				TriggerTouchableComponent: TouchableOpacity,
 				triggerTouchable: {
