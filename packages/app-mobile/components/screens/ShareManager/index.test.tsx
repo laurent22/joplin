@@ -11,6 +11,8 @@ import { Provider } from 'react-redux';
 import createMockReduxStore from '../../../utils/testing/createMockReduxStore';
 import { AppState } from '../../../utils/types';
 import { Store } from 'redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { MenuProvider } from 'react-native-popup-menu';
 
 interface WrapperProps {
 	shareInvitations: ShareInvitation[];
@@ -19,13 +21,22 @@ interface WrapperProps {
 
 const ShareManagerWrapper: React.FC<WrapperProps> = props => {
 	return (
-		<Provider store={props.store}>
-			<ShareManagerComponent
-				themeId={Setting.THEME_LIGHT}
-				shareInvitations={props.shareInvitations}
-				processingShareInvitationResponse={false}
-			/>
-		</Provider>
+		<SafeAreaProvider
+			initialMetrics={{
+				frame: { x: 0, y: 0, width: 375, height: 812 },
+				insets: { top: 0, left: 0, right: 0, bottom: 0 },
+			}}
+		>
+			<MenuProvider closeButtonLabel={''}>
+				<Provider store={props.store}>
+					<ShareManagerComponent
+						themeId={Setting.THEME_LIGHT}
+						shareInvitations={props.shareInvitations}
+						processingShareInvitationResponse={false}
+					/>
+				</Provider>
+			</MenuProvider>
+		</SafeAreaProvider>
 	);
 };
 
