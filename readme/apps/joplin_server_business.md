@@ -90,6 +90,15 @@ To find out more about Joplin Server Business and how it can be integrated to yo
 
 [Contact us for a quote!](mailto:jsb-inquiry@joplin.cloud?subject=Joplin%20Server%20Business%20inquiry)
 
+## Difference with Joplin Server
+
+Alongside the standard Joplin Server capabilities, JSB offers several additional features:
+
+* **Team support** – streamlines the management of multiple users. It provides a central dashboard showing all members in your organisation, making it simple to add or remove users and handle centralised billing.
+* **Share permissions** – lets you specify whether a shared notebook can be edited or viewed only. This is useful, for instance, when sharing documentation that should remain unchanged.
+* **Customisable publishing banner** – allows you to add a logo, adjust the text, and alter the banner’s colour to suit your branding.
+* **Email to Note** – enables you to save emails directly to JSB by forwarding them to a dedicated address. This requires a functioning mail infrastructure.
+
 ## Technical specifications
 
 ### Software requirements

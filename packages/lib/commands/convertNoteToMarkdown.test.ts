@@ -1,18 +1,20 @@
 import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
-import { AppState, createAppDefaultState } from '../app.reducer';
-import Note from '@joplin/lib/models/Note';
+import { defaultState, State } from '../reducer';
+import Note from '../models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-import Folder from '@joplin/lib/models/Folder';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import Folder from '../models/Folder';
+import { NoteEntity } from '../services/database/types';
+import shim from '../shim';
 
 describe('convertNoteToMarkdown', () => {
-	let state: AppState = undefined;
+	let state: State = undefined;
 
 	beforeEach(async () => {
-		state = createAppDefaultState({});
+		state = defaultState;
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		shim.showToast = jest.fn();
 	});
 
 	it('should set the original note to be trashed', async () => {
@@ -29,13 +31,6 @@ describe('convertNoteToMarkdown', () => {
 	});
 
 	it('should recreate a new note that is a clone of the original', async () => {
-		let noteConvertedToMarkdownId = '';
-		const dispatchFn = jest.fn()
-			.mockImplementationOnce(() => {})
-			.mockImplementationOnce(action => {
-				noteConvertedToMarkdownId = action.id;
-			});
-
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
 			title: 'test',
@@ -49,10 +44,11 @@ describe('convertNoteToMarkdown', () => {
 		const htmlNote = await Note.save(htmlNoteProperties);
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: dispatchFn });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
-		expect(dispatchFn).toHaveBeenCalledTimes(2);
-		expect(noteConvertedToMarkdownId).not.toBe('');
+		const notes = await Note.previews(folder.id);
+		expect(notes).toHaveLength(1);
+		const noteConvertedToMarkdownId = notes[0].id;
 
 		const markdownNote = await Note.load(noteConvertedToMarkdownId);
 
@@ -63,15 +59,6 @@ describe('convertNoteToMarkdown', () => {
 	});
 
 	it('should generate action to trigger notification', async () => {
-		let originalHtmlNoteId = '';
-		let actionType = '';
-		const dispatchFn = jest.fn()
-			.mockImplementationOnce(action => {
-				originalHtmlNoteId = action.value;
-				actionType = action.type;
-			})
-			.mockImplementationOnce(() => {});
-
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
 			title: 'test',
@@ -85,12 +72,9 @@ describe('convertNoteToMarkdown', () => {
 		const htmlNote = await Note.save(htmlNoteProperties);
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: dispatchFn });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
-		expect(dispatchFn).toHaveBeenCalledTimes(2);
-
-		expect(originalHtmlNoteId).toBe(htmlNote.id);
-		expect(actionType).toBe('NOTE_HTML_TO_MARKDOWN_DONE');
+		expect(shim.showToast).toHaveBeenCalled();
 	});
 
 });

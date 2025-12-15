@@ -67,5 +67,8 @@ pub mod property {
     pub mod rich_text {
         pub use crate::one::property::paragraph_alignment::ParagraphAlignment;
         pub use crate::onenote::rich_text::ParagraphStyling;
+        pub use crate::onenote::text_region::Hyperlink;
+        pub use crate::onenote::text_region::MathExpression;
+        pub use crate::onenote::text_region::TextRegion;
     }
 }

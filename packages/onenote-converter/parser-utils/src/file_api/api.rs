@@ -19,6 +19,12 @@ pub trait FileApiDriver: Send + Sync {
     /// `path_2` is still appended to `path_1`.
     fn join(&self, path_1: &str, path_2: &str) -> String;
 
+    /// Splits filename into (base, extension).
+    fn split_file_name(&self, filename: &str) -> (String, String) {
+        let ext = self.get_file_extension(filename);
+        let base = filename.strip_suffix(&ext).unwrap_or(filename);
+        (base.into(), ext)
+    }
     fn remove_prefix<'a>(&self, full_path: &'a str, prefix: &str) -> &'a str {
         if let Some(without_prefix) = full_path.strip_prefix(prefix) {
             without_prefix

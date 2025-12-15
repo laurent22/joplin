@@ -7,7 +7,8 @@ use crate::one::property_set::PropertySetId;
 use crate::onestore::object::Object;
 use crate::shared::exguid::ExGuid;
 use crate::shared::guid::Guid;
-use parser_utils::errors::{ErrorKind, Result};
+use parser_utils::errors::Result;
+use parser_utils::log_warn;
 
 /// A section.
 ///
@@ -18,6 +19,7 @@ use parser_utils::errors::{ErrorKind, Result};
 #[allow(dead_code)]
 pub(crate) struct Data {
     //pub(crate) context_id: ExGuid, // Removed -- but may be necessary
+    /// Used for creating links to sections. If not present, defaults to `Guid::nil`.
     pub(crate) entity_guid: Guid,
     pub(crate) page_series: Vec<ExGuid>,
     pub(crate) created_at: Timestamp,
@@ -32,13 +34,14 @@ pub(crate) fn parse(object: Rc<Object>) -> Result<Data> {
 
     let object = object.as_ref();
     let entity_guid = simple::parse_guid(PropertyType::NotebookManagementEntityGuid, object)?
-        .ok_or_else(|| ErrorKind::MalformedOneNoteFileData("section has no guid".into()))?;
+        .unwrap_or_else(|| {
+            log_warn!("Section: Missing entity GUID");
+            Guid::nil()
+        });
     let page_series =
         ObjectReference::parse_vec(PropertyType::ElementChildNodes, object)?.unwrap_or_default();
     let created_at = Timestamp::parse(PropertyType::TopologyCreationTimeStamp, object)?
-        .ok_or_else(|| {
-            ErrorKind::MalformedOneNoteFileData("section has no creation timestamp".into())
-        })?;
+        .ok_or_else(|| parser_error!(MalformedOneNoteData, "Section has no creation timestamp"))?;
 
     let data = Data {
         //context_id,

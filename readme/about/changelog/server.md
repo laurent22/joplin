@@ -1,5 +1,33 @@
 # Joplin Server Changelog
 
+## [server-v3.5.1](https://github.com/laurent22/joplin/releases/tag/server-v3.5.1) - 2025-12-03T11:56:31Z
+
+- New: Add support for DELETE_EXPIRED_SESSIONS_SCHEDULE to prevent auto-logout when using SAML login (ae289be)
+- Improved: Add LOG_LEVEL env var to control logging verbosity (#13503) (#13147 by [@bartolomeo](https://github.com/bartolomeo))
+- Improved: Database: Adjust connection pool configuration, make connection pool size configurable (#13681 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Enable publish and share notebook for SAML login (defe36b)
+- Improved: Improve SAML login error handling and add doc regarding email and displayName attributes (98effef)
+- Improved: Improve error message when font file cannot be loaded (#13682 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve error when attempting to load certain routes that do not exist (#13683 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Optimise delta query (#13650)
+- Improved: Optimise delta sub-query (#13633)
+- Improved: Performance: Improve performance of requests-per-minute logger (#13670 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Performance: Improve performance of updating shared items, generating reports (#13674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove query optimisation that now seems to be slower with newer versions of Postgres (66fa3fc)
+- Improved: SAML users cannot modify their own profile at all (#13378) (#13369)
+- Improved: Save and query less data when creating and updating items (#13739 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Slightly improve delta performance (#13730 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update `@aws-sdk/client-s3` to v3.928.0 (#13673 by [@saturneric](https://github.com/saturneric))
+- Improved: Updated packages @adobe/css-tools (v4.4.4), dayjs (v1.11.18), follow-redirects (v1.15.11), form-data (v4.0.4), koa (v2.16.2), ldapts (v8.0.9), mermaid (v11.9.0), pg (v8.16.3), rate-limiter-flexible (v7.2.0), raw-body (v3.0.1), samlify (v2.10.1), sharp (v0.34.3), turndown (v7.2.1)
+- Improved: Upgrade NodeJS to v24 (#13701 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade koa to v2.16.3 (#13626 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Cannot login with SAML when already logged in on the browser (#13368)
+- Fixed: Fix items can be incorrectly unshared on conflicting update (#13691) (#13686 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix password fields are always disabled (#13401) (#13400 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix report service fails when there are a very large number of items to be processed (#13721 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix slow delta queries (#13639)
+- Fixed: Make server less likely to generate non-unique SSO codes (#13501) (#13490 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [server-v3.4.4](https://github.com/laurent22/joplin/releases/tag/server-v3.4.4) - 2025-09-25T13:19:10Z
 
 - Improved: Clean-up SAML login section (4cb6b01)

@@ -16,6 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Gtranslator 48.0\n"
+"PO-Revision-Date: 2025-11-15 20:19+0700\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -296,7 +297,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "Penjelasan singkat tentang gambar:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1970
 msgid ""
@@ -413,7 +414,7 @@ msgstr "Tambahkan isi"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:24
 msgid "Add column"
-msgstr ""
+msgstr "Tambah kolom"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -430,9 +431,8 @@ msgid "Add recipient:"
 msgstr "Tambah penerima:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
-#, fuzzy
 msgid "Add row"
-msgstr "Tambah baru"
+msgstr "Tambah baris"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -577,6 +577,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Sebuah galat terjadi ketika mengirim tanggapan. Hal ini dapat terjadi jika "
+"aplikasi sedang luring atau tidak dapat tersambung ke server.\n"
+"Galat: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1191,9 +1194,8 @@ msgstr "Lipat semua buku catatan"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Collapse title"
-msgstr "Lipat %s"
+msgstr "Lipat judul"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1206,9 +1208,9 @@ msgstr "Alarm yang akan datang"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Daftar jalur yang dipisahkan tanda koma menuju direktori untuk memuat "
 "sertifikat dari, atau jalur menuju berkas cert satuan. Contoh: /my/"
@@ -1731,9 +1733,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Hapus lampiran \"%s\"?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:34
-#, fuzzy
 msgid "Delete column"
-msgstr "Hapus baris"
+msgstr "Hapus kolom"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1774,9 +1775,8 @@ msgid "Delete profile \"%s\""
 msgstr "Hapus profil \"%s\"?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:29
-#, fuzzy
 msgid "Delete row"
-msgstr "Hapus catatan"
+msgstr "Hapus baris"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:486
 msgid "Delete selected notes"
@@ -2010,7 +2010,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Apakah aplikasi web Joplin berguna untuk Anda?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1980
 msgid "Document scanner: Title template"
@@ -2573,9 +2573,8 @@ msgstr "Buka semua buku catatan"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Expand title"
-msgstr "Terbuka"
+msgstr "Bentangkan judul"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2685,7 +2684,7 @@ msgstr "Penanda fitur"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Umpan balik"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3374,9 +3373,8 @@ msgid "Joplin Server"
 msgstr "Server Joplin"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:67
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "URL Joplin Server"
+msgstr "Joplin Server (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3409,6 +3407,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin mendukung penyimpanan lokasi tempat di mana catatan disimpan atau "
+"dibuat. Apakah Anda ingin menyalakannya? Ini dapat diubah kapan saja di "
+"pengaturan."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3462,7 +3463,7 @@ msgstr "Kunci-kunci yang perlu ditingkatkan"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Cap"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1443
 msgid "Landscape"
@@ -3704,9 +3705,8 @@ msgid "Markdown editor"
 msgstr "Penyunting Markdown"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1515
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Penyunting Markdown: Tampilkan gambar"
+msgstr "Penyunting Markdown: Sorot baris saat ini"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1504
 msgid "Markdown editor: Render images"
@@ -4105,7 +4105,7 @@ msgstr "Tidak sekarang"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Tidak berguna"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4182,9 +4182,8 @@ msgid "Note list style"
 msgstr "Gaya daftar catatan"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Isi disediakan oleh: %s"
+msgstr "Catatan yang tidak diterbitkan: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4452,7 +4451,7 @@ msgstr "Daftar berurutan"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:130
 msgid "Other"
-msgstr ""
+msgstr "Lainnya"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4846,9 +4845,8 @@ msgid "Publish Note"
 msgstr "Terbitkan catatan"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
+msgstr "Terbitkan catatan \"%s\" (pada buku catatan \"%s\")?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4869,14 +4867,13 @@ msgid "Publish/unpublish"
 msgstr "Terbitkan/Batal terbitkan"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Terbitkan Catatan"
+msgstr "Diterbitkan pada URL: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Menerbitkan sebuah catatan ke Joplin Server atau Joplin Cloud"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4942,9 +4939,8 @@ msgid "Recipients:"
 msgstr "Penerima:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "teks yang ditekankan"
+msgstr "Mengenali teks:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5296,9 +5292,8 @@ msgid "Save geo-location with notes"
 msgstr "Simpan geolokasi dengan catatan"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:555
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Simpan geolokasi dengan catatan"
+msgstr "Simpan geolokasi?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5406,7 +5401,7 @@ msgstr "Pilih buku catatan"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:131
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Pilih salah satu dari sasaran penyelarasan lainnya yang didukung."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5943,7 +5938,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:111
 msgid "Sync"
-msgstr ""
+msgstr "Selaraskan"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6067,9 +6062,8 @@ msgid "Take photo"
 msgstr "Ambil foto"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Membuat gambar"
+msgstr "Ikut survei"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6101,6 +6095,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Terima kasih atas umpan balik yang telah diberikan!\n"
+"Apakah Anda bersedia untuk mengikuti survei singkat?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6880,9 +6876,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "Tidak dapat membagikan data log. Alasan: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1101
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "Tidak dapat membagikan data log. Alasan: %s"
+msgstr "Tidak dapat membagikan data catatan. Alasan: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7145,7 +7140,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Berguna"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7327,6 +7322,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Ketika dinyalakan, minta agar gambar pada catatan untuk ditranskripsi dengan "
+"sebuah layanan transkripsi pada server yang berkualitas lebih tinggi. "
+"Memerlukan penyelarasan dengan sebuah salinan dari aplikasi destop."
 
 #: packages/lib/models/settings/builtInMetadata.ts:576
 msgid ""
@@ -7451,8 +7449,8 @@ msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Kata sandi Anda dibutuhkan untuk mendekripsi beberapa data Anda. Ketik `:"
-"e2ee decrypt` untuk mengaturnya."
+"Kata sandi Anda dibutuhkan untuk mendekripsi beberapa data Anda. Ketik "
+"`:e2ee decrypt` untuk mengaturnya."
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"

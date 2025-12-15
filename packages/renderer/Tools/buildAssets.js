@@ -47,6 +47,9 @@ async function main() {
 
 	await copyFile(`${rootDir}/node_modules/mermaid/dist/mermaid.min.js`, 'mermaid/mermaid.min.js');
 	await copyFile(`${rootDir}/MdToHtml/rules/mermaid_render.js`, 'mermaid/mermaid_render.js');
+
+	await copyFile(`${rootDir}/node_modules/abcjs/dist/abcjs-basic-min.js`, 'abc/abcjs-basic-min.js');
+	await copyFile(`${rootDir}/MdToHtml/rules/abc_render.js`, 'abc/abc_render.js');
 }
 
 main().catch((error) => {

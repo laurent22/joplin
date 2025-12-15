@@ -80,6 +80,7 @@ export default class JoplinServerApi {
 		const optionSession = this.options_.session();
 
 		if (optionSession) {
+			this.session_ = optionSession;
 			return optionSession;
 		}
 

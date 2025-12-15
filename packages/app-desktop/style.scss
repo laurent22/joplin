@@ -13,6 +13,7 @@
 @use 'gui/Sidebar/style.scss' as sidebar-styles;
 @use 'gui/NoteEditor/style.scss' as note-editor-styles;
 @use 'gui/KeymapConfig/style.scss' as keymap-styles;
+@use 'gui/ProfileEditor.scss' as profile-editor;
 @use 'services/plugins/styles/index.scss' as plugins-styles;
 @use 'gui/styles/index.scss' as gui-styles;
 @use 'main.scss' as main;

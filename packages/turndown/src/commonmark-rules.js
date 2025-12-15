@@ -385,12 +385,13 @@ function filterLinkHref (href) {
   return href
 }
 
-function filterImageTitle(title) {
+function filterTitleAttribute(title) {
   if (!title) return ''
   title = title.trim()
   title = title.replace(/\"/g, '&quot;');
   title = title.replace(/\(/g, '&#40;');
   title = title.replace(/\)/g, '&#41;');
+  title = title.replace(/\n{2,}/g, '\n');
   return title
 }
 
@@ -431,7 +432,7 @@ rules.inlineLink = {
     if (!href) {
       return getNamedAnchorFromLink(node, options) + filterLinkContent(content)
     } else {
-      var title = node.title && node.title !== href ? ' "' + node.title + '"' : ''
+      var title = node.title && node.title !== href ? ' "' + filterTitleAttribute(node.title) + '"' : ''
       if (!href) title = ''
       let output = getNamedAnchorFromLink(node, options) + '[' + filterLinkContent(content) + '](' + href + title + ')'
 
@@ -579,7 +580,7 @@ function imageMarkdownFromAttributes(attributes) {
   var alt = attributes.alt || ''
   var src = filterLinkHref(attributes.src || '')
   var title = attributes.title || ''
-  var titlePart = title ? ' "' + filterImageTitle(title) + '"' : ''
+  var titlePart = title ? ' "' + filterTitleAttribute(title) + '"' : ''
   return src ? '![' + alt.replace(/([[\]])/g, '\\$1') + ']' + '(' + src + titlePart + ')' : ''
 }
 
@@ -864,8 +865,12 @@ function joplinCheckboxInfo(liNode) {
     };
   }
 
+  // Should handle both <ul class='joplin-checklist'><li>...</li></ul>
+  // and <ul><li class='joplin-checklist-item'>...</li></ul>. The second is present
+  // in certain types of imported notes.
   const parentChecklist = findParent(liNode, 'class', 'joplin-checklist');
-  if (parentChecklist) {
+  const currentChecklist = liNode.classList.contains('joplin-checklist-item');
+  if (parentChecklist || currentChecklist) {
     return {
       checked: !!liNode.classList && liNode.classList.contains('checked'),
       renderingType: 2,

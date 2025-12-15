@@ -13,7 +13,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../../services/bridge';
 import shim from '@joplin/lib/shim';
 import { MarkupToHtml } from '@joplin/renderer';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
 import { EditorKeymap, EditorLanguageType, EditorSettings, SearchState, UserEventSource } from '@joplin/editor/types';
@@ -32,6 +32,7 @@ import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventManager';
 import useSyncEditorValue from './utils/useSyncEditorValue';
+import { getGlobalSettings } from '@joplin/renderer/types';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
@@ -93,41 +94,13 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const editorCutText = useCallback(() => {
 		if (editorRef.current) {
-			const selections = editorRef.current.getSelections();
-			if (selections.length > 0 && selections[0]) {
-				clipboard.writeText(selections[0]);
-				// Easy way to wipe out just the first selection
-				selections[0] = '';
-				editorRef.current.replaceSelections(selections);
-			} else {
-				const cursor = editorRef.current.getCursor();
-				const line = editorRef.current.getLine(cursor.line);
-				clipboard.writeText(`${line}\n`);
-				const startLine = editorRef.current.getCursor('head');
-				startLine.ch = 0;
-				const endLine = {
-					line: startLine.line + 1,
-					ch: 0,
-				};
-				editorRef.current.replaceRange('', startLine, endLine);
-			}
+			editorRef.current.cutText(text => clipboard.writeText(text));
 		}
 	}, []);
 
 	const editorCopyText = useCallback(() => {
 		if (editorRef.current) {
-			const selections = editorRef.current.getSelections();
-
-			// Handle the case when there is a selection - copy the selection to the clipboard
-			// When there is no selection, the selection array contains an empty string.
-			if (selections.length > 0 && selections[0]) {
-				clipboard.writeText(selections[0]);
-			} else {
-				// This is the case when there is no selection - copy the current line to the clipboard
-				const cursor = editorRef.current.getCursor();
-				const line = editorRef.current.getLine(cursor.line);
-				clipboard.writeText(line);
-			}
+			editorRef.current.copyText(text => clipboard.writeText(text));
 		}
 	}, []);
 
@@ -248,6 +221,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
+				globalSettings: getGlobalSettings(Setting),
 			}));
 
 			if (cancelled) return;
@@ -392,6 +366,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			ignoreModifiers: true,
 			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
 			keymap: keyboardMode,
+			preferMacShortcuts: shim.isMac(),
 			indentWithTabs: true,
 			tabMovesFocus: props.tabMovesFocus,
 			editorLabel: _('Markdown editor'),

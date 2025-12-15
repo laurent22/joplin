@@ -9,3 +9,8 @@ table .selectedCell {
 th > p:only-child, td > p:only-child {
 	margin: unset;
 }
+
+/* Tables used with ProseMirror do not have a thead, so zebra striping needs be styled separately to the global noteStyle css */
+table tr:nth-child(odd) {
+	background-color: var(--joplin-table-background-color);
+}

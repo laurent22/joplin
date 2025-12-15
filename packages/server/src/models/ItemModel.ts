@@ -993,6 +993,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const isNew = await this.isNew(item, options);
 
 		let previousItem: ChangePreviousItem = null;
+		let previousName: string|null = null;
 
 		if (item.content && !item.content_storage_id) {
 			item.content_storage_id = (await this.storageDriver()).storageId;
@@ -1002,13 +1003,9 @@ export default class ItemModel extends BaseModel<Item> {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
 			if (!item.owner_id) item.owner_id = userId;
 		} else {
-			const beforeSaveItem = (await this.load(item.id, { fields: ['name', 'jop_type', 'jop_parent_id', 'jop_share_id'] }));
-			const resourceIds = beforeSaveItem.jop_type === ModelType.Note ? await this.models().itemResource().byItemId(item.id) : [];
-
+			const beforeSaveItem = await this.load(item.id, { fields: ['name', 'jop_share_id'] });
+			previousName = beforeSaveItem.name;
 			previousItem = {
-				jop_parent_id: beforeSaveItem.jop_parent_id,
-				name: beforeSaveItem.name,
-				jop_resource_ids: resourceIds,
 				jop_share_id: beforeSaveItem.jop_share_id,
 			};
 		}
@@ -1029,7 +1026,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 			// We only record updates. This because Create and Update events are
 			// per user, whenever a user_item is created or deleted.
-			const changeItemName = item.name || previousItem.name;
+			const changeItemName = item.name || previousName;
 
 			if (!isNew && this.shouldRecordChange(changeItemName)) {
 				await this.models().change().save({

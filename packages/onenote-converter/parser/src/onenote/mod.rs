@@ -19,6 +19,7 @@ pub(crate) mod page_series;
 pub(crate) mod rich_text;
 pub(crate) mod section;
 pub(crate) mod table;
+pub(crate) mod text_region;
 
 /// The OneNote file parser.
 pub struct Parser;

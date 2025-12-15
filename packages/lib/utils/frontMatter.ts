@@ -3,6 +3,7 @@ import { NoteEntity } from '../services/database/types';
 import { MdFrontMatterExport } from '../services/interop/types';
 import time from '../time';
 import * as yaml from 'js-yaml';
+const moment = require('moment');
 
 export interface ParsedMeta {
 	metadata: NoteEntity;
@@ -11,6 +12,19 @@ export interface ParsedMeta {
 
 const convertDate = (datetime: number): string => {
 	return time.unixMsToRfc3339Sec(datetime);
+};
+
+
+const dateStringToDate = (dateString: string, defaultValue: number) => {
+	try {
+		// When exporting with Joplin, we encode the date in this format, so try this first.
+		const ms = time.rfc3339SecToUnixMs(dateString);
+		return ms;
+	} catch {
+		// If it fails, try to parse with `moment`:
+		const m = moment(dateString);
+		return m.isValid() ? m.toDate().getTime() : defaultValue;
+	}
 };
 
 export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
@@ -200,24 +214,24 @@ export const parse = (note: string): ParsedMeta => {
 
 	// The date fallback gives support for MultiMarkdown format, r-markdown, and pandoc formats
 	if ('created' in md) {
-		metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now());
+		metadata['user_created_time'] = dateStringToDate(md['created'], Date.now());
 	} else if ('date' in md) {
-		metadata['user_created_time'] = time.anythingToMs(md['date'], Date.now());
+		metadata['user_created_time'] = dateStringToDate(md['date'], Date.now());
 	} else if ('created_at' in md) {
 		// Add support for Notesnook
-		metadata['user_created_time'] = time.anythingToMs(md['created_at'], Date.now());
+		metadata['user_created_time'] = dateStringToDate(md['created_at'], Date.now());
 	}
 
 	if ('updated' in md) {
-		metadata['user_updated_time'] = time.anythingToMs(md['updated'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(md['updated'], Date.now());
 	} else if ('lastmod' in md) {
 		// Add support for hugo
-		metadata['user_updated_time'] = time.anythingToMs(md['lastmod'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(md['lastmod'], Date.now());
 	} else if ('date' in md) {
-		metadata['user_updated_time'] = time.anythingToMs(md['date'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(md['date'], Date.now());
 	} else if ('updated_at' in md) {
 		// Notesnook
-		metadata['user_updated_time'] = time.anythingToMs(md['updated_at'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(md['updated_at'], Date.now());
 	}
 
 	if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
@@ -230,7 +244,7 @@ export const parse = (note: string): ParsedMeta => {
 			metadata['todo_completed'] = metadata['user_updated_time'] ?? Date.now();
 		}
 		if ('due' in md) {
-			const due_date = time.anythingToMs(md['due'], null);
+			const due_date = dateStringToDate(md['due'], null);
 			if (due_date) { metadata['todo_due'] = due_date; }
 		}
 	}
@@ -240,8 +254,10 @@ export const parse = (note: string): ParsedMeta => {
 	if ('tags' in md) {
 		// Only create unique tags
 		tags = md['tags'];
-	} else if ('keywords' in md) {
-		// Adding support for r-markdown/pandoc
+	} else if ('keywords' in md && Array.isArray(md.keywords)) {
+		// Support for r-markdown/pandoc. Note that "keywords" may be an empty field in the input
+		// document, which would be parsed as just "null", so this is why we need to check that it
+		// is an array. Fixes: https://github.com/laurent22/joplin/issues/13008
 		tags = tags.concat(md['keywords']);
 	}
 

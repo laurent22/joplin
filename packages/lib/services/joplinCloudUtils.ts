@@ -101,7 +101,11 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 		if (isWaitingResponse) return undefined;
 		isWaitingResponse = true;
 
-		const response = await fetch(applicationsUrl);
+		const response = await fetch(applicationsUrl, {
+			headers: {
+				'X-JOPLIN-CUSTOM-API-KEY': '',
+			},
+		});
 		const jsonBody = await response.json();
 
 		if (!response.ok || jsonBody.status !== 'finished') {

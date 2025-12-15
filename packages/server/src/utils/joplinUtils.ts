@@ -241,37 +241,43 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		linkRenderingType: 2,
 	};
 
-	const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+	try {
+		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
 
-	const bodyHtml = await mustache_.renderView({
-		cssFiles: ['items/note'],
-		jsFiles: ['items/note'],
-		name: 'note',
-		title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
-		titleOverride: true,
-		path: 'index/items/note',
-		content: {
-			note: {
-				...note,
-				bodyHtml: result.html,
-				updatedDateTime: formatDateTime(note.user_updated_time),
+		const bodyHtml = await mustache_.renderView({
+			cssFiles: ['items/note'],
+			jsFiles: ['items/note'],
+			name: 'note',
+			title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
+			titleOverride: true,
+			path: 'index/items/note',
+			content: {
+				note: {
+					...note,
+					bodyHtml: result.html,
+					updatedDateTime: formatDateTime(note.user_updated_time),
+				},
+				cssStrings: result.cssStrings.join('\n'),
+				assetsJs: `
+					const joplinNoteViewer = {
+						pluginAssets: ${JSON.stringify(result.pluginAssets)},
+						appBaseUrl: ${JSON.stringify(baseUrl_)},
+					};
+				`,
 			},
-			cssStrings: result.cssStrings.join('\n'),
-			assetsJs: `
-				const joplinNoteViewer = {
-					pluginAssets: ${JSON.stringify(result.pluginAssets)},
-					appBaseUrl: ${JSON.stringify(baseUrl_)},
-				};
-			`,
-		},
-	}, { prefersDarkEnabled: false });
+		}, { prefersDarkEnabled: false });
 
-	return {
-		body: bodyHtml,
-		mime: 'text/html',
-		size: Buffer.byteLength(bodyHtml, 'utf-8'),
-		filename: '',
-	};
+		return {
+			body: bodyHtml,
+			mime: 'text/html',
+			size: Buffer.byteLength(bodyHtml, 'utf-8'),
+			filename: '',
+		};
+	} catch (error) {
+		// Resolves: https://github.com/laurent22/joplin/issues/13059
+		error.message = `Could not render note - please make sure it has been synchronised. Error was: ${error.message}`;
+		throw error;
+	}
 }
 
 export function itemIsEncrypted(item: Item): boolean {

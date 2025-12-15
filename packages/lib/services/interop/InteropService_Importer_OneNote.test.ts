@@ -9,6 +9,7 @@ import InteropService from './InteropService';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { JSDOM } from 'jsdom';
 import { ImportModuleOutputFormat } from './types';
+import HtmlToMd from '../../HtmlToMd';
 
 const instructionMessage = `
 --------------------------------------
@@ -24,6 +25,21 @@ const expectWithInstructions = <T>(value: T) => {
 
 const removeItemIds = (body: string) => {
 	return body.replace(/:\/[a-z0-9]{32}/g, ':/id-here');
+};
+
+const removeDefaultCss = (body: string) => {
+	const defaultCssStart = body.indexOf('/*** Start default CSS ***/');
+	const endMarker = '/*** End default CSS ***/';
+	const defaultCssEnd = body.indexOf(endMarker);
+	if (defaultCssEnd === -1 || defaultCssStart === -1) return body;
+
+	const before = body.substring(0, defaultCssStart);
+	const after = body.substring(defaultCssEnd + endMarker.length);
+	return [before, '/* (For testing: Removed default CSS) */', after].join('\n');
+};
+
+const normalizeNoteForSnapshot = (body: string) => {
+	return removeItemIds(removeDefaultCss(body));
 };
 
 // This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
@@ -68,7 +84,7 @@ describe('InteropService_Importer_OneNote', () => {
 
 		expectWithInstructions(mainNote.title).toBe('Page title');
 		expectWithInstructions(mainNote.markup_language).toBe(MarkupToHtml.MARKUP_LANGUAGE_HTML);
-		expectWithInstructions(mainNote.body).toMatchSnapshot(mainNote.title);
+		expectWithInstructions(normalizeNoteForSnapshot(mainNote.body)).toMatchSnapshot(mainNote.title);
 	});
 
 	it('should preserve indentation of subpages in Section page', async () => {
@@ -121,7 +137,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(notes.filter(n => n.parent_id === parentSection.id).length).toBe(6);
 
 		for (const note of notes) {
-			expectWithInstructions(note.body).toMatchSnapshot(note.title);
+			expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot(note.title);
 		}
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
@@ -186,7 +202,9 @@ describe('InteropService_Importer_OneNote', () => {
 		const originalIdGenerator = BaseModel.setIdGenerator(() => String(idx++));
 		const notes = await importNote(`${supportDir}/onenote/bug_broken_character.zip`);
 
-		expectWithInstructions(notes.find(n => n.title === 'Action research - Wikipedia').body).toMatchSnapshot();
+		expectWithInstructions(
+			normalizeNoteForSnapshot(notes.find(n => n.title === 'Action research - Wikipedia').body),
+		).toMatchSnapshot();
 
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
@@ -197,7 +215,7 @@ describe('InteropService_Importer_OneNote', () => {
 		const notes = await importNote(`${supportDir}/onenote/remove_hyperlink_on_title.zip`);
 
 		for (const note of notes) {
-			expectWithInstructions(note.body).toMatchSnapshot(note.title);
+			expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot(note.title);
 		}
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
@@ -208,7 +226,7 @@ describe('InteropService_Importer_OneNote', () => {
 		const noteToTest = notes.find(n => n.title === 'Tips from a Pro Using Trees for Dramatic Landscape Photography');
 
 		expectWithInstructions(noteToTest).toBeTruthy();
-		expectWithInstructions(noteToTest.body.includes('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/风景.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>')).toBe(true);
+		expectWithInstructions(noteToTest.body).toContain('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>');
 	});
 
 	it('should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker', async () => {
@@ -217,7 +235,7 @@ describe('InteropService_Importer_OneNote', () => {
 		const notes = await importNote(`${supportDir}/onenote/hyperlink_marker_as_first_character.zip`);
 
 		for (const note of notes) {
-			expectWithInstructions(note.body).toMatchSnapshot(note.title);
+			expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot(note.title);
 		}
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
@@ -230,7 +248,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(notes.length).toBe(2);
 
 		for (const note of notes) {
-			expectWithInstructions(note.body).toMatchSnapshot(note.title);
+			expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot(note.title);
 		}
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
@@ -243,7 +261,7 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(notes.length).toBe(2);
 
 		for (const note of notes) {
-			expectWithInstructions(note.body).toMatchSnapshot(note.title);
+			expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot(note.title);
 		}
 		BaseModel.setIdGenerator(originalIdGenerator);
 	});
@@ -253,11 +271,11 @@ describe('InteropService_Importer_OneNote', () => {
 
 		// InkBias bug
 		const note1Content = notes.find(n => n.title === 'Marketing Funnel & Training').body;
-		expect(removeItemIds(note1Content)).toMatchSnapshot();
+		expect(normalizeNoteForSnapshot(note1Content)).toMatchSnapshot();
 
 		// EntityGuid
 		const note2Content = notes.find(n => n.title === 'Decrease support costs').body;
-		expect(removeItemIds(note2Content)).toMatchSnapshot();
+		expect(normalizeNoteForSnapshot(note2Content)).toMatchSnapshot();
 	});
 
 	it('should support directly importing .one files', async () => {
@@ -277,7 +295,26 @@ describe('InteropService_Importer_OneNote', () => {
 	it('should support importing .one files that contain checkboxes', async () => {
 		const notes = await importNote(`${supportDir}/onenote/checkboxes_and_unicode.one`);
 		expectWithInstructions(
-			removeItemIds(notes.find(n => n.title.startsWith('Test Todo')).body),
+			normalizeNoteForSnapshot(notes.find(n => n.title.startsWith('Test Todo')).body),
 		).toMatchSnapshot();
+	});
+
+	it('should correctly convert imported notes to Markdown', async () => {
+		const notes = await importNote(`${supportDir}/onenote/checkboxes_and_unicode.one`);
+		const checklistNote = notes.find(n => n.title.startsWith('Test Todo'));
+		const converter = new HtmlToMd();
+		const markdown = converter.parse(checklistNote.body);
+
+		expect(markdown).toMatchSnapshot('Test Todo: As Markdown');
+	});
+
+	it('should correctly import math formulas', async () => {
+		const notes = await importNote(`${supportDir}/onenote/Math.one`);
+		const importedNote = notes.find(n => n.title.startsWith('Math'));
+
+		const converter = new HtmlToMd();
+		const markdown = converter.parse(importedNote.body);
+
+		expect(markdown).toMatchSnapshot('Math');
 	});
 });

@@ -36,7 +36,7 @@
     "jest-environment-jsdom": "29.7.0",
     "style-loader": "3.3.4",
     "ts-jest": "29.4.1",
-    "ts-loader": "9.5.2",
+    "ts-loader": "9.5.4",
     "typescript": "5.8.3",
     "webpack": "5.74.0",
     "webpack-cli": "4.10.0"
@@ -44,7 +44,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "6.1.2",
     "@fortawesome/free-solid-svg-icons": "6.1.2",
-    "@fortawesome/react-fontawesome": "0.2.3",
+    "@fortawesome/react-fontawesome": "0.2.6",
     "@joplin/lib": "~3.5",
     "async-mutex": "0.5.0",
     "pdfjs-dist": "2.16.105",

@@ -1,5 +1,5 @@
-import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource, expectNotThrow } from '../../utils/testing/testUtils';
+import { ChangeType, Session, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, updateNote, expectHttpError, createResource, expectNotThrow } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel';
 import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
@@ -8,6 +8,68 @@ import { ErrorForbidden } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
+
+const createSingleFolderShare = async (session1: Session, session2: Session) => {
+	const folderItem = await createFolder(session1.id, { title: 'created by sharer' });
+
+	// ----------------------------------------------------------------
+	// Create the file share object
+	// ----------------------------------------------------------------
+	const share = await postApi<Share>(session1.id, 'shares', {
+		type: ShareType.Folder,
+		folder_id: folderItem.jop_id,
+	});
+
+	// ----------------------------------------------------------------
+	// Once the share object has been created, the client can add folders
+	// and notes to it. This is done by setting the share_id property,
+	// which we simulate here.
+	// ----------------------------------------------------------------
+	await models().item().saveForUser(session1.user_id, {
+		id: folderItem.id,
+		jop_parent_id: '',
+		jop_share_id: share.id,
+	});
+
+	// ----------------------------------------------------------------
+	// Send the share to a user
+	// ----------------------------------------------------------------
+	const user2 = await models().user().load(session2.user_id);
+	let shareUser = await postApi(session1.id, `shares/${share.id}/users`, {
+		email: user2.email,
+	}) as ShareUser;
+
+	shareUser = await models().shareUser().load(shareUser.id);
+	expect(shareUser.share_id).toBe(share.id);
+	expect(shareUser.user_id).toBe(user2.id);
+	expect(shareUser.status).toBe(ShareUserStatus.Waiting);
+
+	// ----------------------------------------------------------------
+	// On the sharee side, accept the share
+	// ----------------------------------------------------------------
+	await patchApi<ShareUser>(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+
+	{
+		shareUser = await models().shareUser().load(shareUser.id);
+		expect(shareUser.status).toBe(ShareUserStatus.Accepted);
+	}
+
+	await models().share().updateSharedItems3();
+
+	// ----------------------------------------------------------------
+	// On the sharee side, check that the file is present
+	// and with the right content.
+	// ----------------------------------------------------------------
+	const results = await getApi<PaginatedItems>(session2.id, 'items/root/children');
+	expect(results.items.length).toBe(1);
+	expect(results.items[0].name).toBe(folderItem.name);
+
+	const itemContent = await getApi<Buffer>(session2.id, `items/root:/${folderItem.name}:/content`);
+	expect(itemContent.toString().includes('created by sharer')).toBe(true);
+
+	return { folderItem, itemContent, share };
+};
 
 describe('shares.folder', () => {
 
@@ -24,62 +86,15 @@ describe('shares.folder', () => {
 	});
 
 	test('should share a folder with another user', async () => {
-		const { user: user1, session: session1 } = await createUserAndSession(1);
-		const { user: user2, session: session2 } = await createUserAndSession(2);
-		const folderItem = await createFolder(session1.id, { title: 'created by sharer' });
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		await createSingleFolderShare(session1, session2);
+	});
 
-		// ----------------------------------------------------------------
-		// Create the file share object
-		// ----------------------------------------------------------------
-		const share = await postApi<Share>(session1.id, 'shares', {
-			type: ShareType.Folder,
-			folder_id: folderItem.jop_id,
-		});
-
-		// ----------------------------------------------------------------
-		// Once the share object has been created, the client can add folders
-		// and notes to it. This is done by setting the share_id property,
-		// which we simulate here.
-		// ----------------------------------------------------------------
-		await models().item().saveForUser(user1.id, {
-			id: folderItem.id,
-			jop_share_id: share.id,
-		});
-
-		// ----------------------------------------------------------------
-		// Send the share to a user
-		// ----------------------------------------------------------------
-		let shareUser = await postApi(session1.id, `shares/${share.id}/users`, {
-			email: user2.email,
-		}) as ShareUser;
-
-		shareUser = await models().shareUser().load(shareUser.id);
-		expect(shareUser.share_id).toBe(share.id);
-		expect(shareUser.user_id).toBe(user2.id);
-		expect(shareUser.status).toBe(ShareUserStatus.Waiting);
-
-		// ----------------------------------------------------------------
-		// On the sharee side, accept the share
-		// ----------------------------------------------------------------
-		await patchApi<ShareUser>(session2.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
-
-		{
-			shareUser = await models().shareUser().load(shareUser.id);
-			expect(shareUser.status).toBe(ShareUserStatus.Accepted);
-		}
-
-		await models().share().updateSharedItems3();
-
-		// ----------------------------------------------------------------
-		// On the sharee side, check that the file is present
-		// and with the right content.
-		// ----------------------------------------------------------------
-		const results = await getApi<PaginatedItems>(session2.id, 'items/root/children');
-		expect(results.items.length).toBe(1);
-		expect(results.items[0].name).toBe(folderItem.name);
-
-		const itemContent = await getApi<Buffer>(session2.id, `items/root:/${folderItem.name}:/content`);
-		expect(itemContent.toString().includes('created by sharer')).toBe(true);
+	test('sharer should see change if item is changed by sharee', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		const { folderItem, itemContent } = await createSingleFolderShare(session1, session2);
 
 		// ----------------------------------------------------------------
 		// If file is changed by sharee, sharer should see the change too
@@ -95,6 +110,30 @@ describe('shares.folder', () => {
 			const modContent = await getApi<Buffer>(session1.id, `items/root:/${folderItem.name}:/content`);
 			expect(modContent.toString().includes('modified by recipient')).toBe(true);
 		}
+	});
+
+	test('should not delete an item on unshare', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		const { folderItem, share } = await createSingleFolderShare(session1, session2);
+
+		await models().item().saveForUser(session2.user_id, {
+			id: folderItem.id,
+			jop_parent_id: 'changed',
+			jop_share_id: share.id,
+		});
+
+		await models().item().saveForUser(session1.user_id, {
+			id: folderItem.id,
+			jop_parent_id: 'changed',
+			jop_share_id: '',
+		});
+
+		await models().share().updateSharedItems3();
+
+		const user1HasAccess = !!await models().userItem().byUserAndItemId(session1.user_id, folderItem.id);
+		const user2HasAccess = !!await models().userItem().byUserAndItemId(session2.user_id, folderItem.id);
+		expect({ user1HasAccess, user2HasAccess }).toEqual({ user1HasAccess: true, user2HasAccess: false });
 	});
 
 	test('should share a folder and all its children', async () => {

@@ -116,6 +116,62 @@ This is how it would look with the Markdown on the left, and rendered graph on t
 
 Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.
 
+### Musical notation
+
+Joplin can renders [ABC notation](https://abcnotation.com) into sheet music. You create a fenced block with `abc` as identifier, and the content is rendered to a sheet music:
+
+<!-- cSpell:disable -->
+
+````md
+```abc
+K:F
+!f!(fgag-g2c2)|
+```
+````
+
+<!-- cSpell:enable -->
+
+For example:
+
+![The introduction of Peacherine Rag by Scott Joplin](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/abc/PeacherineRag.png)
+
+#### Global options
+
+In the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md), under the **Markdown** section, you can set additional options for the ABC renderer. These options are global and will apply to all music sheets. See the [official ABC documentation](https://paulrosen.github.io/abcjs/visual/render-abc-options.html) for the full list of options. You need to set them as a [JSON5 object](https://json5.org/).
+
+For example, this would make the foreground colour red, and will make the music twice as big:
+
+```js
+{ foregroundColor: "#ff0000", scale: 2 }
+```
+
+#### Per sheet options
+
+You can also activate options for a particular sheet music. To do so, add a header to the ABC markup, separated by `---`, which will contain the renderer options.
+
+For example, this would add violin tablatures to the sheet music:
+
+<!-- cSpell:disable -->
+````md
+```abc
+{tablature: [{instrument: 'violin'}]}
+---
+
+X:1
+T: Cooley's
+M: 4/4
+L: 1/8
+R: reel
+K: G
+|:D2|EB{c}BA B2 EB|~B2 AB dBAG|FDAD BDAD|FDAD dAFD|
+```
+````
+<!-- cSpell:enable -->
+
+![Sheet music and guitar tablature for the Irish reel "Cooley's" in D major](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/abc/Tablature.png)
+
+Note that even in this case the global options still apply. The per-sheet options simply override the global ones if there's a conflict.
+
 ### Checkboxes
 
 Checkboxes can be added like so:

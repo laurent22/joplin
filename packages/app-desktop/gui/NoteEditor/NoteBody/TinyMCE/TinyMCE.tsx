@@ -1051,6 +1051,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		editor,
 	});
 
+	const noteChangeTimeRef = useRef(Date.now());
 	const lastNoteIdRef = useRef(props.noteId);
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -1068,6 +1069,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			// Use nextOnChangeEventInfo's noteId -- lastOnChangeEventInfo can be slightly out-of-date.
 			const differentNoteId = lastNoteIdRef.current !== props.noteId;
 			const differentContent = lastOnChangeEventInfo.current.content !== props.content;
+
+			if (differentNoteId) noteChangeTimeRef.current = Date.now();
+
 			if (differentNoteId || differentContent || !resourcesEqual) {
 				const result = await props.markupToHtml(
 					props.contentMarkupLanguage,
@@ -1340,7 +1344,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// keep it this way for now.
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onKeyUp(event: any) {
-			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
+			const timeSinceNoteChange = Date.now() - noteChangeTimeRef.current;
+
+			// A key that is pressed before the editor is opened, and that is released after it is
+			// opened is going to be processed here. For example if the user presses Enter in
+			// GotoAnything to arrive here. But in that case, we don't want the change handler to be
+			// activated, because that would change the note timestamp. So we take into account how
+			// long the note has been loaded before we process the key. Fixes
+			// https://github.com/laurent22/joplin/issues/12367
+			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key) && timeSinceNoteChange > 200) {
 				onChangeHandler();
 			}
 		}

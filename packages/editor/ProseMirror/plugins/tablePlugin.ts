@@ -1,4 +1,4 @@
-import { addColumnAfter, addRowAfter, deleteColumn, deleteRow, tableEditing } from 'prosemirror-tables';
+import { addColumnAfter, addRowAfter, deleteColumn, deleteRow, deleteTable, tableEditing } from 'prosemirror-tables';
 import createFloatingButtonPlugin, { ToolbarType } from './utils/createFloatingButtonPlugin';
 import addColumnRightIcon from '../vendor/icons/addColumnRight';
 import addRowBelowIcon from '../vendor/icons/addRowBelow';
@@ -9,6 +9,13 @@ import { Command } from 'prosemirror-state';
 
 const tableCommand = (command: Command): Command => (state, dispatch, view) => {
 	return command(state, dispatch, view) && focusEditor(state, dispatch, view);
+};
+
+// By default, commands like deleteRow or deleteColumn don't delete the last
+// row/column in the table. This command removes the table when there are no more
+// rows/columns to delete:
+const runCommandOrDeleteTable = (command: Command): Command => (state, dispatch, view) => {
+	return command(state, dispatch, view) || deleteTable(state, dispatch);
 };
 
 const tablePlugin = [
@@ -27,12 +34,12 @@ const tablePlugin = [
 		{
 			icon: removeRowIcon,
 			label: (_) => _('Delete row'),
-			command: () => tableCommand(deleteRow),
+			command: () => tableCommand(runCommandOrDeleteTable(deleteRow)),
 		},
 		{
 			icon: removeColumnIcon,
 			label: (_) => _('Delete column'),
-			command: () => tableCommand(deleteColumn),
+			command: () => tableCommand(runCommandOrDeleteTable(deleteColumn)),
 		},
 	], ToolbarType.FloatAboveBelow),
 ];

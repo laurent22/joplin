@@ -1,0 +1,20 @@
+@use "./base-text.scss";
+
+.shared-note-list-item {
+	flex: 1;
+	flex-direction: row;
+	display: flex;
+	align-items: center;
+	border: 1px solid;
+	border-color: var(--joplin-divider-color);
+	padding: 0.5em;
+	margin-bottom: 5px;
+
+	> .title {
+		@extend .base-text;
+
+		flex: 1;
+		display: flex;
+		color: var(--joplin-color);
+	}
+}

@@ -7,8 +7,9 @@ use crate::one::property_set::PropertySetId;
 use crate::one::property_set::note_tag_container::Data as NoteTagData;
 use crate::onestore::object::Object;
 use crate::shared::exguid::ExGuid;
+use crate::shared::prop_set::PropertySet;
 use parser_utils::errors::{ErrorKind, Result};
-use parser_utils::log_warn;
+use parser_utils::{Utf16ToString, log_warn};
 
 /// A rich text paragraph.
 ///
@@ -23,12 +24,12 @@ pub(crate) struct Data {
     pub(crate) text_run_formatting: Vec<ExGuid>,
     pub(crate) text_run_indices: Vec<u32>,
     pub(crate) text_run_data_object: Vec<ExGuid>,
+    pub(crate) text_run_data_values: Vec<PropertySet>,
     pub(crate) paragraph_style: ExGuid,
     pub(crate) paragraph_space_before: f32,
     pub(crate) paragraph_space_after: f32,
     pub(crate) paragraph_line_spacing_exact: Option<f32>,
     pub(crate) paragraph_alignment: ParagraphAlignment,
-    pub(crate) text: Option<String>,
     pub(crate) is_title_time: bool,
     pub(crate) is_boiler_text: bool,
     pub(crate) is_title_date: bool,
@@ -38,6 +39,8 @@ pub(crate) struct Data {
     pub(crate) language_code: Option<u32>,
     pub(crate) rtl: bool,
     pub(crate) note_tags: Vec<NoteTagData>,
+    pub(crate) text: Option<String>,
+    pub(crate) text_utf_16: Option<Vec<u8>>,
 }
 
 pub(crate) fn parse(object: &Object) -> Result<Data> {
@@ -57,6 +60,8 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         simple::parse_vec_u32(PropertyType::TextRunIndex, object)?.unwrap_or_default();
     let text_run_data_object =
         ObjectReference::parse_vec(PropertyType::TextRunDataObject, object)?.unwrap_or_default();
+    let text_run_data_array =
+        simple::parse_property_values(PropertyType::TextRunData, object)?.unwrap_or(&[]);
 
     let paragraph_style_result = ObjectReference::parse(PropertyType::ParagraphStyle, object);
     let paragraph_style = match paragraph_style_result {
@@ -78,10 +83,23 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         simple::parse_f32(PropertyType::ParagraphLineSpacingExact, object)?;
     let paragraph_alignment = ParagraphAlignment::parse(object)?.unwrap_or_default();
 
-    let text = match simple::parse_string(PropertyType::RichEditTextUnicode, object)? {
-        None => simple::parse_ascii(PropertyType::TextExtendedAscii, object)?,
-        text => text,
-    };
+    // Keep the text in its original UTF-16 byte array, if possible. This is needed later on for
+    // indexing.
+    let text_utf_16_bytes = simple::parse_vec(PropertyType::RichEditTextUnicode, object)?;
+    let text_ascii = simple::parse_ascii(PropertyType::TextExtendedAscii, object)?;
+    let text_string = text_utf_16_bytes
+        .as_ref()
+        .map(|data| data.as_slice().utf16_to_string())
+        .transpose()?
+        .or(text_ascii);
+    let text_utf_16_bytes = text_utf_16_bytes.or_else(|| {
+        // Fall back to re-encoding the ASCII representation as UTF-16, if it exists.
+        text_string.as_ref().map(|text| {
+            text.encode_utf16()
+                .flat_map(|two_bytes| two_bytes.to_le_bytes())
+                .collect()
+        })
+    });
 
     let layout_alignment_in_parent =
         LayoutAlignment::parse(PropertyType::LayoutAlignmentInParent, object)?;
@@ -103,13 +121,15 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         tight_layout,
         text_run_formatting,
         text_run_indices,
+        text_run_data_values: text_run_data_array.into(),
         text_run_data_object,
         paragraph_style,
         paragraph_space_before,
         paragraph_space_after,
         paragraph_line_spacing_exact,
         paragraph_alignment,
-        text,
+        text_utf_16: text_utf_16_bytes,
+        text: text_string,
         is_title_time,
         is_boiler_text,
         is_title_date,

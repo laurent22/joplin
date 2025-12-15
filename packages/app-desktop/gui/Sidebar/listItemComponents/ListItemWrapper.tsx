@@ -4,9 +4,18 @@ import { useMemo } from 'react';
 
 export type ListItemRef = React.Ref<HTMLDivElement>;
 
+export interface ItemSelectionState {
+	selected: boolean;
+	// The item with primary selection is used for actions that support only one folder.
+	// Only one item can have primary selection.
+	primarySelected: boolean;
+
+	multipleItemsSelected: boolean;
+}
+
 interface Props {
 	containerRef: ListItemRef;
-	selected: boolean;
+	selectionState: ItemSelectionState;
 	itemIndex: number;
 	itemCount: number;
 	expanded?: boolean|undefined;
@@ -35,15 +44,17 @@ const ListItemWrapper: React.FC<Props> = props => {
 		} as React.CSSProperties;
 	}, [props.depth]);
 
+	const { selected, primarySelected, multipleItemsSelected } = props.selectionState;
+
 	return (
 		<div
 			ref={props.containerRef}
 			aria-posinset={props.itemIndex + 1}
 			aria-setsize={props.itemCount}
-			aria-selected={props.selected}
+			aria-selected={selected}
 			aria-expanded={props.expanded}
 			aria-level={props.depth}
-			tabIndex={props.selected ? 0 : -1}
+			tabIndex={primarySelected ? 0 : -1}
 
 			onContextMenu={props.onContextMenu}
 			onDrag={props.onDrag}
@@ -53,10 +64,17 @@ const ListItemWrapper: React.FC<Props> = props => {
 			draggable={props.draggable}
 
 			role='treeitem'
-			className={`list-item-wrapper ${props.highlightOnHover ? '-highlight-on-hover' : ''} ${props.selected ? '-selected' : ''} ${props.className ?? ''}`}
+			className={[
+				'list-item-wrapper',
+				props.highlightOnHover ? '-highlight-on-hover' : '',
+				selected ? '-selected' : '',
+				primarySelected && multipleItemsSelected ? '-selected-primary' : '',
+				props.className ?? '',
+			].join(' ')}
 			style={style}
 			data-folder-id={props['data-folder-id']}
 			data-id={props['data-id']}
+			data-index={props.itemIndex}
 			data-tag-id={props['data-tag-id']}
 			data-type={props['data-type']}
 			aria-labelledby={props['aria-labelledby']}

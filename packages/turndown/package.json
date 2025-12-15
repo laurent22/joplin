@@ -9,7 +9,7 @@
   },
   "browser": "lib/turndown.browser.cjs.js",
   "dependencies": {
-    "@adobe/css-tools": "4.4.3",
+    "@adobe/css-tools": "4.4.4",
     "html-entities": "1.4.0",
     "jsdom": "26.1.0"
   },

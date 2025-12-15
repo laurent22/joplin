@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
@@ -8,10 +8,10 @@ import { ThemeStyle, themeStyle } from '../../global-style';
 import { AppState } from '../../../utils/types';
 import { Dispatch } from 'redux';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import IconButton from '../../IconButton';
 import SearchResults from './SearchResults';
 import AccessibleView from '../../accessibility/AccessibleView';
 import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
+import SearchBar from './SearchBar';
 
 interface Props {
 	themeId: number;
@@ -28,25 +28,6 @@ const useStyles = (theme: ThemeStyle, visible: boolean) => {
 		return StyleSheet.create({
 			body: {
 				flex: 1,
-			},
-			searchContainer: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				borderWidth: 1,
-				borderColor: theme.dividerColor,
-			},
-			searchTextInput: {
-				...theme.lineInput,
-				paddingLeft: theme.marginLeft,
-				flex: 1,
-				backgroundColor: theme.backgroundColor,
-				color: theme.color,
-			},
-			clearIcon: {
-				...theme.icon,
-				color: theme.colorFaded,
-				paddingRight: theme.marginRight,
-				backgroundColor: theme.backgroundColor,
 			},
 			rootStyle: visible ? theme.rootStyle : theme.hiddenRootStyle,
 		});
@@ -118,26 +99,14 @@ const SearchScreenComponent: React.FC<Props> = props => {
 				showSearchButton={false}
 			/>
 			<View style={styles.body}>
-				<View style={styles.searchContainer}>
-					<TextInput
-						style={styles.searchTextInput}
-						autoFocus={props.visible}
-						underlineColorAndroid="#ffffff00"
-						onChangeText={setQuery}
-						onSubmitEditing={onOverridePause}
-						value={query}
-						selectionColor={theme.textSelectionColor}
-						keyboardAppearance={theme.keyboardAppearance}
-					/>
-					<IconButton
-						themeId={props.themeId}
-						iconStyle={styles.clearIcon}
-						iconName='ionicon close-circle'
-						onPress={clearButton_press}
-						description={_('Clear')}
-					/>
-				</View>
-
+				<SearchBar
+					themeId={props.themeId}
+					autoFocus={props.visible}
+					value={query}
+					onChangeText={setQuery}
+					onSubmitEditing={onOverridePause}
+					onClearButtonPress={clearButton_press}
+				/>
 				<SearchResults
 					query={query}
 					paused={paused}

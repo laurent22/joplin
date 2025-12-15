@@ -95,6 +95,14 @@ class Time {
 		);
 	}
 
+	public rfc3339SecToUnixMs(rfc3339: string): number {
+		const m = moment.utc(rfc3339, 'YYYY-MM-DD HH:mm:ss[Z]', true);
+		if (!m.isValid()) {
+			throw new Error(`Invalid RFC3339 date format: ${rfc3339}`);
+		}
+		return m.valueOf();
+	}
+
 	public unixMsToLocalDateTime(ms: number): string {
 		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
 	}

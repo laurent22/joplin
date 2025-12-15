@@ -102,6 +102,26 @@ const sources: Source[] = [
 		id: 13,
 		name: '../JoplinLetterBlue.svg',
 	},
+	{
+		id: 14,
+		name: 'Android/ic_launcher_background.png',
+	},
+	{
+		id: 15,
+		name: 'Android/ic_launcher_foreground.png',
+	},
+	{
+		id: 16,
+		name: 'Android/ic_launcher_round.png',
+	},
+	{
+		id: 17,
+		name: 'Android/ic_launcher.png',
+	},
+	{
+		id: 18,
+		name: 'Android/ic_launcher_foreground_drawable.png',
+	},
 ];
 
 function sourceById(id: number) {
@@ -115,6 +135,61 @@ const iOSReadAppIcon = async (filePath: string): Promise<iOSAppIconContents> => 
 	if (!(await pathExists(filePath))) return { images: [] };
 	const content = await readFile(filePath, 'utf8');
 	return JSON.parse(content) as iOSAppIconContents;
+};
+
+const getAndroidOperations = () => {
+	const output: Operation[] = [];
+
+	const targetFolders = {
+		'mipmap-hdpi': [72, 162],
+		'mipmap-mdpi': [48, 108],
+		'mipmap-xhdpi': [96, 216],
+		'mipmap-xxhdpi': [144, 324],
+		'mipmap-xxxhdpi': [192, 432],
+	};
+
+	for (const [folderName, sizes] of Object.entries(targetFolders)) {
+		output.push({
+			source: 14,
+			dest: `packages/app-mobile/android/app/src/main/res/${folderName}/ic_launcher_background.png`,
+			width: sizes[1],
+			height: sizes[1],
+		});
+		output.push({
+			source: 15,
+			dest: `packages/app-mobile/android/app/src/main/res/${folderName}/ic_launcher_foreground.png`,
+			width: sizes[1],
+			height: sizes[1],
+		});
+		output.push({
+			source: 16,
+			dest: `packages/app-mobile/android/app/src/main/res/${folderName}/ic_launcher_round.png`,
+			width: sizes[0],
+			height: sizes[0],
+		});
+		output.push({
+			source: 17,
+			dest: `packages/app-mobile/android/app/src/main/res/${folderName}/ic_launcher.png`,
+			width: sizes[0],
+			height: sizes[0],
+		});
+	}
+
+	output.push({
+		source: 14,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable/ic_launcher_background.png',
+		width: 1024,
+		height: 1024,
+	});
+
+	output.push({
+		source: 18,
+		dest: 'packages/app-mobile/android/app/src/main/res/drawable/ic_launcher_foreground.png',
+		width: 572,
+		height: 752,
+	});
+
+	return output;
 };
 
 const getOperations = async (rootDir: string): Promise<Operation[]> => {
@@ -499,6 +574,8 @@ const getOperations = async (rootDir: string): Promise<Operation[]> => {
 			dest: 'packages/server/public/images/icons/cloud/favicon.ico',
 			images: ['joplinCloud32'],
 		},
+
+		...getAndroidOperations(),
 	];
 };
 

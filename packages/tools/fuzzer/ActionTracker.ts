@@ -518,8 +518,7 @@ class ActionTracker {
 					folders = folders.filter(folder => !isReadOnly(folder.id));
 				}
 
-				const folderIndex = this.context_.randInt(0, folders.length);
-				return folders.length ? folders[folderIndex] : null;
+				return folders.length ? this.context_.randomFrom(folders) : null;
 			},
 			randomNote: async () => {
 				const notes = await tracker.listNotes();

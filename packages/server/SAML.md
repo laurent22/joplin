@@ -117,6 +117,12 @@ Get the IDP XML file from Keycloak. The URL is something like this:
 http://<keycloak-host>:<port>/realms/<realm-name>/protocol/saml/descriptor
 ```
 
+The URL is likely to be something like this for this example:
+
+```
+http://localhost:8080/realms/joplin/protocol/saml/descriptor
+```
+
 It should look like this:
 
 **idp.xml:**

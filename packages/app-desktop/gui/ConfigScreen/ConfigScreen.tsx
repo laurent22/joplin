@@ -261,7 +261,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 					const server = settings['sync.11.path'] as string;
 
-					const goToSamlLogin = () => {
+					const goToSamlLogin = async () => {
+						// Save settings to allow SAML auth with the correct URL.
+						await shared.saveSettings(this);
+
 						this.props.dispatch({
 							type: 'NAV_GO',
 							routeName: 'JoplinServerSamlLogin',

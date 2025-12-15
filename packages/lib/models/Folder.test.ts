@@ -3,6 +3,7 @@ import { FolderEntity } from '../services/database/types';
 import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
+import Setting from './Setting';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -390,6 +391,22 @@ describe('models/Folder', () => {
 		expect((await Note.load(note3.id)).deleted_time).toBe(0);
 	});
 
+	it('should allow deleting multiple folders to trash', async () => {
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		const folder3 = await Folder.save({ parent_id: folder2.id });
+		const folder4 = await Folder.save({ parent_id: folder2.id });
+
+		const beforeTime = Date.now();
+		await Folder.batchDelete([folder1.id, folder2.id, folder3.id], { toTrash: true, deleteChildren: true });
+
+		const folders = await Folder.loadItemsByIds([folder1.id, folder2.id, folder3.id, folder4.id]);
+		expect(folders[0].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[1].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[2].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[3].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+	});
+
 	it('should delete and set the parent ID', async () => {
 		const folder1 = await Folder.save({});
 		const folder2 = await Folder.save({});
@@ -438,6 +455,42 @@ describe('models/Folder', () => {
 		await Folder.delete(f1.id, { toTrash: true });
 		folders = await Folder.all({ includeTrash: true });
 		expect(Folder.atLeastOneRealFolderExists(folders)).toBe(false);
+	});
+
+	it('should get active folder when activeFolderId is valid', async () => {
+		const activeFolder = await Folder.save({ title: 'folder' });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBe(activeFolder.id);
+	});
+
+	it('should get default folder when activeFolderId is trashed', async () => {
+		const defaultFolder = await Folder.save({ title: 'default' });
+		const activeFolder = await Folder.save({ title: 'folder' });
+		await Folder.delete(activeFolder.id, { toTrash: true });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBe(defaultFolder.id);
+	});
+
+	it('should get no folder when activeFolderId is undefined', async () => {
+		Setting.setValue('activeFolderId', undefined);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
+	});
+
+	it('should get no folder when activeFolderId is trashed and there are no other not trashed folders', async () => {
+		const activeFolder = await Folder.save({ title: 'folder' });
+		const otherFolder = await Folder.save({ title: 'other' });
+		await Folder.delete(activeFolder.id, { toTrash: true });
+		await Folder.delete(otherFolder.id, { toTrash: true });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
 	});
 
 });
