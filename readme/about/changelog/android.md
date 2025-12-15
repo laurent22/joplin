@@ -1,5 +1,19 @@
 # Joplin Android Changelog
 
+## [android-v3.5.3](https://github.com/laurent22/joplin/releases/tag/android-v3.5.3) (Pre-release) - 2025-12-14T13:46:02Z
+
+- New: Add a link to the list of open-source licenses (5caec16)
+- New: Add the ability to rename and delete tags (#13731 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Do no re-use the 'Restored Notes' folder if it is trashed (#13813 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Prevent opening the edit / delete dialog when long pressing the conflicts notebook (#13860 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Updated packages @react-native/babel-preset (v0.81.0), babel-plugin-react-native-web (v0.21.1), dayjs (v1.11.18), fs-extra (v11.3.1), react-native-safe-area-context (v5.6.1), react-native-share (v12.2.0), react-native-web (v0.21.1)
+- Improved: Upgrade js-draw to v1.32.0 (#13875 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix incompatible plugins cannot be uninstalled (#13828) (#13825 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Import Error: Note date incorrect when import notes with import MD - Markdown + Front Matter (#12770)
+- Fixed: Importing MD + frontmatter fails on empty variable (#13008)
+- Fixed: Markdown import incorrectly parses a link as a file path (#12172)
+- Fixed: Rich Text Editor: Fix table delete row/delete column buttons can't remove the last row/column from a table (#13877 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.5.1](https://github.com/laurent22/joplin/releases/tag/android-v3.5.1) (Pre-release) - 2025-11-29T12:33:28Z
 
 - New: Add support for mixed case tags (#12931 by [@mrjo118](https://github.com/mrjo118))

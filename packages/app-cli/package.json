@@ -48,7 +48,7 @@
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
     "file-type": "16.5.4",
-    "fs-extra": "11.3.1",
+    "fs-extra": "11.3.2",
     "html-entities": "1.4.0",
     "keytar": "7.9.0",
     "md5": "2.3.0",
