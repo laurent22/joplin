@@ -27,7 +27,7 @@
     "compare-versions": "6.1.1",
     "dayjs": "1.11.18",
     "execa": "4.1.0",
-    "fs-extra": "11.3.1",
+    "fs-extra": "11.3.2",
     "gettext-parser": "7.0.1",
     "glob": "11.0.3",
     "license-checker-rseidelsohn": "4.4.2",
