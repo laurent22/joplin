@@ -26,8 +26,8 @@ Using Joplin Cloud Pro or Teams, you have the ability to customise the banner th
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/publish_note/Banner.png" width="75%"/>
 
-### Video Tutorial
+## Video Tutorial
 
-You can watch the full video tutorial here:
+For a video tutorial on how to publish a note and customise the banner please click on the thumbnail:
 
 [![Watch the video](https://img.youtube.com/vi/i1xgInm0PTE/hqdefault.jpg)](https://youtu.be/i1xgInm0PTE)
