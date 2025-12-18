@@ -13,10 +13,35 @@ const removeListItemWrapperParagraphs = (container: HTMLElement) => {
 	for (const item of listItems) {
 		trimEmptyParagraphs(item);
 
+		// Replace <li><p>...text...</p></li> with <li>...text...</li>
 		if (item.children.length === 1) {
 			const firstChild = item.children[0];
 			if (firstChild.tagName === 'P') {
 				firstChild.replaceWith(...firstChild.childNodes);
+			}
+		}
+	}
+};
+
+// Avoids extra newlines from being included in the output Markdown
+const removeChecklistItemWrapperParagraphs = (container: HTMLElement) => {
+	const listItems = container.querySelectorAll<HTMLLIElement>('li');
+	for (const item of listItems) {
+		// Is it a checklist item?
+		if (item.children.length !== 2) continue;
+		const input = item.children[0];
+		const content = item.children[1];
+		if (input.tagName !== 'INPUT' || content.tagName !== 'DIV') continue;
+
+		trimEmptyParagraphs(content);
+
+		// Replace <li><input/><div><p>...text...</p></div></li> with <li><input/><span>...text...</span></li>
+		if (content.children.length === 1) {
+			const firstChild = content.children[0];
+			if (firstChild.tagName === 'P') {
+				const newContent = document.createElement('span');
+				newContent.replaceChildren(...firstChild.childNodes);
+				content.replaceWith(newContent);
 			}
 		}
 	}
@@ -63,6 +88,7 @@ const postprocessEditorOutput = (node: Node|DocumentFragment) => {
 	fixResourceUrls(html);
 	restoreOriginalLinks(html);
 	removeListItemWrapperParagraphs(html);
+	removeChecklistItemWrapperParagraphs(html);
 	removeTableItemExtraPadding(html);
 
 	return html;

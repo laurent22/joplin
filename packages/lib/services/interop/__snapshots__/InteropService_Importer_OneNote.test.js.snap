@@ -6,6 +6,7 @@ exports[`InteropService_Importer_OneNote should apply position data for embedded
 <head>
     <meta charset="UTF-8">
     <title>Embedded doc sheet</title>
+    <meta name="X-Original-Page-Id" content="{C7F7C2C8-DFFA-4AD4-B5E3-84A969D31C8C}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
