@@ -26,6 +26,9 @@ To adhere to AppStore guidelines, the iOS app only allows installing recommended
 
 :::
 
+For a video tutorial on how to find and install plugin please click on the thumbnail:
+[![Watch the video](https://img.youtube.com/vi/wutW3IXGTNI/hqdefault.jpg)](https://www.youtube.com/watch?v=wutW3IXGTNI)
+
 ## Managing Plugins
 
 Within the Joplin Plugins page you have the option to turn individual plugins on or off using the toggle control. After changing the state of a plugin Joplin must be restarted, you may need to check Joplin is not minimising to the system tray/notification area rather than fully closing.
