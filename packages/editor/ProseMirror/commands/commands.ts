@@ -15,6 +15,7 @@ import jumpToHash from '../utils/jumpToHash';
 import focusEditor from './focusEditor';
 import canReplaceSelectionWith from '../utils/canReplaceSelectionWith';
 import showCreateEditablePrompt from '../plugins/joplinEditablePlugin/showCreateEditablePrompt';
+import getTextBetween from '../utils/getTextBetween';
 
 type Dispatch = (tr: Transaction)=> void;
 type ExtendedCommand = (state: EditorState, dispatch: Dispatch, view?: EditorView, options?: string[])=> boolean;
@@ -86,13 +87,20 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.ToggleItalicized]: toggleMark(schema.marks.emphasis),
 	[EditorCommandType.ToggleCode]: toggleCode,
 	[EditorCommandType.ToggleMath]: (state, dispatch, view) => {
-		const selectedText = state.doc.textBetween(state.selection.from, state.selection.to);
-		const block = selectedText.includes('\n');
-		const nodeType = block ? schema.nodes.joplinEditableBlock : schema.nodes.joplinEditableInline;
+		const inlineNodeType = schema.nodes.joplinEditableInline;
+		const blockNodeType = schema.nodes.joplinEditableBlock;
+		// If multiple paragraphs are selected, it usually isn't possible to replace them
+		// to inline math. Fall back to block math:
+		const block = !canReplaceSelectionWith(state.selection, inlineNodeType);
+		const nodeType = block ? blockNodeType : inlineNodeType;
 
 		if (canReplaceSelectionWith(state.selection, nodeType)) {
 			if (view) {
-				return showCreateEditablePrompt(block ? '$$\n\t...\n$$' : '$...$', !block)(state, dispatch, view);
+				const selectedText = getTextBetween(state.doc, state.selection.from, state.selection.to);
+				const content = selectedText || '...';
+				return showCreateEditablePrompt(
+					block ? `$$\n\t${content}\n$$` : `$${content}$`, !block,
+				)(state, dispatch, view);
 			}
 			return true;
 		}
@@ -135,7 +143,10 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 		return true;
 	},
 	[EditorCommandType.InsertCodeBlock]: (state, dispatch, view) => {
-		return showCreateEditablePrompt('```\n\n```', false)(state, dispatch, view);
+		const selectedText = getTextBetween(state.doc, state.selection.from, state.selection.to);
+		return showCreateEditablePrompt(
+			`\`\`\`\n${selectedText}\n\`\`\``, false,
+		)(state, dispatch, view);
 	},
 	[EditorCommandType.ToggleSearch]: (state, dispatch, view) => {
 		const command = setSearchVisible(!getSearchVisible(state));
