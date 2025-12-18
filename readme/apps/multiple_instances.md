@@ -35,6 +35,10 @@ To start a second instance of Joplin:
 
 This second instance operates independently, allowing you to customise it as needed.
 
+## Video Tutorial
+For a video tutorial on how to open a second instance of Joplin, please click on the thumbnail:
+[![Watch the video](https://img.youtube.com/vi/1PRUj7QBg9g/hqdefault.jpg)](https://www.youtube.com/watch?v=1PRUj7QBg9g)
+
 ## Caveats
 
 ### Launching the primary instance when the secondary instance is active
