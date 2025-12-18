@@ -1,4 +1,4 @@
-# Email to Note
+ # Email to Note
 
 You can save your emails in Joplin Cloud by forwarding your emails to your Joplin Cloud email address. The subject of the email will become the note title, and the email body will become the note content. The note will be created inside a notebook called Inbox.
 
@@ -14,10 +14,12 @@ To copy your Joplin Cloud email address you will need to navigate to the [Config
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/email_to_note/desktop.png" width="80%"/>
 
+For a video tutorial on how to setup email to note on desktop please click on the thumbnail:
+[![Watch the video](https://img.youtube.com/vi/8r8gS7grFDQ/hqdefault.jpg)](https://www.youtube.com/watch?v=8r8gS7grFDQ)
+
 ### Mobile
 
 To copy your Joplin Cloud email address you will need to navigate to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) and find the Joplin Cloud section. You will need to have your [synchronisation set to Joplin Cloud](https://github.com/laurent22/joplin/blob/dev/readme/apps/sync/joplin_cloud.md)
-
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/email_to_note/mobile.png" width="50%"/>
 
