@@ -13,7 +13,7 @@ import { editorFont } from '../global-style';
 import { EditorControl as EditorBodyControl, ContentScriptData } from '@joplin/editor/types';
 import { EditorControl, EditorSettings, EditorType } from './types';
 import { _ } from '@joplin/lib/locale';
-import { ChangeEvent, EditorEvent, EditorEventType, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { ChangeEvent, EditorEvent, EditorEventType, EditorScrolledEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
 import { EditorCommandType, EditorKeymap, EditorLanguageType, SearchState } from '@joplin/editor/types';
 import SelectionFormatting, { defaultSelectionFormatting } from '@joplin/editor/SelectionFormatting';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -38,6 +38,7 @@ import Logger from '@joplin/utils/Logger';
 const logger = Logger.create('NoteEditor');
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
+type ScrollEventHandler = (event: EditorScrolledEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
 type OnAttachCallback = (filePath?: string)=> Promise<void>;
@@ -46,6 +47,7 @@ interface Props {
 	ref: Ref<EditorControl>;
 	themeId: number;
 	initialText: string;
+	initialScroll: number;
 	mode: EditorType;
 	markupLanguage: MarkupLanguage;
 	noteId: string;
@@ -58,6 +60,7 @@ interface Props {
 	plugins: PluginStates;
 	noteResources: ResourceInfos;
 
+	onScroll: ScrollEventHandler;
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
@@ -334,8 +337,10 @@ function NoteEditor(props: Props) {
 			break;
 		}
 		case EditorEventType.Remove:
-		case EditorEventType.Scroll:
 			// Not handled
+			break;
+		case EditorEventType.Scroll:
+			props.onScroll(event);
 			break;
 		default:
 			exhaustivenessCheck = event;
@@ -442,6 +447,7 @@ function NoteEditor(props: Props) {
 					noteHash={props.noteHash}
 					initialText={props.initialText}
 					initialSelection={props.initialSelection}
+					initialScroll={props.initialScroll}
 					editorSettings={editorSettings}
 					globalSearch={props.globalSearch}
 					onEditorEvent={onEditorEvent}

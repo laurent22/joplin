@@ -20,7 +20,7 @@ export interface RenderSettings {
 	resources: ResourceInfos;
 	codeTheme: string;
 	noteHash: string;
-	initialScroll: number;
+	initialScrollPercent: number;
 	// If [null], plugin assets are not added to the document
 	pluginAssetContainerSelector: string|null;
 	removeUnusedPluginAssets: boolean;

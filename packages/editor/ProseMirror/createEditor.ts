@@ -134,6 +134,14 @@ const createEditor = async (
 				formatting: selectionFormatting,
 			});
 		}
+
+		props.onEvent({
+			kind: EditorEventType.SelectionRangeChange,
+			anchor: newState.selection.anchor,
+			head: newState.selection.head,
+			from: newState.selection.from,
+			to: newState.selection.to,
+		});
 	};
 
 	const view = new EditorView(parentElement, {
@@ -187,10 +195,18 @@ const createEditor = async (
 		redo: () => {
 			void editorControl.execCommand(EditorCommandType.Redo);
 		},
-		select: function(anchor: number, head: number): void {
+		select: (anchor: number, head: number) => {
+			const clampPointToDocument = (point: number) => {
+				if (point < 0) return 0;
+				const docMaximumPosition = view.state.doc.nodeSize - 2;
+				if (point > docMaximumPosition) return docMaximumPosition;
+
+				return point;
+			};
+
 			const transaction = view.state.tr;
 			transaction.setSelection(
-				TextSelection.create(transaction.doc, anchor, head),
+				TextSelection.create(transaction.doc, clampPointToDocument(anchor), clampPointToDocument(head)),
 			);
 			view.dispatch(transaction);
 		},

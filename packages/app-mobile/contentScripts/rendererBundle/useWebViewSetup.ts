@@ -91,8 +91,8 @@ const useMessenger = (props: UseMessengerProps) => {
 
 	const messenger = useMemo(() => {
 		const fsDriver = shim.fsDriver();
-		const localApi = {
-			onScroll: (fraction: number) => onScrollRef.current?.(fraction),
+		const localApi: MainProcessApi = {
+			onScroll: (event) => onScrollRef.current?.(event),
 			onPostMessage: (message: string) => onPostMessageRef.current?.(message),
 			onPostPluginMessage,
 			fsDriver: {

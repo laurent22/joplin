@@ -22,6 +22,7 @@ import { themeStyle } from '../global-style';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import { DialogContext } from '../DialogManager';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
+import { OnScrollCallback } from '../NoteBodyViewer/types';
 
 interface Props {
 	themeId: number;
@@ -153,6 +154,10 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		return result;
 	}, [revisions]);
 
+	const onScroll: OnScrollCallback = useCallback((event) => {
+		setInitialScroll(event.fraction);
+	}, []);
+
 	const onOptionSelected = useCallback((value: string) => {
 		setCurrentRevisionId(value);
 	}, []);
@@ -280,8 +285,8 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 			noteResources={resources}
 			highlightedKeywords={emptyStringList}
 			paddingBottom={0}
-			initialScroll={initialScroll}
-			onScroll={setInitialScroll}
+			initialScrollPercent={initialScroll}
+			onScroll={onScroll}
 			noteHash={''}
 		/>
 	</View>;
