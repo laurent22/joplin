@@ -28,6 +28,7 @@ import { RenderResult } from '../../renderer/types';
 import postprocessEditorOutput from './utils/postprocessEditorOutput';
 import detailsPlugin from './plugins/detailsPlugin';
 import tablePlugin from './plugins/tablePlugin';
+import clampPointToDocument from './utils/clampPointToDocument';
 
 interface ProseMirrorControl extends EditorControl {
 	getSettings(): EditorSettings;
@@ -196,17 +197,13 @@ const createEditor = async (
 			void editorControl.execCommand(EditorCommandType.Redo);
 		},
 		select: (anchor: number, head: number) => {
-			const clampPointToDocument = (point: number) => {
-				if (point < 0) return 0;
-				const docMaximumPosition = view.state.doc.nodeSize - 2;
-				if (point > docMaximumPosition) return docMaximumPosition;
-
-				return point;
-			};
-
 			const transaction = view.state.tr;
 			transaction.setSelection(
-				TextSelection.create(transaction.doc, clampPointToDocument(anchor), clampPointToDocument(head)),
+				TextSelection.create(
+					transaction.doc,
+					clampPointToDocument(view.state, anchor),
+					clampPointToDocument(view.state, head),
+				),
 			);
 			view.dispatch(transaction);
 		},
