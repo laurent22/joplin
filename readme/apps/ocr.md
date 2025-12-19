@@ -24,6 +24,12 @@ The application allows you to view the OCR text associated with an image. To do 
 
 ![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/view_ocr_text.png)
 
+## Video Tutorial
+
+For a video tutorial on how to OCR in Joplin please click on the thumbnail:
+
+[![Watch the video](https://img.youtube.com/vi/kmNsWo2KlF8/hqdefault.jpg)](https://www.youtube.com/watch?v=kmNsWo2KlF8)
+
 ## Initial processing
 
 Processing images and PDF may be resource intensive, especially if you have a lot of attachments. So the first time the feature is enabled don't be surprised if Joplin CPU usage is higher than usual. Once the initial scan of all your attachments is done, this will go back to normal. Later, whenever you attach a file it will be scanned quickly in a way that's not noticeable.
