@@ -71,10 +71,7 @@ class ImageWidget extends WidgetType {
 				image.src = this.resolvedSrc_;
 				// When the image loads, measure and cache the height
 				image.onload = () => {
-					// We measure the container because that's what CodeMirror cares about
-					// assuming the container wraps the image tightly or as intended.
-					// In this case renderBlockImages sets max-width: 100% etc on .image
-					// and the container is a div wrapper.
+					// Measure container height (what CodeMirror uses for scroll calculations).
 					if (dom.isConnected) {
 						imageHeightCache.set(this.cacheKey, dom.offsetHeight);
 					}
