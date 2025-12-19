@@ -113,7 +113,7 @@ class ImageWidget extends WidgetType {
 	}
 
 	private get cacheKey() {
-		return `${this.src_}_${this.width_ ?? ''}`;
+		return `${this.src_}_${this.width_ ?? ''}_${this.reloadCounter_}`;
 	}
 
 	public get estimatedHeight() {
