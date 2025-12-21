@@ -107,6 +107,7 @@ class Command extends BaseCommand {
 				userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 				username: () => joplinServerAuth.email,
 				password: () => joplinServerAuth.password,
+				apiKey: () => '',
 				session: (): Session => null,
 			});
 

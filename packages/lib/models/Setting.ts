@@ -61,6 +61,10 @@ export interface Constants {
 	syncVersion: number;
 	startupDevPlugins: string[];
 	isSubProfile: boolean;
+
+	'sync.9.apiKey': string;
+	'sync.10.apiKey': string;
+	'sync.11.apiKey': string;
 }
 
 interface SettingSections {
@@ -296,6 +300,10 @@ class Setting extends BaseModel {
 		syncVersion: 3,
 		startupDevPlugins: [],
 		isSubProfile: false,
+
+		'sync.9.apiKey': '',
+		'sync.10.apiKey': '',
+		'sync.11.apiKey': '',
 	};
 
 	public static autoSaveEnabled = true;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { TouchableOpacity, Text, StyleSheet, ScrollView, View, ViewStyle } from 'react-native';
 import { connect } from 'react-redux';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 import { themeStyle } from './global-style';
 import { AppState } from '../utils/types';
 

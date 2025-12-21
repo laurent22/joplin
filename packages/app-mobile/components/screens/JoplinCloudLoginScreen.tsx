@@ -11,9 +11,9 @@ import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
 import Clipboard from '@react-native-clipboard/clipboard';
-const Icon = require('react-native-vector-icons/Ionicons').default;
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
+import Icon from '../Icon';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 
@@ -179,7 +179,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				</Text>
 				{state.active === 'LINK_USED' ? (
 					<Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>
-						<Icon name='sync' style={styles.loadingIcon}/>
+						<Icon name='ionicon sync' style={styles.loadingIcon} accessibilityLabel={_('Waiting for authorisation...')}/>
 					</Animated.View>
 				) : null }
 			</View>

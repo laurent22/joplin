@@ -178,6 +178,9 @@ const buildStartupTasks = (
 		Setting.setConstant('pluginAssetDir', `${Setting.value('resourceDir')}/pluginAssets`);
 		Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 		Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
+		Setting.setConstant('sync.9.apiKey', '');
+		Setting.setConstant('sync.10.apiKey', '');
+		Setting.setConstant('sync.11.apiKey', '');
 	});
 	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));

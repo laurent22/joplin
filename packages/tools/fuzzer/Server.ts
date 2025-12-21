@@ -15,6 +15,7 @@ const createApi = async (serverUrl: string, adminAuth: UserData) => {
 		password: () => adminAuth.password,
 		username: () => adminAuth.email,
 		session: ()=>null,
+		apiKey: ()=>'',
 		env: Env.Dev,
 	});
 	await api.loadSession();

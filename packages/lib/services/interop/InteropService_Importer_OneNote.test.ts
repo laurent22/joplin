@@ -185,16 +185,21 @@ describe('InteropService_Importer_OneNote', () => {
 		const content = await readFile(filepath, 'utf-8');
 
 		const jsdom = new JSDOM('<div></div>');
-		InteropService.instance().domParser = new jsdom.window.DOMParser();
-		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
+		const domParser = new jsdom.window.DOMParser();
+		const xmlSerializer = new jsdom.window.XMLSerializer();
 
 		const importer = new InteropService_Importer_OneNote();
 		await importer.init('asdf', {
-			domParser: new jsdom.window.DOMParser(),
-			xmlSerializer: new jsdom.window.XMLSerializer(),
+			domParser,
+			xmlSerializer,
 		});
 
-		expectWithInstructions(importer.extractSvgs(content, titleGenerator())).toMatchSnapshot();
+		const dom = domParser.parseFromString(content, 'text/html');
+		const extracted = importer.extractSvgs(dom, titleGenerator());
+		expect(extracted).toMatchObject({ changed: true });
+		expectWithInstructions(
+			{ html: dom.body.outerHTML, svgs: extracted.svgs },
+		).toMatchSnapshot();
 	});
 
 	it('should ignore broken characters at the start of paragraph', async () => {
@@ -316,5 +321,12 @@ describe('InteropService_Importer_OneNote', () => {
 		const markdown = converter.parse(importedNote.body);
 
 		expect(markdown).toMatchSnapshot('Math');
+	});
+
+	it('should apply position data for embedded files', async () => {
+		const notes = await importNote(`${supportDir}/onenote/testOneNoteEmbeddedWordDoc.one`);
+		const importedNote = notes.find(n => n.title.startsWith('Embedded doc sheet'));
+
+		expect(normalizeNoteForSnapshot(importedNote.body)).toMatchSnapshot('EmbeddedFiles');
 	});
 });

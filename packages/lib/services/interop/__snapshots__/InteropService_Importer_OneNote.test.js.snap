@@ -1,5 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`InteropService_Importer_OneNote should apply position data for embedded files: EmbeddedFiles 1`] = `
+"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Embedded doc sheet</title>
+    <meta name="X-Original-Page-Id" content="{C7F7C2C8-DFFA-4AD4-B5E3-84A969D31C8C}"/>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Embedded doc sheet</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Wednesday, December 11, 2019</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">5:35 PM</span></div>
+</div></div><p style="font-size: 11pt; line-height: 17px; margin-left: 2in; margin-top: 1.7in;"><a href=":/id-here">Dude this is a super cool embedded doc.docx</a></p><div class="container-outline" style="left: 192px; position: absolute; top: 259px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>"
+`;
+
 exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: new_section 1`] = `
 "<!DOCTYPE html>
 <html lang="en">
@@ -104,6 +136,7 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 <head>
     <meta charset="UTF-8">
     <title>title</title>
+    <meta name="X-Original-Page-Id" content="{B8EACEFB-CA13-42D8-AECA-5F277CE28041}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -130,7 +163,7 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 `;
 
 exports[`InteropService_Importer_OneNote should correctly convert imported notes to Markdown: Test Todo: As Markdown 1`] = `
-" Test Todo : cases à cocher lien vers doc sur partage 
+" Test Todo : cases à cocher lien vers doc sur partage  
 
 Test Todo : cases à cocher lien vers doc sur partage
 
@@ -156,7 +189,7 @@ jeudi 23 octobre 2025
 `;
 
 exports[`InteropService_Importer_OneNote should correctly import math formulas: Math 1`] = `
-" Math 
+" Math  
 
 Math
 
@@ -198,6 +231,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A page can have any width it wants?</title>
+    <meta name="X-Original-Page-Id" content="{CB4D5A97-3C6D-4DB7-A56A-B5A8B9D85391}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -230,6 +264,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A page with a lot of svgs</title>
+    <meta name="X-Original-Page-Id" content="{2F308E45-ADB4-47EF-9350-D0F7A18AEC0A}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -260,6 +295,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A page with text and drawing above it</title>
+    <meta name="X-Original-Page-Id" content="{6ABD6E20-4015-42B8-953E-74E620C82471}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -296,6 +332,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A simple filename</title>
+    <meta name="X-Original-Page-Id" content="{D7A26766-0233-4170-9EF3-372379551FF7}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -326,6 +363,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>Page with more than one font size</title>
+    <meta name="X-Original-Page-Id" content="{074A237A-AFFA-4C2E-907E-48E82E80809D}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -467,6 +505,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>text</title>
+    <meta name="X-Original-Page-Id" content="{55390DC0-8B2B-4A1E-9795-DA8033492F7C}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -498,14 +537,13 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 
 exports[`InteropService_Importer_OneNote should extract svgs 1`] = `
 {
-  "html": "<!DOCTYPE HTML>
-<html lang="en"><head></head><body>
+  "html": "<body>
 
 <div class="container-outline" style="left: 48px;position: absolute;top: 107px;width: 624px;">
     <img src="./id1.svg">
 </div>
 
-</body></html>",
+</body>",
   "svgs": [
     {
       "content": "<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
@@ -536,32 +574,7 @@ exports[`InteropService_Importer_OneNote should extract svgs 1`] = `
 
 exports[`InteropService_Importer_OneNote should extract svgs 2`] = `
 {
-  "html": "<!DOCTYPE HTML>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <title>Created on OneNote App</title>
-    <style>
-    * { margin: 0; padding: 0; font-weight: normal; }
-    table, tr, td { border-color: #A3A3A3; }
-    ul, ol { padding: 0; }
-    .title .outline-element { display: inline; }
-    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
-    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
-    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
-    .ink-text { top: 0; left: 0; }
-    .note-tag-icon { position: relative; }
-    .note-tag-icon > svg { position: absolute; }
-    .icon-secondary > svg { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
-
-    .list-0 li { padding-left: 10px; }
-    .list-0 li::marker { content: '•'; font-family: Calibri; font-size: 12pt; }
-    .list-1 li { padding-left: 10px; }
-    .list-1 li::marker { content: '○'; font-family: Courier New; font-size: 12pt; }
-    
-    </style>
-</head>
-<body>
+  "html": "<body>
 
 
 
@@ -577,7 +590,7 @@ exports[`InteropService_Importer_OneNote should extract svgs 2`] = `
 </script>
 
 
-</body></html>",
+</body>",
   "svgs": [
     {
       "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 295 1550"><path d="M 70 1454 l 4 0 6 -14 6 -31 4 -53 4 -69 6 -73 7 -81 6 -90 5 -101 12 -116 14 -123 12 -113 10 -103 6 -95 8 -82 8 -72 6 -58 5 -47 3 -37 1 -26" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
@@ -809,6 +822,7 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
 <head>
     <meta charset="UTF-8">
     <title>Action research - Wikipedia</title>
+    <meta name="X-Original-Page-Id" content="{5B2B7262-DC9F-47D5-A64D-9BB61513B52E}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -872,6 +886,7 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
 <head>
     <meta charset="UTF-8">
     <title>Page title</title>
+    <meta name="X-Original-Page-Id" content="{D7355639-C72B-494D-9B70-774A0060FD10}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1007,6 +1022,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tip
 <head>
     <meta charset="UTF-8">
     <title>Tips from a Pro: Using Trees for Dramatic Landscape Photography</title>
+    <meta name="X-Original-Page-Id" content="{B4FB39E6-163B-472A-9330-A37F97DCF590}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1038,6 +1054,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
 <head>
     <meta charset="UTF-8">
     <title>wikipedia link</title>
+    <meta name="X-Original-Page-Id" content="{542DF835-4AE2-4231-A924-98D4B8D4F95C}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1064,11 +1081,11 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
 `;
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景  (Web view) 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>风景  (Web view)</title>
+    <meta name="X-Original-Page-Id" content="{1AA1839C-D5BF-4AB7-99F3-793769C6259A}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1082,7 +1099,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 <div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">&nbsp;</span></div>
 </div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Sunday, January 5, 2025</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">10:13 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href="onenote:#%E9%A3%8E%E6%99%AF&section-id={75256889-9e75-4ec2-82ed-fc799557e1b9}&page-id={d099b6f3-7f5a-4c08-aed7-e8d42c59523f}&end" style="font-family: Calibri; font-size: 11pt;">风景</a><span style="font-family: Calibri; font-size: 11pt;">  (</span><a href="https://onedrive.live.com/edit.aspx?resid=193EE54E3252492D!s9b62db4219f740709f444bc0129de4e9&migratedtospo=true&wd=target%28Quick%20Notes.one%7C75256889-9e75-4ec2-82ed-fc799557e1b9%2F%E9%A3%8E%E6%99%AF%7Cd099b6f3-7f5a-4c08-aed7-e8d42c59523f%2F%29&wdorigin=703&wdpreservelink=1" style="font-family: Calibri; font-size: 11pt;">Web view</a><span style="font-family: Calibri; font-size: 11pt;">)</span></p></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href=":/6" style="font-family: Calibri; font-size: 11pt;">风景</a><span style="font-family: Calibri; font-size: 11pt;">  (</span><a href="https://onedrive.live.com/edit.aspx?resid=193EE54E3252492D!s9b62db4219f740709f444bc0129de4e9&amp;migratedtospo=true&amp;wd=target%28Quick%20Notes.one%7C75256889-9e75-4ec2-82ed-fc799557e1b9%2F%E9%A3%8E%E6%99%AF%7Cd099b6f3-7f5a-4c08-aed7-e8d42c59523f%2F%29&amp;wdorigin=703&amp;wdpreservelink=1" style="font-family: Calibri; font-size: 11pt;">Web view</a><span style="font-family: Calibri; font-size: 11pt;">)</span></p></div>
 </div>
 
 <script>
@@ -1090,8 +1107,8 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
         window.parent.postMessage(window.location.href, '*');
     }
 </script>
-</body>
-</html>"
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 1`] = `
@@ -1100,6 +1117,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 <head>
     <meta charset="UTF-8">
     <title>风景</title>
+    <meta name="X-Original-Page-Id" content="{D099B6F3-7F5A-4C08-AED7-E8D42C59523F}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1130,6 +1148,7 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
 <head>
     <meta charset="UTF-8">
     <title>My title</title>
+    <meta name="X-Original-Page-Id" content="{301ACB0B-E552-428F-BA6E-0D5293ECCD35}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1264,6 +1283,7 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
 <head>
     <meta charset="UTF-8">
     <title>Is Mexico safe for shooting Street Photography?</title>
+    <meta name="X-Original-Page-Id" content="{3DB79201-A9D3-4FBD-AAC5-2178D16CB20B}"/>
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1394,6 +1414,7 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>Test Todo : cases à cocher lien vers doc sur partage</title>
+    <meta name="X-Original-Page-Id" content="{A51D95CD-67AF-43D6-9E5B-1A83068EA7AC}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1447,6 +1468,7 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>Marketing Funnel &amp; Training</title>
+    <meta name="X-Original-Page-Id" content="{23857BB4-B769-4A90-931A-68122AAC3AF4}">
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1484,6 +1506,7 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <head>
     <meta charset="UTF-8">
     <title>Decrease support costs</title>
+    <meta name="X-Original-Page-Id" content="{375A5D06-249C-574E-8439-23CEAA489035}"/>
     <style>
     
 /* (For testing: Removed default CSS) */

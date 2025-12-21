@@ -726,7 +726,7 @@ msgid ""
 msgstr ""
 "Figyelem: Ha módosítja ezt a helyet, győződjön meg arról, hogy az összes "
 "tartalmát átmásolta oda szinkronizálás előtt, különben minden fájl törölve "
-"lesz! További részletekért lásd a GYIK-et: %s"
+"lesz! További részletekért tekintse meg a GYIK-et: %s"
 
 #: packages/app-cli/app/command-sync.ts:73
 #: packages/app-cli/app/command-sync.ts:87
@@ -750,7 +750,7 @@ msgstr "Automatikus"
 
 #: packages/server/src/services/TaskService.ts:30
 msgid "Auto-add disabled accounts for deletion"
-msgstr "A letiltott fiókok automatikus hozzáadása a törléshez"
+msgstr "Letiltott fiókok automatikus hozzáadása a törléshez"
 
 #: packages/lib/models/settings/builtInMetadata.ts:785
 msgid "Auto-format Markdown in the Rich Text Editor"
@@ -758,7 +758,7 @@ msgstr "Markdown automatikus átalakítása a formázott szöveges szerkesztőbe
 
 #: packages/lib/models/settings/builtInMetadata.ts:742
 msgid "Auto-pair braces, parentheses, quotations, etc."
-msgstr "Automatikusan párosítsa a zárójeleket, idézőjeleket, stb."
+msgstr "Zárójelek, idézőjelek, stb. automatikus párosítása"
 
 #: packages/lib/models/settings/builtInMetadata.ts:753
 msgid "Autocomplete Markdown and HTML"
@@ -770,11 +770,11 @@ msgstr "Frissítések automatikus ellenőrzése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1997
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr "Kuka tartalmának automatikusan törlése bizonyos napok elteltével"
+msgstr "Kuka tartalmának automatikus törlése bizonyos napok elteltével"
 
 #: packages/lib/models/settings/builtInMetadata.ts:653
 msgid "Automatically switch theme to match system theme"
-msgstr "Automatikus átváltás a rendszer témájával egyező témára"
+msgstr "Automatikus váltás a rendszer témájával egyező témára"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:48
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:475
@@ -2220,7 +2220,7 @@ msgstr "Szerkesztő betűmérete"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1275
 msgid "Editor maximum width"
-msgstr "Szerkesztő maximális szélessége"
+msgstr "Szerkesztő legnagyobb szélessége"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1256
 msgid "Editor monospace font family"
@@ -2273,7 +2273,7 @@ msgstr "kiemelt szöveg"
 #: packages/app-mobile/components/side-menu-content.tsx:344
 #: packages/app-mobile/components/side-menu-content.tsx:348
 msgid "Empty trash"
-msgstr "Kuka kiürítése"
+msgstr "Kuka ürítése"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:144
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:86
@@ -3777,19 +3777,19 @@ msgstr "Matematika"
 
 #: packages/lib/models/settings/builtInMetadata.ts:496
 msgid "Max concurrent connections"
-msgstr "Maximális egyidejű kapcsolatok"
+msgstr "Megengedett egyidejű kapcsolatok száma"
 
 #: packages/server/src/routes/admin/users.ts:148
 msgid "Max Item Size"
-msgstr "Maximális elemméret"
+msgstr "Legnagyobb elemméret"
 
 #: packages/lib/utils/joplinCloud/index.ts:138
 msgid "Max note or attachment size"
-msgstr "Maximális jegyzet- vagy mellékletméret"
+msgstr "Legnagyobb jegyzet- vagy mellékletméret"
 
 #: packages/server/src/routes/admin/users.ts:156
 msgid "Max Total Size"
-msgstr "Maximális összméret"
+msgstr "Legnagyobb összméret"
 
 #: packages/lib/models/Setting.ts:1334
 msgid "Media player, math, diagrams, table of contents"
@@ -4281,7 +4281,7 @@ msgstr "Jegyzetek"
 
 #: packages/lib/models/Setting.ts:1319
 msgid "Notes and settings are stored in: %s"
-msgstr "A jegyzetek és beállítások itt vannak tárolva: %s"
+msgstr "Jegyzetek és beállítások tárolási helye: %s"
 
 #: packages/app-cli/app/command-mknote.js:16
 #: packages/app-cli/app/command-mktodo.js:16
@@ -4414,7 +4414,7 @@ msgstr "PDF-megjelenítő megnyitása"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
-msgstr "Az elsődleges alkalmazáspéldány megnyitása…"
+msgstr "Elsődleges alkalmazáspéldány megnyitása…"
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -4659,7 +4659,7 @@ msgid ""
 "switch to %s to edit the note."
 msgstr ""
 "Várjon, amíg minden melléklet letöltődik és visszafejtődik. A jegyzet "
-"szerkesztéséhez átválthat a(z) %s nézetre is."
+"szerkesztéséhez a(z) %s nézetre is válthat."
 
 #: packages/server/src/utils/saml.ts:58
 msgid "Please wait while we load your organisation sign-in page..."
@@ -6160,7 +6160,7 @@ msgstr "Az alkalmazást újra kell indítani a módosítások érvényesítésé
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
-msgstr "A mellékletek figyelése megszűnik, ha átvált egy másik jegyzetre."
+msgstr "A mellékletek figyelése megszűnik, ha egy másik jegyzetre vált."
 
 #: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"
@@ -6810,11 +6810,11 @@ msgstr "Szerkesztőfül billentyűs navigációja be/ki"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
-msgstr "Átváltás a szerkesztők között"
+msgstr "Váltás a szerkesztők között"
 
 #: packages/app-desktop/commands/toggleExternalEditing.ts:8
 msgid "Toggle external editing"
-msgstr "Átváltás külső szerkesztőre"
+msgstr "Váltás külső szerkesztőre"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.ts:7
 msgid "Toggle menu bar"

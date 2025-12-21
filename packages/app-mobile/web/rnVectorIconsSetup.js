@@ -1,29 +1,24 @@
-import fontAwesomeFont from 'react-native-vector-icons/Fonts/FontAwesome.ttf';
-import fontAwesomeSolidFont from 'react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf';
-import fontAwesomeRegularFont from 'react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf';
-import fontAwesomeBrandsFont from 'react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf';
-import ioniconFont from 'react-native-vector-icons/Fonts/Ionicons.ttf';
-import materialCommunityIconsFont from 'react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf';
-import antDesignFont from 'react-native-vector-icons/Fonts/AntDesign.ttf';
+import fontAwesomeSolidFont from '@react-native-vector-icons/fontawesome5/fonts/FontAwesome5_Solid.ttf';
+import fontAwesomeRegularFont from '@react-native-vector-icons/fontawesome5/fonts/FontAwesome5_Regular.ttf';
+import fontAwesomeBrandsFont from '@react-native-vector-icons/fontawesome5/fonts/FontAwesome5_Brands.ttf';
+import ioniconFont from '@react-native-vector-icons/ionicons/fonts/Ionicons.ttf';
+import materialCommunityIconsFont from '@react-native-vector-icons/material-icons/fonts/MaterialIcons.ttf';
+import materialIconsFont from '@react-native-vector-icons/material-design-icons/fonts/MaterialDesignIcons.ttf';
 
 // See https://www.npmjs.com/package/react-native-vector-icons
 const setUpRnVectorIcons = () => {
 	const iconFontStyles = `
 		@font-face {
-			src: url(${fontAwesomeFont});
-			font-family: FontAwesome;
-		}
-		@font-face {
 			src: url(${fontAwesomeSolidFont});
-			font-family: FontAwesome5_Solid;
+			font-family: FontAwesome5Free-Solid;
 		}
 		@font-face {
 			src: url(${fontAwesomeRegularFont});
-			font-family: FontAwesome5_Regular;
+			font-family: FontAwesome5Free-Regular;
 		}
 		@font-face {
 			src: url(${fontAwesomeBrandsFont});
-			font-family: FontAwesome5_Brands;
+			font-family: FontAwesome5Brands-Regular;
 		}
 		@font-face {
 			src: url(${ioniconFont});
@@ -34,8 +29,8 @@ const setUpRnVectorIcons = () => {
 			font-family: MaterialCommunityIcons;
 		}
 		@font-face {
-			src: url(${antDesignFont});
-			font-family: AntDesign;
+			src: url(${materialIconsFont});
+			font-family: MaterialDesignIcons;
 		}
 	`;
 

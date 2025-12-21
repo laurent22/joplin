@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1234,9 +1234,9 @@ msgstr "Anstehende Alarme"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Kommagetrennte Liste von Pfaden zu Verzeichnissen, aus denen die Zertifikate "
 "geladen werden, oder Pfad zu einzelnen Zertifikatsdateien. Zum Beispiel: /my/"
@@ -2343,7 +2343,7 @@ msgstr "Verschlüsselung aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1116
 msgid "Enable file:// URLs for images and videos"
-msgstr "file://-URLs für Bilder und Videos aktivieren"
+msgstr "URLs mit file:// für Bilder und Videos aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1097
 msgid "Enable footnotes"
@@ -7001,8 +7001,8 @@ msgid ""
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
 "Deinstalliere die Anwendung und installiere sie erneut. Erstelle zuvor "
-"unbedingt eine Sicherungskopie, indem du alle Ihre Notizen aus der Desktop-"
-"Anwendung als JEX exportieren."
+"unbedingt ein Backup, indem du alle deine Notizen aus der Desktop-Anwendung "
+"als JEX exportierst."
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 #: packages/app-mobile/utils/getVersionInfoText.ts:14
@@ -7553,8 +7553,8 @@ msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Dein Passwort ist nötig um einige deiner Daten zu entschlüsseln. Tippe „:"
-"e2ee decrypt“ um es zu setzen."
+"Dein Passwort ist nötig um einige deiner Daten zu entschlüsseln. Tippe "
+"„:e2ee decrypt“ um es zu setzen."
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"
@@ -8279,8 +8279,8 @@ msgstr "Herauszoomen"
 #~ "`sync.2.path` to specify the target directory."
 #~ msgstr ""
 #~ "Das Synchronisationsziel, mit dem synchronisiert werden soll. Wenn mit "
-#~ "dem Dateisystem synchronisiert werden soll, setze den Wert zu `sync.2."
-#~ "path`, um den Zielpfad zu spezifizieren."
+#~ "dem Dateisystem synchronisiert werden soll, setze den Wert zu "
+#~ "`sync.2.path`, um den Zielpfad zu spezifizieren."
 
 #~ msgid "To-do title:"
 #~ msgstr "Aufgabentitel:"

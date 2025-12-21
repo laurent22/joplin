@@ -50,7 +50,7 @@ import WarningBanner from './WarningBanner/WarningBanner';
 import UserWebview from '../../services/plugins/UserWebview';
 import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
-import { stateUtils } from '@joplin/lib/reducer';
+import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
@@ -722,6 +722,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		bodyEditor = 'CodeMirror5';
 	}
 
+	const mainWindowState = stateUtils.windowStateById(state, defaultWindowId);
+
 	return {
 		noteId,
 		bodyEditor,
@@ -740,7 +742,9 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		customCss: state.customViewerCss,
 		noteVisiblePanes: windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
-		highlightedWords: state.highlightedWords,
+		// For now, only the main window has search UI. Show the same search markers in all
+		// windows:
+		highlightedWords: mainWindowState.highlightedWords,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([

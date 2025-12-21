@@ -2,7 +2,6 @@ import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, ViewStyle, Platform } from 'react-native';
-const Icon = require('react-native-vector-icons/Ionicons').default;
 import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
@@ -26,6 +25,7 @@ import WebBetaButton from './WebBetaButton';
 import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
+import Icon from '../Icon';
 export { MenuOptionType };
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -283,7 +283,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={_('Show/hide the sidebar')}
 					accessibilityRole="button">
 					<View style={styles.sideMenuButton}>
-						<Icon name="menu" style={styles.topIcon} />
+						<Icon name="ionicon menu" style={styles.topIcon} accessibilityLabel={null} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -314,8 +314,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						style={disabled ? containerDisabledStyle : containerStyle}
 					>
 						<Icon
-							name="arrow-back"
+							name="ionicon arrow-back"
 							style={iconStyle}
+							accessibilityLabel={null}
 						/>
 					</View>
 				</Menu>
@@ -705,7 +706,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			!menuOptions.length || !showContextMenuButton ? null : (
 				<Menu themeId={this.props.themeId} options={menuOptions}>
 					<View style={contextMenuStyle} accessibilityLabel={_('Actions')}>
-						<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={null}/>
 					</View>
 				</Menu>
 			);

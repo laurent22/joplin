@@ -4,7 +4,7 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes } from '../../path-utils';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
-import { join, resolve, normalize, sep, dirname, extname, basename } from 'path';
+import { join, resolve, normalize, sep, dirname, extname, basename, relative } from 'path';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
@@ -16,9 +16,9 @@ export type SvgXml = {
 	content: string;
 };
 
-type ExtractSvgsReturn = {
-	svgs: SvgXml[];
-	html: string;
+type PageResolutionResult = { path: string };
+type PageIdMap = {
+	get: (pageId: string)=> PageResolutionResult|null;
 };
 
 // See onenote-converter README.md for more information
@@ -117,8 +117,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			this.options_.onError?.(new Error(`None of the files appear to be from OneNote. Skipped files include: ${JSON.stringify(skippedFiles)}`));
 		}
 
-		logger.info('Extracting SVGs into files');
-		await this.moveSvgToLocalFile(tempOutputDirectory);
+		logger.info('Postprocessing imported content...');
+		await this.postprocessGeneratedHtml_(tempOutputDirectory);
 
 		logger.info('Importing HTML into Joplin');
 		const importer = new InteropService_Importer_Md();
@@ -144,41 +144,113 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 	}
 
-	private async moveSvgToLocalFile(baseFolder: string) {
-		const htmlFiles = await this.getValidHtmlFiles(resolve(baseFolder));
+	private async buildIdMap_(baseFolder: string): Promise<PageIdMap> {
+		const htmlFiles = await this.getValidHtmlFiles_(resolve(baseFolder));
+		const pageIdToPath = new Map<string, string>();
+
+		for (const file of htmlFiles) {
+			const fullPath = join(baseFolder, file.path);
+			const html: string = await shim.fsDriver().readFile(fullPath);
+
+			const metaTagMatch = html.match(/<meta name="X-Original-Page-Id" content="([^"]+)"/i);
+			if (metaTagMatch) {
+				const pageId = metaTagMatch[1];
+				pageIdToPath.set(pageId.toUpperCase(), fullPath);
+			}
+		}
+
+		return {
+			get: (id: string)=>{
+				const path = pageIdToPath.get(id.toUpperCase());
+
+				if (path) {
+					return { path };
+				}
+				return null;
+			},
+		};
+	}
+
+	private async postprocessGeneratedHtml_(baseFolder: string) {
+		const htmlFiles = await this.getValidHtmlFiles_(resolve(baseFolder));
+
+		const pipeline = [
+			(dom: Document, currentFolder: string) => this.extractSvgsToFiles_(dom, currentFolder),
+			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder),
+		];
 
 		for (const file of htmlFiles) {
 			const fileLocation = join(baseFolder, file.path);
 			const originalHtml = await shim.fsDriver().readFile(fileLocation);
-			const { svgs, html: updatedHtml } = this.extractSvgs(originalHtml, () => uuidgen(10));
+			const dom = this.domParser.parseFromString(originalHtml, 'text/html');
 
-			if (!svgs || !svgs.length) continue;
+			let changed = false;
+			for (const task of pipeline) {
+				const result = await task(dom, dirname(fileLocation));
+				changed ||= result;
+			}
 
-			await shim.fsDriver().writeFile(fileLocation, updatedHtml, 'utf8');
-			await this.createSvgFiles(svgs, join(baseFolder, dirname(file.path)));
+			if (changed) {
+				// Don't use xmlSerializer here: It breaks <style> blocks.
+				const updatedHtml = `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`;
+				await shim.fsDriver().writeFile(fileLocation, updatedHtml, 'utf-8');
+			}
 		}
 	}
 
-	private async getValidHtmlFiles(baseFolder: string) {
+	private async getValidHtmlFiles_(baseFolder: string) {
 		const files = await shim.fsDriver().readDirStats(baseFolder, { recursive: true });
 		const htmlFiles = files.filter(f => !f.isDirectory() && f.path.endsWith('.html'));
 		return htmlFiles;
 	}
 
-	private async createSvgFiles(svgs: SvgXml[], svgBaseFolder: string) {
+	private async convertExternalLinksToInternalLinks_(dom: Document, baseFolder: string) {
+		let idMap_: PageIdMap|null = null;
+		const idMap = async () => {
+			idMap_ ??= await this.buildIdMap_(baseFolder);
+			return idMap_;
+		};
+
+		const links = dom.querySelectorAll<HTMLAnchorElement>('a[href^="onenote"]');
+		let changed = false;
+		for (const link of links) {
+			if (!link.href.startsWith('onenote:')) continue;
+
+			// Remove everything before the first query parameter (e.g. &section-id=).
+			const separatorIndex = link.href.indexOf('&');
+			const prefixRemoved = link.href.substring(separatorIndex);
+			const params = new URLSearchParams(prefixRemoved);
+			const pageId = params.get('page-id');
+			const targetPage = (await idMap()).get(pageId);
+
+			// The target page might be in a different notebook (imported separately)
+			if (!targetPage) {
+				logger.info('Page not found for internal link. Page ID: ', pageId);
+			} else {
+				changed = true;
+				link.href = relative(baseFolder, targetPage.path);
+			}
+		}
+		return changed;
+	}
+
+	private async extractSvgsToFiles_(dom: Document, svgBaseFolder: string) {
+		const { svgs, changed } = this.extractSvgs(dom);
+
 		for (const svg of svgs) {
 			await shim.fsDriver().writeFile(join(svgBaseFolder, svg.title), svg.content, 'utf8');
 		}
+
+		return changed;
 	}
 
-	public extractSvgs(html: string, titleGenerator: ()=> string): ExtractSvgsReturn {
-		const dom = this.domParser.parseFromString(html, 'text/html');
-
+	// Public to allow testing:
+	public extractSvgs(dom: Document, titleGenerator: ()=> string = () => uuidgen(10)) {
 		// get all "top-level" SVGS (ignore nested)
 		const svgNodeList = dom.querySelectorAll('svg');
 
 		if (!svgNodeList || !svgNodeList.length) {
-			return { svgs: [], html };
+			return { svgs: [], changed: false };
 		}
 
 		const svgs: SvgXml[] = [];
@@ -220,8 +292,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 		return {
 			svgs,
-			// Don't use xmlSerializer here: It breaks <style> blocks.
-			html: `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`,
+			changed: true,
 		};
 	}
 }

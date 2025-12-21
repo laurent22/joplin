@@ -4,6 +4,7 @@ use crate::onenote::outline::{Outline, parse_outline};
 use crate::onenote::page_content::{PageContent, parse_page_content};
 use crate::onestore::object_space::ObjectSpaceRef;
 use crate::shared::exguid::ExGuid;
+use crate::shared::guid::Guid;
 use parser_utils::errors::{ErrorKind, Result};
 use parser_utils::log::set_current_page;
 
@@ -15,6 +16,7 @@ use parser_utils::log::set_current_page;
 /// [\[MS-ONE\] 2.2.19]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/e381b7c7-b434-43a2-ba23-0d08bafd281a
 #[derive(Clone, Debug)]
 pub struct Page {
+    entity_id: Guid,
     title: Option<Title>,
     level: i32,
     author: Option<String>,
@@ -82,6 +84,12 @@ impl Page {
                     })
                     .next()
             })
+    }
+
+    /// The page's GUID. May be referenced by internal links.
+    /// Ref: [ONESTORE 2.2.58](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-one/34ea5601-f060-4a69-b5f9-5843a1f14098)
+    pub fn link_target_id(&self) -> String {
+        format!("{}", self.entity_id)
     }
 
     fn outline_text(outline: &Outline) -> Option<&str> {
@@ -203,6 +211,7 @@ pub(crate) fn parse_page(page_space: ObjectSpaceRef) -> Result<Page> {
         .collect::<Result<_>>()?;
 
     Ok(Page {
+        entity_id: metadata.entity_guid,
         title,
         level,
         author: data.author.map(|author| author.into_value()),

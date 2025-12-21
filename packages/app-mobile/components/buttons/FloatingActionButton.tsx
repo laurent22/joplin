@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import { AccessibilityActionEvent, AccessibilityActionInfo, View } from 'react-native';
 import { connect } from 'react-redux';
 import BottomDrawer from '../BottomDrawer';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
