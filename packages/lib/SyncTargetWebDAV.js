@@ -6,6 +6,7 @@ const Synchronizer = require('./Synchronizer').default;
 const WebDavApi = require('./WebDavApi');
 const { FileApiDriverWebDav } = require('./file-api-driver-webdav');
 const checkProviderIsSupported = require('./utils/webDAVUtils').default;
+const urlUtils = require('./utils/urlUtils');
 
 class SyncTargetWebDAV extends BaseSyncTarget {
 	static id() {
@@ -41,7 +42,7 @@ class SyncTargetWebDAV extends BaseSyncTarget {
 		// /[^\u0021-\u00ff]/ is used in Node.js to detect the unescaped characters.
 		// See https://github.com/nodejs/node/blob/bbbf97b6dae63697371082475dc8651a6a220336/lib/_http_client.js#L176
 		const charsReg = /[^\u0021-\u00ff]/;
-		const pathUrl = charsReg.exec(options.path()) !== null ? encodeURI(options.path()) : options.path();
+		const pathUrl = charsReg.exec(options.path()) !== null ? urlUtils.safe_encodeURI(options.path()) : options.path();
 		const apiOptions = {
 			baseUrl: () => pathUrl,
 			username: () => options.username(),
