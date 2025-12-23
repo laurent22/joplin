@@ -1907,6 +1907,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		// As of December 2025, the voice typing feature doesn't work well on low-resource devices.
+		// There have been requests to allow disabling the voice typing feature at build time. This
+		// feature flag allows doing so, by changing the default `value` from `true` to `false`:
+		'featureFlag.voiceTypingEnabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Mobile],
+			label: () => 'Voice typing: Enable the voice typing feature',
+			section: 'note',
+			advanced: true,
+		},
+
 		'survey.webClientEval2025.progress': {
 			value: SurveyProgress.NotStarted,
 			type: SettingItemType.Int,

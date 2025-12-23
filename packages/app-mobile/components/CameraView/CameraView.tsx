@@ -85,7 +85,7 @@ const useStyles = ({ themeId, style, cameraRatio }: UseStyleProps) => {
 	}, [themeId, style, outputPositioning]);
 };
 
-const androidRatios = ['1:1', '4:3', '16:9'];
+const androidRatios = ['4:3', '16:9'];
 const iOSRatios: string[] = [];
 const useAvailableRatios = (): string[] => {
 	return Platform.OS === 'android' ? androidRatios : iOSRatios;

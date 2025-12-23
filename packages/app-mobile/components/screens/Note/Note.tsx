@@ -78,6 +78,7 @@ import { writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
 import useKeyboardState from '../../../utils/hooks/useKeyboardState';
+import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -1312,8 +1313,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
-		const voiceTypingSupported = Platform.OS === 'android';
-		if (voiceTypingSupported) {
+		if (VoiceTyping.supported()) {
 			output.push({
 				title: _('Voice typing...'),
 				onPress: () => {

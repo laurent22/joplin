@@ -213,7 +213,7 @@ const modelLocalFilepath = () => {
 };
 
 const whisper: VoiceTypingProvider = {
-	supported: () => !!SpeechToTextModule,
+	supported: () => !!SpeechToTextModule && Setting.value('featureFlag.voiceTypingEnabled'),
 	modelLocalFilepath: modelLocalFilepath,
 	getDownloadUrl: (locale) => {
 		const lang = languageCodeOnly(locale).toLowerCase();
