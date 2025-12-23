@@ -37,6 +37,7 @@ const defaultEditorProps = {
 	onUndoRedoDepthChange: ()=>{},
 	onScroll: ()=>{},
 	onAttach: async ()=>{},
+	onSearchVisibleChange: ()=>{},
 	noteResources: {},
 	plugins: {},
 	mode: EditorType.Markdown,
