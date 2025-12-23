@@ -123,8 +123,8 @@ const ToolbarBaseComponent: React.FC<Props> = props => {
 		};
 
 		const tabIndex = indexInFocusable === (selectedIndex % focusableItems.length) ? 0 : -1;
-		const setButtonRefCallback = (button: HTMLButtonElement) => {
-			if (tabIndex === 0 && containerHasFocus) {
+		const setButtonRefCallback = (button: HTMLButtonElement | null) => {
+			if (button && tabIndex === 0 && containerHasFocus) {
 				focus('ToolbarBase', button);
 			}
 		};
