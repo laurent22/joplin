@@ -37,11 +37,12 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('NoteEditor');
 
-type ChangeEventHandler = (event: ChangeEvent)=> void;
-type ScrollEventHandler = (event: EditorScrolledEvent)=> void;
-type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
-type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
-type OnAttachCallback = (filePath?: string)=> Promise<void>;
+type OnChange = (event: ChangeEvent)=> void;
+type OnSearchVisibleChange = (visible: boolean)=> void;
+type OnScroll = (event: EditorScrolledEvent)=> void;
+type OnUndoRedoDepthChange = (event: UndoRedoDepthChangeEvent)=> void;
+type OnSelectionChange = (event: SelectionRangeChangeEvent)=> void;
+type OnAttach = (filePath?: string)=> Promise<void>;
 
 interface Props {
 	ref: Ref<EditorControl>;
@@ -60,11 +61,12 @@ interface Props {
 	plugins: PluginStates;
 	noteResources: ResourceInfos;
 
-	onScroll: ScrollEventHandler;
-	onChange: ChangeEventHandler;
-	onSelectionChange: SelectionChangeEventHandler;
-	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
-	onAttach: OnAttachCallback;
+	onScroll: OnScroll;
+	onChange: OnChange;
+	onSearchVisibleChange: OnSearchVisibleChange;
+	onSelectionChange: OnSelectionChange;
+	onUndoRedoDepthChange: OnUndoRedoDepthChange;
+	onAttach: OnAttach;
 }
 
 function fontFamilyFromSettings() {
@@ -295,6 +297,7 @@ function NoteEditor(props: Props) {
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
 	const editorControlRef = useRef<EditorControl|null>(null);
+	const lastSearchVisibleRef = useRef<boolean|undefined>(undefined);
 	const onEditorEvent = (event: EditorEvent) => {
 		let exhaustivenessCheck: never;
 		switch (event.kind) {
@@ -325,14 +328,20 @@ function NoteEditor(props: Props) {
 			// If the change to the search was done by this editor, it was already applied to the
 			// search state. Skipping the update in this case also helps avoid overwriting the
 			// search state with an older value.
+			const showSearch = event.searchState.dialogVisible;
 			if (hasExternalChange) {
 				setSearchState(event.searchState);
 
-				if (event.searchState.dialogVisible) {
+				if (showSearch) {
 					editorControl.searchControl.showSearch();
 				} else {
 					editorControl.searchControl.hideSearch();
 				}
+			}
+
+			if (showSearch !== lastSearchVisibleRef.current) {
+				props.onSearchVisibleChange(event.searchState.dialogVisible);
+				lastSearchVisibleRef.current = showSearch;
 			}
 			break;
 		}

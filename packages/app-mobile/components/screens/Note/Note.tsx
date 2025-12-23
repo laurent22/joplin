@@ -7,7 +7,7 @@ import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
 import * as React from 'react';
-import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
@@ -77,6 +77,7 @@ import { IconButton } from 'react-native-paper';
 import { writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
+import useKeyboardState from '../../../utils/hooks/useKeyboardState';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -121,12 +122,14 @@ interface Props extends BaseProps {
 interface ComponentProps extends Props {
 	dialogs: DialogControl;
 	visibleEditorPluginIds: string[];
+	lowVerticalSpace: boolean;
 }
 
 interface State {
 	note: NoteEntity;
 	mode: NoteViewerMode;
 	readOnly: boolean;
+	showSearch: boolean;
 	folder: FolderEntity|null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastSavedNote: any;
@@ -214,6 +217,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			showCamera: false,
 			showImageEditor: false,
 			showAudioRecorder: false,
+			showSearch: false,
 			imageEditorResource: null,
 			noteResources: {},
 			imageEditorResourceFilepath: null,
@@ -389,6 +393,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return this.props.useEditorBeta;
 	}
 
+	private onSearchVisibleChange_ = (visible: boolean) => {
+		this.setState({ showSearch: visible });
+	};
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
@@ -1680,6 +1687,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						onChange={this.onMarkdownEditorTextChange}
 						onSelectionChange={this.onEditorSelectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+						onSearchVisibleChange={this.onSearchVisibleChange_}
 						onAttach={this.onAttach}
 						noteResources={this.state.noteResources}
 						readOnly={this.state.readOnly}
@@ -1790,25 +1798,28 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const { editorPlugin: activeEditorPlugin } = getActivePluginEditorView(this.props.plugins, this.props.windowId);
 
+		const header = <ScreenHeader
+			folderPickerOptions={this.folderPickerOptions()}
+			menuOptions={this.menuOptions()}
+			showSaveButton={showSaveButton}
+			saveButtonDisabled={saveButtonDisabled}
+			onSaveButtonPress={this.saveNoteButton_press}
+			showSideMenuButton={false}
+			showSearchButton={false}
+			showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
+			showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
+			showPluginEditorButton={!!activeEditorPlugin}
+			undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
+			onUndoButtonPress={this.screenHeader_undoButtonPress}
+			onRedoButtonPress={this.screenHeader_redoButtonPress}
+			title={getDisplayParentTitle(this.state.note, this.state.folder)}
+		/>;
+		const increaseSpaceForEditor = this.props.lowVerticalSpace && this.state.mode === 'edit' && this.state.showSearch;
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
-				<ScreenHeader
-					folderPickerOptions={this.folderPickerOptions()}
-					menuOptions={this.menuOptions()}
-					showSaveButton={showSaveButton}
-					saveButtonDisabled={saveButtonDisabled}
-					onSaveButtonPress={this.saveNoteButton_press}
-					showSideMenuButton={false}
-					showSearchButton={false}
-					showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
-					showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
-					showPluginEditorButton={!!activeEditorPlugin}
-					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
-					onUndoButtonPress={this.screenHeader_undoButtonPress}
-					onRedoButtonPress={this.screenHeader_redoButtonPress}
-					title={getDisplayParentTitle(this.state.note, this.state.folder)}
-				/>
-				{titleComp}
+				{!increaseSpaceForEditor && header}
+				{!increaseSpaceForEditor && titleComp}
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
 				{renderActionButton()}
@@ -1826,6 +1837,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 }
 
+const useHasLowAvailableSpace = () => {
+	const windowDimensions = useWindowDimensions();
+	const keyboardState = useKeyboardState();
+	const verticalSpaceAvailable = windowDimensions.height - keyboardState.dockedKeyboardHeight;
+
+	const lowVerticalScreenSpace = verticalSpaceAvailable < 300;
+	return lowVerticalScreenSpace;
+};
+
 // We added this change to reset the component state when the props.noteId is changed.
 // NoteScreenComponent original implementation assumed that noteId would never change,
 // which can cause some bugs where previously set state to another note would interfere
@@ -1833,9 +1853,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 const NoteScreenWrapper = (props: Props) => {
 	const dialogs = useContext(DialogContext);
 	const visibleEditorPluginIds = useVisiblePluginEditorViewIds(props.plugins, props.windowId);
+	const lowVerticalSpace = useHasLowAvailableSpace();
 
 	return (
-		<NoteScreenComponent key={props.noteId} dialogs={dialogs} visibleEditorPluginIds={visibleEditorPluginIds} {...props} />
+		<NoteScreenComponent
+			key={props.noteId}
+			dialogs={dialogs}
+			visibleEditorPluginIds={visibleEditorPluginIds}
+			lowVerticalSpace={lowVerticalSpace}
+			{...props}
+		/>
 	);
 };
 
