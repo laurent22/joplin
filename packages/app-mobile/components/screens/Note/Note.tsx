@@ -76,6 +76,7 @@ import { EditorType } from '../../NoteEditor/types';
 import { IconButton } from 'react-native-paper';
 import { writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
+import NotePositionService from '@joplin/lib/services/NotePositionService';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -154,6 +155,8 @@ interface State {
 	multiline: boolean;
 }
 
+type ScrollEventSlice = { fraction: number };
+
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
@@ -225,6 +228,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			showSpeechToTextDialog: false,
 			multiline: false,
 		};
+
+		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
+		if (initialCursorLocation) {
+			this.selection = { start: initialCursorLocation, end: initialCursorLocation };
+		}
+		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
+		this.lastBodyScroll = initialScroll;
 
 		this.titleTextFieldRef = React.createRef();
 
@@ -770,8 +780,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.selection = event.nativeEvent.selection;
 	};
 
-	private onMarkdownEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
+	private onEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
 		this.selection = { start: event.from, end: event.to };
+
+		NotePositionService.instance().updateCursorPosition(
+			this.props.noteId, defaultWindowId, { markdown: event.from },
+		);
 	};
 
 	public makeSaveAction(state: State) {
@@ -1487,9 +1501,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return this.folderPickerOptions_;
 	}
 
-	private onBodyViewerScroll = (scrollTop: number) => {
-		this.lastBodyScroll = scrollTop;
+	private onBodyViewerScroll = (event: ScrollEventSlice) => {
+		this.lastBodyScroll = event.fraction;
+
+		NotePositionService.instance().updateScrollPosition(
+			this.props.noteId, defaultWindowId, event.fraction,
+		);
 	};
+
+	private onMarkdownEditorScroll = () => {};
 
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
@@ -1604,7 +1624,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							onMarkForDownload={this.onMarkForDownload}
 							onRequestEditResource={this.onEditResource}
 							onScroll={this.onBodyViewerScroll}
-							initialScroll={this.lastBodyScroll}
+							initialScrollPercent={this.lastBodyScroll}
 						/>
 					);
 			} else {
@@ -1658,7 +1678,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						markupLanguage={this.state.note.markup_language}
 						globalSearch={this.props.searchQuery}
 						onChange={this.onMarkdownEditorTextChange}
-						onSelectionChange={this.onMarkdownEditorSelectionChange}
+						onSelectionChange={this.onEditorSelectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 						onAttach={this.onAttach}
 						noteResources={this.state.noteResources}
@@ -1671,6 +1691,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							paddingLeft: 0,
 							paddingRight: 0,
 						}}
+
+						// For now, only save/restore the scroll location for the Rich Text editor since that editor's
+						// scroll should roughly match the viewer. In the future, it may make sense to refactor this to
+						// use mapsToLine (similar to what's done on desktop) to sync the Markdown editor scroll, but this
+						// will require refactoring.
+						initialScroll={this.props.editorType === EditorType.RichText ? this.lastBodyScroll : undefined}
+						onScroll={this.props.editorType === EditorType.RichText ? this.onBodyViewerScroll : this.onMarkdownEditorScroll}
+
 						mode={this.props.editorType}
 					/>;
 				}

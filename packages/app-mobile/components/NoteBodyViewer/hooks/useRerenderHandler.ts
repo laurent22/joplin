@@ -24,7 +24,7 @@ interface Props {
 	highlightedKeywords: string[];
 	noteResources: Record<string, ResourceInfo>;
 	noteHash: string;
-	initialScroll: number|undefined;
+	initialScrollPercent: number|undefined;
 
 	paddingBottom: number;
 }
@@ -136,7 +136,7 @@ const useRerenderHandler = (props: Props) => {
 
 			// If the hash changed, we don't set initial scroll -- we want to scroll to the hash
 			// instead.
-			initialScroll: (previousHash && hashChanged) ? undefined : props.initialScroll,
+			initialScrollPercent: (previousHash && hashChanged) ? undefined : props.initialScrollPercent,
 			noteHash: props.noteHash,
 		};
 
