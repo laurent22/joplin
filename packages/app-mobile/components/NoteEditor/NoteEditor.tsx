@@ -34,8 +34,8 @@ import { MarkupLanguage } from '@joplin/renderer';
 import WarningBanner from './WarningBanner';
 import useIsScreenReaderEnabled from '../../utils/hooks/useIsScreenReaderEnabled';
 import Logger from '@joplin/utils/Logger';
-import debounce from '../../utils/debounce';
 import { Second } from '@joplin/utils/time';
+import useDebounced from '../../utils/hooks/useDebounced';
 
 const logger = Logger.create('NoteEditor');
 
@@ -266,19 +266,15 @@ const useHighlightActiveLine = () => {
 
 const useHasSpaceForToolbar = () => {
 	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
-	const debouncedSetHasSpaceForToolbar = useMemo(() => debounce((hasSpace: boolean) => {
-		setHasSpaceForToolbar(hasSpace);
-	}, Second / 4), []);
 
 	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
 		const containerHeight = event.nativeEvent.layout.height;
 
-		// Debounce to avoid hiding, showing, then re-hiding the toolbar when the editor
-		// layout is changing rapidly (e.g. when hiding/showing the keyboard):
-		debouncedSetHasSpaceForToolbar(containerHeight >= 140);
-	}, [debouncedSetHasSpaceForToolbar]);
+		setHasSpaceForToolbar(containerHeight >= 140);
+	}, []);
 
-	return { hasSpaceForToolbar, onContainerLayout };
+	const debouncedHasSpaceForToolbar = useDebounced(hasSpaceForToolbar, Second / 4);
+	return { hasSpaceForToolbar: debouncedHasSpaceForToolbar, onContainerLayout };
 };
 
 function NoteEditor(props: Props) {
@@ -347,7 +343,7 @@ function NoteEditor(props: Props) {
 			// If the change to the search was done by this editor, it was already applied to the
 			// search state. Skipping the update in this case also helps avoid overwriting the
 			// search state with an older value.
-			const showSearch = event.searchState.dialogVisible;
+			const showSearch = event.searchState.dialogVisible ?? lastSearchVisibleRef.current;
 			if (hasExternalChange) {
 				setSearchState(event.searchState);
 
@@ -359,7 +355,7 @@ function NoteEditor(props: Props) {
 			}
 
 			if (showSearch !== lastSearchVisibleRef.current) {
-				props.onSearchVisibleChange(event.searchState.dialogVisible);
+				props.onSearchVisibleChange(showSearch);
 				lastSearchVisibleRef.current = showSearch;
 			}
 			break;
@@ -415,8 +411,6 @@ function NoteEditor(props: Props) {
 		return editorControl;
 	});
 
-	const { hasSpaceForToolbar, onContainerLayout } = useHasSpaceForToolbar();
-	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
 
 	const onAttach = useCallback(async (type: string, base64: string) => {
 		const tempFilePath = join(Setting.value('tempDir'), `paste.${uuid.createNano()}.${toFileExtension(type)}`);
@@ -434,7 +428,11 @@ function NoteEditor(props: Props) {
 		searchVisible: searchState.dialogVisible,
 	}), [selectionState, searchState.dialogVisible]);
 
+
+	const { hasSpaceForToolbar, onContainerLayout } = useHasSpaceForToolbar();
+	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
 	const toolbar = <EditorToolbar editorState={toolbarEditorState} />;
+
 	const EditorComponent = props.mode === EditorType.Markdown ? MarkdownEditor : RichTextEditor;
 
 	return (

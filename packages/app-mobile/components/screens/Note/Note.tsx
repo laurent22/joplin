@@ -79,6 +79,8 @@ import shareFile from '../../../utils/shareFile';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
 import useKeyboardState from '../../../utils/hooks/useKeyboardState';
 import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
+import useDebounced from '../../../utils/hooks/useDebounced';
+import { Second } from '@joplin/utils/time';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -1607,6 +1609,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		// Currently keyword highlighting is supported only when FTS is available.
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
+		const increaseSpaceForEditor = this.props.lowVerticalSpace
+			// For now, only dismiss other UI when search is visible. This provides a way to re-show the hidden UI (by dismissing search).
+			&& this.state.showSearch
+			// Tapping on the title input when search is visible should edit the title, even if showing the keyboard decreases the
+			// available space.
+			&& !this.titleTextFieldRef.current?.isFocused();
+
 		let bodyComponent = null;
 
 		if (editorView) {
@@ -1676,7 +1685,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
-						toolbarEnabled={this.props.toolbarEnabled}
+						toolbarEnabled={this.props.toolbarEnabled && !increaseSpaceForEditor}
 						themeId={this.props.themeId}
 						noteId={this.props.noteId}
 						noteHash={this.props.noteHash}
@@ -1814,7 +1823,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			onRedoButtonPress={this.screenHeader_redoButtonPress}
 			title={getDisplayParentTitle(this.state.note, this.state.folder)}
 		/>;
-		const increaseSpaceForEditor = this.props.lowVerticalSpace && this.state.mode === 'edit' && this.state.showSearch;
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
@@ -1843,7 +1851,9 @@ const useHasLowAvailableSpace = () => {
 	const verticalSpaceAvailable = windowDimensions.height - keyboardState.dockedKeyboardHeight;
 
 	const lowVerticalScreenSpace = verticalSpaceAvailable < 300;
-	return lowVerticalScreenSpace;
+	// Debounce state updates to avoid multiple re-renders when the keyboard is hidden, then quickly
+	// re-shown (e.g. when moving focus between text inputs).
+	return useDebounced(lowVerticalScreenSpace, Second / 10);
 };
 
 // We added this change to reset the component state when the props.noteId is changed.
