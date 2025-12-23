@@ -1850,7 +1850,7 @@ const useHasLowAvailableSpace = () => {
 	const keyboardState = useKeyboardState();
 	const verticalSpaceAvailable = windowDimensions.height - keyboardState.dockedKeyboardHeight;
 
-	const lowVerticalScreenSpace = verticalSpaceAvailable < 300;
+	const lowVerticalScreenSpace = verticalSpaceAvailable < 270;
 	// Debounce state updates to avoid multiple re-renders when the keyboard is hidden, then quickly
 	// re-shown (e.g. when moving focus between text inputs).
 	return useDebounced(lowVerticalScreenSpace, Second / 10);
