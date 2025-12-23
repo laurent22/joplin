@@ -132,7 +132,7 @@ interface State {
 	note: NoteEntity;
 	mode: NoteViewerMode;
 	readOnly: boolean;
-	showSearch: boolean;
+	searchVisible: boolean;
 	folder: FolderEntity|null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastSavedNote: any;
@@ -220,7 +220,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			showCamera: false,
 			showImageEditor: false,
 			showAudioRecorder: false,
-			showSearch: false,
+			searchVisible: false,
 			imageEditorResource: null,
 			noteResources: {},
 			imageEditorResourceFilepath: null,
@@ -397,7 +397,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private onSearchVisibleChange_ = (visible: boolean) => {
-		this.setState({ showSearch: visible });
+		this.setState({ searchVisible: visible });
 	};
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
@@ -1610,8 +1610,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		const increaseSpaceForEditor = this.props.lowVerticalSpace
+			&& this.state.mode === 'edit'
 			// For now, only dismiss other UI when search is visible. This provides a way to re-show the hidden UI (by dismissing search).
-			&& this.state.showSearch
+			&& this.state.searchVisible
 			// Tapping on the title input when search is visible should edit the title, even if showing the keyboard decreases the
 			// available space.
 			&& !this.titleTextFieldRef.current?.isFocused();
