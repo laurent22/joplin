@@ -34,6 +34,8 @@ import { MarkupLanguage } from '@joplin/renderer';
 import WarningBanner from './WarningBanner';
 import useIsScreenReaderEnabled from '../../utils/hooks/useIsScreenReaderEnabled';
 import Logger from '@joplin/utils/Logger';
+import debounce from '../../utils/debounce';
+import { Second } from '@joplin/utils/time';
 
 const logger = Logger.create('NoteEditor');
 
@@ -262,6 +264,23 @@ const useHighlightActiveLine = () => {
 	return canHighlight && Setting.value('editor.highlightActiveLine');
 };
 
+const useHasSpaceForToolbar = () => {
+	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
+	const debouncedSetHasSpaceForToolbar = useMemo(() => debounce((hasSpace: boolean) => {
+		setHasSpaceForToolbar(hasSpace);
+	}, Second / 4), []);
+
+	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
+		const containerHeight = event.nativeEvent.layout.height;
+
+		// Debounce to avoid hiding, showing, then re-hiding the toolbar when the editor
+		// layout is changing rapidly (e.g. when hiding/showing the keyboard):
+		debouncedSetHasSpaceForToolbar(containerHeight >= 140);
+	}, [debouncedSetHasSpaceForToolbar]);
+
+	return { hasSpaceForToolbar, onContainerLayout };
+};
+
 function NoteEditor(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
@@ -396,18 +415,8 @@ function NoteEditor(props: Props) {
 		return editorControl;
 	});
 
-	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
+	const { hasSpaceForToolbar, onContainerLayout } = useHasSpaceForToolbar();
 	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
-
-	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
-		const containerHeight = event.nativeEvent.layout.height;
-
-		if (containerHeight < 140) {
-			setHasSpaceForToolbar(false);
-		} else {
-			setHasSpaceForToolbar(true);
-		}
-	}, []);
 
 	const onAttach = useCallback(async (type: string, base64: string) => {
 		const tempFilePath = join(Setting.value('tempDir'), `paste.${uuid.createNano()}.${toFileExtension(type)}`);
