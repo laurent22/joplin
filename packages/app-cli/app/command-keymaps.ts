@@ -12,10 +12,6 @@ class Command extends BaseCommand {
 		return _('Displays the configured keyboard shortcuts.');
 	}
 
-	public override options(): string[][] {
-		return [];
-	}
-
 	public override compatibleUis() {
 		return ['cli', 'gui'];
 	}
@@ -24,29 +20,22 @@ class Command extends BaseCommand {
 	public override async action(_args: any) {
 		const keymaps = await app().loadKeymaps();
 
-		this.stdout(_('Configured keyboard shortcuts:'));
-		this.stdout('');
+		this.stdout(_('Configured keyboard shortcuts:\n'));
 
 		const rows = [];
+		const padding = '  ';
 
-		// Add header row
-		rows.push(['KEYS', 'TYPE', 'COMMAND']);
+		rows.push([`${padding}KEYS`, 'TYPE', 'COMMAND']);
+		rows.push([`${padding}----`, '----', '-------']);
 
-		// Add separator row
-		rows.push(['----', '----', '-------']);
-
-		// Add keymap rows
 		for (const item of keymaps) {
 			const formattedKeys = item.keys
 				.map((k: string) => (k === ' ' ? '(SPACE)' : k))
 				.join(', ');
-			rows.push([formattedKeys, item.type, item.command]);
+			rows.push([padding + formattedKeys, item.type, item.command]);
 		}
 
-		// Print with left padding
-		const padding = '  ';
-		const originalStdout = this.stdout.bind(this);
-		cliUtils.printArray((line: string) => originalStdout(padding + line), rows);
+		cliUtils.printArray(this.stdout.bind(this), rows, rows);
 
 		if (app().gui() && !app().gui().isDummy()) {
 			app().gui().showConsole();
