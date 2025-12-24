@@ -35,7 +35,7 @@ class Command extends BaseCommand {
 			rows.push([padding + formattedKeys, item.type, item.command]);
 		}
 
-		cliUtils.printArray(this.stdout.bind(this), rows, rows);
+		cliUtils.printArray(this.stdout.bind(this), rows);
 
 		if (app().gui() && !app().gui().isDummy()) {
 			app().gui().showConsole();
