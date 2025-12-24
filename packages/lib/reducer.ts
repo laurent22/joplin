@@ -1218,7 +1218,28 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// add it to it.
 					if (!found) {
 						if (isViewingAllNotes || noteIsInFolder(modNote, windowDraft.selectedFolderId)) {
-							newNotes.push(modNote);
+							// When custom sort is active, insert new notes at the top (after to-dos if applicable)
+							// to match Android behavior and improve UX. To-dos are already handled by sortNotes.
+							const isCustomSort = draft.settings['notes.sortOrder.field'] === 'order';
+							const isNote = !modNote.is_todo;
+							if (isCustomSort && isNote) {
+								// Insert at the top, or after uncompleted to-dos if they're on top
+								let insertIndex = 0;
+								if (draft.settings.uncompletedTodosOnTop) {
+									// Find the position after all uncompleted to-dos
+									for (let i = 0; i < newNotes.length; i++) {
+										const note = newNotes[i];
+										if (note.is_todo && !note.todo_completed) {
+											insertIndex = i + 1;
+										} else {
+											break;
+										}
+									}
+								}
+								newNotes.splice(insertIndex, 0, modNote);
+							} else {
+								newNotes.push(modNote);
+							}
 						}
 					}
 
