@@ -34,14 +34,17 @@ import { MarkupLanguage } from '@joplin/renderer';
 import WarningBanner from './WarningBanner';
 import useIsScreenReaderEnabled from '../../utils/hooks/useIsScreenReaderEnabled';
 import Logger from '@joplin/utils/Logger';
+import { Second } from '@joplin/utils/time';
+import useDebounced from '../../utils/hooks/useDebounced';
 
 const logger = Logger.create('NoteEditor');
 
-type ChangeEventHandler = (event: ChangeEvent)=> void;
-type ScrollEventHandler = (event: EditorScrolledEvent)=> void;
-type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
-type SelectionChangeEventHandler = (event: SelectionRangeChangeEvent)=> void;
-type OnAttachCallback = (filePath?: string)=> Promise<void>;
+type OnChange = (event: ChangeEvent)=> void;
+type OnSearchVisibleChange = (visible: boolean)=> void;
+type OnScroll = (event: EditorScrolledEvent)=> void;
+type OnUndoRedoDepthChange = (event: UndoRedoDepthChangeEvent)=> void;
+type OnSelectionChange = (event: SelectionRangeChangeEvent)=> void;
+type OnAttach = (filePath?: string)=> Promise<void>;
 
 interface Props {
 	ref: Ref<EditorControl>;
@@ -60,11 +63,12 @@ interface Props {
 	plugins: PluginStates;
 	noteResources: ResourceInfos;
 
-	onScroll: ScrollEventHandler;
-	onChange: ChangeEventHandler;
-	onSelectionChange: SelectionChangeEventHandler;
-	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
-	onAttach: OnAttachCallback;
+	onScroll: OnScroll;
+	onChange: OnChange;
+	onSearchVisibleChange: OnSearchVisibleChange;
+	onSelectionChange: OnSelectionChange;
+	onUndoRedoDepthChange: OnUndoRedoDepthChange;
+	onAttach: OnAttach;
 }
 
 function fontFamilyFromSettings() {
@@ -260,6 +264,19 @@ const useHighlightActiveLine = () => {
 	return canHighlight && Setting.value('editor.highlightActiveLine');
 };
 
+const useHasSpaceForToolbar = () => {
+	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
+
+	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
+		const containerHeight = event.nativeEvent.layout.height;
+
+		setHasSpaceForToolbar(containerHeight >= 140);
+	}, []);
+
+	const debouncedHasSpaceForToolbar = useDebounced(hasSpaceForToolbar, Second / 4);
+	return { hasSpaceForToolbar: debouncedHasSpaceForToolbar, onContainerLayout };
+};
+
 function NoteEditor(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
@@ -295,6 +312,7 @@ function NoteEditor(props: Props) {
 	const [searchState, setSearchState] = useState(defaultSearchState);
 
 	const editorControlRef = useRef<EditorControl|null>(null);
+	const lastSearchVisibleRef = useRef<boolean|undefined>(undefined);
 	const onEditorEvent = (event: EditorEvent) => {
 		let exhaustivenessCheck: never;
 		switch (event.kind) {
@@ -325,14 +343,20 @@ function NoteEditor(props: Props) {
 			// If the change to the search was done by this editor, it was already applied to the
 			// search state. Skipping the update in this case also helps avoid overwriting the
 			// search state with an older value.
+			const showSearch = event.searchState.dialogVisible ?? lastSearchVisibleRef.current;
 			if (hasExternalChange) {
 				setSearchState(event.searchState);
 
-				if (event.searchState.dialogVisible) {
+				if (showSearch) {
 					editorControl.searchControl.showSearch();
 				} else {
 					editorControl.searchControl.hideSearch();
 				}
+			}
+
+			if (showSearch !== lastSearchVisibleRef.current) {
+				props.onSearchVisibleChange(showSearch);
+				lastSearchVisibleRef.current = showSearch;
 			}
 			break;
 		}
@@ -387,18 +411,6 @@ function NoteEditor(props: Props) {
 		return editorControl;
 	});
 
-	const [hasSpaceForToolbar, setHasSpaceForToolbar] = useState(true);
-	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
-
-	const onContainerLayout = useCallback((event: LayoutChangeEvent) => {
-		const containerHeight = event.nativeEvent.layout.height;
-
-		if (containerHeight < 140) {
-			setHasSpaceForToolbar(false);
-		} else {
-			setHasSpaceForToolbar(true);
-		}
-	}, []);
 
 	const onAttach = useCallback(async (type: string, base64: string) => {
 		const tempFilePath = join(Setting.value('tempDir'), `paste.${uuid.createNano()}.${toFileExtension(type)}`);
@@ -416,7 +428,11 @@ function NoteEditor(props: Props) {
 		searchVisible: searchState.dialogVisible,
 	}), [selectionState, searchState.dialogVisible]);
 
+
+	const { hasSpaceForToolbar, onContainerLayout } = useHasSpaceForToolbar();
+	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
 	const toolbar = <EditorToolbar editorState={toolbarEditorState} />;
+
 	const EditorComponent = props.mode === EditorType.Markdown ? MarkdownEditor : RichTextEditor;
 
 	return (

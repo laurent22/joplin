@@ -1,5 +1,18 @@
 # Joplin Android Changelog
 
+## [android-v3.5.4](https://github.com/laurent22/joplin/releases/tag/android-v3.5.4) (Pre-release) - 2025-12-23T20:00:18Z
+
+- Improved: Accessibility: Dark mode: Improve contrast of conflicts notebook title, error messages in "Logs" (#13925 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Attempt to fix application hang when opening the camera (#13974 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Set the default math/code block content to the selection (#13952 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/datetimepicker (v8.4.5), @react-native-documents/picker (v10.1.7), esbuild (v0.25.10), expo (v53.0.23), fs-extra (v11.3.2), mermaid (v11.10.1), sass (v1.93.2), sharp (v0.34.4)
+- Improved: Viewer, Rich Text Editor: Save/restore the cursor and scroll position when switching notes (#13962) (#520 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix `react-native-vector-icons` error when opening a note (#13975 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix some icons are invisible: Upgrade `react-native-vector-icons` to v12 (#13905) (#13854 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix checklists saved with extra space (#13951) (#13081 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix indent/de-indent buttons do nothing when not in a list (#13961 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Toolbar editor: Fix toolbar editor dismiss button is rendered outside the dialog on small screens (#13976 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.5.3](https://github.com/laurent22/joplin/releases/tag/android-v3.5.3) (Pre-release) - 2025-12-14T13:46:02Z
 
 - New: Add a link to the list of open-source licenses (5caec16)

@@ -80,6 +80,21 @@ const useCss = (editorTheme: Theme) => {
 			.toolbar-edge-toolbar:not(.one-row) .toolwidget-tag--exit .toolbar-icon {
 				display: none;
 			}
+
+			${Setting.value('buildFlag.ui.disableSmallScreenIncompatibleFeatures') ? `
+				/* As of December 2025, the help overlay is difficult to use on small screens
+				   (slow to load, help text overlapping content in some cases). */
+				.js-draw .toolbar-help-overlay-button {
+					display: none;
+				}
+
+				/* As of December 2025, the pipette button is difficult to use on small screens:
+				   It may not be clear that it's necessary to dismiss the tool menu in order to
+				   pick a color from the screen. */
+				.js-draw .color-input-container > button.pipetteButton.pipetteButton {
+					display: none;
+				}
+			` : ''}
 		`;
 	}, [editorTheme]);
 };

@@ -6,7 +6,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - EXConstants (17.1.7):
     - ExpoModulesCore
-  - Expo (53.0.20):
+  - Expo (53.0.23):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -1408,7 +1408,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-alarm-notification (3.5.0):
     - React
-  - react-native-document-picker (10.1.5):
+  - react-native-document-picker (10.1.7):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1902,7 +1902,7 @@ PODS:
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
-  - RNDateTimePicker (8.4.4):
+  - RNDateTimePicker (8.4.5):
     - React-Core
   - RNDeviceInfo (14.0.4):
     - React-Core
@@ -2309,7 +2309,7 @@ SPEC CHECKSUMS:
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXAV: ae28256069c4cdde93d185c007d8f68d92902c2e
   EXConstants: 98bcf0f22b820f9b28f9fee55ff2daededadd2f8
-  Expo: b527631da3b11e085809e877b845f9e6cdd68f9c
+  Expo: c8f323f74218c45c46e27eed40d8a53ba50667c3
   ExpoAsset: ef06e880126c375f580d4923fdd1cdf4ee6ee7d6
   ExpoCamera: e1879906d41184e84b57d7643119f8509414e318
   ExpoFileSystem: 7f92f7be2f5c5ed40a7c9efc8fa30821181d9d63
@@ -2356,7 +2356,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: c3f4b608e4a59dd2f6a416ef4d47a14400194468
   React-microtasksnativemodule: 054f34e9b82f02bd40f09cebd4083828b5b2beb6
   react-native-alarm-notification: a4326a743df72a94d361a4c3a21515556f650341
-  react-native-document-picker: d7580f6e287bbf2c31c071d6b3f252ae1c6586f1
+  react-native-document-picker: b6419b766863408dacbdf5e97b2f3a694c611150
   react-native-geolocation: ec15ffebc53790314885eb9e5f2132132fbc2600
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
   react-native-image-picker: 7babe45e727db306b3f00d08c72eda3586d6e9c1
@@ -2408,7 +2408,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: 25612b6d6f6e980c6f17ed98ba2f58f5696a51ca
   RNCClipboard: f6679d470d0da2bce2a37b0af7b9e0bf369ecda5
   RNCPushNotificationIOS: 6c4ca3388c7434e4a662b92e4dfeeee858e6f440
-  RNDateTimePicker: 7d93eacf4bdf56350e4b7efd5cfc47639185e10c
+  RNDateTimePicker: 8c12d12e8660697c2e176d2f98775764431c141f
   RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
