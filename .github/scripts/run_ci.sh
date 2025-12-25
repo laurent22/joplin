@@ -148,8 +148,10 @@ if [ "$RUN_TESTS" == "1" ]; then
 	export NODE_OPTIONS="--max-old-space-size=32768"
 
 	if [ "$IS_MACOS" == "1" ]; then
+		echo "Running MacOS specific tests..."
 		yarn test-ci-macos
 	else
+		echo "Running all tests..."
 		yarn test-ci
 	fi
 	
