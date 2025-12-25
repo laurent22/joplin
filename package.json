@@ -57,7 +57,7 @@
     "spellcheck": "node packages/tools/spellcheck.js",
     "tagServerLatest": "node packages/tools/tagServerLatest.js",
     "test-ci": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 run test-ci",
-    "test-ci-macos": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 --exclude '@joplin/app-mobile' --exclude '@joplin/app-cli' run test-ci",
+    "test-ci-macos": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 --exclude '**/app-mobile' run test-ci",
     "test": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 run test",
     "tsc": "yarn workspaces foreach --worktree --parallel --verbose --interlaced run tsc",
     "updateIgnored": "node packages/tools/gulp/tasks/updateIgnoredTypeScriptBuildRun.js",
