@@ -114,7 +114,7 @@
     "@types/node": "18.19.130",
     "@types/react": "19.0.14",
     "@types/react-redux": "7.1.33",
-    "@types/serviceworker": "0.0.153",
+    "@types/serviceworker": "0.0.154",
     "@types/tar-stream": "3.1.4",
     "babel-jest": "29.7.0",
     "babel-loader": "9.1.3",
