@@ -16,7 +16,7 @@
     "clean": "node tools/clean.js",
     "buildInjectedJs": "gulp buildInjectedJs",
     "test": "jest",
-    "test-ci": "yarn test",
+    "test-ci": "node tools/runTestsConditionally.js",
     "watchInjectedJs": "gulp watchInjectedJs",
     "postinstall": "jetify"
   },

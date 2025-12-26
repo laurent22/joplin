@@ -1,6 +1,7 @@
 _mydocs
 _releases
 _vieux/
+.claude
 !/var/cache
 !/var/logs
 !/var/sessions
