@@ -8,6 +8,7 @@ const imageClassName = 'cm-md-image';
 
 class ImageWidget extends WidgetType {
 	private resolvedSrc_: string;
+	private loading_ = false;
 
 	public constructor(
 		private readonly context_: RenderedContentContext,
@@ -48,10 +49,14 @@ class ImageWidget extends WidgetType {
 		};
 
 		if (!this.resolvedSrc_) {
-			void (async () => {
-				this.resolvedSrc_ = await this.context_.resolveImageSrc(this.src_, this.reloadCounter_);
-				updateImageUrl();
-			})();
+			if (!this.loading_) {
+				this.loading_ = true;
+				void (async () => {
+					this.resolvedSrc_ = await this.context_.resolveImageSrc(this.src_, this.reloadCounter_);
+					this.loading_ = false;
+					updateImageUrl();
+				})();
+			}
 		} else {
 			updateImageUrl();
 		}
