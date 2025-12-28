@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Isak Bergdahl\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -301,7 +303,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "En kort beskrivning av bilden:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1970
 msgid ""
@@ -418,7 +420,7 @@ msgstr "Lägg till brödtext"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:24
 msgid "Add column"
-msgstr ""
+msgstr "Lägg till kolumn"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -435,9 +437,8 @@ msgid "Add recipient:"
 msgstr "Lägg till mottagare:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:19
-#, fuzzy
 msgid "Add row"
-msgstr "Lägg till ny"
+msgstr "Lägg till rad"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -579,6 +580,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Ett fel uppstod vid sändningen av svaret. Detta kan inträffa om appen är "
+"offline eller inte kan ansluta till servern.\n"
+"Fel: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:189
 msgid "An error occurred: %s"
@@ -1195,9 +1199,8 @@ msgstr "Fäll ihop anteckningsböcker"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Collapse title"
-msgstr "Fäll in %s"
+msgstr "Fäll ihop titel"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1210,9 +1213,9 @@ msgstr "Kommande larm"
 #: packages/lib/models/settings/builtInMetadata.ts:1591
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/"
+"custom.pem. Note that if you make changes to the TLS settings, you must save "
+"your changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Kommaseparerad lista över sökvägar till kataloger för att läsa certifikaten "
 "från eller sökvägen till enskilda cert-filer. Till exempel: /my/cert_dir,/"
@@ -1738,9 +1741,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Ta bort bilagan \"%s\"?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:34
-#, fuzzy
 msgid "Delete column"
-msgstr "Ta bort rad"
+msgstr "Ta bort kolumn"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1781,9 +1783,8 @@ msgid "Delete profile \"%s\""
 msgstr "Ta bort profilen \"%s\""
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:29
-#, fuzzy
 msgid "Delete row"
-msgstr "Ta bort anteckning"
+msgstr "Ta bort rad"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:486
 msgid "Delete selected notes"
@@ -1958,9 +1959,9 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Visar endast objekt av den specifika typen/typerna. Kan vara `n` för "
-"anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra (t."
-"ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa anteckningar "
-"och att-göra."
+"anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra "
+"(t.ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa "
+"anteckningar och att-göra."
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -2017,7 +2018,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
-msgstr ""
+msgstr "Tycker du att Joplin-webbappen är användbar?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1980
 msgid "Document scanner: Title template"
@@ -2579,9 +2580,8 @@ msgstr "Expandera alla anteckningsböcker"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
-#, fuzzy
 msgid "Expand title"
-msgstr "Expanderad"
+msgstr "Expandera rubrik"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2691,7 +2691,7 @@ msgstr "Funktionsflaggor"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "Återkoppling"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -3377,9 +3377,8 @@ msgid "Joplin Server"
 msgstr "Joplin Server"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:67
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "Joplin-serverwebbadress"
+msgstr "Joplin Server (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3412,6 +3411,8 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin stöder sparande av platsen där anteckningar sparas eller skapas. Vill "
+"du aktivera det? Detta kan ändras när som helst i inställningarna."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3465,7 +3466,7 @@ msgstr "Nycklar som behöver uppgradering"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
-msgstr ""
+msgstr "Etikett"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1443
 msgid "Landscape"
@@ -3683,8 +3684,8 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"Hanterar E2EE-konfigurationen. Kommandona är `enable`,` disable`, `decrypt`,"
-"` status`, `decrypt-file` och `target-status`."
+"Hanterar E2EE-konfigurationen. Kommandona är `enable`,` disable`, "
+"`decrypt`,` status`, `decrypt-file` och `target-status`."
 
 #: packages/lib/models/settings/builtInMetadata.ts:471
 msgid "Manual"
@@ -3708,9 +3709,8 @@ msgid "Markdown editor"
 msgstr "Markdown-redigerare"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1515
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown-redigerare: Rendera bilder"
+msgstr "Markdown-redigerare: Markera aktiv rad"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1504
 msgid "Markdown editor: Render images"
@@ -4105,7 +4105,7 @@ msgstr "Inte nu"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:188
 msgid "Not useful"
-msgstr ""
+msgstr "Inte användbart"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:110
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -4182,9 +4182,8 @@ msgid "Note list style"
 msgstr "Anteckningsliststil"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "Innehåll tillhandahållet av: %s"
+msgstr "Anteckning inte publicerad: %s"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4450,7 +4449,7 @@ msgstr "Numrerad lista"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:130
 msgid "Other"
-msgstr ""
+msgstr "Annat"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -4841,9 +4840,8 @@ msgid "Publish Note"
 msgstr "Publicera anteckning"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Flytta %d anteckning till anteckningsboken \"%s\"?"
+msgstr "Publicera anteckningen \"%s\" (i anteckningsboken \"%s\")?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4864,14 +4862,13 @@ msgid "Publish/unpublish"
 msgstr "Publicera/avpublicera"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "Publicera anteckningar"
+msgstr "Publicerad på URL: %s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "Publicerar en anteckning till Joplin Server eller Joplin Cloud"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4938,9 +4935,8 @@ msgid "Recipients:"
 msgstr "Mottagare:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "betonad text"
+msgstr "Identifiera text:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -5291,9 +5287,8 @@ msgid "Save geo-location with notes"
 msgstr "Spara geografisk plats med anteckningar"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:555
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "Spara geografisk plats med anteckningar"
+msgstr "Spara geografisk plats?"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5401,7 +5396,7 @@ msgstr "Välj anteckningsbok"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:131
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Välj ett av de andra synkroniseringsmålen som stöds."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5935,7 +5930,7 @@ msgstr ""
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:111
 msgid "Sync"
-msgstr ""
+msgstr "Synkronisera"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6058,9 +6053,8 @@ msgid "Take photo"
 msgstr "Ta ett foto"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Rita bild"
+msgstr "Fyll i enkät"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6092,6 +6086,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Tack för din återkoppling!\n"
+"Har du tid att fylla i en kort enkät?"
 
 #: packages/lib/services/profileConfig/index.ts:106
 msgid ""
@@ -6877,9 +6873,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "Det går inte att dela loggdata. Orsak: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1101
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "Det går inte att dela loggdata. Orsak: %s"
+msgstr "Det gick inte att dela anteckningsdata. Orsak: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7140,7 +7135,7 @@ msgstr ""
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
-msgstr ""
+msgstr "Användbar"
 
 #: packages/server/src/services/MustacheService.ts:125
 msgid "User deletions"
@@ -7321,6 +7316,9 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"När detta är aktiverat begärs att bilderna i anteckningen transkriberas med "
+"en serverbaserad transkriberingstjänst av högre kvalitet. Kräver "
+"synkronisering med en kopia från skrivbordsappen."
 
 #: packages/lib/models/settings/builtInMetadata.ts:576
 msgid ""
