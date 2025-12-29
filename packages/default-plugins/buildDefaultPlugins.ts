@@ -28,8 +28,14 @@ const buildDefaultPlugins = async (options: Options) => {
 		if (repositoryData.type === BuiltInPluginType.Built) {
 			await buildPlugin(pluginId, repositoryData, outputPath, options);
 		} else {
-			logStatus('Copying plugin...');
+			if (!outputPath) {
+				console.warn('Skipping NPM plugin,', pluginId, ': missing output path.');
+				continue;
+			}
+
+			logStatus('Copying plugin', pluginId, 'JPL file to', outputPath);
 			await copy(join(__dirname, 'node_modules', repositoryData.package, 'publish', `${pluginId}.jpl`), outputPath);
+			logStatus('Copied.');
 		}
 	}
 };
