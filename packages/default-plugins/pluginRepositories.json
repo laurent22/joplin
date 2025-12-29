@@ -6,7 +6,6 @@
 	},
 	"io.github.personalizedrefrigerator.js-draw": {
 		"cloneUrl": "https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing.git",
-		"branch": "main",
-		"commit": "955b648c2ab08a384fac4554f2cbf7d438ba3334"
+		"package": "joplin-plugin-freehand-drawing"
 	}
 }
