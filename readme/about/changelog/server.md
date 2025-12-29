@@ -1,5 +1,12 @@
 # Joplin Server Changelog
 
+## [server-v3.5.2](https://github.com/laurent22/joplin/releases/tag/server-v3.5.2) - 2025-12-19T21:28:39Z
+
+- Improved: Ensure that shared items are processed in the correct order (#13858 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Periodically delete old backups for archived accounts (#13741 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages fs-extra (v11.3.2), mermaid (v11.10.1), sharp (v0.34.4)
+- Fixed: Confusing error message if a published note has not been synced to the server (#13059)
+
 ## [server-v3.5.1](https://github.com/laurent22/joplin/releases/tag/server-v3.5.1) - 2025-12-03T11:56:31Z
 
 - New: Add support for DELETE_EXPIRED_SESSIONS_SCHEDULE to prevent auto-logout when using SAML login (ae289be)

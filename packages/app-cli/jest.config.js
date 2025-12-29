@@ -26,7 +26,16 @@
 
 module.exports = {
 	testMatch: [
-		'**/tests/**/*.js',
+		'**/tests/HtmlToHtml.js',
+		'**/tests/HtmlToMd.js',
+		'**/tests/MarkupToHtml.js',
+		'**/tests/MdToHtml.js',
+		'**/tests/feature_NoteHistory.js',
+		'**/tests/feature_NoteList.js',
+		'**/tests/feature_ShowAllNotes.js',
+		'**/tests/feature_TagList.js',
+
+		'**/tests/services/**/*.js',
 		'**/*.test.js',
 	],
 

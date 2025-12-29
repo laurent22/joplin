@@ -1,6 +1,7 @@
 _mydocs
 _releases
 _vieux/
+.claude
 !/var/cache
 !/var/logs
 !/var/sessions
@@ -931,6 +932,7 @@ packages/app-mobile/utils/fs-driver/testUtil/verifyDirectoryMatches.js
 packages/app-mobile/utils/getPackageInfo.js
 packages/app-mobile/utils/getVersionInfoText.js
 packages/app-mobile/utils/hooks/useBackHandler.js
+packages/app-mobile/utils/hooks/useDebounced.js
 packages/app-mobile/utils/hooks/useIsScreenReaderEnabled.js
 packages/app-mobile/utils/hooks/useKeyboardState.js
 packages/app-mobile/utils/hooks/useOnLongPressProps.js
@@ -1086,6 +1088,7 @@ packages/editor/CodeMirror/vendor/announceSearchMatch.js
 packages/editor/ProseMirror/commands/commands.test.js
 packages/editor/ProseMirror/commands/commands.js
 packages/editor/ProseMirror/commands/focusEditor.js
+packages/editor/ProseMirror/commands/selectDocumentEnd.js
 packages/editor/ProseMirror/createEditor.js
 packages/editor/ProseMirror/index.js
 packages/editor/ProseMirror/plugins/detailsPlugin.test.js
@@ -1118,6 +1121,7 @@ packages/editor/ProseMirror/types.js
 packages/editor/ProseMirror/utils/SelectableNodeView.js
 packages/editor/ProseMirror/utils/UndoStackSynchronizer.js
 packages/editor/ProseMirror/utils/canReplaceSelectionWith.js
+packages/editor/ProseMirror/utils/clampPointToDocument.js
 packages/editor/ProseMirror/utils/computeSelectionFormatting.js
 packages/editor/ProseMirror/utils/dom/createButton.js
 packages/editor/ProseMirror/utils/dom/createTextArea.js

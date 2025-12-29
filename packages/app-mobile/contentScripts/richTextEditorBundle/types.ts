@@ -3,9 +3,13 @@ import { EditorControl, EditorSettings, OnLocalize, SearchState } from '@joplin/
 import { MarkupRecord, RendererControl } from '../rendererBundle/types';
 import { RenderResult } from '@joplin/renderer/types';
 
+type SelectionRange = { start: number; end: number };
+
 export interface EditorProps {
 	initialText: string;
 	initialSearch: SearchState;
+	initialSelection: SelectionRange;
+	initialScroll: number;
 	initialNoteId: string;
 	parentElementClassName: string;
 	settings: EditorSettings;

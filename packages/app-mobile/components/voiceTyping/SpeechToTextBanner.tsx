@@ -4,7 +4,6 @@ import { Text, Button } from 'react-native-paper';
 import { _, languageName } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import VoiceTyping, { OnTextCallback, VoiceTypingSession } from '../../services/voiceTyping/VoiceTyping';
-import whisper from '../../services/voiceTyping/whisper';
 import { RecorderState } from './types';
 import RecordingControls from './RecordingControls';
 import { PrimaryButton } from '../buttons';
@@ -38,7 +37,7 @@ const useVoiceTyping = ({ locale, onSetPreview, onText }: UseVoiceTypingProps) =
 	voiceTypingRef.current = voiceTyping;
 
 	const builder = useMemo(() => {
-		return new VoiceTyping(locale, [whisper]);
+		return new VoiceTyping(locale);
 	}, [locale]);
 
 	const [redownloadCounter, setRedownloadCounter] = useState(0);
