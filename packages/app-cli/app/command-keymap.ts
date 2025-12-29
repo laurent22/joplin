@@ -3,9 +3,16 @@ import app from './app';
 import { _ } from '@joplin/lib/locale';
 const { cliUtils } = require('./cli-utils.js');
 
+type Args = {
+	note: string;
+	options: {
+		force?: boolean;
+	};
+};
+
 class Command extends BaseCommand {
 	public override usage() {
-		return 'keymaps';
+		return 'keymap';
 	}
 
 	public override description() {
@@ -16,8 +23,7 @@ class Command extends BaseCommand {
 		return ['cli', 'gui'];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(_args: any) {
+	public override async action(_args: Args) {
 		const keymaps = await app().loadKeymaps();
 
 		this.stdout(_('Configured keyboard shortcuts:\n'));
@@ -25,12 +31,12 @@ class Command extends BaseCommand {
 		const rows = [];
 		const padding = '  ';
 
-		rows.push([`${padding}KEYS`, 'TYPE', 'COMMAND']);
+		rows.push([`${padding}${_('KEYS')}`, _('TYPE'), _('COMMAND')]);
 		rows.push([`${padding}----`, '----', '-------']);
 
 		for (const item of keymaps) {
 			const formattedKeys = item.keys
-				.map((k: string) => (k === ' ' ? '(SPACE)' : k))
+				.map((k: string) => (k === ' ' ? `(${'SPACE'})` : k))
 				.join(', ');
 			rows.push([padding + formattedKeys, item.type, item.command]);
 		}
