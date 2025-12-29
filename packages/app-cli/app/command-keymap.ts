@@ -3,12 +3,8 @@ import app from './app';
 import { _ } from '@joplin/lib/locale';
 const { cliUtils } = require('./cli-utils.js');
 
-type Args = {
-	note: string;
-	options: {
-		force?: boolean;
-	};
-};
+// eslint-disable-next-line @typescript-eslint/ban-types -- no args expected
+type Args = {};
 
 class Command extends BaseCommand {
 	public override usage() {
