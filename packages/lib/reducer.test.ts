@@ -951,6 +951,7 @@ describe('reducer', () => {
 			todo_completed: 0,
 			todo_due: 0,
 			order: 0,
+			deleted_time: 0,
 		};
 
 		// Add the new note
@@ -997,6 +998,7 @@ describe('reducer', () => {
 			todo_completed: 0,
 			todo_due: 0,
 			order: 0,
+			deleted_time: 0,
 		};
 
 		// Add the new to-do
@@ -1020,6 +1022,7 @@ describe('reducer', () => {
 			todo_completed: 0,
 			todo_due: 0,
 			order: 0,
+			deleted_time: 0,
 		};
 
 		// Add the new note
