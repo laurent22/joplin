@@ -4,6 +4,7 @@ import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/
 import Note from './models/Note';
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
+import uuid from './uuid';
 // const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
@@ -924,5 +925,117 @@ describe('reducer', () => {
 		// The other window should be focused
 		expect(state.windowId).toBe(defaultWindowId);
 		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
+
+	it('should insert new notes at the top when custom sort is active', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(3, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// Enable custom sort
+		state = reducer(state, {
+			type: 'SETTING_UPDATE_ONE',
+			key: 'notes.sortOrder.field',
+			value: 'order',
+		});
+
+		// Create a new note
+		const newNote = {
+			id: uuid.create(),
+			title: 'New Note',
+			body: '',
+			parent_id: folders[0].id,
+			updated_time: Date.now(),
+			user_updated_time: Date.now(),
+			is_todo: false,
+			todo_completed: 0,
+			todo_due: 0,
+			order: 0,
+		};
+
+		// Add the new note
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: newNote,
+		});
+
+		// The new note should be at the top
+		expect(state.notes[0].id).toBe(newNote.id);
+		expect(state.notes.length).toBe(4);
+
+		// After NOTE_SORT, the position should be preserved
+		state = reducer(state, { type: 'NOTE_SORT' });
+		expect(state.notes[0].id).toBe(newNote.id);
+	});
+
+	it('should insert new notes after uncompleted to-dos when custom sort and uncompletedTodosOnTop are active', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(3, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// Enable custom sort and uncompletedTodosOnTop
+		state = reducer(state, {
+			type: 'SETTING_UPDATE_ONE',
+			key: 'notes.sortOrder.field',
+			value: 'order',
+		});
+		state = reducer(state, {
+			type: 'SETTING_UPDATE_ONE',
+			key: 'uncompletedTodosOnTop',
+			value: true,
+		});
+
+		// Create a new uncompleted to-do
+		const newTodo = {
+			id: uuid.create(),
+			title: 'New Todo',
+			body: '',
+			parent_id: folders[0].id,
+			updated_time: Date.now(),
+			user_updated_time: Date.now(),
+			is_todo: true,
+			todo_completed: 0,
+			todo_due: 0,
+			order: 0,
+		};
+
+		// Add the new to-do
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: newTodo,
+		});
+
+		// The new to-do should be at the top
+		expect(state.notes[0].id).toBe(newTodo.id);
+
+		// Create a new note (not a to-do)
+		const newNote = {
+			id: uuid.create(),
+			title: 'New Note',
+			body: '',
+			parent_id: folders[0].id,
+			updated_time: Date.now(),
+			user_updated_time: Date.now(),
+			is_todo: false,
+			todo_completed: 0,
+			todo_due: 0,
+			order: 0,
+		};
+
+		// Add the new note
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: newNote,
+		});
+
+		// The new note should be after the uncompleted to-do
+		expect(state.notes[0].id).toBe(newTodo.id);
+		expect(state.notes[1].id).toBe(newNote.id);
+		expect(state.notes.length).toBe(5);
+
+		// After NOTE_SORT, the position should be preserved
+		state = reducer(state, { type: 'NOTE_SORT' });
+		expect(state.notes[0].id).toBe(newTodo.id);
+		expect(state.notes[1].id).toBe(newNote.id);
 	});
 });
