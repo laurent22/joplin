@@ -32,6 +32,6 @@ export const runtime = (): CommandRuntime => {
 			return result;
 		},
 
-		enabledCondition: 'markdownEditorPaneVisible || richTextEditorVisible',
+		enabledCondition: 'oneNoteSelected && (!modalDialogVisible || gotoAnythingVisible) && (markdownEditorPaneVisible || richTextEditorVisible)',
 	};
 };
