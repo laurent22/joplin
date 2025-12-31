@@ -57,6 +57,8 @@ A community maintained list of these distributions can be found here: [Unofficia
 **On Linux**
 
 To uninstall on Linux, delete the following folders & files:
-`~/.joplin` // Contains the executable
-`~/.config/joplin-desktop` // Contains configuration and notes
-`~/.local/share/applications/appimagekit-joplin.desktop` // is the desktop file
+```
+~/.joplin // Contains the executable
+~/.config/joplin-desktop // Contains configuration and notes
+~/.local/share/applications/appimagekit-joplin.desktop // is the desktop file
+```
