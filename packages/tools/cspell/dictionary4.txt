@@ -226,3 +226,6 @@ xhdpi
 xxhdpi
 xxxhdpi
 scrollend
+youtube
+youtu
+nocookie
