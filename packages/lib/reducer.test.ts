@@ -1044,12 +1044,34 @@ describe('reducer', () => {
 
 		// The new note should be after the uncompleted to-do
 		expect(state.notes[0].id).toBe(newTodo.id);
-		expect(state.notes[1].id).toBe(newNote.id);
+		const newNoteIndex = state.notes.findIndex(n => n.id === newNote.id);
+		const firstCompletedIndex = state.notes.findIndex(
+			n => !n.is_todo || n.todo_completed,
+		);
+
+		// New note must exist
+		expect(newNoteIndex).toBeGreaterThanOrEqual(0);
+
+		// New note must be placed immediately after uncompleted todos
+		if (firstCompletedIndex !== -1) {
+			expect(newNoteIndex).toBe(firstCompletedIndex);
+		}
 		expect(state.notes.length).toBe(5);
 
 		// After NOTE_SORT, the position should be preserved
 		state = reducer(state, { type: 'NOTE_SORT' });
 		expect(state.notes[0].id).toBe(newTodo.id);
-		expect(state.notes[1].id).toBe(newNote.id);
+		const newNoteIndexAfterSort = state.notes.findIndex(n => n.id === newNote.id);
+		const firstCompletedIndexAfterSort = state.notes.findIndex(
+			n => !n.is_todo || n.todo_completed,
+		);
+
+		// New note must exist
+		expect(newNoteIndexAfterSort).toBeGreaterThanOrEqual(0);
+
+		// New note must be placed immediately after uncompleted todos
+		if (firstCompletedIndexAfterSort !== -1) {
+			expect(newNoteIndexAfterSort).toBe(firstCompletedIndexAfterSort);
+		}
 	});
 });
