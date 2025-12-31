@@ -56,4 +56,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 
 **On Linux**
 
-If you installed via the application script, you can remove Joplin with the command: `rm -rf ~/.joplin`
+To uninstall on Linux, delete the following folders & files:
+`~/.joplin` // Contains the executable
+`~/.config/joplin-desktop` // Contains configuration and notes
+`~/.local/share/applications/appimagekit-joplin.desktop` // is the desktop file
