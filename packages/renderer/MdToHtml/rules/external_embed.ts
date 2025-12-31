@@ -22,7 +22,7 @@ const plugin = (markdownIt: MarkdownIt) => {
 	};
 
 	// Track active embed state
-	let activeEmbedVideoId: string | null = null;
+	let activeEmbedVideo: { videoId: string; originalUrl: string } | null = null;
 
 	markdownIt.renderer.rules.link_open = function(tokens, idx, options, env, self) {
 		const token = tokens[idx];
@@ -38,7 +38,7 @@ const plugin = (markdownIt: MarkdownIt) => {
 			const videoId = extractVideoId(href);
 
 			if (videoId) {
-				activeEmbedVideoId = videoId;
+				activeEmbedVideo = { videoId, originalUrl: href };
 				return '';
 			}
 		}
@@ -48,7 +48,7 @@ const plugin = (markdownIt: MarkdownIt) => {
 
 	markdownIt.renderer.rules.text = function(tokens, idx, options, env, self) {
 		// Skip text content if we're in an active embed
-		if (activeEmbedVideoId) {
+		if (activeEmbedVideo) {
 			return '';
 		}
 		return defaultTextRender(tokens, idx, options, env, self);
@@ -56,14 +56,19 @@ const plugin = (markdownIt: MarkdownIt) => {
 
 	markdownIt.renderer.rules.link_close = function(tokens, idx, options, env, self) {
 		// Check if we have an active embed to close
-		if (activeEmbedVideoId) {
-			const videoId = activeEmbedVideoId;
-			activeEmbedVideoId = null; // Clear state
+		if (activeEmbedVideo) {
+			const videoId = activeEmbedVideo.videoId;
+			const originalUrl = activeEmbedVideo.originalUrl;
+			activeEmbedVideo = null; // Clear state
 
 			const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
+			const escapedUrl = markdownIt.utils.escapeHtml(originalUrl);
 
-			return `<div class="joplin-youtube-player-rendered">
-				<iframe src="${embedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			return `<div class="joplin-editable">
+				<span class="joplin-source" data-joplin-source-open="" data-joplin-source-close="">${escapedUrl}</span>
+				<div class="joplin-youtube-player-rendered">
+					<iframe src="${embedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+				</div>
 			</div>`;
 		}
 
