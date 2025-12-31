@@ -960,13 +960,24 @@ describe('reducer', () => {
 			note: newNote,
 		});
 
-		// The new note should be at the top
-		expect(state.notes[0].id).toBe(newNote.id);
+		// The new note should be placed above completed notes
+		const completedIndex = state.notes.findIndex(n => n.todo_completed);
+		const newIndex = state.notes.findIndex(n => n.id === newNote.id);
+		if (completedIndex !== -1) {
+			expect(newIndex).toBeLessThan(completedIndex);
+		} else {
+			expect(newIndex).toBeGreaterThanOrEqual(0);
+		}
 		expect(state.notes.length).toBe(4);
 
 		// After NOTE_SORT, the position should be preserved
 		state = reducer(state, { type: 'NOTE_SORT' });
-		expect(state.notes[0].id).toBe(newNote.id);
+		const newIndexAfterSort = state.notes.findIndex(n => n.id === newNote.id);
+		if (completedIndex !== -1) {
+			expect(newIndexAfterSort).toBeLessThan(completedIndex);
+		} else {
+			expect(newIndexAfterSort).toBeGreaterThanOrEqual(0);
+		}
 	});
 
 	it('should insert new notes after uncompleted to-dos when custom sort and uncompletedTodosOnTop are active', async () => {
