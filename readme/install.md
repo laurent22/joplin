@@ -51,3 +51,9 @@ There are a number of unofficial alternative Joplin distributions. If you do not
 However these come with a caveat in that they are not officially supported so certain issues may not be supportable by the main project. Rather support requests, bug reports and general advice would need to go to the maintainers of these distributions.
 
 A community maintained list of these distributions can be found here: [Unofficial Joplin distributions](https://discourse.joplinapp.org/t/unofficial-alternative-joplin-distributions/23703)
+
+# Uninstall
+
+**On Linux**
+
+If you installed via the application script, you can remove Joplin with the command: `rm -rf ~/.joplin`
