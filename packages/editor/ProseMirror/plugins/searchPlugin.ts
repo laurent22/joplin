@@ -3,11 +3,22 @@ import { SearchState } from '../../types';
 import { Plugin, EditorState, Command, Transaction } from 'prosemirror-state';
 import { EditorEvent, EditorEventType } from '../../events';
 
+type VisibleMetaState = {
+	visible: boolean;
+	changeSource: string;
+};
+const getVisibleMeta = (tr: Transaction): VisibleMetaState|undefined => (
+	tr.getMeta(visiblePlugin)
+);
+const setVisibleMeta = (tr: Transaction, metaState: VisibleMetaState): Transaction => (
+	tr.setMeta(visiblePlugin, metaState)
+);
+
 const visiblePlugin = new Plugin({
 	state: {
 		init: () => false,
 		apply: (tr, value) => {
-			const visibleMeta = tr.getMeta(visiblePlugin);
+			const visibleMeta = getVisibleMeta(tr);
 			if (visibleMeta) {
 				return visibleMeta.visible;
 			}
@@ -24,7 +35,7 @@ export const setSearchVisible = (visible: boolean): Command => (state, dispatch)
 		return false;
 	}
 	if (dispatch) {
-		dispatch(state.tr.setMeta(visiblePlugin, { visible }));
+		dispatch(setVisibleMeta(state.tr, { visible, changeSource: 'setSearchVisible' }));
 	}
 	return true;
 };
@@ -58,7 +69,7 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 			onEditorEvent({
 				kind: EditorEventType.UpdateSearchDialog,
 				searchState: currentState,
-				changeSources: [transaction.getMeta(visiblePlugin)?.changeSource ?? 'unknown'],
+				changeSources: [getVisibleMeta(transaction)?.changeSource ?? 'unknown'],
 			});
 		}
 	};
@@ -81,16 +92,13 @@ const searchExtension = (onEditorEvent: (event: EditorEvent)=> void) => {
 		],
 		updateState: (editorState: EditorState, searchState: SearchState, changeSource: string) => {
 			let transaction = editorState.tr;
-			setSearchVisible(searchState.dialogVisible)(editorState, (newTransaction) => {
-				transaction = newTransaction;
-			});
 			transaction = setSearchState(transaction, new SearchQuery({
 				search: searchState.searchText,
 				caseSensitive: searchState.caseSensitive,
 				regexp: searchState.useRegex,
 				replace: searchState.replaceText,
 			}));
-			transaction.setMeta(visiblePlugin, { changeSource });
+			setVisibleMeta(transaction, { changeSource, visible: searchState.dialogVisible });
 			lastState = { ...searchState };
 
 			return transaction;

@@ -75,6 +75,7 @@
 		"prosemirror-model",
 		"prosemirror-state",
 		"prosemirror-view",
+		"prosemirror-tables",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
