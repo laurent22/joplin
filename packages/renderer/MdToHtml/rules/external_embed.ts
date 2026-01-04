@@ -64,12 +64,14 @@ const plugin = (markdownIt: MarkdownIt) => {
 			const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
 			const escapedUrl = markdownIt.utils.escapeHtml(originalUrl);
 
-			return `<div class="joplin-editable">
-				<span class="joplin-source" data-joplin-source-open="" data-joplin-source-close="">${escapedUrl}</span>
-				<div class="joplin-youtube-player-rendered">
-					<iframe src="${embedUrl}" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+			return `
+				<div class="joplin-editable">
+					<span class="joplin-source" data-joplin-source-open="" data-joplin-source-close="">${escapedUrl}</span>
+					<div class="joplin-youtube-player-rendered">
+						<iframe src="${embedUrl}" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+					</div>
 				</div>
-			</div>`;
+			`;
 		}
 
 		return defaultLinkCloseRender(tokens, idx, options, env, self);
