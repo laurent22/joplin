@@ -10552,7 +10552,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.0.14"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.156"
+    "@types/serviceworker": "npm:0.0.157"
     "@types/tar-stream": "npm:3.1.4"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -11171,7 +11171,7 @@ __metadata:
   dependencies:
     "@adobe/css-tools": "npm:4.4.4"
     "@rollup/plugin-commonjs": "npm:28.0.6"
-    "@rollup/plugin-node-resolve": "npm:16.0.1"
+    "@rollup/plugin-node-resolve": "npm:16.0.2"
     "@rollup/plugin-replace": "npm:6.0.2"
     browserify: "npm:14.5.0"
     html-entities: "npm:1.4.0"
@@ -14205,9 +14205,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@rollup/plugin-node-resolve@npm:16.0.1"
+"@rollup/plugin-node-resolve@npm:16.0.2":
+  version: 16.0.2
+  resolution: "@rollup/plugin-node-resolve@npm:16.0.2"
   dependencies:
     "@rollup/pluginutils": "npm:^5.0.1"
     "@types/resolve": "npm:1.20.2"
@@ -14219,7 +14219,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 10/88fee8c003a5730cca2c06edd200ec6a46c7ab28bed3a99aea6d3070f34f980f575fcbea906946579e41b0be6fd7a2fbc24cdf0ca24f172a555f130726915d8b
+  checksum: 10/79ea6cd8fe474161914bc9bf1618787a75378f9e52fb70ffe698322140e8100a0b706198ba5cc615eabf774e78979542df2ad6bc1fe0ad5e820e20f2537de48c
   languageName: node
   linkType: hard
 
@@ -17094,10 +17094,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.156":
-  version: 0.0.156
-  resolution: "@types/serviceworker@npm:0.0.156"
-  checksum: 10/d05c58bdb897e11782934daa77840dbe3aff69e3d7232b554128881d2da531720c7d78af5e2435fc52177e9a92c89b22f3232ef840dab13fa7f96e0ad9156ee7
+"@types/serviceworker@npm:0.0.157":
+  version: 0.0.157
+  resolution: "@types/serviceworker@npm:0.0.157"
+  checksum: 10/47fd9ff27c075c1d93077de5a771e690da45e30f2f89a0b0f53628f6e7b34ba4f48fdb64ab52b4bef27ed75788d8161175cef16244f3df14e6aa7c863a1913b2
   languageName: node
   linkType: hard
 
