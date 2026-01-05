@@ -2,7 +2,12 @@ const { execCommand } = require('@joplin/utils');
 const yargs = require('yargs');
 
 async function main() {
-	if (!process.env.IS_CONTINUOUS_INTEGRATION) {
+	const argv = yargs.argv;
+	if (!argv.profile) throw new Error('OneNote build: profile value is missing');
+	if (!['release', 'dev'].includes(argv.profile)) throw new Error('OneNote build: profile value is invalid');
+	const isDevBuild = argv.profile === 'dev';
+
+	if (!isDevBuild && !process.env.IS_CONTINUOUS_INTEGRATION) {
 		// eslint-disable-next-line no-console
 		console.info(
 			'----------------------------------------------------------------\n' +
@@ -20,15 +25,12 @@ async function main() {
 		return;
 	}
 
-	const argv = yargs.argv;
-	if (!argv.profile) throw new Error('OneNote build: profile value is missing');
-	if (!['release', 'dev'].includes(argv.profile)) throw new Error('OneNote build: profile value is invalid');
 
 	const buildCommand = `wasm-pack build --target nodejs --${argv.profile} ./renderer`;
 
 	await execCommand(buildCommand);
 
-	if (argv.profile !== 'release') return;
+	if (isDevBuild) return;
 
 	// If release build, remove intermediary folder to decrease size of release
 	const removeIntermediaryFolder = 'cargo clean';
