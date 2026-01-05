@@ -64,6 +64,10 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('Folder b');
 		await mainWindow.keyboard.type('A');
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
+
+		// Should be case-insensitive
+		await mainWindow.keyboard.type('f');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder b');
 	});
 
 	test('left/right arrow keys should expand/collapse notebooks', async ({ electronApp, mainWindow }) => {
