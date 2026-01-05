@@ -60,14 +60,16 @@ const AllNotesItem: React.FC<Props> = props => {
 			itemIndex={props.index}
 			itemCount={props.itemCount}
 		>
-			<EmptyExpandLink/>
-			<StyledAllNotesIcon aria-hidden='true' role='img' className='icon-notes'/>
+			<EmptyExpandLink />
+			<StyledAllNotesIcon aria-hidden='true' role='img' className='icon-notes' />
 			<StyledListItemAnchor
 				className="list-item"
 				isSpecialItem={true}
 				selected={props.selectionState.selected}
 				onClick={onAllNotesClick_}
 				onContextMenu={toggleAllNotesContextMenu}
+				title="Show all notes"
+				aria-label="Show all notes"
 			>
 				{props.item.label}
 			</StyledListItemAnchor>
