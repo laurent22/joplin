@@ -9,12 +9,15 @@ async function main() {
 
 	if (!isDevBuild && !process.env.IS_CONTINUOUS_INTEGRATION) {
 		// eslint-disable-next-line no-console
-		console.info(
+		console.info([
 			'----------------------------------------------------------------\n' +
-			'Not building onenote-converter because it is not a continuous integration environment.\n' +
-			'Use IS_CONTINUOUS_INTEGRATION=1 env var if build is necessary.\n' +
+			'Not building onenote-converter because it is not a continuous integration environment.',
+			'',
+			'Either:',
+			' - Re-run with the IS_CONTINUOUS_INTEGRATION environment variable set to 1.',
+			' - Run "yarn buildDev" to create a development build.',
 			'----------------------------------------------------------------',
-		);
+		].join('\n'));
 		return;
 	}
 
