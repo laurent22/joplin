@@ -1196,7 +1196,7 @@ msgstr "Κλείσιμο παραθύρου"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:162
 msgid "Closing session..."
-msgstr "Συνεδρίαση λήξης..."
+msgstr "Τερματισμός συνεδρίας..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:40
 msgid "Cmd-click to open"
@@ -6641,8 +6641,7 @@ msgstr "Δεν υπάρχουν δεδομένα για εξαγωγή."
 #: packages/lib/models/Resource.ts:510
 msgid "There was a [conflict](%s) on the attachment below.\n\n%s"
 msgstr ""
-"Υπήρξε μια [conflict](%s) στο παρακάτω συνημμένο.
-\n"
+"Υπήρξε μια [διένεξη](%s) στο παρακάτω συνημμένο.\n"
 "\n"
 "%s"
 
