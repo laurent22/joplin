@@ -5051,7 +5051,7 @@ msgstr "Έξοδος"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:184
 msgid "Re-download model"
-msgstr "Μοντέλο εκ νέου λήψης"
+msgstr "Εκ νέου λήψη του μοντέλου"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:342
 msgid "Re-encrypt data"
@@ -5719,8 +5719,8 @@ msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
-"Διαμοιράζει ή καταργεί τη διαμοιρασμό του καθορισμένου [φορητού υπολογιστή] "
-"με τον [χρήστη]. Απαιτεί Joplin Cloud ή Joplin Server."
+"Διαμοιράζει ή καταργεί τη διαμοιρασμό του καθορισμένου [notebook] "
+"με τον [user]. Απαιτεί Joplin Cloud ή Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:353
 msgid "Sharing notebook..."
@@ -7130,7 +7130,7 @@ msgstr "Αδύνατη η κοινοποίηση δεδομένων αρχείο
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
-msgstr "Μη ελεγχόμενη"
+msgstr "Μη επιλεγμένο"
 
 #: packages/lib/models/settings/builtInMetadata.ts:713
 msgid "Uncompleted to-dos on top"
