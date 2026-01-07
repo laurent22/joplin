@@ -23,13 +23,13 @@ const createEditorDialogForNode = (nodePosition: number, view: EditorView, onHid
 		view.state.doc.nodeAt(nodePosition)
 	);
 
-	const openCharacters = getNode().attrs.openCharacters;
+	const openCharacters = getNode().attrs.openCharacters ?? '';
 	const { dismiss } = createEditorDialog({
 		editorApi: getEditorApi(view.state),
 		source: [
 			openCharacters,
 			getNode().attrs.source,
-			getNode().attrs.closeCharacters,
+			getNode().attrs.closeCharacters ?? '',
 		].join(''),
 		cursor: openCharacters.length,
 		onSave: async (source) => {
