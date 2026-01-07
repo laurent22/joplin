@@ -163,7 +163,7 @@ const inputRulesExtension = [
 	baseInputRules,
 	inlineInputRules([
 		makeInputRule({
-			contentRegex: /(^|[\n])(```+)(\w+)$/,
+			contentRegex: /(^|[\n])(```+)(\w*)$/,
 			commitCharacter: '',
 			onReplace: (match, view) => {
 				const blockStart = `${match[1]}${match[2]}\n`;
@@ -195,12 +195,6 @@ const inputRulesExtension = [
 			commitCharacter: '_',
 			onReplace: (match) => match[1],
 			marks: [schema.marks.emphasis],
-		}),
-		makeInputRule({
-			contentRegex: `[\`](${inlineContentExp})[\`]`,
-			commitCharacter: '`',
-			onReplace: (match) => match[1],
-			marks: [schema.marks.code],
 		}),
 	], /[ .,?)!;]/),
 ];
