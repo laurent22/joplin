@@ -159,6 +159,7 @@ const makeInputRule = ({
 
 const baseInputRules = buildInputRules(schema);
 const inlineContentExp = '\\S[^\\n]*\\S|\\S';
+const noMatchRegex = /$^/;
 const inputRulesExtension = [
 	baseInputRules,
 	inlineInputRules([
@@ -177,7 +178,8 @@ const inputRulesExtension = [
 			},
 			marks: [],
 		}),
-
+	], noMatchRegex),
+	inlineInputRules([
 		makeInputRule({
 			contentRegex: `\\*\\*(${inlineContentExp})\\*\\*`,
 			commitCharacter: '*',
