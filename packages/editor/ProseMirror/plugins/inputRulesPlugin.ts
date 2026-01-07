@@ -175,7 +175,7 @@ const inputRulesExtension = [
 				})(view.state, view.dispatch, view);
 				return '';
 			},
-			marks: [schema.marks.mark],
+			marks: [],
 		}),
 
 		makeInputRule({
@@ -201,12 +201,6 @@ const inputRulesExtension = [
 			commitCharacter: '`',
 			onReplace: (match) => match[1],
 			marks: [schema.marks.code],
-		}),
-		makeInputRule({
-			contentRegex: `==(${inlineContentExp})==`,
-			commitCharacter: '=',
-			onReplace: (match) => match[1],
-			marks: [schema.marks.mark],
 		}),
 	], /[ .,?)!;]/),
 ];
