@@ -96,15 +96,16 @@ const replaceCheckboxes = [
 				top: '0',
 				bottom: '0',
 
+				// Ensure that the checkbox is at least as tall as the default
+				// checkbox height in Chromium (13px), even for very small font
+				// sizes.
+				height: 'max(13px, 70%)',
+
 				// Center it:
 				marginLeft: 'auto',
 				marginRight: 'auto',
-
-				// A small margin seems to be necessary to align the checkbox
-				// with the list item marker. Use percents so that the relative
-				// size adjusts with the font size/line height.
-				marginTop: '15%',
-				marginBottom: '10%',
+				marginTop: 'auto',
+				marginBottom: 'auto',
 			},
 		},
 		[`& .${completedTaskClassName}`]: {
