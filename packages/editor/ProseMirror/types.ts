@@ -14,11 +14,6 @@ export interface RendererControl {
 	renderHtmlToMarkup: HtmlToMarkup;
 }
 
-export interface CodeEditorSelection {
-	anchor: number;
-	head: number;
-}
-
 export interface CodeEditorControl {
 	focus: ()=> void;
 	remove: ()=> void;
