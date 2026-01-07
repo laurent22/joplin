@@ -48,6 +48,9 @@ const joplinEditorApiPlugin = new Plugin<EditorApi>({
 					updateBody: (newValue) => {
 						editor.textArea.value = newValue;
 					},
+					select: (anchor, head) => {
+						editor.textArea.setSelectionRange(Math.min(anchor, head), Math.max(anchor, head));
+					},
 				};
 			},
 		}),
