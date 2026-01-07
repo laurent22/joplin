@@ -10643,6 +10643,7 @@ __metadata:
     "@joplin/utils": "npm:~3.5"
     "@types/yargs": "npm:17.0.33"
     fs-extra: "npm:11.3.2"
+    joplin-plugin-freehand-drawing: "npm:4.2.0"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.8.3"
     yargs: "npm:17.7.2"
@@ -34925,6 +34926,16 @@ __metadata:
     "@sideway/formula": "npm:^3.0.1"
     "@sideway/pinpoint": "npm:^2.0.0"
   checksum: 10/392e897693aa49a401a869180d6b57bdb7ccf616be07c3a2c2c81a2df7a744962249dbaa4a718c07e0fe23b17a04795cbfbd75b79be5829627402eed074db6c9
+  languageName: node
+  linkType: hard
+
+"joplin-plugin-freehand-drawing@npm:4.2.0":
+  version: 4.2.0
+  resolution: "joplin-plugin-freehand-drawing@npm:4.2.0"
+  dependencies:
+    "@js-draw/material-icons": "npm:1.33.0"
+    js-draw: "npm:1.33.0"
+  checksum: 10/457c23b7fbd6f1e3a48568395c1e456d570a3c68e25b40fba97973fd848de1b513be2f1ece6eb9babae862e19ba140aca871eee0e3a8a9cb5a033e0c0fd78934
   languageName: node
   linkType: hard
 

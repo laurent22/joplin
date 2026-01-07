@@ -1,12 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`InteropService_Importer_OneNote should apply position data for embedded files: EmbeddedFiles 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Embedded doc sheet</title>
-    <meta name="X-Original-Page-Id" content="{C7F7C2C8-DFFA-4AD4-B5E3-84A969D31C8C}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -23,19 +22,14 @@ exports[`InteropService_Importer_OneNote should apply position data for embedded
 </div></div><p style="font-size: 11pt; line-height: 17px; margin-left: 2in; margin-top: 1.7in;"><a href=":/id-here">Dude this is a super cool embedded doc.docx</a></p><div class="container-outline" style="left: 192px; position: absolute; top: 259px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: new_section 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>new_section</title>
     <style>
@@ -91,7 +85,7 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
         
     </ul>
 </nav>
-<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
 
 <style>
     .l2 { padding: 10px 20px 10px 40px }
@@ -100,43 +94,18 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
     .l5 { padding: 10px 20px 10px 100px }
     li.-error a { color: #C11; font-weight: bold; }
 </style>
-<script>
-    document.addEventListener('click', function (event) {
-        // If the clicked element doesn't have the right selector, bail
-        if (!event.target.matches('nav a')) return;
-        for (const child of event.target.parentElement.parentElement.children) {
-            child.classList.remove('active');
-        }
-        event.target.parentElement.classList.add('active');
 
-    }, false);
 
-    window.addEventListener('message', (event) => {
-        const activeTarget = event.data;
 
-        for (const link of document.querySelectorAll('nav ul li a')) {
-            if (link.href === activeTarget) {
-                link.parentElement.classList.add('active');
-            }
-        }
-    });
-
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-
-</body>
-</html>"
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: title 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>title</title>
-    <meta name="X-Original-Page-Id" content="{B8EACEFB-CA13-42D8-AECA-5F277CE28041}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -153,17 +122,13 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 </div><div class="container-outline" style="left: 909px; position: absolute; top: 132px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should correctly convert imported notes to Markdown: Test Todo: As Markdown 1`] = `
-" Test Todo : cases à cocher lien vers doc sur partage  
+" Test Todo : cases à cocher lien vers doc sur partage 
 
 Test Todo : cases à cocher lien vers doc sur partage
 
@@ -189,7 +154,7 @@ jeudi 23 octobre 2025
 `;
 
 exports[`InteropService_Importer_OneNote should correctly import math formulas: Math 1`] = `
-" Math  
+" Math 
 
 Math
 
@@ -231,7 +196,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A page can have any width it wants?</title>
-    <meta name="X-Original-Page-Id" content="{CB4D5A97-3C6D-4DB7-A56A-B5A8B9D85391}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -250,11 +215,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </div><div class="container-outline" style="left: 944px; position: absolute; top: 361px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">This is another paragraph by the right side</p></div>
 </div><img style="height: 10px; left: 944px; overflow: visible; position: absolute; top: 377px; width: 278px;" src=":/10"><img style="height: 24px; left: 136px; overflow: visible; position: absolute; top: 221px; width: 122px;" src=":/11"><img style="height: 19px; left: 986px; overflow: visible; position: absolute; top: 361px; width: 65px;" src=":/12">
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
@@ -264,7 +225,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A page with a lot of svgs</title>
-    <meta name="X-Original-Page-Id" content="{2F308E45-ADB4-47EF-9350-D0F7A18AEC0A}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -281,11 +242,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </div></div><img style="height: 22px; left: 53px; overflow: visible; position: absolute; top: 189px; width: 19px;" src=":/13"><img style="height: 30px; left: 127px; overflow: visible; position: absolute; top: 215px; width: 21px;" src=":/14"><img style="height: 38px; left: 93px; overflow: visible; position: absolute; top: 285px; width: 20px;" src=":/15"><img style="height: 73px; left: 194px; overflow: visible; position: absolute; top: 284px; width: 64px;" src=":/16"><img style="height: 65px; left: 213px; overflow: visible; position: absolute; top: 168px; width: 40px;" src=":/17"><img style="height: 10px; left: 214px; overflow: visible; position: absolute; top: 149px; width: 48px;" src=":/18"><img style="height: 12px; left: 308px; overflow: visible; position: absolute; top: 205px; width: 10px;" src=":/19"><img style="height: 10px; left: 286px; overflow: visible; position: absolute; top: 300px; width: 6px;" src=":/20"><img style="height: 17px; left: 265px; overflow: visible; position: absolute; top: 374px; width: 21px;" src=":/21"><img style="height: 10px; left: 179px; overflow: visible; position: absolute; top: 423px; width: 12px;" src=":/22"><img style="height: 15px; left: 140px; overflow: visible; position: absolute; top: 471px; width: 11px;" src=":/23"><img style="height: 12px; left: 236px; overflow: visible; position: absolute; top: 533px; width: 42px;" src=":/24"><img style="height: 22px; left: 403px; overflow: visible; position: absolute; top: 526px; width: 25px;" src=":/25"><img style="height: 18px; left: 443px; overflow: visible; position: absolute; top: 500px; width: 8px;" src=":/26"><img style="height: 34px; left: 386px; overflow: visible; position: absolute; top: 420px; width: 51px;" src=":/27"><img style="height: 18px; left: 251px; overflow: visible; position: absolute; top: 368px; width: 47px;" src=":/28"><img style="height: 35px; left: 154px; overflow: visible; position: absolute; top: 317px; width: 24px;" src=":/29"><img style="height: 29px; left: 137px; overflow: visible; position: absolute; top: 249px; width: 7px;" src=":/30"><img style="height: 11px; left: 148px; overflow: visible; position: absolute; top: 215px; width: 11px;" src=":/31"><img style="height: 11px; left: 222px; overflow: visible; position: absolute; top: 195px; width: 48px;" src=":/32"><img style="height: 7px; left: 388px; overflow: visible; position: absolute; top: 203px; width: 12px;" src=":/33"><img style="height: 13px; left: 465px; overflow: visible; position: absolute; top: 248px; width: 7px;" src=":/34"><img style="height: 12px; left: 462px; overflow: visible; position: absolute; top: 326px; width: 6px;" src=":/35"><img style="height: 11px; left: 430px; overflow: visible; position: absolute; top: 394px; width: 10px;" src=":/36"><img style="height: 13px; left: 337px; overflow: visible; position: absolute; top: 430px; width: 26px;" src=":/37"><img style="height: 8px; left: 267px; overflow: visible; position: absolute; top: 486px; width: 7px;" src=":/38"><img style="height: 8px; left: 226px; overflow: visible; position: absolute; top: 566px; width: 9px;" src=":/39"><img style="height: 8px; left: 216px; overflow: visible; position: absolute; top: 618px; width: 7px;" src=":/40"><img style="height: 8px; left: 184px; overflow: visible; position: absolute; top: 668px; width: 11px;" src=":/41"><img style="height: 33px; left: 138px; overflow: visible; position: absolute; top: 629px; width: 10px;" src=":/42"><img style="height: 21px; left: 114px; overflow: visible; position: absolute; top: 547px; width: 19px;" src=":/43"><img style="height: 14px; left: 88px; overflow: visible; position: absolute; top: 508px; width: 7px;" src=":/44"><img style="height: 6px; left: 337px; overflow: visible; position: absolute; top: 521px; width: 38px;" src=":/45"><img style="height: 8px; left: 519px; overflow: visible; position: absolute; top: 583px; width: 6px;" src=":/46"><img style="height: 12px; left: 506px; overflow: visible; position: absolute; top: 638px; width: 47px;" src=":/47"><img style="height: 39px; left: 746px; overflow: visible; position: absolute; top: 603px; width: 10px;" src=":/48"><img style="height: 38px; left: 691px; overflow: visible; position: absolute; top: 488px; width: 38px;" src=":/49"><img style="height: 24px; left: 564px; overflow: visible; position: absolute; top: 394px; width: 22px;" src=":/50"><img style="height: 16px; left: 492px; overflow: visible; position: absolute; top: 354px; width: 25px;" src=":/51"><img style="height: 19px; left: 413px; overflow: visible; position: absolute; top: 322px; width: 22px;" src=":/52"><img style="height: 24px; left: 486px; overflow: visible; position: absolute; top: 197px; width: 17px;" src=":/53"><img style="height: 6px; left: 717px; overflow: visible; position: absolute; top: 135px; width: 7px;" src=":/54"><img style="height: 9px; left: 795px; overflow: visible; position: absolute; top: 172px; width: 11px;" src=":/55"><img style="height: 12px; left: 857px; overflow: visible; position: absolute; top: 249px; width: 8px;" src=":/56"><img style="height: 41px; left: 710px; overflow: visible; position: absolute; top: 412px; width: 40px;" src=":/57"><img style="height: 11px; left: 699px; overflow: visible; position: absolute; top: 512px; width: 40px;" src=":/58"><img style="height: 18px; left: 853px; overflow: visible; position: absolute; top: 517px; width: 71px;" src=":/59"><img style="height: 13px; left: 1119px; overflow: visible; position: absolute; top: 470px; width: 13px;" src=":/60"><img style="height: 32px; left: 1199px; overflow: visible; position: absolute; top: 415px; width: 6px;" src=":/61"><img style="height: 35px; left: 1184px; overflow: visible; position: absolute; top: 315px; width: 23px;" src=":/62"><img style="height: 22px; left: 1058px; overflow: visible; position: absolute; top: 250px; width: 55px;" src=":/63"><img style="height: 6px; left: 969px; overflow: visible; position: absolute; top: 247px; width: 27px;" src=":/64"><img style="height: 19px; left: 883px; overflow: visible; position: absolute; top: 347px; width: 16px;" src=":/65"><img style="height: 11px; left: 816px; overflow: visible; position: absolute; top: 426px; width: 21px;" src=":/66"><img style="height: 8px; left: 639px; overflow: visible; position: absolute; top: 450px; width: 23px;" src=":/67"><img style="height: 30px; left: 487px; overflow: visible; position: absolute; top: 395px; width: 42px;" src=":/68"><img style="height: 12px; left: 395px; overflow: visible; position: absolute; top: 346px; width: 17px;" src=":/69"><img style="height: 15px; left: 296px; overflow: visible; position: absolute; top: 363px; width: 26px;" src=":/70"><img style="height: 9px; left: 257px; overflow: visible; position: absolute; top: 467px; width: 8px;" src=":/71"><img style="height: 11px; left: 254px; overflow: visible; position: absolute; top: 543px; width: 7px;" src=":/72"><img style="height: 13px; left: 262px; overflow: visible; position: absolute; top: 623px; width: 10px;" src=":/73"><img style="height: 22px; left: 213px; overflow: visible; position: absolute; top: 678px; width: 24px;" src=":/74"><img style="height: 8px; left: 175px; overflow: visible; position: absolute; top: 724px; width: 8px;" src=":/75"><img style="height: 7px; left: 136px; overflow: visible; position: absolute; top: 730px; width: 23px;" src=":/76"><img style="height: 8px; left: 89px; overflow: visible; position: absolute; top: 729px; width: 8px;" src=":/77"><img style="height: 44px; left: 76px; overflow: visible; position: absolute; top: 614px; width: 12px;" src=":/78"><img style="height: 31px; left: 65px; overflow: visible; position: absolute; top: 516px; width: 6px;" src=":/79"><img style="height: 48px; left: 76px; overflow: visible; position: absolute; top: 383px; width: 6px;" src=":/80"><img style="height: 10px; left: 81px; overflow: visible; position: absolute; top: 321px; width: 11px;" src=":/81"><img style="height: 7px; left: 124px; overflow: visible; position: absolute; top: 328px; width: 16px;" src=":/82"><img style="height: 19px; left: 255px; overflow: visible; position: absolute; top: 450px; width: 12px;" src=":/83"><img style="height: 30px; left: 328px; overflow: visible; position: absolute; top: 584px; width: 16px;" src=":/84"><img style="height: 7px; left: 413px; overflow: visible; position: absolute; top: 696px; width: 7px;" src=":/85"><img style="height: 7px; left: 471px; overflow: visible; position: absolute; top: 718px; width: 10px;" src=":/86"><img style="height: 22px; left: 508px; overflow: visible; position: absolute; top: 685px; width: 6px;" src=":/87"><img style="height: 36px; left: 505px; overflow: visible; position: absolute; top: 612px; width: 7px;" src=":/88"><img style="height: 24px; left: 504px; overflow: visible; position: absolute; top: 537px; width: 6px;" src=":/89"><img style="height: 22px; left: 480px; overflow: visible; position: absolute; top: 416px; width: 8px;" src=":/90"><img style="height: 31px; left: 488px; overflow: visible; position: absolute; top: 344px; width: 22px;" src=":/91"><img style="height: 19px; left: 543px; overflow: visible; position: absolute; top: 291px; width: 19px;" src=":/92"><img style="height: 18px; left: 583px; overflow: visible; position: absolute; top: 264px; width: 19px;" src=":/93"><img style="height: 16px; left: 624px; overflow: visible; position: absolute; top: 234px; width: 6px;" src=":/94"><img style="height: 15px; left: 620px; overflow: visible; position: absolute; top: 208px; width: 10px;" src=":/95"><img style="height: 29px; left: 564px; overflow: visible; position: absolute; top: 158px; width: 29px;" src=":/96"><img style="height: 13px; left: 419px; overflow: visible; position: absolute; top: 121px; width: 35px;" src=":/97"><img style="height: 15px; left: 328px; overflow: visible; position: absolute; top: 126px; width: 15px;" src=":/98"><img style="height: 37px; left: 301px; overflow: visible; position: absolute; top: 228px; width: 31px;" src=":/99"><img style="height: 9px; left: 478px; overflow: visible; position: absolute; top: 437px; width: 12px;" src=":/100"><img style="height: 15px; left: 585px; overflow: visible; position: absolute; top: 529px; width: 13px;" src=":/101"><img style="height: 9px; left: 638px; overflow: visible; position: absolute; top: 615px; width: 7px;" src=":/102"><img style="height: 31px; left: 611px; overflow: visible; position: absolute; top: 661px; width: 37px;" src=":/103"><img style="height: 11px; left: 566px; overflow: visible; position: absolute; top: 728px; width: 16px;" src=":/104"><img style="height: 6px; left: 244px; overflow: visible; position: absolute; top: 958px; width: 6px;" src=":/105"><img style="height: 29px; left: 254px; overflow: visible; position: absolute; top: 890px; width: 6px;" src=":/106"><img style="height: 40px; left: 260px; overflow: visible; position: absolute; top: 799px; width: 18px;" src=":/107"><img style="height: 25px; left: 325px; overflow: visible; position: absolute; top: 724px; width: 24px;" src=":/108"><img style="height: 22px; left: 427px; overflow: visible; position: absolute; top: 667px; width: 11px;" src=":/109"><img style="height: 28px; left: 439px; overflow: visible; position: absolute; top: 603px; width: 13px;" src=":/110"><img style="height: 23px; left: 405px; overflow: visible; position: absolute; top: 555px; width: 22px;" src=":/111"><img style="height: 17px; left: 341px; overflow: visible; position: absolute; top: 516px; width: 24px;" src=":/112"><img style="height: 10px; left: 262px; overflow: visible; position: absolute; top: 497px; width: 19px;" src=":/113"><img style="height: 8px; left: 226px; overflow: visible; position: absolute; top: 500px; width: 11px;" src=":/114"><img style="height: 24px; left: 192px; overflow: visible; position: absolute; top: 560px; width: 6px;" src=":/115"><img style="height: 16px; left: 223px; overflow: visible; position: absolute; top: 635px; width: 22px;" src=":/116"><img style="height: 7px; left: 303px; overflow: visible; position: absolute; top: 683px; width: 7px;" src=":/117"><img style="height: 25px; left: 350px; overflow: visible; position: absolute; top: 731px; width: 35px;" src=":/118"><img style="height: 7px; left: 406px; overflow: visible; position: absolute; top: 768px; width: 8px;" src=":/119"><img style="height: 7px; left: 471px; overflow: visible; position: absolute; top: 797px; width: 9px;" src=":/120"><img style="height: 6px; left: 539px; overflow: visible; position: absolute; top: 815px; width: 9px;" src=":/121"><img style="height: 13px; left: 590px; overflow: visible; position: absolute; top: 806px; width: 17px;" src=":/122"><img style="height: 20px; left: 635px; overflow: visible; position: absolute; top: 784px; width: 14px;" src=":/123"><img style="height: 26px; left: 659px; overflow: visible; position: absolute; top: 738px; width: 10px;" src=":/124"><img style="height: 24px; left: 676px; overflow: visible; position: absolute; top: 692px; width: 10px;" src=":/125"><img style="height: 22px; left: 692px; overflow: visible; position: absolute; top: 643px; width: 9px;" src=":/126"><img style="height: 23px; left: 697px; overflow: visible; position: absolute; top: 598px; width: 6px;" src=":/127"><img style="height: 6px; left: 672px; overflow: visible; position: absolute; top: 225px; width: 6px;" src=":/128"><img style="height: 6px; left: 702px; overflow: visible; position: absolute; top: 224px; width: 10px;" src=":/129"><img style="height: 15px; left: 734px; overflow: visible; position: absolute; top: 243px; width: 11px;" src=":/130"><img style="height: 14px; left: 718px; overflow: visible; position: absolute; top: 304px; width: 21px;" src=":/131"><img style="height: 9px; left: 638px; overflow: visible; position: absolute; top: 330px; width: 34px;" src=":/132"><img style="height: 11px; left: 526px; overflow: visible; position: absolute; top: 348px; width: 12px;" src=":/133"><img style="height: 20px; left: 521px; overflow: visible; position: absolute; top: 397px; width: 13px;" src=":/134"><img style="height: 16px; left: 607px; overflow: visible; position: absolute; top: 481px; width: 26px;" src=":/135"><img style="height: 6px; left: 755px; overflow: visible; position: absolute; top: 512px; width: 38px;" src=":/136"><img style="height: 6px; left: 894px; overflow: visible; position: absolute; top: 524px; width: 6px;" src=":/137"><img style="height: 16px; left: 908px; overflow: visible; position: absolute; top: 560px; width: 7px;" src=":/138"><img style="height: 28px; left: 870px; overflow: visible; position: absolute; top: 684px; width: 20px;" src=":/139"><img style="height: 6px; left: 820px; overflow: visible; position: absolute; top: 731px; width: 26px;" src=":/140"><img style="height: 35px; left: 716px; overflow: visible; position: absolute; top: 672px; width: 29px;" src=":/141"><img style="height: 19px; left: 595px; overflow: visible; position: absolute; top: 550px; width: 17px;" src=":/142"><img style="height: 26px; left: 528px; overflow: visible; position: absolute; top: 514px; width: 46px;" src=":/143"><img style="height: 11px; left: 446px; overflow: visible; position: absolute; top: 484px; width: 20px;" src=":/144"><img style="height: 7px; left: 368px; overflow: visible; position: absolute; top: 490px; width: 18px;" src=":/145"><img style="height: 8px; left: 321px; overflow: visible; position: absolute; top: 530px; width: 8px;" src=":/146"><img style="height: 7px; left: 304px; overflow: visible; position: absolute; top: 553px; width: 7px;" src=":/147"><img style="height: 7px; left: 248px; overflow: visible; position: absolute; top: 908px; width: 9px;" src=":/148"><img style="height: 10px; left: 236px; overflow: visible; position: absolute; top: 939px; width: 20px;" src=":/149"><img style="height: 7px; left: 392px; overflow: visible; position: absolute; top: 987px; width: 22px;" src=":/150"><img style="height: 8px; left: 508px; overflow: visible; position: absolute; top: 990px; width: 25px;" src=":/151"><img style="height: 24px; left: 588px; overflow: visible; position: absolute; top: 962px; width: 14px;" src=":/152"><img style="height: 30px; left: 481px; overflow: visible; position: absolute; top: 891px; width: 54px;" src=":/153"><img style="height: 10px; left: 414px; overflow: visible; position: absolute; top: 873px; width: 22px;" src=":/154"><img style="height: 14px; left: 354px; overflow: visible; position: absolute; top: 857px; width: 24px;" src=":/155"><img style="height: 9px; left: 175px; overflow: visible; position: absolute; top: 813px; width: 13px;" src=":/156"><img style="height: 6px; left: 109px; overflow: visible; position: absolute; top: 810px; width: 9px;" src=":/157"><img style="height: 11px; left: 87px; overflow: visible; position: absolute; top: 848px; width: 7px;" src=":/158"><img style="height: 13px; left: 97px; overflow: visible; position: absolute; top: 925px; width: 9px;" src=":/159"><img style="height: 56px; left: 129px; overflow: visible; position: absolute; top: 960px; width: 63px;" src=":/160"><img style="height: 6px; left: 275px; overflow: visible; position: absolute; top: 1055px; width: 14px;" src=":/161"><img style="height: 8px; left: 391px; overflow: visible; position: absolute; top: 1063px; width: 44px;" src=":/162"><img style="height: 9px; left: 557px; overflow: visible; position: absolute; top: 1056px; width: 15px;" src=":/163"><img style="height: 18px; left: 678px; overflow: visible; position: absolute; top: 993px; width: 12px;" src=":/164"><img style="height: 22px; left: 706px; overflow: visible; position: absolute; top: 936px; width: 6px;" src=":/165"><img style="height: 24px; left: 697px; overflow: visible; position: absolute; top: 891px; width: 12px;" src=":/166"><img style="height: 33px; left: 599px; overflow: visible; position: absolute; top: 826px; width: 60px;" src=":/167"><img style="height: 17px; left: 479px; overflow: visible; position: absolute; top: 792px; width: 32px;" src=":/168"><img style="height: 17px; left: 399px; overflow: visible; position: absolute; top: 762px; width: 12px;" src=":/169"><img style="height: 41px; left: 377px; overflow: visible; position: absolute; top: 685px; width: 10px;" src=":/170"><img style="height: 17px; left: 377px; overflow: visible; position: absolute; top: 647px; width: 7px;" src=":/171"><img style="height: 15px; left: 382px; overflow: visible; position: absolute; top: 630px; width: 16px;" src=":/172"><img style="height: 542px; left: 224px; overflow: visible; position: absolute; top: 464px; width: 848px;" src=":/173"><img style="height: 6px; left: 651px; overflow: visible; position: absolute; top: 273px; width: 6px;" src=":/174"><img style="height: 7px; left: 666px; overflow: visible; position: absolute; top: 320px; width: 6px;" src=":/175"><img style="height: 7px; left: 716px; overflow: visible; position: absolute; top: 422px; width: 7px;" src=":/176"><img style="height: 7px; left: 799px; overflow: visible; position: absolute; top: 479px; width: 7px;" src=":/177"><img style="height: 9px; left: 898px; overflow: visible; position: absolute; top: 527px; width: 12px;" src=":/178"><img style="height: 8px; left: 998px; overflow: visible; position: absolute; top: 562px; width: 26px;" src=":/179"><img style="height: 7px; left: 1208px; overflow: visible; position: absolute; top: 596px; width: 6px;" src=":/180"><img style="height: 6px; left: 710px; overflow: visible; position: absolute; top: 765px; width: 10px;" src=":/181"><img style="height: 6px; left: 566px; overflow: visible; position: absolute; top: 806px; width: 7px;" src=":/182"><img style="height: 11px; left: 339px; overflow: visible; position: absolute; top: 833px; width: 11px;" src=":/183"><img style="height: 14px; left: 253px; overflow: visible; position: absolute; top: 760px; width: 13px;" src=":/184"><img style="height: 14px; left: 230px; overflow: visible; position: absolute; top: 734px; width: 10px;" src=":/185"><img style="height: 21px; left: 162px; overflow: visible; position: absolute; top: 586px; width: 9px;" src=":/186"><img style="height: 21px; left: 151px; overflow: visible; position: absolute; top: 529px; width: 8px;" src=":/187"><img style="height: 18px; left: 158px; overflow: visible; position: absolute; top: 476px; width: 8px;" src=":/188"><img style="height: 19px; left: 176px; overflow: visible; position: absolute; top: 416px; width: 10px;" src=":/189"><img style="height: 6px; left: 176px; overflow: visible; position: absolute; top: 373px; width: 6px;" src=":/190"><div class="container-outline" style="left: 62px; position: absolute; top: 119px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">This is a text paragraph that should apppear behind the drawings</p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
@@ -295,7 +252,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A page with text and drawing above it</title>
-    <meta name="X-Original-Page-Id" content="{6ABD6E20-4015-42B8-953E-74E620C82471}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -318,11 +275,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div><img style="height: 358px; left: 35px; overflow: visible; position: absolute; top: 98px; width: 441px;" src=":/191"><img style="height: 320px; left: 487px; overflow: visible; position: absolute; top: 220px; width: 269px;" src=":/192"><img style="height: 346px; left: 173px; overflow: visible; position: absolute; top: 534px; width: 337px;" src=":/193"><img style="height: 8px; left: 38px; overflow: visible; position: absolute; top: 506px; width: 199px;" src=":/194"><img style="height: 28px; left: 33px; overflow: visible; position: absolute; top: 484px; width: 202px;" src=":/195">
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
@@ -332,7 +285,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>A simple filename</title>
-    <meta name="X-Original-Page-Id" content="{D7A26766-0233-4170-9EF3-372379551FF7}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -349,11 +302,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </div></div><img style="height: 300px; left: 136px; overflow: visible; position: absolute; top: 160px; width: 222px;" src=":/196"><img style="height: 51px; left: 60px; overflow: visible; position: absolute; top: 567px; width: 18px;" src=":/197"><img style="height: 47px; left: 63px; overflow: visible; position: absolute; top: 556px; width: 44px;" src=":/198"><img style="height: 38px; left: 101px; overflow: visible; position: absolute; top: 585px; width: 43px;" src=":/199"><img style="height: 6px; left: 108px; overflow: visible; position: absolute; top: 603px; width: 26px;" src=":/200"><img style="height: 48px; left: 161px; overflow: visible; position: absolute; top: 578px; width: 51px;" src=":/201"><img style="height: 64px; left: 225px; overflow: visible; position: absolute; top: 570px; width: 41px;" src=":/202"><img style="height: 49px; left: 260px; overflow: visible; position: absolute; top: 581px; width: 49px;" src=":/203"><div class="container-outline" style="left: 257px; position: absolute; top: 629px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
@@ -363,7 +312,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>Page with more than one font size</title>
-    <meta name="X-Original-Page-Id" content="{074A237A-AFFA-4C2E-907E-48E82E80809D}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -383,19 +332,14 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;">It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him. </span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;">The hallway smelt of boiled cabbage and old rag mats. At one end of it a coloured poster, too large for indoor display, had been tacked to the wall. It depicted simply an enormous face, more than a metre wide: the face of a man of about forty-five, with a heavy black moustache and ruggedly handsome features. Winston made for the stairs. It was no use trying the lift. Even at the best of times it was seldom working, and at present the electric current was cut off during daylight hours. It was part of the economy drive in preparation for Hate Week. The flat was seven flights up, and Winston, who was thirty-nine and had a varicose ulcer above his right ankle, went slowly, resting several times on the way. On each landing, opposite the lift-shaft, the poster with the enormous face gazed from the wall. It was one of those pictures which are so contrived that the eyes follow you about when you move. BIG BROTHER IS WATCHING YOU, the caption beneath it ran. </span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;">Inside the flat a fruity voice was reading out a list of figures which had something to do with the production of pig-iron. The voice came from an oblong metal plaque like a dulled mirror which formed part of the surface of the right-hand wall. Winston turned a switch and the voice sank somewhat, though the words were still distinguishable. The instrument (the telescreen, it was called) could be dimmed, but there was no way of shutting it off completely. He moved over to the window: a smallish, frail figure, the meagreness of his body merely emphasized by the blue overalls which were the uniform of the party. His hair was very fair, his face naturally sanguine, his skin roughened by coarse soap and blunt razor blades and the cold of the winter that had just ended. </span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span>Outside, even through the shut window-pane, the world looked cold. Down in the street little eddies of wind were whirling dust and torn paper into spirals, and though the sun was shining and the sky a harsh blue, there seemed to be no colour in anything, except the posters that were plastered everywhere. The blackmoustachio'd face gazed down from every commanding corner. There was one on the house-front immediately opposite. BIG BROTHER IS WATCHING YOU, the caption said, while the dark eyes looked deep into Winston's own. Down at streetlevel another poster, torn at one corner, flapped fitfully in the wind, alternately covering and uncovering the single word INGSOC. In the far distance a helicopter skimmed down between the roofs, hovered for an instant like a bluebottle, and darted away again with a curving flight. It was the police patrol, snooping into people's windows. The patrols did not matter, however. Only the Thought Police mattered. <br><br>Behind Winston's back the voice from the telescreen was still babbling away about pig-iron and the overfulfilment of the Ninth Three-Year Plan. The telescreen received and transmitted simultaneously. Any sound that Winston made, above the level of a very low whisper, would be picked up by it, moreover, so long as he remained within the field of vision which the metal plaque commanded, he could be seen as well as heard. There was of course no way of knowing whether you were being watched at any given moment. How often, or on what system, the Thought Police plugged in on any individual wire was guesswork. It was even conceivable that they watched everybody all the time. But at any rate they could plug in your wire whenever they wanted to. You had to live -- did live, from habit that became instinct -- in the assumption that every sound you made was overheard, and, except in darkness, every movement scrutinized. </p></div>
 </div><img style="height: 6px; left: 49px; overflow: visible; position: absolute; top: 127px; width: 72px;" src=":/204"><img style="height: 16px; left: 465px; overflow: visible; position: absolute; top: 227px; width: 17px;" src=":/205"><img style="height: 7px; left: 49px; overflow: visible; position: absolute; top: 262px; width: 37px;" src=":/206"><img style="height: 9px; left: 146px; overflow: visible; position: absolute; top: 521px; width: 82px;" src=":/207"><img style="height: 17px; left: 175px; overflow: visible; position: absolute; top: 713px; width: 28px;" src=":/208"><img style="height: 6px; left: 46px; overflow: visible; position: absolute; top: 883px; width: 12px;" src=":/209"><img style="height: 12px; left: 157px; overflow: visible; position: absolute; top: 1518px; width: 17px;" src=":/210">
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Quick Notes 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Quick Notes</title>
     <style>
@@ -461,7 +405,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
         
     </ul>
 </nav>
-<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
 
 <style>
     .l2 { padding: 10px 20px 10px 40px }
@@ -470,34 +414,10 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
     .l5 { padding: 10px 20px 10px 100px }
     li.-error a { color: #C11; font-weight: bold; }
 </style>
-<script>
-    document.addEventListener('click', function (event) {
-        // If the clicked element doesn't have the right selector, bail
-        if (!event.target.matches('nav a')) return;
-        for (const child of event.target.parentElement.parentElement.children) {
-            child.classList.remove('active');
-        }
-        event.target.parentElement.classList.add('active');
 
-    }, false);
 
-    window.addEventListener('message', (event) => {
-        const activeTarget = event.data;
 
-        for (const link of document.querySelectorAll('nav ul li a')) {
-            if (link.href === activeTarget) {
-                link.parentElement.classList.add('active');
-            }
-        }
-    });
-
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-
-</body>
-</html>"
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: text 1`] = `
@@ -505,7 +425,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>text</title>
-    <meta name="X-Original-Page-Id" content="{55390DC0-8B2B-4A1E-9795-DA8033492F7C}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -526,11 +446,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div><img style="height: 7px; left: 49px; overflow: visible; position: absolute; top: 301px; width: 53px;" src=":/211"><img style="height: 21px; left: 210px; overflow: visible; position: absolute; top: 386px; width: 34px;" src=":/212"><img style="height: 18px; left: 45px; overflow: visible; position: absolute; top: 225px; width: 21px;" src=":/213"><img style="height: 28px; left: 44px; overflow: visible; position: absolute; top: 413px; width: 26px;" src=":/214"><img style="height: 33px; left: 146px; overflow: visible; position: absolute; top: 674px; width: 40px;" src=":/215"><img style="height: 33px; left: 47px; overflow: visible; position: absolute; top: 712px; width: 6px;" src=":/216"><img style="height: 8px; left: 48px; overflow: visible; position: absolute; top: 713px; width: 27px;" src=":/217"><img style="height: 31px; left: 168px; overflow: visible; position: absolute; top: 830px; width: 27px;" src=":/218"><img style="height: 31px; left: 255px; overflow: visible; position: absolute; top: 1142px; width: 25px;" src=":/219">
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
@@ -817,12 +733,11 @@ exports[`InteropService_Importer_OneNote should extract svgs 2`] = `
 `;
 
 exports[`InteropService_Importer_OneNote should ignore broken characters at the start of paragraph 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Action research - Wikipedia</title>
-    <meta name="X-Original-Page-Id" content="{5B2B7262-DC9F-47D5-A64D-9BB61513B52E}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -841,15 +756,15 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
 </div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Monday, May 27, 2019</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">12:13 PM</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Clipped from: </span><a href="https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development" style="font-family: Verdana; font-size: 12pt;">https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development</a></p></div>
-<div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: -48px; max-width: -48px;" /></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">569 revisions since </span><a href="https://en.wikipedia.org/wiki/Special%3APermaLink%2F2264241" style="font-family: Verdana; font-size: 12pt;">2003-05-19</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="https://en.wikipedia.org/wiki/Special%3ADiff%2F898227450" style="font-family: Verdana; font-size: 12pt;">+5 days</a><span style="font-family: Verdana; font-size: 12pt;">), 328 editors, 90 watchers, </span><a href="https://tools.wmflabs.org/pageviews?project=en.wikipedia.org&pages=Action%20research&range=latest-30" style="font-family: Verdana; font-size: 12pt;">18,937 pageviews</a><span style="font-family: Verdana; font-size: 12pt;"> (30 days), created by: </span><a href="https://en.wikipedia.org/wiki/User:Thseamon" style="font-family: Verdana; font-size: 12pt;">Thseamon</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="http://xtools.wmflabs.org/ec/en.wikipedia.org/Thseamon" style="font-family: Verdana; font-size: 12pt;">762</a><span style="font-family: Verdana; font-size: 12pt;">) · </span><a href="http://xtools.wmflabs.org/articleinfo/en.wikipedia.org/Action%20research" style="font-family: Verdana; font-size: 12pt;">See full page statistics</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: -48px; max-width: -48px;"></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">569 revisions since </span><a href="https://en.wikipedia.org/wiki/Special%3APermaLink%2F2264241" style="font-family: Verdana; font-size: 12pt;">2003-05-19</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="https://en.wikipedia.org/wiki/Special%3ADiff%2F898227450" style="font-family: Verdana; font-size: 12pt;">+5 days</a><span style="font-family: Verdana; font-size: 12pt;">), 328 editors, 90 watchers, </span><a href="https://tools.wmflabs.org/pageviews?project=en.wikipedia.org&amp;pages=Action%20research&amp;range=latest-30" style="font-family: Verdana; font-size: 12pt;">18,937 pageviews</a><span style="font-family: Verdana; font-size: 12pt;"> (30 days), created by: </span><a href="https://en.wikipedia.org/wiki/User:Thseamon" style="font-family: Verdana; font-size: 12pt;">Thseamon</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="http://xtools.wmflabs.org/ec/en.wikipedia.org/Thseamon" style="font-family: Verdana; font-size: 12pt;">762</a><span style="font-family: Verdana; font-size: 12pt;">) · </span><a href="http://xtools.wmflabs.org/articleinfo/en.wikipedia.org/Action%20research" style="font-family: Verdana; font-size: 12pt;">See full page statistics</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><a href="https://en.wikipedia.org/wiki/Action_research#mw-head" style="font-family: Verdana; font-size: 12pt;">Jump to navigation</a><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://en.wikipedia.org/wiki/Action_research#p-search" style="font-family: Verdana; font-size: 12pt;">Jump to search</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">For the British charity formerly named Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Medical_Research" style="font-family: Verdana; font-size: 12pt;">Action Medical Research</a><span style="font-family: Verdana; font-size: 12pt;">. For the academic journal titled Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Research_(journal)" style="font-family: Verdana; font-size: 12pt;">Action Research (journal)</a><span style="font-family: Verdana; font-size: 12pt;">.</span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><table cellpadding="0" cellspacing="0" style="border-collapse: collapse;"><tr><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><img src=":/6" style="max-height: 39px; max-width: 50px;" /></div>
-</td><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt;">This article </span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">needs additional citations for </span><a href="https://en.wikipedia.org/wiki/Wikipedia:Verifiability" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">verification</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Please help </span><a href="https://en.wikipedia.org/w/index.php?title=Action_research&action=edit" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">improve this article</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;"> by </span><a href="https://en.wikipedia.org/wiki/Help:Introduction_to_referencing_with_Wiki_Markup/1" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">adding citations to reliable sources</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Unsourced material may be challenged and removed.</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;"><br></span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Find sources:</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?as_eq=wikipedia&q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">&quot;Action research&quot;</a><span style="font-family: Verdana; font-size: 12pt;"> – </span><a href="https://www.google.com/search?tbm=nws&q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">news</a><span style="font-family: Verdana; font-size: 12pt;"> </span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?&q=%22Action+research%22+site:news.google.com/newspapers&source=newspapers" style="font-family: Verdana; font-size: 12pt;">newspapers</a><span style="font-family: Verdana; font-size: 12pt;"> </span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?tbs=bks:1&q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">books</a><span style="font-family: Verdana; font-size: 12pt;"> </span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://scholar.google.com/scholar?q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">scholar</a><span style="font-family: Verdana; font-size: 12pt;"> </span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.jstor.org/action/doBasicSearch?Query=%22Action+research%22&acc=on&wc=on" style="font-family: Verdana; font-size: 12pt;">JSTOR</a><span style="font-family: Verdana; font-size: 12pt;"> </span><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">(May 2019)</span><span style="font-family: Verdana; font-size: 12pt; font-style: italic;"> (</span><a href="https://en.wikipedia.org/wiki/Help:Maintenance_template_removal" style="font-family: Verdana; font-size: 12pt; font-style: italic;">Learn how and when to remove this template message</a><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">)</span></p></div>
-</td></tr></table></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Action research</span><span style="font-family: Verdana; font-size: 12pt;"> seeks transformative change through the simultaneous process of taking action and doing research, which are linked together by critical reflection.</span><a href="https://en.wikipedia.org/wiki/Kurt_Lewin" style="font-family: Verdana; font-size: 12pt;">Kurt Lewin</a><span style="font-family: Verdana; font-size: 12pt;">, then a professor at </span><a href="https://en.wikipedia.org/wiki/MIT" style="font-family: Verdana; font-size: 12pt;">MIT</a><span style="font-family: Verdana; font-size: 12pt;">, first coined the term &quot;action research&quot; in 1944. In his 1946 paper &quot;Action Research and Minority Problems&quot; he described action research as &quot;a comparative research on the conditions and effects of various forms of social action and research leading to social action&quot; that uses &quot;a spiral of steps, each of which is composed of a circle of planning, action and fact-finding about the result of the action&quot;. </span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research practitioners reflect upon the consequences of their own questions, beliefs, assumptions, and practices with the goal of understanding, developing, and improving social practices.</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-1" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[1]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> This action is designed to create three levels of change</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-2" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[2]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> (1) self-change as the only subject of action research is the person who conducting the research. This person is seeking to be better understand the effects of their action in social settings and to engage in a process of living his or her&apos;s values. The second level is a collective process of understanding change in a classroom, office, community, organization or institution. Action research enlists others and works to create a democratic sharing of voice to achieve deeper understanding of collective actions</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-3" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[3]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. Finally action research is process of sharing finding with the community of researchers. This can be done is many ways, in journals</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-4" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[4]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">, on websites, in books, videos or at conferences. The Social Publishers Foundation</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-5" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[5]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> provides support for this action research process. </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><table cellpadding="0" cellspacing="0" style="border-collapse: collapse;"><tbody><tr><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><img src=":/6" style="max-height: 39px; max-width: 50px;"></div>
+</td><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt;">This article </span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">needs additional citations for </span><a href="https://en.wikipedia.org/wiki/Wikipedia:Verifiability" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">verification</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Please help </span><a href="https://en.wikipedia.org/w/index.php?title=Action_research&amp;action=edit" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">improve this article</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;"> by </span><a href="https://en.wikipedia.org/wiki/Help:Introduction_to_referencing_with_Wiki_Markup/1" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">adding citations to reliable sources</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Unsourced material may be challenged and removed.</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;"><br></span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Find sources:</span><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><a href="https://www.google.com/search?as_eq=wikipedia&amp;q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">"Action research"</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;–&nbsp;</span><a href="https://www.google.com/search?tbm=nws&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">news</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?&amp;q=%22Action+research%22+site:news.google.com/newspapers&amp;source=newspapers" style="font-family: Verdana; font-size: 12pt;">newspapers</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?tbs=bks:1&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">books</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://scholar.google.com/scholar?q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">scholar</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.jstor.org/action/doBasicSearch?Query=%22Action+research%22&amp;acc=on&amp;wc=on" style="font-family: Verdana; font-size: 12pt;">JSTOR</a><span style="font-family: Verdana; font-size: 12pt;"> </span><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">(May 2019)</span><span style="font-family: Verdana; font-size: 12pt; font-style: italic;"> (</span><a href="https://en.wikipedia.org/wiki/Help:Maintenance_template_removal" style="font-family: Verdana; font-size: 12pt; font-style: italic;">Learn how and when to remove this template message</a><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">)</span></p></div>
+</td></tr></tbody></table></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Action research</span><span style="font-family: Verdana; font-size: 12pt;"> seeks transformative change through the simultaneous process of taking action and doing research, which are linked together by critical reflection.</span><a href="https://en.wikipedia.org/wiki/Kurt_Lewin" style="font-family: Verdana; font-size: 12pt;">Kurt Lewin</a><span style="font-family: Verdana; font-size: 12pt;">, then a professor at </span><a href="https://en.wikipedia.org/wiki/MIT" style="font-family: Verdana; font-size: 12pt;">MIT</a><span style="font-family: Verdana; font-size: 12pt;">, first coined the term "action research" in 1944. In his 1946 paper "Action Research and Minority Problems" he described action research as "a comparative research on the conditions and effects of various forms of social action and research leading to social action" that uses "a spiral of steps, each of which is composed of a circle of planning, action and fact-finding about the result of the action". </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research practitioners reflect upon the consequences of their own questions, beliefs, assumptions, and practices with the goal of understanding, developing, and improving social practices.</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-1" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[1]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> This action is designed to create three levels of change</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-2" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[2]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> (1) self-change as the only subject of action research is the person who conducting the research. This person is seeking to be better understand the effects of their action in social settings and to engage in a process of living his or her's values. The second level is a collective process of understanding change in a classroom, office, community, organization or institution. Action research enlists others and works to create a democratic sharing of voice to achieve deeper understanding of collective actions</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-3" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[3]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. Finally action research is process of sharing finding with the community of researchers. This can be done is many ways, in journals</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-4" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[4]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">, on websites, in books, videos or at conferences. The Social Publishers Foundation</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-5" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[5]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> provides support for this action research process. </span></p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research involves actively participating in a change situation, often via an existing organization, whilst simultaneously conducting research. Action research can also be undertaken by larger organizations or institutions, assisted or guided by professional researchers, with the aim of improving their strategies, practices and knowledge of the environments within which they practice. As designers and stakeholders, researchers work with others to propose a new course of action to help their community improve its work practices. Depending upon the nature of the people involved in the action research as well as the person(s) organizing it, there are different ways of describing action research</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-6" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[6]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. </span></p></div><ul class="list-0" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Collaborative Action Research</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Participatory Action Research</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Community-Based Action Research</span></li>
@@ -863,30 +778,25 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">There are also a set of approaches that share some properties with action research but have some different practices</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-7" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[7]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. These include: </span></p></div><ul class="list-1" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Appreciative Inquiry is a way of starting with what is working well and then using action research to improve it.</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Lesson Study</span><span style="font-family: Verdana; font-size: 12pt;"> places the teaching of a shared lesson as the action and has a set of protocols for understanding the outcomes.</span></span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Practitioner Research</span><span style="font-family: Verdana; font-size: 12pt;"> does not have to be action research, as practitioners can engage in any form of the many forms of research.</span></span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Reflective Practice/Self Study</span><span style="font-family: Verdana; font-size: 12pt;"> is the first part of action research but does not require the practitioner to make the results public, to share the results of the learning with others.  Many of these approaches will be described in these resources.</span></span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Teacher Research</span><span style="font-family: Verdana; font-size: 12pt;"> can be any form of research that teachers do, including action research, but not limited to it. At George Mason University, teacher research is described in a way that is very similar to what most authors understand as action research. And at some point, they suggest that action research can be a synonym of teacher research.  The description of action research posted on this site is more closely aligned to what we have called reflective practice.   This shows the variation in the way that people working in the field have of conceptualizing these terms.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Reflective Practice/Self Study</span><span style="font-family: Verdana; font-size: 12pt;"> is the first part of action research but does not require the practitioner to make the results public, to share the results of the learning with others.&nbsp; Many of these approaches will be described in these resources.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Teacher Research</span><span style="font-family: Verdana; font-size: 12pt;"> can be any form of research that teachers do, including action research, but not limited to it. At George Mason University, teacher research is described in a way that is very similar to what most authors understand as action research. And at some point, they suggest that action research can be a synonym of teacher research.&nbsp; The description of action research posted on this site is more closely aligned to what we have called reflective practice.&nbsp; &nbsp;This shows the variation in the way that people working in the field have of conceptualizing these terms.</span></span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Action Inquiry draws on action research and recasts evaluation research to help navigate complexity when enacting collective leadership. Find out more about by reading this document from Scotland.</span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Improvement Science is explicitly designed to accelerate learning-by-doing. It&apos;s a more user-centered and problem-centered approached to improving teaching and learning that is highly similar to action research supported by the Carnegie Foundation for the Advancement of Teaching.</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Improvement Science is explicitly designed to accelerate learning-by-doing. It's a more user-centered and problem-centered approached to improving teaching and learning that is highly similar to action research supported by the Carnegie Foundation for the Advancement of Teaching.</span></li>
 </ul>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><br></p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should import a simple OneNote notebook: Page title 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Page title</title>
-    <meta name="X-Original-Page-Id" content="{D7355639-C72B-494D-9B70-774A0060FD10}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -903,19 +813,14 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">Page content</p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: Quick Notes 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Quick Notes</title>
     <style>
@@ -977,7 +882,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Qui
         
     </ul>
 </nav>
-<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
 
 <style>
     .l2 { padding: 10px 20px 10px 40px }
@@ -986,43 +891,18 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Qui
     .l5 { padding: 10px 20px 10px 100px }
     li.-error a { color: #C11; font-weight: bold; }
 </style>
-<script>
-    document.addEventListener('click', function (event) {
-        // If the clicked element doesn't have the right selector, bail
-        if (!event.target.matches('nav a')) return;
-        for (const child of event.target.parentElement.parentElement.children) {
-            child.classList.remove('active');
-        }
-        event.target.parentElement.classList.add('active');
 
-    }, false);
 
-    window.addEventListener('message', (event) => {
-        const activeTarget = event.data;
 
-        for (const link of document.querySelectorAll('nav ul li a')) {
-            if (link.href === activeTarget) {
-                link.parentElement.classList.add('active');
-            }
-        }
-    });
-
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-
-</body>
-</html>"
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tips from a Pro Using Trees for Dramatic Landscape Photography 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Tips from a Pro: Using Trees for Dramatic Landscape Photography</title>
-    <meta name="X-Original-Page-Id" content="{B4FB39E6-163B-472A-9330-A37F97DCF590}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1036,25 +916,20 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tip
 <div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
 </div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Saturday, February 11, 2023</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">12:56 AM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 14pt; line-height: 22px;"><a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></p></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 14pt; line-height: 22px;"><a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&amp;section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&amp;page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&amp;end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: wikipedia link 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>wikipedia link</title>
-    <meta name="X-Original-Page-Id" content="{542DF835-4AE2-4231-A924-98D4B8D4F95C}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1071,13 +946,9 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href="https://zh.wikipedia.org/zh-hans/%E9%A3%8E%E6%99%AF" style="">wikipedia link</a></p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景  (Web view) 1`] = `
@@ -1085,7 +956,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>风景  (Web view)</title>
-    <meta name="X-Original-Page-Id" content="{1AA1839C-D5BF-4AB7-99F3-793769C6259A}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1102,22 +973,17 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href=":/6" style="font-family: Calibri; font-size: 11pt;">风景</a><span style="font-family: Calibri; font-size: 11pt;">  (</span><a href="https://onedrive.live.com/edit.aspx?resid=193EE54E3252492D!s9b62db4219f740709f444bc0129de4e9&amp;migratedtospo=true&amp;wd=target%28Quick%20Notes.one%7C75256889-9e75-4ec2-82ed-fc799557e1b9%2F%E9%A3%8E%E6%99%AF%7Cd099b6f3-7f5a-4c08-aed7-e8d42c59523f%2F%29&amp;wdorigin=703&amp;wdpreservelink=1" style="font-family: Calibri; font-size: 11pt;">Web view</a><span style="font-family: Calibri; font-size: 11pt;">)</span></p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>风景</title>
-    <meta name="X-Original-Page-Id" content="{D099B6F3-7F5A-4C08-AED7-E8D42C59523F}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1133,22 +999,17 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">10:14 PM</span></div>
 </div></div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should render audio as links to resource: My title 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>My title</title>
-    <meta name="X-Original-Page-Id" content="{301ACB0B-E552-428F-BA6E-0D5293ECCD35}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1170,19 +1031,14 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
 </div><div class="container-outline" style="left: 240px; position: absolute; top: 373px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should render audio as links to resource: Quick Notes 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Quick Notes</title>
     <style>
@@ -1238,7 +1094,7 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
         
     </ul>
 </nav>
-<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
 
 <style>
     .l2 { padding: 10px 20px 10px 40px }
@@ -1247,43 +1103,18 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
     .l5 { padding: 10px 20px 10px 100px }
     li.-error a { color: #C11; font-weight: bold; }
 </style>
-<script>
-    document.addEventListener('click', function (event) {
-        // If the clicked element doesn't have the right selector, bail
-        if (!event.target.matches('nav a')) return;
-        for (const child of event.target.parentElement.parentElement.children) {
-            child.classList.remove('active');
-        }
-        event.target.parentElement.classList.add('active');
 
-    }, false);
 
-    window.addEventListener('message', (event) => {
-        const activeTarget = event.data;
 
-        for (const link of document.querySelectorAll('nav ul li a')) {
-            if (link.href === activeTarget) {
-                link.parentElement.classList.add('active');
-            }
-        }
-    });
-
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-
-</body>
-</html>"
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Is Mexico safe for shooting Street Photography 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Is Mexico safe for shooting Street Photography?</title>
-    <meta name="X-Original-Page-Id" content="{3DB79201-A9D3-4FBD-AAC5-2178D16CB20B}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1299,22 +1130,17 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">10:52 AM</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 19px;"><a href="https://www.youtube.com/watch?v=-U-uj1jaHtk" style="">Is Mexico safe for shooting Street Photography?</a></p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: 200px; max-width: 356px;" /></div>
+<div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: 200px; max-width: 356px;"></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Quick Notes 1`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Quick Notes</title>
     <style>
@@ -1370,7 +1196,7 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
         
     </ul>
 </nav>
-<iframe src="" frameborder="0" name="content" class="content"></iframe>
+
 
 <style>
     .l2 { padding: 10px 20px 10px 40px }
@@ -1379,34 +1205,10 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
     .l5 { padding: 10px 20px 10px 100px }
     li.-error a { color: #C11; font-weight: bold; }
 </style>
-<script>
-    document.addEventListener('click', function (event) {
-        // If the clicked element doesn't have the right selector, bail
-        if (!event.target.matches('nav a')) return;
-        for (const child of event.target.parentElement.parentElement.children) {
-            child.classList.remove('active');
-        }
-        event.target.parentElement.classList.add('active');
 
-    }, false);
 
-    window.addEventListener('message', (event) => {
-        const activeTarget = event.data;
 
-        for (const link of document.querySelectorAll('nav ul li a')) {
-            if (link.href === activeTarget) {
-                link.parentElement.classList.add('active');
-            }
-        }
-    });
-
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-
-</body>
-</html>"
+</body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should support importing .one files that contain checkboxes 1`] = `
@@ -1414,7 +1216,7 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>Test Todo : cases à cocher lien vers doc sur partage</title>
-    <meta name="X-Original-Page-Id" content="{A51D95CD-67AF-43D6-9E5B-1A83068EA7AC}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1454,11 +1256,7 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 </ul></li>
 </ul></div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
@@ -1468,7 +1266,7 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <html lang="en"><head>
     <meta charset="UTF-8">
     <title>Marketing Funnel &amp; Training</title>
-    <meta name="X-Original-Page-Id" content="{23857BB4-B769-4A90-931A-68122AAC3AF4}">
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1491,22 +1289,17 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <div class="outline-element" style="margin-left: 0px;"><p style="color: rgb(91,155,213); font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">Training</p></div>
 </div><img style="height: 170px; left: 57px; overflow: visible; position: absolute; top: 435px; width: 310px;" src=":/id-here">
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
+
 
 </body></html>"
 `;
 
 exports[`InteropService_Importer_OneNote should use default value for EntityGuid and InkBias if not found 2`] = `
-"<!DOCTYPE html>
-<html lang="en">
-<head>
+"<!DOCTYPE HTML>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <title>Decrease support costs</title>
-    <meta name="X-Original-Page-Id" content="{375A5D06-249C-574E-8439-23CEAA489035}"/>
+    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1520,7 +1313,7 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Decrease support costs</span></div>
 </div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt; line-height: 16px;">Saturday, October 10, 2015</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt; line-height: 16px;">11:15 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 88px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">One of the strategic goals of training <span style="font-style: italic; font-weight: bold;">must</span> be to decrease the cost of customer support. To do this training must teach customers to &quot;<span style="font-weight: bold;">do</span>&quot; not to &quot;know.&quot;  How many customers call asking to know something?</p></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 88px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">One of the strategic goals of training <span style="font-style: italic; font-weight: bold;">must</span> be to decrease the cost of customer support. To do this training must teach customers to "<span style="font-weight: bold;">do</span>" not to "know."  How many customers call asking to know something?</p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
@@ -1531,11 +1324,7 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 </div>
 
-<script>
-    if (window.parent !== null) {
-        window.parent.postMessage(window.location.href, '*');
-    }
-</script>
-</body>
-</html>"
+
+
+</body></html>"
 `;

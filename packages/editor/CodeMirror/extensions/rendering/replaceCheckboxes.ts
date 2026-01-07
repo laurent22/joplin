@@ -7,16 +7,26 @@ const checkboxClassName = 'cm-ext-checkbox-toggle';
 
 
 class CheckboxWidget extends WidgetType {
-	public constructor(private checked: boolean, private depth: number, private label: string) {
+	public constructor(
+		private checked: boolean,
+		private depth: number,
+		private label: string,
+		private markup: string,
+	) {
 		super();
 	}
 
 	public eq(other: CheckboxWidget) {
-		return other.checked === this.checked && other.depth === this.depth && other.label === this.label;
+		return other.checked === this.checked
+			&& other.depth === this.depth
+			&& other.label === this.label
+			&& other.markup === this.markup;
 	}
 
 	private applyContainerClasses(container: HTMLElement) {
 		container.classList.add(checkboxClassName);
+		// For sizing: Should have the same font/styles as non-rendered checkboxes:
+		container.classList.add('cm-taskMarker');
 
 		for (const className of [...container.classList]) {
 			if (className.startsWith('-depth-')) {
@@ -30,11 +40,17 @@ class CheckboxWidget extends WidgetType {
 	public toDOM(view: EditorView) {
 		const container = document.createElement('span');
 
+		const sizingNode = document.createElement('span');
+		sizingNode.classList.add('sizing');
+		sizingNode.textContent = this.markup;
+		container.appendChild(sizingNode);
+
 		const checkbox = document.createElement('input');
 		checkbox.type = 'checkbox';
 		checkbox.checked = this.checked;
 		checkbox.ariaLabel = this.label;
 		checkbox.title = this.label;
+		checkbox.classList.add('content');
 		container.appendChild(checkbox);
 
 		checkbox.oninput = () => {
@@ -67,14 +83,28 @@ const completedListItemDecoration = Decoration.line({ class: completedTaskClassN
 const replaceCheckboxes = [
 	EditorView.theme({
 		[`& .${checkboxClassName}`]: {
-			'& > input': {
-				width: '1.1em',
-				height: '1.1em',
-				margin: '4px',
-				verticalAlign: 'middle',
+			position: 'relative',
+
+			'& > .sizing': {
+				visibility: 'hidden',
 			},
-			'&:not(.-depth-1) > input': {
-				marginInlineStart: 0,
+
+			'& > .content': {
+				position: 'absolute',
+				left: '0',
+				right: '0',
+				top: '0',
+				bottom: '0',
+
+				// Center it:
+				marginLeft: 'auto',
+				marginRight: 'auto',
+
+				// A small margin seems to be necessary to align the checkbox
+				// with the list item marker. Use percents so that the relative
+				// size adjusts with the font size/line height.
+				marginTop: '15%',
+				marginBottom: '10%',
 			},
 		},
 		[`& .${completedTaskClassName}`]: {
@@ -101,8 +131,14 @@ const replaceCheckboxes = [
 			if (node.name === 'TaskMarker') {
 				const containerLine = state.doc.lineAt(node.from);
 				const labelText = state.doc.sliceString(node.to, containerLine.to);
+				const markerText = state.doc.sliceString(node.from, node.to);
 
-				return new CheckboxWidget(markerIsChecked(node), parentTags.get('ListItem') ?? 0, labelText);
+				return new CheckboxWidget(
+					markerIsChecked(node),
+					parentTags.get('ListItem') ?? 0,
+					labelText,
+					markerText,
+				);
 			} else if (node.name === 'Task') {
 				const marker = node.node.getChild('TaskMarker');
 				if (marker && markerIsChecked(marker)) {
@@ -119,7 +155,7 @@ const replaceCheckboxes = [
 					return null;
 				}
 
-				return [listMarker.from, node.to];
+				return [node.from, node.to];
 			} else if (node.name === 'Task') {
 				const taskLine = state.doc.lineAt(node.from);
 				return [taskLine.from];

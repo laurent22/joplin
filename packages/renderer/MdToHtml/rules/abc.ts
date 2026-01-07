@@ -52,25 +52,33 @@ const plugin = (markdownIt: MarkdownIt, ruleOptions: any) => {
 		const token = tokens[idx];
 		if (token.info !== 'abc') return defaultRender(tokens, idx, options, env, self);
 
+		const escapeHtml = markdownIt.utils.escapeHtml;
+
 		ruleOptions.context.pluginWasUsed.abc = true;
 
 		try {
 			const parsed = parseAbcContent(token.content);
 			const globalOptions = ruleOptions.globalSettings ? parseGlobalOptions(ruleOptions.globalSettings['markdown.plugin.abc.options']) : {};
-			const contentHtml = markdownIt.utils.escapeHtml(parsed.markup.trim());
-			const optionsHtml = markdownIt.utils.escapeHtml(JSON.stringify({
+			const content = parsed.markup.trim();
+			const contentHtml = escapeHtml(content);
+			const optionsHtml = escapeHtml(JSON.stringify({
 				...globalOptions,
 				...parsed.options,
 			}));
 
+			const sourceContentLines: string[] = [];
+			if (parsed.options && Object.keys(parsed.options).length) sourceContentLines.push(JSON5.stringify(parsed.options));
+			sourceContentLines.push(content);
+			const sourceContentHtml = escapeHtml(sourceContentLines.join('\n---\n'));
+
 			return `
 				<div class="joplin-editable joplin-abc-notation">
-					<pre class="joplin-source" data-abc-options="${optionsHtml}" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
+					<pre class="joplin-source" data-abc-options="${optionsHtml}" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${sourceContentHtml}</pre>
 					<pre class="joplin-rendered joplin-abc-notation-rendered">${contentHtml}</pre>
 				</div>
 			`;
 		} catch (error) {
-			return `<div class="inline-code">${markdownIt.utils.escapeHtml(error.message)}</div}>`;
+			return `<div class="inline-code">${escapeHtml(error.message)}</div}>`;
 		}
 	};
 };
