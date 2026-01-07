@@ -41,7 +41,7 @@ describe('showCreateEditorPrompt', () => {
 		showCreateEditablePrompt({
 			source: '```\ntest\n```',
 			inline: false,
-			cursor: 4,
+			cursor: 8,
 		})(editor.state, editor.dispatch, editor);
 
 		const dialog = findEditorDialog();
@@ -57,5 +57,17 @@ describe('showCreateEditorPrompt', () => {
 				},
 			}],
 		});
+	});
+
+	test('should position the cursor at the provided location', () => {
+		const editor = createEditor('');
+		showCreateEditablePrompt({
+			source: '```\n\n```',
+			inline: false,
+			cursor: 4,
+		})(editor.state, editor.dispatch, editor);
+
+		const dialog = findEditorDialog();
+		expect(dialog.editor.selectionStart).toBe(4);
 	});
 });
