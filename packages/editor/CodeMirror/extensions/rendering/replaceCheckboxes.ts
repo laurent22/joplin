@@ -104,7 +104,7 @@ const replaceCheckboxes = [
 			},
 		},
 		[`& .${checkboxClassName}`]: {
-			verticalAlign: 'baseline',
+			verticalAlign: 'middle',
 
 			// Ensure that the checkbox grows as the font size increases:
 			width: '100%',
@@ -112,7 +112,7 @@ const replaceCheckboxes = [
 
 			// Shift the checkbox slightly so that it's aligned with the list item bullet point
 			margin: '0',
-			marginTop: '3px',
+			marginBottom: '3px',
 		},
 		[`& .${completedTaskClassName}`]: {
 			opacity: 0.69,
