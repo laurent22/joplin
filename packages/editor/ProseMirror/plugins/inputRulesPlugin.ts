@@ -196,6 +196,12 @@ const inputRulesExtension = [
 			onReplace: (match) => match[1],
 			marks: [schema.marks.emphasis],
 		}),
+		makeInputRule({
+			contentRegex: `\`(${inlineContentExp})\``,
+			commitCharacter: '`',
+			onReplace: (match) => match[1],
+			marks: [schema.marks.code],
+		}),
 	], /[ .,?)!;]/),
 ];
 export default inputRulesExtension;
