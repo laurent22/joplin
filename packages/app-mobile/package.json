@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@bam.tech/react-native-image-resizer": "3.0.11",
+    "@dr.pogodin/react-native-fs": "2.36.2",
     "@joplin/editor": "~3.5",
     "@joplin/lib": "~3.5",
     "@joplin/react-native-alarm-notification": "~3.5",
@@ -63,7 +64,6 @@
     "react-native-dropdownalert": "5.2.0",
     "react-native-exit-app": "2.0.0",
     "react-native-file-viewer": "2.1.5",
-    "react-native-fs": "2.20.0",
     "react-native-get-random-values": "1.11.0",
     "react-native-image-picker": "8.2.1",
     "react-native-localize": "3.5.2",
@@ -104,9 +104,9 @@
     "@react-native-community/cli": "16.0.3",
     "@react-native-community/cli-platform-android": "16.0.3",
     "@react-native-community/cli-platform-ios": "16.0.3",
-    "@react-native/babel-preset": "0.80.1",
-    "@react-native/metro-config": "0.79.5",
-    "@react-native/typescript-config": "0.80.2",
+    "@react-native/babel-preset": "0.81.5",
+    "@react-native/metro-config": "0.81.5",
+    "@react-native/typescript-config": "0.81.5",
     "@sqlite.org/sqlite-wasm": "3.46.0-build2",
     "@testing-library/react-native": "13.2.0",
     "@types/fs-extra": "11.0.4",
@@ -157,7 +157,6 @@
     },
     "install": {
       "exclude": [
-        "react-native@~0.76.6",
         "react-native-reanimated@~3.16.1",
         "react-native-gesture-handler@~2.20.0",
         "react-native-screens@~4.4.0",
