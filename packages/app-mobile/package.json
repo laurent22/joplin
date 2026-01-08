@@ -5,7 +5,7 @@
   "version": "3.5.0",
   "private": true,
   "scripts": {
-    "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start --reset-cache",
+    "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start",
     "android": "react-native run-android",
     "build": "NO_FLIPPER=1 gulp build",
     "web": "webpack --mode production --config ./web/webpack.config.ts --progress && cp -r ./web/public/* ./web/dist/",
@@ -145,6 +145,14 @@
     "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.2.2"
+  },
+  "codegenConfig": {
+    "name": "AppSpecs",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "net.cozic.joplin.specs"
+    }
   },
   "engines": {
     "node": ">=18"

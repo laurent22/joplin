@@ -29,7 +29,6 @@ class MainApplication : Application(), ReactApplication {
                     add(SharePackage())
                     add(SslPackage())
                     add(SystemVersionInformationPackage())
-                    add(SpeechToTextPackage())
                 }
 
             override fun getJSMainModuleName(): String = ".expo/.virtual-metro-entry"

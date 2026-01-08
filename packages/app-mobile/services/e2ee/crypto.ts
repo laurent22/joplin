@@ -71,7 +71,7 @@ const crypto: Crypto = {
 
 	digest: async (algorithm: Digest, data: Uint8Array) => {
 		const hash = QuickCrypto.createHash(digestNameMap[algorithm]);
-		hash.update(data);
+		hash.update(data as unknown as ArrayBuffer); // Cast: hash.update accepts TypedArrays
 		return hash.digest();
 	},
 
