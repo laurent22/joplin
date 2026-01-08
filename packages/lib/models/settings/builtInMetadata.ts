@@ -1118,7 +1118,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => `${_('Enable file:// URLs for images and videos')}${wysiwygYes}`,
 		},
 
-		'markdown.plugin.abc.options': { storage: SettingStorage.File, isGlobal: true, value: '', type: SettingItemType.String, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('ABC musical notation: Options')}${wysiwygNo}`, description: () => _('Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %1', 'https://paulrosen.github.io/abcjs/visual/render-abc-options.html') },
+		'markdown.plugin.abc.options': { storage: SettingStorage.File, isGlobal: true, value: '', type: SettingItemType.String, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('ABC musical notation: Options')}${wysiwygNo}`, description: () => _('Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s', 'https://paulrosen.github.io/abcjs/visual/render-abc-options.html') },
 
 		// Tray icon (called AppIndicator) doesn't work in Ubuntu
 		// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html

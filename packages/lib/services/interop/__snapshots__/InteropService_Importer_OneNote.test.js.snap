@@ -2,7 +2,7 @@
 
 exports[`InteropService_Importer_OneNote should apply position data for embedded files: EmbeddedFiles 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Embedded doc sheet</title>
     
@@ -102,7 +102,7 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 
 exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: title 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>title</title>
     
@@ -193,7 +193,7 @@ Integral identities (see https://en.wikipedia.org/wiki/Lists_of_integrals), belo
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>A page can have any width it wants?</title>
     
@@ -222,7 +222,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page with a lot of svgs 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>A page with a lot of svgs</title>
     
@@ -249,7 +249,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page with text and drawing above it 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>A page with text and drawing above it</title>
     
@@ -282,7 +282,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A simple filename 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>A simple filename</title>
     
@@ -309,7 +309,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Page with more than one font size 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Page with more than one font size</title>
     
@@ -422,7 +422,7 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 
 exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: text 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>text</title>
     
@@ -734,7 +734,7 @@ exports[`InteropService_Importer_OneNote should extract svgs 2`] = `
 
 exports[`InteropService_Importer_OneNote should ignore broken characters at the start of paragraph 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Action research - Wikipedia</title>
     
@@ -793,7 +793,7 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
 
 exports[`InteropService_Importer_OneNote should import a simple OneNote notebook: Page title 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Page title</title>
     
@@ -899,7 +899,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Qui
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tips from a Pro Using Trees for Dramatic Landscape Photography 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Tips from a Pro: Using Trees for Dramatic Landscape Photography</title>
     
@@ -926,7 +926,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tip
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: wikipedia link 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>wikipedia link</title>
     
@@ -953,7 +953,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景  (Web view) 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>风景  (Web view)</title>
     
@@ -980,7 +980,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 
 exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>风景</title>
     
@@ -1006,7 +1006,7 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 
 exports[`InteropService_Importer_OneNote should render audio as links to resource: My title 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>My title</title>
     
@@ -1111,7 +1111,7 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
 
 exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Is Mexico safe for shooting Street Photography 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Is Mexico safe for shooting Street Photography?</title>
     
@@ -1213,7 +1213,7 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
 
 exports[`InteropService_Importer_OneNote should support importing .one files that contain checkboxes 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Test Todo : cases à cocher lien vers doc sur partage</title>
     
@@ -1263,7 +1263,7 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 
 exports[`InteropService_Importer_OneNote should use default value for EntityGuid and InkBias if not found 1`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Marketing Funnel &amp; Training</title>
     
@@ -1296,7 +1296,7 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 
 exports[`InteropService_Importer_OneNote should use default value for EntityGuid and InkBias if not found 2`] = `
 "<!DOCTYPE HTML>
-<html lang="en"><head>
+<html><head>
     <meta charset="UTF-8">
     <title>Decrease support costs</title>
     

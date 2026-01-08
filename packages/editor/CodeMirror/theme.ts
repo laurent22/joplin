@@ -86,6 +86,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 	const baseHeadingStyle = {
 		fontWeight: 'bold',
 		fontFamily: theme.fontFamily,
+		paddingBottom: '0.2em',
 	};
 
 	const codeMirrorTheme = EditorView.theme({
@@ -210,7 +211,12 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		// small.
 		'& .cm-h1': {
 			...baseHeadingStyle,
-			fontSize: '1.6em',
+			fontSize: '1.5em',
+		},
+		// Only underline level 1 headings not in block quotes. The underline overlaps with the blockquote border.
+		'& .cm-h1:not(.cm-blockQuote)': {
+			borderBottom: `1px solid ${theme.dividerColor}`,
+			marginBottom: '0.1em',
 		},
 		'& .cm-h2': {
 			...baseHeadingStyle,

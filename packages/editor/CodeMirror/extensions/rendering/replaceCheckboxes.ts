@@ -3,7 +3,8 @@ import { SyntaxNodeRef } from '@lezer/common';
 import makeReplaceExtension from './utils/makeInlineReplaceExtension';
 import toggleCheckboxAt from '../../utils/markdown/toggleCheckboxAt';
 
-const checkboxClassName = 'cm-ext-checkbox-toggle';
+const checkboxContainerClassName = 'cm-ext-checkbox-toggle';
+const checkboxClassName = 'cm-ext-checkbox';
 
 
 class CheckboxWidget extends WidgetType {
@@ -24,7 +25,7 @@ class CheckboxWidget extends WidgetType {
 	}
 
 	private applyContainerClasses(container: HTMLElement) {
-		container.classList.add(checkboxClassName);
+		container.classList.add(checkboxContainerClassName);
 		// For sizing: Should have the same font/styles as non-rendered checkboxes:
 		container.classList.add('cm-taskMarker');
 
@@ -45,13 +46,17 @@ class CheckboxWidget extends WidgetType {
 		sizingNode.textContent = this.markup;
 		container.appendChild(sizingNode);
 
+		const checkboxWrapper = document.createElement('span');
+		checkboxWrapper.classList.add('content');
+		container.appendChild(checkboxWrapper);
+
 		const checkbox = document.createElement('input');
 		checkbox.type = 'checkbox';
 		checkbox.checked = this.checked;
 		checkbox.ariaLabel = this.label;
 		checkbox.title = this.label;
-		checkbox.classList.add('content');
-		container.appendChild(checkbox);
+		checkbox.classList.add(checkboxClassName);
+		checkboxWrapper.appendChild(checkbox);
 
 		checkbox.oninput = () => {
 			toggleCheckboxAt(view.posAtDOM(container))(view);
@@ -82,7 +87,7 @@ const completedListItemDecoration = Decoration.line({ class: completedTaskClassN
 
 const replaceCheckboxes = [
 	EditorView.theme({
-		[`& .${checkboxClassName}`]: {
+		[`& .${checkboxContainerClassName}`]: {
 			position: 'relative',
 
 			'& > .sizing': {
@@ -95,17 +100,19 @@ const replaceCheckboxes = [
 				right: '0',
 				top: '0',
 				bottom: '0',
-
-				// Center it:
-				marginLeft: 'auto',
-				marginRight: 'auto',
-
-				// A small margin seems to be necessary to align the checkbox
-				// with the list item marker. Use percents so that the relative
-				// size adjusts with the font size/line height.
-				marginTop: '15%',
-				marginBottom: '10%',
+				textAlign: 'center',
 			},
+		},
+		[`& .${checkboxClassName}`]: {
+			verticalAlign: 'middle',
+
+			// Ensure that the checkbox grows as the font size increases:
+			width: '100%',
+			minHeight: '70%',
+
+			// Shift the checkbox slightly so that it's aligned with the list item bullet point
+			margin: '0',
+			marginBottom: '3px',
 		},
 		[`& .${completedTaskClassName}`]: {
 			opacity: 0.69,
@@ -114,7 +121,7 @@ const replaceCheckboxes = [
 	EditorView.domEventHandlers({
 		mousedown: (event) => {
 			const target = event.target as Element;
-			if (target.nodeName === 'INPUT' && target.parentElement?.classList?.contains(checkboxClassName)) {
+			if (target.nodeName === 'INPUT' && target.classList?.contains(checkboxClassName)) {
 				// Let the checkbox handle the event
 				return true;
 			}

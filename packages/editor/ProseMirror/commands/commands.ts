@@ -135,9 +135,12 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 			if (view) {
 				const selectedText = getTextBetween(state.doc, state.selection.from, state.selection.to);
 				const content = selectedText || '...';
-				return showCreateEditablePrompt(
-					block ? `$$\n\t${content}\n$$` : `$${content}$`, !block,
-				)(state, dispatch, view);
+				const blockStart = block ? '$$\n\t' : '$';
+				return showCreateEditablePrompt({
+					source: block ? `${blockStart}${content}\n$$` : `${blockStart}${content}$`,
+					inline: !block,
+					cursor: blockStart.length,
+				})(state, dispatch, view);
 			}
 			return true;
 		}
@@ -180,10 +183,13 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 		return true;
 	},
 	[EditorCommandType.InsertCodeBlock]: (state, dispatch, view) => {
+		const sourceBlockStart = '```\n';
 		const selectedText = getTextBetween(state.doc, state.selection.from, state.selection.to);
-		return showCreateEditablePrompt(
-			`\`\`\`\n${selectedText}\n\`\`\``, false,
-		)(state, dispatch, view);
+		return showCreateEditablePrompt({
+			source: `${sourceBlockStart}${selectedText}\n\`\`\``,
+			inline: false,
+			cursor: sourceBlockStart.length,
+		})(state, dispatch, view);
 	},
 	[EditorCommandType.ToggleSearch]: (state, dispatch, view) => {
 		const command = setSearchVisible(!getSearchVisible(state));
