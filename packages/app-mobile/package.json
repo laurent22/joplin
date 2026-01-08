@@ -101,9 +101,9 @@
     "@joplin/turndown": "~4.0.80",
     "@joplin/turndown-plugin-gfm": "~1.0.62",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.0",
-    "@react-native-community/cli": "16.0.3",
-    "@react-native-community/cli-platform-android": "16.0.3",
-    "@react-native-community/cli-platform-ios": "16.0.3",
+    "@react-native-community/cli": "20.0.0",
+    "@react-native-community/cli-platform-android": "20.0.0",
+    "@react-native-community/cli-platform-ios": "20.0.0",
     "@react-native/babel-preset": "0.81.5",
     "@react-native/metro-config": "0.81.5",
     "@react-native/typescript-config": "0.81.5",
@@ -112,7 +112,7 @@
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/node": "18.19.130",
-    "@types/react": "~19.1.10",
+    "@types/react": "19.1.10",
     "@types/react-redux": "7.1.33",
     "@types/serviceworker": "0.0.157",
     "@types/tar-stream": "3.1.4",
@@ -133,7 +133,7 @@
     "react-dom": "19.1.0",
     "react-native-web": "0.21.1",
     "react-refresh": "0.17.0",
-    "react-test-renderer": "19.0.0",
+    "react-test-renderer": "19.1.0",
     "sharp": "0.34.4",
     "sqlite3": "5.1.6",
     "timers-browserify": "2.0.12",
@@ -155,7 +155,7 @@
     }
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "expo": {
     "autolinking": {

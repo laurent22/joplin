@@ -136,6 +136,10 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    buildFeatures {
+        prefab true // For Audio through "oboe"
+    }
 }
 
 dependencies {
@@ -147,4 +151,7 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Audio from C++
+    implementation 'com.google.oboe:oboe:1.10.0'
 }
