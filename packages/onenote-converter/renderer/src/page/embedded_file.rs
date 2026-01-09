@@ -25,10 +25,14 @@ impl<'a> Renderer<'a> {
 
         let file_type = Self::guess_type(file);
         match file_type {
-            // TODO: we still don't have support for the audio tag on html notes https://github.com/laurent22/joplin/issues/11939
+            // TODO: As of 01-06-2026, Joplin has limited or no support for <video> and <audio> elements in HTML notes.
+            // For example, <video> elements can only reference web URLs and <audio> elements aren't
+            // supported at all.
+            //
+            // See also: https://github.com/laurent22/joplin/issues/11939.
             // FileType::Audio => content = format!("<audio class=\"media-player media-audio\"controls><source src=\"{}\" type=\"audio/x-wav\"></source></audio>", filename),
-            FileType::Video => content = format!("<video controls src=\"{}\" {}></video>", filename, styles.to_html_attr()),
-            FileType::Unknown | FileType::Audio => {
+            // FileType::Video => content = format!("<video controls src=\"{}\" {}></video>", filename, styles.to_html_attr()),
+            FileType::Unknown | FileType::Audio | FileType::Video => {
                 styles.set("font-size", "11pt".into());
                 styles.set("line-height", "17px".into());
                 let style_attr = styles.to_html_attr();

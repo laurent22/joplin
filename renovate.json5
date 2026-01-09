@@ -75,6 +75,7 @@
 		"prosemirror-model",
 		"prosemirror-state",
 		"prosemirror-view",
+		"prosemirror-tables",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
@@ -234,6 +235,11 @@
 		"bat",
 
 		"react-test-renderer",
+
+		// Don't upgrade katex and mermaid automatically because we need to run
+		// `yarn buildAssets` after the package has been updated
+		"katex",
+		"mermaid",
 	],
 	"packageRules": [
 		// The React Monorepo rule appears to be automatically enabled, but the PR will usually fail

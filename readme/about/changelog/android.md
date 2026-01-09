@@ -1,5 +1,41 @@
 # Joplin Android Changelog
 
+## [android-v3.5.7](https://github.com/laurent22/joplin/releases/tag/android-v3.5.7) (Pre-release) - 2026-01-08T19:30:28Z
+
+- New: Rich Text Editor: Add shortcuts for inserting code blocks (#14055 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: In-editor rendering: Fix rendered checkboxes are very small on mobile (#14056 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Make header styles more closely match the note viewer (#14053) (#13753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Prevent layout shift when hiding/showing rendered checkboxes (#14044) (#13159 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @rollup/plugin-node-resolve (v16.0.2), katex (v0.16.23)
+- Fixed: Fix "Check synchronization configuration" button (#14031) (#14030 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix ABC Sheet Music setting includes "Translation error" in description (#14058) (#14049 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Images sometimes don't render until you click somewhere in the note (#14019) (#13963 by [@bwat47](https://github.com/bwat47))
+- Fixed: Insert time command not respecting locale settings (#13994) (#13229 by [@HIJOdelIDANII](https://github.com/HIJOdelIDANII))
+
+## [android-v3.5.6](https://github.com/laurent22/joplin/releases/tag/android-v3.5.6) (Pre-release) - 2025-12-27T20:34:44Z
+
+- Revert "All: Apache Tomcat WebDAV compatibility for sync (#13614)"
+
+## [android-v3.5.5](https://github.com/laurent22/joplin/releases/tag/android-v3.5.5) (Pre-release) - 2025-12-26T10:53:20Z
+
+- Improved: Update js-draw to v1.33.0 (#13990 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages react-native-webview (v13.16.0)
+- Fixed: Editor: Fix search/replace UI is partially off-screen on small-screen devices (#13978 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Feature flags: Fix "voice typing" feature flag (#13981 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.5.4](https://github.com/laurent22/joplin/releases/tag/android-v3.5.4) (Pre-release) - 2025-12-23T20:00:18Z
+
+- Improved: Accessibility: Dark mode: Improve contrast of conflicts notebook title, error messages in "Logs" (#13925 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Attempt to fix application hang when opening the camera (#13974 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Set the default math/code block content to the selection (#13952 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/datetimepicker (v8.4.5), @react-native-documents/picker (v10.1.7), esbuild (v0.25.10), expo (v53.0.23), fs-extra (v11.3.2), mermaid (v11.10.1), sass (v1.93.2), sharp (v0.34.4)
+- Improved: Viewer, Rich Text Editor: Save/restore the cursor and scroll position when switching notes (#13962) (#520 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix `react-native-vector-icons` error when opening a note (#13975 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix some icons are invisible: Upgrade `react-native-vector-icons` to v12 (#13905) (#13854 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix checklists saved with extra space (#13951) (#13081 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix indent/de-indent buttons do nothing when not in a list (#13961 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Toolbar editor: Fix toolbar editor dismiss button is rendered outside the dialog on small screens (#13976 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.5.3](https://github.com/laurent22/joplin/releases/tag/android-v3.5.3) (Pre-release) - 2025-12-14T13:46:02Z
 
 - New: Add a link to the list of open-source licenses (5caec16)

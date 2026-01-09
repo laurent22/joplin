@@ -16,9 +16,10 @@ const customCssFilePath = (Setting: typeof SettingType, filename: string): strin
 	return `${Setting.value('rootProfileDir')}/${filename}`;
 };
 
-const showVoiceTypingSettings = () => (
+type VoiceTypingSettingSlice = Record<'buildFlag.voiceTypingEnabled', boolean>;
+const showVoiceTypingSettings = (settings: VoiceTypingSettingSlice) => (
 	// For now, iOS and web don't support voice typing.
-	shim.mobilePlatform() === 'android'
+	shim.mobilePlatform() === 'android' && !!settings['buildFlag.voiceTypingEnabled']
 );
 
 export enum CameraDirection {
@@ -1117,7 +1118,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => `${_('Enable file:// URLs for images and videos')}${wysiwygYes}`,
 		},
 
-		'markdown.plugin.abc.options': { storage: SettingStorage.File, isGlobal: true, value: '', type: SettingItemType.String, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('ABC musical notation: Options')}${wysiwygNo}`, description: () => _('Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %1', 'https://paulrosen.github.io/abcjs/visual/render-abc-options.html') },
+		'markdown.plugin.abc.options': { storage: SettingStorage.File, isGlobal: true, value: '', type: SettingItemType.String, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('ABC musical notation: Options')}${wysiwygNo}`, description: () => _('Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s', 'https://paulrosen.github.io/abcjs/visual/render-abc-options.html') },
 
 		// Tray icon (called AppIndicator) doesn't work in Ubuntu
 		// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -1907,6 +1908,25 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		// As of December 2025, the voice typing feature doesn't work well on low-resource devices.
+		// There have been requests to allow disabling the voice typing feature at build time. This
+		// feature flag allows doing so, by changing the default `value` from `true` to `false`:
+		'buildFlag.voiceTypingEnabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Mobile],
+			label: () => 'Voice typing: Enable the voice typing feature',
+		},
+
+		'buildFlag.ui.disableSmallScreenIncompatibleFeatures': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Mobile],
+			label: () => 'UI: Disable features known to be incompatible with small screens',
+		},
+
 		'survey.webClientEval2025.progress': {
 			value: SurveyProgress.NotStarted,
 			type: SettingItemType.Int,
@@ -1971,7 +1991,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Mobile],
 			label: () => _('Voice typing: Glossary'),
 			description: () => _('A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.'),
-			show: () => showVoiceTypingSettings(),
+			show: showVoiceTypingSettings,
 			section: 'note',
 		},
 

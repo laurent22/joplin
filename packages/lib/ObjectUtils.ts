@@ -1,5 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function sortByValue(object: any) {
+type AnyObject = Record<string|symbol, unknown>;
+
+type SortableValue = string|number;
+type SortableObject = Record<string, SortableValue>;
+
+export function sortByValue<T extends SortableObject>(object: T): T {
 	const temp = [];
 	for (const k in object) {
 		if (!object.hasOwnProperty(k)) continue;
@@ -10,8 +14,8 @@ export function sortByValue(object: any) {
 	}
 
 	temp.sort((a, b) => {
-		let v1 = a.value;
-		let v2 = b.value;
+		let v1: SortableValue = a.value;
+		let v2: SortableValue = b.value;
 		if (typeof v1 === 'string') v1 = v1.toLowerCase();
 		if (typeof v2 === 'string') v2 = v2.toLowerCase();
 		if (v1 === v2) return 0;
@@ -28,8 +32,7 @@ export function sortByValue(object: any) {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function fieldsEqual(o1: any, o2: any) {
+export function fieldsEqual(o1: AnyObject, o2: AnyObject) {
 	if ((!o1 || !o2) && o1 !== o2) return false;
 
 	for (const k in o1) {
@@ -45,8 +48,11 @@ export function fieldsEqual(o1: any, o2: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function convertValuesToFunctions(o: any) {
+type ValuesToFunctions<T extends AnyObject> = {
+	[k in keyof T]: T[k] extends ()=> unknown ? T[k] : ()=> T[k]
+};
+
+export function convertValuesToFunctions<T extends AnyObject>(o: T): ValuesToFunctions<T> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const output: any = {};
 	for (const n in o) {
@@ -58,8 +64,7 @@ export function convertValuesToFunctions(o: any) {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function isEmpty(o: any) {
+export function isEmpty(o: AnyObject|null) {
 	if (!o) return true;
 	return Object.keys(o).length === 0 && o.constructor === Object;
 }

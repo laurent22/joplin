@@ -27,7 +27,7 @@ interface WrapperProps {
 	noteBody: string;
 	highlightedKeywords?: string[];
 	noteResources?: Record<string, ResourceInfo>;
-	onScroll?: (percent: number)=> void;
+	onScroll?: ()=> void;
 	onMarkForDownload?: OnMarkForDownloadCallback;
 }
 
@@ -52,7 +52,7 @@ const WrappedNoteViewer: React.FC<WrapperProps> = (
 			highlightedKeywords={highlightedKeywords}
 			noteResources={noteResources}
 			paddingBottom={0}
-			initialScroll={0}
+			initialScrollPercent={0}
 			noteHash={''}
 			onMarkForDownload={onMarkForDownload}
 			onScroll={onScroll}

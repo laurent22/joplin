@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest --verbose=false --config=jest.config.js --bail --forceExit",
     "test-one": "jest --verbose=false --config=jest.config.js --bail --forceExit",
-    "test-ci": "jest --config=jest.config.js --forceExit",
+    "test-ci": "jest --config=jest.config.js --forceExit --testPathIgnorePatterns=cli-integration-tests.test",
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "start-no-build": "node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",

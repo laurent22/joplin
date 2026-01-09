@@ -171,6 +171,11 @@ interface UserSettingMigration {
 	isPluginSetting: boolean;
 }
 
+interface SubValuesOptions {
+	includeBaseKeyInName?: boolean;
+	includeConstants?: boolean;
+}
+
 const userSettingMigration: UserSettingMigration[] = [
 	{
 		oldName: 'spellChecker.language',
@@ -1100,18 +1105,29 @@ class Setting extends BaseModel {
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: any = null) {
+	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: SubValuesOptions|null = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
+
+		const subKey = (key: string) => {
+			return includeBaseKeyInName ? key : key.substring(baseKey.length + 1);
+		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
-		for (const key in settings) {
-			if (!settings.hasOwnProperty(key)) continue;
-			if (key.indexOf(baseKey) === 0) {
-				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
-				output[subKey] = settings[key];
+		for (const [key, value] of Object.entries(settings)) {
+			if (key.startsWith(baseKey)) {
+				output[subKey(key)] = value;
 			}
 		}
+
+		if (options?.includeConstants) {
+			for (const [key, value] of Object.entries(this.constants_)) {
+				if (key.startsWith(baseKey)) {
+					output[subKey(key)] = value;
+				}
+			}
+		}
+
 		return output;
 	}
 

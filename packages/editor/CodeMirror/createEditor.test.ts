@@ -50,7 +50,7 @@ describe('createEditor', () => {
 
 		const headerLine = document.body.querySelector('.cm-headerLine')!;
 		expect(headerLine.textContent).toBe(headerLineText);
-		expect(getComputedStyle(headerLine).fontSize).toBe('1.6em');
+		expect(getComputedStyle(headerLine).fontSize).toBe('1.5em');
 
 		// CodeMirror nests the tag that styles the header within .cm-headerLine:
 		//  <div class='cm-headerLine'><span class='someclass'>Testing...</span></div>

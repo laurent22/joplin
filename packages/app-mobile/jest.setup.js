@@ -114,10 +114,7 @@ jest.doMock('@expo/vector-icons/MaterialCommunityIcons', () => {
 
 const mockIconLibrary = (libraryName, exportName) => {
 	jest.doMock(libraryName, () => {
-		const MockIconComponent = class extends require('react-native').View {
-			// Used by the renderer
-			static getImageSourceSync = () => ({ uri: '' });
-		};
+		const MockIconComponent = require('react-native').View;
 		return {
 			default: MockIconComponent,
 			[exportName]: MockIconComponent,
