@@ -48,4 +48,5 @@ The Web Clipper service can be used to create, modify or delete notes, notebooks
 ## Video tutorial
 
 Watch this short video to learn how to install and use the web clipper:
+
 [![Watch the video](https://img.youtube.com/vi/jeWTF2BILEI/hqdefault.jpg)](https://www.youtube.com/watch?v=jeWTF2BILEI)
