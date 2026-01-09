@@ -5,5 +5,6 @@
 To use it, go to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md), then to the Synchronisation section. In the list of sync targets, select "Joplin Cloud". Enter your email and password, and you're ready to use Joplin Cloud.
 
 ## Video tutorial
-For a video tutorial on how to setup Joplin Cloud synchronisation please click on the thumbnail:
+Watch this short video to learn how to setup Joplin Cloud synchronisation:
+
 [![Watch the video](https://img.youtube.com/vi/AxKKxTBO8go/hqdefault.jpg)](https://www.youtube.com/watch?v=AxKKxTBO8go)
