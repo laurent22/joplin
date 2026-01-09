@@ -20,7 +20,9 @@ Joplin supports inserting and editing drawings. On mobile, this is built in. On 
 
 Clicking "Draw picture" adds a new drawing to the note. When Joplin's note viewer is open, drawings are added to the end of the note. In editing mode, drawings are added at the cursor.
 
-For a video tutorial on how to add a drawing to a note on mobile app click on the thumbnail:
+### Video tutorial
+
+Watch this short video to learn how to add a drawing to a note on mobile app:
 [![Watch the video](https://img.youtube.com/vi/B21GpLXbGWE/hqdefault.jpg)](https://www.youtube.com/watch?v=B21GpLXbGWE)
 
 ### Editing an existing drawing
@@ -52,7 +54,9 @@ Double-click on an existing drawing to edit it:
 
 For more ways to edit existing drawings on desktop, see the [Freehand Drawing plugin's FAQ](https://joplinapp.org/plugins/plugin/io.github.personalizedrefrigerator.js-draw/#faq).
 
-For a video tutorial on how to add a drawing to a note on desktop app click on the thumbnail:
+### Video tutorial
+
+Watch this short video to learn how to add a drawing to a note on desktop app click on the thumbnail:
 [![Watch the video](https://img.youtube.com/vi/TK1RhTlgAlA/hqdefault.jpg)](https://www.youtube.com/watch?v=TK1RhTlgAlA)
 
 ## The editor
