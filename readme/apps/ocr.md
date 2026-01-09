@@ -24,9 +24,9 @@ The application allows you to view the OCR text associated with an image. To do 
 
 ![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/view_ocr_text.png)
 
-## Video Tutorial
+## Video tutorial
 
-For a video tutorial on how to OCR in Joplin please click on the thumbnail:
+Watch this short video to learn how to use the OCR in Joplin:
 
 [![Watch the video](https://img.youtube.com/vi/kmNsWo2KlF8/hqdefault.jpg)](https://www.youtube.com/watch?v=kmNsWo2KlF8)
 
