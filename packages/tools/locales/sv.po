@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# Jonatan Nyberg, 2023, 2024, 2025.
+# Jonatan Nyberg, 2023, 2024, 2025, 2026.
 #
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -3125,19 +3125,20 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"För att göra detta måste all din datauppsättning vara krypterad och "
-"synkroniserad, det är bäst köra processen över natten.\n"
+"För att göra det måste hela din datamängd krypteras och synkroniseras, så "
+"det är bäst att köra den över natten.\n"
 "\n"
-"För att starta processen, följ dessa instruktioner:\n"
+"För att börja, följ dessa instruktioner:\n"
 "\n"
-"1. Synkronisera alla dina enheter.\\n\n"
-"2. Klicka \\\"%s\\\"\n"
-"3. Låt den köra färdigt. Medan den kör, undvik att göra ändringar i några "
-"anteckningar på dina andra enheter för att undvika konflikter.\n"
-"4. När synkroniseringen är färdig på denna enhet, synkronisera alla dina "
-"andra enheter och låt processen köra färdigt.\n"
+"1. Synkronisera alla dina enheter.\n"
+"2. Klicka på \"%s\".\n"
+"3. Låt den köras tills den är klar. Undvik att ändra några anteckningar på "
+"dina andra enheter medan den körs, för att undvika konflikter.\n"
 "\n"
-"Viktigt: du behöver bara köra denna process EN gång på en enhet."
+"4. När synkroniseringen är klar på den här enheten, synkronisera alla dina "
+"andra enheter och låt den köras tills den är klar.\n"
+"\n"
+"Viktigt: du behöver bara köra detta EN GÅNG på en enhet."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:499
 msgid "In order to synchronise, please upgrade your application to version %s+"
