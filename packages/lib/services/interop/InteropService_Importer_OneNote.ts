@@ -110,7 +110,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			try {
 				await oneNoteConverter(notebookFilePath, resolve(outputDirectory2), notebookBaseDir);
 			} catch (error) {
-				this.options_.onError?.(error);
+				// Forward only the error message. Usually the stack trace is useless or very difficult to use.
+				this.options_.onError?.(error.message ?? error);
 				console.error(error);
 			}
 		}
