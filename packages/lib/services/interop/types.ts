@@ -49,7 +49,8 @@ export interface ImportOptions {
 	// Only supported by some importers.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onProgress?: (progressState: any, progress?: any)=> void;
-	onError?: (error: string|Error)=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	onError?: (error: any)=> void;
 	domParser?: DOMParser;
 	xmlSerializer?: XMLSerializer;
 
