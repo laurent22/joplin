@@ -185,6 +185,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Hakkında"
 	],
@@ -467,6 +470,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Kalın"
 	],
@@ -605,6 +611,9 @@
 	"Checking... Please wait.": [
 		"Kontrol ediliyor... Lütfen bekleyin."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Bir seçim yap"
 	],
@@ -671,9 +680,6 @@
 	"Code View": [
 		"Kod Görünümü"
 	],
-	"Code:": [
-		"Kod:"
-	],
 	"Collaborate on a notebook with others": [
 		"Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 	],
@@ -700,6 +706,9 @@
 	],
 	"Command": [
 		"Komut"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Komut paleti"
@@ -789,9 +798,6 @@
 	"Convert it": [
 		"Dönüştür"
 	],
-	"Convert note to Markdown": [
-		"Notu Markdown'a dönüştür"
-	],
 	"Convert to note": [
 		"Nota çevir"
 	],
@@ -846,9 +852,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Eklenti sunucusuna bağlanılamadı."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Not Markdown'a dönüştürülemedi: %s"
 	],
 	"Could not export notes: %s": [
 		"Notlar dışarı aktarılamadı: %s"
@@ -1054,6 +1057,9 @@
 	"Delete selected notes": [
 		"Seçili notları sil"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Gelen Kutusu not defteri silinsin mi?\n\nGelen kutusu not defterini silerseniz, yakın zamanda gönderilen tüm e-postalar kaybolabilir."
 	],
@@ -1158,6 +1164,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Notla ilgili tüm bilgileri görüntüler."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Verilen notu görüntüler."
@@ -2075,6 +2084,9 @@
 	"Keychain Supported: %s": [
 		"Keychain Desteği: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Güncellenmesi gereken anahtarlar"
 	],
@@ -2220,6 +2232,9 @@
 	],
 	"Manage your plugins": [
 		"Eklentileri yönet"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Uçtan Uca Şifreleme ayarını yönetir. Komutlar: `enable`, `disable`, `decrypt`, `status`, `decrypt-file` ve `target-status`."
@@ -2477,6 +2492,9 @@
 	"No updates available": [
 		"Güncelleme bulunamadı"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Hiçbiri"
 	],
@@ -2687,6 +2705,9 @@
 	"Open Sync Wizard...": [
 		"Senkronizasyon Sihirbazını Aç…"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Aç..."
 	],
@@ -2707,6 +2728,9 @@
 	],
 	"Options": [
 		"Seçenekler"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Dizilmiş liste"
@@ -3339,6 +3363,9 @@
 	"Select parent notebook": [
 		"Ana not defterini seç"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Seçili: %s"
 	],
@@ -3542,6 +3569,9 @@
 	],
 	"Source: ": [
 		"Kaynak: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Ara boşluk"
@@ -3850,9 +3880,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı"
-	],
 	"The note was successfully moved to the trash.": [
 		"Not başarıyla çöp kutusuna taşındı.",
 		"Notlar başarıyla çöp kutusuna taşındı."
@@ -4153,6 +4180,9 @@
 	],
 	"Try it now": [
 		"Şimdi dene"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"`help [command]` yazarak komutlar hakkında daha fazla bilgiye ulaşabilirsiniz; yada `help all` yazarak tam kullanım bilgisine ulaşabilirsiniz."

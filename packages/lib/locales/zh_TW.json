@@ -149,6 +149,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"關於"
 	],
@@ -401,6 +404,9 @@
 	"Beta": [
 		"測試"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"粗體"
 	],
@@ -530,6 +536,9 @@
 	"Checking... Please wait.": [
 		"檢查中...請稍候。"
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"選擇一個選項"
 	],
@@ -607,6 +616,9 @@
 	],
 	"Command": [
 		"命令"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"命令模式"
@@ -914,6 +926,9 @@
 	"Delete selected notes": [
 		"刪除選定的筆記"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"刪除收件匣筆記本？\n\n如果您刪除收件匣筆記本，最近發送到該筆記本的任何電子郵件可能會遺失。"
 	],
@@ -1003,6 +1018,9 @@
 	],
 	"Displays the complete information about note.": [
 		"顯示有關記事的完整資訊。"
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"顯示特定的記事。"
@@ -1835,6 +1853,9 @@
 	"Keychain Supported: %s": [
 		"鑰匙圈支援：%s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"需要升級的密鑰"
 	],
@@ -1963,6 +1984,9 @@
 	],
 	"Manage your plugins": [
 		"管理您的延伸模組"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"管理 E2EE 設定。指令包含 `enable`，`disable`，`decrypt`，`status` 和 `target-status`。"
@@ -2168,6 +2192,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"未設定文字編輯器。請用 `config editor <editor-path>` 來設定"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"北歐藍"
 	],
@@ -2339,6 +2366,9 @@
 	"Open Sync Wizard...": [
 		"開啟同步精靈..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"開啟舊檔..."
 	],
@@ -2350,6 +2380,9 @@
 	],
 	"Options": [
 		"選項"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"有序清單"
@@ -2885,6 +2918,9 @@
 	"Select parent notebook": [
 		"選擇父筆記本"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -3061,6 +3097,9 @@
 	],
 	"Source: ": [
 		"來源："
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -3622,6 +3661,9 @@
 	],
 	"Try it now": [
 		"現在就試試"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"輸入 `help [command]` 查看關於命令的更多資訊; 或者輸入 `help all` 獲取完整的使用說明。"

@@ -21,7 +21,8 @@ class Command extends BaseCommand {
 	public override async action(_args: Args) {
 		const keymaps = await app().loadKeymaps();
 
-		this.stdout(_('Configured keyboard shortcuts:\n'));
+		this.stdout(_('Configured keyboard shortcuts:'));
+		this.stdout('\n');
 
 		const rows = [];
 		const padding = '  ';
@@ -31,7 +32,7 @@ class Command extends BaseCommand {
 
 		for (const item of keymaps) {
 			const formattedKeys = item.keys
-				.map((k: string) => (k === ' ' ? `(${'SPACE'})` : k))
+				.map((k: string) => (k === ' ' ? `(${_('SPACE')})` : k))
 				.join(', ');
 			rows.push([padding + formattedKeys, item.type, item.command]);
 		}

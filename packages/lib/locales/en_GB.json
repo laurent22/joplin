@@ -185,6 +185,9 @@
 	"A5": [
 		""
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -470,6 +473,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		""
 	],
@@ -522,6 +528,9 @@
 		""
 	],
 	"Cannot change encrypted item": [
+		""
+	],
+	"Cannot convert read-only item: \"%s\"": [
 		""
 	],
 	"Cannot copy note to \"%s\" notebook": [
@@ -608,6 +617,9 @@
 	"Checking... Please wait.": [
 		""
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		""
 	],
@@ -674,9 +686,6 @@
 	"Code View": [
 		""
 	],
-	"Code:": [
-		""
-	],
 	"Collaborate on a notebook with others": [
 		""
 	],
@@ -702,6 +711,9 @@
 		""
 	],
 	"Command": [
+		""
+	],
+	"COMMAND": [
 		""
 	],
 	"Command palette": [
@@ -741,6 +753,9 @@
 		""
 	],
 	"Configuration": [
+		""
+	],
+	"Configured keyboard shortcuts:": [
 		""
 	],
 	"Configures the size of scrollbars used in the app.": [
@@ -792,7 +807,7 @@
 	"Convert it": [
 		""
 	],
-	"Convert note to Markdown": [
+	"Convert to Markdown": [
 		""
 	],
 	"Convert to note": [
@@ -850,7 +865,7 @@
 	"Could not connect to plugin repository.": [
 		""
 	],
-	"Could not convert note to Markdown: %s": [
+	"Could not convert notes to Markdown: %s": [
 		""
 	],
 	"Could not export notes: %s": [
@@ -1057,10 +1072,16 @@
 	"Delete profile \"%s\"": [
 		""
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		""
+	],
 	"Delete row": [
 		""
 	],
 	"Delete selected notes": [
+		""
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
 		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
@@ -1166,6 +1187,9 @@
 		""
 	],
 	"Displays the complete information about note.": [
+		""
+	],
+	"Displays the configured keyboard shortcuts.": [
 		""
 	],
 	"Displays the given note.": [
@@ -1300,6 +1324,9 @@
 	"Edit profile configuration...": [
 		""
 	],
+	"Edit tag": [
+		""
+	],
 	"Editor": [
 		""
 	],
@@ -1364,6 +1391,9 @@
 		""
 	],
 	"Enable abbreviation syntax": [
+		""
+	],
+	"Enable ABC musical notation support": [
 		""
 	],
 	"Enable audio player": [
@@ -1859,6 +1889,9 @@
 	"Import or export your data": [
 		""
 	],
+	"Import...": [
+		""
+	],
 	"Imported successfully!": [
 		""
 	],
@@ -2084,6 +2117,9 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		""
 	],
@@ -2230,6 +2266,9 @@
 	"Manage your plugins": [
 		""
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		""
 	],
@@ -2334,6 +2373,9 @@
 	],
 	"Move %d note to notebook \"%s\"?": [
 		"",
+		""
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
 		""
 	],
 	"Move down": [
@@ -2484,6 +2526,9 @@
 		""
 	],
 	"No updates available": [
+		""
+	],
+	"No URL for SAML authentication set.": [
 		""
 	],
 	"None": [
@@ -2696,6 +2741,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		""
 	],
@@ -2715,6 +2763,9 @@
 		""
 	],
 	"Options": [
+		""
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
 		""
 	],
 	"Ordered list": [
@@ -2946,6 +2997,9 @@
 	"Profile name": [
 		""
 	],
+	"Profile name cannot be empty": [
+		""
+	],
 	"Profile name:": [
 		""
 	],
@@ -3076,6 +3130,9 @@
 		""
 	],
 	"Remove": [
+		""
+	],
+	"Remove %d tags from all notes? This cannot be undone.": [
 		""
 	],
 	"Remove %s": [
@@ -3348,6 +3405,9 @@
 	"Select parent notebook": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		""
 	],
@@ -3552,6 +3612,9 @@
 	"Source: ": [
 		""
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -3750,7 +3813,13 @@
 	"Tab moves focus": [
 		""
 	],
+	"Table": [
+		""
+	],
 	"Tabloid": [
+		""
+	],
+	"Tag: %s": [
 		""
 	],
 	"Tagged: %d.": [
@@ -3860,6 +3929,7 @@
 		""
 	],
 	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"",
 		""
 	],
 	"The note was successfully moved to the trash.": [
@@ -4161,6 +4231,9 @@
 		""
 	],
 	"Try it now": [
+		""
+	],
+	"TYPE": [
 		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
