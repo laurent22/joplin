@@ -16,10 +16,10 @@ import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSize
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
 import { stripePortalUrl, adminUserDeletionsUrl, adminUserUrl, adminUsersUrl, setQueryParameters } from '../../utils/urlUtils';
-import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
+import { cancelSubscriptionByUserId, initStripe, recheckPaymentStatus, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime, Hour } from '../../utils/time';
-import { startImpersonating, stopImpersonating } from './utils/users/impersonate';
+import { startImpersonating } from './utils/users/impersonate';
 import { userFlagToString } from '../../models/UserFlagModel';
 import { _ } from '@joplin/lib/locale';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
@@ -108,17 +108,34 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	const pagination = makeTablePagination(ctx.query, 'full_name', PaginationOrderDir.ASC);
 	pagination.limit = 1000;
 	const page = await ctx.joplin.models.user().allPaginated(pagination, {
+		fields: [
+			'users.id as id',
+			'full_name',
+			'email',
+			'account_type',
+			'max_item_size',
+			'total_item_size',
+			'max_total_item_size',
+			'can_share_folder',
+			'enabled',
+		],
 		queryCallback: (query: Knex.QueryBuilder) => {
 			if (!showDisabled) {
 				void query.where('enabled', '=', 1);
 			}
 
 			if (searchQuery) {
-				void query.where(qb => {
-					void qb
-						.whereRaw('lower(full_name) like ?', [`%${searchQuery}%`])
-						.orWhereRaw('lower(email) like ?', [`%${searchQuery}%`]);
-				});
+				void query
+					.select([
+						'subscriptions.stripe_subscription_id',
+					])
+					.leftJoin('subscriptions', 'users.id', 'subscriptions.user_id')
+					.where(qb => {
+						void qb
+							.whereRaw('lower(full_name) like ?', [`%${searchQuery}%`])
+							.orWhereRaw('lower(email) like ?', [`%${searchQuery}%`])
+							.orWhereRaw('lower(subscriptions.stripe_subscription_id) = ?', [searchQuery]);
+					});
 			}
 
 			return query;
@@ -271,7 +288,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}
 
-	view.content.showImpersonateButton = !isNew && user.enabled && user.id !== owner.id;
+	view.content.showImpersonateButton = !isNew && user.id !== owner.id;
 	view.content.showRestoreButton = !isNew && !user.enabled;
 	view.content.showScheduleDeletionButton = !isNew && !isScheduledForDeletion;
 	view.content.showResetPasswordButton = !isNew && user.enabled;
@@ -309,15 +326,18 @@ interface FormFields {
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	impersonate_button: string;
-	stop_impersonate_button: string;
+	// stop_impersonate_button: string;
 	delete_user_flags: string;
 	schedule_deletion_button: string;
+	recheck_invoice_button: string;
 }
 
 router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
 	const owner = ctx.joplin.owner;
 	let userId = userIsMe(path) ? owner.id : path.id;
+
+	const stripe = initStripe();
 
 	try {
 		const body = await formParse(ctx.req);
@@ -341,11 +361,14 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 				// When changing the password, we also clear all session IDs for
 				// that user, except the current one (otherwise they would be
 				// logged out).
-				if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+				if (userToSave.password) {
+					await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+					await models.application().deleteByUserId(userToSave.id);
+				}
 			}
-		} else if (fields.stop_impersonate_button) {
-			await stopImpersonating(ctx);
-			return redirect(ctx, config().baseUrl);
+		// } else if (fields.stop_impersonate_button) {
+		// 	await stopImpersonating(ctx);
+		// 	return redirect(ctx, config().baseUrl);
 		} else if (fields.disable_button || fields.restore_button) {
 			const user = await models.user().load(path.id);
 			await models.user().checkIfAllowed(owner, AclAction.Delete, user);
@@ -355,14 +378,16 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			await models.user().save({ id: user.id, must_set_password: 1 });
 			await models.user().sendAccountConfirmationEmail(user);
 		} else if (fields.impersonate_button) {
-			await startImpersonating(ctx, userId);
+			await startImpersonating(ctx, userId, ctx.URL.href);
 			return redirect(ctx, config().baseUrl);
 		} else if (fields.cancel_subscription_button) {
 			await cancelSubscriptionByUserId(models, userId);
 		} else if (fields.update_subscription_basic_button) {
-			await updateSubscriptionType(models, userId, AccountType.Basic);
+			await updateSubscriptionType(stripe, models, userId, AccountType.Basic);
 		} else if (fields.update_subscription_pro_button) {
-			await updateSubscriptionType(models, userId, AccountType.Pro);
+			await updateSubscriptionType(stripe, models, userId, AccountType.Pro);
+		} else if (fields.recheck_invoice_button) {
+			await recheckPaymentStatus(stripe, models, userId);
 		} else if (fields.schedule_deletion_button) {
 			const deletionDate = Date.now() + 24 * Hour;
 

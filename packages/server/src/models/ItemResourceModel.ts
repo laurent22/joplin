@@ -1,6 +1,7 @@
 import { resourceBlobPath } from '../utils/joplinUtils';
 import { Item, ItemResource, Uuid } from '../services/database/types';
 import BaseModel from './BaseModel';
+import { ItemLoadOptions } from './ItemModel';
 
 export interface TreeItem {
 	item_id: Uuid;
@@ -63,9 +64,9 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 		return rows.map(r => r.item_id);
 	}
 
-	public async blobItemsByResourceIds(userIds: Uuid[], resourceIds: string[]): Promise<Item[]> {
+	public async blobItemsByResourceIds(userIds: Uuid[], resourceIds: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		const resourceBlobNames = resourceIds.map(id => resourceBlobPath(id));
-		return this.models().item().loadByNames(userIds, resourceBlobNames);
+		return this.models().item().loadByNames(userIds, resourceBlobNames, options);
 	}
 
 	public async itemTree(rootItemId: Uuid, rootJopId: string, currentItemIds: string[] = []): Promise<TreeItem> {

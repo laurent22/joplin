@@ -27,7 +27,22 @@ function mockStripe(options: StripeOptions = null) {
 			},
 		},
 		subscriptions: {
-			del: jest.fn(),
+			cancel: jest.fn(),
+			retrieve: async () => {
+				return {
+					stripe_subscription_id: 'sub_new',
+					items: {
+						data: [
+							{
+								id: 'item_123456',
+							},
+						],
+					},
+				};
+			},
+		},
+		subscriptionItems: {
+			update: jest.fn(),
 		},
 	};
 }
@@ -40,6 +55,8 @@ interface WebhookOptions {
 	customerId?: string;
 	sessionId?: string;
 	userEmail?: string;
+	accountType?: AccountType;
+	quantity?: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -63,11 +80,13 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 	options = {
 		subscriptionId: `sub_${uuidgen()}`,
 		customerId: `cus_${uuidgen()}`,
+		accountType: AccountType.Pro,
+		quantity: 1,
 		...options,
 	};
 
 	const stripeSessionId = 'sess_123';
-	const stripePrice = findPrice(stripeConfig(), { accountType: 2, period: PricePeriod.Monthly });
+	const stripePrice = findPrice(stripeConfig(), { accountType: options.accountType, period: PricePeriod.Monthly });
 	await models().keyValue().setValue(`stripeSessionToPriceId::${stripeSessionId}`, stripePrice.id);
 
 	await simulateWebhook(ctx, 'customer.subscription.created', {
@@ -77,6 +96,7 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 			data: [
 				{
 					price: stripePrice,
+					quantity: options.quantity,
 				},
 			],
 		},
@@ -170,12 +190,12 @@ describe('index/stripe', () => {
 		expect((await models().user().all()).length).toBe(1);
 		const user = (await models().user().all())[0];
 		const subBefore = await models().subscription().byUserId(user.id);
-		expect(stripe.subscriptions.del).toHaveBeenCalledTimes(0);
+		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(0);
 
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', stripe });
 		expect((await models().user().all()).length).toBe(1);
 		const subAfter = await models().subscription().byUserId(user.id);
-		expect(stripe.subscriptions.del).toHaveBeenCalledTimes(1);
+		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(1);
 
 		expect(subBefore.stripe_subscription_id).toBe(subAfter.stripe_subscription_id);
 	});
@@ -306,7 +326,7 @@ describe('index/stripe', () => {
 		}, { stripe });
 
 		// Verify that we didn't try to delete that new subscription
-		expect(stripe.subscriptions.del).toHaveBeenCalledTimes(0);
+		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(0);
 	});
 
 });

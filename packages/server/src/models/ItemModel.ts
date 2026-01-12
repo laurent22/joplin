@@ -119,16 +119,18 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: Item = null): Promise<void> {
-		if (action === AclAction.Create) {
-			if (!(await this.models().shareUser().isShareParticipant(resource.jop_share_id, user.id))) throw new ErrorForbidden('user has no access to this share');
-		}
+		if ([AclAction.Create, AclAction.Update, AclAction.Delete].includes(action) && resource.jop_share_id) {
+			const share = await this.models().share().load(resource.jop_share_id, { fields: ['id', 'owner_id'] });
 
-		// if (action === AclAction.Delete) {
-		// 	const share = await this.models().share().byItemId(resource.id);
-		// 	if (share && share.type === ShareType.JoplinRootFolder) {
-		// 		if (user.id !== share.owner_id) throw new ErrorForbidden('only the owner of the shared notebook can delete it');
-		// 	}
-		// }
+			if (!share) {
+				modelLogger.warn('cannot find the share associated with this item. Action:', action, 'User:', user, 'Resource:', resource);
+			} else {
+				if (share.owner_id !== user.id) {
+					const shareUser = await this.models().shareUser().byShareAndUserId(share.id, user.id);
+					if (!shareUser) throw new ErrorForbidden('user has no access to this share');
+				}
+			}
+		}
 	}
 
 	public fromApiInput(item: Item): Item {
@@ -141,7 +143,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	protected objectToApiOutput(object: Item): Item {
+	protected async objectToApiOutput(object: Item): Promise<Item> {
 		const output: Item = {};
 		const propNames = ['id', 'name', 'updated_time', 'created_time'];
 		for (const k of Object.keys(object)) {
@@ -562,10 +564,9 @@ export default class ItemModel extends BaseModel<Item> {
 		return item;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async loadAsJoplinItem(id: Uuid): Promise<any> {
+	public async loadAsJoplinItem<T>(id: Uuid): Promise<T> {
 		const raw = await this.loadWithContent(id);
-		return this.itemToJoplinItem(raw);
+		return this.itemToJoplinItem(raw) as T;
 	}
 
 	public async saveFromRawContent(user: User, rawContentItemOrItems: SaveFromRawContentItem[] | SaveFromRawContentItem, options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
@@ -590,14 +591,35 @@ export default class ItemModel extends BaseModel<Item> {
 		interface ExistingItem {
 			id: Uuid;
 			name: string;
+			owner_id: string;
+			jop_share_id: string;
 		}
 
 		return this.withTransaction(async () => {
-			const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name), { fields: ['id', 'name'] }) as ExistingItem[];
+			const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name), { fields: ['id', 'name', 'owner_id', 'jop_share_id', 'jop_type', 'jop_parent_id'] }) as ExistingItem[];
 			const itemsToProcess: Record<string, ItemToProcess> = {};
 
 			for (const rawItem of rawContentItems) {
 				try {
+					const existingItem = existingItems.find(i => i.name === rawItem.name);
+
+					// Check if the user is allowed to modify the item - in
+					// particular it would be disabled if the user has only
+					// read-only access to a share. Later, once we have
+					// unserialized the content, and got all the relevant
+					// information, we check if the user is allowed to create
+					// the item.
+					//
+					// Normally only one such check is needed to know if the
+					// item can be updated... except if share_id is changed, in
+					// which case we need to check again with the new share_id
+					// (see below)
+					let previousShareId = '';
+					if (existingItem) {
+						await this.checkIfAllowed(user, AclAction.Update, existingItem);
+						previousShareId = existingItem.jop_share_id;
+					}
+
 					const isJoplinItem = isJoplinItemName(rawItem.name);
 					let isNote = false;
 
@@ -636,10 +658,33 @@ export default class ItemModel extends BaseModel<Item> {
 						item.content = rawItem.body;
 					}
 
-					const existingItem = existingItems.find(i => i.name === rawItem.name);
 					if (existingItem) item.id = existingItem.id;
 
 					if (options.shareId) item.jop_share_id = options.shareId;
+
+					// Check if the user is allowed to create an item here - in
+					// particular it would be disabled if the user has only
+					// read-only access to a share.
+
+					const itemToCheck = { ...item };
+					if (!isJoplinItem) {
+						// The checked item must have these properties,
+						// otherwise isRootSharedFolder() will fail. If it's not
+						// a Joplin item, it means it's a regular file, such as
+						// info.json or the content of a resource, so we set the
+						// type to `ModelType.Resource`, which is not strictly
+						// correct but will make it work with the
+						// isRootSharedFolder() check.
+						if (!itemToCheck.jop_parent_id) itemToCheck.jop_parent_id = '';
+						if (!itemToCheck.jop_type) itemToCheck.jop_type = ModelType.Resource;
+					}
+
+					if (!existingItem) {
+						await this.checkIfAllowed(user, AclAction.Create, itemToCheck);
+					} else {
+						const newShareId = item.jop_share_id || '';
+						if (previousShareId !== newShareId) await this.checkIfAllowed(user, AclAction.Update, itemToCheck);
+					}
 
 					await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
 
@@ -851,6 +896,11 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public isRootSharedFolder(item: Item): boolean {
+		if (!('jop_type' in item) || !('jop_parent_id' in item) || !('jop_share_id' in item)) {
+			const itemInfo = { ...item };
+			delete itemInfo.content;
+			throw new Error(`Missing jop_type, jop_parent_id or jop_share_id property: ${JSON.stringify(itemInfo)}`);
+		}
 		return item.jop_type === ModelType.Folder && item.jop_parent_id === '' && !!item.jop_share_id;
 	}
 
@@ -912,7 +962,13 @@ export default class ItemModel extends BaseModel<Item> {
 	public async deleteForUser(userId: Uuid, item: Item, options: DeleteOptions = {}): Promise<void> {
 		if (this.isRootSharedFolder(item)) {
 			const share = await this.models().share().byItemId(item.id);
-			if (!share) throw new Error(`Cannot find share associated with item ${item.id}`);
+			if (!share) {
+				// In that case we don't do anything - the item is going to be
+				// deleted locally anyway. And we can't delete a root folder,
+				// otherwise it will potentially delete it for other users too.
+				modelLogger.warn(`Trying to delete a root folder associated with a share that no longer exists: ${item.id}`);
+				return;
+			}
 			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
 
 			if (userShare) {

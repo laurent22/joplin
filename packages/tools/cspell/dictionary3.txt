@@ -153,6 +153,7 @@ SJCL
 Slovenčina
 Slovenija
 Slovensko
+smartmail
 softbreaks
 Solarised
 SOLARIZED

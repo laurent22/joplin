@@ -1,0 +1,39 @@
+
+	<h1 class="title">{{title}}</h1>
+
+	<form action="{{postUrl}}" method="POST" id="login-form">
+		{{{csrfTag}}}
+
+		<div class="block readable-block content">
+			<p>{{description}}</p>
+		</div>
+
+		{{> errorBanner}}
+
+		{{^showPassword}}
+			<div class="field">
+				<label class="label">Authentication code</label>
+				<div class="field has-addons">
+					<div class="control is-expanded">
+						<input class="input" inputmode="number" name="mfaCode" placeholder="XXXXXX" maxlength="6"/>
+					</div>
+				</div>
+				<p class="help"><a href="{{authWithPasswordUrl}}">Use your password</a></p>
+			</div>
+		{{/showPassword}}
+		{{#showPassword}}
+			<div class="field">
+				<label class="label">Password</label>
+				<div class="field has-addons">
+					<div class="control is-expanded">
+						<input class="input" type="password" name="password" autocomplete="new-password" value="{{password}}"/>
+					</div>
+				</div>
+				<p class="help"><a href="{{authWithMfaCodeUrl}}">Use your authenticator app</a></p>
+			</div>
+		{{/showPassword}}
+
+		<div class="control">
+			<button class="button is-primary">{{buttonTitle}}</button>
+		</div>
+	</form>
