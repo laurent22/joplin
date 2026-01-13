@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: clsty\n"
+"Last-Translator: wh201906 <wh201906@yandex.com>\n"
 "Language-Team: zh_CN <clsty@celestialy.top>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -311,7 +311,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "ABC 记谱法：选项"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -404,7 +404,7 @@ msgstr "添加内容"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:31
 msgid "Add column"
-msgstr ""
+msgstr "添加列"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -421,9 +421,8 @@ msgid "Add recipient:"
 msgstr "添加受邀人："
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:26
-#, fuzzy
 msgid "Add row"
-msgstr "新增"
+msgstr "添加行"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -763,7 +762,7 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "代码块"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -879,9 +878,8 @@ msgid "Cannot change encrypted item"
 msgstr "无法更改已加密条目"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "无法创建新笔记：%s"
+msgstr "无法转换只读条目：“%s”"
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1033,7 +1031,7 @@ msgstr "正在检查……请稍候。"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "中文/日语/韩语字符数"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1164,9 +1162,8 @@ msgstr "折叠所有笔记本"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1758
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:225
-#, fuzzy
 msgid "Collapse title"
-msgstr "折叠 %s"
+msgstr "折叠标题"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
@@ -1712,9 +1709,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "是否删除附件 “%s”？"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:41
-#, fuzzy
 msgid "Delete column"
-msgstr "删除行"
+msgstr "删除列"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1755,17 +1751,18 @@ msgid "Delete profile \"%s\""
 msgstr "删除配置档案 “%s”"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
-msgstr "包含笔记、笔记本和标签在内的所有数据将会被永久删除。"
+msgstr ""
+"是否删除配置档案“%s”？\n"
+"\n"
+"包含笔记、笔记本和标签在内的所有数据将会被永久删除。"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
-#, fuzzy
 msgid "Delete row"
-msgstr "删除笔记"
+msgstr "删除行"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:487
 msgid "Delete selected notes"
@@ -1778,6 +1775,9 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"是否删除标签“%s”？\n"
+"\n"
+"与此标签关联的所有笔记均会保留，但该标签将从所有笔记中移除。"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -1956,7 +1956,7 @@ msgstr "显示关于笔记的完整信息。"
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "显示已配置的键盘快捷键。"
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2171,9 +2171,8 @@ msgid "Edit profile configuration..."
 msgstr "编辑配置档案内的配置……"
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "编辑笔记。"
+msgstr "编辑标签"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2283,9 +2282,8 @@ msgid "Enable abbreviation syntax"
 msgstr "启用缩写语法"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "启用 Fountain 语法支持"
+msgstr "启用 ABC 记谱法支持"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -2568,9 +2566,8 @@ msgstr "展开所有笔记本"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1758
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:225
-#, fuzzy
 msgid "Expand title"
-msgstr "已展开"
+msgstr "展开标题"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:21
 msgid "Expanded"
@@ -2678,7 +2675,7 @@ msgstr "特性标志"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:180
 msgid "Feedback"
-msgstr ""
+msgstr "反馈"
 
 #: packages/lib/Synchronizer.ts:207
 msgid "Fetched items: %d/%d."
@@ -2823,7 +2820,7 @@ msgstr "地理位置、拼写检查、编辑器工具栏、图像缩放"
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
-msgstr ""
+msgstr "获取报价"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:93
 msgid "Get it now:"
@@ -3350,7 +3347,7 @@ msgstr "Joplin 服务器"
 #: packages/lib/SyncTargetJoplinServerSAML.ts:68
 #, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "Joplin 服务器 URL"
+msgstr "Joplin 服务器 (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3653,6 +3650,7 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"管理您的配置档案。您可以重命名或删除配置档案。正在使用的配置档案无法删除。"
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3687,7 +3685,7 @@ msgstr "Markdown 编辑器"
 #: packages/lib/models/settings/builtInMetadata.ts:1519
 #, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown 编辑器：渲染图像"
+msgstr "Markdown 编辑器：高亮当前行"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1508
 msgid "Markdown editor: Render images"
@@ -3811,16 +3809,15 @@ msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "是否移动 %d 条笔记到笔记本 “%s”？"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"是否将笔记本“%s”移到回收站？\n"
+"是否将 %d 个笔记本移到回收站？\n"
 "\n"
-"所有该笔记本内的笔记和子笔记本也将同时被移到回收站。"
+"这些笔记本内的所有笔记和子笔记本也将被移到回收站。"
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -4167,9 +4164,8 @@ msgid "Note list style"
 msgstr "笔记列表样式"
 
 #: packages/app-cli/app/command-unpublish.ts:41
-#, fuzzy
 msgid "Note not published: %s"
-msgstr "内容由 %s 提供"
+msgstr "笔记 %s 未发布"
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:140
 msgid "Note preview"
@@ -4442,7 +4438,7 @@ msgstr "有序列表"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:130
 msgid "Other"
-msgstr ""
+msgstr "其它"
 
 #: packages/app-desktop/gui/MenuBar.tsx:459
 msgid "Other applications..."
@@ -4785,9 +4781,8 @@ msgid "Profile name"
 msgstr "配置档案名称"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "确认密码不可为空"
+msgstr "配置档案名称不可为空"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -4827,9 +4822,8 @@ msgid "Publish Note"
 msgstr "发布笔记"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "是否移动 %d 条笔记到笔记本 “%s”？"
+msgstr "是否发布“%2$s”中的笔记“%1$s”？"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4850,14 +4844,13 @@ msgid "Publish/unpublish"
 msgstr "发布 / 取消发布"
 
 #: packages/app-cli/app/command-publish.ts:60
-#, fuzzy
 msgid "Published at URL: %s"
-msgstr "发布笔记"
+msgstr "笔记已发布于：%s"
 
 #: packages/app-cli/app/command-publish.ts:27
 #: packages/app-cli/app/command-unpublish.ts:24
 msgid "Publishes a note to Joplin Server or Joplin Cloud"
-msgstr ""
+msgstr "将笔记发布到 Joplin 服务器或 Joplin 云"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:79
 msgid "QR Code"
@@ -4983,11 +4976,8 @@ msgid "Remove"
 msgstr "删除"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
-msgstr ""
-"是否删除模型并重新下载？\n"
-"此操作无法撤销。"
+msgstr "从所有笔记中删除 %d 个标签？此操作无法撤销。"
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5280,9 +5270,8 @@ msgid "Save geo-location with notes"
 msgstr "保存地理位置信息到笔记中"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:575
-#, fuzzy
 msgid "Save geolocation?"
-msgstr "保存地理位置信息到笔记中"
+msgstr "保存地理位置信息？"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:81
 msgid "Scan notebook"
@@ -5391,7 +5380,7 @@ msgstr "选择笔记本"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:131
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "选择另外一种支持的同步目标。"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5399,7 +5388,7 @@ msgstr "选择父笔记本"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "选择导入文件的类型："
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -5912,7 +5901,7 @@ msgstr "切换到 [notebook] - 所有进一步操作将在该笔记本中进行�
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:111
 msgid "Sync"
-msgstr ""
+msgstr "同步"
 
 #: packages/lib/utils/joplinCloud/index.ts:170
 msgid "Sync as many devices as you want"
@@ -6010,18 +5999,16 @@ msgid "Tab moves focus"
 msgstr "Tab 移动焦点"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "启用"
+msgstr "表格"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "文摘（Tabloid）"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "使用情况：%s"
+msgstr "标签：%s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6228,7 +6215,7 @@ msgid ""
 msgid_plural ""
 "The notes have been converted to Markdown and the original notes have been "
 "moved to the trash"
-msgstr[0] "该笔记已转换为 Markdown，原始笔记已移至回收站。"
+msgstr[0] "该笔记已转换为 Markdown，原始笔记已移至回收站"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6797,9 +6784,8 @@ msgid "Unable to share log data. Reason: %s"
 msgstr "无法分享日志数据，原因: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1125
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "无法分享日志数据，原因: %s"
+msgstr "无法分享笔记数据，原因: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
