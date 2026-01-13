@@ -338,7 +338,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			let newPath;
 
 			let fixedFileName = Buffer.from(fileName, 'latin1').toString('utf8');
-			if (fixedFileName !== fileName) {
+			// If the filename includes the Unicode replacement character, file name correction has failed.
+			// Use the original (incorrect) filename in that case:
+			const replacementCharacter = '\uFFFD';
+			if (fixedFileName !== fileName && !fixedFileName.includes(replacementCharacter)) {
 				// In general, the path shouldn't start with "."s or contain path separators.
 				// However, if it does, these characters might cause import errors, so remove them:
 				fixedFileName = fixedFileName.replace(/^\.+/, '');
