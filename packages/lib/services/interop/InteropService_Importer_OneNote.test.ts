@@ -329,4 +329,12 @@ describe('InteropService_Importer_OneNote', () => {
 
 		expect(normalizeNoteForSnapshot(importedNote.body)).toMatchSnapshot('EmbeddedFiles');
 	});
+
+	it('should correctly import .onepkg notebooks', async () => {
+		const notes = await importNote(`${supportDir}/onenote/test.onepkg`);
+
+		for (const note of notes) {
+			expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot(`onepkg-${note.title}`);
+		}
+	});
 });

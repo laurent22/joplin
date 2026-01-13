@@ -153,6 +153,577 @@ jeudi 23 octobre 2025
     - [x] Documenter configuration synchro JBS saml pour un utilisateur (case cochée)"
 `;
 
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-A 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>A</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/id-here" target="content" title="Test">Test</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-A test 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>A test</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">A test</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Tuesday, January 13, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">1:44 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; font-weight: bold; line-height: 17px; text-decoration: underline;">…test…</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Another section 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Another section</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/id-here" target="content" title="Page 1">Page 1</a></li>
+        
+        <li class="l1"><a href=":/id-here" target="content" title="Page 2">Page 2</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-B 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>B</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/id-here" target="content" title="Test page">Test page</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Math 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Math</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    .list-0 li { padding-left: 10px; }
+    .list-0 li::marker { content: '-'; font-family: Arial; font-size: 11pt; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Math</span></div>
+</div><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Friday, November 28, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">2:47 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Cauchy's Integral Formula: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\parens#1{\\left( {#1} \\right)}𝑓\\parens{𝑥}=\\∫{𝛾}{}{\\frac{𝑓(𝑧)}{𝑧−𝑥}𝑑𝑧}</span>𝑓\\parens{𝑥}=\\∫{𝛾}{}{\\frac{𝑓(𝑧)}{𝑧−𝑥}𝑑𝑧}</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Pythagorean Theorem: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\pow#1#2{{#1}^{#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}</span>\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Law of Cosines: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}+2𝑎𝑏\\fnCall{cos}{𝐶}</span>\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}+2𝑎𝑏\\fnCall{cos}{𝐶}</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Euler's Formula: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑒}{𝑖𝜃}=\\fnCall{cos}{𝜃}+𝑖\\fnCall{sin}{𝜃}</span>\\pow{𝑒}{𝑖𝜃}=\\fnCall{cos}{𝜃}+𝑖\\fnCall{sin}{𝜃}</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Determinant of a 2x2 matrix: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\parens#1{\\left( {#1} \\right)}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\parens{\\unknown{20}{𝑎}{𝑏}{𝑐}{𝑑}}=𝑎𝑑−𝑏𝑐</span>\\parens{\\unknown{20}{𝑎}{𝑏}{𝑐}{𝑑}}=𝑎𝑑−𝑏𝑐</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Empty formula: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\mathrm{Type equation here.}</span>\\mathrm{Type equation here.}</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Fractions: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\frac{𝑎}{𝑏}, \\frac{𝑎}{𝑏},\\mathrm{\\frac{𝑎}{𝑏}}, \\frac{𝑎}{𝑏}</span>\\frac{𝑎}{𝑏}, \\frac{𝑎}{𝑏},\\mathrm{\\frac{𝑎}{𝑏}}, \\frac{𝑎}{𝑏}</span>.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Summation: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\∑#1#2#3{\\sum_{#1}^{#2}{#3}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\fnCall{\\withSubscript{lim}{𝑛→∞}}{\\∑{𝑘=0}{𝑛 }{\\frac{1}{𝑘}}}=∞</span>\\fnCall{\\withSubscript{lim}{𝑛→∞}}{\\∑{𝑘=0}{𝑛 }{\\frac{1}{𝑘}}}=∞</span>.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Definite integral: <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\∫{0}{1}{𝑥}ⅆ𝑥=\\frac{1}{2}</span>\\∫{0}{1}{𝑥}ⅆ𝑥=\\frac{1}{2}</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Integral identities (see <a href="https://en.wikipedia.org/wiki/Lists_of_integrals" style="">https://en.wikipedia.org/wiki/Lists_of_integrals</a>), below, <span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">𝐶∈ℝ</span>𝐶∈ℝ</span>:</p></div><ul class="list-0" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\mathrm{\\frac{1}{𝑥}𝑑𝑥}=\\fnCall{ln}{\\parens{𝑥}}+𝐶</span>∫\\mathrm{\\frac{1}{𝑥}𝑑𝑥}=\\fnCall{ln}{\\parens{𝑥}}+𝐶</span><span style="font-family: Cambria Math;">.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\pow#1#2{{#1}^{#2}}∫\\pow{𝑒}{𝑎𝑥}𝑑𝑥=\\frac{1}{𝑎}\\pow{𝑒}{𝑎𝑥}+𝐶</span>∫\\pow{𝑒}{𝑎𝑥}𝑑𝑥=\\frac{1}{𝑎}\\pow{𝑒}{𝑎𝑥}+𝐶</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span class="joplin-editable" style="font-family: Cambria Math; font-style: italic;"><span class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$" style="display: none;">\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\parens{\\fnCall{sin}{𝑥}}𝑑𝑥=−\\fnCall{cos}{𝑥}+𝐶</span>∫\\parens{\\fnCall{sin}{𝑥}}𝑑𝑥=−\\fnCall{cos}{𝑥}+𝐶</span></span></li>
+</ul><div class="outline-element" style="margin-left: 36px;"><p style="font-family: Cambria Math; font-size: 11pt; font-style: italic; line-height: 17px;">&nbsp;</p></div>
+
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Page 1 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Page 1</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Page 1</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Tuesday, January 13, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">1:42 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">Test</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Page 2 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Page 2</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Page 2</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Tuesday, January 13, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">1:42 PM</span></div>
+</div></div><img style="height: 164px; left: 79px; overflow: visible; position: absolute; top: 168px; width: 333px;" src=":/id-here"><div class="container-outline" style="left: 74px; position: absolute; top: 336px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Test 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Test</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Tuesday, January 13, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">1:44 PM</span></div>
+</div></div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Test page 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Test page</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Test page</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Tuesday, January 13, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">1:45 PM</span></div>
+</div></div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Tést! 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Tést!</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/id-here" target="content" title="Math">Math</a></li>
+        
+        <li class="l1"><a href=":/id-here" target="content" title="A test">A test</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-Untitled Page 1 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Untitled Page</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Tuesday, January 13, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">1:45 PM</span></div>
+</div></div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks: onepkg-⅀⸨ Unicode ⸩ 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>⅀⸨ Unicode ⸩</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/id-here" target="content" title="Untitled Page 1">Untitled Page 1</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
 exports[`InteropService_Importer_OneNote should correctly import math formulas: Math 1`] = `
 " Math 
 
