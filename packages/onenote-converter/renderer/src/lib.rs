@@ -1,6 +1,7 @@
 use color_eyre::eyre::{Result, eyre};
 pub use parser::Parser;
-use std::panic;
+use sanitize_filename::sanitize;
+use std::{io::Read, panic};
 use wasm_bindgen::{JsError, prelude::wasm_bindgen};
 
 use parser_utils::{fs_driver, log};
@@ -70,7 +71,36 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
             log!("Notebook directory: {:?}", notebook_output_dir);
 
             notebook::Renderer::new().render(&notebook, &notebook_name, &notebook_output_dir)?;
-        }
+        },
+        ".onepkg" => {
+            let cab_data = fs_driver().open_file(path)?;
+            let mut cabinet = cab::Cabinet::new(cab_data)?;
+            let file_paths: Vec<String> = cabinet
+                .folder_entries()
+                .flat_map(|folder| folder.file_entries())
+                .map(|entry| String::from(entry.name()))
+                .collect();
+
+            for file_path in file_paths {
+                if !file_path.ends_with(".one") {
+                    log!("Skipping non-section file {file_path}");
+                    continue;
+                }
+
+                let mut file_data = cabinet.read_file(&file_path)?;
+                let mut data = Vec::new();
+                file_data.read_to_end(&mut data)?;
+
+                let section = parser.parse_section_from_data(&data, &file_path)?;
+
+                let file_name = fs_driver().get_file_name(&file_path).unwrap_or(file_path);
+                log!("Rendering {file_name}");
+                let section_output_dir = fs_driver().join(output_dir, &sanitize(&file_name));
+                fs_driver().make_dir(&section_output_dir)?;
+
+                section::Renderer::new().render(&section, section_output_dir.to_owned())?;
+            }
+        },
         ext => return Err(eyre!("Invalid file extension: {}, file: {}", ext, path)),
     }
 

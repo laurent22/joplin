@@ -1,5 +1,7 @@
 use super::ApiResult;
 use super::FileApiDriver;
+use super::FileHandle;
+use std::io::Cursor;
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
 use web_sys::js_sys;
@@ -97,6 +99,12 @@ impl FileApiDriver for FileApiDriverImpl {
         }
     }
 
+    fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>> {
+        // TODO: Avoid reading the full file into memory
+        let file_data = self.read_file(path)?;
+        Ok(Box::new(Cursor::new(file_data)))
+    }
+
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()> {
         if let Err(error) = write_file(path, data) {
             Err(handle_error(error, &format!("writing file {}", path)))
@@ -138,3 +146,5 @@ impl FileApiDriver for FileApiDriverImpl {
         join_path(path_1, path_2).unwrap().as_string().unwrap()
     }
 }
+
+impl FileHandle for Cursor<Vec<u8>> { }

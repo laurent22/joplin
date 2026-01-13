@@ -100,3 +100,28 @@ fn convert_page_versions() {
             .exists()
     );
 }
+
+#[test]
+fn convert_onepkg() {
+    let TestResources {
+        output_dir,
+        test_data_dir,
+    } = setup("onepkg");
+
+    convert(
+        &test_data_dir.join("onepkg").join("migration-test-notebook.onepkg").to_string_lossy(),
+        &output_dir.to_string_lossy(),
+        &test_data_dir.to_string_lossy(),
+    )
+    .unwrap();
+
+    // Should create folders for each section
+    assert!(output_dir.join("Ma Section 1.one").exists());
+    assert!(output_dir.join("Ma section 2.one").exists());
+    assert!(output_dir.join("Procédures.one").exists());
+
+    // Should create HTML files
+    let procedures_export = output_dir.join("Procédures.one");
+    assert!(procedures_export.join("Procédures.html").exists());
+    assert!(procedures_export.join("Procédures").join("Tuto vidéo - partage Carnet de notes Joplin.html").exists());
+}
