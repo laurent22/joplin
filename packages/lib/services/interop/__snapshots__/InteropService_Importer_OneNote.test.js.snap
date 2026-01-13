@@ -189,45 +189,6 @@ Tuesday, January 13, 2026
 - [Test page](:/id-here "Test page")
 
 
-# Note: Math
-
- Math 
-
-Math
-
-Friday, November 28, 2025
-
-2:47 PM
-
-Cauchy's Integral Formula: $\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\parens#1{\\left( {#1} \\right)}𝑓\\parens{𝑥}=\\∫{𝛾}{}{\\frac{𝑓(𝑧)}{𝑧−𝑥}𝑑𝑧}$
-
-Pythagorean Theorem: $\\def\\pow#1#2{{#1}^{#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}$
-
-Law of Cosines: $\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}+2𝑎𝑏\\fnCall{cos}{𝐶}$
-
-Euler's Formula: $\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑒}{𝑖𝜃}=\\fnCall{cos}{𝜃}+𝑖\\fnCall{sin}{𝜃}$
-
-Determinant of a 2x2 matrix: $\\def\\parens#1{\\left( {#1} \\right)}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\parens{\\unknown{20}{𝑎}{𝑏}{𝑐}{𝑑}}=𝑎𝑑−𝑏𝑐$
-
-Empty formula: $\\mathrm{Type equation here.}$
-
-Fractions: $\\frac{𝑎}{𝑏}, \\frac{𝑎}{𝑏},\\mathrm{\\frac{𝑎}{𝑏}}, \\frac{𝑎}{𝑏}$.
-
-Summation: $\\def\\∑#1#2#3{\\sum_{#1}^{#2}{#3}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\fnCall{\\withSubscript{lim}{𝑛→∞}}{\\∑{𝑘=0}{𝑛 }{\\frac{1}{𝑘}}}=∞$.
-
-Definite integral: $\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\∫{0}{1}{𝑥}ⅆ𝑥=\\frac{1}{2}$
-
-&nbsp;
-
-Integral identities (see https://en.wikipedia.org/wiki/Lists_of_integrals), below, $𝐶∈ℝ$:
-
-- $\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\mathrm{\\frac{1}{𝑥}𝑑𝑥}=\\fnCall{ln}{\\parens{𝑥}}+𝐶$.
-- $\\def\\pow#1#2{{#1}^{#2}}∫\\pow{𝑒}{𝑎𝑥}𝑑𝑥=\\frac{1}{𝑎}\\pow{𝑒}{𝑎𝑥}+𝐶$
-- $\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\parens{\\fnCall{sin}{𝑥}}𝑑𝑥=−\\fnCall{cos}{𝑥}+𝐶$
-
-&nbsp;
-
-
 # Note: Page 1
 
  Page 1 
@@ -278,11 +239,28 @@ Tuesday, January 13, 2026
 1:45 PM
 
 
+# Note: Testing…
+
+ Testing… 
+
+Testing…
+
+Friday, November 28, 2025
+
+2:47 PM
+
+&nbsp;
+
+&nbsp;
+
+Link to page: [Page 2](onenote:https://d.docs.live.net/4c230b31b0dfb50f/Documents/OneNote%20Notebooks/test/Another%20section.one#Page%202&section-id={C271F3B1-5F22-457F-9DEA-F2B938D9B3D7}&page-id={62800B88-EC08-4170-BDB6-885CBB47FF99}&end)
+
+
 # Note: Tést!
 
  Tést! 
 
-- [Math](:/id-here "Math")
+- [Testing…](:/id-here "Testing…")
 - [A test](:/id-here "A test")
 
 
