@@ -1,5 +1,10 @@
 # Joplin iOS Changelog
 
+## [ios-v13.5.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.5.3) - 2026-01-10T10:09:33Z
+
+- Fixed: Fix icon rendering (#14071) (#14063 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed keyboard input issue in note title (#14070) (#13544 by [@mrjo118](https://github.com/mrjo118))
+
 ## [ios-v13.5.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.5.2) - 2026-01-08T19:42:53Z
 
 - New: Add a link to the list of open-source licenses (5caec16)
@@ -16,7 +21,7 @@
 - Improved: Updated packages @react-native-community/datetimepicker (v8.4.5), @react-native-documents/picker (v10.1.7), @react-native/babel-preset (v0.81.0), @rollup/plugin-node-resolve (v16.0.2), babel-plugin-react-native-web (v0.21.1), dayjs (v1.11.18), esbuild (v0.25.10), expo (v53.0.23), fs-extra (v11.3.2), katex (v0.16.23), mermaid (v11.10.1), react-native-safe-area-context (v5.6.1), react-native-share (v12.2.0), react-native-web (v0.21.1), react-native-webview (v13.16.0), sass (v1.93.2), sharp (v0.34.4)
 - Improved: Upgrade js-draw to v1.32.0 (#13875 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Viewer, Rich Text Editor: Save/restore the cursor and scroll position when switching notes (#13962) (#520 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
-- Fixed: Editor: Fix search/replace UI is partially offscreen on small-screen devices (#13978 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Editor: Fix search/replace UI is partially off-screen on small-screen devices (#13978 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Feature flags: Fix "voice typing" feature flag (#13981 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix "Check synchronization configuration" button (#14031) (#14030 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix ABC Sheet Music setting includes "Translation error" in description (#14058) (#14049 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

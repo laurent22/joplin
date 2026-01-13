@@ -4,6 +4,7 @@ import { ChangeType, Event } from './services/database/types';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import { createDb } from './tools/dbTools';
 import { msleep } from './utils/time';
+import { FolderEntity } from '@joplin/lib/services/database/types';
 
 const eventId1 = '4f405391-bd72-4a4f-809f-344fc6cd4b31';
 const eventId2 = '4f405391-bd72-4a4f-809f-344fc6cd4b32';
@@ -115,7 +116,7 @@ describe('db.replication', () => {
 		expect(result.items.length).toBe(0);
 
 		// But we still get the item because it doesn't use the slave database
-		expect((await models().item().loadAsJoplinItem(folderItem.id)).title).toBe('title 1');
+		expect((await models().item().loadAsJoplinItem<FolderEntity>(folderItem.id)).title).toBe('title 1');
 
 		// After sync, we should get the change
 		await sqliteSyncSlave(db(), dbSlave());
@@ -130,7 +131,7 @@ describe('db.replication', () => {
 		expect(result.items.length).toBe(0);
 
 		// But we get the latest item if requesting it directly
-		expect((await models().item().loadAsJoplinItem(folderItem.id)).title).toBe('title 2');
+		expect((await models().item().loadAsJoplinItem<FolderEntity>(folderItem.id)).title).toBe('title 2');
 
 		// After sync, we should get the change
 		await sqliteSyncSlave(db(), dbSlave());

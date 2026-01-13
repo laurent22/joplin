@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.5.8](https://github.com/laurent22/joplin/releases/tag/android-v3.5.8) (Pre-release) - 2026-01-10T10:08:46Z
+
+- Fixed: Fixed keyboard input issue in note title (#14070) (#13544 by [@mrjo118](https://github.com/mrjo118))
+
 ## [android-v3.5.7](https://github.com/laurent22/joplin/releases/tag/android-v3.5.7) (Pre-release) - 2026-01-08T19:30:28Z
 
 - New: Rich Text Editor: Add shortcuts for inserting code blocks (#14055 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

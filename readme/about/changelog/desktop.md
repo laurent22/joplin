@@ -1,5 +1,52 @@
 # Joplin Desktop Changelog
 
+## [v3.5.11](https://github.com/laurent22/joplin/releases/tag/v3.5.11) - 2026-01-12T15:17:25Z
+
+- Improved: OneNote importer: Simplify error report ([#14074](https://github.com/laurent22/joplin/issues/14074) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed keyboard input issue in note title ([#14070](https://github.com/laurent22/joplin/issues/14070)) ([#13544](https://github.com/laurent22/joplin/issues/13544) by [@mrjo118](https://github.com/mrjo118))
+
+
+## [v3.5.10](https://github.com/laurent22/joplin/releases/tag/v3.5.10) (Pre-release) - 2026-01-08T20:18:15Z
+
+- New: Add CJK characters counter in statistics panel ([#13840](https://github.com/laurent22/joplin/issues/13840) by Self Not Found)
+- New: OneNote importer: Add partial support for importing internal links ([#13926](https://github.com/laurent22/joplin/issues/13926) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: [#13804](https://github.com/laurent22/joplin/issues/13804): Change search Resources feature to case insensitive ([#13824](https://github.com/laurent22/joplin/issues/13824)) ([#13804](https://github.com/laurent22/joplin/issues/13804) by [@bhorbowicz](https://github.com/bhorbowicz))
+- Improved: Accessibility: In-editor rendering: Fix rendered checkboxes are very small on mobile ([#14056](https://github.com/laurent22/joplin/issues/14056) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Make sidebar "jump to next match" case insensitive ([#14033](https://github.com/laurent22/joplin/issues/14033) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Built-in plugins: Update Backup to v1.5.1 ([#14003](https://github.com/laurent22/joplin/issues/14003) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Built-in plugins: Update Freehand Drawing to v4.2.0 ([#14002](https://github.com/laurent22/joplin/issues/14002) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Do no re-use the 'Restored Notes' folder if it is trashed ([#13813](https://github.com/laurent22/joplin/issues/13813) by [@mrjo118](https://github.com/mrjo118))
+- Improved: Markdown Editor: Collapse selection to a single cursor when pressing "escape" ([#13864](https://github.com/laurent22/joplin/issues/13864) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Make header styles more closely match the note viewer ([#14053](https://github.com/laurent22/joplin/issues/14053)) ([#13753](https://github.com/laurent22/joplin/issues/13753) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Prevent layout shift when hiding/showing rendered checkboxes ([#14044](https://github.com/laurent22/joplin/issues/14044)) ([#13159](https://github.com/laurent22/joplin/issues/13159) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: OneNote import: Improve ID resolution ([#14035](https://github.com/laurent22/joplin/issues/14035)) ([#14004](https://github.com/laurent22/joplin/issues/14004) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: OneNote import: Simplify imported HTML ([#14047](https://github.com/laurent22/joplin/issues/14047) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Replace the edit profile config menu option with a gui to manage profiles ([#13771](https://github.com/laurent22/joplin/issues/13771) by [@mrjo118](https://github.com/mrjo118))
+- Improved: Support converting multiple notes from HTML to Markdown at once ([#13802](https://github.com/laurent22/joplin/issues/13802) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @playwright/test (v1.55.1), @rollup/plugin-node-resolve (v16.0.2), dayjs (v1.11.18), fs-extra (v11.3.2), katex (v0.16.23), mermaid (v11.10.1), sass (v1.93.2), sharp (v0.34.4)
+- Improved: Use the "--no-sandbox" flag for Tuxedo OS ([#13810](https://github.com/laurent22/joplin/issues/13810) by [@marph91](https://github.com/marph91))
+- Fixed: Do not suggest downgrading the app when a version has been unpublished ([#13038](https://github.com/laurent22/joplin/issues/13038))
+- Fixed: Editor plugins: Fix error logged when pressing enter and a plugin-created input is focused ([#13932](https://github.com/laurent22/joplin/issues/13932) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix "Check synchronization configuration" button ([#14031](https://github.com/laurent22/joplin/issues/14031)) ([#14030](https://github.com/laurent22/joplin/issues/14030) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix ABC Sheet Music setting includes "Translation error" in description ([#14058](https://github.com/laurent22/joplin/issues/14058)) ([#14049](https://github.com/laurent22/joplin/issues/14049) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix importing HTML links with multi-line `title`s as Markdown ([#13876](https://github.com/laurent22/joplin/issues/13876)) ([#13872](https://github.com/laurent22/joplin/issues/13872) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix search markers vanish when moving focus to a secondary window ([#13927](https://github.com/laurent22/joplin/issues/13927) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Images sometimes don't render until you click somewhere in the note ([#14019](https://github.com/laurent22/joplin/issues/14019)) ([#13963](https://github.com/laurent22/joplin/issues/13963) by [@bwat47](https://github.com/bwat47))
+- Fixed: Import Error: Note date incorrect when import notes with import MD - Markdown + Front Matter ([#12770](https://github.com/laurent22/joplin/issues/12770))
+- Fixed: Importing MD + frontmatter fails on empty variable ([#13008](https://github.com/laurent22/joplin/issues/13008))
+- Fixed: Importing from OneNote: Fix badly encoded accents in notebook titles ([#14037](https://github.com/laurent22/joplin/issues/14037)) ([#13549](https://github.com/laurent22/joplin/issues/13549) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Insert time command not respecting locale settings ([#13994](https://github.com/laurent22/joplin/issues/13994)) ([#13229](https://github.com/laurent22/joplin/issues/13229) by [@HIJOdelIDANII](https://github.com/HIJOdelIDANII))
+- Fixed: Markdown import incorrectly parses a link as a file path ([#12172](https://github.com/laurent22/joplin/issues/12172))
+- Fixed: OneNote import: Fix all imported notes have the language marked as "English" ([#14054](https://github.com/laurent22/joplin/issues/14054) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OneNote import: Fix certain embedded files are positioned under the header ([#13898](https://github.com/laurent22/joplin/issues/13898) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OneNote import: Fix video embeds aren't imported: Import video embeds as links ([#14046](https://github.com/laurent22/joplin/issues/14046) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OneNote importer: Fix missing content in imported notebooks, improve math formula import ([#13829](https://github.com/laurent22/joplin/issues/13829) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OneNote importer: Fix wrong page version imported ([#13850](https://github.com/laurent22/joplin/issues/13850)) ([#13844](https://github.com/laurent22/joplin/issues/13844) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Remove architecture warning on Windows ARM with Apple silicon ([#13814](https://github.com/laurent22/joplin/issues/13814))
+- Fixed: Rich Text Editor: ABC sheet music options lost on edit ([#14040](https://github.com/laurent22/joplin/issues/14040))
+- Fixed: Warning logged on startup when ABC Sheet Music plugin is not installed ([#13880](https://github.com/laurent22/joplin/issues/13880))
+- Fixed: When using RTE, switching to a note from go to anything search results with keyboard immediately updates note last modified date ([#12367](https://github.com/laurent22/joplin/issues/12367))
+
 ## [v3.5.9](https://github.com/laurent22/joplin/releases/tag/v3.5.9) (Pre-release) - 2025-11-30T19:11:11Z
 
 - New: Add loading indicator to the sync status screen ([#13796](https://github.com/laurent22/joplin/issues/13796) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

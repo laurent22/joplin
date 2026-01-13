@@ -25,6 +25,28 @@ async function postSession(email: string, password: string): Promise<AppContext>
 	return context;
 }
 
+const createApplicationCredentials = async () => {
+	const applicationAuthId = 'applicationAuthId1';
+	const { user } = await createUserAndSession(1, false);
+	await models().application().createPreLoginRecord(
+		applicationAuthId,
+		'',
+		'',
+		'',
+		'',
+	);
+	await models().application().onAuthorizeUse(applicationAuthId, user.id);
+	const response = await models().application().createAppPassword(applicationAuthId);
+	if (response.status === 'finished') {
+		return {
+			user,
+			password: response.password,
+			id: response.id,
+		};
+	}
+	return {};
+};
+
 describe('api/sessions', () => {
 
 	beforeAll(async () => {
@@ -220,4 +242,72 @@ describe('api/sessions', () => {
 
 	});
 
+	test('should login with application credentials', async () => {
+
+		const { user, password, id } = await createApplicationCredentials();
+
+		const context = await koaAppContext({
+			request: {
+				method: 'POST',
+				url: '/api/sessions',
+				body: {
+					email: id,
+					password: password,
+				},
+			},
+		});
+
+		await routeHandler(context);
+
+		expect(context.response.status).toBe(200);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		expect(!!(context.response.body as any).id).toBe(true);
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const session: Session = await models().session().load((context.response.body as any).id);
+		expect(session.user_id).toBe(user.id);
+	});
+
+	test('should update application information on successful login', async () => {
+		jest
+			.useFakeTimers()
+			.setSystemTime(new Date('2023-11-27'));
+
+		const { password, id } = await createApplicationCredentials();
+
+		const context = await koaAppContext({
+			request: {
+				method: 'POST',
+				url: '/api/sessions',
+				body: {
+					email: id,
+					password: password,
+					platform: 1,
+					type: 2,
+					version: '2.13.1',
+				},
+			},
+		});
+
+		// before request
+		const applicationsBefore = await models().application().all();
+		expect(applicationsBefore.length).toBe(1);
+
+		expect(applicationsBefore[0].platform).toBe(0);
+		expect(applicationsBefore[0].type).toBe(0);
+		expect(applicationsBefore[0].version).toBe('');
+		expect(applicationsBefore[0].last_access_time).toBe(0);
+
+		await routeHandler(context);
+		expect(context.response.status).toBe(200);
+
+		// after request
+		const applicationsAfter = await models().application().all();
+		expect(applicationsAfter.length).toBe(1);
+
+		expect(applicationsAfter[0].platform).toBe(1);
+		expect(applicationsAfter[0].type).toBe(2);
+		expect(applicationsAfter[0].version).toBe('2.13.1');
+		expect(applicationsAfter[0].last_access_time).toBe(Date.now());
+	});
 });

@@ -5,7 +5,7 @@ import { AppContext } from '../../utils/types';
 import { findPrice, PricePeriod, PlanName, getFeatureLabel, getFeatureEnabled, getAllFeatureIds } from '@joplin/lib/utils/joplinCloud';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
-import { stripeConfig, stripePriceIdByUserId, updateSubscriptionType } from '../../utils/stripe';
+import { initStripe, stripeConfig, stripePriceIdByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { bodyFields } from '../../utils/requestUtils';
 import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType } from '../../models/UserModel';
@@ -48,7 +48,9 @@ router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
 		});
 	}
 
-	const priceId = await stripePriceIdByUserId(ctx.joplin.models, ctx.joplin.owner.id);
+	const stripe = initStripe();
+	const priceId = await stripePriceIdByUserId(stripe, ctx.joplin.models, ctx.joplin.owner.id);
+
 	const currentPrice = findPrice(stripeConfig(), { priceId });
 	const upgradePrice = findPrice(stripeConfig(), {
 		accountType: AccountType.Pro,
@@ -75,7 +77,8 @@ router.post('upgrade', async (_path: SubPath, ctx: AppContext) => {
 	const models = joplin.models;
 
 	if (fields.upgrade_button) {
-		await updateSubscriptionType(models, joplin.owner.id, AccountType.Pro);
+		const stripe = initStripe();
+		await updateSubscriptionType(stripe, models, joplin.owner.id, AccountType.Pro);
 		await models.user().save({ id: joplin.owner.id, account_type: AccountType.Pro });
 		await models.notification().add(joplin.owner.id, NotificationKey.UpgradedToPro);
 		return redirect(ctx, `${config().baseUrl}/home`);

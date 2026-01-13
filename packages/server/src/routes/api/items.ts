@@ -51,8 +51,9 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 			// query parameter.
 			if (ctx.query['share_id']) {
 				saveOptions.shareId = ctx.query['share_id'] as string;
-				await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
 			}
+
+			// await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
 
 			items = [
 				{
@@ -67,7 +68,7 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 
 	const output = await ctx.joplin.models.item().saveFromRawContent(ctx.joplin.owner, items, saveOptions);
 	for (const [name] of Object.entries(output)) {
-		if (output[name].item) output[name].item = ctx.joplin.models.item().toApiOutput(output[name].item) as Item;
+		if (output[name].item) output[name].item = (await ctx.joplin.models.item().toApiOutput(output[name].item)) as Item;
 		if (output[name].error) output[name].error = errorToPlainObject(output[name].error);
 	}
 

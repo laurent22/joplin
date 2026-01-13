@@ -124,8 +124,7 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 
 					void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
 				},
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onError: (error: any) => {
+				onError: (error: string|Error) => {
 					errors.push(error);
 					console.warn(error);
 				},
