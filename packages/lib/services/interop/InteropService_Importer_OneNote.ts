@@ -337,7 +337,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const originalPath = join(basePath, fileName);
 			let newPath;
 
-			let fixedFileName = Buffer.from(fileName, 'latin1').toString('utf8');
+			const fixedFileName = Buffer.from(fileName, 'latin1').toString('utf8');
 			// If the filename includes the Unicode replacement character, file name correction has failed.
 			// Use the original (incorrect) filename in that case:
 			const replacementCharacter = '\uFFFD';
