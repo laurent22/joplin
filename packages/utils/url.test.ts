@@ -1,4 +1,4 @@
-import { fileUriToPath, hasProtocol } from './url';
+import { fileUriToPath, isHttpOrHttpsUrl, hasProtocol } from './url';
 
 describe('utils/url', () => {
 
@@ -27,6 +27,17 @@ describe('utils/url', () => {
 		expect(fileUriToPath('file:///d:/better')).toBe('d:/better');
 		expect(fileUriToPath('file:///c:/AUTOEXEC.BAT', 'win32')).toBe('c:\\AUTOEXEC.BAT');
 	}));
+
+	it('should correctly identify https and http URLs', () => {
+		expect(isHttpOrHttpsUrl('https://example.com')).toBe(true);
+		expect(isHttpOrHttpsUrl('http://example.com')).toBe(true);
+		// cSpell:disable
+		expect(isHttpOrHttpsUrl('htttp://example.com')).toBe(false);
+		// cSpell:enable
+		expect(isHttpOrHttpsUrl('ftp://')).toBe(false);
+		expect(isHttpOrHttpsUrl('javascript:alert()')).toBe(false);
+		expect(isHttpOrHttpsUrl('void:0')).toBe(false);
+	});
 
 	test.each([
 		[

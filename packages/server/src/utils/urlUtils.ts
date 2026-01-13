@@ -1,6 +1,7 @@
 import { URL } from 'url';
 import config from '../config';
 import { Uuid } from '../services/database/types';
+import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import { ReportType } from '../services/reports/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -23,6 +24,14 @@ export function stripOffQueryParameters(url: string): string {
 	s.pop();
 	return s.join('?');
 }
+
+// Does not escape HTML characters.
+export const sanitizeUserUrl = (url: string) => {
+	if (!isHttpOrHttpsUrl(url)) {
+		return '#';
+	}
+	return url;
+};
 
 export function resetPasswordUrl(token: string): string {
 	return `${config().baseUrl}/password/reset${token ? `?token=${token}` : ''}`;
@@ -60,8 +69,10 @@ export function changesUrl(): string {
 	return `${config().baseUrl}/changes`;
 }
 
-export function loginUrl(): string {
-	return `${config().baseUrl}/login`;
+export function loginUrl(applicationAuthId?: string): string {
+	const url = `${config().baseUrl}/login`;
+	if (!applicationAuthId) return url;
+	return `${url}?application_auth_id=${applicationAuthId}`;
 }
 
 export function adminUserDeletionsUrl(): string {
@@ -94,6 +105,33 @@ export function adminEmailsUrl() {
 
 export function adminEmailUrl(id: number) {
 	return `${config().adminBaseUrl}/emails/${id}`;
+}
+
+export function mfaUrl(userId: Uuid) {
+	return `${config().baseUrl}/mfa/${userId}`;
+}
+
+export function applicationsConfirmUrl(applicationAuthId: string) {
+	return `${config().baseUrl}/applications/${applicationAuthId}/confirm`;
+}
+
+export function recoveryCodesUrl() {
+	return `${config().baseUrl}/recovery_codes`;
+}
+
+export function recoveryCodesAuthUrl(isPassword?: boolean, isMfaCode?: boolean) {
+	const url = `${config().baseUrl}/recovery_codes/auth`;
+	if (isMfaCode) return `${url}?show_mfa_code=1`;
+	if (isPassword) return `${url}?show_password=1`;
+	return url;
+}
+
+export function applicationsUrl() {
+	return `${config().baseUrl}/applications`;
+}
+
+export function applicationDeleteUrl(id: string) {
+	return `${config().baseUrl}/applications/${id}/delete`;
 }
 
 export function adminReportUrl(type: ReportType) {

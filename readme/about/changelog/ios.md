@@ -1,5 +1,42 @@
 # Joplin iOS Changelog
 
+## [ios-v13.5.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.5.3) - 2026-01-10T10:09:33Z
+
+- Fixed: Fix icon rendering (#14071) (#14063 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed keyboard input issue in note title (#14070) (#13544 by [@mrjo118](https://github.com/mrjo118))
+
+## [ios-v13.5.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.5.2) - 2026-01-08T19:42:53Z
+
+- New: Add a link to the list of open-source licenses (5caec16)
+- New: Add the ability to rename and delete tags (#13731 by [@mrjo118](https://github.com/mrjo118))
+- New: Rich Text Editor: Add shortcuts for inserting code blocks (#14055 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Dark mode: Improve contrast of conflicts notebook title, error messages in "Logs" (#13925 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: In-editor rendering: Fix rendered checkboxes are very small on mobile (#14056 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Do no re-use the 'Restored Notes' folder if it is trashed (#13813 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Markdown editor: Make header styles more closely match the note viewer (#14053) (#13753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Prevent layout shift when hiding/showing rendered checkboxes (#14044) (#13159 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Prevent opening the edit / delete dialog when long pressing the conflicts notebook (#13860 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Rich Text Editor: Set the default math/code block content to the selection (#13952 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update js-draw to v1.33.0 (#13990 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/datetimepicker (v8.4.5), @react-native-documents/picker (v10.1.7), @react-native/babel-preset (v0.81.0), @rollup/plugin-node-resolve (v16.0.2), babel-plugin-react-native-web (v0.21.1), dayjs (v1.11.18), esbuild (v0.25.10), expo (v53.0.23), fs-extra (v11.3.2), katex (v0.16.23), mermaid (v11.10.1), react-native-safe-area-context (v5.6.1), react-native-share (v12.2.0), react-native-web (v0.21.1), react-native-webview (v13.16.0), sass (v1.93.2), sharp (v0.34.4)
+- Improved: Upgrade js-draw to v1.32.0 (#13875 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Viewer, Rich Text Editor: Save/restore the cursor and scroll position when switching notes (#13962) (#520 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Editor: Fix search/replace UI is partially off-screen on small-screen devices (#13978 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Feature flags: Fix "voice typing" feature flag (#13981 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix "Check synchronization configuration" button (#14031) (#14030 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix ABC Sheet Music setting includes "Translation error" in description (#14058) (#14049 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix incompatible plugins cannot be uninstalled (#13828) (#13825 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix some icons are invisible: Upgrade `react-native-vector-icons` to v12 (#13905) (#13854 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Images sometimes don't render until you click somewhere in the note (#14019) (#13963 by [@bwat47](https://github.com/bwat47))
+- Fixed: Import Error: Note date incorrect when import notes with import MD - Markdown + Front Matter (#12770)
+- Fixed: Importing MD + frontmatter fails on empty variable (#13008)
+- Fixed: Insert time command not respecting locale settings (#13994) (#13229 by [@HIJOdelIDANII](https://github.com/HIJOdelIDANII))
+- Fixed: Markdown import incorrectly parses a link as a file path (#12172)
+- Fixed: Rich Text Editor: Fix checklists saved with extra space (#13951) (#13081 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix indent/de-indent buttons do nothing when not in a list (#13961 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix table delete row/delete column buttons can't remove the last row/column from a table (#13877 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Toolbar editor: Fix toolbar editor dismiss button is rendered outside the dialog on small screens (#13976 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.5.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.5.1) - 2025-11-29T12:45:55Z
 
 - New: Add support for mixed case tags (#12931 by [@mrjo118](https://github.com/mrjo118))

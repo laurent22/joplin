@@ -478,8 +478,15 @@ async function findFirstRelevantTag(baseTag: string, platform: Platform, allTags
 	for (let i = baseTagIndex - 1; i >= 0; i--) {
 		const tag = allTags[i];
 		if (platformFromTag(tag) !== platform) continue;
+
 		const currentVersion = versionFromTag(tag);
-		if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+
+		try {
+			if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+		} catch (error) {
+			console.warn(`Skipping invalid tag: ${tag}`);
+			continue;
+		}
 
 		try {
 			const logs = await gitLog(tag);

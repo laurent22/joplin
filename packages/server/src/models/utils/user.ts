@@ -37,3 +37,8 @@ export function totalSizeClass(user: User) {
 	if (d >= .7) return 'is-warning';
 	return '';
 }
+
+export function getIsMFAEnabled(user: User) {
+	if (!('totp_secret' in user)) throw new Error('Missing totp_secret property');
+	return user.totp_secret.length > 0;
+}

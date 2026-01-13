@@ -31,19 +31,18 @@ export function accountTypeToPriceId(accountType: AccountType): string {
 	return price.id;
 }
 
-export async function subscriptionInfoByUserId(models: Models, userId: Uuid): Promise<SubscriptionInfo> {
+export async function subscriptionInfoByUserId(stripe: Stripe, models: Models, userId: Uuid): Promise<SubscriptionInfo> {
 	const sub = await models.subscription().byUserId(userId);
 	if (!sub) throw new ErrorWithCode('Could not retrieve subscription info', ErrorCode.NoSub);
 
-	const stripe = initStripe();
 	const stripeSub = await stripe.subscriptions.retrieve(sub.stripe_subscription_id);
 	if (!stripeSub) throw new ErrorWithCode('Could not retrieve Stripe subscription', ErrorCode.NoStripeSub);
 
 	return { sub, stripeSub };
 }
 
-export async function stripePriceIdByUserId(models: Models, userId: Uuid): Promise<string> {
-	const { stripeSub } = await subscriptionInfoByUserId(models, userId);
+export async function stripePriceIdByUserId(stripe: Stripe, models: Models, userId: Uuid): Promise<string> {
+	const { stripeSub } = await subscriptionInfoByUserId(stripe, models, userId);
 	return stripePriceIdByStripeSub(stripeSub);
 }
 
@@ -55,18 +54,18 @@ export async function cancelSubscriptionByUserId(models: Models, userId: Uuid) {
 	const sub = await models.subscription().byUserId(userId);
 	if (!sub) throw new Error(`No subscription for user: ${userId}`);
 	const stripe = initStripe();
-	await stripe.subscriptions.del(sub.stripe_subscription_id);
+	await stripe.subscriptions.cancel(sub.stripe_subscription_id);
 }
 
 export async function cancelSubscription(stripe: Stripe, stripeSubId: string) {
-	await stripe.subscriptions.del(stripeSubId);
+	await stripe.subscriptions.cancel(stripeSubId);
 }
 
-export async function updateSubscriptionType(models: Models, userId: Uuid, newAccountType: AccountType) {
+export async function updateSubscriptionType(stripe: Stripe, models: Models, userId: Uuid, newAccountType: AccountType) {
 	const user = await models.user().load(userId);
 	if (user.account_type === newAccountType) throw new Error(`Account type is already: ${newAccountType}`);
 
-	const { sub, stripeSub } = await subscriptionInfoByUserId(models, userId);
+	const { sub, stripeSub } = await subscriptionInfoByUserId(stripe, models, userId);
 
 	const currentPrice = findPrice(stripeConfig(), { priceId: stripePriceIdByStripeSub(stripeSub) });
 	const upgradePrice = findPrice(stripeConfig(), { accountType: newAccountType, period: currentPrice.period });
@@ -103,7 +102,6 @@ export async function updateSubscriptionType(models: Models, userId: Uuid, newAc
 	// example, the user could try to upgrade the account a second time.
 	// Although that attempt would most likely fail due the checks above and
 	// the checks in subscriptions.update().
-	const stripe = initStripe();
 	await stripe.subscriptions.update(sub.stripe_subscription_id, { items });
 }
 
@@ -142,10 +140,54 @@ export function betaStartSubUrl(email: string, accountType: AccountType): string
 	return `${globalConfig().joplinAppBaseUrl}/plans/?email=${encodeURIComponent(email)}&account_type=${encodeURIComponent(accountType)}`;
 }
 
-export async function updateCustomerEmail(models: Models, userId: Uuid, newEmail: string) {
-	const subInfo = await subscriptionInfoByUserId(models, userId);
-	const stripe = initStripe();
+export async function updateCustomerEmail(stripe: Stripe, models: Models, userId: Uuid, newEmail: string) {
+	const subInfo = await subscriptionInfoByUserId(stripe, models, userId);
 	await stripe.customers.update(subInfo.sub.stripe_user_id, {
 		email: newEmail,
 	});
 }
+
+// Currently we only handle FR, because it's required by French administration
+const countryToLocales = (countryCode: string): string[] => {
+	countryCode = countryCode.toUpperCase();
+	if (countryCode === 'FR') return ['fr-FR', 'en-GB'];
+	return ['en-GB'];
+};
+
+export const autoAssignCustomerPreferredLocales = async (stripe: Stripe, customerId: string) => {
+	const customer = await stripe.customers.retrieve(customerId) as Stripe.Customer;
+	if (!customer.address) return;
+
+	const locales = countryToLocales(customer.address.country);
+	await stripe.customers.update(customerId, {
+		preferred_locales: locales,
+	});
+};
+
+enum InvoiceStatus {
+	None = 'none',
+	Paid = 'paid',
+	Unpaid = 'unpaid',
+}
+
+export const getLastInvoiceStatus = async (stripe: Stripe, subscriptionId: string) => {
+	const sub = await stripe.subscriptions.retrieve(subscriptionId, {
+		expand: ['latest_invoice'],
+	});
+
+	const invoice = sub.latest_invoice as Stripe.Invoice;
+	if (!invoice) return InvoiceStatus.None;
+
+	return invoice.paid ? InvoiceStatus.Paid : InvoiceStatus.Unpaid;
+};
+
+// Rechecking an invoice normally should not be necessary since we receive the events from Stripe.
+// However if for some reason the server was down for a long period of time, it may not have picked
+// up that an invoice had been paid during that time. In that case, it's possible call this to
+// manually check the invoice status and update the related flags.
+export const recheckPaymentStatus = async (stripe: Stripe, models: Models, userId: Uuid) => {
+	const subInfo = await subscriptionInfoByUserId(stripe, models, userId);
+	const status = await getLastInvoiceStatus(stripe, subInfo.sub.stripe_subscription_id);
+	if (status === InvoiceStatus.None) return;
+	await models.subscription().handlePayment(subInfo.sub.stripe_subscription_id, status === InvoiceStatus.Paid);
+};

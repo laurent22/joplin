@@ -53,6 +53,7 @@ lerna-debug.log
 docs/**/*.mustache
 .idea
 /readme/i18n
+.watchman-cookie-*
 
 # Yarn stuff
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored

@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.5.9",
+  "version": "3.5.11",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -88,6 +88,12 @@
       "target": [
         {
           "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "pkg",
           "arch": [
             "x64"
           ]
