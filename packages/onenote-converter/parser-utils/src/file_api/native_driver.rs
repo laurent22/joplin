@@ -77,7 +77,7 @@ impl FileApiDriver for FileApiDriverImpl {
     }
 }
 
-impl FileHandle for fs::File { }
+impl FileHandle for fs::File {}
 
 #[cfg(test)]
 mod test {

@@ -1,7 +1,7 @@
 use std::io::{Read, Seek};
 
 pub type ApiResult<T> = std::result::Result<T, std::io::Error>;
-pub trait FileHandle : Read+Seek {}
+pub trait FileHandle: Read + Seek {}
 
 pub trait FileApiDriver: Send + Sync {
     fn is_directory(&self, path: &str) -> ApiResult<bool>;

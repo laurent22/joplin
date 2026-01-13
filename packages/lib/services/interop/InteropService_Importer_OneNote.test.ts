@@ -42,6 +42,19 @@ const normalizeNoteForSnapshot = (body: string) => {
 	return removeItemIds(removeDefaultCss(body));
 };
 
+// A single Markdown string is much easier to visually compare during snapshot testing.
+// Prefer notesToMarkdownString to normalizeNoteForSnapshot when the exact output HTML
+// doesn't matter.
+const notesToMarkdownString = (notes: NoteEntity[]) => {
+	const converter = new HtmlToMd();
+	return notes.map(note => {
+		return [
+			`# Note: ${note.title}`,
+			converter.parse(normalizeNoteForSnapshot(note.body)),
+		].join('\n\n');
+	}).sort().join('\n\n\n');
+};
+
 // This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
@@ -333,8 +346,6 @@ describe('InteropService_Importer_OneNote', () => {
 	it('should correctly import .onepkg notebooks', async () => {
 		const notes = await importNote(`${supportDir}/onenote/test.onepkg`);
 
-		for (const note of notes) {
-			expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot(`onepkg-${note.title}`);
-		}
+		expect(notesToMarkdownString(notes)).toMatchSnapshot();
 	});
 });

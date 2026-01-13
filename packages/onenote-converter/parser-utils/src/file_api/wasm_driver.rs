@@ -1,7 +1,7 @@
 use super::ApiResult;
 use super::FileApiDriver;
 use super::FileHandle;
-use std::io::{ Seek, Read, BufReader, SeekFrom };
+use std::io::{BufReader, Read, Seek, SeekFrom};
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
 use web_sys::js_sys;
@@ -43,7 +43,11 @@ extern "C" {
     type JsFileHandle;
 
     #[wasm_bindgen(structural, method, catch)]
-    fn read(this: &JsFileHandle, offset: usize, size: usize) -> std::result::Result<Uint8Array, JsValue>;
+    fn read(
+        this: &JsFileHandle,
+        offset: usize,
+        size: usize,
+    ) -> std::result::Result<Uint8Array, JsValue>;
 
     #[wasm_bindgen(structural, method)]
     fn size(this: &JsFileHandle) -> usize;
@@ -121,7 +125,7 @@ impl FileApiDriver for FileApiDriverImpl {
             Ok(handle) => {
                 let file = BufReader::new(SeekableFileHandle { handle, offset: 0 });
                 Ok(Box::new(file))
-            },
+            }
             Err(e) => Err(handle_error(e, &format!("opening file {}", path))),
         }
     }
@@ -193,17 +197,16 @@ impl Read for SeekableFileHandle {
                 if size > out.len() {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::Other,
-                        "Invariant violation: Size read must be less than or equal to the maximum_read_size."
+                        "Invariant violation: Size read must be less than or equal to the maximum_read_size.",
                     ));
                 }
-
 
                 let (target_mem, padding) = out.split_at_mut(size);
                 target_mem.copy_from_slice(&data);
                 padding.fill(0);
 
                 Ok(size)
-            },
+            }
             Err(error) => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::Other,
@@ -219,18 +222,18 @@ impl Seek for SeekableFileHandle {
         match pos {
             SeekFrom::Start(pos) => {
                 self.offset = pos as usize;
-            },
+            }
             SeekFrom::Current(offset) => {
                 // Disallow seeking to a negative position
                 if offset < 0 && (-offset) as usize > self.offset {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
-                        "Attempted to seek before the beginning of the file."
+                        "Attempted to seek before the beginning of the file.",
                     ));
                 }
 
                 self.offset = (self.offset as i64 + offset) as usize;
-            },
+            }
             SeekFrom::End(offset) => {
                 self.offset = self.handle.size();
                 self.seek(SeekFrom::Current(offset))?;
@@ -244,7 +247,8 @@ impl Drop for SeekableFileHandle {
     fn drop(&mut self) {
         if let Err(error) = self.handle.close() {
             // Use web_sys directly -- log_warn! can't be used from within the parser-utils package:
-            let message: JsValue = format!("OneNote converter: Failed to close file: Error: {error:?}").into();
+            let message: JsValue =
+                format!("OneNote converter: Failed to close file: Error: {error:?}").into();
             web_sys::console::warn_1(&message);
         }
     }
