@@ -2,7 +2,7 @@ import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './t
 
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
-import { rtrimSlashes } from '../../path-utils';
+import { friendlySafeFilename, rtrimSlashes } from '../../path-utils';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import { join, resolve, normalize, sep, dirname, extname, basename, relative } from 'path';
 import Logger from '@joplin/utils/Logger';
@@ -338,17 +338,11 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			let newPath;
 
 			let fixedFileName = Buffer.from(fileName, 'latin1').toString('utf8');
-			// If the filename includes the Unicode replacement character, file name correction has failed.
-			// Use the original (incorrect) filename in that case:
-			const replacementCharacter = '\uFFFD';
-			if (fixedFileName !== fileName && !fixedFileName.includes(replacementCharacter)) {
-				// In general, the path shouldn't start with "."s or contain path separators.
-				// However, if it does, these characters might cause import errors, so remove them:
-				fixedFileName = fixedFileName.replace(/^\.+/, '');
-				fixedFileName = fixedFileName.replace(/[/\\]/g, ' ');
-
-				// Avoid path traversal: Ensure that the file path is contained within the base directory
-				const newFullPathSafe = shim.fsDriver().resolveRelativePathWithinDir(basePath, fixedFileName);
+			if (fixedFileName !== fileName) {
+				const newFullPathSafe = shim.fsDriver().resolveRelativePathWithinDir(
+					basePath,
+					friendlySafeFilename(fixedFileName, 128, true),
+				);
 				await shim.fsDriver().move(originalPath, newFullPathSafe);
 
 				newPath = newFullPathSafe;
