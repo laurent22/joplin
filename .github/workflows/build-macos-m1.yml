@@ -64,20 +64,24 @@ jobs:
           npm pkg set 'build.mac.target[1].target'='pkg'
           npm pkg set 'build.mac.target[1].arch[0]'='arm64'
 
-          if [[ "$PUBLISH_ENABLED" == "true" ]]; then
-            echo "Building and publishing desktop application..."
-            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist --mac --arm64
+          build_dist() {
+            if [[ "$PUBLISH_ENABLED" == "true" ]]; then
+              echo "Building and publishing desktop application..."
+              PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist --mac --arm64
 
-            yarn modifyReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
-          else
-            echo "Building but *not* publishing desktop application..."
+              yarn modifyReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
+            else
+              echo "Building but *not* publishing desktop application..."
 
-            # We also want to disable signing the app in this case, because
-            # it doesn't work and we don't need it.
-            # https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+              # We also want to disable signing the app in this case, because
+              # it doesn't work and we don't need it.
+              # https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
 
-            export CSC_IDENTITY_AUTO_DISCOVERY=false
-            npm pkg set 'build.mac.identity'=null --json
+              export CSC_IDENTITY_AUTO_DISCOVERY=false
+              npm pkg set 'build.mac.identity'=null --json
 
-            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist  --mac --arm64 --publish=never
-          fi
+              PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist  --mac --arm64 --publish=never
+            fi
+          }
+
+          build_dist || build_dist || build_dist
