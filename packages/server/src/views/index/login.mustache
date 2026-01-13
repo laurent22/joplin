@@ -1,30 +1,60 @@
 <section class="section login-box">
+	<h1 class="title">Log in to {{global.appName}}</h1>
+	<p class="subtitle">Please enter your details to log in to {{global.appName}}</p>
+
 	<div class="container block">
 		{{> errorBanner}}
-
-		<div class="columns">
-			<form action="{{{global.baseUrl}}}/login" method="POST" class="column">
-				<h2 class="title">Login to {{global.appName}}</h1>
-				<p class="subtitle">Please input your details to login to {{global.appName}}</p>
-
-				<div class="field">
-					<label class="label">Email</label>
-					<div class="control">
-						<input class="input" type="email" name="email"/>
+		<form action="{{{global.baseUrl}}}/login" method="POST" id="login-form">
+			<input type="hidden" name="applicationAuthId" value="{{applicationAuthId}}"/>
+			<div class="field">
+				<label class="label">Email</label>
+				<div class="field has-addons">
+					<div class="control is-expanded">
+						<input class="input" type="email" name="email" value="{{email}}"/>
 					</div>
 				</div>
-				<div class="field">
-					<label class="label">Password</label>
-					<div class="control">
-						<input class="input" type="password" name="password"/>
+			</div>
+			<div class="field">
+				<label class="label">Password</label>
+				<div class="field has-addons">
+					<div class="control is-expanded">
+						<input class="input" type="password" name="password" value="{{password}}"/>
 					</div>
-					<p class="help"><a href="{{{global.baseUrl}}}/password/forgot">I forgot my password</a></p>
+					<p class="control">
+						<button class="button" onclick="togglePasswordVisibility()" type="button">
+						    <span class="icon is-small">
+								<i class="fas fa-eye"></i>
+							</span>	
+						</button>
+					</p>
 				</div>
-				<div class="control">
-					<button class="button is-primary">Login</button>
+				<p class="help"><a href="{{{global.baseUrl}}}/password/forgot">I forgot my password</a></p>
+			</div>
+			{{#showMfaCodeInput}}
+				<div class="field">
+					<label class="label">Authentication code</label>
+					<div class="field has-addons">
+						<div class="control is-expanded">
+							<input class="input" inputmode="number" name="mfaCode" maxlength="6" placeholder="XXXXXX" autocomplete="off" required/>
+						</div>
+					</div>
+					<p class="help"><a href="{{{global.baseUrl}}}/login?showRecoveryCodeInput=1">Use a recovery code</a></p>
 				</div>
-			</form>
-		</div>
+			{{/showMfaCodeInput}}
+			{{#showRecoveryCodeInput}}
+				<div class="field">
+					<label class="label">Recovery Code</label>
+					<div class="field has-addons">
+						<div class="control is-expanded">
+							<input class="input" name="recoveryCode" maxlength="11" required/>
+						</div>
+					</div>
+				</div>
+			{{/showRecoveryCodeInput}}
+			<div class="control pt-3">
+				<button class="button is-primary">Login</button>
+			</div>
+		</form>
 	</div>
 
 	{{#samlEnabled}}
@@ -48,3 +78,15 @@
 		</div>
 	{{/signupUrl}}
 </section>
+
+<script type="text/javascript">
+function togglePasswordVisibility() {
+	let input = document.querySelector('input[name=password]');
+	if (input.type === 'password') {
+		input.type = 'text';
+	} else {
+		input.type = 'password';
+	}
+}
+
+</script>

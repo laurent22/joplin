@@ -77,6 +77,8 @@ import StorageModel from './StorageModel';
 import UserDeletionModel from './UserDeletionModel';
 import BackupItemModel from './BackupItemModel';
 import TaskStateModel from './TaskStateModel';
+import ApplicationModel from './ApplicationModel';
+import RecoveryCodeModel from './RecoveryCodeModel';
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
@@ -182,6 +184,13 @@ export class Models {
 		return new TaskStateModel(this.db_, this.dbSlave_, this.newModelFactory, this.config_);
 	}
 
+	public application() {
+		return new ApplicationModel(this.db_, this.dbSlave_, this.newModelFactory, this.config_);
+	}
+
+	public recoveryCode() {
+		return new RecoveryCodeModel(this.db_, this.dbSlave_, this.newModelFactory, this.config_);
+	}
 }
 
 export default function newModelFactory(db: DbConnection, dbSlave: DbConnection, config: Config): Models {

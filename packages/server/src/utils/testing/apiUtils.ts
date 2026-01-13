@@ -2,7 +2,7 @@ import { AppContext } from '../types';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContextTestOptions, checkContextError, koaAppContext } from './testUtils';
 
-interface ExecRequestOptions {
+export interface ExecRequestOptions {
 	filePath?: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	query?: Record<string, any>;

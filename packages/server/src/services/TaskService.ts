@@ -131,6 +131,8 @@ export default class TaskService extends BaseService {
 	public async runTask(id: TaskId, runType: RunType) {
 		const displayString = this.taskDisplayString(id);
 		const taskState = await this.models.taskState().loadByTaskId(id);
+		if (!taskState) throw new Error(`Invalid task: ${id}: ${runType}`);
+
 		if (!taskState.enabled) {
 			logger.info(`Not running ${displayString} because the tasks is disabled`);
 			return;

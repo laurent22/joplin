@@ -1,4 +1,4 @@
-import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
+import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
@@ -6,7 +6,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
-import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
+import { getIsMFAEnabled, getMaxItemSize, getMaxTotalItemSize } from './utils/user';
 import * as zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
@@ -27,10 +27,13 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
+import { validateEmail } from '../utils/validation';
 import { Config, Env, LdapConfig } from '../utils/types';
-import ldapLogin from '../utils/ldapLogin';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
+import { encryptMFASecret } from '../utils/crypto';
+import ldapLogin from '../utils/ldapLogin';
+const thirtyTwo = require('thirty-two');
 import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
 import { samlOwnedUserProperties } from '../utils/saml';
@@ -43,6 +46,8 @@ interface UserEmailDetails {
 	recipient_email: string;
 	recipient_name: string;
 }
+
+export type GetUsersApiResponse = User;
 
 export enum AccountType {
 	Default = 0,
@@ -58,37 +63,42 @@ export interface Account {
 	max_total_item_size: number;
 }
 
+const accountMetadata: Record<AccountType, Account> = {
+	// The "default" account is the account that would be used on a self-hosted
+	// Joplin Server, or a user that can be created from the admin UI (or API).
+	// In general, it should have all permissions and infinite storage.
+	[AccountType.Default]: {
+		account_type: AccountType.Default,
+		can_share_folder: 1,
+		can_receive_folder: 1,
+		max_item_size: 0,
+		max_total_item_size: 0,
+	},
+
+	// The Basic, Pro and Team account is what is available to Joplin Cloud users.
+	[AccountType.Basic]: {
+		account_type: AccountType.Basic,
+		can_share_folder: 0,
+		can_receive_folder: 1,
+		max_item_size: 10 * MB,
+		max_total_item_size: 2 * GB,
+	},
+	[AccountType.Pro]: {
+		account_type: AccountType.Pro,
+		can_share_folder: 1,
+		can_receive_folder: 1,
+		max_item_size: 200 * MB,
+		max_total_item_size: 30 * GB,
+	},
+};
+
 interface AccountTypeSelectOptions {
 	value: number;
 	label: string;
 }
 
 export function accountByType(accountType: AccountType): Account {
-	const types: Account[] = [
-		{
-			account_type: AccountType.Default,
-			can_share_folder: 1,
-			can_receive_folder: 1,
-			max_item_size: 0,
-			max_total_item_size: 0,
-		},
-		{
-			account_type: AccountType.Basic,
-			can_share_folder: 0,
-			can_receive_folder: 1,
-			max_item_size: 10 * MB,
-			max_total_item_size: 1 * GB,
-		},
-		{
-			account_type: AccountType.Pro,
-			can_share_folder: 1,
-			can_receive_folder: 1,
-			max_item_size: 200 * MB,
-			max_total_item_size: 10 * GB,
-		},
-	];
-
-	const type = types.find(a => a.account_type === accountType);
+	const type = accountMetadata[accountType];
 	if (!type) throw new Error(`Invalid account type: ${accountType}`);
 	return type;
 }
@@ -118,12 +128,14 @@ export function accountTypeToString(accountType: AccountType): string {
 }
 
 export default class UserModel extends BaseModel<User> {
+	private mfaEncryptionKey_: string = null;
 	private authCodeTtl = 600000; // 10 minutes
 	private ldapConfig_: LdapConfig[];
 	private isUsingExternalAuth_ = false;
 
 	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, dbSlave, modelFactory, config);
+		this.mfaEncryptionKey_ = config.MFA_ENCRYPTION_KEY;
 		this.ldapConfig_ = config.ldap;
 		this.isUsingExternalAuth_ = isUsingExternalAuth(config);
 	}
@@ -132,9 +144,11 @@ export default class UserModel extends BaseModel<User> {
 		return 'users';
 	}
 
-	public async loadByEmail(email: string): Promise<User> {
-		const user: User = this.formatValues({ email: email });
-		return this.db<User>(this.tableName).where(user).first();
+	public async loadByEmail(email: string, options: LoadOptions = {}): Promise<User> {
+		return this.db(this.tableName)
+			.select(this.selectFields(options))
+			.where(this.formatValues({ email: email }))
+			.first();
 	}
 
 	public async loadBySsoAuthCode(code: string): Promise<User> {
@@ -257,9 +271,16 @@ export default class UserModel extends BaseModel<User> {
 		return user;
 	}
 
-	protected objectToApiOutput(object: User): User {
-		const output: User = { ...object };
-		delete output.password;
+	protected async objectToApiOutput(object: User): Promise<GetUsersApiResponse> {
+		const output: GetUsersApiResponse = { };
+
+		if ('account_type' in object) output.account_type = object.account_type;
+		if ('created_time' in object) output.created_time = object.created_time;
+		if ('email' in object) output.email = object.email;
+		if ('full_name' in object) output.full_name = object.full_name;
+		if ('id' in object) output.id = object.id;
+		if ('updated_time' in object) output.updated_time = object.updated_time;
+
 		return output;
 	}
 
@@ -373,9 +394,11 @@ export default class UserModel extends BaseModel<User> {
 		// been hashed by then.
 		if (options.isNew) {
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
+			if ('email' in user && !user.email.includes('@')) throw new ErrorUnprocessableEntity(`Should include @ in email address, email: ${user.email}`);
 			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
+			if ('email' in user && !user.email.includes('@')) throw new ErrorUnprocessableEntity(`Should include @ in email address, email: ${user.email}`);
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
 		}
 
@@ -384,18 +407,12 @@ export default class UserModel extends BaseModel<User> {
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
 			// See https://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690 (found via https://stackoverflow.com/a/574698)
 			if (user.email.length > 254) throw new ErrorUnprocessableEntity('Please enter an email address between 0 and 254 characters');
-			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
+			validateEmail(user.email);
 		}
 
 		if ('full_name' in user && user.full_name.length > 256) throw new ErrorUnprocessableEntity('Full name must be at most 256 characters');
 
 		return super.validate(user, options);
-	}
-
-	private validateEmail(email: string): boolean {
-		const s = email.split('@');
-		if (s.length !== 2) return false;
-		return !!s[0].length && !!s[1].length;
 	}
 
 	// public async delete(id: string): Promise<void> {
@@ -502,12 +519,16 @@ export default class UserModel extends BaseModel<User> {
 		});
 	}
 
+	public async generateLinkForPasswordReset(userId: Uuid) {
+		const validationToken = await this.models().token().generate(userId);
+		return resetPasswordUrl(validationToken);
+	}
+
 	public async sendResetPasswordEmail(email: string) {
 		const user = await this.loadByEmail(email);
 		if (!user) throw new ErrorNotFound(`No such user: ${email}`);
 
-		const validationToken = await this.models().token().generate(user.id);
-		const url = resetPasswordUrl(validationToken);
+		const url = await this.generateLinkForPasswordReset(user.id);
 
 		await this.models().email().push({
 			...resetPasswordTemplate({ url }),
@@ -522,6 +543,7 @@ export default class UserModel extends BaseModel<User> {
 		await this.withTransaction(async () => {
 			await this.models().user().save({ id: user.id, password: fields.password });
 			await this.models().session().deleteByUserId(user.id);
+			await this.models().application().deleteByUserId(user.id);
 			await this.models().token().deleteByValue(user.id, token);
 		}, 'UserModel::resetPassword');
 	}
@@ -791,14 +813,13 @@ export default class UserModel extends BaseModel<User> {
 		return this.withTransaction(async () => {
 			const savedUser = await super.save(user, options);
 
-			if (isNew) {
+			if (isNew && (object.email_confirmed !== 1 || object.must_set_password !== 0)) {
 				await this.sendAccountConfirmationEmail(savedUser);
 			}
 
 			return savedUser;
 		}, 'UserModel::save');
 	}
-
 	public async saveMulti(users: User[], options: SaveOptions = {}): Promise<void> {
 		await this.withTransaction(async () => {
 			for (const user of users) {
@@ -806,4 +827,38 @@ export default class UserModel extends BaseModel<User> {
 			}
 		}, 'UserModel::saveMulti');
 	}
+
+	public async hasMFAEnabled(email: string) {
+		const user = await this.loadByEmail(email, { fields: ['totp_secret'] });
+		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		return getIsMFAEnabled(user);
+	}
+
+	public async disableMFA(userId: Uuid) {
+		await this.save({ id: userId, totp_secret: '' });
+	}
+
+	public async isPasswordValid(userId: Uuid, password: string) {
+		if (!password) throw new ErrorBadRequest('Password cannot be empty');
+		const user = await this.load(userId, { fields: ['password'] });
+		return checkPassword(password, user.password);
+	}
+
+	public async enableMFA(userId: Uuid, totpSecret: string, currentSessionId: string) {
+		const decodedTotpSecret = thirtyTwo.decode(totpSecret);
+		const encryptedTotpSecret = encryptMFASecret(decodedTotpSecret, this.mfaEncryptionKey_);
+
+		await this.withTransaction(async () => {
+			await super.save({ id: userId, totp_secret: encryptedTotpSecret });
+
+			const codes = this.models().recoveryCode().generateNewCodes();
+			await super.models().recoveryCode().saveCodes(codes, userId);
+			await super.models().keyValue().setValue(`RecoveryCode::isNewlyCreated::${userId}`, 1);
+			await super.models().session().deleteByUserId(userId, currentSessionId);
+			await super.models().application().deleteByUserId(userId);
+		}, 'UserModel::enableMFA');
+
+		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'Multi-factor authentication has been enabled for your account. Please remember to copy and save your recovery codes');
+	}
+
 }

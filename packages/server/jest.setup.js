@@ -8,6 +8,6 @@ shimInit({ nodeSqlite });
 // tests can take more time since we do integration testing too. The share tests
 // in particular can take a while.
 
-jest.setTimeout(60 * 1000);
+jest.setTimeout(120 * 1000);
 
 process.env.JOPLIN_IS_TESTING = '1';

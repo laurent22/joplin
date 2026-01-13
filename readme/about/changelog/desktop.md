@@ -1,5 +1,11 @@
 # Joplin Desktop Changelog
 
+## [v3.5.11](https://github.com/laurent22/joplin/releases/tag/v3.5.11) - 2026-01-12T15:17:25Z
+
+- Improved: OneNote importer: Simplify error report ([#14074](https://github.com/laurent22/joplin/issues/14074) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed keyboard input issue in note title ([#14070](https://github.com/laurent22/joplin/issues/14070)) ([#13544](https://github.com/laurent22/joplin/issues/13544) by [@mrjo118](https://github.com/mrjo118))
+
+
 ## [v3.5.10](https://github.com/laurent22/joplin/releases/tag/v3.5.10) (Pre-release) - 2026-01-08T20:18:15Z
 
 - New: Add CJK characters counter in statistics panel ([#13840](https://github.com/laurent22/joplin/issues/13840) by Self Not Found)

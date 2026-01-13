@@ -2306,7 +2306,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
+  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EXAV: ae28256069c4cdde93d185c007d8f68d92902c2e
   EXConstants: 98bcf0f22b820f9b28f9fee55ff2daededadd2f8
   Expo: c8f323f74218c45c46e27eed40d8a53ba50667c3
@@ -2319,7 +2319,7 @@ SPEC CHECKSUMS:
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 84b955f7b4da8b895faf5946f73748267347c975
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
+  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
   JoplinRNShareExtension: e158a4b53ee0aa9cd3037a16221dc8adbd6f7860
