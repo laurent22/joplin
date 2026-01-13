@@ -8,6 +8,7 @@ import { ApplicationPlatform, ApplicationType } from '@joplin/lib/types';
 import { validate } from 'uuid';
 import Logger from '@joplin/utils/Logger';
 import { NotificationKey } from './NotificationModel';
+import { getEmptyIp } from '../db';
 
 const logger = Logger.create('ApplicationModel');
 
@@ -110,7 +111,7 @@ export default class ApplicationModel extends BaseModel<Application> {
 	private async createApplicationRecord(userId: Uuid, client: Client) {
 		return this.save({
 			user_id: userId,
-			ip: client.ip,
+			ip: client.ip || getEmptyIp(this.db),
 			version: client.version,
 			platform: client.platform,
 			type: client.type,

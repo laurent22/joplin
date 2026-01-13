@@ -24,7 +24,7 @@ describe('ApplicationModel', () => {
 			email: 'test@example.com',
 			password: '111111',
 		});
-		await models().application().createPreLoginRecord('mock-application-id', 'mock-ip', 'mock-version', 'mock-platform', 'mock-type');
+		await models().application().createPreLoginRecord('mock-application-id', '127.0.0.1', 'mock-version', 'mock-platform', 'mock-type');
 		await models().application().onAuthorizeUse('mock-application-id', user.id);
 
 		const notifications = await models().notification().allUnreadByUserId(user.id);
@@ -42,7 +42,7 @@ describe('ApplicationModel', () => {
 		);
 
 		const appId = 'mock-application-id';
-		await models().application().createPreLoginRecord(appId, 'mock-ip', 'mock-version', 'mock-platform', 'mock-type');
+		await models().application().createPreLoginRecord(appId, '127.0.0.1', 'mock-version', 'mock-platform', 'mock-type');
 		await models().application().onAuthorizeUse(appId, user.id);
 	});
 });

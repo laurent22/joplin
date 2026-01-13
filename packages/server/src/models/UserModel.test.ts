@@ -488,8 +488,8 @@ describe('UserModel', () => {
 			password: '111111',
 		});
 		await models().session().createUserSession(user.id);
-		await models().session().createApplicationSession(user.id, 'applicationId');
-		await models().session().createApplicationSession(user.id, 'applicationId2');
+		await models().session().createApplicationSession(user.id, '00000000-0000-0000-0000-000000000001');
+		await models().session().createApplicationSession(user.id, '00000000-0000-0000-0000-000000000002');
 
 		const session = await models().session().createUserSession(user.id);
 
