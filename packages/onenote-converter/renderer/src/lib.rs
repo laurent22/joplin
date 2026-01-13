@@ -4,7 +4,7 @@ use sanitize_filename::sanitize;
 use std::{io::Read, panic};
 use wasm_bindgen::{JsError, prelude::wasm_bindgen};
 
-use parser_utils::{fs_driver, log};
+use parser_utils::{FileHandle, fs_driver, log};
 
 mod errors;
 mod notebook;
@@ -35,8 +35,6 @@ fn _main(input_path: &str, output_dir: &str, base_path: &str) -> Result<()> {
 }
 
 pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
-    let mut parser = Parser::new();
-
     let extension: String = fs_driver().get_file_extension(path);
 
     match extension.as_str() {
@@ -48,7 +46,7 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
                 return Ok(());
             }
 
-            let section = parser.parse_section(path.to_owned())?;
+            let section = Parser::new().parse_section(path.to_owned())?;
 
             let section_output_dir = fs_driver().get_output_path(base_path, output_dir, path);
             section::Renderer::new().render(&section, section_output_dir.to_owned())?;
@@ -57,7 +55,7 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
             let _name: String = fs_driver().get_file_name(path).expect("Missing file name");
             log!("Parsing .onetoc2 file: {}", _name);
 
-            let notebook = parser.parse_notebook(path.to_owned())?;
+            let notebook = Parser::new().parse_notebook(path.to_owned())?;
 
             let notebook_name = fs_driver()
                 .get_parent_dir(path)
@@ -73,35 +71,42 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
             notebook::Renderer::new().render(&notebook, &notebook_name, &notebook_output_dir)?;
         },
         ".onepkg" => {
-            let cab_data = fs_driver().open_file(path)?;
-            let mut cabinet = cab::Cabinet::new(cab_data)?;
-            let file_paths: Vec<String> = cabinet
-                .folder_entries()
-                .flat_map(|folder| folder.file_entries())
-                .map(|entry| String::from(entry.name()))
-                .collect();
-
-            for file_path in file_paths {
-                if !file_path.ends_with(".one") {
-                    log!("Skipping non-section file {file_path}");
-                    continue;
-                }
-
-                let mut file_data = cabinet.read_file(&file_path)?;
-                let mut data = Vec::new();
-                file_data.read_to_end(&mut data)?;
-
-                let section = parser.parse_section_from_data(&data, &file_path)?;
-
-                let file_name = fs_driver().get_file_name(&file_path).unwrap_or(file_path);
-                log!("Rendering {file_name}");
-                let section_output_dir = fs_driver().join(output_dir, &sanitize(&file_name));
-                fs_driver().make_dir(&section_output_dir)?;
-
-                section::Renderer::new().render(&section, section_output_dir.to_owned())?;
-            }
+            let file_data = fs_driver().open_file(path)?;
+            convert_onepkg(file_data, output_dir)?;
         },
         ext => return Err(eyre!("Invalid file extension: {}, file: {}", ext, path)),
+    }
+
+    Ok(())
+}
+
+fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()> {
+    let mut cabinet = cab::Cabinet::new(file_data)?;
+    let file_paths: Vec<String> = cabinet
+        .folder_entries()
+        .flat_map(|folder| folder.file_entries())
+        .map(|entry| String::from(entry.name()))
+        .collect();
+    let mut parser = Parser::new();
+
+    for file_path in file_paths {
+        if !file_path.ends_with(".one") {
+            log!("Skipping non-section file {file_path}");
+            continue;
+        }
+
+        let mut file_data = cabinet.read_file(&file_path)?;
+        let mut data = Vec::new();
+        file_data.read_to_end(&mut data)?;
+
+        let section = parser.parse_section_from_data(&data, &file_path)?;
+
+        let file_name = fs_driver().get_file_name(&file_path).unwrap_or(file_path);
+        log!("Rendering {file_name}");
+        let section_output_dir = fs_driver().join(output_dir, &sanitize(&file_name));
+        fs_driver().make_dir(&section_output_dir)?;
+
+        section::Renderer::new().render(&section, section_output_dir.to_owned())?;
     }
 
     Ok(())
