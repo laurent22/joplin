@@ -338,7 +338,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			let newPath;
 
 			let fixedFileName = Buffer.from(fileName, 'latin1').toString('utf8');
-			if (fixedFileName !== fileName) {
+			// If the filename includes the Unicode replacement character, file name correction has failed.
+			// Use the original (incorrect) filename in that case:
+			const replacementCharacter = '\uFFFD';
+			if (fixedFileName !== fileName && !fixedFileName.includes(replacementCharacter)) {
 				const newFullPathSafe = shim.fsDriver().resolveRelativePathWithinDir(
 					basePath,
 					friendlySafeFilename(fixedFileName, 128, true),
