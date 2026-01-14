@@ -27,7 +27,7 @@
     "@types/mustache": "4.2.6",
     "@types/node": "18.19.130",
     "@types/node-rsa": "1.1.4",
-    "@types/react": "18.3.25",
+    "@types/react": "18.3.26",
     "@types/uuid": "10.0.0",
     "jest": "29.7.0",
     "jest-expect-message": "1.1.3",
