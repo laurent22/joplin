@@ -119,8 +119,8 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const ownedShares = ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id)) as Share[];
-	const participatedShares = ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id));
+	const ownedShares = (await ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id))) as Share[];
+	const participatedShares = (await ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id)));
 
 	// Fake paginated results so that it can be added later on, if needed.
 	return {

@@ -126,6 +126,10 @@ export default abstract class BaseModel<T> {
 		return this.defaultFields_.slice();
 	}
 
+	protected get defaultFieldsWithPrefix(): string[] {
+		return this.defaultFields.map(f => `${this.tableName}.${f}`);
+	}
+
 	public async checkIfAllowed(_user: User, _action: AclAction, _resource: T = null): Promise<void> {
 		throw new Error('Must be overriden');
 	}
@@ -302,13 +306,17 @@ export default abstract class BaseModel<T> {
 		return output;
 	}
 
-	protected objectToApiOutput(object: T): T {
+	protected async objectToApiOutput(object: T): Promise<T> {
 		return { ...object };
 	}
 
-	public toApiOutput(object: T | T[]): T | T[] {
+	public async toApiOutput(object: T | T[]): Promise<T | T[]> {
 		if (Array.isArray(object)) {
-			return object.map(f => this.objectToApiOutput(f));
+			const output: T[] = [];
+			for (let i = 0; i < object.length; i++) {
+				output.push(await this.objectToApiOutput(object[i]));
+			}
+			return output;
 		} else {
 			return this.objectToApiOutput(object);
 		}

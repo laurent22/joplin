@@ -44,3 +44,9 @@ Copy and paste the content of both the debugging window and the Firefox console,
 ## Using the Web Clipper service
 
 The Web Clipper service can be used to create, modify or delete notes, notebooks, tags, etc. from any other application. It exposes an API with a number of methods to manage Joplin's data. For more information about this API and how to use it, please check the [Joplin API documentation](https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md).
+
+## Video tutorial
+
+Watch this short video to learn how to install and use the web clipper:
+
+[![Watch the video](https://img.youtube.com/vi/jeWTF2BILEI/hqdefault.jpg)](https://www.youtube.com/watch?v=jeWTF2BILEI)

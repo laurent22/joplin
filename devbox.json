@@ -11,11 +11,6 @@
     },
     "nodejs":     "24.5.0",
     "pkg-config": "latest",
-    "darwin.apple_sdk.frameworks.Foundation": { // satisfies missing CoreText/CoreText.h
-      // https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/default.nix
-      "version":   "",
-      "platforms": ["aarch64-darwin", "x86_64-darwin"],
-    },
     "python": "3.13.3",
     "bat":    "latest",
     "electron": {

@@ -53,6 +53,7 @@ lerna-debug.log
 docs/**/*.mustache
 .idea
 /readme/i18n
+.watchman-cookie-*
 
 # Yarn stuff
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
@@ -88,6 +89,7 @@ packages/app-cli/app/command-export.js
 packages/app-cli/app/command-geoloc.js
 packages/app-cli/app/command-help.js
 packages/app-cli/app/command-import.js
+packages/app-cli/app/command-keymap.js
 packages/app-cli/app/command-ls.js
 packages/app-cli/app/command-mkbook.test.js
 packages/app-cli/app/command-mkbook.js
@@ -1200,6 +1202,7 @@ packages/lib/InMemoryCache.js
 packages/lib/JoplinDatabase.js
 packages/lib/JoplinError.js
 packages/lib/JoplinServerApi.js
+packages/lib/ObjectUtils.test.js
 packages/lib/ObjectUtils.js
 packages/lib/PerformanceLogger.test.js
 packages/lib/PerformanceLogger.js

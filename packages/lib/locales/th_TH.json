@@ -134,6 +134,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -323,6 +326,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"ตัวหนา"
 	],
@@ -413,6 +419,9 @@
 	"Checking... Please wait.": [
 		"กำลังตรวจสอบ... โปรดรอสักครู่..."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"เลือก"
 	],
@@ -471,6 +480,9 @@
 		""
 	],
 	"Command": [
+		""
+	],
+	"COMMAND": [
 		""
 	],
 	"Command palette": [
@@ -665,6 +677,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -739,6 +754,9 @@
 	],
 	"Displays the complete information about note.": [
 		"แสดงข้อมูลทั้งหมดของบันทึก"
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"แสดงบันทึกที่เลือก"
@@ -1361,6 +1379,9 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		""
 	],
@@ -1437,6 +1458,9 @@
 		""
 	],
 	"Manage your plugins": [
+		""
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
 		""
 	],
 	"Manual": [
@@ -1598,6 +1622,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		""
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1715,6 +1742,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"เปิด..."
 	],
@@ -1726,6 +1756,9 @@
 	],
 	"Options": [
 		"ตัวเลือก"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Other": [
 		""
@@ -2132,6 +2165,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selection deleted": [
 		""
 	],
@@ -2245,6 +2281,9 @@
 	],
 	"Source format: %s": [
 		"ฟอร์แมตต้นฉบับ: %s"
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -2689,6 +2728,9 @@
 	],
 	"Try again": [
 		"ลองอีกครั้ง"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด"

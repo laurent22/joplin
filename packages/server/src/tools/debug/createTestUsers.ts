@@ -1,33 +1,15 @@
 import time from '@joplin/lib/time';
-import { DbConnection, truncateTables } from '../../db';
+import { DbConnection } from '../../db';
 import newModelFactory from '../../models/factory';
 import { AccountType } from '../../models/UserModel';
 import { User, UserFlagType } from '../../services/database/types';
 import { Config } from '../../utils/types';
+import truncateUserDataTables from './truncateUserDataTables';
 
 export interface CreateTestUsersOptions {
 	count?: number;
 	fromNum?: number;
 }
-
-const includedTables = [
-	'changes',
-	'emails',
-	'events',
-	'item_resources',
-	'items',
-	'notifications',
-	'sessions',
-	'share_users',
-	'shares',
-	'subscriptions',
-	'teams',
-	'team_users',
-	'user_deletions',
-	'user_flags',
-	'user_items',
-	'users',
-];
 
 export default async function createTestUsers(db: DbConnection, config: Config, options: CreateTestUsersOptions = null) {
 	options = {
@@ -39,7 +21,7 @@ export default async function createTestUsers(db: DbConnection, config: Config, 
 	const password = '111111';
 	const models = newModelFactory(db, db, config);
 
-	await truncateTables(db, includedTables);
+	await truncateUserDataTables(db);
 
 	await models.user().save({
 		email: 'admin@localhost',

@@ -3,7 +3,7 @@ import { Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
-import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
+import BaseModel, { AclAction, DeleteOptions, LoadOptions, ValidateOptions } from './BaseModel';
 import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
@@ -43,6 +43,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public checkShareUrl(share: Share, shareUrl: string) {
+		if (this.userContentBaseUrl === 'http://joplinusercontent.local:22300') return; // OK - testing
 		if (this.baseUrl === this.userContentBaseUrl) return; // OK
 
 		const userId = userIdFromUserContentUrl(shareUrl);
@@ -55,7 +56,7 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 	}
 
-	protected objectToApiOutput(object: Share): Share {
+	protected async objectToApiOutput(object: Share): Promise<Share> {
 		const output: Share = {};
 
 		if (object.id) output.id = object.id;
@@ -88,10 +89,10 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.save(toSave);
 	}
 
-	public async itemShare(shareType: ShareType, itemId: string): Promise<Share> {
+	public async itemShare(shareType: ShareType, itemId: string, options: LoadOptions = null): Promise<Share> {
 		return this
 			.db(this.tableName)
-			.select(this.defaultFields)
+			.select(this.selectFields(options))
 			.where('item_id', '=', itemId)
 			.where('type', '=', shareType)
 			.first();

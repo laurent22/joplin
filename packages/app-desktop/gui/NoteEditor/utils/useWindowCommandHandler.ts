@@ -2,7 +2,7 @@ import { RefObject, Dispatch, SetStateAction, useEffect } from 'react';
 import { WindowCommandDependencies, NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, RegisteredRuntime } from '@joplin/lib/services/CommandService';
-import time from '@joplin/lib/time';
+import { formatMsToLocal } from '@joplin/utils/time';
 import { reg } from '@joplin/lib/registry';
 import getWindowCommandPriority from './getWindowCommandPriority';
 
@@ -50,7 +50,7 @@ function editorCommandRuntime(
 			if (declaration.name === 'insertDateTime') {
 				return editorRef.current.execCommand({
 					name: 'insertText',
-					value: time.formatMsToLocal(new Date().getTime()),
+					value: formatMsToLocal(Date.now()),
 				});
 			} else if (declaration.name === 'scrollToHash') {
 				return editorRef.current.scrollTo({

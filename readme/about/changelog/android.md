@@ -1,5 +1,21 @@
 # Joplin Android Changelog
 
+## [android-v3.5.8](https://github.com/laurent22/joplin/releases/tag/android-v3.5.8) (Pre-release) - 2026-01-10T10:08:46Z
+
+- Fixed: Fixed keyboard input issue in note title (#14070) (#13544 by [@mrjo118](https://github.com/mrjo118))
+
+## [android-v3.5.7](https://github.com/laurent22/joplin/releases/tag/android-v3.5.7) (Pre-release) - 2026-01-08T19:30:28Z
+
+- New: Rich Text Editor: Add shortcuts for inserting code blocks (#14055 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: In-editor rendering: Fix rendered checkboxes are very small on mobile (#14056 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Make header styles more closely match the note viewer (#14053) (#13753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Prevent layout shift when hiding/showing rendered checkboxes (#14044) (#13159 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @rollup/plugin-node-resolve (v16.0.2), katex (v0.16.23)
+- Fixed: Fix "Check synchronization configuration" button (#14031) (#14030 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix ABC Sheet Music setting includes "Translation error" in description (#14058) (#14049 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Images sometimes don't render until you click somewhere in the note (#14019) (#13963 by [@bwat47](https://github.com/bwat47))
+- Fixed: Insert time command not respecting locale settings (#13994) (#13229 by [@HIJOdelIDANII](https://github.com/HIJOdelIDANII))
+
 ## [android-v3.5.6](https://github.com/laurent22/joplin/releases/tag/android-v3.5.6) (Pre-release) - 2025-12-27T20:34:44Z
 
 - Revert "All: Apache Tomcat WebDAV compatibility for sync (#13614)"

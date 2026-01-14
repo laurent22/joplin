@@ -16,6 +16,7 @@
 			"./packages/app-cli/**/*.mo": true,
 			"./packages/app-cli/**/build/": true,
 			"./packages/app-cli/**/config.json": true,
+			"**/.watchman-cookie-*": true,
 			"./packages/app-cli/**/linkToLocal.sh": true,
 			"./packages/app-cli/**/node_modules/": true,
 			"./packages/app-cli/**/out.txt": true,

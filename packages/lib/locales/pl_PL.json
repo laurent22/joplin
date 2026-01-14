@@ -191,6 +191,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Informacje"
 	],
@@ -464,6 +467,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Pogrubienie"
 	],
@@ -602,6 +608,9 @@
 	"Checking... Please wait.": [
 		"Sprawdzanie... Proszę czekać."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Wybierz opcję"
 	],
@@ -691,6 +700,9 @@
 	],
 	"Command": [
 		"Polecenie"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta poleceń"
@@ -1023,6 +1035,9 @@
 	"Delete selected notes": [
 		"Usuń wybrane notatki"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Usunąć notatnik „Skrzynka odbiorcza”?\n\nJeśli usuniesz notatnik „Skrzynka odbiorcza”, wszystkie wiadomości e-mail, które zostały ostatnio wysłane do tej skrzynki, mogą zostać utracone."
 	],
@@ -1127,6 +1142,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Wyświetla pełne informacje o notatce."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Wyświetla podaną notatkę."
@@ -2009,6 +2027,9 @@
 	"Keychain Supported: %s": [
 		"Obsługiwany menadżer kluczy: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Klucze wymagające aktualizacji"
 	],
@@ -2156,6 +2177,9 @@
 	],
 	"Manage your plugins": [
 		"Zarządzaj wtyczkami"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Zarządza konfiguracją E2EE (szyfrowanie end-to-end). Dostępne polecenia: `enable`, `disable`, `decrypt`, `status`, `decrypt-file` oraz `target-status`."
@@ -2402,6 +2426,9 @@
 	"No updates available": [
 		"Brak dostępnych aktualizacji"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Brak"
 	],
@@ -2597,6 +2624,9 @@
 	"Open Sync Wizard...": [
 		"Otwórz kreatora synchronizacji..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Otwórz..."
 	],
@@ -2617,6 +2647,9 @@
 	],
 	"Options": [
 		"Opcje"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Lista uporządkowana"
@@ -3205,6 +3238,9 @@
 	"Select parent notebook": [
 		"Wybierz notatnik nadrzędny"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selection deleted": [
 		"Wybór usunięty"
 	],
@@ -3405,6 +3441,9 @@
 	],
 	"Source: ": [
 		"Źródło: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Separator"
@@ -4003,6 +4042,9 @@
 	],
 	"Try it now": [
 		"Wypróbuj teraz"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Wpisz `help [polecenie]`, aby uzyskać więcej informacji na temat polecenia, lub `help all`, aby uzyskać pełną informację na temat użycia."

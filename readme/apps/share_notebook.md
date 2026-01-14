@@ -28,6 +28,11 @@ To make use of this feature, simply select "Can view" or "Can view and edit" fro
 
 ![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230825-share-permissions.png)
 
+## Video tutorial
+Watch this short video to learn how to share a notebook and manage share permissions:
+
+[![Watch the video](https://img.youtube.com/vi/NvQAnea_Lk8/hqdefault.jpg)](https://www.youtube.com/watch?v=NvQAnea_Lk8)
+
 ## FAQ
 
 ### What's the availability of the notebook sharing feature?

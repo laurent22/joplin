@@ -69,6 +69,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 				// other files.
 				fileNamePattern: '*.one',
 			});
+
+			await this.fixIncorrectLatin1Decoding_(extractPath);
 		} else {
 			throw new Error(`Unknown file extension: ${fileExtension}`);
 		}
@@ -108,7 +110,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			try {
 				await oneNoteConverter(notebookFilePath, resolve(outputDirectory2), notebookBaseDir);
 			} catch (error) {
-				this.options_.onError?.(error);
+				// Forward only the error message. Usually the stack trace points to bytes in the WASM file.
+				// It's very difficult to use and can cause the error report to be longer than the maximum
+				// length for auto-creating a forum post:
+				this.options_.onError?.(error.message ?? error);
 				console.error(error);
 			}
 		}
@@ -177,6 +182,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const pipeline = [
 			(dom: Document, currentFolder: string) => this.extractSvgsToFiles_(dom, currentFolder),
 			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder),
+			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
 		];
 
 		for (const file of htmlFiles) {
@@ -231,6 +237,28 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 				link.href = relative(baseFolder, targetPage.path);
 			}
 		}
+		return changed;
+	}
+
+	private simplifyHtml_(dom: Document) {
+		const selectors = [
+			// <script> blocks that aren't marked with a specific type (e.g. application/tex).
+			'script:not([type])',
+			// ID mappings (unused at this stage of the import process)
+			'meta[name="X-Original-Page-Id"]',
+
+			// Empty iframes
+			'iframe[src=""]',
+		];
+
+		let changed = false;
+		for (const selector of selectors) {
+			for (const element of dom.querySelectorAll(selector)) {
+				element.remove();
+				changed = true;
+			}
+		}
+
 		return changed;
 	}
 
@@ -294,5 +322,48 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			svgs,
 			changed: true,
 		};
+	}
+
+	// Works around a decoding issue in which file names are extracted as latin1 strings,
+	// rather than UTF-8 strings. For example, OneNote seems to encode filenames as UTF-8 in .onepkg files.
+	// However, EXPAND.EXE reads the filenames as latin1. As a result, "é.one" becomes
+	// "Ã©.one" when extracted from the archive.
+	// This workaround re-encodes filenames as UTF-8.
+	private async fixIncorrectLatin1Decoding_(parentDir: string) {
+		// Only seems to be necessary on Windows.
+		if (!shim.isWindows()) return;
+
+		const fixEncoding = async (basePath: string, fileName: string) => {
+			const originalPath = join(basePath, fileName);
+			let newPath;
+
+			let fixedFileName = Buffer.from(fileName, 'latin1').toString('utf8');
+			if (fixedFileName !== fileName) {
+				// In general, the path shouldn't start with "."s or contain path separators.
+				// However, if it does, these characters might cause import errors, so remove them:
+				fixedFileName = fixedFileName.replace(/^\.+/, '');
+				fixedFileName = fixedFileName.replace(/[/\\]/g, ' ');
+
+				// Avoid path traversal: Ensure that the file path is contained within the base directory
+				const newFullPathSafe = shim.fsDriver().resolveRelativePathWithinDir(basePath, fixedFileName);
+				await shim.fsDriver().move(originalPath, newFullPathSafe);
+
+				newPath = newFullPathSafe;
+			} else {
+				newPath = originalPath;
+			}
+
+			if (await shim.fsDriver().isDirectory(originalPath)) {
+				const children = await shim.fsDriver().readDirStats(newPath, { recursive: false });
+				for (const child of children) {
+					await fixEncoding(originalPath, child.path);
+				}
+			}
+		};
+
+		const stats = await shim.fsDriver().readDirStats(parentDir, { recursive: false });
+		for (const stat of stats) {
+			await fixEncoding(parentDir, stat.path);
+		}
 	}
 }

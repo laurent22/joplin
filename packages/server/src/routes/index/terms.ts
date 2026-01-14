@@ -3,8 +3,6 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import MarkdownIt = require('markdown-it');
-import markdownUtils from '@joplin/lib/markdownUtils';
-import config from '../../config';
 
 const router: Router = new Router(RouteType.Web);
 router.public = true;
@@ -36,9 +34,7 @@ The use of this website is subject to the following terms of use:
 
 - From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).
 
-- Your use of this website and any dispute arising out of such use of the website is subject to the laws of France.
-
-- Please contact us at [${markdownUtils.escapeTitleText(config().supportEmail)}](mailto:${markdownUtils.escapeLinkUrl(config().supportEmail)}) for any question.`);
+- Your use of this website and any dispute arising out of such use of the website is subject to the laws of France.`);
 });
 
 export default router;

@@ -1,6 +1,5 @@
 import Setting, { AppType, SettingMetadataSection, SettingSectionSource } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
-const ObjectUtils = require('../../../ObjectUtils');
 const { _ } = require('../../../locale');
 import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
@@ -8,6 +7,7 @@ import Logger from '@joplin/utils/Logger';
 import { type ReactNode } from 'react';
 import { type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
+import { convertValuesToFunctions } from '../../../ObjectUtils';
 
 const logger = Logger.create('config-shared');
 
@@ -75,11 +75,11 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: any
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 
 	const options = {
-		...Setting.subValues(`sync.${syncTargetId}`, settings),
-		...Setting.subValues('net', settings) };
+		...Setting.subValues(`sync.${syncTargetId}`, settings, { includeConstants: true }),
+		...Setting.subValues('net', settings, { includeConstants: true }) };
 
 	comp.setState({ checkSyncConfigResult: 'checking' });
-	const result = await SyncTargetClass.checkConfig(ObjectUtils.convertValuesToFunctions(options));
+	const result = await SyncTargetClass.checkConfig(convertValuesToFunctions(options));
 	comp.setState({ checkSyncConfigResult: result });
 
 	if (result.ok) {
