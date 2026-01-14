@@ -11175,7 +11175,7 @@ __metadata:
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
     "@adobe/css-tools": "npm:4.4.4"
-    "@rollup/plugin-commonjs": "npm:28.0.6"
+    "@rollup/plugin-commonjs": "npm:28.0.8"
     "@rollup/plugin-node-resolve": "npm:16.0.2"
     "@rollup/plugin-replace": "npm:6.0.2"
     browserify: "npm:14.5.0"
@@ -14238,9 +14238,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:28.0.6":
-  version: 28.0.6
-  resolution: "@rollup/plugin-commonjs@npm:28.0.6"
+"@rollup/plugin-commonjs@npm:28.0.8":
+  version: 28.0.8
+  resolution: "@rollup/plugin-commonjs@npm:28.0.8"
   dependencies:
     "@rollup/pluginutils": "npm:^5.0.1"
     commondir: "npm:^1.0.1"
@@ -14254,7 +14254,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 10/0c46acc1d2efe107555c32c36c67965669bded206b4d4d940e0f30b374f03952c16fa5198d890da967d0c7301d863a95f0f00321fc0a9ccfc147ca5d09109073
+  checksum: 10/0533210ed86523ff2dfb952bcb13ae081a226d21c8246bf91f7e4553665c7e639f3df9bc60fadf5daae5d81de5b66101a82dc8dfc6a9f24c8ea882b40b9d8b84
   languageName: node
   linkType: hard
 
