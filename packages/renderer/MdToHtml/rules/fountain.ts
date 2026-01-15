@@ -1,6 +1,7 @@
 const fountain = require('../../vendor/fountain.min.js');
 
-const pluginAssets = function() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Theme is defined in @joplin/lib and we don't import it here
+const pluginAssets = function(theme: any) {
 	return [
 		{
 			inline: true,
@@ -21,7 +22,7 @@ const pluginAssets = function() {
 				}
 
 				.fountain .title-page {
-					border-bottom: 1px solid #d2d2d2;
+					border-bottom: 1px solid ${theme.dividerColor};
 				}
 
 				@media print {
@@ -37,7 +38,7 @@ const pluginAssets = function() {
 
 				.fountain hr {
 					border: none;
-					border-top: 1px solid #d2d2d2;
+					border-top: 1px solid ${theme.dividerColor};
 					margin: 2em 0;
 				}
 
