@@ -1805,6 +1805,7 @@ packages/renderer/MdToHtml/renderMedia.js
 packages/renderer/MdToHtml/rules/abc.js
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/code_inline.js
+packages/renderer/MdToHtml/rules/externalEmbed.js
 packages/renderer/MdToHtml/rules/fence.js
 packages/renderer/MdToHtml/rules/fountain.js
 packages/renderer/MdToHtml/rules/highlight_keywords.js
