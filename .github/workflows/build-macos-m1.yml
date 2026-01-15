@@ -61,8 +61,8 @@ jobs:
           npm pkg set 'build.mac.target[0].arch[0]'='arm64'
           npm pkg set 'build.mac.target[1].target'='zip'
           npm pkg set 'build.mac.target[1].arch[0]'='arm64'
-          npm pkg set 'build.mac.target[1].target'='pkg'
-          npm pkg set 'build.mac.target[1].arch[0]'='arm64'
+          npm pkg set 'build.mac.target[2].target'='pkg'
+          npm pkg set 'build.mac.target[2].arch[0]'='arm64'
 
           build_dist() {
             if [[ "$PUBLISH_ENABLED" == "true" ]]; then
@@ -84,4 +84,4 @@ jobs:
             fi
           }
 
-          build_dist || build_dist || build_dist
+          build_dist || build_dist
