@@ -39,7 +39,7 @@
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "test-ci": "lerna run test-ci --stream",
     "test": "lerna run test --stream",
-    "tsc": "lerna run tsc --stream --parallel",
+    "tsc": "lerna run tsc --stream",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "lerna run watch --stream --parallel",
