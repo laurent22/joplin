@@ -59,7 +59,7 @@
     "punycode": "2.3.1",
     "react": "19.0.0",
     "react-native": "0.79.2",
-    "react-native-device-info": "14.0.4",
+    "react-native-device-info": "14.1.1",
     "react-native-dropdownalert": "5.2.0",
     "react-native-exit-app": "2.0.0",
     "react-native-file-viewer": "2.1.5",

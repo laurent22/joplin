@@ -10587,7 +10587,7 @@ __metadata:
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
     react-native: "npm:0.79.2"
-    react-native-device-info: "npm:14.0.4"
+    react-native-device-info: "npm:14.1.1"
     react-native-dropdownalert: "npm:5.2.0"
     react-native-exit-app: "npm:2.0.0"
     react-native-file-viewer: "npm:2.1.5"
@@ -43933,12 +43933,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-device-info@npm:14.0.4":
-  version: 14.0.4
-  resolution: "react-native-device-info@npm:14.0.4"
+"react-native-device-info@npm:14.1.1":
+  version: 14.1.1
+  resolution: "react-native-device-info@npm:14.1.1"
   peerDependencies:
     react-native: "*"
-  checksum: 10/bf031048551597b1a9ab2965d498cbd073eacf50005dffa4e3496286578734a45854141d47654e7e58ef8531b8c2cd6d1670bfd75625271c91aab3b3b8d0a8d8
+  checksum: 10/560c5f8d990fc47e7f07ba526b0b016352854b9badac2ec1d5676912ea81df1a15eb05b78e4fb077d552e9dc4b6eff585ea0aad0f5d6a8f23a5cd4bfdf4b4652
   languageName: node
   linkType: hard
 
