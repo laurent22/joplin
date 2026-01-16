@@ -48,6 +48,7 @@ jobs:
           CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
           PUBLISH_ENABLED: ${{ env.PUBLISH_ENABLED }}
@@ -57,12 +58,19 @@ jobs:
           yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
+
+          npm pkg delete 'build.mac.target'
           npm pkg set 'build.mac.target[0].target'='dmg'
           npm pkg set 'build.mac.target[0].arch[0]'='arm64'
           npm pkg set 'build.mac.target[1].target'='zip'
           npm pkg set 'build.mac.target[1].arch[0]'='arm64'
-          npm pkg set 'build.mac.target[2].target'='pkg'
-          npm pkg set 'build.mac.target[2].arch[0]'='arm64'
+
+          # Only enable pkg build in the main repository CI. As of 01/15/2026, pkg
+          # build fails when running on external pull requests.
+          if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
+            npm pkg set 'build.mac.target[2].target'='pkg'
+            npm pkg set 'build.mac.target[2].arch[0]'='arm64'
+          fi
 
           build_dist() {
             if [[ "$PUBLISH_ENABLED" == "true" ]]; then
