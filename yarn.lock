@@ -11068,7 +11068,7 @@ __metadata:
     rate-limiter-flexible: "npm:7.3.2"
     raw-body: "npm:3.0.1"
     samlify: "npm:2.10.1"
-    short-uuid: "npm:4.2.2"
+    short-uuid: "npm:5.2.0"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
     stripe: "npm:13.9.0"
@@ -47410,13 +47410,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"short-uuid@npm:4.2.2":
-  version: 4.2.2
-  resolution: "short-uuid@npm:4.2.2"
+"short-uuid@npm:5.2.0":
+  version: 5.2.0
+  resolution: "short-uuid@npm:5.2.0"
   dependencies:
     any-base: "npm:^1.1.0"
-    uuid: "npm:^8.3.2"
-  checksum: 10/fcd0cef08c5f3f4c1e5d1f716a9a92efbadf8131a22ba6e399f7cf9257e7f18084995e6dc3e950cc705bcdee4c4e982a752872caf1305314713fc86357d68480
+    uuid: "npm:^9.0.1"
+  checksum: 10/9915e92c512c96684683e8fd56cdd848ce6d139db602567cc10fbd26313700db6c09f138687ee4bc13a7f41c71099948f4c9169e8b111e2bbffb1f8090b0af7c
   languageName: node
   linkType: hard
 
@@ -52380,6 +52380,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10/23857699a616d1b48224bc2b8440eae6e57d25463c3a0200e514ba8279dfa3bde7e92ea056122237839cfa32045e57d8f8f4a30e581d720fd72935572853ae2e
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10/9d0b6adb72b736e36f2b1b53da0d559125ba3e39d913b6072f6f033e0c87835b414f0836b45bcfaf2bdf698f92297fea1c3cc19b0b258bc182c9c43cc0fab9f2
   languageName: node
   linkType: hard
 
