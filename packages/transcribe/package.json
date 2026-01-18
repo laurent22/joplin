@@ -16,7 +16,7 @@
   "dependencies": {
     "@joplin/utils": "~3.6",
     "@koa/cors": "3.4.3",
-    "dotenv": "17.2.2",
+    "dotenv": "17.2.3",
     "file-type": "16.5.4",
     "fs-extra": "11.3.2",
     "knex": "3.1.0",
