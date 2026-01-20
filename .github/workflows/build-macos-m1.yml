@@ -87,7 +87,7 @@ jobs:
           import os, subprocess
           p12="installer.p12"
           pw=os.environ["CSC_INSTALLER_KEY_PASSWORD"]
-          cmd=["openssl","pkcs12","-in",p12,"-noout","-info","-provider","default","-provider","legacy","-passin","stdin"]
+          cmd=["openssl","pkcs12","-in",p12,"-noout","-info","-passin","stdin"]
           p=subprocess.run(cmd, input=(pw+"\n").encode(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
           print(p.stdout.decode(errors="replace"))
           print("exit code:", p.returncode)
