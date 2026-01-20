@@ -78,42 +78,29 @@ jobs:
 
 
 
-          echo "Password length: ${#CSC_INSTALLER_KEY_PASSWORD}"
-          echo "Has trailing whitespace: $([[ "$CSC_INSTALLER_KEY_PASSWORD" != "${CSC_INSTALLER_KEY_PASSWORD%[[:space:]]}" ]] && echo yes || echo no)"
-
           curl -L -o installer.p12 "$CSC_INSTALLER_LINK"
 
-          python3 - <<'PY'
-          import os, subprocess
-          p12="installer.p12"
-          pw=os.environ["CSC_INSTALLER_KEY_PASSWORD"]
-          cmd=["openssl","pkcs12","-in",p12,"-noout","-info","-passin","stdin"]
-          p=subprocess.run(cmd, input=(pw+"\n").encode(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-          print(p.stdout.decode(errors="replace"))
-          print("exit code:", p.returncode)
-          PY
+          # Create an explicit keychain file path (avoid temp dirs / weird defaults)
+          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PW=""
 
-          echo "Certificate size:"
-          ls -lh installer.p12
+          security create-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
 
-          echo "HASH:"
-          shasum -a 256 installer.p12
+          # Make sure this keychain is the one security uses
+          security list-keychains -d user -s "$KEYCHAIN"
+          security default-keychain -d user -s "$KEYCHAIN"
 
-          security create-keychain -p "" build.keychain
-          security unlock-keychain -p "" build.keychain
-
-          echo "Checking certificate...."
-
-          PW_FILE="$(mktemp)"
-          printf "%s" "$CSC_INSTALLER_KEY_PASSWORD" > "$PW_FILE"
-
+          # Import with -A to avoid access-control prompts in CI
           security import installer.p12 \
-            -k build.keychain \
-            -P "$(cat "$PW_FILE")" \
-            -T /usr/bin/codesign \
-            -T /usr/bin/productbuild
+            -k "$KEYCHAIN" \
+            -P "$CSC_INSTALLER_KEY_PASSWORD" \
+            -A
 
-          rm -f "$PW_FILE"
+          # Sanity: confirm identity is now present
+          security find-identity -p codesigning -v "$KEYCHAIN"
+
 
 
 
