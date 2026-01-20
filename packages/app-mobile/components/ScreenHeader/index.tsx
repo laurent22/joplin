@@ -698,6 +698,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			<View style={this.styles().outerContainer}>
 				<View style={this.styles().aboveHeader}/>
 				<View style={this.styles().innerContainer}>
+					<View style={{ width: 0 }} pointerEvents="none" />
 					{sideMenuComp}
 					{backButtonComp}
 					{renderUndoButton()}
