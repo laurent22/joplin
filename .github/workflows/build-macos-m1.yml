@@ -94,11 +94,17 @@ jobs:
 
           echo "Checking certificate...."
 
+          PW_FILE="$(mktemp)"
+          printf "%s" "$CSC_INSTALLER_KEY_PASSWORD" > "$PW_FILE"
+
           security import installer.p12 \
             -k build.keychain \
-            -P "$CSC_INSTALLER_KEY_PASSWORD" \
+            -P "$(cat "$PW_FILE")" \
             -T /usr/bin/codesign \
             -T /usr/bin/productbuild
+
+          rm -f "$PW_FILE"
+
 
 
 
