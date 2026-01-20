@@ -74,6 +74,24 @@ jobs:
             npm pkg set 'build.mac.target[2].arch[0]'='arm64'
           fi
 
+
+
+
+          curl -L -o installer.p12 "$CSC_INSTALLER_LINK"
+
+          security create-keychain -p "" build.keychain
+          security unlock-keychain -p "" build.keychain
+
+          security import installer.p12 \
+            -k build.keychain \
+            -P "$CSC_INSTALLER_KEY_PASSWORD" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/productbuild
+
+
+
+            
+
           build_dist() {
             if [[ "$PUBLISH_ENABLED" == "true" ]]; then
               echo "Building and publishing desktop application..."

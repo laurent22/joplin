@@ -247,3 +247,5 @@ nocookie
 fgag
 mrjo
 spctl
+codesign
+productbuild
