@@ -1,0 +1,26 @@
+{
+	"clientCount": 2,
+	"actions": [
+		["switchClient", { "id": 0 }],
+		"sync",
+
+		"// Switch to the second client & share a folder",
+		["switchClient", { "id": 1 }],
+		["newToplevelFolder", { "id": "11111111111111111111111111111112" }],
+		["newNote", { "id": "11111111111111111111111111111113", "parentId": "11111111111111111111111111111112" }],
+		["shareFolder", { "folderId": "11111111111111111111111111111112", "otherClientId": 0, "readOnly": false }],
+		"syncAndCheckState",
+
+		"// Switch to the first client & remove a note from the folder",
+		["switchClient", { "id": 0 }],
+		["newToplevelFolder", { "id": "11111111111111111111111111111111" }],
+		"syncAndCheckState",
+
+		["moveNote", { "noteId": "11111111111111111111111111111113", "targetFolderId": "11111111111111111111111111111111" }],
+		"syncAndCheckState",
+
+		"// Switch back to the second client and add a new client to the same account",
+		["switchClient", { "id": 0 }],
+		"newClientOnSameAccount"
+	]
+}

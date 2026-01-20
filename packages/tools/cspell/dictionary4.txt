@@ -241,5 +241,8 @@ xhdpi
 xxhdpi
 xxxhdpi
 scrollend
+youtube
+youtu
+nocookie
 fgag
 mrjo

@@ -47,30 +47,13 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		if (fileExtension === '.zip') {
 			logger.info('Unzipping files...');
 			await shim.fsDriver().zipExtract({ source: sourcePath, extractTo: targetPath });
-		} else if (fileExtension === '.one') {
+		} else if (fileExtension === '.one' || fileExtension === '.onepkg') {
 			logger.info('Copying file...');
 
 			const outputDirectory = join(targetPath, fileNameNoExtension);
 			await shim.fsDriver().mkdir(outputDirectory);
 
 			await shim.fsDriver().copy(sourcePath, join(outputDirectory, basename(sourcePath)));
-		} else if (fileExtension === '.onepkg') {
-			// Change the file extension so that the archive can be extracted
-			const archivePath = join(targetPath, `${fileNameNoExtension}.cab`);
-			await shim.fsDriver().copy(sourcePath, archivePath);
-
-			const extractPath = join(targetPath, fileNameNoExtension);
-			await shim.fsDriver().mkdir(extractPath);
-
-			await shim.fsDriver().cabExtract({
-				source: archivePath,
-				extractTo: extractPath,
-				// Only the .one files are used--there's no need to extract
-				// other files.
-				fileNamePattern: '*.one',
-			});
-
-			await this.fixIncorrectLatin1Decoding_(extractPath);
 		} else {
 			throw new Error(`Unknown file extension: ${fileExtension}`);
 		}
@@ -101,7 +84,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const notebookFilePath = join(unzipTempDirectory, notebookFile.path);
 			// In some cases, the OneNote zip file can include folders and other files
 			// that shouldn't be imported directly. Skip these:
-			if (!['.one', '.onetoc2'].includes(extname(notebookFilePath).toLowerCase())) {
+			if (!['.one', '.onepkg', '.onetoc2'].includes(extname(notebookFilePath).toLowerCase())) {
 				logger.info('Skipping non-OneNote file:', notebookFile.path);
 				skippedFiles.push(notebookFile.path);
 				continue;
@@ -322,48 +305,5 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			svgs,
 			changed: true,
 		};
-	}
-
-	// Works around a decoding issue in which file names are extracted as latin1 strings,
-	// rather than UTF-8 strings. For example, OneNote seems to encode filenames as UTF-8 in .onepkg files.
-	// However, EXPAND.EXE reads the filenames as latin1. As a result, "é.one" becomes
-	// "Ã©.one" when extracted from the archive.
-	// This workaround re-encodes filenames as UTF-8.
-	private async fixIncorrectLatin1Decoding_(parentDir: string) {
-		// Only seems to be necessary on Windows.
-		if (!shim.isWindows()) return;
-
-		const fixEncoding = async (basePath: string, fileName: string) => {
-			const originalPath = join(basePath, fileName);
-			let newPath;
-
-			let fixedFileName = Buffer.from(fileName, 'latin1').toString('utf8');
-			if (fixedFileName !== fileName) {
-				// In general, the path shouldn't start with "."s or contain path separators.
-				// However, if it does, these characters might cause import errors, so remove them:
-				fixedFileName = fixedFileName.replace(/^\.+/, '');
-				fixedFileName = fixedFileName.replace(/[/\\]/g, ' ');
-
-				// Avoid path traversal: Ensure that the file path is contained within the base directory
-				const newFullPathSafe = shim.fsDriver().resolveRelativePathWithinDir(basePath, fixedFileName);
-				await shim.fsDriver().move(originalPath, newFullPathSafe);
-
-				newPath = newFullPathSafe;
-			} else {
-				newPath = originalPath;
-			}
-
-			if (await shim.fsDriver().isDirectory(originalPath)) {
-				const children = await shim.fsDriver().readDirStats(newPath, { recursive: false });
-				for (const child of children) {
-					await fixEncoding(originalPath, child.path);
-				}
-			}
-		};
-
-		const stats = await shim.fsDriver().readDirStats(parentDir, { recursive: false });
-		for (const stat of stats) {
-			await fixEncoding(parentDir, stat.path);
-		}
 	}
 }

@@ -742,7 +742,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					'media-src \'self\' blob: data: *', // Audio and video players
 
 					// Disallow certain unused features
-					'child-src \'none\'', // Should not contain sub-frames
+					'child-src https://*.youtube.com https://*.youtube-nocookie.com', // Allow YouTube embeds
 					'object-src \'none\'', // Objects can be used for script injection
 					'form-action \'none\'', // No submitting forms
 

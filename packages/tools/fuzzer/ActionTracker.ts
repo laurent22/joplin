@@ -10,10 +10,42 @@ interface ClientInfo {
 	email: string;
 }
 
+interface ActionLogEntry {
+	action: string;
+	source: string;
+}
+
 class ActionTracker {
+	private idToActionLog_: Map<ItemId, ActionLogEntry[]> = new Map();
 	private idToItem_: Map<ItemId, TreeItem> = new Map();
 	private tree_: Map<string, ClientData> = new Map();
 	public constructor(private readonly context_: FuzzContext) {}
+
+	public getActionLog(id: ItemId) {
+		return [...(this.idToActionLog_.get(id) ?? [])];
+	}
+
+	public printActionLog(id: ItemId) {
+		const logEntries = this.getActionLog(id);
+		if (logEntries.length === 0) {
+			process.stdout.write('N/A\n');
+			return;
+		}
+
+		const log = logEntries
+			.map(item => `in:${item.source}: ${item.action}`)
+			.join('\n');
+		process.stdout.write(`${log}\n`);
+	}
+
+	private logAction_(item: ItemId|TreeItem, action: string, source: string) {
+		const itemId = typeof item === 'string' ? item : item.id;
+
+		const log = this.idToActionLog_.get(itemId) ?? [];
+		this.idToActionLog_.set(itemId, log);
+
+		log.push({ action, source });
+	}
 
 	private getToplevelParent_(item: ItemId|TreeItem) {
 		let itemId = typeof item === 'string' ? item : item.id;
@@ -98,6 +130,14 @@ class ActionTracker {
 				childIds: [],
 			});
 		}
+
+		const logAction = (item: ItemId|TreeItem, action: string) => {
+			this.logAction_(item, action, clientId);
+		};
+		const updateItem = (id: ItemId, newValue: TreeItem, changeLabel: string) => {
+			logAction(id, changeLabel);
+			this.idToItem_.set(id, newValue);
+		};
 
 		const getChildIds = (itemId: ItemId) => {
 			const item = this.idToItem_.get(itemId);
@@ -207,10 +247,12 @@ class ActionTracker {
 				}
 
 				this.idToItem_.delete(id);
+				logAction(id, 'removed');
 			} else {
 				const idIsUnused = removeRootItem(item.id);
 				if (idIsUnused) {
 					this.idToItem_.delete(id);
+					logAction(id, 'removed');
 				}
 			}
 
@@ -223,8 +265,9 @@ class ActionTracker {
 				}
 			}
 		};
-		const mapItems = <T> (map: (item: TreeItem)=> T) => {
-			const workList: ItemId[] = [...this.tree_.get(clientId).childIds];
+		const mapItems = <T> (map: (item: TreeItem)=> T, startFolder?: FolderRecord) => {
+			const startIds: readonly ItemId[] = (startFolder ?? this.tree_.get(clientId)).childIds;
+			const workList = [...startIds];
 			const result: T[] = [];
 
 			while (workList.length > 0) {
@@ -243,6 +286,8 @@ class ActionTracker {
 
 			return result;
 		};
+
+		const descendants = (folder: FolderRecord) => mapItems(item => item, folder);
 
 		const getAllFolders = () => {
 			return mapItems((item): FolderRecord => {
@@ -286,7 +331,13 @@ class ActionTracker {
 				childIds: otherSubTree.childIds.filter(childId => childId !== id),
 			});
 
-			this.idToItem_.set(id, targetItem.withRemovedFromShare(shareWith.email));
+			const updateLabel = `remove ${shareWith.email} from share`;
+			updateItem(
+				id, targetItem.withRemovedFromShare(shareWith.email), updateLabel,
+			);
+			for (const item of descendants(targetItem)) {
+				logAction(item, updateLabel);
+			}
 
 			this.checkRep_();
 		};
@@ -297,9 +348,9 @@ class ActionTracker {
 
 				assert.ok(!!data.parentId, `note ${data.id} should have a parentId`);
 				assert.ok(!this.idToItem_.has(data.id), `note ${data.id} should not yet exist`);
-				this.idToItem_.set(data.id, {
+				updateItem(data.id, {
 					...data,
-				});
+				}, 'created');
 				addChild(data.parentId, data.id);
 
 				this.checkRep_();
@@ -308,14 +359,26 @@ class ActionTracker {
 			updateNote: (data: NoteData) => {
 				assertWriteable(data.parentId);
 
-				const oldItem = this.idToItem_.get(data.id);
+				const oldItem = this.idToItem_.get(data.id) as NoteData;
 				assert.ok(oldItem, `note ${data.id} should exist`);
 				assert.ok(!!data.parentId, `note ${data.id} should have a parentId`);
 
+				// Additional debugging information about what changed:
+				const changedFieldsInfo = Object.entries(data)
+					.filter(([key, newValue]) => {
+						const itemKey = key as keyof NoteData;
+						// isShared is a virtual property
+						return key !== 'isShared'
+							&& oldItem[itemKey] !== newValue;
+					})
+					.map(([key]) => {
+						return key;
+					});
+
 				removeChild(oldItem.parentId, data.id);
-				this.idToItem_.set(data.id, {
+				updateItem(data.id, {
 					...data,
-				});
+				}, `updated (changed fields: ${JSON.stringify(changedFieldsInfo)})`);
 				addChild(data.parentId, data.id);
 
 				this.checkRep_();
@@ -325,14 +388,14 @@ class ActionTracker {
 				const parentId = data.parentId ?? '';
 				assertWriteable(parentId);
 
-				this.idToItem_.set(data.id, new FolderRecord({
+				updateItem(data.id, new FolderRecord({
 					...data,
 					parentId: parentId ?? '',
 					childIds: getChildIds(data.id),
 					sharedWith: [],
 					ownedByEmail: clientId,
 					isShared: false,
-				}));
+				}), 'created');
 				addChild(data.parentId, data.id);
 
 				this.checkRep_();
@@ -365,6 +428,8 @@ class ActionTracker {
 				return Promise.resolve();
 			},
 			shareFolder: (id: ItemId, shareWith: ClientInfo, options: ShareOptions) => {
+				assert.notEqual(client.email, shareWith.email, 'Cannot share a folder with the same client');
+
 				const itemToShare = this.idToItem_.get(id);
 				assertIsFolder(itemToShare);
 
@@ -381,9 +446,16 @@ class ActionTracker {
 					childIds: [...shareWithChildIds, id],
 				});
 
-				this.idToItem_.set(
-					id, itemToShare.withShared(shareWith.email, options.readOnly),
+				updateItem(
+					id,
+					itemToShare.withShared(shareWith.email, options.readOnly),
+					`shared with ${shareWith.email}`,
 				);
+
+				// Additional logging
+				for (const item of descendants(itemToShare)) {
+					logAction(item, `ancestor shared with ${shareWith.email}`);
+				}
 
 				this.checkRep_();
 				return Promise.resolve();
@@ -397,7 +469,11 @@ class ActionTracker {
 					removeFromShare(id, { email: recipient });
 				}
 
-				this.idToItem_.set(id, targetItem.withUnshared());
+				updateItem(id, targetItem.withUnshared(), 'unshared');
+
+				for (const item of descendants(targetItem)) {
+					logAction(item, 'parent share removed');
+				}
 
 				this.checkRep_();
 				return Promise.resolve();
@@ -426,9 +502,10 @@ class ActionTracker {
 
 				removeChild(item.parentId, itemId);
 				addChild(newParentId, itemId);
-				this.idToItem_.set(
+				updateItem(
 					itemId,
 					isFolder(item) ? item.withParent(newParentId) : { ...item, parentId: newParentId },
+					`moved to id:${newParentId}`,
 				);
 
 				this.checkRep_();
@@ -441,10 +518,10 @@ class ActionTracker {
 				assert.ok(!oldItem.published, 'should not be published');
 
 
-				this.idToItem_.set(id, {
+				updateItem(id, {
 					...oldItem,
 					published: true,
-				});
+				}, 'published');
 
 				this.checkRep_();
 				return Promise.resolve();
@@ -455,10 +532,10 @@ class ActionTracker {
 				assert.ok(!isFolder(oldItem), 'folders cannot be unpublished');
 				assert.ok(oldItem.published, 'should be published');
 
-				this.idToItem_.set(id, {
+				updateItem(id, {
 					...oldItem,
 					published: false,
-				});
+				}, 'unpublished');
 
 				this.checkRep_();
 				return Promise.resolve();
@@ -524,6 +601,13 @@ class ActionTracker {
 				const notes = await tracker.listNotes();
 				const noteIndex = this.context_.randInt(0, notes.length);
 				return notes.length ? notes[noteIndex] : null;
+			},
+			// Note: Does not verify that the current client has access to the item
+			itemById: (id: ItemId) => {
+				const item = this.idToItem_.get(id);
+
+				if (!item) throw new Error(`No item found with ID ${id}`);
+				return item;
 			},
 		};
 		return tracker;

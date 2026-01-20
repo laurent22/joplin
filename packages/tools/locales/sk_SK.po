@@ -2,10 +2,12 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin package.
 #
-# Jozef Gaal <preklady@mayday.sk>, 2024,2025.
+# Jozef Gaal <preklady@mayday.sk>, 2024,2025, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin v3.5.5\n"
+"Project-Id-Version: Joplin v3.5.11\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
 "Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
 "Language: sk_SK\n"
@@ -13,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -332,7 +334,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "ABC notový zápis: Možnosti"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -800,7 +802,7 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Blok kódu"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -918,9 +920,8 @@ msgid "Cannot change encrypted item"
 msgstr "Nedá sa zmeniť zašifrovaná položka"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Nedá sa vytvoriť nová poznámka: %s"
+msgstr "Nie je možné previesť položku len na čítanie: „%s“"
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1078,7 +1079,7 @@ msgstr "Prebieha kontrola... Čakajte prosím."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "Čínske/japonské/kórejské znaky"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1245,7 +1246,7 @@ msgstr "Príkaz"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "PRÍKAZ"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1310,9 +1311,8 @@ msgid "Configuration"
 msgstr "Nastavenie"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
-msgstr "Klávesové skratky"
+msgstr "Nastavené klávesové skratky:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1296
 msgid "Configures the size of scrollbars used in the app."
@@ -1388,9 +1388,8 @@ msgid "Convert it"
 msgstr "Previesť ju"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
-msgstr "Previesť poznámku na Markdown"
+msgstr "Previesť na Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1350
 msgid "Convert to note"
@@ -1497,9 +1496,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Nepodarilo sa pripojiť k úložisku doplnkov."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
-msgstr "Poznámku sa nepodarilo previesť do formátu Markdown: %s"
+msgstr "Poznámky sa nepodarilo previesť do formátu Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:235
 msgid "Could not export notes: %s"
@@ -1811,12 +1809,13 @@ msgid "Delete profile \"%s\""
 msgstr "Vymazať profil \"%s\""
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Odstrániť profil „%s“?\n"
+"\n"
 "Všetky údaje vrátane poznámok, zápisníkov a štítkov budú natrvalo vymazané."
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
@@ -1834,6 +1833,10 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"Odstrániť štítok „%s“?\n"
+"\n"
+"Všetky poznámky spojené s týmto štítkom zostanú zachované, ale štítok bude "
+"odstránený zo všetkých poznámok."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -2017,7 +2020,7 @@ msgstr "Zobrazí úplné informácie o poznámke."
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "Zobrazí nastavené klávesové skratky."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2236,9 +2239,8 @@ msgid "Edit profile configuration..."
 msgstr "Upraviť konfiguráciu profilu..."
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "Upraviť poznámku."
+msgstr "Upraviť štítok"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2348,9 +2350,8 @@ msgid "Enable abbreviation syntax"
 msgstr "Povoliť syntax skratiek"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "Povoliť podporu syntaxe Fountain"
+msgstr "Povoliť podporu hudobnej notácie ABC"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3126,9 +3127,8 @@ msgid "Import or export your data"
 msgstr "Importujte alebo exportujte svoje údaje"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
-msgstr "Importuje sa..."
+msgstr "Importovať..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3750,13 +3750,15 @@ msgstr "Spravovať možnosti panela nástrojov"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:331
 msgid "Manage your plugins"
-msgstr "Spravovať svoje doplnky"
+msgstr "Spravujte svoje doplnky"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:171
 msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Spravujte svoje profily. Profily môžete premenovať alebo odstrániť. Aktívny "
+"profil nie je možné odstrániť."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3798,7 +3800,7 @@ msgstr "Editor Markdown: Vykresliť obrázky"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1498
 msgid "Markdown editor: Render markup in editor"
-msgstr "Markdown editor: Vykresliť značky v editore"
+msgstr "Editor Markdown: Vykresliť značky v editore"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3918,17 +3920,16 @@ msgstr[1] "Presunúť %d poznámky do zápisníka „%s“?"
 msgstr[2] "Presunúť %d poznámok do zápisníka „%s“?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"Presunúť zápisník \"%s\" do koša?\n"
+"Presunúť %d zápisníkov do koša?\n"
 "\n"
-"Do koša sa presunú aj všetky poznámky a podradené zápisníky v tomto "
-"zápisníku."
+"Do koša sa presunú aj všetky poznámky a podradené zápisníky v týchto "
+"zápisníkoch."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -4167,7 +4168,7 @@ msgstr "Nie sú k dispozícii žiadne aktualizácie"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "Nie je nastavená žiadna URL adresa pre overenie SAML."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4510,7 +4511,7 @@ msgstr "Otvoriť Sprievodcu synchronizáciou..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "Licencie s otvoreným zdrojovým kódom"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4549,6 +4550,8 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"Možnosti, ktoré by sa mali používať pri renderovaní kódu ABC. Musí to byť "
+"objekt JSON5. Úplný zoznam možností je k dispozícii na: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4914,9 +4917,8 @@ msgid "Profile name"
 msgstr "Názov profilu"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "Potvrdenie hesla nemôže byť prázdne"
+msgstr "Názov profilu nemôže byť prázdny"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -5110,11 +5112,9 @@ msgid "Remove"
 msgstr "Odstrániť"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
 msgstr ""
-"Odstrániť model a znovu stiahnuť?\n"
-"Toto sa nedá vrátiť späť."
+"Odstrániť %d štítkov zo všetkých poznámok? Táto akcia sa nedá vrátiť späť."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5531,7 +5531,7 @@ msgstr "Vybrať nadradený zápisník"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "Vyberte typ súboru, ktorý chcete importovať:"
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -6167,18 +6167,16 @@ msgid "Tab moves focus"
 msgstr "Tab presunie výber"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "Povoliť"
+msgstr "Tabuľka"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "Použitie: %s"
+msgstr "Štítok: %s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6401,7 +6399,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Poznámka \"%s\" bola úspešne obnovená do zápisníka \"%s\"."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -6412,11 +6409,11 @@ msgstr[0] ""
 "Poznámka bola prevedená do formátu Markdown a pôvodná poznámka bola "
 "presunutá do koša"
 msgstr[1] ""
-"Poznámka bola prevedená do formátu Markdown a pôvodná poznámka bola "
-"presunutá do koša"
+"Poznámky boli prevedené do formátu Markdown a pôvodné poznámky boli "
+"presunuté do koša"
 msgstr[2] ""
-"Poznámka bola prevedená do formátu Markdown a pôvodná poznámka bola "
-"presunutá do koša"
+"Poznámky boli prevedené do formátu Markdown a pôvodné poznámky boli "
+"presunuté do koša"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
