@@ -8,25 +8,25 @@ const execAsync = promisify(exec);
 // Same appId in electron-builder.
 const appId = 'net.cozic.joplin-desktop';
 
-// function isDesktopAppTag(tagName: string) {
-// 	if (!tagName) return false;
-// 	return tagName[0] === 'v';
-// }
+function isDesktopAppTag(tagName: string) {
+	if (!tagName) return false;
+	return tagName[0] === 'v';
+}
 
 export default async function notarizeFile(filePath: string) {
 	if (process.platform !== 'darwin') return;
 
-	console.info(`Checking if notarization should be on: ${filePath}`);
+	console.info(`Checking if notarization should be done on: ${filePath}`);
 
-	// if (!process.env.IS_CONTINUOUS_INTEGRATION || !isDesktopAppTag(process.env.GIT_TAG_NAME)) {
-	// 	console.info(`Either not running in CI or not processing a desktop app tag - skipping notarization. process.env.IS_CONTINUOUS_INTEGRATION = ${process.env.IS_CONTINUOUS_INTEGRATION}; process.env.GIT_TAG_NAME = ${process.env.GIT_TAG_NAME}`);
-	// 	return;
-	// }
+	if (!process.env.IS_CONTINUOUS_INTEGRATION || !isDesktopAppTag(process.env.GIT_TAG_NAME)) {
+		console.info(`Either not running in CI or not processing a desktop app tag - skipping notarization. process.env.IS_CONTINUOUS_INTEGRATION = ${process.env.IS_CONTINUOUS_INTEGRATION}; process.env.GIT_TAG_NAME = ${process.env.GIT_TAG_NAME}`);
+		return;
+	}
 
-	// if (!process.env.APPLE_ID || !process.env.APPLE_ID_PASSWORD) {
-	// 	console.warn('Environment variables APPLE_ID and APPLE_ID_PASSWORD not found - notarization will NOT be done.');
-	// 	return;
-	// }
+	if (!process.env.APPLE_ID || !process.env.APPLE_ID_PASSWORD) {
+		console.warn('Environment variables APPLE_ID and APPLE_ID_PASSWORD not found - notarization will NOT be done.');
+		return;
+	}
 
 	if (!existsSync(filePath)) {
 		throw new Error(`Cannot find file at: ${filePath}`);
