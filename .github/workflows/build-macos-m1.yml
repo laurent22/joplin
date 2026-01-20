@@ -83,6 +83,16 @@ jobs:
 
           curl -L -o installer.p12 "$CSC_INSTALLER_LINK"
 
+          python3 - <<'PY'
+          import os, subprocess
+          p12="installer.p12"
+          pw=os.environ["CSC_INSTALLER_KEY_PASSWORD"]
+          cmd=["openssl","pkcs12","-in",p12,"-noout","-info","-provider","default","-provider","legacy","-passin","stdin"]
+          p=subprocess.run(cmd, input=(pw+"\n").encode(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+          print(p.stdout.decode(errors="replace"))
+          print("exit code:", p.returncode)
+          PY
+
           echo "Certificate size:"
           ls -lh installer.p12
 
