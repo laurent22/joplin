@@ -48,8 +48,9 @@ const notarizePkg = async () => {
 };
 
 const mainHook = async () => {
-	const sha512FilePath = generateChecksumFile();
 	await notarizePkg();
+
+	const sha512FilePath = generateChecksumFile();
 	const outputFiles = [sha512FilePath].filter(item => item);
 	return outputFiles;
 };
