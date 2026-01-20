@@ -86,6 +86,9 @@ jobs:
           echo "Certificate size:"
           ls -lh installer.p12
 
+          echo "HASH:"
+          shasum -a 256 installer.p12
+
           security create-keychain -p "" build.keychain
           security unlock-keychain -p "" build.keychain
 
