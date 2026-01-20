@@ -77,7 +77,14 @@ jobs:
 
 
 
+
+          echo "Password length: ${#CSC_INSTALLER_KEY_PASSWORD}"
+          echo "Has trailing whitespace: $([[ "$CSC_INSTALLER_KEY_PASSWORD" != "${CSC_INSTALLER_KEY_PASSWORD%[[:space:]]}" ]] && echo yes || echo no)"
+
           curl -L -o installer.p12 "$CSC_INSTALLER_LINK"
+
+          echo "Certificate size:"
+          ls -lh installer.p12
 
           security create-keychain -p "" build.keychain
           security unlock-keychain -p "" build.keychain
