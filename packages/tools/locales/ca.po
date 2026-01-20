@@ -11,6 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Éric Duarte <contacto@ericdq.com>\n"
 "Language-Team: contacto@ericdq.com\n"
 "Language: ca\n"
@@ -333,7 +335,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "Notació musical ABC: Opcions"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -810,7 +812,7 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Codi de bloc"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -928,9 +930,8 @@ msgid "Cannot change encrypted item"
 msgstr "No es pot canviar un element xifrat"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "No pot crear una nova nota: %s"
+msgstr "No es pot convertir l'element de només lectura: \"%s\""
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1087,7 +1088,7 @@ msgstr "Verificant... Espereu."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "Caràcters xinesos/japonesos/coreans"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1253,7 +1254,7 @@ msgstr "Ordre"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "COMMAND"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1318,9 +1319,8 @@ msgid "Configuration"
 msgstr "Configuració"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
-msgstr "Dreceres de teclat"
+msgstr "Dreceres de teclat configurades:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1296
 msgid "Configures the size of scrollbars used in the app."
@@ -1396,9 +1396,8 @@ msgid "Convert it"
 msgstr "Converteix-lo"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
-msgstr "Converteix la nota a Markdown"
+msgstr "Converteix a Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1350
 msgid "Convert to note"
@@ -1502,9 +1501,8 @@ msgid "Could not connect to plugin repository."
 msgstr "No s'ha pogut connectar al repositori d'extensions."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
-msgstr "No s'ha pogut convertir la nota a Markdown: %s"
+msgstr "No s'han pogut convertir les notes a Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:235
 msgid "Could not export notes: %s"
@@ -1819,14 +1817,15 @@ msgid "Delete profile \"%s\""
 msgstr "Suprimeix el perfil \"%s\"?"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
-"Totes les dades, incloent notes, blocs de notes i etiquetes se suprimiran de "
-"manera permanent."
+"Vols suprimir el perfil «%s»?\n"
+"\n"
+"Totes les dades, incloses les notes, les llibretes i les etiquetes "
+"s'eliminaran permanentment."
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
 msgid "Delete row"
@@ -1843,6 +1842,10 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"Vols suprimir l'etiqueta «%s»?\n"
+"\n"
+"Es mantindran totes les notes associades a aquesta etiqueta, però l'etiqueta "
+"s'eliminarà de totes les notes."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -2027,7 +2030,7 @@ msgstr "Mostra la informació completa sobre la nota."
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "Mostra les dreceres de teclat configurades."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2247,9 +2250,8 @@ msgid "Edit profile configuration..."
 msgstr "Edita la configuració del perfil."
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "Edita la nota."
+msgstr "Edita l'etiqueta"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2359,9 +2361,8 @@ msgid "Enable abbreviation syntax"
 msgstr "Activa la sintaxi d'abreviatures"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "Activa el suport de sintaxi de Fountain"
+msgstr "Activa la implementació de notació musical ABC"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3142,9 +3143,8 @@ msgid "Import or export your data"
 msgstr "Importar o exportar les dades"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
-msgstr "Important..."
+msgstr "Importa..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3541,7 +3541,7 @@ msgstr "Clauer admès: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "CLAUS"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
@@ -3771,6 +3771,8 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Gestiona els teus perfils. Pots canviar el nom o suprimir els perfils. El "
+"perfil actiu no es pot suprimir."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3932,16 +3934,15 @@ msgstr[0] "Moure %d nota a la llibreta \"%s\"?"
 msgstr[1] "Moure %d notes a la llibreta \"%s\"?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"Moure el \"%s\" de la llibreta a la paperera?\n"
+"Vols moure %d llibretes a la paperera?\n"
 "\n"
-"Totes les notes i subllibretes d'aquesta llibreta també es mouran a la "
+"Totes les notes i subllibretes d'aquestes llibretes també es mouran a la "
 "paperera."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
@@ -4181,7 +4182,7 @@ msgstr "No hi ha actualitzacions disponibles"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "No s'ha establert cap URL per a l'autenticació SAML."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4524,7 +4525,7 @@ msgstr "Obre l'assistent de sincronització..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "Llicències de codi obert"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4563,6 +4564,8 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"Opcions que s'han d'utilitzar quan es renderitzi codi ABC. Ha de ser un "
+"objecte JSON5. La llista completa d'opcions està disponible a: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4929,9 +4932,8 @@ msgid "Profile name"
 msgstr "Nom del perfil"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "El camp *Confirma la contrasenya* no pot ser buit"
+msgstr "El nom del perfil no pot estar buit"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -5126,9 +5128,8 @@ msgid "Remove"
 msgstr "Elimina"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
-msgstr "Voleu suprimir l'etiqueta \"%s\" de totes les notes?"
+msgstr "Eliminar %d etiquetes de totes les notes? Això no es pot desfer."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5545,7 +5546,7 @@ msgstr "Selecciona la llibreta principal"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "Selecciona el tipus de fitxer a importar:"
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -5870,7 +5871,7 @@ msgstr "Font: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "ESPAI"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
@@ -6181,18 +6182,16 @@ msgid "Tab moves focus"
 msgstr "El tab mou el focus"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "Activa"
+msgstr "Taula"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "Tabloide"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "Ús: %s"
+msgstr "Etiqueta: %s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6419,7 +6418,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "La nota \"%s\" s'ha restaurat correctament a la llibreta \"%s\"."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -6430,7 +6428,7 @@ msgstr[0] ""
 "La nota s'ha convertit a Markdown i la nota original s'ha traslladat a la "
 "paperera"
 msgstr[1] ""
-"La nota s'ha convertit a Markdown i la nota original s'ha traslladat a la "
+"Les notes s'han convertit a Markdown i les notes originals s'han mogut a la "
 "paperera"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
@@ -7010,7 +7008,7 @@ msgstr "Proveu-ho ara"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "TIPUS"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""

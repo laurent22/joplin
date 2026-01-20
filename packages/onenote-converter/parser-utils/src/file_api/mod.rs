@@ -1,6 +1,7 @@
 pub mod api;
 pub use api::ApiResult;
 pub use api::FileApiDriver;
+pub use api::FileHandle;
 use lazy_static::lazy_static;
 use std::sync::Arc;
 

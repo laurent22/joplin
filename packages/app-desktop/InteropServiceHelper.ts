@@ -95,6 +95,9 @@ export default class InteropServiceHelper {
 									// Allows users to override the CSS page size.
 									// See https://github.com/laurent22/joplin/issues/13096
 									preferCSSPageSize: true,
+
+									// Include accessibility information in the output:
+									generateTaggedPDF: true,
 								});
 								resolve(data);
 							} catch (error) {

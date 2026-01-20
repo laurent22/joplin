@@ -253,16 +253,16 @@ describe('Synchronizer.revisions', () => {
 		const getNoteRevisions = () => {
 			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		};
-		jest.advanceTimersByTime(200);
+		jest.advanceTimersByTime(500);
 
 		await Note.save({ id: note.id, title: 'note REV0' });
-		jest.advanceTimersByTime(200);
+		jest.advanceTimersByTime(500);
 
 		await revisionService().collectRevisions(); // REV0
 		expect(await getNoteRevisions()).toHaveLength(1);
 
 		const interimTime = Date.now();
-		jest.advanceTimersByTime(200);
+		jest.advanceTimersByTime(500);
 
 		await Note.save({ id: note.id, title: 'note REV1' });
 		await revisionService().collectRevisions(); // REV1
@@ -272,6 +272,10 @@ describe('Synchronizer.revisions', () => {
 		await synchronizerStart();
 		await switchClient(2);
 		await synchronizerStart();
+
+		// Prevent a race condition whereby a revision is downloaded via the sync, then one of the same revisions is updated within the same millisecond via
+		// deleteOldRevisions, and therefore is not uploaded via the sync because the sync_time matches
+		jest.advanceTimersByTime(500);
 
 		const revisions = await getNoteRevisions();
 		expect(revisions).toHaveLength(2);

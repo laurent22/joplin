@@ -30,6 +30,7 @@ uuid = "1.1.2"
 widestring = "1.0.2"
 wasm-bindgen = "0.2"
 lazy_static = "1.4"
+cab = "0.6.0"
 parser = { path = "../parser" }
 parser-utils = { path = "../parser-utils" }
 

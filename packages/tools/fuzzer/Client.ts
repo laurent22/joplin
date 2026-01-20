@@ -22,6 +22,7 @@ import Stream = require('stream');
 import ProgressBar from './utils/ProgressBar';
 import logDiffDebug from './utils/logDiffDebug';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import diffSortedStringArrays from './utils/diffSortedStringArrays';
 
 const logger = Logger.create('Client');
 
@@ -95,6 +96,12 @@ type ChildProcessWrapper = {
 const cliProcessPromptString = 'command> ';
 
 interface CreateOrUpdateOptions {
+	quiet?: boolean;
+}
+
+interface CreateRandomItemOptions extends CreateOrUpdateOptions {
+	parentId: ItemId;
+	id?: ItemId;
 	quiet?: boolean;
 }
 
@@ -251,6 +258,7 @@ class Client implements ActionableClient {
 
 		this.childProcess_.close();
 		this.closed_ = true;
+		logger.info('Closed client ', this.email);
 	}
 
 	public onClose(listener: OnCloseListener) {
@@ -313,7 +321,8 @@ class Client implements ActionableClient {
 			this.bufferedChildProcessStderr_ = [];
 			process.stdout.write('CLI debug session. Enter a blank line or "exit" to exit.\n');
 			process.stdout.write('To review a transcript of all interactions with this client,\n');
-			process.stdout.write('enter "[transcript]".\n\n');
+			process.stdout.write('enter "[transcript]". To log information about a particular item\n');
+			process.stdout.write('enter "[item:...id here...]".\n\n');
 			process.stdout.write(cliProcessPromptString);
 
 			const isExitRequest = (input: string) => {
@@ -328,6 +337,10 @@ class Client implements ActionableClient {
 				lastInput = await readline.question('');
 				if (lastInput === '[transcript]') {
 					process.stdout.write(`\n\n# Transcript\n\n${this.getTranscript()}\n\n# End transcript\n\n`);
+				} else if (lastInput.startsWith('[item:') && lastInput.endsWith(']')) {
+					let id = lastInput.substring('[item:'.length);
+					id = id.substring(0, id.length - 1);
+					this.globalActionTracker_.printActionLog(id);
 				} else if (!isExitRequest(lastInput)) {
 					this.childProcess_.writeStdin(`${lastInput}\n`);
 				}
@@ -471,11 +484,11 @@ class Client implements ActionableClient {
 				let parentId = (await this.randomFolder({ includeReadOnly: false }))?.id;
 				const createSubfolder = this.context_.randInt(0, 100) < 10;
 				if (!parentId || createSubfolder) {
-					const folder = await this.createRandomFolder(parentId, { quiet: true });
+					const folder = await this.createRandomFolder({ parentId, quiet: true });
 					parentId = folder.id;
 				}
 
-				await this.createRandomNote(parentId, { quiet: true });
+				await this.createRandomNote({ parentId, quiet: true });
 			},
 			update: async (targetNote: NoteData) => {
 				const keep = targetNote.body.substring(
@@ -513,16 +526,15 @@ class Client implements ActionableClient {
 		bar.complete();
 	}
 
-	public async createRandomFolder(parentId: ItemId, options: CreateOrUpdateOptions) {
+	public async createRandomFolder({ quiet, parentId, id }: CreateRandomItemOptions) {
 		const titleLength = this.context_.randInt(1, 128);
-		const folderId = uuid.create();
 		const folder = {
 			parentId: parentId,
-			id: folderId,
+			id: id ?? uuid.create(),
 			title: this.context_.randomString(titleLength).replace(/\n/g, ' '),
 		};
 
-		await this.createFolder(folder, options);
+		await this.createFolder(folder, { quiet });
 
 		return folder;
 	}
@@ -582,11 +594,14 @@ class Client implements ActionableClient {
 				logDiffDebug(lastActualNote.title, expected.title);
 				logDiffDebug(lastActualNote.body, expected.body);
 			}
+			// Log all transactions associated with the item
+			this.globalActionTracker_.printActionLog(expected.id);
+
 			throw error;
 		}
 	}
 
-	public async createRandomNote(parentId: string, { quiet = false }: CreateOrUpdateOptions = { }) {
+	public async createRandomNote({ parentId, id, quiet = false }: CreateRandomItemOptions) {
 		const titleLength = this.context_.randInt(0, 256);
 		const bodyLength = this.context_.randInt(0, 2000);
 		await this.createNote({
@@ -594,7 +609,7 @@ class Client implements ActionableClient {
 			parentId,
 			title: this.context_.randomString(titleLength),
 			body: this.context_.randomString(bodyLength),
-			id: uuid.create(),
+			id: id ?? uuid.create(),
 		}, { quiet });
 	}
 
@@ -793,6 +808,10 @@ class Client implements ActionableClient {
 		return this.tracker_.randomNote(options);
 	}
 
+	public itemById(itemId: ItemId) {
+		return this.tracker_.itemById(itemId);
+	}
+
 	public async checkState() {
 		logger.info('Check state', this.label);
 
@@ -814,6 +833,35 @@ class Client implements ActionableClient {
 			}
 		};
 
+		const assertSameIds = (actualSorted: ItemSlice[], expectedSorted: ItemSlice[], testLabel: string) => {
+			const actualIds = actualSorted.map(i => i.id);
+			const expectedIds = expectedSorted.map(i => i.id);
+			const { missing, unexpected } = diffSortedStringArrays(actualIds, expectedIds);
+
+
+			if (missing.length || unexpected.length) {
+				const idLogs = (ids: string[]) => {
+					const output = [];
+					for (const id of ids) {
+						const log = this.globalActionTracker_.getActionLog(id);
+						output.push(`\nid:${id}`);
+						output.push(log.map(item => `\t${item.source}: ${item.action}`).join('\n'));
+					}
+					return output.join('\n');
+				};
+
+				throw new Error([
+					`IDs were different (${testLabel}):`,
+					missing.length && `- Expected ${JSON.stringify(missing)} to be present, but were missing.`,
+					unexpected.length && `- Present but should not have been: ${JSON.stringify(unexpected)}`,
+					'\n',
+					'Logs:',
+					idLogs(missing),
+					idLogs(unexpected),
+				].filter(line => !!line).join('\n'));
+			}
+		};
+
 		const checkNoteState = async () => {
 			const notes = [...await this.listNotes()];
 			const expectedNotes = [...await this.tracker_.listNotes()];
@@ -823,6 +871,7 @@ class Client implements ActionableClient {
 
 			assertNoAdjacentEqualIds(notes, 'notes');
 			assertNoAdjacentEqualIds(expectedNotes, 'expectedNotes');
+			assertSameIds(notes, expectedNotes, 'should have the same note IDs');
 			assert.deepEqual(notes, expectedNotes, 'should have the same notes as the expected state');
 		};
 
@@ -835,6 +884,7 @@ class Client implements ActionableClient {
 
 			assertNoAdjacentEqualIds(folders, 'folders');
 			assertNoAdjacentEqualIds(expectedFolders, 'expectedFolders');
+			assertSameIds(folders, expectedFolders, 'should have the same folder IDs');
 			assert.deepEqual(folders, expectedFolders, 'should have the same folders as the expected state');
 		};
 

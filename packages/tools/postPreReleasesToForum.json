@@ -197,6 +197,10 @@
 		"ios-v13.5.2": true,
 		"android-v3.5.8": true,
 		"ios-v13.5.3": true,
-		"v3.5.11": true
+		"v3.5.11": true,
+		"v3.5.12": true,
+		"v3.6.1": true,
+		"v3.6.2": true,
+		"android-v3.5.9": true
 	}
 }

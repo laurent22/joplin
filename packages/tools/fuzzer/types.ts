@@ -42,6 +42,10 @@ export const assertIsFolder: (item: TreeItem)=> asserts item is FolderRecord = i
 		throw new Error(`Expected item with ID ${item?.id} to be a folder.`);
 	}
 };
+export const assertIsNote: (item: TreeItem)=> asserts item is NoteData = item => {
+	if (!item) throw new Error(`Item ${item} is not a note`);
+	if (isFolder(item)) throw new Error(`Expected item with ID ${item?.id} to be a note.`);
+};
 
 export interface FuzzContext {
 	serverUrl: string;
@@ -88,6 +92,7 @@ export interface ActionableClient {
 	allFolderDescendants(parentId: ItemId): Promise<ItemId[]>;
 	randomFolder(options: RandomFolderOptions): Promise<FolderRecord>;
 	randomNote(options: RandomNoteOptions): Promise<NoteData>;
+	itemById(id: ItemId): TreeItem;
 }
 
 export interface UserData {

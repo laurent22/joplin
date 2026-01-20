@@ -1,6 +1,7 @@
 const fountain = require('../../vendor/fountain.min.js');
 
-const pluginAssets = function() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Theme is defined in @joplin/lib and we don't import it here
+const pluginAssets = function(theme: any) {
 	return [
 		{
 			inline: true,
@@ -15,11 +16,30 @@ const pluginAssets = function() {
 				}
 
 				.fountain .title-page,
-				.fountain .page { 
-					box-shadow: 0 0 5px rgba(0,0,0,0.1);
-					border: 1px solid #d2d2d2;
-					padding: 10%;
+				.fountain .page {
+					padding: 1em 2em;
 					margin-bottom: 2em;
+				}
+
+				.fountain .title-page {
+					border-bottom: 1px solid ${theme.dividerColor};
+				}
+
+				@media print {
+					.fountain .title-page,
+					.fountain .page {
+						page-break-after: always;
+					}
+
+					.fountain .title-page {
+						border-bottom: none;
+					}
+				}
+
+				.fountain hr {
+					border: none;
+					border-top: 1px solid ${theme.dividerColor};
+					margin: 2em 0;
 				}
 
 				.fountain h1,
@@ -121,6 +141,7 @@ function renderFountainScript(markdownIt: any, content: string) {
 	}
 
 	return `
+		<!-- joplin-metadata-print-title = false -->
 		<div class="fountain joplin-editable">
 			<pre class="joplin-source" data-joplin-language="fountain" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
 			${titlePageHtml}

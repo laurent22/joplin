@@ -326,7 +326,12 @@ async function main() {
 	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 
 	const changelogPath = `${rootDir}/readme/about/changelog/android.md`;
-	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Android', isPreRelease);
+
+	// When creating the changelog, we always set `isPrerelease` to `false` - this is because we
+	// only ever publish pre-releases, and it's only later that we manually promote some of them to
+	// stable releases. So having "(Pre-release)" for each Android version in the changelog is
+	// meaningless and would be incorrect for the versions that are stable ones.
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Android', false);
 }
 
 main().catch((error) => {
