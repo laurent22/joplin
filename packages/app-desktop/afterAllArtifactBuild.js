@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const sha512 = require('js-sha512');
+const notarizeFile = require('./tools/notarizeFile').default;
 const distDirName = 'dist';
 const distPath = path.join(__dirname, distDirName);
 
@@ -31,8 +32,24 @@ const generateChecksumFile = () => {
 	return sha512FilePath;
 };
 
-const mainHook = () => {
+const notarizePkg = async () => {
+	if (os.platform() !== 'darwin') {
+		return;
+	}
+
+	const files = fs.readdirSync(distPath);
+	for (const filename of files) {
+		if (filename.endsWith('.pkg')) {
+			const pkgPath = path.join(distPath, filename);
+			await notarizeFile(pkgPath);
+			return;
+		}
+	}
+};
+
+const mainHook = async () => {
 	const sha512FilePath = generateChecksumFile();
+	await notarizePkg();
 	const outputFiles = [sha512FilePath].filter(item => item);
 	return outputFiles;
 };

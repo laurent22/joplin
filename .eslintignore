@@ -611,6 +611,7 @@ packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/generateLatestArm64Yml.js
 packages/app-desktop/tools/githubReleasesUtils.js
 packages/app-desktop/tools/modifyReleaseAssets.js
+packages/app-desktop/tools/notarizeFile.js
 packages/app-desktop/tools/notarizeMacApp.js
 packages/app-desktop/tools/resolveSourceMap.js
 packages/app-desktop/utils/7zip/getPathToExecutable7Zip.js

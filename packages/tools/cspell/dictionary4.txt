@@ -246,3 +246,4 @@ youtu
 nocookie
 fgag
 mrjo
+spctl
