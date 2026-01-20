@@ -82,6 +82,8 @@ jobs:
           security create-keychain -p "" build.keychain
           security unlock-keychain -p "" build.keychain
 
+          echo "Checking certificate...."
+
           security import installer.p12 \
             -k build.keychain \
             -P "$CSC_INSTALLER_KEY_PASSWORD" \
