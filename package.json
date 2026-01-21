@@ -45,11 +45,7 @@
     "watch": "lerna run watch --stream --parallel",
     "i": "lerna add --no-bootstrap --scope"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+
   "devDependencies": {
     "@types/cheerio": "^0.22.30",
     "@types/fs-extra": "^9.0.12",
