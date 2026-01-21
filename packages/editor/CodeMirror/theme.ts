@@ -252,7 +252,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		{
 			tag: tags.comment,
 			fontStyle: 'italic',
-			color: isDarkTheme ? '#b18eb1' : '#707187',
+			color: isDarkTheme ? '#b18eb1' : '#6d7086',
 		},
 		{
 			tag: tags.link,
