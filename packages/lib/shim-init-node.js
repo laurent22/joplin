@@ -356,7 +356,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 		// bodyがBufferの場合はbase64エンコード
 		let bodyContent = options.body ?? undefined;
-		bodyContent = bodyContent?.toString('base64');
+		if (Buffer.isBuffer(bodyContent)) {
+			bodyContent = bodyContent.toString('base64');
+		}
 
 		const body = {
 			headers: options.headers,
@@ -364,12 +366,49 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			method: options.method ?? 'GET',
 			body: bodyContent,
 		};
-		const newOptions = {
-			method: 'GET',
-			redirect: 'manual',
-			body: JSON.stringify(body), // bodyがundefinedの場合はundefinedになる
-		};
-		return nodeFetch(proxyUrl, newOptions);
+
+		// node-fetchはGETでbodyを送信できないため、httpモジュールを直接使用
+		const urlParse = require('url').parse;
+		const parsedUrl = urlParse(proxyUrl);
+		const protocol = parsedUrl.protocol === 'https:' ? https : http;
+		const bodyString = JSON.stringify(body);
+
+		return new Promise((resolve, reject) => {
+			const requestOptions = {
+				hostname: parsedUrl.hostname,
+				port: parsedUrl.port,
+				path: parsedUrl.path,
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Content-Length': Buffer.byteLength(bodyString),
+				},
+			};
+
+			const req = protocol.request(requestOptions, (res) => {
+				const chunks = [];
+				res.on('data', (chunk) => chunks.push(chunk));
+				res.on('end', () => {
+					const buffer = Buffer.concat(chunks);
+					const text = buffer.toString('utf-8');
+
+					// node-fetchのレスポンス形式に合わせる
+					resolve({
+						ok: res.statusCode >= 200 && res.statusCode < 300,
+						status: res.statusCode,
+						statusText: res.statusMessage,
+						headers: new Map(Object.entries(res.headers)),
+						text: async () => text,
+						json: async () => JSON.parse(text),
+						buffer: async () => buffer,
+					});
+				});
+			});
+
+			req.on('error', reject);
+			req.write(bodyString);
+			req.end();
+		});
 	};
 
 
