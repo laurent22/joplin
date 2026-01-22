@@ -406,16 +406,6 @@ export default function (theme: any, options: Options = null) {
 		/* For TinyMCE */
 		/* =============================================== */
 
-		// body.mce-content-body {
-		// 	/* Note: we give a bit more padding at the bottom, to allow scrolling past the end of the document */
-		// 	padding: 5px 10px 10em 3px !important;
-		// }
-		// .mce-content-body .joplin-editable[data-mce-selected] pre.hljs {
-	    //     overflow-x: visible;
-        // }
-		// .mce-content-body [contentEditable=false][data-mce-selected] {
-	    //     outline-offset: -3px;
-        // }
 		body.mce-content-body .joplin-editable[contenteditable="false"][data-mce-selected] {
 	        outline: 3px solid #b4d7ff;
 	        outline-offset: -3px;
