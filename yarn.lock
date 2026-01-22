@@ -10641,7 +10641,7 @@ __metadata:
   resolution: "@joplin/default-plugins@workspace:packages/default-plugins"
   dependencies:
     "@joplin/utils": "npm:~3.6"
-    "@types/yargs": "npm:17.0.33"
+    "@types/yargs": "npm:17.0.34"
     fs-extra: "npm:11.3.2"
     joplin-plugin-freehand-drawing: "npm:4.3.0"
     ts-node: "npm:10.9.2"
@@ -11035,7 +11035,7 @@ __metadata:
     "@types/nodemailer": "npm:6.4.21"
     "@types/qrcode": "npm:1.5.6"
     "@types/uuid": "npm:10.0.0"
-    "@types/yargs": "npm:17.0.33"
+    "@types/yargs": "npm:17.0.34"
     "@types/zxcvbn": "npm:4.4.5"
     bcryptjs: "npm:2.4.3"
     bulma: "npm:1.0.4"
@@ -11096,7 +11096,7 @@ __metadata:
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
     "@types/node-fetch": "npm:2.6.13"
-    "@types/yargs": "npm:17.0.33"
+    "@types/yargs": "npm:17.0.34"
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.18"
     execa: "npm:4.1.0"
@@ -17339,12 +17339,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.33":
-  version: 17.0.33
-  resolution: "@types/yargs@npm:17.0.33"
+"@types/yargs@npm:17.0.34":
+  version: 17.0.34
+  resolution: "@types/yargs@npm:17.0.34"
   dependencies:
     "@types/yargs-parser": "npm:*"
-  checksum: 10/16f6681bf4d99fb671bf56029141ed01db2862e3db9df7fc92d8bea494359ac96a1b4b1c35a836d1e95e665fb18ad753ab2015fc0db663454e8fd4e5d5e2ef91
+  checksum: 10/8e7907479e649e9115dcca94cb059dfe2322992ac5d29120f759564c078abfc13673a31f7ad86a3a5c9de7f241a4e3d70042ba38b794fd1601e44f9a1bc5cefd
   languageName: node
   linkType: hard
 
