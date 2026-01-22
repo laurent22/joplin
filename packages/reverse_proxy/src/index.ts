@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express';
+import fetch from 'node-fetch';
+import { HttpUtil, WrappedRequest } from './http_util.js';
 
 const app = express();
 const PORT = process.env.PORT || 7777;
@@ -7,15 +9,25 @@ const PORT = process.env.PORT || 7777;
 app.use(express.json());
 
 // GET /image endpoint - the only valid API
-app.get('/image', (req: Request, res: Response) => {
+app.get('/image', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
-	const body = req.body;
-	const safeBody = { ...body };
+	const body: WrappedRequest = req.body;
+	const safeBody: WrappedRequest = JSON.parse(JSON.stringify(body));
 	if (safeBody?.headers?.Authorization) {
 		safeBody.headers.Authorization = '*****';
 	}
+
 	console.log(`body: ${JSON.stringify(safeBody, null, 2)}`);
+
+	const nodeFetchOptions = HttpUtil.convertNodeFetchOptions(body);
+	const result = await fetch(body.url, nodeFetchOptions);
+	const headers = result.headers.raw();
+	const resBody = await result.body?.read?.();
+	console.log(`response: ${result.status}`);
+	console.log(`headers: ${JSON.stringify(headers, null, 2)}`);
+	console.log(`body: ${JSON.stringify(resBody, null, 2)}`);
+
 	const response = {
 		status: 'success',
 		message: 'Image endpoint',
