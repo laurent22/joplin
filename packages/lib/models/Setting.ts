@@ -524,6 +524,19 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			'sync.reverseProxyUrl': {
+				value: '',
+				type: SettingItemType.String,
+				public: true,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.useReverseProxy'] === true;
+				},
+				label: () => _('Reverse Proxy URL'),
+				description: () => _('Enter the URL of your reverse proxy server (e.g., https://proxy.example.com).'),
+				storage: SettingStorage.File,
+			},
+
 			// The active folder ID is guaranteed to be valid as long as there's at least one
 			// existing folder, so it is a good default in contexts where there's no currently
 			// selected folder. It corresponds in general to the currently selected folder or
