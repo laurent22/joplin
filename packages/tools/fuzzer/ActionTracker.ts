@@ -70,44 +70,71 @@ class ActionTracker {
 	}
 
 	private checkRep_() {
+		const checkParentId = (item: TreeItem) => {
+			if (item.parentId) {
+				const parent = this.idToItem_.get(item.parentId);
+				assert.ok(parent, `should find parent (id: ${item.parentId})`);
+
+				assert.ok(isFolder(parent), 'parent should be a folder');
+				assert.ok(parent.childIds.includes(item.id), 'parent should include the current item in its children');
+			}
+		};
+		const checkFolder = (folder: FolderRecord) => {
+			for (const childId of folder.childIds) {
+				checkItem(childId);
+			}
+
+			// Shared folders
+			assert.ok(folder.ownedByEmail, 'all folders should have a "shareOwner" property (even if not shared)');
+			if (folder.isRootSharedItem) {
+				assert.equal(folder.parentId, '', 'only toplevel folders should be shared');
+			}
+			for (const sharedWith of folder.shareRecipients) {
+				assert.ok(this.tree_.has(sharedWith), 'all sharee users should exist');
+			}
+			// isSharedWith is only valid for toplevel folders
+			if (folder.parentId === '') {
+				assert.ok(!folder.isSharedWith(folder.ownedByEmail), 'the share owner should not be in an item\'s sharedWith list');
+			}
+
+			// Uniqueness
+			assert.equal(
+				folder.childIds.length,
+				[...new Set(folder.childIds)].length,
+				'child IDs should be unique',
+			);
+		};
+		const checkNote = (note: NoteData) => {
+			assert.ok(!isFolder(note));
+			assert.ok(!isResource(note));
+		};
+		const checkResource = (resource: ResourceRecord) => {
+			assert.ok(!isFolder(resource));
+			assert.ok(!isNote(resource));
+			assert.ok(isResource(resource));
+
+			// References list should be up-to-date
+			for (const noteId of resource.referencedBy) {
+				const note = this.idToItem_.get(noteId);
+				assert.ok(note, `all references should exist (testing ID ${noteId})`);
+				assert.ok(isNote(note), 'all references should be notes');
+				assert.ok(note.body.includes(resource.id), 'all references should include the resource ID');
+			}
+		};
 		const checkItem = (itemId: ItemId) => {
 			assert.match(itemId, /^[a-zA-Z0-9]{32}$/, 'item IDs should be 32 character alphanumeric strings');
 
 			const item = this.idToItem_.get(itemId);
 			assert.ok(!!item, `should find item with ID ${itemId}`);
 
-			if (item.parentId) {
-				const parent = this.idToItem_.get(item.parentId);
-				assert.ok(parent, `should find parent (id: ${item.parentId})`);
-
-				assert.ok(isFolder(parent), 'parent should be a folder');
-				assert.ok(parent.childIds.includes(itemId), 'parent should include the current item in its children');
-			}
+			checkParentId(item);
 
 			if (isFolder(item)) {
-				for (const childId of item.childIds) {
-					checkItem(childId);
-				}
-
-				// Shared folders
-				assert.ok(item.ownedByEmail, 'all folders should have a "shareOwner" property (even if not shared)');
-				if (item.isRootSharedItem) {
-					assert.equal(item.parentId, '', 'only toplevel folders should be shared');
-				}
-				for (const sharedWith of item.shareRecipients) {
-					assert.ok(this.tree_.has(sharedWith), 'all sharee users should exist');
-				}
-				// isSharedWith is only valid for toplevel folders
-				if (item.parentId === '') {
-					assert.ok(!item.isSharedWith(item.ownedByEmail), 'the share owner should not be in an item\'s sharedWith list');
-				}
-
-				// Uniqueness
-				assert.equal(
-					item.childIds.length,
-					[...new Set(item.childIds)].length,
-					'child IDs should be unique',
-				);
+				checkFolder(item);
+			} else if (isNote(item)) {
+				checkNote(item);
+			} else {
+				checkResource(item);
 			}
 		};
 
@@ -286,6 +313,16 @@ class ActionTracker {
 						workList.push(childId);
 					}
 				}
+				if (isNote(item)) {
+					// Map linked resources
+					const linkedIds = extractResourceUrls(item.body);
+					for (const id of linkedIds) {
+						const item = this.idToItem_.get(id.itemId);
+						if (!item || !isResource(item)) continue;
+
+						result.push(map(item));
+					}
+				}
 			}
 
 			return result;
@@ -398,7 +435,7 @@ class ActionTracker {
 				assert.ok(!this.idToItem_.has(data.id), `note ${data.id} should not yet exist`);
 				updateItem(data.id, {
 					...data,
-				}, 'created');
+				}, `created in ${data.parentId}`);
 				addChild(data.parentId, data.id);
 				updateResourceReferences(null, data);
 
@@ -438,15 +475,27 @@ class ActionTracker {
 				const resourceMarkup = `[resource](:/${resource.id})`;
 				const withAttached = { ...note, body: `${note.body}${resourceMarkup}` };
 
+				if (!tracker.itemExists(resource.id)) {
+					await tracker.createResource(resource);
+				}
+				await tracker.updateNote(withAttached);
+				return withAttached;
+			},
+			createResource: async (resource) => {
+				if (tracker.itemExists(resource.id)) {
+					// Don't double-create the item. Avoid throwing here
+					return Promise.resolve();
+				}
+
 				updateItem(
 					resource.id, new ResourceRecord({
 						...resource,
-						referencedBy: [note.id],
+						referencedBy: [],
 					}),
 					'created',
 				);
-				await tracker.updateNote(withAttached);
-				return withAttached;
+				this.checkRep_();
+				return Promise.resolve();
 			},
 			createFolder: (data: FolderData) => {
 				const parentId = data.parentId ?? '';
@@ -459,7 +508,7 @@ class ActionTracker {
 					sharedWith: [],
 					ownedByEmail: clientId,
 					isShared: false,
-				}), 'created');
+				}), `created ${data.parentId ? `in ${data.parentId}` : '(toplevel)'}`);
 				addChild(data.parentId, data.id);
 
 				this.checkRep_();
@@ -605,6 +654,12 @@ class ActionTracker {
 				return Promise.resolve();
 			},
 			sync: () => Promise.resolve(),
+			listResources: () => {
+				const items = mapItems(item => {
+					return !isResource(item) ? null : item;
+				}).filter(item => !!item && item.referenceCount > 0);
+				return Promise.resolve(items);
+			},
 			listNotes: () => {
 				const notes = mapItems(item => {
 					return !isNote(item) ? null : item;
@@ -672,6 +727,18 @@ class ActionTracker {
 
 				if (!item) throw new Error(`No item found with ID ${id}`);
 				return item;
+			},
+			itemExists: (id: ItemId) => {
+				const item = this.idToItem_.get(id);
+				if (!item) return false;
+				if (isResource(item)) return true;
+
+				const root = this.getToplevelParent_(id);
+				if (isFolder(root)) {
+					return root.ownedByEmail === client.email || root.isSharedWith(client.email);
+				}
+
+				return this.tree_.get(clientId).childIds.includes(id);
 			},
 		};
 		return tracker;

@@ -1,4 +1,4 @@
-import { ItemId, ResourceData } from "../types";
+import { ItemId, ResourceData } from '../types';
 
 interface InitializationOptions extends ResourceData {
 	referencedBy: ItemId[];
@@ -9,7 +9,7 @@ export default class ResourceRecord implements ResourceData {
 	public readonly id: ItemId;
 	public readonly title: string;
 	public readonly mimeType: string;
-	private readonly referencedBy: ItemId[] = [];
+	public readonly referencedBy: readonly ItemId[] = [];
 
 	public constructor(options: InitializationOptions) {
 		this.id = options.id;

@@ -1,5 +1,5 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
-import { ActionableClient, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ResourceData, ShareOptions } from './types';
+import { ActionableClient, assertIsNote, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ResourceData, ShareOptions } from './types';
 import { join } from 'path';
 import { mkdir, remove } from 'fs-extra';
 import getStringProperty from './utils/getStringProperty';
@@ -22,6 +22,7 @@ import ProgressBar from './utils/ProgressBar';
 import logDiffDebug from './utils/logDiffDebug';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import diffSortedStringArrays from './utils/diffSortedStringArrays';
+import extractResourceIds from './utils/extractResourceIds';
 
 const logger = Logger.create('Client');
 
@@ -475,11 +476,109 @@ class Client implements ActionableClient {
 			// Certain sync failures self-resolve after a background task is allowed to
 			// run. Delay:
 			delayOnFailure: retry => retry * Second * 2,
-			onFail: async (error) => {
+			onFail: async ({ error, willRetry }) => {
 				logger.debug('Sync error: ', error);
-				logger.info('Sync failed. Retrying...');
+				if (willRetry) {
+					logger.info('Sync failed. Retrying...');
+				}
 			},
 		});
+
+		await this.handleResourceIdChanges_();
+	}
+
+	// Joplin occasionally changes the ID of a resource. Handle this here.
+	// Assumes that the client is up-to-date with the server.
+	private async handleResourceIdChanges_() {
+		type UntrackedAttachment = {
+			id: ItemId;
+			linkedNotes: Set<ItemId>;
+		};
+		const collectUntrackedAttachments = async () => {
+			// Maps from untracked item IDs to the notes that contain that item.
+			const untrackedItemsById = new Map<ItemId, UntrackedAttachment>();
+			const noteActualStates = new Map<ItemId, NoteData>();
+			for (const note of await this.listNotes()) {
+				for (const itemId of extractResourceIds(note.body)) {
+					if (this.tracker_.itemExists(itemId)) continue;
+
+					const noteIds = untrackedItemsById.get(itemId);
+					if (noteIds) {
+						noteIds.linkedNotes.add(note.id);
+					} else {
+						untrackedItemsById.set(itemId, {
+							id: itemId,
+							linkedNotes: new Set([note.id]),
+						});
+					}
+					noteActualStates.set(note.id, note);
+				}
+			}
+
+			return { untrackedItemsById, noteActualStates };
+		};
+
+		const fetchResourceData = async (resourceId: ItemId) => {
+			try {
+				const resourceJson = JSON.parse(
+					await this.execApiCommand_('GET', `/resources/${resourceId}?fields=id,title,mime`),
+				);
+				const resourceData: ResourceData = {
+					id: getStringProperty(resourceJson, 'id'),
+					mimeType: getStringProperty(resourceJson, 'mime'),
+					title: getStringProperty(resourceJson, 'title'),
+				};
+				return resourceData;
+			} catch (error) {
+				if (error instanceof RequestError && error.code === 404) {
+					return null;
+				} else {
+					throw error;
+				}
+			}
+		};
+
+		const removeResourceIds = (text: string) => {
+			for (const id of extractResourceIds(text)) {
+				text = text.split(id).join('');
+			}
+			return text;
+		};
+
+		const textsMatchIgnoringResources = (actual: string, expected: string) => {
+			return removeResourceIds(expected) === removeResourceIds(actual);
+		};
+
+		const { untrackedItemsById, noteActualStates } = await collectUntrackedAttachments();
+
+		for (const { id: resourceId, linkedNotes } of untrackedItemsById.values()) {
+			const resourceData = await fetchResourceData(resourceId);
+			if (!resourceData) {
+				logger.warn('Resource not found:', resourceId);
+				continue;
+			}
+
+			await this.createResource(resourceData);
+			for (const id of linkedNotes) {
+				const expected = this.tracker_.itemById(id);
+				assertIsNote(expected);
+				const actual = noteActualStates.get(id);
+				assertIsNote(actual);
+
+				if (textsMatchIgnoringResources(actual.body, expected.body)) {
+					const firstMatchIndex = actual.body.indexOf(resourceId);
+					// This relies on the fact that **all** resource IDs are length-32 strings:
+					const originalId = expected.body.substring(firstMatchIndex, firstMatchIndex + 32);
+
+					logger.info('Resource rewrite: Updating note', id, ': Replacing', originalId, 'with', resourceId);
+
+					await this.tracker_.updateNote({
+						...expected,
+						body: expected.body.split(originalId).join(resourceId),
+					});
+				}
+			}
+		}
 	}
 
 	public async createOrUpdateMany(actionCount: number) {
@@ -660,7 +759,25 @@ class Client implements ActionableClient {
 	}
 
 	public async attachResource(note: NoteData, resource: ResourceData): Promise<NoteData> {
+		logger.info('Attach resource', resource.id, 'to note', note.id);
 		const updatedNote = await this.tracker_.attachResource(note, resource);
+
+		await this.execApiCommand_('PUT', `/notes/${encodeURIComponent(note.id)}`, {
+			title: updatedNote.title,
+			body: updatedNote.body,
+			parent_id: updatedNote.parentId ?? '',
+		});
+
+		// Create the resource on the client *after* attaching it to the note so that the
+		// resource is always referenced by at least one note:
+		await this.createResource(resource);
+
+		await this.assertNoteMatchesState_(updatedNote);
+		return updatedNote;
+	}
+
+	public async createResource(resource: ResourceData): Promise<void> {
+		await this.tracker_.createResource(resource);
 
 		const checkExists = async () => {
 			try {
@@ -674,7 +791,7 @@ class Client implements ActionableClient {
 			}
 		};
 
-		if (await checkExists()) {
+		if (!await checkExists()) {
 			const resourceForm = new FormData();
 			resourceForm.append('data', new Blob(['test'], { type: resource.mimeType }));
 			resourceForm.append('props', JSON.stringify({
@@ -685,15 +802,6 @@ class Client implements ActionableClient {
 
 			await this.execApiCommand_('POST', '/resources', resourceForm);
 		}
-
-		await this.execApiCommand_('PUT', `/notes/${encodeURIComponent(note.id)}`, {
-			title: updatedNote.title,
-			body: updatedNote.body,
-			parent_id: updatedNote.parentId ?? '',
-		});
-		await this.assertNoteMatchesState_(updatedNote);
-
-		return updatedNote;
 	}
 
 	public async deleteFolder(id: string) {
@@ -799,6 +907,24 @@ class Client implements ActionableClient {
 		await this.execCliCommand_('mv', itemId, movingToRoot ? 'root' : newParentId);
 	}
 
+	public async listResources() {
+		const params = {
+			fields: 'id,title,mime',
+			include_deleted: '1',
+			include_conflicts: '1',
+		};
+		return await this.execPagedApiCommand_(
+			'GET',
+			'/resources',
+			params,
+			(item): ResourceData => ({
+				id: getStringProperty(item, 'id'),
+				title: getStringProperty(item, 'title'),
+				mimeType: getStringProperty(item, 'mime'),
+			}),
+		);
+	}
+
 	public async listNotes() {
 		const params = {
 			fields: 'id,parent_id,body,title,is_conflict,conflict_original_id,share_id,is_shared',
@@ -854,6 +980,10 @@ class Client implements ActionableClient {
 
 	public itemById(itemId: ItemId) {
 		return this.tracker_.itemById(itemId);
+	}
+
+	public itemExists(itemId: ItemId) {
+		return this.tracker_.itemExists(itemId);
 	}
 
 	public async checkState() {
@@ -932,7 +1062,22 @@ class Client implements ActionableClient {
 			assert.deepEqual(folders, expectedFolders, 'should have the same folders as the expected state');
 		};
 
+		const checkResourceState = async () => {
+			const actualResources = [...await this.listResources()];
+			const actualResourceIds = new Set(actualResources.map(r => r.id));
+			const expectedResources = [...await this.tracker_.listResources()];
+
+			for (const resource of expectedResources) {
+				if (!actualResourceIds.has(resource.id)) {
+					this.globalActionTracker_.printActionLog(resource.id);
+
+					throw new Error(`All expected resources should exist on the client. Resource with ID ${resource.id} was not found (searched ${actualResourceIds.size} existing resources).`);
+				}
+			}
+		};
+
 		await checkNoteState();
+		await checkResourceState();
 		await checkFolderState();
 	}
 }

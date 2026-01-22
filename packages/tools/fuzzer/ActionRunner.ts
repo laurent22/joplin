@@ -31,9 +31,11 @@ export default class ActionRunner {
 		}, {
 			count: 4,
 			delayOnFailure: count => count * Second * 2,
-			onFail: async () => {
-				logger.info('.checkState failed. Syncing all clients...');
-				await this.clientPool_.syncAll();
+			onFail: async ({ willRetry }) => {
+				if (willRetry) {
+					logger.info('.checkState failed. Syncing all clients...');
+					await this.clientPool_.syncAll();
+				}
 			},
 		});
 	}
@@ -277,6 +279,16 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		noteId: selectOrCreateWriteableNote,
 		targetFolderId: undefinedId,
 	});
+
+	addAction('duplicateNote', async ({ id }) => {
+		const note = noteById(id);
+
+		await client.createNote({
+			...note,
+			id: context.randomId(),
+		});
+		return true;
+	}, { id: selectOrCreateWriteableNote });
 
 	addAction('deleteNote', async ({ id }) => {
 		const validatedNote = noteById(id); // Ensure, e.g., that the note exists

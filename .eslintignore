@@ -1858,6 +1858,7 @@ packages/tools/fuzzer/utils/ProgressBar.js
 packages/tools/fuzzer/utils/SeededRandom.js
 packages/tools/fuzzer/utils/diffSortedStringArrays.test.js
 packages/tools/fuzzer/utils/diffSortedStringArrays.js
+packages/tools/fuzzer/utils/extractResourceIds.js
 packages/tools/fuzzer/utils/getNumberProperty.js
 packages/tools/fuzzer/utils/getProperty.js
 packages/tools/fuzzer/utils/getStringProperty.js
