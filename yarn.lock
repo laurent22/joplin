@@ -11065,7 +11065,7 @@ __metadata:
     prettycron: "npm:0.10.0"
     qrcode: "npm:1.5.4"
     query-string: "npm:7.1.3"
-    rate-limiter-flexible: "npm:7.3.2"
+    rate-limiter-flexible: "npm:7.4.0"
     raw-body: "npm:3.0.1"
     samlify: "npm:2.10.1"
     short-uuid: "npm:5.2.0"
@@ -43643,10 +43643,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rate-limiter-flexible@npm:7.3.2":
-  version: 7.3.2
-  resolution: "rate-limiter-flexible@npm:7.3.2"
-  checksum: 10/f95c9af17c52899ab939593a9fa60a0a2d69b8724b1b87bd67370b0414c1845d5a9e5cee5ad1dbafa7ced3f7d804fba1e42393817b1dee17eb44888987217e6d
+"rate-limiter-flexible@npm:7.4.0":
+  version: 7.4.0
+  resolution: "rate-limiter-flexible@npm:7.4.0"
+  checksum: 10/85012124949028213494ac7a24eaf6f3b850aa6bc3d503afb1cd23d6d42721a9a05172e3b7cf1a59b818580ce3815a96eaad54b484eb573917911246f28311d9
   languageName: node
   linkType: hard
 
