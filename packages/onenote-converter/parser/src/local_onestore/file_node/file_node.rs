@@ -767,14 +767,9 @@ impl AttachmentInfo {
             .into())
         } else if self.data_ref.starts_with("<invfdo>") {
             // "invalid"
-            log_warn!("Attempted to load an invalid {} file", self.extension);
-            Err(parser_error!(
-                ResolutionFailed,
-                "Unable to load invalid file reference: {} (ext: {})",
-                self.data_ref,
-                self.extension
-            )
-            .into())
+            log_warn!("Attempted to load an invalid {} file. Importing an empty file.", self.extension);
+            // Return empty data
+            Ok(FileBlob::default())
         } else {
             Err(parser_error!(
                 ResolutionFailed,
