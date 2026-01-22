@@ -356,14 +356,17 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 		// bodyがBufferの場合はbase64エンコード
 		let bodyContent = options.body ?? undefined;
+		let base64Encoded = false;
 		if (Buffer.isBuffer(bodyContent)) {
 			bodyContent = bodyContent.toString('base64');
+			base64Encoded = true;
 		}
 
 		const body = {
 			headers: options.headers,
 			url: url,
 			method: options.method ?? 'GET',
+			base64Encoded: base64Encoded,
 			body: bodyContent,
 		};
 
