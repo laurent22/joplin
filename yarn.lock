@@ -10552,7 +10552,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.0.14"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.158"
+    "@types/serviceworker": "npm:0.0.159"
     "@types/tar-stream": "npm:3.1.4"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -17204,10 +17204,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.158":
-  version: 0.0.158
-  resolution: "@types/serviceworker@npm:0.0.158"
-  checksum: 10/ec31c5f07f24aea8ae50a54c98cef70e60b16fb2463ca4a46a8062b2d7c4113adee5b01dd6f765fec885e75818123908bde7e4b918a61cb9996b24a5287e40f3
+"@types/serviceworker@npm:0.0.159":
+  version: 0.0.159
+  resolution: "@types/serviceworker@npm:0.0.159"
+  checksum: 10/b2468d5bd2694c0501b32afc3f339093bc4ca98546092fef48c675141512d9df503aa21076867acb60957de6dc1a8d9d716ae4b4a9e3c58fe29608349e2c1887
   languageName: node
   linkType: hard
 
