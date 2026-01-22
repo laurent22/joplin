@@ -31,9 +31,9 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 		// Find the matching closing tag
 		for (; !!cursor && nestedTagCounter > 0; cursor = cursor.nextSibling) {
 			const info = htmlNodeInfo(cursor, state);
-			if (isMatchingOpeningTag(info)) {
+			if (info && isMatchingOpeningTag(info)) {
 				nestedTagCounter ++;
-			} else if (isMatchingClosingTag(info)) {
+			} else if (info && isMatchingClosingTag(info)) {
 				nestedTagCounter --;
 			}
 
