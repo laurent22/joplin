@@ -6,7 +6,7 @@ import * as React from 'react';
 import { useMemo, useCallback, useRef } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 
-import { EditorProps } from './types';
+import { EditorProps, EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 import Logger from '@joplin/utils/Logger';
@@ -17,10 +17,12 @@ import shim from '@joplin/lib/shim';
 
 const logger = Logger.create('RichTextEditor');
 
-function useCss(themeId: number, editorCss: string): string {
+function useCss(themeId: number, editorCss: string, editorSettings: EditorSettings): string {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		const themeVariableCss = themeToCss(theme);
+		const themeData = editorSettings.themeData;
+		const fontSize = `${themeData.fontSize}${themeData.fontSizeUnits ?? 'px'}`;
 		return `
 			${themeVariableCss}
 			${editorCss}
@@ -41,7 +43,7 @@ function useCss(themeId: number, editorCss: string): string {
 				padding-bottom: 1px;
 				padding-top: 10px;
 
-				font-size: 13pt;
+				font-size: ${fontSize};
 				font-family: ${JSON.stringify(theme.fontFamily)}, sans-serif;
 			}
 
@@ -52,7 +54,7 @@ function useCss(themeId: number, editorCss: string): string {
 				position: relative;
 			}
 		`;
-	}, [themeId, editorCss]);
+	}, [themeId, editorCss, editorSettings]);
 }
 
 function useHtml(initialCss: string): string {
@@ -127,7 +129,7 @@ const RichTextEditor: React.FC<EditorProps> = props => {
 		true;
 	`;
 
-	const css = useCss(props.themeId, editorWebViewSetup.pageSetup.css);
+	const css = useCss(props.themeId, editorWebViewSetup.pageSetup.css, props.editorSettings);
 	const html = useHtml(css);
 
 	const onMessage = useCallback((event: OnMessageEvent) => {
