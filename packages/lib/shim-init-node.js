@@ -335,6 +335,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	};
 
 	const nodeFetch = require('node-fetch');
+	const got = require('got');
 
 	// Not used??
 	shim.readLocalFileBase64 = path => {
@@ -356,7 +357,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 		// bodyがBufferの場合はbase64エンコード
 		let bodyContent = options.body ?? undefined;
-		bodyContent = bodyContent?.toString('base64');
+		if (Buffer.isBuffer(bodyContent)) {
+			bodyContent = bodyContent.toString('base64');
+		}
 
 		const body = {
 			headers: options.headers,
@@ -364,12 +367,41 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			method: options.method ?? 'GET',
 			body: bodyContent,
 		};
-		const newOptions = {
-			method: 'GET',
-			redirect: 'manual',
-			body: JSON.stringify(body), // bodyがundefinedの場合はundefinedになる
-		};
-		return nodeFetch(proxyUrl, newOptions);
+
+		// gotを使用してGETリクエストでボディを送信
+		try {
+			const response = await got(proxyUrl, {
+				method: 'GET',
+				json: body,
+				responseType: 'buffer',
+				followRedirect: false,
+			});
+
+			// node-fetchのレスポンス形式に合わせる
+			return {
+				ok: response.statusCode >= 200 && response.statusCode < 300,
+				status: response.statusCode,
+				statusText: response.statusMessage,
+				headers: new Map(Object.entries(response.headers)),
+				text: async () => response.body.toString('utf-8'),
+				json: async () => JSON.parse(response.body.toString('utf-8')),
+				buffer: async () => response.body,
+			};
+		} catch (error) {
+			// gotのエラーをnode-fetch形式に変換
+			if (error.response) {
+				return {
+					ok: false,
+					status: error.response.statusCode,
+					statusText: error.response.statusMessage,
+					headers: new Map(Object.entries(error.response.headers)),
+					text: async () => error.response.body.toString('utf-8'),
+					json: async () => JSON.parse(error.response.body.toString('utf-8')),
+					buffer: async () => error.response.body,
+				};
+			}
+			throw error;
+		}
 	};
 
 
