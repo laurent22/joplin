@@ -1825,6 +1825,7 @@ packages/tools/fuzzer/ClientPool.js
 packages/tools/fuzzer/Server.js
 packages/tools/fuzzer/constants.js
 packages/tools/fuzzer/model/FolderRecord.js
+packages/tools/fuzzer/model/ResourceRecord.js
 packages/tools/fuzzer/sync-fuzzer.js
 packages/tools/fuzzer/types.js
 packages/tools/fuzzer/utils/ProgressBar.js

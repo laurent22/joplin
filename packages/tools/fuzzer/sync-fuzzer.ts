@@ -55,9 +55,10 @@ interface Options {
 
 const createContext = (options: Options, server: Server, profilesDirectory: string) => {
 	const random = new SeededRandom(options.seed);
-	// Use a separate random number generator for strings. This prevents
+	// Use a separate random number generator for strings and IDs. This prevents
 	// the random strings setting from affecting the other output.
 	const stringRandom = new SeededRandom(random.next());
+	const idRandom = new SeededRandom(random.next());
 
 	if (options.isJoplinCloud) {
 		logger.info('Sync target: Joplin Cloud');
@@ -72,6 +73,17 @@ const createContext = (options: Options, server: Server, profilesDirectory: stri
 		}
 	})();
 
+	const randomId = () => {
+		const bytes = [];
+		for (let i = 0; i < 16; i++) {
+			bytes.push(idRandom.nextInRange(0, 256));
+		}
+		return Buffer.from(bytes)
+			.toString('hex')
+			.toLowerCase()
+			.padStart(32, '0');
+	};
+
 	const fuzzContext: FuzzContext = {
 		serverUrl: server.url,
 		isJoplinCloud: options.isJoplinCloud,
@@ -82,6 +94,7 @@ const createContext = (options: Options, server: Server, profilesDirectory: stri
 		randInt: (a, b) => random.nextInRange(a, b),
 		randomFrom: (data) => data[random.nextInRange(0, data.length)],
 		randomString: randomStringGenerator,
+		randomId,
 		keepAccounts: options.keepAccountsOnClose,
 	};
 	return fuzzContext;

@@ -1,5 +1,5 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
-import { ActionableClient, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ShareOptions } from './types';
+import { ActionableClient, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ResourceData, ShareOptions } from './types';
 import { join } from 'path';
 import { mkdir, remove } from 'fs-extra';
 import getStringProperty from './utils/getStringProperty';
@@ -14,7 +14,6 @@ import getNumberProperty from './utils/getNumberProperty';
 import retryWithCount from './utils/retryWithCount';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import { formatMsToDateTimeLocal, msleep, Second } from '@joplin/utils/time';
-import shim from '@joplin/lib/shim';
 import { spawn } from 'child_process';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { createInterface } from 'readline/promises';
@@ -105,6 +104,12 @@ interface CreateRandomItemOptions extends CreateOrUpdateOptions {
 	quiet?: boolean;
 }
 
+class RequestError extends Error {
+	public constructor(public readonly code: number, message: string) {
+		super(message);
+	}
+}
+
 class Client implements ActionableClient {
 	public readonly email: string;
 
@@ -122,7 +127,7 @@ class Client implements ActionableClient {
 	}
 
 	private static async fromAccount(account: AccountData, actionTracker: ActionTracker, context: FuzzContext) {
-		const id = uuid.create();
+		const id = context.randomId();
 		const profileDirectory = join(context.baseDir, id);
 		await mkdir(profileDirectory);
 
@@ -388,22 +393,24 @@ class Client implements ActionableClient {
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
 	private async execApiCommand_(method: 'GET', route: string): Promise<string>;
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
-	private async execApiCommand_(method: 'POST'|'PUT', route: string, data: Json): Promise<string>;
+	private async execApiCommand_(method: 'POST'|'PUT', route: string, data: Json|FormData): Promise<string>;
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
-	private async execApiCommand_(method: HttpMethod, route: string, data: Json|null = null): Promise<string> {
+	private async execApiCommand_(method: HttpMethod, route: string, data: Json|FormData|null = null): Promise<string> {
 		route = route.replace(/^[/]/, '');
 		const url = new URL(`http://localhost:${this.apiData_.port}/${route}`);
 		url.searchParams.append('token', this.apiData_.token);
 
 		this.transcript_.push(`\n[[${method} ${url}; body: ${JSON.stringify(data)}]]\n`);
 
-		const response = await shim.fetch(url.toString(), {
+		const response = await fetch(url.toString(), {
 			method,
-			...(data ? { body: JSON.stringify(data) } : undefined),
+			...(data ? {
+				body: data instanceof FormData ? data : JSON.stringify(data),
+			} : undefined),
 		});
 
 		if (!response.ok) {
-			throw new Error(`Request to ${route} failed with error: ${await response.text()}`);
+			throw new RequestError(response.status, `Request to ${route} failed with error: ${await response.text()}`);
 		}
 
 		return await response.text();
@@ -530,7 +537,7 @@ class Client implements ActionableClient {
 		const titleLength = this.context_.randInt(1, 128);
 		const folder = {
 			parentId: parentId,
-			id: id ?? uuid.create(),
+			id: id ?? this.context_.randomId(),
 			title: this.context_.randomString(titleLength).replace(/\n/g, ' '),
 		};
 
@@ -609,7 +616,7 @@ class Client implements ActionableClient {
 			parentId,
 			title: this.context_.randomString(titleLength),
 			body: this.context_.randomString(bodyLength),
-			id: id ?? uuid.create(),
+			id: id ?? this.context_.randomId(),
 		}, { quiet });
 	}
 
@@ -650,6 +657,43 @@ class Client implements ActionableClient {
 		await this.tracker_.deleteNote(id);
 
 		await this.execCliCommand_('rmnote', '--permanent', '--force', id);
+	}
+
+	public async attachResource(note: NoteData, resource: ResourceData): Promise<NoteData> {
+		const updatedNote = await this.tracker_.attachResource(note, resource);
+
+		const checkExists = async () => {
+			try {
+				await this.execApiCommand_('GET', `/resources/${resource.id}`);
+				return true;
+			} catch (error) {
+				if (error instanceof RequestError && error.code === 404) {
+					return false;
+				}
+				throw error;
+			}
+		};
+
+		if (await checkExists()) {
+			const resourceForm = new FormData();
+			resourceForm.append('data', new Blob(['test'], { type: resource.mimeType }));
+			resourceForm.append('props', JSON.stringify({
+				title: resource.title,
+				id: resource.id,
+				mime: resource.mimeType,
+			}));
+
+			await this.execApiCommand_('POST', '/resources', resourceForm);
+		}
+
+		await this.execApiCommand_('PUT', `/notes/${encodeURIComponent(note.id)}`, {
+			title: updatedNote.title,
+			body: updatedNote.body,
+			parent_id: updatedNote.parentId ?? '',
+		});
+		await this.assertNoteMatchesState_(updatedNote);
+
+		return updatedNote;
 	}
 
 	public async deleteFolder(id: string) {

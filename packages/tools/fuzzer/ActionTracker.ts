@@ -1,6 +1,8 @@
 import { strict as assert } from 'assert';
-import { ActionableClient, FolderData, FuzzContext, ItemId, NoteData, ShareOptions, TreeItem, assertIsFolder, isFolder } from './types';
+import { ActionableClient, FolderData, FuzzContext, ItemId, NoteData, ShareOptions, TreeItem, assertIsFolder, isFolder, isNote, isResource } from './types';
 import FolderRecord from './model/FolderRecord';
+import { extractResourceUrls } from '@joplin/lib/urlUtils';
+import ResourceRecord from './model/ResourceRecord';
 
 interface ClientData {
 	childIds: ItemId[];
@@ -263,6 +265,8 @@ class ActionTracker {
 
 					removeItemRecursive(childId);
 				}
+			} else if (isNote(item)) {
+				updateResourceReferences(item, { ...item, body: '' });
 			}
 		};
 		const mapItems = <T> (map: (item: TreeItem)=> T, startFolder?: FolderRecord) => {
@@ -342,6 +346,50 @@ class ActionTracker {
 			this.checkRep_();
 		};
 
+		const updateResourceReferences = (noteBefore: NoteData|null, noteAfter: NoteData|null) => {
+			assert.ok(!!noteBefore || !!noteAfter, 'at least one of (noteBefore, noteAfter) must be specified');
+			if (noteBefore && noteAfter) {
+				assert.equal(noteBefore.id, noteAfter.id, 'changing note IDs is not supported');
+			}
+
+			const bodyBefore = noteBefore?.body ?? '';
+			const bodyAfter = noteAfter?.body ?? '';
+			if (bodyBefore === bodyAfter) return;
+
+			const id = noteBefore?.id ?? noteAfter?.id;
+
+			const referencesBefore = extractResourceUrls(bodyBefore).map(r => r.itemId);
+			const referencesAfter = extractResourceUrls(bodyAfter).map(r => r.itemId);
+
+			const newReferences = new Set(referencesAfter);
+			for (const reference of referencesBefore) {
+				newReferences.delete(reference);
+			}
+
+			const removedReferences = new Set(referencesBefore);
+			for (const reference of referencesAfter) {
+				removedReferences.delete(reference);
+			}
+
+			for (const reference of newReferences) {
+				const item = this.idToItem_.get(reference);
+				if (item && isResource(item)) {
+					updateItem(item.id, item.withReference(id), `referenced by ${id}`);
+				}
+			}
+
+			for (const reference of removedReferences) {
+				const item = this.idToItem_.get(reference);
+				if (item && isResource(item)) {
+					updateItem(
+						item.id,
+						item.withoutReference(id),
+						`dereferenced by ${id}`,
+					);
+				}
+			}
+		};
+
 		const tracker: ActionableClient = {
 			createNote: (data: NoteData) => {
 				assertWriteable(data.parentId);
@@ -352,6 +400,7 @@ class ActionTracker {
 					...data,
 				}, 'created');
 				addChild(data.parentId, data.id);
+				updateResourceReferences(null, data);
 
 				this.checkRep_();
 				return Promise.resolve();
@@ -364,7 +413,7 @@ class ActionTracker {
 				assert.ok(!!data.parentId, `note ${data.id} should have a parentId`);
 
 				// Additional debugging information about what changed:
-				const changedFieldsInfo = Object.entries(data)
+				const changedFields = Object.entries(data)
 					.filter(([key, newValue]) => {
 						const itemKey = key as keyof NoteData;
 						// isShared is a virtual property
@@ -378,11 +427,26 @@ class ActionTracker {
 				removeChild(oldItem.parentId, data.id);
 				updateItem(data.id, {
 					...data,
-				}, `updated (changed fields: ${JSON.stringify(changedFieldsInfo)})`);
+				}, `updated (changed fields: ${JSON.stringify(changedFields)})`);
 				addChild(data.parentId, data.id);
+				updateResourceReferences(oldItem, data);
 
 				this.checkRep_();
 				return Promise.resolve();
+			},
+			attachResource: async (note, resource) => {
+				const resourceMarkup = `[resource](:/${resource.id})`;
+				const withAttached = { ...note, body: `${note.body}${resourceMarkup}` };
+
+				updateItem(
+					resource.id, new ResourceRecord({
+						...resource,
+						referencedBy: [note.id],
+					}),
+					'created',
+				);
+				await tracker.updateNote(withAttached);
+				return withAttached;
 			},
 			createFolder: (data: FolderData) => {
 				const parentId = data.parentId ?? '';
@@ -419,7 +483,7 @@ class ActionTracker {
 
 				const item = this.idToItem_.get(id);
 				if (!item) throw new Error(`Not found ${id}`);
-				assert.ok(!isFolder(item), 'should be a note');
+				assert.ok(isNote(item), 'should be a note');
 				assertWriteable(item);
 
 				removeItemRecursive(id);
@@ -480,6 +544,7 @@ class ActionTracker {
 			},
 			moveItem: (itemId, newParentId) => {
 				const item = this.idToItem_.get(itemId);
+				assert.ok(isFolder(item) || isNote(item), `item with ${itemId} should be a folder or a note`);
 
 				const validateParameters = () => {
 					assert.ok(item, `item with ${itemId} should exist`);
@@ -514,9 +579,8 @@ class ActionTracker {
 			publishNote: (id) => {
 				const oldItem = this.idToItem_.get(id);
 				assert.ok(oldItem, 'should exist');
-				assert.ok(!isFolder(oldItem), 'folders cannot be published');
+				assert.ok(isNote(oldItem), 'only notes can be published');
 				assert.ok(!oldItem.published, 'should not be published');
-
 
 				updateItem(id, {
 					...oldItem,
@@ -529,7 +593,7 @@ class ActionTracker {
 			unpublishNote: (id) => {
 				const oldItem = this.idToItem_.get(id);
 				assert.ok(oldItem, 'should exist');
-				assert.ok(!isFolder(oldItem), 'folders cannot be unpublished');
+				assert.ok(isNote(oldItem), 'only notes can be unpublished');
 				assert.ok(oldItem.published, 'should be published');
 
 				updateItem(id, {
@@ -543,7 +607,7 @@ class ActionTracker {
 			sync: () => Promise.resolve(),
 			listNotes: () => {
 				const notes = mapItems(item => {
-					return isFolder(item) ? null : item;
+					return !isNote(item) ? null : item;
 				}).filter(item => !!item).map(item => ({
 					...item,
 					isShared: isShared(item),

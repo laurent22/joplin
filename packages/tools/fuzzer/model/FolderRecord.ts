@@ -19,8 +19,8 @@ const validateId = (id: string) => {
 };
 
 export default class FolderRecord implements FolderData {
-	public readonly parentId: string;
-	public readonly id: string;
+	public readonly parentId: ItemId;
+	public readonly id: ItemId;
 	public readonly title: string;
 	public readonly ownedByEmail: string;
 	public readonly childIds: ItemId[];

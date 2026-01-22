@@ -1,7 +1,6 @@
-import uuid from '@joplin/lib/uuid';
 import Client from './Client';
 import ClientPool from './ClientPool';
-import { assertIsFolder, assertIsNote, FuzzContext, ItemId, RandomFolderOptions } from './types';
+import { assertIsFolder, assertIsNote, FuzzContext, ItemId, RandomFolderOptions, ResourceData } from './types';
 import { strict as assert } from 'assert';
 import Logger from '@joplin/utils/Logger';
 import retryWithCount from './utils/retryWithCount';
@@ -148,7 +147,7 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		// Create a toplevel folder to serve as this
 		// folder's parent if none exist yet
 		if (!parentId) {
-			parentId = uuid.create();
+			parentId = context.randomId();
 			await client.createFolder({
 				parentId: '',
 				id: parentId,
@@ -171,7 +170,7 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 			await client.createNote({
 				...defaultNoteProperties,
 				parentId: await selectOrCreateWriteableFolder(),
-				id: uuid.create(),
+				id: context.randomId(),
 				title: 'Test note',
 				body: 'Body',
 			});
@@ -244,13 +243,25 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 
 	addAction('updateNoteBody', async ({ id }) => {
 		const note = noteById(id);
+
 		await client.updateNote({
 			...note,
-			body: `${note.body}\n\nUpdated.\n`,
+			body: `${note.body}\n\nUpdated!`,
 		});
 
 		return true;
 	}, { id: selectOrCreateWriteableNote });
+
+	addAction('attachResourceTo', async ({ noteId }) => {
+		const resourceData: ResourceData = {
+			id: context.randomId(),
+			mimeType: 'text/plain',
+			title: 'Test!',
+		};
+		await client.attachResource(noteById(noteId), resourceData);
+
+		return true;
+	}, { noteId: selectOrCreateWriteableNote });
 
 	addAction('moveNote', async ({ noteId, targetFolderId }) => {
 		const note = noteById(noteId);
