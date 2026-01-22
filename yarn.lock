@@ -11032,7 +11032,7 @@ __metadata:
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
     "@types/node-os-utils": "npm:1.3.4"
-    "@types/nodemailer": "npm:6.4.20"
+    "@types/nodemailer": "npm:6.4.21"
     "@types/qrcode": "npm:1.5.6"
     "@types/uuid": "npm:10.0.0"
     "@types/yargs": "npm:17.0.33"
@@ -16883,13 +16883,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.20":
-  version: 6.4.20
-  resolution: "@types/nodemailer@npm:6.4.20"
+"@types/nodemailer@npm:6.4.21":
+  version: 6.4.21
+  resolution: "@types/nodemailer@npm:6.4.21"
   dependencies:
     "@aws-sdk/client-ses": "npm:^3.731.1"
     "@types/node": "npm:*"
-  checksum: 10/050b6aa95c97a1bf645f0735c5da20a5b4aa30df1fc8bcc8a60c039b5f45f450689e5f51821d144d038148f3dae8427bb7d91f503c6390960a1390e562147a4f
+  checksum: 10/3388d11defbef0b1b471720f88ff2fd206ab5879bc7089d90d3467198f869299dc374f01cf07054025c7e87b186a7297b1040d318d65e9ec19a130732aa1448d
   languageName: node
   linkType: hard
 
