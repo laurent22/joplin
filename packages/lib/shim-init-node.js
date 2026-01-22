@@ -353,16 +353,21 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
 		console.log(`Reverse Proxy URL: ${reverseProxyUrl}`);
 		const proxyUrl = `${reverseProxyUrl}/image`;
+
+		// bodyがBufferの場合はbase64エンコード
+		let bodyContent = options.body ?? undefined;
+		bodyContent = bodyContent?.toString('base64');
+
 		const body = {
 			headers: options.headers,
 			url: url,
 			method: options.method ?? 'GET',
-			body: options.body ?? null,
+			body: bodyContent,
 		};
 		const newOptions = {
 			method: 'GET',
 			redirect: 'manual',
-			body: JSON.stringify(body),
+			body: JSON.stringify(body), // bodyがundefinedの場合はundefinedになる
 		};
 		return nodeFetch(proxyUrl, newOptions);
 	};
