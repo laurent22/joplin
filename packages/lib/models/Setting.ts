@@ -514,6 +514,16 @@ class Setting extends BaseModel {
 
 			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
+			'sync.useReverseProxy': {
+				value: false,
+				type: SettingItemType.Bool,
+				public: true,
+				section: 'sync',
+				label: () => _('Use Reverse Proxy'),
+				description: () => _('Enable this option if you are using a reverse proxy for synchronization.'),
+				storage: SettingStorage.File,
+			},
+
 			// The active folder ID is guaranteed to be valid as long as there's at least one
 			// existing folder, so it is a good default in contexts where there's no currently
 			// selected folder. It corresponds in general to the currently selected folder or

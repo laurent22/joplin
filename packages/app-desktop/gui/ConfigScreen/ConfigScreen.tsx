@@ -34,7 +34,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			screenName: '',
 			changedSettingKeys: [],
 			needRestart: false,
-			isUseProxy: false,
 		};
 
 		this.rowStyle_ = {
@@ -53,7 +52,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.renderLabel = this.renderLabel.bind(this);
 		this.renderDescription = this.renderDescription.bind(this);
 		this.renderHeader = this.renderHeader.bind(this);
-		this.onUseProxyChange = this.onUseProxyChange.bind(this);
 	}
 
 	async checkSyncConfig_() {
@@ -269,14 +267,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
 
-		console.log(`isUseProxy: ${this.state.isUseProxy}`);
 		return (
 			<div key={key} style={sectionStyle}>
 				{this.renderSectionDescription(section)}
 				<div>{settingComps}</div>
 				{advancedSettingsButton}
-				<span><input type="checkbox" checked={this.state.isUseProxy} onClick={this.onUseProxyChange} /></span>
-				<label>use ReverseProxy</label>
 				<div style={advancedSettingsSectionStyle}>{advancedSettingComps}</div>
 			</div>
 		);
@@ -652,12 +647,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 
 		return output;
-	}
-
-	// Handles toggling of the Reverse Proxy usage checkbox.
-	private onUseProxyChange() {
-		this.setState({ isUseProxy: !this.state.isUseProxy });
-		// TODO: Persist this to a Setting once a metadata key is defined (e.g., 'sync.onedrive.useReverseProxy').
 	}
 
 	private restartMessage() {
