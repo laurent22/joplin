@@ -11165,7 +11165,7 @@ __metadata:
     browserify: "npm:14.5.0"
     rollup: "npm:0.50.1"
     standard: "npm:17.1.2"
-    turndown: "npm:7.2.1"
+    turndown: "npm:7.2.2"
     turndown-attendant: "npm:0.0.3"
   languageName: unknown
   linkType: soft
@@ -50949,12 +50949,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turndown@npm:7.2.1":
-  version: 7.2.1
-  resolution: "turndown@npm:7.2.1"
+"turndown@npm:7.2.2":
+  version: 7.2.2
+  resolution: "turndown@npm:7.2.2"
   dependencies:
     "@mixmark-io/domino": "npm:^2.2.0"
-  checksum: 10/8c8986e7b6d2f93af25d7b1af6f50a2c53f6bb8229b5a333fb404bc54f3bd99bb96992fe78651bbb12ed830d590a8a5f5608289ed3a067de5a9d51b92ed27b49
+  checksum: 10/e0a6f7f0c2bc8447ca7ea145348c9e337163a00c9d95f49e5eecdbc9931002aa0253c7561fbc299280c854d5308ed5a0eacfc9b4e399d698fce64be4d2d7bb52
   languageName: node
   linkType: hard
 
