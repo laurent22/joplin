@@ -76,7 +76,7 @@ export const whiteBackgroundNoteStyle = () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function (theme: any, options: Options = null) {
+export default function(theme: any, options: Options = null) {
 	options = {
 		contentMaxWidth: 0,
 		...options,
