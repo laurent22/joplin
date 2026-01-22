@@ -11,7 +11,11 @@ app.get('/image', (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
 	const body = req.body;
-	console.log(`body: ${JSON.stringify(body)}`);
+	const safeBody = { ...body };
+	if (safeBody?.headers?.Authorization) {
+		safeBody.headers.Authorization = '*****';
+	}
+	console.log(`body: ${JSON.stringify(safeBody, null, 2)}`);
 	const response = {
 		status: 'success',
 		message: 'Image endpoint',
