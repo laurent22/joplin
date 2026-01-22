@@ -342,12 +342,21 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		return new Buffer(data).toString('base64');
 	};
 
-	const fetchFunc = async (url, options) => {
+	const fetchFunc = async (url, options, Setting) => {
 		const newOptions = {
 			...options,
 			redirect: 'manual',
 		};
-		console.log(`reverse proxy used: ${process.env.JOPLIN_REVERSE_PROXY ?? 'false'} `);
+
+		// Check if reverse proxy is enabled from settings
+		const useReverseProxy = Setting ? Setting.value('sync.useReverseProxy') : false;
+		console.log(`Reverse Proxy Enabled: ${useReverseProxy}`);
+
+		if (useReverseProxy) {
+			const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
+			console.log(`Reverse Proxy URL: ${reverseProxyUrl}`);
+		}
+
 		let response = await nodeFetch(url, newOptions);
 		if (response.status >= 300 && response.status < 400) {
 			const redirectUrl = response.headers.get('location');
@@ -358,7 +367,6 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 				response = await nodeFetch(redirectUrl, redirectOptions);
 			}
 		}
-		console.log(`response status: ${response.status}`);
 		return response;
 	};
 
@@ -371,8 +379,11 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			redirect: 'manual',
 		};
 
+		// Get Setting module
+		const Setting = require('./models/Setting').default;
+
 		return shim.fetchWithRetry(async () => {
-			let result = await fetchFunc(url, newOptions);
+			let result = await fetchFunc(url, newOptions, Setting);
 			if (result.status === 429) {
 				// console.log(`Too many Request: ${JSON.stringify(result, null, 2)}`);
 				const waitSecondsStr = result.headers.get('retry-after');
