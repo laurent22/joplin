@@ -342,29 +342,46 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		return new Buffer(data).toString('base64');
 	};
 
+	const nodeFetchWrapper = async (url, options, Setting) => {
+		// Check if reverse proxy is enabled from settings
+		const useReverseProxy = Setting ? Setting.value('sync.useReverseProxy') : false;
+		console.log(`Reverse Proxy Enabled: ${useReverseProxy}`);
+
+		if (!useReverseProxy) {
+			return nodeFetch(url, options);
+		}
+		const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
+		console.log(`Reverse Proxy URL: ${reverseProxyUrl}`);
+		const proxyUrl = `${reverseProxyUrl}/image`;
+		const body = {
+			headers: options.headers,
+			url: url,
+			method: options.method ?? 'GET',
+			body: options.body ?? null,
+		};
+		const newOptions = {
+			method: 'GET',
+			redirect: 'manual',
+			body: JSON.stringify(body),
+		};
+		return nodeFetch(proxyUrl, newOptions);
+	};
+
+
+
 	const fetchFunc = async (url, options, Setting) => {
 		const newOptions = {
 			...options,
 			redirect: 'manual',
 		};
-
-		// Check if reverse proxy is enabled from settings
-		const useReverseProxy = Setting ? Setting.value('sync.useReverseProxy') : false;
-		console.log(`Reverse Proxy Enabled: ${useReverseProxy}`);
-
-		if (useReverseProxy) {
-			const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
-			console.log(`Reverse Proxy URL: ${reverseProxyUrl}`);
-		}
-
-		let response = await nodeFetch(url, newOptions);
+		let response = await nodeFetchWrapper(url, newOptions, Setting);
 		if (response.status >= 300 && response.status < 400) {
 			const redirectUrl = response.headers.get('location');
 			if (redirectUrl) {
 				const redirectOptions = { ...newOptions };
 				delete redirectOptions.headers['Authorization'];
 				delete redirectOptions.headers['redirect'];
-				response = await nodeFetch(redirectUrl, redirectOptions);
+				response = await nodeFetchWrapper(redirectUrl, redirectOptions, Setting);
 			}
 		}
 		return response;
