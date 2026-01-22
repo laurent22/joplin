@@ -14,7 +14,7 @@
     "jsdom": "26.1.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "28.0.8",
+    "@rollup/plugin-commonjs": "28.0.9",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-replace": "6.0.2",
     "browserify": "14.5.0",
