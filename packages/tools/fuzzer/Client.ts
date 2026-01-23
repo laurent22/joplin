@@ -499,6 +499,11 @@ class Client implements ActionableClient {
 			const untrackedItemsById = new Map<ItemId, UntrackedAttachment>();
 			const noteActualStates = new Map<ItemId, NoteData>();
 			for (const note of await this.listNotes()) {
+				// Skip notes that are not yet in the expected state. It's possible
+				// that these notes still need to be synced by another client. If so,
+				// attachments in these notes will be processed later:
+				if (!this.tracker_.itemExists(note.id)) continue;
+
 				for (const itemId of extractResourceIds(note.body)) {
 					if (this.tracker_.itemExists(itemId)) continue;
 

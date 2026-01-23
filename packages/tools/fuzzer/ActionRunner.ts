@@ -185,12 +185,16 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	};
 
 	const noteById = (id: ItemId) => {
+		assert.ok(client.itemExists(id), `Could not find note with ID ${id} in client ${client.email}'s expected state.`);
+
 		const note = client.itemById(id);
 		assertIsNote(note);
 		return note;
 	};
 
 	const folderById = (id: ItemId) => {
+		assert.ok(client.itemExists(id), `Could not find folder with ID ${id} in client ${client.email}'s expected state.`);
+
 		const folder = client.itemById(id);
 		assertIsFolder(folder);
 		return folder;
@@ -280,15 +284,18 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		targetFolderId: undefinedId,
 	});
 
-	addAction('duplicateNote', async ({ id }) => {
+	addAction('duplicateNote', async ({ id, newNoteId }) => {
 		const note = noteById(id);
 
 		await client.createNote({
 			...note,
-			id: context.randomId(),
+			id: newNoteId,
 		});
 		return true;
-	}, { id: selectOrCreateWriteableNote });
+	}, {
+		id: selectOrCreateWriteableNote,
+		newNoteId: () => context.randomId(),
+	});
 
 	addAction('deleteNote', async ({ id }) => {
 		const validatedNote = noteById(id); // Ensure, e.g., that the note exists
