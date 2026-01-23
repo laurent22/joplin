@@ -1106,7 +1106,7 @@ class Client implements ActionableClient {
 			if (missingResources.length > 0) {
 				const log = idLogs(missingResources, expectedResources);
 
-				throw new Error(`Missing resource(s): All expected resources should exist on the client. Resources with IDs ${JSON.stringify(missingResources)} were not found (total resource count: ${actualResourceIds.size}).\nResource action history:\n${log}`);
+				throw new Error(`Missing resource(s): All expected resources should exist on the client. Resource(s) with ID(s) ${JSON.stringify(missingResources)} were not found (total resource count: ${actualResourceIds.size}).\nResource action history:\n${log}`);
 			}
 		};
 
@@ -1125,7 +1125,7 @@ class Client implements ActionableClient {
 
 		if (errors.length) {
 			const errorList = errors
-				.map((error, index) => `Error ${index + 1}: ${error}`)
+				.map((error, index) => `Error ${index + 1} of ${errors.length}: ${error}`)
 				.map(message => hangingIndent(message))
 				.join('\n');
 			throw new Error(`Incorrect state in client: ${this.clientLabel_}:\n${errorList}`);
