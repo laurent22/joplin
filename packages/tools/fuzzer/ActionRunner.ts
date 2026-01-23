@@ -258,16 +258,22 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		return true;
 	}, { id: selectOrCreateWriteableNote });
 
-	addAction('attachResourceTo', async ({ noteId }) => {
+	addAction('attachResource', async ({ noteId, count }) => {
 		const resourceData: ResourceData = {
 			id: context.randomId(),
 			mimeType: 'text/plain',
 			title: 'Test!',
 		};
-		await client.attachResource(noteById(noteId), resourceData);
+
+		for (let i = 0; i < count; i++) {
+			await client.attachResource(noteById(noteId), resourceData);
+		}
 
 		return true;
-	}, { noteId: selectOrCreateWriteableNote });
+	}, {
+		noteId: selectOrCreateWriteableNote,
+		count: () => context.randInt(1, 3),
+	});
 
 	addAction('moveNote', async ({ noteId, targetFolderId }) => {
 		const note = noteById(noteId);
