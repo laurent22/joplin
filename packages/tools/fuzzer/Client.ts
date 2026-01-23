@@ -107,7 +107,7 @@ interface CreateRandomItemOptions extends CreateOrUpdateOptions {
 	quiet?: boolean;
 }
 
-class RequestError extends Error {
+class ApiResponseError extends Error {
 	public constructor(public readonly code: number, message: string) {
 		super(message);
 	}
@@ -413,7 +413,7 @@ class Client implements ActionableClient {
 		});
 
 		if (!response.ok) {
-			throw new RequestError(response.status, `Request to ${route} failed with error: ${await response.text()}`);
+			throw new ApiResponseError(response.status, `Request to ${route} failed with error: ${await response.text()}`);
 		}
 
 		return await response.text();
@@ -537,7 +537,7 @@ class Client implements ActionableClient {
 				};
 				return resourceData;
 			} catch (error) {
-				if (error instanceof RequestError && error.code === 404) {
+				if (error instanceof ApiResponseError && error.code === 404) {
 					return null;
 				} else {
 					throw error;
@@ -791,7 +791,7 @@ class Client implements ActionableClient {
 				await this.execApiCommand_('GET', `/resources/${resource.id}`);
 				return true;
 			} catch (error) {
-				if (error instanceof RequestError && error.code === 404) {
+				if (error instanceof ApiResponseError && error.code === 404) {
 					return false;
 				}
 				throw error;
