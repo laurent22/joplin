@@ -857,8 +857,8 @@ class Client implements ActionableClient {
 		}, {
 			count: 2,
 			delayOnFailure: count => count * Second,
-			onFail: (error)=>{
-				logger.warn('Share failed:', error);
+			onFail: ({ error, willRetry })=>{
+				logger.warn('Share failed:', error, willRetry ? 'Retrying...' : '');
 			},
 		});
 

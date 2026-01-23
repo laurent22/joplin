@@ -450,8 +450,12 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		}, {
 			delayOnFailure: (count) => Second * count,
 			count: 3,
-			onFail: async (error) => {
-				logger.warn('other.sync/other.checkState failed with', error, 'retrying...');
+			onFail: async ({ error, willRetry }) => {
+				logger.warn(
+					'other.sync/other.checkState failed with',
+					error,
+					willRetry ? 'retrying...' : '',
+				);
 			},
 		});
 
