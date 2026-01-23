@@ -1023,16 +1023,25 @@ class Client implements ActionableClient {
 					const output = [];
 					for (const id of ids) {
 						const log = this.globalActionTracker_.getActionLog(id);
+
 						output.push(`\nid:${id}`);
-						output.push(log.map(item => `\t${item.source}: ${item.action}`).join('\n'));
+						if (log.length > 0) {
+							output.push(
+								log
+									.map(item => `\t${item.source}: ${item.action}`)
+									.join('\n'),
+							);
+						} else {
+							output.push('  Not found in the ID tracker (is this an auto-generated conflict note?).');
+						}
 					}
 					return output.join('\n');
 				};
 
 				throw new Error([
-					`IDs were different (${testLabel}):`,
-					missing.length && `- Expected ${JSON.stringify(missing)} to be present, but were missing.`,
-					unexpected.length && `- Present but should not have been: ${JSON.stringify(unexpected)}`,
+					`${testLabel}: IDs were different:`,
+					missing.length && ` - Expected ${JSON.stringify(missing)} to be present, but were missing.`,
+					unexpected.length && ` - Present but should not have been: ${JSON.stringify(unexpected)}`,
 					'\n',
 					'Logs:',
 					idLogs(missing),
@@ -1081,9 +1090,25 @@ class Client implements ActionableClient {
 			}
 		};
 
-		await checkNoteState();
-		await checkResourceState();
-		await checkFolderState();
+		const errors: Error[] = [];
+		const runCheck = async (check: ()=> Promise<void>) => {
+			try {
+				await check();
+			} catch (error) {
+				errors.push(error);
+			}
+		};
+
+		await runCheck(checkResourceState);
+		await runCheck(checkNoteState);
+		await runCheck(checkFolderState);
+
+		if (errors.length) {
+			const errorList = errors
+				.map((error, index) => `Error ${index}: ${error}`)
+				.join('\n');
+			throw new Error(`Incorrect state in client: ${this.clientLabel_}:\n${errorList}`);
+		}
 	}
 }
 
