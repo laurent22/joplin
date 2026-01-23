@@ -19,16 +19,17 @@ app.get('/image', async (req: Request, res: Response) => {
 			safeBody.headers.Authorization = '*****';
 		}
 
-		console.log(`body: ${JSON.stringify(safeBody, null, 2)}`);
+		// console.log(`body: ${JSON.stringify(safeBody, null, 2)}`);
+		console.log(`${safeBody.method} ${safeBody.url}`);
 
 		const nodeFetchOptions = HttpUtil.convertNodeFetchOptions(body);
 		const result = await fetch(body.url, nodeFetchOptions);
 
 		const wrappedResponse = await HttpUtil.convertWrappedRequest(result);
 
-		console.log(`response: ${wrappedResponse.status}`);
-		console.log(`headers: ${JSON.stringify(wrappedResponse.headers, null, 2)}`);
-		console.log(`body (base64Encoded: ${wrappedResponse.base64Encoded}): ${wrappedResponse.body?.substring(0, 100)}...`);
+		// console.log(`response: ${wrappedResponse.status}`);
+		// console.log(`headers: ${JSON.stringify(wrappedResponse.headers, null, 2)}`);
+		// console.log(`body (base64Encoded: ${wrappedResponse.base64Encoded}): ${wrappedResponse.body?.substring(0, 100)}...`);
 
 		res.status(200).json(wrappedResponse);
 	} catch (error) {
