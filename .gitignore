@@ -1839,6 +1839,8 @@ packages/tools/fuzzer/utils/getStringProperty.js
 packages/tools/fuzzer/utils/hangingIndent.js
 packages/tools/fuzzer/utils/logDiffDebug.js
 packages/tools/fuzzer/utils/openDebugSession.js
+packages/tools/fuzzer/utils/randomId.test.js
+packages/tools/fuzzer/utils/randomId.js
 packages/tools/fuzzer/utils/randomString.js
 packages/tools/fuzzer/utils/retryWithCount.js
 packages/tools/generate-database-types.js

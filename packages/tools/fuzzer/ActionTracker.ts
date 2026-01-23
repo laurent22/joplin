@@ -483,7 +483,7 @@ class ActionTracker {
 			},
 			createResource: async (resource) => {
 				if (tracker.itemExists(resource.id)) {
-					// Don't double-create the item. Avoid throwing here
+					// Don't double-create the item.
 					return Promise.resolve();
 				}
 

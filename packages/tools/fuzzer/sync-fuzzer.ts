@@ -13,6 +13,7 @@ import { packagesDir } from './constants';
 import ActionRunner, { ActionSpec } from './ActionRunner';
 import randomString from './utils/randomString';
 import { readFile } from 'fs/promises';
+import randomId from './utils/randomId';
 const { shimInit } = require('@joplin/lib/shim-init-node');
 
 const globalLogger = new Logger();
@@ -72,17 +73,7 @@ const createContext = (options: Options, server: Server, profilesDirectory: stri
 			return (_targetLength: number) => `Placeholder (x${stringCount++})`;
 		}
 	})();
-
-	const randomId = () => {
-		const bytes = [];
-		for (let i = 0; i < 16; i++) {
-			bytes.push(idRandom.nextInRange(0, 256));
-		}
-		return Buffer.from(bytes)
-			.toString('hex')
-			.toLowerCase()
-			.padStart(32, '0');
-	};
+	const randomIdGenerator = randomId((min, max) => idRandom.nextInRange(min, max));
 
 	const fuzzContext: FuzzContext = {
 		serverUrl: server.url,
@@ -94,7 +85,7 @@ const createContext = (options: Options, server: Server, profilesDirectory: stri
 		randInt: (a, b) => random.nextInRange(a, b),
 		randomFrom: (data) => data[random.nextInRange(0, data.length)],
 		randomString: randomStringGenerator,
-		randomId,
+		randomId: randomIdGenerator,
 		keepAccounts: options.keepAccountsOnClose,
 	};
 	return fuzzContext;
