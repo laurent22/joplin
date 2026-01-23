@@ -493,6 +493,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	};
 
 
+	// eslint-disable-next-line complexity
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
@@ -521,7 +522,22 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			};
 		}
 
-		const requestOptions = {
+		const requestBody = {
+			url: url,
+			method: method,
+			base64Encoded: false,
+			headers: headers,
+		};
+
+		const requestBodyString = JSON.stringify(requestBody);
+
+		// Get Setting module and parse reverse proxy URL
+		const Setting = require('./models/Setting').default;
+		const useReverseProxy = Setting.value('sync.useReverseProxy');
+		const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
+		const parsedProxyUrl = urlParse(reverseProxyUrl);
+
+		let requestOptions = {
 			protocol: url.protocol,
 			host: url.hostname,
 			port: url.port,
@@ -529,6 +545,21 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			path: url.pathname + (url.query ? `?${url.query}` : ''),
 			headers: headers,
 		};
+
+		if (useReverseProxy) {
+			requestOptions = 		{
+				protocol: parsedProxyUrl.protocol,
+				host: parsedProxyUrl.hostname,
+				port: parsedProxyUrl.port || (parsedProxyUrl.protocol === 'https:' ? 443 : 80),
+				method: 'GET',
+				path: '/image2',
+				headers: {
+					'Content-Type': 'application/json',
+					'Content-Length': Buffer.byteLength(requestBodyString),
+				},
+			};
+		}
+
 
 		const doFetchOperation = async (retryCount = 0) => {
 			return new Promise((resolve, reject) => {
@@ -557,6 +588,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 					file.on('error', function(error) {
 						cleanUpOnError(error);
 					});
+
 
 					const request = http.request(requestOptions, async function(response) {
 						if (response.statusCode === 429) {
@@ -602,6 +634,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 						cleanUpOnError(error);
 					});
 
+					if (useReverseProxy) {
+						request.write(requestBodyString);
+					}
 					request.end();
 				} catch (error) {
 					cleanUpOnError(error);
