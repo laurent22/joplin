@@ -250,6 +250,14 @@ class Client implements ActionableClient {
 
 	private closed_ = false;
 	public async close() {
+		if (this.closed_) {
+			// This can happen if:
+			// - Multiple cleanup callbacks are registered for the client.
+			// - The client was manually closed, but also has a cleanup callback registered.
+			logger.info('Client', this.clientLabel_, 'already closed. Skipping.');
+			return;
+		}
+
 		assert.ok(!this.closed_, 'should not be closed');
 
 		await this.account_.onClientDisconnected();
