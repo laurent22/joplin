@@ -1,4 +1,4 @@
-import { RequestInit } from "node-fetch";
+import { RequestInit } from 'node-fetch';
 
 export interface WrappedRequest {
     headers: Record<string, string>;
@@ -6,6 +6,13 @@ export interface WrappedRequest {
     method: string;
     base64Encoded: boolean;
     body?: string;
+}
+
+export interface WrappedResponse {
+	status: number;
+	headers: Record<string, string[]>;
+	base64Encoded: boolean;
+	body?: string;
 }
 
 export interface NodeFetchRequest {
@@ -31,5 +38,24 @@ export class HttpUtil {
 			}
 		}
 		return options;
+	}
+
+	public static convertWrappedRequest(status: number,headers: Record<string, string[]>, resBody: string | Buffer<ArrayBufferLike> | undefined): WrappedResponse {
+		const result: WrappedResponse = {
+			headers: headers,
+			status: status,
+			base64Encoded: false,
+		};
+
+		if (resBody) {
+			if (Buffer.isBuffer(resBody)) {
+				result.body = resBody.toString('base64');
+				result.base64Encoded = true;
+			} else {
+				result.body = resBody;
+				result.base64Encoded = false;
+			}
+		}
+		return result;
 	}
 }

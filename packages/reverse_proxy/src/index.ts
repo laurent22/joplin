@@ -28,13 +28,9 @@ app.get('/image', async (req: Request, res: Response) => {
 	console.log(`headers: ${JSON.stringify(headers, null, 2)}`);
 	console.log(`body: ${JSON.stringify(resBody, null, 2)}`);
 
-	const response = {
-		status: 'success',
-		message: 'Image endpoint',
-		timestamp: new Date().toISOString(),
-	};
+	const wrappedResponse = HttpUtil.convertWrappedRequest(result.status, headers, resBody);
 
-	res.json(response);
+	res.status(200).json(wrappedResponse);
 });
 
 // 404 handler for all other routes
