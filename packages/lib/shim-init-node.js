@@ -395,15 +395,42 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 					const buffer = Buffer.concat(chunks);
 					const text = buffer.toString('utf-8');
 
+					if (res.statusCode !== 200) {
+						reject(new Error(`Proxy request failed with status ${res.statusCode}: ${text}`));
+						return;
+					}
+
 					// node-fetchのレスポンス形式に合わせる
+					// WrappedResponse形式のJSONをパースして変換
+					const wrappedResponse = JSON.parse(text);
+
+					// bodyのデコード
+					let responseBody;
+					if (wrappedResponse.body) {
+						if (wrappedResponse.base64Encoded) {
+							responseBody = Buffer.from(wrappedResponse.body, 'base64');
+						} else {
+							responseBody = wrappedResponse.body;
+						}
+					} else {
+						responseBody = Buffer.alloc(0);
+					}
+
+					// headers を Record<string, string[]> から Map に変換
+					const headersMap = new Map();
+					for (const [key, values] of Object.entries(wrappedResponse.headers)) {
+						// 配列の最初の値を使用（node-fetchのheaders.get()との互換性）
+						headersMap.set(key, Array.isArray(values) ? values[0] : values);
+					}
+
 					resolve({
-						ok: res.statusCode >= 200 && res.statusCode < 300,
-						status: res.statusCode,
-						statusText: res.statusMessage,
-						headers: new Map(Object.entries(res.headers)),
-						text: async () => text,
-						json: async () => JSON.parse(text),
-						buffer: async () => buffer,
+						ok: wrappedResponse.status >= 200 && wrappedResponse.status < 300,
+						status: wrappedResponse.status,
+						statusText: '',
+						headers: headersMap,
+						text: async () => responseBody.toString('utf-8'),
+						json: async () => JSON.parse(responseBody.toString('utf-8')),
+						buffer: async () => responseBody,
 					});
 				});
 			});
