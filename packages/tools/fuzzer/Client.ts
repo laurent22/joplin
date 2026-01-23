@@ -23,6 +23,8 @@ import logDiffDebug from './utils/logDiffDebug';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import diffSortedStringArrays from './utils/diffSortedStringArrays';
 import extractResourceIds from './utils/extractResourceIds';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import hangingIndent from './utils/hangingIndent';
 
 const logger = Logger.create('Client');
 
@@ -994,7 +996,7 @@ class Client implements ActionableClient {
 	public async checkState() {
 		logger.info('Check state', this.label);
 
-		type ItemSlice = { id: string };
+		type ItemSlice = { id: string; title: string };
 		const compare = (a: ItemSlice, b: ItemSlice) => {
 			if (a.id === b.id) return 0;
 			return a.id < b.id ? -1 : 1;
@@ -1012,41 +1014,46 @@ class Client implements ActionableClient {
 			}
 		};
 
-		const assertSameIds = (actualSorted: ItemSlice[], expectedSorted: ItemSlice[], testLabel: string) => {
+		const idLogs = (ids: ItemId[], items: ItemSlice[]) => {
+			const itemTitle = (id: ItemId) => {
+				const itemTitle = items.find(item => item.id === id)?.title;
+				return itemTitle ? JSON.stringify(substrWithEllipsis(itemTitle, 0, 28)) : 'Unknown';
+			};
+
+			const output = [];
+			for (const id of ids) {
+				const log = this.globalActionTracker_.getActionLog(id);
+
+				output.push(`id: ${id} (${itemTitle(id)})`);
+				if (log.length > 0) {
+					output.push(
+						log
+							.map(item => `\t${item.source}: ${item.action}`)
+							.join('\n'),
+					);
+				} else {
+					output.push('\tNo history found');
+				}
+			}
+			return output.join('\n');
+		};
+
+		const assertSameIds = async (actualSorted: ItemSlice[], expectedSorted: ItemSlice[], assertionLabel: string) => {
 			const actualIds = actualSorted.map(i => i.id);
 			const expectedIds = expectedSorted.map(i => i.id);
 			const { missing, unexpected } = diffSortedStringArrays(actualIds, expectedIds);
 
-
 			if (missing.length || unexpected.length) {
-				const idLogs = (ids: string[]) => {
-					const output = [];
-					for (const id of ids) {
-						const log = this.globalActionTracker_.getActionLog(id);
-
-						output.push(`\nid:${id}`);
-						if (log.length > 0) {
-							output.push(
-								log
-									.map(item => `\t${item.source}: ${item.action}`)
-									.join('\n'),
-							);
-						} else {
-							output.push('  Not found in the ID tracker (is this an auto-generated conflict note?).');
-						}
-					}
-					return output.join('\n');
-				};
-
-				throw new Error([
-					`${testLabel}: IDs were different:`,
-					missing.length && ` - Expected ${JSON.stringify(missing)} to be present, but were missing.`,
-					unexpected.length && ` - Present but should not have been: ${JSON.stringify(unexpected)}`,
-					'\n',
+				const message = [
+					`${assertionLabel}: IDs were different:`,
+					missing.length && `Expected ${JSON.stringify(missing)} to be present, but were missing.`,
+					unexpected.length && `Present but should not have been: ${JSON.stringify(unexpected)}`,
 					'Logs:',
-					idLogs(missing),
-					idLogs(unexpected),
-				].filter(line => !!line).join('\n'));
+					idLogs(missing, expectedSorted),
+					idLogs(unexpected, actualSorted),
+				].filter(line => !!line).join('\n');
+
+				throw new Error(message);
 			}
 		};
 
@@ -1059,7 +1066,7 @@ class Client implements ActionableClient {
 
 			assertNoAdjacentEqualIds(notes, 'notes');
 			assertNoAdjacentEqualIds(expectedNotes, 'expectedNotes');
-			assertSameIds(notes, expectedNotes, 'should have the same note IDs');
+			await assertSameIds(notes, expectedNotes, 'Note IDs should match');
 			assert.deepEqual(notes, expectedNotes, 'should have the same notes as the expected state');
 		};
 
@@ -1072,7 +1079,7 @@ class Client implements ActionableClient {
 
 			assertNoAdjacentEqualIds(folders, 'folders');
 			assertNoAdjacentEqualIds(expectedFolders, 'expectedFolders');
-			assertSameIds(folders, expectedFolders, 'should have the same folder IDs');
+			await assertSameIds(folders, expectedFolders, 'Folder IDs should match');
 			assert.deepEqual(folders, expectedFolders, 'should have the same folders as the expected state');
 		};
 
@@ -1081,12 +1088,17 @@ class Client implements ActionableClient {
 			const actualResourceIds = new Set(actualResources.map(r => r.id));
 			const expectedResources = [...await this.tracker_.listResources()];
 
+			const missingResources = [];
 			for (const resource of expectedResources) {
 				if (!actualResourceIds.has(resource.id)) {
-					this.globalActionTracker_.printActionLog(resource.id);
-
-					throw new Error(`All expected resources should exist on the client. Resource with ID ${resource.id} was not found (searched ${actualResourceIds.size} existing resources).`);
+					missingResources.push(resource.id);
 				}
+			}
+
+			if (missingResources.length > 0) {
+				const log = idLogs(missingResources, expectedResources);
+
+				throw new Error(`Missing resource(s): All expected resources should exist on the client. Resource with IDs ${JSON.stringify(missingResources)} were not found (total resource count: ${actualResourceIds.size}).\nResource action history:\n${log}`);
 			}
 		};
 
@@ -1105,7 +1117,8 @@ class Client implements ActionableClient {
 
 		if (errors.length) {
 			const errorList = errors
-				.map((error, index) => `Error ${index}: ${error}`)
+				.map((error, index) => `Error ${index + 1}: ${error}`)
+				.map(message => hangingIndent(message))
 				.join('\n');
 			throw new Error(`Incorrect state in client: ${this.clientLabel_}:\n${errorList}`);
 		}
