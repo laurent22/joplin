@@ -30,7 +30,7 @@ export default class ActionRunner {
 			await this.clientPool_.checkState();
 		}, {
 			count: 4,
-			delayOnFailure: count => count * Second * 2,
+			delayOnFailure: count => count * Second * 3,
 			onFail: async ({ willRetry }) => {
 				if (willRetry) {
 					logger.info('.checkState failed. Syncing all clients...');
