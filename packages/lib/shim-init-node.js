@@ -501,7 +501,8 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 		const urlParse = require('url').parse;
 
-		url = urlParse(url.trim());
+		const originalUrl = url.trim();
+		url = urlParse(originalUrl);
 		const method = options.method ? options.method : 'GET';
 		const http = url.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
@@ -523,7 +524,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		}
 
 		const requestBody = {
-			url: url,
+			url: originalUrl,
 			method: method,
 			base64Encoded: false,
 			headers: headers,
