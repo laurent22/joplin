@@ -504,7 +504,6 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		const originalUrl = url.trim();
 		url = urlParse(originalUrl);
 		const method = options.method ? options.method : 'GET';
-		const http = url.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
 
@@ -537,6 +536,8 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		const useReverseProxy = Setting.value('sync.useReverseProxy');
 		const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
 		const parsedProxyUrl = urlParse(reverseProxyUrl);
+		const targetUrl = urlParse(useReverseProxy ? reverseProxyUrl : originalUrl);
+		const http = targetUrl.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 
 		let requestOptions = {
 			protocol: url.protocol,
