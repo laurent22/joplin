@@ -54,7 +54,7 @@ app.get('/image2', async (req: Request, res: Response) => {
 		console.log(`${safeBody.method} ${safeBody.url}`);
 
 		const url = new URL(body.url);
-		const protocol = url.protocol === 'https:' ? https : http;
+		const protocol = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 
 		const requestOptions = {
 			protocol: url.protocol,
