@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -328,7 +330,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "ABC müzik notasyonu: Seçenekler"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -424,7 +426,7 @@ msgstr "Gövde Ekle"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:31
 msgid "Add column"
-msgstr ""
+msgstr "Sütun ekle"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -441,9 +443,8 @@ msgid "Add recipient:"
 msgstr "Alıcı ekle:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:26
-#, fuzzy
 msgid "Add row"
-msgstr "Yeni bir şey ekle"
+msgstr "Satır ekle"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -801,7 +802,7 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Blok kod"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -919,9 +920,8 @@ msgid "Cannot change encrypted item"
 msgstr "Şifrelenmiş öğe değiştirilemiyor"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Yeni bir not oluşturulamadı: %s"
+msgstr "Salt okunur öğe dönüştürülemiyor: “%s”"
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1077,7 +1077,7 @@ msgstr "Kontrol ediliyor... Lütfen bekleyin."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "Çince/Japonca/Korece karakterler"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1244,7 +1244,7 @@ msgstr "Komut"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "KOMUT"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1309,9 +1309,8 @@ msgid "Configuration"
 msgstr "Yapılandırma"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
-msgstr "Klavye Kısayolları"
+msgstr "Ayarlanmış klavye Kısayolları:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1296
 msgid "Configures the size of scrollbars used in the app."
@@ -1386,9 +1385,8 @@ msgid "Convert it"
 msgstr "Dönüştür"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
-msgstr "Notu Markdown'a dönüştür"
+msgstr "Markdown'a dönüştür"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1350
 msgid "Convert to note"
@@ -1494,9 +1492,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Eklenti sunucusuna bağlanılamadı."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
-msgstr "Not Markdown'a dönüştürülemedi: %s"
+msgstr "Notlar Markdown'a dönüştürülemedi: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:235
 msgid "Could not export notes: %s"
@@ -1767,9 +1764,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "\"%s\" eki silinsin mi?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:41
-#, fuzzy
 msgid "Delete column"
-msgstr "Satırı sil"
+msgstr "Sütunu sil"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1810,19 +1806,19 @@ msgid "Delete profile \"%s\""
 msgstr "\"%s\" profilini sil"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
-"Not defterleri, etiketler ve notlar da dahil olmak üzere tüm veriler kalıcı "
-"olarak silinecek."
+"“%s” profili silinsin mi?\n"
+"\n"
+"Notlar, not defterleri ve etiketler dâhil tüm veriler kalıcı olarak "
+"silinecektir."
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
-#, fuzzy
 msgid "Delete row"
-msgstr "Notu sil"
+msgstr "Satırı sil"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:487
 msgid "Delete selected notes"
@@ -1835,6 +1831,8 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"\"%s\" etiketini silmek ister misiniz? Bu etiketle ilişkili tüm notlar "
+"kalacak, ancak etiket tüm notlardan kaldırılacaktır."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -2017,7 +2015,7 @@ msgstr "Notla ilgili tüm bilgileri görüntüler."
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "Yapılandırılmış klavye kısayollarını görüntüler."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2237,9 +2235,8 @@ msgid "Edit profile configuration..."
 msgstr "Profil ayarlarını düzenle…"
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "Notu düzenle."
+msgstr "Etiketi düzenle"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2349,9 +2346,8 @@ msgid "Enable abbreviation syntax"
 msgstr "Kısaltma söz dizimini etkinleştir"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "Fountain söz dizimi desteğini etkinleştir"
+msgstr "ABC müzik notasyon desteğini etkinleştir"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3133,9 +3129,8 @@ msgid "Import or export your data"
 msgstr "Verini içeri veya dışarı aktar"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
-msgstr "Dışa aktarılıyor..."
+msgstr "İçe aktar…"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3515,7 +3510,7 @@ msgstr "Not tarihçesini şu kadar süre tut"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2037
 msgid "Keep notes in the trash for"
-msgstr "Çöp kutusunda notları şu kadar süre tut: "
+msgstr "Çöp kutusunda notları şu kadar süre tut:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1470
 msgid "Keyboard Mode"
@@ -3535,7 +3530,7 @@ msgstr "Keychain Desteği: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "TUŞLAR"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
@@ -3763,6 +3758,8 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Profillerini yönet. Profilleri yeniden adlandırabilir veya silebilirsin. O "
+"an kullanılan aktif profil silinemez."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3923,7 +3920,6 @@ msgstr[0] "%d not \"%s\" not defterine taşınsın mı?"
 msgstr[1] "%d not \"%s\" not defterine taşınsın mı?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
@@ -4174,7 +4170,7 @@ msgstr "Güncelleme bulunamadı"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "URL veya SAML doğrulaması ayarlanmamış."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4516,7 +4512,7 @@ msgstr "Senkronizasyon Sihirbazını Aç…"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "Açık kaynaklı lisanslar"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4555,6 +4551,8 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"ABC kodu her işlendiğinde kullanılacak seçenekler. Bir JSON5 nesnesi "
+"olmalıdır. Seçeneklerin tam listesi şu adreste mevcuttur: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4920,9 +4918,8 @@ msgid "Profile name"
 msgstr "Profil adı"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "Şifre boş olamaz"
+msgstr "Profil adı boş olamaz"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -5115,11 +5112,8 @@ msgid "Remove"
 msgstr "Sil"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
-msgstr ""
-"Model silinip yeniden indirilsin mi?\n"
-"Bu işlem geri alınamaz."
+msgstr "Tüm notlardan %d etiket kaldırılsın mı? Bu işlem geri alınamaz."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5536,7 +5530,7 @@ msgstr "Ana not defterini seç"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "İçe aktarılacak dosya türünü seçin:"
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -5861,7 +5855,7 @@ msgstr "Kaynak: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "ALAN"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
@@ -6172,18 +6166,16 @@ msgid "Tab moves focus"
 msgstr "Tab odak hareket ettirir"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "Etkinleştir"
+msgstr "Tablo"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "Tablo"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "Kullanım: %s"
+msgstr "Etiket: %s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6404,7 +6396,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -6412,7 +6403,8 @@ msgid_plural ""
 "The notes have been converted to Markdown and the original notes have been "
 "moved to the trash"
 msgstr[0] "Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı"
-msgstr[1] "Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı"
+msgstr[1] ""
+"Notlar Markdown'a dönüştürüldü ve orijinal notlar çöp kutusuna taşındı"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6991,7 +6983,7 @@ msgstr "Şimdi dene"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "TİP"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""
