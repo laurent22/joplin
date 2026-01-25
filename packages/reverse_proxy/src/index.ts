@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import fetch from 'node-fetch';
+import http from 'http';
+import https from 'https';
 import { HttpUtil, WrappedRequest } from './http_util.js';
 
 const app = express();
@@ -51,16 +53,38 @@ app.get('/image2', async (req: Request, res: Response) => {
 		// console.log(`body: ${JSON.stringify(safeBody, null, 2)}`);
 		console.log(`${safeBody.method} ${safeBody.url}`);
 
-		const nodeFetchOptions = HttpUtil.convertNodeFetchOptions(body);
-		const result = await fetch(body.url, nodeFetchOptions);
+		const url = new URL(body.url);
+		const protocol = url.protocol === 'https:' ? https : http;
 
-		const wrappedResponse = await HttpUtil.convertWrappedRequest(result);
+		const requestOptions = {
+			protocol: url.protocol,
+			host: url.hostname,
+			port: url.port,
+			method: body.method || 'GET',
+			path: url.pathname + url.search,
+			headers: body.headers || {},
+		};
 
-		// console.log(`response: ${wrappedResponse.status}`);
-		// console.log(`headers: ${JSON.stringify(wrappedResponse.headers, null, 2)}`);
-		// console.log(`body (base64Encoded: ${wrappedResponse.base64Encoded}): ${wrappedResponse.body?.substring(0, 100)}...`);
+		const request = protocol.request(requestOptions, async function(response) {
+			// ヘッダーをコピー
+			for (const [name, value] of Object.entries(response.headers)) {
+				if (value) {
+					res.setHeader(name, value);
+				}
+			}
 
-		res.status(200).json(wrappedResponse);
+			// ステータスコードを設定してストリームをパイプ
+			res.status(response.statusCode || 200);
+			response.pipe(res);
+		});
+
+		request.on('error', (error) => {
+			console.error('Error processing /image request:', error);
+			res.status(500).json({ error: 'Internal Server Error' });
+		});
+
+		request.end();
+
 	} catch (error) {
 		console.error('Error processing /image request:', error);
 		res.status(500).json({ error: 'Internal Server Error' });
