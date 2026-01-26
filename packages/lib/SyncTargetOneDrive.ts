@@ -10,7 +10,7 @@ const { FileApiDriverOneDrive } = require('./file-api-driver-onedrive.js');
 
 export default class SyncTargetOneDrive extends BaseSyncTarget {
 
-	protected api_: any;
+	private api_: any;
 
 	static id() {
 		return 3;

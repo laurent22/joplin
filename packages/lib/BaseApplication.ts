@@ -44,7 +44,6 @@ import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
 import MigrationService from './services/MigrationService';
-import SyncTargetReverseProxy from './SyncTargetReverseProxy';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 
@@ -697,7 +696,6 @@ export default class BaseApplication {
 		SyncTargetRegistry.addClass(SyncTargetDropbox);
 		SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 		SyncTargetRegistry.addClass(SyncTargetJoplinServer);
-		SyncTargetRegistry.addClass(SyncTargetReverseProxy);
 
 		try {
 			await shim.fsDriver().remove(tempDir);

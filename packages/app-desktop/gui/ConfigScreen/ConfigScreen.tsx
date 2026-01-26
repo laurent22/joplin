@@ -39,7 +39,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.rowStyle_ = {
 			marginBottom: 10,
 		};
-		// Removed assignment to this.isUseProxy.current as it is read-only
 
 		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
