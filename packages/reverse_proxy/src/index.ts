@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import fetch from 'node-fetch';
 import followRedirects from 'follow-redirects';
+import crypto from 'crypto';
 import { HttpUtil, WrappedRequest } from './http_util.js';
 
 const { http: httpFollowRedirects, https: httpsFollowRedirects } = followRedirects;
@@ -68,16 +69,28 @@ app.get('/image2', async (req: Request, res: Response) => {
 		const requiredHeaders = ['accept-ranges', 'content-type', 'content-length', 'content-encoding', 'etag'];
 
 		const request = protocol.request(requestOptions, async function(response) {
-			// ヘッダーをコピー
+			// 32バイトの鍵を取得（HttpUtilと同じ鍵を使用）
+			const key = HttpUtil.getSecretKey();
+			const iv = crypto.randomBytes(16); // AES-256-CTRには16バイトのIV
+
+			// 暗号化ストリームを作成
+			const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
+
+			// ヘッダーをコピー（暗号化なし）
 			for (const [name, value] of Object.entries(response.headers)) {
 				if (value && requiredHeaders.includes(name.toLowerCase())) {
 					res.setHeader(name, value);
 				}
 			}
+			
+			// IVをカスタムヘッダーで送信（復号化時に必要）
+			res.setHeader('X-Encryption-IV', iv.toString('base64'));
 
-			// ステータスコードを設定してストリームをパイプ
+			// ステータスコードを設定
 			res.status(response.statusCode || 200);
-			response.pipe(res);
+
+			// ボディのみ暗号化: レスポンスストリーム → 暗号化 → クライアントへ
+			response.pipe(cipher).pipe(res);
 		});
 
 		request.on('error', (error) => {

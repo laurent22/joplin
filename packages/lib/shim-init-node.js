@@ -665,7 +665,21 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 							return;
 						}
 
-						response.pipe(file);
+						// リバースプロキシを使用している場合は復号化してからファイルに書き込む
+						if (useReverseProxy) {
+							const ivBase64 = response.headers['x-encryption-iv'];
+							if (!ivBase64) {
+								cleanUpOnError(new Error('Encryption IV header is missing from reverse proxy response'));
+								return;
+							}
+
+							const iv = Buffer.from(ivBase64, 'base64');
+							const decipher = crypto.createDecipheriv('aes-256-ctr', secretKey, iv);
+
+							response.pipe(decipher).pipe(file);
+						} else {
+							response.pipe(file);
+						}
 
 						const isGzipped = response.headers['content-encoding'] === 'gzip';
 

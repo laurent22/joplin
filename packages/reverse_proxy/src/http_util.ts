@@ -28,6 +28,12 @@ export class HttpUtil {
 
 	private static secretKey: Buffer | null = fs.readFileSync('../../secret.key'); // 32 bytes for AES-256
 
+	public static getSecretKey(): Buffer {
+		if (!this.secretKey) {
+			throw new Error('Secret key not initialized');
+		}
+		return this.secretKey;
+	}
 
 	public static convertNodeFetchOptions(requestBody: WrappedRequest): RequestInit {
 		const options: RequestInit = {
