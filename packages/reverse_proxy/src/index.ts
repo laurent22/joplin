@@ -16,7 +16,7 @@ app.get('/image', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
 	try {
-		const body: WrappedRequest = JSON.parse(HttpUtil.decrypt(req.body.bodyData));
+		const body = HttpUtil.isEncrypte() ? JSON.parse(HttpUtil.decrypt(req.body.bodyData)) : req.body.bodyData;
 		const safeBody: WrappedRequest = JSON.parse(JSON.stringify(body));
 		if (safeBody?.headers?.Authorization) {
 			safeBody.headers.Authorization = '*****';
@@ -33,8 +33,11 @@ app.get('/image', async (req: Request, res: Response) => {
 		// console.log(`response: ${wrappedResponse.status}`);
 		// console.log(`headers: ${JSON.stringify(wrappedResponse.headers, null, 2)}`);
 		// console.log(`body (base64Encoded: ${wrappedResponse.base64Encoded}): ${wrappedResponse.body?.substring(0, 100)}...`);
-
-		res.status(200).send(HttpUtil.encrypt(JSON.stringify(wrappedResponse)));
+		if (HttpUtil.isEncrypte()) {
+			res.status(200).send(HttpUtil.encrypt(JSON.stringify(wrappedResponse)));
+		} else {
+			res.status(200).json(wrappedResponse);
+		}
 	} catch (error) {
 		console.error('Error processing /image request:', error);
 		res.status(500).json({ error: 'Internal Server Error' });
@@ -45,7 +48,7 @@ app.get('/image2', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
 	try {
-		const body: WrappedRequest = JSON.parse(HttpUtil.decrypt(req.body.bodyData));
+		const body = HttpUtil.isEncrypte() ? JSON.parse(HttpUtil.decrypt(req.body.bodyData)) : req.body.bodyData;
 		const safeBody: WrappedRequest = JSON.parse(JSON.stringify(body));
 		if (safeBody?.headers?.Authorization) {
 			safeBody.headers.Authorization = '*****';
@@ -69,12 +72,6 @@ app.get('/image2', async (req: Request, res: Response) => {
 		const requiredHeaders = ['accept-ranges', 'content-type', 'content-length', 'content-encoding', 'etag'];
 
 		const request = protocol.request(requestOptions, async function(response) {
-			// 32バイトの鍵を取得（HttpUtilと同じ鍵を使用）
-			const key = HttpUtil.getSecretKey();
-			const iv = crypto.randomBytes(16); // AES-256-CTRには16バイトのIV
-
-			// 暗号化ストリームを作成
-			const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
 
 			// ヘッダーをコピー（暗号化なし）
 			for (const [name, value] of Object.entries(response.headers)) {
@@ -82,15 +79,27 @@ app.get('/image2', async (req: Request, res: Response) => {
 					res.setHeader(name, value);
 				}
 			}
-			
-			// IVをカスタムヘッダーで送信（復号化時に必要）
-			res.setHeader('X-Encryption-IV', iv.toString('base64'));
 
 			// ステータスコードを設定
 			res.status(response.statusCode || 200);
 
-			// ボディのみ暗号化: レスポンスストリーム → 暗号化 → クライアントへ
-			response.pipe(cipher).pipe(res);
+			if (HttpUtil.isEncrypte()) {
+				// 暗号化が有効な場合
+				const key = HttpUtil.getSecretKey();
+				const iv = crypto.randomBytes(16); // AES-256-CTRには16バイトのIV
+
+				// 暗号化ストリームを作成
+				const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
+
+				// IVをカスタムヘッダーで送信（復号化時に必要）
+				res.setHeader('X-Encryption-IV', iv.toString('base64'));
+
+				// ボディのみ暗号化: レスポンスストリーム → 暗号化 → クライアントへ
+				response.pipe(cipher).pipe(res);
+			} else {
+				// 暗号化が無効な場合はそのまま転送
+				response.pipe(res);
+			}
 		});
 
 		request.on('error', (error) => {
