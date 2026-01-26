@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import fetch from 'node-fetch';
-import http from 'http';
-import https from 'https';
+import followRedirects from 'follow-redirects';
 import { HttpUtil, WrappedRequest } from './http_util.js';
 
+const { http: httpFollowRedirects, https: httpsFollowRedirects } = followRedirects;
 const app = express();
 const PORT = process.env.PORT || 7777;
 
@@ -54,7 +54,7 @@ app.get('/image2', async (req: Request, res: Response) => {
 		console.log(`${safeBody.method} ${safeBody.url}`);
 
 		const url = new URL(body.url);
-		const protocol = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
+		const protocol = url.protocol.toLowerCase() === 'http:' ? httpFollowRedirects : httpsFollowRedirects;
 
 		const requestOptions = {
 			protocol: url.protocol,
