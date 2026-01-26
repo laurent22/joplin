@@ -65,7 +65,7 @@ app.get('/image2', async (req: Request, res: Response) => {
 			headers: body.headers || {},
 		};
 
-		const requiredHeaders = ['accept-ranges', 'content-type', 'content-length', 'etag'];
+		const requiredHeaders = ['accept-ranges', 'content-type', 'content-length', 'content-encoding', 'etag'];
 
 		const request = protocol.request(requestOptions, async function(response) {
 			// ヘッダーをコピー
