@@ -121,9 +121,9 @@ async function createRelease(projectName: string, releaseConfig: ReleaseConfig, 
 	const apkFilePath = `${releaseDir}/${apkFilename}`;
 	const downloadUrl = `https://github.com/laurent22/${projectName}/releases/download/${tagName}/${apkFilename}`;
 
-	// await execCommand('yarn install', { showStdout: false });
-	// await execCommand('yarn tsc', { showStdout: false });
-	// await execCommand('yarn buildParallel', { showStdout: false });
+	await execCommand('yarn install', { showStdout: false });
+	await execCommand('yarn tsc', { showStdout: false });
+	await execCommand('yarn buildParallel', { showStdout: false });
 
 	console.info(`Building APK file v${suffix}...`);
 
@@ -238,8 +238,7 @@ const uploadToGitHubRelease = async (projectName: string, tagName: string, isPre
 const releaseConfigs: ReleaseConfig[] = [
 	{
 		name: 'main',
-		publish: false,
-		disabled: true,
+		publish: true,
 	},
 
 	{
