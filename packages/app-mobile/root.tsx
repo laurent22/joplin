@@ -11,7 +11,6 @@ import Alarm from '@joplin/lib/models/Alarm';
 import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import NoteScreen from './components/screens/Note/Note';
-import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { } from '@joplin/lib/models/Setting';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import { NotesParent, serializeNotesParent } from '@joplin/lib/reducer';
@@ -36,15 +35,6 @@ import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMidd
 const { AppNav } = require('./components/app-nav.js');
 import Folder from '@joplin/lib/models/Folder';
 import NotesScreen from './components/screens/Notes/Notes';
-import TagsScreen from './components/screens/tags';
-import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
-const { FolderScreen } = require('./components/screens/folder.js');
-import LogScreen from './components/screens/LogScreen';
-import StatusScreen from './components/screens/status';
-import SearchScreen from './components/screens/SearchScreen';
-const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
-import EncryptionConfigScreen from './components/screens/encryption-config';
-import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
@@ -63,11 +53,47 @@ const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
-import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
 
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
+// Lazy-loaded screens for faster startup
+const TagsScreen = React.lazy(() => import('./components/screens/tags'));
+const ConfigScreen = React.lazy(() => import('./components/screens/ConfigScreen/ConfigScreen'));
+const FolderScreen = React.lazy(async () => {
+	// @ts-expect-error JS file without type declarations
+	const m: { FolderScreen: React.ComponentType } = await import('./components/screens/folder.js');
+	return { default: m.FolderScreen };
+});
+const LogScreen = React.lazy(() => import('./components/screens/LogScreen'));
+const StatusScreen = React.lazy(() => import('./components/screens/status'));
+const SearchScreen = React.lazy(() => import('./components/screens/SearchScreen'));
+const OneDriveLoginScreen = React.lazy(async () => {
+	// @ts-expect-error JS file without type declarations
+	const m: { OneDriveLoginScreen: React.ComponentType } = await import('./components/screens/onedrive-login.js');
+	return { default: m.OneDriveLoginScreen };
+});
+const EncryptionConfigScreen = React.lazy(() => import('./components/screens/encryption-config'));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- JS file without type declarations
+const DropboxLoginScreen = React.lazy(async (): Promise<{ default: any }> => {
+	return await import('./components/screens/dropbox-login.js');
+});
+const JoplinCloudLoginScreen = React.lazy(() => import('./components/screens/JoplinCloudLoginScreen'));
+const UpgradeSyncTargetScreen = React.lazy(() => import('./components/screens/UpgradeSyncTargetScreen'));
+const ShareManager = React.lazy(() => import('./components/screens/ShareManager'));
+const ProfileSwitcher = React.lazy(() => import('./components/ProfileSwitcher/ProfileSwitcher'));
+const ProfileEditor = React.lazy(() => import('./components/ProfileSwitcher/ProfileEditor'));
+const NoteRevisionViewer = React.lazy(() => import('./components/screens/NoteRevisionViewer'));
+const DocumentScanner = React.lazy(() => import('./components/screens/DocumentScanner/DocumentScanner'));
+const SyncWizard = React.lazy(() => import('./components/SyncWizard/SyncWizard'));
 
+// SsoLoginScreen needs special handling due to its factory pattern
+const SsoLoginScreen = React.lazy(async () => {
+	const [{ default: SsoLoginScreenFactory }, { default: SamlShared }] = await Promise.all([
+		import('./components/screens/SsoLoginScreen'),
+		import('@joplin/lib/components/shared/SamlShared'),
+	]);
+	return { default: SsoLoginScreenFactory(new SamlShared()) };
+});
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -85,29 +111,21 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import setupNotifications from './utils/setupNotifications';
 import { loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
 import { Theme, ThemeAppearance } from '@joplin/lib/themes/type';
-import ProfileSwitcher from './components/ProfileSwitcher/ProfileSwitcher';
-import ProfileEditor from './components/ProfileSwitcher/ProfileEditor';
 import sensorInfo, { SensorInfo } from './components/biometrics/sensorInfo';
 import { setDispatch } from './services/profiles';
 import { ReactNode } from 'react';
 import autodetectTheme, { onSystemColorSchemeChange } from './utils/autodetectTheme';
 import PluginRunnerWebView from './components/plugins/PluginRunnerWebView';
 import { refreshFolders, scheduleRefreshFolders } from '@joplin/lib/folders-screen-utils';
-import ShareManager from './components/screens/ShareManager';
 import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time';
 import DialogManager from './components/DialogManager';
 import { AppState } from './utils/types';
 import { getDisplayParentId } from '@joplin/lib/services/trash';
 import PluginNotification from './components/plugins/PluginNotification';
 import FocusControl from './components/accessibility/FocusControl/FocusControl';
-import SsoLoginScreen from './components/screens/SsoLoginScreen';
-import SamlShared from '@joplin/lib/components/shared/SamlShared';
-import NoteRevisionViewer from './components/screens/NoteRevisionViewer';
-import DocumentScanner from './components/screens/DocumentScanner/DocumentScanner';
 import buildStartupTasks from './utils/buildStartupTasks';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import appReducer from './utils/appReducer';
-import SyncWizard from './components/SyncWizard/SyncWizard';
 
 const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();
@@ -711,7 +729,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
-			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
+			JoplinServerSamlLogin: { screen: SsoLoginScreen },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ShareManager: { screen: ShareManager },
@@ -759,11 +777,15 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 					<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
 						<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
+								<React.Suspense fallback={<View/>}>
+									{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
+								</React.Suspense>
 							</View>
 							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
 							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
-							<SyncWizard/>
+							<React.Suspense fallback={null}>
+								<SyncWizard/>
+							</React.Suspense>
 						</SafeAreaView>
 					</View>
 				</SideMenu>
