@@ -15,7 +15,7 @@ app.get('/image', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
 	try {
-		const body: WrappedRequest = req.body;
+		const body: WrappedRequest = JSON.parse(HttpUtil.decrypt(req.body));
 		const safeBody: WrappedRequest = JSON.parse(JSON.stringify(body));
 		if (safeBody?.headers?.Authorization) {
 			safeBody.headers.Authorization = '*****';
@@ -33,7 +33,7 @@ app.get('/image', async (req: Request, res: Response) => {
 		// console.log(`headers: ${JSON.stringify(wrappedResponse.headers, null, 2)}`);
 		// console.log(`body (base64Encoded: ${wrappedResponse.base64Encoded}): ${wrappedResponse.body?.substring(0, 100)}...`);
 
-		res.status(200).json(wrappedResponse);
+		res.status(200).send(HttpUtil.encrypt(JSON.stringify(wrappedResponse)));
 	} catch (error) {
 		console.error('Error processing /image request:', error);
 		res.status(500).json({ error: 'Internal Server Error' });
