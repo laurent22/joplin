@@ -17,6 +17,21 @@ const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
 
+
+let secretKey = null;
+
+function getSecretKey() {
+	if (!secretKey) {
+		try {
+			secretKey = fs.readFileSync('../../secret.key');
+		} catch (error) {
+			console.warn('Could not load secret key for reverse proxy encryption:', error);
+			throw new Error('Secret key is required for encryption but could not be loaded');
+		}
+	}
+	return secretKey;
+}
+
 function fileExists(filePath) {
 	try {
 		return fs.statSync(filePath).isFile();
@@ -342,22 +357,169 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		return new Buffer(data).toString('base64');
 	};
 
-	const fetchFunc = async (url, options) => {
+	const crypto = require('crypto');
+
+	function encrypt(plainText) {
+		const key = getSecretKey();
+		if (key.length !== 32) throw new Error('Key must be 32 bytes for AES-256-GCM.');
+
+		const iv = crypto.randomBytes(12); // 12 bytes recommended for GCM
+		const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+
+		const ciphertext = Buffer.concat([
+			cipher.update(plainText, 'utf8'),
+			cipher.final(),
+		]);
+
+		const authTag = cipher.getAuthTag();
+
+		// Return a single string you can store/transmit
+		// format: iv:authTag:ciphertext (all base64)
+		return [
+			iv.toString('base64'),
+			authTag.toString('base64'),
+			ciphertext.toString('base64'),
+		].join(':');
+	}
+
+	function decrypt(payload) {
+		const key = getSecretKey();
+		if (key.length !== 32) throw new Error('Key must be 32 bytes for AES-256-GCM.');
+
+		const [ivB64, authTagB64, ciphertextB64] = payload.split(':');
+		const iv = Buffer.from(ivB64, 'base64');
+		const authTag = Buffer.from(authTagB64, 'base64');
+		const ciphertext = Buffer.from(ciphertextB64, 'base64');
+
+		const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+		decipher.setAuthTag(authTag);
+
+		const plain = Buffer.concat([
+			decipher.update(ciphertext),
+			decipher.final(),
+		]);
+
+		return plain.toString('utf8');
+	}
+
+	const nodeFetchWrapper = async (url, options, Setting) => {
+		// Check if reverse proxy is enabled from settings
+		const useReverseProxy = Setting ? Setting.value('sync.useReverseProxy') : false;
+		const useEncryption = Setting ? Setting.value('sync.reverseProxyEncryption') : true;
+		console.log(`Reverse Proxy Enabled: ${useReverseProxy}, Encryption: ${useEncryption}`);
+
+		if (!useReverseProxy) {
+			return nodeFetch(url, options);
+		}
+		const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
+		console.log(`Reverse Proxy URL: ${reverseProxyUrl}`);
+		const proxyUrl = `${reverseProxyUrl}/image`;
+
+		// bodyがBufferの場合はbase64エンコード
+		let bodyContent = options.body ?? undefined;
+		let base64Encoded = false;
+		if (Buffer.isBuffer(bodyContent)) {
+			bodyContent = bodyContent.toString('base64');
+			base64Encoded = true;
+		}
+
+		const body = {
+			headers: options.headers,
+			url: url,
+			method: options.method ?? 'GET',
+			base64Encoded: base64Encoded,
+			body: bodyContent,
+		};
+
+		// node-fetchはGETでbodyを送信できないため、httpモジュールを直接使用
+		const urlParse = require('url').parse;
+		const parsedUrl = urlParse(proxyUrl);
+		const protocol = parsedUrl.protocol === 'https:' ? https : http;
+		const bodyData = useEncryption ? encrypt(JSON.stringify(body)) : JSON.stringify(body);
+		const bodyString = JSON.stringify({ bodyData: bodyData });
+
+		return new Promise((resolve, reject) => {
+			const requestOptions = {
+				hostname: parsedUrl.hostname,
+				port: parsedUrl.port,
+				path: parsedUrl.path,
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Content-Length': Buffer.byteLength(bodyString),
+				},
+			};
+
+			const req = protocol.request(requestOptions, (res) => {
+				const chunks = [];
+				res.on('data', (chunk) => chunks.push(chunk));
+				res.on('end', () => {
+					const buffer = Buffer.concat(chunks);
+					const text = buffer.toString('utf-8');
+
+					if (res.statusCode !== 200) {
+						reject(new Error(`Proxy request failed with status ${res.statusCode}: ${text}`));
+						return;
+					}
+
+					// node-fetchのレスポンス形式に合わせる
+					// WrappedResponse形式のJSONをパースして変換
+					const wrappedResponse = JSON.parse(useEncryption ? decrypt(text) : text);
+
+					// bodyのデコード
+					let responseBody;
+					if (wrappedResponse.body) {
+						if (wrappedResponse.base64Encoded) {
+							responseBody = Buffer.from(wrappedResponse.body, 'base64');
+						} else {
+							responseBody = wrappedResponse.body;
+						}
+					} else {
+						responseBody = Buffer.alloc(0);
+					}
+
+					// headers を Record<string, string[]> から Map に変換
+					const headersMap = new Map();
+					for (const [key, values] of Object.entries(wrappedResponse.headers)) {
+						// 配列の最初の値を使用（node-fetchのheaders.get()との互換性）
+						headersMap.set(key, Array.isArray(values) ? values[0] : values);
+					}
+
+					resolve({
+						ok: wrappedResponse.status >= 200 && wrappedResponse.status < 300,
+						status: wrappedResponse.status,
+						statusText: '',
+						headers: headersMap,
+						text: async () => responseBody.toString('utf-8'),
+						json: async () => JSON.parse(responseBody.toString('utf-8')),
+						buffer: async () => responseBody,
+					});
+				});
+			});
+
+			req.on('error', reject);
+			req.write(bodyString);
+			req.end();
+		});
+	};
+
+
+
+	const fetchFunc = async (url, options, Setting) => {
 		const newOptions = {
 			...options,
 			redirect: 'manual',
 		};
-		let response = await nodeFetch(url, newOptions);
+		let response = await nodeFetchWrapper(url, newOptions, Setting);
 		if (response.status >= 300 && response.status < 400) {
 			const redirectUrl = response.headers.get('location');
 			if (redirectUrl) {
 				const redirectOptions = { ...newOptions };
 				delete redirectOptions.headers['Authorization'];
 				delete redirectOptions.headers['redirect'];
-				response = await nodeFetch(redirectUrl, redirectOptions);
+				response = await nodeFetchWrapper(redirectUrl, redirectOptions, Setting);
 			}
 		}
-		console.log(`response status: ${response.status}`);
 		return response;
 	};
 
@@ -370,8 +532,11 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			redirect: 'manual',
 		};
 
+		// Get Setting module
+		const Setting = require('./models/Setting').default;
+
 		return shim.fetchWithRetry(async () => {
-			let result = await fetchFunc(url, newOptions);
+			let result = await fetchFunc(url, newOptions, Setting);
 			if (result.status === 429) {
 				// console.log(`Too many Request: ${JSON.stringify(result, null, 2)}`);
 				const waitSecondsStr = result.headers.get('retry-after');
@@ -390,6 +555,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	};
 
 
+	// eslint-disable-next-line complexity
 	shim.fetchBlob = async function(url, options) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
@@ -397,9 +563,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 		const urlParse = require('url').parse;
 
-		url = urlParse(url.trim());
+		const originalUrl = url.trim();
+		url = urlParse(originalUrl);
 		const method = options.method ? options.method : 'GET';
-		const http = url.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
 
@@ -418,7 +584,25 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			};
 		}
 
-		const requestOptions = {
+		const requestBody = {
+			url: originalUrl,
+			method: method,
+			base64Encoded: false,
+			headers: headers,
+		};
+
+		// Get Setting module and parse reverse proxy URL
+		const Setting = require('./models/Setting').default;
+		const useReverseProxy = Setting.value('sync.useReverseProxy');
+		const useEncryption = Setting.value('sync.reverseProxyEncryption');
+		const bodyData = useEncryption ? encrypt(JSON.stringify(requestBody)) : JSON.stringify(requestBody);
+		const requestBodyString = JSON.stringify({ bodyData: bodyData });
+		const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
+		const parsedProxyUrl = urlParse(reverseProxyUrl);
+		const targetUrl = urlParse(useReverseProxy ? reverseProxyUrl : originalUrl);
+		const http = targetUrl.protocol.toLowerCase() == 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
+
+		let requestOptions = {
 			protocol: url.protocol,
 			host: url.hostname,
 			port: url.port,
@@ -426,6 +610,21 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			path: url.pathname + (url.query ? `?${url.query}` : ''),
 			headers: headers,
 		};
+
+		if (useReverseProxy) {
+			requestOptions = 		{
+				protocol: parsedProxyUrl.protocol,
+				host: parsedProxyUrl.hostname,
+				port: parsedProxyUrl.port || (parsedProxyUrl.protocol === 'https:' ? 443 : 80),
+				method: 'GET',
+				path: '/image2',
+				headers: {
+					'Content-Type': 'application/json',
+					'Content-Length': Buffer.byteLength(requestBodyString),
+				},
+			};
+		}
+
 
 		const doFetchOperation = async (retryCount = 0) => {
 			return new Promise((resolve, reject) => {
@@ -455,6 +654,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 						cleanUpOnError(error);
 					});
 
+
 					const request = http.request(requestOptions, async function(response) {
 						if (response.statusCode === 429) {
 							// Retry after handling
@@ -470,7 +670,20 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 							return;
 						}
 
-						response.pipe(file);
+						// リバースプロキシを使用している場合は復号化してからファイルに書き込む
+						if (useReverseProxy && useEncryption) {
+							const ivBase64 = response.headers['x-encryption-iv'];
+							if (!ivBase64) {
+								cleanUpOnError(new Error('Encryption IV header is missing from reverse proxy response'));
+								return;
+							}
+
+							const iv = Buffer.from(ivBase64, 'base64');
+							const decipher = crypto.createDecipheriv('aes-256-ctr', getSecretKey(), iv);
+							response.pipe(decipher).pipe(file);
+						} else {
+							response.pipe(file);
+						}
 
 						const isGzipped = response.headers['content-encoding'] === 'gzip';
 
@@ -499,6 +712,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 						cleanUpOnError(error);
 					});
 
+					if (useReverseProxy) {
+						request.write(requestBodyString);
+					}
 					request.end();
 				} catch (error) {
 					cleanUpOnError(error);
