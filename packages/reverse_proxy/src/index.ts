@@ -15,7 +15,7 @@ app.get('/image', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
 	try {
-		const body: WrappedRequest = JSON.parse(HttpUtil.decrypt(req.body));
+		const body: WrappedRequest = JSON.parse(HttpUtil.decrypt(req.body.bodyData));
 		const safeBody: WrappedRequest = JSON.parse(JSON.stringify(body));
 		if (safeBody?.headers?.Authorization) {
 			safeBody.headers.Authorization = '*****';

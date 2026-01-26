@@ -17,6 +17,17 @@ const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
 
+
+let secretKey = null;
+
+if (!secretKey) {
+	try {
+		secretKey = fs.readFileSync('../../secret.key');
+	} catch (error) {
+		console.warn('Could not load secret key for reverse proxy encryption:', error);
+	}
+}
+
 function fileExists(filePath) {
 	try {
 		return fs.statSync(filePath).isFile();
@@ -342,6 +353,51 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		return new Buffer(data).toString('base64');
 	};
 
+	const crypto = require('crypto');
+
+	function encrypt(plainText) {
+		const key = secretKey;
+		if (key.length !== 32) throw new Error('Key must be 32 bytes for AES-256-GCM.');
+
+		const iv = crypto.randomBytes(12); // 12 bytes recommended for GCM
+		const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+
+		const ciphertext = Buffer.concat([
+			cipher.update(plainText, 'utf8'),
+			cipher.final(),
+		]);
+
+		const authTag = cipher.getAuthTag();
+
+		// Return a single string you can store/transmit
+		// format: iv:authTag:ciphertext (all base64)
+		return [
+			iv.toString('base64'),
+			authTag.toString('base64'),
+			ciphertext.toString('base64'),
+		].join(':');
+	}
+
+	function decrypt(payload) {
+		const key = secretKey;
+		if (key.length !== 32) throw new Error('Key must be 32 bytes for AES-256-GCM.');
+
+		const [ivB64, authTagB64, ciphertextB64] = payload.split(':');
+		const iv = Buffer.from(ivB64, 'base64');
+		const authTag = Buffer.from(authTagB64, 'base64');
+		const ciphertext = Buffer.from(ciphertextB64, 'base64');
+
+		const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+		decipher.setAuthTag(authTag);
+
+		const plain = Buffer.concat([
+			decipher.update(ciphertext),
+			decipher.final(),
+		]);
+
+		return plain.toString('utf8');
+	}
+
 	const nodeFetchWrapper = async (url, options, Setting) => {
 		// Check if reverse proxy is enabled from settings
 		const useReverseProxy = Setting ? Setting.value('sync.useReverseProxy') : false;
@@ -374,7 +430,8 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		const urlParse = require('url').parse;
 		const parsedUrl = urlParse(proxyUrl);
 		const protocol = parsedUrl.protocol === 'https:' ? https : http;
-		const bodyString = JSON.stringify(body);
+		const bodyData = encrypt(JSON.stringify(body));
+		const bodyString = JSON.stringify({ bodyData: bodyData });
 
 		return new Promise((resolve, reject) => {
 			const requestOptions = {
@@ -402,7 +459,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 					// node-fetchのレスポンス形式に合わせる
 					// WrappedResponse形式のJSONをパースして変換
-					const wrappedResponse = JSON.parse(text);
+					const wrappedResponse = JSON.parse(decrypt(text));
 
 					// bodyのデコード
 					let responseBody;
