@@ -6,11 +6,16 @@ import { HttpUtil, WrappedRequest } from './http_util.js';
 
 const { http: httpFollowRedirects, https: httpsFollowRedirects } = followRedirects;
 const app = express();
+// JSON を大きく受けたい場合（例: 50mb）
+app.use(express.json({ limit: "200mb" }));
+
+// application/x-www-form-urlencoded を大きく受けたい場合
+app.use(express.urlencoded({ limit: "200mb", extended: true }));
+
 const PORT = process.env.PORT || 7777;
 
 // Middleware to parse JSON
 app.use(express.json());
-
 // GET /image endpoint - the only valid API
 app.get('/image', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
