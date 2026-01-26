@@ -537,6 +537,19 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			'sync.reverseProxyEncryption': {
+				value: true,
+				type: SettingItemType.Bool,
+				public: true,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.useReverseProxy'] === true;
+				},
+				label: () => _('Enable Encryption'),
+				description: () => _('set secret.key in joplin folder.Encrypt communication between client and reverse proxy server.'),
+				storage: SettingStorage.File,
+			},
+
 			// The active folder ID is guaranteed to be valid as long as there's at least one
 			// existing folder, so it is a good default in contexts where there's no currently
 			// selected folder. It corresponds in general to the currently selected folder or
