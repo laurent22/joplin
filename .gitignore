@@ -870,6 +870,9 @@ packages/lib/SyncTargetJoplinServer.js.map
 packages/lib/SyncTargetOneDrive.d.ts
 packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetOneDrive.js.map
+packages/lib/SyncTargetReverseProxy.d.ts
+packages/lib/SyncTargetReverseProxy.js
+packages/lib/SyncTargetReverseProxy.js.map
 packages/lib/Synchronizer.d.ts
 packages/lib/Synchronizer.js
 packages/lib/Synchronizer.js.map
@@ -1128,6 +1131,9 @@ packages/lib/services/interop/InteropService_Importer_Base.js.map
 packages/lib/services/interop/InteropService_Importer_Custom.d.ts
 packages/lib/services/interop/InteropService_Importer_Custom.js
 packages/lib/services/interop/InteropService_Importer_Custom.js.map
+packages/lib/services/interop/InteropService_Importer_Embededhtml.d.ts
+packages/lib/services/interop/InteropService_Importer_Embededhtml.js
+packages/lib/services/interop/InteropService_Importer_Embededhtml.js.map
 packages/lib/services/interop/InteropService_Importer_EnexToHtml.d.ts
 packages/lib/services/interop/InteropService_Importer_EnexToHtml.js
 packages/lib/services/interop/InteropService_Importer_EnexToHtml.js.map
@@ -1527,6 +1533,12 @@ packages/renderer/pathUtils.js.map
 packages/renderer/utils.d.ts
 packages/renderer/utils.js
 packages/renderer/utils.js.map
+packages/reverse_proxy/src/http_util.d.ts
+packages/reverse_proxy/src/http_util.js
+packages/reverse_proxy/src/http_util.js.map
+packages/reverse_proxy/src/index.d.ts
+packages/reverse_proxy/src/index.js
+packages/reverse_proxy/src/index.js.map
 packages/tools/generate-database-types.d.ts
 packages/tools/generate-database-types.js
 packages/tools/generate-database-types.js.map
@@ -1551,3 +1563,5 @@ packages/tools/tool-utils.js.map
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-desktop/gui/getWindowTitle.js
 packages/app-desktop/gui/getWindowTitle.test.js
+# Symmetric encryption keys for reverse proxy
+*.key
