@@ -585,8 +585,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			base64Encoded: false,
 			headers: headers,
 		};
+		const bodyData = encrypt(JSON.stringify(requestBody));
+		const requestBodyString = JSON.stringify({ bodyData: bodyData });
 
-		const requestBodyString = JSON.stringify(requestBody);
 
 		// Get Setting module and parse reverse proxy URL
 		const Setting = require('./models/Setting').default;
