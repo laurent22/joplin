@@ -181,7 +181,29 @@ describe('models/Folder.sharing', () => {
 		}
 	}));
 
-	it('should not fail to update share IDs when an outdated share ID is contained in a read-only folder', async () => {
+	it('updating share IDs should not fail when a read-only resource is linked to a writeable note', async () => {
+		const root = await Folder.save({ title: 'read-only' });
+		let note = await Note.save({ title: 'Test', parent_id: root.id });
+		note = await shim.attachFileToNote(note, testImagePath);
+		const resourceId = Note.linkedItemIds(note.body)[0];
+
+		// Associate the resource with the share
+		const shareId = 'abcd1234';
+		await Resource.save({
+			id: resourceId,
+			share_id: shareId,
+			is_shared: 1,
+		});
+
+		const reset = simulateReadOnlyShareEnv([shareId]);
+		try {
+			await Folder.updateAllShareIds(resourceService(), []);
+		} finally {
+			reset();
+		}
+	});
+
+	it('should not fail to update note share IDs when an outdated share ID is contained in a read-only folder', async () => {
 		const shareId = 'abcd1234';
 		const root = await Folder.save({ title: 'read-only', share_id: shareId });
 		// Save a child with a different share ID
