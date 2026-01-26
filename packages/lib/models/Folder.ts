@@ -687,12 +687,10 @@ export default class Folder extends BaseItem {
 					// Don't update read-only notes:
 					if (isReadOnly(ModelType.Note, note)) continue;
 
-					const newResource = await Resource.duplicateResource(resourceId);
-					// Ensure that the resource starts with the correct share_id and is_shared.
-					// This reduces the number of resources to be processed in the next loop iteration
-					// and seems to fix an issue related to resources not syncing with read-only shares.
-					await Resource.save({
-						id: newResource.id,
+					const newResource = await Resource.duplicateResource(resourceId, {
+						// Ensure that the resource starts with the correct share_id and is_shared.
+						// This reduces the number of resources to be processed in the next loop iteration
+						// and seems to fix an issue related to resources not syncing with read-only shares.
 						is_shared: note.is_shared,
 						share_id: note.share_id,
 					});
