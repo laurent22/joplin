@@ -121,9 +121,9 @@ async function createRelease(projectName: string, releaseConfig: ReleaseConfig, 
 	const apkFilePath = `${releaseDir}/${apkFilename}`;
 	const downloadUrl = `https://github.com/laurent22/${projectName}/releases/download/${tagName}/${apkFilename}`;
 
-	await execCommand('yarn install', { showStdout: false });
-	await execCommand('yarn tsc', { showStdout: false });
-	await execCommand('yarn buildParallel', { showStdout: false });
+	// await execCommand('yarn install', { showStdout: false });
+	// await execCommand('yarn tsc', { showStdout: false });
+	// await execCommand('yarn buildParallel', { showStdout: false });
 
 	console.info(`Building APK file v${suffix}...`);
 
@@ -186,6 +186,12 @@ async function createRelease(projectName: string, releaseConfig: ReleaseConfig, 
 }
 
 const uploadToGitHubRelease = async (projectName: string, tagName: string, isPreRelease: boolean, releaseFiles: Record<string, Release>) => {
+	const allPublishDisabled = Object.values(releaseFiles).every(r => !r.publish);
+	if (allPublishDisabled) {
+		console.info('All release files have publishing disabled - skipping GitHub release creation');
+		return;
+	}
+
 	console.info(`Creating GitHub release ${tagName}...`);
 
 	const releaseOptions = { isPreRelease: isPreRelease };
@@ -232,7 +238,8 @@ const uploadToGitHubRelease = async (projectName: string, tagName: string, isPre
 const releaseConfigs: ReleaseConfig[] = [
 	{
 		name: 'main',
-		publish: true,
+		publish: false,
+		disabled: true,
 	},
 
 	{
@@ -323,7 +330,7 @@ async function main() {
 
 	await uploadToGitHubRelease(mainProjectName, tagName, isPreRelease, releaseFiles);
 
-	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
+	if (releaseFiles['main']) console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 
 	const changelogPath = `${rootDir}/readme/about/changelog/android.md`;
 
