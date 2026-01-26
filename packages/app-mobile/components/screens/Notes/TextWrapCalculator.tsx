@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Platform, Text, ViewStyle } from 'react-native';
 
 interface Props {
-	textCompStyle: ViewStyle,
-	textCompContainerWidth: number, // Must be updated dynamically via onLayout of the container, in order for Text.onTextLayout to fire on every device rotation
-	showMultilineToggle: boolean | null,
-	multiline: boolean,
-	text: string,
-	updateState: (showMultilineToggle: boolean, multiline: boolean) => void;
+	textCompStyle: ViewStyle;
+	textCompContainerWidth: number; // Must be updated dynamically via onLayout of the container, in order for Text.onTextLayout to fire on every device rotation
+	showMultilineToggle: boolean | null;
+	multiline: boolean;
+	text: string;
+	updateState: (showMultilineToggle: boolean, multiline: boolean)=> void;
 }
 
 // This component can be used to estimate when text wrapping is required for a TextInput or Text element, to conditionally display a button to enable / disable
@@ -25,7 +25,7 @@ const TextWrapCalculator: React.FC<Props> = props => {
 				position: 'absolute',
 				opacity: 0,
 				width: props.textCompContainerWidth,
-			}
+			},
 		]}
 		onTextLayout={(e) => {
 			if (props.textCompContainerWidth !== 0) {

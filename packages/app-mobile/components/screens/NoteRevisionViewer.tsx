@@ -225,7 +225,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
 		setShowMultilineToggle(showToggle);
 		setMultiline(enableMultiline);
-	}
+	};
 
 	const titleToggleButton = !showMultilineToggle ? null :
 		<IconButton

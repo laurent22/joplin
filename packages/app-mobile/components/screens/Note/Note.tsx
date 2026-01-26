@@ -1755,7 +1755,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
 			this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline });
-		}
+		};
 
 		const titleToggleButton = !this.state.showMultilineToggle ? null :
 			<IconButton
