@@ -65,10 +65,12 @@ app.get('/image2', async (req: Request, res: Response) => {
 			headers: body.headers || {},
 		};
 
+		const requiredHeaders = [`accept-ranges`, `content-type`, `content-length`, `etag`]
+
 		const request = protocol.request(requestOptions, async function(response) {
 			// ヘッダーをコピー
 			for (const [name, value] of Object.entries(response.headers)) {
-				if (value) {
+				if (value && requiredHeaders.includes(name.toLowerCase())) {
 					res.setHeader(name, value);
 				}
 			}
