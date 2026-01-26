@@ -16,7 +16,8 @@ app.get('/image', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
 	try {
-		const body = HttpUtil.isEncrypte() ? JSON.parse(HttpUtil.decrypt(req.body.bodyData)) : req.body.bodyData;
+		const isEncrypt = HttpUtil.isEncrypte();
+		const body = JSON.parse(isEncrypt ? HttpUtil.decrypt(req.body.bodyData) : req.body.bodyData);
 		const safeBody: WrappedRequest = JSON.parse(JSON.stringify(body));
 		if (safeBody?.headers?.Authorization) {
 			safeBody.headers.Authorization = '*****';
@@ -48,7 +49,8 @@ app.get('/image2', async (req: Request, res: Response) => {
 	console.log('GET /image request received');
 
 	try {
-		const body = HttpUtil.isEncrypte() ? JSON.parse(HttpUtil.decrypt(req.body.bodyData)) : req.body.bodyData;
+		const isEncrypt = HttpUtil.isEncrypte();
+		const body = JSON.parse(isEncrypt ? HttpUtil.decrypt(req.body.bodyData) : req.body.bodyData);
 		const safeBody: WrappedRequest = JSON.parse(JSON.stringify(body));
 		if (safeBody?.headers?.Authorization) {
 			safeBody.headers.Authorization = '*****';

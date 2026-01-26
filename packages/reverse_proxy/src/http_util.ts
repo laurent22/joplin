@@ -29,7 +29,7 @@ export class HttpUtil {
 	private static secretKey: Buffer | null = fs.readFileSync('../../secret.key'); // 32 bytes for AES-256
 
 	public static isEncrypte(): boolean {
-		return process.env.ENABLE_ENCRYPTION !== 'false';
+		return !!process.env.ENABLE_ENCRYPTION;
 	}
 
 	public static getSecretKey(): Buffer {

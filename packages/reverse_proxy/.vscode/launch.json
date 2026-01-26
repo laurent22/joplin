@@ -21,6 +21,28 @@
             "env": {
                 "NODE_ENV": "development"
             }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Reverse Proxy (No Encryption)",
+            "runtimeArgs": [
+                "--loader",
+                "ts-node/esm"
+            ],
+            "args": [
+                "${workspaceFolder}/src/index.ts"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "env": {
+                "NODE_ENV": "development",
+                "DISABLE_ENCRYPTION": "true"
+            }
         }
     ]
 }
