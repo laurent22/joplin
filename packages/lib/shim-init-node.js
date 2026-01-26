@@ -20,12 +20,16 @@ const zlib = require('zlib');
 
 let secretKey = null;
 
-if (!secretKey) {
-	try {
-		secretKey = fs.readFileSync('../../secret.key');
-	} catch (error) {
-		console.warn('Could not load secret key for reverse proxy encryption:', error);
+function getSecretKey() {
+	if (!secretKey) {
+		try {
+			secretKey = fs.readFileSync('../../secret.key');
+		} catch (error) {
+			console.warn('Could not load secret key for reverse proxy encryption:', error);
+			throw new Error('Secret key is required for encryption but could not be loaded');
+		}
 	}
+	return secretKey;
 }
 
 function fileExists(filePath) {
@@ -356,7 +360,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	const crypto = require('crypto');
 
 	function encrypt(plainText) {
-		const key = secretKey;
+		const key = getSecretKey();
 		if (key.length !== 32) throw new Error('Key must be 32 bytes for AES-256-GCM.');
 
 		const iv = crypto.randomBytes(12); // 12 bytes recommended for GCM
@@ -379,7 +383,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	}
 
 	function decrypt(payload) {
-		const key = secretKey;
+		const key = getSecretKey();
 		if (key.length !== 32) throw new Error('Key must be 32 bytes for AES-256-GCM.');
 
 		const [ivB64, authTagB64, ciphertextB64] = payload.split(':');
@@ -401,7 +405,8 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	const nodeFetchWrapper = async (url, options, Setting) => {
 		// Check if reverse proxy is enabled from settings
 		const useReverseProxy = Setting ? Setting.value('sync.useReverseProxy') : false;
-		console.log(`Reverse Proxy Enabled: ${useReverseProxy}`);
+		const useEncryption = Setting ? Setting.value('sync.reverseProxyEncryption') : true;
+		console.log(`Reverse Proxy Enabled: ${useReverseProxy}, Encryption: ${useEncryption}`);
 
 		if (!useReverseProxy) {
 			return nodeFetch(url, options);
@@ -430,7 +435,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		const urlParse = require('url').parse;
 		const parsedUrl = urlParse(proxyUrl);
 		const protocol = parsedUrl.protocol === 'https:' ? https : http;
-		const bodyData = encrypt(JSON.stringify(body));
+		const bodyData = useEncryption ? encrypt(JSON.stringify(body)) : JSON.stringify(body);
 		const bodyString = JSON.stringify({ bodyData: bodyData });
 
 		return new Promise((resolve, reject) => {
@@ -459,7 +464,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 					// node-fetchのレスポンス形式に合わせる
 					// WrappedResponse形式のJSONをパースして変換
-					const wrappedResponse = JSON.parse(decrypt(text));
+					const wrappedResponse = JSON.parse(useEncryption ? decrypt(text) : text);
 
 					// bodyのデコード
 					let responseBody;
@@ -585,13 +590,13 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			base64Encoded: false,
 			headers: headers,
 		};
-		const bodyData = encrypt(JSON.stringify(requestBody));
-		const requestBodyString = JSON.stringify({ bodyData: bodyData });
-
 
 		// Get Setting module and parse reverse proxy URL
 		const Setting = require('./models/Setting').default;
 		const useReverseProxy = Setting.value('sync.useReverseProxy');
+		const useEncryption = Setting.value('sync.reverseProxyEncryption');
+		const bodyData = useEncryption ? encrypt(JSON.stringify(requestBody)) : JSON.stringify(requestBody);
+		const requestBodyString = JSON.stringify({ bodyData: bodyData });
 		const reverseProxyUrl = Setting.value('sync.reverseProxyUrl');
 		const parsedProxyUrl = urlParse(reverseProxyUrl);
 		const targetUrl = urlParse(useReverseProxy ? reverseProxyUrl : originalUrl);
@@ -666,7 +671,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 						}
 
 						// リバースプロキシを使用している場合は復号化してからファイルに書き込む
-						if (useReverseProxy) {
+						if (useReverseProxy && useEncryption) {
 							const ivBase64 = response.headers['x-encryption-iv'];
 							if (!ivBase64) {
 								cleanUpOnError(new Error('Encryption IV header is missing from reverse proxy response'));
@@ -674,8 +679,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 							}
 
 							const iv = Buffer.from(ivBase64, 'base64');
-							const decipher = crypto.createDecipheriv('aes-256-ctr', secretKey, iv);
-
+							const decipher = crypto.createDecipheriv('aes-256-ctr', getSecretKey(), iv);
 							response.pipe(decipher).pipe(file);
 						} else {
 							response.pipe(file);
