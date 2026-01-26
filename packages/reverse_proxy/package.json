@@ -8,7 +8,7 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "build": "npm run tsc",
     "encrypt_server": "ENABLE_ENCRYPTION=true node --loader ts-node/esm src/index.ts",
-    "nonencrypt_server": "ENABLE_ENCRYPTION=false node --loader ts-node/esm src/index.ts",
+    "nonencrypt_server": "node --loader ts-node/esm src/index.ts",
     "start": "npm run encrypt_server",
     "dev": "npm run encrypt_server"
   },

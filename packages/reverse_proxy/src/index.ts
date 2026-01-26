@@ -133,7 +133,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(Number(PORT), "0.0.0.0", () => {
 	console.log(`Reverse proxy server running on http://localhost:${PORT}`);
 	console.log('Available endpoint: GET /image');
 });
