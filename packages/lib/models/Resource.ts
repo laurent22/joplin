@@ -446,7 +446,7 @@ export default class Resource extends BaseItem {
 
 	public static async duplicateResource(
 		resourceId: string,
-		// When set, changes some of the properties in the duplicate:
+		// Overrides property values in the duplicate resource.
 		propertyOverrides: ResourceEntity = {},
 	): Promise<ResourceEntity> {
 		const resource = await Resource.load(resourceId);

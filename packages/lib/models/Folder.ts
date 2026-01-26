@@ -691,6 +691,9 @@ export default class Folder extends BaseItem {
 						// Ensure that the resource starts with the correct share_id and is_shared.
 						// This reduces the number of resources to be processed in the next loop iteration
 						// and seems to fix an issue related to resources not syncing with read-only shares.
+						//
+						// These properties are set directly in the "duplicateResource" call to prevent
+						// race conditions.
 						is_shared: note.is_shared,
 						share_id: note.share_id,
 					});
