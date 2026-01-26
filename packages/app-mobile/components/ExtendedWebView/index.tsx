@@ -13,6 +13,7 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { Props, WebViewControl } from './types';
 import useCss from './utils/useCss';
+import { Platform } from 'react-native';
 
 const logger = Logger.create('ExtendedWebView');
 
@@ -141,7 +142,8 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			onLoadEnd={props.onLoadEnd}
 			onContentProcessDidTerminate={refreshWebViewAfterCrash}
 			onRenderProcessGone={refreshWebViewAfterCrash}
-			decelerationRate='normal'
+			// See https://github.com/react-native-webview/react-native-webview/issues/3814
+			decelerationRate={Platform.OS === 'ios' ? 'normal' : undefined}
 		/>
 	);
 };

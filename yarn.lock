@@ -11194,8 +11194,8 @@ __metadata:
   dependencies:
     "@babel/core": "npm:7.16.0"
     "@types/react-native": "npm:0.64.19"
-    react: "npm:18.3.1"
-    react-native: "npm:0.70.6"
+    react: "npm:19.1.0"
+    react-native: "npm:0.81.5"
     typescript: "npm:5.8.3"
   peerDependencies:
     react: "*"

@@ -1,8 +1,5 @@
 import * as React from 'react';
-import shim from '@joplin/lib/shim';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
-
-shim.setReact(React);
 PerformanceLogger.onAppStartBegin();
 
 import setupQuickActions from './setupQuickActions';

@@ -928,6 +928,7 @@ packages/app-mobile/services/voiceTyping/utils/unzip.js
 packages/app-mobile/services/voiceTyping/whisper.test.js
 packages/app-mobile/services/voiceTyping/whisper.js
 packages/app-mobile/setupQuickActions.js
+packages/app-mobile/specs/NativeWhisperModule.js
 packages/app-mobile/tools/buildInjectedJs/BundledFile.js
 packages/app-mobile/tools/buildInjectedJs/constants.js
 packages/app-mobile/tools/buildInjectedJs/copyAssets.js
@@ -969,6 +970,7 @@ packages/app-mobile/utils/hooks/useSafeAreaPadding.js
 packages/app-mobile/utils/image/fileToImage.web.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js
+packages/app-mobile/utils/initReact.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
