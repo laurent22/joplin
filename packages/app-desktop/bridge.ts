@@ -441,11 +441,11 @@ export class Bridge {
 	}
 
 	public get Menu() {
-		return require('electron').Menu;
+		return Menu;
 	}
 
 	public get MenuItem() {
-		return require('electron').MenuItem;
+		return MenuItem;
 	}
 
 	public async openExternal(url: string) {

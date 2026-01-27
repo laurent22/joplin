@@ -1,7 +1,9 @@
 import Resource from '@joplin/lib/models/Resource';
 import Logger from '@joplin/utils/Logger';
+import bridge from '../../../services/bridge';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 
+const MenuItem = bridge().MenuItem;
 const logger = Logger.create('contextMenuUtils');
 
 export enum ContextMenuItemType {
@@ -36,6 +38,7 @@ export interface ContextMenuItem {
 	onAction: Function;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	isActive: Function;
+	isSeparator?: boolean;
 }
 
 export interface ContextMenuItems {
@@ -127,3 +130,39 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 		img.src = svg;
 	});
 };
+
+export function buildMenuItems(items: ContextMenuItems, options: ContextMenuOptions) {
+	const activeItems: ContextMenuItem[] = [];
+	for (const itemKey in items) {
+		const item = items[itemKey];
+		if (item.isActive(options.itemType, options)) {
+			activeItems.push(item);
+		}
+	}
+
+	// Filter out leading, trailing, and successive separators
+	const filteredItems: ContextMenuItem[] = [];
+	let lastWasSeparator = true;
+	for (const item of activeItems) {
+		if (item.isSeparator) {
+			if (lastWasSeparator) continue;
+			lastWasSeparator = true;
+		} else {
+			lastWasSeparator = false;
+		}
+		filteredItems.push(item);
+	}
+
+	// Remove trailing separator
+	while (filteredItems.length > 0 && filteredItems[filteredItems.length - 1].isSeparator) {
+		filteredItems.pop();
+	}
+
+	return filteredItems.map(item => new MenuItem({
+		label: item.label,
+		click: () => {
+			item.onAction(options);
+		},
+		type: item.isSeparator ? 'separator' : 'normal',
+	}));
+}

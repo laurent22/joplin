@@ -3,7 +3,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import { useEffect } from 'react';
 import bridge from '../../../../../services/bridge';
-import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextMenuUtils';
+import { ContextMenuOptions, ContextMenuItemType, buildMenuItems } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -77,20 +77,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 				mdToHtml,
 			};
 
-			const result = [];
-			for (const itemName in contextMenuItems) {
-				const item = contextMenuItems[itemName];
-
-				if (!item.isActive(itemType, contextMenuActionOptions.current)) continue;
-
-				result.push(new MenuItem({
-					label: item.label,
-					click: () => {
-						item.onAction(contextMenuActionOptions.current);
-					},
-				}));
-			}
-			return result;
+			return buildMenuItems(contextMenuItems, contextMenuActionOptions.current);
 		};
 
 		const makeEditableMenuItems = (element: Element) => {
