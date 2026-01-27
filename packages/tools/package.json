@@ -55,7 +55,7 @@
     "@types/node": "18.19.130",
     "@types/node-fetch": "2.6.13",
     "@types/yargs": "17.0.34",
-    "gettext-extractor": "4.0.0",
+    "gettext-extractor": "4.0.1",
     "gulp": "4.0.2",
     "html-entities": "1.4.0",
     "jest": "29.7.0",
