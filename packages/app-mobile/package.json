@@ -29,6 +29,7 @@
     "@joplin/react-native-saf-x": "~3.5",
     "@joplin/renderer": "~3.5",
     "@joplin/utils": "~3.5",
+    "@joplin/whisper-voice-typing": "~0.0",
     "@js-draw/material-icons": "1.33.0",
     "@react-native-clipboard/clipboard": "1.16.3",
     "@react-native-community/datetimepicker": "8.4.4",
@@ -49,9 +50,9 @@
     "deprecated-react-native-prop-types": "5.0.0",
     "events": "3.3.0",
     "expo": "54.0.31",
-    "expo-av": "~16.0.8",
-    "expo-camera": "~17.0.10",
-    "expo-local-authentication": "~17.0.8",
+    "expo-av": "16.0.8",
+    "expo-camera": "17.0.10",
+    "expo-local-authentication": "17.0.8",
     "js-draw": "1.33.0",
     "lodash": "4.17.21",
     "md5": "2.3.0",
@@ -145,14 +146,6 @@
     "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.2.2"
-  },
-  "codegenConfig": {
-    "name": "AppSpecs",
-    "type": "modules",
-    "jsSrcsDir": "specs",
-    "android": {
-      "javaPackageName": "net.cozic.joplin.specs"
-    }
   },
   "engines": {
     "node": ">=20"

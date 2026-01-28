@@ -901,7 +901,6 @@ packages/app-mobile/services/voiceTyping/utils/unzip.js
 packages/app-mobile/services/voiceTyping/whisper.test.js
 packages/app-mobile/services/voiceTyping/whisper.js
 packages/app-mobile/setupQuickActions.js
-packages/app-mobile/specs/NativeWhisperModule.js
 packages/app-mobile/tools/buildInjectedJs/BundledFile.js
 packages/app-mobile/tools/buildInjectedJs/constants.js
 packages/app-mobile/tools/buildInjectedJs/copyAssets.js
@@ -1902,5 +1901,7 @@ packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/processTranslations.js
 packages/tools/website/utils/render.js
 packages/tools/website/utils/types.js
+packages/whisper-voice-typing/src/index.js
+packages/whisper-voice-typing/src/specs/Whisper.nitro.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 

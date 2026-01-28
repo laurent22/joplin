@@ -1,0 +1,23 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": [
+    "whispervoicetyping"
+  ],
+  "ios": {
+    "iosModuleName": "WhisperVoiceTyping"
+  },
+  "android": {
+    "androidNamespace": [
+      "whispervoicetyping"
+    ],
+    "androidCxxLibName": "WhisperVoiceTyping"
+  },
+  "autolinking": {
+    "WhisperVoiceTyping": {
+      "cpp": "HybridWhisperVoiceTyping"
+    }
+  },
+  "ignorePaths": [
+    "**/node_modules"
+  ]
+}

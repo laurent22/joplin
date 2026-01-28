@@ -1,0 +1,2 @@
+// Auto-generated
+#pragma once
