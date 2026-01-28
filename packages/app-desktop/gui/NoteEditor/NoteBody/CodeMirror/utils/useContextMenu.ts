@@ -22,6 +22,12 @@ const menuUtils = new MenuUtils(CommandService.instance());
 
 const imageClassName = 'cm-md-image';
 
+// Shared helper to extract resource ID from a path/URL
+const pathToId = (path: string) => {
+	const id = Resource.pathToId(path);
+	return isItemId(id) ? id : '';
+};
+
 interface ContextMenuProps {
 	plugins: PluginStates;
 	dispatch: Dispatch;
@@ -127,44 +133,42 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return null;
 		}
 
+		function showImageContextMenu(resourceId: string) {
+			const menu = new Menu();
+			const contextMenuOptions: ContextMenuOptions = {
+				itemType: ContextMenuItemType.Image,
+				resourceId,
+				filename: null,
+				mime: null,
+				linkToCopy: null,
+				linkToOpen: null,
+				textToCopy: null,
+				htmlToCopy: null,
+				insertContent: () => {},
+				isReadOnly: true,
+				fireEditorEvent: () => {},
+				htmlToMd: null,
+				mdToHtml: null,
+			};
+
+			const imageMenuItems = buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
+			for (const item of imageMenuItems) {
+				menu.append(item);
+			}
+
+			menu.popup({ window: bridge().activeWindow() });
+		}
+
 		async function onContextMenu(event: Event, params: ContextMenuParams) {
 			// Check if right-clicking on a rendered image first (images may not be "editable")
 			const imageContainer = getClickedImageContainer(params);
 			if (imageContainer && pointerInsideEditor(params, true)) {
 				const imgElement = imageContainer.querySelector('img');
 				if (imgElement) {
-					const pathToId = (path: string) => {
-						const id = Resource.pathToId(path);
-						return isItemId(id) ? id : '';
-					};
-
 					const resourceId = pathToId(imgElement.src);
 					if (resourceId) {
 						event.preventDefault();
-
-						const menu = new Menu();
-						const contextMenuOptions: ContextMenuOptions = {
-							itemType: ContextMenuItemType.Image,
-							resourceId,
-							filename: null,
-							mime: null,
-							linkToCopy: null,
-							linkToOpen: null,
-							textToCopy: null,
-							htmlToCopy: null,
-							insertContent: () => {},
-							isReadOnly: true,
-							fireEditorEvent: () => {},
-							htmlToMd: null,
-							mdToHtml: null,
-						};
-
-						const imageMenuItems = buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
-						for (const item of imageMenuItems) {
-							menu.append(item);
-						}
-
-						menu.popup({ window: bridge().activeWindow() });
+						showImageContextMenu(resourceId);
 						return;
 					}
 				}
@@ -174,30 +178,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const markupResourceId = getResourceIdFromMarkup();
 			if (markupResourceId && pointerInsideEditor(params)) {
 				event.preventDefault();
-
-				const menu = new Menu();
-				const contextMenuOptions: ContextMenuOptions = {
-					itemType: ContextMenuItemType.Image,
-					resourceId: markupResourceId,
-					filename: null,
-					mime: null,
-					linkToCopy: null,
-					linkToOpen: null,
-					textToCopy: null,
-					htmlToCopy: null,
-					insertContent: () => {},
-					isReadOnly: true,
-					fireEditorEvent: () => {},
-					htmlToMd: null,
-					mdToHtml: null,
-				};
-
-				const imageMenuItems = buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
-				for (const item of imageMenuItems) {
-					menu.append(item);
-				}
-
-				menu.popup({ window: bridge().activeWindow() });
+				showImageContextMenu(markupResourceId);
 				return;
 			}
 
