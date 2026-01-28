@@ -16,7 +16,7 @@ class WhisperVoiceTypingPackage : BaseReactPackage() {
 
     companion object {
         init {
-            System.loadLibrary("whispervoicetyping")
+            System.loadLibrary("WhisperVoiceTyping")
         }
     }
 }
