@@ -36,13 +36,24 @@ std::shared_ptr<Promise<void>> HybridWhisperSession::startRecording() {
     });
 }
 
-std::shared_ptr<Promise<std::string>> HybridWhisperSession::convertNext() {
+std::shared_ptr<Promise<std::string>> HybridWhisperSession::convertNext(double seconds) {
+    auto state = state_;
+    return Promise<std::string>::async([state, seconds] () -> std::string {
+        std::lock_guard<std::mutex> lock { state->mutex_ };
+
+        // Wait until at least 2s of data are available:
+        state->recorder_->waitForData(seconds);
+        // Convert the data:
+        state->session_.addAudioFromRecorder(*state->recorder_);
+        return state->session_.transcribeNextChunk();
+    });
+}
+
+std::shared_ptr<Promise<std::string>> HybridWhisperSession::convertAvailable() {
     auto state = state_;
     return Promise<std::string>::async([state] () -> std::string {
         std::lock_guard<std::mutex> lock { state->mutex_ };
 
-        // Wait until at least 2s of data are available:
-        state->recorder_->waitForData(2.0);
         // Convert the data:
         state->session_.addAudioFromRecorder(*state->recorder_);
         return state->session_.transcribeNextChunk();

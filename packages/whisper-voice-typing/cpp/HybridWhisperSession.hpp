@@ -14,7 +14,8 @@ namespace margelo::nitro::whispervoicetyping {
         HybridWhisperSession(const SessionOptions& options);
 
         std::shared_ptr<Promise<void>> startRecording() override;
-        std::shared_ptr<Promise<std::string>> convertNext() override;
+        std::shared_ptr<Promise<std::string>> convertNext(double seconds) override;
+        std::shared_ptr<Promise<std::string>> convertAvailable() override;
         std::shared_ptr<Promise<void>> closeSession() override;
 
     private:

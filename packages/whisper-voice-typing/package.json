@@ -31,7 +31,7 @@
   ],
   "scripts": {
     "clean": "rm -rf android/build node_modules/**/android/build lib",
-    "tsc": "tsc --noEmit",
+    "tsc": "tsc",
     "build": "nitrogen",
     "specs": "tsc --noEmit false && nitrogen --logLevel=\"debug\""
   },

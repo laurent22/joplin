@@ -2,7 +2,8 @@ import type { HybridObject } from 'react-native-nitro-modules';
 
 export interface WhisperSession extends HybridObject<{ android: 'c++' }> {
 	startRecording(): Promise<void>;
-	convertNext(): Promise<string>;
+	convertNext(durationSeconds: number): Promise<string>;
+	convertAvailable(): Promise<string>;
 	closeSession(): Promise<void>;
 }
 
