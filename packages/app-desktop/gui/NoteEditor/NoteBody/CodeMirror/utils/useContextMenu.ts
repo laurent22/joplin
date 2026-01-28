@@ -15,6 +15,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { ContextMenuItemType, ContextMenuOptions, buildMenuItems } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
+import { extractResourceUrls } from '@joplin/lib/urlUtils';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -61,7 +62,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return screenXY / zoomFraction;
 		};
 
-		function pointerInsideEditor(params: ContextMenuParams, allowNonEditable = false) {
+		const pointerInsideEditor = (params: ContextMenuParams, allowNonEditable = false) => {
 			const x = params.x, y = params.y, isEditable = params.isEditable;
 			const containerDoc = props.containerRef.current?.ownerDocument;
 			const elements = containerDoc?.getElementsByClassName(props.editorClassName);
@@ -80,9 +81,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const yScreen = convertFromScreenCoordinates(zoom, y);
 			const intersectingElement = containerDoc.elementFromPoint(xScreen, yScreen);
 			return intersectingElement && isAncestorOfCodeMirrorEditor(intersectingElement);
-		}
+		};
 
-		function getClickedImageContainer(params: ContextMenuParams) {
+		const getClickedImageContainer = (params: ContextMenuParams) => {
 			const containerDoc = props.containerRef.current?.ownerDocument;
 			if (!containerDoc) return null;
 
@@ -92,13 +93,12 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const clickedElement = containerDoc.elementFromPoint(xScreen, yScreen);
 
 			return clickedElement?.closest(`.${imageClassName}`) as HTMLElement | null;
-		}
+		};
 
 		// Extract resource ID from image markup at cursor position
-		function getResourceIdFromMarkup(): string | null {
+		const getResourceIdFromMarkup = (): string | null => {
 			if (!editorRef.current) return null;
 
-			// Access the CodeMirror 6 editor view
 			const editor = editorRef.current.editor;
 			if (!editor) return null;
 
@@ -108,32 +108,46 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const lineContent = line.text;
 			const cursorPosInLine = cursorPos - line.from;
 
-			// Check for markdown image syntax: ![...](:/resourceId) or ![...](:resourceId)
-			const markdownImageRegex = /!\[[^\]]*\]\(:\/?([a-zA-Z0-9]{32})\)/g;
-			let match;
-			while ((match = markdownImageRegex.exec(lineContent)) !== null) {
-				const matchStart = match.index;
-				const matchEnd = match.index + match[0].length;
-				// Check if cursor is within this match
-				if (cursorPosInLine >= matchStart && cursorPosInLine <= matchEnd) {
-					return match[1];
-				}
-			}
+			// Get all resource URLs from the line
+			const resourceUrls = extractResourceUrls(lineContent);
+			if (!resourceUrls.length) return null;
 
-			// Check for HTML image syntax: <img src=":/resourceId" ...>
-			const htmlImageRegex = /<img[^>]*src=["']:\/?([a-zA-Z0-9]{32})["'][^>]*>/gi;
-			while ((match = htmlImageRegex.exec(lineContent)) !== null) {
-				const matchStart = match.index;
-				const matchEnd = match.index + match[0].length;
-				if (cursorPosInLine >= matchStart && cursorPosInLine <= matchEnd) {
-					return match[1];
+			// Find which resource (if any) the cursor is within
+			for (const resourceInfo of resourceUrls) {
+				// Find the position of this resource ID in the line
+				const resourcePattern = new RegExp(`[:](/?${resourceInfo.itemId})`, 'g');
+				let match;
+				while ((match = resourcePattern.exec(lineContent)) !== null) {
+					// Expand to find the full image markup containing this resource
+					// Look backwards for ![ or <img
+					let markupStart = lineContent.lastIndexOf('![', match.index);
+					const imgTagStart = lineContent.lastIndexOf('<img', match.index);
+					if (imgTagStart > markupStart) markupStart = imgTagStart;
+
+					if (markupStart === -1) continue;
+
+					// Find the end of the markup
+					let markupEnd: number;
+					if (lineContent[markupStart] === '!') {
+						// Markdown image: find closing )
+						markupEnd = lineContent.indexOf(')', match.index);
+						if (markupEnd !== -1) markupEnd += 1;
+					} else {
+						// HTML img: find closing >
+						markupEnd = lineContent.indexOf('>', match.index);
+						if (markupEnd !== -1) markupEnd += 1;
+					}
+
+					if (markupEnd !== -1 && cursorPosInLine >= markupStart && cursorPosInLine <= markupEnd) {
+						return resourceInfo.itemId;
+					}
 				}
 			}
 
 			return null;
-		}
+		};
 
-		function showImageContextMenu(resourceId: string) {
+		const showImageContextMenu = (resourceId: string) => {
 			const menu = new Menu();
 			const contextMenuOptions: ContextMenuOptions = {
 				itemType: ContextMenuItemType.Image,
@@ -157,9 +171,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			menu.popup({ window: bridge().activeWindow() });
-		}
+		};
 
-		async function onContextMenu(event: Event, params: ContextMenuParams) {
+		const onContextMenu = async (event: Event, params: ContextMenuParams) => {
 			// Check if right-clicking on a rendered image first (images may not be "editable")
 			const imageContainer = getClickedImageContainer(params);
 			if (imageContainer && pointerInsideEditor(params, true)) {
@@ -264,7 +278,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			});
 
 			menu.popup({ window: bridge().activeWindow() });
-		}
+		};
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
