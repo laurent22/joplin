@@ -960,7 +960,7 @@ msgstr "Det går inte att hitta \"%s\"."
 
 #: packages/app-cli/app/command-mkbook.ts:28
 msgid "Cannot find: \"%s\""
-msgstr "Det går inte att hitta: \"%s\"."
+msgstr "Det går inte att hitta: \"%s\""
 
 #: packages/app-cli/app/command-sync.ts:203
 msgid "Cannot initialise synchroniser."
@@ -2357,7 +2357,7 @@ msgstr "Aktivera förkortningssyntax"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
 msgid "Enable ABC musical notation support"
-msgstr "Aktivera stöd för ABC musiknotation."
+msgstr "Aktivera stöd för ABC musiknotation"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
