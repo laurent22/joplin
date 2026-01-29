@@ -15,6 +15,9 @@
   "autolinking": {
     "WhisperVoiceTyping": {
       "cpp": "HybridWhisperVoiceTyping"
+    },
+    "AudioRecorder": {
+      "kotlin": "HybridAudioRecorder"
     }
   },
   "ignorePaths": [
