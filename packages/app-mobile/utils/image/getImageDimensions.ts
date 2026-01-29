@@ -1,10 +1,13 @@
-import { Size } from '@joplin/utils/types';
 import { fileUriToPath } from '@joplin/utils/url';
 import { Image as NativeImage, Platform } from 'react-native';
 import fileToImage from './fileToImage.web';
 
+interface ImageDimensions {
+	width: number;
+	height: number;
+}
 
-const getImageDimensions = async (uri: string): Promise<Size> => {
+const getImageDimensions = async (uri: string): Promise<ImageDimensions> => {
 	if (uri.startsWith('/')) {
 		uri = `file://${uri}`;
 	}

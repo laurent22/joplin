@@ -3,6 +3,7 @@ import Logger from '@joplin/utils/Logger';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import fileToImage from './fileToImage.web';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
+import getImageDimensions from './getImageDimensions';
 
 const logger = Logger.create('resizeImage');
 
@@ -60,15 +61,20 @@ const resizeImage = async (options: Options) => {
 			image.free();
 		}
 	} else {
-		const context = ImageManipulator.manipulate(options.inputPath);
-		const initial = await context.renderAsync();
-		if (initial.width > options.maxWidth || initial.height > options.maxHeight) {
-			const scale = computeScale(initial);
-			context.resize({
-				width: initial.width * scale,
-				height: initial.height * scale,
+		const originalSize = await getImageDimensions(options.inputPath);
+		logger.debug('Processing image with size', originalSize.width, 'x', originalSize.height);
+
+		let context = ImageManipulator.manipulate(options.inputPath);
+
+		// Only rescale the image if it's bigger than the maximum size:
+		if (originalSize.width > options.maxWidth || originalSize.height > options.maxHeight) {
+			const scale = computeScale(originalSize);
+			context = context.resize({
+				width: originalSize.width * scale,
+				height: originalSize.height * scale,
 			});
 		}
+
 		const final = await context.renderAsync();
 		const saved = await final.saveAsync({
 			format: options.format === 'PNG' ? SaveFormat.PNG : SaveFormat.JPEG,
