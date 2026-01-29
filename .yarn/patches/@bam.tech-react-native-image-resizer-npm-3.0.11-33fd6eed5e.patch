@@ -1,0 +1,17 @@
+# Workaround for https://github.com/bamlab/react-native-image-resizer/issues/428
+diff --git a/react-native-image-resizer.podspec b/react-native-image-resizer.podspec
+index 1848ae8bf8e743e969d40628994b0282bb552790..36de0dd5f01fb84cb186aa9d1429ecafa801a39c 100644
+--- a/react-native-image-resizer.podspec
++++ b/react-native-image-resizer.podspec
+@@ -27,7 +27,10 @@ Pod::Spec.new do |s|
+         "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+     }
+     s.dependency "React-Codegen"
+-    s.dependency "RCT-Folly"
++    # Fixes the iOS build. See https://github.com/bamlab/react-native-image-resizer/issues/428#issuecomment-3347695257
++    if ENV['RCT_USE_PREBUILT_RNCORE'] != '1' then
++      s.dependency "RCT-Folly"
++    end
+     s.dependency "RCTRequired"
+     s.dependency "RCTTypeSafety"
+     s.dependency "ReactCommon/turbomodule/core"

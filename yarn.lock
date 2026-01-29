@@ -6864,6 +6864,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bam.tech/react-native-image-resizer@patch:@bam.tech/react-native-image-resizer@npm%3A3.0.11#~/.yarn/patches/@bam.tech-react-native-image-resizer-npm-3.0.11-33fd6eed5e.patch":
+  version: 3.0.11
+  resolution: "@bam.tech/react-native-image-resizer@patch:@bam.tech/react-native-image-resizer@npm%3A3.0.11#~/.yarn/patches/@bam.tech-react-native-image-resizer-npm-3.0.11-33fd6eed5e.patch::version=3.0.11&hash=4277e5"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/c8d3a68a336daeae2a02ea521e4f2bd1cfb40c8dbcfbf94b1a963778cdc26558529497e98f96c1b5798d1fdc289f0ba37235b14b9dfc53055a6f2f27c310fe30
+  languageName: node
+  linkType: hard
+
 "@bcoe/v8-coverage@npm:^0.2.3":
   version: 0.2.3
   resolution: "@bcoe/v8-coverage@npm:0.2.3"
@@ -10752,7 +10762,7 @@ __metadata:
     "@babel/plugin-transform-export-namespace-from": "npm:7.27.1"
     "@babel/preset-env": "npm:7.25.3"
     "@babel/runtime": "npm:7.25.0"
-    "@bam.tech/react-native-image-resizer": "npm:3.0.11"
+    "@bam.tech/react-native-image-resizer": "patch:@bam.tech/react-native-image-resizer@npm%3A3.0.11#~/.yarn/patches/@bam.tech-react-native-image-resizer-npm-3.0.11-33fd6eed5e.patch"
     "@dr.pogodin/react-native-fs": "npm:2.36.2"
     "@joplin/editor": "npm:~3.5"
     "@joplin/lib": "npm:~3.5"
@@ -10763,7 +10773,7 @@ __metadata:
     "@joplin/turndown": "npm:~4.0.80"
     "@joplin/turndown-plugin-gfm": "npm:~1.0.62"
     "@joplin/utils": "npm:~3.5"
-    "@joplin/whisper-voice-typing": "npm:~0.0.1"
+    "@joplin/whisper-voice-typing": "npm:~0.0"
     "@js-draw/material-icons": "npm:1.33.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.0"
     "@react-native-clipboard/clipboard": "npm:1.16.3"
@@ -10805,9 +10815,9 @@ __metadata:
     esbuild: "npm:0.25.10"
     events: "npm:3.3.0"
     expo: "npm:54.0.31"
-    expo-av: "npm:~16.0.8"
-    expo-camera: "npm:~17.0.10"
-    expo-local-authentication: "npm:~17.0.8"
+    expo-av: "npm:16.0.8"
+    expo-camera: "npm:17.0.10"
+    expo-local-authentication: "npm:17.0.8"
     fast-deep-equal: "npm:3.1.3"
     fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
@@ -10827,7 +10837,6 @@ __metadata:
     react-native: "npm:0.81.5"
     react-native-device-info: "npm:14.0.4"
     react-native-dropdownalert: "npm:5.2.0"
-    react-native-exit-app: "npm:2.0.0"
     react-native-file-viewer: "npm:2.1.5"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
@@ -11461,7 +11470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joplin/whisper-voice-typing@npm:~0.0.1, @joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing":
+"@joplin/whisper-voice-typing@npm:~0.0, @joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing":
   version: 0.0.0-use.local
   resolution: "@joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing"
   dependencies:
@@ -28627,7 +28636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-av@npm:~16.0.8":
+"expo-av@npm:16.0.8":
   version: 16.0.8
   resolution: "expo-av@npm:16.0.8"
   peerDependencies:
@@ -28642,7 +28651,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-camera@npm:~17.0.10":
+"expo-camera@npm:17.0.10":
   version: 17.0.10
   resolution: "expo-camera@npm:17.0.10"
   dependencies:
@@ -28705,7 +28714,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-local-authentication@npm:~17.0.8":
+"expo-local-authentication@npm:17.0.8":
   version: 17.0.8
   resolution: "expo-local-authentication@npm:17.0.8"
   dependencies:
@@ -44264,13 +44273,6 @@ __metadata:
   version: 5.2.0
   resolution: "react-native-dropdownalert@npm:5.2.0"
   checksum: 10/a1509bbda4a27df74fba9a3fe17be135c51d02519fa6fafade5d947037eacec69c9de1e65841d3fb6fd6fa7b067ee645f548db0ed4fdb119d4b87ead73a70742
-  languageName: node
-  linkType: hard
-
-"react-native-exit-app@npm:2.0.0":
-  version: 2.0.0
-  resolution: "react-native-exit-app@npm:2.0.0"
-  checksum: 10/387d9cb02036a6f91bff3d47e13950afb28258718745eed7917c2c416e213f44d2e20735083ce6235757caf2a58a1d08bc486c5130d9232b02583d343751d4d0
   languageName: node
   linkType: hard
 
