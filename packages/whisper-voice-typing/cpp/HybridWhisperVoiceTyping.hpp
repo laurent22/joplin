@@ -10,7 +10,7 @@ namespace margelo::nitro::whispervoicetyping {
 
         std::shared_ptr<
             Promise<SessionPointer>
-        > openSession(const std::shared_ptr<HybridAudioRecorderSpec>& recorder, const SessionOptions& options) override;
+        > openSession(const SessionOptions& options) override;
 
         // Runs tests
         std::shared_ptr<Promise<void>> test() override;

@@ -4,14 +4,14 @@
 #include <memory>
 
 #include "HybridWhisperSessionSpec.hpp"
-#include "HybridAudioRecorderSpec.hpp"
 #include "SessionOptions.hpp"
+#include "IAudioRecorder.hpp"
 #include "utils/WhisperSession.hpp"
 
 namespace margelo::nitro::whispervoicetyping {
     class HybridWhisperSession : public HybridWhisperSessionSpec {
     public:
-        HybridWhisperSession(const std::shared_ptr<HybridAudioRecorderSpec>& recorder, const SessionOptions& options);
+        HybridWhisperSession(const SessionOptions& options);
 
         std::shared_ptr<Promise<void>> startRecording() override;
         std::shared_ptr<Promise<std::string>> convertNext(double seconds) override;

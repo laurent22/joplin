@@ -1,5 +1,5 @@
 import { NitroModules } from 'react-native-nitro-modules';
-import type { AudioRecorder, SessionOptions, WhisperSession, WhisperVoiceTyping } from './specs/Whisper.nitro';
+import type { SessionOptions, WhisperSession, WhisperVoiceTyping } from './specs/Whisper.nitro';
 
 let WhisperVoiceTypingHybridObject: WhisperVoiceTyping|null = null;
 
@@ -11,8 +11,7 @@ const getVoiceTyping = () => {
 };
 
 export function openSession(options: SessionOptions) {
-	const recorder = NitroModules.createHybridObject<AudioRecorder>('AudioRecorder');
-	return getVoiceTyping().openSession(recorder, options);
+	return getVoiceTyping().openSession(options);
 }
 
 export function test() {
