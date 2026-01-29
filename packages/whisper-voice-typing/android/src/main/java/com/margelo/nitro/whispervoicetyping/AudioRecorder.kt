@@ -10,10 +10,13 @@ import android.media.MediaRecorder.AudioSource
 import java.io.Closeable
 import kotlin.math.max
 import kotlin.math.min
+import com.margelo.nitro.NitroModules
 
-typealias AudioRecorderFactory = (context: Context)->AudioRecorder;
-
-class AudioRecorder(context: Context) : Closeable {
+class AudioRecorder (
+    // Default to NitroModules.applicationContext to simplify construction from JNI.
+    // For now, assume that NitroModules.applicationContext is non-null:
+    context: Context = NitroModules.applicationContext!!
+) : Closeable {
 	private val sampleRate = 16_000
 	// Don't allow the unprocessed audio buffer to grow indefinitely -- discard
 	// data if longer than this:

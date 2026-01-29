@@ -1,11 +1,11 @@
-#ifndef WHISPERVOICETYPING_EXAMPLE_AUDIORECORDERJNI_H
-#define WHISPERVOICETYPING_EXAMPLE_AUDIORECORDERJNI_H
+#pragma once
 
 #include <vector>
 #include <jni.h>
 #include <IAudioRecorder.hpp>
-#include "JniWrapper.h"
+#include "JniWrapper.hpp"
 
+// Wraps AudioRecorder.kt
 class AudioRecorderJni: public IAudioRecorder {
 public:
     AudioRecorderJni();
@@ -18,10 +18,15 @@ public:
     // Pushes all available audio data to the given output vector
     void pullAvailable(std::vector<float>& out) override;
 
+    // Must be called with a global reference to AudioRecorderBuilder
+    static void setRecorderBuilderClass(jclass globalClassReference);
+    // Must be called with a global reference to AudioRecorder
+    static void setRecorderClass(jclass globalClassReference);
+    static void setRecorderBuilderStaticConstructor(jmethodID constructorMethodId);
+
 private:
     JniWrapper jni_;
     jobject ref_;
 };
 
 
-#endif //WHISPERVOICETYPING_EXAMPLE_AUDIORECORDERJNI_H

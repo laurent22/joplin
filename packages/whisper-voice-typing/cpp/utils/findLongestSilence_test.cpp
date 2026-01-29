@@ -1,6 +1,7 @@
 #include "findLongestSilence_test.hpp"
 #include "findLongestSilence.hpp"
 #include "androidUtil.h"
+#include "testing.hpp"
 
 #include <string>
 #include <vector>
@@ -12,8 +13,6 @@ static void testTones();
 static void testToneWithPause();
 static void testSilence();
 static void testNoise();
-
-static void fail(const std::string& message);
 
 struct GeneratedAudio {
 	std::vector<float> data;
@@ -91,10 +90,6 @@ static void testNoise() {
 }
 
 
-static void fail(const std::string& message) {
-	throw std::runtime_error(message);
-}
-
 static GeneratedAudio makeAudio(const AudioGenerator& generator, int sampleRate, float duration) {
 	std::vector<float> result { };
 
@@ -111,9 +106,6 @@ static GeneratedAudio makeAudio(const AudioGenerator& generator, int sampleRate,
 	};
 }
 
-static void logTestPass(const std::string& message) {
-	LOGI("Test PASS: %s", message.c_str());
-}
 
 static float samplesToSeconds(int samples, int sampleRate) {
 	return static_cast<float>(samples) / static_cast<float>(sampleRate);

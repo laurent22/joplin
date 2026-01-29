@@ -1,8 +1,9 @@
 
-#include "JniWrapper.h"
+#include "JniWrapper.hpp"
 #include <jni.h>
 #include <stdexcept>
 #include <sstream>
+#include "androidUtil.h"
 
 JavaVM* vm_ = nullptr;
 
@@ -11,9 +12,19 @@ public:
     NotReadyException(): std::runtime_error("JVM runtime not ready!") { }
 };
 
-class JniEnvLoadFailureException : public std::runtime_error {
+class JniException : public std::runtime_error {
 public:
-    explicit JniEnvLoadFailureException(const std::string& message): std::runtime_error(message) { }
+    explicit JniException(const std::string& message): std::runtime_error(message) { }
+};
+
+class JniEnvLoadFailureException : public JniException {
+public:
+    explicit JniEnvLoadFailureException(const std::string& message): JniException(message) { }
+};
+
+class JniEnvCleanupFailureException : public JniException {
+public:
+    explicit JniEnvCleanupFailureException(const std::string& message): JniException(message) { }
 };
 
 class JniItemNotFoundException : public std::logic_error {
@@ -36,9 +47,9 @@ JavaVM* getJvm() {
 }
 
 /// Returns a pointer to the current JNI environment. Throws on failure.
-JNIEnv* getJniEnv() {
+JNIEnv* attachCurrentThread() {
     JNIEnv* env = nullptr;
-    jint result = getJvm()->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6);
+    jint result = getJvm()->AttachCurrentThread(&env, nullptr);
     if (result != JNI_OK) {
         std::stringstream stream;
         stream << "JVM GetEnv failed. Code: " << result;
@@ -47,7 +58,22 @@ JNIEnv* getJniEnv() {
     return env;
 }
 
-JniWrapper::JniWrapper() = default;
+JniWrapper::JniWrapper() {
+    env_ = runAndWait<JNIEnv*>([] {
+        return attachCurrentThread();
+    });
+}
+
+JniWrapper::~JniWrapper() {
+    runAndWait<void>([] {
+        jint code = getJvm()->DetachCurrentThread();
+        if (code != JNI_OK) {
+            std::stringstream stream;
+            stream << "JVM DetachCurrentThread failed. Code: " << code;
+            throw JniEnvCleanupFailureException(stream.str());
+        }
+    });
+}
 
 void JniWrapper::setJvm(JavaVM *vm) {
     vm_ = vm;
@@ -57,14 +83,13 @@ void JniWrapper::clearJvm() {
     vm_ = nullptr;
 }
 
-JNIEnv& JniWrapper::env() {
-    return *getJniEnv();
-}
 
-jclass JniWrapper::findClass(const std::string &path) {
-    auto env = getJniEnv();
-    auto targetClass = env->FindClass(path.c_str());
+jclass JniInterface::findClass(const std::string &path) {
+    LOGD("Searching for class %s...", path.c_str());
+
+    auto targetClass = env_->FindClass(path.c_str());
     if (targetClass == NULL) {
+        LOGD("failed to find class %s", path.c_str());
         std::stringstream message;
         message << "Not found (class): " << path;
         throw JniItemNotFoundException(message.str());
@@ -72,25 +97,19 @@ jclass JniWrapper::findClass(const std::string &path) {
     return targetClass;
 }
 
-jmethodID JniWrapper::findStaticMethodId(jclass target, const std::string& path, const std::string& signature) {
-    auto env = getJniEnv();
-    auto methodId = env->GetStaticMethodID(target, path.c_str(), signature.c_str());
+jmethodID JniInterface::getStaticMethodId(jclass target, const std::string& path, const std::string& signature) {
+    auto methodId = env_->GetStaticMethodID(target, path.c_str(), signature.c_str());
     if (methodId == NULL) {
         std::stringstream message;
-        message << "Not found: Static method on class: " << path;
+        message << "Not found: Static method on class: " << path << " with signature " << signature;
         throw JniItemNotFoundException(message.str());
     }
     return methodId;
 }
 
-jobject JniWrapper::callStaticObjectMethod(jclass target, jmethodID id) {
-    return getJniEnv()->CallStaticObjectMethod(target, id);
-}
-
-jmethodID JniWrapper::findMethodId(jclass target, const std::string &path,
+jmethodID JniInterface::getMethodId(jclass target, const std::string &path,
                                    const std::string &methodSignature) {
-    auto env = getJniEnv();
-    auto methodId = env->GetMethodID(target, path.c_str(), methodSignature.c_str());
+    auto methodId = env_->GetMethodID(target, path.c_str(), methodSignature.c_str());
     if (methodId == NULL) {
         std::stringstream message;
         message << "Not found: Method on class: " << path;
@@ -99,30 +118,35 @@ jmethodID JniWrapper::findMethodId(jclass target, const std::string &path,
     return methodId;
 }
 
-void JniWrapper::callVoidMethod(jobject target, jmethodID id) {
-    return getJniEnv()->CallVoidMethod(target, id);
-}
-
-jobject JniWrapper::newGlobalRef(jobject target) {
+jobject JniInterface::newGlobalRef(jobject target) {
     if (target == nullptr) {
         throw JniNullPointerException("Attempted to create a global ref from a nullptr local ref");
     }
 
-    return getJniEnv()->NewGlobalRef(target);
+    return env_->NewGlobalRef(target);
 }
 
-void JniWrapper::deleteGlobalRef(jobject target) {
+jclass JniInterface::newGlobalRef(jclass target) {
+    // A jclass is a subtype of jobject. See https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/types.html.
+    return static_cast<jclass>(env_->NewGlobalRef(static_cast<jobject>(target)));
+}
+
+void JniInterface::deleteGlobalRef(jobject target) {
     if (target == nullptr) {
         throw JniNullPointerException("Attempted to delete a nullptr global ref");
     }
 
-    getJniEnv()->DeleteGlobalRef(target);
+    env_->DeleteGlobalRef(target);
 }
 
-void JniWrapper::deleteLocalRef(jobject target) {
+void JniInterface::deleteLocalRef(jobject target) {
     if (target == nullptr) {
         throw JniNullPointerException("Attempted to delete a nullptr local ref");
     }
 
-    getJniEnv()->DeleteLocalRef(target);
+    env_->DeleteLocalRef(target);
+}
+
+JNIEnv* JniInterface::raw() {
+    return env_;
 }

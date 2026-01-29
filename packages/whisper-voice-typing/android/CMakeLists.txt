@@ -11,9 +11,12 @@ add_library(
         src/main/cpp/cpp-adapter.cpp
         src/main/cpp/AudioRecorderJni.cpp
         src/main/cpp/JniWrapper.cpp
+        ../cpp/utils/testing.cpp
         ../cpp/utils/findLongestSilence_test.cpp
         ../cpp/utils/findLongestSilence.cpp
         ../cpp/utils/WhisperSession.cpp
+        ../cpp/utils/SingleThread.cpp
+        ../cpp/utils/SingleThread_test.cpp
         ../cpp/HybridWhisperSession.cpp
         ../cpp/HybridWhisperVoiceTyping.cpp
 )

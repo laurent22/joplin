@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <jni.h>
-#include "JniWrapper.h"
 
 class IAudioRecorder {
 public:

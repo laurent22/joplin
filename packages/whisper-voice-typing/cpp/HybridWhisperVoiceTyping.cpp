@@ -2,6 +2,7 @@
 #include "HybridWhisperVoiceTyping.hpp"
 #include "HybridWhisperSession.hpp"
 #include "findLongestSilence_test.hpp"
+#include "SingleThread_test.hpp"
 
 using namespace margelo::nitro::whispervoicetyping;
 
@@ -23,5 +24,6 @@ std::shared_ptr<
 std::shared_ptr<Promise<void>> HybridWhisperVoiceTyping::test() {
     return Promise<void>::async([=] () -> void {
         findLongestSilence_test();
+        SingleThread_test();
     });
 }

@@ -1,6 +1,6 @@
 #include "HybridWhisperSession.hpp"
 #ifndef __APPLE__
-#include "AudioRecorderJni.h"
+#include "AudioRecorderJni.hpp"
 #endif
 
 using namespace margelo::nitro::whispervoicetyping;
@@ -41,7 +41,7 @@ std::shared_ptr<Promise<std::string>> HybridWhisperSession::convertNext(double s
     return Promise<std::string>::async([state, seconds] () -> std::string {
         std::lock_guard<std::mutex> lock { state->mutex_ };
 
-        // Wait until at least 2s of data are available:
+        // Wait for the data to become available...
         state->recorder_->waitForData(seconds);
         // Convert the data:
         state->session_.addAudioFromRecorder(*state->recorder_);
