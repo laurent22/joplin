@@ -450,6 +450,18 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 				},
 			};
 
+			// reverse_proxyを使用していてhttpsの場合、ルート証明書を追加
+			if (useReverseProxy && parsedUrl.protocol === 'https:') {
+				try {
+					const certPath = '../../server_cert.pem';
+					if (fs.existsSync(certPath)) {
+						requestOptions.ca = fs.readFileSync(certPath);
+					}
+				} catch (error) {
+					console.warn('Could not load server certificate:', error);
+				}
+			}
+
 			const req = protocol.request(requestOptions, (res) => {
 				const chunks = [];
 				res.on('data', (chunk) => chunks.push(chunk));
@@ -623,6 +635,18 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 					'Content-Length': Buffer.byteLength(requestBodyString),
 				},
 			};
+
+			// reverse_proxyを使用していてhttpsの場合、ルート証明書を追加
+			if (parsedProxyUrl.protocol === 'https:') {
+				try {
+					const certPath = '../../server_cert.pem';
+					if (fs.existsSync(certPath)) {
+						requestOptions.ca = fs.readFileSync(certPath);
+					}
+				} catch (error) {
+					console.warn('Could not load server certificate:', error);
+				}
+			}
 		}
 
 
