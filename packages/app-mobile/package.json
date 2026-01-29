@@ -28,7 +28,7 @@
     "@joplin/react-native-saf-x": "~3.6",
     "@joplin/renderer": "~3.6",
     "@joplin/utils": "~3.6",
-    "@joplin/whisper-voice-typing": "~0.0",
+    "@joplin/whisper-voice-typing": "~3.6",
     "@js-draw/material-icons": "1.33.0",
     "@react-native-clipboard/clipboard": "1.16.3",
     "@react-native-community/datetimepicker": "8.4.7",

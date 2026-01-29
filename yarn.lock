@@ -10766,7 +10766,7 @@ __metadata:
     "@joplin/turndown": "npm:~4.0.80"
     "@joplin/turndown-plugin-gfm": "npm:~1.0.62"
     "@joplin/utils": "npm:~3.6"
-    "@joplin/whisper-voice-typing": "npm:~0.0"
+    "@joplin/whisper-voice-typing": "npm:~3.6"
     "@js-draw/material-icons": "npm:1.33.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.0"
     "@react-native-clipboard/clipboard": "npm:1.16.3"
@@ -11470,7 +11470,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/whisper-voice-typing@npm:~0.0, @joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing":
+"@joplin/whisper-voice-typing@npm:~3.6, @joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing":
   version: 0.0.0-use.local
   resolution: "@joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing"
   dependencies:
