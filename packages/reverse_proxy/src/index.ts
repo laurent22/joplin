@@ -2,6 +2,9 @@ import express, { Request, Response } from 'express';
 import fetch from 'node-fetch';
 import followRedirects from 'follow-redirects';
 import crypto from 'crypto';
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
 import { HttpUtil, WrappedRequest } from './http_util.js';
 
 const { http: httpFollowRedirects, https: httpsFollowRedirects } = followRedirects;
@@ -13,6 +16,9 @@ app.use(express.json({ limit: "200mb" }));
 app.use(express.urlencoded({ limit: "200mb", extended: true }));
 
 const PORT = process.env.PORT || 7777;
+const USE_HTTPS = process.env.USE_HTTPS === 'true';
+const CERT_PATH = process.env.CERT_PATH || '../../server_cert.pem';
+const KEY_PATH = process.env.KEY_PATH || '../../server_key.pem';
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -133,7 +139,28 @@ app.use((req: Request, res: Response) => {
 });
 
 // Start server
-app.listen(Number(PORT), "0.0.0.0", () => {
-	console.log(`Reverse proxy server running on http://localhost:${PORT}`);
-	console.log('Available endpoint: GET /image');
-});
+if (USE_HTTPS) {
+	// HTTPS mode
+	try {
+		const httpsOptions = {
+			key: fs.readFileSync(KEY_PATH),
+			cert: fs.readFileSync(CERT_PATH),
+		};
+
+		https.createServer(httpsOptions, app).listen(Number(PORT), "0.0.0.0", () => {
+			console.log(`Reverse proxy server running on https://localhost:${PORT} (HTTPS)`);
+			console.log('Available endpoints: GET /image, GET /image2');
+		});
+	} catch (error) {
+		console.error('Failed to start HTTPS server. Please check certificate files:', error);
+		console.error(`CERT_PATH: ${CERT_PATH}`);
+		console.error(`KEY_PATH: ${KEY_PATH}`);
+		process.exit(1);
+	}
+} else {
+	// HTTP mode
+	http.createServer(app).listen(Number(PORT), "0.0.0.0", () => {
+		console.log(`Reverse proxy server running on http://localhost:${PORT} (HTTP)`);
+		console.log('Available endpoints: GET /image, GET /image2');
+	});
+}
