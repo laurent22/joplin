@@ -6,6 +6,7 @@ import { dirname, join } from 'path';
 import { openSession, test as testWhisper, WhisperSession } from '@joplin/whisper-voice-typing';
 import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
 import { languageCodeOnly, stringByLocale } from '@joplin/lib/locale';
+import { Platform } from 'react-native';
 
 const logger = Logger.create('voiceTyping/whisper');
 
@@ -211,7 +212,7 @@ const modelLocalFilepath = () => {
 };
 
 const whisper: VoiceTypingProvider = {
-	supported: () => Setting.value('buildFlag.voiceTypingEnabled'),
+	supported: () => Platform.OS === 'android' && Setting.value('buildFlag.voiceTypingEnabled'),
 	modelLocalFilepath: modelLocalFilepath,
 	getDownloadUrl: (locale) => {
 		const lang = languageCodeOnly(locale).toLowerCase();
