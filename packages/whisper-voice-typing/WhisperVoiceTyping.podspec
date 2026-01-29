@@ -20,7 +20,8 @@ Pod::Spec.new do |s|
     # Autolinking/Registration (Objective-C++)
     "ios/**/*.{m,mm}",
     # Implementation (C++ objects)
-    "cpp/**/*.{hpp,cpp}",
+    # DISABLED for now:
+    # "cpp/**/*.{hpp,cpp}",
   ]
 
   # DISABLED: Currently, this package lacks iOS support
