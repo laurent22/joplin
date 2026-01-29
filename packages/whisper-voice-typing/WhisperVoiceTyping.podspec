@@ -2,6 +2,7 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
+
 Pod::Spec.new do |s|
   s.name         = "WhisperVoiceTyping"
   s.version      = package["version"]
@@ -22,10 +23,12 @@ Pod::Spec.new do |s|
     "cpp/**/*.{hpp,cpp}",
   ]
 
-  load 'nitrogen/generated/ios/WhisperVoiceTyping+autolinking.rb'
-  add_nitrogen_files(s)
+  # DISABLED: Currently, this package lacks iOS support
+  #load 'nitrogen/generated/ios/WhisperVoiceTyping+autolinking.rb'
+  #add_nitrogen_files(s)
 
   s.dependency 'React-jsi'
   s.dependency 'React-callinvoker'
   install_modules_dependencies(s)
 end
+

@@ -217,7 +217,9 @@ WhisperSession::transcribeNextChunk() {
 
 
 void WhisperSession::addAudioFromRecorder(IAudioRecorder& recorder) {
+	LOGD("Pulling audio data. Initial buffer size: %d...", audioBuffer_.size());
 	recorder.pullAvailable(audioBuffer_);
+	LOGD("...final buffer size: %d", audioBuffer_.size());
 }
 
 std::string WhisperSession::transcribeAll() {

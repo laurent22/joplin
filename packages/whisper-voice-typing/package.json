@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "description": "Whisper.cpp bindings for React Native!",
+  "author": "Joplin team",
   "main": "lib/index",
   "module": "lib/index",
   "types": "lib/index.d.ts",
@@ -43,6 +44,7 @@
     "type": "git",
     "url": "git+https://github.com/laurent22/joplin.git"
   },
+  "homepage": "https://github.com/laurent22/joplin",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/react": "19.2.10",

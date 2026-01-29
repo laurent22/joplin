@@ -24,7 +24,7 @@ prepare_react_native_project!
 target 'Joplin' do
   use_expo_modules!
 
-  if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
+  if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] != '0'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
   else
     config_command = [

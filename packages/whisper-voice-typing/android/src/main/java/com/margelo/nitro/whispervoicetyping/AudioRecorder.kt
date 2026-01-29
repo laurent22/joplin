@@ -55,17 +55,13 @@ class AudioRecorder (
 	// Discards the first [samples] samples from the start of the buffer. Conceptually, this
 	// advances the buffer's start point.
 	private fun advanceStartBySamples(samples: Int) {
-		val samplesClamped = min(samples, maxBufferSize)
-		val remainingBuffer = buffer.sliceArray(samplesClamped until maxBufferSize)
+        val samplesClamped = min(samples, maxBufferSize)
+        val remainingBuffer = buffer.sliceArray(samplesClamped until maxBufferSize)
 
-		buffer.fill(0f, samplesClamped, maxBufferSize)
-		remainingBuffer.copyInto(buffer, 0)
-		bufferWriteOffset = max(bufferWriteOffset - samplesClamped, 0)
-	}
-
-	fun dropFirstSeconds(seconds: Double) {
-		advanceStartBySamples((seconds * sampleRate).toInt())
-	}
+        buffer.fill(0f, samplesClamped, maxBufferSize)
+        remainingBuffer.copyInto(buffer, 0)
+        bufferWriteOffset = max(bufferWriteOffset - samplesClamped, 0)
+    }
 
 	fun start() {
 		recorder.startRecording()
