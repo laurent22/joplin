@@ -2,6 +2,13 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
+# Currently disabled on iOS.
+# To enable,
+# 1. Uncomment the code after "DISABLED:"
+# 2. Run vencor/whisper.cpp/build-xcframework.sh
+# 3. Add vendor/whisper.cpp as a dependency?
+# 4. Implement cpp/IAudioRecorder.hpp for iOS.
+
 
 Pod::Spec.new do |s|
   s.name         = "WhisperVoiceTyping"
@@ -20,8 +27,8 @@ Pod::Spec.new do |s|
     # Autolinking/Registration (Objective-C++)
     "ios/**/*.{m,mm}",
     # Implementation (C++ objects)
-    # DISABLED for now:
-    # "cpp/**/*.{hpp,cpp}",
+    # DISABLED: for now:
+    #"cpp/**/*.{hpp,cpp}",
   ]
 
   # DISABLED: Currently, this package lacks iOS support
