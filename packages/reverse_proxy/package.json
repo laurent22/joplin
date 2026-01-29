@@ -7,9 +7,10 @@
   "scripts": {
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "build": "npm run tsc",
+    "encrypt_https_server": "USE_HTTPS=true ENABLE_ENCRYPTION=true node --loader ts-node/esm src/index.ts",
     "encrypt_server": "ENABLE_ENCRYPTION=true node --loader ts-node/esm src/index.ts",
     "nonencrypt_server": "node --loader ts-node/esm src/index.ts",
-    "start": "npm run encrypt_server",
+    "start": "npm run encrypt_https_server",
     "dev": "npm run encrypt_server"
   },
   "dependencies": {
