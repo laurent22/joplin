@@ -134,17 +134,10 @@ android {
             matchingFallbacks = ['release']
         }
     }
-
-    buildFeatures {
-        prefab true // For Audio through "oboe"
-    }
 }
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:hermes-android")
-
-    // Audio from C++
-    implementation 'com.google.oboe:oboe:1.10.0'
 }
