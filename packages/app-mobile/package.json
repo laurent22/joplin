@@ -21,7 +21,6 @@
     "postinstall": "jetify"
   },
   "dependencies": {
-    "@bam.tech/react-native-image-resizer": "patch:@bam.tech/react-native-image-resizer@npm%3A3.0.11#~/.yarn/patches/@bam.tech-react-native-image-resizer-npm-3.0.11-33fd6eed5e.patch",
     "@dr.pogodin/react-native-fs": "2.36.2",
     "@joplin/editor": "~3.5",
     "@joplin/lib": "~3.5",
@@ -52,6 +51,7 @@
     "expo": "54.0.31",
     "expo-av": "16.0.8",
     "expo-camera": "17.0.10",
+    "expo-image-manipulator": "14.0.8",
     "expo-local-authentication": "17.0.8",
     "js-draw": "1.33.0",
     "lodash": "4.17.21",

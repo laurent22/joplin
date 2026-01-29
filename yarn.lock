@@ -6854,26 +6854,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bam.tech/react-native-image-resizer@npm:3.0.11":
-  version: 3.0.11
-  resolution: "@bam.tech/react-native-image-resizer@npm:3.0.11"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/b003cb04307e52576691254e066ea8e74fa628095e387b00185c9caebfbbabd01a15a39034d28d18ec5167e4dde9a1afae2a4530e579537e957fa4f78ab439bd
-  languageName: node
-  linkType: hard
-
-"@bam.tech/react-native-image-resizer@patch:@bam.tech/react-native-image-resizer@npm%3A3.0.11#~/.yarn/patches/@bam.tech-react-native-image-resizer-npm-3.0.11-33fd6eed5e.patch":
-  version: 3.0.11
-  resolution: "@bam.tech/react-native-image-resizer@patch:@bam.tech/react-native-image-resizer@npm%3A3.0.11#~/.yarn/patches/@bam.tech-react-native-image-resizer-npm-3.0.11-33fd6eed5e.patch::version=3.0.11&hash=4277e5"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/c8d3a68a336daeae2a02ea521e4f2bd1cfb40c8dbcfbf94b1a963778cdc26558529497e98f96c1b5798d1fdc289f0ba37235b14b9dfc53055a6f2f27c310fe30
-  languageName: node
-  linkType: hard
-
 "@bcoe/v8-coverage@npm:^0.2.3":
   version: 0.2.3
   resolution: "@bcoe/v8-coverage@npm:0.2.3"
@@ -10762,7 +10742,6 @@ __metadata:
     "@babel/plugin-transform-export-namespace-from": "npm:7.27.1"
     "@babel/preset-env": "npm:7.25.3"
     "@babel/runtime": "npm:7.25.0"
-    "@bam.tech/react-native-image-resizer": "patch:@bam.tech/react-native-image-resizer@npm%3A3.0.11#~/.yarn/patches/@bam.tech-react-native-image-resizer-npm-3.0.11-33fd6eed5e.patch"
     "@dr.pogodin/react-native-fs": "npm:2.36.2"
     "@joplin/editor": "npm:~3.5"
     "@joplin/lib": "npm:~3.5"
@@ -10817,6 +10796,7 @@ __metadata:
     expo: "npm:54.0.31"
     expo-av: "npm:16.0.8"
     expo-camera: "npm:17.0.10"
+    expo-image-manipulator: "npm:14.0.8"
     expo-local-authentication: "npm:17.0.8"
     fast-deep-equal: "npm:3.1.3"
     fs-extra: "npm:11.3.2"
@@ -28701,6 +28681,26 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/3fb7d87c75c818c3c8503d43f9e13b3d237f2e128bcb59e09b8fdad3eaf1aece2ab89030d5cffbeb5b172d7b030df627e4319b0fdd97e6f6d57e27bbdb520f22
+  languageName: node
+  linkType: hard
+
+"expo-image-loader@npm:~6.0.0":
+  version: 6.0.0
+  resolution: "expo-image-loader@npm:6.0.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/896b4df1208ec071888acac0a8673ee4a67afcc8e06061de26fd189feed3369959ab9254314d51f303bcfc8f6289fd04ca9bec616007333d3dcb2e6d0618a2fe
+  languageName: node
+  linkType: hard
+
+"expo-image-manipulator@npm:14.0.8":
+  version: 14.0.8
+  resolution: "expo-image-manipulator@npm:14.0.8"
+  dependencies:
+    expo-image-loader: "npm:~6.0.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/655c8d1f8420df0d70357f68a92769eee5c8ee8691fbd3aede0e3f2645fe03b61ed257b0a7944e588f70ebd46582cc134947f74c80af9aed53b15a305957092a
   languageName: node
   linkType: hard
 
