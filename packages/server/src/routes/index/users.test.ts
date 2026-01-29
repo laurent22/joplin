@@ -6,6 +6,7 @@ import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
+import config from '../../config';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
@@ -93,7 +94,7 @@ describe('index/users', () => {
 
 		const userModel = models().user();
 
-		await patchUser(session.id, { id: user.id, full_name: 'new name' });
+		await patchUser(session.id, { id: user.id, full_name: 'new name' }, '/users/me');
 		const modUser: User = await userModel.load(user.id);
 		expect(modUser.full_name).toBe('new name');
 	});
@@ -290,7 +291,7 @@ describe('index/users', () => {
 			max_total_item_size: 5555,
 			can_share_folder: 1,
 			can_upload: 0,
-		});
+		}, '/users/me');
 		const reloadedUser1 = await models().user().load(user1.id);
 		expect(reloadedUser1.is_admin).toBe(0);
 		expect(reloadedUser1.max_item_size).toBe(null);
@@ -316,5 +317,62 @@ describe('index/users', () => {
 		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, email: 'cantdothateither@example.com' }), ErrorForbidden.httpCode);
 	});
 
+	test('should delete all sessions when changing the password but the current one', async () => {
+		const { user, session, password } = await createUserAndSession(1, true);
 
+		await models().session().authenticate(user.email, password, '');
+		await models().session().authenticate(user.email, password, '');
+
+		expect(await models().session().count()).toBe(3);
+
+		const newPassword = uuidgen();
+		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword });
+
+		const sessions = await models().session().all();
+		expect(sessions.length).toBe(1);
+		expect(sessions[0].id).toBe(session.id);
+	});
+
+	test('should delete all applications when changing the password', async () => {
+		const { user, session } = await createUserAndSession(1, true);
+
+		await models().application().createPreLoginRecord('random-string', '');
+		await models().application().onAuthorizeUse('random-string', user.id);
+
+		await models().application().createPreLoginRecord('random-string2', '');
+		await models().application().onAuthorizeUse('random-string2', user.id);
+
+		expect(await models().application().count()).toBe(2);
+
+		const newPassword = uuidgen();
+		await patchUser(session.id, { id: user.id, password: newPassword, password2: newPassword });
+
+		expect(await models().application().count()).toBe(0);
+	});
+
+	test.each([
+		{ isExternal: true, expectedDisabled: true },
+		{ isExternal: false, expectedDisabled: false },
+	])('should disable password fields for external users, enable for internal users (case: %j)', async ({
+		isExternal, expectedDisabled,
+	}) => {
+		const { user, session } = await createUserAndSession();
+
+		config().SAML_ENABLED = true;
+		try {
+			await models().user().save({
+				id: user.id,
+				is_external: isExternal ? 1 : 0,
+			}, { skipValidation: true });
+
+			const userHtml = await getUserHtml(session.id, user.id);
+			const doc = parseHtml(userHtml);
+
+			expect(
+				doc.querySelector<HTMLInputElement>('input[name=password]').disabled,
+			).toBe(expectedDisabled);
+		} finally {
+			config().SAML_ENABLED = false;
+		}
+	});
 });

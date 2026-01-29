@@ -4,6 +4,10 @@ import { joplinCommandToTinyMceCommands } from './NoteBody/TinyMCE/utils/joplinC
 
 const workWithHtmlNotes = [
 	'attachFile',
+	'textCopy',
+	'textCut',
+	'textPaste',
+	'textSelectAll',
 ];
 
 export const enabledCondition = (commandName: string) => {

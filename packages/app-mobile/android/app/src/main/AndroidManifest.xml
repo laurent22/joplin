@@ -47,6 +47,9 @@
 		android:usesCleartextTraffic="${usesCleartextTraffic}"
 		android:supportsRtl="true">
 
+		<!-- Enable profiling in release builds (Android 10+) -->
+		<profileable android:shell="true" />
+
 		<!--
 		2018-12-16: Changed android:launchMode from "singleInstance" to "singleTop" for Firebase notification
 					Previously singleInstance was necessary to prevent multiple instance of the RN app from running at the same time, but maybe no longer needed.

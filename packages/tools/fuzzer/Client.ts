@@ -1,5 +1,5 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
-import { ActionableClient, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ShareOptions } from './types';
+import { ActionableClient, assertIsNote, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ResourceData, ShareOptions } from './types';
 import { join } from 'path';
 import { mkdir, remove } from 'fs-extra';
 import getStringProperty from './utils/getStringProperty';
@@ -14,7 +14,6 @@ import getNumberProperty from './utils/getNumberProperty';
 import retryWithCount from './utils/retryWithCount';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import { formatMsToDateTimeLocal, msleep, Second } from '@joplin/utils/time';
-import shim from '@joplin/lib/shim';
 import { spawn } from 'child_process';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { createInterface } from 'readline/promises';
@@ -22,6 +21,10 @@ import Stream = require('stream');
 import ProgressBar from './utils/ProgressBar';
 import logDiffDebug from './utils/logDiffDebug';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import diffSortedStringArrays from './utils/diffSortedStringArrays';
+import extractResourceIds from './utils/extractResourceIds';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import hangingIndent from './utils/hangingIndent';
 
 const logger = Logger.create('Client');
 
@@ -98,6 +101,18 @@ interface CreateOrUpdateOptions {
 	quiet?: boolean;
 }
 
+interface CreateRandomItemOptions extends CreateOrUpdateOptions {
+	parentId: ItemId;
+	id?: ItemId;
+	quiet?: boolean;
+}
+
+class ApiResponseError extends Error {
+	public constructor(public readonly code: number, message: string) {
+		super(message);
+	}
+}
+
 class Client implements ActionableClient {
 	public readonly email: string;
 
@@ -115,7 +130,7 @@ class Client implements ActionableClient {
 	}
 
 	private static async fromAccount(account: AccountData, actionTracker: ActionTracker, context: FuzzContext) {
-		const id = uuid.create();
+		const id = context.randomId();
 		const profileDirectory = join(context.baseDir, id);
 		await mkdir(profileDirectory);
 
@@ -235,6 +250,14 @@ class Client implements ActionableClient {
 
 	private closed_ = false;
 	public async close() {
+		if (this.closed_) {
+			// This can happen if:
+			// - Multiple cleanup callbacks are registered for the client.
+			// - The client was manually closed, but also has a cleanup callback registered.
+			logger.info('Client', this.clientLabel_, 'already closed. Skipping.');
+			return;
+		}
+
 		assert.ok(!this.closed_, 'should not be closed');
 
 		await this.account_.onClientDisconnected();
@@ -251,6 +274,7 @@ class Client implements ActionableClient {
 
 		this.childProcess_.close();
 		this.closed_ = true;
+		logger.info('Closed client ', this.email);
 	}
 
 	public onClose(listener: OnCloseListener) {
@@ -313,7 +337,8 @@ class Client implements ActionableClient {
 			this.bufferedChildProcessStderr_ = [];
 			process.stdout.write('CLI debug session. Enter a blank line or "exit" to exit.\n');
 			process.stdout.write('To review a transcript of all interactions with this client,\n');
-			process.stdout.write('enter "[transcript]".\n\n');
+			process.stdout.write('enter "[transcript]". To log information about a particular item\n');
+			process.stdout.write('enter "[item:...id here...]".\n\n');
 			process.stdout.write(cliProcessPromptString);
 
 			const isExitRequest = (input: string) => {
@@ -328,6 +353,10 @@ class Client implements ActionableClient {
 				lastInput = await readline.question('');
 				if (lastInput === '[transcript]') {
 					process.stdout.write(`\n\n# Transcript\n\n${this.getTranscript()}\n\n# End transcript\n\n`);
+				} else if (lastInput.startsWith('[item:') && lastInput.endsWith(']')) {
+					let id = lastInput.substring('[item:'.length);
+					id = id.substring(0, id.length - 1);
+					this.globalActionTracker_.printActionLog(id);
 				} else if (!isExitRequest(lastInput)) {
 					this.childProcess_.writeStdin(`${lastInput}\n`);
 				}
@@ -375,22 +404,24 @@ class Client implements ActionableClient {
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
 	private async execApiCommand_(method: 'GET', route: string): Promise<string>;
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
-	private async execApiCommand_(method: 'POST'|'PUT', route: string, data: Json): Promise<string>;
+	private async execApiCommand_(method: 'POST'|'PUT', route: string, data: Json|FormData): Promise<string>;
 	// eslint-disable-next-line no-dupe-class-members -- This is not a duplicate class member
-	private async execApiCommand_(method: HttpMethod, route: string, data: Json|null = null): Promise<string> {
+	private async execApiCommand_(method: HttpMethod, route: string, data: Json|FormData|null = null): Promise<string> {
 		route = route.replace(/^[/]/, '');
 		const url = new URL(`http://localhost:${this.apiData_.port}/${route}`);
 		url.searchParams.append('token', this.apiData_.token);
 
 		this.transcript_.push(`\n[[${method} ${url}; body: ${JSON.stringify(data)}]]\n`);
 
-		const response = await shim.fetch(url.toString(), {
+		const response = await fetch(url.toString(), {
 			method,
-			...(data ? { body: JSON.stringify(data) } : undefined),
+			...(data ? {
+				body: data instanceof FormData ? data : JSON.stringify(data),
+			} : undefined),
 		});
 
 		if (!response.ok) {
-			throw new Error(`Request to ${route} failed with error: ${await response.text()}`);
+			throw new ApiResponseError(response.status, `Request to ${route} failed with error: ${await response.text()}`);
 		}
 
 		return await response.text();
@@ -455,11 +486,114 @@ class Client implements ActionableClient {
 			// Certain sync failures self-resolve after a background task is allowed to
 			// run. Delay:
 			delayOnFailure: retry => retry * Second * 2,
-			onFail: async (error) => {
+			onFail: async ({ error, willRetry }) => {
 				logger.debug('Sync error: ', error);
-				logger.info('Sync failed. Retrying...');
+				if (willRetry) {
+					logger.info('Sync failed. Retrying...');
+				}
 			},
 		});
+
+		await this.handleResourceIdChanges_();
+	}
+
+	// Joplin occasionally changes the ID of a resource. Handle this here.
+	// Assumes that the client is up-to-date with the server.
+	private async handleResourceIdChanges_() {
+		type UntrackedAttachment = {
+			id: ItemId;
+			linkedNotes: Set<ItemId>;
+		};
+		const collectUntrackedAttachments = async () => {
+			// Maps from untracked item IDs to the notes that contain that item.
+			const untrackedItemsById = new Map<ItemId, UntrackedAttachment>();
+			const noteActualStates = new Map<ItemId, NoteData>();
+			for (const note of await this.listNotes()) {
+				// Skip notes that are not yet in the expected state. It's possible
+				// that these notes still need to be synced by another client. If so,
+				// attachments in these notes will be processed later:
+				if (!this.tracker_.itemExists(note.id)) continue;
+
+				for (const itemId of extractResourceIds(note.body)) {
+					if (this.tracker_.itemExists(itemId)) continue;
+
+					const noteIds = untrackedItemsById.get(itemId);
+					if (noteIds) {
+						noteIds.linkedNotes.add(note.id);
+					} else {
+						untrackedItemsById.set(itemId, {
+							id: itemId,
+							linkedNotes: new Set([note.id]),
+						});
+					}
+					noteActualStates.set(note.id, note);
+				}
+			}
+
+			return { untrackedItemsById, noteActualStates };
+		};
+
+		const fetchResourceData = async (resourceId: ItemId) => {
+			try {
+				const resourceJson = JSON.parse(
+					await this.execApiCommand_('GET', `/resources/${resourceId}?fields=id,title,mime`),
+				);
+				const resourceData: ResourceData = {
+					id: getStringProperty(resourceJson, 'id'),
+					mimeType: getStringProperty(resourceJson, 'mime'),
+					title: getStringProperty(resourceJson, 'title'),
+				};
+				return resourceData;
+			} catch (error) {
+				if (error instanceof ApiResponseError && error.code === 404) {
+					return null;
+				} else {
+					throw error;
+				}
+			}
+		};
+
+		const removeResourceIds = (text: string) => {
+			for (const id of extractResourceIds(text)) {
+				text = text.split(id).join('');
+			}
+			return text;
+		};
+
+		const textsMatchIgnoringResources = (actual: string, expected: string) => {
+			return removeResourceIds(expected) === removeResourceIds(actual);
+		};
+
+		const { untrackedItemsById, noteActualStates } = await collectUntrackedAttachments();
+
+		for (const { id: resourceId, linkedNotes } of untrackedItemsById.values()) {
+			const resourceData = await fetchResourceData(resourceId);
+			if (!resourceData) {
+				logger.warn('Resource not found:', resourceId);
+				continue;
+			}
+
+			await this.createResource(resourceData);
+			for (const id of linkedNotes) {
+				const expected = this.tracker_.itemById(id);
+				assertIsNote(expected);
+				const actual = noteActualStates.get(id);
+				assertIsNote(actual);
+
+				if (textsMatchIgnoringResources(actual.body, expected.body)) {
+					const firstMatchIndex = actual.body.indexOf(resourceId);
+					// This relies on the fact that **all** resource IDs are length-32 strings:
+					const originalId = expected.body.substring(firstMatchIndex, firstMatchIndex + 32);
+
+					logger.info('Resource rewrite: Updating note', id, ': Replacing', originalId, 'with', resourceId);
+
+					await this.tracker_.updateNote({
+						...expected,
+						body: expected.body.split(originalId).join(resourceId),
+					});
+				}
+			}
+		}
 	}
 
 	public async createOrUpdateMany(actionCount: number) {
@@ -471,11 +605,11 @@ class Client implements ActionableClient {
 				let parentId = (await this.randomFolder({ includeReadOnly: false }))?.id;
 				const createSubfolder = this.context_.randInt(0, 100) < 10;
 				if (!parentId || createSubfolder) {
-					const folder = await this.createRandomFolder(parentId, { quiet: true });
+					const folder = await this.createRandomFolder({ parentId, quiet: true });
 					parentId = folder.id;
 				}
 
-				await this.createRandomNote(parentId, { quiet: true });
+				await this.createRandomNote({ parentId, quiet: true });
 			},
 			update: async (targetNote: NoteData) => {
 				const keep = targetNote.body.substring(
@@ -513,16 +647,15 @@ class Client implements ActionableClient {
 		bar.complete();
 	}
 
-	public async createRandomFolder(parentId: ItemId, options: CreateOrUpdateOptions) {
+	public async createRandomFolder({ quiet, parentId, id }: CreateRandomItemOptions) {
 		const titleLength = this.context_.randInt(1, 128);
-		const folderId = uuid.create();
 		const folder = {
 			parentId: parentId,
-			id: folderId,
+			id: id ?? this.context_.randomId(),
 			title: this.context_.randomString(titleLength).replace(/\n/g, ' '),
 		};
 
-		await this.createFolder(folder, options);
+		await this.createFolder(folder, { quiet });
 
 		return folder;
 	}
@@ -582,11 +715,14 @@ class Client implements ActionableClient {
 				logDiffDebug(lastActualNote.title, expected.title);
 				logDiffDebug(lastActualNote.body, expected.body);
 			}
+			// Log all transactions associated with the item
+			this.globalActionTracker_.printActionLog(expected.id);
+
 			throw error;
 		}
 	}
 
-	public async createRandomNote(parentId: string, { quiet = false }: CreateOrUpdateOptions = { }) {
+	public async createRandomNote({ parentId, id, quiet = false }: CreateRandomItemOptions) {
 		const titleLength = this.context_.randInt(0, 256);
 		const bodyLength = this.context_.randInt(0, 2000);
 		await this.createNote({
@@ -594,7 +730,7 @@ class Client implements ActionableClient {
 			parentId,
 			title: this.context_.randomString(titleLength),
 			body: this.context_.randomString(bodyLength),
-			id: uuid.create(),
+			id: id ?? this.context_.randomId(),
 		}, { quiet });
 	}
 
@@ -635,6 +771,52 @@ class Client implements ActionableClient {
 		await this.tracker_.deleteNote(id);
 
 		await this.execCliCommand_('rmnote', '--permanent', '--force', id);
+	}
+
+	public async attachResource(note: NoteData, resource: ResourceData): Promise<NoteData> {
+		logger.info('Attach resource', resource.id, 'to note', note.id);
+		const updatedNote = await this.tracker_.attachResource(note, resource);
+
+		await this.execApiCommand_('PUT', `/notes/${encodeURIComponent(note.id)}`, {
+			title: updatedNote.title,
+			body: updatedNote.body,
+			parent_id: updatedNote.parentId ?? '',
+		});
+
+		// Create the resource on the client *after* attaching it to the note so that the
+		// resource is always referenced by at least one note:
+		await this.createResource(resource);
+
+		await this.assertNoteMatchesState_(updatedNote);
+		return updatedNote;
+	}
+
+	public async createResource(resource: ResourceData): Promise<void> {
+		await this.tracker_.createResource(resource);
+
+		const checkExists = async () => {
+			try {
+				await this.execApiCommand_('GET', `/resources/${resource.id}`);
+				return true;
+			} catch (error) {
+				if (error instanceof ApiResponseError && error.code === 404) {
+					return false;
+				}
+				throw error;
+			}
+		};
+
+		if (!await checkExists()) {
+			const resourceForm = new FormData();
+			resourceForm.append('data', new Blob(['test'], { type: resource.mimeType }));
+			resourceForm.append('props', JSON.stringify({
+				title: resource.title,
+				id: resource.id,
+				mime: resource.mimeType,
+			}));
+
+			await this.execApiCommand_('POST', '/resources', resourceForm);
+		}
 	}
 
 	public async deleteFolder(id: string) {
@@ -683,8 +865,8 @@ class Client implements ActionableClient {
 		}, {
 			count: 2,
 			delayOnFailure: count => count * Second,
-			onFail: (error)=>{
-				logger.warn('Share failed:', error);
+			onFail: ({ error, willRetry })=>{
+				logger.warn('Share failed:', error, willRetry ? 'Retrying...' : '');
 			},
 		});
 
@@ -740,6 +922,24 @@ class Client implements ActionableClient {
 		await this.execCliCommand_('mv', itemId, movingToRoot ? 'root' : newParentId);
 	}
 
+	public async listResources() {
+		const params = {
+			fields: 'id,title,mime',
+			include_deleted: '1',
+			include_conflicts: '1',
+		};
+		return await this.execPagedApiCommand_(
+			'GET',
+			'/resources',
+			params,
+			(item): ResourceData => ({
+				id: getStringProperty(item, 'id'),
+				title: getStringProperty(item, 'title'),
+				mimeType: getStringProperty(item, 'mime'),
+			}),
+		);
+	}
+
 	public async listNotes() {
 		const params = {
 			fields: 'id,parent_id,body,title,is_conflict,conflict_original_id,share_id,is_shared',
@@ -793,10 +993,18 @@ class Client implements ActionableClient {
 		return this.tracker_.randomNote(options);
 	}
 
+	public itemById(itemId: ItemId) {
+		return this.tracker_.itemById(itemId);
+	}
+
+	public itemExists(itemId: ItemId) {
+		return this.tracker_.itemExists(itemId);
+	}
+
 	public async checkState() {
 		logger.info('Check state', this.label);
 
-		type ItemSlice = { id: string };
+		type ItemSlice = { id: string; title: string };
 		const compare = (a: ItemSlice, b: ItemSlice) => {
 			if (a.id === b.id) return 0;
 			return a.id < b.id ? -1 : 1;
@@ -814,6 +1022,49 @@ class Client implements ActionableClient {
 			}
 		};
 
+		const idLogs = (ids: ItemId[], items: ItemSlice[]) => {
+			const itemTitle = (id: ItemId) => {
+				const itemTitle = items.find(item => item.id === id)?.title;
+				return itemTitle ? JSON.stringify(substrWithEllipsis(itemTitle, 0, 28)) : 'Unknown';
+			};
+
+			const output = [];
+			for (const id of ids) {
+				const log = this.globalActionTracker_.getActionLog(id);
+
+				output.push(`id: ${id} (${itemTitle(id)})`);
+				if (log.length > 0) {
+					output.push(
+						log
+							.map(item => `\t${item.source}: ${item.action}`)
+							.join('\n'),
+					);
+				} else {
+					output.push('\tNo history found');
+				}
+			}
+			return output.join('\n');
+		};
+
+		const assertSameIds = async (actualSorted: ItemSlice[], expectedSorted: ItemSlice[], assertionLabel: string) => {
+			const actualIds = actualSorted.map(i => i.id);
+			const expectedIds = expectedSorted.map(i => i.id);
+			const { missing, unexpected } = diffSortedStringArrays(actualIds, expectedIds);
+
+			if (missing.length || unexpected.length) {
+				const message = [
+					`${assertionLabel}: IDs were different:`,
+					missing.length && `Expected ${JSON.stringify(missing)} to be present, but were missing.`,
+					unexpected.length && `Present but should not have been: ${JSON.stringify(unexpected)}`,
+					'Logs:',
+					idLogs(missing, expectedSorted),
+					idLogs(unexpected, actualSorted),
+				].filter(line => !!line).join('\n');
+
+				throw new Error(message);
+			}
+		};
+
 		const checkNoteState = async () => {
 			const notes = [...await this.listNotes()];
 			const expectedNotes = [...await this.tracker_.listNotes()];
@@ -823,6 +1074,7 @@ class Client implements ActionableClient {
 
 			assertNoAdjacentEqualIds(notes, 'notes');
 			assertNoAdjacentEqualIds(expectedNotes, 'expectedNotes');
+			await assertSameIds(notes, expectedNotes, 'Note IDs should match');
 			assert.deepEqual(notes, expectedNotes, 'should have the same notes as the expected state');
 		};
 
@@ -835,11 +1087,49 @@ class Client implements ActionableClient {
 
 			assertNoAdjacentEqualIds(folders, 'folders');
 			assertNoAdjacentEqualIds(expectedFolders, 'expectedFolders');
+			await assertSameIds(folders, expectedFolders, 'Folder IDs should match');
 			assert.deepEqual(folders, expectedFolders, 'should have the same folders as the expected state');
 		};
 
-		await checkNoteState();
-		await checkFolderState();
+		const checkResourceState = async () => {
+			const actualResources = [...await this.listResources()];
+			const actualResourceIds = new Set(actualResources.map(r => r.id));
+			const expectedResources = [...await this.tracker_.listResources()];
+
+			const missingResources = [];
+			for (const resource of expectedResources) {
+				if (!actualResourceIds.has(resource.id)) {
+					missingResources.push(resource.id);
+				}
+			}
+
+			if (missingResources.length > 0) {
+				const log = idLogs(missingResources, expectedResources);
+
+				throw new Error(`Missing resource(s): All expected resources should exist on the client. Resource(s) with ID(s) ${JSON.stringify(missingResources)} were not found (total resource count: ${actualResourceIds.size}).\nResource action history:\n${log}`);
+			}
+		};
+
+		const errors: Error[] = [];
+		const runCheck = async (check: ()=> Promise<void>) => {
+			try {
+				await check();
+			} catch (error) {
+				errors.push(error);
+			}
+		};
+
+		await runCheck(checkResourceState);
+		await runCheck(checkNoteState);
+		await runCheck(checkFolderState);
+
+		if (errors.length) {
+			const errorList = errors
+				.map((error, index) => `Error ${index + 1} of ${errors.length}: ${error}`)
+				.map(message => hangingIndent(message))
+				.join('\n');
+			throw new Error(`Incorrect state in client: ${this.clientLabel_}:\n${errorList}`);
+		}
 	}
 }
 

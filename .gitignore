@@ -53,6 +53,7 @@ lerna-debug.log
 docs/**/*.mustache
 .idea
 /readme/i18n
+.watchman-cookie-*
 
 # Yarn stuff
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
@@ -1035,6 +1036,8 @@ packages/editor/CodeMirror/extensions/rendering/replaceBulletLists.js
 packages/editor/CodeMirror/extensions/rendering/replaceCheckboxes.js
 packages/editor/CodeMirror/extensions/rendering/replaceDividers.js
 packages/editor/CodeMirror/extensions/rendering/replaceFormatCharacters.js
+packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.test.js
+packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.js
 packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
@@ -1075,6 +1078,7 @@ packages/editor/CodeMirror/utils/getSearchState.js
 packages/editor/CodeMirror/utils/growSelectionToNode.js
 packages/editor/CodeMirror/utils/handleLinkEditRequests.js
 packages/editor/CodeMirror/utils/handlePasteEvent.js
+packages/editor/CodeMirror/utils/htmlNodeInfo.js
 packages/editor/CodeMirror/utils/isCursorAtBeginning.js
 packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/allLanguages.js
@@ -1779,6 +1783,7 @@ packages/renderer/MdToHtml/renderMedia.js
 packages/renderer/MdToHtml/rules/abc.js
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/code_inline.js
+packages/renderer/MdToHtml/rules/externalEmbed.js
 packages/renderer/MdToHtml/rules/fence.js
 packages/renderer/MdToHtml/rules/fountain.js
 packages/renderer/MdToHtml/rules/highlight_keywords.js
@@ -1814,22 +1819,29 @@ packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js
 packages/tools/convertThemesToCss.js
+packages/tools/fuzzer/ActionRunner.js
 packages/tools/fuzzer/ActionTracker.js
 packages/tools/fuzzer/Client.js
 packages/tools/fuzzer/ClientPool.js
 packages/tools/fuzzer/Server.js
 packages/tools/fuzzer/constants.js
-packages/tools/fuzzer/doRandomAction.js
 packages/tools/fuzzer/model/FolderRecord.js
+packages/tools/fuzzer/model/ResourceRecord.js
 packages/tools/fuzzer/sync-fuzzer.js
 packages/tools/fuzzer/types.js
 packages/tools/fuzzer/utils/ProgressBar.js
 packages/tools/fuzzer/utils/SeededRandom.js
+packages/tools/fuzzer/utils/diffSortedStringArrays.test.js
+packages/tools/fuzzer/utils/diffSortedStringArrays.js
+packages/tools/fuzzer/utils/extractResourceIds.js
 packages/tools/fuzzer/utils/getNumberProperty.js
 packages/tools/fuzzer/utils/getProperty.js
 packages/tools/fuzzer/utils/getStringProperty.js
+packages/tools/fuzzer/utils/hangingIndent.js
 packages/tools/fuzzer/utils/logDiffDebug.js
 packages/tools/fuzzer/utils/openDebugSession.js
+packages/tools/fuzzer/utils/randomId.test.js
+packages/tools/fuzzer/utils/randomId.js
 packages/tools/fuzzer/utils/randomString.js
 packages/tools/fuzzer/utils/retryWithCount.js
 packages/tools/generate-database-types.js

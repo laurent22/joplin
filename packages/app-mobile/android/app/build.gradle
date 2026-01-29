@@ -83,8 +83,8 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097786
-		versionName "3.5.6"
+		versionCode 2097788
+		versionName "3.6.0"
 
         buildConfigField "String", "REACT_NATIVE_RELEASE_LEVEL", "\"${findProperty('reactNativeReleaseLevel') ?: 'stable'}\""
 
@@ -121,6 +121,17 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableMinifyInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+        profileable {
+            // Release-like build that allows profiling with Android Studio Profiler
+            initWith release
+            signingConfig signingConfigs.debug
+            // Required for Android Studio Profiler to attach
+            debuggable false
+            // Keeps symbols for better stack traces in profiler
+            minifyEnabled false
+            // Use release variants of dependencies that don't have profileable
+            matchingFallbacks = ['release']
         }
     }
 

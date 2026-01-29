@@ -191,6 +191,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Despre"
 	],
@@ -473,6 +476,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Aldin"
 	],
@@ -611,6 +617,9 @@
 	"Checking... Please wait.": [
 		"Se verifică... Te rog să aștepți."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Selectează o opțiune"
 	],
@@ -677,9 +686,6 @@
 	"Code View": [
 		"Vizualizare code"
 	],
-	"Code:": [
-		"Cod:"
-	],
 	"Collaborate on a notebook with others": [
 		"Colaborează la caiet cu alte persoane"
 	],
@@ -706,6 +712,9 @@
 	],
 	"Command": [
 		"Comandă"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta de comenzi"
@@ -796,9 +805,6 @@
 	"Convert it": [
 		"Convertește-o"
 	],
-	"Convert note to Markdown": [
-		"Convertește notița în Markdown"
-	],
 	"Convert to note": [
 		"Convertește în notiță"
 	],
@@ -854,9 +860,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Nu s-a putut conecta la repozitoriul de plugin-uri."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Nu s-a putut converti notița în Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"Nu s-au putut exporta notițele: %s"
@@ -1062,6 +1065,9 @@
 	"Delete selected notes": [
 		"Șterge aceste notițe"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Ștergi caietul Inbox?\n\nDacă ștergi caietul de notițe Inbox, orice e-mail trimis recent în acesta poate fi pierdut."
 	],
@@ -1166,6 +1172,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Afișează informațiile complete despre notiță."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Afișează notițele specificate."
@@ -2084,6 +2093,9 @@
 	"Keychain Supported: %s": [
 		"Lanț de chei suportat: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Chei care trebuie actualizate"
 	],
@@ -2231,6 +2243,9 @@
 	],
 	"Manage your plugins": [
 		"Gestionează-ți plugin-urile"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Gestionează configurația E2EE. Comenzile sînt `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`."
@@ -2489,6 +2504,9 @@
 	"No updates available": [
 		"Nu există actualizări"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Niciuna"
 	],
@@ -2699,6 +2717,9 @@
 	"Open Sync Wizard...": [
 		"Deschide ghidul de sincronizare…"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Deschide..."
 	],
@@ -2719,6 +2740,9 @@
 	],
 	"Options": [
 		"Opțiuni"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Listă ordonată"
@@ -3352,6 +3376,9 @@
 	"Select parent notebook": [
 		"Selectează caietul părinte"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Selectat: %s"
 	],
@@ -3555,6 +3582,9 @@
 	],
 	"Source: ": [
 		"Sursă: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Distanțier"
@@ -3864,9 +3894,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Notița „%s” a fost restaurată cu succes în caietul „%s”."
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Notița a fost convertită în Markdown și notița originală a fost mutată în coșul de gunoi"
-	],
 	"The note was successfully moved to the trash.": [
 		"Notița a fost mutată cu succes în coșul de gunoi.",
 		"Notițele au fost mutate cu succes în coșul de gunoi.",
@@ -4171,6 +4198,9 @@
 	],
 	"Try it now": [
 		"Încearcă acum"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Tastează `help [command]` pentru mai multe informații despre o comandă; sau tastează `help all` pentru informații complete de utilizare."

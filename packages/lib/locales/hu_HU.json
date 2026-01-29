@@ -185,6 +185,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Névjegy"
 	],
@@ -243,7 +246,7 @@
 		"Törzsszöveg hozzáadása"
 	],
 	"Add column": [
-		""
+		"Oszlop hozzáadása"
 	],
 	"Add new": [
 		"Új hozzáadása"
@@ -253,6 +256,9 @@
 	],
 	"Add recipient:": [
 		"Címzett hozzáadása:"
+	],
+	"Add row": [
+		"Sor hozzáadása"
 	],
 	"Add tags:": [
 		"Címkék hozzáadása:"
@@ -423,7 +429,7 @@
 		"A mellékleteket nem lehet letölteni"
 	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
-		"Figyelem: Ha módosítja ezt a helyet, győződjön meg arról, hogy az összes tartalmát átmásolta oda szinkronizálás előtt, különben minden fájl törölve lesz! További részletekért lásd a GYIK-et: %s"
+		"Figyelem: Ha módosítja ezt a helyet, győződjön meg arról, hogy az összes tartalmát átmásolta oda szinkronizálás előtt, különben minden fájl törölve lesz! További részletekért tekintse meg a GYIK-et: %s"
 	],
 	"Authentication was not completed (did not receive an authentication token).": [
 		"A hitelesítés nem fejeződött be (nem érkezett hitelesítő-token)."
@@ -438,13 +444,13 @@
 		"Automatikus"
 	],
 	"Auto-add disabled accounts for deletion": [
-		"A letiltott fiókok automatikus hozzáadása a törléshez"
+		"Letiltott fiókok automatikus hozzáadása a törléshez"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
 		"Markdown automatikus átalakítása a formázott szöveges szerkesztőben"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
-		"Automatikusan párosítsa a zárójeleket, idézőjeleket, stb."
+		"Zárójelek, idézőjelek, stb. automatikus párosítása"
 	],
 	"Autocomplete Markdown and HTML": [
 		"Automatikus kiegészítés Markdown és HTML esetén"
@@ -453,10 +459,10 @@
 		"Frissítések automatikus ellenőrzése"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		"Kuka tartalmának automatikusan törlése bizonyos napok elteltével"
+		"Kuka tartalmának automatikus törlése bizonyos napok elteltével"
 	],
 	"Automatically switch theme to match system theme": [
-		"Automatikus átváltás a rendszer témájával egyező témára"
+		"Automatikus váltás a rendszer témájával egyező témára"
 	],
 	"Back": [
 		"Vissza"
@@ -466,6 +472,9 @@
 	],
 	"Beta": [
 		"Béta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Félkövér"
@@ -605,6 +614,9 @@
 	"Checking... Please wait.": [
 		"Ellenőrzés… Kis türelmet."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Válasszon egy beállítást"
 	],
@@ -671,9 +683,6 @@
 	"Code View": [
 		"Kódnézet"
 	],
-	"Code:": [
-		"Kód:"
-	],
 	"Collaborate on a notebook with others": [
 		"Együttműködés egy jegyzetfüzeten másokkal"
 	],
@@ -700,6 +709,9 @@
 	],
 	"Command": [
 		"Parancs"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Parancspaletta"
@@ -789,9 +801,6 @@
 	"Convert it": [
 		"Átalakítás"
 	],
-	"Convert note to Markdown": [
-		"Jegyzet átalakítása Markdown formátumba"
-	],
 	"Convert to note": [
 		"Átalakítás jegyzetté"
 	],
@@ -846,9 +855,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Nem sikerült kapcsolódni a bővítménytárolóhoz."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Nem sikerült a jegyzetet átalakítani Markdown formátumba: %s"
 	],
 	"Could not export notes: %s": [
 		"Nem sikerült exportálni a jegyzeteket: %s"
@@ -1024,6 +1030,9 @@
 	"Delete attachment \"%s\"?": [
 		"Törli a(z) „%s” mellékletet?"
 	],
+	"Delete column": [
+		"Oszlop törlése"
+	],
 	"Delete expired sessions": [
 		"Lejárt munkamenetek törlése"
 	],
@@ -1051,8 +1060,14 @@
 	"Delete profile \"%s\"": [
 		"A(z) „%s” nevű profil törlése"
 	],
+	"Delete row": [
+		"Sor törlése"
+	],
 	"Delete selected notes": [
 		"Kijelölt jegyzetek törlése"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Törli az „Inbox” nevű jegyzetfüzetet?\n\nHa törli az „Inbox” nevű jegyzetfüzetet, az ide nemrég küldött e-mailek elveszhetnek."
@@ -1158,6 +1173,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Részletes információkat jelenít meg a jegyzetekről."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Megjeleníti a megadott jegyzetet."
@@ -1307,7 +1325,7 @@
 		"Szerkesztő betűmérete"
 	],
 	"Editor maximum width": [
-		"Szerkesztő maximális szélessége"
+		"Szerkesztő legnagyobb szélessége"
 	],
 	"Editor monospace font family": [
 		"Szerkesztő monospace betűcsaládja"
@@ -1340,7 +1358,7 @@
 		"kiemelt szöveg"
 	],
 	"Empty trash": [
-		"Kuka kiürítése"
+		"Kuka ürítése"
 	],
 	"Enable": [
 		"Engedélyezés"
@@ -2075,6 +2093,9 @@
 	"Keychain Supported: %s": [
 		"Támogatott kulcstartók: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Frissítésre szoruló kulcsok"
 	],
@@ -2221,6 +2242,9 @@
 	"Manage your plugins": [
 		"Bővítmények kezelése"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Végpontok közötti titkosításbeállítások kezelése (E2EE). A parancsok a következők: `enable` (engedélyezés), `disable` (letiltás), `decrypt` (visszafejtés), `status` (állapot), `decrypt-file` (fájl visszafejtése) és `target-status` (cél állapota)."
 	],
@@ -2270,16 +2294,16 @@
 		"Matematika"
 	],
 	"Max concurrent connections": [
-		"Maximális egyidejű kapcsolatok"
+		"Megengedett egyidejű kapcsolatok száma"
 	],
 	"Max Item Size": [
-		"Maximális elemméret"
+		"Legnagyobb elemméret"
 	],
 	"Max note or attachment size": [
-		"Maximális jegyzet- vagy mellékletméret"
+		"Legnagyobb jegyzet- vagy mellékletméret"
 	],
 	"Max Total Size": [
-		"Maximális összméret"
+		"Legnagyobb összméret"
 	],
 	"Media player, math, diagrams, table of contents": [
 		"Médialejátszó, matematika, diagramok, tartalomjegyzék"
@@ -2477,6 +2501,9 @@
 	"No updates available": [
 		"Nincsenek elérhető frissítések"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Semmi"
 	],
@@ -2595,7 +2622,7 @@
 		"Jegyzetek"
 	],
 	"Notes and settings are stored in: %s": [
-		"A jegyzetek és beállítások itt vannak tárolva: %s"
+		"Jegyzetek és beállítások tárolási helye: %s"
 	],
 	"Notes can only be created within a notebook.": [
 		"A jegyzetek csak egy jegyzetfüzeten belül hozhatók létre."
@@ -2670,7 +2697,7 @@
 		"PDF-megjelenítő megnyitása"
 	],
 	"Open primary app instance...": [
-		"Az elsődleges alkalmazáspéldány megnyitása…"
+		"Elsődleges alkalmazáspéldány megnyitása…"
 	],
 	"Open profile directory": [
 		"Profilkönyvtár megnyitása"
@@ -2686,6 +2713,9 @@
 	],
 	"Open Sync Wizard...": [
 		"Szinkronizálási segéd megnyitása…"
+	],
+	"Open-source licences": [
+		""
 	],
 	"Open...": [
 		"Megnyitás…"
@@ -2707,6 +2737,9 @@
 	],
 	"Options": [
 		"Beállítások"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Számozott lista"
@@ -2818,7 +2851,7 @@
 		"Frissítse a Joplint a(z) %s vagy újabb verzióra a bővítmény használatához."
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
-		"Várjon, amíg minden melléklet letöltődik és visszafejtődik. A jegyzet szerkesztéséhez átválthat a(z) %s nézetre is."
+		"Várjon, amíg minden melléklet letöltődik és visszafejtődik. A jegyzet szerkesztéséhez a(z) %s nézetre is válthat."
 	],
 	"Please wait while we load your organisation sign-in page...": [
 		"Várjon, amíg a szervezet bejelentkezési oldala betöltődik…"
@@ -3339,6 +3372,9 @@
 	"Select parent notebook": [
 		"Szülő jegyzetfüzet kijelölése"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Kiválasztva: %s"
 	],
@@ -3542,6 +3578,9 @@
 	],
 	"Source: ": [
 		"Forrás: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Elválasztó"
@@ -3796,7 +3835,7 @@
 		"Az alkalmazást újra kell indítani a módosítások érvényesítéséhez."
 	],
 	"The attachments will no longer be watched when you switch to a different note.": [
-		"A mellékletek figyelése megszűnik, ha átvált egy másik jegyzetre."
+		"A mellékletek figyelése megszűnik, ha egy másik jegyzetre vált."
 	],
 	"The command \"%s\" is only available in GUI mode": [
 		"A(z) „%s” parancs csak GUI módban érhető el"
@@ -3849,9 +3888,6 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"A(z) „%s” nevű jegyzet sikeresen vissza lett állítva a(z) „%s” nevű jegyzetfüzetbe."
-	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"A jegyzet Markdown formátumba lett konvertálva, és az eredeti jegyzet át lett helyezve a kukába"
 	],
 	"The note was successfully moved to the trash.": [
 		"A jegyzet sikeresen át lett helyezve a kukába.",
@@ -4101,10 +4137,10 @@
 		"Szerkesztőfül billentyűs navigációja be/ki"
 	],
 	"Toggle editors": [
-		"Átváltás a szerkesztők között"
+		"Váltás a szerkesztők között"
 	],
 	"Toggle external editing": [
-		"Átváltás külső szerkesztőre"
+		"Váltás külső szerkesztőre"
 	],
 	"Toggle menu bar": [
 		"Menüsáv be/ki"
@@ -4153,6 +4189,9 @@
 	],
 	"Try it now": [
 		"Próbálja ki most"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"A paranccsal kapcsolatos további információkért írja be a `help [command]` parancsot; vagy a teljes használati információért írja be a `help all` parancsot."

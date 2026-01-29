@@ -94,13 +94,20 @@ export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string) => {
 };
 
 export const extractResourceUrls = (text: string) => {
-	const markdownLinksRE = /\]\((.*?)\)/g;
+	const markdownLinkRegexes = [
+		// Standard [link](...)-style links
+		/\]\((.*?)\)/g,
+		// Reference links
+		/\]:(.*?)(?:[\n]|$)/g,
+	];
 	const output = [];
 	let result = null;
 
-	while ((result = markdownLinksRE.exec(text)) !== null) {
-		const resourceUrlInfo = parseResourceUrl(result[1]);
-		if (resourceUrlInfo) output.push(resourceUrlInfo);
+	for (const regex of markdownLinkRegexes) {
+		while ((result = regex.exec(text)) !== null) {
+			const resourceUrlInfo = parseResourceUrl(result[1].trim());
+			if (resourceUrlInfo) output.push(resourceUrlInfo);
+		}
 	}
 
 	const htmlRegexes = [

@@ -6,6 +6,33 @@ import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 
 const imageClassName = 'cm-md-image';
 
+class ImageHeightCache {
+	private readonly cache = new Map<string, number>();
+	private readonly maxEntries = 500;
+
+	public get(key: string): number | undefined {
+		const value = this.cache.get(key);
+		if (value !== undefined) {
+			// Refresh recency
+			this.cache.delete(key);
+			this.cache.set(key, value);
+		}
+		return value;
+	}
+
+	public set(key: string, height: number): void {
+		if (this.cache.has(key)) {
+			this.cache.delete(key);
+		} else if (this.cache.size >= this.maxEntries) {
+			const firstKey = this.cache.keys().next().value;
+			if (firstKey) this.cache.delete(firstKey);
+		}
+		this.cache.set(key, height);
+	}
+}
+
+const imageHeightCache = new ImageHeightCache();
+
 class ImageWidget extends WidgetType {
 	private resolvedSrc_: string;
 
@@ -41,9 +68,16 @@ class ImageWidget extends WidgetType {
 
 		const updateImageUrl = () => {
 			if (this.resolvedSrc_) {
-				// Use a background-image style property rather than img[src=]. This
-				// simplifies setting the image to the correct size/position.
 				image.src = this.resolvedSrc_;
+				// When the image loads, measure and cache the height
+				image.onload = () => {
+					// Measure container height (what CodeMirror uses for scroll calculations).
+					if (dom.isConnected) {
+						imageHeightCache.set(this.cacheKey, dom.offsetHeight);
+					}
+
+					dom.style.minHeight = '';
+				};
 			}
 		};
 
@@ -56,10 +90,16 @@ class ImageWidget extends WidgetType {
 			updateImageUrl();
 		}
 
+		// Apply cached height as min-height to prevent collapse during load.
+		const cached = imageHeightCache.get(this.cacheKey);
+		if (cached) {
+			dom.style.minHeight = `${cached}px`;
+		}
+
 		return true;
 	}
 
-	public toDOM() {
+	public toDOM(_view: EditorView) {
 		const container = document.createElement('div');
 		container.classList.add(imageClassName);
 
@@ -72,8 +112,12 @@ class ImageWidget extends WidgetType {
 		return container;
 	}
 
+	private get cacheKey() {
+		return `${this.src_}_${this.width_ ?? ''}_${this.reloadCounter_}`;
+	}
+
 	public get estimatedHeight() {
-		return -1;
+		return imageHeightCache.get(this.cacheKey) ?? -1;
 	}
 }
 

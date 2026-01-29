@@ -187,7 +187,7 @@ const reactions: Record<Action, Reaction> = {
 
 		// Tag the folder with the share ID so that items created within
 		// the folder can be part of the share:
-		const folder = await context.models.item().loadAsJoplinItem(item.id);
+		const folder = await context.models.item().loadAsJoplinItem<FolderEntity>(item.id);
 		const serialized = makeFolderSerializedBody({
 			...folder,
 			share_id: share.id,
@@ -252,7 +252,7 @@ const reactions: Record<Action, Reaction> = {
 		try {
 			const noteItem = await context.models.item().loadByJopId(user.id, noteId);
 			if (!noteItem) return false;
-			const note = await context.models.item().loadAsJoplinItem(noteItem.id);
+			const note = await context.models.item().loadAsJoplinItem<NoteEntity>(noteItem.id);
 			const serialized = makeNoteSerializedBody({
 				title: randomWords(10),
 				...note,
@@ -276,7 +276,7 @@ const reactions: Record<Action, Reaction> = {
 
 		try {
 			const folderItem = await context.models.item().loadByJopId(user.id, folderId);
-			const folder = await context.models.item().loadAsJoplinItem(folderItem.id);
+			const folder = await context.models.item().loadAsJoplinItem<FolderEntity>(folderItem.id);
 			const serialized = makeFolderSerializedBody({
 				title: randomWords(5),
 				...folder,

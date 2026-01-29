@@ -56,6 +56,8 @@ const defaultEnvValues: EnvVariables = {
 	USER_CONTENT_BASE_URL: '',
 	API_BASE_URL: '',
 	JOPLINAPP_BASE_URL: 'https://joplinapp.org',
+	TERMS_URL: '',
+	PRIVACY_URL: '',
 
 	// ==================================================
 	// Database config
@@ -129,6 +131,13 @@ const defaultEnvValues: EnvVariables = {
 
 	USER_DATA_AUTO_DELETE_ENABLED: false,
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: 90,
+
+	// ==================================================
+	// ==================================================
+	// MFA - 32+ bytes hex string
+	// ==================================================
+	MFA_ENCRYPTION_KEY: '',
+	MFA_ENABLED: 0,
 
 	// ==================================================
 	// Events deletion
@@ -205,6 +214,8 @@ export interface EnvVariables {
 	USER_CONTENT_BASE_URL: string;
 	API_BASE_URL: string;
 	JOPLINAPP_BASE_URL: string;
+	TERMS_URL: string;
+	PRIVACY_URL: string;
 
 	DB_CLIENT: string;
 	DB_SLOW_QUERY_LOG_ENABLED: boolean;
@@ -252,6 +263,9 @@ export interface EnvVariables {
 
 	USER_DATA_AUTO_DELETE_ENABLED: boolean;
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
+
+	MFA_ENCRYPTION_KEY: string;
+	MFA_ENABLED: number;
 
 	EVENTS_AUTO_DELETE_ENABLED: boolean;
 	EVENTS_AUTO_DELETE_AFTER_DAYS: number;

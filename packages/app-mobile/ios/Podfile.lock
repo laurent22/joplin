@@ -1491,7 +1491,7 @@ PODS:
     - Yoga
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.5.1):
+  - react-native-saf-x (3.6.0):
     - React-Core
   - react-native-safe-area-context (5.6.1):
     - hermes-engine

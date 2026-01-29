@@ -1,5 +1,5 @@
 import { ChangeType, Session, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, updateNote, expectHttpError, createResource, expectNotThrow } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, updateNote, expectHttpError, createResource, expectNotThrow, updateFolder, db } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel';
 import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
@@ -7,7 +7,7 @@ import { msleep } from '../../utils/time';
 import { ErrorForbidden } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 const createSingleFolderShare = async (session1: Session, session2: Session) => {
@@ -225,7 +225,7 @@ describe('shares.folder', () => {
 	});
 
 	test('should share when a note is added to a shared folder', async () => {
-		const { session: session1 } = await createUserAndSession(1);
+		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 
 		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', [
@@ -247,9 +247,49 @@ describe('shares.folder', () => {
 
 		await models().share().updateSharedItems3();
 
-		const newChildren = await models().item().children(user2.id);
-		expect(newChildren.items.length).toBe(3);
-		expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000002.md')).toBe(true);
+		{
+			const newChildren = await models().item().children(user2.id);
+			expect(newChildren.items.length).toBe(3);
+			expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000002.md')).toBe(true);
+		}
+
+		await createNote(session2.id, {
+			id: '00000000000000000000000000000003',
+			parent_id: '000000000000000000000000000000F2',
+			share_id: share.id,
+		});
+
+		await models().share().updateSharedItems3();
+
+		{
+			const newChildren = await models().item().children(user1.id);
+			expect(newChildren.items.length).toBe(4);
+			expect(!!newChildren.items.find(i => i.name === '00000000000000000000000000000003.md')).toBe(true);
+		}
+	});
+
+	test('should allow recipient to modify the root folder title', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { item: rootFolderItem } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', [
+			{
+				id: '000000000000000000000000000000F2',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		await updateFolder(session2.id, {
+			id: '000000000000000000000000000000F2',
+			title: 'update from session 2',
+		});
+
+		const rootFolder = await models().item().loadAsJoplinItem<FolderEntity>(rootFolderItem.id);
+		expect(rootFolder.title).toBe('update from session 2');
 	});
 
 	test('should update share status when note parent changes', async () => {
@@ -609,30 +649,6 @@ describe('shares.folder', () => {
 		expect((await models().item().children(user2.id)).items.length).toBe(0);
 	});
 
-	// test('should associate a user with the item after sharing', async function() {
-	// 	const { session: session1 } = await createUserAndSession(1);
-	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
-
-	// 	const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
-
-	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
-
-	// 	expect((await models().userItem().all()).length).toBe(2);
-	// 	expect(!!(await models().userItem().all()).find(ui => ui.user_id === user2.id)).toBe(true);
-	// });
-
-	// test('should not share an already shared item', async function() {
-	// 	const { session: session1 } = await createUserAndSession(1);
-	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
-	// 	const { user: user3, session: session3 } = await createUserAndSession(3);
-
-	// 	const item = await createItem(session1.id, 'root:/test.txt:', 'testing');
-
-	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.App, item);
-	// 	const error = await checkThrowAsync(async () => shareWithUserAndAccept(session2.id, session3.id, user3, ShareType.App, item));
-	// 	expect(error.httpCode).toBe(ErrorBadRequest.httpCode);
-	// });
-
 	test('should see delta changes for linked items', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
@@ -873,6 +889,22 @@ describe('shares.folder', () => {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
 	});
 
+	test('should not throw an error when deleting a root folder associated with a non-existing share', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { share, item } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		]);
+
+		await db().from('shares').where('id', '=', share.id).delete();
+
+		await expectNotThrow(async () => deleteApi(session2.id, `items/root:/${item.jop_id}.md:`));
+	});
+
 	test('should unshare a folder', async () => {
 		// The process to unshare a folder is as follow:
 		//
@@ -912,28 +944,6 @@ describe('shares.folder', () => {
 
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(0);
 	});
-
-	// test('should handle incomplete sync - orphan note is moved out of shared folder', async function() {
-	// 	// - A note and its folder are moved to a shared folder.
-	// 	// - However when data is synchronised, only the note is synced (not the folder).
-	// 	// - Then later the note is synchronised.
-	// 	// In that case, we need to make sure that both folder and note are eventually shared.
-
-	// 	const { session: session1 } = await createUserAndSession(1);
-	// 	const { user: user2, session: session2 } = await createUserAndSession(2);
-
-	// 	const folderItem1 = await createFolder(session1.id, { id: '000000000000000000000000000000F1' });
-	// 	const noteItem1 = await createNote(session1.id, { id: '00000000000000000000000000000001', parent_id: '000000000000000000000000000000F2' });
-	// 	await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.JoplinRootFolder, folderItem1);
-	// 	// await models().share().updateSharedItems2();
-
-	// 	await createFolder(session1.id, { id: '000000000000000000000000000000F2', parent_id: folderItem1.jop_id });
-	// 	await models().share().updateSharedItems2(user2.id);
-
-	// 	const children = await models().item().children(user2.id);
-	// 	expect(children.items.length).toBe(3);
-	// 	expect(children.items.find(c => c.id === noteItem1.id)).toBeTruthy();
-	// });
 
 	test('should check permissions - cannot share a folder with yourself', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);

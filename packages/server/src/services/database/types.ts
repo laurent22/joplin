@@ -49,12 +49,12 @@ export enum UserFlagType {
 
 export function userFlagTypeToLabel(t: UserFlagType): string {
 	const s: Record<UserFlagType, string> = {
-		[UserFlagType.FailedPaymentWarning]: 'Failed Payment (Warning)',
-		[UserFlagType.FailedPaymentFinal]: 'Failed Payment (Final)',
-		[UserFlagType.AccountOverLimit]: 'Account Over Limit',
-		[UserFlagType.AccountWithoutSubscription]: 'Account Without Subscription',
-		[UserFlagType.SubscriptionCancelled]: 'Subscription Cancelled',
-		[UserFlagType.ManuallyDisabled]: 'Manually Disabled',
+		[UserFlagType.FailedPaymentWarning]: 'Failed payment (Warning)',
+		[UserFlagType.FailedPaymentFinal]: 'Failed payment (Final)',
+		[UserFlagType.AccountOverLimit]: 'Account over limit',
+		[UserFlagType.AccountWithoutSubscription]: 'Account without subscription',
+		[UserFlagType.SubscriptionCancelled]: 'Subscription cancelled',
+		[UserFlagType.ManuallyDisabled]: 'Manually disabled',
 		[UserFlagType.UserDeletionInProgress]: 'User deletion in progress',
 	};
 
@@ -146,6 +146,7 @@ export enum TaskId {
 export interface Session extends WithDates, WithUuid {
 	user_id?: Uuid;
 	auth_code?: string;
+	application_id?: Uuid;
 }
 
 export interface File {
@@ -244,28 +245,6 @@ export interface Subscription {
 	is_deleted?: number;
 }
 
-export interface User extends WithDates, WithUuid {
-	email?: string;
-	password?: string;
-	full_name?: string;
-	is_admin?: number;
-	email_confirmed?: number;
-	must_set_password?: number;
-	account_type?: number;
-	can_upload?: number;
-	max_item_size?: number | null;
-	can_share_folder?: number | null;
-	can_share_note?: number | null;
-	max_total_item_size?: number | null;
-	total_item_size?: number;
-	enabled?: number;
-	disabled_time?: number;
-	can_receive_folder?: number;
-	is_external?: number;
-	sso_auth_code?: string;
-	sso_auth_code_expire_at?: number;
-}
-
 export interface UserFlag extends WithDates {
 	id?: number;
 	user_id?: Uuid;
@@ -342,6 +321,51 @@ export interface TaskState extends WithDates {
 	enabled?: number;
 }
 
+export interface Application {
+	id?: Uuid;
+	user_id?: Uuid;
+	password?: string;
+	version?: string;
+	platform?: number;
+	ip?: string;
+	type?: number;
+	updated_time?: string;
+	created_time?: string;
+	last_access_time?: string;
+}
+
+export interface RecoveryCode {
+	id?: Uuid;
+	user_id?: Uuid;
+	code?: string;
+	is_used?: number;
+	updated_time?: string;
+	created_time?: string;
+}
+
+export interface User extends WithDates, WithUuid {
+	email?: string;
+	password?: string;
+	full_name?: string;
+	is_admin?: number;
+	email_confirmed?: number;
+	must_set_password?: number;
+	account_type?: number;
+	can_upload?: number;
+	max_item_size?: number | null;
+	can_share_folder?: number | null;
+	can_share_note?: number | null;
+	max_total_item_size?: number | null;
+	total_item_size?: number;
+	enabled?: number;
+	disabled_time?: number;
+	can_receive_folder?: number;
+	totp_secret?: string;
+	is_external?: number;
+	sso_auth_code?: string;
+	sso_auth_code_expire_at?: number;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string', defaultValue: null },
@@ -349,6 +373,7 @@ export const databaseSchema: DatabaseTables = {
 		auth_code: { type: 'string', defaultValue: '' },
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
+		application_id: { type: 'string', defaultValue: 'null' },
 	},
 	files: {
 		id: { type: 'string', defaultValue: null },
@@ -453,30 +478,6 @@ export const databaseSchema: DatabaseTables = {
 		created_time: { type: 'string', defaultValue: null },
 		is_deleted: { type: 'number', defaultValue: 0 },
 	},
-	users: {
-		id: { type: 'string', defaultValue: null },
-		email: { type: 'string', defaultValue: null },
-		password: { type: 'string', defaultValue: null },
-		full_name: { type: 'string', defaultValue: '' },
-		is_admin: { type: 'number', defaultValue: 0 },
-		updated_time: { type: 'string', defaultValue: null },
-		created_time: { type: 'string', defaultValue: null },
-		email_confirmed: { type: 'number', defaultValue: 0 },
-		must_set_password: { type: 'number', defaultValue: 0 },
-		account_type: { type: 'number', defaultValue: 0 },
-		can_upload: { type: 'number', defaultValue: 1 },
-		max_item_size: { type: 'number', defaultValue: null },
-		can_share_folder: { type: 'number', defaultValue: null },
-		can_share_note: { type: 'number', defaultValue: null },
-		max_total_item_size: { type: 'string', defaultValue: null },
-		total_item_size: { type: 'string', defaultValue: 0 },
-		enabled: { type: 'number', defaultValue: 1 },
-		disabled_time: { type: 'string', defaultValue: 0 },
-		can_receive_folder: { type: 'number', defaultValue: null },
-		is_external: { type: 'number', defaultValue: 0 },
-		sso_auth_code: { type: 'string', defaultValue: '' },
-		sso_auth_code_expire_at: { type: 'number', defaultValue: 0 },
-	},
 	user_flags: {
 		id: { type: 'number', defaultValue: null },
 		user_id: { type: 'string', defaultValue: null },
@@ -557,6 +558,51 @@ export const databaseSchema: DatabaseTables = {
 		enabled: { type: 'number', defaultValue: 1 },
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
+	},
+	applications: {
+		id: { type: 'string', defaultValue: null },
+		user_id: { type: 'string', defaultValue: '' },
+		password: { type: 'string', defaultValue: '' },
+		version: { type: 'string', defaultValue: '' },
+		platform: { type: 'number', defaultValue: null },
+		ip: { type: 'string', defaultValue: null },
+		type: { type: 'number', defaultValue: null },
+		updated_time: { type: 'string', defaultValue: null },
+		created_time: { type: 'string', defaultValue: null },
+		last_access_time: { type: 'string', defaultValue: 0 },
+	},
+	recovery_codes: {
+		id: { type: 'string', defaultValue: null },
+		user_id: { type: 'string', defaultValue: '' },
+		code: { type: 'string', defaultValue: '' },
+		is_used: { type: 'number', defaultValue: 1 },
+		updated_time: { type: 'string', defaultValue: null },
+		created_time: { type: 'string', defaultValue: null },
+	},
+	users: {
+		id: { type: 'string', defaultValue: null },
+		email: { type: 'string', defaultValue: null },
+		password: { type: 'string', defaultValue: null },
+		full_name: { type: 'string', defaultValue: '' },
+		is_admin: { type: 'number', defaultValue: 0 },
+		updated_time: { type: 'string', defaultValue: null },
+		created_time: { type: 'string', defaultValue: null },
+		email_confirmed: { type: 'number', defaultValue: 0 },
+		must_set_password: { type: 'number', defaultValue: 0 },
+		account_type: { type: 'number', defaultValue: 0 },
+		can_upload: { type: 'number', defaultValue: 1 },
+		max_item_size: { type: 'number', defaultValue: null },
+		can_share_folder: { type: 'number', defaultValue: null },
+		can_share_note: { type: 'number', defaultValue: null },
+		max_total_item_size: { type: 'string', defaultValue: null },
+		total_item_size: { type: 'string', defaultValue: 0 },
+		enabled: { type: 'number', defaultValue: 1 },
+		disabled_time: { type: 'string', defaultValue: 0 },
+		can_receive_folder: { type: 'number', defaultValue: null },
+		totp_secret: { type: 'string', defaultValue: '' },
+		is_external: { type: 'number', defaultValue: 0 },
+		sso_auth_code: { type: 'string', defaultValue: '' },
+		sso_auth_code_expire_at: { type: 'string', defaultValue: 0 },
 	},
 };
 // AUTO-GENERATED-TYPES
