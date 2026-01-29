@@ -11037,7 +11037,7 @@ __metadata:
     bcryptjs: "npm:2.4.3"
     bulma: "npm:1.0.4"
     compare-versions: "npm:6.1.1"
-    dayjs: "npm:1.11.18"
+    dayjs: "npm:1.11.19"
     formidable: "npm:2.1.2"
     fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
@@ -11095,7 +11095,7 @@ __metadata:
     "@types/node-fetch": "npm:2.6.13"
     "@types/yargs": "npm:17.0.34"
     compare-versions: "npm:6.1.1"
-    dayjs: "npm:1.11.18"
+    dayjs: "npm:1.11.19"
     execa: "npm:4.1.0"
     fs-extra: "npm:11.3.2"
     gettext-extractor: "npm:4.0.1"
@@ -11209,7 +11209,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/node-fetch": "npm:2.6.13"
     async-mutex: "npm:0.5.0"
-    dayjs: "npm:1.11.18"
+    dayjs: "npm:1.11.19"
     execa: "npm:5.1.1"
     fs-extra: "npm:11.3.2"
     glob: "npm:11.0.3"
@@ -24991,10 +24991,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:1.11.18":
-  version: 1.11.18
-  resolution: "dayjs@npm:1.11.18"
-  checksum: 10/7d29a90834cf4da2feb437c2f34b8235c3f94493a06d2f1bf9f506f1fa49eadf796f26e1d685b9fe8cb5e75ce6ee067825115e196f1af3d07b3552ff857bfc39
+"dayjs@npm:1.11.19":
+  version: 1.11.19
+  resolution: "dayjs@npm:1.11.19"
+  checksum: 10/185b820d68492b83a3ce2b8ddc7543034edc1dfd1423183f6ae4707b29929a3cc56503a81826309279f9084680c15966b99456e74cf41f7d1f6a2f98f9c7196f
   languageName: node
   linkType: hard
 
