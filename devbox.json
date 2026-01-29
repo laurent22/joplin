@@ -9,7 +9,7 @@
     "vips.dev": {
       "platforms": ["aarch64-darwin"],
     },
-    "nodejs":     "24.5.0",
+    "nodejs":     "24.8.0",
     "pkg-config": "latest",
     "python": "3.13.3",
     "bat":    "latest",
