@@ -241,7 +241,6 @@ xhdpi
 xxhdpi
 xxxhdpi
 scrollend
-fgag
 pogodin
 youtube
 youtu
