@@ -16,7 +16,6 @@
     "nitrogen",
     "android/build.gradle",
     "android/gradle.properties",
-    "android/fix-prefab.gradle",
     "android/CMakeLists.txt",
     "android/src",
     "ios/**/*.h",
