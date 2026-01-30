@@ -32,6 +32,9 @@
     "appId": "net.cozic.joplin-desktop",
     "compression": "normal",
     "productName": "Joplin",
+    "extraMetadata": {
+      "name": "joplin"
+    },
     "npmRebuild": false,
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
