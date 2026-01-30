@@ -20,6 +20,7 @@ const zlib = require('zlib');
 
 let secretKey = null;
 const gCaCertPath = '../../cacert.pem';
+let gCaCertData = null;
 
 function getSecretKey() {
 	if (!secretKey) {
@@ -455,8 +456,12 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			if (useReverseProxy && parsedUrl.protocol === 'https:') {
 				try {
 					const certPath = gCaCertPath;
+
 					if (fs.existsSync(certPath)) {
-						requestOptions.ca = fs.readFileSync(certPath);
+						if (!gCaCertData) {
+							gCaCertData = fs.readFileSync(certPath);
+						}
+						requestOptions.ca = gCaCertData;
 					}
 				} catch (error) {
 					console.warn('Could not load server certificate:', error);
@@ -642,7 +647,10 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 				try {
 					const certPath = gCaCertPath;
 					if (fs.existsSync(certPath)) {
-						requestOptions.ca = fs.readFileSync(certPath);
+						if (!gCaCertData) {
+							gCaCertData = fs.readFileSync(certPath);
+						}
+						requestOptions.ca = gCaCertData;
 					}
 				} catch (error) {
 					console.warn('Could not load server certificate:', error);
