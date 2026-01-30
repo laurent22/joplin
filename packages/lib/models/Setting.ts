@@ -533,7 +533,7 @@ class Setting extends BaseModel {
 					return settings['sync.useReverseProxy'] === true;
 				},
 				label: () => _('Reverse Proxy URL'),
-				description: () => _('Enter the URL of your reverse proxy server (e.g., https://proxy.example.com).\nIf you need a root certificate for HTTPS communication, set ./server_cert.pem'),
+				description: () => _('Enter the URL of your reverse proxy server (e.g., https://proxy.example.com).\nIf you need a root certificate for HTTPS communication, set ./cacert_cert.pem'),
 				storage: SettingStorage.File,
 			},
 
