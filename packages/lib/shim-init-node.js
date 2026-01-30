@@ -19,6 +19,8 @@ const zlib = require('zlib');
 
 
 let secretKey = null;
+const gCaCertPath = '../../cacert.pem';
+let gCaCertData = null;
 
 function getSecretKey() {
 	if (!secretKey) {
@@ -450,6 +452,22 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 				},
 			};
 
+			// reverse_proxyを使用していてhttpsの場合、ルート証明書を追加
+			if (useReverseProxy && parsedUrl.protocol === 'https:') {
+				try {
+					const certPath = gCaCertPath;
+
+					if (fs.existsSync(certPath)) {
+						if (!gCaCertData) {
+							gCaCertData = fs.readFileSync(certPath);
+						}
+						requestOptions.ca = gCaCertData;
+					}
+				} catch (error) {
+					console.warn('Could not load server certificate:', error);
+				}
+			}
+
 			const req = protocol.request(requestOptions, (res) => {
 				const chunks = [];
 				res.on('data', (chunk) => chunks.push(chunk));
@@ -623,6 +641,21 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 					'Content-Length': Buffer.byteLength(requestBodyString),
 				},
 			};
+
+			// reverse_proxyを使用していてhttpsの場合、ルート証明書を追加
+			if (parsedProxyUrl.protocol === 'https:') {
+				try {
+					const certPath = gCaCertPath;
+					if (fs.existsSync(certPath)) {
+						if (!gCaCertData) {
+							gCaCertData = fs.readFileSync(certPath);
+						}
+						requestOptions.ca = gCaCertData;
+					}
+				} catch (error) {
+					console.warn('Could not load server certificate:', error);
+				}
+			}
 		}
 
 
