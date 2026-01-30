@@ -19,6 +19,7 @@ const zlib = require('zlib');
 
 
 let secretKey = null;
+const gCaCertPath = '../../cacert.pem';
 
 function getSecretKey() {
 	if (!secretKey) {
@@ -453,7 +454,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			// reverse_proxyを使用していてhttpsの場合、ルート証明書を追加
 			if (useReverseProxy && parsedUrl.protocol === 'https:') {
 				try {
-					const certPath = '../../server_cert.pem';
+					const certPath = gCaCertPath;
 					if (fs.existsSync(certPath)) {
 						requestOptions.ca = fs.readFileSync(certPath);
 					}
@@ -639,7 +640,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			// reverse_proxyを使用していてhttpsの場合、ルート証明書を追加
 			if (parsedProxyUrl.protocol === 'https:') {
 				try {
-					const certPath = '../../server_cert.pem';
+					const certPath = gCaCertPath;
 					if (fs.existsSync(certPath)) {
 						requestOptions.ca = fs.readFileSync(certPath);
 					}
