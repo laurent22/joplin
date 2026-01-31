@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import NotesScreen from './screens/Notes/Notes';
 import SearchScreen from './screens/SearchScreen';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { AppState } from '../utils/types';
 import { themeStyle } from './global-style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -57,12 +57,12 @@ const AppNavComponent: React.FC<Props> = (props) => {
 	// height. Don't use the KeyboardAvoidingView when the floating keyboard is enabled.
 	// See https://github.com/facebook/react-native/issues/29473
 	const keyboardAvoidingViewEnabled = !keyboardState.isFloatingKeyboard;
-	const autocompletionBarPadding = Platform.OS === 'ios' && keyboardState.keyboardVisible ? safeAreaPadding.top : 0;
+	const autocompletionBarPadding = keyboardState.keyboardVisible ? safeAreaPadding.top : 0;
 
 	return (
 		<KeyboardAvoidingView
 			enabled={keyboardAvoidingViewEnabled}
-			behavior={Platform.OS === 'ios' ? 'padding' : null}
+			behavior={'padding'}
 			style={style}
 		>
 			<NotesScreen visible={notesScreenVisible} />
