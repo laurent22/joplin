@@ -15,8 +15,8 @@ jest.mock('@joplin/whisper-voice-typing', () => {
 			lastPrompt = options.prompt;
 
 			return {
-				startRecording: jest.fn(),
-				closeSession: jest.fn(),
+				open: jest.fn(),
+				close: jest.fn(),
 				convertNext: jest.fn(() => 'Test. This is test output. Test!'),
 				convertAvailable: jest.fn(() => ''),
 			};
