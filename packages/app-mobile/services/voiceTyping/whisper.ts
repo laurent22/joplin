@@ -169,11 +169,11 @@ class Whisper implements VoiceTypingSession {
 		}
 
 		logger.info('Closing session...');
-		const promise = this.session.close();
+		this.session.close();
 		this.session = null;
 		this.closeCounter ++;
 
-		return promise;
+		return Promise.resolve();
 	}
 }
 
