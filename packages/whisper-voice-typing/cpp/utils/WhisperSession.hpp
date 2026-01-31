@@ -4,14 +4,13 @@
 #include <vector>
 
 #include "whisper.h"
-#include "IAudioRecorder.hpp"
 
 class WhisperSession {
 public:
 	WhisperSession(const std::string& modelPath, std::string lang, std::string prompt, bool shortAudioContext);
 	~WhisperSession();
 	// Adds to the buffer
-	void addAudioFromRecorder(IAudioRecorder& recorder);
+	void addAudio(float* audio, size_t count);
 	// Returns the next finalized slice of audio (if any) and updates the preview.
 	std::string transcribeNextChunk();
 	// Transcribes all buffered audio data that hasn't been finalized yet

@@ -3,7 +3,7 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
 import { dirname, join } from 'path';
-import { openSession, test as testWhisper, WhisperSession } from '@joplin/whisper-voice-typing';
+import { openSession, test as testWhisper, Session as WhisperSession } from '@joplin/whisper-voice-typing';
 import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
 import { languageCodeOnly, stringByLocale } from '@joplin/lib/locale';
 import { Platform } from 'react-native';
@@ -128,7 +128,7 @@ class Whisper implements VoiceTypingSession {
 		}
 		try {
 			logger.debug('starting recorder');
-			await this.session.startRecording();
+			await this.session.open();
 			logger.debug('recorder started');
 
 			const loopStartCounter = this.closeCounter;
@@ -153,7 +153,7 @@ class Whisper implements VoiceTypingSession {
 		}
 
 		try {
-			const data: string = await this.session.convertAvailable();
+			const data: string = await this.session.convertNext(null);
 			this.onDataFinalize(data);
 		} catch (error) {
 			logger.error('Error stopping session: ', error);
@@ -169,7 +169,7 @@ class Whisper implements VoiceTypingSession {
 		}
 
 		logger.info('Closing session...');
-		const promise = this.session.closeSession();
+		const promise = this.session.close();
 		this.session = null;
 		this.closeCounter ++;
 
@@ -267,10 +267,10 @@ const whisper: VoiceTypingProvider = {
 		}
 
 		logger.debug('Starting whisper session', config.supportsShortAudioCtx ? '(short audio context)' : '');
-		const sessionId = await openSession({
+		const session = openSession({
 			modelPath, locale, prompt: getPrompt(locale, config.prompts), shortAudioContext: config.supportsShortAudioCtx,
 		});
-		return new Whisper(sessionId, callbacks, config);
+		return new Whisper(session, callbacks, config);
 	},
 	modelName: 'whisper',
 };

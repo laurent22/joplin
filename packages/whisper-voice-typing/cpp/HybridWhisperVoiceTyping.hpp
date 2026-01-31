@@ -8,9 +8,7 @@ namespace margelo::nitro::whispervoicetyping {
     public:
         HybridWhisperVoiceTyping(): HybridObject(TAG) {};
 
-        std::shared_ptr<
-            Promise<SessionPointer>
-        > openSession(const SessionOptions& options) override;
+        SessionPointer openSession(const SessionOptions& options) override;
 
         // Runs tests
         std::shared_ptr<Promise<void>> test() override;

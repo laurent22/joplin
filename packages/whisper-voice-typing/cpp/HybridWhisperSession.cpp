@@ -1,23 +1,31 @@
 #include "HybridWhisperSession.hpp"
-#ifndef __APPLE__
-#include "AudioRecorderJni.hpp"
-#endif
+#include "androidUtil.h"
+#include <NitroModules/ArrayBuffer.hpp>
 
 using namespace margelo::nitro::whispervoicetyping;
 
 struct HybridWhisperSession::State_ {
     State_(const SessionOptions& options)
-        :
-#ifndef __APPLE__
-          recorder_(std::make_unique<AudioRecorderJni> ()),
-#endif // ifdef __APPLE__
-          session_(options.modelPath, options.locale, options.prompt, options.shortAudioContext)
+        : session_(options.modelPath, options.locale, options.prompt, options.shortAudioContext)
     {};
 
+    void addAudio(ArrayBuffer& data);
+
     std::mutex mutex_;
-    std::unique_ptr<IAudioRecorder> recorder_;
     WhisperSession session_;
 };
+
+void HybridWhisperSession::State_::addAudio(ArrayBuffer& data) {
+    float* dataFloat = reinterpret_cast<float*>(data.data());
+    size_t sizeFloats = data.size() / sizeof(float);
+
+    if (dataFloat == nullptr) {
+        throw std::logic_error("Attempting to add audio from a source that has already been deleted.");
+    }
+
+    LOGD("Add audio (size %zu)", sizeFloats);
+    session_.addAudio(dataFloat, sizeFloats);
+}
 
 HybridWhisperSession::HybridWhisperSession(
     const SessionOptions& options
@@ -26,45 +34,15 @@ HybridWhisperSession::HybridWhisperSession(
     state_(std::make_shared<HybridWhisperSession::State_>(options))
 { }
 
-std::shared_ptr<Promise<void>> HybridWhisperSession::startRecording() {
-    auto state = state_;
-    return Promise<void>::async([state] () -> void {
-        // Promise::async can run on a separate thread. Only allow one action to run at a time
-        std::lock_guard<std::mutex> lock { state->mutex_ };
+void HybridWhisperSession::pushAudio(const std::shared_ptr<ArrayBuffer>& audio) {
+    std::lock_guard<std::mutex> lock { state_->mutex_ };
 
-        state->recorder_->start();
-    });
+    state_->addAudio(*audio);
 }
 
-std::shared_ptr<Promise<std::string>> HybridWhisperSession::convertNext(double seconds) {
-    auto state = state_;
-    return Promise<std::string>::async([state, seconds] () -> std::string {
+std::shared_ptr<Promise<std::string>> HybridWhisperSession::convertNext() {
+    return Promise<std::string>::async([state = state_] () -> std::string {
         std::lock_guard<std::mutex> lock { state->mutex_ };
-
-        // Wait for the data to become available...
-        state->recorder_->waitForData(seconds);
-        // Convert the data:
-        state->session_.addAudioFromRecorder(*state->recorder_);
         return state->session_.transcribeNextChunk();
-    });
-}
-
-std::shared_ptr<Promise<std::string>> HybridWhisperSession::convertAvailable() {
-    auto state = state_;
-    return Promise<std::string>::async([state] () -> std::string {
-        std::lock_guard<std::mutex> lock { state->mutex_ };
-
-        // Convert the data:
-        state->session_.addAudioFromRecorder(*state->recorder_);
-        return state->session_.transcribeNextChunk();
-    });
-}
-
-std::shared_ptr<Promise<void>> HybridWhisperSession::closeSession() {
-    auto state = state_;
-    return Promise<void>::async([state] {
-        std::lock_guard<std::mutex> lock { state->mutex_ };
-
-        state->recorder_->stop();
     });
 }

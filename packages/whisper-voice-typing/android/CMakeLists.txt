@@ -9,8 +9,6 @@ set(CMAKE_CXX_STANDARD 20)
 add_library(
         ${PACKAGE_NAME} SHARED
         src/main/cpp/cpp-adapter.cpp
-        src/main/cpp/AudioRecorderJni.cpp
-        src/main/cpp/JniWrapper.cpp
         ../cpp/utils/testing.cpp
         ../cpp/utils/findLongestSilence_test.cpp
         ../cpp/utils/findLongestSilence.cpp

@@ -216,10 +216,11 @@ WhisperSession::transcribeNextChunk() {
 }
 
 
-void WhisperSession::addAudioFromRecorder(IAudioRecorder& recorder) {
-	LOGD("Pulling audio data. Initial buffer size: %zu...", audioBuffer_.size());
-	recorder.pullAvailable(audioBuffer_);
-	LOGD("...final buffer size: %zu", audioBuffer_.size());
+void WhisperSession::addAudio(float* data, size_t count) {
+	// See https://en.cppreference.com/w/cpp/algorithm/copy_n.html,
+	//     and the suggestions at https://stackoverflow.com/q/34552783.
+	audioBuffer_.reserve(count);
+	std::copy_n(data, count, std::back_inserter(audioBuffer_));
 }
 
 std::string WhisperSession::transcribeAll() {
