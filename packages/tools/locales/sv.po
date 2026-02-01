@@ -2741,7 +2741,7 @@ msgstr ""
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
 msgid "Failed to connect to your account. Please try again."
-msgstr "Det gick inte att ansluta till ditt konto. Vänligen försök igen."
+msgstr "Det gick inte att ansluta till ditt konto. Försök igen."
 
 #: packages/app-cli/app/main.js:107
 msgid "Fatal error:"
@@ -4750,7 +4750,7 @@ msgstr ""
 
 #: packages/server/src/utils/saml.ts:58
 msgid "Please wait while we load your organisation sign-in page..."
-msgstr "Vänligen vänta medan vi laddar din organisations inloggningssida..."
+msgstr "Vänta medan vi laddar din organisations inloggningssida..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:315
@@ -6801,7 +6801,7 @@ msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
 msgstr ""
-"För att tillåta Joplin att synkronisera med Joplin Cloud, vänligen logga in "
+"För att tillåta Joplin att synkronisera med Joplin Cloud, logga in "
 "med denna URL:"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
