@@ -127,8 +127,28 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
         };
 
         let (output_path, file_name) = build_output_dir(&file_path)?;
-        let section = parser.parse_section_from_data(&data, &file_name)?;
-        section::Renderer::new().render(&section, output_path)?;
+        let section = match parser.parse_section_from_data(&data, &file_name) {
+            Ok(s) => s,
+            Err(e) => {
+                log!("Skipping malformed section {file_path}: {:?}", e);
+                continue;
+            }
+        };
+
+        let mut renderer = section::Renderer::new();
+        if let Err(e) = renderer.render(&section, output_path.clone()) {
+            log!("Render failed for section {file_path}: {:?}", e);
+
+            let error_md = format!(
+                "# Import warning\n\nThis section failed to render:\n\n```\n{:?}\n```",
+                e
+            );
+
+            fs_driver().write_file(
+                &fs_driver().join(&output_path, "IMPORT_ERROR.md"),
+                error_md.as_bytes(),
+            )?;
+        }
     }
 
     Ok(())
