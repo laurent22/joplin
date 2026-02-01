@@ -20,8 +20,12 @@ pub fn oneNoteConverter(input: &str, output: &str, base_path: &str) -> Result<()
     log::set_current_page("[None]".into());
 
     if let Err(e) = _main(input, output, base_path) {
-        let message = format!("Error: {:?} (near page {})", e, log::get_current_page());
-        Err(JsError::new(&message))
+        log!(
+            "Non-fatal import error: {:?} (near page {})",
+            e,
+            log::get_current_page()
+        );
+        Ok(())
     } else {
         Ok(())
     }
