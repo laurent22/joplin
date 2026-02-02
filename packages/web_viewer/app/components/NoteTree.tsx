@@ -82,15 +82,17 @@ export default function NoteTree() {
   }
 
   return (
-    <SimpleTreeView
-      aria-label="folder tree"
-      slots={{
-        collapseIcon: ExpandMoreIcon,
-        expandIcon: ChevronRightIcon,
-      }}
-      sx={{ flexGrow: 1, overflowY: 'auto' }}
-    >
-      {renderTree(folders)}
-    </SimpleTreeView>
+    <Box sx={{ height: '100%' }}>
+      <SimpleTreeView
+        aria-label="folder tree"
+        slots={{
+          collapseIcon: ExpandMoreIcon,
+          expandIcon: ChevronRightIcon,
+        }}
+        sx={{ height: '100%', overflowY: 'auto' }}
+      >
+        {renderTree(folders)}
+      </SimpleTreeView>
+    </Box>
   );
 }

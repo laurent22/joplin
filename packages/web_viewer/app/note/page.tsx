@@ -8,9 +8,11 @@ export default function NotePage() {
     <ReactQueryProvider>
       <div className="h-screen">
         <Group orientation="horizontal">
-          <Panel defaultSize={400} minSize={20} className="bg-gray-100 p-4">
+          <Panel defaultSize={400} minSize={20} className="bg-gray-100 p-4 flex flex-col">
             <h2 className="text-lg font-bold mb-4">Folders</h2>
-            <NoteTree />
+            <div className="flex-1 min-h-0 overflow-auto">
+              <NoteTree />
+            </div>
             <div className="mt-4">
               <Link href="/" className="text-blue-600 underline hover:text-blue-800">Go to Home</Link>
             </div>
