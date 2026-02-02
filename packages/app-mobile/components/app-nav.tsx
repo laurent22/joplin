@@ -63,7 +63,7 @@ const AppNavComponent: React.FC<Props> = (props) => {
 
 	const theme = themeStyle(props.themeId);
 	const styles = useStyles(theme);
-	const autocompletionBarPadding = keyboardState.keyboardVisible && Platform.OS === 'ios' ? safeAreaPadding.top : 0;
+	const autocompletionBarPadding = keyboardState.keyboardVisible ? safeAreaPadding.top : 0;
 
 	return (
 		<KeyboardAvoidingView
