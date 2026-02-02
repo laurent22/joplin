@@ -9,6 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.7",
+    "@mui/material": "^7.3.7",
+    "@mui/x-tree-view": "^8.26.0",
+    "@tanstack/react-query": "^5.90.20",
     "better-sqlite3": "^12.6.2",
     "next": "16.1.6",
     "react": "19.2.3",
