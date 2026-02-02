@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import Folder from '@joplin/lib/models/Folder';
-import { initializeDatabase } from '@/lib/database';
+import { getDatabase } from '@/lib/database';
 
 export async function GET() {
   try {
-    // データベースを初期化
-    await initializeDatabase();
+    // データベース初期化の完了を待つ（初回は自動初期化、2回目以降は即座に返る）
+    await getDatabase();
     
     // Folder.all()を使って全てのフォルダ情報を取得
     const folders = await Folder.all({

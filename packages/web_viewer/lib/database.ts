@@ -2,20 +2,17 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import BaseModel from '@joplin/lib/BaseModel';
 import { homedir } from 'os';
 
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
+import { DatabaseDriverNode } from '@joplin/lib/database-driver-node.js';
 
 // データベースのシングルトンインスタンス
 let database: JoplinDatabase | null = null;
 let isInitialized = false;
+let initializationPromise: Promise<JoplinDatabase> | null = null;
 
 /**
- * データベースを初期化する
+ * データベースを初期化する（内部関数）
  */
-export async function initializeDatabase() {
-  if (isInitialized && database) {
-    return database;
-  }
-
+async function _initializeDatabase(): Promise<JoplinDatabase> {
   try {
     // データベースドライバーを作成
     const driver = new DatabaseDriverNode();
@@ -36,18 +33,30 @@ export async function initializeDatabase() {
     return database;
   } catch (error) {
     console.error('Failed to initialize database:', error);
+    database = null;
+    isInitialized = false;
+    initializationPromise = null;
     throw error;
   }
 }
 
 /**
- * データベースインスタンスを取得する
+ * データベースを取得する（必要に応じて初期化）
  */
-export function getDatabase(): JoplinDatabase {
-  if (!database || !isInitialized) {
-    throw new Error('Database not initialized. Call initializeDatabase() first.');
+export async function getDatabase(): Promise<JoplinDatabase> {
+  // 既に初期化済みの場合はそのまま返す
+  if (isInitialized && database) {
+    return database;
   }
-  return database;
+
+  // 初期化中の場合は同じPromiseを返す（重複初期化を防ぐ）
+  if (initializationPromise) {
+    return initializationPromise;
+  }
+
+  // 初回初期化
+  initializationPromise = _initializeDatabase();
+  return initializationPromise;
 }
 
 /**
@@ -58,6 +67,13 @@ export async function closeDatabase() {
     // JoplinDatabaseにcloseメソッドがあれば呼び出す
     database = null;
     isInitialized = false;
+    initializationPromise = null;
     console.log('Database connection closed');
   }
+}
+
+// モジュールロード時に自動的に初期化を開始
+if (typeof window === 'undefined') {
+  // サーバーサイドでのみ実行
+  initializationPromise = _initializeDatabase();
 }
