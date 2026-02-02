@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { GestureResponderEvent, KeyboardAvoidingView, Modal, ModalProps, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
+import { GestureResponderEvent, Modal, ModalProps, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ModalState } from './accessibility/FocusControl/types';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { _ } from '@joplin/lib/locale';
+import KeyboardAvoidingView from './KeyboardAvoidingView';
 
 export interface ModalElementProps extends ModalProps {
 	children: React.ReactNode;

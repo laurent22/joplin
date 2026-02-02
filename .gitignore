@@ -665,6 +665,7 @@ packages/app-mobile/components/FeedbackBanner.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
+packages/app-mobile/components/KeyboardAvoidingView.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/ModalDialog.js
 packages/app-mobile/components/NestableFlatList.js
