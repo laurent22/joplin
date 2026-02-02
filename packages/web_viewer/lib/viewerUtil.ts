@@ -1,4 +1,5 @@
 import { getDatabase, FolderEntity } from './database';
+import { Folder } from './folder';
 
 // APIレスポンスの型定義
 export interface FolderListResponse {
@@ -29,10 +30,7 @@ export class ViewerUtil {
 
   public static selectFolderDataAndCreateTree(): FolderTreeNode[] {
     // データベースから全てのフォルダ情報を取得
-    const db = getDatabase();
-    const folders = db.prepare(
-      'SELECT id, title, parent_id, updated_time, created_time FROM folders ORDER BY title ASC'
-    ).all() as FolderEntity[];
+    const folders = Folder.getAllFolders();
 
     // レスポンス用にデータを整形
     const folderList: FolderListResponse[] = folders.map(folder => ({
