@@ -51,11 +51,24 @@ function renderTree(nodes: FolderTreeNode[]) {
   ));
 }
 
+function collectIds(nodes: FolderTreeNode[]): string[] {
+  const ids: string[] = [];
+  for (const node of nodes) {
+    ids.push(node.id);
+    if (node.children && node.children.length > 0) {
+      ids.push(...collectIds(node.children));
+    }
+  }
+  return ids;
+}
+
 export default function NoteTree() {
   const { data: folders, isLoading, error } = useQuery({
     queryKey: ['folders'],
     queryFn: fetchFolders,
   });
+
+  const allIds = React.useMemo(() => collectIds(folders || []), [folders]);
 
   if (isLoading) {
     return (
@@ -81,6 +94,8 @@ export default function NoteTree() {
     );
   }
 
+  
+
   return (
     <Box sx={{ height: '100%' }}>
       <SimpleTreeView
@@ -90,6 +105,7 @@ export default function NoteTree() {
           expandIcon: ChevronRightIcon,
         }}
         sx={{ height: '100%', overflowY: 'auto' }}
+        defaultExpandedItems={allIds}
       >
         {renderTree(folders)}
       </SimpleTreeView>
