@@ -9,6 +9,26 @@ export interface FolderEntity {
   created_time: number;
 }
 
+export interface NoteEntity {
+  id: string;
+  parent_id: string;
+  title: string;
+  created_time: number;
+  updated_time: number;
+  is_conflict: number;
+  latitude: number;
+  longitude: number;
+  altitude: number;
+  author: string;
+  source_url: string;
+  is_todo: number;
+  todo_due: number;
+  todo_completed: number;
+  source: string;
+  source_application: string;
+  application_data: string;
+  order: number;
+}
 // データベースのシングルトンインスタンス
 let database: Database.Database | null = null;
 
