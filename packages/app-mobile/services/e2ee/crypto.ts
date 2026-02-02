@@ -1,6 +1,6 @@
 import { Crypto, CryptoBuffer, Digest, CipherAlgorithm, EncryptionResult, EncryptionParameters } from '@joplin/lib/services/e2ee/types';
-import QuickCrypto from 'react-native-quick-crypto';
-import type { CipherGCMOptions, CipherGCM, DecipherGCM } from 'crypto';
+import QuickCrypto, { Buffer as QuickCryptoBuffer } from 'react-native-quick-crypto';
+import type { CipherGCMOptions } from 'crypto';
 import {
 	generateNonce as generateNonceShared,
 	increaseNonce as increaseNonceShared,
@@ -29,9 +29,9 @@ const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, key
 
 const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	const cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
+	const cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions);
 
-	cipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
+	cipher.setAAD(associatedData as QuickCryptoBuffer, { plaintextLength: Buffer.byteLength(data) });
 
 	const encryptedData = [cipher.update(data), cipher.final()];
 	const authTag = cipher.getAuthTag();
@@ -41,12 +41,12 @@ const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 
 const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	const decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as DecipherGCM;
+	const decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions);
 
 	const authTag = data.subarray(-authTagLength);
 	const encryptedData = data.subarray(0, data.byteLength - authTag.byteLength);
-	decipher.setAuthTag(authTag);
-	decipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
+	decipher.setAuthTag(authTag as QuickCryptoBuffer);
+	decipher.setAAD(associatedData as QuickCryptoBuffer, { plaintextLength: Buffer.byteLength(data) });
 
 	try {
 		return Buffer.concat([decipher.update(encryptedData), decipher.final()]);
