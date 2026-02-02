@@ -15,11 +15,13 @@
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
     "@mui/x-tree-view": "^8.26.0",
+    "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.90.20",
     "better-sqlite3": "^12.6.2",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-redux": "^9.2.0",
     "react-resizable-panels": "^4.5.8"
   },
   "devDependencies": {
