@@ -1,27 +1,23 @@
 import { NextResponse } from 'next/server';
 import Folder from '@joplin/lib/models/Folder';
 import { getDatabase } from '@/lib/database';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import { SuccessResponse, ErrorResponse, FolderListResponse, ViewerUtil } from '@/lib/viewerUtil';
 
-export async function GET() {
+
+
+type ApiResponse = SuccessResponse | ErrorResponse;
+
+export async function GET(): Promise<NextResponse<ApiResponse>> {
   try {
     // データベース初期化の完了を待つ（初回は自動初期化、2回目以降は即座に返る）
     await getDatabase();
     
-    // Folder.all()を使って全てのフォルダ情報を取得
-    const folders = await Folder.all({
-      fields: ['id', 'title', 'parent_id', 'updated_time', 'created_time'],
-      order: [
-        {
-          by: 'title',
-          dir: 'ASC',
-        },
-      ],
-    });
+    const folderTree = await ViewerUtil.selectFolderDataAndCreateTree();
 
     return NextResponse.json({ 
       success: true,
-      data: folders,
-      count: folders.length 
+      data: folderTree,
     });
   } catch (error) {
     console.error('Error fetching folders:', error);
@@ -35,3 +31,5 @@ export async function GET() {
     );
   }
 }
+
+
