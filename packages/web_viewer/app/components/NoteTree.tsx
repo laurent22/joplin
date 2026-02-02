@@ -44,7 +44,12 @@ function renderTree(nodes: FolderTreeNode[]) {
     <TreeItem
       key={node.id}
       itemId={node.id}
-      label={node.title}
+      label={
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <FolderIcon fontSize="small" />
+          <span>{node.title}</span>
+        </Box>
+      }
     >
       {node.children.length > 0 && renderTree(node.children)}
     </TreeItem>
