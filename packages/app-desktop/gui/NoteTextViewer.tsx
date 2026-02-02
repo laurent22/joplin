@@ -239,8 +239,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 			className="noteTextViewer"
 			ref={setWebview}
 			style={viewerStyle}
-			allow='clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=(self) encrypted-media=(self)'
-			allowFullScreen={true}
+			allow="clipboard-write 'self' joplin-content://note-viewer/; fullscreen 'self' joplin-content://note-viewer/; autoplay 'self' joplin-content://note-viewer/; local-fonts 'self' joplin-content://note-viewer/; encrypted-media 'self' joplin-content://note-viewer/"
 			aria-label={_('Note viewer')}
 			src={`joplin-content://note-viewer/${toForwardSlashes(getAssetPath('gui/note-viewer/index.html'))}`}
 		></iframe>
