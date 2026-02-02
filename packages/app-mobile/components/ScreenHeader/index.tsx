@@ -688,8 +688,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const menuComp =
 			!menuOptions.length || !showContextMenuButton ? null : (
 				<Menu themeId={this.props.themeId} options={menuOptions}>
-					<View style={contextMenuStyle} accessibilityLabel={_('Actions')}>
-						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={null}/>
+					<View style={contextMenuStyle}>
+						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={_('Actions')}/>
 					</View>
 				</Menu>
 			);
