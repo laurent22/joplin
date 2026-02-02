@@ -3,16 +3,15 @@ import { useEffect, RefObject } from 'react';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { EditContextMenuFilterObject, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
-import eventManager from '@joplin/lib/eventManager';
 import bridge from '../../../../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
-import { ContextMenuItemType, ContextMenuOptions, buildMenuItems } from '../../../utils/contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorContextMenuFilter } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
@@ -147,7 +146,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return null;
 		};
 
-		const showImageContextMenu = (resourceId: string) => {
+		const showImageContextMenu = async (resourceId: string) => {
 			const menu = new Menu();
 			const contextMenuOptions: ContextMenuOptions = {
 				itemType: ContextMenuItemType.Image,
@@ -165,7 +164,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 				mdToHtml: null,
 			};
 
-			const imageMenuItems = buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
+			const imageMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
 			for (const item of imageMenuItems) {
 				menu.append(item);
 			}
@@ -182,7 +181,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 					const resourceId = pathToId(imgElement.src);
 					if (resourceId) {
 						event.preventDefault();
-						showImageContextMenu(resourceId);
+						await showImageContextMenu(resourceId);
 						return;
 					}
 				}
@@ -192,7 +191,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const markupResourceId = getResourceIdFromMarkup();
 			if (markupResourceId && pointerInsideEditor(params)) {
 				event.preventDefault();
-				showImageContextMenu(markupResourceId);
+				await showImageContextMenu(markupResourceId);
 				return;
 			}
 
@@ -255,21 +254,16 @@ const useContextMenu = (props: ContextMenuProps) => {
 				(editorRef.current as any).alignSelection(params);
 			}
 
-			let filterObject: EditContextMenuFilterObject = {
-				items: [],
-			};
+			const extraItems = await handleEditorContextMenuFilter();
 
-			filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
-
-			for (const item of filterObject.items) {
+			if (extraItems.length) {
 				menu.append(new MenuItem({
-					label: item.label,
-					click: async () => {
-						const args = item.commandArgs || [];
-						void CommandService.instance().execute(item.commandName, ...args);
-					},
-					type: item.type,
+					type: 'separator',
 				}));
+			}
+
+			for (const extraItem of extraItems) {
+				menu.append(extraItem);
 			}
 
 			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied

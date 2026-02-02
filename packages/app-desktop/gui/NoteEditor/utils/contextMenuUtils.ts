@@ -2,6 +2,10 @@ import Resource from '@joplin/lib/models/Resource';
 import Logger from '@joplin/utils/Logger';
 import bridge from '../../../services/bridge';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/types';
+import eventManager from '@joplin/lib/eventManager';
+import CommandService from '@joplin/lib/services/CommandService';
+import { type MenuItem as MenuItemType } from 'electron';
 
 const MenuItem = bridge().MenuItem;
 const logger = Logger.create('contextMenuUtils');
@@ -131,13 +135,58 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 	});
 };
 
-export function buildMenuItems(items: ContextMenuItems, options: ContextMenuOptions) {
+export const handleEditorContextMenuFilter = async () => {
+	const output: MenuItemType[] = [];
+
+	let filterObject: EditContextMenuFilterObject = {
+		items: [],
+	};
+
+	filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
+
+	for (const item of filterObject.items) {
+		output.push(new MenuItem({
+			label: item.label,
+			click: async () => {
+				const args = item.commandArgs || [];
+				void CommandService.instance().execute(item.commandName, ...args);
+			},
+			type: item.type,
+		}));
+	}
+
+	return output;
+};
+
+export const buildMenuItems = async (items: ContextMenuItems, options: ContextMenuOptions) => {
 	const activeItems: ContextMenuItem[] = [];
 	for (const itemKey in items) {
 		const item = items[itemKey];
 		if (item.isActive(options.itemType, options)) {
 			activeItems.push(item);
 		}
+	}
+
+	const extraItems = await handleEditorContextMenuFilter();
+
+	if (extraItems.length) {
+		activeItems.push({
+			isActive: () => true,
+			label: '',
+			onAction: () => {},
+			isSeparator: true,
+		});
+	}
+
+	for (const [, extraItem] of extraItems.entries()) {
+		activeItems.push({
+			isActive: () => true,
+			label: extraItem.label,
+			onAction: () => {
+				extraItem.click();
+			},
+			isSeparator: false,
+		});
 	}
 
 	// Filter out leading, trailing, and successive separators
@@ -165,4 +214,4 @@ export function buildMenuItems(items: ContextMenuItems, options: ContextMenuOpti
 		},
 		type: item.isSeparator ? 'separator' : 'normal',
 	}));
-}
+};

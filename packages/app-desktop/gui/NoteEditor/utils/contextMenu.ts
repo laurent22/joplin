@@ -278,7 +278,9 @@ export default async function contextMenu(options: ContextMenuOptions, dispatch:
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
 
-	for (const item of buildMenuItems(menuItems(dispatch), options)) {
+	const items = await buildMenuItems(menuItems(dispatch), options);
+
+	for (const item of items) {
 		menu.append(item);
 	}
 

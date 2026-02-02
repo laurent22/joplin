@@ -36,7 +36,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 		const contextMenuItems = menuItems(dispatch);
 		const targetWindow = bridge().activeWindow();
 
-		const makeMainMenuItems = (element: Element) => {
+		const makeMainMenuItems = async (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;
 			let resourceId = '';
 			let linkUrl = null;
@@ -96,7 +96,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			return [];
 		};
 
-		const showContextMenu = (element: HTMLElement, misspelledWord: string|null, dictionarySuggestions: string[]) => {
+		const showContextMenu = async (element: HTMLElement, misspelledWord: string|null, dictionarySuggestions: string[]) => {
 			const menu = new Menu();
 			const menuItems: MenuItemType[] = [];
 			const toMenuItems = (specs: MenuItemConstructorOptions[]) => {
@@ -104,7 +104,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			};
 
 			menuItems.push(...makeEditableMenuItems(element));
-			menuItems.push(...makeMainMenuItems(element));
+			menuItems.push(...(await makeMainMenuItems(element)));
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
 			menuItems.push(
 				...toMenuItems(spellCheckerMenuItems),
@@ -120,16 +120,16 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 		};
 
 		let lastTarget: EventTarget|null = null;
-		const onElectronContextMenu = (event: ElectronEvent, params: ContextMenuParams) => {
+		const onElectronContextMenu = async (event: ElectronEvent, params: ContextMenuParams) => {
 			if (!lastTarget) return;
 			const element = lastTarget as HTMLElement;
 			lastTarget = null;
 
 			event.preventDefault();
-			showContextMenu(element, params.misspelledWord, params.dictionarySuggestions);
+			await showContextMenu(element, params.misspelledWord, params.dictionarySuggestions);
 		};
 
-		const onBrowserContextMenu = (event: PointerEvent) => {
+		const onBrowserContextMenu = async (event: PointerEvent) => {
 			const isKeyboard = event.buttons === 0;
 			if (isKeyboard) {
 				// Context menu events from the keyboard seem to always use <body> as the
@@ -148,7 +148,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			const isFromPlugin = !event.isTrusted;
 			if (isFromPlugin) {
 				event.preventDefault();
-				showContextMenu(lastTarget as HTMLElement, null, []);
+				await showContextMenu(lastTarget as HTMLElement, null, []);
 				lastTarget = null;
 			}
 		};
