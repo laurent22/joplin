@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { SuccessResponse, ErrorResponse, ViewerUtil } from '@/lib/viewerUtil';
+import { Note } from '@/lib/note';
 
 type ApiResponse = SuccessResponse | ErrorResponse;
 
 export async function GET(): Promise<NextResponse<ApiResponse>> {
   try {
     const folderTree = ViewerUtil.selectFolderDataAndCreateTree();
+    const allNotes = Note.getAllNotesMetadata();
 
     return NextResponse.json({ 
       success: true,
