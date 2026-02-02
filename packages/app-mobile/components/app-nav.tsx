@@ -69,9 +69,9 @@ const AppNavComponent: React.FC<Props> = (props) => {
 		<KeyboardAvoidingView
 			style={styles.keyboardAvoidingView}
 			enabled={
-				// Workaround: On Android 16, the main app content seems to auto-resize when the keyboard is shown.
+				// Workaround: On Android 15, the main app content seems to auto-resize when the keyboard is shown.
 				// On earlier Android versions (and in modals), this does not seem to be the case.
-				(Platform.OS === 'android' && Platform.Version < 36)
+				(Platform.OS === 'android' && Platform.Version < 35)
 				|| Platform.OS === 'ios'
 			}
 		>
