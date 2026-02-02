@@ -8,27 +8,42 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import DescriptionIcon from '@mui/icons-material/Description';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import { NoteEntity } from '@/lib/database';
 
-interface FolderTreeNode {
+type TreeNode = FolderNode | NoteNode;
+
+interface FolderNode {
   id: string;
   title: string;
   parent_id: string;
   updated_time: number;
   created_time: number;
-  children: FolderTreeNode[];
+  type: 'Folder';
+  children: TreeNode[];
+}
+
+interface NoteNode {
+  id: string;
+  title: string;
+  parent_id: string;
+  updated_time: number;
+  created_time: number;
+  type: 'Note';
+  metadata: NoteEntity;
 }
 
 interface ApiResponse {
   success: boolean;
-  data?: FolderTreeNode[];
+  data?: TreeNode[];
   error?: string;
   message?: string;
 }
 
-async function fetchFolders(): Promise<FolderTreeNode[]> {
+async function fetchFolders(): Promise<TreeNode[]> {
   const response = await fetch('/api/tree');
   const json: ApiResponse = await response.json();
   
@@ -38,29 +53,46 @@ async function fetchFolders(): Promise<FolderTreeNode[]> {
   
   return json.data || [];
 }
+function renderTree(nodes: TreeNode[]) {
+  return nodes.map((node) => {
+    if (node.type === 'Folder') {
+      return (
+        <TreeItem
+          key={node.id}
+          itemId={node.id}
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <FolderIcon fontSize="small" sx={{ color: '#F3C13A' }} />
+              <span>{node.title}</span>
+            </Box>
+          }
+        >
+          {node.children && node.children.length > 0 && renderTree(node.children)}
+        </TreeItem>
+      );
+    }
 
-function renderTree(nodes: FolderTreeNode[]) {
-  return nodes.map((node) => (
-    <TreeItem
-      key={node.id}
-      itemId={node.id}
-      label={
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <FolderIcon fontSize="small" sx={{ color: '#F3C13A' }} />
-          <span>{node.title}</span>
-        </Box>
-      }
-    >
-      {node.children.length > 0 && renderTree(node.children)}
-    </TreeItem>
-  ));
+    // Note node (leaf)
+    return (
+      <TreeItem
+        key={node.id}
+        itemId={node.id}
+        label={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
+            <span>{node.title}</span>
+          </Box>
+        }
+      />
+    );
+  });
 }
 
-function collectIds(nodes: FolderTreeNode[]): string[] {
+function collectIds(nodes: TreeNode[]): string[] {
   const ids: string[] = [];
   for (const node of nodes) {
     ids.push(node.id);
-    if (node.children && node.children.length > 0) {
+    if (node.type === 'Folder' && node.children && node.children.length > 0) {
       ids.push(...collectIds(node.children));
     }
   }

@@ -1,5 +1,6 @@
-import { getDatabase, FolderEntity } from './database';
+import { getDatabase, FolderEntity, NoteEntity } from './database';
 import { Folder } from './folder';
+import { Note } from './note';
 
 // APIレスポンスの型定義
 export interface FolderListResponse {
@@ -10,9 +11,21 @@ export interface FolderListResponse {
   created_time: number;
 }
 
+export interface NoteTreeNode {
+  id: string;
+  title: string;
+  parent_id: string;
+  updated_time: number;
+  created_time: number;
+  type: 'Note';
+  metadata: NoteEntity;
+}
+
+export type TreeNode = FolderTreeNode | NoteTreeNode;
+
 export interface SuccessResponse {
   success: true;
-  data: FolderTreeNode[];
+  data: TreeNode[];
 }
 
 export interface ErrorResponse {
@@ -23,7 +36,8 @@ export interface ErrorResponse {
 
 // ツリー構造のフォルダ型定義
 export interface FolderTreeNode extends FolderListResponse {
-  children: FolderTreeNode[];
+  type: 'Folder';
+  children: TreeNode[];
 }
 
 export class ViewerUtil {
@@ -45,6 +59,77 @@ export class ViewerUtil {
     return folderTree;
   }
 
+  public static selectFolderAndNotesAndCreateTree() {
+    const folderTree = ViewerUtil.createFolderTree(
+      // reuse same formatting as selectFolderDataAndCreateTree
+      (Folder.getAllFolders() || []).map(folder => ({
+        id: folder.id || '',
+        title: folder.title || '',
+        parent_id: folder.parent_id || '',
+        updated_time: folder.updated_time || 0,
+        created_time: folder.created_time || 0,
+      }))
+    );
+
+    const allNoteMetadata = Note.getAllNotesMetadata();
+
+    // build id map for folders so we can append notes to their parent folder
+    const idMap = new Map<string, FolderTreeNode>();
+    const traverse = (nodes: FolderTreeNode[]) => {
+      for (const node of nodes) {
+        idMap.set(node.id, node);
+        // only traverse folder children (note nodes won't exist yet)
+        node.children.forEach(child => {
+          if ((child as FolderTreeNode).type === 'Folder') {
+            traverse([child as FolderTreeNode]);
+          }
+        });
+      }
+    };
+    traverse(folderTree);
+
+    // attach notes to their parent folder's children
+    const rootNodes: TreeNode[] = [...folderTree];
+
+    for (const note of allNoteMetadata) {
+      const noteNode: NoteTreeNode = {
+        id: note.id,
+        title: note.title || '',
+        parent_id: note.parent_id || '',
+        updated_time: note.updated_time || 0,
+        created_time: note.created_time || 0,
+        type: 'Note',
+        metadata: note,
+      };
+
+      if (note.parent_id && idMap.has(note.parent_id)) {
+        const parent = idMap.get(note.parent_id)!;
+        parent.children.push(noteNode);
+      } else {
+        // orphan notes go to root
+        rootNodes.push(noteNode);
+      }
+    }
+
+    // sort nodes by title, recursively for folders
+    const sortByTitle = (nodes: TreeNode[]): TreeNode[] => {
+      return nodes
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .map(node => {
+          if ((node as FolderTreeNode).type === 'Folder') {
+            const folderNode = node as FolderTreeNode;
+            return {
+              ...folderNode,
+              children: sortByTitle(folderNode.children)
+            } as FolderTreeNode;
+          }
+          return node;
+        });
+    };
+
+    return sortByTitle(rootNodes);
+  }
+
   /**
    * フラットなフォルダリストから木構造を作成
    * @param folders フォルダのリスト
@@ -58,7 +143,8 @@ export class ViewerUtil {
     folders.forEach(folder => {
       folderMap.set(folder.id, {
         ...folder,
-        children: []
+        type: 'Folder',
+        children: [] as TreeNode[],
       });
     });
 
@@ -86,16 +172,22 @@ export class ViewerUtil {
     });
 
     // タイトルでソート（再帰的に）
-    const sortByTitle = (nodes: FolderTreeNode[]): FolderTreeNode[] => {
+    const sortByTitle = (nodes: TreeNode[]): TreeNode[] => {
       return nodes
         .sort((a, b) => a.title.localeCompare(b.title))
-        .map(node => ({
-          ...node,
-          children: sortByTitle(node.children)
-        }));
+        .map(node => {
+          if ((node as FolderTreeNode).type === 'Folder') {
+            const folderNode = node as FolderTreeNode;
+            return {
+              ...folderNode,
+              children: sortByTitle(folderNode.children)
+            } as FolderTreeNode;
+          }
+          return node;
+        });
     };
 
-    return sortByTitle(rootNodes);
+    return sortByTitle(rootNodes) as FolderTreeNode[];
   }
 }
 

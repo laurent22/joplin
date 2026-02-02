@@ -6,8 +6,7 @@ type ApiResponse = SuccessResponse | ErrorResponse;
 
 export async function GET(): Promise<NextResponse<ApiResponse>> {
   try {
-    const folderTree = ViewerUtil.selectFolderDataAndCreateTree();
-    const allNotes = Note.getAllNotesMetadata();
+    const folderTree = ViewerUtil.selectFolderAndNotesAndCreateTree();
 
     return NextResponse.json({ 
       success: true,
