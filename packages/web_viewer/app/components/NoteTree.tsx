@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { TreeView } from '@mui/x-tree-view/TreeView';
+import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -43,10 +43,8 @@ function renderTree(nodes: FolderTreeNode[]) {
   return nodes.map((node) => (
     <TreeItem
       key={node.id}
-      nodeId={node.id}
+      itemId={node.id}
       label={node.title}
-      icon={<FolderIcon />}
-      endIcon={<FolderOpenIcon />}
     >
       {node.children.length > 0 && renderTree(node.children)}
     </TreeItem>
@@ -84,13 +82,15 @@ export default function NoteTree() {
   }
 
   return (
-    <TreeView
+    <SimpleTreeView
       aria-label="folder tree"
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
+      slots={{
+        collapseIcon: ExpandMoreIcon,
+        expandIcon: ChevronRightIcon,
+      }}
       sx={{ flexGrow: 1, overflowY: 'auto' }}
     >
       {renderTree(folders)}
-    </TreeView>
+    </SimpleTreeView>
   );
 }
