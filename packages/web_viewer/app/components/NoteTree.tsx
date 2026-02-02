@@ -46,7 +46,7 @@ function renderTree(nodes: FolderTreeNode[]) {
       itemId={node.id}
       label={
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <FolderIcon fontSize="small" />
+          <FolderIcon fontSize="small" sx={{ color: '#F3C13A' }} />
           <span>{node.title}</span>
         </Box>
       }
