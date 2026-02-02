@@ -1,5 +1,5 @@
-project(WhisperVoiceTyping)
 cmake_minimum_required(VERSION 3.9.0)
+project(WhisperVoiceTyping)
 
 set(PACKAGE_NAME WhisperVoiceTyping)
 set(CMAKE_VERBOSE_MAKEFILE ON)
