@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAppSelector } from '@/lib/hooks';
 import { NoteEntity } from '@/lib/database';
 import NoteAbst from './NoteAbst';
+import NoteDetails from './NoteDetails';
 
 function fmtTime(ts?: number) {
   if (!ts) return '-';
@@ -61,5 +62,6 @@ export default function NoteViewer() {
 
   const note = fetched ?? selected;
 
-  return <NoteAbst note={note as (NoteEntity & { body?: string }) | null} />;
+//   return <NoteAbst note={note as (NoteEntity & { body?: string }) | null} />;
+return <NoteDetails note={note as (NoteEntity & { body?: string }) | null} />;
 }
