@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -82,7 +83,10 @@ function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) 
         itemId={node.id}
         label={
           <Link href={`/note?note_id=${node.id}`}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', color: 'inherit' }}>
+            <Box 
+              sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', color: 'inherit' }}
+              data-nodeid={node.id}
+            >
               <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
               <span>{node.title}</span>
             </Box>
@@ -111,8 +115,30 @@ export default function NoteTree() {
     queryFn: fetchFolders,
   });
 
+  const searchParams = useSearchParams();
+  const noteIdFromUrl = searchParams.get('note_id');
   const allIds = React.useMemo(() => collectIds(folders || []), [folders]);
   const dispatch = useAppDispatch();
+
+  // URLクエリパラメータのnote_idに対応するノートへスクロール＆フォーカス
+  React.useEffect(() => {
+    if (noteIdFromUrl && folders) {
+      // TreeItemが描画されるまで少し待つ
+      const timer = setTimeout(() => {
+        const targetElement = document.querySelector(`[data-nodeid="${noteIdFromUrl}"]`);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // フォーカスを当てる
+          const focusableElement = targetElement as HTMLElement;
+          focusableElement.focus();
+          focusableElement.click();
+        }
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [noteIdFromUrl, folders]);
 
   if (isLoading) {
     return (
