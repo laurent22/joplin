@@ -1,4 +1,4 @@
-'use client';
+ 'use client';
 
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -13,6 +13,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import { NoteEntity } from '@/lib/database';
+import { useAppDispatch } from '@/lib/hooks';
+import { setSelectedNote } from '@/lib/features/selectedNoteSlice';
 
 type TreeNode = FolderNode | NoteNode;
 
@@ -53,7 +55,7 @@ async function fetchFolders(): Promise<TreeNode[]> {
   
   return json.data || [];
 }
-function renderTree(nodes: TreeNode[]) {
+function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) {
   return nodes.map((node) => {
     if (node.type === 'Folder') {
       return (
@@ -67,7 +69,7 @@ function renderTree(nodes: TreeNode[]) {
             </Box>
           }
         >
-          {node.children && node.children.length > 0 && renderTree(node.children)}
+          {node.children && node.children.length > 0 && renderTree(node.children, onNoteDouble)}
         </TreeItem>
       );
     }
@@ -83,6 +85,7 @@ function renderTree(nodes: TreeNode[]) {
             <span>{node.title}</span>
           </Box>
         }
+        onDoubleClick={() => onNoteDouble && onNoteDouble(node as NoteNode)}
       />
     );
   });
@@ -123,6 +126,8 @@ export default function NoteTree() {
     );
   }
 
+  const dispatch = useAppDispatch();
+
   if (!folders || folders.length === 0) {
     return (
       <Alert severity="info">
@@ -144,7 +149,7 @@ export default function NoteTree() {
         sx={{ height: '100%', overflowY: 'auto' }}
         defaultExpandedItems={allIds}
       >
-        {renderTree(folders)}
+        {renderTree(folders, (n) => dispatch(setSelectedNote(n.metadata)))}
       </SimpleTreeView>
     </Box>
   );

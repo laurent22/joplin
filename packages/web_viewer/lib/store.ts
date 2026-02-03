@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import exampleReducer from './features/exampleSlice';
+import selectedNoteReducer from './features/selectedNoteSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       example: exampleReducer,
+      selectedNote: selectedNoteReducer,
     },
   });
 };
