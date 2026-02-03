@@ -27,9 +27,19 @@ joplin.plugins.register({
 			const newItems: MenuItem[] = [];
 
 			newItems.push({
-				label: 'filterEditorContextMenu test',
+				label: 'filterEditorContextMenu test 1',
 				commandName: 'newNote',
-				commandArgs: ['Created from context menu'],
+				commandArgs: ['Created from context menu 1'],
+			});
+
+			newItems.push({
+				type: 'separator',
+			});
+
+			newItems.push({
+				label: 'filterEditorContextMenu test 2',
+				commandName: 'newNote',
+				commandArgs: ['Created from context menu 2'],
 			});
 
 			object.items = object.items.concat(newItems);

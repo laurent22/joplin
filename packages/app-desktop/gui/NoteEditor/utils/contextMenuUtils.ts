@@ -185,7 +185,7 @@ export const buildMenuItems = async (items: ContextMenuItems, options: ContextMe
 			onAction: () => {
 				extraItem.click();
 			},
-			isSeparator: false,
+			isSeparator: extraItem.type === 'separator',
 		});
 	}
 
