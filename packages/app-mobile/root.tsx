@@ -692,12 +692,12 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
 			menuPosition = SideMenuPosition.Right;
 		} else if (this.props.routeName === 'Config') {
 			disableSideMenuGestures = true;
 		} else {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
+			sideMenuContent = <SideMenuContent/>;
 		}
 
 		const appNavInit = {
