@@ -34,7 +34,10 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 		if (!editor) return () => {};
 
 		const contextMenuItems = menuItems(dispatch);
-		const targetWindow = bridge().activeWindow();
+		// Use mainWindow() instead of activeWindow() because activeWindow() can return
+		// the DevTools window when it's focused, causing the listener to be registered
+		// on the wrong webContents.
+		const targetWindow = bridge().mainWindow();
 
 		const makeMainMenuItems = (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;

@@ -156,7 +156,10 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		const targetWindow = bridge().activeWindow();
+		// Use mainWindow() instead of activeWindow() because activeWindow() can return
+		// the DevTools window when it's focused, causing the listener to be registered
+		// on the wrong webContents.
+		const targetWindow = bridge().mainWindow();
 		targetWindow.webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
