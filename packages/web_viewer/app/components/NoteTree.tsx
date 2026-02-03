@@ -81,8 +81,8 @@ function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) 
         key={node.id}
         itemId={node.id}
         label={
-          <Link href={`/note?note_id=${node.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Link href={`/note?note_id=${node.id}`}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', color: 'inherit' }}>
               <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
               <span>{node.title}</span>
             </Box>

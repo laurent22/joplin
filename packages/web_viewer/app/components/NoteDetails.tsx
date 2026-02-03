@@ -51,15 +51,18 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
           // 同一サーバ内のリンク（相対パスや / で始まる）の場合は Link に置き換え
           if (href && (href.startsWith('/') || !href.match(/^https?:\/\//))) {
             return (
-              <Link href={href} style={{ color: 'inherit', textDecoration: 'underline' }}>
-                {domToReact(domNode.children as DOMNode[], parseOptions)}
+              <Link href={href}>
+                <span style={{ color: 'inherit', textDecoration: 'underline' }}>
+                  {domToReact(domNode.children as DOMNode[], parseOptions)}
+                </span>
               </Link>
             );
           }
           
           // 外部リンクはそのまま <a> タグとして処理
+          const { style, ...otherAttribs } = domNode.attribs || {};
           return (
-            <a {...domNode.attribs} target="_blank" rel="noopener noreferrer">
+            <a {...otherAttribs} target="_blank" rel="noopener noreferrer">
               {domToReact(domNode.children as DOMNode[], parseOptions)}
             </a>
           );
