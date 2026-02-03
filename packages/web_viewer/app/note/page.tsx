@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Panel, Group, Separator } from "react-resizable-panels";
 import NoteTree from '../components/NoteTree';
 import ReactQueryProvider from '../components/ReactQueryProvider';
+import NoteViewer from '../components/NoteViewer';
 
 export default function NotePage() {
   return (
@@ -18,9 +19,8 @@ export default function NotePage() {
             </div>
           </Panel>
           <Separator className="w-2 bg-gray-300 hover:bg-gray-400 cursor-col-resize" />
-          <Panel className="bg-white p-4">
-            <h2>右ペイン</h2>
-            <p>コンテンツがここに表示されます</p>
+          <Panel className="bg-white p-4 overflow-auto">
+            <NoteViewer />
           </Panel>
         </Group>
       </div>
