@@ -16,6 +16,42 @@ import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
 
+// Extract resource ID from image markup at a given cursor position within a line.
+// Returns the resource ID if the cursor is within an image markup, null otherwise.
+export const getResourceIdFromMarkup = (lineContent: string, cursorPosInLine: number): string | null => {
+	const resourceUrls = extractResourceUrls(lineContent);
+	if (!resourceUrls.length) return null;
+
+	for (const resourceInfo of resourceUrls) {
+		const resourcePattern = new RegExp(`[:](/?${resourceInfo.itemId})`, 'g');
+		let match;
+		while ((match = resourcePattern.exec(lineContent)) !== null) {
+			// Look backwards for ![ or <img
+			let markupStart = lineContent.lastIndexOf('![', match.index);
+			const imgTagStart = lineContent.lastIndexOf('<img', match.index);
+			if (imgTagStart > markupStart) markupStart = imgTagStart;
+
+			if (markupStart === -1) continue;
+
+			// Find the end of the markup
+			let markupEnd: number;
+			if (lineContent[markupStart] === '!') {
+				markupEnd = lineContent.indexOf(')', match.index);
+				if (markupEnd !== -1) markupEnd += 1;
+			} else {
+				markupEnd = lineContent.indexOf('>', match.index);
+				if (markupEnd !== -1) markupEnd += 1;
+			}
+
+			if (markupEnd !== -1 && cursorPosInLine >= markupStart && cursorPosInLine <= markupEnd) {
+				return resourceInfo.itemId;
+			}
+		}
+	}
+
+	return null;
+};
+
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const menuUtils = new MenuUtils(CommandService.instance());
@@ -94,8 +130,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return clickedElement?.closest(`.${imageClassName}`) as HTMLElement | null;
 		};
 
-		// Extract resource ID from image markup at cursor position
-		const getResourceIdFromMarkup = (): string | null => {
+		const getResourceIdAtCursor = (): string | null => {
 			if (!editorRef.current) return null;
 
 			const editor = editorRef.current.editor;
@@ -104,46 +139,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const state = editor.state;
 			const cursorPos = state.selection.main.head;
 			const line = state.doc.lineAt(cursorPos);
-			const lineContent = line.text;
-			const cursorPosInLine = cursorPos - line.from;
-
-			// Get all resource URLs from the line
-			const resourceUrls = extractResourceUrls(lineContent);
-			if (!resourceUrls.length) return null;
-
-			// Find which resource (if any) the cursor is within
-			for (const resourceInfo of resourceUrls) {
-				// Find the position of this resource ID in the line
-				const resourcePattern = new RegExp(`[:](/?${resourceInfo.itemId})`, 'g');
-				let match;
-				while ((match = resourcePattern.exec(lineContent)) !== null) {
-					// Expand to find the full image markup containing this resource
-					// Look backwards for ![ or <img
-					let markupStart = lineContent.lastIndexOf('![', match.index);
-					const imgTagStart = lineContent.lastIndexOf('<img', match.index);
-					if (imgTagStart > markupStart) markupStart = imgTagStart;
-
-					if (markupStart === -1) continue;
-
-					// Find the end of the markup
-					let markupEnd: number;
-					if (lineContent[markupStart] === '!') {
-						// Markdown image: find closing )
-						markupEnd = lineContent.indexOf(')', match.index);
-						if (markupEnd !== -1) markupEnd += 1;
-					} else {
-						// HTML img: find closing >
-						markupEnd = lineContent.indexOf('>', match.index);
-						if (markupEnd !== -1) markupEnd += 1;
-					}
-
-					if (markupEnd !== -1 && cursorPosInLine >= markupStart && cursorPosInLine <= markupEnd) {
-						return resourceInfo.itemId;
-					}
-				}
-			}
-
-			return null;
+			return getResourceIdFromMarkup(line.text, cursorPos - line.from);
 		};
 
 		const showImageContextMenu = async (resourceId: string) => {
@@ -207,7 +203,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			// Check if right-clicking on image markup text
-			const markupResourceId = getResourceIdFromMarkup();
+			const markupResourceId = getResourceIdAtCursor();
 			if (markupResourceId && pointerInsideEditor(params)) {
 				event.preventDefault();
 				await showImageContextMenu(markupResourceId);
