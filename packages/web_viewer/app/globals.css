@@ -104,7 +104,7 @@ body {
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-family: "Courier New", Courier, monospace;
-  font-size: 14px !important;
+  font-size: 16px !important;
 }
 
 .note-content pre {
@@ -116,11 +116,22 @@ body {
 
 .note-content pre,
 .note-content pre * {
-  font-size: 14px !important;
+  font-size: 16px !important;
   line-height: 1.6 !important;
 }
 
 .note-content pre code {
   background-color: transparent;
   padding: 0;
+}
+
+/* Code blocks in div tags */
+.note-content div[style*="monospace"] {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+}
+
+.note-content div[style*="monospace"] * {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
 }
