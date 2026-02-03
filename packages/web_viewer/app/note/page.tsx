@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Panel, Group, Separator } from "react-resizable-panels";
-import NoteTree from '../components/NoteTree';
+import NoteTreeWrapper from '../components/NoteTreeWrapper';
 import ReactQueryProvider from '../components/ReactQueryProvider';
 import NoteViewer from '../components/NoteViewer';
 
@@ -12,7 +12,7 @@ export default function NotePage() {
           <Panel defaultSize={400} minSize={20} className="bg-gray-100 p-4 flex flex-col">
             <h2 className="text-lg font-bold mb-4">Folders</h2>
             <div className="flex-1 min-h-0 overflow-auto">
-              <NoteTree />
+              <NoteTreeWrapper />
             </div>
             <div className="mt-4">
               <Link href="/" className="text-blue-600 underline hover:text-blue-800">Go to Home</Link>
