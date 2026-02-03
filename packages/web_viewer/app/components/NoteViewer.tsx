@@ -4,6 +4,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppSelector } from '@/lib/hooks';
 import { NoteEntity } from '@/lib/database';
+import NoteAbst from './NoteAbst';
 
 function fmtTime(ts?: number) {
   if (!ts) return '-';
@@ -60,51 +61,5 @@ export default function NoteViewer() {
 
   const note = fetched ?? selected;
 
-  return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-2">{note?.title || 'Untitled'}</h2>
-      <div className="text-sm text-gray-600 mb-4">ID: {note?.id}</div>
-
-      <div className="grid grid-cols-2 gap-4 text-sm">
-        <div>
-          <div className="font-medium">Author</div>
-          <div className="text-gray-700">{note?.author || '-'}</div>
-        </div>
-        <div>
-          <div className="font-medium">Source</div>
-          <div className="text-gray-700">{note?.source || '-'}</div>
-        </div>
-
-        <div>
-          <div className="font-medium">Created</div>
-          <div className="text-gray-700">{fmtTime(note?.created_time)}</div>
-        </div>
-        <div>
-          <div className="font-medium">Updated</div>
-          <div className="text-gray-700">{fmtTime(note?.updated_time)}</div>
-        </div>
-
-        <div>
-          <div className="font-medium">Todo?</div>
-          <div className="text-gray-700">{note?.is_todo ? 'Yes' : 'No'}</div>
-        </div>
-        <div>
-          <div className="font-medium">Todo due</div>
-          <div className="text-gray-700">{note?.todo_due ? fmtTime(note?.todo_due) : '-'}</div>
-        </div>
-      </div>
-
-      {note?.source_url && (
-        <div className="mt-4 text-sm">
-          <div className="font-medium">Source URL</div>
-          <a className="text-blue-600 underline" href={note.source_url} target="_blank" rel="noreferrer">{note.source_url}</a>
-        </div>
-      )}
-
-      <div className="mt-4">
-        <div className="font-medium mb-2">Body</div>
-        <pre className="whitespace-pre-wrap text-sm text-gray-800 bg-gray-50 p-3 rounded">{(note as any)?.body || '-'}</pre>
-      </div>
-    </div>
-  );
+  return <NoteAbst note={note as (NoteEntity & { body?: string }) | null} />;
 }
