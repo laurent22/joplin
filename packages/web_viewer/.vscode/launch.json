@@ -6,11 +6,8 @@
       "type": "pwa-node",
       "request": "launch",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": ["start", "--", "--profileName", "joplin_desktop_st"],
       "cwd": "${workspaceFolder}",
-      "env": {
-        "NODE_OPTIONS": "--inspect=9229"
-      },
       "console": "integratedTerminal",
       "outputCapture": "std"
     },
