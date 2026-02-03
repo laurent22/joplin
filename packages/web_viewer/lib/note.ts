@@ -1,5 +1,17 @@
 import { NoteEntity, getDatabase } from './database';
 
+export interface SearchResult {
+    id: string;
+    title: string;
+    offsets: string;
+    matchinfo: Buffer | { type: 'Buffer'; data: number[] };
+    user_created_time: number;
+    user_updated_time: number;
+    is_todo: number;
+    todo_completed: number;
+    parent_id: string | null;
+}
+
 export class Note {
     public static getAllNotesMetadata(): NoteEntity[] {
         const db = getDatabase();
@@ -17,4 +29,25 @@ export class Note {
         const note = stmt.get(id);
         return note || null;
     }
+    public static selectAll(matchQuery: string): SearchResult[] {
+        const db = getDatabase();
+        const sql = `
+            SELECT
+                notes_fts.id,
+                notes_fts.title,
+                offsets(notes_fts) AS offsets,
+                matchinfo(notes_fts, 'pcnalx') AS matchinfo,
+                notes_fts.user_created_time,
+                notes_fts.user_updated_time,
+                notes_fts.is_todo,
+                notes_fts.todo_completed,
+                notes_fts.parent_id
+            FROM notes_fts
+            WHERE 1 AND notes_fts MATCH ?`;
+
+        const stmt = db.prepare(sql);
+        const rows = stmt.all(matchQuery);
+        return rows as SearchResult[];
+    }
+    
 }
