@@ -1019,6 +1019,8 @@ packages/editor/CodeMirror/extensions/links/utils/getUrlAtPosition.js
 packages/editor/CodeMirror/extensions/links/utils/openLink.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.test.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.js
+packages/editor/CodeMirror/extensions/markdownFrontMatterExtension.test.js
+packages/editor/CodeMirror/extensions/markdownFrontMatterExtension.js
 packages/editor/CodeMirror/extensions/markdownHighlightExtension.test.js
 packages/editor/CodeMirror/extensions/markdownHighlightExtension.js
 packages/editor/CodeMirror/extensions/markdownMathExtension.test.js
