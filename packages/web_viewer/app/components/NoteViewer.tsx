@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useAppSelector } from '@/lib/hooks';
+import { useSearchParams } from 'next/navigation';
 import { NoteEntity } from '@/lib/database';
 import NoteAbst from './NoteAbst';
 import NoteDetails from './NoteDetails';
@@ -18,8 +18,9 @@ function fmtTime(ts?: number) {
 }
 
 export default function NoteViewer() {
-  const selected = useAppSelector((s) => s.selectedNote.note as NoteEntity | null);
-  const noteId = selected?.id ?? null;
+  const searchParams = useSearchParams();
+  const noteId = searchParams.get('note_id') ?? null;
+
 
   const { data: fetched, isLoading, error } = useQuery({
     queryKey: ['note', noteId],
@@ -60,7 +61,7 @@ export default function NoteViewer() {
     );
   }
 
-  const note = fetched ?? selected;
+  const note = fetched ?? null;
 
 //   return <NoteAbst note={note as (NoteEntity & { body?: string }) | null} />;
 return <NoteDetails note={note as (NoteEntity & { body?: string }) | null} />;

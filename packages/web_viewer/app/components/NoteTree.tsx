@@ -1,6 +1,7 @@
  'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
@@ -80,12 +81,14 @@ function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) 
         key={node.id}
         itemId={node.id}
         label={
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
-            <span>{node.title}</span>
-          </Box>
+          <Link href={`/note?note_id=${node.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
+              <span>{node.title}</span>
+            </Box>
+          </Link>
         }
-        onDoubleClick={() => onNoteDouble && onNoteDouble(node as NoteNode)}
+        // onDoubleClick={() => onNoteDouble && onNoteDouble(node as NoteNode)}
       />
     );
   });
