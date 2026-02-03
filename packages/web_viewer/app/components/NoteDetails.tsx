@@ -19,24 +19,31 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
   // HTML内の<a>タグをNext.js Linkに変換する処理
   const parseOptions: HTMLReactParserOptions = {
     replace: (domNode) => {
-      if (domNode instanceof Element && domNode.name === 'a') {
-        const href = domNode.attribs?.href;
-        
-        // 同一サーバ内のリンク（相対パスや / で始まる）の場合は Link に置き換え
-        if (href && (href.startsWith('/') || !href.match(/^https?:\/\//))) {
-          return (
-            <Link href={href} style={{ color: 'inherit', textDecoration: 'underline' }}>
-              {domToReact(domNode.children as DOMNode[], parseOptions)}
-            </Link>
-          );
+      if (domNode instanceof Element) {
+        // html, body, head タグはスキップして子要素だけをレンダリング
+        if (domNode.name === 'html' || domNode.name === 'body' || domNode.name === 'head') {
+          return <>{domToReact(domNode.children as DOMNode[], parseOptions)}</>;
         }
         
-        // 外部リンクはそのまま <a> タグとして処理
-        return (
-          <a {...domNode.attribs} target="_blank" rel="noopener noreferrer">
-            {domToReact(domNode.children as DOMNode[], parseOptions)}
-          </a>
-        );
+        if (domNode.name === 'a') {
+          const href = domNode.attribs?.href;
+          
+          // 同一サーバ内のリンク（相対パスや / で始まる）の場合は Link に置き換え
+          if (href && (href.startsWith('/') || !href.match(/^https?:\/\//))) {
+            return (
+              <Link href={href} style={{ color: 'inherit', textDecoration: 'underline' }}>
+                {domToReact(domNode.children as DOMNode[], parseOptions)}
+              </Link>
+            );
+          }
+          
+          // 外部リンクはそのまま <a> タグとして処理
+          return (
+            <a {...domNode.attribs} target="_blank" rel="noopener noreferrer">
+              {domToReact(domNode.children as DOMNode[], parseOptions)}
+            </a>
+          );
+        }
       }
     },
   };
