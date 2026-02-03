@@ -76,6 +76,9 @@ PODS:
     - hermes-engine/Pre-built (= 0.81.5)
   - hermes-engine/Pre-built (0.81.5)
   - JoplinCommonShareExtension (1.0.0)
+  - JoplinRNShareExtension (1.0.0):
+    - JoplinCommonShareExtension
+    - React
   - libwebp (1.5.0):
     - libwebp/demux (= 1.5.0)
     - libwebp/mux (= 1.5.0)
@@ -2180,6 +2183,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - JoplinCommonShareExtension (from `ShareExtension`)
+  - JoplinRNShareExtension (from `ShareExtension`)
   - NitroModules (from `../node_modules/react-native-nitro-modules`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
@@ -2317,6 +2321,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2025-07-07-RNv0.81.0-e0fc67142ec0763c6b6153ca2bf96df815539782
   JoplinCommonShareExtension:
+    :path: ShareExtension
+  JoplinRNShareExtension:
     :path: ShareExtension
   NitroModules:
     :path: "../node_modules/react-native-nitro-modules"
@@ -2530,6 +2536,7 @@ SPEC CHECKSUMS:
   FBLazyVector: e95a291ad2dadb88e42b06e0c5fb8262de53ec12
   hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
+  JoplinRNShareExtension: e158a4b53ee0aa9cd3037a16221dc8adbd6f7860
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   NitroModules: 114b4f79e10be9b202723e721d6a54382fa4b599
   OpenSSL-Universal: 6082b0bf950e5636fe0d78def171184e2b3899c2
@@ -2634,6 +2641,6 @@ SPEC CHECKSUMS:
   Yoga: 5934998fbeaef7845dbf698f698518695ab4cd1a
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 7b13a01a875361316b0027cf383a11d2a2706604
+PODFILE CHECKSUM: e822222a3fa702bf2b95fed246a9dab9eaf26905
 
 COCOAPODS: 1.16.2
