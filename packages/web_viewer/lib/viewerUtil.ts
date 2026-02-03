@@ -258,4 +258,22 @@ export class ViewerUtil {
     }
     return $;
   }
+
+  public static modifyJoplinLinkAnchor($: cheerio.Root): cheerio.Root {
+    const joplinAnchors = $("a[href^=joplin://]");
+    for (let i = 0; i < joplinAnchors.length; i++) {
+      const joplinAnchor = joplinAnchors[i] as cheerio.TagElement;
+      const url = URL.parse(joplinAnchor.attribs.href);
+      if (!url?.hostname) {
+        continue;
+      }
+      const targetId = url.hostname;
+      try {
+        joplinAnchor.attribs.href = `/note?note_id=${targetId}`;
+      } catch (e) {
+        console.log(`error: ${e?.toString()}`);
+      }
+    }
+    return $;
+  }
 }

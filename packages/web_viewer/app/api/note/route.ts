@@ -14,8 +14,9 @@ export async function GET(req: Request) {
     const note = Note.getNoteById(id);
     const resourceDir = `/api/resource/`;
     const $ = cheerio.load(note.body || '');
-    const modifiedHtml = ViewerUtil.modifyJoplinResource($, resourceDir);
-    note.body = modifiedHtml.html();
+    const resourceModifiedHtml = ViewerUtil.modifyJoplinResource($, resourceDir);
+    const linkModifiedHtml = ViewerUtil.modifyJoplinLinkAnchor(resourceModifiedHtml);
+    note.body = linkModifiedHtml.html();
     if (!note) {
       return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
     }
