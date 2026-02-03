@@ -5,7 +5,7 @@
   "version": "3.6.0",
   "private": true,
   "scripts": {
-    "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start",
+    "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start --reset-cache",
     "android": "react-native run-android",
     "build": "NO_FLIPPER=1 gulp build",
     "web": "webpack --mode production --config ./web/webpack.config.ts --progress && cp -r ./web/public/* ./web/dist/",
@@ -142,7 +142,7 @@
     "ts-jest": "29.4.1",
     "ts-loader": "9.5.4",
     "ts-node": "10.9.2",
-    "typescript": "~5.9.2",
+    "typescript": "5.8.3",
     "url-loader": "4.1.1",
     "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
