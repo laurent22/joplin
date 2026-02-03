@@ -1,6 +1,6 @@
  'use client';
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -57,7 +57,7 @@ async function fetchFolders(): Promise<TreeNode[]> {
   
   return json.data || [];
 }
-function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) {
+function renderTree(nodes: TreeNode[], onNoteClick?: () => void) {
   return nodes.map((node) => {
     if (node.type === 'Folder') {
       return (
@@ -71,7 +71,7 @@ function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) 
             </Box>
           }
         >
-          {node.children && node.children.length > 0 && renderTree(node.children, onNoteDouble)}
+          {node.children && node.children.length > 0 && renderTree(node.children, onNoteClick)}
         </TreeItem>
       );
     }
@@ -92,7 +92,7 @@ function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) 
             </Box>
           </Link>
         }
-        // onDoubleClick={() => onNoteDouble && onNoteDouble(node as NoteNode)}
+        onClick={onNoteClick}
       />
     );
   });
@@ -118,12 +118,21 @@ export default function NoteTree() {
   const searchParams = useSearchParams();
   const noteIdFromUrl = searchParams.get('note_id');
   const allIds = React.useMemo(() => collectIds(folders || []), [folders]);
-  const dispatch = useAppDispatch();
+  const [isClicked, setIsClicked] = React.useState(false);
+
+  const onClickNote = useCallback(() => {
+    setIsClicked(true);
+  }, []);
 
   // URLクエリパラメータのnote_idに対応するノートへスクロール＆フォーカス
   React.useEffect(() => {
     if (noteIdFromUrl && folders) {
       // TreeItemが描画されるまで少し待つ
+      if (isClicked) {
+        // When the note is changed by click, don't auto-scroll
+        setIsClicked(false);
+        return;
+      }
       const timer = setTimeout(() => {
         const targetElement = document.querySelector(`[data-nodeid="${noteIdFromUrl}"]`);
         if (targetElement) {
@@ -138,7 +147,12 @@ export default function NoteTree() {
       
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noteIdFromUrl, folders]);
+
+  const treeCompoent = useMemo(() => {
+    return renderTree(folders || [], onClickNote);
+  }, [folders, onClickNote]);
 
   if (isLoading) {
     return (
@@ -177,7 +191,7 @@ export default function NoteTree() {
         sx={{ height: '100%', overflowY: 'auto' }}
         defaultExpandedItems={allIds}
       >
-        {renderTree(folders, (n) => dispatch(setSelectedNote(n.metadata)))}
+        {treeCompoent}
       </SimpleTreeView>
     </Box>
   );
