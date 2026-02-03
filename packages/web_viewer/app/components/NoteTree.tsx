@@ -112,6 +112,7 @@ export default function NoteTree() {
   });
 
   const allIds = React.useMemo(() => collectIds(folders || []), [folders]);
+  const dispatch = useAppDispatch();
 
   if (isLoading) {
     return (
@@ -128,8 +129,6 @@ export default function NoteTree() {
       </Alert>
     );
   }
-
-  const dispatch = useAppDispatch();
 
   if (!folders || folders.length === 0) {
     return (
