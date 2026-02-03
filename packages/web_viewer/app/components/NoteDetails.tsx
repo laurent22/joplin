@@ -1,12 +1,32 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import parse, { domToReact, HTMLReactParserOptions, Element, DOMNode } from 'html-react-parser';
 import { NoteEntity } from '@/lib/database';
 
 
 export default function NoteDetails({ note }: { note: (NoteEntity & { body?: string }) | null }) {
+  // コンテンツロード後にフラグメントジャンプを実行
+  useEffect(() => {
+    if (!note?.body) return;
+
+    // URLのフラグメントを取得
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    // フラグメントに該当する要素を探してスクロール
+    const elementId = hash.substring(1); // '#' を除去
+    const targetElement = document.getElementById(elementId);
+    
+    if (targetElement) {
+      // 少し遅延を入れることでDOMの完全なレンダリングを待つ
+      setTimeout(() => {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 1000);
+    }
+  }, [note?.body]);
+
   if (!note) {
     return (
       <div className="p-4">
