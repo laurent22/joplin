@@ -11,8 +11,9 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 export default function NoteTreeWrapper() {
   const [query, setQuery] = React.useState('');
+  const [searchInput, setSearchInput] = React.useState('');
 
-  const hideTree =  query && query.trim() !== '';
+  const hideTree = query && query.trim() !== '';
 
   return (
     <div className="note-tree-wrapper" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -21,8 +22,13 @@ export default function NoteTreeWrapper() {
           variant="outlined"
           size="small"
           placeholder="検索..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Enter') {
+              setQuery(searchInput);
+            }
+          }}
           fullWidth
           InputProps={{
             startAdornment: (
@@ -30,9 +36,9 @@ export default function NoteTreeWrapper() {
                 <SearchIcon />
               </InputAdornment>
             ),
-            endAdornment: query ? (
+            endAdornment: searchInput ? (
               <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setQuery('')}>
+                <IconButton size="small" onClick={() => { setSearchInput(''); setQuery(''); }}>
                   <ClearIcon fontSize="small" />
                 </IconButton>
               </InputAdornment>
