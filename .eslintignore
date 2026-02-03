@@ -1813,6 +1813,8 @@ packages/renderer/MdToHtml/rules/code_inline.js
 packages/renderer/MdToHtml/rules/externalEmbed.js
 packages/renderer/MdToHtml/rules/fence.js
 packages/renderer/MdToHtml/rules/fountain.js
+packages/renderer/MdToHtml/rules/frontmatter.test.js
+packages/renderer/MdToHtml/rules/frontmatter.js
 packages/renderer/MdToHtml/rules/highlight_keywords.js
 packages/renderer/MdToHtml/rules/html_image.js
 packages/renderer/MdToHtml/rules/image.js
