@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -57,11 +56,7 @@ async function fetchFolders(): Promise<TreeNode[]> {
   
   return json.data || [];
 }
-function renderTree(
-  nodes: TreeNode[], 
-  onNoteDouble?: (node: NoteNode) => void,
-  nodeRefs?: React.MutableRefObject<Map<string, HTMLElement>>
-) {
+function renderTree(nodes: TreeNode[], onNoteDouble?: (node: NoteNode) => void) {
   return nodes.map((node) => {
     if (node.type === 'Folder') {
       return (
@@ -75,7 +70,7 @@ function renderTree(
             </Box>
           }
         >
-          {node.children && node.children.length > 0 && renderTree(node.children, onNoteDouble, nodeRefs)}
+          {node.children && node.children.length > 0 && renderTree(node.children, onNoteDouble)}
         </TreeItem>
       );
     }
@@ -87,14 +82,7 @@ function renderTree(
         itemId={node.id}
         label={
           <Link href={`/note?note_id=${node.id}`}>
-            <Box 
-              sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', color: 'inherit' }}
-              ref={(el) => {
-                if (el && nodeRefs) {
-                  nodeRefs.current.set(node.id, el);
-                }
-              }}
-            >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', color: 'inherit' }}>
               <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
               <span>{node.title}</span>
             </Box>
@@ -123,35 +111,8 @@ export default function NoteTree() {
     queryFn: fetchFolders,
   });
 
-  const searchParams = useSearchParams();
-  const noteIdFromUrl = searchParams.get('note_id');
   const allIds = React.useMemo(() => collectIds(folders || []), [folders]);
   const dispatch = useAppDispatch();
-  const nodeRefs = React.useRef<Map<string, HTMLElement>>(new Map());
-
-  // URLクエリパラメータのnote_idに対応するノートへスクロール＆フォーカス
-  React.useEffect(() => {
-    if (noteIdFromUrl && folders && nodeRefs.current.size > 0) {
-      // TreeItemが描画されるまで少し待つ
-      const timer = setTimeout(() => {
-        const targetElement = nodeRefs.current.get(noteIdFromUrl);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          
-          // フォーカスを当てる
-          targetElement.focus();
-          
-          // 視覚的にハイライト（オプション）
-          targetElement.style.backgroundColor = 'rgba(25, 118, 210, 0.12)';
-          setTimeout(() => {
-            targetElement.style.backgroundColor = '';
-          }, 2000);
-        }
-      }, 100);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [noteIdFromUrl, folders]);
 
   if (isLoading) {
     return (
@@ -190,7 +151,7 @@ export default function NoteTree() {
         sx={{ height: '100%', overflowY: 'auto' }}
         defaultExpandedItems={allIds}
       >
-        {renderTree(folders, (n) => dispatch(setSelectedNote(n.metadata)), nodeRefs)}
+        {renderTree(folders, (n) => dispatch(setSelectedNote(n.metadata)))}
       </SimpleTreeView>
     </Box>
   );
