@@ -8,16 +8,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import SearchDialog from './SearchDialog';
 
 export default function NoteTreeWrapper() {
   const [query, setQuery] = React.useState('');
   const [searchInput, setSearchInput] = React.useState('');
   const [openSearchDialog, setOpenSearchDialog] = React.useState(false);
-  const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
-
   const hideTree = query && query.trim() !== '';
 
   React.useEffect(() => {
@@ -35,12 +31,7 @@ export default function NoteTreeWrapper() {
     return () => window.removeEventListener('keydown', handler);
   }, [query]);
 
-  React.useEffect(() => {
-    if (openSearchDialog) {
-      // focus the dialog input on open
-      setTimeout(() => dialogInputRef.current?.focus(), 0);
-    }
-  }, [openSearchDialog]);
+  
 
   return (
     <div className="note-tree-wrapper" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -75,42 +66,13 @@ export default function NoteTreeWrapper() {
         />
       </div>
       
-      <Dialog open={openSearchDialog} onClose={() => setOpenSearchDialog(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>検索</DialogTitle>
-        <DialogContent>
-          <TextField
-            variant="outlined"
-            size="small"
-            placeholder="検索..."
-            inputRef={dialogInputRef}
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === 'Enter') {
-                setQuery(searchInput);
-                setOpenSearchDialog(false);
-              } else if (e.key === 'Escape') {
-                setOpenSearchDialog(false);
-              }
-            }}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-              endAdornment: searchInput ? (
-                <InputAdornment position="end">
-                  <IconButton size="small" onClick={() => { setSearchInput(''); setQuery(''); setOpenSearchDialog(false); }}>
-                    <ClearIcon fontSize="small" />
-                  </IconButton>
-                </InputAdornment>
-              ) : undefined,
-            }}
-          />
-        </DialogContent>
-      </Dialog>
+      <SearchDialog
+        open={openSearchDialog}
+        onClose={() => setOpenSearchDialog(false)}
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        setQuery={setQuery}
+      />
       
       <div style={{ flex: 1, minHeight: 0, display: !hideTree ? 'none' : undefined  }}>
           <SearchResult query={query} />
