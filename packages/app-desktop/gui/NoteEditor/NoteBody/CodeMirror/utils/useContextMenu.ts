@@ -172,6 +172,24 @@ const useContextMenu = (props: ContextMenuProps) => {
 			menu.popup({ window: bridge().activeWindow() });
 		};
 
+		// Move the cursor to the line containing the image markup for a rendered image.
+		// This ensures plugins that inspect cursor position (e.g. rich markdown, image resize)
+		// show the correct context menu options.
+		const moveCursorToImageLine = (imageContainer: HTMLElement) => {
+			const editor = editorRef.current?.editor;
+			if (!editor) return;
+
+			// The image widget stores its source document position as a data attribute.
+			const sourceFrom = imageContainer.dataset.sourceFrom;
+			if (sourceFrom === undefined) return;
+
+			const pos = Math.min(Number(sourceFrom), editor.state.doc.length);
+			const line = editor.state.doc.lineAt(pos);
+			editor.dispatch({
+				selection: { anchor: line.from },
+			});
+		};
+
 		const onContextMenu = async (event: Event, params: ContextMenuParams) => {
 			// Check if right-clicking on a rendered image first (images may not be "editable")
 			const imageContainer = getClickedImageContainer(params);
@@ -181,6 +199,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 					const resourceId = pathToId(imgElement.src);
 					if (resourceId) {
 						event.preventDefault();
+						moveCursorToImageLine(imageContainer);
 						await showImageContextMenu(resourceId);
 						return;
 					}
