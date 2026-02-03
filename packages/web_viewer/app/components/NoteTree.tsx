@@ -2,61 +2,23 @@
 
 import React, { useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
+import { /* useQuery replaced by useFolderQuery */ } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FolderIcon from '@mui/icons-material/Folder';
-import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+// FolderOpenIcon removed (unused)
 import DescriptionIcon from '@mui/icons-material/Description';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import { NoteEntity } from '@/lib/database';
-import { useAppDispatch } from '@/lib/hooks';
-import { setSelectedNote } from '@/lib/features/selectedNoteSlice';
+import { TreeNode, useFolderQuery } from '@/lib/hooks';
 
-type TreeNode = FolderNode | NoteNode;
 
-interface FolderNode {
-  id: string;
-  title: string;
-  parent_id: string;
-  updated_time: number;
-  created_time: number;
-  type: 'Folder';
-  children: TreeNode[];
-}
-
-interface NoteNode {
-  id: string;
-  title: string;
-  parent_id: string;
-  updated_time: number;
-  created_time: number;
-  type: 'Note';
-  metadata: NoteEntity;
-}
-
-interface ApiResponse {
-  success: boolean;
-  data?: TreeNode[];
-  error?: string;
-  message?: string;
-}
-
-async function fetchFolders(): Promise<TreeNode[]> {
-  const response = await fetch('/api/tree');
-  const json: ApiResponse = await response.json();
-  
-  if (!json.success) {
-    throw new Error(json.message || 'Failed to fetch folders');
-  }
-  
-  return json.data || [];
-}
+// fetch logic moved to `useFolderQuery` in `lib/hooks`
 function renderTree(nodes: TreeNode[], onNoteClick?: () => void) {
   return nodes.map((node) => {
     if (node.type === 'Folder') {
@@ -110,10 +72,7 @@ function collectIds(nodes: TreeNode[]): string[] {
 }
 
 export default function NoteTree() {
-  const { data: folders, isLoading, error } = useQuery({
-    queryKey: ['folders'],
-    queryFn: fetchFolders,
-  });
+  const { folders, isLoading, error } = useFolderQuery();
 
   const searchParams = useSearchParams();
   const noteIdFromUrl = searchParams.get('note_id');
