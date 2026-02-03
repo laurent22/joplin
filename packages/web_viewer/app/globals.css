@@ -104,7 +104,7 @@ body {
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-family: "Courier New", Courier, monospace;
-  font-size: 0.9em;
+  font-size: 14px !important;
 }
 
 .note-content pre {
@@ -112,6 +112,12 @@ body {
   padding: 1em;
   border-radius: 5px;
   overflow-x: auto;
+}
+
+.note-content pre,
+.note-content pre * {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
 }
 
 .note-content pre code {
