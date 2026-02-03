@@ -639,12 +639,21 @@ export default class Folder extends BaseItem {
 			// one note. If it is not, we create duplicate resources so that
 			// each note has its own separate resource.
 
+			// Order unshared items first: This makes conflicts less likely, since shared
+			// items are more likely to be duplicated by multiple users.
+			const orderingSql = 'ORDER BY is_shared ASC';
+
 			const noteResourceAssociations = await this.db().selectAll(`
-				SELECT resource_id, note_id, notes.share_id
+				SELECT
+					resource_id,
+					note_id,
+					notes.share_id,
+					(notes.share_id != '') AS is_shared
 				FROM note_resources
 				LEFT JOIN notes ON notes.id = note_resources.note_id
 				WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)})
 				AND is_associated = 1
+				${orderingSql}
 			`) as NoteResourceRow[];
 
 			const resourceIdToNotes: Record<string, NoteResourceRow[]> = {};

@@ -520,6 +520,50 @@ describe('models/Folder.sharing', () => {
 		expect(note4.user_updated_time).toBe(userUpdatedTimes[note4.id]);
 	});
 
+	it('should prefer duplicating resources in unshared folders to shared folders', async () => {
+		const resourceService = new ResourceService();
+
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1', // Share 1
+				children: [
+					{
+						title: 'note 1',
+					},
+				],
+			},
+			{
+				title: 'folder 2', // Not shared
+				children: [
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
+
+		let note1: NoteEntity = await Note.loadByTitle('note 1');
+		let note2: NoteEntity = await Note.loadByTitle('note 2');
+
+		await Folder.save({ id: folder1.id, share_id: 'share1' });
+
+		note1 = await shim.attachFileToNote(note1, testImagePath);
+		note2 = await Note.save({ id: note2.id, body: note1.body });
+
+		await msleep(1);
+
+		await resourceService.indexNoteResources(); // Populate note_resources
+		await Folder.updateAllShareIds(resourceService, []);
+
+		// After
+		expect(await Resource.all()).toHaveLength(2);
+
+		// note1 should have the same body
+		expect(await Note.load(note1.id)).toMatchObject({ body: note1.body, share_id: 'share1' });
+		// note2's body should be updated
+		expect(await Note.load(note2.id)).not.toMatchObject({ body: note2.body, share_id: '' });
+	});
+
 	it('should clear share_ids for items that are no longer part of an existing share', async () => {
 		await createFolderTree('', [
 			{

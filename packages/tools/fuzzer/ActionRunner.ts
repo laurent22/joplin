@@ -1,7 +1,6 @@
-import uuid from '@joplin/lib/uuid';
 import Client from './Client';
 import ClientPool from './ClientPool';
-import { assertIsFolder, assertIsNote, FuzzContext, ItemId, RandomFolderOptions } from './types';
+import { assertIsFolder, assertIsNote, FuzzContext, ItemId, RandomFolderOptions, ResourceData } from './types';
 import { strict as assert } from 'assert';
 import Logger from '@joplin/utils/Logger';
 import retryWithCount from './utils/retryWithCount';
@@ -31,10 +30,12 @@ export default class ActionRunner {
 			await this.clientPool_.checkState();
 		}, {
 			count: 4,
-			delayOnFailure: count => count * Second * 2,
-			onFail: async () => {
-				logger.info('.checkState failed. Syncing all clients...');
-				await this.clientPool_.syncAll();
+			delayOnFailure: count => count * Second * 3,
+			onFail: async ({ willRetry }) => {
+				if (willRetry) {
+					logger.info('.checkState failed. Syncing all clients...');
+					await this.clientPool_.syncAll();
+				}
 			},
 		});
 	}
@@ -148,7 +149,7 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		// Create a toplevel folder to serve as this
 		// folder's parent if none exist yet
 		if (!parentId) {
-			parentId = uuid.create();
+			parentId = context.randomId();
 			await client.createFolder({
 				parentId: '',
 				id: parentId,
@@ -171,7 +172,7 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 			await client.createNote({
 				...defaultNoteProperties,
 				parentId: await selectOrCreateWriteableFolder(),
-				id: uuid.create(),
+				id: context.randomId(),
 				title: 'Test note',
 				body: 'Body',
 			});
@@ -184,12 +185,16 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	};
 
 	const noteById = (id: ItemId) => {
+		assert.ok(client.itemExists(id), `Could not find note with ID ${id} in client ${client.email}'s expected state.`);
+
 		const note = client.itemById(id);
 		assertIsNote(note);
 		return note;
 	};
 
 	const folderById = (id: ItemId) => {
+		assert.ok(client.itemExists(id), `Could not find folder with ID ${id} in client ${client.email}'s expected state.`);
+
 		const folder = client.itemById(id);
 		assertIsFolder(folder);
 		return folder;
@@ -244,13 +249,28 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 
 	addAction('updateNoteBody', async ({ id }) => {
 		const note = noteById(id);
+
 		await client.updateNote({
 			...note,
-			body: `${note.body}\n\nUpdated.\n`,
+			body: `${note.body}\n\nUpdated!`,
 		});
 
 		return true;
 	}, { id: selectOrCreateWriteableNote });
+
+	addAction('attachResourceTo', async ({ noteId, resourceId }) => {
+		const resourceData: ResourceData = {
+			id: resourceId,
+			mimeType: 'text/plain',
+			title: 'Test!',
+		};
+		await client.attachResource(noteById(noteId), resourceData);
+
+		return true;
+	}, {
+		noteId: selectOrCreateWriteableNote,
+		resourceId: () => context.randomId(),
+	});
 
 	addAction('moveNote', async ({ noteId, targetFolderId }) => {
 		const note = noteById(noteId);
@@ -265,6 +285,19 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	}, {
 		noteId: selectOrCreateWriteableNote,
 		targetFolderId: undefinedId,
+	});
+
+	addAction('duplicateNote', async ({ id, newNoteId }) => {
+		const note = noteById(id);
+
+		await client.createNote({
+			...note,
+			id: newNoteId,
+		});
+		return true;
+	}, {
+		id: selectOrCreateWriteableNote,
+		newNoteId: () => context.randomId(),
 	});
 
 	addAction('deleteNote', async ({ id }) => {
@@ -420,8 +453,12 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		}, {
 			delayOnFailure: (count) => Second * count,
 			count: 3,
-			onFail: async (error) => {
-				logger.warn('other.sync/other.checkState failed with', error, 'retrying...');
+			onFail: async ({ error, willRetry }) => {
+				logger.warn(
+					'other.sync/other.checkState failed with',
+					error,
+					willRetry ? 'retrying...' : '',
+				);
 			},
 		});
 

@@ -1,5 +1,6 @@
 import type Client from './Client';
 import type FolderRecord from './model/FolderRecord';
+import ResourceRecord from './model/ResourceRecord';
 
 export type Json = string|number|Json[]|{ [key: string]: Json };
 
@@ -25,10 +26,24 @@ export interface DetailedFolderData extends FolderData {
 	isShared: boolean;
 }
 
-export type TreeItem = NoteData|FolderRecord;
+export interface ResourceData {
+	id: ItemId;
+	title: string;
+	mimeType: string;
+}
+
+export type TreeItem = NoteData|FolderRecord|ResourceRecord;
 
 export const isFolder = (item: TreeItem): item is FolderRecord => {
 	return 'childIds' in item;
+};
+
+export const isResource = (item: TreeItem): item is ResourceRecord => {
+	return 'mimeType' in item;
+};
+
+export const isNote = (item: TreeItem): item is NoteData => {
+	return !isFolder(item) && !isResource(item);
 };
 
 // Typescript type assertions require type definitions on the left for arrow functions.
@@ -57,6 +72,7 @@ export interface FuzzContext {
 	execApi: (method: HttpMethod, route: string, debugAction: Json)=> Promise<Json>;
 	randInt: (low: number, high: number)=> number;
 	randomString: (targetLength: number)=> string;
+	randomId: ()=> string;
 	randomFrom: <T> (data: T[])=> T;
 }
 
@@ -82,6 +98,8 @@ export interface ActionableClient {
 	deleteNote(id: ItemId): Promise<void>;
 	createNote(data: NoteData): Promise<void>;
 	updateNote(data: NoteData): Promise<void>;
+	attachResource(note: NoteData, resource: ResourceData): Promise<NoteData>;
+	createResource(resource: ResourceData): Promise<void>;
 	moveItem(itemId: ItemId, newParentId: ItemId): Promise<void>;
 	publishNote(id: ItemId): Promise<void>;
 	unpublishNote(id: ItemId): Promise<void>;
@@ -89,10 +107,12 @@ export interface ActionableClient {
 
 	listNotes(): Promise<NoteData[]>;
 	listFolders(): Promise<DetailedFolderData[]>;
+	listResources(): Promise<ResourceData[]>;
 	allFolderDescendants(parentId: ItemId): Promise<ItemId[]>;
 	randomFolder(options: RandomFolderOptions): Promise<FolderRecord>;
 	randomNote(options: RandomNoteOptions): Promise<NoteData>;
 	itemById(id: ItemId): TreeItem;
+	itemExists(id: ItemId): boolean;
 }
 
 export interface UserData {

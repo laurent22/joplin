@@ -7,7 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Christoph Eder\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sebastian Aust <code@ryanthara.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -331,7 +333,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "ABC-Notenschrift: Optionen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -821,7 +823,7 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Blockcode"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -939,9 +941,8 @@ msgid "Cannot change encrypted item"
 msgstr "Kann verschlüsseltes Element nicht ändern"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Konnte neue Notiz nicht erstellen: %s"
+msgstr "Schreibgeschütztes Element kann nicht konvertiert werden: „%s“"
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1103,7 +1104,7 @@ msgstr "Überprüfen… Bitte warten."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "Chinesische/Japanische/Koreanische Schriftzeichen"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1270,7 +1271,7 @@ msgstr "Befehl"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "COMMAND"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1334,9 +1335,8 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
-msgstr "Tastaturkürzel"
+msgstr "Konfigurierte Tastaturkürzel:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1296
 msgid "Configures the size of scrollbars used in the app."
@@ -1412,9 +1412,8 @@ msgid "Convert it"
 msgstr "Umwandeln"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
-msgstr "Notiz in Markdown umwandeln"
+msgstr "In Markdown umwandeln"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1350
 msgid "Convert to note"
@@ -1521,9 +1520,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Konnte keine Verbindung zum Plugin-Repository herstellen."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
-msgstr "Konnte Notiz nicht in Markdown umwandeln: %s"
+msgstr "Notizen konnten nicht in Markdown konvertiert werden: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:235
 msgid "Could not export notes: %s"
@@ -1837,13 +1835,14 @@ msgid "Delete profile \"%s\""
 msgstr "Lösche Profil „%s“"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
-"Alle Daten, inklusive Notizen, Notizbücher und Schlagwörter werden dauerhaft "
+"Profil „%s“ löschen?\n"
+"\n"
+"Alle Daten, einschließlich Notizen, Notizbücher und Tags, werden dauerhaft "
 "gelöscht."
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
@@ -1861,6 +1860,10 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"Schlagworte „%s“ löschen?\n"
+"\n"
+"Alle mit diesem Tag verbundenen Notizen bleiben erhalten, aber das Tag wird "
+"aus allen Notizen entfernt."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -2045,7 +2048,7 @@ msgstr "Zeigt alle Informationen über die Notiz an."
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "Zeigt die konfigurierten Tastaturkürzel an."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2269,9 +2272,8 @@ msgid "Edit profile configuration..."
 msgstr "Profilkonfiguration bearbeiten..."
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "Notiz bearbeiten."
+msgstr "Schlagwort bearbeiten"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2382,9 +2384,8 @@ msgid "Enable abbreviation syntax"
 msgstr "Abkürzungssyntax aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "Fountain-Syntaxunterstützung aktivieren"
+msgstr "Unterstützung für ABC-Notenschrift aktivieren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3167,7 +3168,6 @@ msgid "Import or export your data"
 msgstr "Importiere oder Exportiere deine Daten"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
 msgstr "Importieren..."
 
@@ -3569,7 +3569,7 @@ msgstr "Unterstützter Schlüsselbund: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "KEYS"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
@@ -3800,6 +3800,8 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Verwalte deine Profile. Du kannst Profile umbenennen oder löschen. Das "
+"aktive Profil kann nicht gelöscht werden."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3962,17 +3964,16 @@ msgstr[0] "%d Notiz in das Notizbuch „%s“ verschieben?"
 msgstr[1] "%d Notizen in das Notizbuch „%s“ verschieben?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"Notizbuch „%s“ in den Papierkorb bewegen?\n"
+"%d Notizbücher in den Papierkorb verschieben?\n"
 "\n"
-"Alle Notizen und Unter-Notizbücher in diesem Notizbuch werden ebenfalls in "
-"den Papierkorb bewegt."
+"Alle Notizen und Unternotizbücher in diesen Notizbüchern werden ebenfalls in "
+"den Papierkorb verschoben."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -4215,7 +4216,7 @@ msgstr "Keine Updates verfügbar"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "Keine URL für SAML-Authentifizierung festgelegt."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4565,7 +4566,7 @@ msgstr "Sync-Assistent öffnen..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "Open-Source-Lizenzen"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4604,6 +4605,9 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"Optionen, die beim Rendern von ABC-Code verwendet werden sollten. Es muss "
+"sich um ein JSON5-Objekt handeln. Die vollständige Liste der Optionen "
+"findest du unter: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4979,9 +4983,8 @@ msgid "Profile name"
 msgstr "Profilname"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "Bestätigungs-Passwort darf nicht leer sein"
+msgstr "Profilname darf nicht leer sein"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -5176,11 +5179,10 @@ msgid "Remove"
 msgstr "Entfernen"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
 msgstr ""
-"Modell löschen und neu herunterladen?\n"
-"Dies kann nicht rückgängig gemacht werden."
+"%d Schlagworte aus allen Notizen entfernen? Dieser Vorgang kann nicht "
+"rückgängig gemacht werden."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5598,7 +5600,7 @@ msgstr "Eltern-Notizbuch auswählen"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "Wähle den Typ der zu importierenden Datei aus:"
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -5927,7 +5929,7 @@ msgstr "Quelle: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "SPACE"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
@@ -6241,18 +6243,16 @@ msgid "Tab moves focus"
 msgstr "Tab verschiebt Fokus"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "Aktivieren"
+msgstr "Tabelle"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "Nutzung: %s"
+msgstr "Schlagwort: %s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6485,7 +6485,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Die Notiz „%s“ wurde erfolgreich im Notizbuch „%s“ wiederhergestellt."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -6493,11 +6492,11 @@ msgid_plural ""
 "The notes have been converted to Markdown and the original notes have been "
 "moved to the trash"
 msgstr[0] ""
-"Die Notiz wurde in Markdown umgewandelt und die Originalnotiz in den "
-"Papierkorb verschoben"
+"Die Notiz wurde in Markdown konvertiert und die ursprüngliche Notiz wurde in "
+"den Papierkorb verschoben"
 msgstr[1] ""
-"Die Notiz wurde in Markdown umgewandelt und die Originalnotiz in den "
-"Papierkorb verschoben"
+"Die Notizen wurden in Markdown konvertiert und die ursprünglichen Notizen "
+"wurden in den Papierkorb verschoben"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -7093,7 +7092,7 @@ msgstr "Jetzt testen"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "TYPE"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""

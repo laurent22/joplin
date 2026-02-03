@@ -13,6 +13,7 @@ import { packagesDir } from './constants';
 import ActionRunner, { ActionSpec } from './ActionRunner';
 import randomString from './utils/randomString';
 import { readFile } from 'fs/promises';
+import randomId from './utils/randomId';
 const { shimInit } = require('@joplin/lib/shim-init-node');
 
 const globalLogger = new Logger();
@@ -55,9 +56,10 @@ interface Options {
 
 const createContext = (options: Options, server: Server, profilesDirectory: string) => {
 	const random = new SeededRandom(options.seed);
-	// Use a separate random number generator for strings. This prevents
+	// Use a separate random number generator for strings and IDs. This prevents
 	// the random strings setting from affecting the other output.
 	const stringRandom = new SeededRandom(random.next());
+	const idRandom = new SeededRandom(random.next());
 
 	if (options.isJoplinCloud) {
 		logger.info('Sync target: Joplin Cloud');
@@ -71,6 +73,7 @@ const createContext = (options: Options, server: Server, profilesDirectory: stri
 			return (_targetLength: number) => `Placeholder (x${stringCount++})`;
 		}
 	})();
+	const randomIdGenerator = randomId((min, max) => idRandom.nextInRange(min, max));
 
 	const fuzzContext: FuzzContext = {
 		serverUrl: server.url,
@@ -82,6 +85,7 @@ const createContext = (options: Options, server: Server, profilesDirectory: stri
 		randInt: (a, b) => random.nextInRange(a, b),
 		randomFrom: (data) => data[random.nextInRange(0, data.length)],
 		randomString: randomStringGenerator,
+		randomId: randomIdGenerator,
 		keepAccounts: options.keepAccountsOnClose,
 	};
 	return fuzzContext;
