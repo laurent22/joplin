@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.90.20",
     "better-sqlite3": "^12.6.2",
+    "cheerio": "^1.2.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",

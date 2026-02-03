@@ -1,6 +1,7 @@
 import { homedir } from 'os';
 import * as path from 'path';
 import Database from 'better-sqlite3';
+import { ViewerUtil } from './viewerUtil';
 
 export interface FolderEntity {
   id: string;
@@ -41,18 +42,13 @@ export function getDatabase(): Database.Database {
     return database;
   }
 
-  // プロファイル名を環境変数から取得（起動スクリプトで設定される）
-  const profileName = process.env.PROFILE_NAME || 'joplin_desktop';
-
-  // profileName にスラッシュや不正文字が含まれている可能性があるためサニタイズ
-  const safeProfile = path.basename(profileName);
-
+ 
   // データベースファイルを開く（path.join で適切に結合）
-  const dbPath = path.join(homedir(), '.config', safeProfile, 'database.sqlite');
+  const dbPath = ViewerUtil.getDabaseFilePath();
   database = new Database(dbPath, { readonly: true });
   
   console.log('Database initialized successfully:', dbPath);
-  console.log('Using profile:', profileName);
+  console.log('Using profile:', path.basename(ViewerUtil.getProfileFolderPath()));
   return database;
 }
 
