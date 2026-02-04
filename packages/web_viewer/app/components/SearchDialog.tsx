@@ -30,6 +30,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
   const [searchInput, setSearchInput] = React.useState('');
+  const [filterInput, setFilterInput] = React.useState('');
 
   // HTMLエスケープ用のヘルパー関数
   const escapeHtml = (str: string): string => {
@@ -229,12 +230,22 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
       `SearchDialog: fragment extraction took ${(t1 - t0).toFixed(2)}ms for ${results.length} results and ${queryKeywords.length} keywords`
     );
 
+    // フィルタリング適用
+    const filteredResults = filterInput
+      ? expandedResults.filter(({ item, fragment }) => {
+          const filterLower = filterInput.toLowerCase();
+          const titleMatch = item.title.toLowerCase().includes(filterLower);
+          const fragmentMatch = fragment ? fragment.toLowerCase().includes(filterLower) : false;
+          return titleMatch || fragmentMatch;
+        })
+      : expandedResults;
+
     return (
       <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
-        {expandedResults.map(({ item, fragment, index }) => renderItem(item, fragment, index))}
+        {filteredResults.map(({ item, fragment, index }) => renderItem(item, fragment, index))}
       </List>
     );
-  }, [internalQuery, results, noteMap]);
+  }, [internalQuery, results, noteMap, filterInput]);
 
 
   return (
@@ -266,6 +277,30 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
             endAdornment: searchInput ? (
               <InputAdornment position="end">
                 <IconButton size="small" onClick={() => { setSearchInput(''); setInternalQuery(''); }}>
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ) : undefined,
+          }}
+        />
+
+        <TextField
+          variant="outlined"
+          size="small"
+          placeholder="結果をフィルタ..."
+          value={filterInput}
+          onChange={(e) => setFilterInput(e.target.value)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Escape') {
+              onClose();
+            }
+          }}
+          fullWidth
+          sx={{ mb: 2 }}
+          InputProps={{
+            endAdornment: filterInput ? (
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => setFilterInput('')}>
                   <ClearIcon fontSize="small" />
                 </IconButton>
               </InputAdornment>
