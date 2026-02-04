@@ -31,6 +31,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
   const [internalQuery, setInternalQuery] = React.useState('');
   const [searchInput, setSearchInput] = React.useState('');
   const [filterInput, setFilterInput] = React.useState('');
+  const [activeFilter, setActiveFilter] = React.useState('');
 
   // HTMLエスケープ用のヘルパー関数
   const escapeHtml = (str: string): string => {
@@ -231,9 +232,9 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
     );
 
     // フィルタリング適用
-    const filteredResults = filterInput
+    const filteredResults = activeFilter
       ? expandedResults.filter(({ item, fragment }) => {
-          const filterLower = filterInput.toLowerCase();
+          const filterLower = activeFilter.toLowerCase();
           const titleMatch = item.title.toLowerCase().includes(filterLower);
           const fragmentMatch = fragment ? fragment.toLowerCase().includes(filterLower) : false;
           return titleMatch || fragmentMatch;
@@ -245,7 +246,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
         {filteredResults.map(({ item, fragment, index }) => renderItem(item, fragment, index))}
       </List>
     );
-  }, [internalQuery, results, noteMap, filterInput]);
+  }, [internalQuery, results, noteMap, activeFilter]);
 
 
   return (
@@ -291,7 +292,9 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
           value={filterInput}
           onChange={(e) => setFilterInput(e.target.value)}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Escape') {
+            if (e.key === 'Enter') {
+              setActiveFilter(filterInput);
+            } else if (e.key === 'Escape') {
               onClose();
             }
           }}
@@ -300,7 +303,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
           InputProps={{
             endAdornment: filterInput ? (
               <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setFilterInput('')}>
+                <IconButton size="small" onClick={() => { setFilterInput(''); setActiveFilter(''); }}>
                   <ClearIcon fontSize="small" />
                 </IconButton>
               </InputAdornment>
