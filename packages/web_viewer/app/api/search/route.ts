@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     const wildcartQuery = `${query}*`;
     const results = Note.selectAll(wildcartQuery);
 
-    const limit = 100;
+    const limit = 30;
     const notes = Note.byIds(
       results.map((result: SearchResult) => result.id).slice(0, limit),
       ['id', 'body', 'markup_language', 'is_todo', 'todo_completed']

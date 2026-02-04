@@ -15,7 +15,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { useQuery } from '@tanstack/react-query';
-import { SearchApiResult, SearchResult } from '@/lib/note';;
+import { SearchApiResult, SearchResult } from '@/lib/note';
+import * as cheerio from 'cheerio';
 
 type Props = {
   open: boolean;
@@ -41,17 +42,6 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
 
-  // 次の空白のインデックスを取得
-  const nextWhitespaceIndex = (str: string, startIndex: number): number => {
-    const match = str.substring(startIndex).match(/\s/);
-    return match ? startIndex + match.index : str.length;
-  };
-
-  // ダイアクリティカルマークを削除（アクセント記号など）
-  const removeDiacritics = (str: string): string => {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  };
-
   // GotoAnythingと同じsurroundKeywords実装
   const surroundKeywords = (keywords: string[], text: string, prefix: string, suffix: string, options: { escapeHtml?: boolean } = {}): string => {
     if (!keywords || keywords.length === 0 || !text) return options.escapeHtml ? escapeHtml(text) : text;
@@ -68,48 +58,7 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
     return result;
   };
 
-  // offsets文字列を解析してフラグメントを生成する関数（GotoAnythingスタイル）
-  const extractFragments = (body: string, offsets: string, queryKeywords: string[]): string[] => {
-    if (!body || !offsets) return [];
-    
-    try {
-      // offsetsは "column offset length column offset length ..." の形式
-      const parts = offsets.split(' ').map(Number);
-      const indices: Array<[number, number]> = [];
-      
-      // column 2 がbody列なので、それに対応するoffset/lengthを抽出
-      for (let i = 0; i < parts.length; i += 4) {
-        const column = parts[i];
-        const offset = parts[i + 2];
-        const length = parts[i + 3];
-        if (column === 2) { // bodyは3列目（0始まりで2）
-          const matchIndex = offset;
-          const endIndex = nextWhitespaceIndex(body, offset + length + 15);
-          indices.push([matchIndex, endIndex]);
-          if (indices.length > 20) break;
-        }
-      }
-      
-      if (indices.length === 0) return [];
-      
-      // 各マッチ箇所からフラグメントを生成
-      const fragments: string[] = [];
-      const exists: Record<string, boolean> = {};
-      
-      for (const [start, end] of indices) {
-        const fragment = body.slice(start, end);
-        if (fragment.length > 0 && !exists[fragment]) {
-          exists[fragment] = true;
-          fragments.push(fragment);
-        }
-      }
-      
-      return fragments;
-    } catch (e) {
-      console.error('Fragment extraction error:', e);
-      return [];
-    }
-  };
+
 
   // react-queryでAPI呼び出し
   const { data: searchApiResults, isLoading, error } = useQuery<{ success: boolean; data: SearchApiResult }>({
@@ -144,7 +93,18 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
   };
 
   const results = searchApiResults?.data.results || [];
-  const noteMap = searchApiResults?.data.noteMap || {};
+
+
+  const noteMap = React.useMemo(() => {
+    const map: Record<string, string> = {};
+    Object.entries(searchApiResults?.data.noteMap || {}).forEach(([id, note]) => {
+      const body = note.body || '';
+      const $ = cheerio.load(`<root>${body}</root>`);
+      const text = $.root().text();
+      map[id] = text;
+    });
+    return map;
+  }, [searchApiResults?.data.noteMap]);
 
   const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
     const note = noteMap[item.id];
@@ -203,11 +163,37 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
     const queryKeywords = internalQuery.split(' ').filter(k => k.trim());
     const expandedResults: Array<{ item: SearchResult; fragment?: string; index?: number }> = [];
 
-    // GotoAnythingと同じように、各フラグメントを個別の結果として展開
+    // 各検索結果に対して、queryKeywordsに含まれる部分を前後20文字と共に取得
     results.forEach((item) => {
-      const note = noteMap[item.id];
-      if (note?.body && item.offsets) {
-        const fragments = extractFragments(note.body, item.offsets, queryKeywords);
+      const noteText = noteMap[item.id];
+      if (noteText) {
+        const fragments: string[] = [];
+        const fragmentSet = new Set<string>();
+        
+        // 各キーワードについてnoteText内のすべての出現位置を検索
+        queryKeywords.forEach((keyword) => {
+          if (!keyword) return;
+          
+          let startIndex = 0;
+          while (true) {
+            const index = noteText.toLowerCase().indexOf(keyword.toLowerCase(), startIndex);
+            if (index === -1) break;
+            
+            // 前後20文字を含めて取得
+            const start = Math.max(0, index - 20);
+            const end = Math.min(noteText.length, index + keyword.length + 20);
+            const fragment = noteText.slice(start, end);
+            
+            // 重複を避けるため、Set で管理
+            if (!fragmentSet.has(fragment)) {
+              fragmentSet.add(fragment);
+              fragments.push(fragment);
+            }
+            
+            startIndex = index + 1;
+          }
+        });
+        
         if (fragments.length > 0) {
           fragments.forEach((fragment, idx) => {
             expandedResults.push({ item, fragment, index: idx });
