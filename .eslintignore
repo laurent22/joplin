@@ -92,6 +92,7 @@ readme/
 packages/react-native-vosk/lib/
 packages/lib/countable/Countable.js
 packages/onenote-converter/renderer/pkg/*
+packages/whisper-voice-typing/lib/
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
@@ -468,6 +469,8 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/duplicateNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/exportPdf.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/globalRedo.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/globalUndo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/hideModalMessage.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.js
@@ -511,6 +514,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderR
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/togglePerFolderSortOrder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleVisiblePanes.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/utils/canUseNativeUndo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/types.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/appDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/showFolderPicker.js
@@ -691,6 +695,7 @@ packages/app-mobile/components/FeedbackBanner.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
 packages/app-mobile/components/IconButton.js
+packages/app-mobile/components/KeyboardAvoidingView.js
 packages/app-mobile/components/Modal.js
 packages/app-mobile/components/ModalDialog.js
 packages/app-mobile/components/NestableFlatList.js
@@ -869,6 +874,7 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js
 packages/app-mobile/components/screens/dropbox-login.js
 packages/app-mobile/components/screens/encryption-config.test.js
 packages/app-mobile/components/screens/encryption-config.js
+packages/app-mobile/components/screens/folder.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
 packages/app-mobile/components/side-menu-content.js
@@ -969,6 +975,7 @@ packages/app-mobile/utils/hooks/useSafeAreaPadding.js
 packages/app-mobile/utils/image/fileToImage.web.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js
+packages/app-mobile/utils/initReact.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
@@ -1045,6 +1052,8 @@ packages/editor/CodeMirror/extensions/links/utils/getUrlAtPosition.js
 packages/editor/CodeMirror/extensions/links/utils/openLink.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.test.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.js
+packages/editor/CodeMirror/extensions/markdownFrontMatterExtension.test.js
+packages/editor/CodeMirror/extensions/markdownFrontMatterExtension.js
 packages/editor/CodeMirror/extensions/markdownHighlightExtension.test.js
 packages/editor/CodeMirror/extensions/markdownHighlightExtension.js
 packages/editor/CodeMirror/extensions/markdownMathExtension.test.js
@@ -1707,6 +1716,7 @@ packages/lib/testing/share/mockShareService.js
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/test-utils-synchronizer.js
 packages/lib/testing/test-utils.js
+packages/lib/testing/waitFor.js
 packages/lib/theme.js
 packages/lib/themes/aritimDark.js
 packages/lib/themes/dark.js
@@ -1811,6 +1821,8 @@ packages/renderer/MdToHtml/rules/code_inline.js
 packages/renderer/MdToHtml/rules/externalEmbed.js
 packages/renderer/MdToHtml/rules/fence.js
 packages/renderer/MdToHtml/rules/fountain.js
+packages/renderer/MdToHtml/rules/frontmatter.test.js
+packages/renderer/MdToHtml/rules/frontmatter.js
 packages/renderer/MdToHtml/rules/highlight_keywords.js
 packages/renderer/MdToHtml/rules/html_image.js
 packages/renderer/MdToHtml/rules/image.js
@@ -1938,4 +1950,6 @@ packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/processTranslations.js
 packages/tools/website/utils/render.js
 packages/tools/website/utils/types.js
+packages/whisper-voice-typing/src/index.js
+packages/whisper-voice-typing/src/specs/Whisper.nitro.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

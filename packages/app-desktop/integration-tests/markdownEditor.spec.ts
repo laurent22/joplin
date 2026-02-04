@@ -381,5 +381,24 @@ test.describe('markdownEditor', () => {
 		await goToAnything.runCommand(electronApp, 'textPaste');
 		await noteEditor.expectToHaveText(/^Test \(new content!\)[\n]+/);
 	});
+
+	test('the undo and redo menu items should work', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test undo/redo');
+
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+
+		await mainWindow.keyboard.type('A');
+		await noteEditor.expectToHaveText('A');
+
+		await activateMainMenuItem(electronApp, 'Undo');
+		await noteEditor.expectToHaveText('\n');
+
+		await activateMainMenuItem(electronApp, 'Redo');
+		await noteEditor.expectToHaveText('A');
+	});
 });
 

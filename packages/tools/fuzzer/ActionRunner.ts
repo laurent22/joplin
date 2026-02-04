@@ -389,7 +389,7 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	addAction('moveFolderToToplevel', async ({ folderId }) => {
 		if (!folderId) return false;
 
-		await client.deleteFolder(folderId);
+		await client.moveItem(folderId, '');
 		return true;
 	}, {
 		folderId: async () => (await client.randomFolder({
@@ -487,16 +487,12 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	});
 
 	addAction('publishNote', async ({ id }) => {
-		const note = id ? noteById(id) : await client.randomNote({
-			includeReadOnly: true,
-		});
+		const note = noteById(id);
 		if (!note || note.published) return false;
 
 		await client.publishNote(note.id);
 		return true;
-	}, {
-		id: undefinedId,
-	});
+	}, { id: selectOrCreateWriteableNote });
 
 	addAction('unpublishNote', async ({ id }) => {
 		const note = id ? noteById(id) : await client.randomNote({ includeReadOnly: true });

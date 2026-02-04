@@ -32,6 +32,10 @@ const mathBlockDecoration = Decoration.line({
 	attributes: { class: 'cm-mathBlock', ...noSpellCheckAttrs },
 });
 
+const frontMatterDecoration = Decoration.line({
+	attributes: { class: 'cm-frontMatter', ...noSpellCheckAttrs },
+});
+
 const inlineMathDecoration = Decoration.mark({
 	attributes: { class: 'cm-inlineMath', ...noSpellCheckAttrs },
 });
@@ -116,6 +120,7 @@ const nodeNameToLineDecoration: Record<string, Decoration> = {
 	'FencedCode': codeBlockDecoration,
 	'CodeBlock': codeBlockDecoration,
 	'BlockMath': mathBlockDecoration,
+	'FrontMatter': frontMatterDecoration,
 	'Blockquote': blockQuoteDecoration,
 	'OrderedList': orderedListDecoration,
 	'BulletList': unorderedListDecoration,
@@ -152,6 +157,7 @@ const multilineNodes = {
 	'FencedCode': true,
 	'CodeBlock': true,
 	'BlockMath': true,
+	'FrontMatter': true,
 	'Blockquote': true,
 	'OrderedList': true,
 	'BulletList': true,

@@ -44,6 +44,7 @@
 		android:requestLegacyExternalStorage="true"
 		android:resizeableActivity="true"
 		android:theme="@style/AppTheme"
+		android:usesCleartextTraffic="${usesCleartextTraffic}"
 		android:supportsRtl="true">
 
 		<!-- Enable profiling in release builds (Android 10+) -->
