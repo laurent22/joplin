@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Note } from '@/lib/note';
+import { Note, SearchResult, NoteEntity } from '@/lib/note';
 
 export async function GET(req: Request) {
   try {
@@ -10,8 +10,23 @@ export async function GET(req: Request) {
     }
 
     const wildcartQuery = `${query}*`;
-    const result = Note.selectAll(wildcartQuery);
-    return NextResponse.json({ success: true, data: result });
+    const results = Note.selectAll(wildcartQuery);
+
+    const limit = 100;
+    const notes = Note.byIds(
+      results.map((result: SearchResult) => result.id).slice(0, limit),
+      ['id', 'body', 'markup_language', 'is_todo', 'todo_completed']
+    );
+
+    const notesById: Record<string, NoteEntity> = {};
+    notes.forEach(note => {
+      notesById[note.id] = note;
+    });
+
+    return NextResponse.json({ success: true, data: {
+      results: results,
+      noteMap: notesById,
+    } });
   } catch (err) {
     return NextResponse.json({ success: false, error: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }

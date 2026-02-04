@@ -1,9 +1,11 @@
 import { NoteEntity, getDatabase } from './database';
 
+export type { NoteEntity };
+
+
 export interface SearchResult {
     id: string;
     title: string;
-    body: string;
     offsets: string;
     matchinfo: Buffer | { type: 'Buffer'; data: number[] };
     user_created_time: number;
@@ -11,6 +13,11 @@ export interface SearchResult {
     is_todo: number;
     todo_completed: number;
     parent_id: string | null;
+}
+
+export interface SearchApiResult {
+    results: SearchResult[];
+    noteMap: Record<string, NoteEntity>;
 }
 
 export class Note {
@@ -36,7 +43,6 @@ export class Note {
             SELECT
                 notes_fts.id,
                 notes_fts.title,
-                notes_fts.body,
                 offsets(notes_fts) AS offsets,
                 matchinfo(notes_fts, 'pcnalx') AS matchinfo,
                 notes_fts.user_created_time,
@@ -50,6 +56,18 @@ export class Note {
         const stmt = db.prepare(sql);
         const rows = stmt.all(matchQuery);
         return rows as SearchResult[];
+    }
+    
+    public static byIds(ids: string[], fields: string[] = ['*']): NoteEntity[] {
+        if (!ids.length) return [];
+        
+        const db = getDatabase();
+        const placeholders = ids.map(() => '?').join(',');
+        const sql = `SELECT ${fields.join(', ')} FROM notes WHERE id IN (${placeholders})`;
+        
+        const stmt = db.prepare(sql);
+        const rows = stmt.all(...ids);
+        return rows as NoteEntity[];
     }
     
 }

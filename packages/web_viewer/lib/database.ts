@@ -30,6 +30,7 @@ export interface NoteEntity {
   source_application: string;
   application_data: string;
   order: number;
+  body?: string;
 }
 // データベースのシングルトンインスタンス
 let database: Database.Database | null = null;

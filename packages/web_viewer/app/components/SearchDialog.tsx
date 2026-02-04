@@ -15,7 +15,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { useQuery } from '@tanstack/react-query';
-import { SearchResult } from '@/lib/note';
+import { SearchApiResult, SearchResult } from '@/lib/note';;
 
 type Props = {
   open: boolean;
@@ -92,10 +92,13 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
   };
 
   // react-queryでAPI呼び出し
-  const { data, isLoading, error } = useQuery<{ success: boolean; data: SearchResult[] }>({
+  const { data: searchApiResults, isLoading, error } = useQuery<{ success: boolean; data: SearchApiResult }>({
     queryKey: ['search', internalQuery],
     queryFn: async () => {
-      if (!internalQuery) return { success: true, data: [] };
+      if (!internalQuery) return { success: true, data: {
+        results: [],
+        noteMap: {},
+      } };
       const response = await fetch(`/api/search?query=${encodeURIComponent(internalQuery)}`);
       if (!response.ok) {
         throw new Error('Search failed');
@@ -120,11 +123,13 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
     onClose();
   };
 
-  const results = data?.data || [];
+  const results = searchApiResults?.data.results || [];
+  const noteMap = searchApiResults?.data.noteMap || {};
 
   const renderItem = (item: SearchResult) => {
     const titleHtml = surroundKeywords(internalQuery, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>');
-    const fragmentHtml = extractFragments(item.body, item.offsets);
+    const note = noteMap[item.id];
+    const fragmentHtml = note?.body ? extractFragments(note.body, item.offsets) : '';
 
     return (
       <ListItem key={item.id} disablePadding>
