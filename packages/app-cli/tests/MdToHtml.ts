@@ -12,6 +12,7 @@ function newTestMdToHtml(options: any = null) {
 		ResourceModel: {
 			isResourceUrl: isResourceUrl,
 			urlToId: resourceUrlToId,
+			fullPath: () => '/some/path/here',
 		},
 		fsDriver: shim.fsDriver(),
 		...options,
@@ -56,6 +57,21 @@ describe('MdToHtml', () => {
 				mdToHtmlOptions.mapsToLine = true;
 			} else if (mdFilename.startsWith('resource_')) {
 				mdToHtmlOptions.resources = {};
+			} else if (mdFilename.startsWith('pdf_')) {
+				mdToHtmlOptions.resources = {
+					'00000000000000000000000000000001': {
+						item: { mime: 'application/pdf' },
+						localState: { },
+					},
+				};
+				mdToHtmlOptions.pdfViewerEnabled = true;
+			} else if (mdFilename.startsWith('video_')) {
+				mdToHtmlOptions.resources = {
+					'00000000000000000000000000000001': {
+						item: { mime: 'video/mp4' },
+						localState: { },
+					},
+				};
 			}
 
 			const markdown = await shim.fsDriver().readFile(mdFilePath);
@@ -86,7 +102,7 @@ describe('MdToHtml', () => {
 				// eslint-disable-next-line no-console
 				console.info(msg.join('\n'));
 
-				expect(false).toBe(true);
+				expect(actualHtml).toBe(expectedHtml);
 				// return;
 			} else {
 				expect(true).toBe(true);

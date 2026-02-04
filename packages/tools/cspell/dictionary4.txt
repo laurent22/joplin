@@ -241,6 +241,7 @@ xhdpi
 xxhdpi
 xxxhdpi
 scrollend
+pogodin
 youtube
 youtu
 nocookie

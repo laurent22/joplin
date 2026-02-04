@@ -1,8 +1,5 @@
 import * as React from 'react';
-import shim from '@joplin/lib/shim';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
-
-shim.setReact(React);
 PerformanceLogger.onAppStartBegin();
 
 import setupQuickActions from './setupQuickActions';
@@ -59,11 +56,7 @@ import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 // Lazy-loaded screens for faster startup
 const TagsScreen = React.lazy(() => import('./components/screens/tags'));
 const ConfigScreen = React.lazy(() => import('./components/screens/ConfigScreen/ConfigScreen'));
-const FolderScreen = React.lazy(async () => {
-	// @ts-expect-error JS file without type declarations
-	const m: { FolderScreen: React.ComponentType } = await import('./components/screens/folder.js');
-	return { default: m.FolderScreen };
-});
+const FolderScreen = React.lazy(() => import('./components/screens/folder'));
 const LogScreen = React.lazy(() => import('./components/screens/LogScreen'));
 const StatusScreen = React.lazy(() => import('./components/screens/status'));
 const SearchScreen = React.lazy(() => import('./components/screens/SearchScreen'));
@@ -713,12 +706,12 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
 			menuPosition = SideMenuPosition.Right;
 		} else if (this.props.routeName === 'Config') {
 			disableSideMenuGestures = true;
 		} else {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
+			sideMenuContent = <SideMenuContent/>;
 		}
 
 		const appNavInit = {

@@ -6,16 +6,14 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
+import './utils/initReact';
 import './utils/polyfills';
 
+import Root from './root';
 import { LogBox } from 'react-native';
 import { registerRootComponent } from 'expo';
 // Allows loading image assets. See https://github.com/expo/expo/issues/31240
 import 'expo-asset';
-import shim from '@joplin/lib/shim';
-shim.setReact(require('react'));
-
-const Root = require('./root').default;
 
 // Seems JavaScript developers love adding warnings everywhere, even when these warnings can't be fixed
 // or don't really matter. Because we want important warnings to actually be fixed, we disable
