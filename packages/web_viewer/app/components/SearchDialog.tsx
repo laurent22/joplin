@@ -170,7 +170,15 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
      
     const t0 = performance.now();
 
+    const processedIds = new Set<string>();
+
     results.forEach((item) => {
+      // 既に処理済みのIDはスキップ
+      if (processedIds.has(item.id)) {
+        return;
+      }
+      processedIds.add(item.id);
+
       const noteText = noteMap[item.id];
       if (noteText) {
         const fragments: string[] = [];
