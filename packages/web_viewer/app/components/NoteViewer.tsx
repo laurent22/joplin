@@ -34,7 +34,7 @@ export default function NoteViewer() {
     staleTime: 60_000,
   });
   console.log(`note: id=${noteId}, note_title=${fetched?.title}`);
-  console.log(`note body = ${fetched?.body}`);
+  // console.log(`note body = ${fetched?.body}`);
 
   if (!noteId) {
     return (
