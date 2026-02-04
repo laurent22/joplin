@@ -8,7 +8,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import SearchDialog from './SearchDialog';
+import MemoizedSearchDialog from './SearchDialog';
 
 export default function NoteTreeWrapper() {
   const [query, setQuery] = React.useState('');
@@ -32,6 +32,9 @@ export default function NoteTreeWrapper() {
   }, [query]);
 
   
+  const onClose = React.useCallback(() => {
+    setOpenSearchDialog(false);
+  }, []);
 
   return (
     <div className="note-tree-wrapper" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -66,11 +69,10 @@ export default function NoteTreeWrapper() {
         />
       </div>
       
-      <SearchDialog
+      <MemoizedSearchDialog
         open={openSearchDialog}
-        onClose={() => setOpenSearchDialog(false)}
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
+        onClose={onClose}
+        initialSearchInput={searchInput}
         setQuery={setQuery}
       />
       

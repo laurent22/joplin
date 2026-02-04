@@ -21,15 +21,15 @@ import * as cheerio from 'cheerio';
 type Props = {
   open: boolean;
   onClose: () => void;
-  searchInput: string;
-  setSearchInput: (v: string) => void;
+  initialSearchInput: string;
   setQuery: (v: string) => void;
 };
 
 
-export default function SearchDialog({ open, onClose, searchInput, setSearchInput, setQuery }: Props) {
+function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
+  const [searchInput, setSearchInput] = React.useState('');
 
   // HTMLエスケープ用のヘルパー関数
   const escapeHtml = (str: string): string => {
@@ -79,9 +79,10 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
 
   React.useEffect(() => {
     if (open) {
+      setSearchInput(initialSearchInput);
       setTimeout(() => dialogInputRef.current?.focus(), 0);
     }
-  }, [open]);
+  }, [open, initialSearchInput]);
 
   const handleSearch = () => {
     setInternalQuery(searchInput);
@@ -92,8 +93,9 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
     onClose();
   };
 
-  const results = searchApiResults?.data.results || [];
-
+  const results = React.useMemo(() => {
+    return searchApiResults?.data.results || [];
+  }, [searchApiResults?.data.results]);
 
   const noteMap = React.useMemo(() => {
     const map: Record<string, string> = {};
@@ -106,64 +108,68 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
     return map;
   }, [searchApiResults?.data.noteMap]);
 
-  const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
-    const note = noteMap[item.id];
-    const queryKeywords = internalQuery.split(' ').filter(k => k.trim());
-    
-    // フラグメントがある場合はタイトルを太字でカラー表示、ない場合はキーワードハイライト
-    const titleHtml = fragment
-      ? `<span style="font-weight: bold; color: #1976d2;">${escapeHtml(item.title)}</span>`
-      : surroundKeywords(queryKeywords, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true });
-
-    // フラグメントをキーワードでハイライト
-    const fragmentHtml = fragment
-      ? surroundKeywords(queryKeywords, fragment, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true })
-      : null;
-
-    const key = index !== undefined ? `${item.id}-${index}` : item.id;
-
-    return (
-      <ListItem key={key} disablePadding>
-        <ListItemButton 
-          onClick={() => handleItemClick(item)} 
-          sx={{ 
-            flexDirection: 'column', 
-            alignItems: 'flex-start', 
-            py: 1.5,
-            borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-            minHeight: fragment ? '84px' : '64px',
-          }}
-        >
-          <Box 
-            dangerouslySetInnerHTML={{ __html: titleHtml }} 
-            sx={{ 
-              fontSize: '1.125rem', 
-              mb: fragment ? 0.75 : 0.5,
-              opacity: 0.85,
-            }} 
-          />
-          {fragmentHtml && (
-            <Box 
-              dangerouslySetInnerHTML={{ __html: fragmentHtml }} 
-              sx={{ 
-                fontSize: '0.95rem', 
-                opacity: 0.7, 
-                mb: 0.5, 
-                whiteSpace: 'pre-wrap',
-                lineHeight: 1.4,
-              }} 
-            />
-          )}
-        </ListItemButton>
-      </ListItem>
-    );
-  };
-
-  const renderList = () => {
+  const renderResults = React.useMemo(() => {
     const queryKeywords = internalQuery.split(' ').filter(k => k.trim());
     const expandedResults: Array<{ item: SearchResult; fragment?: string; index?: number }> = [];
 
+    const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
+      const note = noteMap[item.id];
+      
+      // フラグメントがある場合はタイトルを太字でカラー表示、ない場合はキーワードハイライト
+      const titleHtml = fragment
+        ? `<span style="font-weight: bold; color: #1976d2;">${escapeHtml(item.title)}</span>`
+        : surroundKeywords(queryKeywords, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true });
+
+      // フラグメントをキーワードでハイライト
+      const fragmentHtml = fragment
+        ? surroundKeywords(queryKeywords, fragment, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true })
+        : null;
+
+      const key = index !== undefined ? `${item.id}-${index}` : item.id;
+
+      return (
+        <ListItem key={key} disablePadding>
+          <ListItemButton 
+            onClick={() => handleItemClick(item)} 
+            sx={{ 
+              flexDirection: 'column', 
+              alignItems: 'flex-start', 
+              py: 1.5,
+              borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+              minHeight: fragment ? '84px' : '64px',
+            }}
+          >
+            <Box 
+              dangerouslySetInnerHTML={{ __html: titleHtml }} 
+              sx={{ 
+                fontSize: '1.125rem', 
+                mb: fragment ? 0.75 : 0.5,
+                opacity: 0.85,
+              }} 
+            />
+            {fragmentHtml && (
+              <Box 
+                dangerouslySetInnerHTML={{ __html: fragmentHtml }} 
+                sx={{ 
+                  fontSize: '0.95rem', 
+                  opacity: 0.7, 
+                  mb: 0.5, 
+                  whiteSpace: 'pre-wrap',
+                  lineHeight: 1.4,
+                }} 
+              />
+            )}
+          </ListItemButton>
+        </ListItem>
+      );
+    };
+
     // 各検索結果に対して、queryKeywordsに含まれる部分を前後20文字と共に取得
+
+    // 処理時間計測開始
+     
+    const t0 = performance.now();
+
     results.forEach((item) => {
       const noteText = noteMap[item.id];
       if (noteText) {
@@ -208,12 +214,20 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
       }
     });
 
+    // 処理時間計測終了 (ミリ秒)
+     
+    const t1 = performance.now();
+    console.log(
+      `SearchDialog: fragment extraction took ${(t1 - t0).toFixed(2)}ms for ${results.length} results and ${queryKeywords.length} keywords`
+    );
+
     return (
       <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
         {expandedResults.map(({ item, fragment, index }) => renderItem(item, fragment, index))}
       </List>
     );
-  };
+  }, [internalQuery, results, noteMap]);
+
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -264,7 +278,7 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
           </Box>
         )}
 
-        {!isLoading && !error && results.length > 0 && renderList()}
+        {!isLoading && !error && results.length > 0 && renderResults}
 
         {!isLoading && !error && internalQuery && results.length === 0 && (
           <Box sx={{ p: 2, textAlign: 'center', opacity: 0.6 }}>
@@ -275,3 +289,7 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
     </Dialog>
   );
 }
+
+const MemoizedSearchDialog = React.memo(SearchDialog);
+
+export default MemoizedSearchDialog;
