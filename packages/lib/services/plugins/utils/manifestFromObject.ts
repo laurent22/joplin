@@ -4,26 +4,23 @@ import validatePluginPlatforms from './validatePluginPlatforms';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function manifestFromObject(o: any): PluginManifest {
-
 	const getString = (name: string, required = true, defaultValue = ''): string => {
 		if (required && !o[name]) {
 			if (name === 'app_min_version') {
 				throw new Error('Invalid plugin manifest: missing required field "app_min_version"');
 			}
 			throw new Error(`Missing required field: ${name}`);
-		}	
+		}
 		if (!o[name]) return defaultValue;
 		if (typeof o[name] !== 'string') throw new Error(`Field must be a string: ${name}`);
 		return o[name];
 	};
-
 	const getNumber = (name: string, required = true): number => {
 		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
 		if (!o[name]) return 0;
 		if (typeof o[name] !== 'number') throw new Error(`Field must be a number: ${name}`);
 		return o[name];
-	};
-
+	}
 	const getStrings = (name: string, required = true, defaultValue: string[] = []): string[] => {
 		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
 		if (!o[name]) return defaultValue;
