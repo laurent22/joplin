@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +12,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { useQuery } from '@tanstack/react-query';
@@ -217,37 +217,51 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
 
       return (
         <ListItem key={key} disablePadding>
-          <ListItemButton 
-            onClick={() => handleItemClick(item)} 
-            sx={{ 
-              flexDirection: 'column', 
-              alignItems: 'flex-start', 
-              py: 1.5,
-              borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-              minHeight: fragment ? '84px' : '64px',
+          <Link 
+            href={`/note?note_id=${item.id}`}
+            style={{ 
+              textDecoration: 'none',
+              width: '100%',
+              color: 'inherit',
             }}
           >
-            <Box 
-              dangerouslySetInnerHTML={{ __html: titleHtml }} 
+            <Box
               sx={{ 
-                fontSize: '1.125rem', 
-                mb: fragment ? 0.75 : 0.5,
-                opacity: 0.85,
-              }} 
-            />
-            {fragmentHtml && (
+                display: 'flex',
+                flexDirection: 'column', 
+                alignItems: 'flex-start', 
+                py: 1.5,
+                px: 2,
+                borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+                minHeight: fragment ? '84px' : '64px',
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
               <Box 
-                dangerouslySetInnerHTML={{ __html: fragmentHtml }} 
+                dangerouslySetInnerHTML={{ __html: titleHtml }} 
                 sx={{ 
-                  fontSize: '0.95rem', 
-                  opacity: 0.7, 
-                  mb: 0.5, 
-                  whiteSpace: 'pre-wrap',
-                  lineHeight: 1.4,
+                  fontSize: '1.125rem', 
+                  mb: fragment ? 0.75 : 0.5,
+                  opacity: 0.85,
                 }} 
               />
-            )}
-          </ListItemButton>
+              {fragmentHtml && (
+                <Box 
+                  dangerouslySetInnerHTML={{ __html: fragmentHtml }} 
+                  sx={{ 
+                    fontSize: '0.95rem', 
+                    opacity: 0.7, 
+                    mb: 0.5, 
+                    whiteSpace: 'pre-wrap',
+                    lineHeight: 1.4,
+                  }} 
+                />
+              )}
+            </Box>
+          </Link>
         </ListItem>
       );
     };
