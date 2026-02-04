@@ -188,10 +188,12 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
         queryKeywords.forEach((keyword) => {
           if (!keyword) return;
           
-          let startIndex = 0;
-          while (true) {
-            const index = noteText.toLowerCase().indexOf(keyword.toLowerCase(), startIndex);
-            if (index === -1) break;
+          const escapedKeyword = escapeRegExp(keyword);
+          const regex = new RegExp(escapedKeyword, 'gi');
+          const matches = noteText.matchAll(regex);
+          
+          for (const match of matches) {
+            const index = match.index!;
             
             // 前後20文字を含めて取得
             const start = Math.max(0, index - 20);
@@ -203,8 +205,6 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
               fragmentSet.add(fragment);
               fragments.push(fragment);
             }
-            
-            startIndex = index + 1;
           }
         });
         
