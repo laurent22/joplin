@@ -30,14 +30,52 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
 
-  // offsets文字列を解析してフラグメントを生成する関数
-  const extractFragments = (body: string, offsets: string): string => {
-    if (!body || !offsets) return '';
+  // HTMLエスケープ用のヘルパー関数
+  const escapeHtml = (str: string): string => {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  };
+
+  const escapeRegExp = (str: string): string => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  };
+
+  // 次の空白のインデックスを取得
+  const nextWhitespaceIndex = (str: string, startIndex: number): number => {
+    const match = str.substring(startIndex).match(/\s/);
+    return match ? startIndex + match.index : str.length;
+  };
+
+  // ダイアクリティカルマークを削除（アクセント記号など）
+  const removeDiacritics = (str: string): string => {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  };
+
+  // GotoAnythingと同じsurroundKeywords実装
+  const surroundKeywords = (keywords: string[], text: string, prefix: string, suffix: string, options: { escapeHtml?: boolean } = {}): string => {
+    if (!keywords || keywords.length === 0 || !text) return options.escapeHtml ? escapeHtml(text) : text;
+    
+    let result = options.escapeHtml ? escapeHtml(text) : text;
+    
+    keywords.forEach(keyword => {
+      if (!keyword) return;
+      const escapedKeyword = escapeRegExp(keyword);
+      const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+      result = result.replace(regex, `${prefix}$1${suffix}`);
+    });
+    
+    return result;
+  };
+
+  // offsets文字列を解析してフラグメントを生成する関数（GotoAnythingスタイル）
+  const extractFragments = (body: string, offsets: string, queryKeywords: string[]): string[] => {
+    if (!body || !offsets) return [];
     
     try {
       // offsetsは "column offset length column offset length ..." の形式
       const parts = offsets.split(' ').map(Number);
-      const matches: Array<{ offset: number; length: number }> = [];
+      const indices: Array<[number, number]> = [];
       
       // column 2 がbody列なので、それに対応するoffset/lengthを抽出
       for (let i = 0; i < parts.length; i += 4) {
@@ -45,50 +83,32 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
         const offset = parts[i + 2];
         const length = parts[i + 3];
         if (column === 2) { // bodyは3列目（0始まりで2）
-          matches.push({ offset, length });
+          const matchIndex = offset;
+          const endIndex = nextWhitespaceIndex(body, offset + length + 15);
+          indices.push([matchIndex, endIndex]);
+          if (indices.length > 20) break;
         }
       }
       
-      if (matches.length === 0) return '';
+      if (indices.length === 0) return [];
       
-      // 最初のマッチ箇所の前後を取得
-      const firstMatch = matches[0];
-      const contextLength = 100;
-      const start = Math.max(0, firstMatch.offset - contextLength);
-      const end = Math.min(body.length, firstMatch.offset + firstMatch.length + contextLength);
+      // 各マッチ箇所からフラグメントを生成
+      const fragments: string[] = [];
+      const exists: Record<string, boolean> = {};
       
-      let fragment = body.substring(start, end);
-      if (start > 0) fragment = '...' + fragment;
-      if (end < body.length) fragment = fragment + '...';
+      for (const [start, end] of indices) {
+        const fragment = body.slice(start, end);
+        if (fragment.length > 0 && !exists[fragment]) {
+          exists[fragment] = true;
+          fragments.push(fragment);
+        }
+      }
       
-      // マッチ部分をハイライト
-      let result = fragment;
-      matches.forEach(match => {
-        const matchText = body.substring(match.offset, match.offset + match.length);
-        const regex = new RegExp(`(${escapeRegExp(matchText)})`, 'gi');
-        result = result.replace(regex, '<span style="font-weight: bold; color: #1976d2;">$1</span>');
-      });
-      
-      return result;
+      return fragments;
     } catch (e) {
-      return '';
+      console.error('Fragment extraction error:', e);
+      return [];
     }
-  };
-  
-  const escapeRegExp = (str: string): string => {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  };
-  
-  // キーワードをハイライトするヘルパー関数
-  const surroundKeywords = (keywords: string, text: string, prefix: string, suffix: string): string => {
-    if (!keywords || !text) return text;
-    const keywordArray = keywords.split(' ').filter(k => k.trim());
-    let result = text;
-    keywordArray.forEach(keyword => {
-      const regex = new RegExp(`(${escapeRegExp(keyword)})`, 'gi');
-      result = result.replace(regex, `${prefix}$1${suffix}`);
-    });
-    return result;
   };
 
   // react-queryでAPI呼び出し
@@ -126,19 +146,52 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
   const results = searchApiResults?.data.results || [];
   const noteMap = searchApiResults?.data.noteMap || {};
 
-  const renderItem = (item: SearchResult) => {
-    const titleHtml = surroundKeywords(internalQuery, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>');
+  const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
     const note = noteMap[item.id];
-    const fragmentHtml = note?.body ? extractFragments(note.body, item.offsets) : '';
+    const queryKeywords = internalQuery.split(' ').filter(k => k.trim());
+    
+    // フラグメントがある場合はタイトルを太字でカラー表示、ない場合はキーワードハイライト
+    const titleHtml = fragment
+      ? `<span style="font-weight: bold; color: #1976d2;">${escapeHtml(item.title)}</span>`
+      : surroundKeywords(queryKeywords, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true });
+
+    // フラグメントをキーワードでハイライト
+    const fragmentHtml = fragment
+      ? surroundKeywords(queryKeywords, fragment, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true })
+      : null;
+
+    const key = index !== undefined ? `${item.id}-${index}` : item.id;
 
     return (
-      <ListItem key={item.id} disablePadding>
-        <ListItemButton onClick={() => handleItemClick(item)} sx={{ flexDirection: 'column', alignItems: 'flex-start', py: 1.5 }}>
-          <Box dangerouslySetInnerHTML={{ __html: titleHtml }} sx={{ fontSize: '1rem', mb: 0.5 }} />
+      <ListItem key={key} disablePadding>
+        <ListItemButton 
+          onClick={() => handleItemClick(item)} 
+          sx={{ 
+            flexDirection: 'column', 
+            alignItems: 'flex-start', 
+            py: 1.5,
+            borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+            minHeight: fragment ? '84px' : '64px',
+          }}
+        >
+          <Box 
+            dangerouslySetInnerHTML={{ __html: titleHtml }} 
+            sx={{ 
+              fontSize: '1.125rem', 
+              mb: fragment ? 0.75 : 0.5,
+              opacity: 0.85,
+            }} 
+          />
           {fragmentHtml && (
             <Box 
               dangerouslySetInnerHTML={{ __html: fragmentHtml }} 
-              sx={{ fontSize: '0.875rem', opacity: 0.7, mb: 0.5, whiteSpace: 'pre-wrap' }} 
+              sx={{ 
+                fontSize: '0.95rem', 
+                opacity: 0.7, 
+                mb: 0.5, 
+                whiteSpace: 'pre-wrap',
+                lineHeight: 1.4,
+              }} 
             />
           )}
         </ListItemButton>
@@ -147,9 +200,31 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
   };
 
   const renderList = () => {
+    const queryKeywords = internalQuery.split(' ').filter(k => k.trim());
+    const expandedResults: Array<{ item: SearchResult; fragment?: string; index?: number }> = [];
+
+    // GotoAnythingと同じように、各フラグメントを個別の結果として展開
+    results.forEach((item) => {
+      const note = noteMap[item.id];
+      if (note?.body && item.offsets) {
+        const fragments = extractFragments(note.body, item.offsets, queryKeywords);
+        if (fragments.length > 0) {
+          fragments.forEach((fragment, idx) => {
+            expandedResults.push({ item, fragment, index: idx });
+          });
+        } else {
+          // フラグメントがない場合はタイトルのみ表示
+          expandedResults.push({ item });
+        }
+      } else {
+        // bodyがない場合はタイトルのみ表示
+        expandedResults.push({ item });
+      }
+    });
+
     return (
       <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
-        {results.map((item) => renderItem(item))}
+        {expandedResults.map(({ item, fragment, index }) => renderItem(item, fragment, index))}
       </List>
     );
   };
