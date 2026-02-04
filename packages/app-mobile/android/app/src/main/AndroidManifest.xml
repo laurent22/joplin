@@ -33,6 +33,11 @@
 
 		android:resizeableActivity: allows user to resize Joplin window
 		https://github.com/laurent22/joplin/issues/3547
+
+		android:enableOnBackInvokedCallback: Workaround: Joplin currently does not support predictive back gestures.
+		- https://stackoverflow.com/a/79861863
+		- https://github.com/laurent22/joplin/issues/14265
+		- https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture
 	-->
 	<application
 		android:name=".MainApplication"
@@ -44,6 +49,7 @@
 		android:requestLegacyExternalStorage="true"
 		android:resizeableActivity="true"
 		android:theme="@style/AppTheme"
+		android:enableOnBackInvokedCallback="false"
 		android:usesCleartextTraffic="${usesCleartextTraffic}"
 		android:supportsRtl="true">
 
