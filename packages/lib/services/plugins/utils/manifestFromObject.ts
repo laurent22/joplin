@@ -6,7 +6,12 @@ import validatePluginPlatforms from './validatePluginPlatforms';
 export default function manifestFromObject(o: any): PluginManifest {
 
 	const getString = (name: string, required = true, defaultValue = ''): string => {
-		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
+		if (required && !o[name]) {
+			if (name === 'app_min_version') {
+				throw new Error('Invalid plugin manifest: missing required field "app_min_version"');
+			}
+			throw new Error(`Missing required field: ${name}`);
+		}	
 		if (!o[name]) return defaultValue;
 		if (typeof o[name] !== 'string') throw new Error(`Field must be a string: ${name}`);
 		return o[name];
@@ -58,7 +63,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 		name: getString('name', true),
 		version: getString('version', true),
 		app_min_version: getString('app_min_version', true),
-		app_min_version_mobile: getString('app_min_version', false),
+		app_min_version_mobile: getString('app_min_version_mobile', false),
 		platforms: getStrings('platforms', false),
 
 		author: getString('author', false),
