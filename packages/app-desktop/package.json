@@ -151,7 +151,7 @@
     "@joplin/renderer": "~3.6",
     "@joplin/tools": "~3.6",
     "@joplin/utils": "~3.6",
-    "@playwright/test": "1.55.1",
+    "@playwright/test": "1.56.0",
     "@sentry/electron": "4.24.0",
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.14",
