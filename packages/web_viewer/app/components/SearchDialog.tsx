@@ -12,9 +12,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import FolderIcon from '@mui/icons-material/Folder';
 import { useQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -38,6 +38,18 @@ interface SearchResult {
 export default function SearchDialog({ open, onClose, searchInput, setSearchInput, setQuery }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
+
+  // キーワードをハイライトするヘルパー関数
+  const surroundKeywords = (keywords: string, text: string, prefix: string, suffix: string): string => {
+    if (!keywords || !text) return text;
+    const keywordArray = keywords.split(' ').filter(k => k.trim());
+    let result = text;
+    keywordArray.forEach(keyword => {
+      const regex = new RegExp(`(${keyword})`, 'gi');
+      result = result.replace(regex, `${prefix}$1${suffix}`);
+    });
+    return result;
+  };
 
   // react-queryでAPI呼び出し
   const { data, isLoading, error } = useQuery<{ success: boolean; data: SearchResult[] }>({
@@ -69,6 +81,36 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
   };
 
   const results = data?.data || [];
+
+  const renderItem = (item: SearchResult) => {
+    const titleHtml = item.fragments
+      ? `<span style="font-weight: bold;">${item.title}</span>`
+      : surroundKeywords(internalQuery, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>');
+
+    const fragmentsHtml = !item.fragments
+      ? null
+      : surroundKeywords(internalQuery, item.fragments, '<span style="font-weight: bold; color: #1976d2;">', '</span>');
+
+    return (
+      <ListItem key={item.id} disablePadding>
+        <ListItemButton onClick={() => handleItemClick(item)} sx={{ flexDirection: 'column', alignItems: 'flex-start', py: 1.5 }}>
+          <Box dangerouslySetInnerHTML={{ __html: titleHtml }} sx={{ fontSize: '1rem', mb: 0.5 }} />
+          {fragmentsHtml && (
+            <Box 
+              dangerouslySetInnerHTML={{ __html: fragmentsHtml }} 
+              sx={{ fontSize: '0.875rem', opacity: 0.7, mb: 0.5 }} 
+            />
+          )}
+          {item.path && (
+            <Box sx={{ fontSize: '0.875rem', opacity: 0.6, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <FolderIcon sx={{ fontSize: '1rem' }} />
+              {item.path}
+            </Box>
+          )}
+        </ListItemButton>
+      </ListItem>
+    );
+  };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -121,21 +163,7 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
 
         {!isLoading && !error && results.length > 0 && (
           <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
-            {results.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <ListItemButton onClick={() => handleItemClick(item)}>
-                  <ListItemText
-                    primary={item.title}
-                    secondary={
-                      <>
-                        {item.fragments && <Box sx={{ mb: 0.5, opacity: 0.7 }}>{item.fragments}</Box>}
-                        {item.path && <Box sx={{ fontSize: '0.875rem', opacity: 0.6 }}>{item.path}</Box>}
-                      </>
-                    }
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {results.map((item) => renderItem(item))}
           </List>
         )}
 
