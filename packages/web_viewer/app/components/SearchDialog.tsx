@@ -110,9 +110,95 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
     return map;
   }, [searchApiResults?.data.noteMap]);
 
+  // フラグメント抽出をメモ化（検索文字が変わった時のみ再計算）
+  const expandedResults = React.useMemo(() => {
+    const queryKeywords = internalQuery.split(' ').filter(k => k.trim());
+    const results_array: Array<{ item: SearchResult; fragment?: string; index?: number }> = [];
+
+    // 処理時間計測開始
+    const t0 = performance.now();
+
+    const processedIds = new Set<string>();
+
+    results.forEach((item) => {
+      // 既に処理済みのIDはスキップ
+      if (processedIds.has(item.id)) {
+        return;
+      }
+      processedIds.add(item.id);
+
+      const noteText = noteMap[item.id];
+      if (noteText) {
+        const fragments: string[] = [];
+        const fragmentSet = new Set<string>();
+        
+        // 各キーワードについてnoteText内のすべての出現位置を検索
+        queryKeywords.forEach((keyword) => {
+          if (!keyword) return;
+          
+          const escapedKeyword = escapeRegExp(keyword);
+          const regex = new RegExp(escapedKeyword, 'gi');
+          const matches = noteText.matchAll(regex);
+          
+          for (const match of matches) {
+            const index = match.index!;
+            
+            // 前後20文字を含めて取得
+            const start = Math.max(0, index - 20);
+            const end = Math.min(noteText.length, index + keyword.length + 20);
+            const fragment = noteText.slice(start, end);
+            
+            // 重複を避けるため、Set で管理
+            if (!fragmentSet.has(fragment)) {
+              fragmentSet.add(fragment);
+              fragments.push(fragment);
+            }
+          }
+        });
+        
+        if (fragments.length > 0) {
+          fragments.forEach((fragment, idx) => {
+            results_array.push({ item, fragment, index: idx });
+          });
+        } else {
+          // フラグメントがない場合はタイトルのみ表示
+          results_array.push({ item });
+        }
+      } else {
+        // bodyがない場合はタイトルのみ表示
+        results_array.push({ item });
+      }
+    });
+
+    // 処理時間計測終了 (ミリ秒)
+    const t1 = performance.now();
+    console.log(
+      `SearchDialog: fragment extraction took ${(t1 - t0).toFixed(2)}ms for ${results.length} results and ${queryKeywords.length} keywords`
+    );
+
+    return results_array;
+  }, [internalQuery, results, noteMap]);
+
+  // フィルタリング適用（メモ化された結果から軽量にフィルタ）
+  const filteredResults = React.useMemo(() => {
+    if (!activeFilter) return expandedResults;
+
+    const t0 = performance.now();
+    const filterLower = activeFilter.toLowerCase();
+    const filtered = expandedResults.filter(({ item, fragment }) => {
+      const titleMatch = item.title.toLowerCase().includes(filterLower);
+      const fragmentMatch = fragment ? fragment.toLowerCase().includes(filterLower) : false;
+      return titleMatch || fragmentMatch;
+    });
+    const t1 = performance.now();
+    console.log(`SearchDialog: filtering took ${(t1 - t0).toFixed(2)}ms`);
+
+    return filtered;
+  }, [expandedResults, activeFilter]);
+
+  // レンダリング部分
   const renderResults = React.useMemo(() => {
     const queryKeywords = internalQuery.split(' ').filter(k => k.trim());
-    const expandedResults: Array<{ item: SearchResult; fragment?: string; index?: number }> = [];
 
     const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
       const note = noteMap[item.id];
@@ -166,87 +252,12 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
       );
     };
 
-    // 各検索結果に対して、queryKeywordsに含まれる部分を前後20文字と共に取得
-
-    // 処理時間計測開始
-     
-    const t0 = performance.now();
-
-    const processedIds = new Set<string>();
-
-    results.forEach((item) => {
-      // 既に処理済みのIDはスキップ
-      if (processedIds.has(item.id)) {
-        return;
-      }
-      processedIds.add(item.id);
-
-      const noteText = noteMap[item.id];
-      if (noteText) {
-        const fragments: string[] = [];
-        const fragmentSet = new Set<string>();
-        
-        // 各キーワードについてnoteText内のすべての出現位置を検索
-        queryKeywords.forEach((keyword) => {
-          if (!keyword) return;
-          
-          const escapedKeyword = escapeRegExp(keyword);
-          const regex = new RegExp(escapedKeyword, 'gi');
-          const matches = noteText.matchAll(regex);
-          
-          for (const match of matches) {
-            const index = match.index!;
-            
-            // 前後20文字を含めて取得
-            const start = Math.max(0, index - 20);
-            const end = Math.min(noteText.length, index + keyword.length + 20);
-            const fragment = noteText.slice(start, end);
-            
-            // 重複を避けるため、Set で管理
-            if (!fragmentSet.has(fragment)) {
-              fragmentSet.add(fragment);
-              fragments.push(fragment);
-            }
-          }
-        });
-        
-        if (fragments.length > 0) {
-          fragments.forEach((fragment, idx) => {
-            expandedResults.push({ item, fragment, index: idx });
-          });
-        } else {
-          // フラグメントがない場合はタイトルのみ表示
-          expandedResults.push({ item });
-        }
-      } else {
-        // bodyがない場合はタイトルのみ表示
-        expandedResults.push({ item });
-      }
-    });
-
-    // 処理時間計測終了 (ミリ秒)
-     
-    const t1 = performance.now();
-    console.log(
-      `SearchDialog: fragment extraction took ${(t1 - t0).toFixed(2)}ms for ${results.length} results and ${queryKeywords.length} keywords`
-    );
-
-    // フィルタリング適用
-    const filteredResults = activeFilter
-      ? expandedResults.filter(({ item, fragment }) => {
-          const filterLower = activeFilter.toLowerCase();
-          const titleMatch = item.title.toLowerCase().includes(filterLower);
-          const fragmentMatch = fragment ? fragment.toLowerCase().includes(filterLower) : false;
-          return titleMatch || fragmentMatch;
-        })
-      : expandedResults;
-
     return (
       <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
         {filteredResults.map(({ item, fragment, index }) => renderItem(item, fragment, index))}
       </List>
     );
-  }, [internalQuery, results, noteMap, activeFilter]);
+  }, [filteredResults, internalQuery, noteMap]);
 
 
   return (
