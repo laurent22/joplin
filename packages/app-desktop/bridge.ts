@@ -577,6 +577,8 @@ export class Bridge {
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
 		const { app } = require('electron');
+		const isLinux = process.platform === 'linux';
+		const appImagePath = process.env.APPIMAGE;
 
 		if (shim.isPortable()) {
 			const options = {
@@ -611,6 +613,14 @@ export class Bridge {
 				// 	args: cmd.args,
 				// });
 			}
+		} else if (isLinux && appImagePath) {
+			// When running as an AppImage, process.execPath points inside the
+			// temporary mount (e.g. /tmp/.mount_*), which disappears on exit.
+			// Use the original AppImage path instead so relaunch works.
+			app.relaunch({
+				execPath: appImagePath,
+				args: process.argv.slice(1),
+			});
 		} else {
 			app.relaunch();
 		}
