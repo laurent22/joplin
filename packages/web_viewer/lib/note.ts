@@ -3,6 +3,7 @@ import { NoteEntity, getDatabase } from './database';
 export interface SearchResult {
     id: string;
     title: string;
+    body: string;
     offsets: string;
     matchinfo: Buffer | { type: 'Buffer'; data: number[] };
     user_created_time: number;
@@ -35,6 +36,7 @@ export class Note {
             SELECT
                 notes_fts.id,
                 notes_fts.title,
+                notes_fts.body,
                 offsets(notes_fts) AS offsets,
                 matchinfo(notes_fts, 'pcnalx') AS matchinfo,
                 notes_fts.user_created_time,

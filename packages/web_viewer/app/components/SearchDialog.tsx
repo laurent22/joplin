@@ -14,8 +14,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import FolderIcon from '@mui/icons-material/Folder';
 import { useQuery } from '@tanstack/react-query';
+import { SearchResult } from '@/lib/note';
 
 type Props = {
   open: boolean;
@@ -25,27 +25,67 @@ type Props = {
   setQuery: (v: string) => void;
 };
 
-interface SearchResult {
-  id: string;
-  title: string;
-  parent_id: string;
-  fields: string[];
-  fragments?: string;
-  path?: string;
-  type?: number;
-}
 
 export default function SearchDialog({ open, onClose, searchInput, setSearchInput, setQuery }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
 
+  // offsets文字列を解析してフラグメントを生成する関数
+  const extractFragments = (body: string, offsets: string): string => {
+    if (!body || !offsets) return '';
+    
+    try {
+      // offsetsは "column offset length column offset length ..." の形式
+      const parts = offsets.split(' ').map(Number);
+      const matches: Array<{ offset: number; length: number }> = [];
+      
+      // column 2 がbody列なので、それに対応するoffset/lengthを抽出
+      for (let i = 0; i < parts.length; i += 4) {
+        const column = parts[i];
+        const offset = parts[i + 2];
+        const length = parts[i + 3];
+        if (column === 2) { // bodyは3列目（0始まりで2）
+          matches.push({ offset, length });
+        }
+      }
+      
+      if (matches.length === 0) return '';
+      
+      // 最初のマッチ箇所の前後を取得
+      const firstMatch = matches[0];
+      const contextLength = 100;
+      const start = Math.max(0, firstMatch.offset - contextLength);
+      const end = Math.min(body.length, firstMatch.offset + firstMatch.length + contextLength);
+      
+      let fragment = body.substring(start, end);
+      if (start > 0) fragment = '...' + fragment;
+      if (end < body.length) fragment = fragment + '...';
+      
+      // マッチ部分をハイライト
+      let result = fragment;
+      matches.forEach(match => {
+        const matchText = body.substring(match.offset, match.offset + match.length);
+        const regex = new RegExp(`(${escapeRegExp(matchText)})`, 'gi');
+        result = result.replace(regex, '<span style="font-weight: bold; color: #1976d2;">$1</span>');
+      });
+      
+      return result;
+    } catch (e) {
+      return '';
+    }
+  };
+  
+  const escapeRegExp = (str: string): string => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  };
+  
   // キーワードをハイライトするヘルパー関数
   const surroundKeywords = (keywords: string, text: string, prefix: string, suffix: string): string => {
     if (!keywords || !text) return text;
     const keywordArray = keywords.split(' ').filter(k => k.trim());
     let result = text;
     keywordArray.forEach(keyword => {
-      const regex = new RegExp(`(${keyword})`, 'gi');
+      const regex = new RegExp(`(${escapeRegExp(keyword)})`, 'gi');
       result = result.replace(regex, `${prefix}$1${suffix}`);
     });
     return result;
@@ -83,32 +123,29 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
   const results = data?.data || [];
 
   const renderItem = (item: SearchResult) => {
-    const titleHtml = item.fragments
-      ? `<span style="font-weight: bold;">${item.title}</span>`
-      : surroundKeywords(internalQuery, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>');
-
-    const fragmentsHtml = !item.fragments
-      ? null
-      : surroundKeywords(internalQuery, item.fragments, '<span style="font-weight: bold; color: #1976d2;">', '</span>');
+    const titleHtml = surroundKeywords(internalQuery, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>');
+    const fragmentHtml = extractFragments(item.body, item.offsets);
 
     return (
       <ListItem key={item.id} disablePadding>
         <ListItemButton onClick={() => handleItemClick(item)} sx={{ flexDirection: 'column', alignItems: 'flex-start', py: 1.5 }}>
           <Box dangerouslySetInnerHTML={{ __html: titleHtml }} sx={{ fontSize: '1rem', mb: 0.5 }} />
-          {fragmentsHtml && (
+          {fragmentHtml && (
             <Box 
-              dangerouslySetInnerHTML={{ __html: fragmentsHtml }} 
-              sx={{ fontSize: '0.875rem', opacity: 0.7, mb: 0.5 }} 
+              dangerouslySetInnerHTML={{ __html: fragmentHtml }} 
+              sx={{ fontSize: '0.875rem', opacity: 0.7, mb: 0.5, whiteSpace: 'pre-wrap' }} 
             />
-          )}
-          {item.path && (
-            <Box sx={{ fontSize: '0.875rem', opacity: 0.6, display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <FolderIcon sx={{ fontSize: '1rem' }} />
-              {item.path}
-            </Box>
           )}
         </ListItemButton>
       </ListItem>
+    );
+  };
+
+  const renderList = () => {
+    return (
+      <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
+        {results.map((item) => renderItem(item))}
+      </List>
     );
   };
 
@@ -161,11 +198,7 @@ export default function SearchDialog({ open, onClose, searchInput, setSearchInpu
           </Box>
         )}
 
-        {!isLoading && !error && results.length > 0 && (
-          <List sx={{ maxHeight: '400px', overflow: 'auto' }}>
-            {results.map((item) => renderItem(item))}
-          </List>
-        )}
+        {!isLoading && !error && results.length > 0 && renderList()}
 
         {!isLoading && !error && internalQuery && results.length === 0 && (
           <Box sx={{ p: 2, textAlign: 'center', opacity: 0.6 }}>
