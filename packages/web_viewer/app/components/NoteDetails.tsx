@@ -48,16 +48,54 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     // 既存のハイライトをクリア
     markInstance.unmark();
 
-    // 新しいハイライトを適用
+    // 新しいハイライトを適用（まずは完全一致で試す）
     markInstance.mark(decodedSearch, {
       separateWordSearch: false,
-      done: () => {
-        // ハイライトした最初の要素までスクロール
-        const firstMark = contentRef.current?.querySelector('mark');
-        if (firstMark) {
-          setTimeout(() => {
-            firstMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 100);
+      done: (count: number) => {
+        // マッチがない場合は単語分割検索で再試行
+        if (count === 0) {
+          markInstance.mark(decodedSearch, {
+            separateWordSearch: true,
+            done: () => {
+              // マッチした文字数が最も多い要素を見つけてスクロール
+              const marks = contentRef.current?.querySelectorAll('mark');
+              if (marks && marks.length > 0) {
+                let longestMark = marks[0];
+                let maxLength = marks[0].textContent?.length || 0;
+                
+                marks.forEach(mark => {
+                  const length = mark.textContent?.length || 0;
+                  if (length > maxLength) {
+                    maxLength = length;
+                    longestMark = mark;
+                  }
+                });
+                
+                setTimeout(() => {
+                  longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 3000);
+              }
+            },
+          });
+        } else {
+          // 完全一致が見つかった場合は最も長い要素までスクロール
+          const marks = contentRef.current?.querySelectorAll('mark');
+          if (marks && marks.length > 0) {
+            let longestMark = marks[0];
+            let maxLength = marks[0].textContent?.length || 0;
+            
+            marks.forEach(mark => {
+              const length = mark.textContent?.length || 0;
+              if (length > maxLength) {
+                maxLength = length;
+                longestMark = mark;
+              }
+            });
+            
+            setTimeout(() => {
+              longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 3000);
+          }
         }
       },
     });
