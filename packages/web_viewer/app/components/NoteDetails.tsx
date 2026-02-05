@@ -41,6 +41,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
 
     const decodedSearch = decodeURIComponent(searchQuery);
 
+    console.log(`decodedSearch: ${decodedSearch}`);
     // mark.jsを使ってハイライト
     const markInstance = new Mark(contentRef.current);
     
@@ -49,6 +50,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
 
     // 新しいハイライトを適用
     markInstance.mark(decodedSearch, {
+      separateWordSearch: false,
       done: () => {
         // ハイライトした最初の要素までスクロール
         const firstMark = contentRef.current?.querySelector('mark');
