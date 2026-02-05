@@ -40,18 +40,18 @@ interface DropdownProps {
 
 const Dropdown: React.FC<DropdownProps> = props => {
 	const headerRef = useRef<View|null>(null);
-	const [headerSize, setHeaderSize] = useState<LayoutRectangle>({ x: 0, y: 0, width: 0, height: 0 });
+	const [headerLayout, setHeaderSize] = useState<LayoutRectangle>({ x: 0, y: 0, width: 0, height: 0 });
 	const [listVisible, setListVisible] = useState(false);
 
-	const headerSizeRef = useRef(headerSize);
-	headerSizeRef.current = headerSize;
+	const headerLayoutRef = useRef(headerLayout);
+	headerLayoutRef.current = headerLayout;
 
 	const updateHeaderCoordinates = useCallback(() => {
 		if (!headerRef.current) return;
 
 		// https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
 		headerRef.current.measure((_fx, _fy, width, height, px, py) => {
-			const lastLayout = headerSizeRef.current;
+			const lastLayout = headerLayoutRef.current;
 
 			if (px !== lastLayout.x || py !== lastLayout.y || width !== lastLayout.width || height !== lastLayout.height) {
 				setHeaderSize({ x: px, y: py, width: width, height: height });
@@ -86,7 +86,7 @@ const Dropdown: React.FC<DropdownProps> = props => {
 	const items = props.items;
 	const { styles, dropdownWidth, itemHeight } = useStyles({
 		itemCount: items.length,
-		headerSize,
+		headerLayout,
 		itemStyle: props.itemStyle,
 		itemListStyle: props.itemListStyle,
 		headerStyle: props.headerStyle,
@@ -232,7 +232,7 @@ const useHeaderLabel = (props: HeaderLabelProps) => {
 
 interface StyleProps {
 	itemCount: number;
-	headerSize: LayoutRectangle;
+	headerLayout: LayoutRectangle;
 	headerStyle: ViewStyle|undefined;
 	headerWrapperStyle: ViewStyle|undefined;
 	itemStyle: ViewStyle|undefined;
@@ -240,26 +240,34 @@ interface StyleProps {
 	itemListStyle: ViewStyle|undefined;
 }
 
-const useStyles = ({ itemCount, headerSize, itemStyle, itemWrapperStyle, itemListStyle, headerStyle, headerWrapperStyle }: StyleProps) => {
+const useStyles = ({ itemCount, headerLayout, itemStyle, itemWrapperStyle, itemListStyle, headerStyle, headerWrapperStyle }: StyleProps) => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+
 	const { paddingTop: safeAreaTop, paddingBottom: safeAreaBottom } = useSafeAreaPadding();
+	const safeAreaHeight = windowHeight - safeAreaTop - safeAreaBottom;
 
 	return useMemo(() => {
 		const itemHeight = 60;
 
-		const listMaxHeight = windowHeight - safeAreaTop - safeAreaBottom;
+		const listMaxHeight = safeAreaHeight;
 		const listHeight = Math.min(itemCount * itemHeight, listMaxHeight);
-		const maxListTop = windowHeight - listHeight + safeAreaTop;
-		const listTop = Math.min(maxListTop, headerSize.y + headerSize.height);
 
-		const dropdownWidth = headerSize.width;
+		const safeRegionBottomFromTop = windowHeight - safeAreaBottom;
+		const minListTop = safeAreaTop;
+		const maxListTop = safeRegionBottomFromTop - listHeight;
+		const listTop = Math.max(
+			Math.min(maxListTop, headerLayout.y + headerLayout.height),
+			minListTop,
+		);
+
+		const dropdownWidth = headerLayout.width;
 
 		const styles = StyleSheet.create({
 			wrapper: {
-				width: headerSize.width,
+				width: headerLayout.width,
 				height: listHeight + 2, // +2 for the border (otherwise it makes the scrollbar appear)
 				top: listTop,
-				left: headerSize.x,
+				left: headerLayout.x,
 				position: 'absolute',
 			},
 			backgroundCloseButton: {
@@ -301,7 +309,11 @@ const useStyles = ({ itemCount, headerSize, itemStyle, itemWrapperStyle, itemLis
 			item: itemStyle ?? {},
 		});
 		return { styles, dropdownWidth, itemHeight };
-	}, [windowWidth, windowHeight, headerSize, headerStyle, headerWrapperStyle, itemCount, itemListStyle, itemStyle, itemWrapperStyle, safeAreaTop, safeAreaBottom]);
+	}, [
+		itemCount,
+		windowWidth, windowHeight, safeAreaHeight, headerLayout, safeAreaTop, safeAreaBottom,
+		headerStyle, headerWrapperStyle, itemListStyle, itemStyle, itemWrapperStyle,
+	]);
 };
 
 export default Dropdown;
