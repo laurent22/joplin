@@ -18,6 +18,7 @@ interface WrappedDropdownProps {
 const store = createMockReduxStore();
 
 const WrappedDropdown: React.FC<WrappedDropdownProps> = props => {
+	// A provider stack is needed here to to prevent "No safe area value available" render errors
 	return <TestProviderStack store={store}>
 		<Dropdown {...props}/>
 	</TestProviderStack>;

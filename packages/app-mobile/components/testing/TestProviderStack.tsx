@@ -24,7 +24,13 @@ const safeAreaMetrics: Metrics = {
 
 const TestProviderStack: React.FC<Props> = props => {
 	return <Provider store={props.store}>
-		<SafeAreaProvider initialMetrics={safeAreaMetrics}>
+		<SafeAreaProvider
+			// By default, the SafeAreaProvider doesn't render its children until
+			// it calculates the edge insets, (which involves a callback to native
+			// code). Providing `initialMetrics` causes the provider to render its
+			// content immediately.
+			initialMetrics={safeAreaMetrics}
+		>
 			<FocusControl.Provider>
 				<MenuProvider closeButtonLabel='Dismiss'>
 					<PaperProvider>
