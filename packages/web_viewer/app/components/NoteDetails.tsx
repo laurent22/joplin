@@ -15,7 +15,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
   const prevSearchRef = useRef<string | null>(null);
 
   // 指定要素のレンダリングが安定するのを待つユーティリティ
-  const waitForStableRender = (root: HTMLElement | null, timeout = Config.renderWaitTimeoutMs, stableMs = 80) => {
+  const waitForStableRender = (root: HTMLElement | null, timeout = Config.renderWaitTimeoutMs, stableMs = Config.stableMs) => {
     return new Promise<HTMLElement | null>((resolve) => {
       if (!root) return resolve(null);
       let timer: number | null = null;
