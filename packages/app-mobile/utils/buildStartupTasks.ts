@@ -1,6 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
-import Logger, { TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -200,11 +200,8 @@ const buildStartupTasks = (
 		const mainLogger = new Logger();
 		mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 		mainLogger.setLevel(Logger.LEVEL_INFO);
-
-		if (Setting.value('env') === 'dev') {
-			mainLogger.addTarget(TargetType.Console);
-			mainLogger.setLevel(Logger.LEVEL_DEBUG);
-		}
+		mainLogger.addTarget(TargetType.Console);
+		mainLogger.setLevel(Setting.value('env') === 'dev' ? LogLevel.Debug : LogLevel.Info);
 
 		Logger.initializeGlobalLogger(mainLogger);
 		initLib(mainLogger);

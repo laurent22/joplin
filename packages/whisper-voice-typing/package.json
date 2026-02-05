@@ -1,0 +1,60 @@
+{
+  "name": "@joplin/whisper-voice-typing",
+  "version": "3.6.0",
+  "private": true,
+  "description": "Whisper.cpp bindings for React Native!",
+  "author": "Joplin team",
+  "main": "lib/index",
+  "module": "lib/index",
+  "types": "lib/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "react-native.config.js",
+    "lib",
+    "nitrogen",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/CMakeLists.txt",
+    "android/src",
+    "ios/**/*.h",
+    "ios/**/*.m",
+    "ios/**/*.mm",
+    "ios/**/*.cpp",
+    "ios/**/*.swift",
+    "cppxx/**/*",
+    "app.plugin.js",
+    "nitro.json",
+    "*.podspec",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rm -rf android/build node_modules/**/android/build lib",
+    "tsc": "tsc",
+    "build": "tsc && nitrogen"
+  },
+  "keywords": [
+    "react-native",
+    "nitro"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurent22/joplin.git"
+  },
+  "homepage": "https://github.com/laurent22/joplin",
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@types/react": "19.2.10",
+    "nitrogen": "0.33.2",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-nitro-modules": "0.33.2",
+    "typescript": "5.8.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-nitro-modules": "*"
+  }
+}

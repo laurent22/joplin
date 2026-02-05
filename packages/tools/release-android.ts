@@ -148,7 +148,15 @@ async function createRelease(projectName: string, releaseConfig: ReleaseConfig, 
 	} else {
 		process.chdir(`${rnDir}/android`);
 		apkBuildCmd = './gradlew';
-		apkCleanBuild = `./gradlew clean -PbuildDir=${buildDirName}`;
+
+		// Note: We intentionally do NOT run `./gradlew clean`. On React Native 0.8x+, `clean` is
+		// broken because it triggers CMake regeneration via externalNativeBuild, which re-evaluates
+		// autolinking and codegen and fails if generated JNI/CMake directories are missing (and for
+		// some reason they usually are). Manually deleting build artefacts is safer and
+		// deterministic.
+
+		// apkCleanBuild = `./gradlew clean -PbuildDir=${buildDirName}`;
+		apkCleanBuild = 'yarn clean';
 		restoreDir = rootDir;
 	}
 
@@ -186,6 +194,12 @@ async function createRelease(projectName: string, releaseConfig: ReleaseConfig, 
 }
 
 const uploadToGitHubRelease = async (projectName: string, tagName: string, isPreRelease: boolean, releaseFiles: Record<string, Release>) => {
+	const allPublishDisabled = Object.values(releaseFiles).every(r => !r.publish);
+	if (allPublishDisabled) {
+		console.info('All release files have publishing disabled - skipping GitHub release creation');
+		return;
+	}
+
 	console.info(`Creating GitHub release ${tagName}...`);
 
 	const releaseOptions = { isPreRelease: isPreRelease };
@@ -323,7 +337,7 @@ async function main() {
 
 	await uploadToGitHubRelease(mainProjectName, tagName, isPreRelease, releaseFiles);
 
-	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
+	if (releaseFiles['main']) console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 
 	const changelogPath = `${rootDir}/readme/about/changelog/android.md`;
 

@@ -688,16 +688,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const menuComp =
 			!menuOptions.length || !showContextMenuButton ? null : (
 				<Menu themeId={this.props.themeId} options={menuOptions}>
-					<View style={contextMenuStyle} accessibilityLabel={_('Actions')}>
-						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={null}/>
+					<View style={contextMenuStyle}>
+						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={_('Actions')}/>
 					</View>
 				</Menu>
 			);
+
+		// Updating the state of this component can result in the left most element becoming hidden, so add a dummy as the first element to prevent this
+		// See https://github.com/laurent22/joplin/issues/14153
+		const zeroWidthSpacer = (
+			<View style={{ width: 0 }} pointerEvents="none"/>
+		);
 
 		return (
 			<View style={this.styles().outerContainer}>
 				<View style={this.styles().aboveHeader}/>
 				<View style={this.styles().innerContainer}>
+					{zeroWidthSpacer}
 					{sideMenuComp}
 					{backButtonComp}
 					{renderUndoButton()}

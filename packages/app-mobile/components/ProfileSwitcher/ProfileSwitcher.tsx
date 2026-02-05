@@ -61,7 +61,7 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 			}
 		};
 
-		const switchProfileMessage = _('To switch the profile, the app is going to close and you will need to restart it.');
+		const switchProfileMessage = _('To switch the profile, the app is going to restart.');
 		if (shim.mobilePlatform() === 'web') {
 			if (confirm(switchProfileMessage)) {
 				void doIt();

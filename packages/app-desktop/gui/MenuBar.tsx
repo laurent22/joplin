@@ -693,17 +693,8 @@ function useMenu(props: Props) {
 						menuItemDic.pasteAsText,
 						menuItemDic.textSelectAll,
 						separator(),
-						// Using the generic "undo"/"redo" roles mean the menu
-						// item will work in every text fields, whether it's the
-						// editor or a regular text field.
-						{
-							role: 'undo',
-							label: _('Undo'),
-						},
-						{
-							role: 'redo',
-							label: _('Redo'),
-						},
+						menuItemDic.globalUndo,
+						menuItemDic.globalRedo,
 						separator(),
 						menuItemDic.textBold,
 						menuItemDic.textItalic,
