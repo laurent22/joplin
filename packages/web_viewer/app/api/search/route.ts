@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Note, SearchResult, NoteEntity } from '@/lib/note';
+import { Config } from '../../../config';
 
 export async function GET(req: Request) {
   try {
@@ -12,7 +13,7 @@ export async function GET(req: Request) {
     const wildcartQuery = `${query}*`;
     const results = Note.selectAll(wildcartQuery);
 
-    const limit = 30;
+    const limit = Config.searchNoteLimit;
     const notes = Note.byIds(
       results.map((result: SearchResult) => result.id).slice(0, limit),
       ['id', 'body', 'markup_language', 'is_todo', 'todo_completed']

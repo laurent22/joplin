@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import parse, { domToReact, HTMLReactParserOptions, Element, DOMNode } from 'html-react-parser';
 import { NoteEntity } from '@/lib/database';
 import Mark from 'mark.js';
-
+import { Config } from '../../config';
 
 export default function NoteDetails({ note }: { note: (NoteEntity & { body?: string }) | null }) {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
   const prevSearchRef = useRef<string | null>(null);
 
   // 指定要素のレンダリングが安定するのを待つユーティリティ
-  const waitForStableRender = (root: HTMLElement | null, timeout = 3000, stableMs = 80) => {
+  const waitForStableRender = (root: HTMLElement | null, timeout = Config.renderWaitTimeoutMs, stableMs = 80) => {
     return new Promise<HTMLElement | null>((resolve) => {
       if (!root) return resolve(null);
       let timer: number | null = null;
