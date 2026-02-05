@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import "./joplin.css"
 import "./globals.css";
 import EmotionRegistry from "./components/EmotionRegistry";
 import StoreProvider from "./components/StoreProvider";
