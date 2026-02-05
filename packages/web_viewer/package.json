@@ -6,7 +6,7 @@
     "dev": "node scripts/dev.js",
     "build": "next build",
     "next_start": "node scripts/start.js",
-    "start": "node scripts/dev.js",
+    "start": "mkdir -p public && rm -rf public/pluginAssets && cp -R ../renderer/assets public/pluginAssets && node scripts/dev.js",
     "lint": "eslint"
   },
   "dependencies": {
