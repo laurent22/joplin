@@ -4,6 +4,7 @@ import replaceBulletLists from './replaceBulletLists';
 import replaceCheckboxes from './replaceCheckboxes';
 import replaceDividers from './replaceDividers';
 import replaceFormatCharacters from './replaceFormatCharacters';
+import replaceInlineHtml from './replaceInlineHtml';
 
 export default () => {
 	return [
@@ -13,5 +14,6 @@ export default () => {
 		replaceBackslashEscapes,
 		replaceDividers,
 		addFormattingClasses,
+		replaceInlineHtml,
 	];
 };

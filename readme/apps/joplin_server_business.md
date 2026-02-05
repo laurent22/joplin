@@ -8,7 +8,7 @@ Joplin Server Business is a synchronisation server that you can install on your 
 
 Your teams can collaborate on notebooks and share information. They can also publish notes to the internet or within your own intranet. All that secured by Joplin end-to-end encryption.
 
-Interested? [Contact us for a quote](mailto:jsb-inquiry@joplin.cloud?subject=Joplin%20Server%20Business%20inquiry)
+Interested? [Contact us for a quote](https://tally.so/r/D4BlOE)
 
 </div>
 
@@ -88,7 +88,7 @@ Keep all your resources in one place. Save and share images, PDFs, videos, audio
 
 To find out more about Joplin Server Business and how it can be integrated to your organisation, feel free to contact us. Our experts can prepare a demo for you. We can provide a quote to accommodate your company’s needs.
 
-[Contact us for a quote!](mailto:jsb-inquiry@joplin.cloud?subject=Joplin%20Server%20Business%20inquiry)
+[Contact us for a quote!](https://tally.so/r/D4BlOE)
 
 ## Difference with Joplin Server
 

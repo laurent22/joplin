@@ -41,5 +41,5 @@ If you cannot generate your authentication codes because you have lost access to
 ## How to login with my recovery code
 
 - Proceed to Joplin Cloud login page and follow the usual login process
-- When prompted for an authentication code click in the link **Use a recovery code** bellow the input field
+- When prompted for an authentication code click in the link **Use a recovery code** below the input field
 - Add your code to login

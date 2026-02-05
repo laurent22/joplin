@@ -123,7 +123,12 @@ export default class ItemModel extends BaseModel<Item> {
 			const share = await this.models().share().load(resource.jop_share_id, { fields: ['id', 'owner_id'] });
 
 			if (!share) {
-				modelLogger.warn('cannot find the share associated with this item. Action:', action, 'User:', user, 'Resource:', resource);
+				// Don't warn in the case where the share doesn't exist. This can happen, for example, when
+				// unsharing a folder.
+				// See https://github.com/laurent22/joplin/issues/14107.
+				if (resource.owner_id !== user.id) {
+					modelLogger.warn('cannot find the share associated with this item. Action:', action, 'User:', user.email, 'Resource:', resource);
+				}
 			} else {
 				if (share.owner_id !== user.id) {
 					const shareUser = await this.models().shareUser().byShareAndUserId(share.id, user.id);

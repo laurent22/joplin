@@ -153,6 +153,133 @@ jeudi 23 octobre 2025
     - [x] Documenter configuration synchro JBS saml pour un utilisateur (case cochée)"
 `;
 
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks 1`] = `
+"# Note: A
+
+ A 
+
+- [Test](:/id-here "Test")
+
+
+# Note: A test
+
+ A test 
+
+A test
+
+Tuesday, January 13, 2026
+
+1:44 PM
+
+…test…
+
+
+# Note: Another section
+
+ Another section 
+
+- [Page 1](:/id-here "Page 1")
+- [Page 2](:/id-here "Page 2")
+
+
+# Note: B
+
+ B 
+
+- [Test page](:/id-here "Test page")
+
+
+# Note: Page 1
+
+ Page 1 
+
+Page 1
+
+Tuesday, January 13, 2026
+
+1:42 PM
+
+Test
+
+
+# Note: Page 2
+
+ Page 2 
+
+Page 2
+
+Tuesday, January 13, 2026
+
+1:42 PM
+
+![](:/id-here)
+
+&nbsp;
+
+
+# Note: Test
+
+ Test 
+
+Test
+
+Tuesday, January 13, 2026
+
+1:44 PM
+
+
+# Note: Test page
+
+ Test page 
+
+Test page
+
+Tuesday, January 13, 2026
+
+1:45 PM
+
+
+# Note: Testing…
+
+ Testing… 
+
+Testing…
+
+Friday, November 28, 2025
+
+2:47 PM
+
+&nbsp;
+
+&nbsp;
+
+Link to page: [Page 2](onenote:https://d.docs.live.net/4c230b31b0dfb50f/Documents/OneNote%20Notebooks/test/Another%20section.one#Page%202&section-id={C271F3B1-5F22-457F-9DEA-F2B938D9B3D7}&page-id={62800B88-EC08-4170-BDB6-885CBB47FF99}&end)
+
+
+# Note: Tést!
+
+ Tést! 
+
+- [Testing…](:/id-here "Testing…")
+- [A test](:/id-here "A test")
+
+
+# Note: Untitled Page 1
+
+ Untitled Page 
+
+Tuesday, January 13, 2026
+
+1:45 PM
+
+
+# Note: ⅀⸨ Unicode ⸩
+
+ ⅀⸨ Unicode ⸩ 
+
+- [Untitled Page 1](:/id-here "Untitled Page 1")"
+`;
+
 exports[`InteropService_Importer_OneNote should correctly import math formulas: Math 1`] = `
 " Math 
 

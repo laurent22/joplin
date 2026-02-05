@@ -310,7 +310,7 @@ export class WorkerApi {
 					at = writer.getSize();
 				}
 
-				write = (data: ArrayBufferLike) => writer.write(data, { at });
+				write = (data: BufferSource) => writer.write(data, { at });
 				close = () => writer.close();
 			} catch (error) {
 				// In some cases, createSyncAccessHandle isn't available. In other cases,
@@ -318,7 +318,7 @@ export class WorkerApi {
 
 				logger.warn('Failed to createSyncAccessHandle', error);
 				const writer = await handle.createWritable({ keepExistingData: options?.keepExistingData });
-				write = (data: ArrayBufferLike) => writer.write(data);
+				write = (data: BufferSource) => writer.write(data);
 				close = () => writer.close();
 			}
 

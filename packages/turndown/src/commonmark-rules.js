@@ -711,7 +711,7 @@ rules.picture = {
 
 function findFirstDescendant(node, byType, name) {
   for (const childNode of node.childNodes) {
-    if (byType === 'class' && childNode.classList.contains(name)) return childNode;
+    if (byType === 'class' && childNode.classList && childNode.classList.contains(name)) return childNode;
     if (byType === 'nodeName' && childNode.nodeName === name) return childNode;
 
     const sub = findFirstDescendant(childNode, byType, name);
@@ -864,7 +864,7 @@ function joplinEditableBlockInfo(node) {
   let sourceNode = null;
   let isInline = false;
   for (const childNode of node.childNodes) {
-    if (childNode.classList.contains('joplin-source')) {
+    if (childNode.classList && childNode.classList.contains('joplin-source')) {
       sourceNode = childNode;
       break;
     }

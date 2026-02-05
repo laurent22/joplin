@@ -21,7 +21,7 @@ const useWindowCommands = ({ documentRef, customCss, plugins, editorNoteStatuses
 		editorNoteStatuses: editorNoteStatuses,
 		plugins: plugins,
 	});
-	const windowControl = useWindowControl(setDialogState, onPrintCallback);
+	const windowControl = useWindowControl(setDialogState, onPrintCallback, documentRef);
 
 	// This effect needs to run as soon as possible. Certain components may fail to load if window
 	// commands are not registered on their first render.
