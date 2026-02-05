@@ -12,6 +12,7 @@ import { pathExists, pathExistsSync, writeFileSync, ensureDirSync } from 'fs-ext
 import { extname, normalize, join } from 'path';
 import isSafeToOpen from './utils/isSafeToOpen';
 import { closeSync, openSync, readSync, statSync } from 'fs';
+import { spawn } from 'child_process';
 import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { execCommand } from '@joplin/utils';
@@ -614,13 +615,11 @@ export class Bridge {
 				// });
 			}
 		} else if (isLinux && appImagePath) {
-			// When running as an AppImage, process.execPath points inside the
-			// temporary mount (e.g. /tmp/.mount_*), which disappears on exit.
-			// Use the original AppImage path instead so relaunch works.
-			app.relaunch({
-				execPath: appImagePath,
-				args: process.argv.slice(1),
-			});
+			// AppImage + app.relaunch() is unreliable. Spawn the AppImage directly
+			// in a detached process so the new process continues after the app exits
+			const args = process.argv.slice(1);
+			const child = spawn(appImagePath, args, { detached: true, stdio: 'ignore' });
+			child.unref();
 		} else {
 			app.relaunch();
 		}
