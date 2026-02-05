@@ -193,6 +193,8 @@ const Dropdown: React.FC<DropdownProps> = props => {
 						data={items}
 						extraData={props.selectedValue}
 						renderItem={itemRenderer}
+						ListHeaderComponent={<View style={styles.listHeader}/>}
+						ListFooterComponent={<View style={styles.listFooter}/>}
 						getItemLayout={(_data, index) => ({
 							length: itemHeight,
 							offset: itemHeight * index,
@@ -242,23 +244,23 @@ interface StyleProps {
 
 const useStyles = ({ itemCount, headerLayout, itemStyle, itemWrapperStyle, itemListStyle, headerStyle, headerWrapperStyle }: StyleProps) => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-
 	const { paddingTop: safeAreaTop, paddingBottom: safeAreaBottom } = useSafeAreaPadding();
-	const safeAreaHeight = windowHeight - safeAreaTop - safeAreaBottom;
 
 	return useMemo(() => {
 		const itemHeight = 60;
 
-		const listMaxHeight = safeAreaHeight;
-		const listHeight = Math.min(itemCount * itemHeight, listMaxHeight);
+		const listHeight = Math.min(itemCount * itemHeight, windowHeight);
 
-		const safeRegionBottomFromTop = windowHeight - safeAreaBottom;
-		const minListTop = safeAreaTop;
-		const maxListTop = safeRegionBottomFromTop - listHeight;
-		const listTop = Math.max(
-			Math.min(maxListTop, headerLayout.y + headerLayout.height),
-			minListTop,
-		);
+		const maxListTop = windowHeight - listHeight;
+		const listTop = Math.min(maxListTop, headerLayout.y + headerLayout.height);
+		const listBottom = windowHeight - listTop - listHeight;
+
+		// Add safe-area padding within the list, rather than outside. This allows the list container to visually
+		// extend to the edges of the screen, while ensuring that it's possible to move each list item on-screen.
+		// "listPaddingTop" is applied before the first item in the list while "listPaddingBottom" is applied
+		// after the last.
+		const listPaddingTop = Math.max(0, safeAreaTop - listTop);
+		const listPaddingBottom = Math.max(0, safeAreaBottom - listBottom);
 
 		const dropdownWidth = headerLayout.width;
 
@@ -282,6 +284,12 @@ const useStyles = ({ itemCount, headerLayout, itemStyle, itemWrapperStyle, itemL
 				borderWidth: 1,
 				borderColor: '#ccc',
 			},
+			listHeader: {
+				height: listPaddingTop,
+			},
+			listFooter: {
+				height: listPaddingBottom,
+			},
 			itemWrapper: {
 				...(itemWrapperStyle ?? {}),
 				flex: 1,
@@ -291,6 +299,10 @@ const useStyles = ({ itemCount, headerLayout, itemStyle, itemWrapperStyle, itemL
 				paddingLeft: 20,
 				paddingRight: 10,
 			},
+			item: itemStyle ?? {},
+
+
+			// The button for opening the dropdown
 			headerWrapper: {
 				...(headerWrapperStyle ?? {}),
 				height: 35,
@@ -306,12 +318,11 @@ const useStyles = ({ itemCount, headerLayout, itemStyle, itemWrapperStyle, itemL
 				...(headerStyle ?? {}),
 				flex: 0,
 			},
-			item: itemStyle ?? {},
 		});
 		return { styles, dropdownWidth, itemHeight };
 	}, [
 		itemCount,
-		windowWidth, windowHeight, safeAreaHeight, headerLayout, safeAreaTop, safeAreaBottom,
+		windowWidth, windowHeight, headerLayout, safeAreaTop, safeAreaBottom,
 		headerStyle, headerWrapperStyle, itemListStyle, itemStyle, itemWrapperStyle,
 	]);
 };
