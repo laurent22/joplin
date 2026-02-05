@@ -69,15 +69,12 @@ export default function NoteTreeWrapper() {
         />
       </div>
       
-      <div style={{ display: openSearchDialog ? undefined : 'none' }}>
-        <MemoizedSearchDialog
-          open={true}
-          visible={openSearchDialog}
-          onClose={onClose}
-          initialSearchInput={searchInput}
-          setQuery={setQuery}
-        />
-      </div>
+      <MemoizedSearchDialog
+        open={openSearchDialog}
+        onClose={onClose}
+        initialSearchInput={searchInput}
+        setQuery={setQuery}
+      />
       
       <div style={{ flex: 1, minHeight: 0, display: !hideTree ? 'none' : undefined  }}>
           <SearchResult query={query} />
