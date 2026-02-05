@@ -12,6 +12,36 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
   const searchParams = useSearchParams();
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // 指定要素のレンダリングが安定するのを待つユーティリティ
+  const waitForStableRender = (root: HTMLElement | null, timeout = 3000, stableMs = 80) => {
+    return new Promise<HTMLElement | null>((resolve) => {
+      if (!root) return resolve(null);
+      let timer: number | null = null;
+      const obs = new MutationObserver(() => {
+        if (timer) window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          obs.disconnect();
+          resolve(root);
+        }, stableMs);
+      });
+
+      // もし既に中身がある場合は安定判定をすぐ始める
+      if (root.innerHTML.trim() !== '') {
+        timer = window.setTimeout(() => {
+          resolve(root);
+        }, stableMs);
+        obs.observe(root, { childList: true, subtree: true, characterData: true });
+      } else {
+        // 中身が空なら変更を監視してタイムアウトも入れる
+        obs.observe(root, { childList: true, subtree: true, characterData: true });
+        setTimeout(() => {
+          obs.disconnect();
+          resolve(root);
+        }, timeout);
+      }
+    });
+  };
+
   // コンテンツロード後にフラグメントジャンプを実行
   useEffect(() => {
     if (!note?.body) return;
@@ -22,14 +52,14 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
 
     // フラグメントに該当する要素を探してスクロール
     const elementId = hash.substring(1); // '#' を除去
-    const targetElement = document.getElementById(elementId);
-    
-    if (targetElement) {
-      // 少し遅延を入れることでDOMの完全なレンダリングを待つ
-      setTimeout(() => {
+    // 要素がまだ生成されていない可能性があるため、レンダリングの安定を待ってから再取得してスクロール
+    (async () => {
+      await waitForStableRender(contentRef.current);
+      const targetElement = document.getElementById(elementId);
+      if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 1000);
-    }
+      }
+    })();
   }, [note?.body]);
 
   // searchパラメータが変化した時に、該当箇所をハイライトしてスクロール
@@ -41,67 +71,62 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
 
     const decodedSearch = decodeURIComponent(searchQuery);
 
-    console.log(`decodedSearch: ${decodedSearch}`);
-    // mark.jsを使ってハイライト
     const markInstance = new Mark(contentRef.current);
-    
-    // 既存のハイライトをクリア
-    markInstance.unmark();
+    let cancelled = false;
 
-    // 新しいハイライトを適用（まずは完全一致で試す）
-    markInstance.mark(decodedSearch, {
-      separateWordSearch: false,
-      done: (count: number) => {
-        // マッチがない場合は単語分割検索で再試行
-        if (count === 0) {
-          markInstance.mark(decodedSearch, {
-            separateWordSearch: true,
-            done: () => {
-              // マッチした文字数が最も多い要素を見つけてスクロール
-              const marks = contentRef.current?.querySelectorAll('mark');
-              if (marks && marks.length > 0) {
-                let longestMark = marks[0];
-                let maxLength = marks[0].textContent?.length || 0;
-                
-                marks.forEach(mark => {
-                  const length = mark.textContent?.length || 0;
-                  if (length > maxLength) {
-                    maxLength = length;
-                    longestMark = mark;
-                  }
-                });
-                
-                setTimeout(() => {
-                  longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 1000);
-              }
-            },
-          });
-        } else {
-          // 完全一致が見つかった場合は最も長い要素までスクロール
-          const marks = contentRef.current?.querySelectorAll('mark');
-          if (marks && marks.length > 0) {
-            let longestMark = marks[0];
-            let maxLength = marks[0].textContent?.length || 0;
-            
-            marks.forEach(mark => {
-              const length = mark.textContent?.length || 0;
-              if (length > maxLength) {
-                maxLength = length;
-                longestMark = mark;
-              }
-            });
-            
-            setTimeout(() => {
-              longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 1000);
+    const scrollLongestMark = () => {
+      const marks = contentRef.current?.querySelectorAll('mark');
+      if (marks && marks.length > 0) {
+        let longestMark = marks[0] as HTMLElement;
+        let maxLength = marks[0].textContent?.length || 0;
+
+        marks.forEach(mark => {
+          const length = mark.textContent?.length || 0;
+          if (length > maxLength) {
+            maxLength = length;
+            longestMark = mark as HTMLElement;
           }
-        }
-      },
-    });
+        });
+
+        // 短い遅延で DOM が確定するのを待つ
+        setTimeout(() => {
+          longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
+    };
+
+    (async () => {
+      await waitForStableRender(contentRef.current);
+      if (cancelled) return;
+
+      console.log(`decodedSearch: ${decodedSearch}`);
+      // 既存のハイライトをクリア
+      markInstance.unmark();
+
+      // 新しいハイライトを適用（まずは完全一致で試す）
+      markInstance.mark(decodedSearch, {
+        separateWordSearch: false,
+        done: (count: number) => {
+          if (cancelled) return;
+          // マッチがない場合は単語分割検索で再試行
+          if (count === 0) {
+            markInstance.mark(decodedSearch, {
+              separateWordSearch: true,
+              done: () => {
+                if (cancelled) return;
+                scrollLongestMark();
+              },
+            });
+          } else {
+            scrollLongestMark();
+          }
+        },
+      });
+    })();
 
     // クリーンアップ
     return () => {
+      cancelled = true;
       markInstance.unmark();
     };
   }, [note?.body, searchParams]);
