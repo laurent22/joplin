@@ -34,13 +34,18 @@ async function findLocalFile(path: string): Promise<string> {
 	const appFilePath = await localFileFromUrl(path);
 	if (appFilePath) return appFilePath;
 
-	if (hasOwnProperty(pathToFileMap, path)) return pathToFileMap[path];
-	// For now a bit of a hack to load FontAwesome fonts.
-	if (path.indexOf('css/fontawesome/webfonts/fa-') === 0) return `node_modules/@fortawesome/fontawesome-free/${path.substr(16)}`;
-
 	let localPath = normalize(path);
 	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);
-	localPath = `${publicDir}/${localPath}`;
+
+	if (hasOwnProperty(pathToFileMap, path)) return pathToFileMap[path];
+
+	// For now a bit of a hack to load FontAwesome fonts.
+	if (localPath.indexOf('css/fontawesome/webfonts/fa-') === 0) {
+		localPath = `node_modules/@fortawesome/fontawesome-free/${localPath.substring(16)}`;
+	} else {
+		localPath = `${publicDir}/${localPath}`;
+	}
+
 	if (!(await pathExists(localPath))) throw new ErrorNotFound(`Path not found: ${path}`);
 
 	const stat = await fs.stat(localPath);

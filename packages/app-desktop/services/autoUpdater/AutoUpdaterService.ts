@@ -140,7 +140,10 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 				// electron's autoUpdater appends automatically the platform's yml file to the link so we should remove it
 				assetUrl = assetUrl.substring(0, assetUrl.lastIndexOf('/'));
 				autoUpdater.setFeedURL({ provider: 'generic', url: assetUrl });
-				await autoUpdater.checkForUpdates();
+				const result = await autoUpdater.checkForUpdates();
+
+				// Wait for the installation to finish. By default, .checkForUpdates runs in the background
+				await result.downloadPromise;
 			} catch (error) {
 				this.logger_.error(`Update download url failed: ${error.message}`);
 				this.isUpdateInProgress = false;

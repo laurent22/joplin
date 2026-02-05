@@ -8,7 +8,7 @@ export function getImpersonatorAdminSessionId(ctx: AppContext): string {
 	return cookieGet(ctx, 'adminSessionId');
 }
 
-export async function startImpersonating(ctx: AppContext, userId: Uuid) {
+export async function startImpersonating(ctx: AppContext, userId: Uuid, returnUrl: string) {
 	const adminSessionId = contextSessionId(ctx);
 	const user = await ctx.joplin.models.session().sessionUser(adminSessionId);
 	if (!user) throw new Error(`No user for session: ${adminSessionId}`);
@@ -16,12 +16,15 @@ export async function startImpersonating(ctx: AppContext, userId: Uuid) {
 
 	const impersonatedSession = await ctx.joplin.models.session().createUserSession(userId);
 	cookieSet(ctx, 'adminSessionId', adminSessionId);
+	cookieSet(ctx, 'impersonationReturnUrl', returnUrl);
 	cookieSet(ctx, 'sessionId', impersonatedSession.id);
 }
 
-export async function stopImpersonating(ctx: AppContext) {
+export async function stopImpersonating(ctx: AppContext): Promise<string> {
 	const adminSessionId = cookieGet(ctx, 'adminSessionId');
 	if (!adminSessionId) throw new Error('Missing cookie adminSessionId');
+
+	const returnUrl = cookieGet(ctx, 'impersonationReturnUrl');
 
 	// This function simply moves the adminSessionId back to sessionId. There's
 	// no need to check if anything is valid because that will be done by other
@@ -29,5 +32,8 @@ export async function stopImpersonating(ctx: AppContext) {
 	// because it would leave the cookies in an invalid state (for example if
 	// the admin has lost their sessions, or the user no longer exists).
 	cookieDelete(ctx, 'adminSessionId');
+	cookieDelete(ctx, 'impersonationReturnUrl');
 	cookieSet(ctx, 'sessionId', adminSessionId);
+
+	return returnUrl;
 }

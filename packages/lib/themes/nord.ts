@@ -1,7 +1,7 @@
 import { Theme } from './type';
 import theme_dark from './dark';
 
-const nord = ['#2e3440', '#3b4252', '#434c5e', '#4c566a', '#d8dee9', '#e5e9f0', '#eceff4', '#8fbcbb', '#88c0d0', '#81a1c1', '#5e81ac', '#bf616a', '#d08770', '#ebcb8b', '#a3be8c', '#b48ead'];
+const nord = ['#2e3440', '#3b4252', '#434c5e', '#4c566a', '#d8dee9', '#e5e9f0', '#eceff4', '#8fbcbb', '#88c0d0', '#81a1c1', '#5e81ac', '#bf616a', '#d08770', '#ebcb8b', '#a3be8c', '#b48ead', '#8f503b'];
 
 // DOCUMENTATION of Nord as of Oct 3
 // 0 #2e3440 :     Base component color of "Polar Night".
@@ -46,6 +46,9 @@ const nord = ['#2e3440', '#3b4252', '#434c5e', '#4c566a', '#d8dee9', '#e5e9f0', 
 // 15 #b48ead :    Colorful component color.
 // Used for numbers.
 // 2e3440 === rbga(46, 52, 64, 1)
+// 16 #8f503b :    Colorful component color.
+// Darkened version of nord[12] to avoid white text on light background.
+// Used for warning backgrounds.
 
 const theme: Theme = {
 	...theme_dark,
@@ -69,7 +72,7 @@ const theme: Theme = {
 	raisedBackgroundColor: nord[2],
 	raisedColor: nord[7],
 
-	warningBackgroundColor: nord[13],
+	warningBackgroundColor: nord[16],
 
 	tableBackgroundColor: nord[0],
 	codeBackgroundColor: nord[0],

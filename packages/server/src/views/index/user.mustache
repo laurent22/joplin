@@ -1,6 +1,6 @@
 <h1 class="title">Your profile</h1>
 
-<form id="user_form" action="{{{postUrl}}}" method="POST" class="block">
+<form id="user_form" action="{{{postUrl}}}" method="POST" class="block" enctype="multipart/form-data">
 
 	<div class="block">
 		{{> errorBanner}}
@@ -35,12 +35,29 @@
 			</div>
 		</div>
 
+		{{#isMFAFeatureEnabled}}
+			<div class="content my-5">
+				<h1 class="title">Multi-factor authentication</h1>
+				<p>Multi-factor authentication (MFA), also known as two factor authentication (2FA), enhances the security of your account by adding an additional layer of protection. When you log in to your Joplin Cloud account, you'll be required to enter both your password and an authentication code sent to your mobile phone.</p>
+				{{#hasMFAEnabled}}
+					<p>Multi-factor authentication is currently <strong>enabled</strong>.</p>
+					<ul>
+						<li><a href="{{global.baseUrl}}/mfa/me">Disable multi-factor authentication</a></li>
+						<li><a href="{{global.baseUrl}}/recovery_codes">Manage recovery codes</a></li>
+					</ul>
+				{{/hasMFAEnabled}}
+				{{^hasMFAEnabled}}
+					<a href="{{global.baseUrl}}/mfa/me">Enable multi-factor authentication</a>
+				{{/hasMFAEnabled}}
+			</div>
+		{{/isMFAFeatureEnabled}}
 		<div class="control block">
 			<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
-            {{#showSendAccountConfirmationEmailButton}}
-                <input type="submit" name="send_account_confirmation_email" class="button is-link" value="Send account confirmation email" />
-            {{/showSendAccountConfirmationEmailButton}}
+			{{#showSendAccountConfirmationEmailButton}}
+				<input type="submit" name="send_account_confirmation_email" class="button is-link" value="Send account confirmation email" />
+			{{/showSendAccountConfirmationEmailButton}}
 		</div>
+
 	</div>
 
 	{{#subscription}}

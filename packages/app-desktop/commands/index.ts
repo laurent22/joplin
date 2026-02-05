@@ -1,5 +1,4 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
-import * as convertNoteToMarkdown from './convertNoteToMarkdown';
 import * as copyDevCommand from './copyDevCommand';
 import * as copyToClipboard from './copyToClipboard';
 import * as editProfileConfig from './editProfileConfig';
@@ -14,6 +13,7 @@ import * as openProfileDirectory from './openProfileDirectory';
 import * as openSecondaryAppInstance from './openSecondaryAppInstance';
 import * as replaceMisspelling from './replaceMisspelling';
 import * as restoreNoteRevision from './restoreNoteRevision';
+import * as showProfileEditor from './showProfileEditor';
 import * as startExternalEditing from './startExternalEditing';
 import * as stopExternalEditing from './stopExternalEditing';
 import * as switchProfile from './switchProfile';
@@ -25,7 +25,6 @@ import * as toggleSafeMode from './toggleSafeMode';
 import * as toggleTabMovesFocus from './toggleTabMovesFocus';
 
 const index: any[] = [
-	convertNoteToMarkdown,
 	copyDevCommand,
 	copyToClipboard,
 	editProfileConfig,
@@ -40,6 +39,7 @@ const index: any[] = [
 	openSecondaryAppInstance,
 	replaceMisspelling,
 	restoreNoteRevision,
+	showProfileEditor,
 	startExternalEditing,
 	stopExternalEditing,
 	switchProfile,

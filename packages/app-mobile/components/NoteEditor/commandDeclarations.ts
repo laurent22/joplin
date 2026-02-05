@@ -9,11 +9,22 @@ const markdownEditorOnlyCommands = [
 	EditorCommandType.SwapLineDown,
 ].map(command => `editor.${command}`);
 
+
+
+const richTextEditorOnlyCommands = [
+	EditorCommandType.InsertTable,
+	EditorCommandType.InsertCodeBlock,
+].map(command => `editor.${command}`);
+
 export const visibleCondition = (commandName: string) => {
 	const output = [];
 
 	if (markdownEditorOnlyCommands.includes(commandName)) {
 		output.push('!richTextEditorVisible');
+	}
+
+	if (richTextEditorOnlyCommands.includes(commandName)) {
+		output.push('!markdownEditorPaneVisible');
 	}
 
 	return output.join(' && ');
@@ -103,14 +114,24 @@ const declarations: CommandDeclaration[] = [
 		iconName: 'material format-list-checks',
 	},
 	{
+		name: `editor.${EditorCommandType.InsertTable}`,
+		label: () => _('Table'),
+		iconName: 'material table',
+	},
+	{
+		name: `editor.${EditorCommandType.InsertCodeBlock}`,
+		label: () => _('Block code'),
+		iconName: 'material code-tags',
+	},
+	{
 		name: EditorCommandType.IndentLess,
 		label: () => _('Decrease indent level'),
-		iconName: 'ant indent-left',
+		iconName: 'material format-indent-decrease',
 	},
 	{
 		name: EditorCommandType.IndentMore,
 		label: () => _('Increase indent level'),
-		iconName: 'ant indent-right',
+		iconName: 'material format-indent-increase',
 	},
 	{
 		name: `editor.${EditorCommandType.SwapLineDown}`,

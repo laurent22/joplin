@@ -15,6 +15,7 @@ const createApi = async (serverUrl: string, adminAuth: UserData) => {
 		password: () => adminAuth.password,
 		username: () => adminAuth.email,
 		session: ()=>null,
+		apiKey: ()=>'',
 		env: Env.Dev,
 	});
 	await api.loadSession();
@@ -39,9 +40,13 @@ export default class Server {
 			cwd: serverDir,
 			stdin: 'ignore', // No stdin
 			// For debugging:
-			// stderr: process.stderr,
+			stderr: process.stderr,
 			// stdout: process.stdout,
 		});
+	}
+
+	public get url() {
+		return this.serverUrl_;
 	}
 
 	public async checkConnection() {

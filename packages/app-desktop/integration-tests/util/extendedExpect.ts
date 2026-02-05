@@ -54,6 +54,26 @@ const extendedExpect = expect.extend({
 			name: assertionName,
 		};
 	},
+
+	async toBeSelected(locator: Locator) {
+		let pass = true;
+
+		const assertionName = 'toBeSelected';
+		let resultMessage = () => `${assertionName}: Passed`;
+
+		try {
+			await extendedExpect(locator).toHaveJSProperty('ariaSelected', 'true');
+		} catch (error) {
+			pass = false;
+			resultMessage = () => error.toString();
+		}
+
+		return {
+			pass,
+			message: () => `${assertionName}: ${resultMessage()}`,
+			name: assertionName,
+		};
+	},
 });
 
 export default extendedExpect;

@@ -48,6 +48,7 @@ jobs:
           CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
           PUBLISH_ENABLED: ${{ env.PUBLISH_ENABLED }}
@@ -57,25 +58,38 @@ jobs:
           yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
+
+          npm pkg delete 'build.mac.target'
           npm pkg set 'build.mac.target[0].target'='dmg'
           npm pkg set 'build.mac.target[0].arch[0]'='arm64'
           npm pkg set 'build.mac.target[1].target'='zip'
           npm pkg set 'build.mac.target[1].arch[0]'='arm64'
 
-          if [[ "$PUBLISH_ENABLED" == "true" ]]; then
-            echo "Building and publishing desktop application..."
-            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist --mac --arm64
-
-            yarn modifyReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
-          else
-            echo "Building but *not* publishing desktop application..."
-
-            # We also want to disable signing the app in this case, because
-            # it doesn't work and we don't need it.
-            # https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
-
-            export CSC_IDENTITY_AUTO_DISCOVERY=false
-            npm pkg set 'build.mac.identity'=null --json
-
-            PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist  --mac --arm64 --publish=never
+          # Only enable pkg build in the main repository CI. As of 01/15/2026, pkg
+          # build fails when running on external pull requests.
+          if [[ "$GITHUB_EVENT_NAME" != "pull_request" ]]; then
+            npm pkg set 'build.mac.target[2].target'='pkg'
+            npm pkg set 'build.mac.target[2].arch[0]'='arm64'
           fi
+
+          build_dist() {
+            if [[ "$PUBLISH_ENABLED" == "true" ]]; then
+              echo "Building and publishing desktop application..."
+              PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist --mac --arm64
+
+              yarn modifyReleaseAssets --repo="$GH_REPO" --tag="$GIT_TAG_NAME" --token="$GITHUB_TOKEN"
+            else
+              echo "Building but *not* publishing desktop application..."
+
+              # We also want to disable signing the app in this case, because
+              # it doesn't work and we don't need it.
+              # https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
+
+              export CSC_IDENTITY_AUTO_DISCOVERY=false
+              npm pkg set 'build.mac.identity'=null --json
+
+              PYTHON_PATH=$(which python) USE_HARD_LINKS=false yarn dist  --mac --arm64 --publish=never
+            fi
+          }
+
+          build_dist || build_dist

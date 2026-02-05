@@ -27,7 +27,7 @@
 		"%d Minuten"
 	],
 	"%d note matches this pattern. Delete it?": [
-		"%d Notize stimmt mit diesem Muster überein. Löschen?",
+		"%d Notiz stimmt mit diesem Muster überein. Löschen?",
 		"%d Notizen stimmen mit diesem Muster überein. Löschen?"
 	],
 	"%d note will be permanently deleted. Continue?": [
@@ -168,7 +168,7 @@
 		"[Nichts]"
 	],
 	"A brief description of the image:": [
-		""
+		"Eine kurze Beschreibung des Bildes:"
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Eine kommagetrennte Liste von Wörtern. Kann für ungewöhnliche Wörter verwendet werden, um die korrekte Schreibweise bei der Sprachsteuerung zu unterstützen."
@@ -184,6 +184,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Über"
@@ -243,7 +246,7 @@
 		"Text hinzufügen"
 	],
 	"Add column": [
-		""
+		"Spalte hinzufügen"
 	],
 	"Add new": [
 		"Neu hinzufügen"
@@ -253,6 +256,9 @@
 	],
 	"Add recipient:": [
 		"Füge Empfänger hinzu:"
+	],
+	"Add row": [
+		"Zeile hinzufügen"
 	],
 	"Add tags:": [
 		"Schlagwörter hinzufügen:"
@@ -342,7 +348,7 @@
 		"Es wurde eine automatisch gespeicherte Zeichnung gefunden. Eine Kopie davon an die Notiz anhängen?"
 	],
 	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
+		"Beim Senden der Antwort ist ein Fehler aufgetreten. Dies kann passieren, wenn die App offline ist oder keine Verbindung zum Server herstellen kann.\nFehler: %s"
 	],
 	"An error occurred: %s": [
 		"Ein Fehler trat auf: %s"
@@ -466,6 +472,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Fett"
@@ -605,6 +614,9 @@
 	"Checking... Please wait.": [
 		"Überprüfen… Bitte warten."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Wähle eine Option"
 	],
@@ -671,9 +683,6 @@
 	"Code View": [
 		"Code-Ansicht"
 	],
-	"Code:": [
-		"Code:"
-	],
 	"Collaborate on a notebook with others": [
 		"Gemeinsam mit anderen an einem Notizbuch arbeiten"
 	],
@@ -682,6 +691,9 @@
 	],
 	"Collapse all notebooks": [
 		"Alle Notizbücher einklappen"
+	],
+	"Collapse title": [
+		"Titel einklappen"
 	],
 	"Collapsed": [
 		"Eingeklappt"
@@ -697,6 +709,9 @@
 	],
 	"Command": [
 		"Befehl"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Befehlspalette"
@@ -786,9 +801,6 @@
 	"Convert it": [
 		"Umwandeln"
 	],
-	"Convert note to Markdown": [
-		"Notiz in Markdown umwandeln"
-	],
 	"Convert to note": [
 		"In eine Notiz umwandeln"
 	],
@@ -839,13 +851,10 @@
 		"Konnte die Anwendung nicht autorisieren:\n\n%s\n\nBitte versuche es erneut."
 	],
 	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
-		"Es konnte keine Verbindung zum Joplin-Server hergestellt werden. Bitte überprüfe die Synchronisationsoptionen im Konfigurationsmenü. Vollständiger Fehler:\n\n%s"
+		"Es konnte keine Verbindung zu Joplin Server hergestellt werden. Bitte überprüfe die Synchronisationsoptionen im Konfigurationsmenü. Vollständiger Fehler:\n\n%s"
 	],
 	"Could not connect to plugin repository.": [
 		"Konnte keine Verbindung zum Plugin-Repository herstellen."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Konnte Notiz nicht in Markdown umwandeln: %s"
 	],
 	"Could not export notes: %s": [
 		"Konnte Notizen nicht exportieren: %s"
@@ -1021,6 +1030,9 @@
 	"Delete attachment \"%s\"?": [
 		"Anhang „%s“ löschen?"
 	],
+	"Delete column": [
+		"Spalte löschen"
+	],
 	"Delete expired sessions": [
 		"Lösche abgelaufene Sitzungen"
 	],
@@ -1048,8 +1060,14 @@
 	"Delete profile \"%s\"": [
 		"Lösche Profil „%s“"
 	],
+	"Delete row": [
+		"Zeile löschen"
+	],
 	"Delete selected notes": [
 		"Ausgewählte Notizen löschen"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Das Inbox-Notizbuch löschen?\n\nWenn du das Inbox-Notizbuch löschst, gehen kürzlich dort eingegangene Emails möglicherweise verloren."
@@ -1156,6 +1174,9 @@
 	"Displays the complete information about note.": [
 		"Zeigt alle Informationen über die Notiz an."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Zeigt die angegebene Notiz an."
 	],
@@ -1181,7 +1202,7 @@
 		"Achte darauf, dass du das Passwort nicht verlierst, da dies aus Sicherheitsgründen die *einzige* Möglichkeit ist, deine Daten zu entschlüsseln! Um die Verschlüsselung zu aktivieren, gib bitte unten dein Passwort ein."
 	],
 	"Do you find the Joplin web app useful?": [
-		""
+		"Findest du die Joplin-Webanwendung nützlich?"
 	],
 	"Document scanner: Title template": [
 		"Dokumentenscanner: Titelvorlage"
@@ -1253,7 +1274,7 @@
 		"Duplizieren"
 	],
 	"Duplicate line": [
-		"Dupliziere Zeile"
+		"Zeile duplizieren"
 	],
 	"Duplicate selected notes": [
 		"Ausgewählte Notizen duplizieren"
@@ -1367,7 +1388,7 @@
 		"Verschlüsselung aktivieren"
 	],
 	"Enable file:// URLs for images and videos": [
-		"Aktiviere file://-URLs für Bilder und Videos"
+		"URLs mit file:// für Bilder und Videos aktivieren"
 	],
 	"Enable footnotes": [
 		"Fußnoten aktivieren"
@@ -1376,10 +1397,10 @@
 		"Fountain-Syntaxunterstützung aktivieren"
 	],
 	"Enable handwritten transcription": [
-		"Handschriftumwandlung aktivieren"
+		"Handschrifttranskription aktivieren"
 	],
 	"Enable HTML-to-Markdown conversion banner": [
-		"Umwandlungsbanner für HTML zu Markdown aktivieren"
+		"Banner für Umwandlung von HTML zu Markdown aktivieren"
 	],
 	"Enable Linkify": [
 		"Linkify aktivieren"
@@ -1540,6 +1561,9 @@
 	"Expand all notebooks": [
 		"Alle Notizbücher ausklappen"
 	],
+	"Expand title": [
+		"Titel ausklappen"
+	],
 	"Expanded": [
 		"Ausgeklappt"
 	],
@@ -1604,7 +1628,7 @@
 		"Funktionsargumente"
 	],
 	"Feedback": [
-		""
+		"Feedback"
 	],
 	"Fetched items: %d/%d.": [
 		"Geladene Elemente: %d/%d."
@@ -2018,6 +2042,9 @@
 	"Joplin Server": [
 		"Joplin Server"
 	],
+	"Joplin Server (SAML)": [
+		"Joplin Server (SAML)"
+	],
 	"Joplin Server Business": [
 		"Joplin Server Business"
 	],
@@ -2037,7 +2064,7 @@
 		"Joplin SSO-Authentifizierung"
 	],
 	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
-		""
+		"Joplin unterstützt das Speichern des Standortes, an dem Notizen gespeichert oder erstellt werden. Möchtest du das aktivieren? Dies kann jederzeit in den Einstellungen geändert werden."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper ermöglicht das Speichern von Webseiten und Screenshots aus deinem Browser in Joplin."
@@ -2046,7 +2073,7 @@
 		"Joplin Webseite"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		"Joplins eigener Synchronisationsdienst. Ermöglicht auch den Zugriff auf Joplin-spezifische Funktionen wie das Veröffentlichen von Notizen oder die Zusammenarbeit an Notizbüchern mit anderen."
+		"Joplins eigener Synchronisationsdienst. Ermöglicht auch den Zugriff auf joplinspezifische Funktionen wie das Veröffentlichen von Notizen oder die Zusammenarbeit an Notizbüchern mit anderen."
 	],
 	"Keep note history for": [
 		"Notizenverlauf speichern für"
@@ -2066,11 +2093,14 @@
 	"Keychain Supported: %s": [
 		"Unterstützter Schlüsselbund: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Hauptschlüssel, die aktualisiert werden müssen"
 	],
 	"Label": [
-		""
+		"Beschriftung"
 	],
 	"Landscape": [
 		"Querformat"
@@ -2212,6 +2242,9 @@
 	"Manage your plugins": [
 		"Erweiterungen verwalten"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Verwaltet die E2EE-Konfiguration. Die Befehle lauten `enable`, `disable`, `decrypt`, `status`, `decrypt-file` und `target-status`."
 	],
@@ -2227,11 +2260,14 @@
 	"Markdown editor": [
 		"Markdown-Editor"
 	],
+	"Markdown editor: Highlight active line": [
+		"Markdown-Editor: Aktive Zeile hervorheben"
+	],
 	"Markdown editor: Render images": [
 		"Markdown-Editor: Bilder darstellen"
 	],
 	"Markdown editor: Render markup in editor": [
-		"Markdown-Editor: Auszeichnungen im Editor darstellen"
+		"Markdown-Editor: Markup im Editor darstellen"
 	],
 	"Marks a to-do as done.": [
 		"Markiert eine Aufgabe als erledigt."
@@ -2465,6 +2501,9 @@
 	"No updates available": [
 		"Keine Updates verfügbar"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Nichts"
 	],
@@ -2487,7 +2526,7 @@
 		"Nicht jetzt"
 	],
 	"Not useful": [
-		""
+		"Nicht nützlich"
 	],
 	"note": [
 		"Notiz"
@@ -2536,6 +2575,9 @@
 	],
 	"Note list style": [
 		"Stil der Notiz-Liste"
+	],
+	"Note not published: %s": [
+		"Notiz nicht veröffentlicht: %s"
 	],
 	"Note preview": [
 		"Notizvorschau"
@@ -2672,6 +2714,9 @@
 	"Open Sync Wizard...": [
 		"Sync-Assistent öffnen..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Öffnen..."
 	],
@@ -2693,11 +2738,14 @@
 	"Options": [
 		"Optionen"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Geordnete Liste"
 	],
 	"Other": [
-		""
+		"Andere"
 	],
 	"Other applications...": [
 		"Andere Anwendungen..."
@@ -2949,6 +2997,9 @@
 	"Publish Note": [
 		"Notiz veröffentlichen"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Notiz \"%s\" (im Notizbuch \"%s\") veröffentlichen?"
+	],
 	"Publish note...": [
 		"Notiz veröffentlichen..."
 	],
@@ -2961,8 +3012,11 @@
 	"Publish/unpublish": [
 		"Veröffentlichen / nicht veröffentlichen"
 	],
+	"Published at URL: %s": [
+		"Veröffentlicht unter URL: %s"
+	],
 	"Publishes a note to Joplin Server or Joplin Cloud": [
-		""
+		"Veröffentlicht eine Notiz auf Joplin Server oder Joplin Cloud"
 	],
 	"QR Code": [
 		"QR-Code"
@@ -3008,6 +3062,9 @@
 	],
 	"Recipients:": [
 		"Empfänger:"
+	],
+	"Recognise text:": [
+		"Text erkennen:"
 	],
 	"Recognize handwritten image": [
 		"Handschrift-Bild erkennen"
@@ -3076,7 +3133,7 @@
 		"Benennt das angegebene <item> (Notiz oder Notizbuch) zu <name> um."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		"Stellt Auszeichnungen in allen Zeilen dar, die den Cursor nicht enthalten."
+		"Rendert Markup in allen Zeilen, die den Cursor nicht enthalten."
 	],
 	"Renew token": [
 		"Token erneuern"
@@ -3237,6 +3294,9 @@
 	"Save geo-location with notes": [
 		"Geografischen Standort zusammen mit Notizen speichern"
 	],
+	"Save geolocation?": [
+		"Geografischen Standort speichern?"
+	],
 	"Scan notebook": [
 		"Notizbuch scannen"
 	],
@@ -3307,10 +3367,13 @@
 		"Notizbuch auswählen"
 	],
 	"Select one of the other supported sync targets.": [
-		""
+		"Wähle eines der anderen unterstützten Synchronisationsziele."
 	],
 	"Select parent notebook": [
 		"Eltern-Notizbuch auswählen"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Selected: %s": [
 		"Ausgewählt: %s"
@@ -3346,7 +3409,7 @@
 		"Setze auf 0 um den gesamten verfügbaren Platz zu verwenden. Die empfohlene Breite ist 600."
 	],
 	"Set the password": [
-		"Gib das Passwort ein"
+		"Passwort festlegen"
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Setzt die Eigenschaft <name> der gegebenen <note> auf den gegebenen [Wert]. Mögliche Werte sind:\n\n%s"
@@ -3358,10 +3421,10 @@
 		"Freigeben"
 	],
 	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
-		"Teile eine Kopie aller Notizen in einem Dateiformat, welches von Joplin auf einem anderen Computer importiert werden kann."
+		"Gib eine Kopie aller Notizen in einem Dateiformat frei, welches von Joplin auf einem Computer importiert werden kann."
 	],
 	"Share a notebook with others": [
-		"Teile ein Notizbuch mit anderen"
+		"Gib ein Notizbuch für andere frei"
 	],
 	"Share from %s (%s)": [
 		"Freigeben von %s (%s)"
@@ -3385,7 +3448,7 @@
 		"Gibt das angegebene [Notizbuch] für [Benutzer] frei oder hebt diese Freigabe auf. Erfordert Joplin Cloud oder Joplin Server."
 	],
 	"Sharing notebook...": [
-		"Notizbuch teilen..."
+		"Notizbuch freigeben..."
 	],
 	"Shortcuts are not available in CLI mode.": [
 		"Tastenkürzel sind im CLI-Modus nicht verfügbar."
@@ -3496,7 +3559,7 @@
 		"Notizbücher sortieren nach"
 	],
 	"Sort notes by": [
-		"Sortiere Notizen nach"
+		"Notizen sortieren nach"
 	],
 	"Sort selected lines": [
 		"Ausgewählte Zeilen sortieren"
@@ -3515,6 +3578,9 @@
 	],
 	"Source: ": [
 		"Quelle: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Abstandhalter"
@@ -3646,7 +3712,7 @@
 		"Wechselt zu [notebook] - alle weiteren Aktionen werden in diesem Notizbuch ausgeführt."
 	],
 	"Sync": [
-		""
+		"Synchronisieren"
 	],
 	"Sync as many devices as you want": [
 		"Synchronisiere mit beliebig vielen Geräten"
@@ -3726,6 +3792,9 @@
 	"Take photo": [
 		"Foto aufnehmen"
 	],
+	"Take survey": [
+		"An Umfrage teilnehmen"
+	],
 	"Task \"%s\" failed with error: %s": [
 		"Aufgabe \"%s\" fehlgeschlagen mit Fehler: %s"
 	],
@@ -3745,7 +3814,7 @@
 		"Texteditor-Befehl"
 	],
 	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		""
+		"Danke für das Feedback!\nHast du Zeit, eine kurze Umfrage auszufüllen?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Das aktive Profil kann nicht gelöscht werden. Bitte wechsle in ein anderes Profil und versuche es erneut."
@@ -3819,9 +3888,6 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Die Notiz „%s“ wurde erfolgreich im Notizbuch „%s“ wiederhergestellt."
-	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Die Notiz wurde in Markdown umgewandelt und die Originalnotiz in den Papierkorb verschoben"
 	],
 	"The note was successfully moved to the trash.": [
 		"Die Notiz wurde erfolgreich in den Papierkorb verschoben.",
@@ -3927,7 +3993,7 @@
 		"Diese Zeichnung kann ungespeicherte Änderungen enthalten."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		"Diese Funktion ist per Voreinstellung deaktiviert. Du musst sie manuell aktivieren, indem du die Option ‚Handschriftumwandlung aktivieren‘ einschaltest."
+		"Diese Funktion ist per Voreinstellung deaktiviert. Du musst sie manuell aktivieren, indem du die Option ‚Handschrifttranskription aktivieren‘ einschaltest."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
 		"Diese Funktion ist nur verfügbar in Joplin Cloud und Joplin Server."
@@ -4124,6 +4190,9 @@
 	"Try it now": [
 		"Jetzt testen"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Tippe `help [Befehl]`, um weitere Informationen über einen Befehl zu erhalten oder tippe `help all` für die vollständigen Hinweise zur Nutzung des Befehls."
 	],
@@ -4145,6 +4214,9 @@
 	"Unable to share log data. Reason: %s": [
 		"Protokolldaten können nicht geteilt werden. Grund: %s"
 	],
+	"Unable to share note data. Reason: %s": [
+		"Notizdaten können nicht geteilt werden. Grund: %s"
+	],
 	"Unchecked": [
 		"Nicht angehakt"
 	],
@@ -4155,7 +4227,7 @@
 		"Rückgängig"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		"Deinstalliere die Anwendung und installieren sie dann neu. Stelle sicher, dass du zuerst ein Backup erstellst, indem du alle Notizen als JEX aus der Desktop-Anwendung exportierst."
+		"Deinstalliere die Anwendung und installiere sie erneut. Erstelle zuvor unbedingt ein Backup, indem du alle deine Notizen aus der Desktop-Anwendung als JEX exportierst."
 	],
 	"Unknown": [
 		"Unbekannt"
@@ -4176,13 +4248,13 @@
 		"Ungeordnete Liste"
 	],
 	"Unpublish": [
-		"Nicht veröffentlichen"
+		"Nicht mehr veröffentlichen"
 	],
 	"Unpublish \"%s\"": [
-		"„%s“ nicht veröffentlichen"
+		"„%s“ nicht mehr veröffentlichen"
 	],
 	"Unpublish note": [
-		"Notiz nicht veröffentlichen"
+		"Notiz nicht mehr veröffentlichen"
 	],
 	"Unshare": [
 		"Nicht mehr freigeben"
@@ -4290,7 +4362,7 @@
 		"Verwendete Schriftart mit fester Breite, um Text lesbar zu machen (z.B. in Tabellen, Kontrollkästchen, Code). Falls nicht vorhanden wird eine Monotype-Scrhiftart (mit fester Breite) verwendet."
 	],
 	"Useful": [
-		""
+		"Nützlich"
 	],
 	"User deletions": [
 		"Benutzer-Löschungen"
@@ -4398,7 +4470,7 @@
 		"Beim Erstellen einer neuen Aufgabe:"
 	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
-		""
+		"Wenn aktiviert, werden die Bilder in der Notiz mit einem qualitativ höherwertigen serverseitigen Transkriptionsdienst umgewandelt. Erfordert die Synchronisation mit einer Kopie der Desktop-App."
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Wenn aktiviert, wird die Anwendung deine Anhänge einlesen und Text aus ihnen extrahieren. Damit kannst du innerhalb dieser Anhänge nach Text suchen."

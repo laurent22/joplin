@@ -1,5 +1,5 @@
 import { BaseItemEntity, defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
-import BaseModel, { DeleteOptions } from '../BaseModel';
+import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import { FolderLoadOptions } from './utils/types';
 import time from '../time';
 import { _ } from '../locale';
@@ -19,6 +19,8 @@ import getConflictFolderId from './utils/getConflictFolderId';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { getCollator } from './utils/getCollator';
 import Setting from './Setting';
+import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
+import ItemChange from './ItemChange';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -115,21 +117,21 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async delete(folderId: string, options?: DeleteOptions) {
+	public static async batchDelete(folderIds: string[], options: DeleteOptions): Promise<void> {
 		options = {
 			deleteChildren: true,
 			...options,
 		};
 
-		if (folderId === getTrashFolderId()) throw new Error('The trash folder cannot be deleted');
+		if (folderIds.includes(getTrashFolderId())) throw new Error('The trash folder cannot be deleted');
 
 		const toTrash = !!options.toTrash;
 
-		const folder = await Folder.load(folderId);
-		if (!folder) return; // noop
+		const folders: FolderEntity[] = await Folder.loadItemsByIds(folderIds);
+		if (!folders.length) return; // noop
 
 		const actionLogger = ActionLogger.from(options.sourceDescription);
-		actionLogger.addDescription(`folder title: ${JSON.stringify(folder.title)}`);
+		actionLogger.addDescription(`folder titles: ${JSON.stringify(folders.map(folder => folder.title))}`);
 		options.sourceDescription = actionLogger;
 
 		if (options.deleteChildren) {
@@ -140,28 +142,37 @@ export default class Folder extends BaseItem {
 				toTrash,
 			};
 
-			const noteIds = await Folder.noteIds(folderId);
-			await Note.batchDelete(noteIds, childrenDeleteOptions);
+			for (const folderId of folderIds) {
+				const noteIds = await Folder.noteIds(folderId);
+				await Note.batchDelete(noteIds, childrenDeleteOptions);
 
-			const subFolderIds = await Folder.subFolderIds(folderId);
-			for (let i = 0; i < subFolderIds.length; i++) {
-				await Folder.delete(subFolderIds[i], childrenDeleteOptions);
+				const subFolderIds = await Folder.subFolderIds(folderId);
+				await Folder.batchDelete(subFolderIds, childrenDeleteOptions);
 			}
 		}
 
 		if (toTrash) {
-			const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
-			if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
-			if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
-			await this.save(newFolder);
-		} else {
-			await super.delete(folderId, options);
-		}
+			for (const folderId of folderIds) {
+				const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
+				if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
+				if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
+				await this.save(newFolder);
 
-		this.dispatch({
-			type: 'FOLDER_DELETE',
-			id: folderId,
-		});
+				this.dispatch({
+					type: 'FOLDER_DELETE',
+					id: folderId,
+				});
+			}
+		} else {
+			await super.batchDelete(folderIds, options);
+
+			for (const folderId of folderIds) {
+				this.dispatch({
+					type: 'FOLDER_DELETE',
+					id: folderId,
+				});
+			}
+		}
 	}
 
 	public static conflictFolderTitle() {
@@ -584,6 +595,16 @@ export default class Folder extends BaseItem {
 		// resume the process from the start (thus the loop) so that we deal
 		// with the right note/resource associations.
 
+		const isReadOnly = (type: ModelType, item: NoteEntity|ResourceEntity) => {
+			return itemIsReadOnlySync(
+				type,
+				ItemChange.SOURCE_UNSPECIFIED,
+				item as ItemSlice,
+				Setting.value('sync.userId'),
+				BaseItem.syncShareCache,
+			);
+		};
+
 		interface Row {
 			id: string;
 			share_id: string;
@@ -630,12 +651,21 @@ export default class Folder extends BaseItem {
 			// one note. If it is not, we create duplicate resources so that
 			// each note has its own separate resource.
 
+			// Order unshared items first: This makes conflicts less likely, since shared
+			// items are more likely to be duplicated by multiple users.
+			const orderingSql = 'ORDER BY is_shared ASC';
+
 			const noteResourceAssociations = await this.db().selectAll(`
-				SELECT resource_id, note_id, notes.share_id
+				SELECT
+					resource_id,
+					note_id,
+					notes.share_id,
+					(notes.share_id != '') AS is_shared
 				FROM note_resources
 				LEFT JOIN notes ON notes.id = note_resources.note_id
 				WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)})
 				AND is_associated = 1
+				${orderingSql}
 			`) as NoteResourceRow[];
 
 			const resourceIdToNotes: Record<string, NoteResourceRow[]> = {};
@@ -654,7 +684,20 @@ export default class Folder extends BaseItem {
 					const row = rows[i];
 					const note: NoteEntity = await Note.load(row.note_id);
 					if (!note) continue; // probably got deleted in the meantime?
-					const newResource = await Resource.duplicateResource(resourceId);
+					// Don't update read-only notes:
+					if (isReadOnly(ModelType.Note, note)) continue;
+
+					const newResource = await Resource.duplicateResource(resourceId, {
+						// Ensure that the resource starts with the correct share_id and is_shared.
+						// This reduces the number of resources to be processed in the next loop iteration
+						// and seems to fix an issue related to resources not syncing with read-only shares.
+						//
+						// These properties are set directly in the "duplicateResource" call to prevent
+						// race conditions.
+						is_shared: note.is_shared,
+						share_id: note.share_id,
+					});
+
 					logger.info(`updateResourceShareIds: Automatically created resource "${newResource.id}" to replace resource "${resourceId}" because it is shared and duplicate across notes:`, row);
 					const regex = new RegExp(resourceId, 'gi');
 					const newBody = note.body.replace(regex, newResource.id);
@@ -703,7 +746,9 @@ export default class Folder extends BaseItem {
 						resource.blob_updated_time = now;
 					}
 
-					await Resource.save(resource, { autoTimestamp: false });
+					if (!isReadOnly(ModelType.Resource, resource)) {
+						await Resource.save(resource, { autoTimestamp: false });
+					}
 				}
 				return;
 			}

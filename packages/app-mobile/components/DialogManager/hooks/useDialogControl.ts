@@ -91,7 +91,7 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 					});
 				});
 			},
-			promptForText: (message: string) => {
+			promptForText: (message: string, initialValue?: string) => {
 				return new Promise<string|null>((resolve) => {
 					const dismiss = () => {
 						onDismiss(dialog);
@@ -101,6 +101,7 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 						type: DialogType.TextInput,
 						key: `prompt-dialog-${nextDialogIdRef.current++}`,
 						message,
+						initialValue,
 						onSubmit: (text) => {
 							resolve(text);
 							dismiss();

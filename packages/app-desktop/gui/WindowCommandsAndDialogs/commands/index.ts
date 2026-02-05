@@ -5,8 +5,11 @@ import * as deleteFolder from './deleteFolder';
 import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
 import * as exportPdf from './exportPdf';
+import * as globalRedo from './globalRedo';
+import * as globalUndo from './globalUndo';
 import * as gotoAnything from './gotoAnything';
 import * as hideModalMessage from './hideModalMessage';
+import * as importFrom from './importFrom';
 import * as linkToNote from './linkToNote';
 import * as moveToFolder from './moveToFolder';
 import * as newFolder from './newFolder';
@@ -53,8 +56,11 @@ const index: any[] = [
 	duplicateNote,
 	editAlarm,
 	exportPdf,
+	globalRedo,
+	globalUndo,
 	gotoAnything,
 	hideModalMessage,
+	importFrom,
 	linkToNote,
 	moveToFolder,
 	newFolder,

@@ -42,6 +42,7 @@ interface RendererPlugins {
 
 // /!\/!\ Note: the order of rules is important!! /!\/!\
 const rules: RendererRules = {
+	frontmatter: require('./MdToHtml/rules/frontmatter').default,
 	fence: require('./MdToHtml/rules/fence').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 	image: require('./MdToHtml/rules/image').default,
@@ -55,6 +56,7 @@ const rules: RendererRules = {
 	fountain: require('./MdToHtml/rules/fountain').default,
 	abc: require('./MdToHtml/rules/abc').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	externalEmbed: require('./MdToHtml/rules/externalEmbed').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
 	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
 };

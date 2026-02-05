@@ -132,10 +132,12 @@ a {
 	margin: 40px 20px;
 }
 
-#loading-animation {
+.loading-animation {
 	margin-right: 20px;
 	width: 20px;
 	height: 20px;
+	display: inline-block;
+	vertical-align: middle;
 	border: 5px solid lightgrey;
 	border-top: 4px solid white;
 	border-radius: 50%;
@@ -144,6 +146,10 @@ a {
 	animation-duration: 1.2s;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
+
+	@media (prefers-reduced-motion: reduce) {
+		animation-name: none;
+	}
 }
 
 @keyframes rotate {

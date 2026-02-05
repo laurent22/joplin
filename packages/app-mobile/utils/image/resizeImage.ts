@@ -1,8 +1,9 @@
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-import ImageResizer from '@bam.tech/react-native-image-resizer';
+import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import fileToImage from './fileToImage.web';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
+import getImageDimensions from './getImageDimensions';
 
 const logger = Logger.create('resizeImage');
 
@@ -18,17 +19,23 @@ interface Options {
 }
 
 const resizeImage = async (options: Options) => {
+	type Sized = { width: number; height: number };
+	const computeScale = (image: Sized) => {
+		// Choose a scale factor such that the resized image fits within a
+		// maxWidth x maxHeight box.
+		const scale = Math.min(
+			options.maxWidth / image.width,
+			options.maxHeight / image.height,
+		);
+		return scale;
+	};
+
 	if (shim.mobilePlatform() === 'web') {
 		const image = await fileToImage(options.inputPath);
 		try {
 			const canvas = document.createElement('canvas');
 
-			// Choose a scale factor such that the resized image fits within a
-			// maxWidth x maxHeight box.
-			const scale = Math.min(
-				options.maxWidth / image.image.width,
-				options.maxHeight / image.image.height,
-			);
+			const scale = computeScale(image.image);
 			canvas.width = image.image.width * scale;
 			canvas.height = image.image.height * scale;
 
@@ -54,18 +61,27 @@ const resizeImage = async (options: Options) => {
 			image.free();
 		}
 	} else {
-		const resizedImage = await ImageResizer.createResizedImage(
-			options.inputPath,
-			options.maxWidth,
-			options.maxHeight,
-			options.format,
-			options.quality, // quality
-			undefined, // rotation
-			undefined, // outputPath
-			true, // keep metadata
-		);
+		const originalSize = await getImageDimensions(options.inputPath);
+		logger.debug('Processing image with size', originalSize.width, 'x', originalSize.height);
 
-		const resizedImagePath = resizedImage.uri;
+		let context = ImageManipulator.manipulate(options.inputPath);
+
+		// Only rescale the image if it's bigger than the maximum size:
+		if (originalSize.width > options.maxWidth || originalSize.height > options.maxHeight) {
+			const scale = computeScale(originalSize);
+			context = context.resize({
+				width: originalSize.width * scale,
+				height: originalSize.height * scale,
+			});
+		}
+
+		const final = await context.renderAsync();
+		const saved = await final.saveAsync({
+			format: options.format === 'PNG' ? SaveFormat.PNG : SaveFormat.JPEG,
+			compress: options.quality,
+		});
+
+		const resizedImagePath = saved.uri;
 		logger.info('Resized image ', resizedImagePath);
 		logger.info(`Moving ${resizedImagePath} => ${options.outputPath}`);
 

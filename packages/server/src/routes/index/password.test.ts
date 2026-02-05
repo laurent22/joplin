@@ -19,12 +19,13 @@ describe('index/password', () => {
 
 	test('should queue an email to reset password', async () => {
 		const { user, password } = await createUserAndSession(1);
+		const mfaCode = '';
 
 		// Create a few sessions, to verify that they are all deleted when the
 		// password is changed.
-		await models().session().authenticate(user.email, password);
-		await models().session().authenticate(user.email, password);
-		await models().session().authenticate(user.email, password);
+		await models().session().authenticate(user.email, password, mfaCode);
+		await models().session().authenticate(user.email, password, mfaCode);
+		await models().session().authenticate(user.email, password, mfaCode);
 		expect(await models().session().count()).toBe(4);
 
 		await models().email().deleteAll();

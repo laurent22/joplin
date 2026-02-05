@@ -20,6 +20,7 @@ import { reg } from '@joplin/lib/registry';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { ChangeEvent, Dropdown, DropdownOptions, DropdownVariant } from '../Dropdown/Dropdown';
 import shim from '@joplin/lib/shim';
+import { SettingsRecord } from '@joplin/lib/models/Setting';
 
 const logger = Logger.create('ShareFolderDialog');
 
@@ -421,10 +422,14 @@ function ShareFolderDialog(props: Props) {
 }
 
 const mapStateToProps = (state: State) => {
+	const getCanUseSharePermissions = (settings: Partial<SettingsRecord>) => {
+		return [9, 10, 11].includes(settings['sync.target']) && !!settings['sync.10.canUseSharePermissions'];
+	};
+
 	return {
 		shares: state.shareService.shares,
 		shareUsers: state.shareService.shareUsers,
-		canUseSharePermissions: state.settings['sync.target'] === 10 && state.settings['sync.10.canUseSharePermissions'],
+		canUseSharePermissions: getCanUseSharePermissions(state.settings),
 	};
 };
 

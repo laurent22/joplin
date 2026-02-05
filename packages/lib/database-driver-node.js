@@ -1,5 +1,4 @@
 const shim = require('./shim').default;
-const Promise = require('promise');
 
 class DatabaseDriverNode {
 	open(options) {

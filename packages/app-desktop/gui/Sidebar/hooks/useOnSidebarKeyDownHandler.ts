@@ -9,6 +9,7 @@ interface Props {
 	listItems: ListItem[];
 	collapsedFolderIds: string[];
 	selectedIndex: number;
+	selectedIndexes: number[];
 	updateSelectedIndex: SetSelectedIndexCallback;
 }
 
@@ -50,9 +51,11 @@ const getParentOffset = (childIndex: number, listItems: ListItem[]): number|null
 };
 
 const findNextTypeAheadMatch = (selectedIndex: number, query: string, listItems: ListItem[]) => {
+	const normalize = (text: string) => text.trim().toLowerCase();
 	const matches = (item: ListItem) => {
-		return item.label.startsWith(query);
+		return normalize(item.label).startsWith(normalize(query));
 	};
+
 	const indexBefore = listItems.slice(0, selectedIndex).findIndex(matches);
 	// Search in all results **after** the current. This prevents the current item from
 	// always being identified as the next match, if the user repeatedly presses the
@@ -68,7 +71,7 @@ const findNextTypeAheadMatch = (selectedIndex: number, query: string, listItems:
 };
 
 const useOnSidebarKeyDownHandler = (props: Props) => {
-	const { updateSelectedIndex, listItems, selectedIndex, collapsedFolderIds, dispatch } = props;
+	const { updateSelectedIndex, listItems, selectedIndex, selectedIndexes, collapsedFolderIds, dispatch } = props;
 
 	return useCallback<KeyboardEventHandler<HTMLElement>>((event) => {
 		const selectedItem = listItems[selectedIndex];
@@ -104,12 +107,15 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 			event.preventDefault();
 		} else if (event.code === 'Home') {
 			event.preventDefault();
-			updateSelectedIndex(0);
+			updateSelectedIndex(0, { extend: false });
 			indexChange = 0;
 		} else if (event.code === 'End') {
 			event.preventDefault();
-			updateSelectedIndex(listItems.length - 1);
+			updateSelectedIndex(listItems.length - 1, { extend: false });
 			indexChange = 0;
+		} else if (event.code === 'Escape' && selectedIndexes.length > 1) {
+			event.preventDefault();
+			updateSelectedIndex(selectedIndex, { extend: false });
 		} else if (event.code === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			void CommandService.instance().execute('focusElement', 'noteList');
@@ -122,9 +128,9 @@ const useOnSidebarKeyDownHandler = (props: Props) => {
 
 		if (indexChange !== 0) {
 			event.preventDefault();
-			updateSelectedIndex(selectedIndex + indexChange);
+			updateSelectedIndex(selectedIndex + indexChange, { extend: event.shiftKey });
 		}
-	}, [selectedIndex, collapsedFolderIds, listItems, updateSelectedIndex, dispatch]);
+	}, [selectedIndex, selectedIndexes, collapsedFolderIds, listItems, updateSelectedIndex, dispatch]);
 };
 
 export default useOnSidebarKeyDownHandler;

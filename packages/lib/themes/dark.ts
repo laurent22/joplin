@@ -13,7 +13,7 @@ const theme: Theme = {
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
 	oddBackgroundColor: '#141517',
 	color: '#dddddd',
-	colorError: 'red',
+	colorError: '#ff4444',
 	colorCorrect: '#72b972',
 	colorWarn: '#9A5B00',
 	colorWarnUrl: '#ffff82',

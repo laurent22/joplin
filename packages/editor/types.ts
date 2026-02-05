@@ -30,6 +30,8 @@ export enum EditorCommandType {
 	ToggleHeading5 = 'textHeading5',
 
 	InsertHorizontalRule = 'textHorizontalRule',
+	InsertTable = 'textTable',
+	InsertCodeBlock = 'textCodeBlock',
 
 	// Find commands
 	ToggleSearch = 'textSearch',
@@ -178,6 +180,7 @@ export interface EditorSettings {
 	language: EditorLanguageType;
 
 	keymap: EditorKeymap;
+	preferMacShortcuts: boolean;
 	tabMovesFocus: boolean;
 
 	markdownMarkEnabled: boolean;

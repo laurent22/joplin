@@ -459,7 +459,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.JoplinServerBusiness, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.JoplinServerBusiness, false),
 			cfaLabel: _('Get a quote'),
-			cfaUrl: 'mailto:jsb-inquiry@joplin.cloud?subject=Joplin%20Server%20Business%20inquiry',
+			cfaUrl: 'https://tally.so/r/D4BlOE',
 			footnote: '',
 			learnMoreUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
 			hostingType: PlanHostingType.Self,

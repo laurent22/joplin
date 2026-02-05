@@ -214,12 +214,10 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	return newMediaPath;
 }
 
-
 const getFileExtension = (url: string, isDataUrl: boolean) => {
 	let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 	if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 	if (fileExt) fileExt = `.${fileExt}`;
-
 	return fileExt;
 };
 
