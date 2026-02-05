@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import parse, { domToReact, HTMLReactParserOptions, Element, DOMNode } from 'html-react-parser';
 import { NoteEntity } from '@/lib/database';
+import Mark from 'mark.js';
 
 
 export default function NoteDetails({ note }: { note: (NoteEntity & { body?: string }) | null }) {
+  const searchParams = useSearchParams();
+  const contentRef = useRef<HTMLDivElement>(null);
+
   // コンテンツロード後にフラグメントジャンプを実行
   useEffect(() => {
     if (!note?.body) return;
@@ -26,6 +31,40 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
       }, 1000);
     }
   }, [note?.body]);
+
+  // searchパラメータが変化した時に、該当箇所をハイライトしてスクロール
+  useEffect(() => {
+    if (!note?.body || !contentRef.current) return;
+
+    const searchQuery = searchParams.get('search');
+    if (!searchQuery) return;
+
+    const decodedSearch = decodeURIComponent(searchQuery);
+
+    // mark.jsを使ってハイライト
+    const markInstance = new Mark(contentRef.current);
+    
+    // 既存のハイライトをクリア
+    markInstance.unmark();
+
+    // 新しいハイライトを適用
+    markInstance.mark(decodedSearch, {
+      done: () => {
+        // ハイライトした最初の要素までスクロール
+        const firstMark = contentRef.current?.querySelector('mark');
+        if (firstMark) {
+          setTimeout(() => {
+            firstMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+        }
+      },
+    });
+
+    // クリーンアップ
+    return () => {
+      markInstance.unmark();
+    };
+  }, [note?.body, searchParams]);
 
   if (!note) {
     return (
@@ -75,7 +114,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">{note.title || 'Untitled'}</h2>
         {note.body ? (
-          <div className="note-content">
+          <div className="note-content" ref={contentRef}>
             {parse(note.body, parseOptions)}
           </div>
         ) : (
