@@ -276,4 +276,20 @@ export class ViewerUtil {
     }
     return $;
   }
+
+  public static addKatexCssIfNotExists($: cheerio.Root): cheerio.Root {
+    const katexCssHref = '/pluginAssets/katex/katex.css';
+    const existingLink = $(`link[href="${katexCssHref}"]`);
+    
+    if (existingLink.length === 0) {
+      // headタグがない場合は作成
+      if ($('head').length === 0) {
+        $('html').prepend('<head></head>');
+      }
+      // linkタグを追加
+      $('head').append(`<link rel="stylesheet" href="${katexCssHref}">`);
+    }
+    
+    return $;
+  }
 }

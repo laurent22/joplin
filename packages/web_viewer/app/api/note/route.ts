@@ -16,7 +16,8 @@ export async function GET(req: Request) {
     const $ = cheerio.load(note.body || '');
     const resourceModifiedHtml = ViewerUtil.modifyJoplinResource($, resourceDir);
     const linkModifiedHtml = ViewerUtil.modifyJoplinLinkAnchor(resourceModifiedHtml);
-    note.body = linkModifiedHtml.html();
+    const finalModifiedHtml = ViewerUtil.addKatexCssIfNotExists(linkModifiedHtml);
+    note.body = finalModifiedHtml.html();
     if (!note) {
       return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
     }
