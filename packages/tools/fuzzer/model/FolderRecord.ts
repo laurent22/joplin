@@ -118,10 +118,10 @@ export default class FolderRecord implements FolderData {
 		);
 	}
 
-	private withShareState_(shareState: readonly ShareRecord[]) {
+	private withShareState_(isShared: boolean, shareState: readonly ShareRecord[]) {
 		return new FolderRecord({
 			...this.metadata_,
-			isShared: shareState.length > 0,
+			isShared,
 			sharedWith: [...shareState],
 		});
 	}
@@ -147,7 +147,7 @@ export default class FolderRecord implements FolderData {
 			throw new Error('Cannot share non-top-level folder');
 		}
 
-		return this.withShareState_([
+		return this.withShareState_(true, [
 			...this.sharedWith_.filter(record => record.email !== recipientEmail),
 			{ email: recipientEmail, readOnly },
 		]);
@@ -159,6 +159,8 @@ export default class FolderRecord implements FolderData {
 		}
 
 		return this.withShareState_(
+			// Even if no users are present in the share, Joplin still considers the folder to be shared
+			this.isShared_,
 			this.sharedWith_.filter(record => record.email !== recipientEmail),
 		);
 	}
@@ -168,6 +170,6 @@ export default class FolderRecord implements FolderData {
 			return this;
 		}
 
-		return this.withShareState_([]);
+		return this.withShareState_(false, []);
 	}
 }
