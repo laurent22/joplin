@@ -11,6 +11,8 @@ import Mark from 'mark.js';
 export default function NoteDetails({ note }: { note: (NoteEntity & { body?: string }) | null }) {
   const searchParams = useSearchParams();
   const contentRef = useRef<HTMLDivElement>(null);
+  // 前回の search 値を保持（同じ値ならスクロールを抑制するため）
+  const prevSearchRef = useRef<string | null>(null);
 
   // 指定要素のレンダリングが安定するのを待つユーティリティ
   const waitForStableRender = (root: HTMLElement | null, timeout = 3000, stableMs = 80) => {
@@ -74,6 +76,9 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     const markInstance = new Mark(contentRef.current);
     let cancelled = false;
 
+    // 今回の search と前回の search が異なる場合のみスクロールするフラグ
+    const shouldScroll = decodedSearch !== prevSearchRef.current;
+
     const scrollLongestMark = () => {
       const marks = contentRef.current?.querySelectorAll('mark');
       if (marks && marks.length > 0) {
@@ -88,10 +93,10 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
           }
         });
 
-        // 短い遅延で DOM が確定するのを待つ
-        setTimeout(() => {
-          longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 100);
+          // 短い遅延で DOM が確定するのを待つ
+          setTimeout(() => {
+            longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
       }
     };
 
@@ -114,11 +119,20 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
               separateWordSearch: true,
               done: () => {
                 if (cancelled) return;
-                scrollLongestMark();
+                // 前回と異なる検索文字列だった場合のみスクロール
+                if (shouldScroll) {
+                  scrollLongestMark();
+                }
+                // 現在の検索文字列を保存
+                prevSearchRef.current = decodedSearch;
               },
             });
           } else {
-            scrollLongestMark();
+            if (shouldScroll) {
+              scrollLongestMark();
+            }
+            // 現在の検索文字列を保存
+            prevSearchRef.current = decodedSearch;
           }
         },
       });
