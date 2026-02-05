@@ -217,9 +217,9 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
 
       return (
         <ListItem key={key} disablePadding>
-          <Link 
-            href={`/note?note_id=${item.id}`}
-            style={{ 
+          <Link
+            href={`/note?note_id=${encodeURIComponent(item.id)}${fragment ? `&search=${encodeURIComponent(fragment)}` : ''}`}
+            style={{
               textDecoration: 'none',
               width: '100%',
               color: 'inherit',
