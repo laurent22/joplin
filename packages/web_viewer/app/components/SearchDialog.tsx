@@ -324,7 +324,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
 
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={true} onClose={onClose} maxWidth="md" fullWidth hidden={!open}>
       <DialogTitle>検索</DialogTitle>
       <DialogContent>
         <TextField
