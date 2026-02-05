@@ -73,7 +73,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
                 
                 setTimeout(() => {
                   longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 3000);
+                }, 1000);
               }
             },
           });
@@ -94,7 +94,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
             
             setTimeout(() => {
               longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 3000);
+            }, 1000);
           }
         }
       },
