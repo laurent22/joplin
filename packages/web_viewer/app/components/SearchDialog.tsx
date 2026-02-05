@@ -23,10 +23,11 @@ type Props = {
   onClose: () => void;
   initialSearchInput: string;
   setQuery: (v: string) => void;
+  visible?: boolean;
 };
 
 
-function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
+function SearchDialog({ open, onClose, initialSearchInput, setQuery, visible = true }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
   const [searchInput, setSearchInput] = React.useState('');
@@ -324,7 +325,23 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
 
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      maxWidth="md" 
+      fullWidth
+      hideBackdrop={!visible}
+      disableScrollLock={!visible}
+      slotProps={{
+        backdrop: {
+          style: { display: visible ? undefined : 'none' }
+        },
+        paper: {
+          style: { display: visible ? undefined : 'none' }
+        }
+      }}
+      style={{ pointerEvents: visible ? undefined : 'none' }}
+    >
       <DialogTitle>検索</DialogTitle>
       <DialogContent>
         <TextField
