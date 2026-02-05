@@ -5,6 +5,7 @@ import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import ResourceRecord from './model/ResourceRecord';
 
 interface ClientData {
+	email: string;
 	childIds: ItemId[];
 }
 
@@ -82,6 +83,12 @@ class ActionTracker {
 		const checkFolder = (folder: FolderRecord) => {
 			for (const childId of folder.childIds) {
 				checkItem(childId);
+
+				// Verify that parent-child relationships are two-way:
+				const child = this.idToItem_.get(childId);
+				if (!isResource(child)) {
+					assert.equal(child.parentId, folder.id, 'items should only be included in childIds if the item is a child of the parent');
+				}
 			}
 
 			// Shared folders
@@ -146,6 +153,12 @@ class ActionTracker {
 				assert.ok(!!item);
 				assert.equal(item.parentId, '', `${childId} should not have a parent`);
 
+				if (isFolder(item) && item.isRootSharedItem) {
+					const isShareOwner = item.ownedByEmail === clientData.email;
+					const isShareRecipient = item.shareRecipients.includes(clientData.email);
+					assert.ok(isShareOwner || isShareRecipient, `${clientData.email} should have access to item ${childId}.`);
+				}
+
 				checkItem(childId);
 			}
 		}
@@ -156,6 +169,7 @@ class ActionTracker {
 		// If the client's remote account already exists, continue using it:
 		if (!this.tree_.has(clientId)) {
 			this.tree_.set(clientId, {
+				email: clientId,
 				childIds: [],
 			});
 		}
@@ -163,9 +177,10 @@ class ActionTracker {
 		const logAction = (item: ItemId|TreeItem, action: string) => {
 			this.logAction_(item, action, clientId);
 		};
-		const updateItem = (id: ItemId, newValue: TreeItem, changeLabel: string) => {
+		const updateItem = <ItemType extends TreeItem> (id: ItemId, newValue: ItemType, changeLabel: string) => {
 			logAction(id, changeLabel);
 			this.idToItem_.set(id, newValue);
+			return newValue;
 		};
 
 		const getChildIds = (itemId: ItemId) => {
@@ -173,7 +188,7 @@ class ActionTracker {
 			if (!item || !isFolder(item)) return [];
 			return item.childIds;
 		};
-		const updateChildren = (parentId: ItemId, updateFn: (oldChildren: ItemId[])=> ItemId[]) => {
+		const updateChildren = (parentId: ItemId, updateFn: (oldChildren: readonly ItemId[])=> readonly ItemId[]) => {
 			const parent = this.idToItem_.get(parentId);
 			if (!parent) throw new Error(`Parent with ID ${parentId} not found.`);
 			if (!isFolder(parent)) throw new Error(`Item ${parentId} is not a folder`);
@@ -592,7 +607,7 @@ class ActionTracker {
 				return Promise.resolve();
 			},
 			moveItem: (itemId, newParentId) => {
-				const item = this.idToItem_.get(itemId);
+				let item = this.idToItem_.get(itemId);
 				assert.ok(isFolder(item) || isNote(item), `item with ${itemId} should be a folder or a note`);
 
 				const validateParameters = () => {
@@ -616,11 +631,20 @@ class ActionTracker {
 
 				removeChild(item.parentId, itemId);
 				addChild(newParentId, itemId);
-				updateItem(
+				item = updateItem(
 					itemId,
 					isFolder(item) ? item.withParent(newParentId) : { ...item, parentId: newParentId },
 					`moved to id:${newParentId}`,
 				);
+
+				if (isFolder(item) && newParentId === '') {
+					// Ensure that toplevel notebooks have the correct share state.
+					item = updateItem(
+						itemId,
+						item.withUnshared().withShareOwner(client.email),
+						'reset share state',
+					);
+				}
 
 				this.checkRep_();
 				return Promise.resolve();
