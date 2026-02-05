@@ -104,6 +104,34 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
     Object.entries(searchApiResults?.data.noteMap || {}).forEach(([id, note]) => {
       const body = note.body || '';
       const $ = cheerio.load(`<root>${body}</root>`);
+      
+        const blockTags = [
+        "address","article","aside","blockquote","canvas","dd","div","dl","dt",
+        "fieldset","figcaption","figure","footer","form",
+        "h1","h2","h3","h4","h5","h6",
+        "header","hr","li","main","nav","noscript","ol","p","pre","section",
+        "table","thead","tbody","tfoot","tr","td","th",
+        "ul","video"
+      ];
+
+      // <br> は強制改行
+      $("br").replaceWith("\n");
+
+      // ブロック要素の「前後」に改行を入れる（入れ過ぎはあとで正規化する）
+      const sel = blockTags.join(",");
+      $(sel).each((_, el) => {
+        const node = $(el);
+
+        // 前に改行（直前が改行じゃなければ）
+        // 置換の簡単さ優先で無条件に入れてもOK。後で潰す。
+        node.before("\n");
+
+        // 後ろに改行
+        node.after("\n");
+      });
+
+
+
       const text = $.root().text();
       map[id] = text;
     });
@@ -202,6 +230,27 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
 
     const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
       const note = noteMap[item.id];
+
+      const fragmentNoBr = fragment?.replaceAll('\n', ' ');
+      
+      // フラグメントからキーワードを含む行を抽出
+      const extractKeywordLine = (fragment: string | undefined): string | undefined => {
+        if (!fragment) return undefined;
+        
+        const lines = fragment.split('\n');
+        for (const line of lines) {
+          // いずれかのキーワードを含む行を探す
+          const hasKeyword = queryKeywords.some(keyword => 
+            line.toLowerCase().includes(keyword.toLowerCase())
+          );
+          if (hasKeyword) {
+            return line.trim();
+          }
+        }
+        return undefined;
+      };
+      
+      const keywordLine = extractKeywordLine(fragment);
       
       // フラグメントがある場合はタイトルを太字でカラー表示、ない場合はキーワードハイライト
       const titleHtml = fragment
@@ -209,8 +258,8 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
         : surroundKeywords(queryKeywords, item.title, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true });
 
       // フラグメントをキーワードでハイライト
-      const fragmentHtml = fragment
-        ? surroundKeywords(queryKeywords, fragment, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true })
+      const fragmentHtml = fragmentNoBr
+        ? surroundKeywords(queryKeywords, fragmentNoBr, '<span style="font-weight: bold; color: #1976d2;">', '</span>', { escapeHtml: true })
         : null;
 
       const key = index !== undefined ? `${item.id}-${index}` : item.id;
@@ -218,7 +267,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
       return (
         <ListItem key={key} disablePadding>
           <Link
-            href={`/note?note_id=${encodeURIComponent(item.id)}${fragment ? `&search=${encodeURIComponent(fragment)}` : ''}`}
+            href={`/note?note_id=${encodeURIComponent(item.id)}${keywordLine ? `&search=${encodeURIComponent(keywordLine)}` : ''}`}
             style={{
               textDecoration: 'none',
               width: '100%',
