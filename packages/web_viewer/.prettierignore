@@ -1,0 +1,18 @@
+# dependencies
+node_modules
+
+# build output
+.next
+out
+build
+
+# misc
+.DS_Store
+*.log
+
+# public assets
+public/pluginAssets
+
+# config
+next-env.d.ts
+package-lock.json
