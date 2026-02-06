@@ -104,6 +104,11 @@ export default function NoteTree() {
           // フォーカスを当てる（自動でクリックすると現在のクエリパラメータが上書きされるためクリックは行わない）
           const focusableElement = targetElement as HTMLElement;
           focusableElement.focus();
+          const backupColor = focusableElement.style.backgroundColor;
+          focusableElement.style.backgroundColor = 'rgba(135, 206, 250, 0.3)';
+          setTimeout(() => {
+            focusableElement.style.backgroundColor = backupColor;
+          }, 10_000);
         }
       }, 1000);
 
