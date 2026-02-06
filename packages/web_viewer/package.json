@@ -7,7 +7,10 @@
     "build": "next build",
     "next_start": "node scripts/start.js",
     "start": "mkdir -p public && rm -rf public/pluginAssets && cp -R ../renderer/assets public/pluginAssets && node scripts/dev.js",
-    "lint": "eslint"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-pattern public/**",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix --ignore-pattern public/**",
+    "format": "prettier --write .",
+    "fix": "npm run format && npm run lint:fix"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
@@ -37,6 +40,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-prettier": "5.1.4",
+    "prettier": "3.8.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
