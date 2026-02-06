@@ -7,6 +7,8 @@ import parse, { domToReact, HTMLReactParserOptions, Element, DOMNode } from 'htm
 import { NoteEntity } from '@/lib/database';
 import Mark from 'mark.js';
 import { Config } from '../../config';
+import { ViewerUtil } from '@/lib/viewerUtil';
+import { ClientUtil } from '@/lib/ClientUtil';
 
 export default function NoteDetails({ note }: { note: (NoteEntity & { body?: string }) | null }) {
   const searchParams = useSearchParams();
@@ -95,8 +97,9 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
 
           // 短い遅延で DOM が確定するのを待つ
           setTimeout(() => {
-            longestMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            ClientUtil.scrollIntoViewWithRetry(longestMark, 3);
           }, 100);
+
       }
     };
 
