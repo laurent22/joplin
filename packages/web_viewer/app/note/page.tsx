@@ -14,11 +14,6 @@ export default function NotePage() {
             <div className="flex-1 min-h-0 overflow-auto">
               <NoteTreeWrapper />
             </div>
-            <div className="mt-4">
-              <Link href="/" className="text-blue-600 underline hover:text-blue-800">
-                Go to Home
-              </Link>
-            </div>
           </Panel>
           <Separator className="w-2 bg-gray-300 hover:bg-gray-400 cursor-col-resize" />
           <Panel className="bg-white p-4 overflow-auto">
