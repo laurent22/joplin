@@ -1,4 +1,4 @@
-import { getDatabase, FolderEntity, NoteEntity } from './database';
+import { NoteEntity } from './database';
 import { Folder } from './folder';
 import { Note } from './note';
 import * as cheerio from 'cheerio';
@@ -187,8 +187,8 @@ export class ViewerUtil {
       return nodes
         .sort((a, b) => {
           // files (Note) should come before folders
-          const ta = (a as any).type;
-          const tb = (b as any).type;
+          const ta = a.type;
+          const tb = b.type;
           if (ta !== tb) {
             if (ta === 'Note') return -1;
             if (tb === 'Note') return 1;

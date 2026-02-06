@@ -4,18 +4,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { NoteEntity } from '@/lib/database';
-import NoteAbst from './NoteAbst';
 import NoteDetails from './NoteDetails';
-
-function fmtTime(ts?: number) {
-  if (!ts) return '-';
-  try {
-    const d = new Date(ts);
-    return d.toLocaleString();
-  } catch {
-    return String(ts);
-  }
-}
 
 export default function NoteViewer() {
   const searchParams = useSearchParams();

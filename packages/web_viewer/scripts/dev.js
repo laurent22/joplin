@@ -6,6 +6,7 @@
  * 使用例: npm run dev -- --profileName joplin_desktop_test2
  */
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { spawn } = require('child_process');
 
 // 引数をパース

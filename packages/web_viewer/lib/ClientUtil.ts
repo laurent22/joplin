@@ -8,6 +8,7 @@ export class ClientUtil {
     if (!targetElement || maxAttempts <= 0) return;
 
     // 最初の1回はすぐに実行
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (targetElement as any).scrollIntoViewIfNeeded?.({
       behavior: 'smooth',
       block: 'center',
@@ -16,6 +17,7 @@ export class ClientUtil {
     // 残りの試行回数は100ミリ秒ごとに実行
     for (let i = 1; i < maxAttempts; i++) {
       setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (targetElement as any).scrollIntoViewIfNeeded?.({
           behavior: 'smooth',
           block: 'center',

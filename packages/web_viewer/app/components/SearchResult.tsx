@@ -12,7 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Link from 'next/link';
 import { useFolderQuery } from '@/lib/hooks';
-import { FolderTreeNode, NoteTreeNode, TreeNode, ViewerUtil } from '@/lib/viewerUtil';
+import { FolderTreeNode, NoteTreeNode, TreeNode } from '@/lib/viewerUtil';
 import { NoteEntity } from '@/lib/database';
 
 const searchMatchedNotes = (query: string, folders: TreeNode[]): NoteEntity[] => {

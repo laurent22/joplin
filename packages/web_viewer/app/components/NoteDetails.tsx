@@ -7,7 +7,6 @@ import parse, { domToReact, HTMLReactParserOptions, Element, DOMNode } from 'htm
 import { NoteEntity } from '@/lib/database';
 import Mark from 'mark.js';
 import { Config } from '../../config';
-import { ViewerUtil } from '@/lib/viewerUtil';
 import { ClientUtil } from '@/lib/ClientUtil';
 
 export default function NoteDetails({ note }: { note: (NoteEntity & { body?: string }) | null }) {
@@ -184,6 +183,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
           }
 
           // 外部リンクはそのまま <a> タグとして処理
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { style, ...otherAttribs } = domNode.attribs || {};
           return (
             <a {...otherAttribs} target="_blank" rel="noopener noreferrer">

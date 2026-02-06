@@ -14,7 +14,6 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import { NoteEntity } from '@/lib/database';
 import { TreeNode, useFolderQuery } from '@/lib/hooks';
 
 // fetch logic moved to `useFolderQuery` in `lib/hooks`

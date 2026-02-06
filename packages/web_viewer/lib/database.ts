@@ -1,4 +1,3 @@
-import { homedir } from 'os';
 import * as path from 'path';
 import Database from 'better-sqlite3';
 import { ViewerUtil } from './viewerUtil';

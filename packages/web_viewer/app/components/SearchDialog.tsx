@@ -25,7 +25,7 @@ type Props = {
   setQuery: (v: string) => void;
 };
 
-function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
+function SearchDialog({ open, onClose, initialSearchInput }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
   const [searchInput, setSearchInput] = React.useState('');
@@ -100,11 +100,6 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
 
   const handleSearch = () => {
     setInternalQuery(searchInput);
-  };
-
-  const handleItemClick = (item: SearchResult) => {
-    setQuery(item.title);
-    onClose();
   };
 
   const results = React.useMemo(() => {
@@ -187,7 +182,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
     const results_array: Array<{ item: SearchResult; fragment?: string; index?: number }> = [];
 
     // 処理時間計測開始
-    const t0 = performance.now();
+    // const t0 = performance.now();
 
     const processedIds = new Set<string>();
 
@@ -242,10 +237,10 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
     });
 
     // 処理時間計測終了 (ミリ秒)
-    const t1 = performance.now();
-    console.log(
-      `SearchDialog: fragment extraction took ${(t1 - t0).toFixed(2)}ms for ${results.length} results and ${queryKeywords.length} keywords`
-    );
+    // const t1 = performance.now();
+    // console.log(
+    //   `SearchDialog: fragment extraction took ${(t1 - t0).toFixed(2)}ms for ${results.length} results and ${queryKeywords.length} keywords`
+    // );
 
     return results_array;
   }, [internalQuery, results, noteMap]);
@@ -254,15 +249,15 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
   const filteredResults = React.useMemo(() => {
     if (!activeFilter) return expandedResults;
 
-    const t0 = performance.now();
+    // const t0 = performance.now();
     const filterLower = activeFilter.toLowerCase();
     const filtered = expandedResults.filter(({ item, fragment }) => {
       const titleMatch = item.title.toLowerCase().includes(filterLower);
       const fragmentMatch = fragment ? fragment.toLowerCase().includes(filterLower) : false;
       return titleMatch || fragmentMatch;
     });
-    const t1 = performance.now();
-    console.log(`SearchDialog: filtering took ${(t1 - t0).toFixed(2)}ms`);
+    // const t1 = performance.now();
+    // console.log(`SearchDialog: filtering took ${(t1 - t0).toFixed(2)}ms`);
 
     return filtered;
   }, [expandedResults, activeFilter]);
@@ -272,8 +267,6 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
     const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
 
     const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
-      const note = noteMap[item.id];
-
       const fragmentNoBr = fragment?.replaceAll('\n', ' ');
 
       // フラグメントからキーワードを含む行を抽出
@@ -375,6 +368,7 @@ function SearchDialog({ open, onClose, initialSearchInput, setQuery }: Props) {
         {filteredResults.map(({ item, fragment, index }) => renderItem(item, fragment, index))}
       </List>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredResults, internalQuery, noteMap]);
 
   return (
