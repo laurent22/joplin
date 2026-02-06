@@ -1,12 +1,13 @@
-const Logger = require('@joplin/utils/Logger').default;
-const shim = require('./shim').default;
-const parseXmlString = require('xml2js').parseString;
-const JoplinError = require('./JoplinError').default;
-const URL = require('url-parse');
-const { _ } = require('./locale');
-const { rtrimSlashes } = require('./path-utils');
+import Logger from '@joplin/utils/Logger';
+import shim from './shim';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+const parseXmlString: (xml: string, options: any, callback: (error: Error | null, result: any)=> void)=> void = require('xml2js').parseString;
+import JoplinError from './JoplinError';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+const URL: any = require('url-parse');
+import { _ } from './locale';
+import { rtrimSlashes, ltrimSlashes } from './path-utils';
 const base64 = require('base-64');
-const { ltrimSlashes } = require('./path-utils');
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other
@@ -14,20 +15,56 @@ const { ltrimSlashes } = require('./path-utils');
 // example to convert a custom namespace to "d:" so that it can be used by the rest of the code.
 // In general, we should only deal with things in "d:", which is the standard DAV namespace.
 
+interface WebDavApiOptions {
+	baseUrl(): string;
+	username(): string;
+	password(): string;
+	ignoreTlsErrors?(): boolean;
+}
+
+interface LoggedRequest {
+	timestamp: number;
+	request: string;
+	response: string;
+}
+
+interface RequestInfo {
+	url: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	options: any;
+}
+
+interface ExecOptions {
+	responseFormat?: 'json' | 'text';
+	target?: 'string' | 'file';
+	source?: 'file';
+	path?: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+type JsonValue = any;
+
 class WebDavApi {
-	constructor(options) {
+	private logger_: Logger;
+	private options_: WebDavApiOptions;
+	private lastRequests_: LoggedRequest[];
+
+	public constructor(options: WebDavApiOptions) {
 		this.logger_ = new Logger();
 		this.options_ = options;
 		this.lastRequests_ = [];
+		// Prevent unused method warning - this method is kept for debugging
+		void this._requestToCurl;
 	}
 
-	logRequest_(request, responseText) {
+	private logRequest_(request: RequestInfo, responseText: string) {
 		if (this.lastRequests_.length > 10) this.lastRequests_.splice(0, 1);
 
-		const serializeRequest = (r) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const serializeRequest = (r: RequestInfo): string => {
 			const options = { ...r.options };
 			if (typeof options.body === 'string') options.body = options.body.substr(0, 4096);
-			const output = [];
+			const output: string[] = [];
 			output.push(options.method ? options.method : 'GET');
 			output.push(r.url);
 			options.headers = { ...options.headers };
@@ -45,23 +82,23 @@ class WebDavApi {
 		});
 	}
 
-	lastRequests() {
+	public lastRequests() {
 		return this.lastRequests_;
 	}
 
-	clearLastRequests() {
+	public clearLastRequests() {
 		this.lastRequests_ = [];
 	}
 
-	setLogger(l) {
+	public setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	authToken() {
+	private authToken(): string | null {
 		if (!this.options_.username() || !this.options_.password()) return null;
 		try {
 			// Note: Non-ASCII passwords will throw an error about Latin1 characters - https://github.com/laurent22/joplin/issues/246
@@ -69,24 +106,24 @@ class WebDavApi {
 			// return base64.encode(utf8.encode(this.options_.username() + ':' + this.options_.password()));
 			return base64.encode(`${this.options_.username()}:${this.options_.password()}`);
 		} catch (error) {
-			error.message = `Cannot encode username/password: ${error.message}`;
+			(error as Error).message = `Cannot encode username/password: ${(error as Error).message}`;
 			throw error;
 		}
 	}
 
-	baseUrl() {
+	public baseUrl(): string {
 		return rtrimSlashes(this.options_.baseUrl());
 	}
 
-	relativeBaseUrl() {
+	public relativeBaseUrl(): string {
 		const url = new URL(this.baseUrl());
 		return url.pathname + url.query;
 	}
 
-	async xmlToJson(xml) {
-		const davNamespaces = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
+	public async xmlToJson(xml: string): Promise<JsonValue> {
+		const davNamespaces: string[] = []; // Yes, there can be more than one... xmlns:a="DAV:" xmlns:D="DAV:"
 
-		const nameProcessor = name => {
+		const nameProcessor = (name: string): string => {
 			if (name.indexOf('xmlns') !== 0) {
 				// Check if the current name is within the DAV namespace. If it is, normalise it
 				// by moving it to the "d:" namespace, which is what all the functions are using.
@@ -106,14 +143,15 @@ class WebDavApi {
 			return name.toLowerCase();
 		};
 
-		const attrValueProcessor = (value, name) => {
-			// The namespace is ususally specified like so: xmlns:D="DAV:" ("D" being the alias used in the tag names)
+		const attrValueProcessor = (value: string, name: string): string => {
+			// The namespace is usually specified like so: xmlns:D="DAV:" ("D" being the alias used in the tag names)
 			// In some cases, the namespace can also be empty like so: "xmlns=DAV". In this case, the tags will have
 			// no namespace so instead of <d:prop> will have just <prop>. This is handled above in nameProcessor()
 			if (value.toLowerCase() === 'dav:') {
 				const p = name.split(':');
 				davNamespaces.push(p.length === 2 ? p[p.length - 1] : '');
 			}
+			return value;
 		};
 
 		const options = {
@@ -133,7 +171,7 @@ class WebDavApi {
 		});
 	}
 
-	valueFromJson(json, keys, type) {
+	private valueFromJson(json: JsonValue, keys: (string | number)[], type: 'string' | 'object' | 'array'): JsonValue {
 		let output = json;
 
 		for (let i = 0; i < keys.length; i++) {
@@ -171,19 +209,20 @@ class WebDavApi {
 		return null;
 	}
 
-	stringFromJson(json, keys) {
+	public stringFromJson(json: JsonValue, keys: (string | number)[]): string | null {
 		return this.valueFromJson(json, keys, 'string');
 	}
 
-	objectFromJson(json, keys) {
+	public objectFromJson(json: JsonValue, keys: (string | number)[]): JsonValue {
 		return this.valueFromJson(json, keys, 'object');
 	}
 
-	arrayFromJson(json, keys) {
+	public arrayFromJson(json: JsonValue, keys: (string | number)[]): JsonValue[] | null {
 		return this.valueFromJson(json, keys, 'array');
 	}
 
-	resourcePropByName(resource, outputType, propName) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public resourcePropByName(resource: any, outputType: 'string' | 'array', propName: string): any {
 		const propStats = resource['d:propstat'];
 		let output = null;
 		if (!Array.isArray(propStats)) throw new Error('Missing d:propstat property');
@@ -221,7 +260,7 @@ class WebDavApi {
 		throw new Error(`Invalid output type: ${outputType}`);
 	}
 
-	async execPropFind(path, depth, fields = null, options = null) {
+	public async execPropFind(path: string, depth: number, fields: string[] | null = null, options: ExecOptions | null = null): Promise<JsonValue> {
 		if (fields === null) fields = ['d:getlastmodified'];
 
 		let fieldsXml = '';
@@ -247,8 +286,10 @@ class WebDavApi {
 		return this.exec('PROPFIND', path, body, { Depth: depth }, options);
 	}
 
-	requestToCurl_(url, options) {
-		const output = [];
+	// Used for debugging - can be uncommented in exec() to log curl commands
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private _requestToCurl(url: string, options: any): string {
+		const output: string[] = [];
 		output.push('curl');
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
@@ -264,7 +305,7 @@ class WebDavApi {
 		return output.join(' ');
 	}
 
-	handleNginxHack_(jsonResponse, newErrorHandler) {
+	private handleNginxHack_(jsonResponse: JsonValue, newErrorHandler: (message: string, code: number)=> JoplinError) {
 		// Trying to fix 404 error issue with Nginx WebDAV server.
 		// https://github.com/laurent22/joplin/issues/624
 		// https://github.com/laurent22/joplin/issues/808
@@ -317,11 +358,11 @@ class WebDavApi {
 		const responseArray = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response']);
 		if (responseArray && responseArray.length === 1) {
 			const propStats = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response', 0, 'd:propstat']);
-			if (!propStats.length) return;
+			if (!propStats || !propStats.length) return;
 			let count404 = 0;
 			for (let i = 0; i < propStats.length; i++) {
 				const status = this.arrayFromJson(jsonResponse, ['d:multistatus', 'd:response', 0, 'd:propstat', i, 'd:status']);
-				if (status && status.length && status[0].indexOf('404') >= 0) count404++;
+				if (status && status.length && (status[0] as string).indexOf('404') >= 0) count404++;
 			}
 
 			if (count404 === propStats.length) throw newErrorHandler('Not found', 404);
@@ -335,7 +376,7 @@ class WebDavApi {
 	//    </d:prop>
 	//  </d:propfind>'
 
-	async exec(method, path = '', body = null, headers = null, options = null) {
+	public async exec(method: string, path = '', body: string | null = null, headers: Record<string, string | number> | null = null, options: ExecOptions | null = null): Promise<JsonValue> {
 		headers = { ...headers };
 		options = { ...options };
 
@@ -372,12 +413,13 @@ class WebDavApi {
 		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
 		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
-		const fetchOptions = {};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const fetchOptions: any = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
 		if (options.path) fetchOptions.path = options.path;
 		if (body) fetchOptions.body = body;
-		fetchOptions.ignoreTlsErrors = this.options_.ignoreTlsErrors();
+		fetchOptions.ignoreTlsErrors = this.options_.ignoreTlsErrors ? this.options_.ignoreTlsErrors() : false;
 		if (shim.mobilePlatform() === 'android') {
 			// Using credentials = 'omit' prevents authentication cookies from
 			// being stored. React Native has issues related to cookie authentication:
@@ -391,7 +433,8 @@ class WebDavApi {
 
 		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
 
-		let response = null;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		let response: any = null;
 
 		// console.info('WebDAV Call', `${method} ${url}`, headers, options);
 		// console.info(this.requestToCurl_(url, fetchOptions));
@@ -417,15 +460,15 @@ class WebDavApi {
 		// console.info('WebDAV Response', responseText);
 
 		// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier
-		const newError = (message, code = 0) => {
+		const newError = (message: string, code = 0): JoplinError => {
 			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 			const shortResponseText = (`${responseText}`).substr(0, 1024);
 			return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
 		};
 
-		let responseJson_ = null;
-		const loadResponseJson = async () => {
+		let responseJson_: JsonValue = null;
+		const loadResponseJson = async (): Promise<JsonValue> => {
 			if (!responseText) return null;
 			if (responseJson_) return responseJson_;
 			// eslint-disable-next-line require-atomic-updates
@@ -482,4 +525,4 @@ class WebDavApi {
 	}
 }
 
-module.exports = WebDavApi;
+export default WebDavApi;
