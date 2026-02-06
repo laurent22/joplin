@@ -16,11 +16,13 @@ export async function GET(req: Request) {
 
     const note = Note.getNoteById(id);
     const resourceDir = `/api/resource/`;
-    const $ = cheerio.load(note.body || '');
+    const $ = cheerio.load(note?.body || '');
     const resourceModifiedHtml = ViewerUtil.modifyJoplinResource($, resourceDir);
     const linkModifiedHtml = ViewerUtil.modifyJoplinLinkAnchor(resourceModifiedHtml);
     const finalModifiedHtml = ViewerUtil.addKatexCssIfNotExists(linkModifiedHtml);
-    note.body = finalModifiedHtml.html();
+    if (note) {
+      note.body = finalModifiedHtml.html();
+    }
     if (!note) {
       return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
     }
