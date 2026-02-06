@@ -97,10 +97,9 @@ export default function NoteTree() {
         if (targetElement) {
           targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
           
-          // フォーカスを当てる
+          // フォーカスを当てる（自動でクリックすると現在のクエリパラメータが上書きされるためクリックは行わない）
           const focusableElement = targetElement as HTMLElement;
           focusableElement.focus();
-          focusableElement.click();
         }
       }, 1000);
       
