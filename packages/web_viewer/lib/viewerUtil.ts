@@ -116,7 +116,16 @@ export class ViewerUtil {
     // sort nodes by title, recursively for folders
     const sortByTitle = (nodes: TreeNode[]): TreeNode[] => {
       return nodes
-        .sort((a, b) => a.title.localeCompare(b.title))
+        .sort((a, b) => {
+          // files (Note) should come before folders
+          const ta = a.type;
+          const tb = b .type;
+          if (ta !== tb) {
+            if (ta === 'Note') return -1;
+            if (tb === 'Note') return 1;
+          }
+          return a.title.localeCompare(b.title);
+        })
         .map((node) => {
           if ((node as FolderTreeNode).type === "Folder") {
             const folderNode = node as FolderTreeNode;
@@ -178,7 +187,16 @@ export class ViewerUtil {
     // タイトルでソート（再帰的に）
     const sortByTitle = (nodes: TreeNode[]): TreeNode[] => {
       return nodes
-        .sort((a, b) => a.title.localeCompare(b.title))
+        .sort((a, b) => {
+          // files (Note) should come before folders
+          const ta = (a as any).type;
+          const tb = (b as any).type;
+          if (ta !== tb) {
+            if (ta === 'Note') return -1;
+            if (tb === 'Note') return 1;
+          }
+          return a.title.localeCompare(b.title);
+        })
         .map((node) => {
           if ((node as FolderTreeNode).type === "Folder") {
             const folderNode = node as FolderTreeNode;
