@@ -21,14 +21,17 @@ export default function NoteViewer() {
   const searchParams = useSearchParams();
   const noteId = searchParams.get('note_id') ?? null;
 
-
-  const { data: fetched, isLoading, error } = useQuery({
+  const {
+    data: fetched,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['note', noteId],
     queryFn: async () => {
       const res = await fetch(`/api/note?id=${encodeURIComponent(noteId as string)}`);
       const json = await res.json();
       if (!json.success) throw new Error(json.error || 'Failed to fetch note');
-      return json.data as (NoteEntity & { body?: string });
+      return json.data as NoteEntity & { body?: string };
     },
     enabled: !!noteId,
     staleTime: 60_000,
@@ -63,6 +66,6 @@ export default function NoteViewer() {
 
   const note = fetched ?? null;
 
-//   return <NoteAbst note={note as (NoteEntity & { body?: string }) | null} />;
-return <NoteDetails note={note as (NoteEntity & { body?: string }) | null} />;
+  //   return <NoteAbst note={note as (NoteEntity & { body?: string }) | null} />;
+  return <NoteDetails note={note as (NoteEntity & { body?: string }) | null} />;
 }

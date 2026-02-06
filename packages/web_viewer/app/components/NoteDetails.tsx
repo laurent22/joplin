@@ -17,7 +17,11 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
   const prevSearchRef = useRef<string | null>(null);
 
   // 指定要素のレンダリングが安定するのを待つユーティリティ
-  const waitForStableRender = (root: HTMLElement | null, timeout = Config.renderWaitTimeoutMs, stableMs = Config.stableMs) => {
+  const waitForStableRender = (
+    root: HTMLElement | null,
+    timeout = Config.renderWaitTimeoutMs,
+    stableMs = Config.stableMs
+  ) => {
     return new Promise<HTMLElement | null>((resolve) => {
       if (!root) return resolve(null);
       let timer: number | null = null;
@@ -87,7 +91,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
         let longestMark = marks[0] as HTMLElement;
         let maxLength = marks[0].textContent?.length || 0;
 
-        marks.forEach(mark => {
+        marks.forEach((mark) => {
           const length = mark.textContent?.length || 0;
           if (length > maxLength) {
             maxLength = length;
@@ -95,11 +99,10 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
           }
         });
 
-          // 短い遅延で DOM が確定するのを待つ
-          setTimeout(() => {
-            ClientUtil.scrollIntoViewWithRetry(longestMark, 3);
-          }, 100);
-
+        // 短い遅延で DOM が確定するのを待つ
+        setTimeout(() => {
+          ClientUtil.scrollIntoViewWithRetry(longestMark, 3);
+        }, 100);
       }
     };
 
@@ -165,10 +168,10 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
         if (domNode.name === 'html' || domNode.name === 'body' || domNode.name === 'head') {
           return <>{domToReact(domNode.children as DOMNode[], parseOptions)}</>;
         }
-        
+
         if (domNode.name === 'a') {
           const href = domNode.attribs?.href;
-          
+
           // 同一サーバ内のリンク（相対パスや / で始まる）の場合は Link に置き換え
           if (href && (href.startsWith('/') || !href.match(/^https?:\/\//))) {
             return (
@@ -179,7 +182,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
               </Link>
             );
           }
-          
+
           // 外部リンクはそのまま <a> タグとして処理
           const { style, ...otherAttribs } = domNode.attribs || {};
           return (
@@ -195,13 +198,13 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">{note.title || 'Untitled'}</h2>
-        {note.body ? (
-          <div className="note-content" ref={contentRef}>
-            {parse(note.body, parseOptions)}
-          </div>
-        ) : (
-          <div className="text-sm text-gray-600">-</div>
-        )}
+      {note.body ? (
+        <div className="note-content" ref={contentRef}>
+          {parse(note.body, parseOptions)}
+        </div>
+      ) : (
+        <div className="text-sm text-gray-600">-</div>
+      )}
     </div>
   );
 }

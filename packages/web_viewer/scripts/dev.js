@@ -15,7 +15,7 @@ const nextArgs = [];
 
 for (let i = 0; i < args.length; i++) {
   const arg = args[i];
-  
+
   if (arg.startsWith('--profileName=')) {
     profileName = arg.split('=')[1];
   } else if (arg === '--profileName') {
@@ -39,7 +39,7 @@ const commandArgs = ['dev', ...nextArgs];
 const child = spawn(command, commandArgs, {
   stdio: 'inherit',
   env: process.env,
-  shell: process.platform === 'win32'
+  shell: process.platform === 'win32',
 });
 
 child.on('exit', (code) => {

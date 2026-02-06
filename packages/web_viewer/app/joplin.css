@@ -49,7 +49,7 @@ body {
   word-wrap: break-word;
   line-height: 1.6em;
   background-color: #ffffff;
-  font-family: "Avenir", "Arial", sans-serif;
+  font-family: 'Avenir', 'Arial', sans-serif;
   padding-bottom: 0px;
   padding-top: 0px;
 }
@@ -264,7 +264,7 @@ th {
   padding: 0.5em 1em 0.5em 1em;
   font-size: 15;
   color: #32373f;
-  font-family: "Avenir", "Arial", sans-serif;
+  font-family: 'Avenir', 'Arial', sans-serif;
 }
 
 .jop-tinymce table td,
@@ -333,7 +333,7 @@ a.not-loaded-resource {
   align-items: center;
 }
 
-.md-checkbox input[type="checkbox"]:checked {
+.md-checkbox input[type='checkbox']:checked {
   opacity: 0.7;
 }
 
@@ -370,7 +370,7 @@ background-color: transparent;
 }
 */
 
-.mce-content-body [data-mce-selected="inline-boundary"] {
+.mce-content-body [data-mce-selected='inline-boundary'] {
   background-color: transparent;
 }
 
@@ -444,7 +444,7 @@ li.md-checkbox {
   list-style-type: none;
 }
 
-li.md-checkbox input[type="checkbox"] {
+li.md-checkbox input[type='checkbox'] {
   margin-left: -1.71em;
   margin-right: 0.7em;
 }
@@ -458,8 +458,8 @@ ul.joplin-checklist {
 */
 
 ul.joplin-checklist li::before {
-  content: "\f14a";
-  font-family: "Font Awesome 5 Free";
+  content: '\f14a';
+  font-family: 'Font Awesome 5 Free';
   background-size: 16px 16px;
   pointer-events: all;
   cursor: pointer;
@@ -471,7 +471,7 @@ ul.joplin-checklist li::before {
 }
 
 .joplin-checklist li:not(.checked)::before {
-  content: "\f0c8";
+  content: '\f0c8';
 }
 .mermaid {
   background-color: white;

@@ -60,13 +60,22 @@ export default function NoteAbst({ note }: { note: (NoteEntity & { body?: string
       {note.source_url && (
         <div className="mt-4 text-sm">
           <div className="font-medium">Source URL</div>
-          <a className="text-blue-600 underline" href={note.source_url} target="_blank" rel="noreferrer">{note.source_url}</a>
+          <a
+            className="text-blue-600 underline"
+            href={note.source_url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {note.source_url}
+          </a>
         </div>
       )}
 
       <div className="mt-4">
         <div className="font-medium mb-2">Body</div>
-        <pre className="whitespace-pre-wrap text-sm text-gray-800 bg-gray-50 p-3 rounded">{note.body || '-'}</pre>
+        <pre className="whitespace-pre-wrap text-sm text-gray-800 bg-gray-50 p-3 rounded">
+          {note.body || '-'}
+        </pre>
       </div>
     </div>
   );

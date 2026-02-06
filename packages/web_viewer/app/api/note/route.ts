@@ -8,7 +8,10 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const id = url.searchParams.get('id');
     if (!id) {
-      return NextResponse.json({ success: false, error: 'id query parameter is required' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: 'id query parameter is required' },
+        { status: 400 }
+      );
     }
 
     const note = Note.getNoteById(id);
@@ -24,6 +27,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, data: note });
   } catch (err) {
-    return NextResponse.json({ success: false, error: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
   }
 }

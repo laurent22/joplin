@@ -1,8 +1,8 @@
- 'use client';
+'use client';
 
 import React, { useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import { /* useQuery replaced by useFolderQuery */ } from '@tanstack/react-query';
+import {} from /* useQuery replaced by useFolderQuery */ '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
@@ -16,7 +16,6 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import { NoteEntity } from '@/lib/database';
 import { TreeNode, useFolderQuery } from '@/lib/hooks';
-
 
 // fetch logic moved to `useFolderQuery` in `lib/hooks`
 function renderTree(nodes: TreeNode[], onNoteClick?: () => void) {
@@ -45,8 +44,14 @@ function renderTree(nodes: TreeNode[], onNoteClick?: () => void) {
         itemId={node.id}
         label={
           <Link href={`/note?note_id=${node.id}`}>
-            <Box 
-              sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', color: 'inherit' }}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
               data-nodeid={node.id}
             >
               <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
@@ -96,16 +101,16 @@ export default function NoteTree() {
         const targetElement = document.querySelector(`[data-nodeid="${noteIdFromUrl}"]`);
         if (targetElement) {
           targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          
+
           // フォーカスを当てる（自動でクリックすると現在のクエリパラメータが上書きされるためクリックは行わない）
           const focusableElement = targetElement as HTMLElement;
           focusableElement.focus();
         }
       }, 1000);
-      
+
       return () => clearTimeout(timer);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noteIdFromUrl, folders]);
 
   const treeCompoent = useMemo(() => {
@@ -129,14 +134,8 @@ export default function NoteTree() {
   }
 
   if (!folders || folders.length === 0) {
-    return (
-      <Alert severity="info">
-        No folders found
-      </Alert>
-    );
+    return <Alert severity="info">No folders found</Alert>;
   }
-
-  
 
   return (
     <Box sx={{ height: '100%' }}>

@@ -8,7 +8,6 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
 export const useAppStore = useStore.withTypes<AppStore>();
 
-
 export type TreeNode = FolderNode | NoteNode;
 
 export interface FolderNode {
@@ -31,24 +30,27 @@ export interface NoteNode {
   metadata: NoteEntity;
 }
 
-
 interface ApiResponse<T = TreeNode[]> {
-	success: boolean;
-	data?: T;
-	error?: string;
-	message?: string;
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
 }
 
 export function useFolderQuery() {
-	async function fetchFolders(): Promise<TreeNode[]> {
-		const res = await fetch('/api/tree');
-		const json: ApiResponse<TreeNode[]> = await res.json();
-		if (!json.success) {
-			throw new Error(json.message || 'Failed to fetch folders');
-		}
-		return json.data || [];
-	}
+  async function fetchFolders(): Promise<TreeNode[]> {
+    const res = await fetch('/api/tree');
+    const json: ApiResponse<TreeNode[]> = await res.json();
+    if (!json.success) {
+      throw new Error(json.message || 'Failed to fetch folders');
+    }
+    return json.data || [];
+  }
 
-	const { data: folders, isLoading, error } =  useQuery<TreeNode[]>({ queryKey: ['folders'], queryFn: fetchFolders });
-    return { folders, isLoading, error };
+  const {
+    data: folders,
+    isLoading,
+    error,
+  } = useQuery<TreeNode[]>({ queryKey: ['folders'], queryFn: fetchFolders });
+  return { folders, isLoading, error };
 }

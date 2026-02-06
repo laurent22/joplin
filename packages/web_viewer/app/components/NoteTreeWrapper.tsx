@@ -31,13 +31,15 @@ export default function NoteTreeWrapper() {
     return () => window.removeEventListener('keydown', handler);
   }, [query]);
 
-  
   const onClose = React.useCallback(() => {
     setOpenSearchDialog(false);
   }, []);
 
   return (
-    <div className="note-tree-wrapper" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div
+      className="note-tree-wrapper"
+      style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+    >
       <div style={{ paddingBottom: 8 }}>
         <TextField
           variant="outlined"
@@ -59,7 +61,13 @@ export default function NoteTreeWrapper() {
             ),
             endAdornment: searchInput ? (
               <InputAdornment position="end">
-                <IconButton size="small" onClick={() => { setSearchInput(''); setQuery(''); }}>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setSearchInput('');
+                    setQuery('');
+                  }}
+                >
                   <ClearIcon fontSize="small" />
                 </IconButton>
               </InputAdornment>
@@ -68,21 +76,21 @@ export default function NoteTreeWrapper() {
           inputProps={{ 'aria-label': 'Search notes' }}
         />
       </div>
-      
+
       <MemoizedSearchDialog
         open={openSearchDialog}
         onClose={onClose}
         initialSearchInput={searchInput}
         setQuery={setQuery}
       />
-      
-      <div style={{ flex: 1, minHeight: 0, display: !hideTree ? 'none' : undefined  }}>
-          <SearchResult query={query} />
+
+      <div style={{ flex: 1, minHeight: 0, display: !hideTree ? 'none' : undefined }}>
+        <SearchResult query={query} />
       </div>
 
-        <div style={{ flex: 1, minHeight: 0, display: hideTree ? 'none' : undefined }}>
-            <NoteTree />
-        </div>
+      <div style={{ flex: 1, minHeight: 0, display: hideTree ? 'none' : undefined }}>
+        <NoteTree />
+      </div>
     </div>
   );
 }

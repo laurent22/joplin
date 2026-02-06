@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import { Panel, Group, Separator } from "react-resizable-panels";
+import Link from 'next/link';
+import { Panel, Group, Separator } from 'react-resizable-panels';
 import NoteTreeWrapper from '../components/NoteTreeWrapper';
 import ReactQueryProvider from '../components/ReactQueryProvider';
 import NoteViewer from '../components/NoteViewer';
@@ -15,7 +15,9 @@ export default function NotePage() {
               <NoteTreeWrapper />
             </div>
             <div className="mt-4">
-              <Link href="/" className="text-blue-600 underline hover:text-blue-800">Go to Home</Link>
+              <Link href="/" className="text-blue-600 underline hover:text-blue-800">
+                Go to Home
+              </Link>
             </div>
           </Panel>
           <Separator className="w-2 bg-gray-300 hover:bg-gray-400 cursor-col-resize" />

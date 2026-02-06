@@ -43,11 +43,10 @@ export function getDatabase(): Database.Database {
     return database;
   }
 
- 
   // データベースファイルを開く（path.join で適切に結合）
   const dbPath = ViewerUtil.getDabaseFilePath();
   database = new Database(dbPath, { readonly: true });
-  
+
   console.log('Database initialized successfully:', dbPath);
   console.log('Using profile:', path.basename(ViewerUtil.getProfileFolderPath()));
   return database;

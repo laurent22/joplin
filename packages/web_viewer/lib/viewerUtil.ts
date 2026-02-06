@@ -1,6 +1,6 @@
-import { getDatabase, FolderEntity, NoteEntity } from "./database";
-import { Folder } from "./folder";
-import { Note } from "./note";
+import { getDatabase, FolderEntity, NoteEntity } from './database';
+import { Folder } from './folder';
+import { Note } from './note';
 import * as cheerio from 'cheerio';
 import { homedir } from 'os';
 import * as path from 'path';
@@ -20,7 +20,7 @@ export interface NoteTreeNode {
   parent_id: string;
   updated_time: number;
   created_time: number;
-  type: "Note";
+  type: 'Note';
   metadata: NoteEntity;
 }
 
@@ -39,7 +39,7 @@ export interface ErrorResponse {
 
 // ツリー構造のフォルダ型定義
 export interface FolderTreeNode extends FolderListResponse {
-  type: "Folder";
+  type: 'Folder';
   children: TreeNode[];
 }
 
@@ -50,9 +50,9 @@ export class ViewerUtil {
 
     // レスポンス用にデータを整形
     const folderList: FolderListResponse[] = folders.map((folder) => ({
-      id: folder.id || "",
-      title: folder.title || "",
-      parent_id: folder.parent_id || "",
+      id: folder.id || '',
+      title: folder.title || '',
+      parent_id: folder.parent_id || '',
       updated_time: folder.updated_time || 0,
       created_time: folder.created_time || 0,
     }));
@@ -65,12 +65,12 @@ export class ViewerUtil {
     const folderTree = ViewerUtil.createFolderTree(
       // reuse same formatting as selectFolderDataAndCreateTree
       (Folder.getAllFolders() || []).map((folder) => ({
-        id: folder.id || "",
-        title: folder.title || "",
-        parent_id: folder.parent_id || "",
+        id: folder.id || '',
+        title: folder.title || '',
+        parent_id: folder.parent_id || '',
         updated_time: folder.updated_time || 0,
         created_time: folder.created_time || 0,
-      })),
+      }))
     );
 
     const allNoteMetadata = Note.getAllNotesMetadata();
@@ -82,7 +82,7 @@ export class ViewerUtil {
         idMap.set(node.id, node);
         // only traverse folder children (note nodes won't exist yet)
         node.children.forEach((child) => {
-          if ((child as FolderTreeNode).type === "Folder") {
+          if ((child as FolderTreeNode).type === 'Folder') {
             traverse([child as FolderTreeNode]);
           }
         });
@@ -96,11 +96,11 @@ export class ViewerUtil {
     for (const note of allNoteMetadata) {
       const noteNode: NoteTreeNode = {
         id: note.id,
-        title: note.title || "",
-        parent_id: note.parent_id || "",
+        title: note.title || '',
+        parent_id: note.parent_id || '',
         updated_time: note.updated_time || 0,
         created_time: note.created_time || 0,
-        type: "Note",
+        type: 'Note',
         metadata: note,
       };
 
@@ -119,7 +119,7 @@ export class ViewerUtil {
         .sort((a, b) => {
           // files (Note) should come before folders
           const ta = a.type;
-          const tb = b .type;
+          const tb = b.type;
           if (ta !== tb) {
             if (ta === 'Note') return -1;
             if (tb === 'Note') return 1;
@@ -127,7 +127,7 @@ export class ViewerUtil {
           return a.title.localeCompare(b.title);
         })
         .map((node) => {
-          if ((node as FolderTreeNode).type === "Folder") {
+          if ((node as FolderTreeNode).type === 'Folder') {
             const folderNode = node as FolderTreeNode;
             return {
               ...folderNode,
@@ -146,9 +146,7 @@ export class ViewerUtil {
    * @param folders フォルダのリスト
    * @returns ルートフォルダから始まる木構造
    */
-  private static createFolderTree(
-    folders: FolderListResponse[],
-  ): FolderTreeNode[] {
+  private static createFolderTree(folders: FolderListResponse[]): FolderTreeNode[] {
     // idをキーとしたマップを作成（高速検索用）
     const folderMap = new Map<string, FolderTreeNode>();
 
@@ -156,7 +154,7 @@ export class ViewerUtil {
     folders.forEach((folder) => {
       folderMap.set(folder.id, {
         ...folder,
-        type: "Folder",
+        type: 'Folder',
         children: [] as TreeNode[],
       });
     });
@@ -169,7 +167,7 @@ export class ViewerUtil {
       const node = folderMap.get(folder.id);
       if (!node) return;
 
-      if (!folder.parent_id || folder.parent_id === "") {
+      if (!folder.parent_id || folder.parent_id === '') {
         // parent_idが空の場合はルートノード
         rootNodes.push(node);
       } else {
@@ -198,7 +196,7 @@ export class ViewerUtil {
           return a.title.localeCompare(b.title);
         })
         .map((node) => {
-          if ((node as FolderTreeNode).type === "Folder") {
+          if ((node as FolderTreeNode).type === 'Folder') {
             const folderNode = node as FolderTreeNode;
             return {
               ...folderNode,
@@ -213,43 +211,39 @@ export class ViewerUtil {
   }
 
   public static getProfileFolderPath(): string {
-      // プロファイル名を環境変数から取得（起動スクリプトで設定される）
-      const profileName = process.env.PROFILE_NAME || 'joplin_desktop';
-    
-      // profileName にスラッシュや不正文字が含まれている可能性があるためサニタイズ
-      const safeProfile = path.basename(profileName);
-    
-      // プロファイルフォルダのパスを構築
-      const profilePath = path.join(homedir(), '.config', safeProfile);
-      return profilePath;
+    // プロファイル名を環境変数から取得（起動スクリプトで設定される）
+    const profileName = process.env.PROFILE_NAME || 'joplin_desktop';
+
+    // profileName にスラッシュや不正文字が含まれている可能性があるためサニタイズ
+    const safeProfile = path.basename(profileName);
+
+    // プロファイルフォルダのパスを構築
+    const profilePath = path.join(homedir(), '.config', safeProfile);
+    return profilePath;
   }
 
-
   public static getResourceFolderPath(): string {
-      const profileFolder = this.getProfileFolderPath();
+    const profileFolder = this.getProfileFolderPath();
 
-      // リソースフォルダのパスを構築
-      const resourcePath = path.join(profileFolder, 'resources');
-      return resourcePath;
+    // リソースフォルダのパスを構築
+    const resourcePath = path.join(profileFolder, 'resources');
+    return resourcePath;
   }
 
   public static getDabaseFilePath(): string {
-      const profileFolder = this.getProfileFolderPath();
-    
-      // データベースファイルを開く（path.join で適切に結合）
-      const dbPath = path.join(profileFolder, 'database.sqlite');
-      return dbPath;
+    const profileFolder = this.getProfileFolderPath();
+
+    // データベースファイルを開く（path.join で適切に結合）
+    const dbPath = path.join(profileFolder, 'database.sqlite');
+    return dbPath;
   }
 
   private static escapeRegExp(str: string): string {
-    return str.replace(/[.*+?^=!:${}()|[\]\/\\]/g, "\\$&");
+    return str.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&');
   }
 
-  public static modifyJoplinResource(
-    $: cheerio.Root,
-    resourceDir: string,
-  ): cheerio.Root {
-    const regex = new RegExp(`^${this.escapeRegExp("joplin_resource:/")}`);
+  public static modifyJoplinResource($: cheerio.Root, resourceDir: string): cheerio.Root {
+    const regex = new RegExp(`^${this.escapeRegExp('joplin_resource:/')}`);
     const anchors = $('a[href^="joplin_resource://"]');
 
     for (let i = 0; i < anchors.length; i++) {
@@ -278,7 +272,7 @@ export class ViewerUtil {
   }
 
   public static modifyJoplinLinkAnchor($: cheerio.Root): cheerio.Root {
-    const joplinAnchors = $("a[href^=joplin://]");
+    const joplinAnchors = $('a[href^=joplin://]');
     for (let i = 0; i < joplinAnchors.length; i++) {
       const joplinAnchor = joplinAnchors[i] as cheerio.TagElement;
       const url = URL.parse(joplinAnchor.attribs.href);
@@ -298,7 +292,7 @@ export class ViewerUtil {
   public static addKatexCssIfNotExists($: cheerio.Root): cheerio.Root {
     const katexCssHref = '/pluginAssets/katex/katex.css';
     const existingLink = $(`link[href="${katexCssHref}"]`);
-    
+
     if (existingLink.length === 0) {
       // headタグがない場合は作成
       if ($('head').length === 0) {
@@ -307,7 +301,7 @@ export class ViewerUtil {
       // linkタグを追加
       $('head').append(`<link rel="stylesheet" href="${katexCssHref}">`);
     }
-    
+
     return $;
   }
 }
