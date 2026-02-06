@@ -718,9 +718,13 @@ class ActionTracker {
 			},
 			randomNote: async (options) => {
 				let notes = await tracker.listNotes();
+				if (options.filter) {
+					notes = notes.filter(options.filter);
+				}
 				if (!options.includeReadOnly) {
 					notes = notes.filter(note => !isReadOnly(note.id));
 				}
+
 				const noteIndex = this.context_.randInt(0, notes.length);
 				return notes.length ? notes[noteIndex] : null;
 			},
