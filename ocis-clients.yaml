@@ -1,0 +1,12 @@
+clients:
+  - id: joplin
+    name: Joplin
+    application_type: native
+    redirect_uris:
+      - http://localhost:9968
+      - http://localhost:8968
+      - http://localhost:8868
+      - http://127.0.0.1:9968
+      - http://127.0.0.1:8968
+      - http://127.0.0.1:8868
+    trusted: yes

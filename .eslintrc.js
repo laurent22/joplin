@@ -314,7 +314,7 @@ module.exports = {
 						selector: 'interface',
 						format: null,
 						'filter': {
-							'regex': '^(RSA|RSAKeyPair|iOS.*)$',
+							'regex': '^(RSA|RSAKeyPair|iOS.*|OAuth.*)$',
 							'match': true,
 						},
 					},

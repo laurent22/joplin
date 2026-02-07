@@ -15,11 +15,18 @@ const base64 = require('base-64');
 // example to convert a custom namespace to "d:" so that it can be used by the rest of the code.
 // In general, we should only deal with things in "d:", which is the standard DAV namespace.
 
+export enum WebDavAuthType {
+	Basic = 'basic',
+	Bearer = 'bearer',
+}
+
 interface WebDavApiOptions {
 	baseUrl(): string;
 	username(): string;
 	password(): string;
 	ignoreTlsErrors?(): boolean;
+	authType?(): WebDavAuthType;
+	bearerToken?(): Promise<string>;
 }
 
 interface LoggedRequest {
@@ -98,6 +105,13 @@ class WebDavApi {
 		return this.logger_;
 	}
 
+	private authType(): WebDavAuthType {
+		if (this.options_.authType) {
+			return this.options_.authType();
+		}
+		return WebDavAuthType.Basic;
+	}
+
 	private authToken(): string | null {
 		if (!this.options_.username() || !this.options_.password()) return null;
 		try {
@@ -109,6 +123,13 @@ class WebDavApi {
 			(error as Error).message = `Cannot encode username/password: ${(error as Error).message}`;
 			throw error;
 		}
+	}
+
+	private async bearerToken(): Promise<string | null> {
+		if (this.options_.bearerToken) {
+			return this.options_.bearerToken();
+		}
+		return null;
 	}
 
 	public baseUrl(): string {
@@ -383,9 +404,18 @@ class WebDavApi {
 		if (!options.responseFormat) options.responseFormat = 'json';
 		if (!options.target) options.target = 'string';
 
-		const authToken = this.authToken();
-
-		if (authToken) headers['Authorization'] = `Basic ${authToken}`;
+		// Set authorization header based on auth type
+		if (this.authType() === WebDavAuthType.Bearer) {
+			const token = await this.bearerToken();
+			if (token) {
+				headers['Authorization'] = `Bearer ${token}`;
+			}
+		} else {
+			const authToken = this.authToken();
+			if (authToken) {
+				headers['Authorization'] = `Basic ${authToken}`;
+			}
+		}
 
 		// That should not be needed, but it is required for React Native 0.63+
 		// https://github.com/facebook/react-native/issues/30176
@@ -496,8 +526,9 @@ class WebDavApi {
 
 			let message = 'Unknown error 2';
 			if (response.status === 401 || response.status === 403) {
-				// No auth token means an empty username or password
-				if (!authToken) {
+				// Check if we have valid auth credentials
+				const hasAuth = headers['Authorization'] !== undefined;
+				if (!hasAuth) {
 					message = _('Access denied: Please re-enter your password and/or username');
 				} else {
 					message = _('Access denied: Please check your username and password');

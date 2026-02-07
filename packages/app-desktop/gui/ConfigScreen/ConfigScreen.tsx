@@ -76,6 +76,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				});
 			}
 		}
+
+		// Check if WebDAV with OIDC authentication needs login
+		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
+			this.state.settings['sync.6.authType'] === 'oidc') {
+			const isAuthenticated = await reg.syncTarget().isAuthenticated();
+			if (!isAuthenticated) {
+				return this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'WebDavOidcLogin',
+				});
+			}
+		}
+
 		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
@@ -114,6 +127,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',
 				name: 'syncWizard',
+			});
+		} else if (key === 'sync.6.oidcLogin') {
+			// Save current settings before navigating to login
+			await shared.saveSettings(this);
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'WebDavOidcLogin',
 			});
 		} else {
 			throw new Error(`Unhandled key: ${key}`);

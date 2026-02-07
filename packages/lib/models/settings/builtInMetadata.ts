@@ -229,7 +229,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
+					settings['sync.6.authType'] !== 'oidc';
 			},
 			public: true,
 			label: () => _('WebDAV username'),
@@ -241,11 +242,92 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
+					settings['sync.6.authType'] !== 'oidc';
 			},
 			public: true,
 			label: () => _('WebDAV password'),
 			secure: true,
+		},
+		'sync.6.authType': {
+			value: 'basic',
+			type: SettingItemType.String,
+			section: 'sync',
+			isEnum: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
+			},
+			public: true,
+			label: () => _('WebDAV authentication type'),
+			options: () => {
+				return {
+					'basic': _('Basic (Username/Password)'),
+					'oidc': _('OIDC (OpenID Connect)'),
+				};
+			},
+			storage: SettingStorage.File,
+		},
+		'sync.6.oidcIssuerUrl': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
+					settings['sync.6.authType'] === 'oidc';
+			},
+			public: true,
+			label: () => _('OIDC Issuer URL'),
+			description: () => _('The URL of the OpenID Connect provider (e.g., https://auth.example.com/realms/myrealm)'),
+			storage: SettingStorage.File,
+		},
+		'sync.6.oidcClientId': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
+					settings['sync.6.authType'] === 'oidc';
+			},
+			public: true,
+			label: () => _('OIDC Client ID'),
+			storage: SettingStorage.File,
+		},
+		'sync.6.oidcClientSecret': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
+					settings['sync.6.authType'] === 'oidc';
+			},
+			public: true,
+			label: () => _('OIDC Client Secret (optional)'),
+			description: () => _('Optional for public clients'),
+			secure: true,
+		},
+		'sync.6.oidcAuth': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			secure: true,
+		},
+		'sync.6.oidcLogin': {
+			value: null as null,
+			type: SettingItemType.Button,
+			public: true,
+			appTypes: [AppType.Desktop],
+			section: 'sync',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
+					settings['sync.6.authType'] === 'oidc';
+			},
+			label: () => _('Login with OIDC'),
+			description: () => _('Authenticate with your OpenID Connect provider'),
 		},
 
 		'sync.8.path': {

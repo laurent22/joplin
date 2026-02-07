@@ -1,0 +1,23 @@
+services:
+  ocis:
+    image: owncloud/ocis:latest
+    container_name: ocis
+    entrypoint: /bin/sh
+    command: ["-c", "ocis init --insecure true || true; ocis server"]
+    environment:
+      OCIS_URL: https://localhost:9200
+      OCIS_INSECURE: "true"
+      PROXY_ENABLE_BASIC_AUTH: "false"
+      IDM_ADMIN_PASSWORD: admin
+      OCIS_LOG_LEVEL: warn
+      # Allow Joplin's redirect URIs
+      IDP_INSECURE: "true"
+      IDP_IDENTIFIER_REGISTRATION_CONF: /etc/ocis/clients.yaml
+    ports:
+      - "9200:9200"
+    volumes:
+      - ocis_data:/var/lib/ocis
+      - ./ocis-clients.yaml:/etc/ocis/clients.yaml:ro
+
+volumes:
+  ocis_data:
