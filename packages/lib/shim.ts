@@ -32,6 +32,7 @@ interface FetchOptions {
 	headers?: Record<string, string>;
 	body?: string;
 	agent?: unknown;
+	ignoreTlsErrors?: boolean;
 }
 
 interface AttachFileToNoteOptions {
