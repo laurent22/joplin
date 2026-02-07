@@ -1,8 +1,17 @@
 import { AppType } from '../../../../models/Setting';
 import isCompatible from '../isCompatible';
+import minVersionForPlatform from './minVersionForPlatform';
 
 describe('isCompatible', () => {
 	test.each([
+		// Should treat missing app_min_version as incompatible
+		{
+			manifest: {},
+			appVersion: '2.1.0',
+			shouldSupportDesktop: false,
+			shouldSupportMobile: false,
+		},
+
 		// Should support the case where no platform is provided
 		{
 			manifest: { app_min_version: '2.0' },
@@ -91,5 +100,28 @@ describe('isCompatible', () => {
 		expect(mobileCompatible).toBe(shouldSupportMobile);
 		const desktopCompatible = isCompatible(appVersion, AppType.Desktop, fullManifest);
 		expect(desktopCompatible).toBe(shouldSupportDesktop);
+	});
+
+	describe('minVersionForPlatform', () => {
+		test('should return undefined (not false) when app_min_version is missing but platform is supported', () => {
+			// When app_min_version is missing, minVersionForPlatform returns undefined
+			// (the platform is supported, but the version field is absent).
+			// This is distinct from returning false (platform not supported).
+			const manifest = { id: 'com.example.id' };
+			const result = minVersionForPlatform(AppType.Desktop, manifest);
+			expect(result).toBeUndefined();
+		});
+
+		test('should return false when the platform is not supported', () => {
+			const manifest = { id: 'com.example.id', app_min_version: '2.0', platforms: ['mobile'] };
+			const result = minVersionForPlatform(AppType.Desktop, manifest);
+			expect(result).toBe(false);
+		});
+
+		test('should return the version string when app_min_version is present and platform is supported', () => {
+			const manifest = { id: 'com.example.id', app_min_version: '2.0' };
+			const result = minVersionForPlatform(AppType.Desktop, manifest);
+			expect(result).toBe('2.0');
+		});
 	});
 });

@@ -525,7 +525,7 @@ export default class PluginService extends BaseService {
 		const minVersion = minVersionForPlatform(this.appType_, manifest);
 		if (minVersion) {
 			return _('Please upgrade Joplin to version %s or later to use this plugin.', minVersion);
-		} else {
+		} else if (minVersion === false) {
 			let platformDescription = 'Unknown';
 			if (this.appType_ === AppType.Mobile) {
 				platformDescription = _('Joplin Mobile');
@@ -533,6 +533,10 @@ export default class PluginService extends BaseService {
 				platformDescription = _('Joplin Desktop');
 			}
 			return _('This plugin doesn\'t support %s.', platformDescription);
+		} else {
+			// minVersion is undefined -- the platform is supported but
+			// app_min_version is missing from the manifest.
+			return _('The plugin manifest is missing a required "app_min_version" field.');
 		}
 	}
 
