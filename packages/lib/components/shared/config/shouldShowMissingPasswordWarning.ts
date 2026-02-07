@@ -4,6 +4,12 @@ import SyncTargetRegistry from '../../../SyncTargetRegistry';
 const shouldShowMissingPasswordWarning = (syncTargetId: number, settings: any) => {
 	const syncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 
+	// For sync targets that support OIDC auth, password is not required when using OIDC
+	const authType = settings[`sync.${syncTargetId}.authType`];
+	if (authType === 'oidc') {
+		return false;
+	}
+
 	return syncTargetClass.requiresPassword() && !settings[`sync.${syncTargetId}.password`];
 };
 

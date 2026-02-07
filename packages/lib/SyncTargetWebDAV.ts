@@ -55,9 +55,7 @@ export default class SyncTargetWebDAV extends BaseSyncTarget {
 	}
 
 	public static requiresPassword() {
-		// Only require password for basic auth
-		// This is checked dynamically now based on authType
-		return false;
+		return true;
 	}
 
 	public authRouteName(): string | null {
