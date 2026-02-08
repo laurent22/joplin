@@ -8,7 +8,7 @@ import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
 const BaseCommand = require('./base-command').default;
 import app from './app';
-const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+import OneDriveApiNodeUtils from '@joplin/lib/onedrive-api-node-utils';
 import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');

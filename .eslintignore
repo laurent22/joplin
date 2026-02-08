@@ -1263,6 +1263,7 @@ packages/lib/TaskQueue.js
 packages/lib/WebDavApi.js
 packages/lib/WelcomeUtils.js
 packages/lib/array.js
+packages/lib/base-oauth-node-utils.js
 packages/lib/callbackUrlUtils.test.js
 packages/lib/callbackUrlUtils.js
 packages/lib/clipperUtils.js
@@ -1413,6 +1414,7 @@ packages/lib/models/utils/userData.js
 packages/lib/net-utils.js
 packages/lib/ntp.js
 packages/lib/oidc-api-node-utils.js
+packages/lib/onedrive-api-node-utils.js
 packages/lib/onedrive-api.test.js
 packages/lib/onedrive-api.js
 packages/lib/path-utils.js
