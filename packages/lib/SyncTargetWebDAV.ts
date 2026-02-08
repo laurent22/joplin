@@ -5,7 +5,7 @@ import { FileApi } from './file-api';
 import Synchronizer from './Synchronizer';
 import WebDavApi, { WebDavAuthType } from './WebDavApi';
 import checkProviderIsSupported from './utils/webDAVUtils';
-import OidcApi, { OidcAuth } from './OidcApi';
+import OidcApi, { OidcAuth, OidcEventName } from './OidcApi';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const { FileApiDriverWebDav } = require('./file-api-driver-webdav');
@@ -87,7 +87,7 @@ export default class SyncTargetWebDAV extends BaseSyncTarget {
 			}
 
 			// Save auth when refreshed
-			this.oidcApi_.on('authRefreshed', (auth: OidcAuth | null) => {
+			this.oidcApi_.on(OidcEventName.AuthRefreshed, (auth: OidcAuth | null) => {
 				Setting.setValue('sync.6.oidcAuth', auth ? JSON.stringify(auth) : '');
 			});
 		}

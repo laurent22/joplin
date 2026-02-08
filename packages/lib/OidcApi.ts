@@ -1,11 +1,18 @@
 import shim from './shim';
 import Logger from '@joplin/utils/Logger';
 import { _ } from './locale';
+import { EventEmitter } from 'events';
 
 const { stringify } = require('query-string');
 const urlUtils = require('./urlUtils.js');
 
 const logger = Logger.create('OidcApi');
+
+export enum OidcEventName {
+	AuthRefreshed = 'authRefreshed',
+}
+
+type OidcAuthCallback = (auth: OidcAuth | null)=> void;
 
 export interface OidcAuth {
 	access_token: string;
@@ -41,31 +48,18 @@ export default class OidcApi {
 	private options_: OidcApiOptions;
 	private auth_: OidcAuth | null = null;
 	private discoveryDocument_: OidcDiscoveryDocument | null = null;
-	private listeners_: Record<string, ((auth: OidcAuth | null)=> void)[]>;
+	private emitter_ = new EventEmitter();
 
 	public constructor(options: OidcApiOptions) {
 		this.options_ = options;
-		this.listeners_ = {
-			authRefreshed: [],
-		};
 	}
 
-	public dispatch(eventName: string, param: OidcAuth | null) {
-		const ls = this.listeners_[eventName];
-		for (let i = 0; i < ls.length; i++) {
-			ls[i](param);
-		}
+	public on(eventName: OidcEventName, callback: OidcAuthCallback) {
+		this.emitter_.on(eventName, callback);
 	}
 
-	public on(eventName: string, callback: (auth: OidcAuth | null)=> void) {
-		this.listeners_[eventName].push(callback);
-	}
-
-	public off(eventName: string, callback: (auth: OidcAuth | null)=> void) {
-		const index = this.listeners_[eventName].indexOf(callback);
-		if (index >= 0) {
-			this.listeners_[eventName].splice(index, 1);
-		}
+	public off(eventName: OidcEventName, callback: OidcAuthCallback) {
+		this.emitter_.off(eventName, callback);
 	}
 
 	public auth(): OidcAuth | null {
@@ -78,7 +72,7 @@ export default class OidcApi {
 			auth.expires_at = Date.now() + (auth.expires_in * 1000);
 		}
 		this.auth_ = auth;
-		this.dispatch('authRefreshed', this.auth());
+		this.emitter_.emit(OidcEventName.AuthRefreshed, this.auth());
 	}
 
 	public token(): string | null {
