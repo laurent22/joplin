@@ -9,4 +9,4 @@ clients:
       - http://127.0.0.1:9968
       - http://127.0.0.1:8968
       - http://127.0.0.1:8868
-    trusted: yes
+      - joplin://oidc-callback

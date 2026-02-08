@@ -142,6 +142,7 @@ const WebDavOidcLoginScreen: React.FC = () => {
 					void handleWebviewLoad(event);
 				}}
 				onError={handleWebviewError}
+				onHttpError={handleWebviewError}
 				// Allow the custom joplin:// scheme to be intercepted
 				originWhitelist={['*']}
 				onShouldStartLoadWithRequest={handleShouldStartLoadWithRequest}
