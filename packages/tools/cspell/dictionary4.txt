@@ -255,3 +255,5 @@ OIDC
 userinfo
 jwks
 Segoe
+loglink
+logentry

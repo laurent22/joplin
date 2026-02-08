@@ -1,0 +1,33 @@
+.webdav-oidc-login-screen {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background-color: var(--joplin-background-color);
+
+	> .content {
+		padding: var(--joplin-config-screen-padding);
+		flex: 1;
+		color: var(--joplin-color);
+
+		> .title {
+			font-size: var(--joplin-h1-font-size);
+			font-weight: bold;
+			margin-bottom: 1em;
+		}
+
+		> .logentry {
+			font-size: var(--joplin-font-size);
+			margin: 0;
+		}
+
+		> .loglink {
+			color: var(--joplin-url-color);
+			font-size: var(--joplin-font-size);
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
