@@ -223,6 +223,25 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => emptyDirWarning,
 			storage: SettingStorage.File,
 		},
+		'sync.6.authType': {
+			value: 'basic',
+			type: SettingItemType.String,
+			section: 'sync',
+			isEnum: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
+			},
+			public: true,
+			label: () => _('WebDAV authentication type'),
+			options: () => {
+				return {
+					'basic': _('Basic (Username/Password)'),
+					'oidc': _('OIDC (OpenID Connect)'),
+				};
+			},
+			storage: SettingStorage.File,
+		},
 		'sync.6.username': {
 			value: '',
 			type: SettingItemType.String,
@@ -248,25 +267,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			label: () => _('WebDAV password'),
 			secure: true,
-		},
-		'sync.6.authType': {
-			value: 'basic',
-			type: SettingItemType.String,
-			section: 'sync',
-			isEnum: true,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
-			},
-			public: true,
-			label: () => _('WebDAV authentication type'),
-			options: () => {
-				return {
-					'basic': _('Basic (Username/Password)'),
-					'oidc': _('OIDC (OpenID Connect)'),
-				};
-			},
-			storage: SettingStorage.File,
 		},
 		'sync.6.oidcIssuerUrl': {
 			value: '',

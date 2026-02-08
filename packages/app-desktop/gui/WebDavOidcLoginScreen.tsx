@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
@@ -8,21 +8,16 @@ import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
 import { OidcApiNodeUtils } from '@joplin/lib/oidc-api-node-utils';
 import OidcApi from '@joplin/lib/OidcApi';
-import { AppState } from '../app.reducer';
-import { Dispatch } from 'redux';
-
-interface Props {
-	dispatch: Dispatch;
-}
 
 interface LogEntry {
 	key: string;
 	text: string;
 }
 
-const WebDavOidcLoginScreen: React.FC<Props> = ({ dispatch }) => {
+const WebDavOidcLoginScreen: React.FC = () => {
 	const [authLog, setAuthLog] = useState<LogEntry[]>([]);
 	const oidcApiUtilsRef = useRef<OidcApiNodeUtils | null>(null);
+	const dispatch = useDispatch();
 
 	const log = useCallback((s: string) => {
 		setAuthLog(prevLog => [
@@ -113,8 +108,4 @@ const WebDavOidcLoginScreen: React.FC<Props> = ({ dispatch }) => {
 	);
 };
 
-const mapStateToProps = (_state: AppState) => {
-	return {};
-};
-
-export default connect(mapStateToProps)(WebDavOidcLoginScreen);
+export default WebDavOidcLoginScreen;
