@@ -228,7 +228,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			section: 'sync',
 			isEnum: true,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 			},
@@ -246,7 +246,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
 					settings['sync.6.authType'] !== 'oidc';
@@ -259,7 +259,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
 					settings['sync.6.authType'] !== 'oidc';
@@ -272,7 +272,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
 					settings['sync.6.authType'] === 'oidc';
@@ -286,7 +286,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
 					settings['sync.6.authType'] === 'oidc';
@@ -299,7 +299,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
 					settings['sync.6.authType'] === 'oidc';
@@ -321,7 +321,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			appTypes: [AppType.Desktop],
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav') &&
 					settings['sync.6.authType'] === 'oidc';
