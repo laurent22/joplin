@@ -42,6 +42,7 @@ import SearchScreen from './components/screens/SearchScreen';
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
+import WebDavOidcLoginScreen from './components/screens/webdav-oidc-login';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
@@ -712,6 +713,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
+			WebDavOidcLogin: { screen: WebDavOidcLoginScreen },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },

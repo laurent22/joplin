@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { UpdateSettingValueCallback } from './types';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import Dropdown from '../../Dropdown';
 import { ConfigScreenStyles } from './configScreenStyles';
@@ -23,6 +23,7 @@ interface Props {
 	themeId: number;
 
 	updateSettingValue: UpdateSettingValueCallback;
+	onSettingButtonPress?: (key: string)=> void;
 }
 
 
@@ -127,7 +128,21 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 			/>
 		);
 	} else if (md.type === Setting.TYPE_BUTTON) {
-		// TODO: Not yet supported
+		return (
+			<View key={props.settingId} style={containerStyles.outerContainer}>
+				<View style={containerStyles.innerContainer}>
+					<Button
+						title={md.label()}
+						onPress={() => {
+							if (props.onSettingButtonPress) {
+								props.onSettingButtonPress(props.settingId);
+							}
+						}}
+					/>
+				</View>
+				{descriptionComp}
+			</View>
+		);
 	} else if (Setting.value('env') === 'dev') {
 		throw new Error(`Unsupported setting type: ${md.type}`);
 	}

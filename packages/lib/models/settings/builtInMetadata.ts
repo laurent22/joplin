@@ -319,7 +319,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: null as null,
 			type: SettingItemType.Button,
 			public: true,
-			appTypes: [AppType.Desktop],
+			appTypes: [AppType.Desktop, AppType.Mobile],
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- No type is available for settings in this context
 			show: (settings: any) => {

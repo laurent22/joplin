@@ -739,6 +739,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return false;
 	};
 
+	private handleSettingButtonPress = async (key: string) => {
+		if (key === 'sync.6.oidcLogin') {
+			// Save current settings before navigating to login
+			await shared.saveSettings(this);
+			await NavService.go('WebDavOidcLogin');
+		}
+	};
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public settingToComponent(key: string, value: any) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -755,6 +763,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				themeId={this.props.themeId}
 				updateSettingValue={updateSettingValue}
 				styles={this.styles()}
+				onSettingButtonPress={this.handleSettingButtonPress}
 			/>
 		);
 	}
