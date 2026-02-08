@@ -524,7 +524,7 @@
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Joplin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,6 +544,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 16.6;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -558,7 +559,7 @@
 				CURRENT_PROJECT_VERSION = 150;
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				INFOPLIST_FILE = Joplin/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -577,6 +578,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Joplin-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 16.6;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -632,7 +634,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD = "";
 				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -711,7 +713,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS\n\n";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD = "";
 				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -763,7 +765,7 @@
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -806,7 +808,7 @@
 				DEVELOPMENT_TEAM = A9BXAFS6CT;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -1,3 +1,4 @@
 {
-	"newArchEnabled": "true"
+	"newArchEnabled": "true",
+	"ios.deploymentTarget": "16.1"
 }
