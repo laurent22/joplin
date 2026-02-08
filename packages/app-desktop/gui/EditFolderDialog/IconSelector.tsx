@@ -62,6 +62,7 @@ export const IconSelector = (props: Props) => {
 		const p: EmojiButton = new (window as any).EmojiButton({
 			zIndex: 10000,
 			rootElement: buttonRef.current?.parentElement,
+			theme: 'auto',
 		});
 
 		const onEmoji = (selection: FolderIcon) => {
