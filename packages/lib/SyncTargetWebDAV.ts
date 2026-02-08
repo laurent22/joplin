@@ -72,6 +72,7 @@ export default class SyncTargetWebDAV extends BaseSyncTarget {
 				issuerUrl: Setting.value('sync.6.oidcIssuerUrl'),
 				clientId: Setting.value('sync.6.oidcClientId'),
 				clientSecret: Setting.value('sync.6.oidcClientSecret'),
+				ignoreTlsErrors: Setting.value('net.ignoreTlsErrors'),
 			});
 
 			// Load existing auth if available
@@ -110,6 +111,7 @@ export default class SyncTargetWebDAV extends BaseSyncTarget {
 				issuerUrl: options.oidcIssuerUrl ? options.oidcIssuerUrl() : '',
 				clientId: options.oidcClientId ? options.oidcClientId() : '',
 				clientSecret: options.oidcClientSecret ? options.oidcClientSecret() : '',
+				ignoreTlsErrors: options.ignoreTlsErrors ? options.ignoreTlsErrors() : false,
 			});
 
 			// Load existing auth if available

@@ -156,15 +156,8 @@ export default class OidcApi {
 		return `${authEndpoint}?${stringify(query)}`;
 	}
 
-	public async execTokenRequest(code: string, redirectUri: string): Promise<void> {
+	private async postToTokenEndpoint(body: Record<string, string>, errorContext: string): Promise<OidcAuth> {
 		const tokenEndpoint = await this.tokenEndpoint();
-
-		const body: Record<string, string> = {
-			client_id: this.clientId(),
-			code: code,
-			redirect_uri: redirectUri,
-			grant_type: 'authorization_code',
-		};
 
 		if (this.clientSecret()) {
 			body.client_secret = this.clientSecret();
@@ -181,16 +174,25 @@ export default class OidcApi {
 
 		if (!response.ok) {
 			const text = await response.text();
-			throw new Error(`Could not exchange authorization code for token: ${response.status}: ${response.statusText}: ${text}`);
+			throw new Error(`${errorContext}: ${response.status}: ${text}`);
 		}
 
+		return response.json();
+	}
+
+	public async execTokenRequest(code: string, redirectUri: string): Promise<void> {
+		const body: Record<string, string> = {
+			client_id: this.clientId(),
+			code: code,
+			redirect_uri: redirectUri,
+			grant_type: 'authorization_code',
+		};
+
 		try {
-			const json = await response.json();
-			this.setAuth(json);
+			const auth = await this.postToTokenEndpoint(body, 'Could not exchange authorization code for token');
+			this.setAuth(auth);
 		} catch (error) {
 			this.setAuth(null);
-			const text = await response.text();
-			(error as Error).message += `: ${text}`;
 			throw error;
 		}
 	}
@@ -210,42 +212,26 @@ export default class OidcApi {
 			throw new Error(_('Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.'));
 		}
 
-		const tokenEndpoint = await this.tokenEndpoint();
-
 		const body: Record<string, string> = {
 			client_id: this.clientId(),
 			refresh_token: this.auth_.refresh_token,
 			grant_type: 'refresh_token',
 		};
 
-		if (this.clientSecret()) {
-			body.client_secret = this.clientSecret();
-		}
-
 		logger.info('Refreshing OIDC access token...');
 
-		const response = await shim.fetch(tokenEndpoint, {
-			method: 'POST',
-			body: urlUtils.objectToQueryString(body),
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			ignoreTlsErrors: this.ignoreTlsErrors(),
-		});
-
-		if (!response.ok) {
+		try {
+			const auth = await this.postToTokenEndpoint(body, 'Failed to refresh token');
+			// Preserve refresh token if new one not provided
+			if (!auth.refresh_token && this.auth_.refresh_token) {
+				auth.refresh_token = this.auth_.refresh_token;
+			}
+			this.setAuth(auth);
+			logger.info('OIDC access token refreshed successfully');
+		} catch (error) {
 			this.setAuth(null);
-			const msg = await response.text();
-			throw new Error(`Failed to refresh token: ${response.status}: ${msg}`);
+			throw error;
 		}
-
-		const auth = await response.json();
-		// Preserve refresh token if new one not provided
-		if (!auth.refresh_token && this.auth_.refresh_token) {
-			auth.refresh_token = this.auth_.refresh_token;
-		}
-		this.setAuth(auth);
-		logger.info('OIDC access token refreshed successfully');
 	}
 
 	public async ensureValidToken(): Promise<string> {
