@@ -237,9 +237,10 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			options: () => {
 				return {
 					'basic': _('Basic (Username/Password)'),
-					'oidc': _('OIDC (OpenID Connect)'),
+					'oidc': `${_('OIDC (OpenID Connect)')} (${_('Alpha')})`,
 				};
 			},
+			description: () => 'Please note that the OIDC implementation has not been extensively tested and should not be considered production-ready.',
 			storage: SettingStorage.File,
 		},
 		'sync.6.username': {
