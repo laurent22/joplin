@@ -347,6 +347,9 @@ const handlePluginProtocol = (logger: LoggerSlice) => {
 	});
 
 	const handler: CustomPluginProtocolHandler = {
+		// Hosts a content script with the given `js` using the plugin protocol.
+		// Caution: This assumes that `js` is provided by a trusted source. Be careful
+		// when building/providing `js` to this function.
 		registerContentScript: (id: string, js: string) => {
 			id = encodeURIComponent(id);
 			logger.debug('Registering content script with ID', id);
