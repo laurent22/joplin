@@ -4,6 +4,34 @@ import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
 import { _ } from '@joplin/lib/locale';
 
+interface CheckboxStats {
+	total: number;
+	checked: number;
+	percent: number;
+	isComplete: boolean;
+}
+
+const countCheckboxes = (body: string): CheckboxStats | null => {
+	if (!body) return null;
+
+	// Match unchecked: - [ ] and checked: - [x] or - [X]
+	const uncheckedMatches = body.match(/- \[ \]/g);
+	const checkedMatches = body.match(/- \[[xX]\]/g);
+
+	const unchecked = uncheckedMatches ? uncheckedMatches.length : 0;
+	const checked = checkedMatches ? checkedMatches.length : 0;
+	const total = unchecked + checked;
+
+	if (total === 0) return null;
+
+	return {
+		total,
+		checked,
+		percent: Math.round((checked / total) * 100),
+		isComplete: checked === total,
+	};
+};
+
 const prepareViewProps = async (
 	dependencies: ListRendererDependency[],
 	note: NoteEntity,
@@ -40,6 +68,10 @@ const prepareViewProps = async (
 					taskStatus = note.todo_completed ? _('Complete to-do') : _('Incomplete to-do');
 				}
 				output.note[propName] = taskStatus;
+			} else if (dep === 'note.checkboxes') {
+				// Load the note body if not already loaded
+				if (!('body' in note)) note = await Note.load(note.id);
+				output.note[propName] = countCheckboxes(note.body);
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a

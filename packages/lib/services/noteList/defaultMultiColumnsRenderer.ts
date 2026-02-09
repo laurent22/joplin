@@ -54,8 +54,30 @@ const renderer: ListRenderer = {
 			}
 
 			> .item[data-name="note.is_todo"],
-			> .item[data-name="note.title"] {
+			> .item[data-name="note.title"],
+			> .item[data-name="note.checkboxes"] {
 				opacity: 1;
+			}
+
+			> .item[data-name="note.checkboxes"] > .content > .checkbox-pie > .pie {
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+				background: conic-gradient(
+					var(--joplin-color4) calc(var(--percent) * 1%),
+					var(--joplin-background-color) calc(var(--percent) * 1%)
+				);
+				border: 1px solid var(--joplin-color-faded);
+				box-sizing: border-box;
+			}
+
+			> .item[data-name="note.checkboxes"] > .content > .checkbox-pie > .pie.-complete {
+				background: var(--joplin-background-color);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 10px;
+				color: var(--joplin-color4);
 			}
 
 			> .item > .content > .watchedicon {
@@ -116,6 +138,19 @@ const renderer: ListRenderer = {
 						{{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				</div>
 			{{/note.is_todo}}
+		`,
+		'note.checkboxes': // html
+			`
+			{{#note.checkboxes}}
+				<div class="checkbox-pie" title="{{note.checkboxes.checked}}/{{note.checkboxes.total}} completed">
+					{{#note.checkboxes.isComplete}}
+						<div class="pie -complete">✓</div>
+					{{/note.checkboxes.isComplete}}
+					{{^note.checkboxes.isComplete}}
+						<div class="pie" style="--percent: {{note.checkboxes.percent}};"></div>
+					{{/note.checkboxes.isComplete}}
+				</div>
+			{{/note.checkboxes}}
 		`,
 	},
 

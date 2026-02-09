@@ -1,5 +1,6 @@
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
+import Setting from '../../models/Setting';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 		title: string;
 		is_todo: number;
 		todo_completed: number;
+		body: string;
 	};
 	item: {
 		// index: number;
@@ -17,6 +19,34 @@ interface Props {
 		selected: boolean;
 	};
 }
+
+interface CheckboxStats {
+	total: number;
+	checked: number;
+	percent: number;
+	isComplete: boolean;
+}
+
+const countCheckboxes = (body: string): CheckboxStats | null => {
+	if (!body) return null;
+
+	// Match unchecked: - [ ] and checked: - [x] or - [X]
+	const uncheckedMatches = body.match(/- \[ \]/g);
+	const checkedMatches = body.match(/- \[[xX]\]/g);
+
+	const unchecked = uncheckedMatches ? uncheckedMatches.length : 0;
+	const checked = checkedMatches ? checkedMatches.length : 0;
+	const total = unchecked + checked;
+
+	if (total === 0) return null;
+
+	return {
+		total,
+		checked,
+		percent: Math.round((checked / total) * 100),
+		isComplete: checked === total,
+	};
+};
 
 const renderer: ListRenderer = {
 	id: 'compact',
@@ -34,6 +64,7 @@ const renderer: ListRenderer = {
 		// 'item.index',
 		'item.selected',
 		'item.size.height',
+		'note.body',
 		'note.id',
 		'note.is_shared',
 		'note.is_todo',
@@ -96,6 +127,34 @@ const renderer: ListRenderer = {
 					color: var(--joplin-color);
 				}
 			}
+
+			> .checkbox-pie {
+				display: flex;
+				align-items: center;
+				padding-right: 12px;
+				padding-left: 8px;
+
+				> .pie {
+					width: 16px;
+					height: 16px;
+					border-radius: 50%;
+					background: conic-gradient(
+						var(--joplin-color4) calc(var(--percent) * 1%),
+						var(--joplin-background-color) calc(var(--percent) * 1%)
+					);
+					border: 1px solid var(--joplin-color-faded);
+					box-sizing: border-box;
+				}
+
+				> .pie.-complete {
+					background: var(--joplin-background-color);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 10px;
+					color: var(--joplin-color4);
+				}
+			}
 		}
 
 		> .content.-shared {
@@ -147,11 +206,25 @@ const renderer: ListRenderer = {
 				<i class="watchedicon fa fa-share-square"></i>
 				<span>{{note.title}}</span>
 			</div>
+			{{#checkboxStats}}
+				<div class="checkbox-pie" title="{{checked}}/{{total}} completed">
+					{{#isComplete}}
+						<div class="pie -complete">✓</div>
+					{{/isComplete}}
+					{{^isComplete}}
+						<div class="pie" style="--percent: {{percent}};"></div>
+					{{/isComplete}}
+				</div>
+			{{/checkboxStats}}
 		</div>
 	`,
 
 	onRenderNote: async (props: Props) => {
-		return props;
+		const showChart = Setting.value('notes.showCheckboxCompletionChart');
+		return {
+			...props,
+			checkboxStats: showChart ? countCheckboxes(props.note.body) : null,
+		};
 	},
 };
 
