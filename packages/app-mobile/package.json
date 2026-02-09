@@ -130,7 +130,7 @@
     "jest-environment-jsdom": "29.7.0",
     "jetifier": "2.0.0",
     "jsdom": "26.1.0",
-    "nodemon": "3.1.10",
+    "nodemon": "3.1.11",
     "punycode": "2.3.1",
     "react-dom": "19.1.0",
     "react-native-web": "0.21.2",
