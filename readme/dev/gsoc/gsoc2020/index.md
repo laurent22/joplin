@@ -24,7 +24,7 @@ The GUI's, as listed on the [Joplin's website](https://joplinapp.org/help/#insta
 More details can be found on:
 
 - [How to contribute](https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md)
-- [How to build](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+- [How to build](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md)
 
 Moreover there are community driven projects such as:
 

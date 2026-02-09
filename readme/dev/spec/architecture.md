@@ -2,7 +2,7 @@
 
 Joplin as a project is organised around three main components:
 
-- The user applications: For [desktop](https://github.com/laurent22/joplin/blob/dev/readme/apps/desktop.md), [mobile](https://github.com/laurent22/joplin/blob/dev/readme/apps/mobile.md) and [CLI](https://github.com/laurent22/joplin/blob/dev/readme/apps/terminal.md))
+- The user applications: For [desktop](https://github.com/laurent22/joplin/blob/dev/readme/apps/desktop.md), [mobile](https://github.com/laurent22/joplin/blob/dev/readme/apps/mobile.md) and [CLI](https://github.com/laurent22/joplin/blob/dev/readme/apps/terminal.md)
 - [Joplin Server](https://github.com/laurent22/joplin/blob/dev/packages/server/README.md)
 - [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md)
 
@@ -67,6 +67,6 @@ It is developed using the [WebExtensions API](https://extensionworkshop.com/docu
 ## More information
 
 - [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/plugins.md)
-- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee.md)
+- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee/index.md)
 - [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee/workflow.md)
 - [All Joplin technical specifications](https://github.com/laurent22/joplin/tree/dev/readme/dev/spec)

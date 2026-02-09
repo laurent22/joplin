@@ -17,7 +17,7 @@ All participants will need a Google account in order to join the program. So, sa
 We suggest you read carefully these important documents and bookmark the links as you will need to refer to them throughout GSoC:
 
 - [How to submit a pull request for GSoC](https://joplinapp.org/help/dev/gsoc/gsoc2023/pull_request_guidelines/)
-- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/help/dev/BUILD.md)
+- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md)
 - [How to contribute](https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md)
 
 ## Programming Language

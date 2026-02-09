@@ -89,5 +89,5 @@ interface SyncTargetInfo {
 ## See also
 
 - [Synchronisation lock](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/sync_lock.md)
-- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee.md)
+- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee/index.md)
 - [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/dev/spec/e2ee/workflow.md)
