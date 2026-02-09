@@ -202,6 +202,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
             {chatMessages.map((msg) => (
               <div
                 key={msg.id}
+                className={msg.isUser ? 'chat-bubble-user' : 'chat-bubble-bot'}
                 style={{
                   alignSelf: msg.isUser ? 'flex-end' : 'flex-start',
                   background: msg.isUser ? '#4f8cff' : '#f0f0f0',
@@ -295,10 +296,34 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
       </DialogContent>
 
       {/* アニメーション */}
-      <style jsx>{`
+      <style jsx global>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
+        }
+        
+        .chat-bubble-user::after {
+          content: "";
+          position: absolute;
+          right: -8px;
+          bottom: 8px;
+          width: 0;
+          height: 0;
+          border-top: 12px solid transparent;
+          border-left: 16px solid #4f8cff;
+          border-bottom: 12px solid transparent;
+        }
+        
+        .chat-bubble-bot::after {
+          content: "";
+          position: absolute;
+          left: -8px;
+          bottom: 8px;
+          width: 0;
+          height: 0;
+          border-top: 12px solid transparent;
+          border-right: 16px solid #f0f0f0;
+          border-bottom: 12px solid transparent;
         }
       `}</style>
     </Dialog>
