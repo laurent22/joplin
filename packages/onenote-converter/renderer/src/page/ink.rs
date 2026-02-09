@@ -39,10 +39,7 @@ impl InkBuilder {
             return;
         }
 
-        let stroke_strength = strokes[0]
-            .width()
-            .max(strokes[0].height())
-            .max(140.0);
+        let stroke_strength = strokes[0].width().max(strokes[0].height()).max(140.0);
 
         let offset_horizontal = ink
             .offset_horizontal()
@@ -148,9 +145,7 @@ impl InkBuilder {
 
             format!(
                 "<span style=\"{}\" class=\"ink-text\"><svg {}>{}</svg></span>",
-                span_styles,
-                attrs,
-                path
+                span_styles, attrs, path
             )
         } else {
             format!("<svg {}>{}</svg>", attrs, path)
@@ -245,7 +240,13 @@ fn get_boundary<F: Fn(&InkPoint) -> f32>(strokes: &[InkStroke], coord: F) -> (f3
     let mut max = f32::NEG_INFINITY;
 
     for stroke in strokes {
-        let start = coord(&stroke.path()[0]);
+        let path = stroke.path();
+        if path.is_empty() {
+            continue;
+        }
+
+        let start = coord(&path[0]);
+
         let mut pos = start;
         if pos < min {
             min = pos;
@@ -254,7 +255,7 @@ fn get_boundary<F: Fn(&InkPoint) -> f32>(strokes: &[InkStroke], coord: F) -> (f3
             max = pos;
         }
 
-        for point in stroke.path()[1..].iter() {
+        for point in path[1..].iter() {
             pos += coord(point);
 
             if pos < min {
