@@ -7,6 +7,16 @@ use std::path::Path;
 pub struct FileApiDriverImpl {}
 
 impl FileApiDriver for FileApiDriverImpl {
+    #[cfg(target_os = "windows")]
+    fn is_windows(&self) -> bool {
+        true
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    fn is_windows(&self) -> bool {
+        false
+    }
+
     fn is_directory(&self, path: &str) -> ApiResult<bool> {
         let metadata = fs::metadata(path)?;
         let file_type = metadata.file_type();

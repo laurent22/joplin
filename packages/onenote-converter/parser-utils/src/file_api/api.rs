@@ -1,6 +1,9 @@
+use sanitize_filename::{ sanitize_with_options, Options as SanitizeOptions };
+
 pub type ApiResult<T> = std::result::Result<T, std::io::Error>;
 
 pub trait FileApiDriver: Send + Sync {
+    fn is_windows(&self) -> bool;
     fn is_directory(&self, path: &str) -> ApiResult<bool>;
     fn read_dir(&self, path: &str) -> ApiResult<Vec<String>>;
     fn read_file(&self, path: &str) -> ApiResult<Vec<u8>>;
@@ -18,6 +21,21 @@ pub trait FileApiDriver: Send + Sync {
     /// As a result, unlike Rust's `Path::join`, if `path_2` starts with "/",
     /// `path_2` is still appended to `path_1`.
     fn join(&self, path_1: &str, path_2: &str) -> String;
+
+    fn sanitize_file_name(&self, file_name: &str) -> String {
+        sanitize_with_options(
+            file_name.trim(),
+            SanitizeOptions {
+                // Override "windows". By default, sanitize_filename can
+                // incorrectly detect the host OS when compiled to WASM.
+                windows: self.is_windows(),
+
+                // Otherwise, match the default sanitize_filename options:
+                truncate: true,
+                replacement: "",
+            },
+        )
+    }
 
     /// Splits filename into (base, extension).
     fn split_file_name(&self, filename: &str) -> (String, String) {

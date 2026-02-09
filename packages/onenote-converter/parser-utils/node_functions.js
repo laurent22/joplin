@@ -28,10 +28,15 @@ function normalizeAndWriteFile(filePath, data) {
 	fs.writeFileSync(filePath, data);
 }
 
+function isWindows() {
+	return process.platform === 'win32';
+}
+
 module.exports = {
 	mkdirSyncRecursive,
 	isDirectory,
 	readDir,
 	removePrefix,
 	normalizeAndWriteFile,
+	isWindows,
 };

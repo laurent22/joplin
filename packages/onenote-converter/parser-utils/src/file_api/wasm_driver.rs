@@ -31,6 +31,9 @@ extern "C" {
 
     #[wasm_bindgen(js_name = readDir, catch)]
     fn read_dir_js(path: &str) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = isWindows)]
+    fn is_windows() -> bool;
 }
 
 #[wasm_bindgen(module = "fs")]
@@ -73,6 +76,10 @@ fn handle_error(error: JsValue, source: &str) -> std::io::Error {
 pub struct FileApiDriverImpl {}
 
 impl FileApiDriver for FileApiDriverImpl {
+    fn is_windows(&self) -> bool {
+        is_windows()
+    }
+
     fn is_directory(&self, path: &str) -> ApiResult<bool> {
         match is_directory(path) {
             Ok(is_dir) => Ok(is_dir),
