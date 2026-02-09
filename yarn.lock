@@ -9442,10 +9442,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-free@npm:5.15.4":
-  version: 5.15.4
-  resolution: "@fortawesome/fontawesome-free@npm:5.15.4"
-  checksum: 10/1ffbe55214d378fc3618f77b50b624a4571f984085318bbef3d81b810f1049451865634a4224f35844b205e6586a0a6473a54ce6e5cd0f0b3be5fbf57ab46901
+"@fortawesome/fontawesome-free@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@fortawesome/fontawesome-free@npm:7.0.0"
+  checksum: 10/b2a8400d163c7543e20f0cfedf3285f58e12e1495281691e42397560ad8cbb14587faaf4bb302eb20213ad1b6eb58b2eaa99c6d6d44dd7b65ecb6d63e65a9833
   languageName: node
   linkType: hard
 
@@ -10509,7 +10509,7 @@ __metadata:
     "@electron/notarize": "npm:2.5.0"
     "@electron/rebuild": "npm:3.7.2"
     "@electron/remote": "npm:2.1.3"
-    "@fortawesome/fontawesome-free": "npm:5.15.4"
+    "@fortawesome/fontawesome-free": "npm:7.0.0"
     "@joeattardi/emoji-button": "npm:4.6.4"
     "@joplin/default-plugins": "npm:~3.6"
     "@joplin/editor": "npm:~3.6"
@@ -11093,7 +11093,7 @@ __metadata:
   dependencies:
     "@authenio/samlify-xmllint-wasm": "npm:1.0.1"
     "@aws-sdk/client-s3": "npm:3.928.0"
-    "@fortawesome/fontawesome-free": "npm:5.15.4"
+    "@fortawesome/fontawesome-free": "npm:7.0.0"
     "@joplin/lib": "npm:~3.6"
     "@joplin/renderer": "npm:~3.6"
     "@joplin/tools": "npm:~3.6"

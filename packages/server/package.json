@@ -24,7 +24,7 @@
   "dependencies": {
     "@authenio/samlify-xmllint-wasm": "1.0.1",
     "@aws-sdk/client-s3": "3.928.0",
-    "@fortawesome/fontawesome-free": "5.15.4",
+    "@fortawesome/fontawesome-free": "7.0.0",
     "@joplin/lib": "~3.6",
     "@joplin/renderer": "~3.6",
     "@joplin/utils": "~3.6",
