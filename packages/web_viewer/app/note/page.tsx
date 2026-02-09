@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Panel, Group, Separator } from 'react-resizable-panels';
 import NoteTreeWrapper from '../components/NoteTreeWrapper';
