@@ -166,8 +166,10 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
           return;
         } else {
           // Enterのみで送信
-          event.preventDefault();
-          handleChatSend();
+          if (!event.nativeEvent.isComposing) {
+            event.preventDefault();
+            handleChatSend();
+          }
         }
       }
     },
