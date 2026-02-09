@@ -118,10 +118,10 @@ fn convert_ink() {
     // Should create a table of contents file
     assert!(output_dir.join("ink.html").exists());
     // Should convert the input page to an HTML file
-    assert!(
-        output_dir
-            .join("ink")
-            .join("Testing….html")
-            .exists()
-    );
+    let content_file = output_dir.join("ink").join("Testing….html");
+    assert!(content_file.exists());
+
+    // Should render at least one SVG
+    let rendered_file = fs::read_to_string(content_file).expect("should read the content file");
+    assert!(rendered_file.contains("<svg style"));
 }
