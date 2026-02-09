@@ -34,6 +34,16 @@ impl InkBuilder {
     }
 
     pub(crate) fn push(&mut self, ink: &Ink, display_bounding_box: Option<&InkBoundingBox>) {
+        let strokes = ink.ink_strokes();
+        if strokes.is_empty() {
+            return;
+        }
+
+        let stroke_strength = strokes[0]
+            .width()
+            .max(strokes[0].height())
+            .max(140.0);
+
         let offset_horizontal = ink
             .offset_horizontal()
             .filter(|_| !self.embedded)
@@ -48,13 +58,8 @@ impl InkBuilder {
             .or_else(|| display_bounding_box.map(|bb| bb.scale(Self::SVG_SCALING_FACTOR)))
             .filter(|_| self.embedded);
 
-        let (x_min, width) = get_boundary(ink.ink_strokes(), |p| p.x());
-        let (y_min, height) = get_boundary(ink.ink_strokes(), |p| p.y());
-
-        let stroke_strength = ink.ink_strokes()[0]
-            .width()
-            .max(ink.ink_strokes()[0].height())
-            .max(140.0);
+        let (x_min, width) = get_boundary(strokes, |p| p.x());
+        let (y_min, height) = get_boundary(strokes, |p| p.y());
 
         let x_min = x_min - stroke_strength / 2.0;
         let y_min = y_min - stroke_strength / 2.0;
@@ -76,7 +81,7 @@ impl InkBuilder {
             top_px * Self::SVG_SCALING_FACTOR - y_min,
         );
         let scale = 1. / Self::SVG_SCALING_FACTOR;
-        let path = self.render_ink_path(ink.ink_strokes(), scale, translate);
+        let path = self.render_ink_path(strokes, scale, translate);
         self.parts.push(InkPart {
             content: path,
             size_px: (width_px, height_px),
@@ -206,14 +211,19 @@ impl InkBuilder {
     }
 
     fn render_ink_path_points(&self, stroke: &InkStroke, scale: f32, translate: Vec2) -> String {
+        let path = stroke.path();
+        if path.is_empty() {
+            return "".into();
+        }
+
         let display_point = |p: &InkPoint| -> String {
             let x = p.x() * scale;
             let y = p.y() * scale;
             format!("{} {}", round_svg_value(x), round_svg_value(y))
         };
 
-        let start = &stroke.path()[0];
-        let mut path = stroke.path()[1..].iter().map(display_point).collect_vec();
+        let start = &path[0];
+        let mut path = path[1..].iter().map(display_point).collect_vec();
 
         if path.is_empty() {
             path.push("0 0".to_string());
@@ -227,6 +237,10 @@ impl InkBuilder {
 }
 
 fn get_boundary<F: Fn(&InkPoint) -> f32>(strokes: &[InkStroke], coord: F) -> (f32, f32) {
+    if strokes.is_empty() {
+        return (0.0, 0.0);
+    }
+
     let mut min = f32::INFINITY;
     let mut max = f32::NEG_INFINITY;
 
