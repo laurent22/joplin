@@ -1767,7 +1767,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			/>;
 
 		const titleComp = (
-			<View style={titleContainerStyle} onLayout={(e) => this.setState({ titleContainerWidth: e.nativeEvent.layout.width })}>
+			<View
+				style={titleContainerStyle}
+				onLayout={(e) => {
+					const width = e.nativeEvent.layout.width;
+					if (width !== this.state.titleContainerWidth) {
+						this.setState({ titleContainerWidth: width });
+					}
+				}}
+			>
 				<TextWrapCalculator
 					textCompStyle={this.styles().titleTextInput}
 					textCompContainerWidth={this.state.titleContainerWidth}

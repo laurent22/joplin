@@ -237,7 +237,15 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		/>;
 
 	const titleComponent = (
-		<View style={styles.titleViewContainer} onLayout={(e) => setTitleContainerWidth(e.nativeEvent.layout.width)}>
+		<View
+			style={styles.titleViewContainer}
+			onLayout={(e) => {
+				const width = e.nativeEvent.layout.width;
+				if (width !== titleContainerWidth) {
+					setTitleContainerWidth(width);
+				}
+			}}
+		>
 			<TextWrapCalculator
 				textCompStyle={styles.titleText}
 				textCompContainerWidth={titleContainerWidth}
