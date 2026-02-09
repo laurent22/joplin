@@ -28,7 +28,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
   const [dialogHeight, setDialogHeight] = React.useState(700);
   const [resizeStartX, setResizeStartX] = React.useState(0);
   const [resizeStartY, setResizeStartY] = React.useState(0);
-  
+
   const chatMessagesEndRef = React.useRef<HTMLDivElement>(null);
   const autoScrollModeRef = React.useRef(true);
 
@@ -50,17 +50,20 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     event.preventDefault();
   }, []);
 
-  const handleResizeMove = React.useCallback((event: MouseEvent) => {
-    if (!isResizing) return;
+  const handleResizeMove = React.useCallback(
+    (event: MouseEvent) => {
+      if (!isResizing) return;
 
-    const deltaX = event.clientX - resizeStartX;
-    const deltaY = event.clientY - resizeStartY;
+      const deltaX = event.clientX - resizeStartX;
+      const deltaY = event.clientY - resizeStartY;
 
-    setDialogWidth(prev => Math.max(400, prev + deltaX));
-    setDialogHeight(prev => Math.max(300, prev + deltaY));
-    setResizeStartX(event.clientX);
-    setResizeStartY(event.clientY);
-  }, [isResizing, resizeStartX, resizeStartY]);
+      setDialogWidth((prev) => Math.max(400, prev + deltaX));
+      setDialogHeight((prev) => Math.max(300, prev + deltaY));
+      setResizeStartX(event.clientX);
+      setResizeStartY(event.clientY);
+    },
+    [isResizing, resizeStartX, resizeStartY]
+  );
 
   const handleResizeEnd = React.useCallback(() => {
     setIsResizing(false);
@@ -82,47 +85,70 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
 
     const id = Date.now().toString() + Math.random().toString(36).slice(2);
     const newUserMessage: ChatMessage = { id, text: chatInput, isUser: true };
-    
-    setChatMessages(prev => [...prev, newUserMessage]);
+    const userInput = chatInput;
+
+    setChatMessages((prev) => [...prev, newUserMessage]);
     setChatInput('');
     autoScrollModeRef.current = true;
 
     // ローディング状態のボットメッセージを追加
     const botId = Date.now().toString() + Math.random().toString(36).slice(2);
-    const loadingMessage: ChatMessage = { 
-      id: botId, 
-      text: '', 
-      isUser: false, 
-      loading: true 
+    const loadingMessage: ChatMessage = {
+      id: botId,
+      text: '',
+      isUser: false,
+      loading: true,
     };
-    setChatMessages(prev => [...prev, loadingMessage]);
+    setChatMessages((prev) => [...prev, loadingMessage]);
 
-    // TODO: ここでAI APIを呼び出す
-    // 現在はダミーレスポンス
-    setTimeout(() => {
-      const response = `これはダミーのレスポンスです。入力されたメッセージ: "${chatInput}"`;
-      setChatMessages(prev => 
-        prev.map(msg => 
-          msg.id === botId 
-            ? { ...msg, text: response, loading: false }
+    try {
+      // API呼び出し
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userInput }),
+      });
+
+      if (!response.ok) {
+        throw new Error('APIエラーが発生しました');
+      }
+
+      const data = await response.json();
+
+      setChatMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === botId ? { ...msg, text: data.response, loading: false } : msg
+        )
+      );
+    } catch (error) {
+      console.error('Chat API error:', error);
+      setChatMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === botId
+            ? { ...msg, text: 'エラーが発生しました。もう一度お試しください。', loading: false }
             : msg
         )
       );
-    }, 1000);
+    }
   }, [chatInput]);
 
-  const handleChatInputKeyDown = React.useCallback((event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter') {
-      if (event.shiftKey) {
-        // Shift + Enterで改行（デフォルトの動作を許可）
-        return;
-      } else {
-        // Enterのみで送信
-        event.preventDefault();
-        handleChatSend();
+  const handleChatInputKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (event.key === 'Enter') {
+        if (event.shiftKey) {
+          // Shift + Enterで改行（デフォルトの動作を許可）
+          return;
+        } else {
+          // Enterのみで送信
+          event.preventDefault();
+          handleChatSend();
+        }
       }
-    }
-  }, [handleChatSend]);
+    },
+    [handleChatSend]
+  );
 
   const handleClearHistory = React.useCallback(() => {
     setChatMessages([]);
@@ -150,13 +176,15 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
       }}
     >
       {/* ヘッダー */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '8px 16px',
-        borderBottom: '1px solid #e0e0e0',
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '8px 16px',
+          borderBottom: '1px solid #e0e0e0',
+        }}
+      >
         <h2 style={{ margin: 0, fontSize: '18px' }}>AI チャット</h2>
         <div>
           <IconButton
@@ -167,25 +195,25 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
           >
             <DeleteIcon />
           </IconButton>
-          <IconButton
-            size="small"
-            onClick={onClose}
-            title="閉じる"
-          >
+          <IconButton size="small" onClick={onClose} title="閉じる">
             <CloseIcon />
           </IconButton>
         </div>
       </div>
 
-      <DialogContent style={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <DialogContent
+        style={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100%' }}
+      >
         {/* チャットコンテナ */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          padding: 16,
-          background: '#fafbfc',
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            padding: 16,
+            background: '#fafbfc',
+          }}
+        >
           {/* メッセージエリア */}
           <div
             id="chat-scroller"
@@ -218,31 +246,31 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
                 }}
               >
                 {msg.loading && (
-                  <div style={{
-                    width: 20,
-                    height: 20,
-                    border: '3px solid lightblue',
-                    borderTop: '3px solid transparent',
-                    borderRadius: '50%',
-                    animation: 'spin 1.2s linear infinite',
-                    marginBottom: 8,
-                  }} />
+                  <div
+                    style={{
+                      width: 20,
+                      height: 20,
+                      border: '3px solid lightblue',
+                      borderTop: '3px solid transparent',
+                      borderRadius: '50%',
+                      animation: 'spin 1.2s linear infinite',
+                      marginBottom: 8,
+                    }}
+                  />
                 )}
-                {msg.isUser ? (
-                  msg.text
-                ) : (
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
-                )}
+                {msg.isUser ? msg.text : <ReactMarkdown>{msg.text}</ReactMarkdown>}
               </div>
             ))}
             <div ref={chatMessagesEndRef} />
           </div>
 
           {/* 入力エリア */}
-          <div style={{
-            display: 'flex',
-            gap: 8,
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: 8,
+            }}
+          >
             <textarea
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
@@ -287,7 +315,8 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
             right: 0,
             width: 20,
             height: 20,
-            background: 'linear-gradient(-45deg, transparent 0%, transparent 30%, #ccc 30%, #ccc 40%, transparent 40%, transparent 50%, #ccc 50%, #ccc 60%, transparent 60%, transparent 70%, #ccc 70%, #ccc 80%, transparent 80%)',
+            background:
+              'linear-gradient(-45deg, transparent 0%, transparent 30%, #ccc 30%, #ccc 40%, transparent 40%, transparent 50%, #ccc 50%, #ccc 60%, transparent 60%, transparent 70%, #ccc 70%, #ccc 80%, transparent 80%)',
             cursor: 'nw-resize',
             zIndex: 10,
           }}
@@ -298,12 +327,16 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
       {/* アニメーション */}
       <style jsx global>{`
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
-        
+
         .chat-bubble-user::after {
-          content: "";
+          content: '';
           position: absolute;
           right: -8px;
           bottom: 8px;
@@ -313,9 +346,9 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
           border-left: 16px solid #4f8cff;
           border-bottom: 12px solid transparent;
         }
-        
+
         .chat-bubble-bot::after {
-          content: "";
+          content: '';
           position: absolute;
           left: -8px;
           bottom: 8px;
