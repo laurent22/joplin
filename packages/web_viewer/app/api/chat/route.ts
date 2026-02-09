@@ -34,12 +34,7 @@ export async function POST(request: NextRequest) {
               if (msg !== lastMessage) {
                 const diff = msg.slice(lastMessage.length);
                 if (diff) {
-                  const data = JSON.stringify({
-                    content: diff,
-                    loading: loading || false,
-                    fullText: msg,
-                  });
-                  controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+                  controller.enqueue(encoder.encode(diff));
                 }
                 lastMessage = msg;
               }
@@ -48,7 +43,6 @@ export async function POST(request: NextRequest) {
           );
 
           // ストリーム終了
-          controller.enqueue(encoder.encode('data: [DONE]\n\n'));
           controller.close();
         } catch (error) {
           console.error('AI Agent error:', error);
