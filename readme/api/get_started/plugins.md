@@ -4,7 +4,7 @@ In this article you will learn the basic steps to build and test a plugin in Jop
 
 ## Setting up your environment
 
-First you need to setup your environment:
+First you need to set up your environment:
 
 - Make sure you have [Node.js](https://nodejs.org/) and [git](https://git-scm.com) installed.
 - Install [Joplin](https://joplinapp.org/)

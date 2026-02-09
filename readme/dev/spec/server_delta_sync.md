@@ -6,7 +6,7 @@ Delta sync provides an API end point that gives a list of the latest change even
 
 - User calls `/api/files/delta` and get a list of the latest changes on the sync target. They also get a `cursor` object that can be used to check for the latest changes at a later time. A `cursor` essentially represents a point in time.
 
-- Later on, they call `/api/file/delta?cursor=CURSOR`, with the cursor they previously got, and they will get the latest events since that cursor. They will also get a new cursor, which they would use again to get the following events, and so on.
+- Later on, they call `/api/files/delta?cursor=CURSOR`, with the cursor they previously got, and they will get the latest events since that cursor. They will also get a new cursor, which they would use again to get the following events, and so on.
 
 The events are tied to a particular parent ID - in other words it's only possible to list the changes associated with a particular directory (non-recursive). For now, this is sufficient for the purpose of Joplin synchronisation, but later on it might be possible to get the changes in a recursive way.
 

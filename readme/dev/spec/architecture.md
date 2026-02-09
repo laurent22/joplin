@@ -12,7 +12,7 @@ The desktop, mobile and CLI applications have the same architecture and mostly t
 
 The overall architecture for each application is as such:
 
-- Front end: The user facing part of the app. This is different for each applications (see below for the difference between applications)
+- Front end: The user facing part of the app. This is different for each application (see below for the difference between applications)
 
 - Back end: This is shared by all applications. It is made of:
 

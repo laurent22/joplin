@@ -24,7 +24,7 @@ Additionally, every few minutes, the client is going to poll the server and down
 
 ## Code architecture
 
-- `packages/lib/Synchronizer.ts`: This file is responsible for the main synchronisation process. It download changes, upload them, and apply any deletion. The class is relatively generic and receive a `SyncTarget` object that handles sync target-specific operations. The synchroniser is also going encrypt and decrypt items if E2EE is enabled.
+- `packages/lib/Synchronizer.ts`: This file is responsible for the main synchronisation process. It downloads changes, uploads them, and applies any deletion. The class is relatively generic and receives a `SyncTarget` object that handles sync target-specific operations. The synchroniser is also going to encrypt and decrypt items if E2EE is enabled.
 
 - `packages/lib/SyncTarget*.ts`: These files are the entry points for the various sync targets. They expose some metadata such as name, description, what options they support, etc. Some may also implement a function to test whether the configuration is working (used from the configuration screen). Finally, the main role of this class is to initialise an instance of a `FileApi`.
 
@@ -32,7 +32,7 @@ Additionally, every few minutes, the client is going to poll the server and down
 
 - `packages/lib/*Api.ts`: The `file-api-driver` will call some low-level API to perform its operations. For example `file-api-driver-local` will use the `fs` package to read/write files, `file-api-driver-amazon-s3` will use the AWS API to work with S3. In some cases however such a low-level API is not available - in that case, we usually create an `*Api.ts` file, which is used by the file API driver to perform its operations. For example, there is a `JoplinServerApi.ts`, which is used to connect to Joplin Server.
 
-- In general, each object in the database is represented by a `BaseModel` class. Then each object than can be synced is represented by a `BaseItem` class that inherits from `BaseModel`. This class is where many sync-related utilities can be found such as `itemsThatNeedSync()` or methods that encrypt items so that they can be uploaded when E2EE is enabled.
+- In general, each object in the database is represented by a `BaseModel` class. Then each object that can be synced is represented by a `BaseItem` class that inherits from `BaseModel`. This class is where many sync-related utilities can be found such as `itemsThatNeedSync()` or methods that encrypt items so that they can be uploaded when E2EE is enabled.
 
 - The state of each item is saved to the `sync_items` table. There is saved in particular the `sync_time` property which tells when the item was last synced. It is then used to decide what needs to be synced or not. Additional sync-related properties include `sync_disabled`, which is used in the rare case an item cannot be synced at all - for example if blocked by Dropbox for being "restricted content" (copyrighted), or is over the limit on Joplin Cloud. Each entry in `sync_items` is scoped to a sync target (`sync_target` property), so theoretically it's possible to sync the same items to multiple sync targets.
 
