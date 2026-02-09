@@ -20,7 +20,7 @@ An SP file would look like this:
 </md:EntityDescriptor>
 ```
 
-While and IDP config would look like this:
+While an IDP config would look like this:
 
 <!-- cSpell:disable -->
 
