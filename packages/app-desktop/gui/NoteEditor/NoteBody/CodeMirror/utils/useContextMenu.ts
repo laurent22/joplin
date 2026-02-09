@@ -130,16 +130,22 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return clickedElement?.closest(`.${imageClassName}`) as HTMLElement | null;
 		};
 
-		const getResourceIdAtCursor = (): string | null => {
+		// Get resource ID from image markup at click position (not cursor position)
+		const getResourceIdAtClickPos = (params: ContextMenuParams): string | null => {
 			if (!editorRef.current) return null;
 
 			const editor = editorRef.current.editor;
 			if (!editor) return null;
 
-			const state = editor.state;
-			const cursorPos = state.selection.main.head;
-			const line = state.doc.lineAt(cursorPos);
-			return getResourceIdFromMarkup(line.text, cursorPos - line.from);
+			const zoom = Setting.value('windowContentZoomFactor');
+			const x = convertFromScreenCoordinates(zoom, params.x);
+			const y = convertFromScreenCoordinates(zoom, params.y);
+
+			const clickPos = editor.posAtCoords({ x, y });
+			if (clickPos === null) return null;
+
+			const line = editor.state.doc.lineAt(clickPos);
+			return getResourceIdFromMarkup(line.text, clickPos - line.from);
 		};
 
 		const showImageContextMenu = async (resourceId: string) => {
@@ -203,7 +209,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			// Check if right-clicking on image markup text
-			const markupResourceId = getResourceIdAtCursor();
+			const markupResourceId = getResourceIdAtClickPos(params);
 			if (markupResourceId && pointerInsideEditor(params)) {
 				event.preventDefault();
 				await showImageContextMenu(markupResourceId);
