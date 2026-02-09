@@ -4,7 +4,7 @@ import bridge from '../../bridge';
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export default function(postMessage: Function, isReady: boolean, scripts: string[], cssFilePath: string) {
 	const protocolHandler = useMemo(() => {
-		return bridge().electronApp().getCustomProtocolHandler();
+		return bridge().electronApp().getContentProtocolHandler();
 	}, []);
 
 	useEffect(() => {
