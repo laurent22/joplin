@@ -1064,7 +1064,8 @@ export default class BaseItem extends BaseModel {
 	// in conflicts not occurring when they should.
 	// Please note: The remoteUpdatedTime must come from the updated_time within the server object, not the RemoteItem updated_time from the result of the delta api
 	public static remoteItemSyncTime(remoteUpdatedTime: number) {
-		return remoteUpdatedTime > time.unixMs() ? time.unixMs() : remoteUpdatedTime;
+		const currentTime = time.unixMs();
+		return remoteUpdatedTime > currentTime ? currentTime : remoteUpdatedTime;
 	}
 
 }

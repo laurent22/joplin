@@ -68,9 +68,8 @@ describe('Synchronizer.conflicts', () => {
 	}));
 
 	it('should cap sync_time to the current device time in the delta step', (async () => {
-		jest.useFakeTimers({ advanceTimers: true });
 		const folder1 = await Folder.save({ title: 'folder1' });
-		const note1 = await Note.save({ title: 'un', parent_id: folder1.id, updated_time: time.unixMs() + 10_000 }, { autoTimestamp: false });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id, updated_time: time.unixMs() + 100_000 }, { autoTimestamp: false });
 		await synchronizerStart();
 
 		await switchClient(2);
