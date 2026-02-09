@@ -2,6 +2,7 @@ import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteLis
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 
 interface CheckboxStats {
@@ -69,9 +70,13 @@ const prepareViewProps = async (
 				}
 				output.note[propName] = taskStatus;
 			} else if (dep === 'note.checkboxes') {
-				// Load the note body if not already loaded
-				if (!('body' in note)) note = await Note.load(note.id);
-				output.note[propName] = countCheckboxes(note.body);
+				// Only load the note body and compute checkbox stats if the setting is enabled
+				if (Setting.value('notes.showCheckboxCompletionChart')) {
+					if (!('body' in note)) note = await Note.load(note.id);
+					output.note[propName] = countCheckboxes(note.body);
+				} else {
+					output.note[propName] = null;
+				}
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a

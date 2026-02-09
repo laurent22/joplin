@@ -1,7 +1,13 @@
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
-import Setting from '../../models/Setting';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
+
+interface CheckboxStats {
+	total: number;
+	checked: number;
+	percent: number;
+	isComplete: boolean;
+}
 
 interface Props {
 	note: {
@@ -9,7 +15,7 @@ interface Props {
 		title: string;
 		is_todo: number;
 		todo_completed: number;
-		body: string;
+		checkboxes: CheckboxStats | null;
 	};
 	item: {
 		// index: number;
@@ -19,34 +25,6 @@ interface Props {
 		selected: boolean;
 	};
 }
-
-interface CheckboxStats {
-	total: number;
-	checked: number;
-	percent: number;
-	isComplete: boolean;
-}
-
-const countCheckboxes = (body: string): CheckboxStats | null => {
-	if (!body) return null;
-
-	// Match unchecked: - [ ] and checked: - [x] or - [X]
-	const uncheckedMatches = body.match(/- \[ \]/g);
-	const checkedMatches = body.match(/- \[[xX]\]/g);
-
-	const unchecked = uncheckedMatches ? uncheckedMatches.length : 0;
-	const checked = checkedMatches ? checkedMatches.length : 0;
-	const total = unchecked + checked;
-
-	if (total === 0) return null;
-
-	return {
-		total,
-		checked,
-		percent: Math.round((checked / total) * 100),
-		isComplete: checked === total,
-	};
-};
 
 const renderer: ListRenderer = {
 	id: 'compact',
@@ -64,7 +42,7 @@ const renderer: ListRenderer = {
 		// 'item.index',
 		'item.selected',
 		'item.size.height',
-		'note.body',
+		'note.checkboxes',
 		'note.id',
 		'note.is_shared',
 		'note.is_todo',
@@ -220,10 +198,9 @@ const renderer: ListRenderer = {
 	`,
 
 	onRenderNote: async (props: Props) => {
-		const showChart = Setting.value('notes.showCheckboxCompletionChart');
 		return {
 			...props,
-			checkboxStats: showChart ? countCheckboxes(props.note.body) : null,
+			checkboxStats: props.note.checkboxes,
 		};
 	},
 };
