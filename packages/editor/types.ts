@@ -85,7 +85,7 @@ export interface ContentScriptLoadOptions {
 	// The startJs/endJs options are responsible for setting up the content script
 	// environment and, among other things, should:
 	// - Set up `joplin.require`.
-	// - Forward `modules.exports` to the editor.
+	// - Forward `module.exports` to the editor.
 	// - Notify the editor when the content script has finished loading.
 	//
 	// The content script should be built similar to the following:
