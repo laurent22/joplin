@@ -28,13 +28,13 @@ function historyCanGoBackTo(route: any) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 function removeAdjacentNoteDuplicates(items: any[]) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	return items.filter((item: any, idx: number) => (idx >= 1) ? !(items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
+	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 function removeAdjacentFolderDuplicates(items: any[]) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	return items.filter((item: any, idx: number) => (idx >= 1) ? !(items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
+	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -147,7 +147,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 				newNavHistory = removeAdjacentNoteDuplicates(newNavHistory);
 
 				// Fix the case where after deletion the currently selected note is also the latest in history
-				if (newNavHistory.length && newNavHistory[newNavHistory.length - 1].noteId === state.route.noteId) {
+				if (state.route.routeName === 'Note' && newNavHistory.length && newNavHistory[newNavHistory.length - 1].noteId === state.route.noteId) {
 					newNavHistory = newNavHistory.slice(0, newNavHistory.length - 1);
 				}
 
