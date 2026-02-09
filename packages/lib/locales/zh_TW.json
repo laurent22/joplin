@@ -134,6 +134,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> 可以是 \"toggle\" (切換完成與否，或將記事轉換為待辦事項)或 \"clear\" (將待辦事項轉換為記事)。"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -145,6 +148,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"關於"
@@ -196,6 +202,9 @@
 	],
 	"Add body": [
 		"新增內文"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"新增"
@@ -277,6 +286,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"發現一個自動保存的繪圖。要將其附加到記事嗎？"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"發生錯誤：%s"
@@ -391,6 +403,9 @@
 	],
 	"Beta": [
 		"測試"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"粗體"
@@ -521,6 +536,9 @@
 	"Checking... Please wait.": [
 		"檢查中...請稍候。"
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"選擇一個選項"
 	],
@@ -598,6 +616,9 @@
 	],
 	"Command": [
 		"命令"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"命令模式"
@@ -905,6 +926,9 @@
 	"Delete selected notes": [
 		"刪除選定的筆記"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"刪除收件匣筆記本？\n\n如果您刪除收件匣筆記本，最近發送到該筆記本的任何電子郵件可能會遺失。"
 	],
@@ -995,6 +1019,9 @@
 	"Displays the complete information about note.": [
 		"顯示有關記事的完整資訊。"
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"顯示特定的記事。"
 	],
@@ -1015,6 +1042,9 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"不要遺失此密碼，為了安全起見，這將是 *唯一* 解密資料的方法！若要啟用加密，請在下方輸入您的密碼。"
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1394,6 +1424,9 @@
 	"Feature flags": [
 		"功能旗標"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"已擷取的本地項目: %d/%d 項。"
 	],
@@ -1643,9 +1676,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"在任何一個命令中，可以通過標題或 ID 來指定記事或記事本，或使用快捷鍵 `$n`（選定記事）or `$b`（選定記事本）。您亦可以用 `$c` 代表當前選擇的項目。"
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"為了將地理位置資訊加入此筆記，您必須允許程式存取位置資料。\n\n您隨時可以到設定畫面關閉此選項。"
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"由於必須對整個資料集進行加密和同步，所以最好在夜間睡覺的時候進行。\n\n首先，請依照以下說明進行操作：\n\n1. 同步您的所有設備。\n2. 點選「%s」。\n3. 等待執行完成。在執行過程中，請避免在其他設備上更改任何記事，以免發生衝突。\n4. 待此設備完成重新加密與同步後，同步所有其他設備，並等待其執行完成。\n\n重要提示：您只需要在一台設備上執行此操作一次。"
 	],
@@ -1793,6 +1823,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin 網頁剪輯可以讓您從瀏覽器保存網頁和螢幕截圖到 Joplin。"
 	],
@@ -1820,8 +1853,14 @@
 	"Keychain Supported: %s": [
 		"鑰匙圈支援：%s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"需要升級的密鑰"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"橫向"
@@ -1945,6 +1984,9 @@
 	],
 	"Manage your plugins": [
 		"管理您的延伸模組"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"管理 E2EE 設定。指令包含 `enable`，`disable`，`decrypt`，`status` 和 `target-status`。"
@@ -2150,6 +2192,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"未設定文字編輯器。請用 `config editor <editor-path>` 來設定"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"北歐藍"
 	],
@@ -2167,6 +2212,9 @@
 	],
 	"Not now": [
 		"不要現在"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"記事"
@@ -2318,6 +2366,9 @@
 	"Open Sync Wizard...": [
 		"開啟同步精靈..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"開啟舊檔..."
 	],
@@ -2330,8 +2381,14 @@
 	"Options": [
 		"選項"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"有序清單"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"其他應用程式..."
@@ -2386,9 +2443,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"永久刪除這些記事本 ，不要移到垃圾桶。"
-	],
-	"Permission needed": [
-		"需要權限"
 	],
 	"Photo %d": [
 		""
@@ -2492,9 +2546,6 @@
 	"Preferred light theme": [
 		"偏好的亮色主題"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2580,6 +2631,9 @@
 		"將記事發布至網路上"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2858,8 +2912,14 @@
 	"Select file...": [
 		"選擇檔案..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"選擇父筆記本"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Self-hosted": [
 		""
@@ -3038,6 +3098,9 @@
 	"Source: ": [
 		"來源："
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -3149,6 +3212,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"切換到 [notebook] - 所有進一步的操作將在此記事本中發生。"
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"同步任意數量的設備"
 	],
@@ -3244,6 +3310,9 @@
 	],
 	"Text editor command": [
 		"文字編輯器命令"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"無法刪除目前的設定檔。切換至不同的設定檔並重試。"
@@ -3593,6 +3662,9 @@
 	"Try it now": [
 		"現在就試試"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"輸入 `help [command]` 查看關於命令的更多資訊; 或者輸入 `help all` 獲取完整的使用說明。"
 	],
@@ -3734,6 +3806,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"用在需要固定字寬的狀況（表格、待辦事項、程式碼等）。如果尋無此字型，將顯示為通用的固定寬度字型。"
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"使用者移除"
 	],
@@ -3772,9 +3847,6 @@
 	],
 	"Voice typing...": [
 		"語音輸入..."
-	],
-	"Vosk": [
-		""
 	],
 	"Waiting for authorisation...": [
 		"等待授權..."
@@ -3830,11 +3902,11 @@
 	"When creating a new to-do:": [
 		"當新增待辦事項時："
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"啟用後，應用程式將掃描您的附件並提取其中的文字。這將使您能夠在這些附件中搜索文本。"
-	],
-	"Whisper": [
-		""
 	],
 	"Window unresponsive.": [
 		"視窗無回應。"

@@ -12,6 +12,7 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => '',
 		password: () => '',
+		apiKey: () => Setting.value('sync.11.apiKey'),
 		session: () => ({ id: Setting.value('sync.11.id'), user_id: Setting.value('sync.11.userId') }),
 		env: Setting.value('env'),
 	};
@@ -52,6 +53,9 @@ export const authenticateWithCode = async (code: string) => {
 //
 // Based on the regular Joplin Server sync target.
 export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
+
+	private lastFileApiOptions_: FileApiOptions|null = null;
+
 	public static override id() {
 		return 11;
 	}
@@ -65,7 +69,16 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 	}
 
 	public override async isAuthenticated() {
-		return Setting.value('sync.11.id') !== '';
+		if (!Setting.value('sync.11.id')) return false;
+
+		// We check that the file API has been initialized at least once, otherwise the below check
+		// will always fail and it will be impossible to login.
+		if (this.lastFileApiOptions_) {
+			const check = await SyncTargetJoplinServer.checkConfig(null, null, await this.fileApi());
+			return check.ok;
+		}
+
+		return true;
 	}
 
 	public static override requiresPassword() {
@@ -111,11 +124,13 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 	}
 
 	protected override async initFileApi() {
-		return initFileApi(SyncTargetJoplinServerSAML.id(), this.logger(), {
+		this.lastFileApiOptions_ = {
 			path: () => Setting.value('sync.11.path'),
 			userContentPath: () => Setting.value('sync.11.userContentPath'),
 			username: () => '',
 			password: () => '',
-		});
+			apiKey: () => Setting.value('sync.11.apiKey'),
+		};
+		return initFileApi(SyncTargetJoplinServerSAML.id(), this.logger(), this.lastFileApiOptions_);
 	}
 }

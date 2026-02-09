@@ -45,6 +45,22 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleHeading4]: toggleHeaderLevel(4),
 	[EditorCommandType.ToggleHeading5]: toggleHeaderLevel(5),
 	[EditorCommandType.InsertHorizontalRule]: insertHorizontalRule,
+	[EditorCommandType.InsertTable]: editor => {
+		replaceSelectionCommand(editor, [
+			'',
+			'|    |    |',
+			'|----|----|',
+			'|    |    |',
+			'',
+		].join('\n'));
+	},
+	[EditorCommandType.InsertCodeBlock]: editor => {
+		replaceSelectionCommand(editor, [
+			'```',
+			'',
+			'```',
+		].join('\n'));
+	},
 
 	[EditorCommandType.ScrollSelectionIntoView]: editor => {
 		editor.dispatch(editor.state.update({

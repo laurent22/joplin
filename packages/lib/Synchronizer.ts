@@ -20,7 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem } from './file-api';
+import { FileApi, getSupportsDeltaWithItems, isLocalServer, PaginatedList, RemoteItem, enableEnhancedBasicDeltaAlgorithm } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { checkIfCanSync, fetchSyncInfo, checkSyncTargetIsValid, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
@@ -457,30 +457,30 @@ export default class Synchronizer {
 			}
 		}
 
-		// Before synchronising make sure all share_id properties are set
-		// correctly so as to share/unshare the right items.
-		try {
-			await Folder.updateAllShareIds(this.resourceService(), this.shareService_ ? this.shareService_.shares : []);
-			if (this.shareService_) await this.shareService_.checkShareConsistency();
-		} catch (error) {
-			if (error && error.code === ErrorCode.IsReadOnly) {
-				// We ignore it because the functions above tried to modify a
-				// read-only item and failed. Normally it shouldn't happen since
-				// the UI should prevent, but if there's a bug in the UI or some
-				// other issue we don't want sync to fail because of this.
-				logger.error('Could not update share because an item is readonly:', error);
-			} else {
-				throw error;
-			}
-		}
-
-		const itemUploader = new ItemUploader(this.api(), this.apiCall);
-
 		let errorToThrow = null;
 		let syncLock = null;
 		let hasCaughtError = false;
 
 		try {
+			// Before synchronising make sure all share_id properties are set
+			// correctly so as to share/unshare the right items.
+			try {
+				await Folder.updateAllShareIds(this.resourceService(), this.shareService_ ? this.shareService_.shares : []);
+				if (this.shareService_) await this.shareService_.checkShareConsistency();
+			} catch (error) {
+				if (error && error.code === ErrorCode.IsReadOnly) {
+					// We ignore it because the functions above tried to modify a
+					// read-only item and failed. Normally it shouldn't happen since
+					// the UI should prevent, but if there's a bug in the UI or some
+					// other issue we don't want sync to fail because of this.
+					logger.error('Could not update share because an item is readonly:', error);
+				} else {
+					throw error;
+				}
+			}
+
+			const itemUploader = new ItemUploader(this.api(), this.apiCall);
+
 			await this.api().initialize();
 			this.api().setTempDirName(Dirnames.Temp);
 
@@ -820,6 +820,15 @@ export default class Synchronizer {
 								// on it (instead it uses a more reliable `context` object) and the itemsThatNeedSync loop
 								// above also doesn't use it because it fetches the whole remote object and read the
 								// more reliable 'updated_time' property. Basically remote.updated_time is deprecated.
+								// 2025-08-27: remote.updated_time can now be utilised by the basic delta when using a sync target
+								// where the 'server' is actually the same device that is running the client eg. file system sync.
+								// This is required to correctly detect updated objects where an external sync service is being
+								// used in combination with Joplin, as there are essentially multiple sources of truth, rather
+								// than just one. So we can't rely on the server always containing the latest remote changes
+								// during synchronization, as new changes can be later added which have a timestamp in the past.
+								// In this scenario, we don't know the exact timestamp to specify for remoteItemUpdatedTime upon
+								// uploading. So we can leave it unspecified and then on the next run of the delta step, it will
+								// get set there
 
 								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
 							}
@@ -878,6 +887,11 @@ export default class Synchronizer {
 						// drivers with a delta functionality it's a noop.
 						allItemIdsHandler: async () => {
 							return BaseItem.syncedItemIds(syncTargetId);
+						},
+
+						// This is only used by the basic delta
+						allItemMetadataHandler: async () => {
+							return BaseItem.remoteItemMetadata(syncTargetId);
 						},
 
 						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
@@ -973,6 +987,11 @@ export default class Synchronizer {
 										if (content && content.updated_time > local.updated_time) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
+										} else if (enableEnhancedBasicDeltaAlgorithm()) {
+											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
+											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
+											// of the md files, to prevent these items being continually fetched on every sync
+											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
 										}
 									}
 								}
@@ -1012,7 +1031,7 @@ export default class Synchronizer {
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 							const options: any = {
 								autoTimestamp: false,
-								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs()),
+								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs(), remote.updated_time),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action === SyncAction.CreateLocal) options.isNew = true;

@@ -23,7 +23,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
-import type { Editor, EditorEvent } from 'tinymce';
+import type { Bookmark, Editor, EditorEvent } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
@@ -47,6 +47,7 @@ import Setting from '@joplin/lib/models/Setting';
 import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatternsLookup';
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
+import useCursorPositioning from './utils/useCursorPositioning';
 
 const logger = Logger.create('TinyMCE');
 
@@ -293,6 +294,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
 					pasteAsText: () => editor.fire(TinyMceEditorEvents.PasteAsText),
+
+					'editor.undo': () => {
+						editor.undoManager.undo();
+					},
+					'editor.redo': () => {
+						editor.undoManager.redo();
+					},
 				};
 
 				if (additionalCommands[cmd.name]) {
@@ -741,7 +749,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					'media-src \'self\' blob: data: *', // Audio and video players
 
 					// Disallow certain unused features
-					'child-src \'none\'', // Should not contain sub-frames
+					'child-src https://*.youtube.com https://*.youtube-nocookie.com', // Allow YouTube embeds
 					'object-src \'none\'', // Objects can be used for script injection
 					'form-action \'none\'', // No submitting forms
 
@@ -918,8 +926,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 					editor.on('SetContent', () => {
 						preprocessContent();
-
-						props_onMessage.current({ channel: 'noteRenderComplete' });
 					});
 				},
 			});
@@ -1046,6 +1052,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		return true;
 	}
 
+	const { onRestoreCursorPosition } = useCursorPositioning({
+		initialCursorLocation: props.initialCursorLocation.richText as Bookmark,
+		onCursorUpdate: props.onCursorMotion,
+		editor,
+	});
+
+	const noteChangeTimeRef = useRef(Date.now());
 	const lastNoteIdRef = useRef(props.noteId);
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -1063,6 +1076,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			// Use nextOnChangeEventInfo's noteId -- lastOnChangeEventInfo can be slightly out-of-date.
 			const differentNoteId = lastNoteIdRef.current !== props.noteId;
 			const differentContent = lastOnChangeEventInfo.current.content !== props.content;
+
+			if (differentNoteId) noteChangeTimeRef.current = Date.now();
+
 			if (differentNoteId || differentContent || !resourcesEqual) {
 				const result = await props.markupToHtml(
 					props.contentMarkupLanguage,
@@ -1113,8 +1129,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					// times would result in an empty note.
 					// https://github.com/laurent22/joplin/issues/3534
 					editor.undoManager.reset();
+
+					// Only restore the cursor position from the global state when switching notes.
+					// See https://github.com/laurent22/joplin/issues/13579
+					onRestoreCursorPosition();
 				} else {
-					// Restore the cursor location
+					// Restore the cursor location from the current note
 					editor.selection.bookmarkManager.moveToBookmark(bookmark);
 				}
 
@@ -1123,6 +1143,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					resourceInfos: props.resourceInfos,
 					contentKey: props.contentKey,
 				};
+				props_onMessage.current({ channel: 'noteRenderComplete' });
 			}
 
 			const allAssetsOptions: NoteStyleOptions = {
@@ -1330,7 +1351,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// keep it this way for now.
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onKeyUp(event: any) {
-			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
+			const timeSinceNoteChange = Date.now() - noteChangeTimeRef.current;
+
+			// A key that is pressed before the editor is opened, and that is released after it is
+			// opened is going to be processed here. For example if the user presses Enter in
+			// GotoAnything to arrive here. But in that case, we don't want the change handler to be
+			// activated, because that would change the note timestamp. So we take into account how
+			// long the note has been loaded before we process the key. Fixes
+			// https://github.com/laurent22/joplin/issues/12367
+			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key) && timeSinceNoteChange > 200) {
 				onChangeHandler();
 			}
 		}

@@ -98,6 +98,10 @@ export async function getResourcesFromPasteEvent(event: any) {
 		const formatType = format.split('/')[0];
 
 		if (formatType === 'image') {
+			// writeImageToFile can process only image/jpeg, image/jpg or image/png mime types
+			if (['image/png', 'image/jpg', 'image/jpeg'].indexOf(format) < 0) {
+				continue;
+			}
 			if (event) event.preventDefault();
 
 			const image = clipboard.readImage();

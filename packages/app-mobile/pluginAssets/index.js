@@ -1,5 +1,7 @@
 module.exports = {
-hash:"987efee92a78bb62fe4f889c5b38aceb", files: {
+hash:"88e5d809af57eac7b86c4deaf21b9345", files: {
+'abc/abc_render.js': { data: require('./abc/abc_render.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
+'abc/abcjs-basic-min.js': { data: require('./abc/abcjs-basic-min.js.base64.js'), mime: 'application/javascript', encoding: 'base64' },
 'highlight.js/atom-one-dark-reasonable.css': { data: require('./highlight.js/atom-one-dark-reasonable.css.base64.js'), mime: 'text/css', encoding: 'base64' },
 'highlight.js/atom-one-light.css': { data: require('./highlight.js/atom-one-light.css.base64.js'), mime: 'text/css', encoding: 'base64' },
 'katex/fonts/KaTeX_AMS-Regular.woff2': { data: require('./katex/fonts/KaTeX_AMS-Regular.woff2.base64.js'), mime: 'application/octet-stream', encoding: 'base64' },

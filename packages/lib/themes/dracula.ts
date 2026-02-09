@@ -9,7 +9,7 @@ const theme: Theme = {
 	oddBackgroundColor: '#282a36',
 	color: '#f8f8f2', // For regular text
 	colorError: '#ff5555',
-	colorWarn: '#ffb86c',
+	colorWarn: '#a65a2e',
 	colorFaded: '#6272a4', // For less important text;
 	dividerColor: '#bd93f9',
 	selectedColor: '#44475a',
@@ -23,7 +23,7 @@ const theme: Theme = {
 	raisedBackgroundColor: '#44475a',
 	raisedColor: '#bd93f9',
 
-	warningBackgroundColor: '#ffb86c',
+	warningBackgroundColor: '#a65a2e',
 
 	tableBackgroundColor: '#6272a4',
 	codeBackgroundColor: '#44475a',

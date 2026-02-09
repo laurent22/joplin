@@ -50,13 +50,15 @@ import WarningBanner from './WarningBanner/WarningBanner';
 import UserWebview from '../../services/plugins/UserWebview';
 import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
-import { stateUtils } from '@joplin/lib/reducer';
+import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 import getResourceBaseUrl from './utils/getResourceBaseUrl';
+import useInitialCursorLocation from './utils/useInitialCursorLocation';
+import NotePositionService, { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
 
 const debounce = require('debounce');
 
@@ -329,13 +331,13 @@ function NoteEditorContent(props: NoteEditorProps) {
 		});
 	}, [formNote, setFormNote, handleProvisionalFlag, props.dispatch]);
 
-	const { scrollWhenReady, clearScrollWhenReady } = useScrollWhenReadyOptions({
+	const { scrollWhenReadyRef, clearScrollWhenReady } = useScrollWhenReadyOptions({
 		noteId: formNote.id,
 		selectedNoteHash: props.selectedNoteHash,
-		lastEditorScrollPercents: props.lastEditorScrollPercents,
 		editorRef,
+		editorName: props.bodyEditor,
 	});
-	const onMessage = useMessageHandler(scrollWhenReady, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
+	const onMessage = useMessageHandler(scrollWhenReadyRef, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
 
@@ -399,15 +401,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [setShowRevisions]);
 
 	const onScroll = useCallback((event: { percent: number }) => {
-		props.dispatch({
-			type: 'EDITOR_SCROLL_PERCENT_SET',
-			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
-			// to refer the current value, since they would be one or more generations old.
-			// For the purpose, useRef value should be used.
-			noteId: formNoteRef.current.id,
-			percent: event.percent,
-		});
-	}, [props.dispatch]);
+		const noteId = formNoteRef.current.id;
+		NotePositionService.instance().updateScrollPosition(noteId, windowId, event.percent);
+	}, [windowId]);
+
+	const onCursorMotion = useCallback((location: EditorCursorLocations) => {
+		const noteId = formNoteRef.current.id;
+		NotePositionService.instance().updateCursorPosition(noteId, windowId, location);
+	}, [windowId]);
 
 	function renderNoNotes(rootStyle: React.CSSProperties) {
 		const emptyDivStyle = {
@@ -419,6 +420,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
+	const initialCursorLocation = useInitialCursorLocation({
+		noteId: props.noteId,
+	});
 
 	const markupLanguage = formNote.markup_language;
 	const editorProps: NoteBodyEditorPropsAndRef = {
@@ -432,6 +436,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		content: formNote.body,
 		contentMarkupLanguage: markupLanguage,
 		contentOriginalCss: formNote.originalCss,
+		initialCursorLocation,
 		resourceInfos: resourceInfos,
 		resourceDirectory: Setting.value('resourceDir'),
 		htmlToMarkdown: htmlToMarkdown,
@@ -442,6 +447,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		dispatch: props.dispatch,
 		noteToolbar: null,
 		onScroll: onScroll,
+		onCursorMotion,
 		setLocalSearchResultCount: setLocalSearchResultCount,
 		setLocalSearch: localSearch_change,
 		setShowLocalSearch,
@@ -716,6 +722,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		bodyEditor = 'CodeMirror5';
 	}
 
+	const mainWindowState = stateUtils.windowStateById(state, defaultWindowId);
+
 	return {
 		noteId,
 		bodyEditor,
@@ -728,14 +736,15 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		notesParentType: windowState.notesParentType,
 		selectedNoteTags: windowState.selectedNoteTags,
-		lastEditorScrollPercents: state.lastEditorScrollPercents,
 		selectedNoteHash: windowState.selectedNoteHash,
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customViewerCss,
 		noteVisiblePanes: windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
-		highlightedWords: state.highlightedWords,
+		// For now, only the main window has search UI. Show the same search markers in all
+		// windows:
+		highlightedWords: mainWindowState.highlightedWords,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([

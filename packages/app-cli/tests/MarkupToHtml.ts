@@ -52,7 +52,7 @@ describe('MarkupToHtml', () => {
 			pluginAssets: [],
 		};
 
-		expect(await service.render(MarkupLanguage.Html, testString, {}, {})).toMatchObject(expectedOutput);
-		expect(await service.render(MarkupLanguage.Markdown, testString, {}, {})).toMatchObject(expectedOutput);
+		expect(await service.render(MarkupLanguage.Html, testString, {}, { })).toMatchObject(expectedOutput);
+		expect(await service.render(MarkupLanguage.Markdown, testString, {}, { })).toMatchObject(expectedOutput);
 	});
 });

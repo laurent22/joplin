@@ -30,7 +30,7 @@ test.describe('pluginApi', () => {
 		await mainScreen.createNewNote('First note');
 
 		const editor = mainScreen.noteEditor;
-		await editor.expectToHaveText('');
+		await editor.expectToHaveText('\n');
 
 		await mainScreen.goToAnything.runCommand(app, 'showTestDialog');
 		// Wait for the iframe to load
@@ -164,13 +164,13 @@ test.describe('pluginApi', () => {
 		await mainScreen.createNewNote('Test note (panels)');
 
 		const panelLocator = await mainScreen.pluginPanelLocator('org.joplinapp.plugins.example.panels');
+		await expect(panelLocator).not.toBeVisible();
 
-		const noteEditor = mainScreen.noteEditor;
 		await mainScreen.goToAnything.runCommand(app, 'testShowPanel');
-		await expect(noteEditor.codeMirrorEditor).toHaveText('visible');
 
 		// Panel should be visible
 		await expect(panelLocator).toBeVisible();
+
 		// The panel should have the expected content
 		const panelContent = panelLocator.contentFrame();
 		await expect(
@@ -178,7 +178,6 @@ test.describe('pluginApi', () => {
 		).toBeAttached();
 
 		await mainScreen.goToAnything.runCommand(app, 'testHidePanel');
-		await expect(noteEditor.codeMirrorEditor).toHaveText('hidden');
 
 		await expect(panelLocator).not.toBeVisible();
 	});

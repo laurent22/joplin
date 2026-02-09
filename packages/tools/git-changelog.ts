@@ -281,6 +281,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		// bundle them all up in a single "Updated translations" at the end.
 		if (log.message.match(/Translation:\sUpdate\s.*?(\.po|[a-zA-Z][a-zA-Z]|[a-zA-Z][a-zA-Z]_[a-zA-Z][a-zA-Z])/)
 			|| log.message.match(/Update.+\.po/)
+			|| log.message.match(/^All: Update translations/)
 		) {
 			// updatedTranslations = true;
 			addIt = false;
@@ -477,8 +478,15 @@ async function findFirstRelevantTag(baseTag: string, platform: Platform, allTags
 	for (let i = baseTagIndex - 1; i >= 0; i--) {
 		const tag = allTags[i];
 		if (platformFromTag(tag) !== platform) continue;
+
 		const currentVersion = versionFromTag(tag);
-		if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+
+		try {
+			if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+		} catch (error) {
+			console.warn(`Skipping invalid tag: ${tag}`);
+			continue;
+		}
 
 		try {
 			const logs = await gitLog(tag);

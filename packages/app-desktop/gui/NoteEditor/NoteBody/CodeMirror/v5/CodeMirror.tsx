@@ -695,7 +695,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [renderedBody, webviewReady]);
 
-	useEditorSearchHandler({
+	const { onSetInitialMarkersRef } = useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,
 		searchMarkers: props.searchMarkers,
 		webviewRef,
@@ -737,6 +737,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				<Editor
 					value={props.content}
 					searchMarkers={props.searchMarkers}
+					onSetMarkersRef={onSetInitialMarkersRef}
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					codeMirrorTheme={styles.editor.codeMirrorTheme}

@@ -105,6 +105,9 @@
 	"[None]": [
 		""
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -115,6 +118,9 @@
 		""
 	],
 	"A5": [
+		""
+	],
+	"ABC musical notation: Options": [
 		""
 	],
 	"About": [
@@ -157,6 +163,9 @@
 		""
 	],
 	"Add body": [
+		""
+	],
+	"Add column": [
 		""
 	],
 	"Add or remove tags:": [
@@ -220,6 +229,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -319,6 +331,9 @@
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -432,6 +447,9 @@
 	"Checked": [
 		""
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Chrome Web Store": [
 		""
 	],
@@ -480,9 +498,6 @@
 	"Code View": [
 		""
 	],
-	"Code:": [
-		""
-	],
 	"Collapsed": [
 		""
 	],
@@ -496,6 +511,9 @@
 		""
 	],
 	"Command": [
+		""
+	],
+	"COMMAND": [
 		""
 	],
 	"Command palette": [
@@ -521,6 +539,9 @@
 	],
 	"Configuration": [
 		"Konfigurazioa"
+	],
+	"Configured keyboard shortcuts:": [
+		""
 	],
 	"Configures the size of scrollbars used in the app.": [
 		""
@@ -691,6 +712,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -769,6 +793,9 @@
 	"Displays the complete information about note.": [
 		"Erakutsi oharrari buruzko informazio guztia."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Oharra erakutsi"
 	],
@@ -786,6 +813,9 @@
 	],
 	"Do not ask for confirmation.": [
 		"Ez galdetu berresteko."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1069,6 +1099,9 @@
 	"Feature flags": [
 		""
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Itemak eskuratuta: %d%d."
 	],
@@ -1264,9 +1297,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Edozein komandotan, oharra edo koadernoari erreferentzia egin ahal zaio izenburuz edo ID erabilita, edo `$n` edo `$b` lasterbideak erabilita, aukeratuta dagoen oharra edo koadernoa erabiltzeko. `$c` ere erabil daiteke aukeratutako elementua erabiltzeko."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -1363,6 +1393,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		""
 	],
@@ -1390,7 +1423,13 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1470,6 +1509,9 @@
 		""
 	],
 	"Manage your plugins": [
+		""
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
 		""
 	],
 	"Manual": [
@@ -1622,6 +1664,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Testu editorerik ez dago definituta. Egin hau erabilita, mesedez: `config editor <editorearen-helbidea>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1641,6 +1686,9 @@
 		""
 	],
 	"Not now": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"Note area growth factor": [
@@ -1718,6 +1766,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		""
 	],
@@ -1729,6 +1780,12 @@
 	],
 	"Options": [
 		"Aukerak"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
 	],
 	"Page orientation for PDF export": [
 		""
@@ -1761,9 +1818,6 @@
 		""
 	],
 	"Per user. Minimum of 2 users.": [
-		""
-	],
-	"Permission needed": [
 		""
 	],
 	"Photo %d": [
@@ -1856,9 +1910,6 @@
 	"Preferred light theme": [
 		""
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -1934,6 +1985,12 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"QR Code": [
 		""
 	],
@@ -1965,6 +2022,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recognise text:": [
 		""
 	],
 	"Recognize handwritten image": [
@@ -2123,6 +2183,12 @@
 	"See the pre-release page for more details: %s": [
 		""
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2246,6 +2312,9 @@
 	"Source": [
 		"Iturburua"
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2342,6 +2411,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Aldatu [koaderno]ra - hurrengo eragiketak koaderno horretan jazoko dira."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2403,6 +2475,9 @@
 		""
 	],
 	"Teams": [
+		""
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
@@ -2473,6 +2548,7 @@
 		""
 	],
 	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"",
 		""
 	],
 	"The note was successfully moved to the trash.": [
@@ -2686,6 +2762,9 @@
 	"Try it now": [
 		""
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Idatzi `help [command]` komandoari buruzko informazio gehiagorako; edo idatzi `help all` erabilerari buruzko informazio osoa lortzeko."
 	],
@@ -2702,6 +2781,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -2791,6 +2873,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -2833,9 +2918,6 @@
 	"Voice typing: Glossary": [
 		""
 	],
-	"Vosk": [
-		""
-	],
 	"Warning": [
 		""
 	],
@@ -2860,10 +2942,10 @@
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Ongi etorri Joplin-era!\n\nIdatz `:help shortcuts` lasterbideak ikusteko, edo soilik `:help`erabilerako informaziorako.\n\nEsate baterako, koadernoa sortzeko sakatu `mb`: oharra sortzeko sakatu `mn`"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

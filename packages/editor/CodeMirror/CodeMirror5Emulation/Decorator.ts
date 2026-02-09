@@ -29,10 +29,14 @@ interface CssDecorationSpec extends DecorationRange {
 	id?: number;
 }
 
+interface RemoveMarkDecorationSpec {
+	id: number;
+}
+
 const addLineDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
 const removeLineDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
 const addMarkDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
-const removeMarkDecorationEffect = StateEffect.define<CssDecorationSpec>(mapRangeConfig);
+const removeMarkDecorationEffect = StateEffect.define<RemoveMarkDecorationSpec>();
 const refreshOverlaysEffect = StateEffect.define();
 
 export interface LineWidgetOptions {
@@ -190,12 +194,13 @@ export default class Decorator {
 					decorations = decorations.update({
 						add: [decoration.range(from, to)],
 					});
-				} else if (effect.is(removeLineDecorationEffect) || effect.is(removeMarkDecorationEffect)) {
+				} else if (effect.is(removeLineDecorationEffect)) {
 					const doc = transaction.state.doc;
-					const targetFrom = doc.lineAt(effect.value.from).from;
-					const targetTo = doc.lineAt(effect.value.to).to;
+					const { from, to } = effect.value;
+					// Handle the case where { from, to } point to an outdated document
+					const targetFrom = doc.lineAt(from).from;
+					const targetTo = doc.lineAt(to).to;
 
-					const targetId = effect.value.id;
 					const targetDecoration = this.classNameToCssDecoration(
 						effect.value.cssClass, effect.is(removeLineDecorationEffect),
 					);
@@ -203,12 +208,15 @@ export default class Decorator {
 					decorations = decorations.update({
 						// Returns true only for decorations that should be kept.
 						filter: (from, to, value) => {
-							if (targetId !== undefined) {
-								return value.spec.id !== effect.value.id;
-							}
-
 							const isInRange = from >= targetFrom && to <= targetTo;
-							return isInRange && value.eq(targetDecoration);
+							return !isInRange || !value.eq(targetDecoration);
+						},
+					});
+				} else if (effect.is(removeMarkDecorationEffect)) {
+					decorations = decorations.update({
+						// Returns true only for decorations that should be kept.
+						filter: (_from, _to, value) => {
+							return value.spec.id !== effect.value.id;
 						},
 					});
 				} else if (effect.is(addLineWidgetEffect)) {
@@ -384,9 +392,10 @@ export default class Decorator {
 	}
 
 	public markText(from: number, to: number, options?: MarkTextOptions) {
+		const id = this._nextLineWidgetId++;
 		const effectOptions: CssDecorationSpec = {
 			cssClass: options.className ?? '',
-			id: this._nextLineWidgetId++,
+			id,
 			from,
 			to,
 		};
@@ -398,7 +407,7 @@ export default class Decorator {
 		return {
 			clear: () => {
 				this.editor.dispatch({
-					effects: removeMarkDecorationEffect.of(effectOptions),
+					effects: removeMarkDecorationEffect.of({ id }),
 				});
 			},
 		};

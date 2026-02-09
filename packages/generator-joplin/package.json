@@ -1,6 +1,6 @@
 {
   "name": "generator-joplin",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Scaffolds out a new Joplin plugin",
   "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin",
   "author": {
@@ -30,8 +30,8 @@
     "yosay": "2.0.2"
   },
   "devDependencies": {
-    "@joplin/lib": "~3.5",
-    "@joplin/tools": "~3.5",
+    "@joplin/lib": "~3.6",
+    "@joplin/tools": "~3.6",
     "jest": "29.7.0",
     "ts-node": "10.9.2"
   },

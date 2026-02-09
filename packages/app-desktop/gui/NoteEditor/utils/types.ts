@@ -14,6 +14,7 @@ import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
 import { RefObject, SetStateAction } from 'react';
 import * as React from 'react';
 import { ResourceEntity, ResourceLocalStateEntity } from '@joplin/lib/services/database/types';
+import { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -40,8 +41,6 @@ export interface NoteEditorProps {
 	notesParentType: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	selectedNoteTags: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	lastEditorScrollPercents: any;
 	selectedNoteHash: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searches: any[];
@@ -83,6 +82,14 @@ export interface NoteBodyEditorRef {
 export { MarkupToHtmlOptions };
 export type MarkupToHtmlHandler = (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 export type HtmlToMarkdownHandler = (markupLanguage: number, html: string, originalCss: string, parseOptions?: ParseOptions)=> Promise<string>;
+export type OnCursorMotion = (event: EditorCursorLocations)=> void;
+
+export interface MessageEvent {
+	channel: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
+	args?: any[];
+}
+export type OnMessage = (event: MessageEvent)=> void;
 
 export interface NoteBodyEditorProps {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -102,12 +109,13 @@ export interface NoteBodyEditorProps {
 	contentKey: string;
 	contentMarkupLanguage: number;
 	contentOriginalCss: string;
+	initialCursorLocation: EditorCursorLocations;
 	onChange(event: OnChangeEvent): void;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	onWillChange(event: any): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onMessage(event: any): void;
+	onMessage: OnMessage;
 	onScroll(event: { percent: number }): void;
+	onCursorMotion: OnCursorMotion;
 	markupToHtml: MarkupToHtmlHandler;
 	htmlToMarkdown: HtmlToMarkdownHandler;
 	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;

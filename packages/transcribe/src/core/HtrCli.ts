@@ -1,5 +1,5 @@
 import Logger from '@joplin/utils/Logger';
-import { execCommand } from '@joplin/utils';
+import { commandToString, execCommand } from '@joplin/utils';
 import { WorkHandler } from '../types';
 
 const logger = Logger.create('HtrCli');
@@ -16,15 +16,15 @@ export default class HtrCli implements WorkHandler {
 
 	public async init() {
 		logger.info('Loading');
-		const result = await execCommand(`docker pull ${this.htrCliDockerImage}`, { quiet: true });
+		const result = await execCommand(['docker', 'pull', this.htrCliDockerImage], { quiet: true });
 		logger.info('Finished loading: ', result);
 	}
 
 	public async run(imageName: string) {
-		const command = `docker run --rm -t -v "${this.htrCliImagesFolder}:/images" ${this.htrCliDockerImage} ${imageName}`;
+		const command = ['docker', 'run', '--rm', '-t', '-v', `${this.htrCliImagesFolder}:/images`, this.htrCliDockerImage, imageName];
 
 		logger.info('Running transcription...');
-		logger.info(`Command: ${command}`);
+		logger.info(`Command: ${commandToString(command[0], command.slice(1))}`);
 		const result = await execCommand(command, { quiet: true });
 
 		logger.info('Finished transcription');

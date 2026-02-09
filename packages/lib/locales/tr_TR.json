@@ -83,7 +83,7 @@
 		"%s pek çok dosyanın senkronu için optimize bir değil, bu sebeple ilk senkronizasyon zaman alabilir."
 	],
 	"%s must be a valid whole number": [
-		"%s geçerli bir telefon numarası olmalıdır"
+		"%s geçerli bir tamsayı olmalıdır"
 	],
 	"%s tab opened": [
 		"%s sekme açık"
@@ -150,7 +150,7 @@
 		"(Ayarlardan bu istemi kapatabilirsiniz)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
-		"-Kamera: fotoğraf çekimi ve fotoğrafın nota eklenebilmesi için."
+		"- Kamera: fotoğraf çekimi ve fotoğrafın nota eklenebilmesi için."
 	],
 	"- Location: to allow attaching geo-location information to a note.": [
 		"- Konum: coğrafi konum bilgilerinin bir nota eklenmesine izin vermek için."
@@ -167,6 +167,9 @@
 	"[None]": [
 		"[None]"
 	],
+	"A brief description of the image:": [
+		"Resmin kısa bir açıklaması:"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Virgülle ayrılmış bir kelime listesi. Sesli yazımın nadir kelimeleri doğru şekilde hecelemesine yardımcı olmak için kullanılabilir."
 	],
@@ -181,6 +184,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Hakkında"
@@ -238,6 +244,9 @@
 	],
 	"Add body": [
 		"Gövde Ekle"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Yeni bir şey ekle"
@@ -335,6 +344,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Otomatik kaydedilmiş bir çizim bulundu. Not'a bunun kopyasını iliştirmek ister misiniz?"
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		"Cevap gönderilirken bir hata oluştu. Bu durum uygulama çevrimdışıyken, veya sunucuya bağlanılamadığı zamanlarda olabilir\nHata: %s"
+	],
 	"An error occurred: %s": [
 		"Bir hata oluştu: %s"
 	],
@@ -375,7 +387,7 @@
 		"Aritim Dark"
 	],
 	"Associated tags:": [
-		"Ekli etiketler"
+		"Tanımlı etiketler:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Joplin Web şimdilik sadece aynı anda bir tane sekmede açık durabilir. Lütfen Joplin'in açık diğer sekmelerini kapatın."
@@ -457,6 +469,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Kalın"
@@ -596,6 +611,9 @@
 	"Checking... Please wait.": [
 		"Kontrol ediliyor... Lütfen bekleyin."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Bir seçim yap"
 	],
@@ -662,9 +680,6 @@
 	"Code View": [
 		"Kod Görünümü"
 	],
-	"Code:": [
-		"Kod:"
-	],
 	"Collaborate on a notebook with others": [
 		"Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 	],
@@ -673,6 +688,9 @@
 	],
 	"Collapse all notebooks": [
 		"Tüm not defterlerini küçült"
+	],
+	"Collapse title": [
+		"Başlığı daralt"
 	],
 	"Collapsed": [
 		"Daraltılmış"
@@ -688,6 +706,9 @@
 	],
 	"Command": [
 		"Komut"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Komut paleti"
@@ -777,9 +798,6 @@
 	"Convert it": [
 		"Dönüştür"
 	],
-	"Convert note to Markdown": [
-		"Notu Markdown'a dönüştür"
-	],
 	"Convert to note": [
 		"Nota çevir"
 	],
@@ -834,9 +852,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Eklenti sunucusuna bağlanılamadı."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Not Markdown'a dönüştürülemedi: %s"
 	],
 	"Could not export notes: %s": [
 		"Notlar dışarı aktarılamadı: %s"
@@ -1042,6 +1057,9 @@
 	"Delete selected notes": [
 		"Seçili notları sil"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Gelen Kutusu not defteri silinsin mi?\n\nGelen kutusu not defterini silerseniz, yakın zamanda gönderilen tüm e-postalar kaybolabilir."
 	],
@@ -1147,6 +1165,9 @@
 	"Displays the complete information about note.": [
 		"Notla ilgili tüm bilgileri görüntüler."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Verilen notu görüntüler."
 	],
@@ -1170,6 +1191,9 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Şifrenizi kaybetmeyin, verilerinizin şifresini çözmenin \"*tek yolu* bu şifreyi girmek olacaktır. Şifrelemeyi etkinleştirmek için lütfen parolanızı aşağıya girin."
+	],
+	"Do you find the Joplin web app useful?": [
+		"Joplin web uygulamasını faydalı buldunuz mu?"
 	],
 	"Document scanner: Title template": [
 		"Belge tarayıcı: Başlık şablonu"
@@ -1232,7 +1256,7 @@
 		"Dropbox Girişi"
 	],
 	"Due": [
-		"Şu tarihe kadar: "
+		"Şu tarihe kadar:"
 	],
 	"due date": [
 		"şu tarihe kadar"
@@ -1528,6 +1552,9 @@
 	"Expand all notebooks": [
 		"Tüm not defterini genişlet"
 	],
+	"Expand title": [
+		"Başlığı genişlet"
+	],
 	"Expanded": [
 		"Genişletilmiş"
 	],
@@ -1590,6 +1617,9 @@
 	],
 	"Feature flags": [
 		"Özellik bilgileri"
+	],
+	"Feedback": [
+		"Geribildirim"
 	],
 	"Fetched items: %d/%d.": [
 		"Alınan öğeler: %d/%d."
@@ -1850,9 +1880,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Herhangi bir komutta, bir not veya note defteri başlık veya ID ile, veya `$n` `$b` kestirmelerini kullanılarak atfedilebilinir. Sırasıyla, güncel seçili not veya not defteri. `$c` kullanarak güncel seçili öğeye atıf yapılabilinir."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Notlarla konum bilgisi (geo-location) eşleştirebilmek için uygulamaya konum izni verilmesi gerekmekte.\n\nDaha sonra, Ayarlar ekranından bu izni istediğiniz zaman geri alabilirsiniz."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Bu işlemi yapmak için tüm veriniz yeniden şifrelenip senkron edilecek. Bu işlemi bu sebeple gece yapmanız önerilir.\n\nBaşlamak için lütfen aşağıdaki aşamaları takip edin:\n\n1. Tüm cihazlarınızla notlarınızı senkron edin.\n2. \"%s\"' imgesine tıklayın.\n3. İşlemin tamamlanmasını bekleyin. İşlem çalışırken notlarınızda çakışmayı önlemek için notlarınızda değişiklik yapmayın.\n4. Senkronizasyon işlemi cihazınızda bitince diğer tüm cihazlarınızla da senkron ederek işlemi tammalayın.\n\nÖnemli: Bu işlemi cihaz başına SADECE BİR KERE yapmanız yeterlidir."
 	],
@@ -2006,6 +2033,9 @@
 	"Joplin Server": [
 		"Joplin Sunucusu"
 	],
+	"Joplin Server (SAML)": [
+		"Joplin Server (SAML)"
+	],
 	"Joplin Server Business": [
 		"Joplin Sunucusu Business"
 	],
@@ -2023,6 +2053,9 @@
 	],
 	"Joplin SSO Authentication": [
 		"Joplin SSO Kimlik Doğrulaması"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		"Joplin notların oluşturulduğu veya güncellemelerin kaydedildiği konumları saklayabilme özelliğine sahip. Bu özelliği aktifleştirmek ister misiniz? Bu özelliği istediğiniz zaman ayarlardan açıp kapatabilirsiniz."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Alıntılama, tarayıcınızdaki web sayfalarını ve ekran görüntülerini Joplin'e kaydetmenizi sağlar."
@@ -2051,8 +2084,14 @@
 	"Keychain Supported: %s": [
 		"Keychain Desteği: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Güncellenmesi gereken anahtarlar"
+	],
+	"Label": [
+		"Etiket"
 	],
 	"Landscape": [
 		"Yatay"
@@ -2194,6 +2233,9 @@
 	"Manage your plugins": [
 		"Eklentileri yönet"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Uçtan Uca Şifreleme ayarını yönetir. Komutlar: `enable`, `disable`, `decrypt`, `status`, `decrypt-file` ve `target-status`."
 	],
@@ -2208,6 +2250,9 @@
 	],
 	"Markdown editor": [
 		"Markdown düzenleyici"
+	],
+	"Markdown editor: Highlight active line": [
+		"Markdown düzenleyici: Mevcut satırı rengini değiştirerek vurgula"
 	],
 	"Markdown editor: Render images": [
 		"Markdown düzenleyici: Resimleri görüntüle"
@@ -2358,7 +2403,7 @@
 		"Yeni not defteri \"%s\" oluşturulacak ve \"%s\" dosyası onun içine aktarılacak"
 	],
 	"New notebook title": [
-		"Yeni not defteri başlığı:"
+		"Yeni not defteri başlığı"
 	],
 	"New photo": [
 		"Yeni fotoğraf"
@@ -2447,6 +2492,9 @@
 	"No updates available": [
 		"Güncelleme bulunamadı"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Hiçbiri"
 	],
@@ -2467,6 +2515,9 @@
 	],
 	"Not now": [
 		"Şimdi değil"
+	],
+	"Not useful": [
+		"Kullanışsız"
 	],
 	"note": [
 		"not"
@@ -2515,6 +2566,9 @@
 	],
 	"Note list style": [
 		"Not listeleme biçimi"
+	],
+	"Note not published: %s": [
+		"Not paylaşılamadı: %s"
 	],
 	"Note preview": [
 		"Not önizleme"
@@ -2651,6 +2705,9 @@
 	"Open Sync Wizard...": [
 		"Senkronizasyon Sihirbazını Aç…"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Aç..."
 	],
@@ -2672,8 +2729,14 @@
 	"Options": [
 		"Seçenekler"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Dizilmiş liste"
+	],
+	"Other": [
+		"Diğer"
 	],
 	"Other applications...": [
 		"Diğer uygulamalar..."
@@ -2735,9 +2798,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Not defteri kalıcı olarak, çöpe de gönderilmeden silinecek."
-	],
-	"Permission needed": [
-		"İzin gerekmekte"
 	],
 	"Photo %d": [
 		"Resim %d"
@@ -2841,9 +2901,6 @@
 	"Preferred light theme": [
 		"Tercih edilen açık renk tema"
 	],
-	"Preferred voice typing provider": [
-		"Tercih edilen ses yazma sağlayıcısı"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Zengin metin düzenleyicisi'nden zengin metin yapıştırırken renkleri koru"
 	],
@@ -2931,6 +2988,9 @@
 	"Publish Note": [
 		"Notu Yayımla"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"“%s” notu (“%s” not defterinde) yayımlansın mı?"
+	],
 	"Publish note...": [
 		"Notu yayımla…"
 	],
@@ -2942,6 +3002,12 @@
 	],
 	"Publish/unpublish": [
 		"Yayımla/yayından kaldır"
+	],
+	"Published at URL: %s": [
+		"Şu URL’de yayımlandı: %s"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		"Notu Joplin Server veya Joplin Cloud’a yayımlar"
 	],
 	"QR Code": [
 		"Kare Kod"
@@ -2987,6 +3053,9 @@
 	],
 	"Recipients:": [
 		"Alıcılar:"
+	],
+	"Recognise text:": [
+		"Metni algıla:"
 	],
 	"Recognize handwritten image": [
 		"El yazısı olan resimleri algıla"
@@ -3216,6 +3285,9 @@
 	"Save geo-location with notes": [
 		"Coğrafi konumu notlarla kaydedin"
 	],
+	"Save geolocation?": [
+		"Coğrafi konumu kaydedilsin mi?"
+	],
 	"Scan notebook": [
 		"Not defterini tara"
 	],
@@ -3285,8 +3357,14 @@
 	"Select notebook": [
 		"Not defterini seç"
 	],
+	"Select one of the other supported sync targets.": [
+		"Destekleyen diğer senkronizasyon hedeflerinden birini seçin."
+	],
 	"Select parent notebook": [
 		"Ana not defterini seç"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Selected: %s": [
 		"Seçili: %s"
@@ -3492,6 +3570,9 @@
 	"Source: ": [
 		"Kaynak: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		"Ara boşluk"
 	],
@@ -3621,6 +3702,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"[notebook] not defterine geçer - daha sonraki tüm işlemler bu not defterinde gerçekleşecektir."
 	],
+	"Sync": [
+		"Senkronizasyon"
+	],
 	"Sync as many devices as you want": [
 		"İstediğin kadar cihazı senkronize et"
 	],
@@ -3699,6 +3783,9 @@
 	"Take photo": [
 		"Fotoğraf çek"
 	],
+	"Take survey": [
+		"Ankete katıl"
+	],
 	"Task \"%s\" failed with error: %s": [
 		"\"%s\" görevi başarısız. Hata mesajı: %s"
 	],
@@ -3716,6 +3803,9 @@
 	],
 	"Text editor command": [
 		"Metin editörü komutu"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		"Geribildirim için teşekkür ederiz!\nKısa bir anketimiz var, bunu doldurmaya vaktiniz var mı?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Profil aktifken silinemez. Bir başka profile geçip yeniden deneyin."
@@ -3789,9 +3879,6 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"“%s” notu başarılı bir şekilde “%s” not defterine geri yüklendi."
-	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Not Markdown'a dönüştürüldü ve orijinal not çöp kutusuna taşındı."
 	],
 	"The note was successfully moved to the trash.": [
 		"Not başarıyla çöp kutusuna taşındı.",
@@ -4094,6 +4181,9 @@
 	"Try it now": [
 		"Şimdi dene"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"`help [command]` yazarak komutlar hakkında daha fazla bilgiye ulaşabilirsiniz; yada `help all` yazarak tam kullanım bilgisine ulaşabilirsiniz."
 	],
@@ -4114,6 +4204,9 @@
 	],
 	"Unable to share log data. Reason: %s": [
 		"Loglar dışarı aktarılamadı. Sebep: %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"Not verisi paylaşılamadı. Sebep: %s"
 	],
 	"Unchecked": [
 		"İşaretlenmemiş"
@@ -4259,6 +4352,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Sabit bir metin uzunluğu gerektiren yerlerde (örn: tablolar, doğrulama kutucukları, kod vs.) kullanılır. Eğer bulunamazsa jenerik ve monospace olan bir font kullanılacak."
 	],
+	"Useful": [
+		"Kullanuşlı"
+	],
 	"User deletions": [
 		"Kullancı silmeleri"
 	],
@@ -4306,9 +4402,6 @@
 	],
 	"Voice typing: Glossary": [
 		"Sesli yazma: Sözlük"
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Yetkilendirme için bekleniyor..."
@@ -4367,11 +4460,11 @@
 	"When creating a new to-do:": [
 		"Yeni bir yapılacak oluşturulurken:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Etkinleştirildiğinde, nottaki resimlerin sunucu tabanlı daha yüksek kaliteli transkripsiyon servisi ile çözümlenmesini ister. Masaüstü uygulamasının bir kopyasıyla senkronizasyon gerektirir."
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Eğer bu özellik aktifleştirilirse, uygulama iliştirilen ek dosyaları tarayarak içindeki metinleri ayıklayacak. Bu sayede bu metinler üzerinden de arama yapabileceksiniz."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"Pencere tepkisiz, cevap vermiyor."

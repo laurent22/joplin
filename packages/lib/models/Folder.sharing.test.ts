@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep, resourceService } from '../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep, resourceService, simulateReadOnlyShareEnv } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { allNotesFolders } from '../testing/test-utils-synchronizer';
 import Note from '../models/Note';
@@ -180,6 +180,43 @@ describe('models/Folder.sharing', () => {
 			expect(folder2.share_id).toBe('abcd1234');
 		}
 	}));
+
+	it('updating share IDs should not fail when a read-only resource is linked to a writeable note', async () => {
+		const root = await Folder.save({ title: 'read-only' });
+		let note = await Note.save({ title: 'Test', parent_id: root.id });
+		note = await shim.attachFileToNote(note, testImagePath);
+		const resourceId = Note.linkedItemIds(note.body)[0];
+
+		// Associate the resource with the share
+		const shareId = 'abcd1234';
+		await Resource.save({
+			id: resourceId,
+			share_id: shareId,
+			is_shared: 1,
+		});
+
+		const reset = simulateReadOnlyShareEnv([shareId]);
+		try {
+			await Folder.updateAllShareIds(resourceService(), []);
+		} finally {
+			reset();
+		}
+	});
+
+	it('should not fail to update note share IDs when an outdated share ID is contained in a read-only folder', async () => {
+		const shareId = 'abcd1234';
+		const root = await Folder.save({ title: 'read-only', share_id: shareId });
+		// Save a child with a different share ID
+		const child = await Note.save({ title: 'Test', parent_id: root.id, share_id: `${shareId}-different` });
+
+		const reset = simulateReadOnlyShareEnv([shareId]);
+		try {
+			await Folder.updateAllShareIds(resourceService(), []);
+			expect(await Note.load(child.id)).toMatchObject({ share_id: shareId });
+		} finally {
+			reset();
+		}
+	});
 
 	it('should unshare a subfolder of a shared folder when it is moved to the root', (async () => {
 		let folder1 = await createFolderTree('', [
@@ -503,6 +540,99 @@ describe('models/Folder.sharing', () => {
 		expect(note2.user_updated_time).toBe(userUpdatedTimes[note2.id]);
 		expect(note3.user_updated_time).toBe(userUpdatedTimes[note3.id]);
 		expect(note4.user_updated_time).toBe(userUpdatedTimes[note4.id]);
+	});
+
+	it('should prefer duplicating resources in unshared folders to shared folders', async () => {
+		const resourceService = new ResourceService();
+
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1', // Share 1
+				children: [
+					{
+						title: 'note 1',
+					},
+				],
+			},
+			{
+				title: 'folder 2', // Not shared
+				children: [
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
+
+		let note1: NoteEntity = await Note.loadByTitle('note 1');
+		let note2: NoteEntity = await Note.loadByTitle('note 2');
+
+		await Folder.save({ id: folder1.id, share_id: 'share1' });
+
+		note1 = await shim.attachFileToNote(note1, testImagePath);
+		note2 = await Note.save({ id: note2.id, body: note1.body });
+
+		await msleep(1);
+
+		await resourceService.indexNoteResources(); // Populate note_resources
+		await Folder.updateAllShareIds(resourceService, []);
+
+		// After
+		expect(await Resource.all()).toHaveLength(2);
+
+		// note1 should have the same body
+		expect(await Note.load(note1.id)).toMatchObject({ body: note1.body, share_id: 'share1' });
+		// note2's body should be updated
+		expect(await Note.load(note2.id)).not.toMatchObject({ body: note2.body, share_id: '' });
+	});
+
+
+	it('should not duplicate a resource if both instances are in different read-only shares', async () => {
+		const resourceService = new ResourceService();
+
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1', // Share 1
+				children: [
+					{
+						title: 'note 1',
+					},
+				],
+			},
+			{
+				title: 'folder 2', // Share 2
+				children: [
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
+
+		const folder2 = await Folder.loadByTitle('folder 2');
+
+		let note1: NoteEntity = await Note.loadByTitle('note 1');
+		const note2: NoteEntity = await Note.loadByTitle('note 2');
+		note1 = await shim.attachFileToNote(note1, testImagePath);
+		await Note.save({ id: note2.id, body: note1.body });
+
+		const shareId1 = 'testing1';
+		const shareId2 = 'testing2';
+		await Folder.save({ id: folder1.id, share_id: shareId1 });
+		await Folder.save({ id: folder2.id, share_id: shareId2 });
+
+		await msleep(1);
+
+		const reset = simulateReadOnlyShareEnv([shareId1, shareId2]);
+		try {
+			await resourceService.indexNoteResources(); // Populate note_resources
+			await Folder.updateAllShareIds(resourceService, []);
+
+			// After: Should not have duplicated the resource
+			expect(await Resource.all()).toHaveLength(1);
+		} finally {
+			reset();
+		}
 	});
 
 	it('should clear share_ids for items that are no longer part of an existing share', async () => {

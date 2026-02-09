@@ -90,7 +90,7 @@ export default class ResourceFetcher extends BaseService {
 		});
 	}
 
-	public async markForDownload(resourceIds: string[]) {
+	public async markForDownload(resourceIds: string[]|string) {
 		if (!Array.isArray(resourceIds)) resourceIds = [resourceIds];
 
 		const fetchStatuses = await Resource.fetchStatuses(resourceIds);

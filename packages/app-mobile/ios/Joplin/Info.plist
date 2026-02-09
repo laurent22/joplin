@@ -44,16 +44,15 @@
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
-
 		<!-- Left over from before upgrading from RN 0.71, 0.73 -->
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>localhost</key>
+			<key>api.joplincloud.local</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
-			<key>api.joplincloud.local</key>
+			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
@@ -62,36 +61,37 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To allow attaching a photo to a note</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>$(PRODUCT_NAME) requires FaceID access to secure access to the application</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>To add geo-location information to a note. Can be disabled in app.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To allow attaching voice recordings to a note</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>The images will be displayed on your notes.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow attaching images to a note</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>To allow attaching voice recordings to a note</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
-		<string>Entypo.ttf</string>
-		<string>EvilIcons.ttf</string>
-		<string>Feather.ttf</string>
 		<string>FontAwesome.ttf</string>
 		<string>FontAwesome5_Brands.ttf</string>
 		<string>FontAwesome5_Regular.ttf</string>
 		<string>FontAwesome5_Solid.ttf</string>
-		<string>Foundation.ttf</string>
 		<string>Ionicons.ttf</string>
 		<string>MaterialIcons.ttf</string>
+		<string>MaterialDesignIcons.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
-		<string>SimpleLineIcons.ttf</string>
-		<string>Octicons.ttf</string>
-		<string>Zocial.ttf</string>
-		<string>Fontisto.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -116,11 +116,5 @@
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) requires FaceID access to secure access to the application</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
 </dict>
 </plist>

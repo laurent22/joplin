@@ -177,6 +177,27 @@ rules.resourcePlaceholder = {
   }
 }
 
+// Math renderers often include:
+// - MathML
+// - Stylized display HTML for browsers that don't suppport MathML.
+//
+// Joplin usually can't properly import the display HTML (and the MathML can usually
+// be imported separately). Skip it:
+rules.ignoreMathDisplay = {
+  filter: function (node) {
+    const hidden = node.getAttribute('aria-hidden') === 'true';
+    const hasClass = (className) => node.classList.contains(className);
+
+    const isWikipediaMathFallback = node.nodeName === 'IMG' && (
+      hasClass('mwe-math-fallback-image-display') || hasClass('mwe-math-fallback-image-inline')
+    ) && hidden;
+    const isKatexDisplay = node.nodeName === 'SPAN' && hasClass('katex-html') && hidden;
+    return isWikipediaMathFallback || isKatexDisplay;
+  },
+
+  replacement: () => '',
+};
+
 // ==============================
 // END Joplin format support
 // ==============================
@@ -385,12 +406,13 @@ function filterLinkHref (href) {
   return href
 }
 
-function filterImageTitle(title) {
+function filterTitleAttribute(title) {
   if (!title) return ''
   title = title.trim()
   title = title.replace(/\"/g, '&quot;');
   title = title.replace(/\(/g, '&#40;');
   title = title.replace(/\)/g, '&#41;');
+  title = title.replace(/\n{2,}/g, '\n');
   return title
 }
 
@@ -431,7 +453,7 @@ rules.inlineLink = {
     if (!href) {
       return getNamedAnchorFromLink(node, options) + filterLinkContent(content)
     } else {
-      var title = node.title && node.title !== href ? ' "' + node.title + '"' : ''
+      var title = node.title && node.title !== href ? ' "' + filterTitleAttribute(node.title) + '"' : ''
       if (!href) title = ''
       let output = getNamedAnchorFromLink(node, options) + '[' + filterLinkContent(content) + '](' + href + title + ')'
 
@@ -579,7 +601,7 @@ function imageMarkdownFromAttributes(attributes) {
   var alt = attributes.alt || ''
   var src = filterLinkHref(attributes.src || '')
   var title = attributes.title || ''
-  var titlePart = title ? ' "' + filterImageTitle(title) + '"' : ''
+  var titlePart = title ? ' "' + filterTitleAttribute(title) + '"' : ''
   return src ? '![' + alt.replace(/([[\]])/g, '\\$1') + ']' + '(' + src + titlePart + ')' : ''
 }
 
@@ -689,7 +711,7 @@ rules.picture = {
 
 function findFirstDescendant(node, byType, name) {
   for (const childNode of node.childNodes) {
-    if (byType === 'class' && childNode.classList.contains(name)) return childNode;
+    if (byType === 'class' && childNode.classList && childNode.classList.contains(name)) return childNode;
     if (byType === 'nodeName' && childNode.nodeName === name) return childNode;
 
     const sub = findFirstDescendant(childNode, byType, name);
@@ -774,6 +796,35 @@ rules.mathjaxScriptBlock = {
 // ===============================================================================
 
 // ===============================================================================
+// MathML support (Wikipedia & KaTeX math)
+// ===============================================================================
+
+// Returns the contents of a <semantics><annotation>...</annotation></semantics> within
+// a math block.
+const getSourceText = (mathNode) => {
+  const semantics = findFirstDescendant(mathNode, 'nodeName', 'semantics');
+  if (!semantics) return '';
+
+  const annotation = findFirstDescendant(semantics, 'nodeName', 'annotation');
+  if (!annotation) return '';
+  return annotation.textContent;
+};
+
+rules.mathMlScriptBlock = {
+  filter: function (node) {
+    return node.nodeName === 'math' && !!getSourceText(node);
+  },
+
+  escapeContent: function() {
+    return false;
+  },
+
+  replacement: function (_content, node, _options) {
+    return '$' + getSourceText(node) + '$';
+  }
+};
+
+// ===============================================================================
 // Joplin "noMdConv" support
 // 
 // Tags that have the class "jop-noMdConv" are not converted to Markdown
@@ -813,7 +864,7 @@ function joplinEditableBlockInfo(node) {
   let sourceNode = null;
   let isInline = false;
   for (const childNode of node.childNodes) {
-    if (childNode.classList.contains('joplin-source')) {
+    if (childNode.classList && childNode.classList.contains('joplin-source')) {
       sourceNode = childNode;
       break;
     }
@@ -864,8 +915,12 @@ function joplinCheckboxInfo(liNode) {
     };
   }
 
+  // Should handle both <ul class='joplin-checklist'><li>...</li></ul>
+  // and <ul><li class='joplin-checklist-item'>...</li></ul>. The second is present
+  // in certain types of imported notes.
   const parentChecklist = findParent(liNode, 'class', 'joplin-checklist');
-  if (parentChecklist) {
+  const currentChecklist = liNode.classList.contains('joplin-checklist-item');
+  if (parentChecklist || currentChecklist) {
     return {
       checked: !!liNode.classList && liNode.classList.contains('checked'),
       renderingType: 2,

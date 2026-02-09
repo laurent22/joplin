@@ -246,6 +246,7 @@ async function main() {
 			return `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`;
 		},
 	});
+	globalLogger.setLevel(Logger.levelStringToId(config().LOG_LEVEL));
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);
 

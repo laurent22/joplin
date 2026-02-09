@@ -1,7 +1,7 @@
 import CommandService, { CommandContext, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { EditorControl } from '@joplin/editor/types';
 import useNowEffect from '@joplin/lib/hooks/useNowEffect';
-import commandDeclarations, { enabledCondition } from '../commandDeclarations';
+import commandDeclarations, { enabledCondition, visibleCondition } from '../commandDeclarations';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('useEditorCommandHandler');
@@ -30,6 +30,7 @@ const commandRuntime = (declaration: CommandDeclaration, editor: EditorControl) 
 			return await editor.execCommand(commandName, ...args);
 		},
 		enabledCondition: enabledCondition(declaration.name),
+		visibleCondition: visibleCondition(declaration.name),
 	};
 };
 

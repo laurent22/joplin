@@ -121,6 +121,8 @@ const useStyles = (theme: Theme) => {
 				height: buttonSize,
 				backgroundColor: theme.backgroundColor4,
 				color: theme.color4,
+				margin: 2,
+				width: 90, // Reduce the min width for mobile screens in portrait
 			},
 			buttonText: buttonTextStyle,
 			activeButtonText: {
@@ -342,7 +344,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	);
 
 	const simpleLayout = (
-		<View style={{ flexDirection: 'row' }}>
+		<View style={{ flexDirection: 'row', flexShrink: 1 }}>
 			{ closeButton }
 			{ searchTextInput }
 			{ showDetailsButton }
@@ -352,7 +354,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	);
 
 	const advancedLayout = (
-		<View style={{ flexDirection: 'column', alignItems: 'center' }}>
+		<View style={{ flexDirection: 'column', flexShrink: 1 }}>
 			<View style={{ flexDirection: 'row' }}>
 				{ closeButton }
 				{ labeledSearchInput }

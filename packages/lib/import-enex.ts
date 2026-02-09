@@ -150,12 +150,16 @@ async function processNoteResource(resource: ExtractedResource) {
 		// Some resources have no data, go figure, so we need a special case for this.
 		await handleNoDataResource(resource, true);
 	} else {
-		if (resource.dataEncoding === 'base64') {
+		// If encoding is not specified, it defaults to base64.
+		// Source: enex.dtd: <!ATTLIST data encoding (base64) "base64">
+		const dataEncoding = resource.dataEncoding ? resource.dataEncoding : 'base64';
+
+		if (dataEncoding === 'base64') {
 			const decodedFilePath = `${resource.dataFilePath}.decoded`;
 			await decodeBase64File(resource.dataFilePath, decodedFilePath);
 			resource.dataFilePath = decodedFilePath;
-		} else if (resource.dataEncoding) {
-			throw new Error(`Cannot decode resource with encoding: ${resource.dataEncoding}`);
+		} else if (dataEncoding) {
+			throw new Error(`Cannot decode resource with encoding: ${dataEncoding}`);
 		}
 
 		const stats = await shim.fsDriver().stat(resource.dataFilePath);

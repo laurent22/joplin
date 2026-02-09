@@ -122,6 +122,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> je lahko le \"spremeni\" ali \"počisti\". Uporabite \"spremeni\" da spremenite dani seznam opravil iz opravljeno v neopravljeno ali obratno. (Če je cilj navadna beležka, bo ta pretvorjena v seznam opravil). Uporabite \"počisti\" da povrnete seznam opravil nazaj v običajno beležko."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -133,6 +136,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		""
@@ -178,6 +184,9 @@
 	],
 	"Add body": [
 		"Dodaj telo"
+	],
+	"Add column": [
+		""
 	],
 	"Add or remove tags:": [
 		"Dodaj ali odstrani oznako:"
@@ -243,6 +252,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -348,6 +360,9 @@
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -470,6 +485,9 @@
 	"Checking... Please wait.": [
 		"Pregledovanje... Prosimo počakajte."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Izberi možnost"
 	],
@@ -541,6 +559,9 @@
 	],
 	"Command": [
 		"Ukaz"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta ukazov"
@@ -779,6 +800,9 @@
 	"Delete plugin \"%s\"?": [
 		"Izbriši dodatek \"%s\"?"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -863,6 +887,9 @@
 	"Displays the complete information about note.": [
 		"Prikaže vse informacije o beležki."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Prikaže dano beležko."
 	],
@@ -880,6 +907,9 @@
 	],
 	"Do not ask for confirmation.": [
 		"Ne sprašuj za potrditev."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1205,6 +1235,9 @@
 	"Feature flags": [
 		"Zastavice opcij"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Preneseni predmeti: %d/%d."
 	],
@@ -1412,9 +1445,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"V kateremkoli ukazu se lahko na beležko ali zvezek nanašate ali z naslovom ali ID ali uporabo bližnjic `$n` ali `$b`, v tem vrstnem redu, za trenutno izbrano beležko ali zvezek. `$c` lahko uporabite, da se nanašate na trenutno izbran predmet."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Za povezovanje geo-lokacije z beležko, aplikacija potrebuje vaše dovoljenje za dostop do lokacije.\n\nTo nastavitev lahko kadarkoli izključite v nastavitvah."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Če želite to storiti, vaši celotni podatki bodo morali biti šifrirani in sinhronizirani, zato da je najboljše, da pustite teči čez noč.\n\nZa začetek, prosim sledite naslednjim korakom:\n\n1. Sinhronizirajte vse vaše naprave.\n2. Kliknite \"%s\"\n3. Pustite da teče do konca. Medtem ko teče se izogibajte spreminjanju katerekoli beležke na vaših napravah, da se izognete konfliktom.\n4. Ko se sinhronizacija konča na tej napravi, sinhronizirajte še vse ostale vaše naprave in pustite da teče do konca.\n\nPomembno: to zaženete samo ENKRAT na eni napravi."
 	],
@@ -1544,6 +1574,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper omogoča shranjevanje spletnih strani in posnetke zaslona vašega brskalnika v Joplin."
 	],
@@ -1567,6 +1600,12 @@
 	],
 	"Keychain Supported: %s": [
 		"Keychain podprt: %s"
+	],
+	"KEYS": [
+		""
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Ležeče"
@@ -1651,6 +1690,9 @@
 	],
 	"Manage your plugins": [
 		"Upravljaj svoje dodatke"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manual": [
 		"Ročno"
@@ -1829,6 +1871,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Noben urejevalnik besedila ni izbran. Prosimo, nastavite ga z uporabo `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -1842,6 +1887,9 @@
 		"Ni naloženo"
 	],
 	"Not generated": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"note": [
@@ -1970,6 +2018,9 @@
 	"Open Sync Wizard...": [
 		"Odpri čarovnik sinhronizacije...."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Odpri..."
 	],
@@ -1981,6 +2032,12 @@
 	],
 	"Options": [
 		"Možnosti"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
 	],
 	"Output format: %s": [
 		"Format izhoda: %s"
@@ -2023,9 +2080,6 @@
 	],
 	"Per user. Minimum of 2 users.": [
 		""
-	],
-	"Permission needed": [
-		"Dovoljenje potrebno"
 	],
 	"Photo %d": [
 		""
@@ -2114,9 +2168,6 @@
 	"Preferred light theme": [
 		"Preferirana svetla tema"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2193,6 +2244,9 @@
 		"Objavi beležko na internetu"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2402,6 +2456,12 @@
 	"Select all": [
 		"Izberi vse"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2540,6 +2600,9 @@
 	"Source: ": [
 		"Vir: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2645,6 +2708,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Se premakne v [notebook] - vse nadaljnje operacije se bodo zgodile znotraj tega zvezka."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2731,6 +2797,9 @@
 	],
 	"Text editor command": [
 		"Ukaz za urejevalnik besedila"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
@@ -3011,6 +3080,9 @@
 	"Try again": [
 		"Poizkusi znova"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Vtipkajte `help [command]` za več informacij o ukazu; ali vtipkajte `help all` za popoln prikaz informacij o uporabi."
 	],
@@ -3027,6 +3099,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -3134,6 +3209,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Uporabljen kjer je za izpis potrebna pisava s fiksno širino. (npr: tabele, koda, potrditveno polje). Če ni najden, se uporabi generična monospace(fiksna širina) pisava."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -3174,9 +3252,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -3221,10 +3296,10 @@
 	"When creating a new to-do:": [
 		"Ob ustvarjanju novega seznama opravil:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

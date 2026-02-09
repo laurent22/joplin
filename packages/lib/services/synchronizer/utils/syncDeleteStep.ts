@@ -32,6 +32,7 @@ export default async (syncTargetId: number, cancelling: boolean, logSyncOperatio
 				if (remoteContent) {
 					remoteContent = await BaseItem.unserialize(remoteContent);
 					const ItemClass = BaseItem.itemClass(item.item_type);
+					// For remote deletion, remoteItemUpdatedTime can be reset to 0
 					let nextQueries = BaseItem.updateSyncTimeQueries(syncTargetId, remoteContent, time.unixMs());
 
 					if (isResource) {

@@ -37,6 +37,20 @@ export interface FsDriver {
 	cacheCssToFile: (cssStrings: string[])=> Promise<any>;
 }
 
+export interface RenderOptionsGlobalSettings {
+	'markdown.plugin.abc.options': string;
+}
+
+interface SettingModel {
+	value: <T>(key: string)=> T;
+}
+
+export const getGlobalSettings = (settingModel?: SettingModel): RenderOptionsGlobalSettings => {
+	return {
+		'markdown.plugin.abc.options': settingModel ? settingModel.value<string>('markdown.plugin.abc.options') : '',
+	};
+};
+
 export interface RenderOptions {
 	contentMaxWidth?: number;
 	scrollbarSize?: number;
@@ -80,6 +94,9 @@ export interface RenderOptions {
 
 	// HtmlToHtml only
 	whiteBackgroundNoteRendering?: boolean;
+
+	// This can be used to give access to global settings to Markdown renderer plugins
+	globalSettings?: RenderOptionsGlobalSettings;
 }
 
 export interface RenderResultPluginAsset {

@@ -112,6 +112,7 @@ export const withDerivedColors = (theme: Theme) => {
 		borderColor4: rgbString(Color(theme.color).alpha(0.3)),
 		iconColor: rgbString(Color(theme.color).alpha(0.8)),
 		focusOutlineColor: theme.colorWarn,
+		focusOutlineColorDimmed: rgbString(Color(theme.colorWarn).alpha(0.4)),
 
 		backgroundColor5,
 		backgroundColorHover5: hexString(Color(backgroundColor5).darken(0.2)),

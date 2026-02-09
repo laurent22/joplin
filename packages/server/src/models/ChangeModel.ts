@@ -2,7 +2,6 @@ import { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
 import { DbConnection, SqliteMaxVariableNum, isPostgres } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
-import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
@@ -30,9 +29,6 @@ export interface ChangePagination {
 }
 
 export interface ChangePreviousItem {
-	name: string;
-	jop_parent_id: string;
-	jop_resource_ids: string[];
 	jop_share_id: string;
 }
 
@@ -87,12 +83,12 @@ export default class ChangeModel extends BaseModel<Change> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
-		void query.limit(limit);
+		void query.limit(limit).orderBy('counter', 'asc');
 		let results: Change[] = await query;
 		const hasMore = !!results.length;
 		const cursor = results.length ? results[results.length - 1].id : id;
 		results = await this.removeDeletedItems(results);
-		results = await this.compressChanges(results);
+		results = await this.compressChanges_(results);
 		return {
 			items: results,
 			has_more: hasMore,
@@ -163,21 +159,65 @@ export default class ChangeModel extends BaseModel<Change> {
 		// The "+ 0" was added to prevent Postgres from scanning the `changes` table in `counter`
 		// order, which is an extremely slow query plan. With "+ 0" it went from 2 minutes to 6
 		// seconds for a particular query. https://dba.stackexchange.com/a/338597/37012
+		//
+		// ## 2025-11-06
+		//
+		// Remove the "+ 0" because now it appears to make query slower by preventing the query
+		// planner from using the index. Using Postgres 16.8
+		//
+		// ## 2025-11-08
+		//
+		// This query shape, with `ui AS MATERIALIZED` ensures that Postgres query planner will use
+		// the index `changes_item_id_counter_type2_index`, which was created specifically for that
+		// query. With the join (as previously) the planner uses the `counter` index and ends up
+		// walking through millions of rows in the `changes` table.
+		//
+		// This new query improves this part, however it's still not perfect because it will be
+		// relatively slow for users with hundreds of thousands of items. But at least the
+		// performance won't be bound to the size of the `changes` table anymore, and it will be
+		// fast for users with a normal amount of items.
+		//
+		// Keeping the previous query here because it's more readable and equivalent. It could be a
+		// use as a base for a refactoring:
+		//
+		// ```
+		// SELECT ${changesFieldsSql}
+		// FROM "changes"
+		// JOIN "user_items" ON user_items.item_id = changes.item_id
+		// WHERE counter > ?
+		// AND type = ?
+		// AND user_items.user_id = ?
+		// ORDER BY "counter" ASC
+		// ${doCountQuery ? '' : 'LIMIT ?'}
+		// ```
+
+		const changesFieldsSql = fields
+			.map(f => `"changes"."${f}" AS "${f}"`)
+			.join(', ');
 
 		const subQuery2 = `
-			SELECT ${fieldsSql}
-			FROM "changes"
-			WHERE counter > ?
-			AND type = ?
-			AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)
-			ORDER BY "counter" + 0 ASC
+			WITH ui AS MATERIALIZED (
+				SELECT item_id
+				FROM user_items
+				WHERE user_id = ?
+			)
+			SELECT ${changesFieldsSql}
+			FROM changes
+			WHERE type = ?
+				AND counter > ?
+				AND EXISTS (
+					SELECT 1
+					FROM ui
+					WHERE ui.item_id = changes.item_id
+				)
+			ORDER BY counter
 			${doCountQuery ? '' : 'LIMIT ?'}
 		`;
 
 		const subParams2 = [
-			fromCounter,
-			ChangeType.Update,
 			userId,
+			ChangeType.Update,
+			fromCounter,
 		];
 
 		if (!doCountQuery) subParams2.push(limit);
@@ -269,7 +309,7 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		let items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 
-		let processedChanges = this.compressChanges(changes);
+		let processedChanges = this.compressChanges_(changes);
 		processedChanges = await this.removeDeletedItems(processedChanges, items);
 
 		if (this.deltaIncludesItems_) {
@@ -344,16 +384,15 @@ export default class ChangeModel extends BaseModel<Change> {
 	// know that the item has changed at least once. The reduction is basically:
 	//
 	//     create - update => create
-	//     create - delete => NOOP
+	//     create - delete => delete
 	//     update - update => update
 	//     update - delete => delete
 	//     delete - create => create
 	//
 	// There's one exception for changes that include a "previous_item". This is
 	// used to save specific properties about the previous state of the item,
-	// such as "jop_parent_id" or "name", which is used by the share mechanism
-	// to know if an item has been moved from one folder to another. In that
-	// case, we need to know about each individual change, so they are not
+	// such as "jop_share_id" or "name". The share mechanism needs to know about
+	// each change to "jop_share_id", so updates that change the share ID are not
 	// compressed.
 	//
 	// The latest change, when an item goes from DELETE to CREATE seems odd but
@@ -362,19 +401,41 @@ export default class ChangeModel extends BaseModel<Change> {
 	// (CREATED), then unshared (DELETED), then shared again (CREATED). When it
 	// happens, we want the user to get the item, thus we generate a CREATE
 	// event.
-	private compressChanges(changes: Change[]): Change[] {
-		const itemChanges: Record<Uuid, Change> = {};
+	//
+	// Public to allow testing.
+	public compressChanges_(changes: Change[]): Change[] {
+		const itemChanges = new Map<Uuid, Change>();
 
-		const uniqueUpdateChanges: Record<Uuid, Record<string, Change>> = {};
+		const itemUniqueUpdates = new Map<Uuid, Change[]>();
+		const itemToLastUpdateShareIds = new Map<Uuid, Uuid>();
+
+		const changeToShareId = (change: Change) => {
+			return this.unserializePreviousItem(change.previous_item)?.jop_share_id ?? '';
+		};
 
 		for (const change of changes) {
 			const itemId = change.item_id;
-			const previous = itemChanges[itemId];
+			const previous = itemChanges.get(itemId);
 
 			if (change.type === ChangeType.Update) {
-				const key = md5(itemId + change.previous_item);
-				if (!uniqueUpdateChanges[itemId]) uniqueUpdateChanges[itemId] = {};
-				uniqueUpdateChanges[itemId][key] = change;
+				const shareId = changeToShareId(change);
+
+				const uniqueUpdates = itemUniqueUpdates.get(itemId);
+				if (uniqueUpdates) {
+					const lastShareId = itemToLastUpdateShareIds.get(itemId);
+					const canCompress = lastShareId === shareId;
+
+					if (canCompress) {
+						// Always keep the last change as up-to-date as possible
+						uniqueUpdates[uniqueUpdates.length - 1] = change;
+					} else {
+						uniqueUpdates.push(change);
+						itemToLastUpdateShareIds.set(itemId, shareId);
+					}
+				} else {
+					itemUniqueUpdates.set(itemId, [change]);
+					itemToLastUpdateShareIds.set(itemId, shareId);
+				}
 			}
 
 			if (previous) {
@@ -383,32 +444,31 @@ export default class ChangeModel extends BaseModel<Change> {
 				}
 
 				if (previous.type === ChangeType.Create && change.type === ChangeType.Delete) {
-					delete itemChanges[itemId];
+					itemChanges.set(itemId, change);
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Update) {
-					itemChanges[itemId] = change;
+					itemChanges.set(itemId, change);
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Delete) {
-					itemChanges[itemId] = change;
+					itemChanges.set(itemId, change);
 				}
 
 				if (previous.type === ChangeType.Delete && change.type === ChangeType.Create) {
-					itemChanges[itemId] = change;
+					itemChanges.set(itemId, change);
 				}
 			} else {
-				itemChanges[itemId] = change;
+				itemChanges.set(itemId, change);
 			}
 		}
 
 		const output: Change[] = [];
 
-		for (const itemId in itemChanges) {
-			const change = itemChanges[itemId];
+		for (const [itemId, change] of itemChanges) {
 			if (change.type === ChangeType.Update) {
-				for (const key of Object.keys(uniqueUpdateChanges[itemId])) {
-					output.push(uniqueUpdateChanges[itemId][key]);
+				for (const otherChange of itemUniqueUpdates.get(itemId)) {
+					output.push(otherChange);
 				}
 			} else {
 				output.push(change);

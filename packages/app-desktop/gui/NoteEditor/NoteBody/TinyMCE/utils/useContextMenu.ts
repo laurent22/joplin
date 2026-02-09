@@ -1,7 +1,7 @@
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import bridge from '../../../../../services/bridge';
 import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
@@ -18,6 +18,7 @@ import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import type { MenuItem as MenuItemType } from 'electron';
 import isItemId from '@joplin/lib/models/utils/isItemId';
+import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -30,11 +31,12 @@ interface ContextMenuActionOptions {
 const contextMenuActionOptions: ContextMenuActionOptions = { current: null };
 
 export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatch, htmlToMd: HtmlToMarkdownHandler, mdToHtml: MarkupToHtmlHandler, editDialog: EditDialogControl) {
+	const windowId = useContext(WindowIdContext);
 	useEffect(() => {
 		if (!editor) return () => {};
 
 		const contextMenuItems = menuItems(dispatch);
-		const targetWindow = bridge().activeWindow();
+		const targetWindow = bridge().windowById(windowId);
 
 		const makeMainMenuItems = (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;
@@ -175,5 +177,5 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 				targetWindow.webContents.off('context-menu', onElectronContextMenu);
 			}
 		};
-	}, [editor, plugins, dispatch, htmlToMd, mdToHtml, editDialog]);
+	}, [editor, plugins, dispatch, htmlToMd, mdToHtml, editDialog, windowId]);
 }

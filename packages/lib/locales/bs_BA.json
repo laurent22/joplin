@@ -110,6 +110,9 @@
 	"[None]": [
 		""
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -121,6 +124,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		""
@@ -163,6 +169,9 @@
 	],
 	"Add body": [
 		"Dodaj tekst"
+	],
+	"Add column": [
+		""
 	],
 	"Add or remove tags:": [
 		"Dodajte ili uklonite oznake:"
@@ -225,6 +234,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -324,6 +336,9 @@
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -431,6 +446,9 @@
 	"Checking... Please wait.": [
 		"Provjeravam... Pričekajte."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Odaberi opciju"
 	],
@@ -489,6 +507,9 @@
 		""
 	],
 	"Command": [
+		""
+	],
+	"COMMAND": [
 		""
 	],
 	"Command palette": [
@@ -662,6 +683,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -743,6 +767,9 @@
 	"Displays the complete information about note.": [
 		"Prikazuje potpune informacije o bilješci."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Prikazuje datu bilješku."
 	],
@@ -757,6 +784,9 @@
 	],
 	"Do not ask for confirmation.": [
 		"Ne pitaj za potvrdu."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1031,6 +1061,9 @@
 	"Feature flags": [
 		""
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Preuzeto stavki: %d/%d."
 	],
@@ -1229,9 +1262,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"U svakoj komandi, bilješka ili bilježnica mogu se precizirati pomoću naziva ili identifikacijskog broja, odnosno pomoću kratica za naziv `$n` i broj `$b` trenutno označene bilješke ili bilježnice. `$c` se može koristiti za trenutno označenu stavku."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Da bi dodali geo-lokaciju vasoj biljesci, aplikaciji je potrebna dozvola pristupu vasoj lokacij.\n\nOvu opciju je moguce promijeniti bilo kada u podesavanjima."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Da biste to učinili, svi Vaši podaci moraju biti šifrirani i sinhronizovani, pa je najbolje da to učinite preko noći.\n\nDa započnete, slijedite sljedeće upute:\n\n1. Sinhronizujte sve svoje uređaje.\n2. Pritisnite \"%s\".\n3. Sačekajte dok se proces ne okonča. Tokom rada, nemojte uređivati bilo koju bilješku na nekom od Vaših uređaja kako biste izbjegli konflikte.\n4. Kad je sinhronizacija završena na ovom uređaju, sinhronizujte i ostale uređaje.\n\nVažno: ovaj proces trebate pokrenuti samo JEDNOM i na samo jednom uređaju."
 	],
@@ -1337,6 +1367,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web clipper omogućava pohranjivanje internet stranica i slika ekrana iz Vašeg internet preglednika u Joplin."
 	],
@@ -1354,6 +1387,12 @@
 	],
 	"Keychain Supported: %s": [
 		"Podržani privjesak: %s"
+	],
+	"KEYS": [
+		""
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Vodoravno"
@@ -1431,6 +1470,9 @@
 		"Donirajte"
 	],
 	"Manage your plugins": [
+		""
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
 		""
 	],
 	"Manual": [
@@ -1586,6 +1628,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nije određen program za uređivanje teksta. Precizirajte ga pomoću `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1602,6 +1647,9 @@
 		"Nije preuzeto"
 	],
 	"Not generated": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"note": [
@@ -1694,6 +1742,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Otvori..."
 	],
@@ -1705,6 +1756,12 @@
 	],
 	"Options": [
 		"Opcije"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
 	],
 	"Page orientation for PDF export": [
 		"Položaj stranice za pohranjivanje u PDF"
@@ -1820,9 +1877,6 @@
 	"Preferred light theme": [
 		"Preferirana svijetla tema"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -1893,6 +1947,12 @@
 		""
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2096,6 +2156,12 @@
 	"Select all": [
 		"Označi sve"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2219,6 +2285,9 @@
 	"Source format: %s": [
 		"Izvorni format: %s"
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2324,6 +2393,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Prelazi u [notebook] – sve dalje radnje vršit će se u ovoj bilježnici."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2398,6 +2470,9 @@
 	],
 	"Text editor command": [
 		"Komanda za uređivača teksta"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
@@ -2665,6 +2740,9 @@
 	"Try again": [
 		""
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Kucajte `help [command]` za više informacija o komandi; ili kucajte `help all` za detaljne informacije o načinu korištenja."
 	],
@@ -2678,6 +2756,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -2770,6 +2851,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -2801,9 +2885,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -2851,10 +2932,10 @@
 	"When creating a new to-do:": [
 		"Prilikom kreiranja novog zadatka:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

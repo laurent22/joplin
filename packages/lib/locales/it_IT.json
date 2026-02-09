@@ -134,6 +134,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> può essere \"toggle\" or \"clear\". Usa \"toggle\" per modificare lo stato di un'attività in completato/non completato (se viene utilizzato su una nota la nota verrà convertita in un'attività). Usa \"clear\" convertire le attività in normali note."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -145,6 +148,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Informazioni"
@@ -196,6 +202,9 @@
 	],
 	"Add body": [
 		"Aggiungi corpo"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Aggiungi nuova"
@@ -277,6 +286,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"È stato trovato un disegno salvato automaticamente. Allegarne una copia alla nota?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Si è verificato un errore: %s"
@@ -391,6 +403,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Grassetto"
@@ -521,6 +536,9 @@
 	"Checking... Please wait.": [
 		"Controllo... Attendere per favore."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Scegli un'opzione"
 	],
@@ -598,6 +616,9 @@
 	],
 	"Command": [
 		"Comando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Comandi"
@@ -906,6 +927,9 @@
 	"Delete selected notes": [
 		"Eliminare le note selezionate"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Eliminare il taccuino della Posta in arrivo?\n\nSe elimini il taccuino della posta in arrivo, tutti i messaggi di posta elettronica recentemente inviati ad esso potrebbero andare perduti."
 	],
@@ -996,6 +1020,9 @@
 	"Displays the complete information about note.": [
 		"Mostra le informazioni complete sulla nota."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Mostra la seguente nota."
 	],
@@ -1016,6 +1043,9 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Non perdere la password poiché, per motivi di sicurezza, questo sarà l'*unico* modo per decrittografare i dati! Per abilitare la crittografia, inserisci la tua password qui sotto."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1395,6 +1425,9 @@
 	"Feature flags": [
 		"Flag di funzionalità"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Elementi recuperati: %d/%d."
 	],
@@ -1645,9 +1678,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"In ciascun comando, si deve necessariamente definire una Nota o un Taccuino usando un titolo, un ID o usando le scorciatoie `$n` or `$b` per , rispettivamente, la nota o il Taccuino selezionato `$c` può essere usato per fare riferimento all'elemento selezionato."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Per associare una geolocalizzazione alla nota, l'applicazione ha bisogno del permesso per accedere alla posizione.\n\nPuoi cambiare questa impostazione nel menu Configurazione."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Per farlo, il tuo intero data set deve essere criptato e sincronizzato, quindi è consigliabile lasciarlo fare di notte.\n\nPer iniziare, segui queste indicazioni:\n\n1. Sincronizza tutti i tuoi dispositivi.\n2. Clicca \"%s\".\n3. Aspetta che l'operazione venga completata. Per evitare conflitti, evita di modificare le note durante questo lasso di tempo.\n4. Una volta che questo dispositivo è stato sincronizzato, sincronizza tutti i dispositivi rimanenti e aspetta che finisca.\n\nImportante: questa operazione va eseguita SOLO UNA VOLTA in UN dispositivo."
 	],
@@ -1795,6 +1825,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper consente di salvare pagine Web e schermate dal tuo browser in a Joplin."
 	],
@@ -1822,8 +1855,14 @@
 	"Keychain Supported: %s": [
 		"Portachiavi supportato: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Chiavi master che devono essere aggiornate"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Orizzontale"
@@ -1948,6 +1987,9 @@
 	],
 	"Manage your plugins": [
 		"Gestisci plugins"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Gestisci la configurazione E2EE. I comandi sono `abilita`, `disabilita`, `decripta`, `stato`, `decripta-file` e `stato-target`."
@@ -2153,6 +2195,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Non è definito nessun editor di testo. Per favore impostalo usando `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2170,6 +2215,9 @@
 	],
 	"Not now": [
 		"Non ora"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"nota"
@@ -2321,6 +2369,9 @@
 	"Open Sync Wizard...": [
 		"Apri la procedura guidata di sincronizzazione..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Apri..."
 	],
@@ -2333,8 +2384,14 @@
 	"Options": [
 		"Opzioni"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Lista ordinata"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"Altre applicazioni..."
@@ -2389,9 +2446,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Elimina definitivamente il taccuino, saltando il cestino."
-	],
-	"Permission needed": [
-		"Permesso richiesto"
 	],
 	"Photo %d": [
 		""
@@ -2495,9 +2549,6 @@
 	"Preferred light theme": [
 		"Preferisci il tema chiaro"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2583,6 +2634,9 @@
 		"Pubblicare note su Internet"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2861,8 +2915,14 @@
 	"Select file...": [
 		"Seleziona file..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Seleziona il taccuino principale"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Self-hosted": [
 		""
@@ -3041,6 +3101,9 @@
 	"Source: ": [
 		"Sorgente: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		"Separatore"
 	],
@@ -3152,6 +3215,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Passa tra [notebook] - tutte le ulteriori operazioni interesseranno il seguente Taccuino."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Sincronizza tutti i dispositivi che desideri"
 	],
@@ -3247,6 +3313,9 @@
 	],
 	"Text editor command": [
 		"Comando editor di testo"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Il profilo attivo non può essere eliminato. Passa a un profilo diverso e riprova."
@@ -3601,6 +3670,9 @@
 	"Try it now": [
 		"Prova subito"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Digita `help [command]` per ottenere maggiori informazioni su un comando; o scrivi `help all` per le informazioni di utilizzo complete."
 	],
@@ -3742,6 +3814,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Utilizzato dove un carattere a larghezza fissa è necessario per mostrare il testo in maniera leggibile (ad es. tabelle, caselle di controllo, codice). Se non trovato, sarà utilizzato un carattere monospace (larghezza fissa) generico."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Eliminazioni di utenti"
 	],
@@ -3780,9 +3855,6 @@
 	],
 	"Voice typing...": [
 		"Digitazione vocale..."
-	],
-	"Vosk": [
-		""
 	],
 	"Waiting for authorisation...": [
 		"In attesa dell'autorizzazione..."
@@ -3838,11 +3910,11 @@
 	"When creating a new to-do:": [
 		"Quando crei un nuovo \"Cose-da-fare\":"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Se attivato, l'applicazione scansiona gli allegati ed estrae il testo da essi. In questo modo è possibile cercare il testo negli allegati."
-	],
-	"Whisper": [
-		""
 	],
 	"Window unresponsive.": [
 		"La finestra non risponde."

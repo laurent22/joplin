@@ -7,7 +7,7 @@ import { generateSecureRandom } from 'react-native-securerandom';
 import FsDriverRN from '../fs-driver/fs-driver-rn';
 import { Linking, Platform } from 'react-native';
 import crypto from '../../services/e2ee/crypto';
-const RNExitApp = require('react-native-exit-app').default;
+import { reloadAppAsync } from 'expo';
 
 export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
@@ -178,7 +178,7 @@ export default function shimInit() {
 	};
 
 	shim.restartApp = () => {
-		RNExitApp.exitApp();
+		void reloadAppAsync();
 	};
 
 	shimInitShared();

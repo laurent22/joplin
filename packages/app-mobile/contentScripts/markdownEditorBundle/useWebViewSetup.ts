@@ -88,7 +88,7 @@ const useWebViewSetup = ({
 	`;
 
 	const injectedJavaScript = useMemo(() => `
-		if (typeof markdownEditorBundle === 'undefined') {
+		if (typeof window.markdownEditorBundle === 'undefined') {
 			${shim.injectedJs('markdownEditorBundle')};
 			window.markdownEditorBundle = markdownEditorBundle;
 			markdownEditorBundle.setUpLogger();

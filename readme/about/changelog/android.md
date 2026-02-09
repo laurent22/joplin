@@ -1,12 +1,165 @@
 # Joplin Android Changelog
 
-## [android-v3.4.7](https://github.com/laurent22/joplin/releases/tag/android-v3.4.7) (Pre-release) - 2025-09-09T08:09:54Z
+## [android-v3.6.12](https://github.com/laurent22/joplin/releases/tag/android-v3.6.12) - 2026-02-04T14:08:14Z
+
+- New: Add more error information when the profile is corrupted (f075b56)
+- New: Add support for FrontMatter block rendering in notes (#14256)
+- New: Add support for external embeds, eg. YouTube videos (#14012)
+- Improved: Editor: Inline rendering: Render inline HTML (colorized text, superscript, subscript, strikethrough) (#14133 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown Editor: Make code block highlighting closer to the viewer (#14168) (#14158 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown: Allow specifying the start/end of audio, videos, and PDFs (#14257) (#9745 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Sync: Make resource processing in read-only shares more reliable (#14204 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/datetimepicker (v8.4.7), @rollup/plugin-commonjs (v28.0.9), @rollup/plugin-node-resolve (v16.0.3), @rollup/plugin-replace (v6.0.3), babel-plugin-react-native-web (v0.21.2), dayjs (v1.11.19), esbuild (v0.25.12), react-native-device-info (v14.1.1), react-native-localize (v3.5.4), react-native-safe-area-context (v5.6.2), react-native-web (v0.21.2), react-refresh (v0.18.0), sass (v1.93.3), style-to-js (v1.1.18), turndown (v7.2.2)
+- Improved: Upgrade to React Native 0.81 (#14232 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Align tag search-input-clear behavior across input methods (#14042) (#13243 by [@Fardin96](https://github.com/Fardin96))
+- Fixed: Application crashes when profile database has been analyzed (#14144)
+- Fixed: Markdown editor: Fix error logged in "hide markdown" mode for certain markup (#14179 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown editor: Scroll jumps in notes with many inline images (#13955) (#13933 by [@bwat47](https://github.com/bwat47))
+- Fixed: Markdown editor: Upgrade most CodeMirror dependencies (#14186) (#14009 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Prevent the back button sometimes disappearing when switching between editors (#14164) (#14153 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Unlinked resource deletion: Fix resources attached only via reference links are auto-deleted (#14178 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.5.9](https://github.com/laurent22/joplin/releases/tag/android-v3.5.9) - 2026-01-19T16:24:19Z
+
+- Improved: Remove unnecessary READ_PHONE_STATE permission (#14157 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.5.8](https://github.com/laurent22/joplin/releases/tag/android-v3.5.8) - 2026-01-10T10:08:46Z
+
+- Fixed: Fixed keyboard input issue in note title (#14070) (#13544 by [@mrjo118](https://github.com/mrjo118))
+
+## [android-v3.5.7](https://github.com/laurent22/joplin/releases/tag/android-v3.5.7) - 2026-01-08T19:30:28Z
+
+- New: Rich Text Editor: Add shortcuts for inserting code blocks (#14055 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: In-editor rendering: Fix rendered checkboxes are very small on mobile (#14056 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Make header styles more closely match the note viewer (#14053) (#13753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown editor: Prevent layout shift when hiding/showing rendered checkboxes (#14044) (#13159 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @rollup/plugin-node-resolve (v16.0.2), katex (v0.16.23)
+- Fixed: Fix "Check synchronization configuration" button (#14031) (#14030 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix ABC Sheet Music setting includes "Translation error" in description (#14058) (#14049 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Images sometimes don't render until you click somewhere in the note (#14019) (#13963 by [@bwat47](https://github.com/bwat47))
+- Fixed: Insert time command not respecting locale settings (#13994) (#13229 by [@HIJOdelIDANII](https://github.com/HIJOdelIDANII))
+
+## [android-v3.5.6](https://github.com/laurent22/joplin/releases/tag/android-v3.5.6) - 2025-12-27T20:34:44Z
+
+- Revert "All: Apache Tomcat WebDAV compatibility for sync (#13614)"
+
+## [android-v3.5.5](https://github.com/laurent22/joplin/releases/tag/android-v3.5.5) - 2025-12-26T10:53:20Z
+
+- Improved: Update js-draw to v1.33.0 (#13990 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages react-native-webview (v13.16.0)
+- Fixed: Editor: Fix search/replace UI is partially off-screen on small-screen devices (#13978 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Feature flags: Fix "voice typing" feature flag (#13981 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.5.4](https://github.com/laurent22/joplin/releases/tag/android-v3.5.4) - 2025-12-23T20:00:18Z
+
+- Improved: Accessibility: Dark mode: Improve contrast of conflicts notebook title, error messages in "Logs" (#13925 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Attempt to fix application hang when opening the camera (#13974 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Set the default math/code block content to the selection (#13952 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/datetimepicker (v8.4.5), @react-native-documents/picker (v10.1.7), esbuild (v0.25.10), expo (v53.0.23), fs-extra (v11.3.2), mermaid (v11.10.1), sass (v1.93.2), sharp (v0.34.4)
+- Improved: Viewer, Rich Text Editor: Save/restore the cursor and scroll position when switching notes (#13962) (#520 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix `react-native-vector-icons` error when opening a note (#13975 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix some icons are invisible: Upgrade `react-native-vector-icons` to v12 (#13905) (#13854 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix checklists saved with extra space (#13951) (#13081 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix indent/de-indent buttons do nothing when not in a list (#13961 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Toolbar editor: Fix toolbar editor dismiss button is rendered outside the dialog on small screens (#13976 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.5.3](https://github.com/laurent22/joplin/releases/tag/android-v3.5.3) - 2025-12-14T13:46:02Z
+
+- New: Add a link to the list of open-source licenses (5caec16)
+- New: Add the ability to rename and delete tags (#13731 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Do no re-use the 'Restored Notes' folder if it is trashed (#13813 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Prevent opening the edit / delete dialog when long pressing the conflicts notebook (#13860 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Updated packages @react-native/babel-preset (v0.81.0), babel-plugin-react-native-web (v0.21.1), dayjs (v1.11.18), fs-extra (v11.3.1), react-native-safe-area-context (v5.6.1), react-native-share (v12.2.0), react-native-web (v0.21.1)
+- Improved: Upgrade js-draw to v1.32.0 (#13875 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix incompatible plugins cannot be uninstalled (#13828) (#13825 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Import Error: Note date incorrect when import notes with import MD - Markdown + Front Matter (#12770)
+- Fixed: Importing MD + frontmatter fails on empty variable (#13008)
+- Fixed: Markdown import incorrectly parses a link as a file path (#12172)
+- Fixed: Rich Text Editor: Fix table delete row/delete column buttons can't remove the last row/column from a table (#13877 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.5.1](https://github.com/laurent22/joplin/releases/tag/android-v3.5.1) - 2025-11-29T12:33:28Z
+
+- New: Add support for mixed case tags (#12931 by [@mrjo118](https://github.com/mrjo118))
+- New: Add the ability to search on the tag list screen (#13733 by [@mrjo118](https://github.com/mrjo118))
+- New: Document scanner: Add "Recognise text" checkbox (#13398 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Rich Text Editor: Add button for creating tables (#13645 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: #12823: Disable auto-search for 1-2 character searches (#13444) (#12823 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Accessibility: Allow changing the ALT text of images from the mobile Rich Text Editor (#13169) (#13104 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add support for rendering html images when "Markdown editor: Render images" is enabled (#13743 by [@bwat47](https://github.com/bwat47))
+- Improved: Add sync wizard (#13234) (#13123 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Allow expanding and collapsing the title field across multiple lines (#13016) (#12936 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Allow using share permission with Joplin Server Business (f340960)
+- Improved: Apache Tomcat WebDAV compatibility for sync (#13614 by [@horvatkm](https://github.com/horvatkm))
+- Improved: Automatically retrigger the sync if there are more un-synced outgoing changes when sync completes (#12989 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Avoid excessive data usage when automatically triggering another sync (#13261 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Delete all note revisions when the note is permanently deleted (#12609) (#8718 by pedr)
+- Improved: Ensure that sync process ends up properly when Joplin Server shares cannot be accessed (42d8df3)
+- Improved: Extend notebook selection dropdowns when the dropdown is opened (#13726 by [@mrjo118](https://github.com/mrjo118))
+- Improved: For notes over 100,000 characters, make the share note function share them as a file (#13305 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Hide Markdown-editor-only buttons in the Rich Text Editor (#13664 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Hide backslash escapes when "Markdown editor: Render markup in editor" is enabled (#13773 by [@bwat47](https://github.com/bwat47))
+- Improved: Improve inline search performance in large documents (#13259 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve location permission request (#13248 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve tag dialog performance with long tags and many tags (#13117 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Increase height of tag association screen to cater for a larger tag list area (#13521 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Make the conflicts folder text use the error colour, like is done on desktop (#13343 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Make title field work with very long text (#13566 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Markdown editor search: Auto-scroll to the next match when the search changes (#13242) (#12343 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Open the connection screen when a SAML session has expired (fc0014c)
+- Improved: Plugins: Improve handling of invalid toolbar button enabled conditions (#13076 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove Beta mention for Joplin Server (#13367)
+- Improved: Remove expandable title field on Web client and fix icon alignment (#13240 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Remove image height limit in Markdown editor (#13717) (#12959 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Accessibility: Fix font size setting not respected (#13174 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Improve support for ABC sheet music and Mermaid code blocks (#13784 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Improve table support (#13413) (#13067 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Rich Text Editor: Support inserting code blocks (#13776 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support accepting shares with a new key format (#12829 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.4.4), @babel/plugin-transform-export-namespace-from (v7.27.1), @js-draw/material-icons (v1.30.1), @pmmmwh/react-refresh-webpack-plugin (^0.6.0), @react-native-clipboard/clipboard (v1.16.3), @react-native-community/datetimepicker (v8.4.4), @react-native-documents/picker (v10.1.5), @react-native/babel-preset (v0.80.1), @react-native/metro-config (v0.79.5), @rollup/plugin-commonjs (v28.0.6), esbuild (v0.25.9), expo (v53.0.20), expo-camera (v16.1.11), follow-redirects (v1.15.11), form-data (v4.0.4), glob (v11.0.3), js-draw (v1.30.1), mermaid (v11.9.0), react-native-dropdownalert (v5.2.0), react-native-image-picker (v8.2.1), react-native-localize (v3.5.2), react-native-paper (v5.14.5), react-native-safe-area-context (v5.5.2), react-native-share (v12.1.2), react-native-vector-icons (v10.3.0), react-native-webview (v13.15.0), react-native-zip-archive (v7.0.2), sass (v1.93.0), sharp (v0.34.3), style-to-js (v1.1.17), turndown (v7.2.1), webpack-dev-server (v5.2.2)
+- Improved: Upgrade react-native-quick-crypto to v0.7.17 (#13155 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Accessibility: Fix tag search input loses focus when submitted by pressing "enter" (#13070 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Avoid dismissing the keyboard when tapping markdown toolbar buttons with the title in focus (#13504) (#12957 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Change default content-type for Webdav connector to application/octet-stream (#13053) (#12249 by pedr)
+- Fixed: Ensure note list is re-ordered after updating a note opened via a search (#13506) (#11468 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Ensure notebook conflicts do not delete child notes and notebooks when resolved (#13167) (#11902 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Ensure the sync shows an error when the server is down, when using a local WebDAV server (#13301 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: External keyboard: Fix adding tags by pressing enter on certain Android devices (#13069) (#12952 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix "cannot add an item as a child of a read-only item" error when updating share IDs (#13523) (#13522 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Markdown toolbar (#13514) (#13193 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Markdown toolbar buttons sometimes don't work (#13233) (#13193 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix compatibility with 16-KB-page-size devices: Remove Vosk (#13189) (#13113 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix dropdown menus are offset on Android 15+ (#13106) (#13079 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix historic issue whereby the first revision created for a note does not contain the original contents (#12674 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix images rendered in the Markdown editor don't reload when downloaded (#13045) (#12987 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix incorrect zebra striping on tables in the rich text editor (#13663) (#13637 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix issue with shared notebooks and SAML sync (9f36b44)
+- Fixed: Fix long note title doesn’t wrap properly for To Do type note (#13099) (#13095 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix notes are moved to the conflict folder when a folder is unshared (#12993 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix tag association screen no longer searches case insensitively or searches tag endings (#13128) (#13116 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix text highlighting in basic search mode (#13703 by Self Not Found)
+- Fixed: Fix truncated buttons on tag association screen (#13502) (#13120 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Implement the config check for Joplin Server with SAML enabled (#13360) (#13328 by [@ttcchhmm](https://github.com/ttcchhmm))
+- Fixed: Improve performance of item deserialization (#13585) (#13291 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown toolbar overlaps with the gesture bar (#13533) (#13108 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Plugins: Fix inspecting note editor WebViews (#13272 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Prevent Joplin from missing changes when syncing with file system or WebDAV (#13054) (#6517 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent new notes from being created in trashed or missing notebooks in certain cases (#13575) (#13258 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent toggling of multiline mode from clearing the title field on iOS (#13515) (#13457 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Reset the state of undo and redo buttons when switching editor (#13505) (#13151 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Resize the notes menu to the viewport when the keyboard is open (#13035) (#12956 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Rich Text Editor: Fix error when pressing enter (#13788 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix image size lost on change (#13172) (#13138 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix pressing enter does nothing in some cases (#13075) (#12960 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Treat unclosed quotes as fully quoted search terms, to prevent malformed match expression error (#13564) (#13319 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: When creating a conflict, ensure the latest note contents are used to create the conflict (#13552) (#13531 by [@mrjo118](https://github.com/mrjo118))
+
+## [android-v3.4.7](https://github.com/laurent22/joplin/releases/tag/android-v3.4.7) - 2025-09-09T08:09:54Z
 
 - Fixed: Fix error when saving in-editor rendering-related settings (#13105) (#13103 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix light bar shown above header in dark mode (#13132 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Plugins: Fix renderer plugins that use the `settingValue` API (#13131 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.4.6](https://github.com/laurent22/joplin/releases/tag/android-v3.4.6) (Pre-release) - 2025-09-01T12:02:41Z
+## [android-v3.4.6](https://github.com/laurent22/joplin/releases/tag/android-v3.4.6) - 2025-09-01T12:02:41Z
 
 - Fixed: Fix "edit profile" button is partially off-screen (#13084) (#13015 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix shadow shown above the screen header (#13074 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -14,7 +167,7 @@
 - Fixed: Plugin API: Fix compatibility with certain plugins targetting the desktop app (#13077 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Plugins: Fix plugin panel buttons are off-screen on recent versions of Android (#13080 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.4.5](https://github.com/laurent22/joplin/releases/tag/android-v3.4.5) (Pre-release) - 2025-08-27T06:27:53Z
+## [android-v3.4.5](https://github.com/laurent22/joplin/releases/tag/android-v3.4.5) - 2025-08-27T06:27:53Z
 
 - New: Add a "highlight active line" setting (#12967 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - New: Rich Text Editor: Add basic support for collapsible &lt;details&gt; blocks (#12946 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -37,7 +190,7 @@
 - Fixed: Rich Text Editor: Fix additional blank lines added around list items on save (#12935 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Shared folders: Fix moving shared subfolder to top-level briefly marks it as a top-level share (#12964 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.4.4](https://github.com/laurent22/joplin/releases/tag/android-v3.4.4) (Pre-release) - 2025-08-10T09:31:45Z
+## [android-v3.4.4](https://github.com/laurent22/joplin/releases/tag/android-v3.4.4) - 2025-08-10T09:31:45Z
 
 - Improved: Allow editing code blocks from the Rich Text Editor (#12906) (#12841 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Fixed missing filename when a file is shared with the app (#12895) (#12858 by [@klaas0](https://github.com/klaas0))
@@ -50,7 +203,7 @@
 - Fixed: Fix switching between note and todo on mobile (#12849) (#12822 by [@mrjo118](https://github.com/mrjo118))
 - Fixed: Rich Text Editor: Make initial search behavior match the Markdown editor (#12878) (#12844 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.4.3](https://github.com/laurent22/joplin/releases/tag/android-v3.4.3) (Pre-release) - 2025-08-04T17:38:13Z
+## [android-v3.4.3](https://github.com/laurent22/joplin/releases/tag/android-v3.4.3) - 2025-08-04T17:38:13Z
 
 - New: Add a Rich Text Editor (#12748 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Performance: Improve Rich Text Editor startup performance (#12819 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -61,12 +214,12 @@
 - Fixed: Improve usability of inline search in notes (#12791) (#12783 by [@mrjo118](https://github.com/mrjo118))
 - Fixed: Markdown editor: Make list indentation size equivalent to four spaces (#12794) (#12573 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.4.2](https://github.com/laurent22/joplin/releases/tag/android-v3.4.2) (Pre-release) - 2025-07-25T08:30:30Z
+## [android-v3.4.2](https://github.com/laurent22/joplin/releases/tag/android-v3.4.2) - 2025-07-25T08:30:30Z
 
 - Improved: Updated packages react-native-paper (v5.13.5)
 - Fixed: Fix title bar is partially hidden by the screen header (#12785 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.4.1](https://github.com/laurent22/joplin/releases/tag/android-v3.4.1) (Pre-release) - 2025-07-24T10:57:44Z
+## [android-v3.4.1](https://github.com/laurent22/joplin/releases/tag/android-v3.4.1) - 2025-07-24T10:57:44Z
 
 - New: Add Joplin Server SAML support (#11865 by [@ttcchhmm](https://github.com/ttcchhmm))
 - New: Add delete line, duplicate line and sort selected lines buttons to editor toolbar (#12555 by [@mrjo118](https://github.com/mrjo118))
@@ -100,32 +253,32 @@
 - Fixed: Fix voice typing fails to start on certain devices (#12351 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Moving sub-notebook of shared notebook should unshare it (#12647) (#12089)
 
-## [android-v3.3.11](https://github.com/laurent22/joplin/releases/tag/android-v3.3.11) (Pre-release) - 2025-07-09T22:51:55Z
+## [android-v3.3.11](https://github.com/laurent22/joplin/releases/tag/android-v3.3.11) - 2025-07-09T22:51:55Z
 
 - Fixed: Biometrics: Fix notebook list can still be accessed when the app is locked (#12691 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.10](https://github.com/laurent22/joplin/releases/tag/android-v3.3.10) (Pre-release) - 2025-06-10T08:07:25Z
+## [android-v3.3.10](https://github.com/laurent22/joplin/releases/tag/android-v3.3.10) - 2025-06-10T08:07:25Z
 
 - New: Add additional checks when updating sidebar state (#12428 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.9](https://github.com/laurent22/joplin/releases/tag/android-v3.3.9) (Pre-release) - 2025-06-09T17:11:04Z
+## [android-v3.3.9](https://github.com/laurent22/joplin/releases/tag/android-v3.3.9) - 2025-06-09T17:11:04Z
 
 - Fixed: Voice typing: Fix memory leak (#12402 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.8](https://github.com/laurent22/joplin/releases/tag/android-v3.3.8) (Pre-release) - 2025-05-01T15:45:35Z
+## [android-v3.3.8](https://github.com/laurent22/joplin/releases/tag/android-v3.3.8) - 2025-05-01T15:45:35Z
 
 - New: Force quick action shortcuts to have the same size (#12195 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Increase space between new note/to-do buttons (#12194 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix new note menu size (#12193) (#12191 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.7](https://github.com/laurent22/joplin/releases/tag/android-v3.3.7) (Pre-release) - 2025-04-29T13:06:06Z
+## [android-v3.3.7](https://github.com/laurent22/joplin/releases/tag/android-v3.3.7) - 2025-04-29T13:06:06Z
 
 - New: Add plural forms for notes, users, hours, minutes, days (#12171 by [@SilverGreen93](https://github.com/SilverGreen93))
 - Improved: Allow new note and new to-do buttons to wrap (#12163 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Update immer to v9.0.21 (#12182 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Editor: Allow syntax highlighting within ==highlight==s (#12167) (#12110 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.6](https://github.com/laurent22/joplin/releases/tag/android-v3.3.6) (Pre-release) - 2025-04-24T08:34:56Z
+## [android-v3.3.6](https://github.com/laurent22/joplin/releases/tag/android-v3.3.6) - 2025-04-24T08:34:56Z
 
 - Improved: Improve UI for downloading updated models (#12145 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Note editor: Hash links: Move cursor to header or anchor associated with link target (#12129 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -136,7 +289,7 @@
 - Fixed: Markdown Editor: Fix numbered sublist renumbering (#12091 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Settings: Fix desktop-specific setting visible in note &gt; advanced (#12146 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.5](https://github.com/laurent22/joplin/releases/tag/android-v3.3.5) (Pre-release) - 2025-04-07T19:31:26Z
+## [android-v3.3.5](https://github.com/laurent22/joplin/releases/tag/android-v3.3.5) - 2025-04-07T19:31:26Z
 
 - New: Add "swap line up" and "swap line down" to toolbar extended options (#12053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - New: Plugins: Add command to hide the plugin panel viewer (#12018 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -153,12 +306,12 @@
 - Fixed: Restoring a note which was in a deleted notebook  (#12016) (#11934)
 - Fixed: Voice typing: Fix incorrectly-calculated audio length (#12012 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.4](https://github.com/laurent22/joplin/releases/tag/android-v3.3.4) (Pre-release) - 2025-03-21T18:07:00Z
+## [android-v3.3.4](https://github.com/laurent22/joplin/releases/tag/android-v3.3.4) - 2025-03-21T18:07:00Z
 
 - Improved: Voice typing: Improve processing with larger models (#11983 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Voice typing: Improve re-download button UI (#11979) (#11955 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.3](https://github.com/laurent22/joplin/releases/tag/android-v3.3.3) (Pre-release) - 2025-03-16T10:29:52Z
+## [android-v3.3.3](https://github.com/laurent22/joplin/releases/tag/android-v3.3.3) - 2025-03-16T10:29:52Z
 
 - New: Add setting migration for ocr.enabled (ab86b95)
 - Improved: Accessibility: Improve focus handling in the note actions menu and modal dialogs (#11929 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -168,7 +321,7 @@
 - Fixed: Make tab size consistent between Markdown editor and viewer (and RTE) (#11940) (#11673)
 - Fixed: Voice typing: Fix potential output duplication when finalizing voice typing (#11953 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.2](https://github.com/laurent22/joplin/releases/tag/android-v3.3.2) (Pre-release) - 2025-03-03T22:35:08Z
+## [android-v3.3.2](https://github.com/laurent22/joplin/releases/tag/android-v3.3.2) - 2025-03-03T22:35:08Z
 
 - Improved: Improve encryption config screen accessibility (#11874) (#11846 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Switch default library used for Whisper voice typing (#11881 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -177,7 +330,7 @@
 - Fixed: Fix disabled encryption keys list showing enabled keys (#11861) (#11858 by [@pedr](https://github.com/pedr))
 - Fixed: Fix voice recorder crash (#11876) (#11864 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.3.1](https://github.com/laurent22/joplin/releases/tag/android-v3.3.1) (Pre-release) - 2025-02-19T16:01:54Z
+## [android-v3.3.1](https://github.com/laurent22/joplin/releases/tag/android-v3.3.1) - 2025-02-19T16:01:54Z
 
 - New: Add support for plugin editor views (#11831)
 - Improved: Accessibility: Improve contrast of faded URLs in Markdown editor (#11635 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -207,17 +360,17 @@
 - Fixed: Use alternative fix to set the sqlite CursorWindow size to 50mb (#11726) (#11571 by [@mrjo118](https://github.com/mrjo118))
 - Security: Improve comment escaping (#11706 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.2.7](https://github.com/laurent22/joplin/releases/tag/android-v3.2.7) (Pre-release) - 2025-01-13T17:03:36Z
+## [android-v3.2.7](https://github.com/laurent22/joplin/releases/tag/android-v3.2.7) - 2025-01-13T17:03:36Z
 
 - Fixed: Clicking on an external note link from within a note logs an error (#11619) (#11455 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix clicking "Draw picture" results in blank screen with very old WebView versions (#11604 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.2.5](https://github.com/laurent22/joplin/releases/tag/android-v3.2.5) (Pre-release) - 2025-01-07T23:35:43Z
+## [android-v3.2.5](https://github.com/laurent22/joplin/releases/tag/android-v3.2.5) - 2025-01-07T23:35:43Z
 
 - Improved: Allow re-downloading voice typing models on URL change and error (#11557 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Upgrade js-draw to 1.26.0 (#11589 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.2.4](https://github.com/laurent22/joplin/releases/tag/android-v3.2.4) (Pre-release) - 2025-01-06T12:50:23Z
+## [android-v3.2.4](https://github.com/laurent22/joplin/releases/tag/android-v3.2.4) - 2025-01-06T12:50:23Z
 
 - New: Plugin API: Add support for the renderMarkup command (#11494 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Accessibility: Improve sidemenu notebook list accessibility (#11556 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -232,7 +385,7 @@
 - Fixed: Fix missing "Insert Time" button (#11542) (#11539 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Locked out of mobile app due to broken fingerprint scanner (#10926)
 
-## [android-v3.2.3](https://github.com/laurent22/joplin/releases/tag/android-v3.2.3) (Pre-release) - 2024-12-11T13:58:14Z
+## [android-v3.2.3](https://github.com/laurent22/joplin/releases/tag/android-v3.2.3) - 2024-12-11T13:58:14Z
 
 - New: Accessibility: Add checked/unchecked accessibility information to the "sort notes by" dialog (#11411 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - New: Translation: Add sk_SK.po (Slovak) (#11433 by [@dodog](https://github.com/dodog))
@@ -254,7 +407,7 @@
 - Fixed: Fix the error caused by undefined isCodeBlock_ (turndown-plugin-gfm) (#11471 by Manabu Nakazawa)
 - Fixed: Upgrade CodeMirror packages (#11440) (#11318 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.2.2](https://github.com/laurent22/joplin/releases/tag/android-v3.2.2) (Pre-release) - 2024-11-19T01:12:43Z
+## [android-v3.2.2](https://github.com/laurent22/joplin/releases/tag/android-v3.2.2) - 2024-11-19T01:12:43Z
 
 - Improved: Accessibility: Improve dialog accessibility (#11395 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Deprecated OneDrive sync method (e36f377)
@@ -263,7 +416,7 @@
 - Fixed: Fix race condition which may cause data loss, particularly before or after pasting text in the note editor (#11334) (#11317 by [@mrjo118](https://github.com/mrjo118))
 - Fixed: Fix vertical alignment of checkboxes when text wraps over multiple lines (226a8b3)
 
-## [android-v3.2.1](https://github.com/laurent22/joplin/releases/tag/android-v3.2.1) (Pre-release) - 2024-11-10T14:23:47Z
+## [android-v3.2.1](https://github.com/laurent22/joplin/releases/tag/android-v3.2.1) - 2024-11-10T14:23:47Z
 
 - New: Add new encryption methods based on native crypto libraries (#10696 by Self Not Found)
 - New: Add setting to disable markup autocompletion (#11222 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -281,17 +434,17 @@
 - Fixed: Handle callback url triggered app launch (#11280) (#9204 by [@tiberiusteng](https://github.com/tiberiusteng))
 - Fixed: Upgrade react-native-quick-crypto to v0.7.5 (#11294 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.1.8](https://github.com/laurent22/joplin/releases/tag/android-v3.1.8) (Pre-release) - 2024-11-09T13:02:33Z
+## [android-v3.1.8](https://github.com/laurent22/joplin/releases/tag/android-v3.1.8) - 2024-11-09T13:02:33Z
 
 - Fixed: Fix error on creating new notes if the user is a share recipient (#11326) (#11325 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix new note button is pushed off-screen on certain Android devices (#11323) (#11276 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix sharing to Joplin causes back navigation to get stuck (#11355) (#11324 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.1.7](https://github.com/laurent22/joplin/releases/tag/android-v3.1.7) (Pre-release) - 2024-11-04T20:27:52Z
+## [android-v3.1.7](https://github.com/laurent22/joplin/releases/tag/android-v3.1.7) - 2024-11-04T20:27:52Z
 
 - Fixed: Fix search result note hidden after powering on device (#11297) (#11197 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.1.6](https://github.com/laurent22/joplin/releases/tag/android-v3.1.6) (Pre-release) - 2024-10-17T22:13:06Z
+## [android-v3.1.6](https://github.com/laurent22/joplin/releases/tag/android-v3.1.6) - 2024-10-17T22:13:06Z
 
 - Improved: Downgrade CodeMirror packages to fix various Android regressions (#11170 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Plugins: Name webview root attribute so that it can be styled (75b8caf)
@@ -301,7 +454,7 @@
 - Fixed: Fix new note/edit buttons only work if pressed quickly (#11185) (#11183 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix regression: Search screen not hidden when cached for search result navigation (#11131) (#11130 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.1.5](https://github.com/laurent22/joplin/releases/tag/android-v3.1.5) (Pre-release) - 2024-10-11T22:11:20Z
+## [android-v3.1.5](https://github.com/laurent22/joplin/releases/tag/android-v3.1.5) - 2024-10-11T22:11:20Z
 
 - Improved: Downgrade CodeMirror packages to fix various Android regressions (#11170 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Plugins: Name webview root attribute so that it can be styled (75b8caf)
@@ -311,7 +464,7 @@
 - Fixed: Fix new note/edit buttons only work if pressed quickly (#11185) (#11183 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Fix regression: Search screen not hidden when cached for search result navigation (#11131) (#11130 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.1.4](https://github.com/laurent22/joplin/releases/tag/android-v3.1.4) (Pre-release) - 2024-09-24T14:21:42Z
+## [android-v3.1.4](https://github.com/laurent22/joplin/releases/tag/android-v3.1.4) - 2024-09-24T14:21:42Z
 
 - Improved: Automatically detect and use operating system theme by default (5beb80b)
 - Improved: Make pressing "back" navigate to the previous note after following a link (#11086) (#11082 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -331,7 +484,7 @@
 - Fixed: Move accessibility focus to the first note action menu item on open (#11031) (#10253 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: WebDAV synchronisation not working because of URL encoding differences (#11076) (#10608 by [@pedr](https://github.com/pedr))
 
-## [android-v3.1.3](https://github.com/laurent22/joplin/releases/tag/android-v3.1.3) (Pre-release) - 2024-09-02T12:16:46Z
+## [android-v3.1.3](https://github.com/laurent22/joplin/releases/tag/android-v3.1.3) - 2024-09-02T12:16:46Z
 
 - Improved: Added feature flag to disable sync lock support (#10925) (#10407)
 - Improved: Make feature flags advanced settings by default (700ffa2)
@@ -343,7 +496,7 @@
 - Fixed: Fixed italic support in Fountain documents (5fdd088)
 - Fixed: Markdown editor: Fix toggling bulleted lists when items start with asterisks (#10902) (#10891 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.1.2](https://github.com/laurent22/joplin/releases/tag/android-v3.1.2) (Pre-release) - 2024-08-10T11:44:30Z
+## [android-v3.1.2](https://github.com/laurent22/joplin/releases/tag/android-v3.1.2) - 2024-08-10T11:44:30Z
 
 - Fixed: Fix WebDAV sync on mobile (#10849) (#10848 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Improve RTL support in the Markdown editor (#10810 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -360,26 +513,26 @@
 - Fixed: Remove search bar from plugins screen (#10648) (#10596 by Siddhant Paritosh Rao)
 - Fixed: Show notification in case Joplin Cloud credential is not valid anymore (#10649) (#10645 by [@pedr](https://github.com/pedr))
 
-## [android-v3.0.9](https://github.com/laurent22/joplin/releases/tag/android-v3.0.9) (Pre-release) - 2024-07-28T14:00:59Z
+## [android-v3.0.9](https://github.com/laurent22/joplin/releases/tag/android-v3.0.9) - 2024-07-28T14:00:59Z
 
 - Fixed: #10677: Following a link to a previously open note wouldn't work (#10750) (#10677 by [@pedr](https://github.com/pedr))
 - Fixed: Fix manual resource download mode (#10748 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.0.8](https://github.com/laurent22/joplin/releases/tag/android-v3.0.8) (Pre-release) - 2024-07-06T10:26:06Z
+## [android-v3.0.8](https://github.com/laurent22/joplin/releases/tag/android-v3.0.8) - 2024-07-06T10:26:06Z
 
 - Fixed: Fix sidebar performance regression with many nested notebooks (#10676) (#10674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.0.7](https://github.com/laurent22/joplin/releases/tag/android-v3.0.7) (Pre-release) - 2024-07-01T15:47:15Z
+## [android-v3.0.7](https://github.com/laurent22/joplin/releases/tag/android-v3.0.7) - 2024-07-01T15:47:15Z
 
 - Improved: Set min version for synchronising to 3.0.0 (e4b8976)
 - Fixed: Show notification in case Joplin Cloud credential is not valid anymore (#10649) (#10645 by [@pedr](https://github.com/pedr))
 
-## [android-v3.0.6](https://github.com/laurent22/joplin/releases/tag/android-v3.0.6) (Pre-release) - 2024-06-29T09:41:10Z
+## [android-v3.0.6](https://github.com/laurent22/joplin/releases/tag/android-v3.0.6) - 2024-06-29T09:41:10Z
 
 - Updated Chinese and German translation (#10660 by [@cedecode](https://github.com/cedecode))
 - Fixed: Fix refocusing the note editor (#10644) (#10637 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.0.5](https://github.com/laurent22/joplin/releases/tag/android-v3.0.5) (Pre-release) - 2024-06-19T12:02:12Z
+## [android-v3.0.5](https://github.com/laurent22/joplin/releases/tag/android-v3.0.5) - 2024-06-19T12:02:12Z
 
 - Improved: Don't render empty title page for Fountain (#10631 by [@XPhyro](https://github.com/XPhyro))
 - Improved: Don't show an "expand" arrow by "Installed plugins" when no plugins are installed (#10583 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -398,7 +551,7 @@
 - Fixed: Plugin settings screen: Fix plugin states not set correctly when installing multiple plugins at once (#10580 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Plugin settings: Fix plugins without settings can't be disabled without reinstall (#10579 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.0.4](https://github.com/laurent22/joplin/releases/tag/android-v3.0.4) (Pre-release) - 2024-06-12T20:38:44Z
+## [android-v3.0.4](https://github.com/laurent22/joplin/releases/tag/android-v3.0.4) - 2024-06-12T20:38:44Z
 
 - New: Add Joplin Cloud account information to configuration screen (#10553 by [@pedr](https://github.com/pedr))
 - New: Add button on Synchronization to Joplin Cloud login screen (#10569 by [@pedr](https://github.com/pedr))
@@ -428,7 +581,7 @@
 - Fixed: Fix plugins not reloaded when the plugin runner reloads (#10540 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Maintain cursor position when changing list indentation (#10441) (#10439 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.0.3](https://github.com/laurent22/joplin/releases/tag/android-v3.0.3) (Pre-release) - 2024-04-27T11:21:48Z
+## [android-v3.0.3](https://github.com/laurent22/joplin/releases/tag/android-v3.0.3) - 2024-04-27T11:21:48Z
 
 - Improved: Display a message when Joplin Cloud user don't have access to email to note feature (#10322 by [@pedr](https://github.com/pedr))
 - Improved: Make editor styles closer to desktop (#10377 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -443,7 +596,7 @@
 - Fixed: Fix sync icon off-center (#10350) (#10351 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Plugins: Fix API incompatibility in arguments to `onMessage` listeners in panels (#10375 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.0.2](https://github.com/laurent22/joplin/releases/tag/android-v3.0.2) (Pre-release) - 2024-04-15T18:06:46Z
+## [android-v3.0.2](https://github.com/laurent22/joplin/releases/tag/android-v3.0.2) - 2024-04-15T18:06:46Z
 
 - Improved: Allow marking a plugin as mobile-only or desktop-only (#10229) (#10206 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Allow marking items as "ignored" in sync status  (#10261) (#10245 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -474,7 +627,7 @@
 - Fixed: Plugin API: Fix unable to require `@codemirror/search`  (#10205 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Plugins: Fix event listener memory leak when disabling/uninstalling plugins (#10280 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 
-## [android-v3.0.1](https://github.com/laurent22/joplin/releases/tag/android-v3.0.1) (Pre-release) - 2024-03-21T18:27:47Z
+## [android-v3.0.1](https://github.com/laurent22/joplin/releases/tag/android-v3.0.1) - 2024-03-21T18:27:47Z
 
 - New: Add support for Markdown editor plugins (#10086 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - New: Add support for plugin panels and dialogs (#10121 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
@@ -498,23 +651,23 @@
 - Fixed: Plugins: Fix warning after reloading plugins (#10165 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Fixed: Shows only the real folders in the dropdown of parent folders. (#10147) (#10143 by [@Sidd-R](https://github.com/Sidd-R))
 
-## [android-v2.14.9](https://github.com/laurent22/joplin/releases/tag/android-v2.14.9) (Pre-release) - 2024-02-26T19:56:11Z
+## [android-v2.14.9](https://github.com/laurent22/joplin/releases/tag/android-v2.14.9) - 2024-02-26T19:56:11Z
 
 - Fixed: Note editor: Support older WebView versions (#9986) (#9521 by Henry Heino)
 - Fixed: Sort notebooks in a case-insensitive way (#9996)
 
-## [android-v2.14.8](https://github.com/laurent22/joplin/releases/tag/android-v2.14.8) (Pre-release) - 2024-02-22T22:29:24Z
+## [android-v2.14.8](https://github.com/laurent22/joplin/releases/tag/android-v2.14.8) - 2024-02-22T22:29:24Z
 
 - Improved: Immediately sort notes after toggling a checkbox (5820f63)
 - Fixed: Fix auto-indentation in some types of code blocks (#9972) (#9971 by Henry Heino)
 
-## [android-v2.14.7](https://github.com/laurent22/joplin/releases/tag/android-v2.14.7) (Pre-release) - 2024-02-19T10:40:10Z
+## [android-v2.14.7](https://github.com/laurent22/joplin/releases/tag/android-v2.14.7) - 2024-02-19T10:40:10Z
 
 - Improved: Migrate profile in preparation for trash feature (115eb5d)
 - Improved: Updated packages tar-stream (v3.1.7)
 - Fixed: Fix full text search broken on Android 7 and earlier (#9914) (#9905 by Henry Heino)
 
-## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) (Pre-release) - 2024-02-09T12:41:18Z
+## [android-v2.14.6](https://github.com/laurent22/joplin/releases/tag/android-v2.14.6) - 2024-02-09T12:41:18Z
 
 - Improved: Improve search engine error handling when preparing text for search (#9871 by Henry Heino)
 - Improved: Updated packages @js-draw/material-icons (v1.16.1), @react-native-community/netinfo (v11.2.1), @react-native-community/slider (v4.5.0), async-mutex (v0.4.1), follow-redirects (v1.15.5), js-draw (v1.16.1), moment (v2.30.1), react-native-document-picker (v9.1.0), react-native-localize (v3.0.6), react-native-paper (v5.11.7), react-native-safe-area-context (v4.8.2), react-native-share (v10.0.2), react-native-webview (v13.6.4), sass (v1.69.7), sharp (v0.33.2), sqlite3 (v5.1.7)
@@ -524,7 +677,7 @@
 - Fixed: Fix share to Joplin when only "All notes" has been opened (#9876) (#9863 by Henry Heino)
 - Fixed: Increase space available for Notebook icon (#9877) (#9475 by [@pedr](https://github.com/pedr))
 
-## [android-v2.14.5](https://github.com/laurent22/joplin/releases/tag/android-v2.14.5) (Pre-release) - 2024-02-02T23:09:50Z
+## [android-v2.14.5](https://github.com/laurent22/joplin/releases/tag/android-v2.14.5) - 2024-02-02T23:09:50Z
 
 - Improved: Allow note viewer to extend to the edge of the screen while pinch zooming (#9820) (#9819 by Henry Heino)
 - Improved: Do not allow switching the sync target if not all resources are downloaded (#9263)
@@ -537,7 +690,7 @@
 - Fixed: Fix note editor errors/logs not sent to Joplin's logs (#9808) (#9807 by Henry Heino)
 - Fixed: Fix synchronization happens every 10 seconds even if nothing has changed (#9814) (#9800 by Henry Heino)
 
-## [android-v2.14.4](https://github.com/laurent22/joplin/releases/tag/android-v2.14.4) (Pre-release) - 2024-01-26T10:46:28Z
+## [android-v2.14.4](https://github.com/laurent22/joplin/releases/tag/android-v2.14.4) - 2024-01-26T10:46:28Z
 
 - New: Add support for showing only lines of log that contain a filter (#9728 by Henry Heino)
 - Improved: Allow setting a minimum app version on the sync target (#9778)
@@ -547,18 +700,18 @@
 - Improved: Updated packages @js-draw/material-icons (v1.15.0), follow-redirects (v1.15.4), fs-extra (v11.2.0), js-draw (v1.15.0), react, react-native-device-info (v10.12.0), react-native-image-picker (v7.1.0), react-native-paper (v5.11.5), react-native-vector-icons (v10.0.3), sharp (v0.33.1)
 - Fixed: Fix AWS S3 sync error (#9696) (#8891 by Henry Heino)
 
-## [android-v2.14.3](https://github.com/laurent22/joplin/releases/tag/android-v2.14.3) (Pre-release) - 2024-01-06T12:30:29Z
+## [android-v2.14.3](https://github.com/laurent22/joplin/releases/tag/android-v2.14.3) - 2024-01-06T12:30:29Z
 
 - Improved: Fix table-of-contents links to headings with duplicate content (#9610) (#9594 by Henry Heino)
 - Improved: Improve sync by reducing how often note list is sorted (f95ee68)
 - Improved: Render mermaid diagrams in dark mode when Joplin is in dark mode (#9631) (#3201 by Henry Heino)
 - Improved: Updated packages deprecated-react-native-prop-types (v5), react-native-paper (v5.11.4)
 
-## [android-v2.14.2](https://github.com/laurent22/joplin/releases/tag/android-v2.14.2) (Pre-release) - 2023-12-31T16:14:25Z
+## [android-v2.14.2](https://github.com/laurent22/joplin/releases/tag/android-v2.14.2) - 2023-12-31T16:14:25Z
 
 - Improved: Updated packages react-native-get-random-values (v1.10.0)
 
-## [android-v2.14.1](https://github.com/laurent22/joplin/releases/tag/android-v2.14.1) (Pre-release) - 2023-12-29T22:12:14Z
+## [android-v2.14.1](https://github.com/laurent22/joplin/releases/tag/android-v2.14.1) - 2023-12-29T22:12:14Z
 
 - Improved: CodeMirror 6 markdown editor: Support highlighting more languages (#9563) (#9562 by Henry Heino)
 - Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
@@ -580,22 +733,22 @@
 - Fixed: Fix tooltips don't disappear on some devices (upgrade to js-draw 1.13.2) (#9401) (#9374 by Henry Heino)
 - Fixed: Sidebar is not dismissed when creating a note (#9376)
 
-## [android-v2.13.10](https://github.com/laurent22/joplin/releases/tag/android-v2.13.10) (Pre-release) - 2023-12-01T11:16:17Z
+## [android-v2.13.10](https://github.com/laurent22/joplin/releases/tag/android-v2.13.10) - 2023-12-01T11:16:17Z
 
 - Improved: Drawing: Revert recent changes to input system (#9426) (#9427 by Henry Heino)
 
-## [android-v2.13.9](https://github.com/laurent22/joplin/releases/tag/android-v2.13.9) (Pre-release) - 2023-11-30T17:55:54Z
+## [android-v2.13.9](https://github.com/laurent22/joplin/releases/tag/android-v2.13.9) - 2023-11-30T17:55:54Z
 
 - Improved: Don't attach empty drawings when a user exits without saving (#9386) (#9377 by Henry Heino)
 - Fixed: Fix tooltips don't disappear on some devices (upgrade to js-draw 1.13.2) (#9401) (#9374 by Henry Heino)
 
-## [android-v2.13.8](https://github.com/laurent22/joplin/releases/tag/android-v2.13.8) (Pre-release) - 2023-11-26T12:37:00Z
+## [android-v2.13.8](https://github.com/laurent22/joplin/releases/tag/android-v2.13.8) - 2023-11-26T12:37:00Z
 
 - Fixed: Fix to-dos options toggle don't toggle a rerender (#9364) (#9361 by [@pedr](https://github.com/pedr))
 - Fixed: Fix new note/to-do buttons not visible on app startup in some cases (#9329) (#9328 by Henry Heino)
 - Fixed: Sidebar is not dismissed when creating a note (#9376)
 
-## [android-v2.13.7](https://github.com/laurent22/joplin/releases/tag/android-v2.13.7) (Pre-release) - 2023-11-16T13:17:53Z
+## [android-v2.13.7](https://github.com/laurent22/joplin/releases/tag/android-v2.13.7) - 2023-11-16T13:17:53Z
 
 - Improved: Add more space between settings title and description (#9270) (#9258 by Henry Heino)
 - Improved: Fade settings screen icons (#9268) (#9260 by Henry Heino)
@@ -609,7 +762,7 @@
 - Fixed: Fix settings save confirmation not shown when navigating to encryption/profile/log screens (#9313) (#9312 by Henry Heino)
 - Fixed: Restore scroll position when returning to the note viewer from the editor or camera (#9324) (#9321 by Henry Heino)
 
-## [android-v2.13.6](https://github.com/laurent22/joplin/releases/tag/android-v2.13.6) (Pre-release) - 2023-11-09T19:45:21Z
+## [android-v2.13.6](https://github.com/laurent22/joplin/releases/tag/android-v2.13.6) - 2023-11-09T19:45:21Z
 
 - Improved: Add a "Retry all" button when multiple resources could not be downloaded (#9158)
 - Improved: Image editor: Allow loading from save when the image editor is reloaded in the background (#9135) (#9134 by Henry Heino)
@@ -621,13 +774,13 @@
 - Fixed: Fix search highlighting (#9206) (#9207 by Henry Heino)
 - Fixed: Image editor resets on theme change (#9190) (#9188 by Henry Heino)
 
-## [android-v2.13.5](https://github.com/laurent22/joplin/releases/tag/android-v2.13.5) (Pre-release) - 2023-10-30T22:49:19Z
+## [android-v2.13.5](https://github.com/laurent22/joplin/releases/tag/android-v2.13.5) - 2023-10-30T22:49:19Z
 
 - Improved: Allow searching by note ID or using a callback URL (3667bf3)
 - Improved: Updated packages @react-native-community/datetimepicker (v7.6.0), react-native-device-info (v10.11.0), react-native-webview (v13.6.2)
 - Fixed: Beta editor: Fix image timestamps not updated after editing (#9176) (#9175 by Henry Heino)
 
-## [android-v2.13.4](https://github.com/laurent22/joplin/releases/tag/android-v2.13.4) (Pre-release) - 2023-10-24T18:29:09Z
+## [android-v2.13.4](https://github.com/laurent22/joplin/releases/tag/android-v2.13.4) - 2023-10-24T18:29:09Z
 
 - Improved: Allow modifying a resource metadata only when synchronising (#9114)
 - Improved: Support for plural translations (#9033)
@@ -637,7 +790,7 @@
 - Fixed: Fixed issues related to sharing notes on read-only notebooks (1c7d22e)
 - Fixed: Improve list toggle logic (#9103) (#9066 by Henry Heino)
 
-## [android-v2.13.2](https://github.com/laurent22/joplin/releases/tag/android-v2.13.2) (Pre-release) - 2023-10-07T16:42:16Z
+## [android-v2.13.2](https://github.com/laurent22/joplin/releases/tag/android-v2.13.2) - 2023-10-07T16:42:16Z
 
 - New: Add share button to log screen (#8364 by Henry Heino)
 - New: Add support for drawing pictures (#7588 by Henry Heino)
@@ -657,18 +810,18 @@
 - Fixed: Hide the keyboard when showing the attach dialog (#8911) (#8774 by Henry Heino)
 - Fixed: Prevent accessibility tools from focusing the notes list when it's invisible (#8799) (#8798 by Henry Heino)
 
-## [android-v2.12.3](https://github.com/laurent22/joplin/releases/tag/android-v2.12.3) (Pre-release) - 2023-09-11T20:01:44Z
+## [android-v2.12.3](https://github.com/laurent22/joplin/releases/tag/android-v2.12.3) - 2023-09-11T20:01:44Z
 
 - Improved: Add screen reader labels to search/note actions buttons (#8797) (#8796 by Henry Heino)
 - Improved: Improve accessibility of side menu (#8839 by Henry Heino)
 - Fixed: Fix older Android versions unable to set alarms (#8837) (#8789 by Henry Heino)
 - Fixed: Revert to `react-native-sidemenu-updated` for navigation drawers (#8820) (#8791 by Henry Heino)
 
-## [android-v2.12.2](https://github.com/laurent22/joplin/releases/tag/android-v2.12.2) (Pre-release) - 2023-08-22T13:15:18Z
+## [android-v2.12.2](https://github.com/laurent22/joplin/releases/tag/android-v2.12.2) - 2023-08-22T13:15:18Z
 
 - Improved: Only include "armeabi-v7a", "x86", "arm64-v8a", "x86_64" in APK (4e2d366)
 
-## [android-v2.12.1](https://github.com/laurent22/joplin/releases/tag/android-v2.12.1) (Pre-release) - 2023-08-19T22:32:39Z
+## [android-v2.12.1](https://github.com/laurent22/joplin/releases/tag/android-v2.12.1) - 2023-08-19T22:32:39Z
 
 - New: Add JEX export (#8428 by Henry Heino)
 - New: Add support for Joplin Cloud email to note functionality (#8460 by [@pedr](https://github.com/pedr))
@@ -694,40 +847,40 @@
 - Fixed: Unrevert #7953: Migrate to react-native-drawer-layout (#8379) (#7918 by Henry Heino)
 - Security: Prevent XSS when passing specially encoded string to a link (57b4198)
 
-## [android-v2.11.32](https://github.com/laurent22/joplin/releases/tag/android-v2.11.32) (Pre-release) - 2023-07-03T11:33:54Z
+## [android-v2.11.32](https://github.com/laurent22/joplin/releases/tag/android-v2.11.32) - 2023-07-03T11:33:54Z
 
 - Improved: Allow configuring voice typing model URL (2aab85f)
 
-## [android-v2.11.31](https://github.com/laurent22/joplin/releases/tag/android-v2.11.31) (Pre-release) - 2023-06-25T14:26:21Z
+## [android-v2.11.31](https://github.com/laurent22/joplin/releases/tag/android-v2.11.31) - 2023-06-25T14:26:21Z
 
 - Improved: Upgrade E2EE encryption method to AES-256 (#7686)
 
-## [android-v2.11.30](https://github.com/laurent22/joplin/releases/tag/android-v2.11.30) (Pre-release) - 2023-06-20T15:21:15Z
+## [android-v2.11.30](https://github.com/laurent22/joplin/releases/tag/android-v2.11.30) - 2023-06-20T15:21:15Z
 
 - New: Add support for Voice Typing for most languages (#8309)
 
-## [android-v2.11.27](https://github.com/laurent22/joplin/releases/tag/android-v2.11.27) (Pre-release) - 2023-06-10T15:58:58Z
+## [android-v2.11.27](https://github.com/laurent22/joplin/releases/tag/android-v2.11.27) - 2023-06-10T15:58:58Z
 
 - Upgraded to React Native 0.71
 - Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
 
-## [android-v2.11.26](https://github.com/laurent22/joplin/releases/tag/android-v2.11.26) (Pre-release) - 2023-06-08T16:13:02Z
+## [android-v2.11.26](https://github.com/laurent22/joplin/releases/tag/android-v2.11.26) - 2023-06-08T16:13:02Z
 
 - Improved: Updated packages @react-native-community/datetimepicker (v7), buildTools, domutils (v3.1.0), react-native-document-picker (v8.2.1), react-native-safe-area-context (v4.5.3), tar (v6.1.15)
 - Fixed: Allow certain HTML anchor tags (#8286)
 - Fixed: Fix alarms for latest Android versions (#8229)
 - Fixed: Fix sharing data with the app (#8285)
 
-## [android-v2.11.25](https://github.com/laurent22/joplin/releases/tag/android-v2.11.25) (Pre-release) - 2023-06-03T16:40:08Z
+## [android-v2.11.25](https://github.com/laurent22/joplin/releases/tag/android-v2.11.25) - 2023-06-03T16:40:08Z
 
 - Fixed: Fix Vosk logic (60b3921)
 - Fixed: Fixed error "Download interrupted" when downloading resources from Joplin Cloud/Server.
 
-## [android-v2.11.24](https://github.com/laurent22/joplin/releases/tag/android-v2.11.24) (Pre-release) - 2023-06-02T15:22:04Z
+## [android-v2.11.24](https://github.com/laurent22/joplin/releases/tag/android-v2.11.24) - 2023-06-02T15:22:04Z
 
 - Improved: Write to note in realtime using voice typing (7779879)
 
-## [android-v2.11.23](https://github.com/laurent22/joplin/releases/tag/android-v2.11.23) (Pre-release) - 2023-06-01T17:19:16Z
+## [android-v2.11.23](https://github.com/laurent22/joplin/releases/tag/android-v2.11.23) - 2023-06-01T17:19:16Z
 
 - Improved: Auto-detect language on start (e48d55c)
 - Improved: Implement parenting of notebooks (#7980) (#8193 by [@jcgurango](https://github.com/jcgurango))
@@ -739,59 +892,59 @@
 - Security: Disable SVG tag support in editor to prevent XSS (caf6606)
 - Security: Prevent XSS by sanitizing certain HTML attributes (9e90d90)
 
-## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) (Pre-release) - 2023-05-14T13:44:28Z
+## [android-v2.11.22](https://github.com/laurent22/joplin/releases/tag/android-v2.11.22) - 2023-05-14T13:44:28Z
 
 - Fixed: Fix "Download interrupted" error (b023f58)
 
-## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) (Pre-release) - 2023-05-14T11:05:15Z
+## [android-v2.11.21](https://github.com/laurent22/joplin/releases/tag/android-v2.11.21) - 2023-05-14T11:05:15Z
 
 - Improved: Updated packages react-native-paper (v5.6.0)
 
-## [android-v2.11.16](https://github.com/laurent22/joplin/releases/tag/android-v2.11.16) (Pre-release) - 2023-05-12T12:43:08Z
+## [android-v2.11.16](https://github.com/laurent22/joplin/releases/tag/android-v2.11.16) - 2023-05-12T12:43:08Z
 
 - Improved: Sync as soon as the app starts, and immediately after changing a note (3eb44d2)
 
-## [android-v2.11.14](https://github.com/laurent22/joplin/releases/tag/android-v2.11.14) (Pre-release) - 2023-05-10T12:24:40Z
+## [android-v2.11.14](https://github.com/laurent22/joplin/releases/tag/android-v2.11.14) - 2023-05-10T12:24:40Z
 
 - Improved: Translate Welcome notes (#8154)
 
-## [android-v2.11.13](https://github.com/laurent22/joplin/releases/tag/android-v2.11.13) (Pre-release) - 2023-05-08T20:28:29Z
+## [android-v2.11.13](https://github.com/laurent22/joplin/releases/tag/android-v2.11.13) - 2023-05-08T20:28:29Z
 
 - Improved: Tells whether Hermes engine is enabled or not (5ecae17)
 
-## [android-v2.11.10](https://github.com/laurent22/joplin/releases/tag/android-v2.11.10) (Pre-release) - 2023-05-08T10:26:14Z
+## [android-v2.11.10](https://github.com/laurent22/joplin/releases/tag/android-v2.11.10) - 2023-05-08T10:26:14Z
 
 - Improved: Disable Hermes engine (e9e9986)
 - Fixed: Fix voice typing (d5eeb12)
 
-## [android-v2.11.7](https://github.com/laurent22/joplin/releases/tag/android-v2.11.7) (Pre-release) - 2023-05-07T14:29:08Z
+## [android-v2.11.7](https://github.com/laurent22/joplin/releases/tag/android-v2.11.7) - 2023-05-07T14:29:08Z
 
 - Fixed crash when starting voice typing.
 
-## [android-v2.11.6](https://github.com/laurent22/joplin/releases/tag/android-v2.11.6) (Pre-release) - 2023-05-07T13:53:31Z
+## [android-v2.11.6](https://github.com/laurent22/joplin/releases/tag/android-v2.11.6) - 2023-05-07T13:53:31Z
 
 - Disabled Hermes engine
 
-## [android-v2.11.5](https://github.com/laurent22/joplin/releases/tag/android-v2.11.5) (Pre-release) - 2023-05-07T12:14:21Z
+## [android-v2.11.5](https://github.com/laurent22/joplin/releases/tag/android-v2.11.5) - 2023-05-07T12:14:21Z
 
 - Improved: Improved Vosk support (beta, fr only) (#8131)
 - Improved: Updated packages react-native-share (v8.2.2), reselect (v4.1.8), sharp (v0.32.0)
 
-## [android-v2.11.4](https://github.com/laurent22/joplin/releases/tag/android-v2.11.4) (Pre-release) - 2023-05-03T11:57:27Z
+## [android-v2.11.4](https://github.com/laurent22/joplin/releases/tag/android-v2.11.4) - 2023-05-03T11:57:27Z
 
 - New: Add support for offline speech to text (Beta - FR only) (#8115)
 - Improved: Updated packages @react-native-community/netinfo (v9.3.9), aws, react-native-document-picker (v8.2.0), react-native-paper (v5.5.2), react-native-safe-area-context (v4.5.1), sass (v1.60.0)
 - Fixed: Fixed sync crash (#8056) (#8017 by Arun Kumar)
 - Fixed: Fixes issue where the note body is not updated after attaching a file (991c120)
 
-## [android-v2.11.2](https://github.com/laurent22/joplin/releases/tag/android-v2.11.2) (Pre-release) - 2023-04-09T12:04:06Z
+## [android-v2.11.2](https://github.com/laurent22/joplin/releases/tag/android-v2.11.2) - 2023-04-09T12:04:06Z
 
 - Improved: Resolve #8022: Editor syntax highlighting was broken (#8023) (#8022 by Henry Heino)
 - Improved: Updated packages @react-native-community/netinfo (v9.3.8)
 - Fixed: Removed `MasterKey` from Sync Status report (#8026) (#7940 by Arun Kumar)
 - Security: Prevent bypassing fingerprint lock on certain devices (6b72f86)
 
-## [android-v2.11.1](https://github.com/laurent22/joplin/releases/tag/android-v2.11.1) (Pre-release) - 2023-04-08T08:49:19Z
+## [android-v2.11.1](https://github.com/laurent22/joplin/releases/tag/android-v2.11.1) - 2023-04-08T08:49:19Z
 
 - New: Add log info for biometrics feature (efdbaeb)
 - New: Add setting to enable/disable the markdown toolbar (#7929 by Henry Heino)
@@ -799,11 +952,11 @@
 - Fixed: Fix OneDrive sync attempting to call method on `null` variable (#7987) (#7986 by Henry Heino)
 - Updated packages @lezer/highlight (v1.1.4), fs-extra (v11.1.1), jsdom (v21.1.1), markdown-it-multimd-table (v4.2.1), nanoid (v3.3.6), node-persist (v3.1.3), nodemon (v2.0.22), react-native-document-picker (v8.1.4), react-native-image-picker (v5.3.1), react-native-paper (v5.4.1), react-native-share (v8.2.1), sass (v1.59.3), sqlite3 (v5.1.6), turndown (v7.1.2), yargs (v17.7.1)
 
-## [android-v2.10.9](https://github.com/laurent22/joplin/releases/tag/android-v2.10.9) (Pre-release) - 2023-03-22T18:40:57Z
+## [android-v2.10.9](https://github.com/laurent22/joplin/releases/tag/android-v2.10.9) - 2023-03-22T18:40:57Z
 
 - Improved: Mark biometrics feature as beta and ensure no call is made if it is not enabled (e44a934)
 
-## [android-v2.10.8](https://github.com/laurent22/joplin/releases/tag/android-v2.10.8) (Pre-release) - 2023-02-28T18:09:21Z
+## [android-v2.10.8](https://github.com/laurent22/joplin/releases/tag/android-v2.10.8) - 2023-02-28T18:09:21Z
 
 - Improved: Stop synchronization with unsupported WebDAV providers (#7819) (#7661 by [@julien](https://github.com/julien))
 - Fixed: Custom sort order not synchronized (#7729) (#6956 by Tao Klerks)
@@ -814,20 +967,20 @@
 - Fixed: Hide main content while biometric is enabled and not authenticated (#7781) (#7762 by [@pedr](https://github.com/pedr))
 - Fixed: Sharing pictures to Joplin creates recurring duplications (#7807) (#7791 by [@jd1378](https://github.com/jd1378))
 
-## [android-v2.10.6](https://github.com/laurent22/joplin/releases/tag/android-v2.10.6) (Pre-release) - 2023-02-10T16:22:28Z
+## [android-v2.10.6](https://github.com/laurent22/joplin/releases/tag/android-v2.10.6) - 2023-02-10T16:22:28Z
 
 - Improved: Add create sub-notebook feature (#7728) (#1044 by [@carlosngo](https://github.com/carlosngo))
 - Fixed: Fix double-scroll issue in long notes (#7701) (#7700 by Henry Heino)
 - Fixed: Fix startup error (#7688) (#7687 by Henry Heino)
 - Fixed: Sharing file to Joplin does not work (#7691)
 
-## [android-v2.10.5](https://github.com/laurent22/joplin/releases/tag/android-v2.10.5) (Pre-release) - 2023-01-21T14:21:23Z
+## [android-v2.10.5](https://github.com/laurent22/joplin/releases/tag/android-v2.10.5) - 2023-01-21T14:21:23Z
 
 - Improved: Improve dialogue spacing in Fountain renderer (#7628) (#7627 by [@Elleo](https://github.com/Elleo))
 - Improved: Improve filesystem sync performance (#7637) (#6942 by [@jd1378](https://github.com/jd1378))
 - Fixed: Fixes non-working alarms (138bc81)
 
-## [android-v2.10.4](https://github.com/laurent22/joplin/releases/tag/android-v2.10.4) (Pre-release) - 2023-01-14T17:30:34Z
+## [android-v2.10.4](https://github.com/laurent22/joplin/releases/tag/android-v2.10.4) - 2023-01-14T17:30:34Z
 
 - New: Add support for multiple profiles (6bb52d5)
 - Improved: Configurable editor font size (#7596 by Henry Heino)
@@ -838,19 +991,19 @@
 - Fixed: Fixed issue when floating keyboard is visible (#7593) (#6682 by Henry Heino)
 - Fixed: Remove gray line around text editor (#7595) (#7594 by Henry Heino)
 
-## [android-v2.10.3](https://github.com/laurent22/joplin/releases/tag/android-v2.10.3) (Pre-release) - 2023-01-05T11:29:06Z
+## [android-v2.10.3](https://github.com/laurent22/joplin/releases/tag/android-v2.10.3) - 2023-01-05T11:29:06Z
 
 - New: Add support for locking the app using biometrics (f10d9f7)
 - Improved: Make the new text editor the default one (f5ef318)
 - Fixed: Fixed proxy timeout setting UI (275c80a)
 - Fixed: Settings save button visible even when no settings have been changed (#7503)
 
-## [android-v2.10.2](https://github.com/laurent22/joplin/releases/tag/android-v2.10.2) (Pre-release) - 2023-01-02T17:44:15Z
+## [android-v2.10.2](https://github.com/laurent22/joplin/releases/tag/android-v2.10.2) - 2023-01-02T17:44:15Z
 
 - New: Add support for realtime search (767213c)
 - Fixed: Enable autocorrect with spellcheck (#7532) (#6175 by Henry Heino)
 
-## [android-v2.10.1](https://github.com/laurent22/joplin/releases/tag/android-v2.10.1) (Pre-release) - 2022-12-29T13:55:48Z
+## [android-v2.10.1](https://github.com/laurent22/joplin/releases/tag/android-v2.10.1) - 2022-12-29T13:55:48Z
 
 - Improved: Switch license to AGPL-3.0 (faf0a4e)
 - Improved: Tag search case insensitive (#7368 by [@JackGruber](https://github.com/JackGruber))
@@ -862,16 +1015,16 @@
 - Fixed: Update CodeMirror (#7262) (#7253 by Henry Heino)
 - Security: Fix XSS when a specially crafted string is passed to the renderer (762b4e8)
 
-## [android-v2.9.8](https://github.com/laurent22/joplin/releases/tag/android-v2.9.8) (Pre-release) - 2022-11-01T15:45:36Z
+## [android-v2.9.8](https://github.com/laurent22/joplin/releases/tag/android-v2.9.8) - 2022-11-01T15:45:36Z
 
 - Updated translations
 
-## [android-v2.9.7](https://github.com/laurent22/joplin/releases/tag/android-v2.9.7) (Pre-release) - 2022-10-30T10:25:01Z
+## [android-v2.9.7](https://github.com/laurent22/joplin/releases/tag/android-v2.9.7) - 2022-10-30T10:25:01Z
 
 - Fixed: Fixed notebook icons alignment (ea6b7ca)
 - Fixed: Fixed crash when attaching a file.
 
-## [android-v2.9.6](https://github.com/laurent22/joplin/releases/tag/android-v2.9.6) (Pre-release) - 2022-10-23T16:23:25Z
+## [android-v2.9.6](https://github.com/laurent22/joplin/releases/tag/android-v2.9.6) - 2022-10-23T16:23:25Z
 
 - New: Add monochrome icon (#6954 by Tom Bursch)
 - Fixed: Fix file system sync issues (#6943 by [@jd1378](https://github.com/jd1378))
@@ -879,12 +1032,12 @@
 - Fixed: Fixed notebook icon spacing (633c9ac)
 - Fixed: Support non-ASCII characters in OneDrive (#6916) (#6838 by Self Not Found)
 
-## [android-v2.9.5](https://github.com/laurent22/joplin/releases/tag/android-v2.9.5) (Pre-release) - 2022-10-11T13:52:00Z
+## [android-v2.9.5](https://github.com/laurent22/joplin/releases/tag/android-v2.9.5) - 2022-10-11T13:52:00Z
 
 - Improved: Disable multi-highlighting to fix context menu (9b348fd)
 - Improved: Display icon for all notebooks if at least one notebook has an icon (ec97dd8)
 
-## [android-v2.9.3](https://github.com/laurent22/joplin/releases/tag/android-v2.9.3) (Pre-release) - 2022-10-07T11:12:56Z
+## [android-v2.9.3](https://github.com/laurent22/joplin/releases/tag/android-v2.9.3) - 2022-10-07T11:12:56Z
 
 - Improved: Convert empty bolded regions to bold-italic regions in beta editor (#6807) (#6808 by Henry Heino)
 - Improved: Increase the attachment size limit to 200MB (#6848 by Self Not Found)
@@ -896,7 +1049,7 @@
 - Fixed: Fix resources sync when proxy is set (#6817) (#6688 by Self Not Found)
 - Fixed: Fixed crash when trying to move note to notebook (#6898)
 
-## [android-v2.9.2](https://github.com/laurent22/joplin/releases/tag/android-v2.9.2) (Pre-release) - 2022-09-01T11:14:58Z
+## [android-v2.9.2](https://github.com/laurent22/joplin/releases/tag/android-v2.9.2) - 2022-09-01T11:14:58Z
 
 - New: Add Markdown toolbar (#6753 by Henry Heino)
 - New: Add long-press tooltips (#6758 by Henry Heino)
@@ -908,7 +1061,7 @@
 - Fixed: Fixed Android filesystem sync (resources) (#6789) (#6779 by [@jd1378](https://github.com/jd1378))
 - Fixed: Fixed handling of normal paths in filesystem sync (#6792) (#6791 by [@jd1378](https://github.com/jd1378))
 
-## [android-v2.9.1](https://github.com/laurent22/joplin/releases/tag/android-v2.9.1) (Pre-release) - 2022-08-12T17:14:49Z
+## [android-v2.9.1](https://github.com/laurent22/joplin/releases/tag/android-v2.9.1) - 2022-08-12T17:14:49Z
 
 - New: Add alt text/roles to some buttons to improve accessibility (#6616 by Henry Heino)
 - New: Add keyboard-activatable markdown commands (e.g. bold, italicize) on text editor (#6707 by Henry Heino)
@@ -921,7 +1074,7 @@
 - Fixed: Note links with HTML notation did not work (#6515)
 - Fixed: Scroll selection into view in beta editor when window resizes (#6610) (#5949 by Henry Heino)
 
-## [android-v2.8.1](https://github.com/laurent22/joplin/releases/tag/android-v2.8.1) (Pre-release) - 2022-05-18T13:35:01Z
+## [android-v2.8.1](https://github.com/laurent22/joplin/releases/tag/android-v2.8.1) - 2022-05-18T13:35:01Z
 
 - Improved: Allow filtering tags in tag dialog (#6221 by [@shinglyu](https://github.com/shinglyu))
 - Improved: Automatically start sync after setting the sync parameters (ff066ba)
@@ -939,7 +1092,7 @@
 - Fixed: Support inserting attachments from Beta Editor (#6325) (#6324 by Henry Heino)
 - Fixed: The camera button remains clickable after taking a photo bug (#6222 by [@shinglyu](https://github.com/shinglyu))
 
-## [android-v2.7.2](https://github.com/laurent22/joplin/releases/tag/android-v2.7.2) (Pre-release) - 2022-02-12T12:51:29Z
+## [android-v2.7.2](https://github.com/laurent22/joplin/releases/tag/android-v2.7.2) - 2022-02-12T12:51:29Z
 
 - New: Add additional time format HH.mm (#6086 by [@vincentjocodes](https://github.com/vincentjocodes))
 - Improved: Do not duplicate resources when duplicating a note (721d008)
@@ -957,11 +1110,11 @@
 - Improved: Update Mermaid: 8.12.1 -&gt; 8.13.5 (#5831 by Helmut K. C. Tessarek)
 - Fixed: Links in flowchart Mermaid diagrams (#5830) (#5801 by Helmut K. C. Tessarek)
 
-## [android-v2.6.5](https://github.com/laurent22/joplin/releases/tag/android-v2.6.5) (Pre-release) - 2021-12-13T09:41:18Z
+## [android-v2.6.5](https://github.com/laurent22/joplin/releases/tag/android-v2.6.5) - 2021-12-13T09:41:18Z
 
 - Fixed: Fixed "Invalid lock client type" error when migrating sync target (e0e93c4)
 
-## [android-v2.6.4](https://github.com/laurent22/joplin/releases/tag/android-v2.6.4) (Pre-release) - 2021-12-01T11:38:49Z
+## [android-v2.6.4](https://github.com/laurent22/joplin/releases/tag/android-v2.6.4) - 2021-12-01T11:38:49Z
 
 - Improved: Also duplicate resources when duplicating a note (c0a8c33)
 - Improved: Improved S3 sync error handling and reliability, and upgraded S3 SDK (#5312 by Lee Matos)
@@ -970,7 +1123,7 @@
 - Fixed: Fixed opening attachments (6950c40)
 - Fixed: Handle duplicate attachments when the parent notebook is shared (#5796)
 
-## [android-v2.6.3](https://github.com/laurent22/joplin/releases/tag/android-v2.6.3) (Pre-release) - 2021-11-21T16:59:46Z
+## [android-v2.6.3](https://github.com/laurent22/joplin/releases/tag/android-v2.6.3) - 2021-11-21T16:59:46Z
 
 - New: Add date format YYYY/MM/DD (#5759 by Helmut K. C. Tessarek)
 - New: Add support for faster built-in sync locks (#5662)
@@ -983,18 +1136,18 @@
 - Fixed: Fixed issue with parts of HTML notes not being displayed in some cases (#5687)
 - Fixed: Sharing multiple notebooks via Joplin Server with the same user results in an error (#5721)
 
-## [android-v2.6.1](https://github.com/laurent22/joplin/releases/tag/android-v2.6.1) (Pre-release) - 2021-11-02T20:49:53Z
+## [android-v2.6.1](https://github.com/laurent22/joplin/releases/tag/android-v2.6.1) - 2021-11-02T20:49:53Z
 
 - Improved: Upgraded React Native from 0.64 to 0.66 (66e79cc)
 - Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)
 
-## [android-v2.5.5](https://github.com/laurent22/joplin/releases/tag/android-v2.5.5) (Pre-release) - 2021-10-31T11:03:16Z
+## [android-v2.5.5](https://github.com/laurent22/joplin/releases/tag/android-v2.5.5) - 2021-10-31T11:03:16Z
 
 - New: Add padding around beta text editor (365e152)
 - Improved: Capitalise first word of sentence in beta editor (4128be9)
 - Fixed: Do not render very large code blocks to prevent app from freezing (#5593)
 
-## [android-v2.5.3](https://github.com/laurent22/joplin/releases/tag/android-v2.5.3) (Pre-release) - 2021-10-28T21:47:18Z
+## [android-v2.5.3](https://github.com/laurent22/joplin/releases/tag/android-v2.5.3) - 2021-10-28T21:47:18Z
 
 - New: Add support for public-private key pairs and improved master password support (#5438)
 - New: Added mechanism to migrate default settings to new values (72db8e4)
@@ -1009,13 +1162,13 @@
 
 - Fixed: Fix default sync target (4b39d30)
 
-## [android-v2.4.2](https://github.com/laurent22/joplin/releases/tag/android-v2.4.2) (Pre-release) - 2021-09-22T17:02:37Z
+## [android-v2.4.2](https://github.com/laurent22/joplin/releases/tag/android-v2.4.2) - 2021-09-22T17:02:37Z
 
 - Improved: Allow disabling any master key, including default or active one (9407efd)
 - Improved: Update Mermaid 8.10.2 -&gt; 8.12.1 and fix gitGraph crash (#5448) (#5295 by Helmut K. C. Tessarek)
 - Fixed: Misinterpreted search term after filter in quotation marks (#5445) (#5444 by [@JackGruber](https://github.com/JackGruber))
 
-## [android-v2.4.1](https://github.com/laurent22/joplin/releases/tag/android-v2.4.1) (Pre-release) - 2021-08-30T13:37:34Z
+## [android-v2.4.1](https://github.com/laurent22/joplin/releases/tag/android-v2.4.1) - 2021-08-30T13:37:34Z
 
 - New: Add a way to disable a master key (7faa58e)
 - New: Add support for single master password, to simplify handling of multiple encryption keys (ce89ee5)
@@ -1025,21 +1178,21 @@
 - Improved: Show the used tags first in the tagging dialog (#5315 by [@JackGruber](https://github.com/JackGruber))
 - Fixed: Fixed crash when a required master key does not exist (#5391)
 
-## [android-v2.3.4](https://github.com/laurent22/joplin/releases/tag/android-v2.3.4) (Pre-release) - 2021-08-15T13:27:57Z
+## [android-v2.3.4](https://github.com/laurent22/joplin/releases/tag/android-v2.3.4) - 2021-08-15T13:27:57Z
 
 - Fixed: Bump highlight.js to v11.2 (#5278) (#5245 by Roman Musin)
 
-## [android-v2.3.3](https://github.com/laurent22/joplin/releases/tag/android-v2.3.3) (Pre-release) - 2021-08-12T20:46:15Z
+## [android-v2.3.3](https://github.com/laurent22/joplin/releases/tag/android-v2.3.3) - 2021-08-12T20:46:15Z
 
 - Improved: Improved E2EE usability by making its state a property of the sync target (#5276)
 
-## [android-v2.2.5](https://github.com/laurent22/joplin/releases/tag/android-v2.2.5) (Pre-release) - 2021-08-11T10:54:38Z
+## [android-v2.2.5](https://github.com/laurent22/joplin/releases/tag/android-v2.2.5) - 2021-08-11T10:54:38Z
 
 - Revert "Plugins: Add ability to make dialogs fit the application window (#5219)" as it breaks several plugin webviews.
 - Revert "Resolves #4810, Resolves #4610: Fix AWS S3 sync error and upgrade framework to v3 (#5212)" due to incompatibility with some AWS providers.
 - Improved: Upgraded React Native to v0.64 (afb7e1a)
 
-## [android-v2.2.3](https://github.com/laurent22/joplin/releases/tag/android-v2.2.3) (Pre-release) - 2021-08-09T18:48:29Z
+## [android-v2.2.3](https://github.com/laurent22/joplin/releases/tag/android-v2.2.3) - 2021-08-09T18:48:29Z
 
 - Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
 - Improved: Fix AWS S3 sync error and upgrade framework to v3 (#5212) (#4810 by Lee Matos)
@@ -1047,7 +1200,7 @@
 - Improved: Make sync icon spin in the right direction (#5275) (#4588 by Lee Matos)
 - Fixed: Fixed issue with orphaned resource being created in case of a resource conflict (#5223)
 
-## [android-v2.2.1](https://github.com/laurent22/joplin/releases/tag/android-v2.2.1) (Pre-release) - 2021-07-13T17:37:38Z
+## [android-v2.2.1](https://github.com/laurent22/joplin/releases/tag/android-v2.2.1) - 2021-07-13T17:37:38Z
 
 - New: Added improved editor (beta)
 - Improved: Disable backup to Google Drive (#5114 by Roman Musin)
@@ -1067,12 +1220,12 @@
 - Fixed: Fixed search when the index contains non-existing notes (5ecac21)
 - Fixed: Fixed version number on config screen (65e9268)
 
-## [android-v2.1.2](https://github.com/laurent22/joplin/releases/tag/android-v2.1.2) (Pre-release) - 2021-06-20T18:36:23Z
+## [android-v2.1.2](https://github.com/laurent22/joplin/releases/tag/android-v2.1.2) - 2021-06-20T18:36:23Z
 
 - Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (#5051)
 - Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)
 
-## [android-v2.1.1](https://github.com/laurent22/joplin/releases/tag/android-v2.1.1) (Pre-release) - 2021-06-19T16:42:57Z
+## [android-v2.1.1](https://github.com/laurent22/joplin/releases/tag/android-v2.1.1) - 2021-06-19T16:42:57Z
 
 - New: Add version number to log (525ab01)
 - New: Added feature flags to disable Joplin Server sync optimisations by default, so that it still work with server 2.0 (326fef4)
@@ -1087,7 +1240,7 @@
 
 - Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)
 
-## [android-v2.0.3](https://github.com/laurent22/joplin/releases/tag/android-v2.0.3) (Pre-release) - 2021-06-16T09:48:58Z
+## [android-v2.0.3](https://github.com/laurent22/joplin/releases/tag/android-v2.0.3) - 2021-06-16T09:48:58Z
 
 - Improved: Verbose mode for synchronizer (4bbb3d1)
 

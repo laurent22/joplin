@@ -3,13 +3,13 @@ import * as fs from 'fs-extra';
 import { extname } from 'path';
 import config, { fullVersionString } from '../config';
 import { filename } from '@joplin/lib/path-utils';
-import { NotificationView } from '../utils/types';
+import { Config, NotificationView } from '../utils/types';
 import { User } from '../services/database/types';
 import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl, adminReportUrl } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl, adminReportUrl, applicationsUrl } from '../utils/urlUtils';
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 import { ReportType } from './reports/types';
 
@@ -58,6 +58,7 @@ interface GlobalParams {
 	isAdminPage?: boolean;
 	adminMenu?: MenuItem[];
 	navbarMenu?: MenuItem[];
+	config?: Config;
 	currentPath?: SubPath;
 	appShortName?: string;
 }
@@ -149,6 +150,10 @@ export default class MustacheService {
 			{
 				title: _('Home'),
 				url: homeUrl(),
+			},
+			{
+				title: _('Applications'),
+				url: applicationsUrl(),
 			},
 		];
 

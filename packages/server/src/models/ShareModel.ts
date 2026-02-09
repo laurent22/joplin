@@ -3,7 +3,7 @@ import { Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
-import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
+import BaseModel, { AclAction, DeleteOptions, LoadOptions, ValidateOptions } from './BaseModel';
 import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
@@ -43,6 +43,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public checkShareUrl(share: Share, shareUrl: string) {
+		if (this.userContentBaseUrl === 'http://joplinusercontent.local:22300') return; // OK - testing
 		if (this.baseUrl === this.userContentBaseUrl) return; // OK
 
 		const userId = userIdFromUserContentUrl(shareUrl);
@@ -55,7 +56,7 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 	}
 
-	protected objectToApiOutput(object: Share): Share {
+	protected async objectToApiOutput(object: Share): Promise<Share> {
 		const output: Share = {};
 
 		if (object.id) output.id = object.id;
@@ -88,10 +89,10 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.save(toSave);
 	}
 
-	public async itemShare(shareType: ShareType, itemId: string): Promise<Share> {
+	public async itemShare(shareType: ShareType, itemId: string, options: LoadOptions = null): Promise<Share> {
 		return this
 			.db(this.tableName)
-			.select(this.defaultFields)
+			.select(this.selectFields(options))
 			.where('item_id', '=', itemId)
 			.where('type', '=', shareType)
 			.first();
@@ -227,12 +228,18 @@ export default class ShareModel extends BaseModel<Share> {
 			perfTimer.pop();
 		};
 
-		const handleUpdated = async (change: Change, item: Item, share: Share) => {
-			const previousItem = this.models().change().unserializePreviousItem(change.previous_item);
-			const previousShareId = previousItem.jop_share_id;
+		const getPreviousShareId = (change: Change) => {
+			return this.models().change().unserializePreviousItem(change.previous_item)?.jop_share_id;
+		};
+
+		const handleUpdated = async (change: Change, item: Item, share: Share, nextShareId: Uuid) => {
+			const previousShareId = getPreviousShareId(change);
 			const shareId = share ? share.id : '';
 
-			if (previousShareId === shareId) return;
+			const changesShareId = previousShareId !== nextShareId;
+			if (previousShareId === shareId || !changesShareId) {
+				return;
+			}
 
 			perfTimer.push('handleUpdated');
 
@@ -342,6 +349,18 @@ export default class ShareModel extends BaseModel<Share> {
 				await this.withTransaction(async () => {
 					perfTimer.push(`Processing ${changes.length} changes`);
 
+					const itemToUpdates = new Map<Uuid, Change[]>();
+					for (const change of changes) {
+						if (change.type === ChangeType.Update) {
+							const updates = itemToUpdates.get(change.item_id);
+							if (updates) {
+								updates.push(change);
+							} else {
+								itemToUpdates.set(change.item_id, [change]);
+							}
+						}
+					}
+
 					for (const change of changes) {
 						const item = items.find(i => i.id === change.item_id);
 
@@ -355,7 +374,18 @@ export default class ShareModel extends BaseModel<Share> {
 							}
 
 							if (change.type === ChangeType.Update) {
-								await handleUpdated(change, item, itemShare);
+								const allUpdates = itemToUpdates.get(item.id);
+								const changeIndex = allUpdates.indexOf(change);
+								const nextChange = allUpdates[changeIndex + 1];
+
+								let nextShareId;
+								if (nextChange) {
+									nextShareId = getPreviousShareId(nextChange);
+								} else {
+									nextShareId = item.jop_share_id;
+								}
+
+								await handleUpdated(change, item, itemShare, nextShareId);
 							}
 						}
 

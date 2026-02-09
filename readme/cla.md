@@ -76,12 +76,18 @@ Your Contributions.
    waived such rights for your Contributions to the Company, or that your
    employer has executed a separate Corporate CLA with the Company.
 
-5. You represent that each of Your Contributions is Your original creation (see
-   section 7 for submissions on behalf of others). You represent that Your
-   Contribution submissions include complete details of any third-party license
-   or other restriction (including, but not limited to, related patents and
-   trademarks) of which you are personally aware and which are associated with
-   any part of Your Contributions.
+5. You represent that each of Your Contributions is Your original creation or
+   that You otherwise have the lawful right to submit it, and that each
+   Contribution is a work of human authorship. You represent that, although
+   automated or artificial intelligence tools may have been used to assist in
+   the creation of a Contribution, You have exercised creative judgment in
+   reviewing, selecting, modifying, or arranging the Contribution, and that no
+   Contribution is submitted that was generated entirely by automated means
+   without meaningful human involvement. You represent that Your Contribution
+   submissions include complete details of any third-party license or other
+   restriction (including, but not limited to, related patents and trademarks)
+   of which you are personally aware and which are associated with any part of
+   Your Contributions.
 
 6. You are not expected to provide support for Your Contributions, except to the
    extent You desire to provide support. You may provide support for free, for a

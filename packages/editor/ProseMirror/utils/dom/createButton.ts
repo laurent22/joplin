@@ -3,9 +3,28 @@ import createTextNode from './createTextNode';
 
 type OnClick = ()=> void;
 
-const createButton = (label: LocalizationResult, onClick: OnClick) => {
+type Content = LocalizationResult|{
+	icon: Element;
+	label: LocalizationResult;
+};
+
+const isLocalizationResult = (content: Content): content is LocalizationResult => {
+	return typeof content === 'string' || !('icon' in content);
+};
+
+const createButton = (content: Content, onClick: OnClick) => {
 	const button = document.createElement('button');
-	button.appendChild(createTextNode(label));
+	if (isLocalizationResult(content)) {
+		button.appendChild(createTextNode(content));
+	} else {
+		button.appendChild(content.icon);
+
+		void (async () => {
+			const label = await content.label;
+			button.ariaLabel = label;
+			button.title = label;
+		})();
+	}
 
 	button.onclick = onClick;
 

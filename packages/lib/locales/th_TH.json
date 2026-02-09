@@ -119,6 +119,9 @@
 	"[None]": [
 		""
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -130,6 +133,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		""
@@ -166,6 +172,9 @@
 	],
 	"Add body": [
 		"เพิ่มเนื้อความ"
+	],
+	"Add column": [
+		""
 	],
 	"Add or remove tags:": [
 		"เพิ่มหรือลบแท็ก:"
@@ -225,6 +234,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -312,6 +324,9 @@
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -404,6 +419,9 @@
 	"Checking... Please wait.": [
 		"กำลังตรวจสอบ... โปรดรอสักครู่..."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"เลือก"
 	],
@@ -462,6 +480,9 @@
 		""
 	],
 	"Command": [
+		""
+	],
+	"COMMAND": [
 		""
 	],
 	"Command palette": [
@@ -656,6 +677,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -731,6 +755,9 @@
 	"Displays the complete information about note.": [
 		"แสดงข้อมูลทั้งหมดของบันทึก"
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"แสดงบันทึกที่เลือก"
 	],
@@ -744,6 +771,9 @@
 		"ทำตอนนี้"
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		""
+	],
+	"Do you find the Joplin web app useful?": [
 		""
 	],
 	"Document scanner: Title template": [
@@ -1025,6 +1055,9 @@
 	"Feature flags": [
 		""
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		""
 	],
@@ -1220,9 +1253,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		""
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -1331,6 +1361,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		""
 	],
@@ -1346,7 +1379,13 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1419,6 +1458,9 @@
 		""
 	],
 	"Manage your plugins": [
+		""
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
 		""
 	],
 	"Manual": [
@@ -1580,6 +1622,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		""
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1596,6 +1641,9 @@
 		"ยังไม่ได้ดาวน์โหลด"
 	],
 	"Not generated": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"note": [
@@ -1694,6 +1742,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"เปิด..."
 	],
@@ -1705,6 +1756,12 @@
 	],
 	"Options": [
 		"ตัวเลือก"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
 	],
 	"Page size for PDF export": [
 		"ขนาดของหน้า สำหรับการส่งออก PDF"
@@ -1820,9 +1877,6 @@
 	"Preferred light theme": [
 		""
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -1898,6 +1952,12 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"ออก"
 	],
@@ -1926,6 +1986,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recognise text:": [
 		""
 	],
 	"Recognize handwritten image": [
@@ -2099,6 +2162,12 @@
 	"Select all": [
 		"เลือกทั้งหมด"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selection deleted": [
 		""
 	],
@@ -2213,6 +2282,9 @@
 	"Source format: %s": [
 		"ฟอร์แมตต้นฉบับ: %s"
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2303,6 +2375,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		""
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2379,6 +2454,9 @@
 		""
 	],
 	"Text editor command": [
+		""
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
@@ -2651,6 +2729,9 @@
 	"Try again": [
 		"ลองอีกครั้ง"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด"
 	],
@@ -2664,6 +2745,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -2747,6 +2831,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -2778,9 +2865,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"We have a system for reporting and removing problematic plugins.": [
@@ -2819,10 +2903,10 @@
 	"When creating a new to-do:": [
 		"เมื่อสร้าง to-do ใหม่:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

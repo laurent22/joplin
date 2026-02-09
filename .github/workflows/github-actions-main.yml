@@ -50,6 +50,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # - name: Test Windows app signing
+      #   if: runner.os == 'Windows'
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #     IS_CONTINUOUS_INTEGRATION: 1
+      #     BUILD_SEQUENCIAL: 1
+      #     SSL_ESIGNER_USER_NAME: ${{ secrets.SSL_ESIGNER_USER_NAME }}
+      #     SSL_ESIGNER_USER_PASSWORD: ${{ secrets.SSL_ESIGNER_USER_PASSWORD }}
+      #     SSL_ESIGNER_CREDENTIAL_ID: ${{ secrets.SSL_ESIGNER_CREDENTIAL_ID }}
+      #     SSL_ESIGNER_USER_TOTP: ${{ secrets.SSL_ESIGNER_USER_TOTP }}
+      #     SIGN_APPLICATION: 1
+      #   # To ensure that the operations stop on failure, all commands
+      #   # should be on one line with "&&" in between.
+      #   run: |
+      #     yarn install && cd packages/app-desktop && yarn dist
+
       - name: Run tests, build and publish Linux and macOS apps
         if: runner.os == 'Linux' || runner.os == 'macOs'
         env:
@@ -71,11 +87,14 @@ jobs:
       - name: Build and publish Windows app
         if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
         env:
-          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
-          CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
+          SSL_ESIGNER_USER_NAME: ${{ secrets.SSL_ESIGNER_USER_NAME }}
+          SSL_ESIGNER_USER_PASSWORD: ${{ secrets.SSL_ESIGNER_USER_PASSWORD }}
+          SSL_ESIGNER_CREDENTIAL_ID: ${{ secrets.SSL_ESIGNER_CREDENTIAL_ID }}
+          SSL_ESIGNER_USER_TOTP: ${{ secrets.SSL_ESIGNER_USER_TOTP }}
+          SIGN_APPLICATION: 1
         # To ensure that the operations stop on failure, all commands
         # should be on one line with "&&" in between.
         run: |
@@ -128,9 +147,9 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '24'
 
       - name: Free disk space
         if: runner.os == 'Linux'
@@ -169,7 +188,7 @@ jobs:
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run -p 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js --env dev &
+          docker run --env MAX_TIME_DRIFT=0 --publish 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js --env dev &
 
           # Wait for server to start
           sleep 120
@@ -196,4 +215,3 @@ jobs:
             echo 'Failed while checking the body response after request to /api/ping'
             exit 1;
           fi
-

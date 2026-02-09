@@ -39,15 +39,17 @@ export interface VoiceTypingProvider {
 
 export default class VoiceTyping {
 	private provider: VoiceTypingProvider|null = null;
-	public constructor(
-		private locale: string,
-		allProviders: VoiceTypingProvider[],
-	) {
-		this.provider = allProviders.find(p => p.supported()) ?? null;
+	public constructor(private locale: string) {
+		this.provider = VoiceTyping.providers_.find(p => p.supported()) ?? null;
 	}
 
-	public supported() {
-		return this.provider !== null;
+	private static providers_: VoiceTypingProvider[] = [];
+	public static initialize(providers: VoiceTypingProvider[]) {
+		this.providers_ = providers;
+	}
+
+	public static supported() {
+		return this.providers_.some(p => p.supported());
 	}
 
 	private getModelPath() {

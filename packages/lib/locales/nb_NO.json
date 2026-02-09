@@ -122,6 +122,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> kan enten være \"bytt\" eller \"fjern\". Bruk \"bytt\" for å veksle et gitt gjøremål mellom fullført og ikke fullført status (hvis målet er et vanlig notat det vil bli konvertert til et gjøremål). Bruk \"Clear\" for å konvertere gjøremålet tilbake til et vanlig notat."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -133,6 +136,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		""
@@ -178,6 +184,9 @@
 	],
 	"Add body": [
 		"Legg til brødtekst"
+	],
+	"Add column": [
+		""
 	],
 	"Add or remove tags:": [
 		"Legge til eller fjern merkelapper:"
@@ -243,6 +252,9 @@
 		""
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -351,6 +363,9 @@
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -473,6 +488,9 @@
 	"Checking... Please wait.": [
 		"Sjekker… Vennligst vent."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Velg et alternativ"
 	],
@@ -544,6 +562,9 @@
 	],
 	"Command": [
 		"Kommando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Kommandomeny"
@@ -801,6 +822,9 @@
 	"Delete plugin \"%s\"?": [
 		"Slett utvidelse \"%s\"?"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -885,6 +909,9 @@
 	"Displays the complete information about note.": [
 		"Viser den komplette informasjonen om notatet."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Viser det valgte notatet."
 	],
@@ -905,6 +932,9 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Ikke mist passordet som, av sikkerhetsmessige grunner, vil være den *eneste* måten å dekryptere data på! Skriv inn passordet nedenfor for å aktivere kryptering."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1242,6 +1272,9 @@
 	"Feature flags": [
 		"Funksjonsflagg"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Hentet elementer: %d/%d."
 	],
@@ -1456,9 +1489,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"I alle kommandoer kan et notat eller en notatbok kun refereres til etter tittel eller ID, eller ved hjelp av snarveiene `$n` (notat) eller `$b` (notatbok). `$c` kan brukes til å referere til nåværende merket element."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"For å knytte geolokasjon til dette notatet, trenger applikasjonen din tillatelse for å få tilgang til din lokasjon.\n\nDu kan slå av dette valget når som helst under Innstillinger."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"For å gjøre dette, må hele ditt datasett krypteres og synkroniseres, derfor er det best å gjøre dette over natten.\n\nFølg instruksjonene for å starte :\n\n1. Synkroniser alle dine enheter.\n2. Klikk \"%s\".\n3. La prosessen fullføre. Mens den kjører, unngå endringer på notatene dine på andre enheter, for å unngå konflikt.\n4. Når synkroniseringen er fullført på denne enheten så synkroniserer du dine andre enheter og lar dem fullføre prosessen.\n\nViktig: Du trenger kun å gjøre dette ÉN gang per enhet."
 	],
@@ -1591,6 +1621,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper gjør det mulig å lagre nettsteder og skjermbilder fra din nettleser til Joplin."
 	],
@@ -1615,8 +1648,14 @@
 	"Keychain Supported: %s": [
 		"Nøkkelring støttet: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Nøkler som må oppgraderes"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Landskap"
@@ -1708,6 +1747,9 @@
 	],
 	"Manage your plugins": [
 		"Administrer dine utvidelser"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Håndter E2EE-konfigurasjon. Tilgjengelige kommandoer er: `enable`(aktiver), `disable`(lukk), `decrypt`(dekrypter), `status` og `target-status` (mottager-status)."
@@ -1892,6 +1934,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Ingen teksteditor er valgt. Velg en ved å bruke `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -1906,6 +1951,9 @@
 	],
 	"Not generated": [
 		"Ikke generert"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"notat"
@@ -2039,6 +2087,9 @@
 	"Open Sync Wizard...": [
 		"Åpne Sync Wizard…"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Åpne..."
 	],
@@ -2050,6 +2101,12 @@
 	],
 	"Options": [
 		"Generelle innstillinger"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"Andre programmer…"
@@ -2095,9 +2152,6 @@
 	],
 	"Per user. Minimum of 2 users.": [
 		""
-	],
-	"Permission needed": [
-		"Tillatelse kreves"
 	],
 	"Photo %d": [
 		""
@@ -2186,9 +2240,6 @@
 	"Preferred light theme": [
 		"Foretrukket lyst tema"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2262,6 +2313,9 @@
 		"Publiser notater på internett"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2492,6 +2546,12 @@
 	"Select file...": [
 		"Velg fil…"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2642,6 +2702,9 @@
 	"Source: ": [
 		"Kilde: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2747,6 +2810,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Bytter til [notebook] - alle videre operasjoner vil skje i denne notatboken."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2830,6 +2896,9 @@
 	],
 	"Text editor command": [
 		"Teksteditorkommando"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
@@ -3131,6 +3200,9 @@
 	"Try again": [
 		"Forsøk igjen"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Skriv inn `help [kommando]` for å få mer informasjon om en kommando. eller skriv inn `help all` for fullstendig brukerinformasjon."
 	],
@@ -3147,6 +3219,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -3263,6 +3338,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Brukt hvor en fastbreddefont er behøvd for å ordne tekst(i.e tabeller, avmerkingsbokser, kode). Hvis ikke funnet, vil en generell monospace(fast bredde)-font benyttes."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Brukerslettinger"
 	],
@@ -3303,9 +3381,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -3350,10 +3425,10 @@
 	"When creating a new to-do:": [
 		"Når et nytt gjøremål opprettes:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

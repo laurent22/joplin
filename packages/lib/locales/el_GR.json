@@ -15,7 +15,7 @@
 		"%d MB ανά σημείωση ή συνημμένο"
 	],
 	"%d photo(s) taken": [
-		""
+		"%d φωτογραφία(ες) που ελήφθησαν"
 	],
 	"%s": [
 		"%s"
@@ -51,13 +51,13 @@
 		"%s = %s (%s)"
 	],
 	"%s cannot be less than %s": [
-		""
+		"%s δεν μπορεί να είναι μικρότερο από %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"Το %s δεν έχει βελτιστοποιηθεί για συγχρονισμό πολλών μικρών αρχείων, επομένως ο αρχικός συγχρονισμός θα καθυστερήσει."
 	],
 	"%s must be a valid whole number": [
-		""
+		"%s πρέπει να είναι έγκυρος ακέραιος αριθμός"
 	],
 	"%s tab opened": [
 		"Ανοίχθηκε η καρτέλα %s"
@@ -105,13 +105,13 @@
 		"(Στο πρόσθετο: %s)"
 	],
 	"(level %d)": [
-		""
+		"(επίπεδο %d)"
 	],
 	"(None)": [
 		"(Κανένα)"
 	],
 	"(Read-only)": [
-		""
+		"(Μόνο για ανάγνωση)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
@@ -129,13 +129,16 @@
 		"- Χώρος αποθήκευσης: για να επιτρέπεται η επισύναψη αρχείων στις σημειώσεις και ο συγχρονισμός αρχείων συστήματος."
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
-		"<tag-command> μπορεί να είναι \"add\", \"remove\", \"list\" ή \"notetags\" για προσθήκη ή αφαίρεση [ετικέτας] στη [σημείωση], για λίστα σημειώσεων με τη συγκεκριμένη [ετικέτα] ή για λίστα ετικετών της συγκεκριμένης [σημείωσης]. Η εντολή `tag list` μπορεί να χρησιμοποιηθεί για να πάρετε λίστα με όλες τις ετικέτες (χρησιμοποιήστε το -l για μακρά επιλογή)."
+		"<tag-command> μπορεί να είναι \"add\", \"remove\", \"list\" ή \"notetags\" για προσθήκη ή αφαίρεση [tag] στη [note], για λίστα σημειώσεων με τη συγκεκριμένη [tag] ή για λίστα ετικετών της συγκεκριμένης [note].τη συγκεκριμένη [tag] ή για λίστα ετικετών της συγκεκριμένης [note]. Η εντολή `tag list` μπορεί να χρησιμοποιηθεί για να πάρετε λίστα με όλες τις ετικέτες (χρησιμοποιήστε το -l για μακρά επιλογή)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> μπορεί να είναι \"toggle\" ή \"clear\". Χρησιμοποιήστε το \"toggle\" για εναλλαγή κατάστασης της συγκεκριμένης υπόμνησης μεταξύ ολοκληρωμένης και μη-ολοκληρωμένης (εάν  χρησιμοποιηθεί σε κανονική σημείωση, αυτή θα μετατραπεί σε υπόμνηση). Χρησιμοποιήστε το \"clear\" για να μετατρέψετε την υπόμνηση σε κανονική σημείωση."
 	],
+	"A brief description of the image:": [
+		"Σύντομη περιγραφή της εικόνας:"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
-		""
+		"Ένας κατάλογος λέξεων χωρισμένος με κόμμα. Μπορεί να χρησιμοποιηθεί για ασυνήθιστες λέξεις, για να βοηθήσει τη φωνητική πληκτρολόγηση να τις συλλαβίσει σωστά."
 	],
 	"A3": [
 		"A3"
@@ -145,6 +148,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Σχετικά"
@@ -197,6 +203,9 @@
 	"Add body": [
 		"Προσθήκη σώματος κειμένου"
 	],
+	"Add column": [
+		"Προσθήκη στήλης"
+	],
 	"Add new": [
 		"Προσθήκη νέου"
 	],
@@ -213,10 +222,10 @@
 		"Προσθήκη στο λεξικό"
 	],
 	"Added tag: %s": [
-		""
+		"Προστέθηκε ετικέτα: %s"
 	],
 	"Adds tag": [
-		""
+		"Προσθέτει ετικέτα"
 	],
 	"Admin": [
 		"Διαχειριστής"
@@ -246,7 +255,7 @@
 		"Όλες οι πιθανές θύρες χρησιμοποιούνται - αναφέρετε το ζήτημα στο %s"
 	],
 	"All shared folders:": [
-		""
+		"Όλοι οι κοινόχρηστοι φάκελοι:"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Επιτρέπει την αποσφαλμάτωση φορητών πρόσθετων. Δείτε %s για λεπτομέρειες."
@@ -278,6 +287,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Βρέθηκε ένα αυτόματα αποθηκευμένο σχέδιο. Να επισυναφθεί αντίγραφό του στην σημείωση;"
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		"Προέκυψε σφάλμα κατά την αποστολή της απάντησης. Αυτό μπορεί να συμβεί αν η εφαρμογή είναι εκτός σύνδεσης ή δεν μπορεί να συνδεθεί με τον διακομιστή.\nΣφάλμα: %s"
+	],
 	"An error occurred: %s": [
 		"Συνέβη ένα σφάλμα: %s"
 	],
@@ -285,7 +297,7 @@
 		"Υπάρχει διαθέσιμη μια ενημέρωση, θέλετε να την κατεβάσετε τώρα;"
 	],
 	"Android API level: %d": [
-		""
+		"Επίπεδο API Android: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"Κάθε e-mail σε αυτή τη διεύθυνση θα μετατρέπεται σε σημείωση και θα προστίθεται στη συλλογή σας. Η σημείωση θα αποθηκεύεται στο Σημειωματάριο εισερχομένων"
@@ -312,10 +324,10 @@
 		"Aritim Dark"
 	],
 	"Associated tags:": [
-		""
+		"Σχετικές ετικέτες:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
-		""
+		"Προς το παρόν, το Joplin Web μπορεί να είναι ανοιχτό μόνο σε μία καρτέλα κάθε φορά. Παρακαλούμε κλείστε την άλλη παρουσία του Joplin."
 	],
 	"Attach": [
 		"Επισύναψη"
@@ -366,13 +378,13 @@
 		"Αυτόματη προσθήκη απενεργοποιημένων λογαριασμών για διαγραφή"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
-		""
+		"Αυτόματη μορφοποίηση Markdown στον επεξεργαστή πλούσιου κειμένου"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
 	],
 	"Autocomplete Markdown and HTML": [
-		""
+		"Αυτόματη συμπλήρωση Markdown και HTML"
 	],
 	"Automatically check for updates": [
 		"Αυτόματος έλεγχος για ενημερώσεις"
@@ -391,6 +403,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Έντονη γραφή"
@@ -411,10 +426,10 @@
 		"από %s"
 	],
 	"by word": [
-		""
+		"με λέξη"
 	],
 	"Camera": [
-		""
+		"Κάμερα"
 	],
 	"Can Share": [
 		"Μπορεί να μοιραστεί"
@@ -432,7 +447,7 @@
 		"Ακύρωση συγχρονισμού ... Παρακαλώ περιμένετε."
 	],
 	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
-		""
+		"Η ακύρωση θα απορρίψει την εγγραφή. Αυτό δεν μπορεί να αναιρεθεί. Είστε σίγουροι ότι θέλετε να συνεχίσετε;"
 	],
 	"Cancelling...": [
 		"Ακύρωση..."
@@ -495,7 +510,7 @@
 		"Αλλαγή γλώσσας"
 	],
 	"Change shortcut for \"%s\"": [
-		""
+		"Αλλαγή συντόμευσης για το \"%s\""
 	],
 	"Characters": [
 		"Χαρακτήρες"
@@ -504,7 +519,7 @@
 		"Χαρακτήρες χωρίς τα κενά"
 	],
 	"Check elements to display in the toolbar": [
-		""
+		"Ελέγξτε τα στοιχεία που θα εμφανίζονται στη γραμμή εργαλείων"
 	],
 	"Check for updates...": [
 		"Ελεγχος για ενημερώσεις..."
@@ -520,6 +535,9 @@
 	],
 	"Checking... Please wait.": [
 		"Πραγματοποιείται έλεγχος… Παρακαλώ περιμένετε."
+	],
+	"Chinese/Japanese/Korean characters": [
+		""
 	],
 	"Choose an option": [
 		"Διαλέξτε μία επιλογή"
@@ -540,7 +558,7 @@
 		"Κάντε κλικ στο \"%s\" για να επαναφέρετε τη σημείωση. Θα αντιγραφεί στο σημειωματάριο που ονομάζεται \"%s\". Η τρέχουσα έκδοση της σημείωσης δεν αντικαθίσταται ή τροποποιείται."
 	],
 	"Click \"start\" to attach a new voice memo to the note.": [
-		""
+		"Κάντε κλικ στην επιλογή \"έναρξη\" για να επισυνάψετε ένα νέο φωνητικό σημείωμα στη σημείωση."
 	],
 	"Click to add tags...": [
 		"Κάντε κλικ για να προσθέσετε ετικέτες..."
@@ -555,7 +573,7 @@
 		"Κλείσιμο πτυσσόμενου μενού"
 	],
 	"Close side menu": [
-		""
+		"Κλείσιμο πλευρικού μενού"
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"Κλείσε την εφαρμογή, διαγράψτε το προφίλ στο “%s” και ανοίξτε την εφαρμογή εκ νέου. Βεβαιωθείτε πρώτα ότι έχετε λάβει αντίγραφο ασφαλείας, εξάγοντας όλες τις σημειώσεις σας ως JEX."
@@ -564,7 +582,7 @@
 		"Κλείσιμο παραθύρου"
 	],
 	"Closing session...": [
-		""
+		"Τερματισμός συνεδρίας..."
 	],
 	"Cmd-click to open": [
 		"Cmd-click για άνοιγμα"
@@ -599,6 +617,9 @@
 	"Command": [
 		"Εντολή"
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		"Παλέτα εντολών"
 	],
@@ -606,7 +627,7 @@
 		"Παλέτα εντολών..."
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"Εντολές: `add`, `remove`, `list`, `delete`, `accept`, `leave` και `reject`."
 	],
 	"Compact": [
 		"Συμπαγής"
@@ -633,7 +654,7 @@
 		"Ρυθμίσεις"
 	],
 	"Configures the size of scrollbars used in the app.": [
-		""
+		"Διαμορφώνει το μέγεθος των γραμμών κύλισης που χρησιμοποιούνται στην εφαρμογή."
 	],
 	"Confirm password cannot be empty": [
 		"Η επιβεβαίωση του κωδικού πρόσβασης δεν μπορεί να είναι κενή"
@@ -657,7 +678,7 @@
 		"Σύνδεση σε Joplin Cloud"
 	],
 	"Connect using your organisation account": [
-		""
+		"Συνδεθείτε χρησιμοποιώντας το λογαριασμό του οργανισμού σας"
 	],
 	"Consolidated billing": [
 		"Ενοποιημένη χρέωση"
@@ -832,7 +853,7 @@
 		"Custom πιστοποιητικά TLS"
 	],
 	"Customise the note publishing banner": [
-		""
+		"Προσαρμόστε το πανό δημοσίευσης σημειώσεων"
 	],
 	"Cut": [
 		"Αποκοπή"
@@ -868,7 +889,7 @@
 		"Προεπιλογή"
 	],
 	"Default title to use for documents created by the scanner.": [
-		""
+		"Προεπιλεγμένος τίτλος που θα χρησιμοποιείται για τα έγγραφα που δημιουργούνται από το σαρωτή."
 	],
 	"Default: %s": [
 		"Προεπιλογή: %s"
@@ -905,6 +926,9 @@
 	],
 	"Delete selected notes": [
 		"Διαγραφή επιλεγμένων σημειώσεων"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Να διαγραφεί το σημειωματάριο εισερχομένων;\n\nΑν διαγράψετε το σημειωματάριο εισερχομένων, κάθε e-mail που εστάλη σε αυτό πρόσφατα ίσως χαθεί."
@@ -946,7 +970,7 @@
 		"Λεπτομερής"
 	],
 	"Device: %s": [
-		""
+		"Συσκευή: %s"
 	],
 	"Directory": [
 		"Φάκελος"
@@ -996,6 +1020,9 @@
 	"Displays the complete information about note.": [
 		"Εμφανίζει όλες τις πληροφορίες σχετικά με τη σημείωση."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Εμφανίζει τη καθορισμένη σημείωση."
 	],
@@ -1017,14 +1044,17 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Μην χάσετε τον κωδικό πρόσβασης, καθώς, για λόγους ασφαλείας, αυτός θα είναι ο *μόνος* τρόπος αποκρυπτογράφησης των δεδομένων! Για να ενεργοποιήσετε την κρυπτογράφηση, εισαγάγετε τον κωδικό πρόσβασής σας παρακάτω."
 	],
+	"Do you find the Joplin web app useful?": [
+		"Θεωρείτε χρήσιμη την εφαρμογή Joplin web;"
+	],
 	"Document scanner: Title template": [
-		""
+		"Σαρωτής εγγράφων: Πρότυπο τίτλου"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
-		""
+		"Μην επιτρέπετε στον παραλήπτη της κοινής χρήσης να γράφει στο κοινόχρηστο σημειωματάριο. Ισχύει μόνο για την υποεντολή `add`."
 	],
 	"Don't show this message again": [
-		""
+		"Μην εμφανίσετε ξανά αυτό το μήνυμα"
 	],
 	"Donate, website": [
 		"Δωρεά, ιστότοπος"
@@ -1090,13 +1120,13 @@
 		"Διπλασιασμός επιλεγμένων γραμμών"
 	],
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
-		"Αντιγράφει τις σημειώσεις που ταιριάζουν με τη  <note> στο [σημειωματάριο]. Εάν δεν έχει οριστεί κανένα σημειωματάριο, η σημείωση αντιγράφεται στον τρέχον."
+		"Αντιγράφει τις σημειώσεις που ταιριάζουν με τη  <note> στο [notebook]. Εάν δεν έχει οριστεί κανένα σημειωματάριο, η σημείωση αντιγράφεται στον τρέχον."
 	],
 	"Edit": [
 		"Επεξεργασία"
 	],
 	"Edit as Rich Text": [
-		""
+		"Επεξεργασία ως πλούσιο κείμενο"
 	],
 	"Edit link": [
 		"Επεξεργασία συνδέσμου"
@@ -1189,7 +1219,7 @@
 		"Ενεργοποίηση κρυπτογράφησης"
 	],
 	"Enable file:// URLs for images and videos": [
-		""
+		"Ενεργοποίηση των διευθύνσεων URL file:// για εικόνες και βίντεο"
 	],
 	"Enable footnotes": [
 		"Ενεργοποίηση footnotes"
@@ -1255,10 +1285,10 @@
 		"Ενεργοποιημένο"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
-		""
+		"Ενεργοποιεί τη συνέχιση λίστας Markdown, το αυτόματο κλείσιμο ετικετών HTML και άλλες αυτόματες συμπληρώσεις σήμανσης."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
-		""
+		"Ενεργοποιεί την αντικατάσταση μοτίβων Markdown στον επεξεργαστή πλούσιου κειμένου. Για παράδειγμα, όταν είναι ενεργοποιημένη, η πληκτρολόγηση **bold** δημιουργεί έντονο κείμενο."
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Ενεργοποίηση κρυπτογράφησης σημαίνει *όλες* οι σημειώσεις και τα συνημμένα σας πρόκειται να συγχρονιστούν εκ νέου και να σταλούν κρυπτογραφημένα στο στόχο συγχρονισμού."
@@ -1309,7 +1339,7 @@
 		"Σφάλμα κατά το άνοιγμα της σημείωσης στον editor: %s"
 	],
 	"Error starting camera: %s": [
-		""
+		"Σφάλμα εκκίνησης κάμερας: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Σφάλμα. Παρακαλώ ελέγξτε ότι η διεύθυνση URL, το όνομα, ο κωδικός, κλπ είναι σωστά και ότι το προορισμός συγχρονισμού είναι προσπελάσιμος. Το σφάλμα ήταν:"
@@ -1384,16 +1414,19 @@
 		"Δικλείδα ασφαλείας: Να μη διαγράφονται τα τοπικά δεδομένα όταν ο προορισμός συγχρονισμού είναι κενός (συχνά το αποτέλεσμα μιας εσφαλμένης ρύθμισης παραμέτρων ή ενός σφάλματος)"
 	],
 	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
-		""
+		"Ασφάλεια αποτυχίας: Ο συγχρονισμός διακόπηκε για να αποφευχθεί η απώλεια δεδομένων, επειδή ο στόχος συγχρονισμού είναι άδειος ή κατεστραμμένος. Για να παρακάμψετε αυτή τη συμπεριφορά, απενεργοποιήστε το fail-safe στις ρυθμίσεις συγχρονισμού."
 	],
 	"Failed to connect to your account. Please try again.": [
-		""
+		"Απέτυχε η σύνδεση με το λογαριασμό σας. Προσπαθήστε ξανά."
 	],
 	"Fatal error:": [
 		"Ανεπανόρθωτο σφάλμα:"
 	],
 	"Feature flags": [
 		"Feature flags"
+	],
+	"Feedback": [
+		"Ανατροφοδότηση"
 	],
 	"Fetched items: %d/%d.": [
 		"Ληφθέντα στοιχεία: %d/%d."
@@ -1414,7 +1447,7 @@
 		"Εύρεση: "
 	],
 	"Finishes recording": [
-		""
+		"Ολοκληρώνει την εγγραφή"
 	],
 	"Firefox Extension": [
 		"Επέκταση Firefox"
@@ -1435,10 +1468,10 @@
 		"Eστίαση στον τίτλο"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"Ο φάκελος \"%s\" μοιράζεται με:"
 	],
 	"Follow link": [
-		""
+		"Ακολουθήστε το σύνδεσμο"
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"Για τον εντοπισμό σφαλμάτων και μόνο: εξαγάγετε το προφίλ σας σε μια εξωτερική κάρτα SD."
@@ -1487,7 +1520,7 @@
 		"Γεωεντοπισμός, ορθογραφικός έλεγχος, γραμμή εργαλείων επεξεργασίας, αλλαγή μεγέθους εικόνας"
 	],
 	"Get a quote": [
-		""
+		"Αποκτήστε μια προσφορά"
 	],
 	"Get it now:": [
 		"Λήψη τώρα:"
@@ -1496,22 +1529,22 @@
 		"Λήψη προεκδόσεων κατά τον έλεγχο για ενημερώσεις"
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
-		"Αποκτά ή ορίζει την τιμή μιας παραμέτρου. Αν δεν υπάρχει [τιμή], θα εμφανιστεί  το [όνομα]. Εάν δεν υπάρχει ούτε [όνομα] ούτε [τιμή], θα εμφανιστεί η τρέχουσα παράμετρος."
+		"Αποκτά ή ορίζει την τιμή μιας παραμέτρου. Αν δεν υπάρχει [value], θα εμφανιστεί  το [name]. Εάν δεν υπάρχει ούτε [name] ούτε [value], θα εμφανιστεί η τρέχουσα παράμετρος."
 	],
 	"Glossary:": [
-		""
+		"Γλωσσάριο:"
 	],
 	"go": [
-		""
+		"μετάβαση"
 	],
 	"Go back": [
-		""
+		"Πηγαίνετε πίσω"
 	],
 	"Go to Joplin Cloud profile": [
 		"Μεταβείτε στο προφίλ Joplin Cloud"
 	],
 	"Go to line": [
-		""
+		"Πηγαίνετε στη γραμμή"
 	],
 	"Go to source URL": [
 		"Μεταβείτε στη διεύθυνση URL προέλευσης"
@@ -1589,7 +1622,7 @@
 		"Αδρανής"
 	],
 	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
-		""
+		"Εάν ένα συνημμένο εικόνας βρίσκεται σε δική του γραμμή και ακολουθείται από κενή γραμμή, θα αποδίδεται ακριβώς κάτω από την πηγή Markdown."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Αν έχετε ήδη εξουσιοδοτήσει την εφαρμογή, παρακαλώ περιμένετε για τον συγχρονισμό με το Joplin Cloud."
@@ -1645,9 +1678,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Σε οποιαδήποτε εντολή, μπορείτε να αναφέρετε μια σημείωση ή ένα σημειωματάριο με τον τίτλο ή το αναγνωριστικό (ID) ή χρησιμοποιώντας τις συντομεύσεις `$n` ή `$b` αντίστοιχα. Η `$c` μπορεί να χρησιμοποιηθεί για αναφορά στο τρέχον επιλεγμένο στοιχείο."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Για να συσχετίσετε μια γεωγραφική τοποθεσία με τη σημείωση, η εφαρμογή χρειάζεται την άδειά σας για να αποκτήσει πρόσβαση στην τοποθεσία σας.\n\nΜπορείτε να απενεργοποιήσετε αυτήν την επιλογή ανά πάσα στιγμή στην οθόνη Ρύθμιση παραμέτρων."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Για να το κάνετε αυτό, ολόκληρο το σύνολο δεδομένων σας θα πρέπει να κρυπτογραφηθεί και να συγχρονιστεί, επομένως είναι καλύτερο να το εκτελέσετε κατά τη διάρκεια της νύχτας.\n\nΓια να ξεκινήσετε, ακολουθήστε τις παρακάτω οδηγίες:\n\n1. Συγχρονίστε όλες τις συσκευές σας.\n2. Κάντε κλικ στο κουμπί \"%s\".\n3. Αφήστε το να τρέξει μέχρι να ολοκληρωθεί. Κατά την εκτέλεσή του, αποφύγετε να αλλάξετε οποιαδήποτε σημείωση στις άλλες συσκευές σας, για να αποφύγετε διενέξεις.\n4. Μόλις ολοκληρωθεί ο συγχρονισμός σε αυτήν τη συσκευή, συγχρονίστε όλες τις άλλες συσκευές σας και αφήστε τον συγχρονισμό να ολοκληρωθεί.\n\nΣημαντικό: χρειάζεται να τρέξει ΜΟΝΟ μία φορά σε μια συσκευή."
 	],
@@ -1679,7 +1709,7 @@
 		"Αύξηση εσοχής"
 	],
 	"Info": [
-		""
+		"Πληροφορίες"
 	],
 	"Information": [
 		"Πληροφορίες"
@@ -1724,7 +1754,7 @@
 		"Άκυρη εντολή: \"%s\""
 	],
 	"Invalid format. E.g.: 48.8581372, 2.2926735": [
-		""
+		"Μη έγκυρη μορφή. Π.χ.: 48.8581372, 2.2926735"
 	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Άκυρη τιμή: \" %s\". Οι πιθανές τιμές είναι: %s."
@@ -1793,7 +1823,10 @@
 		"Joplin Server URL"
 	],
 	"Joplin SSO Authentication": [
-		""
+		"Joplin SSO Αυθεντικοποίηση"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		"Το Joplin υποστηρίζει την αποθήκευση της θέσης στην οποία αποθηκεύονται ή δημιουργούνται οι σημειώσεις. Θέλετε να το ενεργοποιήσετε; Αυτό μπορεί να αλλάξει ανά πάσα στιγμή στις ρυθμίσεις."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Το Joplin Web Clipper επιτρέπει την αποθήκευση ιστοσελίδων και screenshots από το πρόγραμμα περιήγησης στο Joplin."
@@ -1822,8 +1855,14 @@
 	"Keychain Supported: %s": [
 		"Υποστηριζόμενη κλειδοθήκη: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Κλειδιά που χρειάζονται αναβάθμιση"
+	],
+	"Label": [
+		"Ετικέτα"
 	],
 	"Landscape": [
 		"Οριζόντια"
@@ -1835,7 +1874,7 @@
 		"Γλώσσα, μορφή ημερομηνίας"
 	],
 	"Large": [
-		""
+		"Μεγάλο"
 	],
 	"Last error: %s": [
 		"Τελευταίο σφάλμα: %s"
@@ -1949,6 +1988,9 @@
 	"Manage your plugins": [
 		"Διαχείριση πρόσθετων"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Διαχειρίζεται τη διαμόρφωση E2EE. Οι εντολές είναι `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, και `target-status`."
 	],
@@ -1962,7 +2004,7 @@
 		"Markdown + Front Matter"
 	],
 	"Markdown editor: Render markup in editor": [
-		""
+		"Επεξεργαστής Markdown: Markup στον συντάκτη"
 	],
 	"Marks a to-do as done.": [
 		"Επισημαίνει μία υπόμνηση ως ολοκληρωμένη."
@@ -1983,10 +2025,10 @@
 		"Κύριος κωδικός πρόσβασης:"
 	],
 	"match case": [
-		""
+		"διάκριση πεζών/κεφαλαίων"
 	],
 	"Math": [
-		""
+		"Μαθηματικά"
 	],
 	"Max concurrent connections": [
 		"Μέγιστος αριθμός ταυτόχρονων συνδέσεων"
@@ -2004,7 +2046,7 @@
 		"Πολυμέσα, μαθηματικές παραστάσεις, διαγράμματα, πίνακας περιεχομένων"
 	],
 	"Medium": [
-		""
+		"Μεσαίο"
 	],
 	"Minimise": [
 		"Ελαχιστοποίηση"
@@ -2037,13 +2079,13 @@
 		"Ο κώδικας των περισσότερων πρόσθετων είναι διαθέσιμος για έλεγχο στην ιστοσελίδα."
 	],
 	"Move left": [
-		""
+		"Μετακίνηση προς τα αριστερά"
 	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"Να μετακινηθεί το σημειωματάριο \"%s\" στον κάδο;\n\nΌλες οι σημειώσεις και τα υποσημειωματάρια που περιέχει θα διαγραφούν."
 	],
 	"Move right": [
-		""
+		"Μετακίνηση προς τα δεξιά"
 	],
 	"Move to notebook": [
 		"Μετακίνηση σε σημειωματάριο"
@@ -2055,7 +2097,7 @@
 		"Μετακίνηση σε σημειωματάριο:"
 	],
 	"Move up": [
-		""
+		"Μετακίνηση προς τα πάνω"
 	],
 	"Moves the given <item> to [notebook]": [
 		"Μετακινεί το συγκεκριμένο <item> στο [notebook]"
@@ -2094,7 +2136,7 @@
 		"Νέα έκδοση: %s"
 	],
 	"next": [
-		""
+		"επόμενο"
 	],
 	"Next match": [
 		"Επόμενη αντιστοίχιση"
@@ -2153,6 +2195,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Δεν έχει οριστεί πρόγραμμα επεξεργασίας κειμένου. Παρακαλώ ορίστε το χρησιμοποιώντας   `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2160,7 +2205,7 @@
 		"Δεν έγινε επαλήθευση με το %s. Παρακαλώ καταχωρίστε τα διαπιστευτήρια που λείπουν."
 	],
 	"Not checked": [
-		""
+		"Δεν έχει ελεγχθεί"
 	],
 	"Not downloaded": [
 		"Δεν έγινε λήψη"
@@ -2170,6 +2215,9 @@
 	],
 	"Not now": [
 		"Αργότερα"
+	],
+	"Not useful": [
+		"Δεν είναι χρήσιμο"
 	],
 	"note": [
 		"σημείωση"
@@ -2259,7 +2307,7 @@
 		"Αριθμημένη λίστα"
 	],
 	"OCR: Clear cache and re-download language data files": [
-		""
+		"OCR: Εκκαθάριση προσωρινής μνήμης και εκ νέου λήψη αρχείων γλωσσικών δεδομένων"
 	],
 	"OK": [
 		"Εντάξει"
@@ -2271,7 +2319,7 @@
 		"Στο %s: %s"
 	],
 	"on line": [
-		""
+		"στη γραμμή"
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"Ένα από τα κύρια κλειδιά σας χρησιμοποιεί μια παλιά μέθοδο κρυπτογράφησης."
@@ -2298,7 +2346,7 @@
 		"Άνοιγμα %s"
 	],
 	"Open in new window": [
-		""
+		"Άνοιγμα σε νέο παράθυρο"
 	],
 	"Open it": [
 		"Ανοίξτε το"
@@ -2307,19 +2355,22 @@
 		"Άνοιγμα προγράμματος προβολής PDF"
 	],
 	"Open primary app instance...": [
-		""
+		"Ανοίξτε την πρωτογενή εφαρμογή..."
 	],
 	"Open profile directory": [
 		"Άνοιγμα φακέλου προφίλ"
 	],
 	"Open secondary app instance...": [
-		""
+		"Άνοιγμα δευτερεύουσας εφαρμογής..."
 	],
 	"Open Source": [
 		"Άνοιγμα Προέλευσης"
 	],
 	"Open Sync Wizard...": [
 		"Άνοιγμα Οδηγού συγχρονισμού..."
+	],
+	"Open-source licences": [
+		""
 	],
 	"Open...": [
 		"Άνοιγμα..."
@@ -2333,8 +2384,14 @@
 	"Options": [
 		"Επιλογές"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Ταξινομημένη λίστα"
+	],
+	"Other": [
+		"Άλλα"
 	],
 	"Other applications...": [
 		"Άλλες εφαρμογές..."
@@ -2349,10 +2406,10 @@
 		"Μέγεθος σελίδας για εξαγωγή PDF"
 	],
 	"Panel \"%s\" is visible": [
-		""
+		"Ο πίνακας \"%s\" είναι ορατός"
 	],
 	"Panel %s is hidden": [
-		""
+		"Ο πίνακας %s είναι κρυμμένος"
 	],
 	"Password": [
 		"Κωδικός"
@@ -2390,11 +2447,8 @@
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Διαγράφει οριστικά το σημειωματάριο, παρακάμπτοντας τον κάδο απορριμμάτων."
 	],
-	"Permission needed": [
-		"Απαιτείται άδεια"
-	],
 	"Photo %d": [
-		""
+		"Φωτογραφία %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Κάντε κλικ στο \"%s\" για να συνεχίσετε ή ορίστε τους κωδικούς πρόσβασης στην παρακάτω λίστα \"%s\"."
@@ -2412,7 +2466,7 @@
 		"Παρακαλώ ανοίξτε την ακόλουθη διεύθυνση URL στο πρόγραμμα περιήγησής σας για να πιστοποιήσετε την εφαρμογή. Η εφαρμογή θα δημιουργήσει έναν φάκελο στο \"Apps / Joplin\" και θα διαβάζει και θα γράφει μόνο αρχεία σε αυτόν. Δεν θα έχει πρόσβαση σε αρχεία εκτός αυτού του φακέλου ούτε σε άλλα προσωπικά δεδομένα. Δεν πρόκειται να κοινοποιηθούν δεδομένα σε τρίτους."
 	],
 	"Please provide the recipient email": [
-		""
+		"Παρακαλούμε δώστε το email του παραλήπτη"
 	],
 	"Please record your voice...": [
 		"Παρακαλώ καταγράψτε τη φωνή σας..."
@@ -2439,7 +2493,7 @@
 		"Παρακαλώ περιμένετε να γίνει λήψη και αποκρυπτογράφηση όλων των συνημμένων. Μπορείτε επίσης να μεταβείτε στο %s για να επεξεργαστείτε τη σημείωση."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"Παρακαλούμε περιμένετε μέχρι να φορτώσουμε τη σελίδα σύνδεσης του οργανισμού σας..."
 	],
 	"Please wait...": [
 		"Παρακαλώ περιμένετε..."
@@ -2481,7 +2535,7 @@
 		"Πιθανές τιμές: %s."
 	],
 	"Prefer JSON output.": [
-		""
+		"Προτιμήστε την έξοδο JSON."
 	],
 	"Preferences": [
 		"Προτιμήσεις"
@@ -2495,11 +2549,8 @@
 	"Preferred light theme": [
 		"Προτιμώμενο φωτεινό θέμα"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
-		""
+		"Διατήρηση χρωμάτων κατά την επικόλληση κειμένου στον επεξεργαστή πλούσιου κειμένου"
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Πατήστε Ctrl+D ή πληκτρολογήστε \"exit\" για να βγείτε από την εφαρμογή"
@@ -2583,13 +2634,16 @@
 		"Δημοσίευση σημειώσεων στο διαδίκτυο"
 	],
 	"Publish/unpublish": [
-		""
+		"Δημοσίευση/αποδημοσίευση"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		"Δημοσιεύει μια σημείωση στον Joplin Server ή στο Joplin Cloud"
 	],
 	"Quit": [
 		"Έξοδος"
 	],
 	"Re-download model": [
-		""
+		"Εκ νέου λήψη του μοντέλου"
 	],
 	"Re-encrypt data": [
 		"Επανακρυπτογράφηση δεδομένων"
@@ -2625,7 +2679,7 @@
 		"Προτεινόμενα πρόσθετα"
 	],
 	"Record audio": [
-		""
+		"Εγγραφή ήχου"
 	],
 	"Redo": [
 		"Επανάληψη"
@@ -2661,7 +2715,7 @@
 		"Μετονομάζει το καθορισμένο <item> (σημείωση ή σημειωματάριο) στο <name>."
 	],
 	"Renders markup on all lines that don't include the cursor.": [
-		""
+		"Αποδίδει σήμανση σε όλες τις γραμμές που δεν περιλαμβάνουν τον κέρσορα."
 	],
 	"Renew token": [
 		"Ανανέωση token"
@@ -2679,10 +2733,10 @@
 		"Αντικατάσταση: "
 	],
 	"replaced $ matches": [
-		""
+		"αντικαταστάθηκαν $ ευρήματα"
 	],
 	"replaced match on line $": [
-		""
+		"αντικαταστάθηκε εύρημα στη γραμμή $"
 	],
 	"Report an issue": [
 		"Αναφέρετε ένα πρόβλημα"
@@ -2760,10 +2814,10 @@
 		"Αναθεώρηση: %s (%s)"
 	],
 	"Rich Text": [
-		""
+		"Πλούσιο κείμενο"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
-		""
+		"Επεξεργαστής πλούσιου κειμένου. Πατήστε Escape και στη συνέχεια Tab για να ξεφύγετε από την εστίαση."
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Εκτελεί τις εντολές που περιέχονται στο αρχείο κειμένου. Θα πρέπει να υπάρχει μία εντολή ανά γραμμή."
@@ -2811,10 +2865,10 @@
 		"Αποθήκευση της γεωγραφικής τοποθεσίας μαζί με της σημειώσεις"
 	],
 	"Scanned code": [
-		""
+		"Σάρωση κώδικα"
 	],
 	"Scrollbar size": [
-		""
+		"Μέγεθος γραμμής κύλισης"
 	],
 	"Search": [
 		"Αναζήτησή"
@@ -2861,11 +2915,17 @@
 	"Select file...": [
 		"Επιλογή φακέλου..."
 	],
+	"Select one of the other supported sync targets.": [
+		"Επιλέξτε έναν από τους άλλους υποστηριζόμενους στόχους συγχρονισμού."
+	],
 	"Select parent notebook": [
 		"Επιλέξτε γονικό σημειωματάριο"
 	],
-	"Self-hosted": [
+	"Select the type of file to be imported:": [
 		""
+	],
+	"Self-hosted": [
+		"Self-hosted"
 	],
 	"Send bug report": [
 		"Αποστολή αναφοράς σφάλματος"
@@ -2892,10 +2952,10 @@
 		"Ορισμός κωδικού πρόσβασης"
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
-		"Ορίζει την ιδιότητα <name> του καθορισμένου <note> στην καθορισμένη [τιμή]. Πιθανές ιδιότητες είναι:\n\n%s"
+		"Ορίζει την ιδιότητα <name> του καθορισμένου <note> στην καθορισμένη [value]. Πιθανές ιδιότητες είναι:\n\n%s"
 	],
 	"Settings": [
-		""
+		"Ρυθμίσεις"
 	],
 	"Share": [
 		"Κοινοποίηση"
@@ -2922,7 +2982,7 @@
 		"Κοινοποιήσεις"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"Διαμοιράζει ή καταργεί τη διαμοιρασμό του καθορισμένου [notebook] με τον [user]. Απαιτεί Joplin Cloud ή Joplin Server."
 	],
 	"Sharing notebook...": [
 		"Κοινοποίηση σημειωματαρίου..."
@@ -2988,7 +3048,7 @@
 		"Αγνοήθηκαν: %d."
 	],
 	"Small": [
-		""
+		"Μικρό"
 	],
 	"Solarised Dark": [
 		"Solarised Dark"
@@ -3015,10 +3075,10 @@
 		"Ορισμένα στοιχεία δεν είναι δυνατό να συγχρονιστούν. Παρακαλώ αρχικά επιχειρήστε να τα συγχρονίσετε."
 	],
 	"Sort \"%s\" in ascending order": [
-		""
+		"Ταξινόμηση \"%s\" σε αύξουσα σειρά"
 	],
 	"Sort \"%s\" in descending order": [
-		""
+		"Ταξινόμηση \"%s\" σε φθίνουσα σειρά"
 	],
 	"Sort notebooks by": [
 		"Ταξινόμηση σημειωματάριων κατά"
@@ -3041,6 +3101,9 @@
 	"Source: ": [
 		"Πηγή: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		"Διαχωριστικό"
 	],
@@ -3057,7 +3120,7 @@
 		"Η εφαρμογή να ανοίγει ελαχιστοποιημένη στη γραμμή εργασιών"
 	],
 	"Start recording": [
-		""
+		"Έναρξη εγγραφής"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"Ξεκινήστε, σταματήστε ή ελέγξτε τον διακομιστή API. Για να καθορίσετε σε ποια θύρα θα πρέπει να εκτελεστεί, ορίστε τη μεταβλητή api.port. Οι εντολές είναι (%s)."
@@ -3132,7 +3195,7 @@
 		"Αλλαγή προφίλ"
 	],
 	"Switch to back-facing camera": [
-		""
+		"Εναλλαγή στην κάμερα που βλέπει προς τα πίσω"
 	],
 	"Switch to note type": [
 		"Μετατροπή σε σημείωση"
@@ -3144,7 +3207,10 @@
 		"Μετατροπή σε υπόμνηση"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
-		"Αλλάζει σε [σημειωματάριο] - όλες οι περαιτέρω λειτουργίες θα πραγματοποιηθούν μέσα σε αυτό το σημειωματάριο."
+		"Αλλάζει σε [notebook] - όλες οι περαιτέρω λειτουργίες θα πραγματοποιηθούν μέσα σε αυτό το σημειωματάριο."
+	],
+	"Sync": [
+		"Συγχρονισμός"
 	],
 	"Sync as many devices as you want": [
 		"Συγχρονίστε όσες συσκευές επιθυμείτε"
@@ -3207,10 +3273,10 @@
 		"Συγχρονισμός..."
 	],
 	"Tab indents": [
-		""
+		"Εσοχές καρτελών"
 	],
 	"Tab moves focus": [
-		""
+		"Η καρτέλα μετακινεί την εστίαση"
 	],
 	"Tabloid": [
 		"Tabloid"
@@ -3242,6 +3308,9 @@
 	"Text editor command": [
 		"Εντολή \"Επεξεργαστή κειμένου\""
 	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		"Σας ευχαριστούμε για τα σχόλια!\nΈχετε χρόνο να συμπληρώσετε μια σύντομη έρευνα;"
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Το ενεργό προφίλ δεν μπορεί να διαγραφεί. Μεταβείτε σε ένα άλλο προφίλ και δοκιμάστε ξανά."
 	],
@@ -3267,7 +3336,7 @@
 		"Η εντολή  \"%s\" είναι διαθέσιμη μόνο σε λειτουργία γραφικού περιβάλλοντος (GUI)"
 	],
 	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
-		"Ο προεπιλεγμένος κωδικός πρόσβασης διαχειριστή δεν είναι ασφαλής και δεν έχει αλλάξει! [Αλλάξτε τον τώρα] (%s)"
+		"Ο προεπιλεγμένος κωδικός πρόσβασης διαχειριστή δεν είναι ασφαλής και δεν έχει αλλάξει! [Αλλάξτε τον τώρα](%s)"
 	],
 	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
 		"Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει μία σε πιο ασφαλή και συνιστάται να την εφαρμόσετε στα δεδομένα σας."
@@ -3295,7 +3364,7 @@
 		"Τα ακόλουθα κλειδιά χρησιμοποιούν έναν αλγόριθμο κρυπτογράφησης που είναι ξεπερασμένος και συνιστάται η αναβάθμισή τους. Το αναβαθμισμένο κλειδί θα εξακολουθεί να είναι σε θέση να αποκρυπτογραφήσει και να κρυπτογραφήσει τα δεδομένα σας ως συνήθως."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		""
+		"Τα παρακάτω πρόσθετα ενδέχεται να μην υποστηρίζουν τον τρέχοντα επεξεργαστή markdown:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Η ομάδα του Joplin έχει ελέγξει αυτό το πρόσθετο και πληροί τα πρότυπα ασφαλείας και επιδόσεων."
@@ -3304,7 +3373,7 @@
 		"Τα κλειδιά με αυτά τα ID χρησιμοποιούνται για την κρυπτογράφηση ορισμένων από τα στοιχεία σας, ωστόσο η εφαρμογή δεν έχει επί του παρόντος πρόσβαση σε αυτά. Είναι πιθανό να μεταφορτωθούν τελικά μέσω συγχρονισμού."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
-		""
+		"Ο παλαιός επεξεργαστής Markdown φαίνεται να έχει καταρρεύσει λόγω ασυμβατότητας με ένα πρόσθετο. Συνιστούμε τη χρήση του νέου επεξεργαστή."
 	],
 	"The master key has been upgraded successfully!": [
 		"Το κλειδί master αναβαθμίστηκε με επιτυχία!"
@@ -3353,7 +3422,7 @@
 		"Ο προορισμός συγχρονισμού. Κάθε προορισμός συγχρονισμού μπορεί να έχει πρόσθετες παραμέτρους οι οποίες ονομάζονται ως `sync.NUM.NAME` (οι οποίες αναφέρονται παρακάτω)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		""
+		"Το πρόγραμμα-πελάτης ιστού δεν υποστηρίζει την αποδοχή κρυπτογραφημένων κοινόχρηστων σημειωματάριων. Παρακαλούμε μεταβείτε στην εφαρμογή για υπολογιστές γραφείου ή για κινητά πριν αποδεχτείτε την κοινή χρήση.\n\nΣφάλμα: \"%s\""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Το Web Clipper χρειάζεται την άδειά σας για να αποκτήσει πρόσβαση στα δεδομένα σας."
@@ -3416,13 +3485,13 @@
 		"Ίσως υπάρχουν μη αποθηκευμένες αλλαγές στο συγκεκριμένο σχέδιο."
 	],
 	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
-		""
+		"Αυτή η λειτουργία είναι απενεργοποιημένη από προεπιλογή, πρέπει να την ενεργοποιήσετε χειροκίνητα ενεργοποιώντας την επιλογή \"Ενεργοποίηση χειρόγραφης μεταγραφής\"."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		""
+		"Αυτή η λειτουργία είναι διαθέσιμη μόνο στο Joplin Cloud και στον Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
-		""
+		"Αυτός ο τύπος εικόνας δεν υποστηρίζεται από το σύστημα αναγνώρισης."
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Πρόκειται για ένα προηγμένο εργαλείο που προβάλλει τα συνημμένα που συνδέονται με τις σημειώσεις σας. Να είστε προσεκτικοί κατά τη διαγραφή ενός από αυτά, καθώς δεν είναι δυνατή η επαναφορά τους."
@@ -3452,7 +3521,7 @@
 		"Αυτή η σημείωση δεν έχει ιστορικό"
 	],
 	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
-		""
+		"Αυτό το σημείωμα είναι σε μορφή HTML. Μετατρέψτε την σε Markdown για να την επεξεργαστείτε πιο εύκολα."
 	],
 	"This plugin doesn't support %s.": [
 		"Αυτό το πρόσθετο δεν υποστηρίζει %s."
@@ -3497,7 +3566,7 @@
 		"Για να συνεχίσετε, παρακαλώ πληκτρολογήστε τον κύριο κωδικό πρόσβασης."
 	],
 	"To create a new tag, type the name and press enter.": [
-		""
+		"Για να δημιουργήσετε μια νέα ετικέτα, πληκτρολογήστε το όνομα και πατήστε enter."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Για να διαγράψετε μία ετικέτα, αφαιρέστε την από τις σχετικές σημειώσεις."
@@ -3595,6 +3664,9 @@
 	"Try it now": [
 		"Δοκιμάστε το τώρα"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Πληκτρολογήστε `help [command]` για περισσότερες πληροφορίες σχετικά με μια εντολή, ή πληκτρολογήστε `help all` για όλες τις πληροφορίες χρήσης."
 	],
@@ -3614,7 +3686,7 @@
 		"Αδύνατη η κοινοποίηση δεδομένων αρχείου καταγραφής. Αιτία: %s"
 	],
 	"Unchecked": [
-		""
+		"Μη επιλεγμένο"
 	],
 	"Uncompleted to-dos on top": [
 		"Μη ολοκληρωμένες υπομνήσεις στην κορυφή"
@@ -3647,7 +3719,7 @@
 		"Κατάργηση κοινής χρήσης"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"Ακύρωση κοινής χρήσης του σημειωματάριου \"%s\"; Αυτό μπορεί να οδηγήσει άλλους χρήστες να χάσουν την πρόσβαση στο σημειωματάριο."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Διακόψτε την κοινή χρήση σε αυτό το σημειωματάριο; Οι παραλήπτες δεν θα έχουν πλέον πρόσβαση στο περιεχόμενό του."
@@ -3736,6 +3808,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Χρησιμοποιείται όταν απαιτείται γραμματοσειρά σταθερού πλάτους για την ευανάκριβη δημιουργία κειμένου (π.χ. πίνακες, πλαίσια ελέγχου, κωδικός). Εάν δεν βρεθεί, χρησιμοποιείται μια γενική μονοδιάστημα (σταθερού πλάτους)."
 	],
+	"Useful": [
+		"Χρήσιμο"
+	],
 	"User deletions": [
 		"Διαγραφές χρήστη"
 	],
@@ -3767,16 +3842,13 @@
 		"Vim"
 	],
 	"Voice recorder": [
-		""
+		"Μαγνητοφωνική συσκευή εγγραφής φωνής"
 	],
 	"Voice typing language files (URL)": [
 		"Αρχεία γλώσσας φωνητικής πληκτρολόγησης (URL)"
 	],
 	"Voice typing...": [
 		"Φωνητική πληκτρολόγηση..."
-	],
-	"Vosk": [
-		""
 	],
 	"Waiting for authorisation...": [
 		"Αναμονή εξουσιοδότησης…"
@@ -3832,11 +3904,11 @@
 	"When creating a new to-do:": [
 		"Κατά τη δημιουργία νέας υπόμνησης:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Όταν είναι ενεργοποιημένη, ζητά να μεταγραφούν οι εικόνες της σημείωσης με μια υπηρεσία μεταγραφής υψηλότερης ποιότητας στον διακομιστή. Απαιτεί συγχρονισμό με ένα αντίγραφο της εφαρμογής γραφείου."
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Αν είναι ενεργοποιημένο, η εφαρμογή θα σαρώσει τα συνημμένα σας και θα εξάγει το κείμενο από αυτά. Έτσι, θα έχετε τη δυνατότητα να αναζητήσετε κείμενο μέσα στα συνημμένα."
-	],
-	"Whisper": [
-		""
 	],
 	"Window unresponsive.": [
 		"Το παράθυρο δεν αποκρίνεται."
@@ -3863,13 +3935,13 @@
 		"Έχετε συνδεθεί στο Joplin Cloud, μπορείτε να κλείσετε αυτό το παράθυρο."
 	],
 	"You are now logged into your account.": [
-		""
+		"Τώρα είστε συνδεδεμένοι στο λογαριασμό σας."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"Τώρα χρησιμοποιείτε την τελευταία έκδοση του επεξεργαστή Markdown."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
-		""
+		"Εκτελείτε την έκδοση Intel του Joplin σε επεξεργαστή Apple Silicon. Κατεβάστε την έκδοση Apple Silicon για καλύτερες επιδόσεις."
 	],
 	"You currently have no notebooks.": [
 		"Αυτή τη στιγμή δεν υπάρχουν σημειωματάρια."

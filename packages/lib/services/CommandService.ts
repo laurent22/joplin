@@ -3,10 +3,11 @@ import eventManager, { EventListenerCallback, EventName } from '../eventManager'
 import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
-import type { WhenClauseContext } from './commands/stateToWhenClauseContext';
+import type { WhenClauseContext, WhenClauseContextOptions } from './commands/stateToWhenClauseContext';
 
 type LabelFunction = ()=> string;
 type EnabledCondition = string;
+type VisibleCondition = string;
 
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
@@ -19,6 +20,8 @@ export interface CommandRuntime {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	execute(context: CommandContext, ...args: any[]): Promise<any | void>;
 	enabledCondition?: EnabledCondition;
+	// Used for toolbar button visibility state
+	visibleCondition?: VisibleCondition;
 	// Used for the (optional) toolbar button title
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	mapStateToTitle?(state: any): string;
@@ -337,8 +340,8 @@ export default class CommandService extends BaseService {
 		}, 10);
 	}
 
-	public currentWhenClauseContext(): WhenClauseContext {
-		return this.stateToWhenClauseContext_(this.store_.getState());
+	public currentWhenClauseContext(options: WhenClauseContextOptions|null = null): WhenClauseContext {
+		return this.stateToWhenClauseContext_(this.store_.getState(), options);
 	}
 
 	public isPublic(commandName: string) {
@@ -358,6 +361,19 @@ export default class CommandService extends BaseService {
 		if (!whenClauseContext) whenClauseContext = this.currentWhenClauseContext();
 
 		const exp = new WhenClause(runtime.enabledCondition, this.devMode_);
+		return exp.evaluate(whenClauseContext);
+	}
+
+	public isVisible(commandName: string, whenClauseContext: WhenClauseContext): boolean {
+		// Default to true, to avoid buttons appearing/disappearing as commands are
+		// declared and runtimes are loaded.
+		const command = this.commandByName(commandName);
+		if (!command) return true;
+		const runtime = this.getRuntime(command);
+		if (!runtime) return true;
+		if (!runtime.visibleCondition) return true;
+
+		const exp = new WhenClause(runtime.visibleCondition, this.devMode_);
 		return exp.evaluate(whenClauseContext);
 	}
 

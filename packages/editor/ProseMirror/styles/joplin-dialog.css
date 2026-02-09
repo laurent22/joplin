@@ -5,7 +5,7 @@
 	background-color: var(--joplin-background-color);
 	border: none;
 	border-radius: 16px;
-	box-shadow: 0px 0px 2px var(--joplin-color);
+	box-shadow: 0px 0px 3px var(--joplin-color);
 	color: var(--joplin-color);
 
 	width: min(80vw, 600px);

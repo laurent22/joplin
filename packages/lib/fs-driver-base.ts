@@ -21,7 +21,7 @@ export interface RemoveOptions {
 	recursive?: boolean;
 }
 
-export interface ZipExtractOptions {
+export interface ArchiveExtractOptions {
 	source: string;
 	extractTo: string;
 }
@@ -268,8 +268,7 @@ export default class FsDriverBase {
 		throw new Error('Not implemented: tarCreate');
 	}
 
-	public async zipExtract(_options: ZipExtractOptions): Promise<ZipEntry[]> {
+	public async zipExtract(_options: ArchiveExtractOptions): Promise<ZipEntry[]> {
 		throw new Error('Not implemented: zipExtract');
 	}
-
 }

@@ -44,6 +44,32 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
 	});
 
+	test('should allow changing the focused folder by pressing the first character of the title', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const sidebar = mainScreen.sidebar;
+
+		const folderAHeader = await sidebar.createNewFolder('1-Test A');
+		await expect(folderAHeader).toBeVisible();
+
+		const folderBHeader = await sidebar.createNewFolder('Folder b');
+		await expect(folderBHeader).toBeVisible();
+		await folderBHeader.click();
+
+		await sidebar.forceUpdateSorting(electronApp);
+
+		await folderBHeader.click();
+		await mainWindow.keyboard.type('1');
+		await expect(mainWindow.locator(':focus')).toHaveText('1-Test A');
+		await mainWindow.keyboard.type('F');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder b');
+		await mainWindow.keyboard.type('A');
+		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
+
+		// Should be case-insensitive
+		await mainWindow.keyboard.type('f');
+		await expect(mainWindow.locator(':focus')).toHaveText('Folder b');
+	});
+
 	test('left/right arrow keys should expand/collapse notebooks', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;
@@ -59,10 +85,12 @@ test.describe('sidebar', () => {
 		await folderDHeader.dragTo(folderCHeader);
 
 		// Folders should have correct initial levels
-		await expect(folderAHeader).toHaveJSProperty('ariaLevel', '2');
-		await expect(folderBHeader).toHaveJSProperty('ariaLevel', '3');
-		await expect(folderCHeader).toHaveJSProperty('ariaLevel', '3');
-		await expect(folderDHeader).toHaveJSProperty('ariaLevel', '4');
+		await sidebar.expectToHaveDepths([
+			[folderAHeader, 2],
+			[folderBHeader, 3],
+			[folderCHeader, 3],
+			[folderDHeader, 4],
+		]);
 
 		await sidebar.forceUpdateSorting(electronApp);
 		await folderBHeader.click();
@@ -163,5 +191,88 @@ test.describe('sidebar', () => {
 		// Expand
 		await testFolderA.dblclick();
 		await expect(testFolderB).toBeVisible();
+	});
+
+	test('should be possible to select, then deselect, multiple folders with cmd-click', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const sidebar = mainScreen.sidebar;
+
+		const folderA = await sidebar.createNewFolder('Folder A');
+		const folderB = await sidebar.createNewFolder('Folder B');
+		const folderC = await sidebar.createNewFolder('Folder C');
+		const folderD = await sidebar.createNewFolder('Folder D');
+
+		await sidebar.forceUpdateSorting(electronApp);
+
+		await folderA.click();
+		await folderB.click({ modifiers: ['ControlOrMeta'] });
+		await folderC.click({ modifiers: ['ControlOrMeta'] });
+
+		await expect(folderA).toBeSelected();
+		await expect(folderB).toBeSelected();
+		await expect(folderC).toBeSelected();
+		await expect(folderD).toHaveJSProperty('ariaSelected', 'false');
+
+		// Should be able to deselect up to two folders
+		await folderA.click({ modifiers: ['ControlOrMeta'] });
+		await expect(folderA).toHaveJSProperty('ariaSelected', 'false');
+		await folderB.click({ modifiers: ['ControlOrMeta'] });
+		await expect(folderB).toHaveJSProperty('ariaSelected', 'false');
+		// Should not be possible to deselect the last folder
+		await folderC.click({ modifiers: ['ControlOrMeta'] });
+		await expect(folderC).toBeSelected();
+	});
+
+	test('should be possible to move multiple folders at once with drag and drop', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const sidebar = mainScreen.sidebar;
+
+		const folderA = await sidebar.createNewFolder('Folder A');
+		const folderB = await sidebar.createNewFolder('Folder B');
+		const folderC = await sidebar.createNewFolder('Folder C');
+		const folderD = await sidebar.createNewFolder('Folder D');
+
+		await sidebar.forceUpdateSorting(electronApp);
+
+		await folderB.click();
+		await folderC.click({ modifiers: ['ControlOrMeta'] });
+
+		await expect(folderB).toBeSelected();
+		await expect(folderC).toBeSelected();
+
+		await folderB.dragTo(folderA);
+
+		// Should have made folder B **and folder C** subfolders of testFolderA
+		await sidebar.expectToHaveDepths([
+			[folderA, 2],
+			[folderB, 3],
+			[folderC, 3],
+			[folderD, 2],
+		]);
+	});
+
+	test('should not move selected folders when dragging an unselected folder', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const sidebar = mainScreen.sidebar;
+
+		const testFolderA = await sidebar.createNewFolder('Folder A');
+		const testFolderB = await sidebar.createNewFolder('Folder B');
+		const testFolderC = await sidebar.createNewFolder('Folder C');
+
+		await sidebar.forceUpdateSorting(electronApp);
+
+		await testFolderB.click();
+		await testFolderC.click({ modifiers: ['ControlOrMeta'] });
+
+		await expect(testFolderB).toBeSelected();
+		await expect(testFolderC).toBeSelected();
+
+		await testFolderA.dragTo(testFolderB);
+
+		await sidebar.expectToHaveDepths([
+			[testFolderB, 2],
+			[testFolderA, 3],
+			[testFolderC, 2],
+		]);
 	});
 });

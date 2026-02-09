@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}</title>
+    <meta name="X-Original-Page-Id" content="{{ page_id_attr }}"/>
+    <style>
+    /*** Start default CSS ***/
+    * { margin: 0; padding: 0; font-weight: normal; }
+    table, tr, td { border-color: #A3A3A3; }
+    ul, ol { padding: 0; }
+    .title .outline-element { display: inline; }
+    .title .outline-element:nth-child(2) { margin-left: 10px !important; }
+    .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; }
+    .ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; }
+    .ink-text { top: 0; left: 0; }
+
+    /* Icons */
+    .note-tag-icon {
+        position: relative;
+        --note-tag-left: -23px;
+        --note-tag-width: 16px;
+        --note-tag-height: 16px;
+    }
+    .note-tag-icon.-large {
+        --note-tag-left: -25px;
+        --note-tag-width: 20px;
+        --note-tag-height: 20px;
+    }
+    .note-tag-icon > img, .note-tag-icon > svg {
+        width: var(--note-tag-width);
+        height: var(--note-tag-height);
+        left: var(--note-tag-left);
+    }
+
+    .tagged-list { list-style: none; padding-left: 0; }
+    {# Select both SVGs and IMGs: Joplin post-processes the converter's output, converting SVGs to IMGs. #}
+    .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
+    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
+    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+    /*** End default CSS ***/
+
+    {% for entry in global_styles -%}
+    {{ entry.0 }} { {{ entry.1 }} }
+    {% endfor %}
+    </style>
+</head>
+<body>
+
+{{ content }}
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>

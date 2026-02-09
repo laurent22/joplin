@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Dialog from '../Dialog';
-import DialogButtonRow, { ClickEvent, ButtonSpec } from '../DialogButtonRow';
+import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
 import ShareService, { ApiShare } from '@joplin/lib/services/share/ShareService';
@@ -20,6 +20,7 @@ import { reg } from '@joplin/lib/registry';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { ChangeEvent, Dropdown, DropdownOptions, DropdownVariant } from '../Dropdown/Dropdown';
 import shim from '@joplin/lib/shim';
+import { SettingsRecord } from '@joplin/lib/models/Setting';
 
 const logger = Logger.create('ShareFolderDialog');
 
@@ -129,7 +130,6 @@ function ShareFolderDialog(props: Props) {
 	const [share, setShare] = useState<StateShare>(null);
 	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
 	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
-	const [customButtons, setCustomButtons] = useState<ButtonSpec[]>([]);
 	const [recipientsBeingUpdated, setRecipientsBeingUpdated] = useState<Record<string, boolean>>({});
 
 	async function synchronize(event: AsyncEffectEvent = null) {
@@ -164,22 +164,11 @@ function ShareFolderDialog(props: Props) {
 	}, [share]);
 
 	useEffect(() => {
-		setCustomButtons(share ? [{
-			name: 'unshare',
-			label: _('Unshare'),
-		}] : []);
-	}, [share]);
-
-	useEffect(() => {
 		if (!share) return;
 		const sus = props.shareUsers[share.id];
 		if (!sus) return;
 		setShareUsers(sus);
 	}, [share, props.shareUsers]);
-
-	useEffect(() => {
-		void ShareService.instance().refreshShares();
-	}, [props.folderId]);
 
 	const permissionsFromString = (p: string): SharePermissions => {
 		return {
@@ -269,7 +258,7 @@ function ShareFolderDialog(props: Props) {
 	}, []);
 
 	function renderAddRecipient() {
-		const disabled = shareState !== ShareState.Idle;
+		const disabled = shareState !== ShareState.Idle && shareState !== ShareState.Synchronizing;
 
 		const dropdown = !props.canUseSharePermissions ? null : <Dropdown className="permission-dropdown" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
 
@@ -395,6 +384,17 @@ function ShareFolderDialog(props: Props) {
 		props.onClose();
 	}
 
+	const customButtons = useMemo(() => {
+		return share ? [{
+			name: 'unshare',
+			label: _('Unshare'),
+			// Don't allow unsharing the folder during the "create" action. Doing so might
+			// be able to cause issues similar to #13518 (e.g. if the "unshare" action completes while
+			// the "share" action is still in progress).
+			disabled: shareState === ShareState.Creating || shareState === ShareState.Synchronizing,
+		}] : [];
+	}, [share, shareState]);
+
 	function renderContent() {
 		return (
 			<StyledRoot className="share-folder-dialog">
@@ -422,10 +422,14 @@ function ShareFolderDialog(props: Props) {
 }
 
 const mapStateToProps = (state: State) => {
+	const getCanUseSharePermissions = (settings: Partial<SettingsRecord>) => {
+		return [9, 10, 11].includes(settings['sync.target']) && !!settings['sync.10.canUseSharePermissions'];
+	};
+
 	return {
 		shares: state.shareService.shares,
 		shareUsers: state.shareService.shareUsers,
-		canUseSharePermissions: state.settings['sync.target'] === 10 && state.settings['sync.10.canUseSharePermissions'],
+		canUseSharePermissions: getCanUseSharePermissions(state.settings),
 	};
 };
 

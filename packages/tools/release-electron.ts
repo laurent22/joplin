@@ -1,4 +1,5 @@
 import { execCommand } from '@joplin/utils';
+import { versionPatch } from '@joplin/utils/version';
 import { gitCurrentBranch, githubRelease, gitPullTry, rootDir } from './tool-utils';
 
 const appDir = `${rootDir}/packages/app-desktop`;
@@ -10,7 +11,7 @@ async function main() {
 
 	console.info(`Running from: ${process.cwd()}`);
 
-	const version = (await execCommand('npm version patch')).trim();
+	const version = await versionPatch();
 	const tagName = version;
 
 	console.info(`New version number: ${version}`);

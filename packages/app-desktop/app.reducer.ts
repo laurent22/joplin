@@ -26,7 +26,7 @@ export interface AppStateDialog {
 	props: Record<string, any>;
 }
 
-export interface EditorScrollPercents {
+export interface NoteIdToScrollPercent {
 	[noteId: string]: number;
 }
 
@@ -55,7 +55,6 @@ export interface AppState extends State, AppWindowState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navHistory: any[];
 	watchedNoteFiles: string[];
-	lastEditorScrollPercents: EditorScrollPercents;
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
@@ -90,7 +89,6 @@ export function createAppDefaultState(resourceEditWatcherDefaultState: any): App
 		},
 		navHistory: [],
 		watchedNoteFiles: [],
-		lastEditorScrollPercents: {},
 		visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
 		focusedField: null,
 		layoutMoveMode: false,
@@ -286,16 +284,6 @@ export default function(state: AppState, action: any) {
 			if (state.watchedNoteFiles.length) {
 				newState = { ...state };
 				newState.watchedNoteFiles = [];
-			}
-			break;
-
-		case 'EDITOR_SCROLL_PERCENT_SET':
-
-			{
-				newState = { ...state };
-				const newPercents = { ...newState.lastEditorScrollPercents };
-				newPercents[action.noteId] = action.percent;
-				newState.lastEditorScrollPercents = newPercents;
 			}
 			break;
 

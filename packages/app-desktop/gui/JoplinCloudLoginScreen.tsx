@@ -106,7 +106,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 						<span className={state.className}>{state.errorMessage}</span>
 					) : null}
 				</p>
-				{state.active === 'LINK_USED' ? <div id="loading-animation" /> : null}
+				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
 				<JoplinCloudSignUpCallToAction />
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />

@@ -128,6 +128,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> může být buď \"toggle\" (přepnout) nebo \"clear\" (odstranit). Použijte \"toggle\" pro přepnutí daného úkolu na dokončený resp. nedokončený (pokud je cílem normální poznámka, bude konvertována na úkol). Použijte \"clear\" pro konverzi úkolu na normální poznámku."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -139,6 +142,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		""
@@ -181,6 +187,9 @@
 	],
 	"Add body": [
 		"Přidat tělo"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Přidat nový"
@@ -252,6 +261,9 @@
 		"Nejednoznačný zápisník \"%s\". Místo toho prosím použijte zkrácené id zápisníku - stiskněte \"ti\" pro zobrazení zkráceného id zápisníku."
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		""
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
 		""
 	],
 	"An error occurred: %s": [
@@ -363,6 +375,9 @@
 		"Základní"
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -491,6 +506,9 @@
 	"Checking... Please wait.": [
 		"Probíhá kontrola... Počkejte prosím."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Zvolit možnost"
 	],
@@ -562,6 +580,9 @@
 	],
 	"Command": [
 		"Příkaz"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Nabídka příkazů"
@@ -835,6 +856,9 @@
 	"Delete selected notes": [
 		"Odstranění vybraných poznámek"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -922,6 +946,9 @@
 	"Displays the complete information about note.": [
 		"Zobrazí veškeré informace o poznámce."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Zobrazí vybranou poznámku."
 	],
@@ -942,6 +969,9 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Heslo neztrácejte, protože z bezpečnostních důvodů je to *jediný* způsob, jak data dešifrovat! Chcete-li povolit šifrování, zadejte níže heslo."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1285,6 +1315,9 @@
 	"Feature flags": [
 		"Příznaky funkcí"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Získané položky: %d/%d."
 	],
@@ -1515,9 +1548,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Ve všech příkazech může být poznámka či zápisník referována svým názvem či ID, nebo zkratkami `$n` a `$b` pro nyní vybranou poznámku či zápisník. `$c` odkazuje na současně vybranou položku."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Pro přidání informací o zeměpisné poloze k poznámce potřebujte aplikace oprávnění pro přístupu k vaší poloze.\n\nTuto možnost můžete kdykoliv vypnout v Nastavení."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Aby to bylo možné, bude nutné zašifrovat a synchronizovat všechna vaše data, takže je nejlepší celou akci spustit přes noc.\n\nPostupujte podle těchto pokynů:\n\n1. Proveďte synchronizaci všech svých zařízení.\n2. Klepněte na \"%s\".\n3. Nechte vše doběhnout do konce. Dokud operace poběži, vyhněte se změnám poznámek na ostatních zařízeních, aby nedocházelo ke konfliktům.\n4. Až bude synchronizace na tomto zařízení dokončena, synchronizujte všechna ostatní zařízení a nechejte na nich synchronizaci doběhnout do konce.\n\nDůležité: toto stačí spustit pouze JEDNOU a na jednom zařízení."
 	],
@@ -1650,6 +1680,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper umožňuje ukládat webové stránky a screenshoty z vašeho prohlížeče do Joplin."
 	],
@@ -1674,8 +1707,14 @@
 	"Keychain Supported: %s": [
 		"Podpora klíčenky: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Klíče, které je třeba aktualizovat"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Na šířku"
@@ -1783,6 +1822,9 @@
 	],
 	"Manage your plugins": [
 		"Správa vašich rozšíření"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Spravuje konfiguraci koncového šifrování. Příkazy jsou `zapnout`, `vypnout`, `dešifrovat`, `stav`, `dešifrovat soubor` a `cílový stav`."
@@ -1979,6 +2021,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nebyl vybrán textový editor. Prosím nastavte jej pomocí `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -1996,6 +2041,9 @@
 	],
 	"Not now": [
 		"Vyzkoušejte to hned"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"Nová poznámka"
@@ -2135,6 +2183,9 @@
 	"Open Sync Wizard...": [
 		"Otevřete Průvodce synchronizací..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Otevřít..."
 	],
@@ -2147,8 +2198,14 @@
 	"Options": [
 		"Nastavení"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Seznam objednávek"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"Další aplikace..."
@@ -2191,9 +2248,6 @@
 	],
 	"PDF File": [
 		"PDF soubor"
-	],
-	"Permission needed": [
-		"Vyžadováno oprávnění"
 	],
 	"Photo %d": [
 		""
@@ -2282,9 +2336,6 @@
 	"Preferred light theme": [
 		"Preferovaný světlý vzhled"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2370,6 +2421,9 @@
 		"Zveřejnění poznámek na internetu"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"Quit": [
@@ -2615,6 +2669,12 @@
 	"Select file...": [
 		"Vybrat soubor..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2771,6 +2831,9 @@
 	"Source: ": [
 		"Zdroj: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2882,6 +2945,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Přepne do zápisníku [zápisník]. Všechny další operace budou prováděny na tomto zápisníku."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Synchronizace libovolného počtu zařízení"
 	],
@@ -2971,6 +3037,9 @@
 	],
 	"Text editor command": [
 		"Textový editor"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktivní profil nelze odstranit. Přepněte na jiný profil a zkuste to znovu."
@@ -3278,6 +3347,9 @@
 	"Try it now": [
 		"Vyzkoušejte to nyní"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Zadejte `help [příkaz]` pro více informací o příkazu; nebo `help all` pro kompletní nápovědu."
 	],
@@ -3294,6 +3366,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -3413,6 +3488,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Používá se, kdekoliv je potřeba znaky s jednotnou šířkou pro čitelné rozložení textu (např. tabulky, zaškrtávací tlačítka, ukázky kódu). Pokud nebude nalezeno, bude použito obecné neproporcionální písmo s jednotnou šířkou znaků."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Odstranění uživatele"
 	],
@@ -3453,9 +3531,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -3500,10 +3575,10 @@
 	"When creating a new to-do:": [
 		"Při vytváření nového úkolu:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

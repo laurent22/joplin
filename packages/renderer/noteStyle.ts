@@ -344,7 +344,7 @@ export default function(theme: any, options: Options = null) {
 		}
 
 		.jop-tinymce table tr:nth-child(even),
-		table tr:nth-child(even) {
+		table:has(thead) tr:nth-child(even) {
 			background-color: ${theme.tableBackgroundColor};
 		}
 

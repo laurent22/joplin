@@ -629,9 +629,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				);
 			}
 
-			addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
+			if (Platform.OS !== 'ios') addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
 			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
 			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
+			addSettingLink('license_link', _('Open-source licences'), 'https://raw.githubusercontent.com/laurent22/joplin/refs/heads/dev/readme/licenses.md');
 
 			const versionInfoText = getVersionInfoText(settings['plugins.states']);
 

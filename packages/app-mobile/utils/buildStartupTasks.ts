@@ -1,6 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
-import Logger, { TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -90,6 +90,8 @@ import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import { Profile } from '@joplin/lib/services/profileConfig/types';
 import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
+import VoiceTyping from '../services/voiceTyping/VoiceTyping';
+import whisper from '../services/voiceTyping/whisper';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -178,6 +180,9 @@ const buildStartupTasks = (
 		Setting.setConstant('pluginAssetDir', `${Setting.value('resourceDir')}/pluginAssets`);
 		Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 		Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
+		Setting.setConstant('sync.9.apiKey', '');
+		Setting.setConstant('sync.10.apiKey', '');
+		Setting.setConstant('sync.11.apiKey', '');
 	});
 	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));
@@ -195,11 +200,8 @@ const buildStartupTasks = (
 		const mainLogger = new Logger();
 		mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 		mainLogger.setLevel(Logger.LEVEL_INFO);
-
-		if (Setting.value('env') === 'dev') {
-			mainLogger.addTarget(TargetType.Console);
-			mainLogger.setLevel(Logger.LEVEL_DEBUG);
-		}
+		mainLogger.addTarget(TargetType.Console);
+		mainLogger.setLevel(Setting.value('env') === 'dev' ? LogLevel.Debug : LogLevel.Info);
 
 		Logger.initializeGlobalLogger(mainLogger);
 		initLib(mainLogger);
@@ -359,6 +361,9 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/migrate PPK', async () => {
 		await migratePpk();
 	});
+	addTask('buildStartupTasks/set up voice typing', async () => {
+		VoiceTyping.initialize([whisper]);
+	});
 	addTask('buildStartupTasks/load folders', async () => {
 		await refreshFolders(dispatch, '');
 
@@ -487,6 +492,14 @@ const buildStartupTasks = (
 		// await checkTestData(testData);
 
 		// await printTestData();
+	});
+	addTask('buildStartupTasks/optionally show sync wizard', async () => {
+		if (Setting.value('sync.wizard.autoShowOnStartup') && Setting.value('sync.target') === 0) {
+			dispatch({
+				type: 'SYNC_WIZARD_VISIBLE_CHANGE',
+				visible: true,
+			});
+		}
 	});
 
 	return startupTasks;

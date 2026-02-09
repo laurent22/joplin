@@ -339,6 +339,7 @@ export interface SyncItemEntity {
   'sync_target'?: number;
   'sync_time'?: number;
   'sync_warning_ignored'?: number;
+  'remote_item_updated_time'?: number;
   'type_'?: number;
 }
 export interface TableFieldEntity {
@@ -444,6 +445,7 @@ export const databaseSchema: DatabaseTables = {
 		sync_target: { type: 'number' },
 		sync_time: { type: 'number' },
 		sync_warning_ignored: { type: 'number' },
+		remote_item_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 	version: {

@@ -22,6 +22,7 @@ const perfLogger = PerformanceLogger.create();
 export interface ApiShare {
 	id: string;
 	master_key_id: string;
+	folder_id: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -85,6 +86,7 @@ export default class ShareService {
 			userContentBaseUrl: () => Setting.value(`sync.${syncTargetId}.userContentPath`),
 			username: () => Setting.value(`sync.${syncTargetId}.username`),
 			password: () => Setting.value(`sync.${syncTargetId}.password`),
+			apiKey: () => Setting.value(`sync.${syncTargetId}.apiKey`),
 			session: () => {
 				if (syncTargetId === 11) {
 					return {
@@ -118,11 +120,15 @@ export default class ShareService {
 				throw new Error('The local public private key pair uses an unsupported algorithm. It may be necessary to upgrade Joplin or share from a different device.');
 			}
 
-			// TODO: handle "undefinedMasterPassword" error - show master password dialog
-			folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword());
-			folderMasterKey = await MasterKey.save(folderMasterKey);
+			if (folder.master_key_id) {
+				logger.info(`Folder ${folderId}'s already has a master key. Not creating a new one.`);
+			} else {
+				// TODO: handle "undefinedMasterPassword" error - show master password dialog
+				folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword());
+				folderMasterKey = await MasterKey.save(folderMasterKey);
 
-			addMasterKey(syncInfo, folderMasterKey);
+				addMasterKey(syncInfo, folderMasterKey);
+			}
 		}
 
 		const newFolderProps: FolderEntity = {};
@@ -162,6 +168,11 @@ export default class ShareService {
 		// First, delete the share - which in turns is going to remove the items
 		// for all users, except the owner.
 		await this.deleteShare(share.id);
+
+		// Clear the master_key_id so that the folder uses a new master key if
+		// shared again.
+		// TODO: Remove the now-unused master key from local sync info.
+		await Folder.save({ id: folderId, master_key_id: '' });
 
 		// Then reset the "share_id" field for the folder and all sub-items.
 		// This could potentially be done server-side, when deleting the share,

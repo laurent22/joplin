@@ -65,12 +65,20 @@ export default class NoteEditorPage {
 		}
 	}
 
-	public async expectToHaveText(content: string) {
+	public async expectToHaveText(expected: string|RegExp) {
 		// expect(...).toHaveText can fail in the Rich Text Editor (perhaps due to frame locators).
 		// Using expect.poll refreshes the locator on each attempt, which seems to prevent flakiness.
-		await expect.poll(
-			async () => (await this.contentLocator()).textContent(),
-		).toBe(content);
+		const expectResult = expect.poll(
+			// Use .innerText: textContent doesn't handle line breaks correctly in the CodeMirror
+			// editor.
+			async () => (await this.contentLocator()).innerText(),
+		);
+		// Allow `expected` to be either an exact match (a string) or a pattern
+		if (typeof expected === 'string') {
+			await expectResult.toBe(expected);
+		} else {
+			await expectResult.toMatch(expected);
+		}
 	}
 
 	public getNoteViewerFrameLocator() {
@@ -116,5 +124,15 @@ export default class NoteEditorPage {
 		const backButton = this.toolbarButtonLocator('Back');
 		await expect(backButton).not.toBeDisabled();
 		await backButton.click();
+	}
+
+	public async toggleEditorLayout() {
+		await this.toggleEditorLayoutButton.click();
+	}
+
+	public async hideViewer() {
+		await expect(this.noteViewerContainer).toBeVisible();
+		await this.toggleEditorLayout();
+		await expect(this.noteViewerContainer).not.toBeVisible();
 	}
 }

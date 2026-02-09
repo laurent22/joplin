@@ -29,12 +29,9 @@ export interface Props {
 	borderBottom?: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	theme?: any;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onSubmit?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDismiss?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onReady?: Function;
+	onSubmit?: ()=> void;
+	onDismiss?: ()=> void;
+	onReady?: ()=> void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

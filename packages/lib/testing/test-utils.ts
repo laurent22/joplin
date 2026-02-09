@@ -46,7 +46,7 @@ import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
-const WebDavApi = require('../WebDavApi');
+import WebDavApi from '../WebDavApi';
 const DropboxApi = require('../DropboxApi');
 import JoplinServerApi, { Session } from '../JoplinServerApi';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
@@ -71,6 +71,7 @@ import { Store } from 'redux';
 import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
+import SearchEngine from '../services/search/SearchEngine';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -287,6 +288,7 @@ async function switchClient(id: number, options: any = null) {
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
 	KvStore.instance().setDb(databases_[id]);
+	SearchEngine.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
@@ -704,6 +706,7 @@ async function initFileApi() {
 			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 			username: () => joplinServerAuth.email,
 			password: () => joplinServerAuth.password,
+			apiKey: () => '',
 			session: (): Session => null,
 		});
 
@@ -1132,34 +1135,6 @@ export const mockMobilePlatform = (platform: MobilePlatform) => {
 			shim.isNode = originalIsNode;
 		},
 	};
-};
-
-// Waits for callback to not throw. Similar to react-native-testing-library's waitFor, but works better
-// with Joplin's mix of real and fake Jest timers.
-const realSetTimeout = setTimeout;
-export const waitFor = async (callback: ()=> Promise<void>) => {
-	const timeout = 10_000;
-	const startTime = performance.now();
-	let passed = false;
-	let lastError: Error|null = null;
-
-	while (!passed && performance.now() - startTime < timeout) {
-		try {
-			await callback();
-			passed = true;
-			lastError = null;
-		} catch (error) {
-			lastError = error;
-
-			await new Promise<void>(resolve => {
-				realSetTimeout(() => resolve(), 10);
-			});
-		}
-	}
-
-	if (lastError) {
-		throw lastError;
-	}
 };
 
 export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {

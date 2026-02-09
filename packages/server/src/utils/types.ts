@@ -70,6 +70,7 @@ export interface DatabaseConfig {
 	asyncStackTraces?: boolean;
 	slowQueryLogEnabled?: boolean;
 	slowQueryLogMinDuration?: number;
+	maxConnections?: number;
 	autoMigration?: boolean;
 }
 
@@ -165,6 +166,7 @@ export interface Config extends EnvVariables {
 	// to stdout, which is then handled by Docker own log mechanism
 	logDir: string;
 	tempDir: string;
+	resourceDir: string;
 	baseUrl: string;
 	apiBaseUrl: string;
 	adminBaseUrl: string;

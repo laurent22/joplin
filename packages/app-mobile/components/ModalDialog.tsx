@@ -48,6 +48,11 @@ const useStyles = (themeId: number) => {
 			invisibleHeading: {
 				flexGrow: 1,
 			},
+			// Use compact mode on the button and expand the padding to match the original styling, to work around an Android issue #13120
+			buttonStyle: {
+				paddingLeft: 16,
+				paddingRight: 16,
+			},
 		});
 	}, [themeId]);
 };
@@ -55,15 +60,22 @@ const useStyles = (themeId: number) => {
 const ModalDialog: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 	const theme = themeStyle(props.themeId);
+	const containerStyle = !props.modalProps.containerStyle ? styles.container : {
+		...styles.container,
+		...props.modalProps.containerStyle,
+	};
+	const modalProps = {
+		...props.modalProps,
+		containerStyle,
+	} as Partial<ModalElementProps>;
 
 	return (
 		<Modal
 			transparent={true}
 			visible={true}
 			onRequestClose={null}
-			containerStyle={styles.container}
 			backgroundColor={theme.backgroundColorTransparent2}
-			{...props.modalProps}
+			{...modalProps}
 		>
 			<View style={styles.contentWrapper}>{props.children}</View>
 			<View style={styles.buttonRow}>
@@ -76,8 +88,8 @@ const ModalDialog: React.FC<Props> = props => {
 					accessible={true}
 					style={styles.invisibleHeading}
 				/>
-				<Button disabled={!props.buttonBarEnabled} onPress={props.onCancelPress}>{props.cancelTitle}</Button>
-				<PrimaryButton disabled={!props.buttonBarEnabled} onPress={props.onOkPress}>{props.okTitle}</PrimaryButton>
+				<Button compact contentStyle={styles.buttonStyle} disabled={!props.buttonBarEnabled} onPress={props.onCancelPress}>{props.cancelTitle}</Button>
+				<PrimaryButton compact contentStyle={styles.buttonStyle} disabled={!props.buttonBarEnabled} onPress={props.onOkPress}>{props.okTitle}</PrimaryButton>
 			</View>
 		</Modal>
 	);

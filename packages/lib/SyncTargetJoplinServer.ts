@@ -14,6 +14,7 @@ export interface FileApiOptions {
 	userContentPath(): string;
 	username(): string;
 	password(): string;
+	apiKey(): string;
 }
 
 export async function newFileApi(id: number, options: FileApiOptions) {
@@ -22,6 +23,7 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => options.username(),
 		password: () => options.password(),
+		apiKey: () => options.apiKey(),
 		session: (): Session => null,
 		env: Setting.value('env'),
 	};
@@ -78,7 +80,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null) {
+	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi|null = null) {
 		const output = {
 			ok: false,
 			errorMessage: '',
@@ -86,50 +88,57 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 
 		syncTargetId = syncTargetId === null ? this.id() : syncTargetId;
 
-		let fileApi = null;
-		try {
-			fileApi = await newFileApi(syncTargetId, options);
-			fileApi.requestRepeatCount_ = 0;
-		} catch (error) {
-			// If there's an error it's probably an application error, but we
-			// can't proceed anyway, so exit.
-			output.errorMessage = error.message;
-			if (error.code) output.errorMessage += ` (Code ${error.code})`;
-			return output;
-		}
-
-		// First we try to fetch info.json. It may not be present if it's a new
-		// sync target but otherwise, if it is, and it's valid, we know the
-		// credentials are valid. We do this test first because it will work
-		// even if account upload is disabled. And we need such account to
-		// successfully login so that they can fix it by deleting extraneous
-		// notes or resources.
-		try {
-			const r = await fileApi.get('info.json');
-			if (r) {
-				const parsed = JSON.parse(r);
-				if (parsed) {
-					output.ok = true;
-					return output;
-				}
+		if (!fileApi) {
+			try {
+				fileApi = await newFileApi(syncTargetId, options);
+			} catch (error) {
+				// If there's an error it's probably an application error, but we
+				// can't proceed anyway, so exit.
+				output.errorMessage = error.message;
+				if (error.code) output.errorMessage += ` (Code ${error.code})`;
+				return output;
 			}
-		} catch (error) {
-			// Ignore because we'll use the next test to check for sure if it
-			// works or not.
-			staticLogger.warn('Could not fetch or parse info.json:', error);
 		}
 
-		// This is a more generic test, which writes a file and tries to read it
-		// back.
+		const previousRequestRepeatCount = fileApi.requestRepeatCount_;
+		fileApi.requestRepeatCount_ = 0;
+
 		try {
-			await fileApi.put('testing.txt', 'testing');
-			const result = await fileApi.get('testing.txt');
-			if (result !== 'testing') throw new Error(`Could not access data on server "${options.path()}"`);
-			await fileApi.delete('testing.txt');
-			output.ok = true;
-		} catch (error) {
-			output.errorMessage = error.message;
-			if (error.code) output.errorMessage += ` (Code ${error.code})`;
+			// First we try to fetch info.json. It may not be present if it's a new
+			// sync target but otherwise, if it is, and it's valid, we know the
+			// credentials are valid. We do this test first because it will work
+			// even if account upload is disabled. And we need such account to
+			// successfully login so that they can fix it by deleting extraneous
+			// notes or resources.
+			try {
+				const r = await fileApi.get('info.json');
+				if (r) {
+					const parsed = JSON.parse(r);
+					if (parsed) {
+						output.ok = true;
+						return output;
+					}
+				}
+			} catch (error) {
+				// Ignore because we'll use the next test to check for sure if it
+				// works or not.
+				staticLogger.warn('Could not fetch or parse info.json:', error);
+			}
+
+			// This is a more generic test, which writes a file and tries to read it
+			// back.
+			try {
+				await fileApi.put('testing.txt', 'testing');
+				const result = await fileApi.get('testing.txt');
+				if (result !== 'testing') throw new Error(`Could not access data on server "${options.path()}"`);
+				await fileApi.delete('testing.txt');
+				output.ok = true;
+			} catch (error) {
+				output.errorMessage = error.message;
+				if (error.code) output.errorMessage += ` (Code ${error.code})`;
+			}
+		} finally {
+			fileApi.requestRepeatCount_ = previousRequestRepeatCount;
 		}
 
 		return output;
@@ -141,6 +150,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 			userContentPath: () => Setting.value('sync.9.userContentPath'),
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
+			apiKey: () => Setting.value('sync.9.apiKey'),
 		});
 	}
 

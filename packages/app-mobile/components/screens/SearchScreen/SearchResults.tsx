@@ -13,6 +13,7 @@ import shim from '@joplin/lib/shim';
 
 interface Props {
 	query: string;
+	paused: boolean;
 	onHighlightedWordsChange: (highlightedWords: (ComplexTerm | string)[])=> void;
 
 	ftsEnabled: number;
@@ -28,7 +29,7 @@ const useResults = (props: Props) => {
 		let notes: NoteEntity[] = [];
 		setIsProcessing(true);
 		try {
-			if (query) {
+			if (query && !props.paused) {
 				if (ftsEnabled) {
 					const r = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
 					notes = r.notes;
@@ -57,7 +58,7 @@ const useResults = (props: Props) => {
 		} finally {
 			setIsProcessing(false);
 		}
-	}, [query, ftsEnabled], { interval: 200 });
+	}, [query, props.paused, ftsEnabled], { interval: 200 });
 
 	return {
 		notes,

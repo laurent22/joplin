@@ -134,6 +134,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> kan of \"toggle\" of \"clear\" zijn. Gebruik \"toggle\" om de to-do te om te schakelen tussen voltooid en onvoltooid (Als het doel een gewone notitie is, zal ze geconverteerd worden naar een to-do). Gebruik \"clear\" om terug te wisselen naar een standaard notitie."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -148,6 +151,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Over"
@@ -199,6 +205,9 @@
 	],
 	"Add body": [
 		"Inhoud toevoegen"
+	],
+	"Add column": [
+		""
 	],
 	"Add new": [
 		"Nieuw toevoegen"
@@ -283,6 +292,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"We hebben een automatisch opgeslagen tekening gevonden. Wil je een kopie ervan toevoegen aan de notitie?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"Er ging iets fout: %s"
@@ -400,6 +412,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Vet"
@@ -533,6 +548,9 @@
 	"Checking... Please wait.": [
 		"Verifiëren ... Even geduld."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Kies een optie"
 	],
@@ -616,6 +634,9 @@
 	],
 	"Command": [
 		"Commando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Commandopalet"
@@ -943,6 +964,9 @@
 	"Delete selected notes": [
 		"Geselecteerde notities verwijderen"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Het Inbox notitieboek verwijderen?\n\nAls je het Inbox notitieboek verwijdert, gaan emails die er recent naar verzonden zijn mogelijk verloren."
 	],
@@ -1045,6 +1069,9 @@
 	"Displays the complete information about note.": [
 		"Toont de volledige informatie over notitie."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Toont de opgegeven notitie."
 	],
@@ -1065,6 +1092,9 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Bewaar het wachtwoord zorgvuldig. Om beveiligingsredenen is dit de *enige* manier om je data te ontsleutelen! Gelieve je wachtwoord hieronder in te geven om encryptie in te schakelen."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
 	],
 	"Document scanner: Title template": [
 		""
@@ -1456,6 +1486,9 @@
 	"Feature flags": [
 		"Feature vlaggen"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Items opgehaald: %d/%d."
 	],
@@ -1712,9 +1745,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Bij ieder commando kan er naar een notitie of een notitieboek verwezen worden door de titel of het ID, of door de snelkoppelingen `$n` of `$b` te gebruiken voor, respectievelijk, het huidig geselecteerde notitieboek of de huidige geselecteerde notitie. `$c` kan gebruikt worden om te refereren naar het huidige geselecteerde item."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Om een geo-locatie aan de notitie te koppelen, heeft de app je toestemming nodig om toegang te krijgen tot je locatie.\n\nJe kan deze optie op elk moment uitschakelen in het 'Configuratie'-scherm."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Om dit te doen, moet je volledige dataset worden versleuteld en gesynchroniseerd, dus het is het best om dit 's nachts uit te voeren.\n\nOm te beginnen, gelieve deze instructies te volgen:\n\n1. Synchroniseer al je apparaten.\n2. Klik op \"%s\".\n3. Laat het tot het einde lopen. Zorg ervoor dat je ondertussen geen notities wijzigt op je andere apparaten, om conflicten te vermijden.\n4. Zodra de synchronisatie op dit apparaat is voltooid, synchroniseer je alle andere apparaten en laat je de synchronisatie tot het einde uitvoeren.\n\nBelangrijk: je hoeft dit maar ÉÉN keer op één apparaat te doen."
 	],
@@ -1874,6 +1904,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper laat toe webpagina's en schermafbeeldingen van je browser op te slaan in Joplin."
 	],
@@ -1901,8 +1934,14 @@
 	"Keychain Supported: %s": [
 		"Keychain ondersteund: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Sleutels die upgrade nodig hebben"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Landschap"
@@ -2030,6 +2069,9 @@
 	],
 	"Manage your plugins": [
 		"Beheer je plugins"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Beheert E2EE-configuratie. Commando's zijn `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, en `target-status`."
@@ -2253,6 +2295,9 @@
 	"No updates available": [
 		"Geen updates beschikbaar"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Geen"
 	],
@@ -2273,6 +2318,9 @@
 	],
 	"Not now": [
 		"Niet nu"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"notitie"
@@ -2430,6 +2478,9 @@
 	"Open Sync Wizard...": [
 		"Sync Wizard openen..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Openen..."
 	],
@@ -2451,8 +2502,14 @@
 	"Options": [
 		"Opties"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Geordende lijst"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"Andere toepassingen..."
@@ -2507,9 +2564,6 @@
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Verwijdert het notitieboek permanent, zonder het naar de prullenmand te verplaatsen."
-	],
-	"Permission needed": [
-		"Toestemming vereist"
 	],
 	"Photo %d": [
 		""
@@ -2613,9 +2667,6 @@
 	"Preferred light theme": [
 		"Voorkeurthema licht"
 	],
-	"Preferred voice typing provider": [
-		"Voorkeursleverancier voor steminvoer"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Behoud kleuren bij het plakken van tekst in de Rich Text Editor"
 	],
@@ -2707,6 +2758,9 @@
 		"Notities publiceren op het Internet"
 	],
 	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
 		""
 	],
 	"QR Code": [
@@ -3009,8 +3063,14 @@
 	"Select file...": [
 		"Selecteer bestand..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Selecteer hoofdnotitieboek"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Selection deleted": [
 		"Selectie verwijderd"
@@ -3207,6 +3267,9 @@
 	"Source: ": [
 		"Bron: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		"Tussenstuk"
 	],
@@ -3327,6 +3390,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Schakelt over naar naar [notebook] - Alle verdere acties zullen op dit notitieboek toegepast worden."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Synchroniseer met zoveel apparaten als je wil"
 	],
@@ -3422,6 +3488,9 @@
 	],
 	"Text editor command": [
 		"Teksteditorcommando"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Het actieve profiel kan niet verwijderd worden. Schakel over naar een ander profiel en probeer opieuw."
@@ -3779,6 +3848,9 @@
 	"Try it now": [
 		"Probeer het nu"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Typ `help [commando]` voor meer informatie over een commando; of typ `help all` voor de volledige gebruiksinformatie."
 	],
@@ -3932,6 +4004,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Wordt gebruikt waar een lettertype met vaste breedte nodig is om de tekst leesbaar uit te lijnen (e.g. tabellen, selectievakjes, code). Indien niet gevonden zal er een generiek monospace lettertype met vaste breedte worden gebruikt."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Verwijderingen van gebruikers"
 	],
@@ -3970,9 +4045,6 @@
 	],
 	"Voice typing...": [
 		"Steminvoer..."
-	],
-	"Vosk": [
-		"Vosk"
 	],
 	"Waiting for authorisation...": [
 		"Wachten op autorisatie…."
@@ -4028,11 +4100,11 @@
 	"When creating a new to-do:": [
 		"Wanneer je een nieuwe taak aanmaakt:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Wanneer ingeschakeld, zal de applicatie je bijlagen scannen en de tekst ervan extraheren. Dit zal je toelaten om tekst te zoeken in deze bijlagen."
-	],
-	"Whisper": [
-		"Fluister"
 	],
 	"Window unresponsive.": [
 		"Venster reageert niet."
