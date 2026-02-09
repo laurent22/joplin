@@ -135,16 +135,38 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 	});
 };
 
-export const handleEditorContextMenuFilter = async () => {
-	const output: MenuItemType[] = [];
+// Filter out leading, trailing, and consecutive separators from a list
+const filterSeparators = <T>(items: T[], isSeparator: (item: T)=> boolean): T[] => {
+	const filtered: T[] = [];
+	let lastWasSeparator = true;
+	for (const item of items) {
+		if (isSeparator(item)) {
+			if (lastWasSeparator) continue;
+			lastWasSeparator = true;
+		} else {
+			lastWasSeparator = false;
+		}
+		filtered.push(item);
+	}
 
+	while (filtered.length > 0 && isSeparator(filtered[filtered.length - 1])) {
+		filtered.pop();
+	}
+
+	return filtered;
+};
+
+export const handleEditorContextMenuFilter = async () => {
 	let filterObject: EditContextMenuFilterObject = {
 		items: [],
 	};
 
 	filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
 
-	for (const item of filterObject.items) {
+	const filteredItems = filterSeparators(filterObject.items, item => item.type === 'separator');
+
+	const output: MenuItemType[] = [];
+	for (const item of filteredItems) {
 		output.push(new MenuItem({
 			label: item.label,
 			click: async () => {
@@ -189,23 +211,7 @@ export const buildMenuItems = async (items: ContextMenuItems, options: ContextMe
 		});
 	}
 
-	// Filter out leading, trailing, and successive separators
-	const filteredItems: ContextMenuItem[] = [];
-	let lastWasSeparator = true;
-	for (const item of activeItems) {
-		if (item.isSeparator) {
-			if (lastWasSeparator) continue;
-			lastWasSeparator = true;
-		} else {
-			lastWasSeparator = false;
-		}
-		filteredItems.push(item);
-	}
-
-	// Remove trailing separator
-	while (filteredItems.length > 0 && filteredItems[filteredItems.length - 1].isSeparator) {
-		filteredItems.pop();
-	}
+	const filteredItems = filterSeparators(activeItems, item => item.isSeparator);
 
 	return filteredItems.map(item => new MenuItem({
 		label: item.label,
