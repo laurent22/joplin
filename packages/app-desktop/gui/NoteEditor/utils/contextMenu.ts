@@ -153,7 +153,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				const { resourcePath } = await resourceInfo(options);
 				bridge().showItemInFolder(resourcePath);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
 		},
 		separator2: makeSeparator(),
 		recognizeHandwrittenImage: {
