@@ -79,6 +79,35 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     };
   }, [handleResizeMove, handleResizeEnd]);
 
+  // ストリーミングレスポンスを処理
+  const processStreamingResponse = React.useCallback(async (response: Response, botId: string) => {
+    const reader = response.body?.getReader();
+    const decoder = new TextDecoder();
+    let accumulatedText = '';
+
+    // ローディングを解除
+    setChatMessages((prev) =>
+      prev.map((msg) => (msg.id === botId ? { ...msg, loading: false } : msg))
+    );
+
+    if (reader) {
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        // デコードして蓄積
+        const chunk = decoder.decode(value, { stream: true });
+        accumulatedText += chunk;
+
+        // メッセージを更新
+        setChatMessages((prev) =>
+          prev.map((msg) => (msg.id === botId ? { ...msg, text: accumulatedText } : msg))
+        );
+      }
+    }
+  }, []);
+
   // チャット送信
   const handleChatSend = React.useCallback(async () => {
     if (chatInput.trim() === '') return;
@@ -116,31 +145,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
       }
 
       // ストリーミングレスポンスを処理
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let accumulatedText = '';
-
-      // ローディングを解除
-      setChatMessages((prev) =>
-        prev.map((msg) => (msg.id === botId ? { ...msg, loading: false } : msg))
-      );
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-
-          if (done) break;
-
-          // デコードして蓄積
-          const chunk = decoder.decode(value, { stream: true });
-          accumulatedText += chunk;
-
-          // メッセージを更新
-          setChatMessages((prev) =>
-            prev.map((msg) => (msg.id === botId ? { ...msg, text: accumulatedText } : msg))
-          );
-        }
-      }
+      await processStreamingResponse(response, botId);
     } catch (error) {
       console.error('Chat API error:', error);
       setChatMessages((prev) =>
