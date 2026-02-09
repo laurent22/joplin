@@ -115,7 +115,7 @@ export default async function(ctx: AppContext) {
 			if (error.code) r.code = error.code;
 			ctx.response.body = r;
 		}
+	} finally {
+		onRequestComplete(requestId);
 	}
-
-	onRequestComplete(requestId);
 }

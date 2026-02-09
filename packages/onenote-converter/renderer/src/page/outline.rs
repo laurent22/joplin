@@ -78,7 +78,7 @@ impl<'a> Renderer<'a> {
         let is_list = self.is_list(element);
 
         let mut attrs = AttributeSet::new();
-        attrs.set("class", "outline-element".to_string());
+        attrs.set("class", "outline-element".into());
 
         let mut styles = StyleSet::new();
         styles.set("margin-left", px(indent_width as f32));

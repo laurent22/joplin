@@ -49,7 +49,7 @@ export const createEventHandlingListeners = (resourceId: string, options: Option
 	};
 
 	if (options.enableLongPress) {
-		const longPressHandler = `(() => ${options.postMessageSyntax}('longclick:${resourceId}'))`;
+		const longPressHandler = `(() => ${options.postMessageSyntax}(${JSON.stringify(`longclick:${resourceId}`)}))`;
 		const touchStart = `(${longPressTouchStartFnString})(${longPressHandler}, ${utils.longPressDelay}); `;
 
 		const callClearLongPressTimeout = `(${clearLongPressTimeoutFnString})(); `;
@@ -63,7 +63,7 @@ export const createEventHandlingListeners = (resourceId: string, options: Option
 	}
 
 	if (options.enableEditPopup) {
-		const editPopupClick = `(() => ${options.postMessageSyntax}('edit:${resourceId}'))`;
+		const editPopupClick = `(() => ${options.postMessageSyntax}(${JSON.stringify(`edit:${resourceId}`)}))`;
 		const createEditPopup = ` (${options.createEditPopupSyntax})(this, ${JSON.stringify(resourceId)}, ${editPopupClick}); `;
 		eventHandlers.ontouchstart += createEditPopup;
 

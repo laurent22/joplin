@@ -32,6 +32,15 @@ impl StorageIndex {
             .get(&id)
             .map(|mapping| mapping.revision_mapping)
     }
+
+    pub(crate) fn find_revision_mapping_by_serial(&self, serial: &SerialNumber) -> Option<ExGuid> {
+        self.revision_mappings
+            .values()
+            .find(|mapping| {
+                mapping.serial.guid == serial.guid && mapping.serial.serial == serial.serial
+            })
+            .map(|mapping| mapping.revision_mapping)
+    }
 }
 
 /// A storage indexes manifest mapping.

@@ -343,4 +343,92 @@ describe('ChangeModel', () => {
 		expect('jopItem' in result.items[0]).toBe(false);
 	});
 
+	test.each([
+		{
+			label: 'should replace create -> update with "create"',
+			changes: [
+				{ type: ChangeType.Create },
+				{ type: ChangeType.Update },
+			],
+			expected: [
+				{ type: ChangeType.Create },
+			],
+		},
+		{
+			label: 'should remove create -> delete',
+			changes: [
+				{ type: ChangeType.Create },
+				{ type: ChangeType.Delete },
+			],
+			expected: [],
+		},
+		{
+			label: 'should replace update -> delete with delete',
+			changes: [
+				{ type: ChangeType.Update },
+				{ type: ChangeType.Delete },
+			],
+			expected: [
+				{ type: ChangeType.Delete },
+			],
+		},
+		{
+			label: 'should replace update -> update with update',
+			changes: [
+				{ type: ChangeType.Update },
+				{ type: ChangeType.Update },
+			],
+			expected: [
+				{ type: ChangeType.Update },
+			],
+		},
+		{
+			label: 'should not compress updates that change the share ID',
+			changes: [
+				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "a" }' },
+				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "b" }' },
+			],
+			expected: [
+				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "a" }' },
+				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "b" }' },
+			],
+		},
+		{
+			label: 'should keep the latest change when compressing updates',
+			changes: [
+				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "a" }', counter: 1 },
+				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "b" }', counter: 2 },
+				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "b" }', counter: 3 },
+				{ type: ChangeType.Update, item_id: '2', previous_item: '{ "jop_share_id": "a" }', counter: 4 },
+				{ type: ChangeType.Update, item_id: '2', previous_item: '{ "jop_share_id": "a" }', counter: 5 },
+			],
+			expected: [
+				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "a" }', counter: 1 },
+				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "b" }', counter: 3 },
+				{ type: ChangeType.Update, item_id: '2', previous_item: '{ "jop_share_id": "a" }', counter: 5 },
+			],
+		},
+		{
+			label: 'should not compress updates that change different items',
+			changes: [
+				{ type: ChangeType.Update, item_id: '1' },
+				{ type: ChangeType.Update, item_id: '2' },
+			],
+			expected: [
+				{ type: ChangeType.Update, item_id: '1' },
+				{ type: ChangeType.Update, item_id: '2' },
+			],
+		},
+	])('should compress changes: $label', ({ changes, expected }) => {
+		// Fill default properties
+		changes = changes.map((change, index) => ({
+			counter: index,
+			item_id: '1',
+			...change,
+		}));
+
+		const changeModel = models().change();
+		expect(changeModel.compressChanges_(changes)).toMatchObject(expected);
+	});
+
 });

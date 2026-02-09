@@ -12,6 +12,7 @@ export interface ToolbarButtonInfo {
 	tooltip: string;
 	iconName: string;
 	enabled: boolean;
+	visible: boolean;
 	onClick(): void;
 	title: string;
 }
@@ -49,6 +50,7 @@ export default class ToolbarButtonUtils {
 
 	private commandToToolbarButton(commandName: string, whenClauseContext: WhenClauseContext): ToolbarButtonInfo {
 		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
+		const newVisible = this.service.isVisible(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
 		const newIcon = this.service.iconName(commandName);
 		const newLabel = this.service.label(commandName);
@@ -56,6 +58,7 @@ export default class ToolbarButtonUtils {
 		if (
 			this.toolbarButtonCache_[commandName] &&
 			this.toolbarButtonCache_[commandName].info.enabled === newEnabled &&
+			this.toolbarButtonCache_[commandName].info.visible === newVisible &&
 			this.toolbarButtonCache_[commandName].info.title === newTitle &&
 			this.toolbarButtonCache_[commandName].info.iconName === newIcon &&
 			this.toolbarButtonCache_[commandName].info.tooltip === newLabel
@@ -69,6 +72,7 @@ export default class ToolbarButtonUtils {
 			tooltip: newLabel,
 			iconName: newIcon,
 			enabled: newEnabled,
+			visible: newVisible,
 			onClick: async () => {
 				await this.service.execute(commandName);
 				void focusEditorIfEditorCommand(commandName, this.service);
@@ -92,12 +96,18 @@ export default class ToolbarButtonUtils {
 
 		for (const commandName of commandNames) {
 			if (commandName === '-') {
-				output.push(separatorItem);
+				const lastItem = output.length > 0 && output[output.length - 1];
+				if (lastItem !== separatorItem) {
+					output.push(separatorItem);
+				}
 				continue;
 			}
 
 			try {
-				output.push(this.commandToToolbarButton(commandName, whenClauseContext));
+				const button = this.commandToToolbarButton(commandName, whenClauseContext);
+				if (button.visible) {
+					output.push(button);
+				}
 			} catch (error) {
 				logger.error('Unable to add toolbar button for command', commandName, '. Error: ', error);
 			}

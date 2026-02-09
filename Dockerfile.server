@@ -2,7 +2,7 @@
 # Build stage
 # =============================================================================
 
-FROM node:18 AS builder
+FROM node:24 AS builder
 
 RUN apt-get update \
     && apt-get install -y \
@@ -58,7 +58,7 @@ RUN --mount=type=cache,target=/build/.yarn/cache --mount=type=cache,target=/buil
 # from a smaller base image.
 # =============================================================================
 
-FROM node:18-slim
+FROM node:24-slim
 
 ARG user=joplin
 RUN useradd --create-home --shell /bin/bash $user

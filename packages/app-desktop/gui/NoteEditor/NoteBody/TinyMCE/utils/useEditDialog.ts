@@ -5,6 +5,8 @@ import { MarkupToHtmlHandler } from '../../../utils/types';
 import { _ } from '@joplin/lib/locale';
 import enableTextAreaTab, { TextAreaTabHandler } from './enableTextAreaTab';
 import { MarkupToHtml } from '@joplin/renderer';
+import { getGlobalSettings } from '@joplin/renderer/types';
+import Setting from '@joplin/lib/models/Setting';
 
 interface Props {
 	editor: Editor;
@@ -49,6 +51,15 @@ function newBlockSource(language = '', content = '', previousSource: SourceInfo 
 		} else {
 			fence = '$$';
 		}
+	} else if (language === 'frontmatter') {
+		// Frontmatter uses --- delimiters instead of code fences
+		return {
+			openCharacters: '---\n',
+			closeCharacters: '\n---\n',
+			content: content,
+			node: null,
+			language: language,
+		};
 	}
 
 	const fenceLanguage = language === 'katex' ? '' : language;
@@ -90,7 +101,7 @@ function openEditDialog(
 		onSubmit: async (dialogApi: any) => {
 			const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea, source);
 			const md = `${newSource.openCharacters}${newSource.content}${newSource.closeCharacters}`;
-			const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
+			const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true, globalSettings: getGlobalSettings(Setting) });
 
 			// markupToHtml will return the complete editable HTML, but we only
 			// want to update the inner HTML, so as not to break additional props that

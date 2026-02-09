@@ -14,6 +14,7 @@ import { RendererControl, RenderOptions } from '../rendererBundle/types';
 import { ResourceInfos } from '@joplin/renderer/types';
 import { _ } from '@joplin/lib/locale';
 import { defaultSearchState } from '../../components/NoteEditor/SearchPanel';
+import { SelectionRange } from '../markdownEditorBundle/types';
 
 const logger = Logger.create('useWebViewSetup');
 
@@ -21,6 +22,8 @@ interface Props {
 	initialText: string;
 	noteId: string;
 	settings: EditorSettings;
+	initialSelection: SelectionRange|null;
+	initialScroll: number|null;
 	parentElementClassName: string;
 	globalSearch: string;
 	themeId: number;
@@ -53,7 +56,7 @@ const useMessenger = (props: UseMessengerProps) => {
 			noteViewerFontSize: `${baseTheme.fontSize}${baseTheme.fontSizeUnits ?? 'px'}`,
 		},
 		noteHash: '',
-		initialScroll: 0,
+		initialScrollPercent: 0,
 		pluginAssetContainerSelector: null,
 		removeUnusedPluginAssets: true,
 	};
@@ -119,6 +122,8 @@ const useSource = (props: UseSourceProps) => {
 				...defaultSearchState,
 				searchText: propsRef.current.globalSearch,
 			},
+			initialScroll: propsRef.current.initialScroll,
+			initialSelection: propsRef.current.initialSelection,
 			settings: propsRef.current.settings,
 		};
 

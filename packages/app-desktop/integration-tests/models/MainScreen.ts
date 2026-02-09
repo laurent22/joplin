@@ -68,9 +68,17 @@ export default class MainScreen {
 		await searchBar.fill(text);
 	}
 
-	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
+	private async importFromModule_(electronApp: ElectronApplication, moduleName: string, path: string) {
 		await setFilePickerResponse(electronApp, [path]);
-		await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
+		await activateMainMenuItem(electronApp, moduleName, 'Import');
+	}
+
+	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
+		return this.importFromModule_(electronApp, 'HTML - HTML document (Directory)', path);
+	}
+
+	public async importHtmlFile(electronApp: ElectronApplication, path: string) {
+		return this.importFromModule_(electronApp, 'HTML - HTML document (File)', path);
 	}
 
 	public async pluginPanelLocator(pluginId: string) {

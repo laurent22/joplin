@@ -319,6 +319,37 @@ describe('models/Setting', () => {
 		Setting.setValue('spellChecker.language', 'fr-FR');
 		await Setting.applyMigrations();
 		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR']);
+
+		// Also double-check that if the setting is changed and the migration applied again, the new
+		// value will not be reverted back to the previous one.
+
+		Setting.setValue('spellChecker.languages', ['en-GB']);
+		await Setting.applyMigrations();
+		expect(Setting.value('spellChecker.languages')).toStrictEqual(['en-GB']);
+	}));
+
+	it('should migrate to new setting - plugins', (async () => {
+		await Setting.reset();
+
+		await Setting.registerSetting('plugin-org.joplinapp.plugins.AbcSheetMusic.options', {
+			type: SettingItemType.String,
+			public: true,
+			value: '',
+			isGlobal: false,
+			storage: SettingStorage.Database,
+		});
+
+		Setting.setValue('plugin-org.joplinapp.plugins.AbcSheetMusic.options', '{ scale: 2 }');
+		await Setting.saveAll();
+		await Setting.applyMigrations();
+		expect(Setting.value('markdown.plugin.abc.options')).toBe('{ scale: 2 }');
+
+		// Also double-check that if the setting is changed and the migration applied again, the new
+		// value will not be reverted back to the previous one.
+
+		Setting.setValue('markdown.plugin.abc.options', '{ scale: 3 }');
+		await Setting.applyMigrations();
+		expect(Setting.value('markdown.plugin.abc.options')).toBe('{ scale: 3 }');
 	}));
 
 	it('should not override new setting, if it already set', (async () => {

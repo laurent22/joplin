@@ -12,12 +12,12 @@ import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import useEditPopup from './utils/useEditPopup';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { RenderSettings } from './contentScript/Renderer';
-import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import Resource from '@joplin/lib/models/Resource';
 import { ResourceInfos } from '@joplin/renderer/types';
 import useContentScripts from './utils/useContentScripts';
 import uuid from '@joplin/lib/uuid';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 
 const logger = Logger.create('renderer/useWebViewSetup');
 
@@ -91,8 +91,8 @@ const useMessenger = (props: UseMessengerProps) => {
 
 	const messenger = useMemo(() => {
 		const fsDriver = shim.fsDriver();
-		const localApi = {
-			onScroll: (fraction: number) => onScrollRef.current?.(fraction),
+		const localApi: MainProcessApi = {
+			onScroll: (event) => onScrollRef.current?.(event),
 			onPostMessage: (message: string) => onPostMessageRef.current?.(message),
 			onPostPluginMessage,
 			fsDriver: {
@@ -212,22 +212,37 @@ const useWebViewSetup = (props: Props): Result => {
 						settingsChanged = true;
 					}
 				},
-				readAssetBlob: (assetPath: string): Promise<Blob> => {
-					// Built-in assets are in resourceDir, external plugin assets are in cacheDir.
-					const assetsDirs = [Setting.value('resourceDir'), Setting.value('cacheDir')];
+				// Handles plugin asset loading on web (where the WebView can't load assets directly).
+				readAssetBlob: async (assetPath: string): Promise<Blob> => {
+					if (assetPath.startsWith('pluginAssets/')) { // Built-in plugin asset
+						assetPath = assetPath.replace(/^pluginAssets\//, '');
 
-					let resolvedPath = null;
-					for (const assetDir of assetsDirs) {
-						resolvedPath ??= resolvePathWithinDir(assetDir, assetPath);
-						if (resolvedPath) break;
-					}
+						const fullPath = shim.fsDriver().resolveRelativePathWithinDir(
+							Setting.value('pluginAssetDir'), assetPath,
+						);
+						return shim.fsDriver().fileAtPath(fullPath);
+					} else { // Asset from an installed/development plugin
+						// User-installed plugins are stored in cacheDir
+						const allowedBasePaths = [Setting.value('cacheDir')];
+						// Development plugins are stored in other locations. Add them separately:
+						if (Setting.value('plugins.devPluginPaths')) {
+							allowedBasePaths.push(...Setting.value('plugins.devPluginPaths').split(','));
+						}
 
-					if (!resolvedPath) {
-						throw new Error(`Failed to load asset at ${assetPath} -- not in any of the allowed asset directories: ${assetsDirs.join(',')}.`);
+						for (const basePath of allowedBasePaths) {
+							const resolved = resolvePathWithinDir(basePath, assetPath);
+							if (resolved) {
+								return shim.fsDriver().fileAtPath(resolved);
+							}
+						}
+
+						throw new Error(`Unable to resolve plugin asset: ${assetPath}`);
 					}
-					return shim.fsDriver().fileAtPath(resolvedPath);
 				},
 				removeUnusedPluginAssets: options.removeUnusedPluginAssets,
+				globalSettings: {
+					'markdown.plugin.abc.options': Setting.value('markdown.plugin.abc.options'),
+				},
 			});
 
 			await transferResources(options.resources);

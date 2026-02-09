@@ -9,7 +9,7 @@ import { useMemo, useRef, useState } from 'react';
 import ItemList from '../ItemList';
 import useElementHeight from '../hooks/useElementHeight';
 import useSidebarListData from './hooks/useSidebarListData';
-import useSelectedSidebarIndex from './hooks/useSelectedSidebarIndex';
+import useSelectedSidebarIndexes from './hooks/useSelectedSidebarIndexes';
 import useOnSidebarKeyDownHandler from './hooks/useOnSidebarKeyDownHandler';
 import useFocusHandler from './hooks/useFocusHandler';
 import useOnRenderItem from './hooks/useOnRenderItem';
@@ -26,7 +26,9 @@ interface Props {
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];
 	notesParentType: string;
+	selectedTagIds: string[];
 	selectedTagId: string;
+	selectedFolderIds: string[];
 	selectedFolderId: string;
 	selectedSmartFilterId: string;
 	collapsedFolderIds: string[];
@@ -37,7 +39,7 @@ interface Props {
 
 const FolderAndTagList: React.FC<Props> = props => {
 	const listItems = useSidebarListData(props);
-	const { selectedIndex, updateSelectedIndex } = useSelectedSidebarIndex({
+	const { selectedIndex, selectedIndexes, updateSelectedIndex } = useSelectedSidebarIndexes({
 		...props,
 		listItems: listItems,
 	});
@@ -50,6 +52,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const onRenderItem = useOnRenderItem({
 		...props,
 		selectedIndex,
+		selectedIndexes,
 		listItems,
 		containerRef: listContainerRef,
 	});
@@ -58,6 +61,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		dispatch: props.dispatch,
 		listItems: listItems,
 		selectedIndex,
+		selectedIndexes,
 		updateSelectedIndex,
 		collapsedFolderIds: props.collapsedFolderIds,
 	});
@@ -107,6 +111,8 @@ const mapStateToProps = (state: AppState) => {
 		tags: state.tags,
 		folders: state.folders,
 		notesParentType: mainWindowState.notesParentType,
+		selectedFolderIds: mainWindowState.selectedFolderIds,
+		selectedTagIds: mainWindowState.selectedTagIds,
 		selectedFolderId: mainWindowState.selectedFolderId,
 		selectedTagId: mainWindowState.selectedTagId,
 		collapsedFolderIds: state.collapsedFolderIds,

@@ -9,16 +9,31 @@ const markdownEditorOnlyCommands = [
 	EditorCommandType.SwapLineDown,
 ].map(command => `editor.${command}`);
 
-export const enabledCondition = (commandName: string) => {
-	const output = [
-		'!noteIsReadOnly',
-	];
+
+
+const richTextEditorOnlyCommands = [
+	EditorCommandType.InsertTable,
+	EditorCommandType.InsertCodeBlock,
+].map(command => `editor.${command}`);
+
+export const visibleCondition = (commandName: string) => {
+	const output = [];
 
 	if (markdownEditorOnlyCommands.includes(commandName)) {
 		output.push('!richTextEditorVisible');
 	}
 
-	return output.filter(c => !!c).join(' && ');
+	if (richTextEditorOnlyCommands.includes(commandName)) {
+		output.push('!markdownEditorPaneVisible');
+	}
+
+	return output.join(' && ');
+};
+
+export const enabledCondition = (commandName: string) => {
+	return [
+		visibleCondition(commandName), '!noteIsReadOnly',
+	].filter(c => !!c).join('&&');
 };
 
 const headerDeclarations = () => {
@@ -99,14 +114,24 @@ const declarations: CommandDeclaration[] = [
 		iconName: 'material format-list-checks',
 	},
 	{
+		name: `editor.${EditorCommandType.InsertTable}`,
+		label: () => _('Table'),
+		iconName: 'material table',
+	},
+	{
+		name: `editor.${EditorCommandType.InsertCodeBlock}`,
+		label: () => _('Block code'),
+		iconName: 'material code-tags',
+	},
+	{
 		name: EditorCommandType.IndentLess,
 		label: () => _('Decrease indent level'),
-		iconName: 'ant indent-left',
+		iconName: 'material format-indent-decrease',
 	},
 	{
 		name: EditorCommandType.IndentMore,
 		label: () => _('Increase indent level'),
-		iconName: 'ant indent-right',
+		iconName: 'material format-indent-increase',
 	},
 	{
 		name: `editor.${EditorCommandType.SwapLineDown}`,

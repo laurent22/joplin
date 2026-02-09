@@ -18,12 +18,16 @@ impl<'a> Renderer<'a> {
         let mut list_end = None;
 
         for (element, parent_level, current_level) in elements {
-            if !in_list && self.is_list(element) {
+            if !in_list && self.is_onenote_list(element) {
                 let tags = self.list_tags(element);
                 let list_start = tags.0;
                 list_end = Some(tags.1);
 
                 contents.push_str(&list_start);
+                in_list = true;
+            } else if !in_list && self.is_tag_list(element) {
+                contents.push_str("<ul class=\"tagged-list\">");
+                list_end = Some("</ul>".into());
                 in_list = true;
             }
 
@@ -176,7 +180,15 @@ impl<'a> Renderer<'a> {
             .unwrap_or_default()
     }
 
+    fn is_onenote_list(&self, element: &OutlineElement) -> bool {
+        !element.list_contents().is_empty()
+    }
+
+    fn is_tag_list(&self, element: &OutlineElement) -> bool {
+        self.has_note_tag(element)
+    }
+
     pub(crate) fn is_list(&self, element: &OutlineElement) -> bool {
-        element.list_contents().first().is_some()
+        self.is_onenote_list(element) || self.is_tag_list(element)
     }
 }

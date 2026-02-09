@@ -18,7 +18,7 @@ import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEdi
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
-import { AppState, EditorCursorLocations } from '../../app.reducer';
+import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _, _n } from '@joplin/lib/locale';
 import NoteTitleBar from './NoteTitle/NoteTitleBar';
@@ -50,7 +50,7 @@ import WarningBanner from './WarningBanner/WarningBanner';
 import UserWebview from '../../services/plugins/UserWebview';
 import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
-import { stateUtils } from '@joplin/lib/reducer';
+import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
@@ -58,6 +58,7 @@ import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisibleP
 import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 import getResourceBaseUrl from './utils/getResourceBaseUrl';
 import useInitialCursorLocation from './utils/useInitialCursorLocation';
+import NotePositionService, { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
 
 const debounce = require('debounce');
 
@@ -333,7 +334,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const { scrollWhenReadyRef, clearScrollWhenReady } = useScrollWhenReadyOptions({
 		noteId: formNote.id,
 		selectedNoteHash: props.selectedNoteHash,
-		lastEditorScrollPercents: props.lastEditorScrollPercents,
 		editorRef,
 		editorName: props.bodyEditor,
 	});
@@ -401,23 +401,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [setShowRevisions]);
 
 	const onScroll = useCallback((event: { percent: number }) => {
-		props.dispatch({
-			type: 'EDITOR_SCROLL_PERCENT_SET',
-			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
-			// to refer the current value, since they would be one or more generations old.
-			// For the purpose, useRef value should be used.
-			noteId: formNoteRef.current.id,
-			percent: event.percent,
-		});
-	}, [props.dispatch]);
+		const noteId = formNoteRef.current.id;
+		NotePositionService.instance().updateScrollPosition(noteId, windowId, event.percent);
+	}, [windowId]);
 
 	const onCursorMotion = useCallback((location: EditorCursorLocations) => {
-		props.dispatch({
-			type: 'EDITOR_CURSOR_POSITION_SET',
-			noteId: formNoteRef.current.id,
-			location,
-		});
-	}, [props.dispatch]);
+		const noteId = formNoteRef.current.id;
+		NotePositionService.instance().updateCursorPosition(noteId, windowId, location);
+	}, [windowId]);
 
 	function renderNoNotes(rootStyle: React.CSSProperties) {
 		const emptyDivStyle = {
@@ -430,7 +421,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
 	const initialCursorLocation = useInitialCursorLocation({
-		lastEditorCursorLocations: props.lastEditorCursorLocations, noteId: props.noteId,
+		noteId: props.noteId,
 	});
 
 	const markupLanguage = formNote.markup_language;
@@ -731,6 +722,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		bodyEditor = 'CodeMirror5';
 	}
 
+	const mainWindowState = stateUtils.windowStateById(state, defaultWindowId);
+
 	return {
 		noteId,
 		bodyEditor,
@@ -743,15 +736,15 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		notesParentType: windowState.notesParentType,
 		selectedNoteTags: windowState.selectedNoteTags,
-		lastEditorScrollPercents: state.lastEditorScrollPercents,
-		lastEditorCursorLocations: state.lastEditorCursorLocations,
 		selectedNoteHash: windowState.selectedNoteHash,
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customViewerCss,
 		noteVisiblePanes: windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
-		highlightedWords: state.highlightedWords,
+		// For now, only the main window has search UI. Show the same search markers in all
+		// windows:
+		highlightedWords: mainWindowState.highlightedWords,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([

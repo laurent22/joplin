@@ -61,6 +61,10 @@ export interface Constants {
 	syncVersion: number;
 	startupDevPlugins: string[];
 	isSubProfile: boolean;
+
+	'sync.9.apiKey': string;
+	'sync.10.apiKey': string;
+	'sync.11.apiKey': string;
 }
 
 interface SettingSections {
@@ -159,6 +163,17 @@ interface UserSettingMigration {
 	newName: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	transformValue: Function;
+
+	// Currently the migration code only supports migrating a plugin setting to the regular settings
+	// (not a plugin setting to a different name). So "oldName" should be the plugin setting name
+	// and "newName" should be the regular setting name. Additionally, it's expected that the
+	// setting is stored in the database (as they all are as of Nov 2025).
+	isPluginSetting: boolean;
+}
+
+interface SubValuesOptions {
+	includeBaseKeyInName?: boolean;
+	includeConstants?: boolean;
 }
 
 const userSettingMigration: UserSettingMigration[] = [
@@ -166,6 +181,13 @@ const userSettingMigration: UserSettingMigration[] = [
 		oldName: 'spellChecker.language',
 		newName: 'spellChecker.languages',
 		transformValue: (value: string) => { return [value]; },
+		isPluginSetting: false,
+	},
+	{
+		oldName: 'plugin-org.joplinapp.plugins.AbcSheetMusic.options',
+		newName: 'markdown.plugin.abc.options',
+		transformValue: (value: string) => { return value; },
+		isPluginSetting: true,
 	},
 ];
 
@@ -283,6 +305,10 @@ class Setting extends BaseModel {
 		syncVersion: 3,
 		startupDevPlugins: [],
 		isSubProfile: false,
+
+		'sync.9.apiKey': '',
+		'sync.10.apiKey': '',
+		'sync.11.apiKey': '',
 	};
 
 	public static autoSaveEnabled = true;
@@ -460,20 +486,35 @@ class Setting extends BaseModel {
 			this.setValue('lastSettingGlobalMigration', globalMigrations.length - 1);
 		};
 
-		const applyUserSettingMigrations = () => {
-			// Function to translate existing user settings to new setting.
-			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-			userSettingMigration.forEach(userMigration => {
-				if (!this.isSet(userMigration.newName) && this.isSet(userMigration.oldName)) {
-					this.setValue(userMigration.newName, userMigration.transformValue(this.value(userMigration.oldName)));
-					logger.info(`Migrating ${userMigration.oldName} to ${userMigration.newName}`);
+		const applyUserSettingMigrations = async () => {
+			for (const migration of userSettingMigration) {
+				let applyMigration = false;
+				let newValue: unknown = null;
+
+				if (migration.isPluginSetting) {
+					const oldItem = await this.loadOneFromDb(migration.oldName);
+
+					if (oldItem) {
+						if (!this.isSet(migration.newName)) {
+							newValue = oldItem.value;
+							applyMigration = true;
+						}
+					}
+				} else if (!this.isSet(migration.newName) && this.isSet(migration.oldName)) {
+					newValue = this.value(migration.oldName);
+					applyMigration = true;
 				}
-			});
+
+				if (applyMigration) {
+					this.setValue(migration.newName, migration.transformValue(newValue));
+					logger.info(`applyUserSettingMigrations: Migrated ${migration.oldName} to ${migration.newName}`);
+				}
+			}
 		};
 
 		applyDefaultMigrations();
 		await applyGlobalMigrations();
-		applyUserSettingMigrations();
+		await applyUserSettingMigrations();
 	}
 
 	public static featureFlagKeys(appType: AppType): string[] {
@@ -598,6 +639,14 @@ class Setting extends BaseModel {
 
 	public static isPublic(key: string) {
 		return this.keys(true).indexOf(key) >= 0;
+	}
+
+	// This allows loading a setting without doing any check on anything - this can be useful to
+	// retrieve a value for a setting that was previously registered, but no longer is. Also to
+	// retrieve setting values for plugins before the plugin is actually loaded.
+	private static async loadOneFromDb(key: string): Promise<CacheItem | null> {
+		const row = await this.modelSelectOne('SELECT key, value FROM settings WHERE key = ?', [key]);
+		return row ? row : null;
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
@@ -1056,18 +1105,29 @@ class Setting extends BaseModel {
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: any = null) {
+	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: SubValuesOptions|null = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
+
+		const subKey = (key: string) => {
+			return includeBaseKeyInName ? key : key.substring(baseKey.length + 1);
+		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
-		for (const key in settings) {
-			if (!settings.hasOwnProperty(key)) continue;
-			if (key.indexOf(baseKey) === 0) {
-				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
-				output[subKey] = settings[key];
+		for (const [key, value] of Object.entries(settings)) {
+			if (key.startsWith(baseKey)) {
+				output[subKey(key)] = value;
 			}
 		}
+
+		if (options?.includeConstants) {
+			for (const [key, value] of Object.entries(this.constants_)) {
+				if (key.startsWith(baseKey)) {
+					output[subKey(key)] = value;
+				}
+			}
+		}
+
 		return output;
 	}
 

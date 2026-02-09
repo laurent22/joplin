@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Errors</title>
+    <style>
+        main {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <h1>Errors</h1>
+        <p>The following errors occurred during the import process:</p>
+        <ul>
+            {% for entry in errors -%}
+                <li>{{ entry }}</li>
+            {% endfor %}
+        </ul>
+        <p>Some pages may be missing or not imported correctly.</p>
+    </main>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+</body>
+</html>

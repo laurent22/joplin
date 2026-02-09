@@ -64,7 +64,10 @@ export const initialize = (options: RendererWebViewOptions) => {
 	const onMainContentScroll = () => {
 		const newScrollTop = document.scrollingElement.scrollTop;
 		if (lastScrollTop !== newScrollTop) {
-			messenger.remoteApi.onScroll(newScrollTop);
+			const scrollHeight = document.scrollingElement.scrollHeight;
+			messenger.remoteApi.onScroll({
+				fraction: newScrollTop / (scrollHeight || 1),
+			});
 		}
 	};
 

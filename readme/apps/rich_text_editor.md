@@ -1,6 +1,6 @@
 # About the Rich Text editor
 
-**TLDR:** Avoid using Markdown plugins if you primarily intend to use the Rich Text editor, and be aware of the editor's limitations.
+**TLDR:** Avoid using [Markdown plugins](https://joplinapp.org/help/apps/markdown/#markdown-plugins) if you primarily intend to use the Rich Text editor, and be aware of the editor's limitations.
 
 At its core, Joplin stores notes in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md). Markdown is a simple way to format text that looks great on any device and, while it's formatted text, it still looks perfectly readable in a plain text editor.
 
@@ -10,7 +10,7 @@ In some cases however, the extra markup format that appears in notes can be seen
 
 However **there is a catch**: in Joplin, notes, even when edited with this Rich Text editor, are **still Markdown** under the hood. This is generally a good thing, because it means you can switch at any time between Markdown and Rich Text editor, and the note is still readable. It is also good if you sync with the CLI application, which doesn't have a rich text editor. The catch is that since Markdown is used under the hood, it means the rich text editor has a number of limitations it inherits from that format:
 
-- For a start, **most Markdown plugins will not be compatible**. If you open a Markdown note that makes use of such plugin in the Rich Text editor, it is likely you will lose the plugin special formatting. The only supported plugins are the "fenced" plugins - those that wrap a section of text in triple backticks (for example, KaTeX, Mermaid, etc. are working). You can see a plugin's compatibility on the Markdown config screen.
+- For a start, **most [Markdown plugins](https://joplinapp.org/help/apps/markdown/#markdown-plugins) will not be compatible**. If you open a Markdown note that makes use of such plugin in the Rich Text editor, it is likely you will lose the plugin special formatting. The only supported plugins are the "fenced" plugins - those that wrap a section of text in triple backticks (for example, KaTeX, Mermaid, etc. are working). You can see a plugin's compatibility on the Markdown config screen.
 
 - Tables must have a header, because this is a requirement in Markdown. When you create a table, it will let you create it without a header, but under the hood it will add an empty one. And next time you open the note, this empty header will be present.
 
@@ -45,3 +45,11 @@ On desktop, the following patterns are replaced:
 Most replacements require pressing the <kbd>space</kbd> or <kbd>enter</kbd> key after the closing formatting character. For example, typing `==test==` does not highlight "test", but pressing a space after the last `=` does.
 
 These replacements can be disabled in settings &gt; note, using the "Auto-format Markdown" setting.
+
+## Rich text editor on mobile
+
+The rich text editor is also available on mobile devices. You can select it when editing a note by clicking on the kebab menu and choosing "Edit as Rich Text".
+
+For a video tutorial on how to select and use the Rich Text editor on mobile devices, please click on the thumbnail:
+
+[![Watch the video](https://img.youtube.com/vi/eXH5Z0b28eM/hqdefault.jpg)](https://www.youtube.com/watch?v=eXH5Z0b28eM)

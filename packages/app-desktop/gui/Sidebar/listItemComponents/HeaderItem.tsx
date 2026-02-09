@@ -5,7 +5,7 @@ import { HeaderId, HeaderListItem } from '../types';
 import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
-import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
+import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -15,7 +15,7 @@ const menuUtils = new MenuUtils(CommandService.instance());
 interface Props {
 	anchorRef: ListItemRef;
 	item: HeaderListItem;
-	isSelected: boolean;
+	selectionState: ItemSelectionState;
 	onDrop: React.DragEventHandler|null;
 	index: number;
 	itemCount: number;
@@ -47,7 +47,7 @@ const HeaderItem: React.FC<Props> = props => {
 	return (
 		<ListItemWrapper
 			containerRef={props.anchorRef}
-			selected={props.isSelected}
+			selectionState={props.selectionState}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
 			expanded={props.item.expanded}

@@ -26,6 +26,7 @@ export interface DialogState {
 		description?: string;
 		label?: string;
 		value?: string;
+		autocomplete?: unknown;
 		onClose?: (answer: unknown, buttonType: unknown)=> void;
 	}|null;
 }

@@ -280,6 +280,18 @@ class Application extends BaseApplication {
 			Setting.setValue('plugins.states', pluginSettings);
 		}
 
+		// As of Joplin 3.5.7, the ABC rendering is part of the app so we automatically disable the plugin
+		if (pluginSettings['org.joplinapp.plugins.AbcSheetMusic']) {
+			pluginSettings = {
+				...pluginSettings,
+				['org.joplinapp.plugins.AbcSheetMusic']: {
+					enabled: false,
+					deleted: false,
+					hasBeenUpdated: false,
+				},
+			};
+		}
+
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);

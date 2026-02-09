@@ -12,3 +12,5 @@ In the **terminal application**, you will need to set the `sync.target` config v
 	:config sync.target 5
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
+
+After completing the setup, open the Nextcloud desktop client and disable syncing for the Joplin data directory, since synchronisation should be handled exclusively by Joplin.

@@ -9,8 +9,11 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('metrics');
 
-let requestsPerSecond_: Record<number, number> = {};
-let activeRequests_: Record<string, boolean> = {};
+type TimestampToRequestCount = Map<number, number>;
+// Items must be added in increasing order of timestamp.
+const requestsPerSecond_: TimestampToRequestCount = new Map();
+
+const activeRequests_ = new Set<string>();
 
 const requestsPerMinute = () => {
 	const nowSeconds = Math.floor(Date.now() / 1000);
@@ -18,8 +21,8 @@ const requestsPerMinute = () => {
 
 	let total = 0;
 	for (let i = startSeconds; i < nowSeconds; i++) {
-		if (!(i in requestsPerSecond_)) continue;
-		total += requestsPerSecond_[i];
+		if (!requestsPerSecond_.has(i)) continue;
+		total += requestsPerSecond_.get(i);
 	}
 
 	return total;
@@ -27,22 +30,27 @@ const requestsPerMinute = () => {
 
 const deleteRequestInfoOlderThan = (ttl: number) => {
 	const cutOffTime = Math.round((Date.now() - ttl) / 1000);
-	for (const key of (Object.keys(requestsPerSecond_))) {
-		if (Number(key) < cutOffTime) delete requestsPerSecond_[Number(key)];
+	for (const key of requestsPerSecond_.keys()) {
+		if (key >= cutOffTime) {
+			// Map iteration happens in insertion order. All subsequent items will be after the cutOffTime.
+			// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.
+			break;
+		}
+		requestsPerSecond_.delete(key);
 	}
 };
 
 const countRequest = () => {
 	const t = Math.floor(Date.now() / 1000);
-	if (!requestsPerSecond_[t]) requestsPerSecond_[t] = 0;
-	requestsPerSecond_[t]++;
+	if (!requestsPerSecond_.has(t)) requestsPerSecond_.set(t, 0);
+	requestsPerSecond_.set(t, (requestsPerSecond_.get(t) ?? 0) + 1);
 
 	deleteRequestInfoOlderThan(10 * Minute);
 };
 
 export const clearMetrics = () => {
-	requestsPerSecond_ = {};
-	activeRequests_ = {};
+	requestsPerSecond_.clear();
+	activeRequests_.clear();
 };
 
 export const heartbeatMessage = async () => {
@@ -75,7 +83,7 @@ export const heartbeatMessage = async () => {
 	line.push(`Cpu: ${info.cpu}%`);
 	line.push(`Mem: ${info.memory.usedMemMb} / ${info.memory.totalMemMb} MB (${Math.round((info.memory.usedMemMb / info.memory.totalMemMb) * 100)}%)`);
 	line.push(`Req: ${requestsPerMinute()} / min`);
-	line.push(`Active req: ${Object.keys(activeRequests_).length}`);
+	line.push(`Active req: ${activeRequests_.size}`);
 
 	return line.join('; ');
 };
@@ -86,9 +94,9 @@ export const logHeartbeat = async () => {
 
 export const onRequestStart = (requestId: string) => {
 	countRequest();
-	activeRequests_[requestId] = true;
+	activeRequests_.add(requestId);
 };
 
 export const onRequestComplete = (requestId: string) => {
-	delete activeRequests_[requestId];
+	activeRequests_.delete(requestId);
 };

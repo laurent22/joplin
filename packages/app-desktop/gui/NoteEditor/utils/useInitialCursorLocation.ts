@@ -1,17 +1,17 @@
-import { useMemo } from 'react';
-import { EditorCursorLocations, NoteIdToEditorCursorLocations } from '../../../app.reducer';
+import { useContext, useMemo } from 'react';
+import { WindowIdContext } from '../../NewWindowOrIFrame';
+import NotePositionService from '@joplin/lib/services/NotePositionService';
 
 interface Props {
-	lastEditorCursorLocations: NoteIdToEditorCursorLocations;
 	noteId: string;
 }
 
-const useInitialCursorLocation = ({ noteId, lastEditorCursorLocations }: Props) => {
-	const lastCursorLocation = lastEditorCursorLocations[noteId];
+const useInitialCursorLocation = ({ noteId }: Props) => {
+	const windowId = useContext(WindowIdContext);
 
-	return useMemo((): EditorCursorLocations => {
-		return lastCursorLocation ?? { };
-	}, [lastCursorLocation]);
+	return useMemo(() => {
+		return NotePositionService.instance().getCursorPosition(noteId, windowId);
+	}, [noteId, windowId]);
 };
 
 export default useInitialCursorLocation;

@@ -47,7 +47,7 @@ interface Options {
 // Note that this function keeps track of what's been added so as not to
 // add the same CSS files multiple times.
 const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Options) => {
-	if (!assets) return;
+	if (!assets) return 0;
 
 	const pluginAssetsContainer = options.container;
 
@@ -78,6 +78,7 @@ const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Optio
 
 	const processedAssetIds = [];
 
+	let addedCount = 0;
 	for (let i = 0; i < assets.length; i++) {
 		const asset = assets[i];
 
@@ -124,6 +125,7 @@ const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Optio
 			pluginAssetsContainer.appendChild(element);
 		}
 
+		addedCount++;
 		pluginAssetsAdded_[assetId] = {
 			element,
 		};
@@ -150,12 +152,14 @@ const addPluginAssets = async (assets: RenderResultPluginAsset[], options: Optio
 				} catch (error) {
 					// We don't throw an exception but we log it since
 					// it shouldn't happen
-					console.warn('Tried to remove an asset but got an error', error);
+					console.warn('Tried to remove an asset but got an error. On asset:', asset, error);
 				}
 				pluginAssetsAdded_[assetId] = null;
 			}
 		}
 	}
+
+	return addedCount > 0;
 };
 
 export default addPluginAssets;

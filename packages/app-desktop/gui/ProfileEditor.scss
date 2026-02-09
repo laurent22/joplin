@@ -1,0 +1,47 @@
+.profile-management {
+	font-family: var(--joplin-font-family);
+	display: flex;
+	flex-direction: column;
+
+	> .tableContainer {
+		overflow-y: scroll;
+		padding: 20px;
+		box-sizing: border-box;
+		flex: 1 1 0%;
+		color: var(--joplin-color);
+
+		> .notification {
+			margin-bottom: 10px;
+		}
+	}
+}
+
+.profile-table {
+	width: 100%;
+
+	> thead > tr > .headerCell {
+		white-space: nowrap;
+		font-weight: bold;
+		width: 1px;
+	}
+
+	> tbody > tr {
+		> .nameCell {
+			text-overflow: ellipsis;
+			overflow-x: hidden;
+			max-width: 1px;
+			width: 100%;
+			white-space: nowrap;
+		}
+		
+		> .dataCell {
+			white-space: nowrap;
+			width: 1px;
+			color: var(--joplin-color-faded);
+		}
+		
+		> .profileActions > button {
+			margin-right: 10px;
+		}
+	}
+}

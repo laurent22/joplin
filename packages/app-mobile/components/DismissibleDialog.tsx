@@ -67,6 +67,10 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogVaria
 				alignSelf: 'center',
 			},
 			heading: {
+				// Without flexShrink/flexGrow, the heading can push the close button
+				// outside of the dialog.
+				flexShrink: 1,
+				flexGrow: 1,
 			},
 			modalBackground: {
 				justifyContent: 'center',

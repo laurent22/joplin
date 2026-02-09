@@ -1,13 +1,28 @@
 import { readFile } from 'fs-extra';
 
+export enum BuiltInPluginType {
+	// Plugins that need to be built when building Joplin (e.g. if the plugin
+	// needs to be patched)
+	Built,
+	// Plugins that can be fetched directly from NPM. Must also be marked as a
+	// dev dependency.
+	FromNpm,
+}
+
 export interface RepositoryData {
+	type: BuiltInPluginType.Built;
 	cloneUrl: string;
 	branch: string;
 	commit: string;
 }
 
+export interface NpmReference {
+	type: BuiltInPluginType.FromNpm;
+	package: string;
+}
+
 export interface AllRepositoryData {
-	[pluginId: string]: RepositoryData;
+	[pluginId: string]: RepositoryData|NpmReference;
 }
 
 const readRepositoryJson = async (repositoryDataFilepath: string): Promise<AllRepositoryData> => {
@@ -26,9 +41,17 @@ const readRepositoryJson = async (repositoryDataFilepath: string): Promise<AllRe
 			}
 		};
 
-		assertPropertyIsString('cloneUrl');
-		assertPropertyIsString('branch');
-		assertPropertyIsString('commit');
+		let type;
+		if ('branch' in parsedJson[pluginId]) {
+			assertPropertyIsString('cloneUrl');
+			assertPropertyIsString('branch');
+			assertPropertyIsString('commit');
+			type = BuiltInPluginType.Built;
+		} else {
+			assertPropertyIsString('package');
+			type = BuiltInPluginType.FromNpm;
+		}
+		parsedJson[pluginId] = { ...parsedJson[pluginId], type };
 	}
 
 	return parsedJson;

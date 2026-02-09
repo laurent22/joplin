@@ -82,11 +82,13 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 				if ('folderId' in action) {
 					newState.selectedFolderId = action.folderId;
+					newState.selectedFolderIds = [action.folderId];
 					newState.notesParentType = 'Folder';
 				}
 
 				if ('tagId' in action) {
 					newState.selectedTagId = action.tagId;
+					newState.selectedTagIds = [action.tagId];
 					newState.notesParentType = 'Tag';
 				}
 

@@ -100,7 +100,7 @@ impl<'a> Renderer<'a> {
     fn table_cell_level(&self, elements: &[OutlineElement]) -> u8 {
         let needs_nesting = elements
             .iter()
-            .any(|element| self.is_list(element) || self.has_note_tag(element));
+            .any(|element| self.is_list(element));
 
         if needs_nesting { 2 } else { 1 }
     }

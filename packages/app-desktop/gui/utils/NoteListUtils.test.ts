@@ -38,7 +38,7 @@ describe('NoteListUtils', () => {
 		const mockStore = {
 			getState: () => {
 				return {
-					...createAppDefaultWindowState(null),
+					...createAppDefaultWindowState(),
 					settings: {},
 				};
 			},

@@ -56,9 +56,16 @@ export interface QueryContext {
 	noSuchTableErrorLoggingDisabled?: boolean;
 }
 
+// See https://knexjs.org/guide/#pool
+interface KnexPoolConfig {
+	min: number;
+	max: number;
+}
+
 export interface KnexDatabaseConfig {
 	client: string;
 	connection: DbConfigConnection;
+	pool: KnexPoolConfig;
 	useNullAsDefault?: boolean;
 	asyncStackTraces?: boolean;
 }
@@ -79,6 +86,7 @@ export interface Migration {
 
 export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	const connection: DbConfigConnection = {};
+	let pool: KnexPoolConfig|undefined = undefined;
 
 	if (dbConfig.client === 'sqlite3') {
 		connection.filename = dbConfig.name;
@@ -92,12 +100,19 @@ export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 			connection.user = dbConfig.user;
 			connection.password = dbConfig.password;
 		}
+
+		// Only change the pooling setting for non-sqlite3 connections:
+		// Knex has a different default configuration for SQLite3 that seems to be
+		// a workaround for a connection-related issue.
+		// See https://knexjs.org/guide/#pool
+		pool = { min: 0, max: dbConfig.maxConnections };
 	}
 
 	return {
 		client: dbConfig.client,
 		useNullAsDefault: dbConfig.client === 'sqlite3',
 		asyncStackTraces: dbConfig.asyncStackTraces,
+		pool,
 		connection,
 	};
 }
@@ -141,6 +156,12 @@ export const isPostgres = (db: DbConnection) => {
 
 export const isSqlite = (db: DbConnection) => {
 	return clientType(db) === DatabaseConfigClient.SQLite;
+};
+
+export const getEmptyIp = (db: DbConnection): string | null => {
+	// PostgreSQL uses inet type which doesn't accept empty strings, only null or valid IPs
+	// SQLite uses string type with NOT NULL constraint, so we use empty strings
+	return isPostgres(db) ? null : '';
 };
 
 export const setCollateC = async (db: DbConnection, tableName: string, columnName: string): Promise<void> => {

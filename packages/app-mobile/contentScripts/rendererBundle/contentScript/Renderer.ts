@@ -1,5 +1,5 @@
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
-import type { MarkupToHtmlConverter, RenderOptions, FsDriver as RendererFsDriver, ResourceInfos } from '@joplin/renderer/types';
+import type { MarkupToHtmlConverter, RenderOptions, RenderOptionsGlobalSettings, FsDriver as RendererFsDriver, ResourceInfos } from '@joplin/renderer/types';
 import makeResourceModel from './utils/makeResourceModel';
 import addPluginAssets from './utils/addPluginAssets';
 import { ExtraContentScriptSource, ForwardedJoplinSettings, MarkupRecord } from '../types';
@@ -20,7 +20,7 @@ export interface RenderSettings {
 	resources: ResourceInfos;
 	codeTheme: string;
 	noteHash: string;
-	initialScroll: number;
+	initialScrollPercent: number;
 	// If [null], plugin assets are not added to the document
 	pluginAssetContainerSelector: string|null;
 	removeUnusedPluginAssets: boolean;
@@ -32,6 +32,7 @@ export interface RenderSettings {
 	destroyEditPopupSyntax: string;
 
 	pluginSettings: Record<string, unknown>;
+	globalSettings?: RenderOptionsGlobalSettings;
 	requestPluginSetting: (pluginId: string, settingKey: string)=> void;
 	readAssetBlob: (assetPath: string)=> Promise<Blob>;
 }
@@ -135,6 +136,7 @@ export default class Renderer {
 			splitted: settings.splitted,
 			mapsToLine: settings.mapsToLine,
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
+			globalSettings: settings.globalSettings,
 		};
 
 		const pluginSettingsCacheKey = JSON.stringify(settings.pluginSettings);
@@ -153,7 +155,7 @@ export default class Renderer {
 		// Adding plugin assets can be slow -- run it asynchronously.
 		if (settings.pluginAssetContainerSelector) {
 			void (async () => {
-				await addPluginAssets(result.pluginAssets, {
+				const addedCount = await addPluginAssets(result.pluginAssets, {
 					inlineAssets: this.setupOptions_.useTransferredFiles,
 					readAssetBlob: settings.readAssetBlob,
 					container: document.querySelector(settings.pluginAssetContainerSelector),
@@ -161,7 +163,12 @@ export default class Renderer {
 				});
 
 				// Some plugins require this event to be dispatched just after being added.
-				document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+				// Avoid dispatching unless the plugins actually changed to avoid unnecessary
+				// rerenders in the background (which can cause content to flicker in the Rich
+				// Text Editor).
+				if (addedCount) {
+					document.dispatchEvent(new Event('joplin-noteDidUpdate'));
+				}
 			})();
 		}
 

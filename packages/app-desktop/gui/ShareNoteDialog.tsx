@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import DialogButtonRow from './DialogButtonRow';
-import { themeStyle, buildStyle } from '@joplin/lib/theme';
 import Dialog from './Dialog';
 import DialogTitle from './DialogTitle';
 import ShareService from '@joplin/lib/services/share/ShareService';
@@ -29,47 +28,6 @@ interface Props {
 	syncTargetId: number;
 }
 
-function styles_(props: Props) {
-	return buildStyle('ShareNoteDialog', props.themeId, theme => {
-		return {
-			root: {
-				minWidth: 500,
-			},
-			noteList: {
-				marginBottom: 10,
-			},
-			note: {
-				flex: 1,
-				flexDirection: 'row',
-				display: 'flex',
-				alignItems: 'center',
-				border: '1px solid',
-				borderColor: theme.dividerColor,
-				padding: '0.5em',
-				marginBottom: 5,
-			},
-			noteTitle: {
-				...theme.textStyle,
-				flex: 1,
-				display: 'flex',
-				color: theme.color,
-			},
-			noteRemoveButton: {
-				background: 'none',
-				border: 'none',
-			},
-			noteRemoveButtonIcon: {
-				color: theme.color,
-				fontSize: '1.4em',
-			},
-			copyShareLinkButton: {
-				...theme.buttonStyle,
-				marginBottom: 10,
-			},
-		};
-	});
-}
-
 export function ShareNoteDialog(props: Props) {
 	const [notes, setNotes] = useState<NoteEntity[]>([]);
 	const [recursiveShare, setRecursiveShare] = useState<boolean>(false);
@@ -77,8 +35,6 @@ export function ShareNoteDialog(props: Props) {
 
 	const syncTargetInfo = useMemo(() => SyncTargetRegistry.infoById(props.syncTargetId), [props.syncTargetId]);
 	const noteCount = notes.length;
-	const theme = themeStyle(props.themeId);
-	const styles = styles_(props);
 
 	useEffect(() => {
 		void ShareService.instance().refreshShares();
@@ -117,8 +73,8 @@ export function ShareNoteDialog(props: Props) {
 		);
 
 		return (
-			<div key={note.id} style={styles.note}>
-				<span style={styles.noteTitle}>{note.title}</span>{unshareButton}
+			<div key={note.id} className='shared-note-list-item'>
+				<span className='title'>{note.title}</span>{unshareButton}
 			</div>
 		);
 	};
@@ -128,7 +84,7 @@ export function ShareNoteDialog(props: Props) {
 		for (const note of notes) {
 			noteComps.push(renderNote(note));
 		}
-		return <div style={styles.noteList}>{noteComps}</div>;
+		return <div className="notes">{noteComps}</div>;
 	};
 
 	const statusMessage = useShareStatusMessage({ sharesState, noteCount });
@@ -136,7 +92,7 @@ export function ShareNoteDialog(props: Props) {
 
 	function renderEncryptionWarningMessage() {
 		if (!encryptionWarning) return null;
-		return <div style={theme.textStyle}>{encryptionWarning}<hr/></div>;
+		return <div className="message">{encryptionWarning}<hr/></div>;
 	}
 
 	const onRecursiveShareChange = useCallback(() => {
@@ -155,12 +111,16 @@ export function ShareNoteDialog(props: Props) {
 
 	const renderContent = () => {
 		return (
-			<div style={styles.root} className="form">
+			<div className="form share-note-dialog">
 				<DialogTitle title={_('Publish Notes')}/>
 				{renderNoteList(notes)}
 				{renderRecursiveShareCheckbox()}
-				<button disabled={[SharingStatus.Creating, SharingStatus.Synchronizing].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
-				<div style={theme.textStyle}>{statusMessage}</div>
+				<button
+					disabled={[SharingStatus.Creating, SharingStatus.Synchronizing].indexOf(sharesState) >= 0}
+					className="share"
+					onClick={shareLinkButton_click}
+				>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
+				<div className="message">{statusMessage}</div>
 				{renderEncryptionWarningMessage()}
 				<DialogButtonRow
 					themeId={props.themeId}

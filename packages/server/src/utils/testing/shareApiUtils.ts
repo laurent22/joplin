@@ -4,7 +4,8 @@ import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
-import { checkContextError, createFolder, createItem, koaAppContext, models, makeFolderSerializedBody, makeNoteSerializedBody, updateFolder, createResource } from './testUtils';
+import { checkContextError, createFolder, createItem, koaAppContext, models, updateFolder, createResource } from './testUtils';
+import { makeFolderSerializedBody, makeNoteSerializedBody } from './serializedItems';
 
 interface ShareResult {
 	share: Share;
@@ -65,6 +66,14 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 		}
 
 		const result = await models().item().saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+
+		for (const [, resultItem] of Object.entries(result)) {
+			if (resultItem.error) {
+				resultItem.error.message = `Cannot create item tree: ${resultItem.error.message}`;
+				throw resultItem.error;
+			}
+		}
+
 		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}

@@ -79,6 +79,9 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 
 				return resourceFullPath(resources[id].item, resourceBaseUrl) + urlParameters;
 			},
+			globalSettings: {
+				'markdown.plugin.abc.options': Setting.value('markdown.plugin.abc.options'),
+			},
 			...options,
 		});
 

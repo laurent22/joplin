@@ -70,7 +70,6 @@ const PluginBox: React.FC<Props> = props => {
 			style={styles.cardContainer}
 			onPress={props.onShowPluginInfo ? onPress : null}
 			testID='plugin-card'
-			disabled={!props.isCompatible}
 		>
 			<Card.Content style={styles.content}>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
