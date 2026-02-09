@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@joplin/ai": ["../AI/src/AIAgent.ts"]
     }
   },
   "include": [
