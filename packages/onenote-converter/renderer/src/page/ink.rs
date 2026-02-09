@@ -19,7 +19,6 @@ pub(crate) struct InkBuilder {
     embedded: bool,
 }
 
-
 impl InkBuilder {
     const SVG_SCALING_FACTOR: f32 = 2540.0 / 96.0;
 
@@ -77,11 +76,7 @@ impl InkBuilder {
             top_px * Self::SVG_SCALING_FACTOR - y_min,
         );
         let scale = 1. / Self::SVG_SCALING_FACTOR;
-        let path = self.render_ink_path(
-            ink.ink_strokes(),
-            scale,
-            translate,
-        );
+        let path = self.render_ink_path(ink.ink_strokes(), scale, translate);
         self.parts.push(InkPart {
             content: path,
             size_px: (width_px, height_px),
@@ -101,9 +96,7 @@ impl InkBuilder {
             return "".into();
         }
 
-        let path = self.parts.iter().map(|part| {
-            &part.content
-        }).join("");
+        let path = self.parts.iter().map(|part| &part.content).join("");
 
         let (offset_x, offset_y, width, height) = {
             let mut min_x = f32::INFINITY;
@@ -129,13 +122,7 @@ impl InkBuilder {
         let mut attrs = AttributeSet::new();
         attrs.set(
             "viewBox",
-            format!(
-                "{} {} {} {}",
-                offset_x,
-                offset_y,
-                width,
-                height
-            ),
+            format!("{} {} {} {}", offset_x, offset_y, width, height),
         );
 
         let mut styles = StyleSet::new();
@@ -167,7 +154,7 @@ impl InkBuilder {
 
     fn render_ink_path(&self, strokes: &[InkStroke], scale: f32, translate: Vec2) -> String {
         if strokes.is_empty() {
-            return "".into()
+            return "".into();
         }
 
         let mut attrs = AttributeSet::new();
@@ -201,10 +188,7 @@ impl InkBuilder {
         };
         attrs.set("stroke", color);
 
-        attrs.set(
-            "stroke-width",
-            (stroke.width() * scale).round().to_string()
-        );
+        attrs.set("stroke-width", (stroke.width() * scale).round().to_string());
 
         let pen_type = stroke.pen_tip().unwrap_or_default();
         attrs.set(
@@ -274,4 +258,3 @@ fn get_boundary<F: Fn(&InkPoint) -> f32>(strokes: &[InkStroke], coord: F) -> (f3
 fn round_svg_value(x: f32) -> f32 {
     (x * 100.).round() / 100.
 }
-

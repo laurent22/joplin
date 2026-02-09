@@ -9,7 +9,7 @@ impl<'a> Renderer<'a> {
         let mut result = vec![];
         let mut ink_builder = InkBuilder::new(false);
 
-        for content in contents {            
+        for content in contents {
             if !matches!(content, Content::Ink(_)) {
                 result.push(ink_builder.finish());
             }
@@ -17,19 +17,19 @@ impl<'a> Renderer<'a> {
             match content {
                 Content::RichText(text) => {
                     result.push(self.render_rich_text(text)?);
-                },
+                }
                 Content::Image(image) => {
                     result.push(self.render_image(image)?);
-                },
+                }
                 Content::EmbeddedFile(file) => {
                     result.push(self.render_embedded_file(file)?);
-                },
+                }
                 Content::Table(table) => {
                     result.push(self.render_table(table)?);
-                },
+                }
                 Content::Ink(ink) => {
                     ink_builder.push(ink, None);
-                },
+                }
                 Content::Unknown => {
                     warn!("Page with unknown content");
                 }

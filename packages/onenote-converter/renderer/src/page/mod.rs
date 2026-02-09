@@ -1,5 +1,5 @@
-use crate::{page::ink::InkBuilder, section};
 use crate::utils::StyleSet;
+use crate::{page::ink::InkBuilder, section};
 use color_eyre::Result;
 use parser::page::{Page, PageContent};
 use std::collections::{HashMap, HashSet};
@@ -70,7 +70,7 @@ impl<'a> Renderer<'a> {
             &page.link_target_id(),
             &title_text,
             &content,
-            &self.global_styles
+            &self.global_styles,
         )
     }
 
@@ -93,7 +93,7 @@ impl<'a> Renderer<'a> {
         let mut result = vec![];
         let mut ink_builder = InkBuilder::new(false);
 
-        for content in contents {            
+        for content in contents {
             if !matches!(content, PageContent::Ink(_)) {
                 result.push(ink_builder.finish());
             }
@@ -101,17 +101,17 @@ impl<'a> Renderer<'a> {
             match content {
                 PageContent::Outline(outline) => {
                     result.push(self.render_outline(outline)?);
-                },
+                }
                 PageContent::Image(image) => {
                     result.push(self.render_image(image)?);
-                },
+                }
                 PageContent::EmbeddedFile(file) => {
                     result.push(self.render_embedded_file(file)?);
-                },
+                }
                 PageContent::Ink(ink) => {
                     ink_builder.push(ink, None);
-                },
-                PageContent::Unknown => {},
+                }
+                PageContent::Unknown => {}
             }
         }
         result.push(ink_builder.finish());
