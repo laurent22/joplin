@@ -26,6 +26,10 @@ const getOneNoteConverter = (): NativeOneNoteConverter => {
 	try {
 		return shim.requireDynamic('@joplin/onenote-converter').oneNoteConverter;
 	} catch (error) {
+		// Log the original error for debugging:
+		logger.warn('Failed to load the onenote importer:', error);
+
+		// Throw a more user and maintainer-friendly error:
 		throw new Error('Failed to load @joplin/onenote-converter. Please check that the onenote-converter package was built correctly and bundled with this version of Joplin.\n\nFor build instructions, see https://github.com/laurent22/joplin/blob/dev/packages/onenote-converter/README.md#building.');
 	}
 };
