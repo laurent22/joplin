@@ -348,6 +348,10 @@ const handlePluginProtocol = (logger: LoggerSlice) => {
 
 	const handler: CustomPluginProtocolHandler = {
 		// Hosts a content script with the given `js` using the plugin protocol.
+		// This can be used to allow loading trusted plugin JavaScript without relying on eval,
+		// inline scripts, or other techniques that would violate the application's
+		// Content-Security-Policy.
+		//
 		// Caution: This assumes that `js` is provided by a trusted source. Be careful
 		// when building/providing `js` to this function.
 		registerContentScript: (id: string, js: string) => {
