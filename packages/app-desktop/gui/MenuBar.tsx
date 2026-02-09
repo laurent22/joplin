@@ -615,6 +615,18 @@ function useMenu(props: Props) {
 
 				...(shim.isMac() ? [] : profilesAndAppInstancesItems),
 
+				shim.isMac() ? noItem : {
+					type: 'separator',
+				},
+
+				shim.isMac() ? noItem : {
+					label: _('Close Window'),
+					accelerator: keymapService.getAccelerator('closeWindow'),
+					click: () => {
+						bridge().activeWindow()?.close();
+					},
+				},
+
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
