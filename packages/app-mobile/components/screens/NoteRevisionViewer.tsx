@@ -140,7 +140,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const [initialScroll, setInitialScroll] = useState(0);
 	const [hasRevisions, setHasRevisions] = useState(false);
 	const [multiline, setMultiline] = useState(false);
-	const [showMultilineToggle, setShowMultilineToggle] = useState(null);
+	const [showMultilineToggle, setShowMultilineToggle] = useState<boolean | null>(null);
 	const [titleContainerWidth, setTitleContainerWidth] = useState(0);
 
 	const options = useMemo(() => {
