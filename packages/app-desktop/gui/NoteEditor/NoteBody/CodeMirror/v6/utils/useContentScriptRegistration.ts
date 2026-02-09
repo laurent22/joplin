@@ -29,7 +29,11 @@ const useContentScriptRegistration = ({ editor, pluginStates }: Props) => {
 			const codeMirrorContentScripts = pluginState.contentScripts[ContentScriptType.CodeMirrorPlugin] ?? [];
 
 			for (const contentScript of codeMirrorContentScripts) {
-				loadedContentScriptRefs.current.get(contentScript.id)?.revoke();
+				// Ensure that the key is unique to the (pluginId, editorId, contentScript) set.
+				// Include the plugin ID to prevent ID collisions if multiple plugins register
+				// content scripts with the same ID:
+				const scriptId = `${pluginId}::${contentScript.id}`;
+				loadedContentScriptRefs.current.get(scriptId)?.revoke();
 
 				contentScripts.push({
 					pluginId,
@@ -39,12 +43,9 @@ const useContentScriptRegistration = ({ editor, pluginStates }: Props) => {
 							scriptPath: contentScript.path,
 							context,
 
-							// Ensure that the key is unique to the (pluginId, editorId, contentScript) set.
-							// Include the plugin ID to prevent ID collisions if multiple plugins register
-							// content scripts with the same ID:
-							key: `${editorId};${encodeURIComponent(pluginId)};${contentScript.id}`,
+							key: `${editorId}::${scriptId}`,
 						});
-						loadedContentScriptRefs.current.set(contentScript.id, handle);
+						loadedContentScriptRefs.current.set(scriptId, handle);
 
 						return { uri: handle.uri };
 					},
