@@ -115,13 +115,32 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
         throw new Error('APIエラーが発生しました');
       }
 
-      const data = await response.json();
+      // ストリーミングレスポンスを処理
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedText = '';
 
+      // ローディングを解除
       setChatMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === botId ? { ...msg, text: data.response, loading: false } : msg
-        )
+        prev.map((msg) => (msg.id === botId ? { ...msg, loading: false } : msg))
       );
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) break;
+
+          // デコードして蓄積
+          const chunk = decoder.decode(value, { stream: true });
+          accumulatedText += chunk;
+
+          // メッセージを更新
+          setChatMessages((prev) =>
+            prev.map((msg) => (msg.id === botId ? { ...msg, text: accumulatedText } : msg))
+          );
+        }
+      }
     } catch (error) {
       console.error('Chat API error:', error);
       setChatMessages((prev) =>
