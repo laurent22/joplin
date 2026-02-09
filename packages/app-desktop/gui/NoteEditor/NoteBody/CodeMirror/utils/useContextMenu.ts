@@ -1,5 +1,5 @@
 import { ContextMenuParams, Event } from 'electron';
-import { useEffect, RefObject } from 'react';
+import { useEffect, RefObject, useContext } from 'react';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
@@ -15,6 +15,7 @@ import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorCo
 import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
+import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 
 // Extract resource ID from image markup at a given cursor position within a line.
 // Returns the resource ID if the cursor is within an image markup, null otherwise.
@@ -77,6 +78,7 @@ interface ContextMenuProps {
 
 const useContextMenu = (props: ContextMenuProps) => {
 	const editorRef = props.editorRef;
+	const windowId = useContext(WindowIdContext);
 
 	// The below code adds support for spellchecking when it is enabled
 	// It might be buggy, refer to the below issue
@@ -297,7 +299,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		const targetWindow = bridge().activeWindow();
+		const targetWindow = bridge().windowById(windowId);
 		targetWindow.webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
@@ -308,6 +310,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 	}, [
 		props.plugins, props.dispatch, props.editorClassName, editorRef, props.containerRef,
 		props.editorCutText, props.editorCopyText, props.editorPaste,
+		windowId,
 	]);
 };
 

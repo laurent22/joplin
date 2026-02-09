@@ -38,7 +38,7 @@
     "node-fetch": "2.6.7",
     "relative": "3.0.2",
     "request": "2.88.2",
-    "sharp": "0.34.4",
+    "sharp": "0.34.5",
     "source-map-support": "0.5.21",
     "uri-template": "2.0.0",
     "yargs": "17.7.2"
@@ -63,7 +63,7 @@
     "rss": "1.2.2",
     "sass": "1.93.3",
     "sqlite3": "5.1.6",
-    "style-to-js": "1.1.18",
+    "style-to-js": "1.1.19",
     "ts-node": "10.9.2",
     "typescript": "5.8.3"
   },

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": [
+    "whispervoicetyping"
+  ],
+  "ios": {
+    "iosModuleName": "WhisperVoiceTyping"
+  },
+  "android": {
+    "androidNamespace": [
+      "whispervoicetyping"
+    ],
+    "androidCxxLibName": "WhisperVoiceTyping"
+  },
+  "autolinking": {
+    "WhisperVoiceTyping": {
+      "cpp": "HybridWhisperVoiceTyping"
+    },
+    "AudioRecorder": {
+      "kotlin": "HybridAudioRecorder"
+    }
+  },
+  "ignorePaths": [
+    "**/node_modules"
+  ]
+}

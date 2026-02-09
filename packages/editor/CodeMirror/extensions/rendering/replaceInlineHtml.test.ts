@@ -1,6 +1,7 @@
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../testing/createTestEditor';
 import replaceInlineHtml from './replaceInlineHtml';
+import waitFor from '@joplin/lib/testing/waitFor';
 
 const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['HTMLTag']) => {
 	const editor = await createTestEditor(
@@ -27,6 +28,9 @@ describe('replaceInlineHtml', () => {
 		// Add additional newlines: Ensure that the cursor isn't initially on the same line as the content to be rendered:
 		const editor = await createEditor(`\n\n${markdown}\n\n`, initialSyntaxTags);
 
-		expect(editor.contentDOM.querySelector(expectedTagsQuery)).toBeTruthy();
+		// Retry on failure to handle the case where the syntax tree is slow:
+		await waitFor(() => {
+			expect(editor.contentDOM.querySelector(expectedTagsQuery)).toBeTruthy();
+		});
 	});
 });

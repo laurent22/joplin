@@ -1,5 +1,25 @@
 # Joplin iOS Changelog
 
+## [ios-v13.6.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.1) - 2026-02-04T14:45:26Z
+
+- New: Add more error information when the profile is corrupted (f075b56)
+- New: Add support for FrontMatter block rendering in notes (#14256)
+- New: Add support for external embeds, eg. YouTube videos (#14012)
+- Improved: Editor: Inline rendering: Render inline HTML (colorized text, superscript, subscript, strikethrough) (#14133 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve Fountain notes exported as PDF (#14120) (#14106)
+- Improved: Markdown Editor: Make code block highlighting closer to the viewer (#14168) (#14158 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Markdown: Allow specifying the start/end of audio, videos, and PDFs (#14257) (#9745 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Sync: Make resource processing in read-only shares more reliable (#14204 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @react-native-community/datetimepicker (v8.4.7), @rollup/plugin-commonjs (v28.0.9), @rollup/plugin-node-resolve (v16.0.3), @rollup/plugin-replace (v6.0.3), babel-plugin-react-native-web (v0.21.2), dayjs (v1.11.19), esbuild (v0.25.12), react-native-device-info (v14.1.1), react-native-localize (v3.5.4), react-native-safe-area-context (v5.6.2), react-native-web (v0.21.2), react-refresh (v0.18.0), sass (v1.93.3), style-to-js (v1.1.18), turndown (v7.2.2)
+- Improved: Upgrade to React Native 0.81 (#14232 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Align tag search-input-clear behavior across input methods (#14042) (#13243 by [@Fardin96](https://github.com/Fardin96))
+- Fixed: Application crashes when profile database has been analyzed (#14144)
+- Fixed: Markdown editor: Fix error logged in "hide markdown" mode for certain markup (#14179 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown editor: Scroll jumps in notes with many inline images (#13955) (#13933 by [@bwat47](https://github.com/bwat47))
+- Fixed: Markdown editor: Upgrade most CodeMirror dependencies (#14186) (#14009 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Prevent the back button sometimes disappearing when switching between editors (#14164) (#14153 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Unlinked resource deletion: Fix resources attached only via reference links are auto-deleted (#14178 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.5.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.5.3) - 2026-01-10T10:09:33Z
 
 - Fixed: Fix icon rendering (#14071) (#14063 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

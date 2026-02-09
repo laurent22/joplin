@@ -83,6 +83,7 @@ export interface RandomFolderOptions {
 
 export interface RandomNoteOptions {
 	includeReadOnly: boolean;
+	filter?: (note: NoteData)=> boolean;
 }
 
 export interface ShareOptions {

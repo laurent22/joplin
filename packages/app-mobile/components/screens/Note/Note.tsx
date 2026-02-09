@@ -546,7 +546,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			marginTop: 0,
 			paddingLeft: 0,
 			color: theme.color,
-			backgroundColor: theme.backgroundColor,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)

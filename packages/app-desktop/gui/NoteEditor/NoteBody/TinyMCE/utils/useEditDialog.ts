@@ -51,6 +51,15 @@ function newBlockSource(language = '', content = '', previousSource: SourceInfo 
 		} else {
 			fence = '$$';
 		}
+	} else if (language === 'frontmatter') {
+		// Frontmatter uses --- delimiters instead of code fences
+		return {
+			openCharacters: '---\n',
+			closeCharacters: '\n---\n',
+			content: content,
+			node: null,
+			language: language,
+		};
 	}
 
 	const fenceLanguage = language === 'katex' ? '' : language;
