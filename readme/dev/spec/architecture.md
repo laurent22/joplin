@@ -46,7 +46,7 @@ A typical Joplin Server installation will use the following elements:
 
 - The [Joplin Server application](https://github.com/laurent22/joplin/blob/dev/packages/server/README.md). This is a Node.js application. It exposes a REST API that is used by the Joplin clients to upload or download notes, notebooks, and other Joplin objects.
 
-- [PostgreSQL](https://www.postgresql.org/): it is used to save the "item" metadata. An "item" can be a note, a notebook, a tag, etc. It is also used to save other informations, such as user accounts, access logs, etc.
+- [PostgreSQL](https://www.postgresql.org/): it is used to save the "item" metadata. An "item" can be a note, a notebook, a tag, etc. It is also used to save other information, such as user accounts, access logs, etc.
 
 - [AWS S3](https://aws.amazon.com/s3/): it is used to save the item content. In other words, the note body, the file attachments, etc.
 

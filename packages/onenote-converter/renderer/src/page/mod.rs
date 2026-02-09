@@ -1,5 +1,5 @@
-use crate::section;
 use crate::utils::StyleSet;
+use crate::{page::ink::InkBuilder, section};
 use color_eyre::Result;
 use parser::page::{Page, PageContent};
 use std::collections::{HashMap, HashSet};
@@ -52,7 +52,7 @@ impl<'a> Renderer<'a> {
                 format!("{}px", (title.offset_horizontal() * 48.0 + 48.0).round()),
             );
 
-            let mut title_field = format!("<div class=\"title\" style=\"{}\">", styles.to_string());
+            let mut title_field = format!("<div class=\"title\" style=\"{}\">", styles);
 
             for outline in title.contents() {
                 title_field.push_str(&self.render_outline(outline)?)
@@ -63,19 +63,14 @@ impl<'a> Renderer<'a> {
             content.push_str(&title_field);
         }
 
-        let page_content = page
-            .contents()
-            .iter()
-            .map(|content| self.render_page_content(content))
-            .collect::<Result<String>>()?;
-
+        let page_content = self.render_page_contents(page.contents())?;
         content.push_str(&page_content);
 
         crate::templates::page::render(
             &page.link_target_id(),
             &title_text,
             &content,
-            &self.global_styles
+            &self.global_styles,
         )
     }
 
@@ -94,13 +89,33 @@ impl<'a> Renderer<'a> {
         }
     }
 
-    fn render_page_content(&mut self, content: &PageContent) -> Result<String> {
-        match content {
-            PageContent::Outline(outline) => self.render_outline(outline),
-            PageContent::Image(image) => self.render_image(image),
-            PageContent::EmbeddedFile(file) => self.render_embedded_file(file),
-            PageContent::Ink(ink) => Ok(self.render_ink(ink, None, false)),
-            PageContent::Unknown => Ok(String::new()),
+    fn render_page_contents(&mut self, contents: &[PageContent]) -> Result<String> {
+        let mut result = vec![];
+        let mut ink_builder = InkBuilder::new(false);
+
+        for content in contents {
+            if !matches!(content, PageContent::Ink(_)) {
+                result.push(ink_builder.finish());
+            }
+
+            match content {
+                PageContent::Outline(outline) => {
+                    result.push(self.render_outline(outline)?);
+                }
+                PageContent::Image(image) => {
+                    result.push(self.render_image(image)?);
+                }
+                PageContent::EmbeddedFile(file) => {
+                    result.push(self.render_embedded_file(file)?);
+                }
+                PageContent::Ink(ink) => {
+                    ink_builder.push(ink, None);
+                }
+                PageContent::Unknown => {}
+            }
         }
+        result.push(ink_builder.finish());
+
+        Ok(result.join(""))
     }
 }
