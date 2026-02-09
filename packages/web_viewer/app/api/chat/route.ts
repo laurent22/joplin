@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ragSendMessage, AIHistory } from '@joplin/ai';
 import * as path from 'path';
+import { ViewerUtil } from '@/lib/viewerUtil';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +13,8 @@ export async function POST(request: NextRequest) {
     }
 
     // デフォルトのdbPathを設定（必要に応じて変更）
-    const vectorDbPath = dbPath || path.join(process.cwd(), '..', 'AI', 'faiss_index');
-    
+    const vectorDbPath = ViewerUtil.getVectorDbFilePath();
+
     // ストリーミングレスポンス
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
