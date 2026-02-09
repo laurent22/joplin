@@ -56,14 +56,14 @@ impl InkBuilder {
             .max(ink.ink_strokes()[0].height())
             .max(140.0);
 
-        let x_min = x_min as f32 - stroke_strength / 2.0;
-        let y_min = y_min as f32 - stroke_strength / 2.0;
+        let x_min = x_min - stroke_strength / 2.0;
+        let y_min = y_min - stroke_strength / 2.0;
 
-        let width = width as f32 + stroke_strength + Self::SVG_SCALING_FACTOR;
-        let height = height as f32 + stroke_strength + Self::SVG_SCALING_FACTOR;
+        let width = width + stroke_strength + Self::SVG_SCALING_FACTOR;
+        let height = height + stroke_strength + Self::SVG_SCALING_FACTOR;
 
-        let height_px = ((height as f32) / (Self::SVG_SCALING_FACTOR)).ceil();
-        let width_px = ((width as f32) / (Self::SVG_SCALING_FACTOR)).ceil();
+        let height_px = (height / (Self::SVG_SCALING_FACTOR)).ceil();
+        let width_px = (width / (Self::SVG_SCALING_FACTOR)).ceil();
 
         let display_y_min = display_bounding_box.map(|bb| bb.y()).unwrap_or_default();
         let display_x_min = display_bounding_box.map(|bb| bb.x()).unwrap_or_default();
@@ -143,12 +143,12 @@ impl InkBuilder {
 
             format!(
                 "<span style=\"{}\" class=\"ink-text\"><svg {}>{}</svg></span>",
-                span_styles.to_string(),
-                attrs.to_string(),
+                span_styles,
+                attrs,
                 path
             )
         } else {
-            format!("<svg {}>{}</svg>", attrs.to_string(), path)
+            format!("<svg {}>{}</svg>", attrs, path)
         }
     }
 
@@ -202,7 +202,7 @@ impl InkBuilder {
 
         attrs.set("fill", "none".to_string());
 
-        format!("<path {} />", attrs.to_string())
+        format!("<path {} />", attrs)
     }
 
     fn render_ink_path_points(&self, stroke: &InkStroke, scale: f32, translate: Vec2) -> String {

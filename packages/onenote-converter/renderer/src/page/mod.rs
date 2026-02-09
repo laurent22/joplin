@@ -52,7 +52,7 @@ impl<'a> Renderer<'a> {
                 format!("{}px", (title.offset_horizontal() * 48.0 + 48.0).round()),
             );
 
-            let mut title_field = format!("<div class=\"title\" style=\"{}\">", styles.to_string());
+            let mut title_field = format!("<div class=\"title\" style=\"{}\">", styles);
 
             for outline in title.contents() {
                 title_field.push_str(&self.render_outline(outline)?)
