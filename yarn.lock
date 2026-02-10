@@ -11036,7 +11036,6 @@ __metadata:
   resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
   dependencies:
     "@babel/core": "npm:7.16.0"
-    "@types/react-native": "npm:0.64.19"
     react: "npm:19.2.0"
     react-native: "npm:0.81.5"
     typescript: "npm:5.8.3"
@@ -16899,15 +16898,6 @@ __metadata:
   peerDependencies:
     "@types/react": ^18.0.0
   checksum: 10/317569219366d487a3103ba1e5e47154e95a002915fdcf73a44162c48fe49c3a57fcf7f57fc6979e70d447112681e6b13c6c3c1df289db8b544df4aab2d318f3
-  languageName: node
-  linkType: hard
-
-"@types/react-native@npm:0.64.19":
-  version: 0.64.19
-  resolution: "@types/react-native@npm:0.64.19"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 10/381f9a1704e6eb5f011d7790d0e94235e86d0902266117da8d43f579fec2d1ae5b688e50288a37332e24dd2825c9194153314afa1a2df48079e2be8a9886fba4
   languageName: node
   linkType: hard
 
