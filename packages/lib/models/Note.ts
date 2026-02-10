@@ -2,7 +2,6 @@ import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
 import type FolderClass from './Folder';
 import type ResourceClass from './Resource';
-import type RevisionClass from './Revision';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
 import shim from '../shim';
@@ -938,8 +937,7 @@ export default class Note extends BaseItem {
 				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
-				const Revision = this.getClass<typeof RevisionClass>('Revision');
-				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
+				await this.revisionService().deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {

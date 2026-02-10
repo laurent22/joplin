@@ -5,8 +5,6 @@ const DiffMatchPatch = require('diff-match-patch');
 import * as ArrayUtils from '../ArrayUtils';
 import JoplinError from '../JoplinError';
 import time from '../time';
-import ItemChange from './ItemChange';
-import RevisionService from '../services/RevisionService';
 const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();
@@ -385,13 +383,6 @@ export default class Revision extends BaseItem {
 		);
 
 		await this.batchDelete(revisions.map(item => item.id), options);
-
-		// Clear any cached content in the item_changes table and reset the state of the note in the revision service, to ensure that any new revisions created
-		// upon revision collection do not include contents which were present prior to triggering the deletion
-		for (const noteId of ids) {
-			await ItemChange.resetOldNoteContent(noteId);
-			RevisionService.instance().removeChangedSinceCollection(noteId);
-		}
 	}
 
 	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
