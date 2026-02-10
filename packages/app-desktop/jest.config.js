@@ -1,7 +1,10 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
+const baseConfig = require('../../jest.config.base.js');
+
 module.exports = {
+	...baseConfig,
 	// All imported modules in your tests should be mocked automatically
 	// automock: false,
 
@@ -128,7 +131,9 @@ module.exports = {
 	testEnvironment: 'jsdom',
 
 	// Options that will be passed to the testEnvironment
-	// testEnvironmentOptions: {},
+	testEnvironmentOptions: {
+		customExportConditions: ['node', 'require'],
+	},
 
 	// Adds a location field to test results
 	// testLocationInResults: false,

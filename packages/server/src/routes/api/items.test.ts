@@ -442,4 +442,5 @@ describe('api/items', () => {
 		// Should not have deleted the other item
 		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000003')).toBeTruthy();
 	});
+
 });

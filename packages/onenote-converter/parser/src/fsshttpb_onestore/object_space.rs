@@ -7,7 +7,7 @@ use crate::fsshttpb_onestore::revision_role::RevisionRole;
 use crate::onestore;
 use crate::shared::cell_id::CellId;
 use crate::shared::exguid::ExGuid;
-use parser_utils::errors::Result;
+use parser_utils::errors::{ErrorKind, Result};
 use std::collections::HashMap;
 
 pub(crate) type GroupData<'a> = HashMap<(ExGuid, u64), &'a ObjectGroupData>;
@@ -58,16 +58,31 @@ impl<'b> ObjectSpace {
         let context_id = cell_id.0;
         let object_space_id = cell_id.1;
 
-        let cell_manifest_id = ObjectSpace::find_cell_manifest_id(mapping.id, packaging)
-            .ok_or_else(|| parser_error!(MalformedOneStoreData, "cell manifest id not found"))?;
-        let revision_manifest_id = storage_index
-            .find_revision_mapping_id(cell_manifest_id)
-            .ok_or_else(|| {
-                parser_error!(
-                    MalformedOneStoreData,
-                    "No revision manifest id found. (Unable to find revision?)."
-                )
-            })?;
+        let cell_revision_id = packaging
+            .data_element_package
+            .find_cell_revision_id(mapping.id);
+
+        let revision_manifest_id = packaging
+            .data_element_package
+            .resolve_cell_revision_manifest_id(storage_index, mapping.id)
+            .or_else(|| storage_index.find_revision_mapping_by_serial(&mapping.serial));
+
+        if revision_manifest_id.is_none() && cell_revision_id.map(|id| id.is_nil()).unwrap_or(false)
+        {
+            return Ok((
+                cell_id,
+                ObjectSpace {
+                    id: object_space_id,
+                    context: context_id,
+                    roots: HashMap::new(),
+                    objects: HashMap::new(),
+                },
+            ));
+        }
+
+        let revision_manifest_id = revision_manifest_id.ok_or_else(|| {
+            ErrorKind::MalformedOneStoreData("no revision manifest id found".into())
+        })?;
 
         let mut objects = HashMap::new();
         let mut roots = HashMap::new();
@@ -97,16 +112,5 @@ impl<'b> ObjectSpace {
         };
 
         Ok((cell_id, space))
-    }
-
-    fn find_cell_manifest_id(
-        cell_manifest_id: ExGuid,
-        packaging: &OneStorePackaging,
-    ) -> Option<ExGuid> {
-        packaging
-            .data_element_package
-            .cell_manifests
-            .get(&cell_manifest_id)
-            .copied()
     }
 }

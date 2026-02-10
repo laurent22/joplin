@@ -198,12 +198,21 @@ else
 fi
 
 # Check if it's in the latest version
-if [[ -e "${INSTALL_DIR}/VERSION" ]] && [[ $(< "${INSTALL_DIR}/VERSION") == "${RELEASE_VERSION}" ]]; then
-  print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
-  ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
+if [[ -e "${INSTALL_DIR}/VERSION" ]]; then
+  CURRENT_VERSION=$(< "${INSTALL_DIR}/VERSION")
+  VERSION_COMPARISON=$(compareVersions "$CURRENT_VERSION" "$RELEASE_VERSION")
+
+  if [[ "$VERSION_COMPARISON" == "0" ]]; then
+    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
+    ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
+  elif [[ "$VERSION_COMPARISON" == "1" ]]; then
+    print "${COLOR_YELLOW}You have version ${CURRENT_VERSION} installed, which is newer than the latest published version ${RELEASE_VERSION}.${COLOR_RESET}"
+    print "${COLOR_YELLOW}Skipping installation to avoid downgrade.${COLOR_RESET}"
+  else
+    print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION} installed."
+  fi
 else
-  [[ -e "${INSTALL_DIR}/VERSION" ]] && CURRENT_VERSION=$(< "${INSTALL_DIR}/VERSION")
-  print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
+  print "The latest version is ${RELEASE_VERSION}, but you have no version installed."
 fi
 
 # Check if it's an update or a new install

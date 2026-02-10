@@ -4,6 +4,7 @@ use crate::one::property_set::{
 use crate::onestore::object_space::ObjectSpaceRef;
 use crate::shared::exguid::ExGuid;
 use parser_utils::errors::{ErrorKind, Result};
+use parser_utils::log_warn;
 
 /// An ink object.
 #[derive(Clone, Debug)]
@@ -203,9 +204,11 @@ pub(crate) fn parse_ink_data(
     scale_x: Option<f32>,
     scale_y: Option<f32>,
 ) -> Result<(Vec<InkStroke>, Option<InkBoundingBox>)> {
-    let ink_data_object = space
-        .get_object(ink_data_id)
-        .ok_or_else(|| ErrorKind::MalformedOneNoteData("ink data node is missing".into()))?;
+    let Some(ink_data_object) = space.get_object(ink_data_id) else {
+        log_warn!("Ink data object {ink_data_id:?} not found! Not importing the ink.");
+        return Ok((vec![], None));
+    };
+
     let ink_data = ink_data_node::parse(&ink_data_object)?;
 
     let strokes = ink_data

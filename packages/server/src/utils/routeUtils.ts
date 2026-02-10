@@ -6,6 +6,7 @@ import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
 import { csrfCheck } from './csrf';
 import { contextSessionId } from './requestUtils';
+import { shortToLong } from './uuid';
 import { stripOffQueryParameters } from './urlUtils';
 import { hasOwnProperty } from '@joplin/utils/object';
 
@@ -82,6 +83,12 @@ export function redirect(ctx: AppContext, url: string): Response {
 	ctx.redirect(url);
 	ctx.response.status = 302;
 	return new Response(ResponseType.KoaResponse, ctx.response);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export function internalRedirect(path: SubPath, ctx: AppContext, router: Router, urlSchema: string, ...args: any[]) {
+	const endPoint = router.findEndPoint(HttpMethod.GET, urlSchema);
+	return endPoint.handler(path, ctx, ...args);
 }
 
 export function filePathInfo(path: string): PathInfo {
@@ -200,6 +207,22 @@ function disabledAccountCheck(route: MatchedRoute, user: User) {
 	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
 }
 
+const needsConvertedId = (_path: SubPath): boolean => {
+	// Return true if the particular schema should use a converted ID
+	return false;
+};
+
+const convertPathId = (path: SubPath): SubPath => {
+	if (needsConvertedId(path)) {
+		return {
+			...path,
+			id: shortToLong(path.id),
+		};
+	}
+
+	return path;
+};
+
 interface ExecRequestResult {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	response: any;
@@ -234,7 +257,7 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 
 	return {
 		response: await endPoint.handler(match.subPath, ctx),
-		path: match.subPath,
+		path: convertPathId(match.subPath),
 	};
 }
 

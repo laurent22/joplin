@@ -15,6 +15,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
 import useWebViewSetup from '../../contentScripts/rendererBundle/useWebViewSetup';
+import { OnScrollCallback } from '../../contentScripts/rendererBundle/types';
 
 interface Props {
 	themeId: number;
@@ -25,12 +26,12 @@ interface Props {
 	highlightedKeywords: string[];
 	noteResources: Record<string, ResourceInfo>;
 	paddingBottom: number;
-	initialScroll: number|null;
+	initialScrollPercent: number|null;
 	noteHash: string;
 	onCheckboxChange?: HandleMessageCallback;
 	onRequestEditResource?: HandleMessageCallback;
 	onMarkForDownload?: OnMarkForDownloadCallback;
-	onScroll: (scrollTop: number)=> void;
+	onScroll: OnScrollCallback;
 	onLoadEnd?: ()=> void;
 	pluginStates: PluginStates;
 }
@@ -46,9 +47,7 @@ const onJoplinLinkClick = async (message: string) => {
 function NoteBodyViewer(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
-	const onScroll = useCallback(async (scrollTop: number) => {
-		props.onScroll(scrollTop);
-	}, [props.onScroll]);
+	const onScroll = props.onScroll;
 
 	const onResourceLongPress = useOnResourceLongPress(
 		{
@@ -82,7 +81,7 @@ function NoteBodyViewer(props: Props) {
 		highlightedKeywords: props.highlightedKeywords,
 		noteResources: props.noteResources,
 		noteHash: props.noteHash,
-		initialScroll: props.initialScroll,
+		initialScrollPercent: props.initialScrollPercent,
 
 		paddingBottom: props.paddingBottom,
 	});

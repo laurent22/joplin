@@ -17,19 +17,19 @@ describe('editorCommandDeclarations', () => {
 	test.each([
 		[
 			{},
-			true,
+			{ textBold: true },
 		],
 		[
 			{
 				markdownEditorPaneVisible: false,
 			},
-			false,
+			{ textBold: false },
 		],
 		[
 			{
 				noteIsReadOnly: true,
 			},
-			false,
+			{ textBold: false },
 		],
 		[
 			// In the Markdown editor, but only the viewer is visible
@@ -37,7 +37,7 @@ describe('editorCommandDeclarations', () => {
 				markdownEditorPaneVisible: false,
 				richTextEditorVisible: false,
 			},
-			false,
+			{ textBold: false },
 		],
 		[
 			// In the Markdown editor, and the viewer is visible
@@ -45,7 +45,7 @@ describe('editorCommandDeclarations', () => {
 				markdownEditorPaneVisible: true,
 				richTextEditorVisible: false,
 			},
-			true,
+			{ textBold: true },
 		],
 		[
 			// In the RT editor
@@ -53,7 +53,7 @@ describe('editorCommandDeclarations', () => {
 				markdownEditorPaneVisible: false,
 				richTextEditorVisible: true,
 			},
-			true,
+			{ textBold: true },
 		],
 		[
 			// In the Markdown editor, and the command palette is visible
@@ -63,14 +63,57 @@ describe('editorCommandDeclarations', () => {
 				gotoAnythingVisible: true,
 				modalDialogVisible: true,
 			},
-			true,
+			{ textBold: true },
 		],
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	])('should create the enabledCondition', (context: Record<string, any>, expected: boolean) => {
-		const condition = enabledCondition('textBold');
-		const wc = new WhenClause(condition);
-		const actual = wc.evaluate({ ...baseContext, ...context });
-		expect(actual).toBe(expected);
+		[
+			// In the Markdown editor, and the command palette is visible
+			{
+				markdownEditorPaneVisible: true,
+				richTextEditorVisible: false,
+				gotoAnythingVisible: true,
+				modalDialogVisible: true,
+			},
+			{ textBold: true },
+		],
+		[
+			// Rich Text Editor, HTML note
+			{
+				markdownEditorPaneVisible: false,
+				richTextEditorVisible: true,
+				noteIsMarkdown: false,
+			},
+			{
+				textCopy: true,
+				textPaste: true,
+				textSelectAll: true,
+			},
+		],
+		[
+			// Rich Text Editor, read-only note
+			{
+				markdownEditorPaneVisible: false,
+				richTextEditorVisible: true,
+				noteIsReadOnly: true,
+			},
+			{
+				textBold: false,
+				textPaste: false,
+
+				// TODO: textCopy should be enabled in read-only notes:
+				// textCopy: false,
+			},
+		],
+	])('should correctly determine whether command is enabled (case %#)', (context, expectedStates) => {
+		const actualStates = [];
+		for (const commandName of Object.keys(expectedStates)) {
+			const condition = enabledCondition(commandName);
+			const wc = new WhenClause(condition);
+			const actual = wc.evaluate({ ...baseContext, ...context });
+			actualStates.push([commandName, actual]);
+		}
+
+		const expectedStatesArray = Object.entries(expectedStates);
+		expect(actualStates).toEqual(expectedStatesArray);
 	});
 
 });

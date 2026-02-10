@@ -51,16 +51,19 @@ describe('ChangeModel', () => {
 		expect(allUncompressedChanges.length).toBe(8);
 
 		{
-			// When we get all the changes, we only get CREATE 2 and CREATE 3.
-			// We don't get CREATE 1 because item 1 has been deleted. And we
-			// also don't get any UPDATE event since they've been compressed
-			// down to the CREATE events.
+			// When we get all the changes, we get DELETE 1, CREATE 2, and CREATE 3:
+			// - We don't get CREATE 1 since CREATE 1 -> DELETE 1 was compressed to
+			//   DELETE 1.
+			// - We don't get any UPDATE event since they've been compressed
+			//   down to the CREATE events.
 			const changes = (await changeModel.delta(user.id)).items;
-			expect(changes.length).toBe(2);
-			expect(changes[0].item_id).toBe(item2.id);
-			expect(changes[0].type).toBe(ChangeType.Create);
-			expect(changes[1].item_id).toBe(item3.id);
+			expect(changes.length).toBe(3);
+			expect(changes[0].item_id).toBe(item1.id);
+			expect(changes[0].type).toBe(ChangeType.Delete);
+			expect(changes[1].item_id).toBe(item2.id);
 			expect(changes[1].type).toBe(ChangeType.Create);
+			expect(changes[2].item_id).toBe(item3.id);
+			expect(changes[2].type).toBe(ChangeType.Create);
 		}
 
 		{
@@ -355,12 +358,27 @@ describe('ChangeModel', () => {
 			],
 		},
 		{
-			label: 'should remove create -> delete',
+			label: 'should replace create -> delete with delete',
+			// Create -> Delete can't be filtered out without un-deleting items.
+			// This is because compressChanges is often called on an individual **page**
+			// of results. For example, if the first page of results is,
+			// - Create: Item 1
+			// - ... other changes not involving item 1...
+			//
+			// And the second page of results is,
+			// - Create: Item 1
+			// - Delete Item 1
+			//
+			// Then removing the Create -> Delete would result in Item 1 ultimately being
+			// created, rather than deleted, since there's still a "Create: Item 1" in the
+			// first page.
 			changes: [
 				{ type: ChangeType.Create },
 				{ type: ChangeType.Delete },
 			],
-			expected: [],
+			expected: [
+				{ type: ChangeType.Delete },
+			],
 		},
 		{
 			label: 'should replace update -> delete with delete',

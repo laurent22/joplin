@@ -42,12 +42,6 @@ const allPackageOverrides: LicenseOverride[] = [
 	// license field was not changed).
 	excludeDevelopment(/^fb-watchman/),
 	excludeDevelopment(/^bser/),
-	mitLicenseOverride(
-		'tkwidgets',
-		'https://github.com/laurent22/tkwidgets',
-		'2017-2018 Laurent Cozic',
-		/^tkwidgets[@]?.*$/,
-	),
 ];
 
 const licenseOverrides: LicenseOverrides = {
@@ -92,6 +86,12 @@ const licenseOverrides: LicenseOverrides = {
 	],
 	'app-cli': [
 		...allPackageOverrides,
+		mitLicenseOverride(
+			'tkwidgets',
+			'https://github.com/laurent22/tkwidgets',
+			'2017-2018 Laurent Cozic',
+			/^tkwidgets[@]?.*$/,
+		),
 	],
 };
 

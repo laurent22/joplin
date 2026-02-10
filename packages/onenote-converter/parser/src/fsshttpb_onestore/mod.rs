@@ -71,7 +71,8 @@ pub(crate) fn parse_store(package: &OneStorePackaging) -> Result<FssHttpbOneStor
     // [ONESTORE] 2.7.1: Parse storage manifest
     let storage_index = package
         .data_element_package
-        .find_storage_index()
+        .find_storage_index_by_id(package.storage_index)
+        .or_else(|| package.data_element_package.find_storage_index())
         .ok_or_else(|| ErrorKind::MalformedOneStoreData("storage index is missing".into()))?;
     let storage_manifest = package
         .data_element_package
