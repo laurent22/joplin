@@ -44,7 +44,7 @@
     "@lezer/highlight": "1.2.3",
     "@lezer/markdown": "1.6.3",
     "@replit/codemirror-vim": "6.2.1",
-    "dompurify": "3.2.7",
+    "dompurify": "3.3.0",
     "orderedmap": "2.1.1",
     "prosemirror-commands": "1.7.1",
     "prosemirror-dropcursor": "1.8.2",

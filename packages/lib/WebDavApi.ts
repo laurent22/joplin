@@ -41,10 +41,11 @@ interface ExecOptions {
 	path?: string;
 }
 
-enum InvalidIfNoneMatchDetectionState {
+// detection state, whether invalid If-None-Match header is accepted by server
+enum ExcludeIfNoneMatch {
 	Unknown = 1,
-	Accepted = 2,
-	Rejected = 3,
+	No = 2,
+	Yes = 3,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -54,13 +55,13 @@ class WebDavApi {
 	private logger_: Logger;
 	private options_: WebDavApiOptions;
 	private lastRequests_: LoggedRequest[];
-	private invalidIfNoneMatchDetectionState: InvalidIfNoneMatchDetectionState;
+	private excludeIfNoneMatch: ExcludeIfNoneMatch;
 
 	public constructor(options: WebDavApiOptions) {
 		this.logger_ = new Logger();
 		this.options_ = options;
 		this.lastRequests_ = [];
-		this.invalidIfNoneMatchDetectionState = InvalidIfNoneMatchDetectionState.Unknown;
+		this.excludeIfNoneMatch = ExcludeIfNoneMatch.Unknown;
 		// Prevent unused method warning - this method is kept for debugging
 		void this._requestToCurl;
 	}
@@ -380,7 +381,7 @@ class WebDavApi {
 	private async performInvalidIfNoneMatchedDetection(url: string, fetchOptions: FetchOptions): Promise<Response> {
 		const response = await shim.fetch(url, fetchOptions);
 		if (response.ok) {
-			this.invalidIfNoneMatchDetectionState = InvalidIfNoneMatchDetectionState.Accepted;
+			this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
 		} else {
 			if (response.status === 400) {
 				const fetchOptionsAlt = { ... fetchOptions };
@@ -388,7 +389,7 @@ class WebDavApi {
 				delete fetchOptionsAlt.headers['If-None-Match'];
 				const responseAlt = await shim.fetch(url, fetchOptionsAlt);
 				if (responseAlt.ok) {
-					this.invalidIfNoneMatchDetectionState = InvalidIfNoneMatchDetectionState.Rejected;
+					this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
 					return responseAlt;
 				}
 			}
@@ -438,7 +439,8 @@ class WebDavApi {
 		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
-		if (['GET', 'HEAD'].indexOf(method) < 0 && this.invalidIfNoneMatchDetectionState !== InvalidIfNoneMatchDetectionState.Rejected) { headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`; }
+		if (['GET', 'HEAD'].indexOf(method) < 0 && this.excludeIfNoneMatch !== ExcludeIfNoneMatch.Yes) 
+			{ headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`; }
 		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -475,7 +477,7 @@ class WebDavApi {
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target === 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
-			if (['GET', 'HEAD'].indexOf(method) < 0 && this.invalidIfNoneMatchDetectionState === InvalidIfNoneMatchDetectionState.Unknown) {
+			if (['GET', 'HEAD'].indexOf(method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
 				response = await this.performInvalidIfNoneMatchedDetection(url, fetchOptions);
 			} else {
 				response = await shim.fetch(url, fetchOptions);
