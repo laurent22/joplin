@@ -34,6 +34,14 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
   const chatMessagesEndRef = React.useRef<HTMLDivElement>(null);
   const autoScrollModeRef = React.useRef(true);
   const lastScrollTopRef = React.useRef(0);
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  // Dialogのトランジションが完了した時にtextareaにフォーカス
+  const handleDialogEntered = React.useCallback(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, []);
 
   // 自動スクロール
   React.useEffect(() => {
@@ -252,6 +260,9 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
       open={open}
       onClose={onClose}
       maxWidth={false}
+      TransitionProps={{
+        onEntered: handleDialogEntered,
+      }}
       PaperProps={{
         style: {
           width: dialogWidth,
@@ -390,6 +401,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
             }}
           >
             <textarea
+              ref={textareaRef}
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={handleChatInputKeyDown}
