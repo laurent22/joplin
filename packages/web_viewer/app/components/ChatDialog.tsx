@@ -354,14 +354,20 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
                         // 内部リンク（/で始まる）の場合はNext.js Linkを使用
                         if (href && href.startsWith('/')) {
                           return (
-                            <Link href={href} {...props}>
+                            <Link href={href} {...props} style={{ color: 'blue' }}>
                               {children}
                             </Link>
                           );
                         }
                         // 外部リンクは通常のaタグ
                         return (
-                          <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            {...props}
+                            style={{ color: 'blue' }}
+                          >
                             {children}
                           </a>
                         );
