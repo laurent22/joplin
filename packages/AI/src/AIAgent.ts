@@ -18,6 +18,16 @@ const embeddings = new OpenAIEmbeddings({
   openAIApiKey: process.env.JOPLIN_OAI_KEY,
 });
 
+// デフォルトのRAGプロンプトテンプレート
+const DEFAULT_RAG_PROMPT = `あなたは親切で正確なアシスタントです。
+提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
+コンテキストに答えがない場合は、「提供された情報では回答できません」と答えてください。
+回答時のフォーマットはmarkdownでお願いします。
+回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
+その際、noteIdはjoplinスキームとしてリンクしてください。
+加えて、根拠となるの文書内に "(fragment_id: {fragment_id})"という形で存在していたらそのfragment_idもセットしてください。
+例えば、根拠: [{source}](joplin://{noteId}#{fragment_id})のように表示してください。`;
+
 // 保存済みのFAISSインデックスをロードする関数
 
 const loadVectorStore = async (indexPath: string) => {
@@ -46,6 +56,7 @@ export const ragSendMessage = async (
   replyId: string,
   histories: Array<AIHistory>,
   replyFunc: (msg: string, id?: string, loading?: boolean) => string,
+  customPrompt?: string,
 ) => {
   const model = new ChatOpenAI({
     model: "gpt-4o",
@@ -75,14 +86,8 @@ export const ragSendMessage = async (
     .join("\n\n");
 
   // システムプロンプトとユーザーメッセージを作成
-  const systemPrompt = `あなたは親切で正確なアシスタントです。
-提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
-コンテキストに答えがない場合は、「提供された情報では回答できません」と答えてください。
-回答時のフォーマットはmarkdownでお願いします。
-回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
-その際、noteIdはjoplinスキームとしてリンクしてください。
-加えて、根拠となるの文書内に "(fragment_id: {fragment_id})"という形で存在していたらそのfragment_idもセットしてください。
-例えば、根拠: [{source}](joplin://{noteId}#{fragment_id})のように表示してください。
+  const promptTemplate = customPrompt || DEFAULT_RAG_PROMPT;
+  const systemPrompt = `${promptTemplate}
 
 コンテキスト情報:
 ${context}`;
