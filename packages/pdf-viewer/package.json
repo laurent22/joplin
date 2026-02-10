@@ -48,8 +48,8 @@
     "@joplin/lib": "~3.6",
     "async-mutex": "0.5.0",
     "pdfjs-dist": "2.16.105",
-    "react": "19.1.0",
-    "react-dom": "18.3.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "styled-components": "5.3.11"
   }
 }
