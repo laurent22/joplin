@@ -10562,10 +10562,10 @@ __metadata:
     pretty-bytes: "npm:5.6.0"
     re-resizable: "npm:6.11.2"
     react: "npm:19.1.0"
-    react-dom: "npm:18.3.1"
+    react-dom: "npm:19.1.0"
     react-redux: "npm:8.1.3"
     react-select: "npm:5.10.2"
-    react-test-renderer: "npm:18.3.1"
+    react-test-renderer: "npm:19.1.0"
     react-toggle-button: "npm:2.2.0"
     react-tooltip: "npm:4.5.1"
     redux: "npm:4.2.1"
@@ -10663,7 +10663,7 @@ __metadata:
     path-browserify: "npm:1.0.1"
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
-    react: "npm:19.2.0"
+    react: "npm:19.1.0"
     react-dom: "npm:19.1.0"
     react-native: "npm:0.81.5"
     react-native-device-info: "npm:14.1.1"
@@ -43966,13 +43966,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^18.3.1":
-  version: 18.3.1
-  resolution: "react-is@npm:18.3.1"
-  checksum: 10/d5f60c87d285af24b1e1e7eaeb123ec256c3c8bdea7061ab3932e3e14685708221bf234ec50b21e10dd07f008f1b966a2730a0ce4ff67905b3872ff2042aec22
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^19.1.0":
   version: 19.2.3
   resolution: "react-is@npm:19.2.3"
@@ -44563,19 +44556,6 @@ __metadata:
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
   checksum: 10/06457fe5bcaa44aeca998905b6849304742ea1cc2d3841e4a0964c745ff392bc4dec07f8c779f317faacce3a0bf6f84e15020ac0fa81adb931067dbb0baf707b
-  languageName: node
-  linkType: hard
-
-"react-test-renderer@npm:18.3.1":
-  version: 18.3.1
-  resolution: "react-test-renderer@npm:18.3.1"
-  dependencies:
-    react-is: "npm:^18.3.1"
-    react-shallow-renderer: "npm:^16.15.0"
-    scheduler: "npm:^0.23.2"
-  peerDependencies:
-    react: ^18.3.1
-  checksum: 10/d53137315c677bdfba702a7179a69828233fc7635ae1e0c03b203923d643400ace72b343cb3dd3dafba8911c20bef53f55bff7aa2e4ddff3ccc423fdd9deeee2
   languageName: node
   linkType: hard
 

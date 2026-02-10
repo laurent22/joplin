@@ -59,7 +59,7 @@
     "path-browserify": "1.0.1",
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
-    "react": "19.2.0",
+    "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-device-info": "14.1.1",
     "react-native-dropdownalert": "5.2.0",
