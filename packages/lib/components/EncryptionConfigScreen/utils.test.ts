@@ -1,19 +1,12 @@
+import '../testing/dom-test-environment';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod } from '../../services/e2ee/EncryptionService';
 import { MasterKeyEntity } from '../../services/e2ee/types';
 import { setEncryptionEnabled } from '../../services/synchronizer/syncInfoUtils';
-import { msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { usePasswordChecker } from './utils';
-import { renderHook } from '@testing-library/react-hooks/pure';
+import { renderHook, waitFor } from '@testing-library/react';
 
-const waitForResult = async <T>(getResult: ()=> T, check: (result: T)=> boolean, timeout = 5000) => {
-	const startTime = Date.now();
-	while (Date.now() - startTime < timeout) {
-		if (check(getResult())) return;
-		await msleep(50);
-	}
-	throw new Error('Timed out waiting for result');
-};
 
 interface WrappedPasswordCheckerProps {
 	masterKeys: MasterKeyEntity[];
@@ -71,10 +64,11 @@ describe('EncryptionConfigScreen/utils', () => {
 
 		// Different password from the master password should cause the secondary key
 		// to be marked as not using the master password.
-		await waitForResult(
-			() => hook.result.current.masterPasswordKeys,
-			(keys) => keys[activeMasterKey.id] === true && keys[secondaryMasterKey.id] === false,
-		);
+		await waitFor(() => {
+			const keys = hook.result.current.masterPasswordKeys;
+			expect(keys[activeMasterKey.id]).toBe(true);
+			expect(keys[secondaryMasterKey.id]).toBe(false);
+		});
 
 		expect(hook.result.current.masterPasswordKeys).toMatchObject({
 			[activeMasterKey.id]: true,
@@ -91,10 +85,11 @@ describe('EncryptionConfigScreen/utils', () => {
 			},
 		});
 
-		await waitForResult(
-			() => hook.result.current.masterPasswordKeys,
-			(keys) => keys[activeMasterKey.id] === true && keys[secondaryMasterKey.id] === false,
-		);
+		await waitFor(() => {
+			const keys = hook.result.current.masterPasswordKeys;
+			expect(keys[activeMasterKey.id]).toBe(true);
+			expect(keys[secondaryMasterKey.id]).toBe(false);
+		});
 
 		expect(hook.result.current.masterPasswordKeys).toMatchObject({
 			[activeMasterKey.id]: true,
