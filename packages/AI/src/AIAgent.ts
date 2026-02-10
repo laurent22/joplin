@@ -118,7 +118,7 @@ const sendMessage = async (
   replyFunc: (msg: string, id?: string) => string,
 ) => {
   const model = new ChatOpenAI({
-    model: "gpt-4o",
+    model: "gpt-5-mini",
     apiKey: process.env.JOPLIN_OAI_KEY,
   });
   const historyMessages = histories.flatMap((h) => {
