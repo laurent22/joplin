@@ -10525,8 +10525,8 @@ __metadata:
     "@types/jest": "npm:29.5.14"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
-    "@types/react": "npm:19.1.8"
-    "@types/react-dom": "npm:18.3.7"
+    "@types/react": "npm:19.2.13"
+    "@types/react-dom": "npm:19.2.3"
     "@types/react-redux": "npm:7.1.33"
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
@@ -10930,7 +10930,6 @@ __metadata:
     re-reselect: "npm:4.0.1"
     react: "npm:19.2.4"
     react-dom: "npm:19.2.4"
-    react-test-renderer: "npm:19.2.4"
     redux: "npm:4.2.1"
     relative: "npm:3.0.2"
     reselect: "npm:4.1.8"
@@ -16942,6 +16941,15 @@ __metadata:
   peerDependencies:
     "@types/react": ^18.0.0
   checksum: 10/317569219366d487a3103ba1e5e47154e95a002915fdcf73a44162c48fe49c3a57fcf7f57fc6979e70d447112681e6b13c6c3c1df289db8b544df4aab2d318f3
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:19.2.3":
+  version: 19.2.3
+  resolution: "@types/react-dom@npm:19.2.3"
+  peerDependencies:
+    "@types/react": ^19.2.0
+  checksum: 10/616c4a8aee250ea05fb1e7b98e7e00475dd3a6c1c30d7be18b4b93caba832f4203106b3a496a6b147e5acc2da14575eca47bce234c633bca1f8430ef8ffb234a
   languageName: node
   linkType: hard
 
@@ -44051,13 +44059,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.2.4":
-  version: 19.2.4
-  resolution: "react-is@npm:19.2.4"
-  checksum: 10/3360fc50a38c23299c5003a709949f2439b2901e77962eea78d892f526f710d05a7777b600b302f853583d1861979b00d7a0a071c89c6562eac5740ac29b9665
-  languageName: node
-  linkType: hard
-
 "react-json-view@npm:^1.21.3":
   version: 1.21.3
   resolution: "react-json-view@npm:1.21.3"
@@ -44653,18 +44654,6 @@ __metadata:
   peerDependencies:
     react: ^19.1.0
   checksum: 10/73ae0ea779bacd0ff084dd3644b763a4431d68adf9c6acffdaa3d0810aab5322f24c95c60259c23b77f38b5f36d9d614ffaa46d91a33840536f2d4b7188dcc89
-  languageName: node
-  linkType: hard
-
-"react-test-renderer@npm:19.2.4":
-  version: 19.2.4
-  resolution: "react-test-renderer@npm:19.2.4"
-  dependencies:
-    react-is: "npm:^19.2.4"
-    scheduler: "npm:^0.27.0"
-  peerDependencies:
-    react: ^19.2.4
-  checksum: 10/b88d4dd3cf6ca89b8fac0bdaa8e98193048f24b963cb255f013f3a7decc41194d7cd15181d4056a966279870b2c132b735ca490b52847ae8816347d7856dea93
   languageName: node
   linkType: hard
 
