@@ -1,5 +1,5 @@
 import useOnInstallHandler from './useOnInstallHandler';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react-hooks/pure';
 
 import PluginService, { defaultPluginSetting } from '../../../../services/plugins/PluginService';
 import { ItemEvent } from './types';
