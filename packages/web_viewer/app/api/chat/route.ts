@@ -3,6 +3,18 @@ import { ragSendMessage, AIHistory } from '@joplin/ai';
 import * as path from 'path';
 import { ViewerUtil } from '@/lib/viewerUtil';
 
+const gCustomPrompt = `あなたは親切で正確なアシスタントです。
+提供されたコンテキスト情報を基に、ユーザーの質問に日本語で回答してください。
+コンテキストに答えがない場合は、「提供された情報では回答できません」と答えてください。
+回答時のフォーマットはmarkdownでお願いします。
+回答時には回答の根拠となったsourceとそのnoteIdをリンクとして表示してください。
+その際、noteIdはaタグとしてリンクしてください。
+加えて、そのノート内の検索でマッチしたワードをできるだけ長く抽出し、それをsearchパラメタとして追加してください。
+例えば、根拠: [{note名}](/note?note_id={noteId}&search={search})のように表示してください.
+もしくはfragment_idが存在していたらそのfragment_idをセットしてください。
+例えば、根拠: [{note名}](/note?note_id={noteId}#{fragment_id})のように表示してください。
+`;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -39,7 +51,8 @@ export async function POST(request: NextRequest) {
                 lastMessage = msg;
               }
               return replyId;
-            }
+            },
+            gCustomPrompt
           );
 
           // ストリーム終了
