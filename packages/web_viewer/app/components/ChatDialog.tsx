@@ -23,6 +23,7 @@ interface ChatDialogProps {
 export default function ChatDialog({ open, onClose }: ChatDialogProps) {
   const [chatMessages, setChatMessages] = React.useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isResizing, setIsResizing] = React.useState(false);
   const [dialogWidth, setDialogWidth] = React.useState(900);
   const [dialogHeight, setDialogHeight] = React.useState(700);
@@ -141,7 +142,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
 
   // チャット送信
   const handleChatSend = React.useCallback(async () => {
-    if (chatInput.trim() === '') return;
+    if (chatInput.trim() === '' || isLoading) return;
 
     const id = Date.now().toString() + Math.random().toString(36).slice(2);
     const newUserMessage: ChatMessage = { id, text: chatInput, isUser: true };
@@ -150,6 +151,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     setChatMessages((prev) => [...prev, newUserMessage]);
     setChatInput('');
     autoScrollModeRef.current = true;
+    setIsLoading(true);
 
     // ローディング状態のボットメッセージを追加
     const botId = Date.now().toString() + Math.random().toString(36).slice(2);
@@ -186,8 +188,10 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
             : msg
         )
       );
+    } finally {
+      setIsLoading(false);
     }
-  }, [chatInput, processStreamingResponse]);
+  }, [chatInput, processStreamingResponse, isLoading]);
 
   const handleChatInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -197,14 +201,14 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
           return;
         } else {
           // Enterのみで送信
-          if (!event.nativeEvent.isComposing) {
+          if (!event.nativeEvent.isComposing && !isLoading) {
             event.preventDefault();
             handleChatSend();
           }
         }
       }
     },
-    [handleChatSend]
+    [handleChatSend, isLoading]
   );
 
   const handleClearHistory = React.useCallback(() => {
@@ -347,6 +351,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={handleChatInputKeyDown}
               placeholder="メッセージを入力... (Shift+Enterで改行)"
+              disabled={isLoading}
               style={{
                 flex: 1,
                 padding: 8,
@@ -357,22 +362,26 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
                 maxHeight: 120,
                 fontFamily: 'inherit',
                 fontSize: 14,
+                opacity: isLoading ? 0.6 : 1,
+                cursor: isLoading ? 'not-allowed' : 'text',
               }}
             />
             <button
               onClick={handleChatSend}
+              disabled={isLoading}
               style={{
                 padding: '8px 16px',
                 borderRadius: 8,
-                background: '#4f8cff',
+                background: isLoading ? '#ccc' : '#4f8cff',
                 color: 'white',
                 border: 'none',
-                cursor: 'pointer',
+                cursor: isLoading ? 'not-allowed' : 'pointer',
                 fontWeight: 'bold',
                 minWidth: 80,
+                opacity: isLoading ? 0.6 : 1,
               }}
             >
-              送信
+              {isLoading ? '送信中...' : '送信'}
             </button>
           </div>
         </div>
