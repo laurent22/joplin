@@ -938,6 +938,7 @@ export default class Note extends BaseItem {
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 				await this.revisionService().deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
+				await ItemChange.waitForAllSaved(); // Ensure item changes have finished saving as part of note history deletion, before saving new item changes
 			}
 
 			for (let i = 0; i < processIds.length; i++) {
