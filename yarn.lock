@@ -10528,7 +10528,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
     "@types/react-redux": "npm:7.1.33"
-    "@types/styled-components": "npm:5.1.32"
+    "@types/styled-components": "npm:5.1.36"
     async-mutex: "npm:0.5.0"
     axios: "npm:^1.7.7"
     codemirror: "npm:5.65.9"
@@ -17186,6 +17186,17 @@ __metadata:
     "@types/react": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10/6f071894d36a82d942a8e0e4c259748c3a17cb0a23c9ba187fb7d0cf7a769ac83cb3958d11b5b1eb100ee0f37c6e924b5a2d00ae2a3dd0057f2c559c6c544b1a
+  languageName: node
+  linkType: hard
+
+"@types/styled-components@npm:5.1.36":
+  version: 5.1.36
+  resolution: "@types/styled-components@npm:5.1.36"
+  dependencies:
+    "@types/hoist-non-react-statics": "npm:*"
+    "@types/react": "npm:*"
+    csstype: "npm:^3.2.2"
+  checksum: 10/fd9130e344c65992ce67accaf3af239573fa69434fc851ef956fafa1f1c03e8b007af8a2acf899ab4526bb42d326b7e07a64f9cd69a445715b6403617675cdd1
   languageName: node
   linkType: hard
 
@@ -24343,6 +24354,13 @@ __metadata:
   version: 3.0.10
   resolution: "csstype@npm:3.0.10"
   checksum: 10/0c731ca8305004cc64abac17798e654e89b21ebd1ad68a7dff48084743c29cc22aed268341998d88d9b39f8f91ed61b0083e93a6105d7776eb1650efcc417c5b
+  languageName: node
+  linkType: hard
+
+"csstype@npm:^3.2.2":
+  version: 3.2.3
+  resolution: "csstype@npm:3.2.3"
+  checksum: 10/ad41baf7e2ffac65ab544d79107bf7cd1a4bb9bab9ac3302f59ab4ba655d5e30942a8ae46e10ba160c6f4ecea464cc95b975ca2fefbdeeacd6ac63f12f99fe1f
   languageName: node
   linkType: hard
 

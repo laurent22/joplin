@@ -161,7 +161,7 @@
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
     "@types/react-redux": "7.1.33",
-    "@types/styled-components": "5.1.32",
+    "@types/styled-components": "5.1.36",
     "async-mutex": "0.5.0",
     "axios": "^1.7.7",
     "codemirror": "5.65.9",
