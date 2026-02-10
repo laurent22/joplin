@@ -90,6 +90,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
       prev.map((msg) => (msg.id === botId ? { ...msg, loading: false } : msg))
     );
 
+    let firstResponseReceived = false;
     if (reader) {
       while (true) {
         const { done, value } = await reader.read();
@@ -100,9 +101,26 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
         const chunk = decoder.decode(value, { stream: true });
         accumulatedText += chunk;
 
+        if (!firstResponseReceived) {
+          if (accumulatedText.indexOf(`関連ドキュメントを検索中...`) === 0) {
+            firstResponseReceived = true;
+            // 関連ドキュメント検索中 + loadingアイコンを表示
+            const cloneAccumulatedText = accumulatedText.toString();
+            setChatMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === botId ? { ...msg, text: cloneAccumulatedText, loading: true } : msg
+              )
+            );
+            accumulatedText = '';
+            continue;
+          }
+        }
+
         // メッセージを更新
         setChatMessages((prev) =>
-          prev.map((msg) => (msg.id === botId ? { ...msg, text: accumulatedText } : msg))
+          prev.map((msg) =>
+            msg.id === botId ? { ...msg, text: accumulatedText, loading: false } : msg
+          )
         );
       }
     }
@@ -156,7 +174,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
         )
       );
     }
-  }, [chatInput]);
+  }, [chatInput, processStreamingResponse]);
 
   const handleChatInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
