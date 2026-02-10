@@ -31,13 +31,15 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
 
   const chatMessagesEndRef = React.useRef<HTMLDivElement>(null);
   const autoScrollModeRef = React.useRef(true);
+  const lastScrollTopRef = React.useRef(0);
 
   // 自動スクロール
   React.useEffect(() => {
     if (chatMessagesEndRef.current && autoScrollModeRef.current) {
       const scroller = document.getElementById('chat-scroller');
       if (scroller) {
-        scroller.scrollTop = scroller.scrollHeight;
+        scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
+        lastScrollTopRef.current = scroller.scrollTop;
       }
     }
   }, [chatMessages]);
@@ -122,6 +124,17 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
             msg.id === botId ? { ...msg, text: accumulatedText, loading: false } : msg
           )
         );
+
+        // 自動スクロールモードの場合、最下部へスクロール
+        if (autoScrollModeRef.current) {
+          requestAnimationFrame(() => {
+            const scroller = document.getElementById('chat-scroller');
+            if (scroller) {
+              scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'auto' });
+              lastScrollTopRef.current = scroller.scrollTop;
+            }
+          });
+        }
       }
     }
   }, []);
@@ -200,8 +213,22 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
 
   const handleScroll = React.useCallback((e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
+    const currentScrollTop = target.scrollTop;
+    const lastScrollTop = lastScrollTopRef.current;
+
+    // 上に10px以上スクロールされた場合、自動スクロールを無効化
+    if (lastScrollTop - currentScrollTop >= 10) {
+      autoScrollModeRef.current = false;
+    }
+
+    // 最下部にいる場合は自動スクロールを有効化
     const isAtBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 20;
-    autoScrollModeRef.current = isAtBottom;
+    if (isAtBottom) {
+      autoScrollModeRef.current = true;
+    }
+
+    // 現在のスクロール位置を記録
+    lastScrollTopRef.current = currentScrollTop;
   }, []);
 
   return (
