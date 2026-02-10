@@ -64,7 +64,10 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
       await waitForStableRender(contentRef.current);
       const targetElement = document.getElementById(elementId);
       if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // 短い遅延で DOM が確定するのを待つ
+        setTimeout(() => {
+          ClientUtil.scrollIntoViewWithRetry(targetElement, 3);
+        }, 100);
       }
     })();
   }, [note?.body]);
