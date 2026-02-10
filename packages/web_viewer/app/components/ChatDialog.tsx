@@ -148,6 +148,14 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     const newUserMessage: ChatMessage = { id, text: chatInput, isUser: true };
     const userInput = chatInput;
 
+    // 現在の会話履歴を取得（新しいメッセージを追加する前）
+    const currentHistories = chatMessages.map((msg) => ({
+      id: msg.id,
+      text: msg.text,
+      isUser: msg.isUser,
+      loading: msg.loading,
+    }));
+
     setChatMessages((prev) => [...prev, newUserMessage]);
     setChatInput('');
     autoScrollModeRef.current = true;
@@ -164,13 +172,16 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     setChatMessages((prev) => [...prev, loadingMessage]);
 
     try {
-      // API呼び出し
+      // API呼び出し - 過去の会話履歴も送信
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userInput }),
+        body: JSON.stringify({
+          message: userInput,
+          histories: currentHistories,
+        }),
       });
 
       if (!response.ok) {
@@ -191,7 +202,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [chatInput, processStreamingResponse, isLoading]);
+  }, [chatInput, chatMessages, processStreamingResponse, isLoading]);
 
   const handleChatInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
