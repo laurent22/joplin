@@ -23,11 +23,13 @@
     "@tanstack/react-query": "^5.90.20",
     "better-sqlite3": "^12.6.2",
     "cheerio": "^1.2.0",
+    "faiss-node": "^0.5.1",
     "html-react-parser": "^5.2.16",
     "mark.js": "^8.11.1",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^4.5.8"
   },

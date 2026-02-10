@@ -9,11 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import MemoizedSearchDialog from './SearchDialog';
+import ChatDialog from './ChatDialog';
 
 export default function NoteTreeWrapper() {
   const [query, setQuery] = React.useState('');
   const [searchInput, setSearchInput] = React.useState('');
   const [openSearchDialog, setOpenSearchDialog] = React.useState(false);
+  const [openChatDialog, setOpenChatDialog] = React.useState(false);
   const hideTree = query && query.trim() !== '';
 
   React.useEffect(() => {
@@ -21,10 +23,17 @@ export default function NoteTreeWrapper() {
       const key = e.key.toLowerCase();
       // Cmd+P on mac (metaKey) or Ctrl+P on other platforms
       if ((e.metaKey || e.ctrlKey) && key === 'p') {
-        e.preventDefault();
-        setOpenSearchDialog(true);
-        // populate dialog input with current query
-        setSearchInput(query);
+        if (e.shiftKey) {
+          // Cmd+Shift+P / Ctrl+Shift+P for Chat Dialog
+          e.preventDefault();
+          setOpenChatDialog(true);
+        } else {
+          // Cmd+P / Ctrl+P for Search Dialog
+          e.preventDefault();
+          setOpenSearchDialog(true);
+          // populate dialog input with current query
+          setSearchInput(query);
+        }
       }
     };
     window.addEventListener('keydown', handler);
@@ -33,6 +42,10 @@ export default function NoteTreeWrapper() {
 
   const onClose = React.useCallback(() => {
     setOpenSearchDialog(false);
+  }, []);
+
+  const onCloseChatDialog = React.useCallback(() => {
+    setOpenChatDialog(false);
   }, []);
 
   return (
@@ -82,6 +95,11 @@ export default function NoteTreeWrapper() {
         onClose={onClose}
         initialSearchInput={searchInput}
         setQuery={setQuery}
+      />
+
+      <ChatDialog
+        open={openChatDialog}
+        onClose={onCloseChatDialog}
       />
 
       <div style={{ flex: 1, minHeight: 0, display: !hideTree ? 'none' : undefined }}>

@@ -238,6 +238,14 @@ export class ViewerUtil {
     return dbPath;
   }
 
+  public static getVectorDbFilePath(): string {
+    const profileFolder = this.getProfileFolderPath();
+
+    // ベクトルデータベースファイルを開く（path.join で適切に結合）
+    const vectorDbPath = path.join(profileFolder, 'vector_db_workspace', `faiss_index`);
+    return vectorDbPath;
+  }
+
   private static escapeRegExp(str: string): string {
     return str.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&');
   }
