@@ -2,7 +2,7 @@ import Resource from '@joplin/lib/models/Resource';
 import Logger from '@joplin/utils/Logger';
 import bridge from '../../../services/bridge';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
-import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/types';
+import { ContextMenuItemType, EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/types';
 import eventManager from '@joplin/lib/eventManager';
 import CommandService from '@joplin/lib/services/CommandService';
 import { type MenuItem as MenuItemType } from 'electron';
@@ -10,13 +10,8 @@ import { type MenuItem as MenuItemType } from 'electron';
 const MenuItem = bridge().MenuItem;
 const logger = Logger.create('contextMenuUtils');
 
-export enum ContextMenuItemType {
-	None = '',
-	Image = 'image',
-	Resource = 'resource',
-	Text = 'text',
-	Link = 'link',
-}
+// Re-export for backward compatibility
+export { ContextMenuItemType };
 
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType;
@@ -156,9 +151,16 @@ const filterSeparators = <T>(items: T[], isSeparator: (item: T)=> boolean): T[] 
 	return filtered;
 };
 
-export const handleEditorContextMenuFilter = async () => {
+export interface EditorContextMenuFilterContext {
+	resourceId?: string;
+	itemType?: ContextMenuItemType;
+	textToCopy?: string;
+}
+
+export const handleEditorContextMenuFilter = async (context?: EditorContextMenuFilterContext) => {
 	let filterObject: EditContextMenuFilterObject = {
 		items: [],
+		context,
 	};
 
 	filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
@@ -189,7 +191,11 @@ export const buildMenuItems = async (items: ContextMenuItems, options: ContextMe
 		}
 	}
 
-	const extraItems = await handleEditorContextMenuFilter();
+	const extraItems = await handleEditorContextMenuFilter({
+		resourceId: options.resourceId,
+		itemType: options.itemType,
+		textToCopy: options.textToCopy,
+	});
 
 	if (extraItems.length) {
 		activeItems.push({

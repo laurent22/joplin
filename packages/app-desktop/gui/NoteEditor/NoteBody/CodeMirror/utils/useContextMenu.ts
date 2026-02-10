@@ -150,6 +150,8 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return getResourceIdFromMarkup(line.text, clickPos - line.from);
 		};
 
+		const targetWindow = bridge().windowById(windowId);
+
 		const showImageContextMenu = async (resourceId: string) => {
 			const menu = new Menu();
 			const contextMenuOptions: ContextMenuOptions = {
@@ -173,7 +175,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 				menu.append(item);
 			}
 
-			menu.popup({ window: bridge().activeWindow() });
+			menu.popup({ window: targetWindow });
 		};
 
 		// Move the cursor to the line containing the image markup for a rendered image.
@@ -277,7 +279,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 				(editorRef.current as any).alignSelection(params);
 			}
 
-			const extraItems = await handleEditorContextMenuFilter();
+			const extraItems = await handleEditorContextMenuFilter({
+				itemType: ContextMenuItemType.Text,
+			});
 
 			if (extraItems.length) {
 				menu.append(new MenuItem({
@@ -294,12 +298,11 @@ const useContextMenu = (props: ContextMenuProps) => {
 				menu.append(new MenuItem(item));
 			});
 
-			menu.popup({ window: bridge().activeWindow() });
+			menu.popup({ window: targetWindow });
 		};
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		const targetWindow = bridge().windowById(windowId);
 		targetWindow.webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
