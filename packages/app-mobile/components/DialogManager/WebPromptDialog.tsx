@@ -67,7 +67,7 @@ const WebPromptDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) =
 	>{dialog.title}</Text>;
 
 	const onDismiss = () => {
-		dialog.onDismiss();
+		dialog.onDismiss?.();
 	};
 
 	return (
