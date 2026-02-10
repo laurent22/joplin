@@ -372,48 +372,6 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
                           </a>
                         );
                       },
-                      p: ({ node, children, ...props }) => {
-                        return (
-                          <p {...props} style={{ margin: '0.25em 0' }}>
-                            {children}
-                          </p>
-                        );
-                      },
-                      li: ({ node, children, ...props }) => {
-                        return (
-                          <li {...props} style={{ marginBottom: '0.25em' }}>
-                            {children}
-                          </li>
-                        );
-                      },
-                      ul: ({ node, children, ...props }) => {
-                        return (
-                          <ul
-                            {...props}
-                            style={{
-                              marginTop: '0.25em',
-                              marginBottom: '0.5em',
-                              paddingLeft: '1.5em',
-                            }}
-                          >
-                            {children}
-                          </ul>
-                        );
-                      },
-                      ol: ({ node, children, ...props }) => {
-                        return (
-                          <ol
-                            {...props}
-                            style={{
-                              marginTop: '0.25em',
-                              marginBottom: '0.5em',
-                              paddingLeft: '1.5em',
-                            }}
-                          >
-                            {children}
-                          </ol>
-                        );
-                      },
                     }}
                   >
                     {msg.text}
