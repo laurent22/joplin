@@ -10692,7 +10692,7 @@ __metadata:
     react-native-zip-archive: "npm:7.0.2"
     react-redux: "npm:8.1.3"
     react-refresh: "npm:0.18.0"
-    react-test-renderer: "npm:19.1.0"
+    react-test-renderer: "npm:19.1.5"
     redux: "npm:4.2.1"
     rn-fetch-blob: "npm:0.12.0"
     sharp: "npm:0.34.5"
@@ -44006,10 +44006,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.1.0":
-  version: 19.2.3
-  resolution: "react-is@npm:19.2.3"
-  checksum: 10/547ac397308204742447b5e4cf556cf09aa97f4cc1c95c4a28e4b2e73a7efab03e59d7b89b4a01f67bf9bf0ca87348a7f0e88bc87c0af6be458aaac1dec5e132
+"react-is@npm:^19.1.5":
+  version: 19.2.4
+  resolution: "react-is@npm:19.2.4"
+  checksum: 10/3360fc50a38c23299c5003a709949f2439b2901e77962eea78d892f526f710d05a7777b600b302f853583d1861979b00d7a0a071c89c6562eac5740ac29b9665
   languageName: node
   linkType: hard
 
@@ -44599,15 +44599,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:19.1.0":
-  version: 19.1.0
-  resolution: "react-test-renderer@npm:19.1.0"
+"react-test-renderer@npm:19.1.5":
+  version: 19.1.5
+  resolution: "react-test-renderer@npm:19.1.5"
   dependencies:
-    react-is: "npm:^19.1.0"
+    react-is: "npm:^19.1.5"
     scheduler: "npm:^0.26.0"
   peerDependencies:
-    react: ^19.1.0
-  checksum: 10/73ae0ea779bacd0ff084dd3644b763a4431d68adf9c6acffdaa3d0810aab5322f24c95c60259c23b77f38b5f36d9d614ffaa46d91a33840536f2d4b7188dcc89
+    react: ^19.1.5
+  checksum: 10/6cedb8174055617357033bacc70d6a6996cb6832a4263d8e5d6cf0298b908090112158b5c8e7782e00b6bf91721c371f04a42d378d60a809f44be252a48ac8fe
   languageName: node
   linkType: hard
 
