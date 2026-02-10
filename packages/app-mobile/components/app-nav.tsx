@@ -63,17 +63,17 @@ const AppNavComponent: React.FC<Props> = (props) => {
 
 	const theme = themeStyle(props.themeId);
 	const styles = useStyles(theme);
-	const autocompletionBarPadding = keyboardState.keyboardVisible ? safeAreaPadding.top : 0;
+	// Workaround: On Android 15 and 16, the main app content seems to auto-resize when the keyboard is shown.
+	// On earlier Android versions (and in modals), this does not seem to be the case.
+	const keyboardAvoidingViewEnabled =
+		(Platform.OS === 'android' && Platform.Version < 35)
+		|| Platform.OS === 'ios';
+	const autocompletionBarPadding = keyboardState.keyboardVisible && keyboardAvoidingViewEnabled ? safeAreaPadding.top : 0;
 
 	return (
 		<KeyboardAvoidingView
 			style={styles.keyboardAvoidingView}
-			enabled={
-				// Workaround: On Android 15 and 16, the main app content seems to auto-resize when the keyboard is shown.
-				// On earlier Android versions (and in modals), this does not seem to be the case.
-				(Platform.OS === 'android' && Platform.Version < 35)
-				|| Platform.OS === 'ios'
-			}
+			enabled={keyboardAvoidingViewEnabled}
 		>
 			<NotesScreen visible={notesScreenVisible} />
 			{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} />}

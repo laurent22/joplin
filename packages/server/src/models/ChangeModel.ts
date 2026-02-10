@@ -384,7 +384,7 @@ export default class ChangeModel extends BaseModel<Change> {
 	// know that the item has changed at least once. The reduction is basically:
 	//
 	//     create - update => create
-	//     create - delete => NOOP
+	//     create - delete => delete
 	//     update - update => update
 	//     update - delete => delete
 	//     delete - create => create
@@ -444,7 +444,7 @@ export default class ChangeModel extends BaseModel<Change> {
 				}
 
 				if (previous.type === ChangeType.Create && change.type === ChangeType.Delete) {
-					itemChanges.delete(itemId);
+					itemChanges.set(itemId, change);
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Update) {

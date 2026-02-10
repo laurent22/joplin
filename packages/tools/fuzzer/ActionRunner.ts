@@ -495,12 +495,22 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	}, { id: selectOrCreateWriteableNote });
 
 	addAction('unpublishNote', async ({ id }) => {
-		const note = id ? noteById(id) : await client.randomNote({ includeReadOnly: true });
-		if (!note || !note.published) return false;
+		if (!id) return false;
+
+		const note = noteById(id);
+		assert.ok(note.published, 'can only unpublish published notes');
 
 		await client.unpublishNote(note.id);
 		return true;
-	}, { id: undefinedId });
+	}, {
+		id: async () => {
+			const note = await client.randomNote({
+				includeReadOnly: false,
+				filter: (note) => note.published,
+			});
+			return note?.id;
+		},
+	});
 
 	addAction('sync', async () => {
 		await client.sync();
