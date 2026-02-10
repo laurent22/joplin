@@ -1,4 +1,4 @@
-import '../testing/dom-test-environment';
+import '../../testing/dom-test-environment';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod } from '../../services/e2ee/EncryptionService';
 import { MasterKeyEntity } from '../../services/e2ee/types';

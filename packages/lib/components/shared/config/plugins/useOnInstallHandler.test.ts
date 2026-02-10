@@ -1,4 +1,4 @@
-import '../testing/dom-test-environment';
+import '../../../../testing/dom-test-environment';
 import useOnInstallHandler from './useOnInstallHandler';
 import { renderHook } from '@testing-library/react';
 
