@@ -2,6 +2,7 @@ import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
 import type FolderClass from './Folder';
 import type ResourceClass from './Resource';
+import type RevisionClass from './Revision';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
 import shim from '../shim';
@@ -937,8 +938,10 @@ export default class Note extends BaseItem {
 				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
-				await this.revisionService().deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
-				await ItemChange.waitForAllSaved(); // Ensure item changes have finished saving as part of note history deletion, before saving new item changes
+				const Revision = this.getClass<typeof RevisionClass>('Revision');
+				// No need to call additional logic in RevisionService, as new change events are already sent via the code below, and additional clearing
+				// is not relevant for deleted notes
+				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {
