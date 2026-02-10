@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
@@ -344,7 +345,32 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
                     }}
                   />
                 )}
-                {msg.isUser ? msg.text : <ReactMarkdown>{msg.text}</ReactMarkdown>}
+                {msg.isUser ? (
+                  msg.text
+                ) : (
+                  <ReactMarkdown
+                    components={{
+                      a: ({ node, href, children, ...props }) => {
+                        // 内部リンク（/で始まる）の場合はNext.js Linkを使用
+                        if (href && href.startsWith('/')) {
+                          return (
+                            <Link href={href} {...props}>
+                              {children}
+                            </Link>
+                          );
+                        }
+                        // 外部リンクは通常のaタグ
+                        return (
+                          <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                            {children}
+                          </a>
+                        );
+                      },
+                    }}
+                  >
+                    {msg.text}
+                  </ReactMarkdown>
+                )}
               </div>
             ))}
             <div ref={chatMessagesEndRef} />
