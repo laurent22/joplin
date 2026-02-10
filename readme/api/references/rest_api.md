@@ -35,7 +35,7 @@ If needed you may also [request the token programmatically](https://github.com/l
 
 ## Using the API
 
-All the calls, unless noted otherwise, receives and send **JSON data**. For example to create a new note:
+All the calls, unless noted otherwise, receive and send **JSON data**. For example to create a new note:
 
 ```shell
 curl --data '{ "title": "My note", "body": "Some note in **Markdown**"}' http://localhost:41184/notes
@@ -101,7 +101,7 @@ Then you will resume fetching the results using this query:
 curl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10&page=2
 ```
 
-Eventually you will get some results that do not contain an "has_more" parameter, at which point you will have retrieved all the results
+Eventually you will get some results that do not contain a "has_more" parameter, at which point you will have retrieved all the results
 
 As an example the pseudo-code below could be used to fetch all the notes:
 
@@ -136,7 +136,7 @@ Call **GET /ping** to check if the service is available. It should return "Jopli
 
 ## Searching
 
-Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/apps/search
+Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `fields` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/apps/search
 
 To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-ids). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.
 
@@ -212,7 +212,7 @@ command | 16
 
 Gets all notes
 
-By default, this call will return the all notes **except** the notes in the trash folder and any conflict note. To include these too, you can specify `include_deleted=1` and `include_conflicts=1` as query parameters.
+By default, this call will return all notes **except** the notes in the trash folder and any conflict note. To include these too, you can specify `include_deleted=1` and `include_conflicts=1` as query parameters.
 
 ### GET /notes/:id
 

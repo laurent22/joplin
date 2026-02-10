@@ -12,7 +12,7 @@ More info on the official website: https://joplinapp.org/help/apps/clipper
 
 ## Plugins
 
-Joplin supports many plugins that allows you to add new features to the app, such as tabs, a table of content for your notes, a way to manage favourite notes, and many other ones. To add a plugin, go to the "Plugins" section in the config screen. From there you can search and install plugins, as well as search or update plugins.
+Joplin supports many plugins that allow you to add new features to the app, such as tabs, a table of content for your notes, a way to manage favourite notes, and many other ones. To add a plugin, go to the "Plugins" section in the config screen. From there you can search and install plugins, as well as search or update plugins.
 
 ## Attachments
 

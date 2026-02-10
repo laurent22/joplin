@@ -29,6 +29,6 @@ Conflicts are always annoying to deal with so it is best to avoid them as much a
 
 For this, the best way is to always synchronise before you start editing, and after you have finished editing. Make sure that synchronisation completes.
 
-Joplin attempts to do this by uploading your latest changes within a few seconds. However, downloading changes is done at fixed intervals, every few minutes (as defined in the Config screen) and this is where conflicts may happen. It can also happen if one of your device did not have an internet connection for some times, and then synchronises. A bad internet connection can also hinder synchronisation because it will interrupt the process, which may have to be restarted from the beginning to ensure consistency.
+Joplin attempts to do this by uploading your latest changes within a few seconds. However, downloading changes is done at fixed intervals, every few minutes (as defined in the Config screen) and this is where conflicts may happen. It can also happen if one of your devices did not have an internet connection for some time, and then synchronises. A bad internet connection can also hinder synchronisation because it will interrupt the process, which may have to be restarted from the beginning to ensure consistency.
 
 So if you have not opened your application in a while, manually sync it and wait for it to complete, that way you are sure that whatever change you make will be on the latest version of the note.

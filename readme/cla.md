@@ -94,7 +94,7 @@ Your Contributions.
    fee, or not at all. Unless required by applicable law or agreed to in
    writing, You provide Your Contributions on an "AS IS" BASIS, WITHOUT
    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including,
-   without limitation, any warranties or conditions of TITLE, NON- INFRINGEMENT,
+   without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT,
    MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE.
 
 7. Should You wish to submit work that is not Your original creation, You may

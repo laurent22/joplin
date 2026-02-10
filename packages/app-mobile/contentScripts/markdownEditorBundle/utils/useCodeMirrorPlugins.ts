@@ -33,8 +33,14 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 				plugins.push({
 					pluginId,
 					contentScriptId,
-					contentScriptJs: async () => {
-						return await shim.fsDriver().readFile(contentScript.path);
+					contentScriptJs: async (context) => {
+						return {
+							sourceJs: [
+								context.contentScriptStartJs,
+								await shim.fsDriver().readFile(contentScript.path),
+								context.contentScriptEndJs,
+							].join('\n'),
+						};
 					},
 					loadCssAsset: (name: string) => {
 						// TODO: This logic is currently shared with app-desktop. Refactor

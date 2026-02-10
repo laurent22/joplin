@@ -44,7 +44,7 @@ Again, **always start from the user's perspective**:
 - How will you label the buttons or tooltip
 - If you're adding a keyboard shortcut, what keys should the user press, etc.
 
-All these details are very important because they give a clear picture of what you are going to do, and it helps reviewer assess the implementation.
+All these details are very important because they give a clear picture of what you are going to do, and it helps reviewers assess the implementation.
 
 It's also an easy way for everybody, even non-technical people, to get involved and help you refine your spec.
 
@@ -52,7 +52,7 @@ Also, if you can, provide a UI mockup.
 
 #### Technical solution
 
-Explain in general terms how you are going to a solve the issue at a technical level.
+Explain in general terms how you are going to solve the issue at a technical level.
 
 Please describe what will be the impact and risks associated with your change. For example if it's just adding a button to change text formatting, it's probably low impact. If it's modifying the sync algorithm it's high impact, because there's a potential for data loss.
 
@@ -64,7 +64,7 @@ In this section you may mention code and filenames, but try not to go into too m
 
 How do you plan to test your changes?
 
-Please provide test units if possible.
+Please provide unit tests if possible.
 
 If it's for GSoC, test units are compulsory. We don't accept pull requests without.
 
