@@ -10663,8 +10663,8 @@ __metadata:
     path-browserify: "npm:1.0.1"
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
-    react: "npm:19.1.5"
-    react-dom: "npm:19.1.5"
+    react: "npm:19.1.0"
+    react-dom: "npm:19.1.0"
     react-native: "npm:0.81.5"
     react-native-device-info: "npm:14.1.1"
     react-native-dropdownalert: "npm:5.2.0"
@@ -10692,7 +10692,7 @@ __metadata:
     react-native-zip-archive: "npm:7.0.2"
     react-redux: "npm:8.1.3"
     react-refresh: "npm:0.18.0"
-    react-test-renderer: "npm:19.1.5"
+    react-test-renderer: "npm:19.1.0"
     redux: "npm:4.2.1"
     rn-fetch-blob: "npm:0.12.0"
     sharp: "npm:0.34.5"
@@ -43920,6 +43920,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-dom@npm:19.1.0":
+  version: 19.1.0
+  resolution: "react-dom@npm:19.1.0"
+  dependencies:
+    scheduler: "npm:^0.26.0"
+  peerDependencies:
+    react: ^19.1.0
+  checksum: 10/c5b58605862c7b0bb044416b01c73647bb8e89717fb5d7a2c279b11815fb7b49b619fe685c404e59f55eb52c66831236cc565c25ee1c2d042739f4a2cc538aa2
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:19.1.5":
   version: 19.1.5
   resolution: "react-dom@npm:19.1.5"
@@ -44006,7 +44017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.1.5":
+"react-is@npm:^19.1.0":
   version: 19.2.4
   resolution: "react-is@npm:19.2.4"
   checksum: 10/3360fc50a38c23299c5003a709949f2439b2901e77962eea78d892f526f710d05a7777b600b302f853583d1861979b00d7a0a071c89c6562eac5740ac29b9665
@@ -44599,15 +44610,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:19.1.5":
-  version: 19.1.5
-  resolution: "react-test-renderer@npm:19.1.5"
+"react-test-renderer@npm:19.1.0":
+  version: 19.1.0
+  resolution: "react-test-renderer@npm:19.1.0"
   dependencies:
-    react-is: "npm:^19.1.5"
+    react-is: "npm:^19.1.0"
     scheduler: "npm:^0.26.0"
   peerDependencies:
-    react: ^19.1.5
-  checksum: 10/6cedb8174055617357033bacc70d6a6996cb6832a4263d8e5d6cf0298b908090112158b5c8e7782e00b6bf91721c371f04a42d378d60a809f44be252a48ac8fe
+    react: ^19.1.0
+  checksum: 10/73ae0ea779bacd0ff084dd3644b763a4431d68adf9c6acffdaa3d0810aab5322f24c95c60259c23b77f38b5f36d9d614ffaa46d91a33840536f2d4b7188dcc89
   languageName: node
   linkType: hard
 
@@ -44661,6 +44672,13 @@ __metadata:
     react: ">=16.6.0"
     react-dom: ">=16.6.0"
   checksum: 10/ca32d3fd2168c976c5d90a317f25d5f5cd723608b415fb3b9006f9d793c8965c619562d0884503a3e44e4b06efbca4fdd1520f30e58ca3e00a0890e637d55419
+  languageName: node
+  linkType: hard
+
+"react@npm:19.1.0":
+  version: 19.1.0
+  resolution: "react@npm:19.1.0"
+  checksum: 10/d0180689826fd9de87e839c365f6f361c561daea397d61d724687cae88f432a307d1c0f53a0ee95ddbe3352c10dac41d7ff1ad85530fb24951b27a39e5398db4
   languageName: node
   linkType: hard
 
