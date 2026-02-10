@@ -1,10 +1,12 @@
 
+interface Options {
+	timeout?: number;
+}
 
 // Waits for callback to not throw. Similar to react-native-testing-library's waitFor, but works better
 // with Joplin's mix of real and fake Jest timers.
 const realSetTimeout = setTimeout;
-const waitFor = async (callback: ()=> void|Promise<void>) => {
-	const timeout = 10_000;
+const waitFor = async (callback: ()=> void|Promise<void>, { timeout = 10_000 }: Options = {}) => {
 	const startTime = performance.now();
 	let passed = false;
 	let lastError: Error|null = null;

@@ -257,26 +257,6 @@ function currentClientId() {
 	return currentClient_;
 }
 
-// A waitFor helper for use with @testing-library/react-hooks.
-// The built-in waitFor from that library doesn't work reliably with React 19.
-// This helper polls until the callback succeeds (doesn't throw) or returns a truthy value.
-async function waitForHook(callback: ()=> void | boolean, options: { timeout?: number } = {}) {
-	const timeout = options.timeout ?? 5000;
-	const startTime = Date.now();
-	while (Date.now() - startTime < timeout) {
-		try {
-			const result = callback();
-			// Support both throwing assertions and boolean returns
-			if (result !== false) return;
-		} catch (_e) {
-			// Assertion failed, keep trying
-		}
-		await msleep(50);
-	}
-	// Final call to throw the error
-	callback();
-}
-
 async function afterEachCleanUp() {
 	await ItemChange.waitForAllSaved();
 	KeymapService.destroyInstance();
@@ -1230,4 +1210,4 @@ export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> P
 	}
 };
 
-export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp, waitForHook };
+export { supportDir, createNoteAndResource, createTempFile, createTestShareData, simulateReadOnlyShareEnv, waitForFolderCount, afterAllCleanUp, exportDir, synchronizerStart, afterEachCleanUp, syncTargetName, setSyncTargetName, syncDir, createTempDir, isNetworkSyncTarget, kvStore, expectThrow, logger, expectNotThrow, resourceService, resourceFetcher, tempFilePath, allSyncTargetItemsEncrypted, msleep, setupDatabase, revisionService, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync, checkThrow, encryptionService, loadEncryptionMasterKey, fileContentEqual, decryptionWorker, currentClientId, id, ids, sortedIds, at, createNTestNotes, createNTestFolders, createNTestTags, TestApp };

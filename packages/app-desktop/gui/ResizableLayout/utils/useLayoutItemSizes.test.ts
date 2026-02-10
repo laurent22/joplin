@@ -1,6 +1,6 @@
 import useLayoutItemSizes, { itemSize, calculateMaxSizeAvailableForItem } from './useLayoutItemSizes';
 import { LayoutItem, LayoutItemDirection } from './types';
-import { renderHook } from '@testing-library/react-hooks/pure';
+import { renderHook } from '@testing-library/react';
 import validateLayout from './validateLayout';
 
 describe('useLayoutItemSizes', () => {
