@@ -1,6 +1,7 @@
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
+import checkboxPieCss from './checkboxPieCss';
 
 interface CheckboxStats {
 	total: number;
@@ -111,29 +112,10 @@ const renderer: ListRenderer = {
 				align-items: center;
 				padding-right: 12px;
 				padding-left: 8px;
-
-				> .pie {
-					width: 16px;
-					height: 16px;
-					border-radius: 50%;
-					background: conic-gradient(
-						var(--joplin-color4) calc(var(--percent) * 1%),
-						var(--joplin-background-color) calc(var(--percent) * 1%)
-					);
-					border: 1px solid var(--joplin-color-faded);
-					box-sizing: border-box;
-				}
-
-				> .pie.-complete {
-					background: var(--joplin-background-color);
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					font-size: 10px;
-					color: var(--joplin-color4);
-				}
 			}
 		}
+
+		${checkboxPieCss}
 
 		> .content.-shared {
 			> .title {

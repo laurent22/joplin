@@ -1,6 +1,7 @@
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
+import checkboxPieCss from './checkboxPieCss';
 
 const renderer: ListRenderer = {
 	id: 'detailed',
@@ -59,27 +60,6 @@ const renderer: ListRenderer = {
 				opacity: 1;
 			}
 
-			> .item[data-name="note.checkboxes"] > .content > .checkbox-pie > .pie {
-				width: 16px;
-				height: 16px;
-				border-radius: 50%;
-				background: conic-gradient(
-					var(--joplin-color4) calc(var(--percent) * 1%),
-					var(--joplin-background-color) calc(var(--percent) * 1%)
-				);
-				border: 1px solid var(--joplin-color-faded);
-				box-sizing: border-box;
-			}
-
-			> .item[data-name="note.checkboxes"] > .content > .checkbox-pie > .pie.-complete {
-				background: var(--joplin-background-color);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				font-size: 10px;
-				color: var(--joplin-color4);
-			}
-
 			> .item > .content > .watchedicon {
 				display: none;
 				margin-right: 8px;
@@ -105,6 +85,8 @@ const renderer: ListRenderer = {
 		> .row:hover, &.-focus-visible > .row {
 			background-color: var(--joplin-background-color-hover3);
 		}
+
+		${checkboxPieCss}
 	`,
 
 	onHeaderClick: async (event: OnClickEvent) => {
