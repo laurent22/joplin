@@ -142,7 +142,7 @@ const renderer: ListRenderer = {
 		'note.checkboxes': // html
 			`
 			{{#note.checkboxes}}
-				<div class="checkbox-pie" title="{{note.checkboxes.checked}}/{{note.checkboxes.total}} completed">
+				<div class="checkbox-pie" title="{{note.checkboxes.checked}}/{{note.checkboxes.total}}">
 					{{#note.checkboxes.isComplete}}
 						<div class="pie -complete">✓</div>
 					{{/note.checkboxes.isComplete}}
