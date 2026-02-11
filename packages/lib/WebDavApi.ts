@@ -378,7 +378,17 @@ class WebDavApi {
 		}
 	}
 
-	private async performInvalidIfNoneMatchedDetection(url: string, fetchOptions: FetchOptions): Promise<Response> {
+	private async testInvalidIfNoneMatch(url: string, fetchOptions: FetchOptions): Promise<Response> {
+		// some webserver, for example Apache Tomcat do not accept invalid If-None-Match header,
+		// which is being sent to resolve issue with Seafile and network library on iOS
+		// to fix this issue, a request is sent with invalid If-None-Match header at first
+		//
+		// if it succeeds, excludeIfNoneMatch  flag is set to No, to indicate,
+		// that  subsequent request will be sent with If-None-Match header
+		//
+		// if first request with invalid If-None-Match header fails, it's retried without the header
+		// if successful, excludeIfNoneMatch is set to Yes, to indicate,
+		// that subsequent request will be sent without If-None-Match header
 		const response = await shim.fetch(url, fetchOptions);
 		if (response.ok) {
 			this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
@@ -439,8 +449,9 @@ class WebDavApi {
 		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
-		if (['GET', 'HEAD'].indexOf(method) < 0 && this.excludeIfNoneMatch !== ExcludeIfNoneMatch.Yes) 
-			{ headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`; }
+		if (['GET', 'HEAD'].indexOf(method) < 0 && this.excludeIfNoneMatch !== ExcludeIfNoneMatch.Yes) {
+			headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+		}
 		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -478,7 +489,7 @@ class WebDavApi {
 		} else if (options.target === 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
 			if (['GET', 'HEAD'].indexOf(method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
-				response = await this.performInvalidIfNoneMatchedDetection(url, fetchOptions);
+				response = await this.testInvalidIfNoneMatch(url, fetchOptions);
 			} else {
 				response = await shim.fetch(url, fetchOptions);
 			}
