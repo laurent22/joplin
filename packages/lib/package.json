@@ -35,7 +35,7 @@
     "jsdom": "26.1.0",
     "pdfjs-dist": "3.11.174",
     "react": "19.1.5",
-    "react-dom": "19.1.5",
+    "react-dom": "19.2.0",
     "sharp": "0.34.5",
     "tesseract.js": "6.0.1",
     "typescript": "5.8.3"
