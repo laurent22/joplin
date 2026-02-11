@@ -50,6 +50,9 @@ pub enum ErrorKind {
     #[error("IO failure: {0}")]
     IoError(std::io::Error),
 
+    #[error("onepkg import failure: {0}")]
+    OnePkgImportFailure(String),
+
     #[error("Failure: {0}")]
     OtherError(ColorError),
 }

@@ -94,7 +94,12 @@ impl crate::onestore::object_space::ObjectSpace for ObjectSpace {
         self.revision_list
             .revisions
             .iter()
-            .rev()
+            // TODO: It would make more sense to use the **last** revision, rather than
+            //       the first to get the content root. However, doing so seems to return
+            //       version history information, rather than the true content root.
+            //       In the future, if there are issues related to importing the wrong versions
+            //       of pages, look into this.
+            // .rev()
             .find_map(|revision| revision.content_root())
     }
 
@@ -102,7 +107,7 @@ impl crate::onestore::object_space::ObjectSpace for ObjectSpace {
         self.revision_list
             .revisions
             .iter()
-            .rev()
+            // .rev() // TODO: Why does calling .rev() result in the wrong metadata being returned?
             .find_map(|revision| revision.metadata_root())
     }
 }

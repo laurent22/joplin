@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, createUser } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, createUser, expectHttpError } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
 import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
@@ -11,7 +11,11 @@ import config from '../config';
 describe('UserModel', () => {
 
 	beforeAll(async () => {
-		await beforeAllDb('UserModel');
+		const envValues = {
+			MFA_ENCRYPTION_KEY: '42bb51d708f1f7bfe43f074b03dfcd5f6c10fe337744d2e73deb4ee46d2b1038',
+		};
+
+		await beforeAllDb('UserModel', { envValues });
 	});
 
 	afterAll(async () => {
@@ -65,27 +69,6 @@ describe('UserModel', () => {
 			await checkThrowAsync(async () => await models().user().save({ id: user1.id, full_name: 'Example', email: 'new_email@example.com' })),
 		).toBe(null);
 	});
-
-	// test('should delete a user', async () => {
-	// 	const { session: session1, user: user1 } = await createUserAndSession(2, false);
-
-	// 	const userModel = models().user();
-
-	// 	const allUsers: User[] = await userModel.all();
-	// 	const beforeCount: number = allUsers.length;
-
-	// 	await createItem(session1.id, 'root:/test.txt:', 'testing');
-
-	// 	// Admin can delete any user
-	// 	expect(!!(await models().session().load(session1.id))).toBe(true);
-	// 	expect((await models().item().all()).length).toBe(1);
-	// 	expect((await models().userItem().all()).length).toBe(1);
-	// 	await models().user().delete(user1.id);
-	// 	expect((await userModel.all()).length).toBe(beforeCount - 1);
-	// 	expect(!!(await models().session().load(session1.id))).toBe(false);
-	// 	expect((await models().item().all()).length).toBe(0);
-	// 	expect((await models().userItem().all()).length).toBe(0);
-	// });
 
 	test('should push an email when creating a new user', async () => {
 		const { user: user1 } = await createUserAndSession(1);
@@ -222,7 +205,7 @@ describe('UserModel', () => {
 		stripeConfig().enabled = false;
 	});
 
-	test('should disable disable the account and send an email if payment failed for good', async () => {
+	test('should disable the account and send an email if payment failed for good', async () => {
 		stripeConfig().enabled = true;
 
 		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
@@ -288,31 +271,35 @@ describe('UserModel', () => {
 		{
 			// Now check that the 100% email is sent too
 
-			await models().user().save({
-				id: user2.id,
-				total_item_size: Math.round(accountByType(AccountType.Pro).max_total_item_size * 1.1),
-			});
+			for (const u of [user2]) {
+				const user = await models().user().load(u.id);
 
-			// User upload should be enabled at this point
-			expect((await models().user().load(user2.id)).can_upload).toBe(1);
+				await models().user().save({
+					id: user.id,
+					total_item_size: Math.round(accountByType(user.account_type).max_total_item_size * 1.1),
+				});
 
-			const emailBeforeCount = (await models().email().all()).length;
-			await models().user().handleOversizedAccounts();
-			const emailAfterCount = (await models().email().all()).length;
+				// User upload should be enabled at this point
+				expect((await models().user().load(user.id)).can_upload).toBe(1);
 
-			// User upload should be disabled
-			expect((await models().user().load(user2.id)).can_upload).toBe(0);
-			expect(await models().userFlag().byUserId(user2.id, UserFlagType.AccountOverLimit)).toBeTruthy();
+				const emailBeforeCount = (await models().email().all()).length;
+				await models().user().handleOversizedAccounts();
+				const emailAfterCount = (await models().email().all()).length;
 
-			expect(emailAfterCount).toBe(emailBeforeCount + 1);
-			const email = (await models().email().all()).pop();
+				// User upload should be disabled
+				expect((await models().user().load(user.id)).can_upload).toBe(0);
+				expect(await models().userFlag().byUserId(user.id, UserFlagType.AccountOverLimit)).toBeTruthy();
 
-			expect(email.recipient_id).toBe(user2.id);
-			expect(email.subject).toContain('100%');
+				expect(emailAfterCount).toBe(emailBeforeCount + 1);
+				const email = (await models().email().all()).pop();
 
-			// Running it again should not send a second email
-			await models().user().handleOversizedAccounts();
-			expect((await models().email().all()).length).toBe(emailBeforeCount + 1);
+				expect(email.recipient_id).toBe(user.id);
+				expect(email.subject).toContain('100%');
+
+				// Running it again should not send a second email
+				await models().user().handleOversizedAccounts();
+				expect((await models().email().all()).length).toBe(emailBeforeCount + 1);
+			}
 		}
 	});
 
@@ -454,6 +441,92 @@ describe('UserModel', () => {
 
 		expect(error.message).toBe(`Unable to save user because password already seems to be hashed. User id: ${user.id}`);
 		expect(error instanceof ErrorBadRequest).toBe(true);
+	});
+
+	test('should not allow the creation of user records with invalid email address', async () => {
+
+		const error = await checkThrowAsync(
+			async () => await models().user().save({
+				email: 'invalid_email.com',
+			}),
+		);
+
+		expect(error.message).toBe('Should include @ in email address, email: invalid_email.com');
+		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
+	});
+
+	test('should generate a notification when MFA is enabled', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+		// cSpell:disable
+		await models().user().enableMFA(user.id, 'KUKNC5O2CGOLU6EVKT2PRAHE3AK7MKY3', '');
+		// cSpell:enable
+
+		const notifications = await models().notification().allUnreadByUserId(user.id);
+		expect(notifications.length).toBe(1);
+		expect(notifications[0].message).toBe('Multi-factor authentication has been enabled for your account. Please remember to copy and save your recovery codes');
+	});
+
+	test('should create a isNewlyCreated keyValue record after MFA is enabled', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+		// cSpell:disable
+		await models().user().enableMFA(user.id, 'KUKNC5O2CGOLU6EVKT2PRAHE3AK7MKY3', '');
+		// cSpell:enable
+
+		const isNewlyCreated = await models().keyValue().value(`RecoveryCode::isNewlyCreated::${user.id}`);
+		expect(isNewlyCreated).toBe(1);
+	});
+
+	test('should delete all other sessions when MFA is enabled', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+		await models().session().createUserSession(user.id);
+		await models().session().createApplicationSession(user.id, '00000000-0000-0000-0000-000000000001');
+		await models().session().createApplicationSession(user.id, '00000000-0000-0000-0000-000000000002');
+
+		const session = await models().session().createUserSession(user.id);
+
+		let sessions = await models().session().all();
+		expect(sessions.length).toBe(4);
+		// cSpell:disable
+		await models().user().enableMFA(user.id, 'KUKNC5O2CGOLU6EVKT2PRAHE3AK7MKY3', session.id);
+		// cSpell:enable
+		sessions = await models().session().all();
+		expect(sessions.length).toBe(1);
+		expect(sessions[0].id).toBe(session.id);
+	});
+
+	test('should throw error if password is empty', async () => {
+		await expectHttpError(() => models().user().isPasswordValid('', undefined as string), 400);
+	});
+
+	test('should delete all applications when password is reset', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+
+		await models().application().createPreLoginRecord('random-string', '');
+		await models().application().onAuthorizeUse('random-string', user.id);
+		await models().application().createPreLoginRecord('random-string2', '');
+		await models().application().onAuthorizeUse('random-string2', user.id);
+
+		let applications = await models().application().all();
+		expect(applications.length).toBe(2);
+
+		const url = await models().user().generateLinkForPasswordReset(user.id);
+		const token = url.split('?token=')[1];
+		await models().user().resetPassword(token, { password: '111111', password2: '111111' });
+
+		applications = await models().application().all();
+		expect(applications.length).toBe(0);
 	});
 
 	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {

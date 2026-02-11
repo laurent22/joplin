@@ -1,6 +1,6 @@
 import config from '../config';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
-import { afterAllTests, beforeAllDb, beforeEachDb, createNote, createUserAndSession, models } from '../utils/testing/testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, createApplicationCredentials, createNote, createUserAndSession, models } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
 import { BackupItemType, UserFlagType } from './database/types';
 import UserDeletionService from './UserDeletionService';
@@ -178,6 +178,33 @@ describe('UserDeletionService', () => {
 
 		// And the job should have been removed from the queue
 		expect(await models().userDeletion().count()).toBe(0);
+	});
+
+	test('should delete applications when deleting user account', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+
+		await createApplicationCredentials(user1.id, 'mockAppAuth');
+		await createApplicationCredentials(user2.id, 'mockAppAuth2');
+
+		await models().userFlag().toggle(user1.id, UserFlagType.ManuallyDisabled, true);
+
+		const job = await models().userDeletion().add(user1.id, new Date().getTime(), {
+			processData: false,
+			processAccount: true,
+		});
+
+		expect(await models().application().count()).toBe(2);
+
+		const service = newService();
+		await service.processDeletionJob(job, { sleepBetweenOperations: 0 });
+
+		const application = (await models().application().all())[0];
+		expect(application.user_id).toBe(user2.id);
+
+		expect(await models().user().count()).toBe(1);
+		expect(await models().session().count()).toBe(1);
+		expect(await models().application().count()).toBe(1);
 	});
 
 });

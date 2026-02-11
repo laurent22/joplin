@@ -24,6 +24,15 @@ export default class TokenModel extends BaseModel<Token> {
 		return token.value;
 	}
 
+	public async generateAnonymous(): Promise<string> {
+		const token = await this.save({
+			value: uuidgen(32),
+			user_id: '',
+		});
+
+		return token.value;
+	}
+
 	public async checkToken(userId: string, tokenValue: string): Promise<void> {
 		if (!(await this.isValid(userId, tokenValue))) throw new ErrorForbidden('Invalid or expired token');
 	}

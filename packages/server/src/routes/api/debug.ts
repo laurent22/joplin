@@ -8,6 +8,7 @@ import { SubPath } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
 import { ErrorForbidden } from '../../utils/errors';
 import createTestUsers, { CreateTestUsersOptions } from '../../tools/debug/createTestUsers';
+import benchmarkDeltaPerformance from '../../tools/benchmark/benchmarkDeltaPerformance';
 import createUserDeletions from '../../tools/debug/createUserDeletions';
 import clearDatabase from '../../tools/debug/clearDatabase';
 import populateDatabase from '../../tools/debug/populateDatabase';
@@ -50,6 +51,10 @@ router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
 
 	if (query.action === 'clearKeyValues') {
 		await models.keyValue().deleteAll();
+	}
+
+	if (query.action === 'benchmarkDeltaPerformance') {
+		await benchmarkDeltaPerformance(ctx.joplin.models);
 	}
 
 	if (query.action === 'populateDatabase') {

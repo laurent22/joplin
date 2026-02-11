@@ -6,12 +6,17 @@ html {
 	font-size: 14px;
 }
 
+h2 {
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 0.5em;
+}
+
 .is-admin-page div.main-container,
 .is-admin-page div.navbar-container {
 	max-width: none !important;
 }
 
-div.navbar-container {
+.is-admin-page div.navbar-container {
 	padding: 0 3rem;
 }
 
@@ -101,4 +106,26 @@ h6:hover a.heading-anchor {
 abbr[title] {
 	text-underline-offset: 2px;
 	text-decoration: underline dotted;
+}
+
+#login-form {
+	max-width: 400px;
+}
+
+#recovery-codes li {
+	opacity: 0.8;
+}
+
+#recovery-codes li>span {
+	font-size: 1.3em;
+	font-family: monospace;
+}
+
+#recovery-codes li>span[data-is-code-used="1"] {
+	text-decoration: line-through;
+	opacity: 0.6;
+}
+
+.application-item:nth-of-type(odd) {
+	background-color: #f9f9f9;
 }

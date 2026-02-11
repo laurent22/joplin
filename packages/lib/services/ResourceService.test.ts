@@ -48,7 +48,20 @@ describe('services/ResourceService', () => {
 		expect(!(await NoteResource.all()).length).toBe(true);
 	}));
 
-	it('should not delete resource if still associated with at least one note', (async () => {
+	it.each([
+		{
+			linkStyle: 'image 1',
+			markupTag: (id: string) => `![image](:/${id})`,
+		},
+		{
+			linkStyle: 'image 2',
+			markupTag: (id: string) => `![image][image]\n\n[image]: :/${id}`,
+		},
+		{
+			linkStyle: 'html link',
+			markupTag: (id: string) => `<a href=":/${id}">test</a>`,
+		},
+	])('should not delete resource if still associated with at least one note (link style: $linkStyle)', (async ({ markupTag }) => {
 		const service = new ResourceService();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -63,7 +76,7 @@ describe('services/ResourceService', () => {
 
 		await service.indexNoteResources();
 
-		await Note.save({ id: note2.id, body: Resource.markupTag(resource1) });
+		await Note.save({ id: note2.id, body: markupTag(resource1.id) });
 
 		await service.indexNoteResources();
 

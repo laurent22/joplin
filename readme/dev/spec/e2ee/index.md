@@ -88,7 +88,7 @@ Public-private key pairs (PPK) are used to transfer secrets between users. Speci
 
 - Alice shares a notebook with Bob
 - Since the notebook is encrypted, Alice also sends the key to Bob, but it needs to be encrypted too.
-- To do so, she downloads Bob's public key and encrypt the key with it
+- To do so, she downloads Bob's public key and encrypts the key with it
 - When accepting the share, Bob receives this key
 - Bob decrypts it with his private key
 - Once decrypted, he reencrypts it with his master password

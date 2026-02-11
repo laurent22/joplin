@@ -1,0 +1,19 @@
+@use "./base-button.scss";
+@use "./base-text.scss";
+
+.share-note-dialog {
+	min-width: 500px;
+
+	> .message {
+		@extend .base-text;
+	}
+
+	> .notes {
+		margin-bottom: 10px;
+	}
+
+	> .share {
+		@extend .base-button;
+		margin-bottom: 10px;
+	}
+}

@@ -125,6 +125,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -338,6 +341,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Paks"
 	],
@@ -431,6 +437,9 @@
 	"Checking... Please wait.": [
 		"Kontroll... Oota."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Valida suvand"
 	],
@@ -480,6 +489,9 @@
 		""
 	],
 	"Command": [
+		""
+	],
+	"COMMAND": [
 		""
 	],
 	"Command palette": [
@@ -678,6 +690,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -746,6 +761,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Kuvatakse märkme kohta täielik teave."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Kuvab antud märkme."
@@ -1306,6 +1324,9 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		""
 	],
@@ -1383,6 +1404,9 @@
 		"Annetuse tegemine"
 	],
 	"Manage your plugins": [
+		""
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
 		""
 	],
 	"Manual": [
@@ -1532,6 +1556,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Tekstiredaktorit pole määratletud. Seadistage see kasutades konfiguratsiooniredaktorit <editor-path>"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1640,6 +1667,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Avatud..."
 	],
@@ -1651,6 +1681,9 @@
 	],
 	"Options": [
 		"Valikud"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Other": [
 		""
@@ -2045,6 +2078,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2173,6 +2209,9 @@
 	],
 	"Source format: %s": [
 		"Allika Formaat: %s"
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -2560,6 +2599,9 @@
 		""
 	],
 	"Try again": [
+		""
+	],
+	"TYPE": [
 		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [

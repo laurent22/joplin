@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { createContext, useMemo, useRef, useState } from 'react';
+import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { NotificationType, PopupHandle, PopupControl as PopupManager } from './types';
 import { Hour, msleep } from '@joplin/utils/time';
+import shim from '@joplin/lib/shim';
 
 export const PopupNotificationContext = createContext<PopupManager|null>(null);
 export const VisibleNotificationsContext = createContext<PopupSpec[]>([]);
@@ -111,6 +112,18 @@ const PopupNotificationProvider: React.FC<Props> = props => {
 		};
 		return manager;
 	}, []);
+
+	useEffect(() => {
+		const defaultShowToast = shim.showToast;
+		shim.showToast = async (message: string, options) => {
+			const popup = popupManager.createPopup(() => message, { type: options?.type ?? NotificationType.Info });
+			popup.scheduleDismiss();
+		};
+
+		return () => {
+			shim.showToast = defaultShowToast;
+		};
+	}, [popupManager]);
 
 	return <PopupNotificationContext.Provider value={popupManager}>
 		<VisibleNotificationsContext.Provider value={popupSpecs}>

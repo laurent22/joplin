@@ -7,4 +7,5 @@ db-*.sqlite
 logs/
 tests/temp/
 temp/
+resource/
 .env

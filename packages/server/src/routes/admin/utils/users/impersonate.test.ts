@@ -24,7 +24,7 @@ describe('users/impersonate', () => {
 
 		cookieSet(ctx, 'sessionId', adminSession.id);
 
-		await startImpersonating(ctx, user.id);
+		await startImpersonating(ctx, user.id, 'http://localhost');
 
 		{
 			expect(cookieGet(ctx, 'adminSessionId')).toBe(adminSession.id);
@@ -32,12 +32,13 @@ describe('users/impersonate', () => {
 			expect(sessionUser.id).toBe(user.id);
 		}
 
-		await stopImpersonating(ctx);
+		const returnUrl = await stopImpersonating(ctx);
 
 		{
 			expect(cookieGet(ctx, 'adminSessionId')).toBeFalsy();
 			const sessionUser = await models().session().sessionUser(cookieGet(ctx, 'sessionId'));
 			expect(sessionUser.id).toBe(adminUser.id);
+			expect(returnUrl).toBe('http://localhost');
 		}
 	});
 
@@ -49,18 +50,7 @@ describe('users/impersonate', () => {
 
 		cookieSet(ctx, 'sessionId', session.id);
 
-		await expectThrow(async () => startImpersonating(ctx, adminUser.id));
+		await expectThrow(async () => startImpersonating(ctx, adminUser.id, 'http://localhost'));
 	});
-
-	// test('should not stop impersonating if not admin', async function() {
-	// 	const ctx = await koaAppContext();
-
-	// 	await createUserAndSession(1, true);
-	// 	const { session } = await createUserAndSession(2);
-
-	// 	cookieSet(ctx, 'adminSessionId', session.id);
-
-	// 	await expectThrow(async () => stopImpersonating(ctx));
-	// });
 
 });

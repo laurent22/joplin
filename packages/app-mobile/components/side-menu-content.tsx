@@ -3,7 +3,6 @@ import { useMemo, useEffect, useCallback, useContext } from 'react';
 import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle } from 'react-native';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-const IonIcon = require('react-native-vector-icons/Ionicons').default;
 import Icon from './Icon';
 import Folder from '@joplin/lib/models/Folder';
 import Synchronizer from '@joplin/lib/Synchronizer';
@@ -26,6 +25,7 @@ import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import { TouchableRipple } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
+import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 interface Props {
@@ -202,8 +202,8 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	const baseStyles = props.styles;
 
 	const collapsed = props.collapsed;
-	const iconName = collapsed ? 'chevron-down' : 'chevron-up';
-	const iconComp = <IonIcon name={iconName} style={baseStyles.folderToggleIcon} />;
+	const iconName = collapsed ? 'ionicon chevron-down' : 'ionicon chevron-up';
+	const iconComp = <Icon name={iconName} style={baseStyles.folderToggleIcon} accessibilityLabel={null} />;
 
 	const onTogglePress = useCallback(() => {
 		props.onTogglePress(props.folder);
@@ -232,7 +232,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 			if (folderId === getTrashFolderId()) {
 				folderIcon = getTrashFolderIcon(FolderIconType.FontAwesome);
 			} else if (props.alwaysShowFolderIcons) {
-				return <IonIcon name="folder-outline" style={baseStyles.folderBaseIcon} />;
+				return <Icon name="ionicon folder-outline" style={baseStyles.folderBaseIcon} accessibilityLabel={null} />;
 			} else {
 				return null;
 			}
@@ -337,6 +337,8 @@ const SideMenuContentComponent = (props: Props) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const menuItems: any[] = [];
+
+		if (folder && folder.id === getConflictFolderId()) return;
 
 		if (folder && folder.id === getTrashFolderId()) {
 			menuItems.push({

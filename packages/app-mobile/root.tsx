@@ -1,8 +1,5 @@
 import * as React from 'react';
-import shim from '@joplin/lib/shim';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
-
-shim.setReact(React);
 PerformanceLogger.onAppStartBegin();
 
 import setupQuickActions from './setupQuickActions';
@@ -38,7 +35,7 @@ import Folder from '@joplin/lib/models/Folder';
 import NotesScreen from './components/screens/Notes/Notes';
 import TagsScreen from './components/screens/tags';
 import ConfigScreen from './components/screens/ConfigScreen/ConfigScreen';
-const { FolderScreen } = require('./components/screens/folder.js');
+import FolderScreen from './components/screens/folder';
 import LogScreen from './components/screens/LogScreen';
 import StatusScreen from './components/screens/status';
 import SearchScreen from './components/screens/SearchScreen';
@@ -445,6 +442,10 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 				state: 'ready',
 			});
 
+			setTimeout(() => {
+				perfLogger.mark('Application is ready');
+			}, 50);
+
 			// setTimeout(() => {
 			// 	this.props.dispatch({
 			// 		type: 'NAV_GO',
@@ -695,12 +696,12 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		let disableSideMenuGestures = this.props.disableSideMenuGestures;
 
 		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContentNote options={this.props.noteSideMenuOptions}/></SafeAreaView>;
+			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
 			menuPosition = SideMenuPosition.Right;
 		} else if (this.props.routeName === 'Config') {
 			disableSideMenuGestures = true;
 		} else {
-			sideMenuContent = <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}><SideMenuContent/></SafeAreaView>;
+			sideMenuContent = <SideMenuContent/>;
 		}
 
 		const appNavInit = {

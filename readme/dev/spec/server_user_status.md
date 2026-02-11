@@ -2,7 +2,7 @@
 
 ## User flags
 
-User flags are used to indicate problem conditions with a particular account. They are usually automatically set by various services, for example when an account go over the limit, or when a payment fails. Likewise they are removed automatically when the condition changes.
+User flags are used to indicate problem conditions with a particular account. They are usually automatically set by various services, for example when an account goes over the limit, or when a payment fails. Likewise they are removed automatically when the condition changes.
 
 The list of flags is defined in `UserFlagType`.
 

@@ -58,7 +58,7 @@ import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesser
 import OcrDriverTranscribe from '@joplin/lib/services/ocr/drivers/OcrDriverTranscribe';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
-import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
+import { CustomContentProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
 import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
@@ -82,7 +82,7 @@ class Application extends BaseApplication {
 	private checkAllPluginStartedIID_: any = null;
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
-	private protocolHandler_: CustomProtocolHandler;
+	private protocolHandler_: CustomContentProtocolHandler;
 
 	public constructor() {
 		super();
@@ -130,7 +130,7 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'renderer.fileUrls' || action.type === 'SETTING_UPDATE_ALL') {
-			bridge().electronApp().getCustomProtocolHandler().setMediaAccessEnabled(
+			bridge().electronApp().getContentProtocolHandler().setMediaAccessEnabled(
 				Setting.value('renderer.fileUrls'),
 			);
 		}
@@ -281,14 +281,16 @@ class Application extends BaseApplication {
 		}
 
 		// As of Joplin 3.5.7, the ABC rendering is part of the app so we automatically disable the plugin
-		pluginSettings = {
-			...pluginSettings,
-			['org.joplinapp.plugins.AbcSheetMusic']: {
-				enabled: false,
-				deleted: false,
-				hasBeenUpdated: false,
-			},
-		};
+		if (pluginSettings['org.joplinapp.plugins.AbcSheetMusic']) {
+			pluginSettings = {
+				...pluginSettings,
+				['org.joplinapp.plugins.AbcSheetMusic']: {
+					enabled: false,
+					deleted: false,
+					hasBeenUpdated: false,
+				},
+			};
+		}
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
@@ -475,7 +477,7 @@ class Application extends BaseApplication {
 		}
 
 		addTask('app/set up custom protocol handler', async () => {
-			this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
+			this.protocolHandler_ = bridge().electronApp().getContentProtocolHandler();
 			this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
 			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
 			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('resourceDir'));

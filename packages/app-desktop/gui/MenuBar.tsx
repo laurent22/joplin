@@ -117,7 +117,7 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 
 		switchProfileMenuItems.push({ type: 'separator' });
 		switchProfileMenuItems.push(menuItemDic.addProfile);
-		switchProfileMenuItems.push(menuItemDic.editProfileConfig);
+		switchProfileMenuItems.push(menuItemDic.showProfileEditor);
 
 		return switchProfileMenuItems;
 	}, [profileConfig, menuItemDic]);
@@ -615,6 +615,18 @@ function useMenu(props: Props) {
 
 				...(shim.isMac() ? [] : profilesAndAppInstancesItems),
 
+				shim.isMac() ? noItem : {
+					type: 'separator',
+				},
+
+				shim.isMac() ? noItem : {
+					label: _('Close Window'),
+					accelerator: keymapService.getAccelerator('closeWindow'),
+					click: () => {
+						bridge().activeWindow()?.close();
+					},
+				},
+
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
@@ -693,17 +705,8 @@ function useMenu(props: Props) {
 						menuItemDic.pasteAsText,
 						menuItemDic.textSelectAll,
 						separator(),
-						// Using the generic "undo"/"redo" roles mean the menu
-						// item will work in every text fields, whether it's the
-						// editor or a regular text field.
-						{
-							role: 'undo',
-							label: _('Undo'),
-						},
-						{
-							role: 'redo',
-							label: _('Redo'),
-						},
+						menuItemDic.globalUndo,
+						menuItemDic.globalRedo,
 						separator(),
 						menuItemDic.textBold,
 						menuItemDic.textItalic,
