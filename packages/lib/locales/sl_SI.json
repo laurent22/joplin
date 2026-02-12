@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -359,6 +362,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Krepko"
 	],
@@ -479,6 +485,9 @@
 	"Checking... Please wait.": [
 		"Pregledovanje... Prosimo počakajte."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Izberi možnost"
 	],
@@ -550,6 +559,9 @@
 	],
 	"Command": [
 		"Ukaz"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta ukazov"
@@ -788,6 +800,9 @@
 	"Delete plugin \"%s\"?": [
 		"Izbriši dodatek \"%s\"?"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -871,6 +886,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Prikaže vse informacije o beležki."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Prikaže dano beležko."
@@ -1583,6 +1601,9 @@
 	"Keychain Supported: %s": [
 		"Keychain podprt: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Label": [
 		""
 	],
@@ -1669,6 +1690,9 @@
 	],
 	"Manage your plugins": [
 		"Upravljaj svoje dodatke"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manual": [
 		"Ročno"
@@ -1847,6 +1871,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Noben urejevalnik besedila ni izbran. Prosimo, nastavite ga z uporabo `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -1991,6 +2018,9 @@
 	"Open Sync Wizard...": [
 		"Odpri čarovnik sinhronizacije...."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Odpri..."
 	],
@@ -2002,6 +2032,9 @@
 	],
 	"Options": [
 		"Možnosti"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Other": [
 		""
@@ -2426,6 +2459,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2563,6 +2599,9 @@
 	],
 	"Source: ": [
 		"Vir: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -3040,6 +3079,9 @@
 	],
 	"Try again": [
 		"Poizkusi znova"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Vtipkajte `help [command]` za več informacij o ukazu; ali vtipkajte `help all` za popoln prikaz informacij o uporabi."

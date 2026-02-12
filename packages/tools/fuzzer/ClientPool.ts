@@ -41,7 +41,7 @@ export default class ClientPool {
 		});
 	}
 
-	public async createInitialItemsAndSync() {
+	public async createRandomInitialItemsAndSync() {
 		for (const client of this.clients) {
 			logger.info('Creating items for ', client.email);
 			const actionCount = this.context_.randomFrom([0, 10, 100]);
@@ -53,6 +53,18 @@ export default class ClientPool {
 
 	public clientsByEmail(email: string) {
 		return this.clients.filter(client => client.email === email);
+	}
+
+	public clientById(id: number) {
+		const client = this.clients[id];
+		if (!client) throw new Error(`Not found: ${id}`);
+		return client;
+	}
+
+	public getClientId(client: Client): number {
+		const index = this.clients.indexOf(client);
+		if (index === -1) throw new Error(`Not found: ${client}`);
+		return index;
 	}
 
 	public randomClient(filter: ClientFilter = ()=>true) {

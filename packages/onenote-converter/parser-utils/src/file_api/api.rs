@@ -1,4 +1,7 @@
+use std::io::{Read, Seek};
+
 pub type ApiResult<T> = std::result::Result<T, std::io::Error>;
+pub trait FileHandle: Read + Seek {}
 
 pub trait FileApiDriver: Send + Sync {
     fn is_directory(&self, path: &str) -> ApiResult<bool>;
@@ -7,6 +10,7 @@ pub trait FileApiDriver: Send + Sync {
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()>;
     fn make_dir(&self, path: &str) -> ApiResult<()>;
     fn exists(&self, path: &str) -> ApiResult<bool>;
+    fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>>;
 
     // These functions correspond to the similarly-named
     // NodeJS path functions and should behave like the NodeJS
@@ -19,6 +23,12 @@ pub trait FileApiDriver: Send + Sync {
     /// `path_2` is still appended to `path_1`.
     fn join(&self, path_1: &str, path_2: &str) -> String;
 
+    /// Splits filename into (base, extension).
+    fn split_file_name(&self, filename: &str) -> (String, String) {
+        let ext = self.get_file_extension(filename);
+        let base = filename.strip_suffix(&ext).unwrap_or(filename);
+        (base.into(), ext)
+    }
     fn remove_prefix<'a>(&self, full_path: &'a str, prefix: &str) -> &'a str {
         if let Some(without_prefix) = full_path.strip_prefix(prefix) {
             without_prefix

@@ -1,13 +1,14 @@
 import { RefObject } from 'react';
 import useMessageHandler from './useMessageHandler';
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default function(viewRef: RefObject<HTMLIFrameElement>, onSubmit: Function, onDismiss: Function) {
+type OnEvent = ()=> void;
+
+export default function(viewRef: RefObject<HTMLIFrameElement>, onSubmit: OnEvent, onDismiss: OnEvent) {
 	useMessageHandler(viewRef, event => {
 		const message = event.data?.message;
-		if (message === 'form-submit') {
+		if (message === 'form-submit' && onSubmit) {
 			onSubmit();
-		} else if (message === 'dismiss') {
+		} else if (message === 'dismiss' && onDismiss) {
 			onDismiss();
 		}
 	});

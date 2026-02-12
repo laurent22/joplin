@@ -21,6 +21,7 @@ const builtInCommandNames = [
 	EditorCommandType.ToggleCheckList,
 	'-',
 	`editor.${EditorCommandType.InsertTable}`,
+	`editor.${EditorCommandType.InsertCodeBlock}`,
 	'-',
 	EditorCommandType.IndentLess,
 	EditorCommandType.IndentMore,

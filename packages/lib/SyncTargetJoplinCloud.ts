@@ -10,6 +10,7 @@ interface FileApiOptions {
 	userContentPath(): string;
 	username(): string;
 	password(): string;
+	apiKey(): string;
 }
 
 export default class SyncTargetJoplinCloud extends BaseSyncTarget {
@@ -89,6 +90,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			userContentPath: () => Setting.value('sync.10.userContentPath'),
 			username: () => Setting.value('sync.10.username'),
 			password: () => Setting.value('sync.10.password'),
+			apiKey: () => Setting.value('sync.10.apiKey'),
 		});
 	}
 

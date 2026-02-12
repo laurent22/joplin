@@ -8,6 +8,7 @@ import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
 import getActivePluginEditorView from '../plugins/utils/getActivePluginEditorView';
+import { MarkupLanguage } from '@joplin/renderer';
 
 export interface WhenClauseContextOptions {
 	commandFolderId?: string;
@@ -18,6 +19,7 @@ export interface WhenClauseContextOptions {
 
 export interface WhenClauseContext {
 	allSelectedNotesAreDeleted: boolean;
+	selectionIncludesHtmlNotes: boolean;
 	foldersAreDeleted: boolean;
 	foldersIncludeReadOnly: boolean;
 	folderIsDeleted: boolean;
@@ -88,6 +90,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// Selected notes properties
 		allSelectedNotesAreDeleted: !selectedNotes.find(n => !n.deleted_time),
+		selectionIncludesHtmlNotes: selectedNotes.some(n => n.markup_language === MarkupLanguage.Html),
 
 		// Note history
 		historyhasBackwardNotes: windowState.backwardHistoryNotes && windowState.backwardHistoryNotes.length > 0,

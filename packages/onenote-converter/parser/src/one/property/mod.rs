@@ -205,4 +205,7 @@ pub(crate) enum PropertyType {
     EmbeddedInkSpaceHeight = 0x14001C28,
     ImageEmbedType = 0x140035F2,
     ImageEmbeddedUrl = 0x1C0035F3,
+
+    MathUnknown1 = 0x10003453, // Unknown 16-bit math-related property (operator variant?)
+    MathOperator = 0x1400344f,
 }

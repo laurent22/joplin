@@ -77,7 +77,9 @@ const makeBlockReplaceExtension = (extensionSpec: ReplacementExtension) => {
 				return extensionSpec.shouldFullReRender(transaction);
 			};
 
-			if (transaction.docChanged || selectionChanged || wasRerenderRequested()) {
+			const treeChanged = syntaxTree(transaction.state) !== syntaxTree(transaction.startState);
+
+			if (transaction.docChanged || selectionChanged || wasRerenderRequested() || treeChanged) {
 				decorations = updateDecorations(transaction.state, extensionSpec);
 			}
 

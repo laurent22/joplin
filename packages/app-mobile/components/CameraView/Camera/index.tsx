@@ -5,7 +5,6 @@ import { ForwardedRef, forwardRef, useCallback, useEffect, useImperativeHandle, 
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { CameraRef, Props } from './types';
 import { _ } from '@joplin/lib/locale';
-import { Platform } from 'react-native';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('Camera/expo');
@@ -66,7 +65,9 @@ const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 		// iOS issue workaround: Since upgrading to Expo SDK 52, closing and reopening the camera on iOS
 		// never emits onCameraReady. As a workaround, call .resumePreview and wait for it to resolve,
 		// rather than relying on the CameraView's onCameraReady prop.
-		if (Platform.OS === 'ios' && camera) {
+		//
+		// Update 12/23/2025: This also happens on certain Android devices.
+		if (camera) {
 			// Work around an issue on iOS where the onCameraReady callback is never called.
 			// Instead, wait for the preview to start using resumePreview:
 			await camera.resumePreview();

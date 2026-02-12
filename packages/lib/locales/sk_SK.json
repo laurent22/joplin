@@ -191,6 +191,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"O aplikácii"
 	],
@@ -476,6 +479,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Tučné"
 	],
@@ -614,6 +620,9 @@
 	"Checking... Please wait.": [
 		"Prebieha kontrola... Čakajte prosím."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Vyberte možnosť"
 	],
@@ -680,9 +689,6 @@
 	"Code View": [
 		"Zobraziť kód"
 	],
-	"Code:": [
-		"Kód:"
-	],
 	"Collaborate on a notebook with others": [
 		"Spolupracujte na zápisníku s ostatnými"
 	],
@@ -709,6 +715,9 @@
 	],
 	"Command": [
 		"Príkaz"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta príkazov"
@@ -799,9 +808,6 @@
 	"Convert it": [
 		"Previesť ju"
 	],
-	"Convert note to Markdown": [
-		"Previesť poznámku na Markdown"
-	],
 	"Convert to note": [
 		"Premeniť na poznámku"
 	],
@@ -857,9 +863,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Nepodarilo sa pripojiť k úložisku doplnkov."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Poznámku sa nepodarilo previesť do formátu Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"Nepodarilo sa exportovať poznámky: %s"
@@ -1071,6 +1074,9 @@
 	"Delete selected notes": [
 		"Vymazať vybrané poznámky"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Vymazať zápisník Doručená pošta?\n\nAk vymažete zápisník doručenej pošty, všetky e-maily, ktoré doň boli nedávno odoslané, sa môžu stratiť."
 	],
@@ -1175,6 +1181,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Zobrazí úplné informácie o poznámke."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Zobrazí danú poznámku."
@@ -2093,6 +2102,9 @@
 	"Keychain Supported: %s": [
 		"Podporovaný zväzok kľúčov: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Kľúče, ktoré si vyžadujú aktualizáciu"
 	],
@@ -2240,6 +2252,9 @@
 	],
 	"Manage your plugins": [
 		"Spravovať svoje doplnky"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Spravuje konfiguráciu E2EE. Príkazy sú `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, a `target-status`."
@@ -2498,6 +2513,9 @@
 	"No updates available": [
 		"Nie sú k dispozícii žiadne aktualizácie"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Žiadny"
 	],
@@ -2708,6 +2726,9 @@
 	"Open Sync Wizard...": [
 		"Otvoriť Sprievodcu synchronizáciou..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Otvoriť..."
 	],
@@ -2728,6 +2749,9 @@
 	],
 	"Options": [
 		"Možnosti"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Usporiadaný zoznam"
@@ -3361,6 +3385,9 @@
 	"Select parent notebook": [
 		"Vybrať nadradený zápisník"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Vybraný: %s"
 	],
@@ -3564,6 +3591,9 @@
 	],
 	"Source: ": [
 		"Zdroj: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Oddelovač"
@@ -3873,9 +3903,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Poznámka \"%s\" bola úspešne obnovená do zápisníka \"%s\"."
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Poznámka bola prevedená do formátu Markdown a pôvodná poznámka bola presunutá do koša"
-	],
 	"The note was successfully moved to the trash.": [
 		"Poznámka bola úspešne presunutá do koša.",
 		"Poznámky boli úspešne presunuté do koša.",
@@ -4180,6 +4207,9 @@
 	],
 	"Try it now": [
 		"Skúste to teraz"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Ak chcete získať ďalšie informácie o príkaze, zadajte `help [command]` alebo `help all` pre úplné informácie o použití."

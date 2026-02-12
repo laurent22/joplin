@@ -28,10 +28,31 @@ function normalizeAndWriteFile(filePath, data) {
 	fs.writeFileSync(filePath, data);
 }
 
+function fileReader(path) {
+	const fd = fs.openSync(path);
+	const size = fs.fstatSync(fd).size;
+	return {
+		read: (position, length) => {
+			const data = Buffer.alloc(length);
+			const sizeRead = fs.readSync(fd, data, { length, position });
+
+			// Make data.size match the number of bytes read:
+			return data.subarray(0, sizeRead);
+		},
+		size: () => {
+			return size;
+		},
+		close: () => {
+			fs.closeSync(fd);
+		},
+	};
+}
+
 module.exports = {
 	mkdirSyncRecursive,
 	isDirectory,
 	readDir,
 	removePrefix,
 	normalizeAndWriteFile,
+	fileReader,
 };

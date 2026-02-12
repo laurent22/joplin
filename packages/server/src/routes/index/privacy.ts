@@ -43,7 +43,7 @@ We treat personal data confidentially and will not share it with any third party
 
 ## Where do we store and process personal data?
 
-Personal data is stored securely in a Postgres database. Access to it is strictly controlled.
+Personal data is stored securely in a database. Access to it is strictly controlled.
 
 We may process the data for reporting purposes - for example, how many users use the service. How many requests per day, etc.
 
@@ -53,7 +53,11 @@ A backup is made at regular intervals and stored on a secure server.
 
 ## How long do we keep your personal data for?
 
-We keep your data for as long as you use the service. If you would like to stop using it and have your data deleted, please contact us. We will also consider automatic data deletion provided it can be done in a safe way.
+Disabled accounts are automatically deleted after 100 days. A disabled account is one where the Stripe subscription has been cancelled either by yourself or automatically (eg for unpaid invoices).
+
+When an account is deleted, all notes, notebooks, tags, etc are permanently deleted. User information, in particular email and full name will be removed from the system within 92 days, but archived for an additional 90 days for legal reasons, after which they will be deleted too.
+
+If you would like to have your data deleted immediately after your subscription is cancelled, please contact us.
 
 ## How to contact us?
 

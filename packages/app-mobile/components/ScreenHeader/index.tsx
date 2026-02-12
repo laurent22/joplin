@@ -2,7 +2,6 @@ import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, TouchableOpacity, ViewStyle, Platform } from 'react-native';
-const Icon = require('react-native-vector-icons/Ionicons').default;
 import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
@@ -26,6 +25,7 @@ import WebBetaButton from './WebBetaButton';
 import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
+import Icon from '../Icon';
 export { MenuOptionType };
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -282,7 +282,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={_('Show/hide the sidebar')}
 					accessibilityRole="button">
 					<View style={styles.sideMenuButton}>
-						<Icon name="menu" style={styles.topIcon} />
+						<Icon name="ionicon menu" style={styles.topIcon} accessibilityLabel={null} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -299,8 +299,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityRole="button">
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
 						<Icon
-							name="arrow-back"
+							name="ionicon arrow-back"
 							style={styles.topIcon}
+							accessibilityLabel={null}
 						/>
 					</View>
 				</TouchableOpacity>
@@ -668,6 +669,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			{pluginPanelsComp}
 			{betaIconComp}
 			{togglePluginEditorButton}
+			{selectAllButtonComp}
+			{searchButtonComp}
+			{deleteButtonComp}
+			{customDeleteButtonComp}
 		</>;
 
 		const titleComp = createTitleComponent(hideableRightComponents);
@@ -683,16 +688,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const menuComp =
 			!menuOptions.length || !showContextMenuButton ? null : (
 				<Menu themeId={this.props.themeId} options={menuOptions}>
-					<View style={contextMenuStyle} accessibilityLabel={_('Actions')}>
-						<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+					<View style={contextMenuStyle}>
+						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={_('Actions')}/>
 					</View>
 				</Menu>
 			);
+
+		// Updating the state of this component can result in the left most element becoming hidden, so add a dummy as the first element to prevent this
+		// See https://github.com/laurent22/joplin/issues/14153
+		const zeroWidthSpacer = (
+			<View style={{ width: 0 }} pointerEvents="none"/>
+		);
 
 		return (
 			<View style={this.styles().outerContainer}>
 				<View style={this.styles().aboveHeader}/>
 				<View style={this.styles().innerContainer}>
+					{zeroWidthSpacer}
 					{sideMenuComp}
 					{backButtonComp}
 					{renderUndoButton()}
@@ -706,10 +718,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						this.props.showSaveButton === true,
 					)}
 					{titleComp}
-					{selectAllButtonComp}
-					{searchButtonComp}
-					{deleteButtonComp}
-					{customDeleteButtonComp}
 					{restoreButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}

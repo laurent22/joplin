@@ -30,6 +30,18 @@ For example,
 }
 ```
 
+Or, alternatively, if the build process for the plugin is trusted (e.g. it uses [NPM trusted publishing](https://docs.npmjs.com/trusted-publishers)) and the plugin doesn't need to be patched,
+1. Add the plugin to `devDependencies` in `package.json`.
+2. Update `pluginRepositories.json`, replacing `""` with the plugin's NPM package name:
+    ```json
+    {
+        "plugin.id.here": {
+            "cloneUrl": "https://example.com/plugin-repo/plugin-repo-here.git",
+            "package": ""
+        }
+    }
+    ```
+
 ## Patching the plugin
 
 Some plugins need patching. To create or update a plugin's patch, run the `patch-plugin` command in the `packages/default-plugins/` directory.

@@ -12,7 +12,7 @@ class Command extends BaseCommand {
 	}
 
 	public override async action() {
-		this.stdout(versionInfo(require('./package.json'), {}).message);
+		this.stdout(versionInfo(require('../package.json'), {}).message);
 	}
 }
 

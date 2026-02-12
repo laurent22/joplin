@@ -26,6 +26,9 @@ class DividerWidget extends WidgetType {
 
 const dividerLineMark = Decoration.line({ class: dividerLineClassName });
 
+// Node names that should be rendered as dividers
+const dividerNodeNames = ['HorizontalRule', 'FrontMatterMarker'];
+
 const replaceDividers = [
 	EditorView.theme({
 		[`& .cm-line.${dividerLineClassName}`]: {
@@ -47,7 +50,7 @@ const replaceDividers = [
 	}),
 	makeInlineReplaceExtension({
 		createDecoration: (node) => {
-			if (node.name === 'HorizontalRule') {
+			if (dividerNodeNames.includes(node.name)) {
 				return new DividerWidget();
 			}
 			return null;
@@ -55,7 +58,7 @@ const replaceDividers = [
 	}),
 	makeInlineReplaceExtension({
 		createDecoration: (node) => {
-			if (node.name === 'HorizontalRule') {
+			if (dividerNodeNames.includes(node.name)) {
 				return dividerLineMark;
 			}
 			return null;

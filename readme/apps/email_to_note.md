@@ -26,3 +26,9 @@ To copy your Joplin Cloud email address you will need to navigate to the [Config
 Your Joplin Cloud email address is available in the dashboard of the Joplin Cloud website.
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/email_to_note/website.png" width="50%"/>
+
+### Video tutorial
+
+Watch this short video to learn how to setup email to note on desktop:
+
+[![Watch the video](https://img.youtube.com/vi/8r8gS7grFDQ/hqdefault.jpg)](https://www.youtube.com/watch?v=8r8gS7grFDQ)
