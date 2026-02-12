@@ -71,6 +71,9 @@ interface ScreenHeaderProps {
 	showContextMenuButton?: boolean;
 	showPluginEditorButton?: boolean;
 	showBackButton?: boolean;
+	showViewToggleButton?: boolean;
+	onViewTogglePress?: OnPressCallback;
+	viewToggleIconName?: string;
 
 	saveButtonDisabled?: boolean;
 	showSaveButton?: boolean;
@@ -371,6 +374,16 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				description: _('Redo'),
 				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
+			});
+		};
+
+		const renderViewToggleButton = () => {
+			if (!this.props.showViewToggleButton || !this.props.onViewTogglePress || !this.props.viewToggleIconName) return null;
+			return renderTopButton({
+				iconName: this.props.viewToggleIconName,
+				description: _('Toggle view/edit'),
+				onPress: this.props.onViewTogglePress,
+				visible: true,
 			});
 		};
 
@@ -718,6 +731,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						this.props.showSaveButton === true,
 					)}
 					{titleComp}
+					{renderViewToggleButton()}
 					{restoreButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}

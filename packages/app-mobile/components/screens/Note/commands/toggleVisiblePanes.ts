@@ -10,8 +10,11 @@ export const declaration: CommandDeclaration = {
 export const runtime = (props: CommandRuntimeProps): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext) => {
-			// For now, the only two "panes" on mobile are view and edit.
-			const newMode = props.getMode() === 'edit' ? 'view' : 'edit';
+			props.dispatch({
+				type: 'NOTE_VISIBLE_PANES_TOGGLE',
+			});
+			const currentMode = props.getMode();
+			const newMode = currentMode === 'edit' ? 'view' : 'edit';
 			props.setMode(newMode);
 		},
 	};

@@ -206,6 +206,20 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'SYNC_WIZARD_VISIBLE_CHANGE':
 			newState = { ...state, syncWizardVisible: action.visible };
 			break;
+
+		case 'NOTE_VISIBLE_PANES_TOGGLE':
+			newState = {
+				...state,
+				noteVisiblePanes: state.noteVisiblePanes.includes('editor') ? ['viewer'] : ['editor'],
+			};
+			break;
+
+		case 'NOTE_VISIBLE_PANES_SET':
+			newState = {
+				...state,
+				noteVisiblePanes: action.panes,
+			};
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;

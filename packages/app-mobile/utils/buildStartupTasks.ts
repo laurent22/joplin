@@ -372,6 +372,13 @@ const buildStartupTasks = (
 			ids: Setting.value('collapsedFolderIds'),
 		});
 	});
+	addTask('buildStartupTasks/initialize note visible panes', async () => {
+		const panes = Setting.value('noteVisiblePanes') || ['viewer'];
+		dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: panes,
+		});
+	});
 	addTask('buildStartupTasks/load tags', async () => {
 		const tags = await Tag.allWithNotes();
 
