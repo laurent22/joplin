@@ -16,7 +16,7 @@ To **update a translation**, follow the same steps as above but instead of getti
 
 ## Translating the documentation
 
-The Joplin documentation translations are managed from [our project on Crowdin](https://crowdin.com/project/joplin-website). To participate simple create a Crowdin account and start translating.
+The Joplin documentation translations are managed from [our project on Crowdin](https://crowdin.com/project/joplin-website). To participate, simply create a Crowdin account and start translating.
 
 If you would like to add a new language or for any other issue, please contact us [on the forum](https://discourse.joplinapp.org/) or GitHub.
 

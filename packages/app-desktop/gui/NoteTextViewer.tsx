@@ -86,7 +86,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 		const result: NoteViewerControl = {
 			domReady: () => domReadyRef.current,
 			setHtml: (html: string, options: SetHtmlOptions) => {
-				const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
+				const protocolHandler = bridge().electronApp().getContentProtocolHandler();
 
 				// Grant & remove asset access.
 				if (options.pluginAssets) {

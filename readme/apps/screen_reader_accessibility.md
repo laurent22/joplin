@@ -55,7 +55,7 @@ An "add new" button is located near the end of the focus order in these cases:
 1. The sidebar is expanded, or
 2. The notes list screen is visible for an editable notebook.
 
-Clicking "add new" opens a menu with "new note" and "new to-do" menu items. These items are be located just before the toggle in the focus order.
+Clicking "add new" opens a menu with "new note" and "new to-do" menu items. These items are located just before the toggle in the focus order.
 
 See [to-dos](https://github.com/laurent22/joplin/blob/dev/readme/apps/to-dos.md) for information about how notes and to-dos are different.
 

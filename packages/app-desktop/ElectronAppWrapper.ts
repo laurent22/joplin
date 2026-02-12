@@ -16,7 +16,7 @@ const fs = require('fs-extra');
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
-import handleCustomProtocols, { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
+import handleCustomProtocols, { CustomProtocolHandlers } from './utils/customProtocols/handleCustomProtocols';
 import { clearTimeout, setTimeout } from 'timers';
 import { resolve } from 'path';
 import { defaultWindowId } from '@joplin/lib/reducer';
@@ -68,7 +68,7 @@ export default class ElectronAppWrapper {
 
 	private initialCallbackUrl_: string = null;
 	private updaterService_: AutoUpdaterService = null;
-	private customProtocolHandler_: CustomProtocolHandler = null;
+	private customProtocolHandlers_: CustomProtocolHandlers|null = null;
 	private updatePollInterval_: ReturnType<typeof setTimeout>|null = null;
 
 	private profileLocker_: FileLocker|null = null;
@@ -816,8 +816,12 @@ export default class ElectronAppWrapper {
 		}
 	};
 
-	public getCustomProtocolHandler() {
-		return this.customProtocolHandler_;
+	public getContentProtocolHandler() {
+		return this.customProtocolHandlers_.appContent;
+	}
+
+	public getPluginProtocolHandler() {
+		return this.customProtocolHandlers_.pluginContent;
 	}
 
 	private async fixLinuxAccessibility_() {
@@ -857,7 +861,7 @@ export default class ElectronAppWrapper {
 
 		await this.fixLinuxAccessibility_();
 
-		this.customProtocolHandler_ = handleCustomProtocols();
+		this.customProtocolHandlers_ = handleCustomProtocols();
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {

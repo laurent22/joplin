@@ -2,7 +2,7 @@
 
 ## CSS
 
-Plugins add custom content to the UI using [webview panels](https://joplinapp.org/api/references/plugin_api/classes/joplinviewspanels.html). The HTML content of a a panel is styled with CSS.
+Plugins add custom content to the UI using [webview panels](https://joplinapp.org/api/references/plugin_api/classes/joplinviewspanels.html). The HTML content of a panel is styled with CSS.
 
 To keep the look and feel of a plugin consistent with the rest of the Joplin UI, you are automatically provided with variables derived from the current theme.
 
@@ -60,4 +60,4 @@ const App = () => {
 export default App;
 ```
 
-If you are not using React, just ask ChatGPT on how to do the above using you preferred JS framework.
+If you are not using React, just ask ChatGPT on how to do the above using your preferred JS framework.

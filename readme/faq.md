@@ -53,7 +53,7 @@ notepad.exe         # Opens Notepad in a new window
 notepad++.exe --openSession   # Opens Notepad ++ in new window
 ```
 
-Note that the path to directory with your editor executable must exist in your PATH variable ([Windows](https://www.computerhope.com/issues/ch000549.htm), [Linux/Mac](https://opensource.com/article/17/6/set-path-linux)) If not, the full path to the executable must be provided.
+Note that the path to the directory with your editor executable must exist in your PATH variable ([Windows](https://www.computerhope.com/issues/ch000549.htm), [Linux/Mac](https://opensource.com/article/17/6/set-path-linux)). If not, the full path to the executable must be provided.
 
 ## When I open a note in vim, the cursor is not visible
 
@@ -142,7 +142,7 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 ## How can I use self-signed SSL certificates on Android?
 
-If you want to serve using https but can't or don't want to use SSL certificates signed by trusted certificate authorities (like "Let's Encrypt"), it's possible to generate a custom CA and sign your certificates with it. You can generate the CA and certificates using [openssl](https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309), but I like to use a tool called [mkcert](https://github.com/FiloSottile/mkcert) for it's simplicity. Finally, you have to add your CA certificate to Android settings so that Android can recognize the certificates you signed with your CA as valid ([link](https://support.google.com/nexus/answer/2844832?hl=en-GB)).
+If you want to serve using https but can't or don't want to use SSL certificates signed by trusted certificate authorities (like "Let's Encrypt"), it's possible to generate a custom CA and sign your certificates with it. You can generate the CA and certificates using [openssl](https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309), but I like to use a tool called [mkcert](https://github.com/FiloSottile/mkcert) for its simplicity. Finally, you have to add your CA certificate to Android settings so that Android can recognize the certificates you signed with your CA as valid ([link](https://support.google.com/nexus/answer/2844832?hl=en-GB)).
 
 ## How do I restart Joplin on Windows (so that certain changes take effect)?
 

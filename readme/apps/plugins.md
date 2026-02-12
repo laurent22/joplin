@@ -17,7 +17,7 @@ To install a plugin just search for the name of the plugin within the search box
 To install a plugin just press its `Install` button, the application will then require restarting to finish the installation and will prompt you to do so.  
 
 Alternatively, to install a plugin manually, first download a plugin as a `.jpl` file. Next,
-- **On desktop**: press the `Plugin tools` "gear" button and select `Install from file` then select the downloaded `.jpl` file. Alternatively you can copy the `.jpl` to your profile's `plugins` directory directory `~/.config/joplin-desktop/plugins` (This path might be different on your device - check at the top of the `Options` page in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md)). The plugin will be automatically loaded and executed when you restart the application. You may need to check Joplin is not minimising to the system tray/notification area rather than fully closing.
+- **On desktop**: press the `Plugin tools` "gear" button and select `Install from file` then select the downloaded `.jpl` file. Alternatively you can copy the `.jpl` to your profile's `plugins` directory `~/.config/joplin-desktop/plugins` (This path might be different on your device - check at the top of the `Options` page in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md)). The plugin will be automatically loaded and executed when you restart the application. You may need to check Joplin is not minimising to the system tray/notification area rather than fully closing.
 - **On Android**, the `Install from file` button is present under "Advanced settings" in the "Plugins" tab of the configuration screen.
 
 :::note

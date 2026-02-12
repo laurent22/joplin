@@ -3,9 +3,9 @@ sidebar_position: 1
 ---
 # Creating a table of contents plugin
 
-This tutorial will guide you through the steps to create a table of contents plugin for Joplin. It will display a view next to the current note that will contain links to the sections of a note. It will be possible to click on one of the header to jump to the relevant section.
+This tutorial will guide you through the steps to create a table of contents plugin for Joplin. It will display a view next to the current note that will contain links to the sections of a note. It will be possible to click on one of the headers to jump to the relevant section.
 
-Through this tutorial you will learn about several aspect of the Joplin API, including:
+Through this tutorial you will learn about several aspects of the Joplin API, including:
 
 - The plugin API
 - How to create a webview
@@ -260,7 +260,7 @@ Try the plugin and the styling should be improved. You may also try to switch to
 
 ## Making the webview interactive
 
-The next step is to make the TOC interactive so that when the user clicks on a link, the note is scrolled to right header. This can be done using an external JavaScript file that will handle the click events. As for the CSS file, create a `webview.js` file next to `index.ts`, then add the script to the webview:
+The next step is to make the TOC interactive so that when the user clicks on a link, the note is scrolled to the right header. This can be done using an external JavaScript file that will handle the click events. As for the CSS file, create a `webview.js` file next to `index.ts`, then add the script to the webview:
 
 ```typescript
 // In index.ts

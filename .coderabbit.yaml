@@ -11,6 +11,8 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    ignored_pr_authors:
+      - "renovate[bot]"
   path_instructions: []
 chat:
   auto_reply: true
