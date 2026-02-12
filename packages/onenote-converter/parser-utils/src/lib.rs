@@ -9,6 +9,7 @@ pub mod parse;
 pub mod reader;
 
 pub use errors::Result;
+pub use file_api::FileHandle;
 pub use file_api::fs_driver;
 
 pub type Reader<'a, 'b> = &'b mut crate::reader::Reader<'a>;

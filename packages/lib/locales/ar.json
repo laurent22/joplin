@@ -140,6 +140,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -371,6 +374,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"غامق"
 	],
@@ -497,6 +503,9 @@
 	"Checking... Please wait.": [
 		"التحقق جارٍ... فضلاً انتظر."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"إختر خيار"
 	],
@@ -568,6 +577,9 @@
 	],
 	"Command": [
 		"أمر"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"لوحة الأوامر"
@@ -859,6 +871,9 @@
 	"Delete selected notes": [
 		"حدف الملاحظات المحددة"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -945,6 +960,9 @@
 	],
 	"Displays the complete information about note.": [
 		"يعرض المعلومات الكاملة عن الملاحظة."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"يعرض الملاحظة المعطاة."
@@ -1695,6 +1713,9 @@
 	"Keychain Supported: %s": [
 		"سلسلة المفاتيح المدعومة: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"المفاتيح التي تحتاج إلى ترقية"
 	],
@@ -1807,6 +1828,9 @@
 	],
 	"Manage your plugins": [
 		"إدارة الإضافات الخاصة بك"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manual": [
 		"يدوي"
@@ -1985,6 +2009,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"لم يعرَّف محرر نصوص. فضلاً اضبطه باستخدام `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2141,6 +2168,9 @@
 	"Open Sync Wizard...": [
 		"فتح معالج المزامنة..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"فتح..."
 	],
@@ -2152,6 +2182,9 @@
 	],
 	"Options": [
 		"خيارات"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Other": [
 		""
@@ -2573,6 +2606,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2710,6 +2746,9 @@
 	],
 	"Source: ": [
 		"المصدر: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -3187,6 +3226,9 @@
 	],
 	"Try again": [
 		"حاول ثانية"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"أكتب `help [command]` للمزيد من المعلومات عن أمر ما ، أو `help all` لمعلومات الاستخدام الكاملة."

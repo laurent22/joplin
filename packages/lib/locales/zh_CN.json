@@ -179,6 +179,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"关于"
 	],
@@ -461,6 +464,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"加粗"
 	],
@@ -599,6 +605,9 @@
 	"Checking... Please wait.": [
 		"正在检查……请稍候。"
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"选择一个选项"
 	],
@@ -665,9 +674,6 @@
 	"Code View": [
 		"代码视图"
 	],
-	"Code:": [
-		"代码："
-	],
 	"Collaborate on a notebook with others": [
 		"与他人共同协作笔记"
 	],
@@ -691,6 +697,9 @@
 	],
 	"Command": [
 		"命令"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"命令面板"
@@ -779,9 +788,6 @@
 	"Convert it": [
 		"转换"
 	],
-	"Convert note to Markdown": [
-		"将笔记转换为 Markdown"
-	],
 	"Convert to note": [
 		"转换为笔记"
 	],
@@ -835,9 +841,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"无法连接到插件库。"
-	],
-	"Could not convert note to Markdown: %s": [
-		"无法将笔记 %s 转换为 Markdown"
 	],
 	"Could not export notes: %s": [
 		"无法导出笔记：%s"
@@ -1043,6 +1046,9 @@
 	"Delete selected notes": [
 		"删除选中的笔记"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"是否删除收件箱笔记本？\n\n如果删除收件箱笔记本，最近发送到其中的任何电子邮件都可能会丢失。"
 	],
@@ -1147,6 +1153,9 @@
 	],
 	"Displays the complete information about note.": [
 		"显示关于笔记的完整信息。"
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"显示选定笔记。"
@@ -2057,6 +2066,9 @@
 	"Keychain Supported: %s": [
 		"支持的密钥链：%s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"需要升级的密钥"
 	],
@@ -2200,6 +2212,9 @@
 	],
 	"Manage your plugins": [
 		"管理您的插件"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"管理 E2EE 配置。命令为：`enable`、`disable`、`decrypt`、`status`、`decrypt-file` 和 `target-status`。"
@@ -2453,6 +2468,9 @@
 	"No updates available": [
 		"没有更新可用"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"无"
 	],
@@ -2660,6 +2678,9 @@
 	"Open Sync Wizard...": [
 		"打开同步向导……"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"打开……"
 	],
@@ -2680,6 +2701,9 @@
 	],
 	"Options": [
 		"选项"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"有序列表"
@@ -3299,6 +3323,9 @@
 	"Select parent notebook": [
 		"选择父笔记本"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"已选择：%s"
 	],
@@ -3502,6 +3529,9 @@
 	],
 	"Source: ": [
 		"来源："
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"间隔"
@@ -3806,9 +3836,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"笔记“%s”已成功恢复到笔记本“%s”中。"
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"该笔记已转换为 Markdown，原始笔记已移至回收站。"
-	],
 	"The note was successfully moved to the trash.": [
 		"已成功将笔记移到回收站中。"
 	],
@@ -4105,6 +4132,9 @@
 	],
 	"Try it now": [
 		"现在就试试吧"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"键入 `help [command]` 来获取有关该命令的更多信息；或键入 `help all` 获取完整的用法提示。"

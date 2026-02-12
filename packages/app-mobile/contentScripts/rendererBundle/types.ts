@@ -30,19 +30,23 @@ export interface ExtraContentScriptSource {
 	pluginId: string;
 }
 
+export interface ScrollEvent {
+	fraction: number; // e.g. 0.5 when scrolled 50% of the way through the document
+}
+
+export type OnScrollCallback = (scrollTop: ScrollEvent)=> void;
+
 export interface RendererProcessApi {
 	renderer: Renderer;
 	jumpToHash: (hash: string)=> void;
 }
 
 export interface MainProcessApi {
-	onScroll(scrollTop: number): void;
+	onScroll: OnScrollCallback;
 	onPostMessage(message: string): void;
 	onPostPluginMessage(contentScriptId: string, message: unknown): Promise<unknown>;
 	fsDriver: RendererFsDriver;
 }
-
-export type OnScrollCallback = (scrollTop: number)=> void;
 
 export interface MarkupRecord {
 	language: MarkupLanguage;
@@ -62,7 +66,7 @@ export interface RenderOptions {
 	removeUnusedPluginAssets: boolean;
 
 	noteHash: string;
-	initialScroll: number;
+	initialScrollPercent: number;
 
 	// Forwarded renderer settings
 	splitted?: boolean;

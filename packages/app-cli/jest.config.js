@@ -24,9 +24,21 @@
 // 4. Remove tests one by one to narrow it down to the one with the async
 //    call that's causing problem.
 
+const baseConfig = require('../../jest.config.base.js');
+
 module.exports = {
+	...baseConfig,
 	testMatch: [
-		'**/tests/**/*.js',
+		'**/tests/HtmlToHtml.js',
+		'**/tests/HtmlToMd.js',
+		'**/tests/MarkupToHtml.js',
+		'**/tests/MdToHtml.js',
+		'**/tests/feature_NoteHistory.js',
+		'**/tests/feature_NoteList.js',
+		'**/tests/feature_ShowAllNotes.js',
+		'**/tests/feature_TagList.js',
+
+		'**/tests/services/**/*.js',
 		'**/*.test.js',
 	],
 

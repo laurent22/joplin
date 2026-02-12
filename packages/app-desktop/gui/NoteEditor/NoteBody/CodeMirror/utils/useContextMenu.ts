@@ -1,6 +1,6 @@
 
 import { ContextMenuParams, Event } from 'electron';
-import { useEffect, RefObject } from 'react';
+import { useEffect, RefObject, useContext } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { EditContextMenuFilterObject, MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
@@ -11,6 +11,7 @@ import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl'
 import eventManager from '@joplin/lib/eventManager';
 import bridge from '../../../../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
+import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -29,6 +30,7 @@ interface ContextMenuProps {
 
 const useContextMenu = (props: ContextMenuProps) => {
 	const editorRef = props.editorRef;
+	const windowId = useContext(WindowIdContext);
 
 	// The below code adds support for spellchecking when it is enabled
 	// It might be buggy, refer to the below issue
@@ -156,7 +158,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		const targetWindow = bridge().activeWindow();
+		const targetWindow = bridge().windowById(windowId);
 		targetWindow.webContents.prependListener('context-menu', onContextMenu);
 
 		return () => {
@@ -167,6 +169,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 	}, [
 		props.plugins, props.editorClassName, editorRef, props.containerRef,
 		props.editorCutText, props.editorCopyText, props.editorPaste,
+		windowId,
 	]);
 };
 

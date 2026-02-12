@@ -14,6 +14,11 @@ Operating system | Method
 -----------------|----------------
 macOS, Linux, or Windows (via [WSL](https://docs.microsoft.com/en-us/windows/wsl/faq)) | 1. First, [install Node 12+](https://nodejs.org/en/download/package-manager/).<br/><br/>2. Issue the following commands to install Joplin Terminal: <br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install --loglevel=error -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/local/bin/joplin`<br><br>3. Enter the following command to start Joplin Terminal:<br>`joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
 
+### Video tutorial
+Watch this short video to learn how to install Joplin terminal application:
+
+[![Watch the video](https://img.youtube.com/vi/B6ZT_XENWmw/hqdefault.jpg)](https://www.youtube.com/watch?v=B6ZT_XENWmw)
+
 ### Unsupported methods
 
 There are other ways to install the terminal application. However, they are not supported and problems must be reported to the upstream projects.

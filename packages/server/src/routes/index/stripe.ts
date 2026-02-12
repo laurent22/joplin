@@ -9,14 +9,14 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/utils/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
+import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
 import { Subscription, User, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
 import { msleep } from '../../utils/time';
 
-const logger = Logger.create('/stripe');
+const logger = Logger.create('index/stripe');
 
 const router: Router = new Router(RouteType.Web);
 
@@ -40,6 +40,7 @@ interface CreateCheckoutSessionFields {
 	coupon: string;
 	promotionCode: string;
 	email: string;
+	source: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -110,7 +111,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			}
 		}
 	} else {
-		logger.info(`Creating subscription for new user: ${customerName} (${userEmail})`);
+		logger.info(`Creating subscription for new user: ${customerName} (${userEmail}), Account type: ${accountType}`);
 
 		await models.subscription().saveUserAndSubscription(
 			userEmail,
@@ -150,7 +151,13 @@ export const postHandlers: PostHandlers = {
 			mode: 'subscription',
 			// Stripe supports many payment method types but it seems only
 			// "card" is supported for recurring subscriptions.
-			payment_method_types: ['card'],
+			payment_method_types: [
+				'card',
+				'sepa_debit',
+				'ideal',
+				// 'sofort',
+				'alipay',
+			],
 			line_items: [
 				{
 					price: priceId,
@@ -160,6 +167,12 @@ export const postHandlers: PostHandlers = {
 			],
 			subscription_data: {
 				trial_period_days: 14,
+			},
+			automatic_tax: {
+				enabled: true,
+			},
+			tax_id_collection: {
+				enabled: true,
 			},
 			allow_promotion_codes: true,
 			// {CHECKOUT_SESSION_ID} is a string literal; do not change it!
@@ -208,6 +221,10 @@ export const postHandlers: PostHandlers = {
 			}
 		}
 
+		if (fields.source) {
+			checkoutSession.metadata = { 'source': fields.source };
+		}
+
 		// See https://stripe.com/docs/api/checkout/sessions/create
 		// for additional parameters to pass.
 		const session = await stripe.checkout.sessions.create(checkoutSession);
@@ -237,6 +254,8 @@ export const postHandlers: PostHandlers = {
 		}
 		await models.keyValue().setValue(eventDoneKey, 1);
 
+		// console.info('EVENT', JSON.stringify(event, null, 4));
+
 		type HookFunction = ()=> Promise<void>;
 
 		const hooks: Record<string, HookFunction> = {
@@ -254,61 +273,11 @@ export const postHandlers: PostHandlers = {
 			'checkout.session.completed': async () => {
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
+				const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
+				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata.source } });
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
 			},
-
-			// 'checkout.session.completed': async () => {
-			// 	// Payment is successful and the subscription is created.
-			// 	//
-			// 	// For testing: `stripe trigger checkout.session.completed`
-			// 	// Or use /checkoutTest URL.
-
-			// 	const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
-			// 	const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
-
-			// 	let customerName = '';
-			// 	try {
-			// 		const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
-			// 		customerName = customer.name;
-			// 	} catch (error) {
-			// 		logger.error('Could not fetch customer information:', error);
-			// 	}
-
-			// 	logger.info('Checkout session completed:', checkoutSession.id);
-			// 	logger.info('User email:', userEmail);
-			// 	logger.info('User name:', customerName);
-
-			// 	let accountType = AccountType.Basic;
-			// 	try {
-			// 		const priceId: string = await models.keyValue().value(`stripeSessionToPriceId::${checkoutSession.id}`);
-			// 		accountType = priceIdToAccountType(priceId);
-			// 		logger.info('Price ID:', priceId);
-			// 	} catch (error) {
-			// 		// We don't want this part to fail since the user has
-			// 		// already paid at that point, so we just default to Basic
-			// 		// in that case. Normally it should not happen anyway.
-			// 		logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
-			// 	}
-
-			// 	logger.info('Account type:', accountType);
-
-			// 	// The Stripe TypeScript object defines "customer" and
-			// 	// "subscription" as various types but they are actually
-			// 	// string according to the documentation.
-			// 	const stripeUserId = checkoutSession.customer as string;
-			// 	const stripeSubscriptionId = checkoutSession.subscription as string;
-
-			// 	await handleSubscriptionCreated(
-			// 		stripe,
-			// 		models,
-			// 		customerName,
-			// 		userEmail,
-			// 		accountType,
-			// 		stripeUserId,
-			// 		stripeSubscriptionId
-			// 	);
-			// },
 
 			'customer.subscription.created': async () => {
 				const stripeSub: Stripe.Subscription = event.data.object as Stripe.Subscription;
@@ -324,6 +293,8 @@ export const postHandlers: PostHandlers = {
 				} catch (error) {
 					logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
 				}
+
+				await autoAssignCustomerPreferredLocales(stripe, customer.id);
 
 				await handleSubscriptionCreated(
 					stripe,
@@ -469,6 +440,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 
 				<script>
 					var stripe = Stripe(${JSON.stringify(stripeConfig().publishableKey)});
+					var source = localStorage.getItem('source');
 
 					var createCheckoutSession = function(priceId, promotionCode) {
 						return fetch("/stripe/createCheckoutSession", {
@@ -479,6 +451,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 							body: JSON.stringify({
 								priceId,
 								promotionCode,
+								source,
 							})
 						}).then(function(result) {
 							return result.json();

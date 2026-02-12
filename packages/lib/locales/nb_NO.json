@@ -137,6 +137,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -362,6 +365,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Fet"
 	],
@@ -482,6 +488,9 @@
 	"Checking... Please wait.": [
 		"Sjekker… Vennligst vent."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Velg et alternativ"
 	],
@@ -553,6 +562,9 @@
 	],
 	"Command": [
 		"Kommando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Kommandomeny"
@@ -810,6 +822,9 @@
 	"Delete plugin \"%s\"?": [
 		"Slett utvidelse \"%s\"?"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -893,6 +908,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Viser den komplette informasjonen om notatet."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Viser det valgte notatet."
@@ -1630,6 +1648,9 @@
 	"Keychain Supported: %s": [
 		"Nøkkelring støttet: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Nøkler som må oppgraderes"
 	],
@@ -1726,6 +1747,9 @@
 	],
 	"Manage your plugins": [
 		"Administrer dine utvidelser"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Håndter E2EE-konfigurasjon. Tilgjengelige kommandoer er: `enable`(aktiver), `disable`(lukk), `decrypt`(dekrypter), `status` og `target-status` (mottager-status)."
@@ -1910,6 +1934,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Ingen teksteditor er valgt. Velg en ved å bruke `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2060,6 +2087,9 @@
 	"Open Sync Wizard...": [
 		"Åpne Sync Wizard…"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Åpne..."
 	],
@@ -2071,6 +2101,9 @@
 	],
 	"Options": [
 		"Generelle innstillinger"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Other": [
 		""
@@ -2516,6 +2549,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2665,6 +2701,9 @@
 	],
 	"Source: ": [
 		"Kilde: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -3160,6 +3199,9 @@
 	],
 	"Try again": [
 		"Forsøk igjen"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Skriv inn `help [kommando]` for å få mer informasjon om en kommando. eller skriv inn `help all` for fullstendig brukerinformasjon."

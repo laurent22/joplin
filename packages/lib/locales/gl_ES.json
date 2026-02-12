@@ -179,6 +179,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Sobre"
 	],
@@ -443,6 +446,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Negrita"
 	],
@@ -581,6 +587,9 @@
 	"Checking... Please wait.": [
 		"Comprobando... Agarde."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Seleccione unha opción"
 	],
@@ -670,6 +679,9 @@
 	],
 	"Command": [
 		"Comando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta de comandos"
@@ -1000,6 +1012,9 @@
 	"Delete selected notes": [
 		"Eliminar notas seleccionadas"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Eliminar o caderno da bandexa de entrada?\n\nSe o eliminas, é posible que se perdan os correos electrónicos enviados recentemente."
 	],
@@ -1104,6 +1119,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Mostra toda a información da nota."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Mostra a nota dada."
@@ -1982,6 +2000,9 @@
 	"Keychain Supported: %s": [
 		"Chaveiro Soportado: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Claves que necesitan actualizarse"
 	],
@@ -2117,6 +2138,9 @@
 	],
 	"Manage your plugins": [
 		"Xestione os seus plugins"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Xestiona a configuración E2EE. As ordes son «enable», «disable», «decrypt», «status» e «target-status»."
@@ -2356,6 +2380,9 @@
 	"No updates available": [
 		"Non hai actualizacións dispoñibles"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Ningún"
 	],
@@ -2548,6 +2575,9 @@
 	"Open Sync Wizard...": [
 		"Abrir asistente de sincronización..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Abrir…"
 	],
@@ -2568,6 +2598,9 @@
 	],
 	"Options": [
 		"Opcións"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Lista ordeada"
@@ -3146,6 +3179,9 @@
 	"Select parent notebook": [
 		"Seleccionar caderno principal"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selection deleted": [
 		"Selección eliminada"
 	],
@@ -3340,6 +3376,9 @@
 	],
 	"Source: ": [
 		"Orixe: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Espaciador"
@@ -3939,6 +3978,9 @@
 	],
 	"Try it now": [
 		"Ténteo agora"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Escriba «help [command]» para obter máis información sobre unha orde ou escriba «help all» para ver toda a información de uso."

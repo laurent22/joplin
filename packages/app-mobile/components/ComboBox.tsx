@@ -438,9 +438,8 @@ const useInputEventHandlers = ({
 	const onSubmit = useCallback(() => {
 		if (selectedResult) {
 			onItemSelected(selectedResult, selectedIndex);
-			setSearch('');
 		}
-	}, [onItemSelected, selectedResult, selectedIndex, setSearch]);
+	}, [onItemSelected, selectedResult, selectedIndex]);
 
 	// For now, onKeyPress only works on web.
 	// See https://github.com/react-native-community/discussions-and-proposals/issues/249

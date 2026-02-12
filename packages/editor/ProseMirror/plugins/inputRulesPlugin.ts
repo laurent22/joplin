@@ -4,19 +4,20 @@ import { MarkType, ResolvedPos } from 'prosemirror-model';
 import { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { closeHistory } from 'prosemirror-history';
+import showCreateEditablePrompt from './joplinEditablePlugin/showCreateEditablePrompt';
 
 
-interface InlineInputRule {
+interface InputRuleData {
 	match: RegExp;
-	matchEndCharacter: string;
-	handler: (state: EditorState, match: RegExpMatchArray, start: number, end: number, commitCharacter: string)=> Transaction|null;
+	commitCharacter: string|null;
+	handler: (view: EditorView, match: RegExpMatchArray, start: number, end: number, commitCharacter: string)=> Transaction|null;
 }
 
 // A custom input rule extension for inline input replacements.
 //
 // Ref: https://github.com/ProseMirror/prosemirror-inputrules/blob/43ef04ce9c1512ef8f2289578309c40b431ed3c5/src/inputrules.ts#L82
 // See https://discuss.prosemirror.net/t/trigger-inputrule-on-enter/1118 for why this approach is needed.
-const inlineInputRules = (rules: InlineInputRule[], commitCharacterExpression: RegExp) => {
+const inlineInputRules = (rules: InputRuleData[], commitCharacterExpression: RegExp) => {
 	const getContentBeforeCursor = (cursorInformation: ResolvedPos) => {
 		const parent = cursorInformation.parent;
 		const offsetInParent = cursorInformation.parentOffset;
@@ -25,9 +26,11 @@ const inlineInputRules = (rules: InlineInputRule[], commitCharacterExpression: R
 	};
 
 	const getApplicableRule = (state: EditorState, cursor: number, justTypedText: string) => {
-		if (!rules.some(rule => justTypedText.endsWith(rule.matchEndCharacter))) {
+		const candidateRules = rules.filter(rule => justTypedText.endsWith(rule.commitCharacter ?? ''));
+		if (!candidateRules.length) {
 			return false;
 		}
+
 		const cursorInformation = state.doc.resolve(cursor);
 		const inCode = cursorInformation.parent.type.spec.code;
 		if (inCode) {
@@ -35,7 +38,7 @@ const inlineInputRules = (rules: InlineInputRule[], commitCharacterExpression: R
 		}
 		const beforeCursor = getContentBeforeCursor(cursorInformation) + justTypedText;
 
-		for (const rule of rules) {
+		for (const rule of candidateRules) {
 			const match = beforeCursor.match(rule.match);
 			if (!match) continue;
 
@@ -44,7 +47,7 @@ const inlineInputRules = (rules: InlineInputRule[], commitCharacterExpression: R
 		return null;
 	};
 
-	type PluginState = { pendingRule: InlineInputRule };
+	type PluginState = { pendingRule: InputRuleData };
 	const run = (view: EditorView, cursor: number, commitData: string) => {
 		const commitCharacter = commitCharacterExpression.exec(commitData) ? commitData : '';
 
@@ -57,7 +60,7 @@ const inlineInputRules = (rules: InlineInputRule[], commitCharacterExpression: R
 		const beforeCursor = getContentBeforeCursor(view.state.doc.resolve(cursor));
 		const match = beforeCursor.match(availableRule.match);
 		if (match) {
-			const transaction = availableRule.handler(view.state, match, cursor - match[0].length, cursor, commitCharacter);
+			const transaction = availableRule.handler(view, match, cursor - match[0].length, cursor, commitCharacter);
 			if (transaction) {
 				// closeHistory: Move the markup completion to a separate history event so that it
 				// can be undone separately.
@@ -109,17 +112,25 @@ const inlineInputRules = (rules: InlineInputRule[], commitCharacterExpression: R
 	return plugin;
 };
 
-const makeMarkInputRule = (
-	regExpString: string, matchEndCharacter: string, replacement: (matches: RegExpMatchArray)=> string, mark: MarkType,
-): InlineInputRule => {
+type OnReplace = (matches: RegExpMatchArray, view: EditorView)=> string;
+interface InputRuleOptions {
+	contentRegex: string|RegExp;
+	commitCharacter: string|null; // null => only "Enter"
+	onReplace: OnReplace;
+	marks: MarkType[];
+}
+
+const makeInputRule = ({
+	contentRegex, commitCharacter, onReplace, marks,
+}: InputRuleOptions): InputRuleData => {
 	const commitCharacterExp = '[.?!,:;¡¿() \\n]';
-	const regex = new RegExp(`(^|${commitCharacterExp})${regExpString}$`);
+	const regex = typeof contentRegex === 'string' ? new RegExp(`(^|${commitCharacterExp})${contentRegex}$`) : contentRegex;
 	return {
 		match: regex,
-		matchEndCharacter,
-		handler: (state, match, start, end, endCommitCharacter) => {
+		commitCharacter,
+		handler: (view, match, start, end, endCommitCharacter) => {
+			const state = view.state;
 			let transaction = state.tr.delete(start, end);
-			const marks = [schema.mark(mark)];
 
 			const startCommitCharacter = match[1];
 
@@ -131,13 +142,12 @@ const makeMarkInputRule = (
 			];
 			matchesWithoutCommitCharacters.groups = match.groups;
 
-			const replacementText = replacement(matchesWithoutCommitCharacters);
-
+			const replacement = onReplace(matchesWithoutCommitCharacters, view);
 			transaction = transaction.insert(
 				transaction.mapping.map(start, -1),
 				[
 					!!startCommitCharacter && schema.text(startCommitCharacter),
-					!!replacementText && schema.text(replacementText, marks),
+					!!replacement && schema.text(replacement, marks.map(type => schema.mark(type))),
 					!!endCommitCharacter && schema.text(endCommitCharacter),
 				].filter(node => !!node),
 			);
@@ -149,33 +159,51 @@ const makeMarkInputRule = (
 
 const baseInputRules = buildInputRules(schema);
 const inlineContentExp = '\\S[^\\n]*\\S|\\S';
+const noMatchRegex = /$^/;
 const inputRulesExtension = [
 	baseInputRules,
 	inlineInputRules([
-		makeMarkInputRule(
-			`\\*\\*(${inlineContentExp})\\*\\*`,
-			'*',
-			(match) => match[1],
-			schema.marks.strong,
-		),
-		makeMarkInputRule(
-			`\\*(${inlineContentExp})\\*`,
-			'*',
-			(match) => match[1],
-			schema.marks.emphasis,
-		),
-		makeMarkInputRule(
-			`_(${inlineContentExp})_`,
-			'_',
-			(match) => match[1],
-			schema.marks.emphasis,
-		),
-		makeMarkInputRule(
-			`[\`](${inlineContentExp})[\`]`,
-			'`',
-			(match) => match[1],
-			schema.marks.code,
-		),
+		makeInputRule({
+			contentRegex: /(^|[\n])(```+)(\w*)$/,
+			commitCharacter: '',
+			onReplace: (match, view) => {
+				const blockStart = `${match[1]}${match[2]}\n`;
+				const block = `${blockStart}\n${match[1]}`;
+				showCreateEditablePrompt({
+					source: block,
+					inline: false,
+					cursor: blockStart.length,
+				})(view.state, view.dispatch, view);
+				return '';
+			},
+			marks: [],
+		}),
+	], noMatchRegex),
+	inlineInputRules([
+		makeInputRule({
+			contentRegex: `\\*\\*(${inlineContentExp})\\*\\*`,
+			commitCharacter: '*',
+			onReplace: (match) => match[1],
+			marks: [schema.marks.strong],
+		}),
+		makeInputRule({
+			contentRegex: `\\*(${inlineContentExp})\\*`,
+			commitCharacter: '*',
+			onReplace: (match) => match[1],
+			marks: [schema.marks.emphasis],
+		}),
+		makeInputRule({
+			contentRegex: `_(${inlineContentExp})_`,
+			commitCharacter: '_',
+			onReplace: (match) => match[1],
+			marks: [schema.marks.emphasis],
+		}),
+		makeInputRule({
+			contentRegex: `\`(${inlineContentExp})\``,
+			commitCharacter: '`',
+			onReplace: (match) => match[1],
+			marks: [schema.marks.code],
+		}),
 	], /[ .,?)!;]/),
 ];
 export default inputRulesExtension;

@@ -108,7 +108,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				},
 				{
 					label: 'Can receive notebooks',
-					value: yesOrNo(getCanReceiveFolder(user)),
+					value: !!yesOrNo(getCanReceiveFolder(user)),
 					show: true,
 				},
 			],

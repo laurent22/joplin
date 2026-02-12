@@ -145,8 +145,7 @@ export default class InteropService {
 					fileExtensions: [
 						'zip',
 						'one',
-						// .onepkg is a CAB archive, which Joplin can currently only extract on Windows
-						...(shim.isWindows() ? ['onepkg'] : []),
+						'onepkg',
 					],
 					sources: [FileSystemItem.File],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)

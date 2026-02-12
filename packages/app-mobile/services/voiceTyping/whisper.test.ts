@@ -3,35 +3,29 @@ import whisper from './whisper';
 import { dirname, join } from 'path';
 import { exists, mkdir, remove, writeFile } from 'fs-extra';
 import Setting from '@joplin/lib/models/Setting';
-import { NativeModules } from 'react-native';
-const SpeechToTextModule = NativeModules.SpeechToTextModule;
+const { testing__lastPrompt } = require('@joplin/whisper-voice-typing');
 
-jest.mock('react-native', () => {
-	const reactNative = jest.requireActual('react-native');
-
+jest.mock('@joplin/whisper-voice-typing', () => {
 	let lastPrompt: string|null = null;
 
-	// Set properties on reactNative rather than creating a new object with
-	// {...reactNative, ...}. Creating a new object triggers deprecation warnings.
-	// See https://github.com/facebook/react-native/issues/28839.
-	reactNative.NativeModules.SpeechToTextModule = {
-		convertNext: () => 'Test. This is test output. Test!',
-		runTests: ()=> {},
-		openSession: jest.fn((_path, _locale, prompt) => {
-			lastPrompt = prompt;
 
-			const someId = 1234;
-			return someId;
+	return {
+		runTests: ()=> {},
+		openSession: jest.fn((options) => {
+			lastPrompt = options.prompt;
+
+			return {
+				open: jest.fn(),
+				close: jest.fn(),
+				convertNext: jest.fn(() => 'Test. This is test output. Test!'),
+				convertAvailable: jest.fn(() => ''),
+			};
 		}),
-		closeSession: jest.fn(),
-		startRecording: jest.fn(),
-		convertAvailable: jest.fn(() => ''),
+		test: ()=>{},
 		testing__lastPrompt: () => {
 			return lastPrompt;
 		},
 	};
-
-	return reactNative;
 });
 
 interface ModelConfig {
@@ -135,6 +129,6 @@ describe('whisper', () => {
 		});
 		await session.start();
 
-		expect(SpeechToTextModule.testing__lastPrompt()).toBe(expectedPrompt);
+		expect(testing__lastPrompt()).toBe(expectedPrompt);
 	});
 });

@@ -24,6 +24,10 @@ In both cases you can either import a single file or a directory that contains m
 
 - If you import a directory, Joplin will create a notebook per file and import the notes into them.
 
+For a video tutorial on how to export your notebooks from Evernote and import them on Joplin, please click on the thumbnail:
+
+[![Watch the video](https://img.youtube.com/vi/_nSrvfUwORM/hqdefault.jpg)](https://www.youtube.com/watch?v=_nSrvfUwORM)  
+
 ### Importing from Markdown files
 
 Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.
@@ -62,6 +66,10 @@ This requires Joplin >=v3.5.5 and the OneNote Windows desktop app. Be aware that
 	- Alternatively, select "Notebook", then "OneNote Package (`*.onepkg`)". `*.onepkg` files can only be imported if Joplin is running on Windows.
 4. Open the Joplin desktop application.
 5. From the "File" > "Import" menu, select "ZIP - OneNote Notebook". In the file picker, select the just-exported file.
+
+For a video tutorial on how to export your notebooks from Onenote and import them on Joplin, please click on the thumbnail:
+
+[![Watch the video](https://img.youtube.com/vi/xgYcLZsw0IA/hqdefault.jpg)](https://www.youtube.com/watch?v=xgYcLZsw0IA&t=2s)
 
 ### Importing from other applications
 

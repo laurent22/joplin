@@ -852,7 +852,7 @@ const mapStateToProps = (state: AppState) => {
 		notesColumns: validateColumns(state.settings['notes.columns']),
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
-		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && process.arch !== 'arm64',
+		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
 	};
 };
 
