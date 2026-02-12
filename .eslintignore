@@ -1545,6 +1545,8 @@ packages/lib/services/ocr/drivers/OcrDriverTranscribe.test.js
 packages/lib/services/ocr/drivers/OcrDriverTranscribe.js
 packages/lib/services/ocr/utils/filterOcrText.test.js
 packages/lib/services/ocr/utils/filterOcrText.js
+packages/lib/services/ocr/utils/ocrLanguageFromLocale.test.js
+packages/lib/services/ocr/utils/ocrLanguageFromLocale.js
 packages/lib/services/ocr/utils/types.js
 packages/lib/services/plugins/BasePlatformImplementation.js
 packages/lib/services/plugins/BasePluginRunner.js

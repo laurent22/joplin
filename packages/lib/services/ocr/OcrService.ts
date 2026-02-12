@@ -1,4 +1,3 @@
-import { toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
@@ -9,6 +8,7 @@ import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
+import ocrLanguageFromLocale from './utils/ocrLanguageFromLocale';
 
 const logger = Logger.create('OcrService');
 
@@ -177,7 +177,7 @@ export default class OcrService {
 		};
 
 		try {
-			const language = toIso639Alpha3(Setting.value('locale'));
+			const language = ocrLanguageFromLocale(Setting.value('locale'));
 			const processedResourceIds: string[] = [];
 
 			// Queue all resources for processing
