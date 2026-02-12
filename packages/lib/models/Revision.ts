@@ -252,7 +252,7 @@ export default class Revision extends BaseItem {
 	}
 
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
-	public static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null, arrayContainsRevision = true) {
+	public static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null) {
 		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
 
 		if (!revs) {
@@ -261,7 +261,7 @@ export default class Revision extends BaseItem {
 			revs = revs.slice();
 		}
 
-		if (arrayContainsRevision) {
+		if (revs.find(item => item.id === revision.id) !== undefined) {
 			// Handle rare case where two revisions have been created at exactly the same millisecond
 			// Also handle even rarer case where a rev and its parent have been created at the
 			// same milliseconds. All code below expects target revision to be on top.
@@ -362,7 +362,7 @@ export default class Revision extends BaseItem {
 					// Note: we don't need to check for encrypted rev here because
 					// mergeDiff will already throw the revision_encrypted exception
 					// if a rev is encrypted.
-					const merged = await this.mergeDiffs(keptRev, oldRevisions, false);
+					const merged = await this.mergeDiffs(keptRev, oldRevisions);
 
 					const titleDiff = this.createTextPatch('', merged.title);
 					const bodyDiff = this.createTextPatch('', merged.body);
