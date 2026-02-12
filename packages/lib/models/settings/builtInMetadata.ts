@@ -1699,9 +1699,9 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'searchEngine.initialIndexingDone': { value: false, type: SettingItemType.Bool, public: false },
 		'searchEngine.lastProcessedResource': { value: '', type: SettingItemType.String, public: false },
 
-		'revisionService.enabled': { section: 'revisionService', storage: SettingStorage.File, value: true, type: SettingItemType.Bool, public: true, label: () => _('Enable note history') },
+		'revisionService.enabled': { section: 'sync', storage: SettingStorage.File, value: true, type: SettingItemType.Bool, public: true, label: () => _('Enable note history') },
 		'revisionService.ttlDays': {
-			section: 'revisionService',
+			section: 'sync',
 			value: 90,
 			type: SettingItemType.Int,
 			public: true,
