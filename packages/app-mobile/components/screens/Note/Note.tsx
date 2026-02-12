@@ -81,6 +81,7 @@ import useKeyboardState from '../../../utils/hooks/useKeyboardState';
 import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
 import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -1145,7 +1146,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (folderId) {
 			void NavService.go('Notes', { folderId: folderId });
 		} else {
-			void NavService.go('Notes', { smartFilterId: 'c3176726992c11e9ac940492261af972' });
+			void NavService.go('Notes', { smartFilterId: ALL_NOTES_FILTER_ID });
 		}
 	}
 
