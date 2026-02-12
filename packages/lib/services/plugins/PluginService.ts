@@ -34,7 +34,7 @@ export interface Plugins {
 }
 
 export interface SettingAndValue {
-	[settingName: string]: string|number|boolean;
+	[settingName: string]: string | number | boolean;
 }
 
 export interface DefaultPluginSettings {
@@ -211,7 +211,7 @@ export default class PluginService extends BaseService {
 		return this.pluginById(id).manifest?.name ?? 'Unknown';
 	}
 
-	public viewControllerByViewId(id: string): ViewController|null {
+	public viewControllerByViewId(id: string): ViewController | null {
 		for (const [, plugin] of Object.entries(this.plugins_)) {
 			if (plugin.hasViewController(id)) return plugin.viewController(id);
 		}
@@ -370,15 +370,6 @@ export default class PluginService extends BaseService {
 		}
 
 		const deprecationNotices: DeprecationNotice[] = [];
-
-		if (!manifestObj.app_min_version) {
-			manifestObj.app_min_version = '1.4';
-			deprecationNotices.push({
-				message: 'The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support.',
-				goneInVersion: '1.4',
-				isError: true,
-			});
-		}
 
 		if (!manifestObj.id) {
 			manifestObj.id = pluginIdIfNotSpecified;
