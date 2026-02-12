@@ -1140,6 +1140,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
+	private revealInNotebook_onPress() {
+		const folderId = this.state.folder?.id;
+		if (folderId) {
+			void NavService.go('Notes', { folderId: folderId });
+		} else {
+			void NavService.go('Notes', { smartFilterId: 'c3176726992c11e9ac940492261af972' });
+		}
+	}
+
 	public async onAlarmDialogAccept(date: Date) {
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
@@ -1388,6 +1397,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				},
 			});
 		}
+
+		output.push({
+			title: _('Reveal in notebook'),
+			onPress: () => {
+				this.revealInNotebook_onPress();
+			},
+		});
 
 		if (isDeleted) {
 			output.push({
