@@ -39519,9 +39519,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:11.4.2":
-  version: 11.4.2
-  resolution: "node-gyp@npm:11.4.2"
+"node-gyp@npm:11.5.0":
+  version: 11.5.0
+  resolution: "node-gyp@npm:11.5.0"
   dependencies:
     env-paths: "npm:^2.2.0"
     exponential-backoff: "npm:^3.1.1"
@@ -39535,7 +39535,7 @@ __metadata:
     which: "npm:^5.0.0"
   bin:
     node-gyp: bin/node-gyp.js
-  checksum: 10/de0fdd1a23d27976974f2480b1c5a2954180050f4d7d682b2fcd36a7c996100981fc37ba0c893d02471ccf1730240f73c3073a6a9397c5eb3bb7578ca82808ed
+  checksum: 10/15a600b626116e1e528c49f73027c5ff84dbf6986df77b0fb61d6eb079ab4230c39f245295cb67f0590e6541a848cbd267e00c5769e8fb8bf88a5cca3701b551
   languageName: node
   linkType: hard
 
@@ -46208,7 +46208,7 @@ __metadata:
     lerna: "npm:3.22.1"
     lint-staged: "npm:16.2.6"
     madge: "npm:8.0.0"
-    node-gyp: "npm:11.4.2"
+    node-gyp: "npm:11.5.0"
     nodemon: "npm:3.1.11"
     npm-package-json-lint: "npm:9.0.0"
     typescript: "npm:5.8.3"
