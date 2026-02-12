@@ -259,7 +259,7 @@ describe('models/Folder', () => {
 		await Folder.delete(f3.id, { toTrash: true });
 
 		const folders = await Folder.allAsTree();
-		const sortedFolderTree = await Folder.sortFolderTree(folders, { removeDeletedFolders: true });
+		const sortedFolderTree = await Folder.sortFolderTree(folders, { includeDeleted: false });
 
 		expect(sortedFolderTree.length).toBe(2);
 		expect(sortedFolderTree[0].id).toBe(f2.id);

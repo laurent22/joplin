@@ -29,6 +29,10 @@ export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
 
+export interface SortFolderOptions {
+	includeDeleted?: boolean;
+}
+
 export default class Folder extends BaseItem {
 	public static tableName() {
 		return 'folders';
@@ -924,12 +928,12 @@ export default class Folder extends BaseItem {
 		return rootFolders;
 	}
 
-	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null, options: { removeDeletedFolders?: boolean } = null) {
+	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null, options: SortFolderOptions = null) {
 		let output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
 			const collator = getCollator();
-			if (options && !!options.removeDeletedFolders) folders = folders.filter(folder => !folder.deleted_time);
+			if (options && options.includeDeleted === false) folders = folders.filter(folder => !folder.deleted_time);
 
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
