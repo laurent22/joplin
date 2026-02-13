@@ -31,17 +31,56 @@ const app = createMcpExpressApp();
 
 app.post('/mcp', async (req, res) => {
   try {
+    // リクエストのログ出力
+    console.log('[MCP Request]', {
+      timestamp: new Date().toISOString(),
+      method: req.method,
+      url: req.url,
+      body: JSON.stringify(req.body, null, 2),
+    });
+
     const server = createServer();
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined, // stateless mode
     });
     await server.connect(transport);
+
+    // レスポンスのログ出力
+    const originalWrite = res.write.bind(res);
+    const originalEnd = res.end.bind(res);
+    const chunks: Buffer[] = [];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    res.write = function (chunk: any, ...args: any[]): boolean {
+      chunks.push(Buffer.from(chunk));
+      return originalWrite(chunk, ...args);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    res.end = function (chunk?: any, ...args: any[]): any {
+      if (chunk) {
+        chunks.push(Buffer.from(chunk));
+      }
+      const body = Buffer.concat(chunks).toString('utf8');
+      console.log('[MCP Response]', {
+        timestamp: new Date().toISOString(),
+        statusCode: res.statusCode,
+        body: body,
+      });
+      return originalEnd(chunk, ...args);
+    };
+
     await transport.handleRequest(req, res, req.body);
     res.on('close', () => {
       transport.close();
       server.close();
     });
   } catch (error) {
+    console.error('[MCP Error]', {
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     if (!res.headersSent) {
       res.status(500).json({
         jsonrpc: '2.0',
