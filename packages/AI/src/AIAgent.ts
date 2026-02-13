@@ -59,7 +59,7 @@ export const ragSendMessage = async (
   customPrompt?: string,
 ) => {
   const model = new ChatOpenAI({
-    model: "gpt-4o",
+    model: "gpt-5-mini",
     apiKey: process.env.JOPLIN_OAI_KEY,
   });
   const vectorStore = await loadVectorStore(dbPath);
