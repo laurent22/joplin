@@ -26,7 +26,7 @@ function createServer() {
   return server;
 }
 
-const port = Number(process.env.MCP_PORT ?? 4000);
+const port = Number(process.env.MCP_PORT ?? 8080);
 const app = createMcpExpressApp();
 
 app.post('/mcp', async (req, res) => {

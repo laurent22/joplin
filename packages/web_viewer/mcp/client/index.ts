@@ -7,7 +7,7 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
  */
 async function runMCPClient() {
   // サーバーのURL
-  const serverUrl = process.env.MCP_SERVER_URL || 'http://localhost:4000/mcp';
+  const serverUrl = process.env.MCP_SERVER_URL || 'http://localhost:8080/mcp';
 
   console.log(`Connecting to MCP server at ${serverUrl}...`);
 
