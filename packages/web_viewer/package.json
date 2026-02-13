@@ -13,12 +13,15 @@
     "fix": "npm run format && npm run lint:fix",
     "mcp:dev": "ts-node-esm ./mcp/server/index.ts",
     "mcp:client": "ts-node-esm ./mcp/client/index.ts",
-    "mcp:server": "node dist-server/mcp/server/index.js"
+    "mcp:server": "node dist-server/mcp/server/index.js",
+    "agent": "ts-node-esm mcp/client/LangChainClient.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@langchain/mcp-adapters": "^1.1.3",
+    "@langchain/openai": "^1.2.7",
     "@modelcontextprotocol/sdk": "^1.26.0",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
@@ -27,8 +30,10 @@
     "@tanstack/react-query": "^5.90.20",
     "better-sqlite3": "^12.6.2",
     "cheerio": "^1.2.0",
+    "express": "^5.2.1",
     "faiss-node": "^0.5.1",
     "html-react-parser": "^5.2.16",
+    "langchain": "^1.2.24",
     "mark.js": "^8.11.1",
     "next": "16.1.6",
     "react": "19.2.3",
@@ -41,6 +46,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.6",
     "@types/mark.js": "^8.11.12",
     "@types/node": "^20",
     "@types/react": "^19",
