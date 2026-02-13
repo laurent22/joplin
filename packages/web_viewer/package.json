@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "fix": "npm run format && npm run lint:fix",
     "mcp:dev": "ts-node-esm ./mcp/server/index.ts",
+    "mcp:client": "ts-node-esm ./mcp/client/index.ts",
     "mcp:server": "node dist-server/mcp/server/index.js"
   },
   "dependencies": {
