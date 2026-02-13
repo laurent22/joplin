@@ -19,7 +19,6 @@ const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
-import FloatingActionButton from '../../buttons/FloatingActionButton';
 import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { MenuOptionType } from '../../ScreenHeader';
@@ -1727,23 +1726,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		const voiceTypingDialogShown = this.state.showSpeechToTextDialog || this.state.showAudioRecorder;
-		const renderActionButton = () => {
-			if (voiceTypingDialogShown) return null;
-			if (editorView) return null;
-			if (!this.state.note || !!this.state.note.deleted_time) return null;
-
-			const editButton = {
-				label: _('Edit'),
-				icon: 'create',
-				onPress: this.toggleVisiblePanes,
-			};
-
-			if (this.state.mode === 'edit') return null;
-
-			return <FloatingActionButton mainButton={editButton} />;
-		};
-
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
 		const saveButtonDisabled = true;// !this.isModified();
@@ -1834,7 +1816,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				{!increaseSpaceForEditor && titleComp}
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
-				{renderActionButton()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
