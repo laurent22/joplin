@@ -171,7 +171,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			contextMenuTrigger: {
 				fontSize: 30,
-				paddingLeft: 10,
+				paddingLeft: 5,
 				paddingRight: theme.marginRight,
 				color: theme.color2,
 				fontWeight: 'bold',
