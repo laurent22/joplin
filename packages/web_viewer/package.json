@@ -33,6 +33,7 @@
     "express": "^5.2.1",
     "faiss-node": "^0.5.1",
     "html-react-parser": "^5.2.16",
+    "https-proxy-agent": "^7.0.6",
     "langchain": "^1.2.24",
     "mark.js": "^8.11.1",
     "next": "16.1.6",
