@@ -11200,7 +11200,7 @@ __metadata:
     sharp: "npm:0.34.5"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
-    style-to-js: "npm:1.1.19"
+    style-to-js: "npm:1.1.20"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.8.3"
     uri-template: "npm:2.0.0"
@@ -49218,12 +49218,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-js@npm:1.1.19":
-  version: 1.1.19
-  resolution: "style-to-js@npm:1.1.19"
+"style-to-js@npm:1.1.20":
+  version: 1.1.20
+  resolution: "style-to-js@npm:1.1.20"
   dependencies:
     style-to-object: "npm:1.0.12"
-  checksum: 10/c25f3a96368f258c90a886ec20b8a15ae035664e46eeea6c36f105fbc1e099ee81eaac355b7f5f948d8bb9d103c048a97b3d09e785c680ff2b4dd6d77cb76a95
+  checksum: 10/e10b283d1566d1e98c03442d011ef317475c4d78c340ae8a770c3f5944ca159c5cc5b8ed5cd79c724d8627998bf31508ce74a0ac70af9116ab4f33581879df17
   languageName: node
   linkType: hard
 
