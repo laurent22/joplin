@@ -229,7 +229,7 @@ class Registry {
 
 				} finally {
 					if (newContext === undefined) {
-						// If the sync errors for any reason other than already being already in progress, ensure syncPending is reset back to false
+						// If the sync errors for any reason other than being already in progress, ensure syncPending is reset back to false
 						this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
 					}
 
