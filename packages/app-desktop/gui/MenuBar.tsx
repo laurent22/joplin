@@ -365,8 +365,7 @@ function useMenu(props: Props) {
 				accelerator: keymapService.getAccelerator('quit'),
 				click: () => {
 					bridge().electronApp().quitWithSyncCheck(
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any --  Assigning types to these variables would be too big of a refactoring
-						(action: any) => props.dispatch(action),
+						(action: { type: string; [key: string]: unknown }) => props.dispatch(action),
 						props.syncPending,
 					);
 				},

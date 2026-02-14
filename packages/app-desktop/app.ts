@@ -214,8 +214,7 @@ class Application extends BaseApplication {
 				{ type: 'separator' },
 				{ label: _('Quit'), click: () => {
 					app.quitWithSyncCheck(
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any --  Assigning types to these variables would be too big of a refactoring
-						(action: any) => this.store().dispatch(action),
+						(action: { type: string; [key: string]: unknown }) => this.store().dispatch(action),
 						this.store().getState().syncPending,
 					);
 				} },
