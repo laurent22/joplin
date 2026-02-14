@@ -203,7 +203,7 @@ export const defaultState: State = {
 	historyCanGoBack: false,
 	syncStarted: false,
 	syncPending: false,
-	showQuitSyncDialog: false;
+	showQuitSyncDialog: false,
 	syncReport: {},
 	searchQuery: '',
 	searchResults: [],
