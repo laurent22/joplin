@@ -11200,7 +11200,7 @@ __metadata:
     sharp: "npm:0.34.5"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
-    style-to-js: "npm:1.1.20"
+    style-to-js: "npm:1.1.21"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.8.3"
     uri-template: "npm:2.0.0"
@@ -32770,10 +32770,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inline-style-parser@npm:0.2.6":
-  version: 0.2.6
-  resolution: "inline-style-parser@npm:0.2.6"
-  checksum: 10/0be8356fcd766b7b170991293c9ad953f057ac9719960f51f4eb54af1a79c34638f591691f2ab43f57bef2e28e9c1239b8ae5f6b72bff2c652f828ccc621c08c
+"inline-style-parser@npm:0.2.7":
+  version: 0.2.7
+  resolution: "inline-style-parser@npm:0.2.7"
+  checksum: 10/cdfe719bd694b53bfbad20a645a9a4dda89c3ff56ee2b95945ad4eea86c541501f49f852d23bc2f73cd8127b6b62ea9027f697838e323a7f7d0d9b760e27a632
   languageName: node
   linkType: hard
 
@@ -49218,12 +49218,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-js@npm:1.1.20":
-  version: 1.1.20
-  resolution: "style-to-js@npm:1.1.20"
+"style-to-js@npm:1.1.21":
+  version: 1.1.21
+  resolution: "style-to-js@npm:1.1.21"
   dependencies:
-    style-to-object: "npm:1.0.12"
-  checksum: 10/e10b283d1566d1e98c03442d011ef317475c4d78c340ae8a770c3f5944ca159c5cc5b8ed5cd79c724d8627998bf31508ce74a0ac70af9116ab4f33581879df17
+    style-to-object: "npm:1.0.14"
+  checksum: 10/5e30b4c52ed4e0294324adab2a43a0438b5495a77a72a6b1258637eebfc4dc8e0614f5ac7bf38a2f514879b3b448215d01fecf1f8d7468b8b95d90bed1d05d57
   languageName: node
   linkType: hard
 
@@ -49236,12 +49236,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-object@npm:1.0.12":
-  version: 1.0.12
-  resolution: "style-to-object@npm:1.0.12"
+"style-to-object@npm:1.0.14":
+  version: 1.0.14
+  resolution: "style-to-object@npm:1.0.14"
   dependencies:
-    inline-style-parser: "npm:0.2.6"
-  checksum: 10/97b91c2056f4fedb573224accba080aaa96b48a7b120a007b83415c9b18b727d0d6588b9168a1b85da06dd1abacc328f6dd774e907721901e40503a2e7a78c89
+    inline-style-parser: "npm:0.2.7"
+  checksum: 10/06b86a5cf435dafac908d19082842983f9052d8cf3682915b1bd9251e3fe9b8065dbd2aef060dc5dfa0fa2ee24d717b587a5205f571513a10f30e3947f9d28ff
   languageName: node
   linkType: hard
 
