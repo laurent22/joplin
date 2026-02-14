@@ -214,10 +214,11 @@ class Application extends BaseApplication {
 				{ type: 'separator' },
 				{ label: _('Quit'), click: () => {
 					app.quitWithSyncCheck(
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any --  Assigning types to these variables would be too big of a refactoring
 						(action: any) => this.store().dispatch(action),
-						this.store().getState().syncPending
+						this.store().getState().syncPending,
 					);
-				}},
+				} },
 			]);
 			app.createTray(contextMenu);
 		}
