@@ -1251,8 +1251,6 @@ export default class Synchronizer {
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
-				// Explicitly update syncPending back to true here, as scheduleSync will only update it to true again if this was a partial sync
-				this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: true });
 				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 			}
 		}
