@@ -214,6 +214,7 @@ class Registry {
 						} catch (error) {
 							if (error.code === 'alreadyStarted') {
 								this.logger().info(error.message);
+								newContext = null; // Prevent resetting syncPending to false if another sync is triggered while one is in progress
 							} else {
 								promiseResolve();
 								throw error;
@@ -227,7 +228,7 @@ class Registry {
 					promiseResolve();
 
 				} finally {
-					if (!newContext) {
+					if (newContext === undefined) {
 						// The synchronizer may run scheduleSync before completing execution, so avoid potentially resetting sync pending immediately
 						// after scheduling sync, where the sync completed successfully. A successful sync will handle the sync pending reset instead
 						this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
