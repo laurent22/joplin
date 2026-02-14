@@ -8,6 +8,7 @@ import Dialog from './Dialog';
 import DialogButtonRow, { ClickEvent } from './DialogButtonRow';
 import styled from 'styled-components';
 import { reg } from '@joplin/lib/registry';
+import Synchronizer from '@joplin/lib/Synchronizer';
 
 interface Props {
 	themeId: number;
@@ -43,7 +44,7 @@ export default function QuitSyncDialog(props: Props) {
 	// Trigger immediate sync when dialog opens if not already syncing
 	useEffect(() => {
 		if (showDialog && syncPending && !syncStarted) {
-			void reg.scheduleSync(0);
+			void reg.scheduleSync(0, { syncSteps: Synchronizer.partialSyncSteps });
 		}
 	}, [showDialog, syncPending, syncStarted]);
 
