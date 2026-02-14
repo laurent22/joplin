@@ -21,14 +21,12 @@ const plugin = (markdownIt: MarkdownIt) => {
 		return (self.renderToken as any)(tokens, idx, options, env, self);
 	};
 
-	// Track active embed state
 	let activeEmbedVideo: { videoId: string; originalUrl: string } | null = null;
 
 	markdownIt.renderer.rules.link_open = function(tokens, idx, options, env, self) {
 		const token = tokens[idx];
 		const href = token.attrGet('href');
 
-		// Check if this is a standalone YouTube link (next token is text matching href, then link_close)
 		if (href &&
 			idx + 2 < tokens.length &&
 			tokens[idx + 1].type === 'text' &&
@@ -38,8 +36,28 @@ const plugin = (markdownIt: MarkdownIt) => {
 			const videoId = extractVideoId(href);
 
 			if (videoId) {
-				activeEmbedVideo = { videoId, originalUrl: href };
-				return '';
+				let hasTextBefore = false;
+				for (let i = idx - 1; i >= 0; i--) {
+					const prevToken = tokens[i];
+					if (prevToken.type === 'text' && prevToken.content.trim() !== '') {
+						hasTextBefore = true;
+						break;
+					}
+				}
+				
+				let hasTextAfter = false;
+				for (let i = idx + 3; i < tokens.length; i++) {
+					const nextToken = tokens[i];
+					if (nextToken.type === 'text' && nextToken.content.trim() !== '') {
+						hasTextAfter = true;
+						break;
+					}
+				}
+				
+				if (!hasTextBefore && !hasTextAfter) {
+					activeEmbedVideo = { videoId, originalUrl: href };
+					return '';
+				}
 			}
 		}
 
@@ -47,7 +65,6 @@ const plugin = (markdownIt: MarkdownIt) => {
 	};
 
 	markdownIt.renderer.rules.text = function(tokens, idx, options, env, self) {
-		// Skip text content if we're in an active embed
 		if (activeEmbedVideo) {
 			return '';
 		}
@@ -55,11 +72,10 @@ const plugin = (markdownIt: MarkdownIt) => {
 	};
 
 	markdownIt.renderer.rules.link_close = function(tokens, idx, options, env, self) {
-		// Check if we have an active embed to close
 		if (activeEmbedVideo) {
 			const videoId = activeEmbedVideo.videoId;
 			const originalUrl = activeEmbedVideo.originalUrl;
-			activeEmbedVideo = null; // Clear state
+			activeEmbedVideo = null;
 
 			const embedUrl = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}`;
 			const escapedUrl = markdownIt.utils.escapeHtml(originalUrl);
