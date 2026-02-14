@@ -229,8 +229,7 @@ class Registry {
 
 				} finally {
 					if (newContext === undefined) {
-						// The synchronizer may run scheduleSync before completing execution, so avoid potentially resetting sync pending immediately
-						// after scheduling sync, where the sync completed successfully. A successful sync will handle the sync pending reset instead
+						// If the sync errors for any reason other than already being already in progress, ensure syncPending is reset back to false
 						this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
 					}
 

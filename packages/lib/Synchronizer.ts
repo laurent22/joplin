@@ -1251,6 +1251,7 @@ export default class Synchronizer {
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
+				// syncPending is set back to true when rescheduled here
 				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 			}
 		}
