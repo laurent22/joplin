@@ -578,7 +578,6 @@ export default class ElectronAppWrapper {
 		this.electronApp_.quit();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any --  Assigning types to these variables would be too big of a refactoring
 	public quitWithSyncCheck(
 		dispatch: (action: { type: string; [key: string]: unknown })=> void,
 		syncPending: boolean,
