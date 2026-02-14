@@ -185,6 +185,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Lisätietoja"
 	],
@@ -452,6 +455,9 @@
 	"Basic": [
 		"Perus"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Lihavoitu"
 	],
@@ -578,6 +584,9 @@
 	"Checking... Please wait.": [
 		"Tarkistetaan... Odota hetki."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Valitse vaihtoehto"
 	],
@@ -635,9 +644,6 @@
 	"Code View": [
 		"Koodinäkymä"
 	],
-	"Code:": [
-		"Koodi:"
-	],
 	"Collaborate on a notebook with others": [
 		"Tee yhteistyötä muistiinpanon parissa muiden kanssa"
 	],
@@ -664,6 +670,9 @@
 	],
 	"Command": [
 		"Komento"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Komentovalikoima"
@@ -936,6 +945,9 @@
 	"Delete selected notes": [
 		"Poista valitut muistiinpanot"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -1022,6 +1034,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Näyttää muistiinpanon täydelliset tiedot."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Näyttää annetun huomautuksen."
@@ -1858,6 +1873,9 @@
 	"Keychain Supported: %s": [
 		"Avainnippu tuettu: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Päivitystä vaativat avaimet"
 	],
@@ -1991,6 +2009,9 @@
 	],
 	"Manage your plugins": [
 		"Hallitse laajennuksia"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Hallitse E2EE määrityksiä. Komennot ovat `enable`, `disable`, `decrypt`, `status`, `decrypt-file` ja `target-status`."
@@ -2229,6 +2250,9 @@
 	"No updates available": [
 		"Ei päivityksiä saatavilla"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Ei mitään"
 	],
@@ -2436,6 +2460,9 @@
 	"Open Sync Wizard...": [
 		"Avaa ohjattu synkronointitoiminto."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Avaa..."
 	],
@@ -2456,6 +2483,9 @@
 	],
 	"Options": [
 		"Asetukset"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Järjestetty luettelo"
@@ -3055,6 +3085,9 @@
 	"Select parent notebook": [
 		"Valitse ylempi muistikirja"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Valitut: %s"
 	],
@@ -3252,6 +3285,9 @@
 	],
 	"Source: ": [
 		"Lähde: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Välitys"
@@ -3557,9 +3593,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Muistiinpano \"%s\" on palautettu muistikirjaan \"%s\"."
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Muistiinpano on muunnettu Markdown-muotoon ja alkuperäinen muistiinpano on siirretty roskakoriin."
-	],
 	"The note was successfully moved to the trash.": [
 		"Muistiinpano siirrettiin roskakoriin onnistuneesti.",
 		"Muistiinpanot siirrettiin roskakoriin onnistuneesti."
@@ -3839,6 +3872,9 @@
 	],
 	"Try it now": [
 		"Kokeile nyt"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Kirjoita `help [command]` saadaksesi lisätietoja komennosta; tai kirjoita `help all` saadaksesi täydelliset käyttötiedot."

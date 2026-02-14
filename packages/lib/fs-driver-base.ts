@@ -26,11 +26,6 @@ export interface ArchiveExtractOptions {
 	extractTo: string;
 }
 
-export interface CabExtractOptions extends ArchiveExtractOptions {
-	// Only files matching the pattern will be extracted
-	fileNamePattern: string;
-}
-
 export interface ZipEntry {
 	entryName: string;
 	name: string;
@@ -275,9 +270,5 @@ export default class FsDriverBase {
 
 	public async zipExtract(_options: ArchiveExtractOptions): Promise<ZipEntry[]> {
 		throw new Error('Not implemented: zipExtract');
-	}
-
-	public async cabExtract(_options: CabExtractOptions) {
-		throw new Error('Not implemented: cabExtract.');
 	}
 }

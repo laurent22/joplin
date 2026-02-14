@@ -130,6 +130,12 @@ const makeAccessDeniedResponse = (message: string) => {
 	});
 };
 
+const makeNotFoundResponse = () => {
+	return new Response('not found', {
+		status: 404,
+	});
+};
+
 // Creating a custom protocol allows us to isolate iframes by giving them
 // different domain names from the main Joplin app.
 //
@@ -210,10 +216,24 @@ const handleCustomProtocols = (): CustomProtocolHandler => {
 
 		const rangeHeader = request.headers.get('Range');
 		let response;
-		if (!rangeHeader) {
-			response = await net.fetch(asFileUrl);
-		} else {
-			response = await handleRangeRequest(request, pathname);
+		try {
+			if (!rangeHeader) {
+				response = await net.fetch(asFileUrl);
+			} else {
+				response = await handleRangeRequest(request, pathname);
+			}
+		} catch (error) {
+			if (
+				// Errors from NodeJS fs methods (e.g. fs.stat()
+				error.code === 'ENOENT'
+				// Errors from Electron's net.fetch(). Use error.message since these errors don't
+				// seem to have a specific .code or .name.
+				|| error.message === 'net::ERR_FILE_NOT_FOUND'
+			) {
+				response = makeNotFoundResponse();
+			} else {
+				throw error;
+			}
 		}
 
 		if (mediaOnly) {

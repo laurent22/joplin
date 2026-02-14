@@ -126,12 +126,12 @@ const declarations: CommandDeclaration[] = [
 	{
 		name: EditorCommandType.IndentLess,
 		label: () => _('Decrease indent level'),
-		iconName: 'ant indent-left',
+		iconName: 'material format-indent-decrease',
 	},
 	{
 		name: EditorCommandType.IndentMore,
 		label: () => _('Increase indent level'),
-		iconName: 'ant indent-right',
+		iconName: 'material format-indent-increase',
 	},
 	{
 		name: `editor.${EditorCommandType.SwapLineDown}`,

@@ -51,9 +51,11 @@ const getParentOffset = (childIndex: number, listItems: ListItem[]): number|null
 };
 
 const findNextTypeAheadMatch = (selectedIndex: number, query: string, listItems: ListItem[]) => {
+	const normalize = (text: string) => text.trim().toLowerCase();
 	const matches = (item: ListItem) => {
-		return item.label.startsWith(query);
+		return normalize(item.label).startsWith(normalize(query));
 	};
+
 	const indexBefore = listItems.slice(0, selectedIndex).findIndex(matches);
 	// Search in all results **after** the current. This prevents the current item from
 	// always being identified as the next match, if the user repeatedly presses the

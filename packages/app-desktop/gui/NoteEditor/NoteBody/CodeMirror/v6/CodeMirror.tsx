@@ -366,6 +366,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			ignoreModifiers: true,
 			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
 			keymap: keyboardMode,
+			preferMacShortcuts: shim.isMac(),
 			indentWithTabs: true,
 			tabMovesFocus: props.tabMovesFocus,
 			editorLabel: _('Markdown editor'),

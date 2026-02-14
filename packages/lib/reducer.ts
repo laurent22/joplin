@@ -91,6 +91,8 @@ export interface WindowState {
 	selectedItemType: string;
 	selectedSmartFilterId: string;
 
+	highlightedWords: string[];
+
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];
 	lastSelectedNotesIds: StateLastSelectedNotesIds;
@@ -113,6 +115,7 @@ export const defaultWindowState: WindowState = {
 	selectedSmartFilterId: null,
 	selectedItemType: 'note',
 	selectedNoteTags: [],
+	highlightedWords: [],
 	backwardHistoryNotes: [],
 	forwardHistoryNotes: [],
 	lastSelectedNotesIds: {
@@ -138,7 +141,6 @@ export interface State extends WindowState {
 	notLoadedMasterKeys: string[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searches: any[];
-	highlightedWords: string[];
 	showSideMenu: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	screens: any;

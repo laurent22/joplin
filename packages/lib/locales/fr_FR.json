@@ -168,7 +168,7 @@
 		"[Aucun]"
 	],
 	"A brief description of the image:": [
-		""
+		"Brève description de l'image :"
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Liste de mots séparés par des virgules. Peut être utilisée pour les mots rares, afin de faciliter leur orthographe vocale."
@@ -184,6 +184,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		"Notation musicale ABC : Options"
 	],
 	"About": [
 		"À propos"
@@ -243,7 +246,7 @@
 		"Ajoutez le contenu"
 	],
 	"Add column": [
-		""
+		"Ajouter une colonne"
 	],
 	"Add new": [
 		"Ajouter"
@@ -253,6 +256,9 @@
 	],
 	"Add recipient:": [
 		"Ajouter destinataire :"
+	],
+	"Add row": [
+		"Ajouter une ligne"
 	],
 	"Add tags:": [
 		"Ajouter étiquettes :"
@@ -342,7 +348,7 @@
 		"Un dessin automatiquement sauvegardé a été trouvé. Le joindre à la note ?"
 	],
 	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
+		"Une erreur s'est produite lors de l'envoi de la réponse. Cela peut arriver si l'application est hors ligne ou ne parvient pas à se connecter au serveur.\nErreur : %s"
 	],
 	"An error occurred: %s": [
 		"Une erreur est survenue : %s"
@@ -467,6 +473,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		"Bloc de code"
+	],
 	"Bold": [
 		"Gras"
 	],
@@ -520,6 +529,9 @@
 	],
 	"Cannot change encrypted item": [
 		"Un objet chiffré ne peut pas être modifié"
+	],
+	"Cannot convert read-only item: \"%s\"": [
+		"Impossible de convertir l'élément en lecture seule : \"%s\""
 	],
 	"Cannot copy note to \"%s\" notebook": [
 		"Impossible de copier la note vers le carnet \"%s\""
@@ -605,6 +617,9 @@
 	"Checking... Please wait.": [
 		"Vérification… Veuillez patienter."
 	],
+	"Chinese/Japanese/Korean characters": [
+		"Caractères chinois/japonais/coréens"
+	],
 	"Choose an option": [
 		"Choisissez une option"
 	],
@@ -671,9 +686,6 @@
 	"Code View": [
 		"Code"
 	],
-	"Code:": [
-		"Code :"
-	],
 	"Collaborate on a notebook with others": [
 		"Collaborer sur des carnets avec d'autres personnes"
 	],
@@ -682,6 +694,9 @@
 	],
 	"Collapse all notebooks": [
 		"Réduire tous les carnets"
+	],
+	"Collapse title": [
+		"Réduire le titre"
 	],
 	"Collapsed": [
 		"Réduit"
@@ -697,6 +712,9 @@
 	],
 	"Command": [
 		"Commande"
+	],
+	"COMMAND": [
+		"COMMANDE"
 	],
 	"Command palette": [
 		"Palette de commandes"
@@ -736,6 +754,9 @@
 	],
 	"Configuration": [
 		"Configuration"
+	],
+	"Configured keyboard shortcuts:": [
+		"Raccourcis clavier configurés :"
 	],
 	"Configures the size of scrollbars used in the app.": [
 		"Configure la taille des barres de défilement utilisées dans l'application."
@@ -786,8 +807,8 @@
 	"Convert it": [
 		"Convertir"
 	],
-	"Convert note to Markdown": [
-		"Convertir note en Markdown"
+	"Convert to Markdown": [
+		"Convertir en Markdown"
 	],
 	"Convert to note": [
 		"Convertir en note"
@@ -844,8 +865,8 @@
 	"Could not connect to plugin repository.": [
 		"Impossible de télécharger la liste des modules."
 	],
-	"Could not convert note to Markdown: %s": [
-		"Impossible de convertir la note en Markdown : %s"
+	"Could not convert notes to Markdown: %s": [
+		"Impossible de convertir les notes en Markdown : %s"
 	],
 	"Could not export notes: %s": [
 		"Impossible d'exporter les notes : %s"
@@ -1021,6 +1042,9 @@
 	"Delete attachment \"%s\"?": [
 		"Supprimer la pièce jointe \"%s\" ?"
 	],
+	"Delete column": [
+		"Supprimer la colonne"
+	],
 	"Delete expired sessions": [
 		"Supprimer les sessions expirées"
 	],
@@ -1048,8 +1072,17 @@
 	"Delete profile \"%s\"": [
 		"Supprimer profil \"%s\" ?"
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"Supprimer le profil « %s » ?\n\nToutes les données, y compris les notes, les carnets et les étiquettes, seront définitivement supprimées."
+	],
+	"Delete row": [
+		"Supprimer la ligne"
+	],
 	"Delete selected notes": [
 		"Supprimer les notes sélectionnées"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		"Supprimer l'étiquette « %s » ?\n\nToutes les notes associées à cette étiquette seront conservées, mais l'étiquette sera supprimée de toutes les notes."
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Supprimer le carnet \"Inbox\" ?\n\nSi vous le supprimez, tout email qui lui a été récemment envoyé peut être perdu."
@@ -1156,6 +1189,9 @@
 	"Displays the complete information about note.": [
 		"Affiche tous les détails de la note."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		"Affiche les raccourcis clavier configurés."
+	],
 	"Displays the given note.": [
 		"Affiche la note."
 	],
@@ -1181,7 +1217,7 @@
 		"Ne perdez pas le mot de passe car, pour des raisons de sécurité, ce sera la *seule* façon de déchiffrer les données. Pour activer le chiffrement, veuillez entrer votre mot de passe ci-dessous."
 	],
 	"Do you find the Joplin web app useful?": [
-		""
+		"Trouvez-vous l'application web Joplin utile ?"
 	],
 	"Document scanner: Title template": [
 		"Scanner de documents : modèle de titre"
@@ -1288,6 +1324,9 @@
 	"Edit profile configuration...": [
 		"Editer la configuration des profils..."
 	],
+	"Edit tag": [
+		"Modifier la balise"
+	],
 	"Editor": [
 		"Éditeur"
 	],
@@ -1353,6 +1392,9 @@
 	],
 	"Enable abbreviation syntax": [
 		"Activer la syntaxe pour abréviations"
+	],
+	"Enable ABC musical notation support": [
+		"Activer notation musicale ABC"
 	],
 	"Enable audio player": [
 		"Activer le lecteur audio"
@@ -1540,6 +1582,9 @@
 	"Expand all notebooks": [
 		"Développer tous les carnets"
 	],
+	"Expand title": [
+		"Développer le titre"
+	],
 	"Expanded": [
 		"Etendu"
 	],
@@ -1602,6 +1647,9 @@
 	],
 	"Feature flags": [
 		"Feature flags"
+	],
+	"Feedback": [
+		"Feedback"
 	],
 	"Fetched items: %d/%d.": [
 		"Téléchargés : %d/%d."
@@ -1841,6 +1889,9 @@
 	"Import or export your data": [
 		"Importez ou exportez vos données"
 	],
+	"Import...": [
+		"Importer..."
+	],
 	"Imported successfully!": [
 		"Importé avec succès !"
 	],
@@ -2013,28 +2064,31 @@
 		"Joplin Mobile"
 	],
 	"Joplin Server": [
-		"Serveur Joplin"
+		"Joplin Server"
+	],
+	"Joplin Server (SAML)": [
+		"Joplin Server (SAML)"
 	],
 	"Joplin Server Business": [
 		"Joplin Server Business"
 	],
 	"Joplin Server email": [
-		"Serveur Joplin : Email"
+		"Joplin Server : Email"
 	],
 	"Joplin Server Login": [
 		"Connexion Joplin Server"
 	],
 	"Joplin Server password": [
-		"Serveur Joplin : Mot de passe"
+		"Joplin Server : Mot de passe"
 	],
 	"Joplin Server URL": [
-		"Serveur Joplin : URL"
+		"Joplin Server : URL"
 	],
 	"Joplin SSO Authentication": [
 		"Authentification SSO Joplin"
 	],
 	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
-		""
+		"Joplin permet d'enregistrer l'emplacement où les notes sont enregistrées ou créées. Souhaitez-vous activer cette fonctionnalité ? Vous pouvez modifier ce paramètre à tout moment."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Le Web Clipper permet d'enregistrer des pages web et des captures d'écran depuis votre navigateur vers Joplin."
@@ -2063,11 +2117,14 @@
 	"Keychain Supported: %s": [
 		"Trousseau supporté : %s"
 	],
+	"KEYS": [
+		"TOUCHES"
+	],
 	"Keys that need upgrading": [
 		"Clefs qui peuvent être mise à niveau"
 	],
 	"Label": [
-		""
+		"Étiquette"
 	],
 	"Landscape": [
 		"Paysage"
@@ -2209,6 +2266,9 @@
 	"Manage your plugins": [
 		"Gérer vos modules"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		"Gérez vos profils. Vous pouvez les renommer ou les supprimer. Le profil actif ne peut pas être supprimé."
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Gérer la configuration E2EE (Chiffrement de bout à bout). Les commandes sont `enable`, `disable`, `decrypt` et `status`, `decrypt-file` et `target-status`."
 	],
@@ -2223,6 +2283,9 @@
 	],
 	"Markdown editor": [
 		"Éditeur Markdown"
+	],
+	"Markdown editor: Highlight active line": [
+		"Éditeur Markdown : Surligner la ligne active"
 	],
 	"Markdown editor: Render images": [
 		"Éditeur Markdown : rendu d'images"
@@ -2311,6 +2374,9 @@
 	"Move %d note to notebook \"%s\"?": [
 		"Déplacer %d note vers carnet \"%s\" ?",
 		"Déplacer %d notes vers carnet \"%s\" ?"
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"Déplacer %d blocs-notes vers la corbeille ?\n\nToutes les notes et sous-blocs-notes contenus dans ces blocs-notes seront également déplacés vers la corbeille."
 	],
 	"Move down": [
 		"Déplacer vers le bas"
@@ -2462,6 +2528,9 @@
 	"No updates available": [
 		"Aucune mise à jour disponible"
 	],
+	"No URL for SAML authentication set.": [
+		"Aucune URL n'est définie pour l'authentification SAML."
+	],
 	"None": [
 		"Aucun"
 	],
@@ -2484,7 +2553,7 @@
 		"Pas maintenant"
 	],
 	"Not useful": [
-		""
+		"Inutile"
 	],
 	"note": [
 		"note"
@@ -2533,6 +2602,9 @@
 	],
 	"Note list style": [
 		"Style de liste de note"
+	],
+	"Note not published: %s": [
+		"Note non publiée : %s"
 	],
 	"Note preview": [
 		"Aperçu des notes"
@@ -2669,6 +2741,9 @@
 	"Open Sync Wizard...": [
 		"Ouvrir l'assistant de synchronisation…"
 	],
+	"Open-source licences": [
+		"Licences open source"
+	],
 	"Open...": [
 		"Ouvrir…"
 	],
@@ -2690,11 +2765,14 @@
 	"Options": [
 		"Options"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		"Options à utiliser lors du rendu du code ABC. Il doit s'agir d'un objet JSON5. La liste complète des options est disponible à l'adresse : %s"
+	],
 	"Ordered list": [
 		"Liste ordonnée"
 	],
 	"Other": [
-		""
+		"Autre"
 	],
 	"Other applications...": [
 		"Autres applications..."
@@ -2919,6 +2997,9 @@
 	"Profile name": [
 		"Nom du profil"
 	],
+	"Profile name cannot be empty": [
+		"Le nom du profil ne peut pas être vide"
+	],
 	"Profile name:": [
 		"Nom du profil :"
 	],
@@ -2946,6 +3027,9 @@
 	"Publish Note": [
 		"Publier une note"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Publier les notes \"%s\" (dans le carnet \"%s\") ?"
+	],
 	"Publish note...": [
 		"Publier la note…"
 	],
@@ -2958,8 +3042,11 @@
 	"Publish/unpublish": [
 		"Publier/dépublier"
 	],
+	"Published at URL: %s": [
+		"Publié à l'URL : %s"
+	],
 	"Publishes a note to Joplin Server or Joplin Cloud": [
-		""
+		"Publie une note sur Joplin Server ou Joplin Cloud"
 	],
 	"QR Code": [
 		"Code QR"
@@ -3006,6 +3093,9 @@
 	"Recipients:": [
 		"Destinataires :"
 	],
+	"Recognise text:": [
+		"Reconnaître le texte :"
+	],
 	"Recognize handwritten image": [
 		"Reconnaître une image manuscrite"
 	],
@@ -3041,6 +3131,9 @@
 	],
 	"Remove": [
 		"Supprimer"
+	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"Supprimer les balises %d de toutes les notes ? Cette opération est irréversible."
 	],
 	"Remove %s": [
 		"Supprimer %s"
@@ -3234,6 +3327,9 @@
 	"Save geo-location with notes": [
 		"Enregistrer les informations de géolocalisation des notes"
 	],
+	"Save geolocation?": [
+		"Enregistrer la géolocalisation ?"
+	],
 	"Scan notebook": [
 		"Numériser le carnet"
 	],
@@ -3304,10 +3400,13 @@
 		"Sélectionnez un carnet"
 	],
 	"Select one of the other supported sync targets.": [
-		""
+		"Sélectionnez une autre cible de synchronisation prise en charge."
 	],
 	"Select parent notebook": [
 		"Sélectionner le carnet parent"
+	],
+	"Select the type of file to be imported:": [
+		"Sélectionnez le type de fichier à importer :"
 	],
 	"Selected: %s": [
 		"Sélectionné : %s"
@@ -3513,6 +3612,9 @@
 	"Source: ": [
 		"Source : "
 	],
+	"SPACE": [
+		"ESPACE"
+	],
 	"Spacer": [
 		"Espaceur"
 	],
@@ -3643,7 +3745,7 @@
 		"Changer de carnet – toutes les opérations à venir se feront dans ce carnet."
 	],
 	"Sync": [
-		""
+		"Sync"
 	],
 	"Sync as many devices as you want": [
 		"Synchronisez autant d'appareils que vous le souhaitez"
@@ -3711,8 +3813,14 @@
 	"Tab moves focus": [
 		"Tab déplace le focus"
 	],
+	"Table": [
+		"Tableau"
+	],
 	"Tabloid": [
 		"Tabloïde"
+	],
+	"Tag: %s": [
+		"Étiquette : %s"
 	],
 	"Tagged: %d.": [
 		"Étiquettes : %d."
@@ -3722,6 +3830,9 @@
 	],
 	"Take photo": [
 		"Prendre une photo"
+	],
+	"Take survey": [
+		"Répondez au sondage"
 	],
 	"Task \"%s\" failed with error: %s": [
 		"La tâche \"%s\" a échoué avec l'erreur : %s"
@@ -3742,7 +3853,7 @@
 		"Commande de l'éditeur de texte"
 	],
 	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		""
+		"Merci pour votre avis !\nAvez-vous quelques instants pour répondre à un court sondage ?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Le profil actif ne peut pas être supprimé. Changez de profil et réessayez."
@@ -3818,7 +3929,8 @@
 		"La note \"%s\" a été restaurée dans le carnet \"%s\"."
 	],
 	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"La note a été convertie en Markdown et la note d'origine a été déplacée vers la corbeille"
+		"La note a été convertie au format Markdown et la note originale a été déplacée vers la corbeille.",
+		"Les notes ont été converties au format Markdown et les notes originales ont été déplacées vers la corbeille."
 	],
 	"The note was successfully moved to the trash.": [
 		"La note a été déplacée avec succès vers la corbeille.",
@@ -4121,6 +4233,9 @@
 	"Try it now": [
 		"Essayer"
 	],
+	"TYPE": [
+		"TYPE"
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Tapez `help [command]` pour plus d'information sur une commande ; ou tapez `help all` pour l'aide complète."
 	],
@@ -4141,6 +4256,9 @@
 	],
 	"Unable to share log data. Reason: %s": [
 		"Impossible de partager le log. Raison : %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"Impossible de partager les données de la note. Raison : %s"
 	],
 	"Unchecked": [
 		"Non coché"
@@ -4287,7 +4405,7 @@
 		"Utilisée lorsque une police à taille fixe est nécessaire pour afficher le texte de façon lisible (par ex. pour les tables, code source, etc.)."
 	],
 	"Useful": [
-		""
+		"Utile"
 	],
 	"User deletions": [
 		"Suppressions d'utilisateurs"
@@ -4395,7 +4513,7 @@
 		"Lors de la création d'une tâche :"
 	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
-		""
+		"Lorsqu'elle est activée, cette option demande la transcription des images de la note par un service de transcription serveur de meilleure qualité. Nécessite une synchronisation avec une copie de l'application de bureau."
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Lorsqu'elle est activée, l'application analysera vos pièces jointes et en extraira le texte. Cela vous permettra de rechercher du texte dans ces pièces jointes."

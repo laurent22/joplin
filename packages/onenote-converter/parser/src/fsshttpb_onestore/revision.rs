@@ -42,10 +42,11 @@ impl Revision {
             .base_rev_id
             .as_option()
             .map(|mapping_id| {
-                storage_index
-                    .find_revision_mapping_id(mapping_id)
+                packaging
+                    .data_element_package
+                    .resolve_revision_manifest_id(storage_index, mapping_id)
                     .ok_or_else(|| {
-                        ErrorKind::MalformedOneStoreData("revision mapping not found".into())
+                        ErrorKind::MalformedOneStoreData("revision manifest id not found".into())
                     })
             })
             .transpose()?;

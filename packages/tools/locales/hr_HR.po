@@ -156,9 +156,9 @@ msgstr "%d MB po bilješci ili privitku"
 #: packages/lib/models/settings/builtInMetadata.ts:1407
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minuta"
-msgstr[1] "%d minute"
-msgstr[2] "%d minuta"
+msgstr[0] "%d minunta"
+msgstr[1] "%d minunte"
+msgstr[2] "%d minunta"
 
 #: packages/app-cli/app/command-rmnote.ts:34
 msgid "%d note matches this pattern. Delete it?"
@@ -1167,7 +1167,7 @@ msgstr "Cmd-klik za otvaranje: %s"
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:70
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:76
 msgid "Code"
-msgstr "Kod"
+msgstr "Kȏd"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:814
 msgid "Code Block"
@@ -1197,11 +1197,11 @@ msgstr "Sklopi sve bilježnice"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1712
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:220
 msgid "Collapse title"
-msgstr "Sklopi naslov"
+msgstr "Sklopi nasolv"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/ExpandIcon.tsx:23
 msgid "Collapsed"
-msgstr "Sklopljeno"
+msgstr "Skupljeno"
 
 #: packages/lib/services/ReportService.ts:386
 msgid "Coming alarms"
@@ -1461,8 +1461,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Neuspjelo povezivanje s Joplin Server. Provjeri opcije sinkronizacije u "
-"prozoru konfiguracije. Potpuna greška glasi:\n"
+"Neuspjelo povezivanje s Joplin poslužiteljem. Provjeri opcije sinkronizacije "
+"u prozoru konfiguracije. Potpuna greška glasi:\n"
 "\n"
 "%s"
 
@@ -2895,7 +2895,7 @@ msgstr "Odobri autorizaciju"
 
 #: packages/app-cli/app/command-sync.ts:117
 msgid "Have you authorised the application login in the above URL?"
-msgstr "Jesi li autorizirao/la prijavu programa u gore navedenom URL-u?"
+msgstr "Jesi li autorizirao/la prijavu program u gore navedenom URL-u?"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:30
 msgid "Header %d"
@@ -3200,7 +3200,7 @@ msgstr "Informacije"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:822
 msgid "Inline Code"
-msgstr "Umetnuti kod"
+msgstr "Umetnuti kȏd"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:24
 msgid "Insert"
@@ -4279,7 +4279,7 @@ msgstr "OCR: URL podataka jezika ili putanja"
 
 #: packages/lib/models/settings/builtInMetadata.ts:628
 msgid "OCR: Search in extracted content"
-msgstr "OCR: Traži u izdvojenom sadržaju"
+msgstr "OCR: Tra#i u izdvojenom sadržaju"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4448,7 +4448,7 @@ msgstr "Poredan popis"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:130
 msgid "Other"
-msgstr "Drugi"
+msgstr "Drugo"
 
 #: packages/app-desktop/gui/MenuBar.tsx:525
 msgid "Other applications..."
@@ -6490,7 +6490,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr "Ova je funkcija dostupna samo na Joplin Cloud i Joplin Server."
+msgstr "Ova je funkcija dostupna samo na Joplin Cloudu i Joplin Serveru."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."

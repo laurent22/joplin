@@ -86,6 +86,7 @@ export default class ShareService {
 			userContentBaseUrl: () => Setting.value(`sync.${syncTargetId}.userContentPath`),
 			username: () => Setting.value(`sync.${syncTargetId}.username`),
 			password: () => Setting.value(`sync.${syncTargetId}.password`),
+			apiKey: () => Setting.value(`sync.${syncTargetId}.apiKey`),
 			session: () => {
 				if (syncTargetId === 11) {
 					return {

@@ -180,6 +180,7 @@ export interface EditorSettings {
 	language: EditorLanguageType;
 
 	keymap: EditorKeymap;
+	preferMacShortcuts: boolean;
 	tabMovesFocus: boolean;
 
 	markdownMarkEnabled: boolean;

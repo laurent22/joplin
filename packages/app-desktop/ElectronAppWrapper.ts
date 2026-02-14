@@ -260,6 +260,15 @@ export default class ElectronAppWrapper {
 
 		require('@electron/remote/main').enable(this.win_.webContents);
 
+		// Add Referer header for YouTube embeds to fix Error 153
+		this.win_.webContents.session.webRequest.onBeforeSendHeaders(
+			{ urls: ['*://*.youtube.com/*', '*://*.youtube-nocookie.com/*'] },
+			(details, callback) => {
+				details.requestHeaders['Referer'] = 'https://joplinapp.org/';
+				callback({ requestHeaders: details.requestHeaders });
+			},
+		);
+
 		if (!screen.getDisplayMatching(this.win_.getBounds())) {
 			const { width: windowWidth, height: windowHeight } = this.win_.getBounds();
 			const { width: primaryDisplayWidth, height: primaryDisplayHeight } = screen.getPrimaryDisplay().workArea;

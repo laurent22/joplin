@@ -16,6 +16,7 @@ interface Options {
 	userContentBaseUrl(): string;
 	username(): string;
 	password(): string;
+	apiKey(): string;
 	session(): Session | null;
 	env?: Env;
 }
@@ -43,7 +44,6 @@ export interface Session {
 }
 
 export default class JoplinServerApi {
-
 	private options_: Options;
 	private session_: Session;
 	private debugRequests_ = false;
@@ -96,6 +96,7 @@ export default class JoplinServerApi {
 			this.session_ = await this.exec_('POST', 'api/sessions', null, {
 				email: this.options_.username(),
 				password: this.options_.password(),
+				apiKey: this.options_.apiKey(),
 				...clientInfo,
 			});
 

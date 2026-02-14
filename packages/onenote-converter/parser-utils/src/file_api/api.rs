@@ -1,4 +1,7 @@
+use std::io::{Read, Seek};
+
 pub type ApiResult<T> = std::result::Result<T, std::io::Error>;
+pub trait FileHandle: Read + Seek {}
 
 pub trait FileApiDriver: Send + Sync {
     fn is_directory(&self, path: &str) -> ApiResult<bool>;
@@ -7,6 +10,7 @@ pub trait FileApiDriver: Send + Sync {
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()>;
     fn make_dir(&self, path: &str) -> ApiResult<()>;
     fn exists(&self, path: &str) -> ApiResult<bool>;
+    fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>>;
 
     // These functions correspond to the similarly-named
     // NodeJS path functions and should behave like the NodeJS

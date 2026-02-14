@@ -1,0 +1,22 @@
+
+<section class="section">
+	<div class="container">
+		<h1 class="title">{{title}}</h1>
+
+		<form action="{{postUrl}}" method="POST">
+			{{{csrfTag}}}
+
+			<div class="block readable-block content">
+				<p>{{description}}</p>
+			</div>
+
+			<input class="input" type="hidden" name="applicationAuthId" value="{{applicationAuthId}}"/>
+
+			{{> errorBanner}}
+			<div class="control">
+				<a href="{{cancelRedirect}}" class="button">{{cancel}}</a>
+				<button class="button is-primary">{{authorise}}</button>
+			</div>
+		</form>
+	</div>
+</section>

@@ -96,6 +96,8 @@ const RichTextEditor: React.FC<EditorProps> = props => {
 		themeId: props.themeId,
 		pluginStates: props.plugins,
 		noteResources: props.noteResources,
+		initialSelection: props.initialSelection,
+		initialScroll: props.initialScroll,
 		onPostMessage: onPostMessage,
 		onAttachFile: props.onAttach,
 	});

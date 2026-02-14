@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, AccessibilityRole } from 'react-native';
 import { connect } from 'react-redux';
 import Tag from '@joplin/lib/models/Tag';
 import { themeStyle } from '../global-style';
@@ -8,10 +8,15 @@ import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import { AppState } from '../../utils/types';
 import { TagEntity } from '@joplin/lib/services/database/types';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useContext } from 'react';
 import { Dispatch } from 'redux';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
+import { DialogContext } from '../DialogManager';
+import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { PromptButtonSpec } from '../DialogManager/types';
+import MultiTouchableOpacity from '../buttons/MultiTouchableOpacity';
 import SearchBar from './SearchScreen/SearchBar';
 import Logger from '@joplin/utils/Logger';
 
@@ -47,12 +52,47 @@ const useStyles = (themeId: number) => {
 	}, [themeId]);
 };
 
+interface TagItemProps {
+	tag: TagEntity;
+	themeId: number;
+	onPress: (id: string)=> void;
+	onLongPress: (tag: TagEntity)=> void;
+}
+
+const TagItem: React.FC<TagItemProps> = ({ tag, themeId, onPress, onLongPress }) => {
+	const styles = useStyles(themeId);
+	const onLongPressProps = useOnLongPressProps({ onLongPress: () => onLongPress(tag), actionDescription: _('Edit tag') });
+	const accessibilityRole: AccessibilityRole = 'button';
+	const pressableProps = {
+		accessibilityRole,
+		accessibilityHint: _('Shows notes for tag'),
+		...onLongPressProps,
+	};
+
+	return (
+		<MultiTouchableOpacity
+			{...pressableProps}
+			containerProps={{
+				style: {},
+			}}
+			onPress={() => onPress(tag.id)}
+			beforePressable={null}
+		>
+			<View style={styles.listItem}>
+				<Text style={styles.listItemText}>{tag.title}</Text>
+			</View>
+		</MultiTouchableOpacity>
+	);
+};
+
 
 const TagsScreenComponent: React.FC<Props> = props => {
 	const [tags, setTags] = useState<TagEntity[]>([]);
+	const [refreshTrigger, setRefreshTrigger] = useState(0);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [showSearch, setShowSearch] = useState(false);
 	const styles = useStyles(props.themeId);
+	const dialogs = useContext(DialogContext);
 	const collatorLocale = getCollatorLocale();
 	const collator = useMemo(() => {
 		return getCollator(collatorLocale);
@@ -86,7 +126,7 @@ const TagsScreenComponent: React.FC<Props> = props => {
 				setTags([]);
 			}
 		}
-	}, [searchQuery, collator], { interval: 200 });
+	}, [searchQuery, collator, refreshTrigger], { interval: 200 });
 
 	const onSearchButtonPress = useCallback(() => {
 		setShowSearch(!showSearch);
@@ -111,20 +151,74 @@ const TagsScreenComponent: React.FC<Props> = props => {
 		});
 	}, [props.dispatch]);
 
+	const onTagItemLongPress = useCallback(async (tag: TagEntity) => {
+		const menuItems: PromptButtonSpec[] = [];
+
+		const generateTagDeletion = () => {
+			return () => {
+				dialogs.prompt('', _('Delete tag "%s"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.', substrWithEllipsis(tag.title, 0, 32)), [
+					{
+						text: _('OK'),
+						onPress: async () => {
+							await Tag.delete(tag.id, { sourceDescription: 'tags-screen (long-press)' });
+							setRefreshTrigger(prev => prev + 1);
+						},
+					},
+					{
+						text: _('Cancel'),
+						onPress: () => { },
+						style: 'cancel',
+					},
+				]);
+			};
+		};
+
+		menuItems.push({
+			text: _('Rename'),
+			onPress: async () => {
+				const newName = await dialogs.promptForText(_('Rename tag:'), tag.title);
+				if (newName && newName.trim() && newName.trim() !== tag.title) {
+					try {
+						const updatedTag = { ...tag, title: newName };
+						await Tag.save(updatedTag, { fields: ['title'], userSideValidation: true });
+						setRefreshTrigger(prev => prev + 1);
+					} catch (error) {
+						await dialogs.error(error instanceof Error ? error.message : String(error));
+					}
+				}
+			},
+		});
+
+		menuItems.push({
+			text: _('Delete'),
+			onPress: generateTagDeletion(),
+			style: 'destructive',
+		});
+
+		menuItems.push({
+			text: _('Cancel'),
+			onPress: () => {},
+			style: 'cancel',
+		});
+
+		dialogs.prompt(
+			'',
+			_('Tag: %s', tag.title),
+			menuItems,
+		);
+	}, [dialogs]);
+
 	type RenderItemEvent = { item: TagEntity };
 	const onRenderItem = useCallback(({ item }: RenderItemEvent) => {
 		return (
-			<TouchableOpacity
-				onPress={() => onTagItemPress({ id: item.id })}
-				accessibilityRole='button'
-				accessibilityHint={_('Shows notes for tag')}
-			>
-				<View style={styles.listItem}>
-					<Text style={styles.listItemText}>{item.title}</Text>
-				</View>
-			</TouchableOpacity>
+			<TagItem
+				tag={item}
+				themeId={props.themeId}
+				onPress={(id) => onTagItemPress({ id })}
+				onLongPress={onTagItemLongPress}
+			/>
 		);
-	}, [onTagItemPress, styles]);
+	}, [onTagItemPress, onTagItemLongPress, props.themeId]);
 
 	return (
 		<View style={styles.rootStyle}>

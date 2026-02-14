@@ -1,7 +1,7 @@
 import { execCommand } from '@joplin/utils';
 import { chdir } from 'process';
 import { rootDir, gitPullTry, releaseFinalGitCommands } from './tool-utils';
-import { yarnVersionPatch } from '@joplin/utils/version';
+import { versionPatch } from '@joplin/utils/version';
 
 const workDir = `${rootDir}/packages/plugin-repo-cli`;
 
@@ -14,7 +14,7 @@ async function main() {
 	chdir(workDir);
 	await execCommand('yarn dist');
 
-	const newVersion = await yarnVersionPatch();
+	const newVersion = await versionPatch();
 
 	console.info(`New version: ${newVersion}`);
 	const tagName = `plugin-repo-cli-${newVersion}`;

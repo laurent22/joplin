@@ -84,7 +84,13 @@ const ResourceTableComp = (props: ResourceTable) => {
 	};
 
 	const filteredResources = props.resources.filter(
-		(resource: InnerResource) => !props.filter || resource.title?.includes(props.filter) || resource.id.includes(props.filter),
+		(resource: InnerResource) => {
+			if (props.filter) {
+				const filterLowerCase = props.filter.toLowerCase();
+				return resource.title?.toLowerCase().includes(filterLowerCase) || resource.id.toLowerCase().includes(filterLowerCase);
+			}
+			return true;
+		},
 	);
 
 	const renderSortableHeader = (title: string, order: SortingOrder) => {
@@ -297,7 +303,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 					<div style={{ ...theme.notificationBox, marginBottom: 10 }}>{
 						_('This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')
 					}</div>
-					<div style={{ float: 'right' }}>
+					<p style={{ float: 'left', paddingRight: 10 }}>
 						<input
 							style={theme.inputStyle}
 							type="search"
@@ -305,7 +311,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 							onChange={this.onFilterUpdate}
 							placeholder={_('Search...')}
 						/>
-					</div>
+					</p>
 					{this.state.isLoading && <div>{_('Please wait...')}</div>}
 					{!this.state.isLoading && <div>
 						{!this.state.resources && <div>

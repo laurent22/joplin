@@ -22,4 +22,8 @@ export const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
 	'search': { name: 'SearchReplace' },
 	'attachFile': { name: 'joplinAttach' },
 	'insertDateTime': true,
+	'textCopy': true,
+	'textCut': true,
+	'textPaste': true,
+	'textSelectAll': true,
 };

@@ -220,7 +220,7 @@ function shimInit(options: ShimInitOptions = null) {
 		if (shim.isElectron()) {
 			return shim.electronBridge().showMessageBox(message, options ?? {});
 		} else {
-			throw new Error('Not implemented');
+			throw new Error(`Not implemented: showMessageBox(${JSON.stringify(message)})`);
 		}
 	};
 

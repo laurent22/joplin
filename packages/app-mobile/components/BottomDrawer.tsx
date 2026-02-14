@@ -44,7 +44,7 @@ const useStyles = (theme: ThemeStyle) => {
 			},
 			contentContainer: {
 				padding: 20,
-				paddingBottom: 14,
+				paddingBottom: 14 + safeAreaPadding.paddingBottom,
 				gap: 8,
 				flexDirection: 'row',
 				flexWrap: 'wrap',
