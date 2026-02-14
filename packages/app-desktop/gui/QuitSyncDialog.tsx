@@ -5,7 +5,7 @@ import { AppState } from '../app.reducer';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../services/bridge';
 import Dialog from './Dialog';
-import DialogButtonRow, { ClickEvent, ButtonSpec } from './DialogButtonRow';
+import DialogButtonRow, { ClickEvent } from './DialogButtonRow';
 import styled from 'styled-components';
 import { reg } from '@joplin/lib/registry';
 
@@ -24,12 +24,6 @@ const StyledContent = styled.div`
 const StyledMessage = styled.div`
 	margin-bottom: 16px;
 	text-align: center;
-`;
-
-const StyledSpinner = styled.div`
-	margin-bottom: 16px;
-	font-size: 14px;
-	color: ${props => props.theme.color};
 `;
 
 export default function QuitSyncDialog(props: Props) {
@@ -64,16 +58,11 @@ export default function QuitSyncDialog(props: Props) {
 		void bridge().electronApp().quit();
 	};
 
-	const buttonSpecs: ButtonSpec[] = [
-		{ name: 'cancel', label: _('Cancel') },
-		{ name: 'quitAnyway', label: _('Quit anyway') },
-	];
-
 	const dialogButtonOnClick = (event: ClickEvent) => {
-		if (event.buttonName === 'cancel') {
-			handleCancel(event);
-		} else if (event.buttonName === 'quitAnyway') {
+		if (event.buttonName === 'ok') {
 			handleQuitAnyway(event);
+		} else if (event.buttonName === 'cancel') {
+			handleCancel(event);
 		}
 	};
 
@@ -81,8 +70,7 @@ export default function QuitSyncDialog(props: Props) {
 		<Dialog>
 			<StyledContent>
 				<StyledMessage>{_('Synchronising remaining changes, please wait...')}</StyledMessage>
-				<StyledSpinner>{syncStarted ? _('Syncing...') : _('Starting sync...')}</StyledSpinner>
-				<DialogButtonRow themeId={props.themeId} customButtons={buttonSpecs} onClick={dialogButtonOnClick} />
+				<DialogButtonRow themeId={props.themeId} onClick={dialogButtonOnClick} okButtonLabel={_('Quit anyway')} cancelButtonLabel={_('Cancel')} />
 			</StyledContent>
 		</Dialog>
 	);
