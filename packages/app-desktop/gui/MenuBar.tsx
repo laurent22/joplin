@@ -363,7 +363,12 @@ function useMenu(props: Props) {
 			const quitMenuItem = {
 				label: _('Quit'),
 				accelerator: keymapService.getAccelerator('quit'),
-				click: () => { void bridge().electronApp().quitWithConfirmation(props.syncPending); },
+				click: () => {
+					bridge().electronApp().quitWithSyncCheck(
+						(action: any) => props.dispatch(action),
+						props.syncPending
+					);
+				},
 			};
 
 			const sortNoteFolderItems = (type: string) => {
