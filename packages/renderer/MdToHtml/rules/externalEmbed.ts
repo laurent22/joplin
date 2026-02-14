@@ -39,19 +39,25 @@ const plugin = (markdownIt: MarkdownIt) => {
 				let hasTextBefore = false;
 				for (let i = idx - 1; i >= 0; i--) {
 					const prevToken = tokens[i];
-					if (prevToken.type === 'text' && prevToken.content.trim() !== '') {
-						hasTextBefore = true;
-						break;
-					}
+					// Ignore pure whitespace text
+					if (prevToken.type === 'text' && prevToken.content.trim() === '') continue;
+					// Ignore soft/hard line breaks (treated as whitespace)
+					if (prevToken.type === 'softbreak' || prevToken.type === 'hardbreak') continue;
+					// Any other token before the link counts as surrounding content
+					hasTextBefore = true;
+					break;
 				}
 				
 				let hasTextAfter = false;
 				for (let i = idx + 3; i < tokens.length; i++) {
 					const nextToken = tokens[i];
-					if (nextToken.type === 'text' && nextToken.content.trim() !== '') {
-						hasTextAfter = true;
-						break;
-					}
+					// Ignore pure whitespace text
+					if (nextToken.type === 'text' && nextToken.content.trim() === '') continue;
+					// Ignore soft/hard line breaks (treated as whitespace)
+					if (nextToken.type === 'softbreak' || nextToken.type === 'hardbreak') continue;
+					// Any other token after the link counts as surrounding content
+					hasTextAfter = true;
+					break;
 				}
 				
 				if (!hasTextBefore && !hasTextAfter) {
