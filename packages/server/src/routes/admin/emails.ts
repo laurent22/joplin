@@ -40,7 +40,7 @@ router.get('admin/emails', async (_path: SubPath, ctx: AppContext) => {
 				label: 'To',
 			},
 			{
-				name: 'user_id',
+				name: 'recipient_id',
 				label: 'User',
 			},
 			{
