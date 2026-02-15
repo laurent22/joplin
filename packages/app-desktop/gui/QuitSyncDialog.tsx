@@ -43,6 +43,7 @@ export default function QuitSyncDialog(props: Props) {
 
 	// Trigger immediate sync when dialog opens if not already syncing
 	// If the sync process schedules another sync automatically, this hook will trigger another sync immediately, instead of having to wait the syncAsYouTypeInterval
+	// That is because this triggers when sync completed is emitted, but if another sync is not scheduled, the app quits via the other hook when syncPending is reset to false just after
 	useEffect(() => {
 		if (showDialog && syncPending && !syncStarted) {
 			void reg.scheduleSync(0, { syncSteps: Synchronizer.partialSyncSteps });
