@@ -1237,11 +1237,11 @@ export default class Synchronizer {
 		this.progressReport_ = {};
 
 		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
-		this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
 
 		this.state_ = 'idle';
 
 		if (errorToThrow) throw errorToThrow;
+		let hasOutgoingChanges = false;
 
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
@@ -1252,8 +1252,11 @@ export default class Synchronizer {
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
 				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				hasOutgoingChanges = true;
 			}
 		}
+
+		if (!hasOutgoingChanges) this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
 
 		return outputContext;
 	}

@@ -150,6 +150,7 @@ class Registry {
 
 			const timeoutCallback = async () => {
 				this.timerCallbackCalls_.push(true);
+				let newContext;
 
 				try {
 					this.scheduleSyncId_ = null;
@@ -208,11 +209,12 @@ class Registry {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
 							}
-							const newContext = await sync.start(options);
+							newContext = await sync.start(options);
 							Setting.setValue(contextKey, JSON.stringify(newContext));
 						} catch (error) {
 							if (error.code === 'alreadyStarted') {
 								this.logger().info(error.message);
+								newContext = null; // Prevent resetting syncPending to false if another sync is triggered while one is in progress
 							} else {
 								promiseResolve();
 								throw error;
@@ -226,6 +228,11 @@ class Registry {
 					promiseResolve();
 
 				} finally {
+					if (newContext === undefined) {
+						// If the logic in the try block returns before executing the sync, ensure syncPending is reset back to false
+						this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
+					}
+
 					this.timerCallbackCalls_.pop();
 				}
 			};
