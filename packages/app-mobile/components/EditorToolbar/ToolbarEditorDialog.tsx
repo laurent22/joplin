@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import createRootStyle from '../../utils/createRootStyle';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Divider, Text, TouchableRipple } from 'react-native-paper';
+import { Divider, IconButton, Text, TouchableRipple } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
 import { connect } from 'react-redux';
@@ -17,6 +17,7 @@ import selectedCommandNamesFromState from './utils/selectedCommandNamesFromState
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { DeleteButton } from '../buttons';
 import shim from '@joplin/lib/shim';
+import useToolbarEditorState, { ReorderableItem } from './utils/useToolbarEditorState';
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
@@ -41,8 +42,13 @@ const useStyle = (themeId: number) => {
 				color: theme.color,
 				fontSize: theme.fontSizeLarge,
 			},
+			disabledIcon: {
+				color: theme.colorFaded,
+				fontSize: theme.fontSizeLarge,
+			},
 			labelText: {
 				fontSize: theme.fontSize,
+				flex: 1,
 			},
 			listContainer: {
 				marginTop: theme.marginTop,
@@ -60,61 +66,126 @@ const useStyle = (themeId: number) => {
 				paddingTop: theme.itemMarginTop,
 				paddingBottom: theme.itemMarginBottom,
 			},
+			arrowButtonsContainer: {
+				flexDirection: 'row',
+				alignItems: 'center',
+			},
+			arrowButton: {
+				margin: 0,
+				padding: 0,
+			},
+			sectionHeader: {
+				paddingVertical: 8,
+				paddingHorizontal: 4,
+				color: theme.colorFaded,
+			},
+			enabledItemTouchable: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				flex: 1,
+				gap: theme.margin,
+			},
+			disabledLabelText: {
+				fontSize: theme.fontSize,
+				flex: 1,
+				color: theme.colorFaded,
+			},
 		});
 	}, [themeId]);
 };
 type Styles = ReturnType<typeof useStyle>;
 
-const setCommandIncluded = (
-	commandName: string,
-	lastSelectedCommands: string[],
-	allCommandNames: string[],
-	include: boolean,
-) => {
-	let newSelectedCommands;
-	if (include) {
-		newSelectedCommands = [];
-		for (const name of allCommandNames) {
-			const isDivider = name === '-';
-			if (isDivider || name === commandName || lastSelectedCommands.includes(name)) {
-				newSelectedCommands.push(name);
-			}
-		}
-	} else {
-		newSelectedCommands = lastSelectedCommands.filter(name => name !== commandName);
-	}
-	Setting.setValue('editor.toolbarButtons', newSelectedCommands);
+interface EnabledItemRowProps {
+	item: ReorderableItem;
+	index: number;
+	isFirst: boolean;
+	isLast: boolean;
+	styles: Styles;
+	onToggle: (commandName: string)=> void;
+	onMoveUp: (index: number)=> void;
+	onMoveDown: (index: number)=> void;
+}
+
+const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
+	item, index, isFirst, isLast, styles, onToggle, onMoveUp, onMoveDown,
+}) => {
+	const title = item.buttonInfo.title || item.buttonInfo.tooltip;
+
+	const handleToggle = useCallback(() => {
+		onToggle(item.commandName);
+	}, [onToggle, item.commandName]);
+
+	const handleMoveUp = useCallback(() => {
+		onMoveUp(index);
+	}, [onMoveUp, index]);
+
+	const handleMoveDown = useCallback(() => {
+		onMoveDown(index);
+	}, [onMoveDown, index]);
+
+	return (
+		<View style={styles.listItem}>
+			<TouchableRipple
+				accessibilityRole='checkbox'
+				accessibilityState={{ checked: true }}
+				aria-checked={true}
+				onPress={handleToggle}
+				style={styles.enabledItemTouchable}
+			>
+				<>
+					<Icon name='ionicon checkbox-outline' style={styles.icon} accessibilityLabel={null}/>
+					<Icon name={item.buttonInfo.iconName} style={styles.icon} accessibilityLabel={null}/>
+					<Text style={styles.labelText}>{title}</Text>
+				</>
+			</TouchableRipple>
+			<View style={styles.arrowButtonsContainer}>
+				<IconButton
+					icon='arrow-up'
+					size={20}
+					onPress={handleMoveUp}
+					disabled={isFirst}
+					style={styles.arrowButton}
+					accessibilityLabel={_('Move %s up', title)}
+				/>
+				<IconButton
+					icon='arrow-down'
+					size={20}
+					onPress={handleMoveDown}
+					disabled={isLast}
+					style={styles.arrowButton}
+					accessibilityLabel={_('Move %s down', title)}
+				/>
+			</View>
+		</View>
+	);
 };
 
-interface ItemToggleProps {
-	item: ToolbarButtonInfo;
-	selectedCommandNames: string[];
-	allCommandNames: string[];
+interface DisabledItemRowProps {
+	item: ReorderableItem;
 	styles: Styles;
+	onToggle: (commandName: string)=> void;
 }
-const ToolbarItemToggle: React.FC<ItemToggleProps> = ({
-	item, selectedCommandNames, styles, allCommandNames,
-}) => {
-	const title = item.title || item.tooltip;
-	const checked = selectedCommandNames.includes(item.name);
 
-	const onToggle = useCallback(() => {
-		setCommandIncluded(item.name, selectedCommandNames, allCommandNames, !checked);
-	}, [item, selectedCommandNames, allCommandNames, checked]);
+const DisabledItemRow: React.FC<DisabledItemRowProps> = ({
+	item, styles, onToggle,
+}) => {
+	const title = item.buttonInfo.title || item.buttonInfo.tooltip;
+
+	const handleToggle = useCallback(() => {
+		onToggle(item.commandName);
+	}, [onToggle, item.commandName]);
 
 	return (
 		<TouchableRipple
 			accessibilityRole='checkbox'
-			accessibilityState={{ checked }}
-			aria-checked={checked}
-			onPress={onToggle}
+			accessibilityState={{ checked: false }}
+			aria-checked={false}
+			onPress={handleToggle}
 		>
 			<View style={styles.listItem}>
-				<Icon name={checked ? 'ionicon checkbox-outline' : 'ionicon square-outline'} style={styles.icon} accessibilityLabel={null}/>
-				<Icon name={item.iconName} style={styles.icon} accessibilityLabel={null}/>
-				<Text style={styles.labelText}>
-					{title}
-				</Text>
+				<Icon name='ionicon square-outline' style={styles.disabledIcon} accessibilityLabel={null}/>
+				<Icon name={item.buttonInfo.iconName} style={styles.disabledIcon} accessibilityLabel={null}/>
+				<Text style={styles.disabledLabelText}>{title}</Text>
 			</View>
 		</TouchableRipple>
 	);
@@ -123,19 +194,34 @@ const ToolbarItemToggle: React.FC<ItemToggleProps> = ({
 const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 	const styles = useStyle(props.themeId);
 
-	const renderItem = (item: ToolbarItem, index: number) => {
-		if (item.type === 'separator') {
-			return <Divider key={`separator-${index}`} />;
-		}
+	// Filter button infos to only include actual buttons (not separators)
+	const allButtonInfos = useMemo(() => {
+		return props.defaultToolbarButtonInfos.filter(
+			(item): item is ToolbarButtonInfo => item.type === 'button',
+		);
+	}, [props.defaultToolbarButtonInfos]);
 
-		return <ToolbarItemToggle
-			key={`command-${item.name}`}
-			item={item}
-			styles={styles}
-			allCommandNames={props.allCommandNames}
-			selectedCommandNames={props.selectedCommandNames}
-		/>;
-	};
+	const {
+		enabledItems,
+		disabledItems,
+		handleMoveUp,
+		handleMoveDown,
+		handleToggle,
+		reinitialize,
+	} = useToolbarEditorState({
+		initialSelectedCommandNames: props.selectedCommandNames,
+		allCommandNames: props.allCommandNames,
+		allButtonInfos,
+	});
+
+	// Re-sync local state whenever the dialog becomes visible (e.g. after Restore defaults)
+	const prevVisible = useRef(props.visible);
+	useEffect(() => {
+		if (props.visible && !prevVisible.current) {
+			reinitialize(props.selectedCommandNames);
+		}
+		prevVisible.current = props.visible;
+	}, [props.visible, props.selectedCommandNames, reinitialize]);
 
 	const onRestoreDefaultLayout = useCallback(async () => {
 		// Dismiss before showing the confirm dialog to prevent modal conflicts.
@@ -168,7 +254,38 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 				<Text variant='bodyMedium'>{_('Check elements to display in the toolbar')}</Text>
 			</View>
 			<ScrollView style={styles.listContainer}>
-				{props.defaultToolbarButtonInfos.map((item, index) => renderItem(item, index))}
+				{enabledItems.map((item, index) => (
+					<EnabledItemRow
+						key={`enabled-${item.commandName}`}
+						item={item}
+						index={index}
+						isFirst={index === 0}
+						isLast={index === enabledItems.length - 1}
+						styles={styles}
+						onToggle={handleToggle}
+						onMoveUp={handleMoveUp}
+						onMoveDown={handleMoveDown}
+					/>
+				))}
+
+				{disabledItems.length > 0 && (
+					<>
+						<Divider />
+						<Text variant='labelMedium' style={styles.sectionHeader}>
+							{_('Available')}
+						</Text>
+					</>
+				)}
+
+				{disabledItems.map((item) => (
+					<DisabledItemRow
+						key={`disabled-${item.commandName}`}
+						item={item}
+						styles={styles}
+						onToggle={handleToggle}
+					/>
+				))}
+
 				{props.hasCustomizedLayout ? restoreButton : null}
 			</ScrollView>
 		</DismissibleDialog>
