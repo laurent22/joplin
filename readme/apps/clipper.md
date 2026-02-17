@@ -6,7 +6,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 ## Troubleshooting the web clipper service
 
-The web clipper extension and the Joplin application communicates via a service, which is started by the Joplin desktop app.
+The web clipper extension and the Joplin application communicate via a service, which is started by the Joplin desktop app.
 
 However certain things can interfere with this service and prevent it from being accessible or from starting. If something does not work, check the following:
 
@@ -20,7 +20,7 @@ If none of this work, please report it on the [forum](https://discourse.joplinap
 
 ### In Chrome
 
-To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome console.
+To provide as much information as possible when reporting an issue, you may provide the log from the various Chrome consoles.
 
 To do so, first enable developer mode in [chrome://extensions/](chrome://extensions/)
 

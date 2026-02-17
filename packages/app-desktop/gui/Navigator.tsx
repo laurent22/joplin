@@ -56,17 +56,32 @@ const useWindowRefocusManager = (route: AppStateRoute) => {
 };
 
 const useContainerSize = (container: HTMLElement|null) => {
-	const [size, setSize] = useState({ width: container?.clientWidth ?? 0, height: container?.clientHeight ?? 0 });
+	const [size, setSize] = useState({
+		// Show the container as soon as possible: Default to the window size,
+		// which is usually correct:
+		width: container?.clientWidth ?? window.innerWidth,
+		height: container?.clientHeight ?? window.innerHeight,
+	});
+
+	const currentSizeRef = useRef(size);
+	currentSizeRef.current = size;
 
 	useEffect(() => {
 		if (!container) return () => {};
 
-		const observer = new ResizeObserver(() => {
-			setSize({
-				width: container.clientWidth,
-				height: container.clientHeight,
-			});
-		});
+		const updateSizeIfDifferent = () => {
+			const { width: lastWidth, height: lastHeight } = currentSizeRef.current;
+			if (lastWidth !== container.clientWidth || lastHeight !== container.clientHeight) {
+				setSize({
+					width: container.clientWidth,
+					height: container.clientHeight,
+				});
+			}
+		};
+		// Ensure that the initial size is set, even if the ResizeObserver doesn't run the callback initially
+		updateSizeIfDifferent();
+
+		const observer = new ResizeObserver(updateSizeIfDifferent);
 		observer.observe(container);
 		return () => {
 			observer.disconnect();

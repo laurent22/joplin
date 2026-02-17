@@ -1004,6 +1004,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: false,
 		},
 
+		'notes.showCheckboxCompletionChart': {
+			value: true,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			section: 'appearance',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Show checkbox completion chart in note list'),
+			isGlobal: true,
+		},
+
 		'plugins.states': {
 			value: {} as PluginSettings,
 			type: SettingItemType.Object,

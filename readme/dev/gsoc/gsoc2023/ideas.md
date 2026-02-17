@@ -156,5 +156,5 @@ Potential Mentor(s):
 ## More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/help/dev/gsoc/gsoc2023)
-- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/help/dev/BUILD.md)
+- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/readme/dev/BUILD.md)
 - And before creating a pull request, please read the [pull request guidelines](https://github.com/laurent22/joplin/blob/dev/readme/dev/gsoc/gsoc2023/pull_request_guidelines.md)
