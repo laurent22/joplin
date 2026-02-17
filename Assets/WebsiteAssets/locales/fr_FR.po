@@ -60,11 +60,11 @@ msgstr ""
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:121
 msgid ""
-"Already have a Joplin Cloud account? <a href=\"https://"
-"joplincloud.com\">Login now</a>"
+"Already have a Joplin Cloud account? <a href=\"https://joplincloud.com"
+"\">Login now</a>"
 msgstr ""
-"Vous avez déjà un compte Joplin Cloud ? <a href=\"https://"
-"joplincloud.com\">Connectez-vous maintenant</a>"
+"Vous avez déjà un compte Joplin Cloud ? <a href=\"https://joplincloud.com"
+"\">Connectez-vous maintenant</a>"
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:209
 msgid ""
@@ -133,7 +133,7 @@ msgid ""
 "access them from any device."
 msgstr ""
 "Joplin est une application libre de prise de notes. Capturez vos pensées et "
-"accédez-y de façon sécurisé depuis n'importe quel appareil."
+"accédez-y de façon sécurisée depuis n'importe quel appareil."
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:79
 msgid "Joplin Server Business"
@@ -159,8 +159,8 @@ msgstr "Nos <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
 
 #: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:46
 msgid ""
-"Our synchronisation and sharing <span class=\"frame-bg frame-bg-"
-"yellow\">solutions</span>"
+"Our synchronisation and sharing <span class=\"frame-bg frame-bg-yellow"
+"\">solutions</span>"
 msgstr ""
 "Nos <span class=\"frame-bg frame-bg-yellow\">solutions</span> de "
 "synchronisation et de partage"
