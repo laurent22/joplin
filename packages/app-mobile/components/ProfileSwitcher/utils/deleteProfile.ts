@@ -42,7 +42,7 @@ const deleteProfile = async (options: DeleteProfileOptions) => {
 	logger.info('Deleting resources directory', resourcesDir);
 	await shim.fsDriver().remove(resourcesDir);
 
-	logger.info('Deleting plugin data directory', resourcesDir);
+	logger.info('Deleting plugin data directory', pluginDataDir);
 	await shim.fsDriver().remove(pluginDataDir);
 };
 
