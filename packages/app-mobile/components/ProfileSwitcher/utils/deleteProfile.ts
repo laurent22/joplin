@@ -17,13 +17,14 @@ interface DeleteProfileOptions {
 
 const deleteProfile = async (options: DeleteProfileOptions) => {
 	logger.info('Deleting profile config', options.toDelete.id);
+	// This step also verifies that the to-be-deleted profile is not the default profile, etc.
 	const newConfig = deleteProfileById(options.profileConfig, options.toDelete.id);
+	// Save the profile config early. If the later deletion steps fail, this prevents the user from
+	// opening a partially-deleted profile:
 	await saveProfileConfig(newConfig);
 
 	const subProfile = isSubProfile(options.toDelete);
-	if (!subProfile) {
-		throw new Error('Unsupported: Deleting non-sub-profile');
-	}
+	if (!subProfile) throw new Error('Deleting a sub-profile is not supported');
 
 	// Retrieve and validate both the database name and resources directory
 	// **before** doing any deletion.
@@ -36,7 +37,9 @@ const deleteProfile = async (options: DeleteProfileOptions) => {
 	try {
 		await db.deleteDatabase({ name: databaseName });
 	} catch (error) {
-		logger.warn('Failed to delete database', error, 'Was the profile initialized?');
+		// Ignore database deletion failures. If the profile hasn't been initialized, the database
+		// may not yet exist. In this case, it should still be possible to delete the profile.
+		logger.warn('Failed to delete database: ', error, '. Was the profile initialized?');
 	}
 
 	logger.info('Deleting resources directory', resourcesDir);
