@@ -111,7 +111,7 @@ To add a test, simply create a new file with an extension `.test.ts` in the same
 
 #### Setting the testing environment
 
-Many utility functions are available under the package `@joplin/lib/testing/test-utils`. Have a look for example at [Note.test.ts](https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Note.test.ts) to see how to setup test units with database support and synchroniser support. Note that this is not needed for all tests - if you just have a simple functions to test you won't need that extra setup.
+Many utility functions are available under the package `@joplin/lib/testing/test-utils`. Have a look for example at [Note.test.ts](https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Note.test.ts) to see how to set up unit tests with database support and synchroniser support. Note that this is not needed for all tests - if you just have simple functions to test you won't need that extra setup.
 
 #### Testing React Hooks
 

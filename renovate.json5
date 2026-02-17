@@ -242,6 +242,9 @@
 		// `yarn buildAssets` after the package has been updated
 		"katex",
 		"mermaid",
+
+		// We keep using v5 for now. Upgrading to v7 would require updating the icon names.
+		"@fortawesome/fontawesome-free",
 	],
 	"packageRules": [
 		// The React Monorepo rule appears to be automatically enabled, but the PR will usually fail

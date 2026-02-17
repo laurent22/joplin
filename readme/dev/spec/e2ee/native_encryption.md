@@ -286,12 +286,11 @@ The Initialization Vector (IV) length is set to 96 bits because extending it doe
 
 ### 3.6. Extended Equivalent Nonce
 Although AES-GCM has been used in TLS for years and has not shown significant vulnerabilities, there are still some security considerations:</br>
-- The Galois Counter Mode (GCM) is vulnerable when the IV and key is reused.
+- The Galois Counter Mode (GCM) is vulnerable when the IV and key are reused.
 - While a simple counter could serve as the IV, it's not easy to maintain a reliable monotonic counter across all clients.
-- The AES-GCM cipher has a maximum IV length of 96 bits (as discussed in [Section 3.5](#35-cipherdecipher-parameters)
-), which is relatively short.
+- The AES-GCM cipher has a maximum IV length of 96 bits (as discussed in [Section 3.5](#35-cipherdecipher-parameters)), which is relatively short.
 
-Although unlikely, a Joplin user could run into two pieces of ciphertext encrypted with the same IV even if the IV is randomly generated. This cause security vulnerabilities if the notes and resources is encrypted with the same Master Key directly. To resolve this, a 256-bit generated salt is used for each encryption to derive a new encryption key from the Master Key, so the key passed to the cipher changes every time. In theory, this approach provides a equivalent nonce with a length of (256+96) bits.
+Although unlikely, a Joplin user could run into two pieces of ciphertext encrypted with the same IV even if the IV is randomly generated. This causes security vulnerabilities if the notes and resources are encrypted with the same Master Key directly. To resolve this, a 256-bit generated salt is used for each encryption to derive a new encryption key from the Master Key, so the key passed to the cipher changes every time. In theory, this approach provides an equivalent nonce with a length of (256+96) bits.
 
 The salt is generated using the following formula:
 

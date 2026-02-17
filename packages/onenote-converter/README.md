@@ -2,7 +2,7 @@
 
 This package is used to process OneNote backup files and output HTML that Joplin can import.
 
-The code is based on the projects created by https://github.com/msiemens
+The code is based on the `one2html` and `onenote.rs` projects created by https://github.com/msiemens.
 
 We adapted it to target WebAssembly, adding Node.js functions that could interface with the host machine. For that to happen we are using custom-made functions (see `node_functions.js`) and the Node.js standard library (see `src/utils.rs`).
 
@@ -58,15 +58,19 @@ To work with the project you will need:
 
 - Rust https://www.rust-lang.org/learn/get-started
 
+### Building
+
+For most setups, the OneNote converter must be built manually:
+- Development build: `yarn buildDev`.
+    - Includes additional logging.
+    - Faster compilation.
+    - Slower at runtime.
+- Production build: `IS_CONTINUOUS_INTEGRATION=1 yarn build`
+    - **Important**: The `IS_CONTINUOUS_INTEGRATION` environment variable must be set. To simplify the development process for contributors without Rust installed, `yarn build` is disabled unless `IS_CONTINUOUS_INTEGRATION` is set.
+
 ### Running tests
 
-Most tests for the project are located in the `lib` packages, but to make it work it is necessary to build this project first:
-
-`IS_CONTINUOUS_INTEGRATION=1 yarn build # for production build`
-or 
-`IS_CONTINUOUS_INTEGRATION=1 yarn buildDev # for build with more logs and compiles faster`
-
-After that you should navigate to `lib` package and run the tests of `InteropService_Importer_OneNote.test.` file
+Most tests for this project are located in the `lib` package. After building the project, set the `IS_CONTINUOUS_INTEGRATION` environment variable and run the tests in `InteropService_Importer_OneNote.test.ts` file:
 
 ```
 cd ../lib
