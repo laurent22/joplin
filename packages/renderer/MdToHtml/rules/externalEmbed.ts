@@ -1,5 +1,24 @@
 import type * as MarkdownIt from 'markdown-it';
 
+const isStandaloneLink = (tokens: MarkdownIt.Token[], idx: number) => {
+	// Scan backward
+	for (let i = idx - 1; i >= 0; i--) {
+		const t = tokens[i];
+		if (t.type === 'softbreak' || t.type === 'hardbreak') break;
+		if (t.type === 'text' && !t.content.trim()) continue;
+		return false;
+	}
+	// Scan forward
+	for (let i = idx + 3; i < tokens.length; i++) {
+		const t = tokens[i];
+		if (t.type === 'softbreak' || t.type === 'hardbreak') break;
+		if (t.type === 'text' && !t.content.trim()) continue;
+		return false;
+	}
+	return true;
+};
+
+
 const extractVideoId = (url: string) => {
 	const pattern = /^https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
 	const match = url.match(pattern);
@@ -34,12 +53,14 @@ const plugin = (markdownIt: MarkdownIt) => {
 			tokens[idx + 1].type === 'text' &&
 			tokens[idx + 1].content === href &&
 			tokens[idx + 2].type === 'link_close') {
+			if (isStandaloneLink(tokens, idx)) {
 
-			const videoId = extractVideoId(href);
+				const videoId = extractVideoId(href);
 
-			if (videoId) {
-				activeEmbedVideo = { videoId, originalUrl: href };
-				return '';
+				if (videoId) {
+					activeEmbedVideo = { videoId, originalUrl: href };
+					return '';
+				}
 			}
 		}
 

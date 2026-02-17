@@ -379,3 +379,5 @@ gumbo
 Guyane
 gvim
 Haïti
+hardbreak
+softbreak
