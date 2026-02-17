@@ -25,6 +25,18 @@ function historyCanGoBackTo(route: any) {
 	return true;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+function removeAdjacentNoteDuplicates(items: any[]) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+function removeAdjacentFolderDuplicates(items: any[]) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -122,7 +134,8 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'FOLDER_DELETE':
 
 			{
-				const newNavHistoryForFolder = navHistory.filter(route => !(route.routeName === 'Notes' && route.folderId === action.id));
+				let newNavHistoryForFolder = navHistory.filter(route => !(route.routeName === 'Notes' && route.folderId === action.id));
+				newNavHistoryForFolder = removeAdjacentFolderDuplicates(newNavHistoryForFolder);
 				navHistory.splice(0, navHistory.length, ...newNavHistoryForFolder);
 			}
 			break;
@@ -130,7 +143,14 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'NOTE_DELETE':
 
 			{
-				const newNavHistory = navHistory.filter(route => !(route.routeName === 'Note' && route.noteId === action.id));
+				let newNavHistory = navHistory.filter(route => !(route.routeName === 'Note' && route.noteId === action.id));
+				newNavHistory = removeAdjacentNoteDuplicates(newNavHistory);
+
+				// Fix the case where after deletion the currently selected note is also the latest in history
+				if (state.route.routeName === 'Note' && newNavHistory.length && newNavHistory[newNavHistory.length - 1].noteId === state.route.noteId) {
+					newNavHistory = newNavHistory.slice(0, newNavHistory.length - 1);
+				}
+
 				navHistory.splice(0, navHistory.length, ...newNavHistory);
 			}
 			break;
