@@ -6,7 +6,7 @@ import { readFile, readdir, remove, writeFile } from 'fs-extra';
 import Resource from '../../../models/Resource';
 import Api, { RequestMethod } from '../Api';
 import Note from '../../../models/Note';
-import { setupDatabase, switchClient } from '../../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -16,7 +16,7 @@ describe('routes/notes', () => {
 
 	beforeEach(async () => {
 		jest.resetAllMocks();
-		await setupDatabase(1);
+		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
 
