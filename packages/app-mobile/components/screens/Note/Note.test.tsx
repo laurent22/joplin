@@ -126,20 +126,17 @@ const openNoteActionsMenu = async () => {
 };
 
 const expectToBeEditing = async (editing: boolean) => {
-	await waitFor(() => {
-		const editButton = screen.queryByLabelText('Edit');
-		if (editing) {
-			expect(editButton).toBeNull();
-		} else {
-			expect(editButton).not.toBeNull();
-		}
-	});
+	if (editing) {
+		await getMarkdownEditorControl();
+	} else {
+		await getNoteViewerDom();
+	}
 };
 
 const openEditor = async () => {
-	const editButton = await screen.findByLabelText('Edit');
+	const editToggle = await screen.findByLabelText('Toggle view/edit');
 
-	fireEvent.press(editButton);
+	fireEvent.press(editToggle);
 	await expectToBeEditing(true);
 };
 

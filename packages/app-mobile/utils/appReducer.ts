@@ -208,16 +208,21 @@ const appReducer = (state = appDefaultState, action: any) => {
 			break;
 
 		case 'NOTE_VISIBLE_PANES_TOGGLE':
-			newState = {
-				...state,
-				noteVisiblePanes: state.noteVisiblePanes.includes('editor') ? ['viewer'] : ['editor'],
-			};
+			{
+				const panes = Array.isArray(state.noteVisiblePanes) && state.noteVisiblePanes.length
+					? state.noteVisiblePanes
+					: ['viewer'];
+				newState = {
+					...state,
+					noteVisiblePanes: panes.includes('editor') ? ['viewer'] : ['editor'],
+				};
+			}
 			break;
 
 		case 'NOTE_VISIBLE_PANES_SET':
 			newState = {
 				...state,
-				noteVisiblePanes: action.panes,
+				noteVisiblePanes: Array.isArray(action.panes) && action.panes.length ? action.panes : ['viewer'],
 			};
 			break;
 		}
