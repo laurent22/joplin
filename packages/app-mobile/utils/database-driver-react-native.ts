@@ -1,5 +1,5 @@
 const SQLite = require('react-native-sqlite-storage');
-import DatabaseDriver, { DatabaseCloseOptions } from '@joplin/lib/database-driver';
+import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions } from '@joplin/lib/database-driver';
 
 export default class DatabaseDriverReactNative implements DatabaseDriver {
 	private lastInsertId_: string;
@@ -9,7 +9,7 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 		this.lastInsertId_ = null;
 	}
 
-	public open(options: { name: string }) {
+	public open(options: DatabaseOpenOptions) {
 		// SQLite.DEBUG(true);
 		return new Promise<void>((resolve, reject) => {
 			SQLite.openDatabase(
