@@ -82,7 +82,7 @@ describe('deleteProfile', () => {
 
 			expect('did not throw').toBe('threw');
 		} catch (error) {
-			expect(String(error)).toMatch(/Deleting non-sub-profile/);
+			expect(String(error)).toMatch(/The default profile cannot be deleted/);
 		}
 	});
 });

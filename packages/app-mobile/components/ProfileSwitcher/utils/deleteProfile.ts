@@ -16,6 +16,10 @@ interface DeleteProfileOptions {
 }
 
 const deleteProfile = async (options: DeleteProfileOptions) => {
+	logger.info('Deleting profile config', options.toDelete.id);
+	const newConfig = deleteProfileById(options.profileConfig, options.toDelete.id);
+	await saveProfileConfig(newConfig);
+
 	const subProfile = isSubProfile(options.toDelete);
 	if (!subProfile) {
 		throw new Error('Unsupported: Deleting non-sub-profile');
@@ -40,10 +44,6 @@ const deleteProfile = async (options: DeleteProfileOptions) => {
 
 	logger.info('Deleting plugin data directory', resourcesDir);
 	await shim.fsDriver().remove(pluginDataDir);
-
-	logger.info('Deleting profile config', options.toDelete.id);
-	const newConfig = deleteProfileById(options.profileConfig, options.toDelete.id);
-	await saveProfileConfig(newConfig);
 };
 
 export default deleteProfile;
