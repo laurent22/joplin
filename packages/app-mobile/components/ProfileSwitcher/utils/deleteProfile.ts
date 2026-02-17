@@ -64,8 +64,9 @@ const getTargetDatabaseName = ({ toDelete: target, profileConfig }: DeleteProfil
 
 const getTargetResourceDirectory = ({ toDelete: target }: DeleteProfileOptions) => {
 	const resourcesDir = getResourceDir(target, isSubProfile(target));
-	// This is done with extra care: On mobile, the resources directory can sometimes contain directories
-	// from other profiles.
+	// Add an extra check here to verify that deleting the other profile's resource directory
+	// doesn't also delete **the active** profile's resource directory. On mobile, the resources
+	// directory can sometimes contain other profile directories (e.g. in the case of the default profile).
 	if (resolvePathWithinDir(resourcesDir, Setting.value('resourceDir')) !== null) {
 		throw new Error('Refusing to delete a directory that contains the active profile\'s resource directory.');
 	}
