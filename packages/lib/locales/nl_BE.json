@@ -152,6 +152,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Over"
 	],
@@ -410,6 +413,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Vet"
 	],
@@ -542,6 +548,9 @@
 	"Checking... Please wait.": [
 		"Verifiëren ... Even geduld."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Kies een optie"
 	],
@@ -625,6 +634,9 @@
 	],
 	"Command": [
 		"Commando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Commandopalet"
@@ -952,6 +964,9 @@
 	"Delete selected notes": [
 		"Geselecteerde notities verwijderen"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Het Inbox notitieboek verwijderen?\n\nAls je het Inbox notitieboek verwijdert, gaan emails die er recent naar verzonden zijn mogelijk verloren."
 	],
@@ -1053,6 +1068,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Toont de volledige informatie over notitie."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Toont de opgegeven notitie."
@@ -1916,6 +1934,9 @@
 	"Keychain Supported: %s": [
 		"Keychain ondersteund: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Sleutels die upgrade nodig hebben"
 	],
@@ -2048,6 +2069,9 @@
 	],
 	"Manage your plugins": [
 		"Beheer je plugins"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Beheert E2EE-configuratie. Commando's zijn `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, en `target-status`."
@@ -2271,6 +2295,9 @@
 	"No updates available": [
 		"Geen updates beschikbaar"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Geen"
 	],
@@ -2451,6 +2478,9 @@
 	"Open Sync Wizard...": [
 		"Sync Wizard openen..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Openen..."
 	],
@@ -2471,6 +2501,9 @@
 	],
 	"Options": [
 		"Opties"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Geordende lijst"
@@ -3036,6 +3069,9 @@
 	"Select parent notebook": [
 		"Selecteer hoofdnotitieboek"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selection deleted": [
 		"Selectie verwijderd"
 	],
@@ -3230,6 +3266,9 @@
 	],
 	"Source: ": [
 		"Bron: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Tussenstuk"
@@ -3808,6 +3847,9 @@
 	],
 	"Try it now": [
 		"Probeer het nu"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Typ `help [commando]` voor meer informatie over een commando; of typ `help all` voor de volledige gebruiksinformatie."

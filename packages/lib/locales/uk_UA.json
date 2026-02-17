@@ -152,6 +152,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Про нас"
 	],
@@ -410,6 +413,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Жирний"
 	],
@@ -542,6 +548,9 @@
 	"Checking... Please wait.": [
 		"Перевірка… Будь ласка, зачекайте."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Виберіть варіант"
 	],
@@ -622,6 +631,9 @@
 	],
 	"Command": [
 		"Команда"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Панель команд"
@@ -945,6 +957,9 @@
 	"Delete selected notes": [
 		"Видалити вибрані нотатки"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Видалити блокнот \"Вхідні\"?\n\nЯкщо ви видалите блокнот \"Вхідні\", всі листи, які нещодавно були надіслані до нього, можуть бути втрачені."
 	],
@@ -1046,6 +1061,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Відображає повну інформацію про нотатку."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Відображає дану нотатку."
@@ -1907,6 +1925,9 @@
 	"Keychain Supported: %s": [
 		"Підтримка Keychain: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Ключі, які потребують оновлення"
 	],
@@ -2040,6 +2061,9 @@
 	],
 	"Manage your plugins": [
 		"Керування розширеннями"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Керує конфігурацією E2EE. Команди: `enable`,` disable`, `decrypt`,` status`, `decrypt-file` та` target-status`."
@@ -2263,6 +2287,9 @@
 	"No updates available": [
 		"Немає доступних оновлень"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Нічого"
 	],
@@ -2443,6 +2470,9 @@
 	"Open Sync Wizard...": [
 		"Відкрити майстер синхронізації..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Відкрити..."
 	],
@@ -2463,6 +2493,9 @@
 	],
 	"Options": [
 		"Властивості"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Упорядкований список"
@@ -3025,6 +3058,9 @@
 	"Select parent notebook": [
 		"Виберіть батьківський блокнот"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selection deleted": [
 		"Вибір видалено"
 	],
@@ -3216,6 +3252,9 @@
 	],
 	"Source: ": [
 		"Джерело: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Роздільник"
@@ -3799,6 +3838,9 @@
 	],
 	"Try it now": [
 		"Спробувати зараз"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Введіть `help [command]` для отримання додаткової інформації про команду; або введіть `help all` для отримання повної інформації про використання."

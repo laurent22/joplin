@@ -1,6 +1,7 @@
 import ShareService from '@joplin/lib/services/share/ShareService';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
-import { createFolderTree, setupDatabaseAndSynchronizer, switchClient, waitFor } from '@joplin/lib/testing/test-utils';
+import { createFolderTree, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+import waitFor from '@joplin/lib/testing/waitFor';
 import { setupApplication, setupCommandForTesting } from './utils/testUtils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';

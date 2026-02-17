@@ -16,6 +16,8 @@ pub(crate) struct RenderedSection {
     pub(crate) section_dir: String,
 }
 
+const ERRORS_NOTE_NAME: &str = "⚠️ Errors ⚠️";
+
 impl Renderer {
     pub fn new() -> Self {
         Renderer {
@@ -81,11 +83,11 @@ impl Renderer {
         let toc_path = self.write_html_file(&output_dir, section.display_name(), &toc_html)?;
         log!("ToC: {}", toc_path);
 
-        if let Some(errors_path) = errors_path {
+        if errors_path.is_some() {
             Err(ErrorKind::RenderFailed(format!(
                 "Some pages failed to render. First error: {:?}. Full error report written to {}",
                 errors.first(),
-                errors_path
+                ERRORS_NOTE_NAME,
             ))
             .into())
         } else {
@@ -136,7 +138,7 @@ impl Renderer {
         Ok(TocEntry {
             level: 1,
             is_error: true,
-            name: "⚠️ Errors ⚠️".into(),
+            name: ERRORS_NOTE_NAME.into(),
             relative_path: fs_driver().remove_prefix(&errors_path, &output_dir).into(),
         })
     }

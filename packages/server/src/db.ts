@@ -158,6 +158,12 @@ export const isSqlite = (db: DbConnection) => {
 	return clientType(db) === DatabaseConfigClient.SQLite;
 };
 
+export const getEmptyIp = (db: DbConnection): string | null => {
+	// PostgreSQL uses inet type which doesn't accept empty strings, only null or valid IPs
+	// SQLite uses string type with NOT NULL constraint, so we use empty strings
+	return isPostgres(db) ? null : '';
+};
+
 export const setCollateC = async (db: DbConnection, tableName: string, columnName: string): Promise<void> => {
 	if (!isPostgres(db)) return;
 	await db.raw(`ALTER TABLE ${tableName} ALTER COLUMN ${columnName} SET DATA TYPE character varying(32) COLLATE "C"`);

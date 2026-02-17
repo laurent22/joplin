@@ -7,6 +7,7 @@ import forceFullParse from './forceFullParse';
 import loadLanguages from './loadLanguages';
 import markdownMathExtension from '../extensions/markdownMathExtension';
 import markdownHighlightExtension from '../extensions/markdownHighlightExtension';
+import markdownFrontMatterExtension from '../extensions/markdownFrontMatterExtension';
 
 // Creates and returns a minimal editor with markdown extensions. Waits to return the editor
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
@@ -26,7 +27,7 @@ const createTestEditor = async (
 		selection: EditorSelection.create(initialSelection),
 		extensions: [
 			markdown({
-				extensions: [markdownMathExtension, markdownHighlightExtension, GithubFlavoredMarkdownExt],
+				extensions: [markdownMathExtension, markdownHighlightExtension, markdownFrontMatterExtension, GithubFlavoredMarkdownExt],
 				addKeymap: addMarkdownKeymap,
 			}),
 			indentUnit.of('\t'),

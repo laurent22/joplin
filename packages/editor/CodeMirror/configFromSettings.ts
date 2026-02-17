@@ -7,6 +7,7 @@ import { deleteMarkupBackward, markdown, markdownLanguage } from '@codemirror/la
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import markdownMathExtension from './extensions/markdownMathExtension';
 import markdownHighlightExtension from './extensions/markdownHighlightExtension';
+import markdownFrontMatterExtension from './extensions/markdownFrontMatterExtension';
 import lookUpLanguage from './utils/markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
@@ -29,6 +30,9 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 				markdown({
 					extensions: [
 						GitHubFlavoredMarkdownExtension,
+
+						// FrontMatter support (YAML blocks at start of document)
+						markdownFrontMatterExtension,
 
 						settings.markdownMarkEnabled ? markdownHighlightExtension : [],
 

@@ -27,7 +27,11 @@ import Logger from '@joplin/utils/Logger';
 import config from '../config';
 import { TreeItem } from '../models/ItemResourceModel';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
+import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
+import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainServiceDriver.dummy';
+import BaseService from '@joplin/lib/services/BaseService';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import FsDriverNode from '@joplin/lib/fs-driver-node';
 
 const logger = Logger.create('JoplinUtils');
 
@@ -88,6 +92,18 @@ export async function initializeJoplinUtils(config: Config, models: Models, must
 	BaseItem.loadClass('NoteTag', NoteTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
+
+	const fsDriver = new FsDriverNode();
+	Resource.fsDriver_ = fsDriver;
+
+	BaseService.logger_ = new Logger();
+
+	Setting.allowFileStorage = false;
+	Setting.setConstant('appId', 'net.cozic.joplin-desktop');
+	Setting.setConstant('tempDir', config.tempDir);
+	Setting.setConstant('resourceDir', config.resourceDir);
+	await loadKeychainServiceAndSettings([KeychainServiceDriverDummy]);
+
 }
 
 export function linkedResourceIds(body: string): string[] {
@@ -160,7 +176,7 @@ async function getResourceInfos(linkedItemInfos: LinkedItemInfos): Promise<Resou
 	return output;
 }
 
-async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, noteBody: string): Promise<LinkedItemInfos> {
+export async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, noteBody: string): Promise<LinkedItemInfos> {
 	const jopIds = await Note.linkedItemIds(noteBody);
 	const output: LinkedItemInfos = {};
 
@@ -241,37 +257,43 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		linkRenderingType: 2,
 	};
 
-	const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+	try {
+		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
 
-	const bodyHtml = await mustache_.renderView({
-		cssFiles: ['items/note'],
-		jsFiles: ['items/note'],
-		name: 'note',
-		title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
-		titleOverride: true,
-		path: 'index/items/note',
-		content: {
-			note: {
-				...note,
-				bodyHtml: result.html,
-				updatedDateTime: formatDateTime(note.user_updated_time),
+		const bodyHtml = await mustache_.renderView({
+			cssFiles: ['items/note'],
+			jsFiles: ['items/note'],
+			name: 'note',
+			title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
+			titleOverride: true,
+			path: 'index/items/note',
+			content: {
+				note: {
+					...note,
+					bodyHtml: result.html,
+					updatedDateTime: formatDateTime(note.user_updated_time),
+				},
+				cssStrings: result.cssStrings.join('\n'),
+				assetsJs: `
+					const joplinNoteViewer = {
+						pluginAssets: ${JSON.stringify(result.pluginAssets)},
+						appBaseUrl: ${JSON.stringify(baseUrl_)},
+					};
+				`,
 			},
-			cssStrings: result.cssStrings.join('\n'),
-			assetsJs: `
-				const joplinNoteViewer = {
-					pluginAssets: ${JSON.stringify(result.pluginAssets)},
-					appBaseUrl: ${JSON.stringify(baseUrl_)},
-				};
-			`,
-		},
-	}, { prefersDarkEnabled: false });
+		}, { prefersDarkEnabled: false });
 
-	return {
-		body: bodyHtml,
-		mime: 'text/html',
-		size: Buffer.byteLength(bodyHtml, 'utf-8'),
-		filename: '',
-	};
+		return {
+			body: bodyHtml,
+			mime: 'text/html',
+			size: Buffer.byteLength(bodyHtml, 'utf-8'),
+			filename: '',
+		};
+	} catch (error) {
+		// Resolves: https://github.com/laurent22/joplin/issues/13059
+		error.message = `Could not render note - please make sure it has been synchronised. Error was: ${error.message}`;
+		throw error;
+	}
 }
 
 export function itemIsEncrypted(item: Item): boolean {
