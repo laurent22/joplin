@@ -13,7 +13,7 @@ To setup your Team, open the [Team tab](https://joplincloud.com/teams/me) at the
 
 ## Inviting members to your team
 
-To invite a member to your team, go to the [Members tag](https://joplincloud.com/teams/me/users). From there, add one or multiple emails (separated by commas) and click "Invite members".
+To invite a member to your team, go to the [Members tab](https://joplincloud.com/teams/me/users). From there, add one or multiple emails (separated by commas) and click "Invite members".
 
 These members will receive an email with a link they will need to follow in order to accept the invitation. You can see which members have accepted the invitation or not in the Members table on that same page.
 

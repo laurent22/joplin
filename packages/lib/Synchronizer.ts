@@ -59,6 +59,7 @@ function isCannotSyncError(error: any): boolean {
 export default class Synchronizer {
 
 	public static verboseMode = true;
+	public static partialSyncSteps = ['update_remote', 'delete_remote'];
 
 	private db_: JoplinDatabase;
 	private api_: FileApi;
@@ -1031,7 +1032,7 @@ export default class Synchronizer {
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 							const options: any = {
 								autoTimestamp: false,
-								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs(), remote.updated_time),
+								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, BaseItem.remoteItemSyncTime(content.updated_time), remote.updated_time),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action === SyncAction.CreateLocal) options.isNew = true;
@@ -1240,6 +1241,7 @@ export default class Synchronizer {
 		this.state_ = 'idle';
 
 		if (errorToThrow) throw errorToThrow;
+		let hasOutgoingChanges = false;
 
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
@@ -1250,8 +1252,11 @@ export default class Synchronizer {
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
 				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				hasOutgoingChanges = true;
 			}
 		}
+
+		if (!hasOutgoingChanges) this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
 
 		return outputContext;
 	}

@@ -1,10 +1,11 @@
 import { EmojiButton } from '@joeattardi/emoji-button';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { loadScript } from '../utils/loadScript';
 import Button from '../Button/Button';
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import bridge from '../../services/bridge';
+import { themeStyle } from '@joplin/lib/theme';
 
 export interface ChangeEvent {
 	value: FolderIcon;
@@ -16,12 +17,16 @@ interface Props {
 	onChange: ChangeHandler;
 	icon: FolderIcon | null;
 	title: string;
+	themeId: number;
 }
 
 export const IconSelector = (props: Props) => {
 	const [emojiButtonClassReady, setEmojiButtonClassReady] = useState<boolean>(false);
 	const [picker, setPicker] = useState<EmojiButton>();
 	const buttonRef = useRef<HTMLButtonElement>(null);
+	const pickerTheme = useMemo(() => {
+		return themeStyle(props.themeId).appearance;
+	}, [props.themeId]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const loadScripts = async () => {
@@ -62,6 +67,7 @@ export const IconSelector = (props: Props) => {
 		const p: EmojiButton = new (window as any).EmojiButton({
 			zIndex: 10000,
 			rootElement: buttonRef.current?.parentElement,
+			theme: pickerTheme,
 		});
 
 		const onEmoji = (selection: FolderIcon) => {
@@ -76,7 +82,7 @@ export const IconSelector = (props: Props) => {
 			p.off('emoji', onEmoji);
 			p.destroyPicker();
 		};
-	}, [emojiButtonClassReady, props.onChange]);
+	}, [emojiButtonClassReady, props.onChange, pickerTheme]);
 
 	const onClick = useCallback(() => {
 		picker.togglePicker(buttonRef.current);

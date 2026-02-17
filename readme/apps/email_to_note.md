@@ -29,6 +29,6 @@ Your Joplin Cloud email address is available in the dashboard of the Joplin Clou
 
 ### Video tutorial
 
-Watch this short video to learn how to setup email to note on desktop:
+Watch this short video to learn how to set up email to note on desktop:
 
 [![Watch the video](https://img.youtube.com/vi/8r8gS7grFDQ/hqdefault.jpg)](https://www.youtube.com/watch?v=8r8gS7grFDQ)

@@ -52,7 +52,7 @@ A lot more is possible including adding code samples, math formulae or checkbox 
 
 Joplin notes are organised into a tree of notebooks and sub-notebooks.
 
-- On **desktop**, you can create a notebook by clicking on New Notebook, then you can organise them as you wish by drag and drop them into other notebooks or right-clicking and selecting "Move to notebook". You can also drag a sub-notebook to the "Notebooks" header to move it to the root. 
+- On **desktop**, you can create a notebook by clicking on New Notebook, then you can organise them as you wish by dragging and dropping them into other notebooks or right-clicking and selecting "Move to notebook". You can also drag a sub-notebook to the "Notebooks" header to move it to the root. 
 - On **mobile**, press the "+" icon and select "New notebook".
 - On **terminal**, press `:mn`
 

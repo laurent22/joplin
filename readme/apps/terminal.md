@@ -51,7 +51,7 @@ Shortcut | Description
 ---------|------------
 `$n`     | Refers to the currently selected note
 `$b`     | Refers to the currently selected notebook
-`$c`     | Refers to the currently selected item. For example, if the note list is current active, `$c` will refer to the currently selected note.
+`$c`     | Refers to the currently selected item. For example, if the note list is currently active, `$c` will refer to the currently selected note.
 
 **Examples:**
 

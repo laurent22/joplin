@@ -1,5 +1,6 @@
 import { ErrorCode } from '../errors';
 import { FolderEntity } from '../services/database/types';
+import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
@@ -226,13 +227,16 @@ describe('models/Folder', () => {
 		expect(folderPath[2].id).toBe(f3.id);
 	}));
 
-	it('should sort folders alphabetically', (async () => {
+	it('should sort folders alphabetically including deleted folders', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f1.id });
 		const f4 = await Folder.save({ title: 'folder4' });
 		const f5 = await Folder.save({ title: 'folder5', parent_id: f4.id });
 		const f6 = await Folder.save({ title: 'folder6' });
+
+		await Folder.delete(f1.id, { toTrash: true });
+		await Folder.delete(f5.id, { toTrash: true });
 
 		const folders = await Folder.allAsTree();
 		const sortedFolderTree = await Folder.sortFolderTree(folders);
@@ -244,6 +248,24 @@ describe('models/Folder', () => {
 		expect(sortedFolderTree[1].id).toBe(f4.id);
 		expect(sortedFolderTree[1].children[0].id).toBe(f5.id);
 		expect(sortedFolderTree[2].id).toBe(f6.id);
+	}));
+
+	it('should sort folders alphabetically excluding deleted folders', (async () => {
+		const f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2' });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		const f4 = await Folder.save({ title: 'folder4' });
+
+		await Folder.delete(f1.id, { toTrash: true });
+		await Folder.delete(f3.id, { toTrash: true });
+
+		const folders = await Folder.allAsTree();
+		const sortedFolderTree = await Folder.sortFolderTree(folders, { includeDeleted: false });
+
+		expect(sortedFolderTree.length).toBe(2);
+		expect(sortedFolderTree[0].id).toBe(f2.id);
+		expect(sortedFolderTree[0].children.length).toBe(0);
+		expect(sortedFolderTree[1].id).toBe(f4.id);
 	}));
 
 	it('should sort folders with special chars alphabetically', (async () => {
@@ -462,7 +484,7 @@ describe('models/Folder', () => {
 		Setting.setValue('activeFolderId', activeFolder.id);
 
 		const validFolder = await Folder.getValidActiveFolder();
-		expect(validFolder).toBe(activeFolder.id);
+		expect(validFolder.id).toBe(activeFolder.id);
 	});
 
 	it('should get default folder when activeFolderId is trashed', async () => {
@@ -472,7 +494,7 @@ describe('models/Folder', () => {
 		Setting.setValue('activeFolderId', activeFolder.id);
 
 		const validFolder = await Folder.getValidActiveFolder();
-		expect(validFolder).toBe(defaultFolder.id);
+		expect(validFolder.id).toBe(defaultFolder.id);
 	});
 
 	it('should get no folder when activeFolderId is undefined', async () => {
@@ -488,6 +510,13 @@ describe('models/Folder', () => {
 		await Folder.delete(activeFolder.id, { toTrash: true });
 		await Folder.delete(otherFolder.id, { toTrash: true });
 		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
+	});
+
+	it('should get no folder when activeFolderId is a virtual folder', async () => {
+		Setting.setValue('activeFolderId', getTrashFolderId());
 
 		const validFolder = await Folder.getValidActiveFolder();
 		expect(validFolder).toBeNull();

@@ -72,27 +72,32 @@ export default class PluginLoader {
 
 			void (async () => {
 				const scriptId = pluginScriptIdCounter++;
-				const js = await plugin.contentScriptJs();
+				const js = await plugin.contentScriptJs({
+					contentScriptStartJs: `
+						(async () => {
+							const exports = {};
+							const module = { exports: exports };
+							const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
+							const joplin = {
+								require,
+							};
+					`,
+					contentScriptEndJs: `
+							window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports);
+						})();
+					`,
+				});
 
 				// Stop if cancelled
 				if (!this.loadedContentScriptIds.includes(contentScriptToId(plugin))) {
 					return;
 				}
 
-				scriptElement.appendChild(document.createTextNode(`
-				(async () => {
-					const exports = {};
-					const module = { exports: exports };
-					const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
-					const joplin = {
-						require,
-					};
-		
-					${js};
-		
-					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports);
-				})();
-				`));
+				if (js.sourceJs) {
+					scriptElement.appendChild(document.createTextNode(js.sourceJs));
+				} else {
+					scriptElement.src = js.uri;
+				}
 
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				(window as any).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;

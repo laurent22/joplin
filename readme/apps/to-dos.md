@@ -29,7 +29,7 @@ It's also possible to hide incomplete to-dos entirely. As before, this can be do
 
 ## Setting alarms
 
-Joplin can be configured to show a notification for an incomplete to-dos. This is done differently on desktop and mobile.
+Joplin can be configured to show a notification for incomplete to-dos. This is done differently on desktop and mobile.
 
 **On desktop:** Click the alarm button in the note toolbar, enter a new date, then click "OK".
 

@@ -546,6 +546,10 @@ export default async function(request: Request, id: string = null, link: string 
 
 		newNote = await Note.save(newNote, saveOptions);
 
+		BaseModel.dispatch({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+		});
+
 		const requestNote = JSON.parse(request.body);
 		if (requestNote.tags || requestNote.tags === '') {
 			const tagTitles = requestNote.tags.split(',');

@@ -1058,4 +1058,14 @@ export default class BaseItem extends BaseModel {
 		return !!md.match(/^\[.*?\]\(:\/[0-9a-zA-Z]{32}\)$/);
 	}
 
+	// When needing to set sync_time to the updated_time of the remote item (after an item is downloaded from remote), because this timestamp usually originates
+	// from another device, we need to cap it at the local device time, to avoid sync issues if there is time drift. In all other cases use the remote updated_time,
+	// as syncing an incoming change to a note can happen much later than the change was actually made, and if we use the device time in all cases, this can result
+	// in conflicts not occurring when they should.
+	// Please note: The remoteUpdatedTime must come from the updated_time within the server object, not the RemoteItem updated_time from the result of the delta api
+	public static remoteItemSyncTime(remoteUpdatedTime: number) {
+		const currentTime = Date.now();
+		return remoteUpdatedTime > currentTime ? currentTime : remoteUpdatedTime;
+	}
+
 }

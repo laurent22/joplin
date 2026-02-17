@@ -44,6 +44,7 @@ import NoteEditor from './NoteEditor/NoteEditor';
 import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import QuitSyncDialog from './QuitSyncDialog';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -809,6 +810,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					themeId={this.props.themeId}
 					toast={this.props.toast}
 				/>
+				<QuitSyncDialog themeId={this.props.themeId} />
 				{messageComp}
 				{layoutComp}
 			</div>

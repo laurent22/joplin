@@ -38,7 +38,7 @@
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "packageJsonLint": "node ./packages/tools/packageJsonLint.js",
-    "syncFuzzer": "node ./packages/tools/fuzzer/sync-fuzzer.js",
+    "syncFuzzer": "node ./packages/tools/fuzzer/cli.js",
     "postinstall": "husky && gulp build",
     "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
     "publishAll": "git pull && yarn buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
@@ -95,8 +95,8 @@
     "@types/fs-extra": "11.0.4",
     "eslint-plugin-github": "4.10.2",
     "http-server": "14.1.1",
-    "node-gyp": "11.4.2",
-    "nodemon": "3.1.10"
+    "node-gyp": "11.5.0",
+    "nodemon": "3.1.11"
   },
   "packageManager": "yarn@4.9.2",
   "resolutions": {

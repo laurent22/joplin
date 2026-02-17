@@ -1,44 +1,65 @@
 import Logger from '@joplin/utils/Logger';
-import ActionTracker from './ActionTracker';
+import ActionTracker from '../model/ActionTracker';
 import Client from './Client';
-import { CleanupTask, FuzzContext } from './types';
+import { FuzzContext } from '../types';
+import { join } from 'path';
+import { mkdir } from 'fs-extra';
+import { readdir } from 'fs/promises';
 
-type AddCleanupTask = (task: CleanupTask)=> void;
 type ClientFilter = (client: Client)=> boolean;
 
 const logger = Logger.create('ClientPool');
 
 export default class ClientPool {
-	public static async create(
-		context: FuzzContext,
-		clientCount: number,
-		addCleanupTask: AddCleanupTask,
-	) {
-		if (clientCount <= 0) throw new Error('There must be at least 1 client');
+	public static async create(context: FuzzContext) {
+		return new ClientPool(context);
+	}
 
-		const actionTracker = new ActionTracker(context);
-		const clientPool: Client[] = [];
-		for (let i = 0; i < clientCount; i++) {
-			const client = await Client.create(actionTracker, context);
-			addCleanupTask(() => client.close());
-			clientPool.push(client);
+	public static async fromSnapshot(snapshotDirectory: string, actionTracker: ActionTracker, context: FuzzContext) {
+		const pool = await ClientPool.create(context);
+
+		const matchingDirectories = (await readdir(snapshotDirectory))
+			.filter(child => child.startsWith('client-'))
+			.map(child => join(snapshotDirectory, child))
+			.sort();
+
+		const accounts = new Map();
+		for (const clientDirectory of matchingDirectories) {
+			const client = await Client.fromSnapshotDirectory(clientDirectory, actionTracker, context, accounts);
+			pool.clients_.push(client);
+			pool.listenForClientClose_(client);
 		}
 
-		return new ClientPool(context, clientPool);
+		return pool;
 	}
+
+	private clients_: Client[] = [];
+
 	private constructor(
 		private readonly context_: FuzzContext,
-		private clients_: Client[],
 	) {
-		for (const client of clients_) {
-			this.listenForClientClose_(client);
-		}
 	}
 
 	private listenForClientClose_(client: Client) {
 		client.onClose(() => {
 			this.clients_ = this.clients_.filter(other => other !== client);
 		});
+	}
+
+	public async saveSnapshot(outputDirectory: string) {
+		let i = 0;
+		for (const client of this.clients) {
+			const outputChildDirectory = join(outputDirectory, `client-${i++}`);
+			await mkdir(outputChildDirectory);
+			await client.saveSnapshot(outputChildDirectory);
+		}
+	}
+
+	public async newClient(model: ActionTracker) {
+		const client = await Client.create(model, this.context_);
+
+		this.clients_.push(client);
+		this.listenForClientClose_(client);
 	}
 
 	public async createRandomInitialItemsAndSync() {
@@ -106,6 +127,16 @@ export default class ClientPool {
 
 	public helpText() {
 		return this.clients_.map(client => client.getHelpText()).join('\n\n');
+	}
+
+	public async close() {
+		for (const client of this.clients) {
+			try {
+				await client.close();
+			} catch (error) {
+				logger.warn('Failed to close client', error);
+			}
+		}
 	}
 }
 

@@ -108,7 +108,7 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 		onDismiss={onManualDismiss}
 		size={DialogVariant.SmallResize}
 		scrollOverflow={true}
-		heading={_('Sync')}
+		heading={_('Synchronisation')}
 	>
 		<Text variant='bodyLarge' role='heading' style={styles.subheading}>{
 			_('Joplin can synchronise your notes using various providers. Select one from the list below.')

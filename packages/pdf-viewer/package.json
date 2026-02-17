@@ -27,8 +27,8 @@
   "devDependencies": {
     "@types/jest": "29.5.14",
     "@types/pdfjs-dist": "2.10.378",
-    "@types/react": "18.3.26",
-    "@types/react-dom": "18.3.7",
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.7",
     "@types/styled-components": "5.1.32",
     "babel-jest": "29.7.0",
     "css-loader": "6.11.0",
@@ -48,8 +48,8 @@
     "@joplin/lib": "~3.6",
     "async-mutex": "0.5.0",
     "pdfjs-dist": "2.16.105",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.1.5",
+    "react-dom": "19.1.5",
     "styled-components": "5.3.11"
   }
 }

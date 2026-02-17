@@ -28,16 +28,23 @@ import { toForwardSlashes } from '@joplin/utils/path';
 const setUpProtocolHandler = () => {
 	const protocolHandler = handleCustomProtocols();
 
-	expect(handleProtocolMock).toHaveBeenCalledTimes(1);
+	expect(handleProtocolMock).toHaveBeenCalled();
 
-	// Should have registered the protocol.
-	const lastCallArgs = handleProtocolMock.mock.lastCall;
-	expect(lastCallArgs[0]).toBe('joplin-content');
+	let onRequestListener;
+	for (const call of handleProtocolMock.mock.calls) {
+		if (call[0] === 'joplin-content') {
+			// The request listener is the second argument:
+			onRequestListener = call[1];
+		}
+	}
 
-	// Extract the request listener so that it can be called by our tests.
-	const onRequestListener = lastCallArgs[1];
+	// Should have registered the protocol
+	expect(onRequestListener).toBeDefined();
 
-	return { protocolHandler, onRequestListener };
+	return {
+		appProtocolHandler: protocolHandler.appContent,
+		onRequestListener,
+	};
 };
 
 interface ExpectBlockedOptions {
@@ -67,7 +74,7 @@ const expectPathToBeUnblocked = async (onRequestListener: ProtocolHandler, fileP
 };
 
 
-describe('handleCustomProtocols', () => {
+describe('handleCustomProtocols.content', () => {
 	beforeEach(() => {
 		// Reset mocks between tests to ensure a clean testing environment.
 		customProtocols.clear();
@@ -76,7 +83,7 @@ describe('handleCustomProtocols', () => {
 	});
 
 	test('should only allow access to files in allowed directories', async () => {
-		const { protocolHandler, onRequestListener } = setUpProtocolHandler();
+		const { appProtocolHandler: protocolHandler, onRequestListener } = setUpProtocolHandler();
 
 		await expectPathToBeBlocked(onRequestListener, '/test/path');
 		await expectPathToBeBlocked(onRequestListener, '/');
@@ -98,7 +105,7 @@ describe('handleCustomProtocols', () => {
 	});
 
 	test('should be possible to allow and remove read access for a file', async () => {
-		const { protocolHandler, onRequestListener } = setUpProtocolHandler();
+		const { appProtocolHandler: protocolHandler, onRequestListener } = setUpProtocolHandler();
 		await expectPathToBeBlocked(onRequestListener, '/test/path/a.txt');
 
 		const handle1 = protocolHandler.allowReadAccessToFile('/test/path/a.txt');
@@ -113,7 +120,7 @@ describe('handleCustomProtocols', () => {
 	});
 
 	test('should only allow access to file-media/ URLs when given the correct access key', async () => {
-		const { protocolHandler, onRequestListener } = setUpProtocolHandler();
+		const { appProtocolHandler: protocolHandler, onRequestListener } = setUpProtocolHandler();
 		const expectBlocked = (path: string) => {
 			return expectPathToBeBlocked(onRequestListener, path, { host: 'file-media' });
 		};
@@ -141,7 +148,7 @@ describe('handleCustomProtocols', () => {
 	});
 
 	test('should allow requesting part of a file', async () => {
-		const { protocolHandler, onRequestListener } = setUpProtocolHandler();
+		const { appProtocolHandler: protocolHandler, onRequestListener } = setUpProtocolHandler();
 
 		protocolHandler.allowReadAccessToDirectory(`${supportDir}/`);
 		const targetFilePath = join(supportDir, 'photo.jpg');
