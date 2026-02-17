@@ -357,13 +357,13 @@ class DialogComponent extends React.PureComponent<Props, State> {
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
 				searchQuery = this.state.query.substr(1).trim();
-				const normalizedSearchQuery = removeDiacritics(searchQuery.toLowerCase());
+				const normalizedSearchQuery = removeDiacritics(searchQuery).toLowerCase();
 
 				results = [];
 				for (const folder of this.props.folders) {
 					if (folder.deleted_time) continue;
 
-					const normalizedTitle = removeDiacritics(folder.title.toLowerCase());
+					const normalizedTitle = removeDiacritics(folder.title).toLowerCase();
 					if (normalizedSearchQuery && normalizedTitle.indexOf(normalizedSearchQuery) < 0) continue;
 
 					const path = Folder.folderPathString(this.props.folders, folder.parent_id);
