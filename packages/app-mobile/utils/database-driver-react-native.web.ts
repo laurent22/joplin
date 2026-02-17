@@ -1,11 +1,13 @@
 const { sqlite3Worker1Promiser } = require('@sqlite.org/sqlite-wasm');
+import DatabaseDriver, { DatabaseCloseOptions } from '@joplin/lib/database-driver';
+import shim from '@joplin/lib/shim';
 import { safeFilename } from '@joplin/utils/path';
 
 type DbPromiser = (command: string, options: Record<string, unknown>)=> Promise<unknown>;
 type DbId = unknown;
 type RowResult = { rowNumber: number|null; row: unknown };
 
-export default class DatabaseDriverReactNative {
+export default class DatabaseDriverReactNative implements DatabaseDriver {
 	private lastInsertId_: string;
 	private db_: DbPromiser;
 	private dbId_: DbId;
@@ -25,6 +27,11 @@ export default class DatabaseDriverReactNative {
 		const { dbId } = await db('open', { filename }) as OpenResult;
 		this.dbId_ = dbId;
 		this.db_ = db;
+	}
+
+	public async deleteDatabase(options: DatabaseCloseOptions) {
+		// Assumes WAL mode has not been enabled
+		await shim.fsDriver().remove(`${safeFilename(options.name)}.sqlite3`);
 	}
 
 	public sqliteErrorToJsError(error: Error) {

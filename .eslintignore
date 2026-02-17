@@ -734,6 +734,8 @@ packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
+packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.test.js
+packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.js
 packages/app-mobile/components/SafeAreaView.js
 packages/app-mobile/components/ScreenHeader/Menu.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.test.js
@@ -1312,6 +1314,7 @@ packages/lib/components/shared/reduxSharedMiddleware.js
 packages/lib/components/shared/side-menu-shared.test.js
 packages/lib/components/shared/side-menu-shared.js
 packages/lib/database-driver-better-sqlite.js
+packages/lib/database-driver.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
 packages/lib/determineBaseAppDirs.js

@@ -4,6 +4,7 @@
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSaveProfileConfig } from '@joplin/lib/services/profileConfig/index';
 import shim from '@joplin/lib/shim';
+import Setting from '@joplin/lib/models/Setting';
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 let dispatch_: Function = null;
@@ -30,8 +31,13 @@ export const getPluginDataDir = (profile: Profile, isSubProfile: boolean) => {
 	return `${getProfilesRootDir()}/plugin-data${suffix}`;
 };
 
-// The suffix is for debugging only
-export const getDatabaseName = (profile: Profile, isSubProfile: boolean, suffix = '') => {
+export const getDatabaseName = (profile: Profile, isSubProfile: boolean) => {
+	const devMode = Setting.value('env') === 'dev';
+
+	// For historical reasons, the database filename is given "-20240127-1"
+	// as a suffix when running in development mode:
+	const suffix = devMode ? '-20240127-1' : '';
+
 	if (!isSubProfile) return `joplin${suffix}.sqlite`;
 	return `joplin-${profile.id}${suffix}.sqlite`;
 };
