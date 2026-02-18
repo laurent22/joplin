@@ -11234,7 +11234,6 @@ __metadata:
     pg-boss: "npm:10.3.3"
     sharp: "npm:0.34.5"
     sqlite3: "npm:5.1.6"
-    ts-node: "npm:10.9.2"
     typescript: "npm:5.8.3"
   languageName: unknown
   linkType: soft
