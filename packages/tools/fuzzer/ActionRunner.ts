@@ -263,7 +263,7 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		const resourceData: ResourceData = {
 			id: resourceId,
 			mimeType: 'text/plain',
-			title: context.randomString(context.randInt(0, 5000)),
+			title: 'Test!',
 		};
 		await client.attachResource(noteById(noteId), resourceData);
 
