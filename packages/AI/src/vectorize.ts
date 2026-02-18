@@ -11,9 +11,11 @@ const embeddings = new OpenAIEmbeddings({
 	model: 'text-embedding-3-large',
 	openAIApiKey: process.env.JOPLIN_OAI_KEY });
 
+const CHUNK_SIZE = 7000;
+
 // テキスト分割器を設定
 const textSplitter = new RecursiveCharacterTextSplitter({
-	chunkSize: 8000,
+	chunkSize: CHUNK_SIZE,
 	chunkOverlap: 200,
 });
 
@@ -129,15 +131,38 @@ export const vectorizeDocuments = async (srcFolderPath: string, faissDBPath: str
 			for (const chunk of splitTexts) {
 				const titledChunk = JSON.stringify({ title, content: chunk });
 				const source = title || file;
-				const doc = new Document({
-					pageContent: titledChunk,
-					metadata: {
-						source: source,
-						filePath: filePath,
-						noteId: noteId,
-					},
-				});
-				allDocuments.push(doc);
+				
+				// CHUNK_SIZEを超える場合は強制的に分割
+				if (titledChunk.length > CHUNK_SIZE) {
+					// JSON化のオーバーヘッドを計算
+					const jsonOverhead = JSON.stringify({ title, content: '' }).length;
+					const maxContentLength = CHUNK_SIZE - jsonOverhead;
+					
+					// chunkを maxContentLength ごとに分割
+					for (let i = 0; i < chunk.length; i += maxContentLength) {
+						const subChunk = chunk.substring(i, i + maxContentLength);
+						const subTitledChunk = JSON.stringify({ title, content: subChunk });
+						const doc = new Document({
+							pageContent: subTitledChunk,
+							metadata: {
+								source: source,
+								filePath: filePath,
+								noteId: noteId,
+							},
+						});
+						allDocuments.push(doc);
+					}
+				} else {
+					const doc = new Document({
+						pageContent: titledChunk,
+						metadata: {
+							source: source,
+							filePath: filePath,
+							noteId: noteId,
+						},
+					});
+					allDocuments.push(doc);
+				}
 			}
 			console.log(`${file} を読み込み・分割しました`);
 		} catch (error) {
