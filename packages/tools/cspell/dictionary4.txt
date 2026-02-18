@@ -253,3 +253,5 @@ Perfetto
 appmodules
 mtmd
 gguf
+armor
+clearsign
