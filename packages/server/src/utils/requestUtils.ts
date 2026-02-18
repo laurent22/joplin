@@ -1,7 +1,8 @@
+import { formatBytesSimple } from './bytes';
 import { cookieGet } from './cookies';
-import { ErrorForbidden } from './errors';
+import { ApiError, ErrorForbidden, ErrorPayloadTooLarge } from './errors';
 import { AppContext } from './types';
-import * as formidable from 'formidable';
+import { formidable } from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
 
@@ -51,6 +52,8 @@ const convertFieldsToKeyValue = (fields: Files | Fields) => {
 	return convertedFields;
 };
 
+const maxRequestSize = Infinity;
+
 // Input should be Koa ctx.req, which corresponds to the native Node request
 export async function formParse(request: IncomingMessage): Promise<FormParseResult> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -74,51 +77,44 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	return new Promise((resolve: Function, reject: Function) => {
-		let promiseCompleted = false;
 
-		const form = formidable({
-			allowEmptyFiles: true,
-			minFileSize: 0,
-		});
-
-		try {
-			form.on('error', (error) => {
-				if (promiseCompleted) return;
-				promiseCompleted = true;
-				const wrapped = new Error(`Could not parse form (1): ${error.message}`);
-				reject(wrapped);
-			});
-
-			form.parse(req, (error: Error, fields: Fields, files: Files) => {
-				if (promiseCompleted) return;
-				promiseCompleted = true;
-
-				if (error) {
-					error.message = `Could not parse form (2): ${error.message}`;
-					reject(error);
-					return;
-				}
-
-				// Formidable seems to be doing some black magic and once a request
-				// has been parsed it cannot be parsed again. Doing so will do
-				// nothing, the code will just end there, or maybe wait
-				// indefinitely. So we cache the result on success and return it if
-				// some code somewhere tries again to parse the form.
-				req.__parsed = {
-					fields: isFormContentType ? convertFieldsToKeyValue(fields) : fields,
-					files: convertFieldsToKeyValue(files),
-				};
-				resolve(req.__parsed);
-			});
-		} catch (error) {
-			if (promiseCompleted) return;
-			promiseCompleted = true;
-
-			const wrapped = new Error(`Could not parse form (3): ${error.message}`);
-			reject(wrapped);
-		}
+	const form = formidable({
+		allowEmptyFiles: true,
+		minFileSize: 0,
 	});
+
+	// Formidable's built-in maximum size checking is insufficient:
+	// - https://github.com/node-formidable/formidable/issues/971#issuecomment-1987352550
+	// Additionally, it doesn't seem to check the maximum size
+	form.use((self, options) => {
+		self.on('progress', (bytesReceived, bytesExpected) => {
+			if (maxRequestSize < bytesReceived) {
+				throw new ErrorPayloadTooLarge(`Error parsing form: Payload too large: ${formatBytesSimple(bytesExpected)} is greater than the maximum of ${formatBytesSimple(options.maxFileSize)}.`);
+			}
+		});
+	});
+
+	try {
+		const [fields, files] = await form.parse(req as FormParseRequest);
+
+		// Formidable seems to be doing some black magic and once a request
+		// has been parsed it cannot be parsed again. Doing so will do
+		// nothing, the code will just end there, or maybe wait
+		// indefinitely. So we cache the result on success and return it if
+		// some code somewhere tries again to parse the form.
+		req.__parsed = {
+			fields: isFormContentType ? convertFieldsToKeyValue(fields) : fields,
+			files: convertFieldsToKeyValue(files),
+		};
+		return req.__parsed;
+	} catch (error) {
+		if (error instanceof ApiError) {
+			throw error;
+		} else {
+			const wrapped = new Error(`Could not parse form: ${error.message}`);
+			throw wrapped;
+		}
+	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

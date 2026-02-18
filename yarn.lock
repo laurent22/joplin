@@ -11102,7 +11102,7 @@ __metadata:
     "@koa/cors": "npm:3.4.3"
     "@rmp135/sql-ts": "npm:1.18.1"
     "@types/bcryptjs": "npm:2.4.6"
-    "@types/formidable": "npm:2.0.6"
+    "@types/formidable": "npm:3.4.6"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/jest-expect-message": "npm:1.1.0"
@@ -11121,7 +11121,7 @@ __metadata:
     bulma: "npm:1.0.4"
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.19"
-    formidable: "npm:2.1.2"
+    formidable: "npm:3.5.4"
     fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
     html-entities: "npm:1.4.0"
@@ -16512,7 +16512,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/formidable@npm:2.0.6, @types/formidable@npm:^2.0.5":
+"@types/formidable@npm:3.4.6":
+  version: 3.4.6
+  resolution: "@types/formidable@npm:3.4.6"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/25ddb37eb163aa794d7c0d484ec4f8f3f3aa1862c1b51441fb0c837b7b4dd0a929ec837e6ce8174d522ce357d0efe3857d90a3f1ab56f8f47a4f50eed2ce9bb9
+  languageName: node
+  linkType: hard
+
+"@types/formidable@npm:^2.0.5":
   version: 2.0.6
   resolution: "@types/formidable@npm:2.0.6"
   dependencies:
@@ -29859,15 +29868,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formidable@npm:2.1.2":
-  version: 2.1.2
-  resolution: "formidable@npm:2.1.2"
+"formidable@npm:3.5.4":
+  version: 3.5.4
+  resolution: "formidable@npm:3.5.4"
   dependencies:
+    "@paralleldrive/cuid2": "npm:^2.2.2"
     dezalgo: "npm:^1.0.4"
-    hexoid: "npm:^1.0.0"
     once: "npm:^1.4.0"
-    qs: "npm:^6.11.0"
-  checksum: 10/d385180e0461f65e6f7b70452859fe1c32aa97a290c2ca33f00cdc33145ef44fa68bbc9b93af2c3af73ae726e42c3477c6619c49f3c34b49934e9481275b7b4c
+  checksum: 10/4645e6ce3d8bbefd3dd873dcd6211362da3bf8a04c8426d7f454c238be0142975f02e5bdbc792fdbd2be493fdcf5442fe01d9a246bd8c3fd8e779738290cc630
   languageName: node
   linkType: hard
 
@@ -31799,13 +31807,6 @@ __metadata:
   dependencies:
     source-map: "npm:^0.7.3"
   checksum: 10/92ffe2ad1baa7c6d6ed3f62dc33a1ac579dac408fece35ce82c25ca2844cbd48e8d3e425558bd3f76e20065af787033032ae23c881e5084c5855056389e8cfe1
-  languageName: node
-  linkType: hard
-
-"hexoid@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "hexoid@npm:1.0.0"
-  checksum: 10/f2271b8b6b0e13fb5a1eccf740f53ce8bae689c80b9498b854c447f9dc94f75f44e0de064c0e4660ecdbfa8942bb2b69973fdcb080187b45bbb409a3c71f19d4
   languageName: node
   linkType: hard
 
@@ -43388,12 +43389,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-model@npm:1.25.3, prosemirror-model@npm:^1.0.0, prosemirror-model@npm:^1.20.0, prosemirror-model@npm:^1.21.0, prosemirror-model@npm:^1.25.0":
+"prosemirror-model@npm:1.25.3":
   version: 1.25.3
   resolution: "prosemirror-model@npm:1.25.3"
   dependencies:
     orderedmap: "npm:^2.0.0"
   checksum: 10/e7dfdca2b515f3bbfabd29062bdd341b47b196c11f598ca9975245962ae61d1d44935879c3e6a0c35ed6f510cab508f232abe95d34dda2e12cf19b5fa2591372
+  languageName: node
+  linkType: hard
+
+"prosemirror-model@npm:^1.0.0, prosemirror-model@npm:^1.20.0, prosemirror-model@npm:^1.21.0, prosemirror-model@npm:^1.25.0":
+  version: 1.25.2
+  resolution: "prosemirror-model@npm:1.25.2"
+  dependencies:
+    orderedmap: "npm:^2.0.0"
+  checksum: 10/de708e22b52b97081ae8012c37136e3a39552a13b64b9fadeddca1c4bb3d7b865f390123cbe1fee7e98c6b7d85776a292be9fdc5140b6ebbe9f60987de980345
   languageName: node
   linkType: hard
 
