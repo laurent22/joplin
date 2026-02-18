@@ -1,3 +1,6 @@
+# Resolves an issue in which notes and attachments larger than 16 KB
+# could become corrupted during the upload process.
+# See https://github.com/laurent22/joplin/issues/14343
 diff --git a/src/parsers/JSON.js b/src/parsers/JSON.js
 index 9a096c25778c7c68be1ddd9dd78faa85bd1d8ec3..6d6bfd2d3789313a7adc8966ab8e58c3d3167356 100644
 --- a/src/parsers/JSON.js
