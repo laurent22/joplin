@@ -1962,6 +1962,7 @@ packages/tools/website/utils/parser.js
 packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/processTranslations.js
 packages/tools/website/utils/render.js
+packages/tools/website/utils/supportedLocales.js
 packages/tools/website/utils/types.js
 packages/whisper-voice-typing/src/index.js
 packages/whisper-voice-typing/src/specs/Whisper.nitro.js

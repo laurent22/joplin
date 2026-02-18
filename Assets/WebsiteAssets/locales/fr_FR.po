@@ -1,8 +1,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -11,18 +9,235 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:63
-msgid "Download the app"
-msgstr "Télécharger l'application"
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:10
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:14
+msgid "/month"
+msgstr "/mois"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:54
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:22
+msgid "/year"
+msgstr "/an"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:71
+msgid ""
+"<a href=\"https://joplincloud.com\">Joplin Cloud</a> allows you to "
+"synchronise your notes across devices. It also lets you publish notes, and "
+"collaborate on notebooks with your friends, family or colleagues."
+msgstr ""
+"<a href=\"https://joplincloud.com\">Joplin Cloud</a> vous permet de "
+"synchroniser vos notes entre vos appareils. Il vous permet également de "
+"publier des notes et de collaborer sur des carnets avec vos amis, votre "
+"famille ou vos collègues."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:206
+msgid "<span class=\"frame-bg frame-bg-yellow-lg\">Customise</span> it"
+msgstr "<span class=\"frame-bg frame-bg-yellow-lg\">Personnalisez</span>-la"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:105
+msgid "<span class=\"frame-bg frame-bg-yellow\">Multimedia</span> notes"
+msgstr "Notes <span class=\"frame-bg frame-bg-yellow\">multimédia</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:257
+msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
+msgstr "100 % <span class=\"frame-bg frame-bg-yellow-lg\">vos données</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:299
+msgid "A <span class=\"frame-bg frame-bg-yellow-lg\">French</span> Alternative"
+msgstr ""
+"Une alternative <span class=\"frame-bg frame-bg-yellow-lg\">française</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:237
+msgid ""
+"Access your notes from your computer, phone or tablet by synchronising with "
+"various services, including Joplin Cloud, Dropbox and OneDrive. The app is "
+"available on Windows, macOS, Linux, Android and iOS. A terminal app is also "
+"available!"
+msgstr ""
+"Accédez à vos notes depuis votre ordinateur, téléphone ou tablette en les "
+"synchronisant avec différents services, notamment Joplin Cloud, Dropbox et "
+"OneDrive. L’application est disponible sur Windows, macOS, Linux, Android et "
+"iOS. Une application en ligne de commande est également disponible !"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:121
+msgid ""
+"Already have a Joplin Cloud account? <a href=\"https://joplincloud.com"
+"\">Login now</a>"
+msgstr ""
+"Vous avez déjà un compte Joplin Cloud ? <a href=\"https://joplincloud.com"
+"\">Connectez-vous maintenant</a>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:209
+msgid ""
+"Customise the app with plugins, custom themes and multiple text editors "
+"(Rich Text or Markdown). Or create your own scripts and plugins using the "
+"Extension API."
+msgstr ""
+"Personnalisez l’application avec des extensions, des thèmes personnalisés et "
+"plusieurs éditeurs de texte (texte enrichi ou Markdown). Ou créez vos "
+"propres scripts et extensions grâce à l’API d’extension."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:243
+msgid "Download it now"
+msgstr "Téléchargez maintenant"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:113
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:64
+msgid "Download the app"
+msgstr "Télécharger l'appli"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:214
+msgid "Find out more"
+msgstr "En savoir plus"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:55
 msgid "Free your <span class=\"frame-bg frame-bg-blue\">notes</span>"
 msgstr "Libérez vos <span class=\"frame-bg frame-bg-blue\">notes</span>"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:57
-msgid "Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device."
-msgstr "Joplin est une application libre de prise de notes. Capturez vos pensées et accédez-y de façon sécurisé depuis n'importe quel appareil."
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:176
+msgid "Get the clipper"
+msgstr "Obtenir le clipper"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:65
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:108
+msgid ""
+"Images, videos, PDFs and audio files are supported. Create math expressions "
+"and diagrams directly from the app. Take photos with the mobile app and save "
+"them to a note."
+msgstr ""
+"Les images, vidéos, PDF et fichiers audio sont pris en charge. Créez des "
+"expressions mathématiques et des diagrammes directement depuis "
+"l’application. Prenez des photos avec l’application mobile et enregistrez-"
+"les dans une note."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:328
+msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
+msgstr "Dans la <span class=\"frame-bg frame-bg-yellow\">presse</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:68
+msgid "Joplin Cloud"
+msgstr "Joplin Cloud"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:302
+msgid ""
+"Joplin Cloud is based in France. This means your data is protected by strict "
+"European Union privacy laws. In addition, Joplin Cloud implements strong end-"
+"to-end encryption so that not even us can have access to your data."
+msgstr ""
+"Joplin Cloud est basé en France. Cela signifie que vos données sont "
+"protégées par les lois strictes de l’Union européenne en matière de "
+"confidentialité. De plus, Joplin Cloud met en œuvre un chiffrement de bout "
+"en bout robuste afin que même nous ne puissions pas accéder à vos données."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:58
+msgid ""
+"Joplin is an open source note-taking app. Capture your thoughts and securely "
+"access them from any device."
+msgstr ""
+"Joplin est une application libre de prise de notes. Capturez vos pensées et "
+"accédez-y de façon sécurisée depuis n'importe quel appareil."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:79
+msgid "Joplin Server Business"
+msgstr "Joplin Server Business"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:82
+msgid ""
+"Joplin Server Business is a synchronisation server that you can install on "
+"your own infrastructure, so that your data remains private and secure within "
+"your business."
+msgstr ""
+"Joplin Server Business est un serveur de synchronisation que vous pouvez "
+"installer sur votre propre infrastructure, afin que vos données restent "
+"privées et sécurisées au sein de votre entreprise."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:263
+msgid "More about E2EE"
+msgstr "En savoir plus sur le chiffrement de bout en bout"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:392
+msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
+msgstr "Nos <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:46
+msgid ""
+"Our synchronisation and sharing <span class=\"frame-bg frame-bg-yellow"
+"\">solutions</span>"
+msgstr ""
+"Nos <span class=\"frame-bg frame-bg-yellow\">solutions</span> de "
+"synchronisation et de partage"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:91
+msgid "Pay Monthly"
+msgstr "Payer mensuellement"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:98
+msgid "Pay Yearly"
+msgstr "Payer annuellement"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:168
+msgid ""
+"Save <span class=\"frame-bg frame-bg-blue\">web pages</span> <br>as notes"
+msgstr ""
+"Enregistrez des <span class=\"frame-bg frame-bg-blue\">pages web</span> "
+"<br>comme notes"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:66
 msgid "Sign up with Joplin Cloud"
 msgstr "S'inscrire sur Joplin Cloud"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:49
+msgid "Synchronise and share your notes with our range of plans."
+msgstr "Synchronisez et partagez vos notes grâce à notre gamme d’offres."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:395
+msgid "Thank you for your support!"
+msgstr "Merci pour votre soutien !"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:258
+msgid ""
+"The app is open source and your notes are saved to an open format, so you'll "
+"always have access to them. Uses End-To-End Encryption (E2EE) to secure your "
+"notes and ensure no-one but yourself can access them."
+msgstr ""
+"L’application est open source et vos notes sont enregistrées dans un format "
+"ouvert, vous aurez donc toujours accès à celles-ci. Elle utilise le "
+"chiffrement de bout en bout (E2EE) pour sécuriser vos notes et garantir que "
+"personne d’autre que vous ne puisse y accéder."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:145
+msgid "Try it now"
+msgstr "Essayez-la maintenant"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:171
+msgid ""
+"Use the web clipper extension, available on Chrome and Firefox, to save web "
+"pages or take screenshots as notes."
+msgstr ""
+"Utilisez l’extension Web Clipper, disponible sur Chrome et Firefox, pour "
+"enregistrer des pages web ou des captures d’écran comme notes."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:139
+msgid ""
+"With Joplin Cloud, share your notes with your friends, family or colleagues "
+"and collaborate on them."
+msgstr ""
+"Avec Joplin Cloud, partagez vos notes avec vos amis, votre famille ou vos "
+"collègues et collaborez dessus."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:138
+msgid "Work <span class=\"frame-bg frame-bg-yellow\">together</span>"
+msgstr "Travaillez <span class=\"frame-bg frame-bg-yellow\">ensemble</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:142
+msgid ""
+"You can also publish a note to the internet and share the URL with others."
+msgstr ""
+"Vous pouvez également publier une note sur Internet et partager son URL avec "
+"d’autres."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:234
+msgid ""
+"Your notes, <span class=\"frame-bg frame-bg-blue-lg\">everywhere</span> you "
+"are"
+msgstr ""
+"Vos notes, <span class=\"frame-bg frame-bg-blue-lg\">partout</span> où vous "
+"êtes"
