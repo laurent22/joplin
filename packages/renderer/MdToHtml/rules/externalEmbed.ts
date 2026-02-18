@@ -29,8 +29,10 @@ const plugin = (markdownIt: MarkdownIt) => {
 		const href = token.attrGet('href');
 
 		// Check if this is a standalone YouTube link (next token is text matching href, then link_close)
+		// and that the link is the only content on the line (tokens array contains only link_open, text, link_close)
 		if (href &&
-			idx + 2 < tokens.length &&
+			idx === 0 &&
+			tokens.length === 3 &&
 			tokens[idx + 1].type === 'text' &&
 			tokens[idx + 1].content === href &&
 			tokens[idx + 2].type === 'link_close') {

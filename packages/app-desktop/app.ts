@@ -212,7 +212,12 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().name), click: () => { app.mainWindow().show(); } },
 				{ type: 'separator' },
-				{ label: _('Quit'), click: () => { void app.quit(); } },
+				{ label: _('Quit'), click: () => {
+					app.quitWithSyncCheck(
+						(action: { type: string; [key: string]: unknown }) => this.store().dispatch(action),
+						this.store().getState().syncPending,
+					);
+				} },
 			]);
 			app.createTray(contextMenu);
 		}

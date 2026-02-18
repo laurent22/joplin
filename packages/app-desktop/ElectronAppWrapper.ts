@@ -578,6 +578,17 @@ export default class ElectronAppWrapper {
 		this.electronApp_.quit();
 	}
 
+	public quitWithSyncCheck(
+		dispatch: (action: { type: string; [key: string]: unknown })=> void,
+		syncPending: boolean,
+	) {
+		if (syncPending) {
+			dispatch({ type: 'QUIT_SYNC_DIALOG_OPEN' });
+		} else {
+			this.quit();
+		}
+	}
+
 	public exit(errorCode = 0) {
 		this.onExit();
 		this.electronApp_.exit(errorCode);

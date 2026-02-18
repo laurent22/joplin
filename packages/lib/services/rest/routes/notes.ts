@@ -30,6 +30,7 @@ import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
 import { FetchBlobOptions } from '../../../types';
+import RevisionService from '../../RevisionService';
 
 const logger = Logger.create('routes/notes');
 
@@ -546,6 +547,10 @@ export default async function(request: Request, id: string = null, link: string 
 
 		newNote = await Note.save(newNote, saveOptions);
 
+		BaseModel.dispatch({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+		});
+
 		const requestNote = JSON.parse(request.body);
 		if (requestNote.tags || requestNote.tags === '') {
 			const tagTitles = requestNote.tags.split(',');
@@ -556,6 +561,13 @@ export default async function(request: Request, id: string = null, link: string 
 	}
 
 	if (request.method === RequestMethod.DELETE) {
+		if (link && link === 'revisions') {
+			await RevisionService.instance().deleteHistoryForNote(id, { sourceDescription: 'api/notes/revisions DELETE' });
+			return;
+		} else if (link) {
+			throw new ErrorNotFound();
+		}
+
 		await Note.delete(id, { toTrash: request.query.permanent !== '1', sourceDescription: 'api/notes DELETE' });
 		return;
 	}

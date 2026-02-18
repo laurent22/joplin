@@ -251,6 +251,16 @@ export default class PromptDialog extends React.Component<Props, any> {
 				} else {
 					onClose(true);
 				}
+			} else if (event.key === 'Escape') {
+				// react-select calls preventDefault() on the Escape keydown
+				// event, which prevents the native <dialog> cancel event from
+				// firing. We handle Escape explicitly here to ensure the dialog
+				// can be closed with the Escape key.
+				if ((this.props.inputType === 'tags' || this.props.inputType === 'dropdown') && this.menuIsOpened_) {
+					// Let react-select close the dropdown menu
+				} else {
+					onClose(false, 'cancel');
+				}
 			}
 		};
 

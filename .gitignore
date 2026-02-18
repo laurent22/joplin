@@ -220,6 +220,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/normalizeAccelerator.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/normalizeAccelerator.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchExtension.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchHandler.js
@@ -367,7 +368,9 @@ packages/app-desktop/gui/PopupNotification/PopupNotificationList.js
 packages/app-desktop/gui/PopupNotification/PopupNotificationProvider.js
 packages/app-desktop/gui/PopupNotification/types.js
 packages/app-desktop/gui/ProfileEditor.js
+packages/app-desktop/gui/PromptDialog.test.js
 packages/app-desktop/gui/PromptDialog.js
+packages/app-desktop/gui/QuitSyncDialog.js
 packages/app-desktop/gui/ResizableLayout/LayoutItemContainer.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
 packages/app-desktop/gui/ResizableLayout/ResizableLayout.js
@@ -833,6 +836,7 @@ packages/app-mobile/components/screens/NoteTagsDialog.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.js
 packages/app-mobile/components/screens/Notes/Notes.js
+packages/app-mobile/components/screens/Notes/TextWrapCalculator.js
 packages/app-mobile/components/screens/SearchScreen/SearchBar.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.test.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.js
@@ -1837,14 +1841,18 @@ packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js
 packages/tools/convertThemesToCss.js
 packages/tools/fuzzer/ActionRunner.js
-packages/tools/fuzzer/ActionTracker.js
-packages/tools/fuzzer/Client.js
-packages/tools/fuzzer/ClientPool.js
-packages/tools/fuzzer/Server.js
+packages/tools/fuzzer/Fuzzer.js
+packages/tools/fuzzer/cli.js
 packages/tools/fuzzer/constants.js
+packages/tools/fuzzer/ipc/Client.js
+packages/tools/fuzzer/ipc/ClientPool.js
+packages/tools/fuzzer/ipc/Server.js
+packages/tools/fuzzer/model/ActionTracker.js
 packages/tools/fuzzer/model/FolderRecord.js
+packages/tools/fuzzer/model/NoteRecord.js
 packages/tools/fuzzer/model/ResourceRecord.js
-packages/tools/fuzzer/sync-fuzzer.js
+packages/tools/fuzzer/model/Serializable.js
+packages/tools/fuzzer/model/types.js
 packages/tools/fuzzer/types.js
 packages/tools/fuzzer/utils/ProgressBar.js
 packages/tools/fuzzer/utils/SeededRandom.js
@@ -1929,6 +1937,7 @@ packages/tools/website/utils/parser.js
 packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/processTranslations.js
 packages/tools/website/utils/render.js
+packages/tools/website/utils/supportedLocales.js
 packages/tools/website/utils/types.js
 packages/whisper-voice-typing/src/index.js
 packages/whisper-voice-typing/src/specs/Whisper.nitro.js

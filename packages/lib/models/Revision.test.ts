@@ -1,12 +1,52 @@
 import { expectNotThrow, naughtyStrings, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Note from '../models/Note';
 import Revision, { ObjectPatch } from '../models/Revision';
+import { NoteEntity, RevisionEntity } from '../services/database/types';
+import BaseModel from '../BaseModel';
+
+const oneDayMs = 24 * 60 * 60 * 1000;
+const halfDayMs = 12 * 60 * 60 * 1000;
+// cSpell:disable
+const testBody = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
+	ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five
+	centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+	sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`;
+// cSpell:enable
+
+const createChangeAndRevision = async (note: NoteEntity, parentRevId: string = null) => {
+	const parentRev = parentRevId ? await Revision.load(parentRevId) : await Revision.latestRevision(BaseModel.TYPE_NOTE, note.id);
+	note.title = `${note.title}a`;
+	note.body = `${note.body}a`;
+	jest.advanceTimersByTime(oneDayMs);
+	note.updated_time = Date.now();
+
+	const output: RevisionEntity = {
+		item_type: BaseModel.TYPE_NOTE,
+		item_id: note.id,
+		item_updated_time: note.updated_time,
+	};
+
+	if (!parentRev) {
+		output.title_diff = Revision.createTextPatch('', note.title);
+		output.body_diff = Revision.createTextPatch('', note.body);
+		output.metadata_diff = Revision.createObjectPatch({}, {});
+	} else {
+		const merged = await Revision.mergeDiffs(parentRev);
+		output.parent_id = parentRev.id;
+		output.title_diff = Revision.createTextPatch(merged.title, note.title);
+		output.body_diff = Revision.createTextPatch(merged.body, note.body);
+		output.metadata_diff = Revision.createObjectPatch({}, {});
+	}
+
+	return Revision.save(output);
+};
 
 describe('models/Revision', () => {
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		jest.useFakeTimers({ advanceTimers: true });
 	});
 
 	it('should create patches of text and apply it', (async () => {
@@ -243,5 +283,84 @@ describe('models/Revision', () => {
 		}
 	}));
 	// cSpell:enable
+
+	test('deleteOldRevisions should merge 2 revisions when the revision chain has 2 branches', (async () => {
+		const revs = [];
+		const note = await Note.save({ title: 'test', body: testBody });
+
+		revs.push(await createChangeAndRevision(note)); // Rev 1
+		revs.push(await createChangeAndRevision(note)); // Rev 2a
+		revs.push(await createChangeAndRevision(note)); // Rev 3
+		revs.push(await createChangeAndRevision(note, revs[0].id)); // Rev 2b
+		revs.push(await createChangeAndRevision(note, revs[2].id)); // Rev 4
+		revs.push(await createChangeAndRevision(note)); // Rev 5
+
+		const timeBeforeCleaning = Date.now();
+		const ttl = (2 * oneDayMs) + halfDayMs; // Delete revs 1-3
+		await Revision.deleteOldRevisions(ttl);
+
+		expect(revs[3].body_diff.length).toBeLessThan(testBody.length);
+		expect(revs[4].body_diff.length).toBeLessThan(testBody.length);
+		expect(revs[5].body_diff.length).toBeLessThan(testBody.length);
+
+		const newRevPos3 = await Revision.load(revs[3].id);
+		const newRevPos4 = await Revision.load(revs[4].id);
+		const newRevPos5 = await Revision.load(revs[5].id);
+
+		// Ensure both revisions expected to be merged contain the full note contents
+		expect(newRevPos3.body_diff.length).toBeGreaterThan(testBody.length);
+		expect(newRevPos4.body_diff.length).toBeGreaterThan(testBody.length);
+		expect(newRevPos3.title_diff).not.toBe(revs[3].title_diff);
+		expect(newRevPos4.title_diff).not.toBe(revs[4].title_diff);
+		expect(revs[5].body_diff).toBe(newRevPos5.body_diff);
+		expect(revs[5].title_diff).toBe(newRevPos5.title_diff);
+
+		// Ensure the merged revisions will be synced
+		expect(newRevPos3.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+		expect(newRevPos4.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+
+		const remainingRevs = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		expect(remainingRevs.length).toBe(3);
+	}));
+
+	test('deleteOldRevisions should merge 3 revisions when the revision chain has 3 branches on 1 revision', (async () => {
+		const revs = [];
+		const note = await Note.save({ title: 'test', body: testBody });
+
+		revs.push(await createChangeAndRevision(note)); // Rev 1
+		revs.push(await createChangeAndRevision(note)); // Rev 2
+		revs.push(await createChangeAndRevision(note)); // Rev 2a
+		revs.push(await createChangeAndRevision(note, revs[1].id)); // Rev 2b
+		revs.push(await createChangeAndRevision(note, revs[1].id)); // Rev 2c
+
+		const timeBeforeCleaning = Date.now();
+		const ttl = (2 * oneDayMs) + halfDayMs; // Delete revs 1-2
+		await Revision.deleteOldRevisions(ttl);
+
+
+		expect(revs[2].body_diff.length).toBeLessThan(testBody.length);
+		expect(revs[3].body_diff.length).toBeLessThan(testBody.length);
+		expect(revs[4].body_diff.length).toBeLessThan(testBody.length);
+
+		const newRevPos2 = await Revision.load(revs[2].id);
+		const newRevPos3 = await Revision.load(revs[3].id);
+		const newRevPos4 = await Revision.load(revs[4].id);
+
+		// Ensure the 3 revisions expected to be merged contain the full note contents
+		expect(newRevPos2.body_diff.length).toBeGreaterThan(testBody.length);
+		expect(newRevPos3.body_diff.length).toBeGreaterThan(testBody.length);
+		expect(newRevPos4.body_diff.length).toBeGreaterThan(testBody.length);
+		expect(newRevPos2.title_diff).not.toBe(revs[2].title_diff);
+		expect(newRevPos3.title_diff).not.toBe(revs[3].title_diff);
+		expect(newRevPos4.title_diff).not.toBe(revs[4].title_diff);
+
+		// Ensure the merged revisions will be synced
+		expect(newRevPos2.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+		expect(newRevPos3.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+		expect(newRevPos4.updated_time).toBeGreaterThanOrEqual(timeBeforeCleaning);
+
+		const remainingRevs = await Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		expect(remainingRevs.length).toBe(3);
+	}));
 
 });
