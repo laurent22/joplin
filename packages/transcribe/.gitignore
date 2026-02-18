@@ -6,3 +6,4 @@ models/
 *.sqlite3
 *.sqlite-journal
 .env
+htr-metal/

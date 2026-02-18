@@ -79,7 +79,19 @@ Metal GPU access is not available inside Docker containers on macOS, so the infe
 
 3. Start the server normally — `HTR_CLI_IMAGES_FOLDER` still needs to be set and accessible to the native binary.
 
----
+Here's a sample `.env` file for testing:
+
+```ini
+# Copy these lines from the output of `yarn setupMetal`
+HTR_CLI_GPU_TYPE=metal
+HTR_CLI_BINARY_PATH=
+HTR_CLI_MODELS_FOLDER=
+
+HTR_CLI_IMAGES_FOLDER=/path/to/images
+API_KEY=test-key
+QUEUE_DRIVER=sqlite
+QUEUE_DATABASE_NAME=./queue.sqlite3
+```
 
 ## Using Docker Compose
 
