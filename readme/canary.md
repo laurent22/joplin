@@ -10,7 +10,7 @@ If such an order were ever received and disclosure were legally prohibited, the 
 
 The current signed canary is published at:
 
-https://github.com/laurent22/joplin/blob/dev/readme/canary.txt
+https://github.com/laurent22/joplin/raw/dev/readme/canary.txt
 
 ## Canary Signing Key
 
@@ -47,7 +47,7 @@ Export the new public key in ASCII-armoured format.
 
 Add the new public key to:
 
-https://github.com/laurent22/joplin/blob/dev/Assets/keys/joplin-canary-signing-key.asc
+https://github.com/laurent22/joplin/raw/dev/Assets/keys/joplin-canary-signing-key.asc
 
 ### 3. Update Documentation
 

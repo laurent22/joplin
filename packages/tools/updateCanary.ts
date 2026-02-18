@@ -59,7 +59,7 @@ will not be updated.
 
 The public key is available at:
 
-https://github.com/laurent22/joplin/blob/dev/Assets/keys/joplin-canary-signing-key.asc
+https://github.com/laurent22/joplin/raw/dev/Assets/keys/joplin-canary-signing-key.asc
 
 To prevent backdating, this statement includes current public events:
 

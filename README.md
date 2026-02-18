@@ -67,7 +67,7 @@ Fingerprint:
 
 F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
 
-Public key: https://github.com/laurent22/joplin/blob/dev/Assets/keys/joplin-canary-signing-key.asc
+Public key: https://github.com/laurent22/joplin/raw/dev/Assets/keys/joplin-canary-signing-key.asc
 
 # Contributors
 
