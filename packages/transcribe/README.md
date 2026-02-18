@@ -2,16 +2,31 @@
 
 ## Configure Docker for Transcribe
 
-The transcribe server embeds the llama.cpp binary and AI models directly in the Docker image. This simplifies deployment and improves security by eliminating the need for Docker-in-Docker.
+The transcribe server embeds the llama.cpp binary directly in the Docker image. The AI models must be downloaded separately and mounted as a volume.
+
+### 1. Download the models
+
+Create a directory for the models and download them:
+
+```shell
+mkdir -p ./data/transcribe-models
+wget -O ./data/transcribe-models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
+wget -O ./data/transcribe-models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
+```
+
+### 2. Configure environment
 
 1. Copy `.env-transcribe-sample` to your Docker configuration directory.
 2. Rename it to `.env-transcribe`.
-3. Test the server with the default configuration:
+3. Set `HTR_CLI_MODELS_FOLDER` to the full path of your models directory.
+
+### 3. Run the server
 
 ```shell
 docker build -f ./Dockerfile.transcribe -t transcribe .
 docker run --env-file .env-transcribe -p 4567:4567 \
 	-v ./packages/transcribe/images:/app/packages/transcribe/images \
+	-v ./data/transcribe-models:/opt/models:ro \
 	transcribe
 ```
 

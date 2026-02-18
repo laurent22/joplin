@@ -85,6 +85,7 @@ services:
             - full
         volumes:
             - ${HTR_CLI_IMAGES_FOLDER}:/app/packages/transcribe/images
+            - ${HTR_CLI_MODELS_FOLDER}:/opt/models:ro
         depends_on:
             - transcribe-db
         ports:
@@ -113,4 +114,5 @@ services:
             - QUEUE_DATABASE_HOST=transcribe-db
             - API_KEY=${TRANSCRIBE_API_KEY}
             - HTR_CLI_IMAGES_FOLDER=/app/packages/transcribe/images
+            - HTR_CLI_MODELS_FOLDER=/opt/models
 

@@ -17,11 +17,6 @@ RUN wget -q https://github.com/ggml-org/llama.cpp/releases/download/b5449/llama-
     && rm llama-b5449-bin-ubuntu-x64.zip \
     && chmod +x /opt/llama/build/bin/llama-mtmd-cli
 
-# Download models
-RUN mkdir -p /opt/models \
-    && wget -q -O /opt/models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf \
-    && wget -q -O /opt/models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
-
 # Create non-root user for security
 RUN groupadd -r transcribe && useradd -r -g transcribe transcribe
 
@@ -50,17 +45,15 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
 
 # Create images directory and set permissions
 RUN mkdir -p /app/packages/transcribe/images \
-    && chown -R transcribe:transcribe /app/packages/transcribe/images \
-    && chown -R transcribe:transcribe /opt/models
+    && chown -R transcribe:transcribe /app/packages/transcribe/images
 
 WORKDIR /app/packages/transcribe
 
 # Switch to non-root user
 USER transcribe
 
-# Set environment variables for embedded llama.cpp
+# Set environment variable for embedded llama.cpp binary
 ENV HTR_CLI_BINARY_PATH=/opt/llama/build/bin/llama-mtmd-cli
-ENV HTR_CLI_MODELS_FOLDER=/opt/models
 
 # Start the Node.js application
 CMD ["yarn", "start"]
