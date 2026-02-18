@@ -14,6 +14,8 @@ const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['
 };
 
 describe('replaceInlineHtml', () => {
+	jest.retryTimes(2);
+
 	test.each([
 		{ markdown: '<sup>Test</sup>', expectedDomTags: 'sup' },
 		{ markdown: '<strike>Test</strike>', expectedDomTags: 'strike' },

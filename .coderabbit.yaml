@@ -1,20 +1,13 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: "en-GB"
-early_access: false
 reviews:
-  profile: "chill"
-  nitpick_comments: false
-  request_changes_workflow: false
-  high_level_summary: true
-  walkthrough: false
+  high_level_summary: false
   estimate_code_review_effort: false
   poem: false
-  review_status: true
-  collapse_walkthrough: false
   auto_review:
     enabled: true
     drafts: false
-    ignored_pr_authors:
+    ignore_usernames:
       - "renovate[bot]"
   auto_apply_labels: true
   labeling_instructions:
@@ -69,7 +62,7 @@ reviews:
     - label: "plugins"
       instructions: "Apply when the PR contains changes to the plugin system, plugin API, or specific plugins."
     - label: "Regression"
-      instructions: "Apply when the PR fixes a regression (something that used to work but was broken by a recent change)."
+      instructions: "Apply when the linked issue, if any, has the Regression label."
     - label: "renderer"
       instructions: "Apply when the PR contains changes to the note renderer or how notes are displayed."
     - label: "search"
@@ -94,6 +87,9 @@ reviews:
       instructions: "Apply when the PR contains changes to the Joplin web application or web-related features."
     - label: "windows"
       instructions: "Apply when the PR contains changes specific to Windows."
-  path_instructions: []
-chat:
-  auto_reply: true
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "readme/dev/coding_style.md"
+      - "readme/dev/index.md"

@@ -823,13 +823,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							<SafeAreaProvider>
 								<FocusControl.MainAppContent style={{ flex: 1 }}>
 									{shouldShowMainContent ? mainContent : (
-										<SafeAreaView>
-											<BiometricPopup
-												dispatch={this.props.dispatch}
-												themeId={this.props.themeId}
-												sensorInfo={this.state.sensorInfo}
-											/>
-										</SafeAreaView>
+										<BiometricPopup
+											dispatch={this.props.dispatch}
+											themeId={this.props.themeId}
+											sensorInfo={this.state.sensorInfo}
+										/>
 									)}
 								</FocusControl.MainAppContent>
 							</SafeAreaProvider>

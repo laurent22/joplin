@@ -181,7 +181,6 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
-packages/app-desktop/gui/Dialog.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
@@ -500,7 +499,6 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useSyncDialogState.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowCommands.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.js
 packages/app-desktop/gui/dialogs.js
-packages/app-desktop/gui/hooks/useDocument.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useElementHeight.js
 packages/app-desktop/gui/hooks/useImperativeHandlerDebugger.js
@@ -605,6 +603,7 @@ packages/app-desktop/utils/customProtocols/handleCustomProtocols.plugins.test.js
 packages/app-desktop/utils/customProtocols/handleCustomProtocols.js
 packages/app-desktop/utils/customProtocols/registerCustomProtocols.js
 packages/app-desktop/utils/getAssetPath.js
+packages/app-desktop/utils/initReact.js
 packages/app-desktop/utils/initializeCommandService.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
@@ -707,6 +706,8 @@ packages/app-mobile/components/NoteList.js
 packages/app-mobile/components/ProfileSwitcher/ProfileEditor.js
 packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.js
 packages/app-mobile/components/ProfileSwitcher/useProfileConfig.js
+packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.test.js
+packages/app-mobile/components/ProfileSwitcher/utils/deleteProfile.js
 packages/app-mobile/components/SafeAreaView.js
 packages/app-mobile/components/ScreenHeader/Menu.js
 packages/app-mobile/components/ScreenHeader/WarningBanner.test.js
@@ -955,6 +956,7 @@ packages/app-mobile/utils/image/fileToImage.web.js
 packages/app-mobile/utils/image/getImageDimensions.js
 packages/app-mobile/utils/image/resizeImage.js
 packages/app-mobile/utils/initReact.js
+packages/app-mobile/utils/initReact.web.js
 packages/app-mobile/utils/initializeCommandService.js
 packages/app-mobile/utils/ipc/RNToWebViewMessenger.js
 packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
@@ -1259,6 +1261,7 @@ packages/lib/commands/synchronize.js
 packages/lib/commands/toggleAllFolders.test.js
 packages/lib/commands/toggleAllFolders.js
 packages/lib/commands/toggleEditorPlugin.js
+packages/lib/components/Dialog.js
 packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteEditor/WarningBanner/onRichTextDismissLinkClick.js
@@ -1285,6 +1288,7 @@ packages/lib/components/shared/reduxSharedMiddleware.js
 packages/lib/components/shared/side-menu-shared.test.js
 packages/lib/components/shared/side-menu-shared.js
 packages/lib/database-driver-better-sqlite.js
+packages/lib/database-driver.js
 packages/lib/database.js
 packages/lib/debug/DebugService.js
 packages/lib/determineBaseAppDirs.js
@@ -1307,6 +1311,7 @@ packages/lib/fsDriver.test.js
 packages/lib/geolocation-node.js
 packages/lib/getAppName.test.js
 packages/lib/getAppName.js
+packages/lib/hooks/dom/useDocument.js
 packages/lib/hooks/plugins/usePlugin.js
 packages/lib/hooks/plugins/useVisiblePluginEditorViewIds.js
 packages/lib/hooks/useAsyncEffect.js
@@ -1936,6 +1941,7 @@ packages/tools/website/utils/parser.js
 packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/processTranslations.js
 packages/tools/website/utils/render.js
+packages/tools/website/utils/supportedLocales.js
 packages/tools/website/utils/types.js
 packages/whisper-voice-typing/src/index.js
 packages/whisper-voice-typing/src/specs/Whisper.nitro.js
