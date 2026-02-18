@@ -60,6 +60,7 @@
     "test": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 run test",
     "tsc": "yarn workspaces foreach --worktree --parallel --verbose --interlaced run tsc",
     "updateIgnored": "node packages/tools/gulp/tasks/updateIgnoredTypeScriptBuildRun.js",
+    "updateCanary": "node ./packages/tools/updateCanary",
     "updateMarkdownDoc": "node ./packages/tools/updateMarkdownDoc",
     "updateNews": "node ./packages/tools/website/updateNews",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
