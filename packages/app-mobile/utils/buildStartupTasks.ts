@@ -257,13 +257,8 @@ const buildStartupTasks = (
 		AlarmService.setDriver(new AlarmServiceDriver(reg.logger()));
 	});
 	addTask('buildStartupTasks/openDatabase', async () => {
-		if (Setting.value('env') === 'prod') {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
-		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
-
-			// await db.clearForTesting();
-		}
+		await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+		// if (Setting.value('env') === 'dev') await db.clearForTesting();
 	});
 	addTask('buildStartupTasks/setUpSettings', async () => {
 		await loadKeychainServiceAndSettings([]);

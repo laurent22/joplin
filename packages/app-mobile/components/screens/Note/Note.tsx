@@ -81,6 +81,7 @@ import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
 import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -335,6 +336,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.properties_onPress = this.properties_onPress.bind(this);
+		this.revealInNotebook_onPress = this.revealInNotebook_onPress.bind(this);
 		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
@@ -1137,6 +1139,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
+	private revealInNotebook_onPress() {
+		const folderId = this.state.folder?.id;
+		if (folderId) {
+			void NavService.go('Notes', { folderId: folderId });
+		} else {
+			void NavService.go('Notes', { smartFilterId: ALL_NOTES_FILTER_ID });
+		}
+	}
+
 	public async onAlarmDialogAccept(date: Date) {
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
@@ -1385,6 +1396,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				},
 			});
 		}
+
+		output.push({
+			title: _('Reveal in notebook'),
+			onPress: () => {
+				this.revealInNotebook_onPress();
+			},
+		});
 
 		if (isDeleted) {
 			output.push({

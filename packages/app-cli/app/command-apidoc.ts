@@ -402,7 +402,17 @@ async function fetchAllNotes() {
 				lines.push('');
 			}
 
-			if (model.type === BaseModel.TYPE_NOTE || model.type === BaseModel.TYPE_FOLDER) {
+			if (model.type === BaseModel.TYPE_NOTE) {
+				lines.push(`By default, the ${singular} will be moved **to the trash**. To permanently delete it, add the query parameter \`permanent=1\``);
+				lines.push('');
+
+				lines.push('### DELETE /notes/:id/revisions');
+				lines.push('');
+				lines.push('Deletes all the revisions attached to this note.');
+				lines.push('');
+			}
+
+			if (model.type === BaseModel.TYPE_FOLDER) {
 				lines.push(`By default, the ${singular} will be moved **to the trash**. To permanently delete it, add the query parameter \`permanent=1\``);
 				lines.push('');
 			}
