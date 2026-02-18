@@ -83,16 +83,7 @@ From `packages/transcribe`, run:
 yarn start
 ```
 
-### Running with Docker mode (development)
-
-For development, you can still use the Docker-based htr-cli if you prefer. Set these environment variables:
-
-- `HTR_CLI_DOCKER_IMAGE`: Docker image for transcription (e.g., `joplin/htr-cli:latest`)
-- Leave `HTR_CLI_BINARY_PATH` and `HTR_CLI_MODELS_FOLDER` empty
-
-### Running with native binary (production)
-
-In production (the default in the Docker image), the embedded llama.cpp binary is used:
+### Environment variables
 
 - `HTR_CLI_BINARY_PATH`: Path to the llama-mtmd-cli binary
 - `HTR_CLI_MODELS_FOLDER`: Path to the models directory

@@ -8,11 +8,8 @@ const systemPrompt = 'SYSTEM: you are an agent of a OCR system. Your job is to b
 
 export interface HtrCliOptions {
 	htrCliImagesFolder: string;
-	// For native binary mode (embedded in container)
-	binaryPath?: string;
-	modelsFolder?: string;
-	// For Docker mode (legacy/development)
-	htrCliDockerImage?: string;
+	binaryPath: string;
+	modelsFolder: string;
 }
 
 export default class HtrCli implements WorkHandler {
@@ -23,31 +20,14 @@ export default class HtrCli implements WorkHandler {
 		this.options = options;
 	}
 
-	private get useNativeBinary(): boolean {
-		return !!(this.options.binaryPath && this.options.modelsFolder);
-	}
-
 	public async init() {
-		if (this.useNativeBinary) {
-			logger.info('Using embedded llama.cpp binary (no Docker)');
-			return;
-		}
-
-		if (!this.options.htrCliDockerImage) {
-			throw new Error('Either binaryPath+modelsFolder or htrCliDockerImage must be provided');
-		}
-
-		logger.info('Loading Docker image');
-		const result = await execCommand(['docker', 'pull', this.options.htrCliDockerImage], { quiet: true });
-		logger.info('Finished loading: ', result);
+		logger.info('Using embedded llama.cpp binary');
 	}
 
 	public async run(imageName: string) {
 		logger.info('Running transcription...');
 
-		const command = this.useNativeBinary
-			? this.buildNativeCommand(imageName)
-			: this.buildDockerCommand(imageName);
+		const command = this.buildCommand(imageName);
 
 		logger.info(`Command: ${commandToString(command[0], command.slice(1))}`);
 		const result = await execCommand(command, { quiet: true });
@@ -56,10 +36,10 @@ export default class HtrCli implements WorkHandler {
 		return this.cleanUpResult(result);
 	}
 
-	private buildNativeCommand(imageName: string): string[] {
+	private buildCommand(imageName: string): string[] {
 		const { binaryPath, modelsFolder, htrCliImagesFolder } = this.options;
 		return [
-			binaryPath!,
+			binaryPath,
 			'-m', `${modelsFolder}/Model-7.6B-Q4_K_M.gguf`,
 			'--mmproj', `${modelsFolder}/mmproj-model-f16.gguf`,
 			'-c', '4096',
@@ -69,15 +49,6 @@ export default class HtrCli implements WorkHandler {
 			'--repeat-penalty', '1.05',
 			'--image', `${htrCliImagesFolder}/${imageName}`,
 			'-p', systemPrompt,
-		];
-	}
-
-	private buildDockerCommand(imageName: string): string[] {
-		return [
-			'docker', 'run', '--rm', '-t',
-			'-v', `${this.options.htrCliImagesFolder}:/images`,
-			this.options.htrCliDockerImage!,
-			imageName,
 		];
 	}
 
