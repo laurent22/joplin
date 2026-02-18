@@ -37,6 +37,15 @@ function removeAdjacentFolderDuplicates(items: any[]) {
 	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+function removeLatestFolderIfSelected(items: any[], route: any) {
+	// Fix the case where after deletion, the currently selected folder is also the latest in history
+	// Notes are not relevant for this scenario, because both note and folder deletion redirects to a folder rather than a note on mobile
+	if (items.length && route.routeName === 'Notes' && items[items.length - 1].folderId === route.folderId) {
+		items.splice(items.length - 1, 1);
+	}
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
@@ -66,7 +75,10 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 					// Avoid multiple consecutive duplicate screens in the navigation history -- these can make
 					// pressing "back" seem to have no effect.
-					if (isDifferentRoute) {
+					if (currentRoute.isDeleted) {
+						// Do not add the item to the history, and remove the last item in the history if that is now the selected item
+						removeLatestFolderIfSelected(navHistory, action);
+					} else if (isDifferentRoute) {
 						navHistory.push(currentRoute);
 					}
 				}
@@ -137,6 +149,15 @@ const appReducer = (state = appDefaultState, action: any) => {
 				let newNavHistoryForFolder = navHistory.filter(route => !(route.routeName === 'Notes' && route.folderId === action.id));
 				newNavHistoryForFolder = removeAdjacentFolderDuplicates(newNavHistoryForFolder);
 				navHistory.splice(0, navHistory.length, ...newNavHistoryForFolder);
+
+				// Prevent the deleted folder from being added to the navigation history again when navigating forward, where the selected folder was deleted
+				newState = {
+					...state,
+					route: {
+						...state.route,
+						isDeleted: true,
+					},
+				};
 			}
 			break;
 
@@ -145,12 +166,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 			{
 				let newNavHistory = navHistory.filter(route => !(route.routeName === 'Note' && route.noteId === action.id));
 				newNavHistory = removeAdjacentNoteDuplicates(newNavHistory);
-
-				// Fix the case where after deletion the currently selected note is also the latest in history
-				if (state.route.routeName === 'Note' && newNavHistory.length && newNavHistory[newNavHistory.length - 1].noteId === state.route.noteId) {
-					newNavHistory = newNavHistory.slice(0, newNavHistory.length - 1);
-				}
-
+				removeLatestFolderIfSelected(newNavHistory, state.route);
 				navHistory.splice(0, navHistory.length, ...newNavHistory);
 			}
 			break;
