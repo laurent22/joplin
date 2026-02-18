@@ -199,7 +199,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
 		return shared.noteComponent_change(this, 'body', saveEvent.body);
 	});
-	private refreshKey: number;
+	private refreshKey: number | undefined;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
