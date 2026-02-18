@@ -15,6 +15,72 @@ docker run --env-file .env-transcribe -p 4567:4567 \
 	transcribe
 ```
 
+## GPU Acceleration
+
+By default the server runs inference on CPU. Set `HTR_CLI_GPU_TYPE` in your `.env` to enable GPU acceleration.
+
+| Value | Hardware | Requires |
+|-------|----------|---------|
+| `none` | CPU (default) | Nothing extra |
+| `cuda` | NVIDIA GPU | NVIDIA Docker runtime (`nvidia-container-toolkit`) |
+| `metal` | Apple Silicon | Native binary (no Docker for inference) |
+
+### NVIDIA CUDA
+
+1. Install the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html) on the host.
+2. Build the GPU Docker image:
+
+   ```shell
+   docker build -f packages/transcribe/Dockerfile.htr-cli-gpu -t joplin/htr-cli-gpu:latest .
+   ```
+
+3. Add these variables to your `.env`:
+
+   ```env
+   HTR_CLI_GPU_TYPE=cuda
+   HTR_CLI_DOCKER_IMAGE=joplin/htr-cli-gpu:latest
+   ```
+
+4. Start the transcribe container with `--gpus all`:
+
+   ```shell
+   docker run --env-file .env-transcribe -p 4567:4567 \
+       --gpus all \
+       -v /var/run/docker.sock:/var/run/docker.sock \
+       -v ./packages/transcribe/images:/app/packages/transcribe/images \
+       transcribe
+   ```
+
+### Apple Silicon (Metal)
+
+Metal GPU access is not available inside Docker containers on macOS, so the inference binary runs natively on the host instead of in a container.
+
+1. Run the setup script to download the native binary and model files (from `packages/transcribe`):
+
+   ```shell
+   yarn setupMetal
+   ```
+
+   An optional `--install-dir` argument controls where files are downloaded (default: `./htr-metal`):
+
+   ```shell
+   yarn setupMetal --install-dir /opt/htr-metal
+   ```
+
+   The script prints the exact `.env` lines to add, for example:
+
+   ```env
+   HTR_CLI_GPU_TYPE=metal
+   HTR_CLI_BINARY_PATH=/path/to/htr-metal/bin/llama-mtmd-cli
+   HTR_CLI_MODELS_FOLDER=/path/to/htr-metal/models
+   ```
+
+2. Add those lines to your `.env`.
+
+3. Start the server normally — `HTR_CLI_IMAGES_FOLDER` still needs to be set and accessible to the native binary.
+
+---
+
 ## Using Docker Compose
 
 The minimal configuration is provided in `.env-sample` and `docker-compose.server.yml`.

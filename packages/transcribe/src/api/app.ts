@@ -34,7 +34,13 @@ const init = async (logger: LoggerWrapper) => {
 	app.context.queue = queue;
 	app.context.storage = fileStorage;
 
-	const htrCli = new HtrCli(envVariables.HTR_CLI_DOCKER_IMAGE, envVariables.HTR_CLI_IMAGES_FOLDER);
+	const htrCli = new HtrCli({
+		htrCliDockerImage: envVariables.HTR_CLI_DOCKER_IMAGE,
+		htrCliImagesFolder: envVariables.HTR_CLI_IMAGES_FOLDER,
+		gpuType: envVariables.HTR_CLI_GPU_TYPE as import('../core/HtrCli').GpuType,
+		binaryPath: envVariables.HTR_CLI_BINARY_PATH,
+		modelsFolder: envVariables.HTR_CLI_MODELS_FOLDER,
+	});
 
 	const jobProcessor = new JobProcessor(queue, htrCli, fileStorage);
 
@@ -46,6 +52,10 @@ const init = async (logger: LoggerWrapper) => {
 const checkServerConfigurations = (envVariables: EnvVariables) => {
 	if (!envVariables.API_KEY) throw Error('API_KEY environment variable not set.');
 	if (!envVariables.HTR_CLI_IMAGES_FOLDER) throw Error('HTR_CLI_IMAGES_FOLDER environment variable not set. This should point to a folder where images will be stored.');
+	if (envVariables.HTR_CLI_GPU_TYPE === 'metal') {
+		if (!envVariables.HTR_CLI_BINARY_PATH) throw Error('HTR_CLI_BINARY_PATH environment variable not set. This should point to the native llama-mtmd-cli binary for Metal GPU mode.');
+		if (!envVariables.HTR_CLI_MODELS_FOLDER) throw Error('HTR_CLI_MODELS_FOLDER environment variable not set. This should point to the folder containing the model files for Metal GPU mode.');
+	}
 };
 
 const main = async () => {

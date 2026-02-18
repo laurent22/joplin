@@ -214,6 +214,7 @@ module.exports = {
 				'packages/tools/**',
 				'packages/app-mobile/tools/**',
 				'packages/app-desktop/tools/**',
+				'packages/transcribe/src/tools/**',
 			],
 			'rules': {
 				'no-console': 'off',

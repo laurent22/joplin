@@ -4,31 +4,74 @@ import { WorkHandler } from '../types';
 
 const logger = Logger.create('HtrCli');
 
+export type GpuType = 'none' | 'cuda' | 'metal';
+
+const systemPrompt = 'SYSTEM: you are an agent of a OCR system. Your job is to be concise and correct. You should NEVER deviate from the content of the image. You should NEVER add any context or new information. Your only job should be to transcribe the text presented in the image as text without anything new information. The output for it should be inside triple backticks like: ```{{example}}```. If you find no text, output ``````.. Your turn:';
+
+export interface HtrCliOptions {
+	htrCliDockerImage: string;
+	htrCliImagesFolder: string;
+	gpuType: GpuType;
+	// Required when gpuType is 'metal'
+	binaryPath?: string;
+	modelsFolder?: string;
+}
+
 export default class HtrCli implements WorkHandler {
 
-	private htrCliDockerImage: string;
-	private htrCliImagesFolder: string;
+	private options: HtrCliOptions;
 
-	public constructor(htrCliDockerImage: string, htrCliImagesFolder: string) {
-		this.htrCliDockerImage = htrCliDockerImage;
-		this.htrCliImagesFolder = htrCliImagesFolder;
+	public constructor(options: HtrCliOptions) {
+		this.options = options;
 	}
 
 	public async init() {
+		if (this.options.gpuType === 'metal') {
+			logger.info('Metal GPU mode: skipping Docker image pull (native binary)');
+			return;
+		}
 		logger.info('Loading');
-		const result = await execCommand(['docker', 'pull', this.htrCliDockerImage], { quiet: true });
+		const result = await execCommand(['docker', 'pull', this.options.htrCliDockerImage], { quiet: true });
 		logger.info('Finished loading: ', result);
 	}
 
 	public async run(imageName: string) {
-		const command = ['docker', 'run', '--rm', '-t', '-v', `${this.htrCliImagesFolder}:/images`, this.htrCliDockerImage, imageName];
-
 		logger.info('Running transcription...');
+
+		let command: string[];
+
+		if (this.options.gpuType === 'metal') {
+			command = this.buildMetalCommand(imageName);
+		} else {
+			command = this.buildDockerCommand(imageName);
+		}
+
 		logger.info(`Command: ${commandToString(command[0], command.slice(1))}`);
 		const result = await execCommand(command, { quiet: true });
 
 		logger.info('Finished transcription');
 		return this.cleanUpResult(result);
+	}
+
+	private buildDockerCommand(imageName: string): string[] {
+		const gpuFlags = this.options.gpuType === 'cuda' ? ['--gpus', 'all'] : [];
+		return ['docker', 'run', '--rm', '-t', ...gpuFlags, '-v', `${this.options.htrCliImagesFolder}:/images`, this.options.htrCliDockerImage, imageName];
+	}
+
+	private buildMetalCommand(imageName: string): string[] {
+		const { binaryPath = '', modelsFolder = '', htrCliImagesFolder } = this.options;
+		return [
+			binaryPath,
+			'-m', `${modelsFolder}/Model-7.6B-Q4_K_M.gguf`,
+			'--mmproj', `${modelsFolder}/mmproj-model-f16.gguf`,
+			'-c', '4096',
+			'--temp', '0.05',
+			'--top-p', '0.8',
+			'--top-k', '100',
+			'--repeat-penalty', '1.05',
+			'--image', `${htrCliImagesFolder}/${imageName}`,
+			'-p', systemPrompt,
+		];
 	}
 
 	public cleanUpResult(transcriptionAndLogs: string) {
