@@ -87,8 +87,18 @@ async function main() {
 
 		const tmpFile = `${canaryFile}.tmp`;
 		await writeFile(tmpFile, content, 'utf8');
-		execSync(
-			`gpg --yes --armor --clearsign --local-user "canary@joplinapp.org" --output "${canaryFile}" "${tmpFile}"`,
+		execFileSync(
+			'gpg',
+			[
+				'--yes',
+				'--armor',
+				'--clearsign',
+				'--local-user',
+				'canary@joplinapp.org',
+				'--output',
+				canaryFile,
+				tmpFile,
+			],
 			{ stdio: 'inherit' },
 		);
 		await remove(tmpFile);
