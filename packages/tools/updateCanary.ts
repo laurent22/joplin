@@ -1,21 +1,21 @@
+import { execFileSync } from 'child_process';
 import { writeFile, remove } from 'fs-extra';
 import { dirname, join } from 'path';
 import { createInterface, Interface as ReadlineInterface } from 'readline';
-import { execSync } from 'child_process';
 
 const rootDir = dirname(dirname(__dirname));
 const canaryFile = join(rootDir, 'readme', 'canary.txt');
 
 function formatDate(date: Date): string {
-	const day = date.getDate();
-	const month = date.toLocaleString('en-US', { month: 'long' });
-	const year = date.getFullYear();
+	const day = date.getUTCDate();
+	const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+	const year = date.getUTCFullYear();
 	return `${day} ${month} ${year}`;
 }
 
 function addDays(date: Date, days: number): Date {
 	const result = new Date(date);
-	result.setDate(result.getDate() + days);
+	result.setUTCDate(result.getUTCDate() + days);
 	return result;
 }
 
@@ -46,11 +46,11 @@ Statement date above, it should be considered expired.
 
 As of the Statement date:
 
-* No National Security Letters have been received.
-* No orders under the USA PATRIOT Act have been received.
-* No orders under the Foreign Intelligence Surveillance Act have been received.
-* No government requests have been received that are accompanied by a gag order.
-* No law enforcement or government agency has required the introduction of backdoors into Joplin.
+* No National Security Letters have been received by the project or its maintainer.
+* No orders under the USA PATRIOT Act or the Foreign Intelligence Surveillance Act have been received by the project or its maintainer.
+* No government request accompanied by a gag order has been received by the project or its maintainer.
+* No government agency or law enforcement body has required the introduction of backdoors into Joplin software, infrastructure, or services.
+* No government agency or law enforcement body has compelled the project or its maintainer to provide access to user data, servers, or infrastructure associated with Joplin.
 
 If any such order is received, and we are legally permitted to do so,
 this statement will be updated accordingly. If we are not legally
