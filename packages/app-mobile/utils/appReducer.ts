@@ -168,7 +168,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 				// Fix the case where after deletion, the currently selected folder is also the latest in history
 				// Notes are not relevant for this scenario, because both note and folder deletion redirects to a folder rather than a note on mobile
 				removeLatestFolderIfSelected(newNavHistory, state.route);
-				
+
 				navHistory.splice(0, navHistory.length, ...newNavHistory);
 			}
 			break;
