@@ -20,7 +20,11 @@ Its fingerprint is present in the canary.txt file itself and duplicated at:
 
 https://github.com/laurent22/joplin/blob/dev/README.md
 
-# Key Rotation Policy
+## Updating the canary file
+
+Run `yarn updateCanary` from the root of the repository and follow the prompt.
+
+## Key Rotation Policy
 
 The canary signing key may be rotated for the following reasons:
 
