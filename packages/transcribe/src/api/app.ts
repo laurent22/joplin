@@ -28,7 +28,7 @@ const init = async (logger: LoggerWrapper) => {
 	logger.info('Creating queue');
 	const queue = await createQueue(envVariables, true);
 
-	const fileStorage = new FileStorage();
+	const fileStorage = new FileStorage(envVariables.HTR_CLI_IMAGES_FOLDER);
 	fileStorage.initMaintenance(envVariables.FILE_STORAGE_TTL, envVariables.FILE_STORAGE_MAINTENANCE_INTERVAL);
 
 	app.context.queue = queue;
