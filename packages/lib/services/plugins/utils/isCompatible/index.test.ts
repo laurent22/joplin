@@ -1,5 +1,7 @@
 import { AppType } from '../../../../models/Setting';
+import PluginService from '../../PluginService';
 import isCompatible from '../isCompatible';
+import { PluginManifest } from '../types';
 
 describe('isCompatible', () => {
 	test.each([
@@ -91,5 +93,18 @@ describe('isCompatible', () => {
 		expect(mobileCompatible).toBe(shouldSupportMobile);
 		const desktopCompatible = isCompatible(appVersion, AppType.Desktop, fullManifest);
 		expect(desktopCompatible).toBe(shouldSupportDesktop);
+	});
+
+	it('should report a missing app_min_version field specifically', () => {
+		const service = new PluginService();
+		const manifest = {
+			id: 'test.plugin',
+			name: 'Test Plugin',
+			version: '1.0.0',
+			// Missing app_min_version
+		};
+
+		const error = service.describeIncompatibility(manifest as unknown as PluginManifest);
+		expect(error).toContain('missing the required "app_min_version" field');
 	});
 });
