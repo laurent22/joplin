@@ -5,7 +5,7 @@ import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../uti
 
 import NoteScreen from './Note';
 import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
-import { waitFor as waitForWithRealTimers } from '@joplin/lib/testing/test-utils';
+import waitForWithRealTimers from '@joplin/lib/testing/waitFor';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../../utils/types';
 import { Store } from 'redux';

@@ -21,6 +21,19 @@ type PageIdMap = {
 	get: (pageId: string)=> PageResolutionResult|null;
 };
 
+type NativeOneNoteConverter = (notebookPath: string, outputDirectory: string, baseDir: string)=> Promise<void>;
+const getOneNoteConverter = (): NativeOneNoteConverter => {
+	try {
+		return shim.requireDynamic('@joplin/onenote-converter').oneNoteConverter;
+	} catch (error) {
+		// Log the original error for debugging:
+		logger.warn('Failed to load the onenote importer:', error);
+
+		// Throw a more user and maintainer-friendly error:
+		throw new Error('Failed to load @joplin/onenote-converter. Please check that the onenote-converter package was built correctly and bundled with this version of Joplin.\n\nFor build instructions, see https://github.com/laurent22/joplin/blob/dev/packages/onenote-converter/README.md#building.');
+	}
+};
+
 // See onenote-converter README.md for more information
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
@@ -76,7 +89,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const notebookFiles = files.filter(e => {
 			return extname(e.path) !== '.onetoc2' && basename(e.path) !== 'OneNote_RecycleBin.onetoc2';
 		});
-		const { oneNoteConverter } = shim.requireDynamic('@joplin/onenote-converter');
+
+		const oneNoteConverter = getOneNoteConverter();
 
 		logger.info('Extracting OneNote to HTML');
 		const skippedFiles = [];

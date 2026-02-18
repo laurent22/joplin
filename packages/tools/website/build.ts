@@ -2,7 +2,7 @@ import { readFileSync, readFile, mkdirpSync, writeFileSync, remove, copy, pathEx
 import { rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
-import { AssetUrls, Env, Locale, Partials, PlanPageParams, TemplateParams } from './utils/types';
+import { AssetUrls, AvailableLocale, Env, Locale, Partials, PlanPageParams, TemplateParams } from './utils/types';
 import { createFeatureTableMd, getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { stripOffFrontMatter } from './utils/frontMatter';
 import { dirname, basename } from 'path';
@@ -10,12 +10,13 @@ import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
 import { extractOpenGraphTags, OpenGraphTags } from './utils/openGraph';
 import { readCredentialFileJson } from '@joplin/lib/utils/credentialFiles';
 import { getNewsDateString } from './utils/news';
-import { Translations } from '../utils/translation';
+import { parsePoFile, parseTranslations, Translations } from '../utils/translation';
 import { setLocale } from '@joplin/lib/locale';
 import applyTranslations from './utils/applyTranslations';
 import { loadSponsors } from '../utils/loadSponsors';
 import convertLinksToLocale from './utils/convertLinksToLocale';
 import { copyFile } from 'fs/promises';
+import { supportedLocales as supportedLocalesList } from './utils/supportedLocales';
 
 interface BuildConfig {
 	env: Env;
@@ -25,10 +26,16 @@ const buildConfig = readCredentialFileJson<BuildConfig>('website-build.json', {
 	env: Env.Prod,
 });
 
+// Default English locale for use before main() builds the full locale list
+const defaultEnglishLocale = supportedLocalesList.find(l => l.id === 'en_GB');
 const enGbLocale: Locale = {
+	id: defaultEnglishLocale.id,
 	htmlTranslations: {},
-	lang: 'en-gb',
-	pathPrefix: '',
+	lang: defaultEnglishLocale.lang,
+	pathPrefix: defaultEnglishLocale.pathPrefix,
+	code: defaultEnglishLocale.code,
+	name: defaultEnglishLocale.name,
+	hreflang: defaultEnglishLocale.hreflang,
 };
 
 const glob = require('glob');
@@ -267,25 +274,32 @@ const updatePageLanguage = (html: string, lang: string): string => {
 	return html.replace('<html lang="en-gb">', `<html lang="${lang}">`);
 };
 
-// TODO: Add function that process links and add prefix.
+// Build the availableLocales array for templates, marking the current locale as active
+const buildAvailableLocales = (currentLocaleId: string): AvailableLocale[] => {
+	return supportedLocalesList.map(loc => ({
+		code: loc.code,
+		name: loc.name,
+		pathPrefix: loc.pathPrefix,
+		hreflang: loc.hreflang,
+		isActive: loc.id === currentLocaleId,
+	}));
+};
 
 async function main() {
-	const supportedLocales: Record<string, Locale> = {
-		'en_GB': enGbLocale,
-		// 'zh_CN': {
-		// 	htmlTranslations: parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/zh_CN.po`)),
-		// 	lang: 'zh-cn',
-		// 	pathPrefix: 'cn',
-		// },
-		// 'fr_FR': {
-		// 	htmlTranslations: {},
-		// 	lang: 'fr-fr',
-		// 	pathPrefix: 'fr',
-		// },
-	};
-
-	// delete supportedLocales['zh_CN'];
-	// delete supportedLocales['fr_FR'];
+	// Build locale objects from the central configuration
+	const locales: Record<string, Locale> = {};
+	for (const loc of supportedLocalesList) {
+		const isEnglish = loc.id === 'en_GB';
+		locales[loc.id] = {
+			id: loc.id,
+			htmlTranslations: isEnglish ? {} : parseTranslations(await parsePoFile(`${websiteAssetDir}/locales/${loc.id}.po`)),
+			lang: loc.lang,
+			pathPrefix: loc.pathPrefix,
+			code: loc.code,
+			name: loc.name,
+			hreflang: loc.hreflang,
+		};
+	}
 
 	setLocale('en_GB');
 
@@ -302,7 +316,7 @@ async function main() {
 
 	const donateLinksMd = await getDonateLinks();
 
-	for (const [localeName, locale] of Object.entries(supportedLocales)) {
+	for (const [localeName, locale] of Object.entries(locales)) {
 		setLocale(localeName);
 
 		const pathPrefix = localeName !== 'en_GB' ? `/${locale.pathPrefix}` : '';
@@ -373,6 +387,9 @@ async function main() {
 				description: 'Joplin, the open source note-taking application',
 				url: 'https://joplinapp.org',
 			},
+			locale,
+			currentPath: '/',
+			availableLocales: buildAvailableLocales(localeName),
 		});
 
 		// =============================================================
@@ -402,6 +419,8 @@ async function main() {
 			showImproveThisDoc: false,
 			contentHtml: planPageContentHtml,
 			title: 'Joplin Cloud Plans',
+			currentPath: '/plans/',
+			availableLocales: buildAvailableLocales(localeName),
 		};
 
 		templateParams.templateHtml = updatePageLanguage(templateParams.templateHtml, locale.lang);
@@ -439,6 +458,8 @@ async function main() {
 				showImproveThisDoc: false,
 				contentHtml: brandPageContentHtml,
 				title: 'Joplin Brand Guidelines',
+				currentPath: '/brand/',
+				availableLocales: buildAvailableLocales(localeName),
 			};
 
 			templateParams.templateHtml = updatePageLanguage(templateParams.templateHtml, locale.lang);
@@ -520,7 +541,7 @@ async function main() {
 		if (!filesToProcess.includes(basename(mdFile))) continue;
 		if (mdFile.startsWith('readme/_i18n')) continue;
 
-		for (const [localeName, locale] of Object.entries(supportedLocales)) {
+		for (const [localeName, locale] of Object.entries(locales)) {
 			const title = await readmeFileTitle(`${rootDir}/${mdFile}`);
 			const targetFilePath = makeTargetFilePath(mdFile, locale.pathPrefix);
 			const openGraph = await extractOpenGraphTags(mdFile, makeTargetUrl(mdFile, locale.pathPrefix));
@@ -562,6 +583,7 @@ async function main() {
 			isNews,
 			partials,
 			assetUrls,
+			availableLocales: buildAvailableLocales(source[2].locale.id),
 		});
 	}
 

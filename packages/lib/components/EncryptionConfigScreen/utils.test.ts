@@ -1,10 +1,12 @@
+import '../../testing/dom-test-environment';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod } from '../../services/e2ee/EncryptionService';
 import { MasterKeyEntity } from '../../services/e2ee/types';
 import { setEncryptionEnabled } from '../../services/synchronizer/syncInfoUtils';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { usePasswordChecker } from './utils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
+
 
 interface WrappedPasswordCheckerProps {
 	masterKeys: MasterKeyEntity[];
@@ -62,11 +64,15 @@ describe('EncryptionConfigScreen/utils', () => {
 
 		// Different password from the master password should cause the secondary key
 		// to be marked as not using the master password.
-		await hook.waitFor(() => {
-			expect(hook.result.current.masterPasswordKeys).toMatchObject({
-				[activeMasterKey.id]: true,
-				[secondaryMasterKey.id]: false,
-			});
+		await waitFor(() => {
+			const keys = hook.result.current.masterPasswordKeys;
+			expect(keys[activeMasterKey.id]).toBe(true);
+			expect(keys[secondaryMasterKey.id]).toBe(false);
+		});
+
+		expect(hook.result.current.masterPasswordKeys).toMatchObject({
+			[activeMasterKey.id]: true,
+			[secondaryMasterKey.id]: false,
 		});
 
 		// Same password as the master password but fails to decrypt: Should not be marked
@@ -78,11 +84,16 @@ describe('EncryptionConfigScreen/utils', () => {
 				[secondaryMasterKey.id]: 'primary',
 			},
 		});
-		await hook.waitFor(() => {
-			expect(hook.result.current.masterPasswordKeys).toMatchObject({
-				[activeMasterKey.id]: true,
-				[secondaryMasterKey.id]: false,
-			});
+
+		await waitFor(() => {
+			const keys = hook.result.current.masterPasswordKeys;
+			expect(keys[activeMasterKey.id]).toBe(true);
+			expect(keys[secondaryMasterKey.id]).toBe(false);
+		});
+
+		expect(hook.result.current.masterPasswordKeys).toMatchObject({
+			[activeMasterKey.id]: true,
+			[secondaryMasterKey.id]: false,
 		});
 	});
 });

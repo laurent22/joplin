@@ -79,6 +79,8 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'@react-native-documents/picker': emptyLibraryMock,
 				'react-native-exit-app': emptyLibraryMock,
 				'expo-camera': emptyLibraryMock,
+				'expo-image-manipulator': emptyLibraryMock,
+				'react-native-nitro-modules': emptyLibraryMock,
 				'react-native-vector-icons/MaterialCommunityIcons': throwOnLoadLibraryMock,
 
 				// Workaround for applying serviceworker types to a single file.

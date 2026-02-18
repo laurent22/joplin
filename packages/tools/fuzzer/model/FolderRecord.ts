@@ -1,5 +1,6 @@
 import { strict as assert } from 'node:assert';
-import type { FolderData, ItemId } from '../types';
+import type { FolderData, ItemId } from './types';
+import Serializable, { BaseSchema } from './Serializable';
 
 export type ShareRecord = {
 	email: string;
@@ -7,8 +8,8 @@ export type ShareRecord = {
 };
 
 interface InitializationOptions extends FolderData {
-	childIds: ItemId[];
-	sharedWith: ShareRecord[];
+	childIds: readonly ItemId[];
+	sharedWith: readonly ShareRecord[];
 	isShared: boolean;
 	// Email of the Joplin Server account that controls the item
 	ownedByEmail: string;
@@ -18,19 +19,33 @@ const validateId = (id: string) => {
 	return !!id.match(/^[a-zA-Z0-9]{32}$/);
 };
 
-export default class FolderRecord implements FolderData {
+const schema = {
+	isFolder: 'boolean',
+	parentId: 'id',
+	id: 'id',
+	title: 'string',
+	ownedByEmail: 'string',
+	childIds: 'id[]',
+	isShared: 'boolean',
+	sharedWith: [
+		{ email: 'string', readOnly: 'boolean' },
+		'...',
+	],
+} satisfies BaseSchema;
+
+export default class FolderRecord extends Serializable<typeof schema> implements FolderData {
 	public readonly parentId: ItemId;
 	public readonly id: ItemId;
 	public readonly title: string;
 	public readonly ownedByEmail: string;
-	public readonly childIds: ItemId[];
+	public readonly childIds: readonly ItemId[];
 
-	// Only valid for root folders. Note that a separate isShared_ is needed
-	// because Joplin folders can be 'shared' even if there are no share recipients.
 	private readonly isShared_: boolean;
-	private readonly sharedWith_: ShareRecord[];
+	private readonly sharedWith_: readonly ShareRecord[];
 
 	public constructor(options: InitializationOptions) {
+		super(schema);
+
 		this.parentId = options.parentId;
 		this.id = options.id;
 		this.title = options.title;
@@ -46,6 +61,24 @@ export default class FolderRecord implements FolderData {
 		if (!validateId(this.id)) {
 			throw new Error(`Invalid ID: ${this.id}`);
 		}
+	}
+
+	public static fromSerialized(serialized: unknown) {
+		const data = this.deserialize(schema, serialized);
+		return new FolderRecord(data);
+	}
+
+	public serialize() {
+		return {
+			isFolder: true,
+			parentId: this.parentId,
+			id: this.id,
+			title: this.title,
+			ownedByEmail: this.ownedByEmail,
+			childIds: [...this.childIds],
+			sharedWith: [...this.sharedWith_],
+			isShared: this.isShared_,
+		};
 	}
 
 	public get shareRecipients() {
@@ -65,7 +98,7 @@ export default class FolderRecord implements FolderData {
 	}
 
 	public get isRootSharedItem() {
-		return this.isShared_;
+		return this.isShared_ && this.parentId === '';
 	}
 
 	public isSharedWith(email: string) {
@@ -99,7 +132,7 @@ export default class FolderRecord implements FolderData {
 		});
 	}
 
-	public withChildren(childIds: ItemId[]) {
+	public withChildren(childIds: readonly ItemId[]) {
 		return new FolderRecord({
 			...this.metadata_,
 			childIds: [...childIds],
@@ -120,6 +153,26 @@ export default class FolderRecord implements FolderData {
 		);
 	}
 
+	private withShareState_(isShared: boolean, shareState: readonly ShareRecord[]) {
+		return new FolderRecord({
+			...this.metadata_,
+			isShared,
+			sharedWith: [...shareState],
+		});
+	}
+
+	public withShareOwner(email: string) {
+		if (email === this.ownedByEmail) return this;
+
+		const sharedWith = this.metadata_.sharedWith.filter(recipient => recipient.email !== email);
+		return new FolderRecord({
+			...this.metadata_,
+			sharedWith: sharedWith,
+			isShared: sharedWith.length > 0,
+			ownedByEmail: email,
+		});
+	}
+
 	public withShared(recipientEmail: string, readOnly: boolean) {
 		if (this.isSharedWith(recipientEmail) && this.isReadOnlySharedWith(recipientEmail) === readOnly) {
 			return this;
@@ -129,14 +182,10 @@ export default class FolderRecord implements FolderData {
 			throw new Error('Cannot share non-top-level folder');
 		}
 
-		return new FolderRecord({
-			...this.metadata_,
-			isShared: true,
-			sharedWith: [
-				...this.sharedWith_.filter(record => record.email !== recipientEmail),
-				{ email: recipientEmail, readOnly },
-			],
-		});
+		return this.withShareState_(true, [
+			...this.sharedWith_.filter(record => record.email !== recipientEmail),
+			{ email: recipientEmail, readOnly },
+		]);
 	}
 
 	public withRemovedFromShare(recipientEmail: string) {
@@ -144,10 +193,11 @@ export default class FolderRecord implements FolderData {
 			return this;
 		}
 
-		return new FolderRecord({
-			...this.metadata_,
-			sharedWith: this.sharedWith_.filter(record => record.email !== recipientEmail),
-		});
+		return this.withShareState_(
+			// Even if no users are present in the share, Joplin still considers the folder to be shared
+			this.isShared_,
+			this.sharedWith_.filter(record => record.email !== recipientEmail),
+		);
 	}
 
 	public withUnshared() {
@@ -155,10 +205,6 @@ export default class FolderRecord implements FolderData {
 			return this;
 		}
 
-		return new FolderRecord({
-			...this.metadata_,
-			sharedWith: [],
-			isShared: false,
-		});
+		return this.withShareState_(false, []);
 	}
 }

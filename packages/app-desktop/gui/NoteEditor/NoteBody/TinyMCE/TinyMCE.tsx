@@ -294,6 +294,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
 					pasteAsText: () => editor.fire(TinyMceEditorEvents.PasteAsText),
+
+					'editor.undo': () => {
+						editor.undoManager.undo();
+					},
+					'editor.redo': () => {
+						editor.undoManager.redo();
+					},
 				};
 
 				if (additionalCommands[cmd.name]) {

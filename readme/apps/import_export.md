@@ -53,8 +53,8 @@ This requires Joplin >= v3.5.1 and a OneNote notebook stored on OneDrive. This a
 2. Click on "Show all notebooks". This should open a OneDrive page.
 3. On OneDrive, go to "My Files" and download the folder containing the OneNote notebooks. This should download a ZIP file.
 	- Right-click on the folder, then click "download". (Move the OneNote notebooks to a new folder, if necessary).
-3. Follow the instructions to download the backup. It should be a ZIP file.
-4. Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
+4. Follow the instructions to download the backup. It should be a ZIP file.
+5. Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
 
 #### Importing from the OneNote Windows desktop app
 

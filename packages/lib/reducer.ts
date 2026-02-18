@@ -146,6 +146,8 @@ export interface State extends WindowState {
 	screens: any;
 	historyCanGoBack: boolean;
 	syncStarted: boolean;
+	syncPending: boolean;
+	showQuitSyncDialog: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	searchResults: ProcessResultsRow[];
@@ -200,6 +202,8 @@ export const defaultState: State = {
 	screens: {},
 	historyCanGoBack: false,
 	syncStarted: false,
+	syncPending: false,
+	showQuitSyncDialog: false,
 	syncReport: {},
 	searchQuery: '',
 	searchResults: [],
@@ -1124,6 +1128,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				const newSettings = { ...draft.settings };
 				newSettings[action.key] = action.value;
 				draft.settings = newSettings;
+
+				// Reset the sync pending status when the user updates the sync target, because if the sync target has changed then the "dirty"
+				// state is no longer relevant
+				if (action.key === 'sync.target') {
+					draft.syncPending = false;
+				}
 			}
 			break;
 
@@ -1424,6 +1434,18 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SYNC_COMPLETED':
 			draft.syncStarted = false;
+			break;
+
+		case 'SYNC_PENDING_UPDATE':
+			draft.syncPending = action.value;
+			break;
+
+		case 'QUIT_SYNC_DIALOG_OPEN':
+			draft.showQuitSyncDialog = true;
+			break;
+
+		case 'QUIT_SYNC_DIALOG_CLOSE':
+			draft.showQuitSyncDialog = false;
 			break;
 
 		case 'SYNC_REPORT_UPDATE':

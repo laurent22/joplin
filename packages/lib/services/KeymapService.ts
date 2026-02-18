@@ -73,6 +73,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+T', command: 'newTodo' },
 		{ accelerator: 'Ctrl+S', command: 'synchronize' },
 		{ accelerator: 'Ctrl+Q', command: 'quit' },
+		{ accelerator: 'Ctrl+W', command: 'closeWindow' },
 		{ accelerator: 'Ctrl+C', command: 'textCopy' },
 		{ accelerator: 'Ctrl+X', command: 'textCut' },
 		{ accelerator: 'Ctrl+V', command: 'textPaste' },

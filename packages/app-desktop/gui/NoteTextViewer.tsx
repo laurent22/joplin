@@ -58,6 +58,17 @@ const usePluginMessageResponder = (webviewRef: RefObject<HTMLIFrameElement>) => 
 	}, [webviewRef, windowId]);
 };
 
+const useAllowAttribute = () => {
+	// Specifies what content in the note viewer can do. See
+	// https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/allow
+	// allow=fullscreen: Required to allow the user to fullscreen videos.
+	return [
+		'clipboard-write', 'fullscreen', 'autoplay', 'local-fonts', 'encrypted-media',
+	].map(
+		attr => `${attr} joplin-content://note-viewer/`,
+	).join('; ');
+};
+
 const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerControl>) => {
 	const [webview, setWebview] = useState<HTMLIFrameElement|null>(null);
 	const webviewRef = useRef<HTMLIFrameElement|null>(null);
@@ -75,7 +86,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 		const result: NoteViewerControl = {
 			domReady: () => domReadyRef.current,
 			setHtml: (html: string, options: SetHtmlOptions) => {
-				const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
+				const protocolHandler = bridge().electronApp().getContentProtocolHandler();
 
 				// Grant & remove asset access.
 				if (options.pluginAssets) {
@@ -233,14 +244,13 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 		return { border: 'none', ...props.viewerStyle };
 	}, [props.viewerStyle]);
 
-	// allow=fullscreen: Required to allow the user to fullscreen videos.
+	const allow = useAllowAttribute();
 	return (
 		<iframe
 			className="noteTextViewer"
 			ref={setWebview}
 			style={viewerStyle}
-			allow='clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=(self) encrypted-media=(self)'
-			allowFullScreen={true}
+			allow={allow}
 			aria-label={_('Note viewer')}
 			src={`joplin-content://note-viewer/${toForwardSlashes(getAssetPath('gui/note-viewer/index.html'))}`}
 		></iframe>

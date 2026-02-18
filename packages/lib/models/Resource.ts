@@ -444,7 +444,11 @@ export default class Resource extends BaseItem {
 		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
 	}
 
-	public static async duplicateResource(resourceId: string): Promise<ResourceEntity> {
+	public static async duplicateResource(
+		resourceId: string,
+		// Overrides property values in the duplicate resource.
+		propertyOverrides: ResourceEntity = {},
+	): Promise<ResourceEntity> {
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 
@@ -452,7 +456,10 @@ export default class Resource extends BaseItem {
 		delete newResource.id;
 		delete newResource.is_shared;
 		delete newResource.share_id;
-		newResource = await Resource.save(newResource);
+		newResource = await Resource.save({
+			...newResource,
+			...propertyOverrides,
+		});
 
 		const newLocalState = { ...localState };
 		newLocalState.resource_id = newResource.id;

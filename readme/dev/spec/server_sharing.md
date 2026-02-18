@@ -23,7 +23,7 @@ On the server, a service is running at regular interval to check the `share_id` 
 
 Technically, the server would only need to know the root shared folder, and from that can be find out its children. This approach was tried but it makes the system much more complex because some information is lost after sync - in particular when notes or notebooks are moved out of folders, when resources are attached or removed, etc. Keeping track of all this is possible but complex and inefficient.
 
-On the other hand, all that information is present on the client. Whenever a notes is moved out a shared folder, or whenever a resources is attached, the changes are tracked, and that can be used to easily assign a `share_id` property. Once this is set, it makes the whole system more simple and reliable.
+On the other hand, all that information is present on the client. Whenever a note is moved out of a shared folder, or whenever a resource is attached, the changes are tracked, and that can be used to easily assign a `share_id` property. Once this is set, it makes the whole system more simple and reliable.
 
 ### When are changes to `share_id` synced?
 
@@ -55,6 +55,6 @@ Any linked note will **not** be shared, due to the following reasons:
 
 ### Multiple share links for a given note
 
-It should be possible to have multiple share links for a given note. For example: I share a note with one person, then the same note with a different person. I revoke the share for one person, but I sill want the other person to access the note.
+It should be possible to have multiple share links for a given note. For example: I share a note with one person, then the same note with a different person. I revoke the share for one person, but I still want the other person to access the note.
 
 So when a share link is created for a note, the API always returns a new link.

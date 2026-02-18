@@ -84,6 +84,7 @@ const emptyMockPackages = [
 	'@joplin/react-native-saf-x',
 	'expo-av',
 	'expo-av/build/Audio',
+	'expo-image-manipulator',
 ];
 for (const packageName of emptyMockPackages) {
 	jest.doMock(packageName, () => {
@@ -130,7 +131,7 @@ mockIconLibrary('@react-native-vector-icons/fontawesome5', 'FontAwesome5');
 // Use a temporary folder instead.
 const tempDirectoryPath = path.join(tmpdir(), `appmobile-test-${uuid.createNano()}`);
 
-jest.doMock('react-native-fs', () => {
+jest.doMock('@dr.pogodin/react-native-fs', () => {
 	return {
 		CachesDirectoryPath: tempDirectoryPath,
 	};

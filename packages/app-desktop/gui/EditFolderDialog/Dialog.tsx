@@ -145,6 +145,7 @@ export default function(props: Props) {
 								title={_('Select emoji...')}
 								icon={folderIcon}
 								onChange={onFolderIconChange}
+								themeId={props.themeId}
 							/>
 							<Button ml={1} title={_('Select file...')} onClick={onBrowseClick}/>
 							{ folderIcon && <Button ml={1} title={_('Clear')} onClick={onClearClick}/> }

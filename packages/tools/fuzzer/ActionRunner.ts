@@ -1,6 +1,7 @@
-import Client from './Client';
-import ClientPool from './ClientPool';
-import { assertIsFolder, assertIsNote, FuzzContext, ItemId, RandomFolderOptions, ResourceData } from './types';
+import Client from './ipc/Client';
+import ClientPool from './ipc/ClientPool';
+import { FuzzContext, RandomFolderOptions } from './types';
+import { assertIsFolder, assertIsNote, ItemId, ResourceData } from './model/types';
 import { strict as assert } from 'assert';
 import Logger from '@joplin/utils/Logger';
 import retryWithCount from './utils/retryWithCount';
@@ -293,6 +294,8 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		await client.createNote({
 			...note,
 			id: newNoteId,
+			// When duplicated, notes are no longer published:
+			published: false,
 		});
 		return true;
 	}, {
@@ -389,7 +392,7 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	addAction('moveFolderToToplevel', async ({ folderId }) => {
 		if (!folderId) return false;
 
-		await client.deleteFolder(folderId);
+		await client.moveItem(folderId, '');
 		return true;
 	}, {
 		folderId: async () => (await client.randomFolder({
@@ -487,24 +490,30 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 	});
 
 	addAction('publishNote', async ({ id }) => {
-		const note = id ? noteById(id) : await client.randomNote({
-			includeReadOnly: true,
-		});
+		const note = noteById(id);
 		if (!note || note.published) return false;
 
 		await client.publishNote(note.id);
 		return true;
-	}, {
-		id: undefinedId,
-	});
+	}, { id: selectOrCreateWriteableNote });
 
 	addAction('unpublishNote', async ({ id }) => {
-		const note = id ? noteById(id) : await client.randomNote({ includeReadOnly: true });
-		if (!note || !note.published) return false;
+		if (!id) return false;
+
+		const note = noteById(id);
+		assert.ok(note.published, 'can only unpublish published notes');
 
 		await client.unpublishNote(note.id);
 		return true;
-	}, { id: undefinedId });
+	}, {
+		id: async () => {
+			const note = await client.randomNote({
+				includeReadOnly: false,
+				filter: (note) => note.published,
+			});
+			return note?.id;
+		},
+	});
 
 	addAction('sync', async () => {
 		await client.sync();

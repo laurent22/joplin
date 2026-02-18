@@ -263,7 +263,7 @@ Use the provided escape functions in `lib/markdownUtils`:
 
 - `escapeTableCell()` for tables
 - `escapeInlineCode()` for inline code
-- `escapeTitleText()`and `escapeLinkUrl()` for links:
+- `escapeTitleText()` and `escapeLinkUrl()` for links:
 
 ```ts
 const markdown = `[${markdownUtils.escapeTitleText(linkTitle)}](${markdownUtils.escapeLinkUrl(linkUrl)})`;
@@ -384,7 +384,7 @@ We use `snake_case` for table names and column names.
 
 ### Everything is NOT NULL
 
-All columns should be defined as `NOT NULL`, possibly with a default value (but see below). This helps keeping queries more simple as we don't have to do check for both `NULL` and `0` or empty string.
+All columns should be defined as `NOT NULL`, possibly with a default value (but see below). This helps keeping queries more simple as we don't have to check for both `NULL` and `0` or empty string.
 
 ### Use defaults sparingly
 
@@ -392,7 +392,7 @@ Don't automatically give a default value to a column - in many cases it's better
 
 ### Use an integer for enum-like values
 
-If a column can be set to a fixed number of values, please set the type to integer. In code, you would then have a TypeScript enum that defines what each values is for. For example:
+If a column can be set to a fixed number of values, please set the type to integer. In code, you would then have a TypeScript enum that defines what each value is for. For example:
 
 ```typescript
 export enum Action {
@@ -447,11 +447,11 @@ const data = await service.readConfig('/path/to/file.json');
 expect(data.version).toBe(1);
 ```
 
-### Avoid spying on method
+### Avoid spying on methods
 
 In unit testing, spying means creating a mock function (a spy) for a specific method of an object.
 
-Like mock objects, spies should be avoided whenever possible because they usually test implementation details that may change in the future. And having many spies makes refactoring difficult since we need to update tests that should not have been broken to being with, since the input and output of the algorithm hasn't changed.
+Like mock objects, spies should be avoided whenever possible because they usually test implementation details that may change in the future. And having many spies makes refactoring difficult since we need to update tests that should not have been broken to begin with, since the input and output of the algorithm hasn't changed.
 
 This is not a hard rule as spies are sometimes useful, but it should only be used when there's no other option.
 
@@ -490,7 +490,7 @@ We aren't using these guides, but they may still be helpful!
 * [TypeScript Deep Dive — Style Guide](https://basarat.gitbook.io/typescript/styleguide)
 * [Google TypeScript style guide](https://google.github.io/styleguide/tsguide.html)
 	* See also [`ts.dev`'s style guide](https://ts.dev/style/#function-expressions), which is based on the Google style guide.
-* [Javascript standardstyle](https://standardjs.com/rules.html)
+* [JavaScript Standard Style](https://standardjs.com/rules.html)
 
 ### Posts/resources related to Joplin's style
 

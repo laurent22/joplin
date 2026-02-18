@@ -145,6 +145,7 @@ async function main() {
 	await updatePackageVersion(`${rootDir}/packages/default-plugins/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/editor/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/transcribe/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/whisper-voice-typing/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {
 		await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);
