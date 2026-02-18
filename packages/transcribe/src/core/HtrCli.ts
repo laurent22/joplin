@@ -1,6 +1,7 @@
 import Logger from '@joplin/utils/Logger';
 import { commandToString, execCommand } from '@joplin/utils';
 import { WorkHandler } from '../types';
+import { basename } from 'path';
 
 const logger = Logger.create('HtrCli');
 
@@ -26,6 +27,12 @@ export default class HtrCli implements WorkHandler {
 
 	public async run(imageName: string) {
 		logger.info('Running transcription...');
+
+		// Sanitize imageName to prevent path traversal attacks
+		const sanitizedImageName = basename(imageName);
+		if (sanitizedImageName !== imageName || imageName.includes('..')) {
+			throw new Error(`Invalid image name: ${imageName}`);
+		}
 
 		const command = this.buildCommand(imageName);
 

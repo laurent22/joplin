@@ -18,15 +18,17 @@ wget -O ./data/transcribe-models/mmproj-model-f16.gguf https://huggingface.co/op
 
 1. Copy `.env-transcribe-sample` to your Docker configuration directory.
 2. Rename it to `.env-transcribe`.
-3. Set `HTR_CLI_MODELS_FOLDER` to the full path of your models directory.
 
 ### 3. Run the server
+
+The models directory on your host is mounted into the container at `/opt/models`. The `HTR_CLI_MODELS_FOLDER` environment variable refers to the path inside the container, not the host path.
 
 ```shell
 docker build -f ./Dockerfile.transcribe -t transcribe .
 docker run --env-file .env-transcribe -p 4567:4567 \
 	-v ./packages/transcribe/images:/app/packages/transcribe/images \
 	-v ./data/transcribe-models:/opt/models:ro \
+	-e HTR_CLI_MODELS_FOLDER=/opt/models \
 	transcribe
 ```
 
