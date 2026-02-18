@@ -39,8 +39,6 @@ function removeAdjacentFolderDuplicates(items: any[]) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 function removeLatestFolderIfSelected(items: any[], route: any) {
-	// Fix the case where after deletion, the currently selected folder is also the latest in history
-	// Notes are not relevant for this scenario, because both note and folder deletion redirects to a folder rather than a note on mobile
 	if (items.length && route.routeName === 'Notes' && items[items.length - 1].folderId === route.folderId) {
 		items.splice(items.length - 1, 1);
 	}
@@ -166,7 +164,11 @@ const appReducer = (state = appDefaultState, action: any) => {
 			{
 				let newNavHistory = navHistory.filter(route => !(route.routeName === 'Note' && route.noteId === action.id));
 				newNavHistory = removeAdjacentNoteDuplicates(newNavHistory);
+
+				// Fix the case where after deletion, the currently selected folder is also the latest in history
+				// Notes are not relevant for this scenario, because both note and folder deletion redirects to a folder rather than a note on mobile
 				removeLatestFolderIfSelected(newNavHistory, state.route);
+				
 				navHistory.splice(0, navHistory.length, ...newNavHistory);
 			}
 			break;
