@@ -251,3 +251,5 @@ codegen
 analyzed
 Perfetto
 appmodules
+mtmd
+gguf

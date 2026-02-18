@@ -2,15 +2,15 @@
 
 ## Configure Docker for Transcribe
 
+The transcribe server embeds the llama.cpp binary and AI models directly in the Docker image. This simplifies deployment and improves security by eliminating the need for Docker-in-Docker.
+
 1. Copy `.env-transcribe-sample` to your Docker configuration directory.
 2. Rename it to `.env-transcribe`.
-3. Set `HTR_CLI_IMAGES_FOLDER` to the full path of the folder where images will be stored. This folder must be outside the Docker container.
-4. Test the server with the default configuration:
+3. Test the server with the default configuration:
 
 ```shell
 docker build -f ./Dockerfile.transcribe -t transcribe .
 docker run --env-file .env-transcribe -p 4567:4567 \
-	-v /var/run/docker.sock:/var/run/docker.sock \
 	-v ./packages/transcribe/images:/app/packages/transcribe/images \
 	transcribe
 ```
@@ -28,6 +28,15 @@ The minimal configuration is provided in `.env-sample` and `docker-compose.serve
    ```
 
 For advanced configuration, refer to `.env-sample-transcribe`.
+
+## Security
+
+The transcribe container runs with these security measures:
+
+- **Non-root user**: The application runs as the `transcribe` user, not root
+- **Read-only filesystem**: The container filesystem is read-only (only `/app/packages/transcribe/images` and `/tmp` are writable)
+- **Resource limits**: Memory and CPU limits prevent runaway processes
+- **No Docker socket**: Unlike previous versions, no Docker socket mount is required
 
 ---
 
@@ -56,8 +65,23 @@ The queue driver can be **SQLite** or **PostgreSQL**:
 From `packages/transcribe`, run:
 
 ```shell
-npm run start
+yarn start
 ```
+
+### Running with Docker mode (development)
+
+For development, you can still use the Docker-based htr-cli if you prefer. Set these environment variables:
+
+- `HTR_CLI_DOCKER_IMAGE`: Docker image for transcription (e.g., `joplin/htr-cli:latest`)
+- Leave `HTR_CLI_BINARY_PATH` and `HTR_CLI_MODELS_FOLDER` empty
+
+### Running with native binary (production)
+
+In production (the default in the Docker image), the embedded llama.cpp binary is used:
+
+- `HTR_CLI_BINARY_PATH`: Path to the llama-mtmd-cli binary
+- `HTR_CLI_MODELS_FOLDER`: Path to the models directory
+- `HTR_CLI_IMAGES_FOLDER`: Path where uploaded images are stored
 
 ---
 

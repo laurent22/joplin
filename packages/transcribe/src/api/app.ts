@@ -34,7 +34,12 @@ const init = async (logger: LoggerWrapper) => {
 	app.context.queue = queue;
 	app.context.storage = fileStorage;
 
-	const htrCli = new HtrCli(envVariables.HTR_CLI_DOCKER_IMAGE, envVariables.HTR_CLI_IMAGES_FOLDER);
+	const htrCli = new HtrCli({
+		htrCliImagesFolder: envVariables.HTR_CLI_IMAGES_FOLDER,
+		binaryPath: envVariables.HTR_CLI_BINARY_PATH || undefined,
+		modelsFolder: envVariables.HTR_CLI_MODELS_FOLDER || undefined,
+		htrCliDockerImage: envVariables.HTR_CLI_DOCKER_IMAGE || undefined,
+	});
 
 	const jobProcessor = new JobProcessor(queue, htrCli, fileStorage);
 

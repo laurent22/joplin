@@ -8,6 +8,8 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_MAINTENANCE_INTERVAL: 60 * Second,
 	HTR_CLI_DOCKER_IMAGE: 'joplin/htr-cli:latest',
 	HTR_CLI_IMAGES_FOLDER: '',
+	HTR_CLI_BINARY_PATH: '', // Path to native llama-mtmd-cli binary (embedded mode)
+	HTR_CLI_MODELS_FOLDER: '', // Path to models directory (embedded mode)
 	QUEUE_DRIVER: 'pg', // 'sqlite'
 	QUEUE_DATABASE_PASSWORD: '',
 	QUEUE_DATABASE_NAME: '',
@@ -27,6 +29,8 @@ export interface EnvVariables {
 	QUEUE_MAINTENANCE_INTERVAL: number;
 	HTR_CLI_DOCKER_IMAGE: string;
 	HTR_CLI_IMAGES_FOLDER: string;
+	HTR_CLI_BINARY_PATH: string;
+	HTR_CLI_MODELS_FOLDER: string;
 	QUEUE_DRIVER: string;
 	QUEUE_DATABASE_PASSWORD: string;
 	QUEUE_DATABASE_NAME: string;
