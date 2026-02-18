@@ -81,6 +81,8 @@ import useKeyboardState from '../../../utils/hooks/useKeyboardState';
 import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
 import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
+import TextWrapCalculator from '../Notes/TextWrapCalculator';
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -159,6 +161,8 @@ interface State {
 
 	showSpeechToTextDialog: boolean;
 	multiline: boolean;
+	showMultilineToggle: boolean | null;
+	titleContainerWidth: number;
 }
 
 type ScrollEventSlice = { fraction: number };
@@ -234,6 +238,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 			showSpeechToTextDialog: false,
 			multiline: false,
+			showMultilineToggle: null,
+			titleContainerWidth: 0,
 		};
 
 		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
@@ -335,6 +341,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.properties_onPress = this.properties_onPress.bind(this);
+		this.revealInNotebook_onPress = this.revealInNotebook_onPress.bind(this);
 		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
@@ -750,11 +757,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	private title_changeText(text: string) {
 		let newText = text;
-		if (Platform.OS !== 'web') {
-			// Manipulating the underlying text inside of onChangeText causes issues with the cursor position jumping to the end while typing
-			// when the Web app is being used on a desktop OS, so providing a toggle to expand the title field can only be done on mobile platforms
-			newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
-		}
+		newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
 		shared.noteComponent_change(this, 'title', newText);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
@@ -1140,6 +1143,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
+	private revealInNotebook_onPress() {
+		const folderId = this.state.folder?.id;
+		if (folderId) {
+			void NavService.go('Notes', { folderId: folderId });
+		} else {
+			void NavService.go('Notes', { smartFilterId: ALL_NOTES_FILTER_ID });
+		}
+	}
+
 	public async onAlarmDialogAccept(date: Date) {
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
@@ -1388,6 +1400,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				},
 			});
 		}
+
+		output.push({
+			title: _('Reveal in notebook'),
+			onPress: () => {
+				this.revealInNotebook_onPress();
+			},
+		});
 
 		if (isDeleted) {
 			output.push({
@@ -1750,7 +1769,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const dueDate = Note.dueDateObject(note);
 
-		const titleToggleButton = Platform.OS === 'web' ? null :
+		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
+			this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline });
+		};
+
+		const titleToggleButton = !this.state.showMultilineToggle ? null :
 			<IconButton
 				icon={(!this.state.multiline && 'menu-down') || (this.state.multiline && 'menu-up')}
 				accessibilityLabel={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
@@ -1760,7 +1783,23 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			/>;
 
 		const titleComp = (
-			<View style={titleContainerStyle}>
+			<View
+				style={titleContainerStyle}
+				onLayout={(e) => {
+					const width = e.nativeEvent.layout.width;
+					if (width !== this.state.titleContainerWidth) {
+						this.setState({ titleContainerWidth: width });
+					}
+				}}
+			>
+				<TextWrapCalculator
+					textCompStyle={this.styles().titleTextInput}
+					textCompContainerWidth={this.state.titleContainerWidth}
+					showMultilineToggle={this.state.showMultilineToggle}
+					multiline={this.state.multiline}
+					text={note.title}
+					updateState={textWrapCalculator_updateState}
+				/>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
 					key={this.state.multiline ? 'multiLine' : 'singleLine'}

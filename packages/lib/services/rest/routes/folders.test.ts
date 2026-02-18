@@ -1,12 +1,12 @@
 import Note from '../../../models/Note';
 import Api, { RequestMethod } from '../Api';
-import { setupDatabase, switchClient } from '../../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import Folder from '../../../models/Folder';
 
 describe('routes/folders', () => {
 
 	beforeEach(async () => {
-		await setupDatabase(1);
+		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
 

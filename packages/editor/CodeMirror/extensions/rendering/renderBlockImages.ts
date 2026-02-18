@@ -42,18 +42,20 @@ class ImageWidget extends WidgetType {
 		private readonly alt_: string,
 		private readonly reloadCounter_ = 0,
 		private readonly width_: string | null = null,
+		private readonly sourceFrom_ = 0,
 	) {
 		super();
 	}
 
 	public eq(other: ImageWidget) {
-		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_ && this.width_ === other.width_;
+		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_ && this.width_ === other.width_ && this.sourceFrom_ === other.sourceFrom_;
 	}
 
 	public updateDOM(dom: HTMLElement): boolean {
 		const image = dom.querySelector<HTMLImageElement>('img.image');
 		if (!image) return false;
 
+		dom.dataset.sourceFrom = String(this.sourceFrom_);
 		image.ariaLabel = this.alt_;
 		image.role = 'image';
 
@@ -102,6 +104,7 @@ class ImageWidget extends WidgetType {
 	public toDOM(_view: EditorView) {
 		const container = document.createElement('div');
 		container.classList.add(imageClassName);
+		container.dataset.sourceFrom = String(this.sourceFrom_);
 
 		const image = document.createElement('img');
 		image.classList.add('image');
@@ -232,7 +235,7 @@ const renderBlockImages = (context: RenderedContentContext) => [
 					if (src) {
 						const isLastLine = lineTo.number === state.doc.lines;
 						return Decoration.widget({
-							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, width),
+							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, width, lineFrom.from),
 							// "side: -1": In general, when the cursor is at the widget's location, it should be at
 							// the start of the next line (and so "side" should be -1).
 							//
