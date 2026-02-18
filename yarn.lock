@@ -11121,7 +11121,7 @@ __metadata:
     bulma: "npm:1.0.4"
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.19"
-    formidable: "npm:3.5.4"
+    formidable: "patch:formidable@npm%3A3.5.4#~/.yarn/patches/formidable-npm-3.5.4-a3473998f7.patch"
     fs-extra: "npm:11.3.2"
     gulp: "npm:4.0.2"
     html-entities: "npm:1.4.0"
@@ -29879,15 +29879,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formidable@npm:^2.0.1":
-  version: 2.1.5
-  resolution: "formidable@npm:2.1.5"
+"formidable@patch:formidable@npm%3A3.5.4#~/.yarn/patches/formidable-npm-3.5.4-a3473998f7.patch":
+  version: 3.5.4
+  resolution: "formidable@patch:formidable@npm%3A3.5.4#~/.yarn/patches/formidable-npm-3.5.4-a3473998f7.patch::version=3.5.4&hash=cd4d81"
   dependencies:
     "@paralleldrive/cuid2": "npm:^2.2.2"
     dezalgo: "npm:^1.0.4"
     once: "npm:^1.4.0"
-    qs: "npm:^6.11.0"
-  checksum: 10/ee96de12e91d63fe86479ffe5bf59004bb3f43e00ce7ccecd1b1ff10b5d1a89a19b1ede727e1fe57ef596c377b9f9300212a5f7bab14fd28f3c4ffe12dbb4cc7
+  checksum: 10/1d9034ab7fbae4e87932f25ea4b0f388d490b4ed3b020a12d03d46276dadd2d7978969d2a726b1fe958607d6e644f9cf72282784d962fd21156e5a2e90213a84
   languageName: node
   linkType: hard
 
