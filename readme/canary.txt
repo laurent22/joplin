@@ -12,11 +12,11 @@ Statement date above, it should be considered expired.
 
 As of the Statement date:
 
-- - No National Security Letters have been received.
-- - No orders under the USA PATRIOT Act have been received.
-- - No orders under the Foreign Intelligence Surveillance Act have been received.
-- - No government requests have been received that are accompanied by a gag order.
-- - No law enforcement or government agency has required the introduction of backdoors into Joplin.
+* No National Security Letters have been received.
+* No orders under the USA PATRIOT Act have been received.
+* No orders under the Foreign Intelligence Surveillance Act have been received.
+* No government requests have been received that are accompanied by a gag order.
+* No law enforcement or government agency has required the introduction of backdoors into Joplin.
 
 If any such order is received, and we are legally permitted to do so,
 this statement will be updated accordingly. If we are not legally
@@ -29,18 +29,18 @@ https://github.com/laurent22/joplin/blob/dev/Assets/keys/joplin-canary-signing-k
 
 To prevent backdating, this statement includes current public events:
 
-Current public events:
+Current international events:
 
-1. Excruciating tropical disease can now be transmitted in most of Europe, study finds
-2. Philippine vice-president Sara Duterte announces 2028 presidential bid
+1. Philippine vice-president Sara Duterte announces 2028 presidential bid
+2. African football chief ‘occupying seat illegally’ and must go, says leading executive
 
 Canary signing key fingerprint:
 
-ABCD 1234 EFGH 5678 IJKL  9012 MNOP 3456 QRST 7890
+F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
 -----BEGIN PGP SIGNATURE-----
 
-iIsEARYKADMWIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaZWSERUcY2FuYXJ5QGpv
-cGxpbmFwcC5vcmcACgkQlGrp+lkV71O0ogEAgMIAvnChB3vLWOTYzRR3Yutui1kG
-JNiIolSyZhk9XowBAJ06Uo5DL4IwG+Sn9UAj5zcFRlls+tQivQpHblBPhqII
-=ffPE
+iIsEARYKADMWIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaZWUBBUcY2FuYXJ5QGpv
+cGxpbmFwcC5vcmcACgkQlGrp+lkV71N8lwEAuRNboHOsr7/GbDjpEhkLrYOtzf2Y
+3uUBB3YBbPabWvEA/RNCb0sUqFaKUT8Zeq/IsoLydsRsLMYUaUP19WIS/rQM
+=UEz2
 -----END PGP SIGNATURE-----
