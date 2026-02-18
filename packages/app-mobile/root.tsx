@@ -225,7 +225,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		void ResourceFetcher.instance().autoAddResources();
 	}
 
-	if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
+	if (['NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 		Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
 	}
 

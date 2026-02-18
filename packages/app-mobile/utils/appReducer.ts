@@ -261,18 +261,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState = { ...state, syncWizardVisible: action.visible };
 			break;
 
-		case 'NOTE_VISIBLE_PANES_TOGGLE':
-			{
-				const panes = Array.isArray(state.noteVisiblePanes) && state.noteVisiblePanes.length
-					? state.noteVisiblePanes
-					: ['viewer'];
-				newState = {
-					...state,
-					noteVisiblePanes: panes.includes('editor') ? ['viewer'] : ['editor'],
-				};
-			}
-			break;
-
 		case 'NOTE_VISIBLE_PANES_SET':
 			newState = {
 				...state,
