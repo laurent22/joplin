@@ -1,5 +1,6 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import Resource from '@joplin/lib/models/Resource';
+import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
 import { ResourceOcrStatus } from '@joplin/lib/services/database/types';
@@ -67,7 +68,7 @@ export const runtime = (): CommandRuntime => {
 			if (!outputPath) return;
 
 			try {
-				await shim.createAccessiblePdf(resourcePath, ocrDetails, outputPath);
+				await shim.createAccessiblePdf(resourcePath, ocrDetails, outputPath, Setting.value('tempDir'));
 				await bridge().openItem(outputPath);
 			} catch (error) {
 				logger.error(error);

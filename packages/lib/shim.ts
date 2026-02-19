@@ -422,7 +422,7 @@ const shim = {
 		throw new Error('Not implemented: pdfInfo');
 	},
 
-	createAccessiblePdf: async (_originalPdfPath: string, _ocrDetails: string, _outputPath: string): Promise<void> => {
+	createAccessiblePdf: async (_originalPdfPath: string, _ocrDetails: string, _outputPath: string, _tempDir: string): Promise<void> => {
 		throw new Error('Not implemented: createAccessiblePdf');
 	},
 

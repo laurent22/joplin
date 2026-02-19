@@ -910,14 +910,13 @@ function shimInit(options: ShimInitOptions = null) {
 		return { pageCount: doc.numPages };
 	};
 
-	shim.createAccessiblePdf = async (originalPdfPath: string, ocrDetails: string, outputPath: string): Promise<void> => {
-		const Setting = require('./models/Setting').default;
-		const tempDir = `${Setting.value('tempDir')}/accessible_pdf_${Date.now()}`;
-		await shim.fsDriver().mkdir(tempDir);
+	shim.createAccessiblePdf = async (originalPdfPath: string, ocrDetails: string, outputPath: string, tempDir: string): Promise<void> => {
+		const workDir = `${tempDir}/accessible_pdf_${Date.now()}`;
+		await shim.fsDriver().mkdir(workDir);
 
 		try {
 			// Convert PDF pages to images with dimensions
-			const pageImages = await shim.pdfToImagesWithDimensions(originalPdfPath, tempDir);
+			const pageImages = await shim.pdfToImagesWithDimensions(originalPdfPath, workDir);
 
 			// Read all images into buffers with their dimensions
 			const pageImagesWithBuffers: { buffer: Buffer; width: number; height: number }[] = [];
@@ -936,8 +935,8 @@ function shimInit(options: ShimInitOptions = null) {
 			// Write the output file
 			await writeFile(outputPath, pdfBytes);
 		} finally {
-			// Clean up temp directory
-			await shim.fsDriver().remove(tempDir);
+			// Clean up work directory
+			await shim.fsDriver().remove(workDir);
 		}
 	};
 }
