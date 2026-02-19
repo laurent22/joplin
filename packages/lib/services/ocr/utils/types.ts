@@ -9,7 +9,7 @@ export const emptyRecognizeResult = (): RecognizeResult => {
 	};
 };
 
-export type RecognizeResultBoundingBox = [number, number, number, number]; // x0, y0, x1, y1
+export type RecognizeResultBoundingBox = [number, number, number, number]; // x0, x1, y0, y1
 
 export interface RecognizeResultWord {
 	t: string;

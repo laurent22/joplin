@@ -77,8 +77,6 @@ function addInvisibleTextLayer(
 			if (!text || !text.trim()) continue;
 
 			// Bounding box format from Tesseract: [x0, x1, y0, y1]
-			// (Note: there's a discrepancy in the codebase - the type says [x0, y0, x1, y1]
-			// but the implementation uses [x0, x1, y0, y1])
 			const [x0, , y0, y1] = word.bb;
 
 			// Convert from OCR coordinates (2x scale, origin top-left)

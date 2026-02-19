@@ -4,7 +4,7 @@ import Setting from '../../models/Setting';
 import shim from '../../shim';
 import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
-import { emptyRecognizeResult, PdfOcrDetails, PdfOcrPage, RecognizeResult } from './utils/types';
+import { emptyRecognizeResult, PdfOcrDetails, PdfOcrPage, RecognizeResult, RecognizeResultLine } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
@@ -114,7 +114,12 @@ export default class OcrService {
 
 				if (saveOcrDetails) {
 					// Parse OCR details and combine with page dimensions
-					const pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
+					let pageLines: RecognizeResultLine[] = [];
+					try {
+						pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
+					} catch (error) {
+						logger.warn(`Failed to parse OCR details for page ${pageIndex + 1}: ${error.message}`);
+					}
 					pdfOcrPages.push({
 						width: pageImage.width,
 						height: pageImage.height,
