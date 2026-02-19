@@ -717,6 +717,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (!editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime) {
 				void shared.reloadNote(this);
 				this.refreshKey = this.props.editorNoteReloadTimeRequest;
+
+				// Clear the undo / redo state, as it will no longer work after the note editor has been refreshed
+				this.setState({
+					undoRedoButtonState: {
+						canUndo: false,
+						canRedo: false,
+					},
+				});
 			}
 		}
 
