@@ -1844,7 +1844,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			onUndoButtonPress={this.screenHeader_undoButtonPress}
 			onRedoButtonPress={this.screenHeader_redoButtonPress}
 			showViewToggleButton={!!this.state.note && !this.state.note.deleted_time}
-			viewToggleIconName={this.state.mode === 'edit' ? 'ionicon eye' : 'ionicon create'}
+			viewToggleIconName={this.state.mode === 'edit' ? 'ionicon book' : 'ionicon pencil'}
 			onViewTogglePress={this.toggleVisiblePanes}
 			title={getDisplayParentTitle(this.state.note, this.state.folder)}
 		/>;
