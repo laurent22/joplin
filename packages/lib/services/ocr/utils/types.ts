@@ -28,10 +28,8 @@ export interface RecognizeResult {
 	ocr_error: string;
 }
 
-// PDF OCR details contain per-page information including dimensions and text positions
+// PDF OCR details contain per-page text positions
 export interface PdfOcrPage {
-	width: number;
-	height: number;
 	lines: RecognizeResultLine[];
 }
 

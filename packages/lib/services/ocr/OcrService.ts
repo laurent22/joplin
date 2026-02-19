@@ -101,24 +101,20 @@ export default class OcrService {
 				}
 			}
 
-			// Use pdfToImagesWithDimensions if we need OCR details, otherwise use simpler pdfToImages
-			const imageFilePaths = saveOcrDetails
-				? (await shim.pdfToImagesWithDimensions(resourceFilePath, await this.pdfExtractDir())).map(p => ({ path: p.path, width: p.width, height: p.height }))
-				: (await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir())).map(p => ({ path: p, width: 0, height: 0 }));
+			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
 
 			const results: RecognizeResult[] = [];
 			const pdfOcrPages: PdfOcrPage[] = [];
 
 			try {
 				let pageIndex = 0;
-				for (const pageImage of imageFilePaths) {
-					const imagePath = pageImage.path;
+				for (const imagePath of imageFilePaths) {
 					logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
 					const result = await driver.recognize(language, imagePath, resource.id);
 					results.push(result);
 
 					if (saveOcrDetails) {
-						// Parse OCR details and combine with page dimensions
+						// Parse OCR details for this page
 						let pageLines: RecognizeResultLine[] = [];
 						try {
 							pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
@@ -126,8 +122,6 @@ export default class OcrService {
 							logger.warn(`Failed to parse OCR details for page ${pageIndex + 1}: ${error.message}`);
 						}
 						pdfOcrPages.push({
-							width: pageImage.width,
-							height: pageImage.height,
 							lines: pageLines,
 						});
 					}
@@ -135,8 +129,8 @@ export default class OcrService {
 					pageIndex++;
 				}
 			} finally {
-				for (const pageImage of imageFilePaths) {
-					await shim.fsDriver().remove(pageImage.path);
+				for (const imagePath of imageFilePaths) {
+					await shim.fsDriver().remove(imagePath);
 				}
 			}
 

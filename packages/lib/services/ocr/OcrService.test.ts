@@ -350,7 +350,7 @@ describe('OcrService', () => {
 	it('should throw error for page count mismatch', async () => {
 		const ocrDetails: PdfOcrDetails = {
 			version: 1,
-			pages: [{ width: 100, height: 100, lines: [] }],
+			pages: [{ lines: [] }],
 		};
 
 		await expect(createAccessiblePdf([], JSON.stringify(ocrDetails)))
@@ -364,20 +364,19 @@ describe('OcrService', () => {
 			version: 1,
 			pages: [
 				{
-					width: 200,
-					height: 200,
 					lines: [{ words: [{ t: 'Page1', bb: [10, 60, 10, 30] }] }],
 				},
 				{
-					width: 200,
-					height: 200,
 					lines: [{ words: [{ t: 'Page2', bb: [10, 60, 10, 30] }] }],
 				},
 			],
 		};
 
 		const pdfBytes = await createAccessiblePdf(
-			[jpegBuffer, jpegBuffer],
+			[
+				{ buffer: jpegBuffer, width: 200, height: 200 },
+				{ buffer: jpegBuffer, width: 200, height: 200 },
+			],
 			JSON.stringify(ocrDetails),
 		);
 

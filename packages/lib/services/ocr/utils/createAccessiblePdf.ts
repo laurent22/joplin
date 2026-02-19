@@ -4,6 +4,12 @@ import { PdfOcrDetails, RecognizeResultLine } from './types';
 // The PDF OCR images are created at 2x scale by pdfToImages()
 const OCR_SCALE_FACTOR = 2;
 
+export interface PageImageWithDimensions {
+	buffer: Buffer;
+	width: number;
+	height: number;
+}
+
 // Adds an invisible text layer to a PDF page based on OCR word positions.
 // The text is rendered in "invisible" mode (render mode 3) so it doesn't
 // appear visually but can be selected, copied, and read by screen readers.
@@ -54,8 +60,10 @@ const addInvisibleTextLayer = (
 // Creates an accessible PDF by overlaying invisible text on top of page images.
 // The text positions are derived from OCR bounding boxes, allowing the PDF to be
 // searched and read by screen readers while maintaining the visual appearance.
+// Page dimensions are provided separately (from pdfToImagesWithDimensions) rather
+// than stored in OCR details, to keep storage size smaller.
 const createAccessiblePdf = async (
-	pageImages: Buffer[],
+	pageImages: PageImageWithDimensions[],
 	ocrDetailsJson: string,
 ): Promise<Uint8Array> => {
 	const ocrDetails: PdfOcrDetails = JSON.parse(ocrDetailsJson);
@@ -74,15 +82,15 @@ const createAccessiblePdf = async (
 	const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
 	for (let pageIndex = 0; pageIndex < pageImages.length; pageIndex++) {
-		const imageBuffer = pageImages[pageIndex];
+		const pageImage = pageImages[pageIndex];
 		const pageOcr = ocrDetails.pages[pageIndex];
 
 		// Embed the page image
-		const image = await pdfDoc.embedJpg(imageBuffer);
+		const image = await pdfDoc.embedJpg(pageImage.buffer);
 
-		// Calculate page dimensions from OCR image dimensions (scaled down from 2x)
-		const pageWidth = pageOcr.width / OCR_SCALE_FACTOR;
-		const pageHeight = pageOcr.height / OCR_SCALE_FACTOR;
+		// Calculate page dimensions from image dimensions (scaled down from 2x)
+		const pageWidth = pageImage.width / OCR_SCALE_FACTOR;
+		const pageHeight = pageImage.height / OCR_SCALE_FACTOR;
 
 		// Add a page with the calculated dimensions
 		const page = pdfDoc.addPage([pageWidth, pageHeight]);

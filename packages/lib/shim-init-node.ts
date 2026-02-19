@@ -916,18 +916,22 @@ function shimInit(options: ShimInitOptions = null) {
 		await shim.fsDriver().mkdir(tempDir);
 
 		try {
-			// Convert PDF pages to images
-			const imageFilePaths = await shim.pdfToImages(originalPdfPath, tempDir);
+			// Convert PDF pages to images with dimensions
+			const pageImages = await shim.pdfToImagesWithDimensions(originalPdfPath, tempDir);
 
-			// Read all images into buffers
-			const imageBuffers: Buffer[] = [];
-			for (const imagePath of imageFilePaths) {
-				const buffer = await fs.readFile(imagePath);
-				imageBuffers.push(buffer);
+			// Read all images into buffers with their dimensions
+			const pageImagesWithBuffers: { buffer: Buffer; width: number; height: number }[] = [];
+			for (const pageImage of pageImages) {
+				const buffer = await fs.readFile(pageImage.path);
+				pageImagesWithBuffers.push({
+					buffer,
+					width: pageImage.width,
+					height: pageImage.height,
+				});
 			}
 
 			// Create the accessible PDF
-			const pdfBytes = await createAccessiblePdf(imageBuffers, ocrDetails);
+			const pdfBytes = await createAccessiblePdf(pageImagesWithBuffers, ocrDetails);
 
 			// Write the output file
 			await writeFile(outputPath, pdfBytes);
