@@ -55,7 +55,7 @@
     "qrcode": "1.5.4",
     "query-string": "7.1.3",
     "rate-limiter-flexible": "7.4.0",
-    "raw-body": "3.0.1",
+    "raw-body": "3.0.2",
     "samlify": "2.10.1",
     "sqlite3": "5.1.6",
     "stripe": "13.9.0",
