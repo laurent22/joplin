@@ -35,7 +35,7 @@
 			if (!sourceElement) continue;
 
 			const options = getOptions(sourceElement);
-			lib.renderAbc(renderContainer, sourceElement.textContent, { ...options });
+			lib.renderAbc(renderContainer, sourceElement.textContent, { responsive: 'resize', ...options });
 		}
 
 		return true;

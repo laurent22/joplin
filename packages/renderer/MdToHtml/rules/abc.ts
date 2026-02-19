@@ -92,6 +92,11 @@ const assets = () => {
 				.abc-notation-block svg {
 					background-color: white;
 				}
+				
+				.joplin-abc-notation svg {
+                    max-width: 100%;
+                    height: auto;
+                }
 			`,
 		},
 		{
