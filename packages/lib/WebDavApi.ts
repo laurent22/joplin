@@ -378,7 +378,7 @@ class WebDavApi {
 		}
 	}
 
-	private async fetchWithInvalidIfNoneMatchTest(url: string, fetchOptions: FetchOptions): Promise<Response> {
+	private async fetchWithIfNoneMatchTest(url: string, fetchOptions: FetchOptions): Promise<Response> {
 		let response: Response = null;
 
 		if (['GET', 'HEAD'].indexOf(fetchOptions.method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
@@ -496,7 +496,7 @@ class WebDavApi {
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target === 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
-			response = await this.fetchWithInvalidIfNoneMatchTest(url, fetchOptions);
+			response = await this.fetchWithIfNoneMatchTest(url, fetchOptions);
 		} else {
 			// file
 			response = await shim.fetchBlob(url, fetchOptions);
