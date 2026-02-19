@@ -109,33 +109,35 @@ export default class OcrService {
 			const results: RecognizeResult[] = [];
 			const pdfOcrPages: PdfOcrPage[] = [];
 
-			let pageIndex = 0;
-			for (const pageImage of imageFilePaths) {
-				const imagePath = pageImage.path;
-				logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
-				const result = await driver.recognize(language, imagePath, resource.id);
-				results.push(result);
+			try {
+				let pageIndex = 0;
+				for (const pageImage of imageFilePaths) {
+					const imagePath = pageImage.path;
+					logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
+					const result = await driver.recognize(language, imagePath, resource.id);
+					results.push(result);
 
-				if (saveOcrDetails) {
-					// Parse OCR details and combine with page dimensions
-					let pageLines: RecognizeResultLine[] = [];
-					try {
-						pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
-					} catch (error) {
-						logger.warn(`Failed to parse OCR details for page ${pageIndex + 1}: ${error.message}`);
+					if (saveOcrDetails) {
+						// Parse OCR details and combine with page dimensions
+						let pageLines: RecognizeResultLine[] = [];
+						try {
+							pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
+						} catch (error) {
+							logger.warn(`Failed to parse OCR details for page ${pageIndex + 1}: ${error.message}`);
+						}
+						pdfOcrPages.push({
+							width: pageImage.width,
+							height: pageImage.height,
+							lines: pageLines,
+						});
 					}
-					pdfOcrPages.push({
-						width: pageImage.width,
-						height: pageImage.height,
-						lines: pageLines,
-					});
+
+					pageIndex++;
 				}
-
-				pageIndex++;
-			}
-
-			for (const pageImage of imageFilePaths) {
-				await shim.fsDriver().remove(pageImage.path);
+			} finally {
+				for (const pageImage of imageFilePaths) {
+					await shim.fsDriver().remove(pageImage.path);
+				}
 			}
 
 			// Only create PDF OCR details structure if setting is enabled
