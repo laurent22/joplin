@@ -4,6 +4,9 @@ import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
 import { ResourceOcrStatus } from '@joplin/lib/services/database/types';
 import bridge from '../services/bridge';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('createAccessibleDocument');
 
 export const declaration: CommandDeclaration = {
 	name: 'createAccessibleDocument',
@@ -35,8 +38,8 @@ export const runtime = (): CommandRuntime => {
 			// If ocr_details is missing (legacy PDF processed before this feature),
 			// automatically re-run OCR to get the coordinate data
 			if (!ocrDetails) {
-				const result = await bridge().showMessageBox(_('This PDF was processed before coordinate data was saved. Would you like to re-run OCR to generate an accessible document? This may take a moment.'), {
-					buttons: [_('Re-run OCR'), _('Cancel')],
+				const result = await bridge().showMessageBox(_('OCR needs to run to generate an accessible document. This may take a moment. Would you like to continue?'), {
+					buttons: [_('Run OCR'), _('Cancel')],
 				});
 
 				if (result === 1) return; // User cancelled
@@ -67,7 +70,7 @@ export const runtime = (): CommandRuntime => {
 				await shim.createAccessiblePdf(resourcePath, ocrDetails, outputPath);
 				await bridge().openItem(outputPath);
 			} catch (error) {
-				console.error('Failed to create accessible PDF:', error);
+				logger.error(error);
 				bridge().showErrorMessageBox(_('Failed to create accessible document: %s', error.message));
 			}
 		},

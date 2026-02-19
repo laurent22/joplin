@@ -22,11 +22,6 @@ export interface PdfInfo {
 	pageCount: number;
 }
 
-export interface ImageSize {
-	width: number;
-	height: number;
-}
-
 export interface PdfPageImage {
 	path: string;
 	width: number;
@@ -425,10 +420,6 @@ const shim = {
 
 	pdfInfo: async (_pdfPath: string): Promise<PdfInfo> => {
 		throw new Error('Not implemented: pdfInfo');
-	},
-
-	imageSize: async (_imagePath: string): Promise<ImageSize> => {
-		throw new Error('Not implemented: imageSize');
 	},
 
 	createAccessiblePdf: async (_originalPdfPath: string, _ocrDetails: string, _outputPath: string): Promise<void> => {

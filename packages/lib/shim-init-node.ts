@@ -1,4 +1,4 @@
-import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, ImageSize, PdfInfo, PdfPageImage } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo, PdfPageImage } from './shim';
 import createAccessiblePdf from './services/ocr/utils/createAccessiblePdf';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
@@ -928,64 +928,6 @@ function shimInit(options: ShimInitOptions = null) {
 	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
 		const doc = await loadPdf(pdfPath);
 		return { pageCount: doc.numPages };
-	};
-
-	shim.imageSize = async (imagePath: string): Promise<ImageSize> => {
-		if (sharp) {
-			const metadata = await sharp(imagePath).metadata();
-			return { width: metadata.width, height: metadata.height };
-		}
-
-		// Fallback: Read JPEG dimensions from file header
-		// JPEG files contain dimensions in the SOF0 (Start Of Frame) marker
-		const buffer = await fs.readFile(imagePath);
-
-		// Check for JPEG magic bytes
-		if (buffer.length < 2 || buffer[0] !== 0xFF || buffer[1] !== 0xD8) {
-			throw new Error('Not a valid JPEG file');
-		}
-
-		let offset = 2;
-		const maxIterations = 1000; // Safety limit
-		let iterations = 0;
-
-		while (offset < buffer.length - 1 && iterations < maxIterations) {
-			iterations++;
-
-			// Skip any padding bytes (0xFF)
-			while (offset < buffer.length && buffer[offset] === 0xFF) {
-				offset++;
-			}
-
-			if (offset >= buffer.length) break;
-
-			const marker = buffer[offset];
-			offset++;
-
-			// SOF markers (Start Of Frame) contain dimensions
-			// SOF0=0xC0, SOF1=0xC1, SOF2=0xC2, etc. (excluding 0xC4, 0xC8, 0xCC)
-			if (marker >= 0xC0 && marker <= 0xCF && marker !== 0xC4 && marker !== 0xC8 && marker !== 0xCC) {
-				// Ensure we have enough bytes to read dimensions
-				if (offset + 7 >= buffer.length) break;
-				// Format: length (2 bytes), precision (1 byte), height (2 bytes), width (2 bytes)
-				const height = buffer.readUInt16BE(offset + 3);
-				const width = buffer.readUInt16BE(offset + 5);
-				return { width, height };
-			}
-
-			// Skip segment (markers without length: D0-D9, 01)
-			if ((marker >= 0xD0 && marker <= 0xD9) || marker === 0x01) {
-				continue;
-			}
-
-			// For other markers, read segment length and skip
-			if (offset + 1 >= buffer.length) break;
-			const segmentLength = buffer.readUInt16BE(offset);
-			if (segmentLength < 2) break; // Invalid length
-			offset += segmentLength;
-		}
-
-		throw new Error('Could not find dimensions in JPEG file');
 	};
 
 	shim.createAccessiblePdf = async (originalPdfPath: string, ocrDetails: string, outputPath: string): Promise<void> => {
