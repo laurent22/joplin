@@ -24,6 +24,22 @@ The application allows you to view the OCR text associated with an image. To do 
 
 ![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/view_ocr_text.png)
 
+## Creating accessible PDF documents
+
+For scanned PDFs that contain only images, you can create an accessible version that allows text selection, copying, and screen reader support. To do this:
+
+1. Right-click on a PDF attachment that has been processed by OCR
+2. Select "Create accessible document"
+3. Choose where to save the new PDF
+
+The generated PDF contains the original page images with an invisible text layer overlaid on top. This allows you to:
+
+- Select and copy text from the PDF
+- Search within the PDF using your PDF viewer
+- Use screen readers to read the document
+
+Note: To use this feature, the "OCR: PDF processing mode" setting (under General > Advanced) must be set to "Accessible". This mode saves additional word coordinate data during OCR processing. If you try to create an accessible document from a PDF that was processed before enabling this mode, you will be prompted to re-run OCR.
+
 ## Video tutorial
 
 Watch this short video to learn how to use the Optical Character Recognition (OCR) in Joplin:
