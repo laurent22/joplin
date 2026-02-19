@@ -217,7 +217,7 @@ const NoteList = (props: Props) => {
 	const renderNotes = () => {
 		if (!props.notes.length) return [];
 
-		const output: JSX.Element[] = [];
+		const output: React.ReactNode[] = [];
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];

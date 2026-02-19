@@ -2,16 +2,33 @@
 
 ## Configure Docker for Transcribe
 
+The transcribe server embeds the llama.cpp binary directly in the Docker image. The AI models must be downloaded separately and mounted as a volume.
+
+### 1. Download the models
+
+Create a directory for the models and download them:
+
+```shell
+mkdir -p ./data/transcribe-models
+wget -O ./data/transcribe-models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
+wget -O ./data/transcribe-models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
+```
+
+### 2. Configure environment
+
 1. Copy `.env-transcribe-sample` to your Docker configuration directory.
 2. Rename it to `.env-transcribe`.
-3. Set `HTR_CLI_IMAGES_FOLDER` to the full path of the folder where images will be stored. This folder must be outside the Docker container.
-4. Test the server with the default configuration:
+
+### 3. Run the server
+
+The models directory on your host is mounted into the container at `/opt/models`. The `HTR_CLI_MODELS_FOLDER` environment variable refers to the path inside the container, not the host path.
 
 ```shell
 docker build -f ./Dockerfile.transcribe -t transcribe .
 docker run --env-file .env-transcribe -p 4567:4567 \
-	-v /var/run/docker.sock:/var/run/docker.sock \
 	-v ./packages/transcribe/images:/app/packages/transcribe/images \
+	-v ./data/transcribe-models:/opt/models:ro \
+	-e HTR_CLI_MODELS_FOLDER=/opt/models \
 	transcribe
 ```
 
@@ -28,6 +45,15 @@ The minimal configuration is provided in `.env-sample` and `docker-compose.serve
    ```
 
 For advanced configuration, refer to `.env-sample-transcribe`.
+
+## Security
+
+The transcribe container runs with these security measures:
+
+- **Non-root user**: The application runs as the `transcribe` user, not root
+- **Read-only filesystem**: The container filesystem is read-only (only `/app/packages/transcribe/images` and `/tmp` are writable)
+- **Resource limits**: Memory and CPU limits prevent runaway processes
+- **No Docker socket**: Unlike previous versions, no Docker socket mount is required
 
 ---
 
@@ -56,8 +82,14 @@ The queue driver can be **SQLite** or **PostgreSQL**:
 From `packages/transcribe`, run:
 
 ```shell
-npm run start
+yarn start
 ```
+
+### Environment variables
+
+- `HTR_CLI_BINARY_PATH`: Path to the llama-mtmd-cli binary
+- `HTR_CLI_MODELS_FOLDER`: Path to the models directory
+- `HTR_CLI_IMAGES_FOLDER`: Path where uploaded images are stored
 
 ---
 

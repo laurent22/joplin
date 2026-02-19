@@ -16,21 +16,17 @@
 				<a href="{{baseUrl}}/news/" class="fw500">News</a>
 				<a href="{{baseUrl}}/help/" class="fw500">Help</a>
 				<a href="{{forumUrl}}" class="fw500">Forum</a>
-				<!-- <a href="{{baseUrl}}/cn/" class="fw500">中文</a> -->
 
-				<!--
 				<div class="dropdown language-switcher">
-					<button class="fw500" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-						Language
+					<button class="fw500" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<i class="fas fa-globe"></i> {{locale.code}}
 					</button>
-					<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-						<li><a class="dropdown-item" href="#">Action</a></li>
-						<li><a class="dropdown-item" href="#">Another action</a></li>
-						<li><a class="dropdown-item" href="#">Something else here</a></li>
+					<ul class="dropdown-menu dropdown-menu-end">
+						{{#availableLocales}}
+							<li><a class="dropdown-item {{#isActive}}active{{/isActive}}" href="{{baseUrl}}/{{pathPrefix}}" onclick="setLocalePreference('{{code}}')">{{name}}</a></li>
+						{{/availableLocales}}
 					</ul>
 				</div>
-				-->
-
 
 				{{#showJoplinCloudLinks}}
 					{{> joplinCloudButton}}
@@ -39,7 +35,6 @@
 			</div>
 			<div class="col-9 text-right d-block d-md-none navbar-mobile-content">
 				{{> twitterLink}}
-				<!-- <a href="{{baseUrl}}/cn/" class="fw500 chinese-page-link">中文</a> -->
 				{{> joplinCloudButton}}
 				{{> supportButton}}
 
@@ -74,6 +69,13 @@
 							{{/showJoplinCloudLinks}}
 							{{> supportButton}}
 						</div>
+
+						<div class="text-center menu-mobile-language">
+							<p class="fw500 mobile-menu-language-label"><i class="fas fa-globe"></i> Language</p>
+							{{#availableLocales}}
+								<a href="{{baseUrl}}/{{pathPrefix}}" class="fw500 mobile-menu-link mobile-language-link {{#isActive}}active{{/isActive}}" onclick="setLocalePreference('{{code}}')">{{name}}</a>
+							{{/availableLocales}}
+						</div>
 					</div>
 
 					{{#showToc}}
@@ -81,7 +83,7 @@
 					{{/showToc}}
 
 					{{> socialFeeds}}
-					
+
 					<div>
 						<p class="light-blue mobile-menu-link-bottom text-center">
 							Copyright &copy; 2016-{{yyyy}} Laurent&nbsp;Cozic

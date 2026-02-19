@@ -1,34 +1,62 @@
 import Logger from '@joplin/utils/Logger';
 import { commandToString, execCommand } from '@joplin/utils';
 import { WorkHandler } from '../types';
+import { basename } from 'path';
 
 const logger = Logger.create('HtrCli');
 
+const systemPrompt = 'SYSTEM: you are an agent of a OCR system. Your job is to be concise and correct. You should NEVER deviate from the content of the image. You should NEVER add any context or new information. Your only job should be to transcribe the text presented in the image as text without anything new information. The output for it should be inside triple backticks like: ```{{example}}```. If you find no text, output an empty code block: ``````. Your turn:';
+
+export interface HtrCliOptions {
+	htrCliImagesFolder: string;
+	binaryPath: string;
+	modelsFolder: string;
+}
+
 export default class HtrCli implements WorkHandler {
 
-	private htrCliDockerImage: string;
-	private htrCliImagesFolder: string;
+	private options: HtrCliOptions;
 
-	public constructor(htrCliDockerImage: string, htrCliImagesFolder: string) {
-		this.htrCliDockerImage = htrCliDockerImage;
-		this.htrCliImagesFolder = htrCliImagesFolder;
+	public constructor(options: HtrCliOptions) {
+		this.options = options;
 	}
 
 	public async init() {
-		logger.info('Loading');
-		const result = await execCommand(['docker', 'pull', this.htrCliDockerImage], { quiet: true });
-		logger.info('Finished loading: ', result);
+		logger.info('Using embedded llama.cpp binary');
 	}
 
 	public async run(imageName: string) {
-		const command = ['docker', 'run', '--rm', '-t', '-v', `${this.htrCliImagesFolder}:/images`, this.htrCliDockerImage, imageName];
-
 		logger.info('Running transcription...');
+
+		// Sanitize imageName to prevent path traversal attacks
+		const sanitizedImageName = basename(imageName);
+		if (sanitizedImageName !== imageName || imageName.includes('..')) {
+			throw new Error(`Invalid image name: ${imageName}`);
+		}
+
+		const command = this.buildCommand(imageName);
+
 		logger.info(`Command: ${commandToString(command[0], command.slice(1))}`);
 		const result = await execCommand(command, { quiet: true });
 
 		logger.info('Finished transcription');
 		return this.cleanUpResult(result);
+	}
+
+	private buildCommand(imageName: string): string[] {
+		const { binaryPath, modelsFolder, htrCliImagesFolder } = this.options;
+		return [
+			binaryPath,
+			'-m', `${modelsFolder}/Model-7.6B-Q4_K_M.gguf`,
+			'--mmproj', `${modelsFolder}/mmproj-model-f16.gguf`,
+			'-c', '4096',
+			'--temp', '0.05',
+			'--top-p', '0.8',
+			'--top-k', '100',
+			'--repeat-penalty', '1.05',
+			'--image', `${htrCliImagesFolder}/${imageName}`,
+			'-p', systemPrompt,
+		];
 	}
 
 	public cleanUpResult(transcriptionAndLogs: string) {

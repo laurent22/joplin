@@ -5,7 +5,7 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import { ChangeEvent } from 'react';
 import { formatDateTimeLocalToMs, isValidDate } from '@joplin/utils/time';
 import lightTheme from '@joplin/lib/themes/light';
@@ -251,6 +251,16 @@ export default class PromptDialog extends React.Component<Props, any> {
 				} else {
 					onClose(true);
 				}
+			} else if (event.key === 'Escape') {
+				// react-select calls preventDefault() on the Escape keydown
+				// event, which prevents the native <dialog> cancel event from
+				// firing. We handle Escape explicitly here to ensure the dialog
+				// can be closed with the Escape key.
+				if ((this.props.inputType === 'tags' || this.props.inputType === 'dropdown') && this.menuIsOpened_) {
+					// Let react-select close the dropdown menu
+				} else {
+					onClose(false, 'cancel');
+				}
 			}
 		};
 
@@ -268,10 +278,10 @@ export default class PromptDialog extends React.Component<Props, any> {
 			/>;
 		} else if (this.props.inputType === 'tags') {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			inputComp = <CreatableSelect className="tag-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
+			inputComp = <CreatableSelect className="tag-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated() as any} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated() as any} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}

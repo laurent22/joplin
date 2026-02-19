@@ -29,6 +29,10 @@ export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
 
+export interface SortFolderOptions {
+	includeDeleted?: boolean;
+}
+
 export default class Folder extends BaseItem {
 	public static tableName() {
 		return 'folders';
@@ -924,11 +928,13 @@ export default class Folder extends BaseItem {
 		return rootFolders;
 	}
 
-	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null) {
-		const output = folders ? folders : await this.allAsTree();
+	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null, options: SortFolderOptions = null) {
+		let output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
 			const collator = getCollator();
+			if (options && options.includeDeleted === false) folders = folders.filter(folder => !folder.deleted_time);
+
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
 					return collator.compare(a.title, b.title);
@@ -949,7 +955,7 @@ export default class Folder extends BaseItem {
 			return folders;
 		};
 
-		sortFolders(sortFoldersAlphabetically(output));
+		output = sortFolders(sortFoldersAlphabetically(output));
 		return output;
 	}
 
@@ -1126,14 +1132,15 @@ export default class Folder extends BaseItem {
 		const folderId = Setting.value('activeFolderId');
 		if (!folderId) return null;
 
-		const folder = await Folder.load(folderId);
+		// Use super.load because the local load function returns folders which do not actually exist in the db, such as the trash
+		const folder = await super.load(folderId);
 		if (!folder || !!folder.deleted_time) {
 			const defaultFolder = await Folder.defaultFolder();
 			if (!defaultFolder) return null;
-			return defaultFolder.id;
+			return defaultFolder;
 		}
 
-		return folderId;
+		return folder;
 	}
 
 }

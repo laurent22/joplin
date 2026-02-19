@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import type * as ReactDom from 'react-dom';
 import type { NoteEntity, ResourceEntity } from './services/database/types';
 import type FsDriverBase from './fs-driver-base';
 import type FileApiDriverLocal from './file-api-driver-local';
@@ -91,6 +92,7 @@ let isTestingEnv_ = false;
 //
 // https://stackoverflow.com/a/42816077/561309
 let react_: typeof React = null;
+let reactDom_: typeof ReactDom = null;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let nodeSqlite_: any = null;
 
@@ -539,6 +541,16 @@ const shim = {
 	react: () => {
 		if (!react_) throw new Error('Trying to access React before it has been set!!!');
 		return react_;
+	},
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Workaround for different react versions
+	setReactDom: (reactDom: any) => {
+		reactDom_ = reactDom;
+	},
+
+	reactDom: () => {
+		if (!reactDom_) throw new Error('Trying to access react-dom before it has been set!!! Is this a browser environment?');
+		return reactDom_;
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

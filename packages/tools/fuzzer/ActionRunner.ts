@@ -1,6 +1,7 @@
-import Client from './Client';
-import ClientPool from './ClientPool';
-import { assertIsFolder, assertIsNote, FuzzContext, ItemId, RandomFolderOptions, ResourceData } from './types';
+import Client from './ipc/Client';
+import ClientPool from './ipc/ClientPool';
+import { FuzzContext, RandomFolderOptions } from './types';
+import { assertIsFolder, assertIsNote, ItemId, ResourceData } from './model/types';
 import { strict as assert } from 'assert';
 import Logger from '@joplin/utils/Logger';
 import retryWithCount from './utils/retryWithCount';
@@ -293,6 +294,8 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		await client.createNote({
 			...note,
 			id: newNoteId,
+			// When duplicated, notes are no longer published:
+			published: false,
 		});
 		return true;
 	}, {

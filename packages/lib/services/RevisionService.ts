@@ -3,7 +3,7 @@ import Note from '../models/Note';
 import Folder from '../models/Folder';
 import Setting from '../models/Setting';
 import Revision from '../models/Revision';
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import ItemChangeUtils from './ItemChangeUtils';
 import shim from '../shim';
 import BaseService from './BaseService';
@@ -373,5 +373,17 @@ export default class RevisionService extends BaseService {
 				}
 			}, 100);
 		});
+	}
+
+	public async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
+		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
+		await Revision.deleteHistoryForNote(ids, options);
+
+		// Clear any cached content in the item_changes table and reset the state of the note in the revision service, to ensure that any new revisions created
+		// upon revision collection do not include contents which were present prior to triggering the deletion
+		for (const noteId of ids) {
+			await ItemChange.resetOldNoteContent(noteId);
+			RevisionService.instance().removeChangedSinceCollection(noteId);
+		}
 	}
 }

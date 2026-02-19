@@ -1,20 +1,26 @@
-import * as React from 'react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { blur, focus } from '@joplin/lib/utils/focusHandler';
-import useDocument from './hooks/useDocument';
+import shim from '../shim';
+import { blur, focus } from '../utils/focusHandler';
+import useDocument from '../hooks/dom/useDocument';
+
+import type { FC, CSSProperties, ReactNode } from 'react';
+const React = shim.react();
+const { useEffect, useRef, useState } = shim.react();
 
 type OnCancelListener = ()=> void;
+type OnShowListener = ()=> void;
 
 interface Props {
 	className?: string;
 	onCancel?: OnCancelListener;
-	contentStyle?: React.CSSProperties;
+	onShow?: OnShowListener;
+	contentStyle?: CSSProperties;
+	open?: boolean;
 	contentFillsScreen?: boolean;
 	children: ReactNode;
 }
 
-const Dialog: React.FC<Props> = props => {
+const Dialog: FC<Props> = props => {
+
 	const [containerElement, setContainerElement] = useState<HTMLDivElement|null>(null);
 	const containerDocument = useDocument(containerElement);
 
@@ -34,10 +40,14 @@ const Dialog: React.FC<Props> = props => {
 	useEffect(() => {
 		if (!dialogElement || !contentRendered) return;
 
-		if (!dialogElement.open) {
+		const open = props.open ?? true;
+		if (!dialogElement.open && open) {
 			dialogElement.showModal();
+			props.onShow?.();
+		} else if (dialogElement.open && !open) {
+			dialogElement.close();
 		}
-	}, [dialogElement, contentRendered]);
+	}, [dialogElement, contentRendered, props.open, props.onShow]);
 
 	useEffect(() => {
 		if (!dialogElement) return;
@@ -59,7 +69,7 @@ const Dialog: React.FC<Props> = props => {
 		</div>
 	);
 	return <div ref={setContainerElement} className='dialog-anchor-node'>
-		{dialogElement && createPortal(content, dialogElement) as ReactNode}
+		{dialogElement && shim.reactDom().createPortal(content, dialogElement) as ReactNode}
 	</div>;
 };
 

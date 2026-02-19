@@ -9,194 +9,213 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:13
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:9
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:10
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:14
 msgid "/month"
 msgstr "/月"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:19
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:22
 msgid "/year"
 msgstr "/年"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:8
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:71
 msgid ""
 "<a href=\"https://joplincloud.com\">Joplin Cloud</a> allows you to "
 "synchronise your notes across devices. It also lets you publish notes, and "
 "collaborate on notebooks with your friends, family or colleagues."
 msgstr ""
-"<a href=\"https://joplincloud.com\">Joplin Cloud</a> 允许您在不同的设备上同步"
-"您的笔记。它还可以让您发布笔记，并与您的朋友、家人或同事在笔记本上进行协作。"
+"<a href=\"https://joplincloud.com\">Joplin Cloud</a> 允许您在不同设备之间同步笔记。"
+"它还支持发布笔记，并与朋友、家人或同事协作共享笔记本。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:205
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:206
 msgid "<span class=\"frame-bg frame-bg-yellow-lg\">Customise</span> it"
-msgstr "<span class=\"frame-bg frame-bg-yellow-lg\">定制</span>它 根据您的需要"
+msgstr "<span class=\"frame-bg frame-bg-yellow-lg\">自定义</span>它"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:104
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:105
 msgid "<span class=\"frame-bg frame-bg-yellow\">Multimedia</span> notes"
-msgstr "<span class=\"frame-bg frame-bg-yellow\">多媒体</span>说明"
+msgstr "<span class=\"frame-bg frame-bg-yellow\">多媒体</span>笔记"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:256
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:257
 msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
-msgstr "百分之百<span class=\"frame-bg frame-bg-yellow-lg\">你的数据</span>"
+msgstr "100% <span class=\"frame-bg frame-bg-yellow-lg\">属于你的数据</span>"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:298
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:299
 msgid "A <span class=\"frame-bg frame-bg-yellow-lg\">French</span> Alternative"
-msgstr "一个<span class=\"frame-bg frame-bg-yellow-lg\">法国</span>的替代方案"
+msgstr "一个<span class=\"frame-bg frame-bg-yellow-lg\">法国</span>替代方案"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:236
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:237
 msgid ""
 "Access your notes from your computer, phone or tablet by synchronising with "
 "various services, including Joplin Cloud, Dropbox and OneDrive. The app is "
 "available on Windows, macOS, Linux, Android and iOS. A terminal app is also "
 "available!"
 msgstr ""
-"通过与各种服务同步，包括Joplin Cloud、Dropbox和OneDrive，从你的电脑、手机或平"
-"板电脑访问你的笔记。该应用程序可在Windows、macOS、Linux、Android和iOS上使用。"
-"终端应用也可使用!"
+"通过与包括 Joplin Cloud、Dropbox 和 OneDrive 在内的多种服务同步，"
+"您可以在电脑、手机或平板上访问笔记。该应用支持 Windows、macOS、Linux、Android 和 iOS。"
+"同时还提供终端版本应用！"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:49
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:121
 msgid ""
-"Already have a Joplin Cloud account? <a href=\"https://joplincloud.com"
-"\">Login now</a>"
+"Already have a Joplin Cloud account? <a href=\"https://"
+"joplincloud.com\">Login now</a>"
 msgstr ""
+"已经拥有 Joplin Cloud 账户？<a href=\"https://joplincloud.com\">立即登录</a>"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:208
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:209
 msgid ""
 "Customise the app with plugins, custom themes and multiple text editors "
 "(Rich Text or Markdown). Or create your own scripts and plugins using the "
 "Extension API."
 msgstr ""
-"用插件、自定义主题和多个文本编辑器（富文本或马克顿）来定制该应用程序。或者使"
-"用扩展API创建你自己的脚本和插件。"
+"通过插件、自定义主题和多种文本编辑器（富文本或 Markdown）来自定义应用。"
+"您也可以使用扩展 API 创建自己的脚本和插件。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:242
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:243
 msgid "Download it now"
-msgstr "下载该应用程序"
+msgstr "立即下载"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:112
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:63
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:113
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:64
 msgid "Download the app"
-msgstr "下载该应用程序"
+msgstr "下载应用"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:213
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:214
 msgid "Find out more"
 msgstr "了解更多"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:54
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:55
 msgid "Free your <span class=\"frame-bg frame-bg-blue\">notes</span>"
 msgstr "释放你的<span class=\"frame-bg frame-bg-blue\">笔记</span>"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:175
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:176
 msgid "Get the clipper"
-msgstr "获取剪子"
+msgstr "获取网页剪藏器"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:107
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:108
 msgid ""
 "Images, videos, PDFs and audio files are supported. Create math expressions "
 "and diagrams directly from the app. Take photos with the mobile app and save "
 "them to a note."
 msgstr ""
-"Joplin，由于其起源和设计，适应并尊重中国的标准和规则。这保证了您的使用不受限"
-"制，以及您的使用数据的完全透明和安全。"
+"支持图片、视频、PDF 和音频文件。可在应用内直接创建数学公式和图表。"
+"还可通过移动端拍照并保存到笔记中。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:327
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:328
 msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
-msgstr ""
+msgstr "媒体<span class=\"frame-bg frame-bg-yellow\">报道</span>"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:5
-msgid "Joplin Cloud <span class=\"frame-bg frame-bg-yellow\">plans</span>"
-msgstr "乔普林云<span class=\"frame-bg frame-bg-yellow\">计划</span>"
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:68
+msgid "Joplin Cloud"
+msgstr "Joplin Cloud"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:301
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:302
 msgid ""
 "Joplin Cloud is based in France. This means your data is protected by strict "
 "European Union privacy laws. In addition, Joplin Cloud implements strong end-"
 "to-end encryption so that not even us can have access to your data."
 msgstr ""
-"Joplin Cloud 位于法国。 这意味着您的数据受到严格的欧盟隐私法的保护。 此外，"
-"Joplin Cloud 实施了强大的端到端加密，因此即使是我们也无法访问您的数据。"
+"Joplin Cloud 位于法国，这意味着您的数据受到严格的欧盟隐私法规保护。"
+"此外，Joplin Cloud 采用强大的端到端加密技术，确保连我们也无法访问您的数据。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:57
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:58
 msgid ""
 "Joplin is an open source note-taking app. Capture your thoughts and securely "
 "access them from any device."
 msgstr ""
-"Joplin是一个开源的记事本应用程序。捕捉你的想法并从任何设备上安全地访问它们。"
+"Joplin 是一款开源笔记应用。随时记录想法，并可在任何设备上安全访问。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:262
-msgid "More about E2EE"
-msgstr "关于E2EE的更多信息"
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:79
+msgid "Joplin Server Business"
+msgstr "Joplin Server 商业版"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:391
-msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:82
+msgid ""
+"Joplin Server Business is a synchronisation server that you can install on "
+"your own infrastructure, so that your data remains private and secure within "
+"your business."
 msgstr ""
+"Joplin Server 商业版是一款可部署在您自有基础设施上的同步服务器，"
+"确保您的数据在企业内部保持私密与安全。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:23
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:263
+msgid "More about E2EE"
+msgstr "了解更多关于 E2EE"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:392
+msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
+msgstr "我们的<span class=\"frame-bg frame-bg-blue-lg\">赞助商</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:46
+msgid ""
+"Our synchronisation and sharing <span class=\"frame-bg frame-bg-"
+"yellow\">solutions</span>"
+msgstr ""
+"我们的同步与共享<span class=\"frame-bg frame-bg-yellow\">解决方案</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:91
 msgid "Pay Monthly"
-msgstr "月度"
+msgstr "按月付费"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:30
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:98
 msgid "Pay Yearly"
-msgstr "每年一次"
+msgstr "按年付费"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:167
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:168
 msgid ""
 "Save <span class=\"frame-bg frame-bg-blue\">web pages</span> <br>as notes"
-msgstr "保存<span class=\"frame-bg frame-bg-blue\">网页</span> <br>作为笔记"
+msgstr "将<span class=\"frame-bg frame-bg-blue\">网页</span><br>保存为笔记"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:65
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:66
 msgid "Sign up with Joplin Cloud"
-msgstr "与乔布林云签约"
+msgstr "注册 Joplin Cloud"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:394
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:49
+msgid "Synchronise and share your notes with our range of plans."
+msgstr "通过我们的多种方案同步并共享您的笔记。"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:395
 msgid "Thank you for your support!"
-msgstr ""
+msgstr "感谢您的支持！"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:257
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:258
 msgid ""
 "The app is open source and your notes are saved to an open format, so you'll "
 "always have access to them. Uses End-To-End Encryption (E2EE) to secure your "
 "notes and ensure no-one but yourself can access them."
 msgstr ""
-"该应用程序是开源的，你的笔记被保存为开放的格式，所以你将永远可以访问它们。使"
-"用端对端加密（E2EE）来保护你的笔记，确保除了你自己之外没有人可以访问它们。"
+"该应用为开源软件，笔记以开放格式保存，确保您始终可以访问。"
+"采用端到端加密（E2EE）保护您的笔记，确保只有您本人可以访问。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:144
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:145
 msgid "Try it now"
-msgstr "现在就试试吧"
+msgstr "立即体验"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:170
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:171
 msgid ""
 "Use the web clipper extension, available on Chrome and Firefox, to save web "
 "pages or take screenshots as notes."
-msgstr "使用Chrome和Firefox上的web clipper扩展，可以保存网页或截图作为笔记。"
+msgstr ""
+"使用适用于 Chrome 和 Firefox 的网页剪藏扩展，将网页或截图保存为笔记。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:138
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:139
 msgid ""
 "With Joplin Cloud, share your notes with your friends, family or colleagues "
 "and collaborate on them."
-msgstr "通过乔普林云，与你的朋友、家人或同事分享你的笔记，并进行合作。"
+msgstr ""
+"通过 Joplin Cloud，与朋友、家人或同事共享笔记并协作编辑。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:137
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:138
 msgid "Work <span class=\"frame-bg frame-bg-yellow\">together</span>"
-msgstr "<span class=\"frame-bg frame-bg-yellow\">一起</span>工作"
+msgstr "<span class=\"frame-bg frame-bg-yellow\">协作</span>工作"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:141
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:142
 msgid ""
 "You can also publish a note to the internet and share the URL with others."
-msgstr "您还可以将笔记发布到 Internet 并与其他人共享 URL。"
+msgstr "您还可以将笔记发布到互联网，并与他人分享链接。"
 
-#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:233
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:234
 msgid ""
 "Your notes, <span class=\"frame-bg frame-bg-blue-lg\">everywhere</span> you "
 "are"
 msgstr ""
-"你的笔记<span class=\"frame-bg frame-bg-blue-lg\">你在哪里都可以</span>"
-
-#~ msgid ""
-#~ "Joplin, due to its origin and design, adapts and respects Chinese "
-#~ "standards and rules. This guarantees your unrestricted use and complete "
-#~ "transparency and security of your usage data."
-#~ msgstr ""
-#~ "Joplin，由于其起源和设计，适应并尊重中国的标准和规则。这保证了您的使用不受"
-#~ "限制，以及您的使用数据的完全透明和安全。"
+"无论身在何处，您的笔记都<span class=\"frame-bg frame-bg-blue-lg\">随时可达</span>"

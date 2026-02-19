@@ -1,53 +1,69 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
-import { ActionableClient, assertIsNote, FolderData, FuzzContext, HttpMethod, ItemId, Json, NoteData, RandomFolderOptions, RandomNoteOptions, ResourceData, ShareOptions } from './types';
+import { ActionableClient, FuzzContext, HttpMethod, Json, RandomFolderOptions, RandomNoteOptions, ShareOptions } from '../types';
+import { assertIsNote, assertIsNoteData, FolderData, ItemId, NoteData, ResourceData } from '../model/types';
 import { join } from 'path';
-import { mkdir, remove } from 'fs-extra';
-import getStringProperty from './utils/getStringProperty';
+import { copy, exists, mkdir, remove } from 'fs-extra';
+import getStringProperty from '../utils/getStringProperty';
 import { strict as assert } from 'assert';
 import ClipperServer from '@joplin/lib/ClipperServer';
-import ActionTracker from './ActionTracker';
+import ActionTracker from '../model/ActionTracker';
 import Logger from '@joplin/utils/Logger';
-import { cliDirectory } from './constants';
+import { cliDirectory } from '../constants';
 import { commandToString } from '@joplin/utils';
 import { quotePath } from '@joplin/utils/path';
-import getNumberProperty from './utils/getNumberProperty';
-import retryWithCount from './utils/retryWithCount';
+import getNumberProperty from '../utils/getNumberProperty';
+import retryWithCount from '../utils/retryWithCount';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import { formatMsToDateTimeLocal, msleep, Second } from '@joplin/utils/time';
 import { spawn } from 'child_process';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { createInterface } from 'readline/promises';
 import Stream = require('stream');
-import ProgressBar from './utils/ProgressBar';
-import logDiffDebug from './utils/logDiffDebug';
+import ProgressBar from '../utils/ProgressBar';
+import logDiffDebug from '../utils/logDiffDebug';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-import diffSortedStringArrays from './utils/diffSortedStringArrays';
-import extractResourceIds from './utils/extractResourceIds';
+import diffSortedStringArrays from '../utils/diffSortedStringArrays';
+import extractResourceIds from '../utils/extractResourceIds';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-import hangingIndent from './utils/hangingIndent';
+import hangingIndent from '../utils/hangingIndent';
+import { readFile, writeFile } from 'fs/promises';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 const logger = Logger.create('Client');
 
 type AccountData = Readonly<{
 	email: string;
 	password: string;
-	serverId: string;
+	userId: string;
 	e2eePassword: string|null;
 	associatedClientCount: number;
 	onClientConnected: ()=> void;
 	onClientDisconnected: ()=> Promise<void>;
 }>;
 
-const createNewAccount = async (email: string, context: FuzzContext): Promise<AccountData> => {
-	const password = createSecureRandom();
-	const apiOutput = await context.execApi('POST', 'api/users', {
-		email,
-		full_name: `Fuzzer user from ${formatMsToDateTimeLocal(Date.now())}`,
-	});
-	const serverId = getStringProperty(apiOutput, 'id');
+const emailPrefix = 'fuzzer-user-';
+
+const loadAccountAndResetPassword = async (
+	userId: string,
+	e2eePassword: string|null,
+	context: FuzzContext,
+): Promise<AccountData> => {
+	const userRoute = `api/users/${encodeURIComponent(userId)}`;
+	const response = await context.execApi('GET', userRoute, undefined);
+
+	if (typeof response !== 'object' || !hasOwnProperty(response, 'email')) {
+		throw new Error(`Failed to look up the email for user ${userId}`);
+	}
+	// The fuzzer can do things like delete accounts.
+	// Do an extra check to make sure that we're working with an account created by the fuzzer:
+	if (typeof response.email !== 'string' || !response.email.startsWith(emailPrefix)) {
+		throw new Error(`Invalid email: ${JSON.stringify(response.email)} (should start with "${emailPrefix}")`);
+	}
+
+	const email = response.email;
 
 	// The password needs to be set *after* creating the user.
-	const userRoute = `api/users/${encodeURIComponent(serverId)}`;
+	const password = createSecureRandom();
 	await context.execApi('PATCH', userRoute, {
 		email,
 		password,
@@ -62,8 +78,8 @@ const createNewAccount = async (email: string, context: FuzzContext): Promise<Ac
 	return {
 		email,
 		password,
-		e2eePassword: context.enableE2ee ? createSecureRandom().replace(/^-/, '_') : null,
-		serverId,
+		e2eePassword,
+		userId: userId,
 		get associatedClientCount() {
 			return referenceCounter;
 		},
@@ -78,6 +94,17 @@ const createNewAccount = async (email: string, context: FuzzContext): Promise<Ac
 			}
 		},
 	};
+};
+
+const createNewAccount = async (email: string, context: FuzzContext): Promise<AccountData> => {
+	const apiOutput = await context.execApi('POST', 'api/users', {
+		email,
+		full_name: `Fuzzer user from ${formatMsToDateTimeLocal(Date.now())}`,
+	});
+	const userId = getStringProperty(apiOutput, 'id');
+
+	const e2eePassword = context.enableE2ee ? createSecureRandom().replace(/^-/, '_') : null;
+	return loadAccountAndResetPassword(userId, e2eePassword, context);
 };
 
 type ApiData = Readonly<{
@@ -117,7 +144,7 @@ class Client implements ActionableClient {
 	public readonly email: string;
 
 	public static async create(actionTracker: ActionTracker, context: FuzzContext) {
-		const account = await createNewAccount(`${uuid.create()}@localhost`, context);
+		const account = await createNewAccount(`${emailPrefix}${uuid.createNano()}@localhost`, context);
 
 		try {
 			const client = await this.fromAccount(account, actionTracker, context);
@@ -129,15 +156,20 @@ class Client implements ActionableClient {
 		}
 	}
 
+	private static async buildClipperConfig_() {
+		const apiData: ApiData = {
+			token: createSecureRandom().replace(/[-]/g, '_'),
+			port: await ClipperServer.instance().findAvailablePort(),
+		};
+		return apiData;
+	}
+
 	private static async fromAccount(account: AccountData, actionTracker: ActionTracker, context: FuzzContext) {
 		const id = context.randomId();
 		const profileDirectory = join(context.baseDir, id);
 		await mkdir(profileDirectory);
 
-		const apiData: ApiData = {
-			token: createSecureRandom().replace(/[-]/g, '_'),
-			port: await ClipperServer.instance().findAvailablePort(),
-		};
+		const apiData = await this.buildClipperConfig_();
 
 		const client = new Client(
 			context,
@@ -151,19 +183,65 @@ class Client implements ActionableClient {
 
 		account.onClientConnected();
 
-		// Joplin Server sync
-		const targetId = context.isJoplinCloud ? '10' : '9';
-		await client.execCliCommand_('config', 'sync.target', targetId);
-		await client.execCliCommand_('config', `sync.${targetId}.path`, context.serverUrl);
-		await client.execCliCommand_('config', `sync.${targetId}.username`, account.email);
-		await client.execCliCommand_('config', `sync.${targetId}.password`, account.password);
-		await client.execCliCommand_('config', 'api.token', apiData.token);
-		await client.execCliCommand_('config', 'api.port', String(apiData.port));
+		await client.setInitialSettings_();
 
 		if (account.e2eePassword) {
 			await client.execCliCommand_('e2ee', 'enable', '--password', account.e2eePassword);
 		}
 		logger.info('Created and configured client');
+
+		await client.startClipperServer_();
+		return client;
+	}
+
+	public static async fromSnapshotDirectory(
+		path: string,
+		actionTracker: ActionTracker,
+		context: FuzzContext,
+
+		// A map from client IDs to client accounts. Use this to ensure that
+		// only one AccountData reference exists for each account:
+		userIdToAccount: Map<string, Promise<AccountData>>,
+	) {
+		logger.info('Reading client from snapshot', path, '...');
+
+		const { userId, e2eePassword } = JSON.parse(await readFile(join(path, 'info.json'), 'utf-8'));
+
+		const getAccount = () => {
+			// Reuse the existing account promise if possible this:
+			// 1. Avoids resetting the password multiple times for the same account.
+			// 2. Avoids closing the account multiple times when exiting the fuzzer.
+			// 3. Caching promises, rather than the final account object, helps avoid race conditions.
+			let accountPromise = userIdToAccount.get(userId);
+			// Reset the account password to simplify re-authentication.
+			accountPromise ??= loadAccountAndResetPassword(userId, e2eePassword, context);
+			userIdToAccount.set(userId, accountPromise);
+
+			return accountPromise;
+		};
+
+		const account = await getAccount();
+
+		const profileDirectory = join(context.baseDir, uuid.createNano());
+		await copy(path, profileDirectory);
+
+		const apiData = await this.buildClipperConfig_();
+
+		const client = new Client(
+			context,
+			actionTracker,
+			actionTracker.track({ email: account.email }),
+			account,
+			profileDirectory,
+			apiData,
+			`${account.email}${account.associatedClientCount ? ` (${account.associatedClientCount})` : ''}`,
+		);
+
+		account.onClientConnected();
+
+		await client.setInitialSettings_();
+
+		logger.info('Created and configured client in', profileDirectory);
 
 		await client.startClipperServer_();
 		return client;
@@ -178,6 +256,7 @@ class Client implements ActionableClient {
 	private onChildProcessOutput_: ()=> void = ()=>{};
 
 	private transcript_: string[] = [];
+	private static isFirstClient_ = true;
 
 	private constructor(
 		private readonly context_: FuzzContext,
@@ -193,9 +272,13 @@ class Client implements ActionableClient {
 		// Don't skip child process-related tasks.
 		this.childProcessQueue_.setCanSkipTaskHandler(() => false);
 
+		// For faster startup, don't rebuild the CLI app for every new client:
+		const rebuildCliApp = Client.isFirstClient_;
+		Client.isFirstClient_ = false;
+
 		const initializeChildProcess = () => {
 			const rawChildProcess = spawn('yarn', [
-				...this.cliCommandArguments,
+				...this.cliCommandArguments(rebuildCliApp),
 				'batch',
 				'--continue-on-failure',
 				'-',
@@ -232,6 +315,35 @@ class Client implements ActionableClient {
 			};
 		};
 		initializeChildProcess();
+	}
+
+	public async saveSnapshot(outputDirectory: string) {
+		assert.ok(await exists(outputDirectory));
+		await copy(this.profileDirectory, outputDirectory);
+
+		await writeFile(
+			join(outputDirectory, 'info.json'),
+			JSON.stringify({
+				userId: this.account_.userId,
+				email: this.account_.email,
+				e2eePassword: this.account_.e2eePassword,
+			}),
+			'utf-8',
+		);
+	}
+
+	private async setInitialSettings_() {
+		// Joplin Server sync
+		const targetId = this.context_.isJoplinCloud ? '10' : '9';
+		await this.execCliCommand_('config', 'sync.target', targetId);
+		await this.execCliCommand_('config', `sync.${targetId}.path`, this.context_.serverUrl);
+		await this.execCliCommand_('config', `sync.${targetId}.username`, this.account_.email);
+		await this.execCliCommand_('config', `sync.${targetId}.password`, this.account_.password);
+		// userContentPath only applies to Joplin Cloud:
+		await this.execCliCommand_('config', 'sync.10.userContentPath', this.context_.serverUrl);
+
+		await this.execCliCommand_('config', 'api.token', this.apiData_.token);
+		await this.execCliCommand_('config', 'api.port', String(this.apiData_.port));
 	}
 
 	private async startClipperServer_() {
@@ -293,9 +405,9 @@ class Client implements ActionableClient {
 		return this.clientLabel_;
 	}
 
-	private get cliCommandArguments() {
+	private cliCommandArguments(build: boolean) {
 		return [
-			'start',
+			build ? 'start' : 'start-no-build',
 			'--profile', this.profileDirectory,
 			'--env', 'dev',
 		];
@@ -304,7 +416,7 @@ class Client implements ActionableClient {
 	public getHelpText() {
 		return [
 			`Client ${this.label}:`,
-			`\tCommand: cd ${quotePath(cliDirectory)} && ${commandToString('yarn', this.cliCommandArguments)}`,
+			`\tCommand: cd ${quotePath(cliDirectory)} && ${commandToString('yarn', this.cliCommandArguments(true))}`,
 		].join('\n');
 	}
 
@@ -578,7 +690,7 @@ class Client implements ActionableClient {
 				const expected = this.tracker_.itemById(id);
 				assertIsNote(expected);
 				const actual = noteActualStates.get(id);
-				assertIsNote(actual);
+				assertIsNoteData(actual);
 
 				if (textsMatchIgnoringResources(actual.body, expected.body)) {
 					const firstMatchIndex = actual.body.indexOf(resourceId);

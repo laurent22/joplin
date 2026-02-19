@@ -3,7 +3,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import { useContext, useEffect } from 'react';
 import bridge from '../../../../../services/bridge';
-import { ContextMenuOptions, ContextMenuItemType } from '../../../utils/contextMenuUtils';
+import { ContextMenuOptions, ContextMenuItemType, buildMenuItems } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -38,7 +38,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 		const contextMenuItems = menuItems(dispatch);
 		const targetWindow = bridge().windowById(windowId);
 
-		const makeMainMenuItems = (element: Element) => {
+		const makeMainMenuItems = async (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;
 			let resourceId = '';
 			let linkUrl = null;
@@ -79,20 +79,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 				mdToHtml,
 			};
 
-			const result = [];
-			for (const itemName in contextMenuItems) {
-				const item = contextMenuItems[itemName];
-
-				if (!item.isActive(itemType, contextMenuActionOptions.current)) continue;
-
-				result.push(new MenuItem({
-					label: item.label,
-					click: () => {
-						item.onAction(contextMenuActionOptions.current);
-					},
-				}));
-			}
-			return result;
+			return buildMenuItems(contextMenuItems, contextMenuActionOptions.current);
 		};
 
 		const makeEditableMenuItems = (element: Element) => {
@@ -111,7 +98,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			return [];
 		};
 
-		const showContextMenu = (element: HTMLElement, misspelledWord: string|null, dictionarySuggestions: string[]) => {
+		const showContextMenu = async (element: HTMLElement, misspelledWord: string|null, dictionarySuggestions: string[]) => {
 			const menu = new Menu();
 			const menuItems: MenuItemType[] = [];
 			const toMenuItems = (specs: MenuItemConstructorOptions[]) => {
@@ -119,7 +106,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			};
 
 			menuItems.push(...makeEditableMenuItems(element));
-			menuItems.push(...makeMainMenuItems(element));
+			menuItems.push(...(await makeMainMenuItems(element)));
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
 			menuItems.push(
 				...toMenuItems(spellCheckerMenuItems),
@@ -135,16 +122,16 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 		};
 
 		let lastTarget: EventTarget|null = null;
-		const onElectronContextMenu = (event: ElectronEvent, params: ContextMenuParams) => {
+		const onElectronContextMenu = async (event: ElectronEvent, params: ContextMenuParams) => {
 			if (!lastTarget) return;
 			const element = lastTarget as HTMLElement;
 			lastTarget = null;
 
 			event.preventDefault();
-			showContextMenu(element, params.misspelledWord, params.dictionarySuggestions);
+			await showContextMenu(element, params.misspelledWord, params.dictionarySuggestions);
 		};
 
-		const onBrowserContextMenu = (event: PointerEvent) => {
+		const onBrowserContextMenu = async (event: PointerEvent) => {
 			const isKeyboard = event.buttons === 0;
 			if (isKeyboard) {
 				// Context menu events from the keyboard seem to always use <body> as the
@@ -163,7 +150,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			const isFromPlugin = !event.isTrusted;
 			if (isFromPlugin) {
 				event.preventDefault();
-				showContextMenu(lastTarget as HTMLElement, null, []);
+				await showContextMenu(lastTarget as HTMLElement, null, []);
 				lastTarget = null;
 			}
 		};

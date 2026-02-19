@@ -5,7 +5,7 @@ import bridge from '../services/bridge';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { ForwardedRef, forwardRef, RefObject, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { WindowIdContext } from './NewWindowOrIFrame';
-import useDocument from './hooks/useDocument';
+import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import { _ } from '@joplin/lib/locale';
 import getAssetPath from '../utils/getAssetPath';
 import { toForwardSlashes } from '@joplin/utils/path';

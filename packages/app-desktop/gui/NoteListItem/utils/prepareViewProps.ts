@@ -2,7 +2,36 @@ import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteLis
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
+
+interface CheckboxStats {
+	total: number;
+	checked: number;
+	percent: number;
+	isComplete: boolean;
+}
+
+const countCheckboxes = (body: string): CheckboxStats | null => {
+	if (!body) return null;
+
+	// Match unchecked: - [ ] and checked: - [x] or - [X]
+	const uncheckedMatches = body.match(/- \[ \]/g);
+	const checkedMatches = body.match(/- \[[xX]\]/g);
+
+	const unchecked = uncheckedMatches ? uncheckedMatches.length : 0;
+	const checked = checkedMatches ? checkedMatches.length : 0;
+	const total = unchecked + checked;
+
+	if (total === 0) return null;
+
+	return {
+		total,
+		checked,
+		percent: Math.round((checked / total) * 100),
+		isComplete: checked === total,
+	};
+};
 
 const prepareViewProps = async (
 	dependencies: ListRendererDependency[],
@@ -40,6 +69,14 @@ const prepareViewProps = async (
 					taskStatus = note.todo_completed ? _('Complete to-do') : _('Incomplete to-do');
 				}
 				output.note[propName] = taskStatus;
+			} else if (dep === 'note.checkboxes') {
+				// Only load the note body and compute checkbox stats if the setting is enabled
+				if (Setting.value('notes.showCheckboxCompletionChart')) {
+					if (!('body' in note)) note = await Note.load(note.id);
+					output.note[propName] = countCheckboxes(note.body);
+				} else {
+					output.note[propName] = null;
+				}
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a
