@@ -9,7 +9,7 @@
 	onCommitFiberRoot: function() {},
 	onCommitFiberUnmount: function() {},
 };
-
+import './utils/initReact';
 import './utils/sourceMapSetup';
 import app from './app';
 import Folder from '@joplin/lib/models/Folder';

@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import DialogButtonRow from './DialogButtonRow';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from './DialogTitle';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { StateShare } from '@joplin/lib/services/share/reducer';

@@ -939,6 +939,8 @@ export default class Note extends BaseItem {
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 				const Revision = this.getClass<typeof RevisionClass>('Revision');
+				// No need to call additional logic in RevisionService, as new change events are already sent via the code below, and additional clearing
+				// is not relevant for deleted notes
 				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
 			}
 

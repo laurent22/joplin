@@ -61,6 +61,14 @@ Name | Description
 
 Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md
 
+## Warrant Canary Signing Key
+
+Fingerprint:
+
+F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
+
+Public key: https://github.com/laurent22/joplin/raw/dev/Assets/keys/joplin-canary-signing-key.asc
+
 # Contributors
 
 Thank you to everyone who've contributed to Joplin's source code!

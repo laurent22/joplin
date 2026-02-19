@@ -99,6 +99,10 @@ describe('MdToHtml', () => {
 					'',
 				];
 
+				// Use this to generate the needed file:
+
+				// await writeFile('/path/to/actual.html', actualHtml, 'utf-8');
+
 				// eslint-disable-next-line no-console
 				console.info(msg.join('\n'));
 

@@ -2,24 +2,23 @@ FROM node:24-bullseye
 
 RUN apt-get update \
     && apt-get install -y \
-    ca-certificates curl \
-    python3 tini
-
-## install docker
-RUN install -m 0755 -d /etc/apt/keyrings
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-RUN chmod a+r /etc/apt/keyrings/docker.asc
-RUN echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-    $(. /etc/os-release && echo bullseye) stable" | \
-    tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN apt-get update \
-    && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+    ca-certificates curl wget unzip \
+    python3 tini \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
 
 RUN corepack enable
+
+# Download llama.cpp binary
+WORKDIR /opt/llama
+RUN wget -q https://github.com/ggml-org/llama.cpp/releases/download/b5449/llama-b5449-bin-ubuntu-x64.zip \
+    && unzip llama-b5449-bin-ubuntu-x64.zip \
+    && rm llama-b5449-bin-ubuntu-x64.zip \
+    && chmod +x /opt/llama/build/bin/llama-mtmd-cli
+
+# Create non-root user for security
+RUN groupadd -r transcribe && useradd -r -g transcribe transcribe
 
 WORKDIR /app
 
@@ -44,7 +43,17 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
     && yarn cache clean \
     && rm -rf .yarn/berry
 
+# Create images directory and set permissions
+RUN mkdir -p /app/packages/transcribe/images \
+    && chown -R transcribe:transcribe /app/packages/transcribe/images
+
 WORKDIR /app/packages/transcribe
+
+# Switch to non-root user
+USER transcribe
+
+# Set environment variable for embedded llama.cpp binary
+ENV HTR_CLI_BINARY_PATH=/opt/llama/build/bin/llama-mtmd-cli
 
 # Start the Node.js application
 CMD ["yarn", "start"]

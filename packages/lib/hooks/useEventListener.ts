@@ -11,7 +11,7 @@ function useEventListener(
 ) {
 	// Create a ref that stores handler
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const savedHandler = useRef<any>();
+	const savedHandler = useRef<any>(undefined);
 
 	useEffect(() => {
 		// Define the listening target

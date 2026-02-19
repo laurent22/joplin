@@ -6,7 +6,7 @@ import WebviewController from '@joplin/lib/services/plugins/WebviewController';
 import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import Dialog from '../../gui/Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 
 interface Props extends UserWebviewProps {
 	buttons: ButtonSpec[];
