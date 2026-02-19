@@ -1,4 +1,4 @@
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib';
 import { PdfOcrDetails, RecognizeResultLine } from './types';
 
 // The PDF OCR images are created at 2x scale by pdfToImages()
@@ -7,10 +7,6 @@ const OCR_SCALE_FACTOR = 2;
 // Creates an accessible PDF by overlaying invisible text on top of page images.
 // The text positions are derived from OCR bounding boxes, allowing the PDF to be
 // searched and read by screen readers while maintaining the visual appearance.
-//
-// @param pageImages - Array of image buffers, one per page (JPEG format)
-// @param ocrDetailsJson - JSON string containing PdfOcrDetails
-// @returns Buffer containing the accessible PDF
 async function createAccessiblePdf(
 	pageImages: Buffer[],
 	ocrDetailsJson: string,
@@ -63,11 +59,9 @@ async function createAccessiblePdf(
 // The text is rendered in "invisible" mode (render mode 3) so it doesn't
 // appear visually but can be selected, copied, and read by screen readers.
 function addInvisibleTextLayer(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	page: any,
+	page: PDFPage,
 	lines: RecognizeResultLine[],
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	font: any,
+	font: PDFFont,
 	_pageWidth: number,
 	pageHeight: number,
 ): void {
