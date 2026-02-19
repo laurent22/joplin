@@ -378,31 +378,39 @@ class WebDavApi {
 		}
 	}
 
-	private async testInvalidIfNoneMatch(url: string, fetchOptions: FetchOptions): Promise<Response> {
-		// some webserver, for example Apache Tomcat do not accept invalid If-None-Match header,
-		// which is being sent to resolve issue with Seafile and network library on iOS
-		// to fix this issue, a request is sent with invalid If-None-Match header at first
-		//
-		// if it succeeds, excludeIfNoneMatch  flag is set to No, to indicate,
-		// that  subsequent request will be sent with If-None-Match header
-		//
-		// if first request with invalid If-None-Match header fails, it's retried without the header
-		// if successful, excludeIfNoneMatch is set to Yes, to indicate,
-		// that subsequent request will be sent without If-None-Match header
-		const response = await shim.fetch(url, fetchOptions);
-		if (response.ok) {
-			this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
-		} else {
-			if (response.status === 400) {
-				const fetchOptionsAlt = { ... fetchOptions };
-				fetchOptionsAlt.headers = { ... fetchOptions.headers };
-				delete fetchOptionsAlt.headers['If-None-Match'];
-				const responseAlt = await shim.fetch(url, fetchOptionsAlt);
-				if (responseAlt.ok) {
-					this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
-					return responseAlt;
+	private async fetchWithInvalidIfNoneMatchTest(url: string, fetchOptions: FetchOptions): Promise<Response> {
+		let response: Response = null;
+
+		if (['GET', 'HEAD'].indexOf(fetchOptions.method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
+			// some webserver, for example Apache Tomcat do not accept invalid If-None-Match header,
+			// which is being sent to resolve issue with Seafile and network library on iOS
+			// to fix this issue, a request is sent with invalid If-None-Match header at first
+			//
+			// if it succeeds, excludeIfNoneMatch  flag is set to No, to indicate,
+			// that  subsequent request will be sent with If-None-Match header
+			//
+			// if first request with invalid If-None-Match header fails, it's retried without the header
+			// if successful, excludeIfNoneMatch is set to Yes, to indicate,
+			// that subsequent request will be sent without If-None-Match header
+			response = await shim.fetch(url, fetchOptions);
+			if (response.ok) {
+				this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
+			} else {
+				if (response.status === 400) {
+					const fetchOptionsAlt = { ... fetchOptions };
+					fetchOptionsAlt.headers = { ... fetchOptions.headers };
+					delete fetchOptionsAlt.headers['If-None-Match'];
+					const responseAlt = await shim.fetch(url, fetchOptionsAlt);
+					if (responseAlt.ok) {
+						this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
+						return responseAlt;
+					}	else if (response.status === 400) {
+						this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
+					}
 				}
 			}
+		} else {
+			response = await shim.fetch(url, fetchOptions);
 		}
 		return response;
 	}
@@ -488,11 +496,7 @@ class WebDavApi {
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target === 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
-			if (['GET', 'HEAD'].indexOf(method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
-				response = await this.testInvalidIfNoneMatch(url, fetchOptions);
-			} else {
-				response = await shim.fetch(url, fetchOptions);
-			}
+			response = await this.fetchWithInvalidIfNoneMatchTest(url, fetchOptions);
 		} else {
 			// file
 			response = await shim.fetchBlob(url, fetchOptions);
