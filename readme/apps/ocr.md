@@ -40,7 +40,7 @@ The generated PDF contains the original page images with an invisible text layer
 
 If the PDF was processed before this feature was available, you will be prompted to re-run OCR to generate the required word coordinate data.
 
-To have all future PDFs automatically processed with word coordinates (so you don't need to re-run OCR), enable the "OCR: PDF processing mode" setting (under General > Advanced) and set it to "Accessible". Note that this increases database size by approximately 10-20 KB per page.
+To have all future PDFs automatically processed with word coordinates (so you don't need to re-run OCR), enable the "OCR: PDF processing mode" setting (under General > Advanced) and set it to "Accessible". Note that this increases database size by approximately 10 to 50 KB per page.
 
 ## Video tutorial
 
