@@ -8,41 +8,87 @@
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { spawn } = require('child_process');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const net = require('net');
 
-// 引数をパース
-const args = process.argv.slice(2);
-let profileName = null;
-const nextArgs = [];
+// ポートが利用可能かチェックする関数
+function checkPort(port) {
+  return new Promise((resolve, reject) => {
+    const server = net.createServer();
+    
+    server.once('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        resolve(false); // ポートは使用中
+      } else {
+        reject(err);
+      }
+    });
+    
+    server.once('listening', () => {
+      server.close();
+      resolve(true); // ポートは利用可能
+    });
+    
+    server.listen(port);
+  });
+}
 
-for (let i = 0; i < args.length; i++) {
-  const arg = args[i];
-
-  if (arg.startsWith('--profileName=')) {
-    profileName = arg.split('=')[1];
-  } else if (arg === '--profileName') {
-    profileName = args[i + 1];
-    i++; // 次の引数をスキップ
-  } else {
-    nextArgs.push(arg);
+// 利用可能なポートを見つける関数
+async function findAvailablePort(startPort = 3000, maxPort = 3100) {
+  for (let port = startPort; port <= maxPort; port++) {
+    if (await checkPort(port)) {
+      return port;
+    }
   }
+  throw new Error(`No available port found between ${startPort} and ${maxPort}`);
 }
 
-// 環境変数に設定
-if (profileName) {
-  process.env.PROFILE_NAME = profileName;
-  console.log(`Using profile: ${profileName}`);
+// メイン関数
+async function main() {
+  // 引数をパース
+  const args = process.argv.slice(2);
+  let profileName = null;
+  const nextArgs = [];
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+
+    if (arg.startsWith('--profileName=')) {
+      profileName = arg.split('=')[1];
+    } else if (arg === '--profileName') {
+      profileName = args[i + 1];
+      i++; // 次の引数をスキップ
+    } else {
+      nextArgs.push(arg);
+    }
+  }
+
+  // 環境変数に設定
+  if (profileName) {
+    process.env.PROFILE_NAME = profileName;
+    console.log(`Using profile: ${profileName}`);
+  }
+
+  // 利用可能なポートを見つける
+  const port = await findAvailablePort();
+  console.log(`Using port: ${port}`);
+
+  // Next.js を起動
+  const command = 'next';
+  const commandArgs = ['start', '-p', port.toString(), ...nextArgs];
+
+  const child = spawn(command, commandArgs, {
+    stdio: 'inherit',
+    env: process.env,
+    shell: process.platform === 'win32',
+  });
+
+  child.on('exit', (code) => {
+    process.exit(code || 0);
+  });
 }
 
-// Next.js を起動
-const command = 'next';
-const commandArgs = ['start', ...nextArgs];
-
-const child = spawn(command, commandArgs, {
-  stdio: 'inherit',
-  env: process.env,
-  shell: process.platform === 'win32',
-});
-
-child.on('exit', (code) => {
-  process.exit(code || 0);
+main().catch((err) => {
+  console.error('Failed to start:', err);
+  process.exit(1);
 });

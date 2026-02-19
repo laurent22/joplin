@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/dev.js",
+    "dev": "mkdir -p public && rm -rf public/pluginAssets && cp -R ../renderer/assets public/pluginAssets && node scripts/dev.js",
     "build": "next build",
     "next_start": "node scripts/start.js",
-    "start": "mkdir -p public && rm -rf public/pluginAssets && cp -R ../renderer/assets public/pluginAssets && node scripts/dev.js",
+    "start": "mkdir -p public && rm -rf public/pluginAssets && cp -R ../renderer/assets public/pluginAssets && node scripts/start.js",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-pattern public/**",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix --ignore-pattern public/**",
     "format": "prettier --write .",
