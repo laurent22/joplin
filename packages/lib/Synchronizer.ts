@@ -990,7 +990,6 @@ export default class Synchronizer {
 
 									if (this.api().supportsAccurateTimestamp && remote.jop_updated_time === local.updated_time) {
 										// Nothing to do, and no need to fetch the content
-										reason = 'nothing to do and no need to fetch the content. The item is up-to-date';
 									} else {
 										content = await loadContent();
 										if (content && content.updated_time > local.updated_time) {
@@ -1001,7 +1000,6 @@ export default class Synchronizer {
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
 											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
-											reason = 'rescan for enhanced basic delta algorithm';
 										}
 									}
 								}
