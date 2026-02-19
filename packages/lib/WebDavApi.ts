@@ -396,18 +396,16 @@ class WebDavApi {
 			response = await shim.fetch(url, fetchOptions);
 			if (response.ok) {
 				this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
-			} else {
-				if (response.status === 400) {
-					const fetchOptionsAlt = { ... fetchOptions };
-					fetchOptionsAlt.headers = { ... fetchOptions.headers };
-					delete fetchOptionsAlt.headers['If-None-Match'];
-					const responseAlt = await shim.fetch(url, fetchOptionsAlt);
-					if (responseAlt.ok) {
-						this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
-						return responseAlt;
-					}	else if (response.status === 400) {
-						this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
-					}
+			} else if (response.status === 400) {
+				const fetchOptionsAlt = { ... fetchOptions };
+				fetchOptionsAlt.headers = { ... fetchOptions.headers };
+				delete fetchOptionsAlt.headers['If-None-Match'];
+				const responseAlt = await shim.fetch(url, fetchOptionsAlt);
+				if (responseAlt.ok) {
+					this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
+					return responseAlt;
+				}	else if (response.status === 400) {
+					this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
 				}
 			}
 		} else {
