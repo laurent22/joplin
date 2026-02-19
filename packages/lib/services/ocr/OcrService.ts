@@ -4,7 +4,7 @@ import Setting from '../../models/Setting';
 import shim from '../../shim';
 import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
-import { emptyRecognizeResult, RecognizeResult } from './utils/types';
+import { emptyRecognizeResult, PdfOcrDetails, PdfOcrPage, RecognizeResult } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
@@ -95,24 +95,55 @@ export default class OcrService {
 				};
 			}
 
-			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
+			const saveOcrDetails = Setting.value('ocr.pdfMode') === 'accessible';
+
+			// Use pdfToImagesWithDimensions if we need OCR details, otherwise use simpler pdfToImages
+			const imageFilePaths = saveOcrDetails
+				? (await shim.pdfToImagesWithDimensions(resourceFilePath, await this.pdfExtractDir())).map(p => ({ path: p.path, width: p.width, height: p.height }))
+				: (await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir())).map(p => ({ path: p, width: 0, height: 0 }));
+
 			const results: RecognizeResult[] = [];
+			const pdfOcrPages: PdfOcrPage[] = [];
 
 			let pageIndex = 0;
-			for (const imageFilePath of imageFilePaths) {
+			for (const pageImage of imageFilePaths) {
+				const imagePath = pageImage.path;
 				logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
-				results.push(await driver.recognize(language, imageFilePath, resource.id));
+				const result = await driver.recognize(language, imagePath, resource.id);
+				results.push(result);
+
+				if (saveOcrDetails) {
+					// Parse OCR details and combine with page dimensions
+					const pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
+					pdfOcrPages.push({
+						width: pageImage.width,
+						height: pageImage.height,
+						lines: pageLines,
+					});
+				}
+
 				pageIndex++;
 			}
 
-			for (const imageFilePath of imageFilePaths) {
-				await shim.fsDriver().remove(imageFilePath);
+			for (const pageImage of imageFilePaths) {
+				await shim.fsDriver().remove(pageImage.path);
+			}
+
+			// Only create PDF OCR details structure if setting is enabled
+			let ocrDetails = '';
+			if (saveOcrDetails) {
+				const pdfOcrDetails: PdfOcrDetails = {
+					version: 1,
+					pages: pdfOcrPages,
+				};
+				ocrDetails = JSON.stringify(pdfOcrDetails);
 			}
 
 			return {
 				...emptyRecognizeResult(),
 				ocr_status: ResourceOcrStatus.Done,
 				ocr_text: results.map(r => r.ocr_text).join('\n'),
+				ocr_details: ocrDetails,
 			};
 		} else {
 			return driver.recognize(language, resourceFilePath, resource.id);

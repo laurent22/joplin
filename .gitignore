@@ -1525,6 +1525,7 @@ packages/lib/services/ocr/OcrService.js
 packages/lib/services/ocr/drivers/OcrDriverTesseract.js
 packages/lib/services/ocr/drivers/OcrDriverTranscribe.test.js
 packages/lib/services/ocr/drivers/OcrDriverTranscribe.js
+packages/lib/services/ocr/utils/createAccessiblePdf.js
 packages/lib/services/ocr/utils/filterOcrText.test.js
 packages/lib/services/ocr/utils/filterOcrText.js
 packages/lib/services/ocr/utils/types.js

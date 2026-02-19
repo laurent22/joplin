@@ -1,4 +1,5 @@
-import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, ImageSize, PdfInfo, PdfPageImage } from './shim';
+import createAccessiblePdf from './services/ocr/utils/createAccessiblePdf';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
 import FsDriverNode from './fs-driver-node';
@@ -851,7 +852,7 @@ function shimInit(options: ShimInitOptions = null) {
 			const quality = 0.8;
 			const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
 				return new Promise(resolve => {
-					canvas.toBlob(blob => resolve(blob), 'image/jpg', quality);
+					canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
 				});
 			};
 
@@ -894,9 +895,124 @@ function shimInit(options: ShimInitOptions = null) {
 		return output;
 	};
 
+	shim.pdfToImagesWithDimensions = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<PdfPageImage[]> => {
+		// Re-use the existing pdfToImages implementation and add dimensions
+		const filePaths = await shim.pdfToImages(pdfPath, outputDirectoryPath, options);
+
+		// Get dimensions by loading the PDF again (we know the scale factor)
+		const scaleFactor = options?.scaleFactor ?? 2;
+		const doc = await loadPdf(pdfPath);
+
+		try {
+			const output: PdfPageImage[] = [];
+			const startPage = options?.minPage ?? 1;
+
+			for (let i = 0; i < filePaths.length; i++) {
+				const pageNum = startPage + i;
+				const page = await doc.getPage(pageNum);
+				const viewport = page.getViewport({ scale: scaleFactor });
+
+				output.push({
+					path: filePaths[i],
+					width: viewport.width,
+					height: viewport.height,
+				});
+			}
+
+			return output;
+		} finally {
+			await doc.destroy();
+		}
+	};
+
 	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
 		const doc = await loadPdf(pdfPath);
 		return { pageCount: doc.numPages };
+	};
+
+	shim.imageSize = async (imagePath: string): Promise<ImageSize> => {
+		if (sharp) {
+			const metadata = await sharp(imagePath).metadata();
+			return { width: metadata.width, height: metadata.height };
+		}
+
+		// Fallback: Read JPEG dimensions from file header
+		// JPEG files contain dimensions in the SOF0 (Start Of Frame) marker
+		const buffer = await fs.readFile(imagePath);
+
+		// Check for JPEG magic bytes
+		if (buffer.length < 2 || buffer[0] !== 0xFF || buffer[1] !== 0xD8) {
+			throw new Error('Not a valid JPEG file');
+		}
+
+		let offset = 2;
+		const maxIterations = 1000; // Safety limit
+		let iterations = 0;
+
+		while (offset < buffer.length - 1 && iterations < maxIterations) {
+			iterations++;
+
+			// Skip any padding bytes (0xFF)
+			while (offset < buffer.length && buffer[offset] === 0xFF) {
+				offset++;
+			}
+
+			if (offset >= buffer.length) break;
+
+			const marker = buffer[offset];
+			offset++;
+
+			// SOF markers (Start Of Frame) contain dimensions
+			// SOF0=0xC0, SOF1=0xC1, SOF2=0xC2, etc. (excluding 0xC4, 0xC8, 0xCC)
+			if (marker >= 0xC0 && marker <= 0xCF && marker !== 0xC4 && marker !== 0xC8 && marker !== 0xCC) {
+				// Ensure we have enough bytes to read dimensions
+				if (offset + 7 >= buffer.length) break;
+				// Format: length (2 bytes), precision (1 byte), height (2 bytes), width (2 bytes)
+				const height = buffer.readUInt16BE(offset + 3);
+				const width = buffer.readUInt16BE(offset + 5);
+				return { width, height };
+			}
+
+			// Skip segment (markers without length: D0-D9, 01)
+			if ((marker >= 0xD0 && marker <= 0xD9) || marker === 0x01) {
+				continue;
+			}
+
+			// For other markers, read segment length and skip
+			if (offset + 1 >= buffer.length) break;
+			const segmentLength = buffer.readUInt16BE(offset);
+			if (segmentLength < 2) break; // Invalid length
+			offset += segmentLength;
+		}
+
+		throw new Error('Could not find dimensions in JPEG file');
+	};
+
+	shim.createAccessiblePdf = async (originalPdfPath: string, ocrDetails: string, outputPath: string): Promise<void> => {
+		const Setting = require('./models/Setting').default;
+		const tempDir = `${Setting.value('tempDir')}/accessible_pdf_${Date.now()}`;
+		await shim.fsDriver().mkdir(tempDir);
+
+		try {
+			// Convert PDF pages to images
+			const imageFilePaths = await shim.pdfToImages(originalPdfPath, tempDir);
+
+			// Read all images into buffers
+			const imageBuffers: Buffer[] = [];
+			for (const imagePath of imageFilePaths) {
+				const buffer = await fs.readFile(imagePath);
+				imageBuffers.push(buffer);
+			}
+
+			// Create the accessible PDF
+			const pdfBytes = await createAccessiblePdf(imageBuffers, ocrDetails);
+
+			// Write the output file
+			await writeFile(outputPath, pdfBytes);
+		} finally {
+			// Clean up temp directory
+			await shim.fsDriver().remove(tempDir);
+		}
 	};
 }
 

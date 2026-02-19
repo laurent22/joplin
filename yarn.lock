@@ -10927,6 +10927,7 @@ __metadata:
     node-notifier: "npm:10.0.1"
     node-persist: "npm:3.1.3"
     node-rsa: "npm:1.1.1"
+    pdf-lib: "npm:1.17.1"
     pdfjs-dist: "npm:3.11.174"
     query-string: "npm:7.1.3"
     re-reselect: "npm:4.0.1"
@@ -13253,6 +13254,24 @@ __metadata:
     "@parcel/watcher-win32-x64":
       optional: true
   checksum: 10/2cc1405166fb3016b34508661902ab08b6dec59513708165c633c84a4696fff64f9b99ea116e747c121215e09619f1decab6f0350d1cb26c9210b98eb28a6a56
+  languageName: node
+  linkType: hard
+
+"@pdf-lib/standard-fonts@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@pdf-lib/standard-fonts@npm:1.0.0"
+  dependencies:
+    pako: "npm:^1.0.6"
+  checksum: 10/0dfcedbd16e3f48afcac321f153d81f49ea6030030fa1e05a07bde359629949e27b3d77b39a5c7b0b0ff8af09912765f62a911cd67d488d4dc0b3c1c5ca106f0
+  languageName: node
+  linkType: hard
+
+"@pdf-lib/upng@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@pdf-lib/upng@npm:1.0.1"
+  dependencies:
+    pako: "npm:^1.0.10"
+  checksum: 10/eecac72f36d51b67acb09f61a7bbb55577ceb6232aa0c1a827aea003126787cede07ad391c0c789ab36164a9a86d1634768c2cf941148743e155de7ed6c34fc3
   languageName: node
   linkType: hard
 
@@ -41304,7 +41323,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pako@npm:^1.0.10, pako@npm:~1.0.5":
+"pako@npm:^1.0.10, pako@npm:^1.0.11, pako@npm:^1.0.6, pako@npm:~1.0.5":
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 10/1ad07210e894472685564c4d39a08717e84c2a68a70d3c1d9e657d32394ef1670e22972a433cbfe48976cb98b154ba06855dcd3fcfba77f60f1777634bec48c0
@@ -41845,6 +41864,18 @@ __metadata:
   version: 1.0.2
   resolution: "pct-encode@npm:1.0.2"
   checksum: 10/11edce15c8a9012cf5fdee006a05f10e3668a755a15aa25b6afbb8cc20d67f600702eb83e5eaca7a98ee78f9b362fb7d9ada9745428dceb6cdc44e0143851509
+  languageName: node
+  linkType: hard
+
+"pdf-lib@npm:1.17.1":
+  version: 1.17.1
+  resolution: "pdf-lib@npm:1.17.1"
+  dependencies:
+    "@pdf-lib/standard-fonts": "npm:^1.0.0"
+    "@pdf-lib/upng": "npm:^1.0.1"
+    pako: "npm:^1.0.11"
+    tslib: "npm:^1.11.1"
+  checksum: 10/ea8c2c0c813d89ca359a0c831cb2e8a581c569ed44b074316f917942b5baa101f878ce922f1cb87e6f41a035008ba75b52267480aee5d65a5e68c445ee83bc37
   languageName: node
   linkType: hard
 

@@ -207,6 +207,66 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
 			},
 		},
+		createAccessibleDocument: {
+			label: _('Create accessible document'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resource, resourcePath } = await resourceInfo(options);
+
+				if (resource.mime !== 'application/pdf') {
+					bridge().showInfoMessageBox(_('This feature is only available for PDF files.'));
+					return;
+				}
+
+				if (resource.ocr_status !== ResourceOcrStatus.Done) {
+					bridge().showInfoMessageBox(_('OCR is not complete. Please wait for OCR to finish before creating an accessible document.'));
+					return;
+				}
+
+				const ocrDetails = resource.ocr_details;
+
+				// If ocr_details is missing (legacy PDF processed before this feature),
+				// automatically re-run OCR to get the coordinate data
+				if (!ocrDetails) {
+					const result = await bridge().showMessageBox(_('This PDF was processed before coordinate data was saved. Would you like to re-run OCR to generate an accessible document? This may take a moment.'), {
+						buttons: [_('Re-run OCR'), _('Cancel')],
+					});
+
+					if (result === 1) return; // User cancelled
+
+					// Trigger OCR re-run
+					await Resource.save({
+						id: resource.id,
+						ocr_status: ResourceOcrStatus.Todo,
+						ocr_details: '',
+						ocr_error: '',
+						ocr_text: '',
+					});
+
+					bridge().showInfoMessageBox(_('OCR has been queued. Please wait for it to complete and then try again.'));
+					return;
+				}
+
+				// Show save dialog
+				const defaultFilename = `${(resource.filename || resource.title || resource.id).replace(/\.pdf$/i, '')}_accessible.pdf`;
+				const outputPath = await bridge().showSaveDialog({
+					defaultPath: defaultFilename,
+					filters: [{ name: 'PDF', extensions: ['pdf'] }],
+				});
+
+				if (!outputPath) return;
+
+				try {
+					await shim.createAccessiblePdf(resourcePath, ocrDetails, outputPath);
+					await bridge().openItem(outputPath);
+				} catch (error) {
+					console.error('Failed to create accessible PDF:', error);
+					bridge().showErrorMessageBox(_('Failed to create accessible document: %s', error.message));
+				}
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+			},
+		},
 		separator3: makeSeparator(),
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),

@@ -108,6 +108,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 		const createWorkerOptions: Partial<WorkerOptions> = {
 			workerBlobURL: false,
+			cacheMethod: 'none', // TODO: REMOVE THIS
 		};
 
 		if (this.workerPath_) createWorkerOptions.workerPath = this.workerPath_;
