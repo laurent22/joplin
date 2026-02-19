@@ -4,13 +4,60 @@ import { PdfOcrDetails, RecognizeResultLine } from './types';
 // The PDF OCR images are created at 2x scale by pdfToImages()
 const OCR_SCALE_FACTOR = 2;
 
+// Adds an invisible text layer to a PDF page based on OCR word positions.
+// The text is rendered in "invisible" mode (render mode 3) so it doesn't
+// appear visually but can be selected, copied, and read by screen readers.
+const addInvisibleTextLayer = (
+	page: PDFPage,
+	lines: RecognizeResultLine[],
+	font: PDFFont,
+	_pageWidth: number,
+	pageHeight: number,
+): void => {
+	for (const line of lines) {
+		for (const word of line.words) {
+			const text = word.t;
+			if (!text || !text.trim()) continue;
+
+			// Bounding box format from Tesseract: [x0, x1, y0, y1]
+			const [x0, , y0, y1] = word.bb;
+
+			// Convert from OCR coordinates (2x scale, origin top-left)
+			// to PDF coordinates (1x scale, origin bottom-left)
+			const pdfX = x0 / OCR_SCALE_FACTOR;
+			const pdfY = pageHeight - (y1 / OCR_SCALE_FACTOR); // Flip Y axis and use bottom of bbox
+
+			// Calculate word height in PDF coordinates (width not currently used)
+			const wordHeight = (y1 - y0) / OCR_SCALE_FACTOR;
+
+			// Estimate font size based on word height
+			// We want the text to fit within the bounding box
+			const fontSize = Math.max(1, wordHeight * 0.85);
+
+			// Draw the text as invisible (using transparent color)
+			// PDF.js and screen readers can still detect and read this text
+			page.drawText(text, {
+				x: pdfX,
+				y: pdfY,
+				size: fontSize,
+				font: font,
+				color: rgb(0, 0, 0),
+				opacity: 0, // Make text invisible
+				// Note: pdf-lib doesn't directly support render mode 3 (invisible),
+				// but opacity: 0 achieves the same visual effect while keeping
+				// the text selectable
+			});
+		}
+	}
+};
+
 // Creates an accessible PDF by overlaying invisible text on top of page images.
 // The text positions are derived from OCR bounding boxes, allowing the PDF to be
 // searched and read by screen readers while maintaining the visual appearance.
-async function createAccessiblePdf(
+const createAccessiblePdf = async (
 	pageImages: Buffer[],
 	ocrDetailsJson: string,
-): Promise<Uint8Array> {
+): Promise<Uint8Array> => {
 	const ocrDetails: PdfOcrDetails = JSON.parse(ocrDetailsJson);
 
 	if (ocrDetails.version !== 1) {
@@ -53,53 +100,6 @@ async function createAccessiblePdf(
 	}
 
 	return pdfDoc.save();
-}
-
-// Adds an invisible text layer to a PDF page based on OCR word positions.
-// The text is rendered in "invisible" mode (render mode 3) so it doesn't
-// appear visually but can be selected, copied, and read by screen readers.
-function addInvisibleTextLayer(
-	page: PDFPage,
-	lines: RecognizeResultLine[],
-	font: PDFFont,
-	_pageWidth: number,
-	pageHeight: number,
-): void {
-	for (const line of lines) {
-		for (const word of line.words) {
-			const text = word.t;
-			if (!text || !text.trim()) continue;
-
-			// Bounding box format from Tesseract: [x0, x1, y0, y1]
-			const [x0, , y0, y1] = word.bb;
-
-			// Convert from OCR coordinates (2x scale, origin top-left)
-			// to PDF coordinates (1x scale, origin bottom-left)
-			const pdfX = x0 / OCR_SCALE_FACTOR;
-			const pdfY = pageHeight - (y1 / OCR_SCALE_FACTOR); // Flip Y axis and use bottom of bbox
-
-			// Calculate word height in PDF coordinates (width not currently used)
-			const wordHeight = (y1 - y0) / OCR_SCALE_FACTOR;
-
-			// Estimate font size based on word height
-			// We want the text to fit within the bounding box
-			const fontSize = Math.max(1, wordHeight * 0.85);
-
-			// Draw the text as invisible (using transparent color)
-			// PDF.js and screen readers can still detect and read this text
-			page.drawText(text, {
-				x: pdfX,
-				y: pdfY,
-				size: fontSize,
-				font: font,
-				color: rgb(0, 0, 0),
-				opacity: 0, // Make text invisible
-				// Note: pdf-lib doesn't directly support render mode 3 (invisible),
-				// but opacity: 0 achieves the same visual effect while keeping
-				// the text selectable
-			});
-		}
-	}
-}
+};
 
 export default createAccessiblePdf;
