@@ -521,17 +521,16 @@ export default class PluginService extends BaseService {
 
 	public describeIncompatibility(manifest: PluginManifest) {
 		if (this.isCompatible(manifest)) return null;
-
+		if (!manifest.app_min_version) {
+			return _(
+				'The plugin manifest is missing the required "%s" field.',
+				'app_min_version',
+			);
+		}
 		const minVersion = minVersionForPlatform(this.appType_, manifest);
 		if (minVersion) {
 			return _('Please upgrade Joplin to version %s or later to use this plugin.', minVersion);
 		} else {
-			if (!manifest.app_min_version) {
-				return _(
-					'The plugin manifest is missing the required "%s" field.',
-					'app_min_version',
-				);
-			}
 			let platformDescription = 'Unknown';
 			if (this.appType_ === AppType.Mobile) {
 				platformDescription = _('Joplin Mobile');
