@@ -27,11 +27,12 @@ import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
 
 export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
-	const s = {
+	const s: Record<ResourceOcrStatus, string> = {
 		[ResourceOcrStatus.Todo]: _('Idle'),
 		[ResourceOcrStatus.Processing]: _('Processing'),
 		[ResourceOcrStatus.Error]: _('Error'),
 		[ResourceOcrStatus.Done]: _('Done'),
+		[ResourceOcrStatus.TodoAccessible]: _('Idle'),
 	};
 
 	return s[status];
@@ -525,13 +526,14 @@ export default class Resource extends BaseItem {
 				SELECT ${selectSql}
 				FROM resources
 				WHERE
-					(ocr_status = ? or ocr_status = ?) AND
+					(ocr_status = ? OR ocr_status = ? OR ocr_status = ?) AND
 					encryption_applied = 0 AND
 					mime IN ('${supportedMimeTypes.join('\',\'')}')
 			`,
 			params: [
 				ResourceOcrStatus.Todo,
 				ResourceOcrStatus.Processing,
+				ResourceOcrStatus.TodoAccessible,
 			],
 		};
 	}

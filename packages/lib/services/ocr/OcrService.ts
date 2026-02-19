@@ -82,20 +82,24 @@ export default class OcrService {
 		if (!driver) throw new Error(`Unknown driver ID: ${resource.ocr_driver_id}`);
 
 		if (resource.mime === 'application/pdf') {
+			// Save OCR details if the setting is enabled OR if this specific resource
+			// was marked with TodoAccessible status (requesting accessible PDF creation)
+			const saveOcrDetails = Setting.value('ocr.pdfMode') === 'accessible' || resource.ocr_status === ResourceOcrStatus.TodoAccessible;
+
 			// OCR can be slow for large PDFs.
-			// Skip it if the PDF already includes text.
-			const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
-			const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+			// Skip it if the PDF already includes text (unless accessible processing is requested)
+			if (!saveOcrDetails) {
+				const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
+				const pagesWithText = pageTexts.filter(text => !!text.trim().length);
 
-			if (pagesWithText.length > 0) {
-				return {
-					...emptyRecognizeResult(),
-					ocr_status: ResourceOcrStatus.Done,
-					ocr_text: pageTexts.join('\n'),
-				};
+				if (pagesWithText.length > 0) {
+					return {
+						...emptyRecognizeResult(),
+						ocr_status: ResourceOcrStatus.Done,
+						ocr_text: pageTexts.join('\n'),
+					};
+				}
 			}
-
-			const saveOcrDetails = Setting.value('ocr.pdfMode') === 'accessible';
 
 			// Use pdfToImagesWithDimensions if we need OCR details, otherwise use simpler pdfToImages
 			const imageFilePaths = saveOcrDetails
@@ -228,6 +232,7 @@ export default class OcrService {
 						'file_extension',
 						'encryption_applied',
 						'ocr_driver_id',
+						'ocr_status',
 					],
 				});
 

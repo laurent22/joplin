@@ -38,7 +38,9 @@ The generated PDF contains the original page images with an invisible text layer
 - Search within the PDF using your PDF viewer
 - Use screen readers to read the document
 
-Note: To use this feature, the "OCR: PDF processing mode" setting (under General > Advanced) must be set to "Accessible". This mode saves additional word coordinate data during OCR processing. If you try to create an accessible document from a PDF that was processed before enabling this mode, you will be prompted to re-run OCR.
+If the PDF was processed before this feature was available, you will be prompted to re-run OCR to generate the required word coordinate data.
+
+To have all future PDFs automatically processed with word coordinates (so you don't need to re-run OCR), enable the "OCR: PDF processing mode" setting (under General > Advanced) and set it to "Accessible". Note that this increases database size by approximately 10-20 KB per page.
 
 ## Video tutorial
 

@@ -44,10 +44,10 @@ export const runtime = (): CommandRuntime => {
 
 				if (result === 1) return; // User cancelled
 
-				// Trigger OCR re-run
+				// Trigger OCR re-run with TodoAccessible status to request full OCR details
 				await Resource.save({
 					id: resource.id,
-					ocr_status: ResourceOcrStatus.Todo,
+					ocr_status: ResourceOcrStatus.TodoAccessible,
 					ocr_details: '',
 					ocr_error: '',
 					ocr_text: '',
