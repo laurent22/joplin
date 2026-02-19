@@ -580,7 +580,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'ocr.pdfMode': {
-			value: 'text',
+			value: 'normal',
 			type: SettingItemType.String,
 			isEnum: true,
 			public: true,
@@ -588,7 +588,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('OCR: PDF processing mode'),
 			description: () => _('Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.'),
 			options: () => ({
-				text: _('Normal'),
+				normal: _('Normal'),
 				accessible: _('Accessible'),
 			}),
 			storage: SettingStorage.File,

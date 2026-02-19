@@ -839,7 +839,7 @@ function shimInit(options: ShimInitOptions = null) {
 		return textByPage;
 	};
 
-	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
+	shim.pdfToImagesWithDimensions = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<PdfPageImage[]> => {
 		if (typeof HTMLCanvasElement === 'undefined') {
 			throw new Error('Unsupported -- the Canvas element is required.');
 		}
@@ -861,7 +861,7 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const filePrefix = `page_${Date.now()}`;
-		const output: string[] = [];
+		const output: PdfPageImage[] = [];
 		const doc = await loadPdf(pdfPath);
 
 		try {
@@ -884,9 +884,14 @@ function shimInit(options: ShimInitOptions = null) {
 
 				const buffer = await canvasToBuffer(canvas);
 				const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
-				output.push(filePath);
 				await writeFile(filePath, buffer, 'binary');
 				if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+
+				output.push({
+					path: filePath,
+					width: viewport.width,
+					height: viewport.height,
+				});
 			}
 		} finally {
 			await doc.destroy();
@@ -895,34 +900,9 @@ function shimInit(options: ShimInitOptions = null) {
 		return output;
 	};
 
-	shim.pdfToImagesWithDimensions = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<PdfPageImage[]> => {
-		// Re-use the existing pdfToImages implementation and add dimensions
-		const filePaths = await shim.pdfToImages(pdfPath, outputDirectoryPath, options);
-
-		// Get dimensions by loading the PDF again (we know the scale factor)
-		const scaleFactor = options?.scaleFactor ?? 2;
-		const doc = await loadPdf(pdfPath);
-
-		try {
-			const output: PdfPageImage[] = [];
-			const startPage = options?.minPage ?? 1;
-
-			for (let i = 0; i < filePaths.length; i++) {
-				const pageNum = startPage + i;
-				const page = await doc.getPage(pageNum);
-				const viewport = page.getViewport({ scale: scaleFactor });
-
-				output.push({
-					path: filePaths[i],
-					width: viewport.width,
-					height: viewport.height,
-				});
-			}
-
-			return output;
-		} finally {
-			await doc.destroy();
-		}
+	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
+		const pagesWithDimensions = await shim.pdfToImagesWithDimensions(pdfPath, outputDirectoryPath, options);
+		return pagesWithDimensions.map(p => p.path);
 	};
 
 	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
