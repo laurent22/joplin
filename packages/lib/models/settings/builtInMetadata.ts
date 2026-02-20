@@ -95,6 +95,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: false,
+			section: 'editor',
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			storage: SettingStorage.File,
 			isGlobal: true,
@@ -738,7 +739,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Auto-pair braces, parentheses, quotations, etc.'),
 			storage: SettingStorage.File,
@@ -749,7 +750,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Autocomplete Markdown and HTML'),
 			description: () => _('Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.'),
@@ -761,7 +762,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable HTML-to-Markdown conversion banner'),
 			storage: SettingStorage.File,
@@ -771,7 +772,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Preserve colours when pasting text in Rich Text Editor'),
 			storage: SettingStorage.File,
@@ -781,7 +782,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Auto-format Markdown in the Rich Text Editor'),
 			description: () => _('Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.'),
@@ -801,7 +802,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			public: false,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Tab moves focus'),
 			storage: SettingStorage.File,
@@ -909,7 +910,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.usePlainText': {
 			value: false,
 			type: SettingItemType.Bool,
-			section: 'note',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Mobile],
 			label: () => 'Use the plain text editor',
@@ -922,7 +923,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.mobile.spellcheckEnabled': {
 			value: true,
 			type: SettingItemType.Bool,
-			section: 'note',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Mobile],
 			label: () => _('Enable spellcheck in the text editor'),
@@ -933,7 +934,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.mobile.toolbarEnabled': {
 			value: true,
 			type: SettingItemType.Bool,
-			section: 'note',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Mobile],
 			label: () => _('Enable the Markdown toolbar'),
@@ -1217,7 +1218,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
-			section: 'appearance',
+			section: 'editor',
 			label: () => _('Editor font size'),
 			minimum: 4,
 			maximum: 50,
@@ -1232,7 +1233,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					public: true,
 					label: () => _('Editor font'),
 					appTypes: [AppType.Mobile],
-					section: 'appearance',
+					section: 'editor',
 					options: () => {
 						// IMPORTANT: The font mapping must match the one in global-styles.js::editorFont()
 						if (mobilePlatform === 'ios') {
@@ -1255,7 +1256,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					type: SettingItemType.String,
 					public: true,
 					appTypes: [AppType.Desktop],
-					section: 'appearance',
+					section: 'editor',
 					label: () => _('Editor font family'),
 					description: () =>
 						_('Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.'),
@@ -1268,7 +1269,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			public: true,
 			appTypes: [AppType.Desktop],
-			section: 'appearance',
+			section: 'editor',
 			label: () => _('Editor monospace font family'),
 			description: () =>
 				_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
@@ -1288,7 +1289,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			subType: SettingItemSubType.FontFamily,
 		},
 
-		'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
+		'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'editor', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 		'style.scrollbarSize': {
 			value: ScrollbarSize.Small,
@@ -1476,6 +1477,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			public: true,
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			isEnum: true,
 			advanced: true,
@@ -1496,6 +1498,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable spell checking in Markdown editor'),
 			storage: SettingStorage.File,
@@ -1509,7 +1512,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Render markup in editor'),
 			description: () => _('Renders markup on all lines that don\'t include the cursor.'),
-			section: 'note',
+			section: 'editor',
 			storage: SettingStorage.File,
 		},
 		'editor.imageRendering': {
@@ -1519,14 +1522,14 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Render images'),
 			description: () => _('If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.'),
-			section: 'note',
+			section: 'editor',
 			storage: SettingStorage.File,
 		},
 		'editor.highlightActiveLine': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Highlight active line'),
 			storage: SettingStorage.File,
@@ -1569,7 +1572,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			value: false,
 			type: SettingItemType.Bool,
-			section: 'general',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Desktop],
 			label: () => _('Use the legacy Markdown editor'),
@@ -1725,7 +1728,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		'spellChecker.enabled': { value: true, type: SettingItemType.Bool, isGlobal: true, storage: SettingStorage.File, public: false },
 		'spellChecker.language': { value: '', type: SettingItemType.String, isGlobal: true, storage: SettingStorage.File, public: false }, // Depreciated in favour of spellChecker.languages.
-		'spellChecker.languages': { value: [] as string[], type: SettingItemType.Array, isGlobal: true, storage: SettingStorage.File, public: false },
+		'spellChecker.languages': { value: [] as string[], type: SettingItemType.Array, section: 'editor', isGlobal: true, storage: SettingStorage.File, public: false },
 
 		windowContentZoomFactor: {
 			value: 100,
