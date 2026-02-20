@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
@@ -27,13 +27,13 @@ const JoplinServerScreenComponent = (props: Props) => {
 	const confirmUrl = (applicationAuthId: string) => `${props.joplinServerApi}/applications/${applicationAuthId}/confirm`;
 	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinServerApi}/api/application_auth/${applicationAuthId}`;
 
-	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
+	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const [state, dispatch] = useReducer(reducer, defaultState);
 
 	const applicationAuthId = useMemo(() => uuidgen(), []);
 
 	const periodicallyCheckForCredentials = () => {
-		if (intervalIdentifier) return;
+		if (intervalRef.current) return;
 
 		let isWaitingResponse = false;
 		const interval = setInterval(async () => {
@@ -57,19 +57,25 @@ const JoplinServerScreenComponent = (props: Props) => {
 					eventManager.emit(EventName.SessionEstablished);
 
 					dispatch({ type: 'COMPLETED' });
-					clearInterval(interval);
+					if (intervalRef.current) {
+						clearInterval(intervalRef.current);
+						intervalRef.current = null;
+					}
 					void reg.scheduleSync(0);
 				}
 			} catch (error) {
 				logger.error(error);
 				dispatch({ type: 'ERROR', payload: error.message });
-				clearInterval(interval);
+				if (intervalRef.current) {
+					clearInterval(intervalRef.current);
+					intervalRef.current = null;
+				}
 			} finally {
 				isWaitingResponse = false;
 			}
 		}, 2 * 1000);
 
-		setIntervalIdentifier(interval);
+		intervalRef.current = interval;
 	};
 
 	const onButtonUsed = () => {
@@ -93,17 +99,20 @@ const JoplinServerScreenComponent = (props: Props) => {
 
 	useEffect(() => {
 		return () => {
-			clearInterval(intervalIdentifier);
+			if (intervalRef.current) {
+				clearInterval(intervalRef.current);
+				intervalRef.current = null;
+			}
 		};
-	}, [intervalIdentifier]);
+	}, []);
 
 	return (
-		<div className="login-page">
-			<div className="page-container">
+		<div className='login-page'>
+			<div className='page-container'>
 				{state.active !== 'COMPLETED' ? (
 					<>
-						<p className="text">{_('To allow Joplin to synchronise with Joplin Server, please login using this URL:')}</p>
-						<div className="buttons-container">
+						<p className='text'>{_('To allow Joplin to synchronise with Joplin Server, please login using this URL:')}</p>
+						<div className='buttons-container'>
 							<Button
 								onClick={onAuthorizeClicked}
 								title={_('Authorise')}
@@ -125,7 +134,7 @@ const JoplinServerScreenComponent = (props: Props) => {
 						<span className={state.className}>{state.errorMessage}</span>
 					) : null}
 				</p>
-				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
+				{state.active === 'LINK_USED' ? <div className='loading-animation' /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>

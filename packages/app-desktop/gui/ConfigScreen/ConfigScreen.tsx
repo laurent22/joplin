@@ -272,7 +272,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					};
 
 					settingComps.push(
-						<div key="connect_to_joplin_server_button" style={this.rowStyle_}>
+						<div key='connect_to_joplin_server_button' style={this.rowStyle_}>
 							<Button
 								title={_('Login with Joplin Server')}
 								level={ButtonLevel.Primary}
