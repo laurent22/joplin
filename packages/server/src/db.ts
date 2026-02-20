@@ -86,7 +86,7 @@ export interface Migration {
 
 export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	const connection: DbConfigConnection = {};
-	let pool: KnexPoolConfig|undefined = undefined;
+	let pool: KnexPoolConfig | undefined = undefined;
 
 	if (dbConfig.client === 'sqlite3') {
 		connection.filename = dbConfig.name;
@@ -312,7 +312,9 @@ export const sqliteSyncSlave = async (master: DbConnection, slave: DbConnection)
 // Incorrectly named migrations may end up being applied in the wrong order.
 const fixMigrationNames = async (db: DbConnection) => {
 	try {
+		const context: QueryContext = { noSuchTableErrorLoggingDisabled: true };
 		await db('knex_migrations')
+			.queryContext(context)
 			.update({ name: '20250404091200_user_auth_code.js' })
 			.where('name', '=', '202504040912000_user_auth_code.js');
 	} catch (error) {
