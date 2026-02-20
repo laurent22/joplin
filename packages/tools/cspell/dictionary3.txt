@@ -88,6 +88,8 @@ rowid
 ROWID
 ROWIDs
 rowspan
+RRULE
+rrule
 rscss
 RSCSS
 rseidelsohn

@@ -134,7 +134,7 @@ export default class AlarmService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async handleNotificationTrigger(alarmId: number) {
 		try {
-			const alarm = await Alarm.load(alarmId);
+			const alarm = await Alarm.load(String(alarmId));
 			if (!alarm) {
 				this.logger().warn(`Alarm ${alarmId} not found when handling trigger`);
 				return;
@@ -165,7 +165,7 @@ export default class AlarmService {
 				// Non-repeating alarm - delete it after triggering
 				this.logger().info(`Non-repeating alarm ${alarmId} triggered, deleting...`);
 				await this.driver().clearNotification(alarmId);
-				await Alarm.delete(alarmId, { sourceDescription: 'AlarmService/handleNotificationTrigger' });
+				await Alarm.delete(String(alarmId), { sourceDescription: 'AlarmService/handleNotificationTrigger' });
 			}
 		} catch (error) {
 			this.logger().error(`Error handling notification trigger for alarm ${alarmId}`, error);

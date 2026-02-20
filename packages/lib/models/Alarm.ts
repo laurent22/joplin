@@ -1,5 +1,6 @@
 import BaseModel from '../BaseModel';
 import Note from './Note';
+import { RRule } from 'rrule';
 
 export interface Notification {
 	id: number;
@@ -9,6 +10,24 @@ export interface Notification {
 	body?: string;
 }
 
+// Alarm model with support for recurring notifications using RRULE (RFC 5545)
+//
+// Supports both simple intervals (backward compatible) and RRULE strings:
+//
+// Simple intervals (converted to RRULE automatically):
+// - 'daily'   → Daily recurrence
+// - 'weekly'  → Weekly recurrence
+// - 'monthly' → Monthly recurrence
+// - 'none'    → One-time alarm
+//
+// RRULE examples:
+// - 'FREQ=DAILY;INTERVAL=1'                    → Every day
+// - 'FREQ=WEEKLY;BYDAY=MO,WE,FR'               → Every Mon, Wed, Fri
+// - 'FREQ=MONTHLY;BYMONTHDAY=1'                → First day of each month
+// - 'FREQ=MONTHLY;BYDAY=1MO'                   → First Monday of each month
+// - 'FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=25'     → Every Christmas
+//
+// Use createRRule() helper for building custom RRULE patterns
 export default class Alarm extends BaseModel {
 	public static tableName() {
 		return 'alarms';
@@ -76,16 +95,34 @@ export default class Alarm extends BaseModel {
 		return this.modelSelectAll('SELECT * FROM alarms WHERE trigger_time >= ?', [Date.now()]);
 	}
 
-	// Get interval in milliseconds from repeat_interval string
-	private static getIntervalMs(period: string): number {
-		const intervals: Record<string, number> = {
-			none: 0,
-			daily: 24 * 60 * 60 * 1000,
-			weekly: 7 * 24 * 60 * 60 * 1000,
-			monthly: 30 * 24 * 60 * 60 * 1000,
-		};
+	// Convert simple interval strings to RRULE strings for backward compatibility
+	private static simpleIntervalToRRule(period: string, dtstart: Date): string {
+		switch (period) {
+		case 'daily':
+			return new RRule({
+				freq: RRule.DAILY,
+				dtstart,
+			}).toString();
+		case 'weekly':
+			return new RRule({
+				freq: RRule.WEEKLY,
+				dtstart,
+			}).toString();
+		case 'monthly':
+			return new RRule({
+				freq: RRule.MONTHLY,
+				dtstart,
+			}).toString();
+		case 'none':
+		default:
+			return '';
+		}
+	}
 
-		return intervals[period] ?? 0;
+	// Check if repeat_interval is a simple string or RRULE
+	private static isRRuleString(interval: string): boolean {
+		if (!interval || interval === 'none') return false;
+		return interval.startsWith('DTSTART') || interval.startsWith('FREQ');
 	}
 
 	// Check if alarm should trigger based on repeat_interval and last_trigger_time
@@ -97,20 +134,20 @@ export default class Alarm extends BaseModel {
 		}
 
 		const now = Date.now();
-		const interval = this.getIntervalMs(alarm.repeat_interval);
-
-		// If interval is 0 or invalid, don't repeat
-		if (interval === 0) {
-			return true;
-		}
 
 		// First time trigger - no last_trigger_time set
 		if (!alarm.last_trigger_time || alarm.last_trigger_time === 0) {
 			return true;
 		}
 
-		// Check if enough time has passed since last trigger
-		return (now - alarm.last_trigger_time) >= interval;
+		// Calculate next occurrence and check if it's due
+		try {
+			const nextTrigger = this.calculateNextTriggerTime(alarm.last_trigger_time, alarm.repeat_interval);
+			return now >= nextTrigger;
+		} catch (error) {
+			this.logger().error('Error checking if alarm should trigger:', error);
+			return true; // Default to triggering on error
+		}
 	}
 
 	// Update the last_trigger_time for a repeating alarm
@@ -130,11 +167,64 @@ export default class Alarm extends BaseModel {
 		);
 	}
 
-	// Calculate next trigger time for repeating alarms
+	// Calculate next trigger time for repeating alarms using RRULE
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static calculateNextTriggerTime(currentTriggerTime: number, repeatInterval: string): number {
-		const interval = this.getIntervalMs(repeatInterval);
-		if (interval === 0) return currentTriggerTime;
-		return currentTriggerTime + interval;
+		if (!repeatInterval || repeatInterval === 'none') {
+			return currentTriggerTime;
+		}
+
+		try {
+			const currentDate = new Date(currentTriggerTime);
+			let rruleString = repeatInterval;
+
+			// Convert simple interval to RRULE if needed (backward compatibility)
+			if (!this.isRRuleString(repeatInterval)) {
+				rruleString = this.simpleIntervalToRRule(repeatInterval, currentDate);
+				if (!rruleString) return currentTriggerTime;
+			}
+
+			// Parse RRULE and get next occurrence after current time
+			const rule = RRule.fromString(rruleString);
+			const nextDate = rule.after(currentDate, false); // false = exclusive (after current)
+
+			if (!nextDate) {
+				this.logger().warn(`No next occurrence found for RRULE: ${rruleString}`);
+				return currentTriggerTime;
+			}
+
+			return nextDate.getTime();
+		} catch (error) {
+			this.logger().error(`Error calculating next trigger time for interval "${repeatInterval}":`, error);
+			return currentTriggerTime;
+		}
+	}
+
+	// Helper to create RRULE string from common patterns
+	public static createRRule(options: {
+		freq: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
+		interval?: number;
+		byweekday?: number[];
+		bymonthday?: number;
+		dtstart: Date;
+	}): string {
+		const freqMap: Record<string, number> = {
+			DAILY: RRule.DAILY,
+			WEEKLY: RRule.WEEKLY,
+			MONTHLY: RRule.MONTHLY,
+			YEARLY: RRule.YEARLY,
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const rruleOptions: any = {
+			freq: freqMap[options.freq],
+			dtstart: options.dtstart,
+		};
+
+		if (options.interval) rruleOptions.interval = options.interval;
+		if (options.byweekday) rruleOptions.byweekday = options.byweekday;
+		if (options.bymonthday) rruleOptions.bymonthday = options.bymonthday;
+
+		return new RRule(rruleOptions).toString();
 	}
 }
