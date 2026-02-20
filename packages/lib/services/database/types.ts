@@ -92,7 +92,10 @@ export interface AlarmEntity {
   'id'?: number | null;
   'note_id'?: string;
   'trigger_time'?: number;
+  'repeat_interval'?: string;
+  'last_trigger_time'?: number;
   'type_'?: number;
+
 }
 export interface DeletedItemEntity {
   'deleted_time'?: number;
@@ -252,6 +255,7 @@ export interface NoteEntity {
   'user_data'?: string;
   'user_updated_time'?: number;
   'type_'?: number;
+  'alarm_interval'?: string;
 }
 export interface NotesNormalizedEntity {
   'altitude'?: number;
@@ -471,6 +475,8 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number' },
 		note_id: { type: 'string' },
 		trigger_time: { type: 'number' },
+		repeat_interval: { type: 'string' },
+		last_trigger_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 	item_changes: {

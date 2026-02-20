@@ -39,8 +39,8 @@ export default class AlarmService {
 	public static async garbageCollect() {
 		this.logger().info('Garbage collecting alarms...');
 
-		// Delete alarms that have already been triggered
-		await Alarm.deleteExpiredAlarms();
+		// Delete only non-repeating alarms that have been triggered
+		await Alarm.deleteExpiredNonRepeatingAlarms();
 
 		// Delete alarms that correspond to non-existent notes
 		const alarmIds = await Alarm.alarmIdsWithoutNotes();
@@ -105,6 +105,7 @@ export default class AlarmService {
 			await Alarm.save({
 				note_id: note.id,
 				trigger_time: note.todo_due,
+				repeat_interval: note.alarm_interval || 'none',
 			});
 
 			// Reload alarm to get its ID
@@ -126,6 +127,48 @@ export default class AlarmService {
 		const dueNotes = await Note.dueNotes();
 		for (let i = 0; i < dueNotes.length; i++) {
 			await this.updateNoteNotification(dueNotes[i]);
+		}
+	}
+
+	// Handle notification trigger - update last triggered time and reschedule if repeating
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public static async handleNotificationTrigger(alarmId: number) {
+		try {
+			const alarm = await Alarm.load(alarmId);
+			if (!alarm) {
+				this.logger().warn(`Alarm ${alarmId} not found when handling trigger`);
+				return;
+			}
+
+			// If it's a repeating alarm, update last trigger time and reschedule
+			if (alarm.repeat_interval && alarm.repeat_interval !== 'none') {
+				this.logger().info(`Repeating alarm ${alarmId} triggered, rescheduling...`);
+
+				// Update last trigger time
+				await Alarm.updateLastTriggered(alarmId);
+
+				// Calculate next trigger time
+				const nextTrigger = Alarm.calculateNextTriggerTime(alarm.trigger_time, alarm.repeat_interval);
+
+				// Update alarm with new trigger time
+				await Alarm.save({
+					id: alarmId,
+					trigger_time: nextTrigger,
+				});
+
+				// Reschedule the notification
+				const note = await Note.load(alarm.note_id);
+				if (note) {
+					await this.updateNoteNotification(note);
+				}
+			} else {
+				// Non-repeating alarm - delete it after triggering
+				this.logger().info(`Non-repeating alarm ${alarmId} triggered, deleting...`);
+				await this.driver().clearNotification(alarmId);
+				await Alarm.delete(alarmId, { sourceDescription: 'AlarmService/handleNotificationTrigger' });
+			}
+		} catch (error) {
+			this.logger().error(`Error handling notification trigger for alarm ${alarmId}`, error);
 		}
 	}
 }

@@ -680,6 +680,8 @@ export default class Note extends BaseItem {
 			note.todo_completed = 0;
 		} else {
 			note.todo_completed = Date.now();
+			// Clear alarm_interval when marking todo as completed
+			note.alarm_interval = 'none';
 		}
 
 		return note;
@@ -877,7 +879,7 @@ export default class Note extends BaseItem {
 			});
 		}
 
-		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
+		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o || 'alarm_interval' in o) {
 			this.dispatch({
 				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
 				id: savedNote.id,
