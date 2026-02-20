@@ -150,8 +150,26 @@ const nodes = addDefaultToplevelAttributes({
 		tableRole: 'table',
 		isolating: true,
 		group: 'block',
-		parseDOM: [{ tag: 'table' }],
-		toDOM: () => ['table', ['tbody', 0]],
+		attrs: {
+			style: { default: '', validate: 'string' },
+			border: { default: '', validate: 'string' },
+			class: { default: '', validate: 'string' },
+		},
+		parseDOM: [{
+			tag: 'table',
+			getAttrs: (node) => ({
+				style: node.getAttribute('style') ?? '',
+				border: node.getAttribute('border') ?? '',
+				class: node.getAttribute('class') ?? '',
+			}),
+		}],
+		toDOM: (node) => {
+			const attrs: Record<string, string> = {};
+			if (node.attrs.style) attrs.style = node.attrs.style;
+			if (node.attrs.border) attrs.border = node.attrs.border;
+			if (node.attrs.class) attrs.class = node.attrs.class;
+			return ['table', attrs, ['tbody', 0]];
+		},
 	},
 
 	text: {
