@@ -17,9 +17,16 @@ import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 
-// Extract resource ID from image markup at a given cursor position within a line.
-// Returns the resource ID if the cursor is within an image markup, null otherwise.
-export const getResourceIdFromMarkup = (lineContent: string, cursorPosInLine: number): string | null => {
+export type ResourceMarkupType = 'image' | 'file';
+
+export interface ResourceMarkupInfo {
+	resourceId: string;
+	type: ResourceMarkupType;
+}
+
+// Extract resource ID from resource markup (images or file attachments) at a given cursor position within a line.
+// Returns the resource ID and its type if the cursor is within a resource markup, null otherwise.
+export const getResourceIdFromMarkup = (lineContent: string, cursorPosInLine: number): ResourceMarkupInfo | null => {
 	const resourceUrls = extractResourceUrls(lineContent);
 	if (!resourceUrls.length) return null;
 
@@ -27,16 +34,38 @@ export const getResourceIdFromMarkup = (lineContent: string, cursorPosInLine: nu
 		const resourcePattern = new RegExp(`[:](/?${resourceInfo.itemId})`, 'g');
 		let match;
 		while ((match = resourcePattern.exec(lineContent)) !== null) {
-			// Look backwards for ![ or <img
-			let markupStart = lineContent.lastIndexOf('![', match.index);
+			// Look backwards for ![, [, <img, or <a
+			const imageMarkupStart = lineContent.lastIndexOf('![', match.index);
+			const linkMarkupStart = lineContent.lastIndexOf('[', match.index);
 			const imgTagStart = lineContent.lastIndexOf('<img', match.index);
-			if (imgTagStart > markupStart) markupStart = imgTagStart;
+			const aTagStart = lineContent.lastIndexOf('<a', match.index);
+
+			// Find the closest markup start and determine type
+			let markupStart = -1;
+			let markupType: ResourceMarkupType = 'file';
+
+			if (imageMarkupStart !== -1 && imageMarkupStart > markupStart) {
+				markupStart = imageMarkupStart;
+				markupType = 'image';
+			}
+			if (linkMarkupStart !== -1 && linkMarkupStart > markupStart && lineContent[linkMarkupStart - 1] !== '!') {
+				markupStart = linkMarkupStart;
+				markupType = 'file';
+			}
+			if (imgTagStart !== -1 && imgTagStart > markupStart) {
+				markupStart = imgTagStart;
+				markupType = 'image';
+			}
+			if (aTagStart !== -1 && aTagStart > markupStart) {
+				markupStart = aTagStart;
+				markupType = 'file';
+			}
 
 			if (markupStart === -1) continue;
 
 			// Find the end of the markup
 			let markupEnd: number;
-			if (lineContent[markupStart] === '!') {
+			if (lineContent[markupStart] === '!' || lineContent[markupStart] === '[') {
 				markupEnd = lineContent.indexOf(')', match.index);
 				if (markupEnd !== -1) markupEnd += 1;
 			} else {
@@ -45,7 +74,7 @@ export const getResourceIdFromMarkup = (lineContent: string, cursorPosInLine: nu
 			}
 
 			if (markupEnd !== -1 && cursorPosInLine >= markupStart && cursorPosInLine <= markupEnd) {
-				return resourceInfo.itemId;
+				return { resourceId: resourceInfo.itemId, type: markupType };
 			}
 		}
 	}
@@ -132,8 +161,8 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return clickedElement?.closest(`.${imageClassName}`) as HTMLElement | null;
 		};
 
-		// Get resource ID from image markup at click position (not cursor position)
-		const getResourceIdAtClickPos = (params: ContextMenuParams): string | null => {
+		// Get resource info from markup at click position (not cursor position)
+		const getResourceInfoAtClickPos = (params: ContextMenuParams): ResourceMarkupInfo | null => {
 			if (!editorRef.current) return null;
 
 			const editor = editorRef.current.editor;
@@ -152,10 +181,10 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		const targetWindow = bridge().windowById(windowId);
 
-		const showImageContextMenu = async (resourceId: string) => {
+		const showResourceContextMenu = async (resourceId: string, type: ResourceMarkupType) => {
 			const menu = new Menu();
 			const contextMenuOptions: ContextMenuOptions = {
-				itemType: ContextMenuItemType.Image,
+				itemType: type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource,
 				resourceId,
 				filename: null,
 				mime: null,
@@ -170,8 +199,8 @@ const useContextMenu = (props: ContextMenuProps) => {
 				mdToHtml: null,
 			};
 
-			const imageMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
-			for (const item of imageMenuItems) {
+			const resourceMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
+			for (const item of resourceMenuItems) {
 				menu.append(item);
 			}
 
@@ -206,17 +235,17 @@ const useContextMenu = (props: ContextMenuProps) => {
 					if (resourceId) {
 						event.preventDefault();
 						moveCursorToImageLine(imageContainer);
-						await showImageContextMenu(resourceId);
+						await showResourceContextMenu(resourceId, 'image');
 						return;
 					}
 				}
 			}
 
-			// Check if right-clicking on image markup text
-			const markupResourceId = getResourceIdAtClickPos(params);
-			if (markupResourceId && pointerInsideEditor(params)) {
+			// Check if right-clicking on resource markup text (images or file attachments)
+			const markupResourceInfo = getResourceInfoAtClickPos(params);
+			if (markupResourceInfo && pointerInsideEditor(params)) {
 				event.preventDefault();
-				await showImageContextMenu(markupResourceId);
+				await showResourceContextMenu(markupResourceInfo.resourceId, markupResourceInfo.type);
 				return;
 			}
 
