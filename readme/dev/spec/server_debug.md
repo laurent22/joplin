@@ -53,3 +53,42 @@ When running in development mode, several debug commands can be run by sending r
 - The `benchmarkDeltaPerformance` command tests the performance of `models.change().delta` by calling `delta` multiple times for each user account. Data is saved in `packages/server/delta-perf.csv`.
 	- `ChangeModel.delta` is called during sync and has historically been a performance bottleneck.
 	- Example: `curl --data '{"action":"benchmarkDeltaPerformance"}' -H 'Content-Type: application/json' http://localhost:22300/api/debug`.
+
+## Fuzzing
+
+The sync fuzzer looks for server bugs by performing pseudorandomly-selected actions. It works by:
+
+- Starting a Joplin Server instance.
+- Starting instances of the CLI app and connecting them to the server.
+- Performing random actions (e.g. "create note", "delete note").
+
+The fuzzer stops when one or more of the CLI apps has incorrect or unexpected content in its notebook/note/resource collection.
+
+To start the fuzzer the server, run `yarn syncFuzzer start` from the main Joplin workspace directory. See `yarn syncFuzzer start --help` for the available configuration options.
+
+**Note**: If you encounter an "unauthorized" error, it may be necessary to set the `FUZZER_SERVER_ADMIN_PASSWORD` environment variable prior to running the fuzzer.
+
+### Useful options
+
+When debugging using the sync fuzzer, these options are particularly helpful:
+
+- Simplifying the environment:
+	- `--random-strings=false`: Don't use random binary data for note content
+	- `--enable-e2ee=false`: Disable E2EE
+- Snapshots:
+	- `--snapshot-after=<steps>`: Create a snapshot of the fuzzer state after a certain number of steps
+	- `--restore-from-snapshot`: Restore the fuzzer state to the previous snapshot
+- Custom initial setup:
+	- `--setup=<path>`: A path to an initial setup/configuration file. For example, to use the `sample-fuzzer-setup.json` file,
+	  ```
+	  yarn syncFuzzer start --setup=./packages/tools/fuzzer/sample-fuzzer-setup.json
+	  ```
+
+
+### Fuzzing with breakpoints
+
+To pause the fuzzer at breakpoints in the client/server logic, use a "JavaScript Debug Terminal" in VS Code:
+
+1. Open a debug terminal in VS Code (command palette > "Debug: JavaScript Debug Terminal").
+2. Start the sync fuzzer (`yarn syncFuzzer start`).
+
