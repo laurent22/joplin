@@ -837,17 +837,30 @@ rules.joplinHtmlInMarkdown = {
   filter: function (node) {
     // Tables are special because they may be entirely kept as HTML depending on
     // the logic in table.js, for example if they contain code.
-    return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
+    return (
+      node &&
+      node.classList &&
+      node.classList.contains("jop-noMdConv") &&
+      node.nodeName !== "TABLE"
+    );
+  },
+
+  escapeContent: function () {
+    // Do not escape content inside HTML block the content is raw HTML/Markdown
+    // that must be preserved as it is . Without this, switching between the Markdown
+    // and Rich Text editors adds extra backslashes on every switch.
+    // Fixes: https://github.com/laurent22/joplin/issues/14078
+    return false;
   },
 
   replacement: function (content, node) {
-    node.classList.remove('jop-noMdConv');
+    node.classList.remove("jop-noMdConv");
     const nodeName = node.nodeName.toLowerCase();
     let attrString = attributesHtml(node.attributes, { skipEmptyClass: true });
-    if (attrString) attrString = ' ' + attrString;
-    return '<' + nodeName + attrString + '>' + content + '</' + nodeName + '>';
-  }
-}
+    if (attrString) attrString = " " + attrString;
+    return "<" + nodeName + attrString + ">" + content + "</" + nodeName + ">";
+  },
+};
 
 // ===============================================================================
 // Joplin Source block support
