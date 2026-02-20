@@ -49,8 +49,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const editorRef = useRef(null);
-	const [editorRoot, setEditorRoot] = useState<HTMLDivElement|null>(null);
-	const rootRef = useRef<HTMLDivElement|null>(null);
+	const [editorRoot, setEditorRoot] = useState<HTMLDivElement | null>(null);
+	const rootRef = useRef<HTMLDivElement | null>(null);
 	rootRef.current = editorRoot;
 
 	const webviewRef = useRef(null);
@@ -414,7 +414,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [styles.editor.codeMirrorTheme]);
 
 	useEffect(() => {
-		if (!editorRoot) return () => {};
+		if (!editorRoot) return () => { };
 
 		const theme = themeStyle(props.themeId);
 
@@ -631,6 +631,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			let bodyToRender = props.content;
 
 			if (!props.visiblePanes.includes('viewer')) {
+				// If the viewer is not visible, it will never render and send the 'noteRenderComplete'
+				// IPC message. We manually trigger this so that pending scroll restorations 
+				// (e.g., returning from a global search) can still be executed.
+				if (props.onMessage) props.onMessage({ channel: 'noteRenderComplete' });
 				return;
 			}
 
@@ -789,7 +793,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={setEditorRoot}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId} windowId={windowId}/>
+					<Toolbar themeId={props.themeId} windowId={windowId} />
 					{props.noteToolbar}
 				</div>
 				{editorViewerRow}

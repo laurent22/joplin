@@ -66,7 +66,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const rootRef = useRef(null);
 	const webviewRef = useRef(null);
 
-	type OnChangeCallback = (event: OnChangeEvent)=> void;
+	type OnChangeCallback = (event: OnChangeEvent) => void;
 	const props_onChangeRef = useRef<OnChangeCallback>(null);
 	props_onChangeRef.current = props.onChange;
 
@@ -84,7 +84,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [props.content]);
 
-	const onEditorPaste = useCallback(async (event: Event|null = null) => {
+	const onEditorPaste = useCallback(async (event: Event | null = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
 		if (editorRef.current) {
@@ -205,6 +205,10 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			let bodyToRender = props.content;
 
 			if (!props.visiblePanes.includes('viewer')) {
+				// If the viewer is not visible, it will never render and send the 'noteRenderComplete'
+				// IPC message. We manually trigger this so that pending scroll restorations 
+				// (e.g., returning from a global search) can still be executed.
+				if (props.onMessage) props.onMessage({ channel: 'noteRenderComplete' });
 				return;
 			}
 
@@ -310,7 +314,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		containerRef: rootRef,
 	});
 
-	const lastSearchState = useRef<SearchState|null>(null);
+	const lastSearchState = useRef<SearchState | null>(null);
 	const onEditorEvent = useCallback((event: EditorEvent) => {
 		if (event.kind === EditorEventType.Scroll) {
 			editor_scroll();
@@ -444,7 +448,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={rootRef}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId} windowId={windowId}/>
+					<Toolbar themeId={props.themeId} windowId={windowId} />
 					{props.noteToolbar}
 				</div>
 				{editorViewerRow}
