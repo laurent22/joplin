@@ -56,11 +56,11 @@ When running in development mode, several debug commands can be run by sending r
 
 ## Fuzzing
 
-The sync fuzzer looks for sync bugs by performing pseudorandomly-selected actions. It works by:
+The sync fuzzer looks for sync bugs. It works by:
 
 - Starting an instance of Joplin Server in development mode.
 - Starting instances of the CLI app and connecting them to the server.
-- Performing random actions (e.g. "create note", "delete note").
+- Performing pseudorandom actions (e.g. "create note", "delete note", "sync").
 
 The fuzzer maintains a model of the expected state of the CLI apps. When the actual state of the CLI apps no longer matches this model, the fuzzer stops.
 
@@ -75,4 +75,4 @@ To pause the fuzzer at breakpoints in the client/server logic, use a "JavaScript
 1. Open a debug terminal in VS Code (command palette > "Debug: JavaScript Debug Terminal").
 2. Start the sync fuzzer (`yarn syncFuzzer start`).
 
-When debugging, the `--snapshot-after=<steps>` and `--restore-from-snapshot` options can be particularly helpful.
+When debugging, the `--setup=<path to setup file>`, `--snapshot-after=<steps>` and `--restore-from-snapshot` options can be particularly helpful (see `yarn syncFuzzer start --help`).
