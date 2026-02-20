@@ -1559,7 +1559,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.beta': {
 			value: false,
 			type: SettingItemType.Bool,
-			section: 'general',
+			section: 'editor',
 			public: false,
 			appTypes: [AppType.Desktop],
 			label: () => 'Opt-in to the editor beta',
@@ -1726,8 +1726,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'camera.type': { value: CameraDirection.Back, type: SettingItemType.Int, public: false, appTypes: [AppType.Mobile] },
 		'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: [AppType.Mobile] },
 
-		'spellChecker.enabled': { value: true, type: SettingItemType.Bool, isGlobal: true, storage: SettingStorage.File, public: false },
-		'spellChecker.language': { value: '', type: SettingItemType.String, isGlobal: true, storage: SettingStorage.File, public: false }, // Depreciated in favour of spellChecker.languages.
+		'spellChecker.enabled': { value: true, type: SettingItemType.Bool, section: 'editor', isGlobal: true, storage: SettingStorage.File, public: false },
+		'spellChecker.language': { value: '', type: SettingItemType.String, section: 'editor', isGlobal: true, storage: SettingStorage.File, public: false }, // Depreciated in favour of spellChecker.languages.
 		'spellChecker.languages': { value: [] as string[], type: SettingItemType.Array, section: 'editor', isGlobal: true, storage: SettingStorage.File, public: false },
 
 		windowContentZoomFactor: {
