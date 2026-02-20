@@ -56,34 +56,17 @@ When running in development mode, several debug commands can be run by sending r
 
 ## Fuzzing
 
-The sync fuzzer looks for server bugs by performing pseudorandomly-selected actions. It works by:
+The sync fuzzer looks for sync bugs by performing pseudorandomly-selected actions. It works by:
 
-- Starting a Joplin Server instance.
+- Starting an instance of Joplin Server in development mode.
 - Starting instances of the CLI app and connecting them to the server.
 - Performing random actions (e.g. "create note", "delete note").
 
-The fuzzer stops when one or more of the CLI apps has incorrect or unexpected content in its notebook/note/resource collection.
+The fuzzer maintains a model of the expected state of the CLI apps. When the actual state of the CLI apps no longer matches this model, the fuzzer stops.
 
-To start the fuzzer the server, run `yarn syncFuzzer start` from the main Joplin workspace directory. See `yarn syncFuzzer start --help` for the available configuration options.
+To start the fuzzer, run `yarn syncFuzzer start` from the main Joplin workspace directory. See `yarn syncFuzzer start --help` for more information.
 
 **Note**: If you encounter an "unauthorized" error, it may be necessary to set the `FUZZER_SERVER_ADMIN_PASSWORD` environment variable prior to running the fuzzer.
-
-### Useful options
-
-When debugging using the sync fuzzer, these options are particularly helpful:
-
-- Simplifying the environment:
-	- `--random-strings=false`: Don't use random binary data for note content
-	- `--enable-e2ee=false`: Disable E2EE
-- Snapshots:
-	- `--snapshot-after=<steps>`: Create a snapshot of the fuzzer state after a certain number of steps
-	- `--restore-from-snapshot`: Restore the fuzzer state to the previous snapshot
-- Custom initial setup:
-	- `--setup=<path>`: A path to an initial setup/configuration file. For example, to use the `sample-fuzzer-setup.json` file,
-	  ```
-	  yarn syncFuzzer start --setup=./packages/tools/fuzzer/sample-fuzzer-setup.json
-	  ```
-
 
 ### Fuzzing with breakpoints
 
@@ -92,3 +75,4 @@ To pause the fuzzer at breakpoints in the client/server logic, use a "JavaScript
 1. Open a debug terminal in VS Code (command palette > "Debug: JavaScript Debug Terminal").
 2. Start the sync fuzzer (`yarn syncFuzzer start`).
 
+When debugging, the `--snapshot-after=<steps>` and `--restore-from-snapshot` options can be particularly helpful.
