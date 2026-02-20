@@ -178,6 +178,147 @@ const processImagesInPastedHtml = async (html: string) => {
 	return htmlUtils.replaceImageUrls(html, (src: string) => mappedResources[src]);
 };
 
+// Inline formatting tag names that, when empty, produce stray Markdown
+// markers (e.g. ** from empty <b>).
+const removableInlineTags = new Set(['b', 'strong', 'i', 'em', 'u', 's']);
+
+// Block-level tags whose children should NOT be paragraph-normalized.
+const blockTags = new Set([
+	'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+	'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
+	'blockquote', 'pre', 'hr', 'figure', 'figcaption', 'section',
+]);
+
+function hasVisibleText(node: Node): boolean {
+	if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim().length > 0;
+	if (node.nodeType === Node.ELEMENT_NODE) {
+		for (const child of Array.from(node.childNodes)) {
+			if (hasVisibleText(child)) return true;
+		}
+	}
+	return false;
+}
+
+// Sanitize HTML produced by Google Docs before the HTML→Markdown round-trip.
+//
+// Only runs when the HTML contains the `docs-internal-guid-` marker that
+// Google Docs injects. For all other sources the HTML is returned as-is.
+//
+// Fixes:
+// - Empty `<b>`, `<strong>`, etc. that Turndown converts to stray `**` / `*`
+// - `<b style="font-weight:normal">` wrappers that are not actually bold
+// - `<br>` between top-level inline elements that should be paragraph breaks
+export function sanitizeGoogleDocsHtml(html: string): string {
+	if (!html.includes('docs-internal-guid-')) return html;
+
+	const doc = new DOMParser().parseFromString(html, 'text/html');
+
+	// --- Step 1: Clean inline formatting nodes ---
+	const walkAndClean = (root: Node) => {
+		// Iterate in reverse so removals don't shift indices.
+		const children = Array.from(root.childNodes);
+		for (const node of children) {
+			if (node.nodeType !== Node.ELEMENT_NODE) continue;
+			const el = node as HTMLElement;
+			const tag = el.tagName.toLowerCase();
+
+			if (removableInlineTags.has(tag)) {
+				if (!hasVisibleText(el)) {
+					// Empty formatting tag — remove entirely.
+					el.remove();
+					continue;
+				}
+				// <b style="font-weight:normal"> is a Google Docs container, not bold.
+				if (tag === 'b' && el.style.fontWeight === 'normal') {
+					if (!el.parentNode) continue;
+					// Unwrap: replace the <b> with its children.
+					while (el.firstChild) {
+						el.parentNode.insertBefore(el.firstChild, el);
+					}
+					el.remove();
+					continue;
+				}
+			}
+
+			// Skip block elements that manage their own structure.
+			if (!blockTags.has(tag)) {
+				walkAndClean(el);
+			}
+		}
+	};
+
+	walkAndClean(doc.body);
+
+	// --- Step 2: Normalize top-level <br>-separated inlines into <p> blocks ---
+	const normalizeBrs = (container: Element) => {
+		const children = Array.from(container.childNodes);
+		// Only normalize if there are <br> elements at this level.
+		const hasBr = children.some(
+			n => n.nodeType === Node.ELEMENT_NODE && (n as Element).tagName.toLowerCase() === 'br',
+		);
+		if (!hasBr) return;
+
+		// Check if container already uses <p> blocks — if so, don't touch.
+		const hasExistingParagraphs = children.some(
+			n => n.nodeType === Node.ELEMENT_NODE && (n as Element).tagName.toLowerCase() === 'p',
+		);
+		if (hasExistingParagraphs) return;
+
+		const groups: Node[][] = [[]];
+		for (const node of children) {
+			if (node.nodeType === Node.ELEMENT_NODE) {
+				const el = node as Element;
+				const tag = el.tagName.toLowerCase();
+
+				if (el.tagName.toLowerCase() === 'br') {
+					// End current group, start a new one.
+					groups.push([]);
+					continue;
+				}
+
+				if (blockTags.has(tag)) {
+					// Flush current group, pass block through as its own group.
+					groups.push([node]);
+					groups.push([]);
+					continue;
+				}
+			}
+
+			// Inline node or text node — add to current group.
+			groups[groups.length - 1].push(node);
+		}
+
+		// Clear the container and rebuild with <p> wrappers.
+		while (container.firstChild) container.firstChild.remove();
+
+		for (const group of groups) {
+			if (group.length === 0) continue;
+
+			// If the group is a single block element, append it directly.
+			if (group.length === 1 && group[0].nodeType === Node.ELEMENT_NODE) {
+				const tag = (group[0] as Element).tagName.toLowerCase();
+				if (blockTags.has(tag)) {
+					container.appendChild(group[0]);
+					continue;
+				}
+			}
+
+			// Skip groups that are only whitespace.
+			const groupText = group.map(n => n.textContent).join('').trim();
+			if (!groupText) continue;
+
+			const p = doc.createElement('p');
+			for (const node of group) p.appendChild(node);
+			container.appendChild(p);
+		}
+	};
+
+	// Only normalize at the top-level container (body or Google's root wrapper).
+	normalizeBrs(doc.body);
+
+	return doc.body.innerHTML;
+}
+
 export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHandler | null, mdToHtml: MarkupToHtmlHandler | null) {
 	// When copying text from eg. GitHub, the HTML might contain non-breaking
 	// spaces instead of regular spaces. If these non-breaking spaces are
@@ -185,6 +326,9 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	// dropped. So here we convert them to regular spaces.
 	// https://stackoverflow.com/a/31790544/561309
 	html = html.replace(/[\u202F\u00A0]/g, ' ');
+
+	// Sanitize Google Docs-specific HTML quirks before the round-trip.
+	html = sanitizeGoogleDocsHtml(html);
 
 	html = await processImagesInPastedHtml(html);
 

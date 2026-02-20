@@ -1,5 +1,5 @@
 import Setting from '@joplin/lib/models/Setting';
-import { processPastedHtml } from './resourceHandling';
+import { processPastedHtml, sanitizeGoogleDocsHtml } from './resourceHandling';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
@@ -62,5 +62,62 @@ describe('resourceHandling', () => {
 		// All images in the resource directory should be preserved.
 		const html = `<img src="file://${encodeURI(Setting.value('resourceDir'))}/resource.png" alt="test"/>`;
 		expect(await processPastedHtml(html, htmlToMd, markupToHtml)).toBe(html);
+	});
+
+	describe('sanitizeGoogleDocsHtml', () => {
+		const googleDocsWrap = (inner: string) =>
+			`<b id="docs-internal-guid-abc123" style="font-weight:normal">${inner}</b>`;
+
+		it('should remove empty inline formatting tags', () => {
+			const html = `${googleDocsWrap('<span>Hello</span>')}<b style="font-weight:normal"></b>`;
+			const result = sanitizeGoogleDocsHtml(html);
+			expect(result).not.toContain('<b style="font-weight:normal"></b>');
+			expect(result).toContain('Hello');
+		});
+
+		it('should remove empty <b> tags containing only empty spans', () => {
+			const html = `${googleDocsWrap('<span>Hi</span>')}<b><span></span></b>`;
+			const result = sanitizeGoogleDocsHtml(html);
+			expect(result).not.toContain('<b><span></span></b>');
+		});
+
+		it('should unwrap fake-bold <b style="font-weight:normal"> with content', () => {
+			const html = googleDocsWrap('<span style="font-size:11pt">Some text</span>');
+			const result = sanitizeGoogleDocsHtml(html);
+			// The <b> wrapper should be removed, but the span content preserved.
+			expect(result).not.toMatch(/<b[^>]*>/);
+			expect(result).toContain('Some text');
+		});
+
+		it('should normalize top-level <br> into <p> blocks', () => {
+			const html = `${googleDocsWrap('<span>Line A</span>')}<br><span>Line B</span>`;
+			const result = sanitizeGoogleDocsHtml(html);
+			expect(result).toContain('<p>');
+			expect(result).not.toMatch(/<br\s*\/?>/i);
+			expect(result).toContain('Line A');
+			expect(result).toContain('Line B');
+		});
+
+		it('should NOT normalize <br> inside <li>', () => {
+			const html = googleDocsWrap('<ul><li>Line1<br>Line2</li></ul>');
+			const result = sanitizeGoogleDocsHtml(html);
+			// <br> inside <li> should be preserved.
+			expect(result).toContain('<br>');
+		});
+
+		it('should NOT touch content when <p> blocks already exist', () => {
+			const html = '<b id="docs-internal-guid-xyz" style="font-weight:normal">' +
+				'<p>Para 1</p><br><p>Para 2</p></b>';
+			const result = sanitizeGoogleDocsHtml(html);
+			// Existing <p> blocks should be preserved as-is.
+			expect(result).toContain('<p>Para 1</p>');
+			expect(result).toContain('<p>Para 2</p>');
+		});
+
+		it('should return non-Google Docs HTML unchanged', () => {
+			const html = '<b></b><span>Hello</span><br><span>World</span>';
+			const result = sanitizeGoogleDocsHtml(html);
+			expect(result).toBe(html);
+		});
 	});
 });
