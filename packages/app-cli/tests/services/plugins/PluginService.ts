@@ -475,8 +475,7 @@ describe('services_PluginService', () => {
 	});
 
 	it('should report a missing app_min_version field specifically', () => {
-		const service = PluginService.instance();
-		service.initialize('3.0.0', {}, null, { dispatch: () => {} });
+		const service = newPluginService();
 		const manifest = {
 			id: 'test.plugin',
 			name: 'Test Plugin',
