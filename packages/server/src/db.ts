@@ -86,7 +86,7 @@ export interface Migration {
 
 export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	const connection: DbConfigConnection = {};
-	let pool: KnexPoolConfig | undefined = undefined;
+	let pool: KnexPoolConfig|undefined = undefined;
 
 	if (dbConfig.client === 'sqlite3') {
 		connection.filename = dbConfig.name;
