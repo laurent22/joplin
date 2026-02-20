@@ -210,6 +210,10 @@ const nodeContains = (node, types) => {
 }
 
 const tableShouldBeHtml = (tableNode, options) => {
+  // In RTE mode, tables with inline styles must be kept as HTML to preserve
+  // visual formatting that cannot be represented in Markdown syntax.
+  if (options.preserveNestedTables && tableNode.getAttribute('style')) return true;
+
   const possibleTags = [
     'UL',
     'OL',
