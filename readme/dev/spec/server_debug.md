@@ -66,7 +66,7 @@ The fuzzer maintains a model of the expected state of the CLI apps. When the act
 
 To start the fuzzer, run `yarn syncFuzzer start` from the main Joplin workspace directory. See `yarn syncFuzzer start --help` for more information.
 
-**Note**: If you encounter an "unauthorized" error, it may be necessary to set the `FUZZER_SERVER_ADMIN_PASSWORD` environment variable prior to running the fuzzer.
+**Note**: If you encounter an "unauthorized" error, it may be necessary to set the `FUZZER_SERVER_ADMIN_PASSWORD` environment variable before running the fuzzer.
 
 ### Fuzzing with breakpoints
 
