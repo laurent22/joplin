@@ -417,10 +417,6 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
 
-		// Collect revisions more frequently on mobile because it doesn't auto-save
-		// and it cannot collect anything when the app is not active.
-		RevisionService.instance().runInBackground(1000 * 30);
-
 		reg.setupRecurrentSync();
 
 		// When the app starts we want the full sync to
@@ -434,6 +430,10 @@ const buildStartupTasks = (
 			void AlarmService.updateAllNotifications();
 
 			void DecryptionWorker.instance().scheduleStart();
+
+			// Collect revisions more frequently on mobile because it doesn't auto-save
+			// and it cannot collect anything when the app is not active.
+			RevisionService.instance().runInBackground(1000 * 30);
 		});
 	});
 	addTask('buildStartupTasks/set up welcome utils', async () => {
