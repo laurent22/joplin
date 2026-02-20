@@ -130,9 +130,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	public screenFromName(screenName: string) {
-		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
-		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
-		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'encryption') return <EncryptionConfigScreen />;
+		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId} />;
+		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId} />;
 		if (screenName === 'joplinCloud') return <JoplinCloudConfigScreen />;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
@@ -253,6 +253,31 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								title={_('Connect to Joplin Cloud')}
 								level={ButtonLevel.Primary}
 								onClick={goToJoplinCloudLogin}
+							/>
+						</div>,
+					);
+				}
+
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer')) {
+					const server = settings['sync.9.path'] as string;
+
+					const goToJoplinServerLogin = async () => {
+						// Save settings to allow auth with the correct URL.
+						await shared.saveSettings(this);
+
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinServerLogin',
+						});
+					};
+
+					settingComps.push(
+						<div key="connect_to_joplin_server_button" style={this.rowStyle_}>
+							<Button
+								title={_('Login with Joplin Server')}
+								level={ButtonLevel.Primary}
+								onClick={goToJoplinServerLogin}
+								disabled={!server || server?.trim().length === 0}
 							/>
 						</div>,
 					);

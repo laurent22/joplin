@@ -65,11 +65,25 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	public async isAuthenticated() {
-		return true;
+		try {
+			const fileApi = await this.fileApi();
+			const api = fileApi.driver().api();
+			const sessionId = await api.sessionId();
+			return !!sessionId;
+		} catch (error) {
+			if (error.code === 403) {
+				return false;
+			}
+			throw error;
+		}
+	}
+
+	public authRouteName() {
+		return 'JoplinServerLogin';
 	}
 
 	public static requiresPassword() {
-		return true;
+		return false;
 	}
 
 	public static override supportsShare(): boolean {
@@ -80,7 +94,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi|null = null) {
+	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi | null = null) {
 		const output = {
 			ok: false,
 			errorMessage: '',
