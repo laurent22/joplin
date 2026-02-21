@@ -10891,7 +10891,6 @@ __metadata:
     "@types/node-rsa": "npm:1.1.4"
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
-    "@types/rrule": "npm:2.2.9"
     "@types/uuid": "npm:10.0.0"
     adm-zip: "npm:0.5.16"
     async-mutex: "npm:0.5.0"
@@ -17166,15 +17165,6 @@ __metadata:
   version: 0.12.0
   resolution: "@types/retry@npm:0.12.0"
   checksum: 10/bbd0b88f4b3eba7b7acfc55ed09c65ef6f2e1bcb4ec9b4dca82c66566934351534317d294a770a7cc6c0468d5573c5350abab6e37c65f8ef254443e1b028e44d
-  languageName: node
-  linkType: hard
-
-"@types/rrule@npm:2.2.9":
-  version: 2.2.9
-  resolution: "@types/rrule@npm:2.2.9"
-  dependencies:
-    rrule: "npm:*"
-  checksum: 10/fca6acf3379c305d7b71bbf399a45ed1cc586387b19f87be725221e4eee4afca8caf37fa97efa7c6639d538d92ad7d78ddf3be8dc44959177de3d818f45a77bc
   languageName: node
   linkType: hard
 
@@ -46389,7 +46379,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rrule@npm:*, rrule@npm:2.8.1":
+"rrule@npm:2.8.1":
   version: 2.8.1
   resolution: "rrule@npm:2.8.1"
   dependencies:
