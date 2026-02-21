@@ -102,7 +102,7 @@ class RootComponent extends React.Component<Props, any> {
 		const renderContent = () => {
 			return (
 				<div>
-					<DialogTitle title={_('Confirmation')}/>
+					<DialogTitle title={_('Confirmation')} />
 					<p>{props.message}</p>
 					<DialogButtonRow
 						themeId={props.themeId}
@@ -162,6 +162,8 @@ class RootComponent extends React.Component<Props, any> {
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			JoplinServerLogin: { screen: (props: any) => <JoplinCloudLoginScreen {...props} syncTargetId={9} />, title: () => _('Joplin Server Login') },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()), title: () => _('Joplin Server Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
@@ -174,9 +176,9 @@ class RootComponent extends React.Component<Props, any> {
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
 					<PopupNotificationProvider>
-						<StyleSheetContainer/>
-						<MenuBar/>
-						<GlobalStyle/>
+						<StyleSheetContainer />
+						<MenuBar />
+						<GlobalStyle />
 						<WindowCommandsAndDialogs windowId={defaultWindowId} />
 						<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 						{this.renderSecondaryWindows()}

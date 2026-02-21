@@ -248,11 +248,29 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						});
 					};
 					settingComps.push(
-						<div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
+						<div key='connect_to_joplin_cloud_button' style={this.rowStyle_}>
 							<Button
 								title={_('Connect to Joplin Cloud')}
 								level={ButtonLevel.Primary}
 								onClick={goToJoplinCloudLogin}
+							/>
+						</div>,
+					);
+				}
+
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer')) {
+					const goToJoplinServerLogin = () => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinServerLogin',
+						});
+					};
+					settingComps.push(
+						<div key='connect_to_joplin_server_button' style={this.rowStyle_}>
+							<Button
+								title={_('Login with Joplin Server')}
+								level={ButtonLevel.Primary}
+								onClick={goToJoplinServerLogin}
 							/>
 						</div>,
 					);

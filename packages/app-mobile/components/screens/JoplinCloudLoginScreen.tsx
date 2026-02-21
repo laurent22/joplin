@@ -5,7 +5,7 @@ const { connect } = require('react-redux');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('../global-style.js');
 import { AppState } from '../../utils/types';
-import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, defaultState } from '@joplin/lib/services/joplinCloudUtils';
+import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, defaultState, syncTargetIdCloud } from '@joplin/lib/services/joplinCloudUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
@@ -87,7 +87,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), syncTargetIdCloud);
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -147,7 +147,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		<View style={styles.root}>
 			<ScreenHeader title={_('Joplin Cloud Login')} />
 			<View style={styles.containerStyle}>
-				{ state.active !== 'COMPLETED' ?
+				{state.active !== 'COMPLETED' ?
 					<React.Fragment>
 						<Text style={styles.text}>
 							{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}
@@ -179,9 +179,9 @@ const JoplinCloudScreenComponent = (props: Props) => {
 				</Text>
 				{state.active === 'LINK_USED' ? (
 					<Animated.View style={{ transform: [{ rotate: syncIconRotation }] }}>
-						<Icon name='ionicon sync' style={styles.loadingIcon} accessibilityLabel={_('Waiting for authorisation...')}/>
+						<Icon name='ionicon sync' style={styles.loadingIcon} accessibilityLabel={_('Waiting for authorisation...')} />
 					</Animated.View>
-				) : null }
+				) : null}
 			</View>
 		</View>
 	);

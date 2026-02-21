@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
@@ -18,39 +18,45 @@ const { connect } = require('react-redux');
 
 interface Props {
 	dispatch: Dispatch;
-	joplinCloudWebsite: string;
-	joplinCloudApi: string;
+	syncTargetId: number;
+	authWebsite: string;
+	authApi: string;
+	serviceName: string;
 }
 
 const JoplinCloudScreenComponent = (props: Props) => {
 
-	const confirmUrl = (applicationAuthId: string) => `${props.joplinCloudWebsite}/applications/${applicationAuthId}/confirm`;
-	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/application_auth/${applicationAuthId}`;
+	const confirmUrl = (applicationAuthId: string) => `${props.authWebsite}/applications/${applicationAuthId}/confirm`;
+	const applicationAuthUrl = (applicationAuthId: string) => `${props.authApi}/api/application_auth/${applicationAuthId}`;
 
-	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
+	// Use useRef for intervalIdentifier to avoid stale closures in periodicallyCheckForCredentials,
+	// implementing feedback from PR #14395
+	const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 	const [state, dispatch] = useReducer(reducer, defaultState);
 
 	const applicationAuthId = useMemo(() => uuidgen(), []);
 
 	const periodicallyCheckForCredentials = () => {
-		if (intervalIdentifier) return;
+		if (intervalRef.current) return;
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), props.syncTargetId);
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
-					clearInterval(interval);
+					if (intervalRef.current) clearInterval(intervalRef.current);
+					intervalRef.current = null;
 					void reg.scheduleSync(0);
 				}
 			} catch (error) {
 				logger.error(error);
 				dispatch({ type: 'ERROR', payload: error.message });
-				clearInterval(interval);
+				if (intervalRef.current) clearInterval(intervalRef.current);
+				intervalRef.current = null;
 			}
 		}, 2 * 1000);
 
-		setIntervalIdentifier(interval);
+		intervalRef.current = interval;
 	};
 
 	const onButtonUsed = () => {
@@ -74,16 +80,16 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 	useEffect(() => {
 		return () => {
-			clearInterval(intervalIdentifier);
+			if (intervalRef.current) clearInterval(intervalRef.current);
 		};
-	}, [intervalIdentifier]);
+	}, []);
 
 	return (
 		<div className="login-page">
 			<div className="page-container">
 				{state.active !== 'COMPLETED' ? (
 					<>
-						<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}</p>
+						<p className="text">{_('To allow Joplin to synchronise with %s, please login using this URL:', props.serviceName)}</p>
 						<div className="buttons-container">
 							<Button
 								onClick={onAuthorizeClicked}
@@ -101,23 +107,33 @@ const JoplinCloudScreenComponent = (props: Props) => {
 						</div>
 					</>
 				) : null}
-				<p className={state.className}>{state.message()}
+				<p className={state.className}>
+					{state.message().replace('Joplin Cloud', props.serviceName)}
 					{state.active === 'ERROR' ? (
 						<span className={state.className}>{state.errorMessage}</span>
 					) : null}
 				</p>
 				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
-				<JoplinCloudSignUpCallToAction />
+				{props.syncTargetId === 10 ? <JoplinCloudSignUpCallToAction /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>
 	);
 };
 
-const mapStateToProps = (state: AppState) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapStateToProps = (state: AppState, ownProps: any) => {
+	const syncTargetId = ownProps.syncTargetId || 10;
+	// When using sync.9, path is the website URL, whereas sync.10 splits path and website.
+	const websiteKey = syncTargetId === 10 ? 'sync.10.website' : `sync.${syncTargetId}.path`;
+	const apiKey = `sync.${syncTargetId}.path`;
+	const serviceName = syncTargetId === 10 ? 'Joplin Cloud' : 'Joplin Server';
+
 	return {
-		joplinCloudWebsite: state.settings['sync.10.website'],
-		joplinCloudApi: state.settings['sync.10.path'],
+		syncTargetId,
+		serviceName,
+		authWebsite: state.settings[websiteKey],
+		authApi: state.settings[apiKey],
 	};
 };
 
