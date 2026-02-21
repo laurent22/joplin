@@ -46,7 +46,7 @@ Most replacements require pressing the <kbd>space</kbd> or <kbd>enter</kbd> key 
 
 These replacements can be disabled in settings &gt; note, using the "Auto-format Markdown" setting.
 
-## Video tutorial
+## Video tutorial - Desktop
 
 Watch this short video to learn how to select and use the Rich Text editor:
 
@@ -56,7 +56,7 @@ Watch this short video to learn how to select and use the Rich Text editor:
 
 The rich text editor is also available on mobile devices. You can select it when editing a note by clicking on the kebab menu and choosing "Edit as Rich Text".
 
-## Video tutorial
+## Video tutorial - Mobile
 
 Watch this short video to learn how to select and use the Rich Text editor on mobile devices:
 
