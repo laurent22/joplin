@@ -11,41 +11,78 @@ export interface HtrCliOptions {
 	htrCliImagesFolder: string;
 	binaryPath: string;
 	modelsFolder: string;
+	device: string;
 }
 
 export default class HtrCli implements WorkHandler {
 
 	private options: HtrCliOptions;
+	private useGpu: boolean = false;
 
 	public constructor(options: HtrCliOptions) {
 		this.options = options;
 	}
 
+	private async detectGpu(): Promise<boolean> {
+		try {
+			await execCommand(['nvidia-smi'], { quiet: true });
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+
 	public async init() {
 		logger.info('Using embedded llama.cpp binary');
+		const { device } = this.options;
+		if (device === 'auto') {
+			this.useGpu = await this.detectGpu();
+			logger.info(`GPU detected: ${this.useGpu}`);
+		} else if (device === 'gpu' || device === 'cuda') {
+			this.useGpu = true;
+			logger.info('GPU detected: true (forced by config)');
+		} else {
+			this.useGpu = false;
+			logger.info('GPU detected: false (forced by config)');
+		}
 	}
 
 	public async run(imageName: string) {
 		logger.info('Running transcription...');
 
-		// Sanitize imageName to prevent path traversal attacks
 		const sanitizedImageName = basename(imageName);
 		if (sanitizedImageName !== imageName || imageName.includes('..')) {
 			throw new Error(`Invalid image name: ${imageName}`);
 		}
 
-		const command = this.buildCommand(imageName);
+		let command = this.buildCommand(imageName, this.useGpu);
 
 		logger.info(`Command: ${commandToString(command[0], command.slice(1))}`);
-		const result = await execCommand(command, { quiet: true });
+
+		let result: string;
+		try {
+			result = await execCommand(command, { quiet: true });
+		} catch (error) {
+			const e = error as Error;
+			const errorMessage = e.message || '';
+			if (this.useGpu && (errorMessage.includes('CUDA error') || errorMessage.includes('cudaError') || errorMessage.includes('no CUDA-capable device') || errorMessage.includes('failed to load dynamic library'))) {
+				logger.warn(`GPU execution failed with error: ${errorMessage}. Retrying with CPU fallback...`);
+				this.useGpu = false;
+				command = this.buildCommand(imageName, false);
+				logger.info(`Fallback Command: ${commandToString(command[0], command.slice(1))}`);
+				result = await execCommand(command, { quiet: true });
+			} else {
+				throw error;
+			}
+		}
 
 		logger.info('Finished transcription');
 		return this.cleanUpResult(result);
 	}
 
-	private buildCommand(imageName: string): string[] {
+	private buildCommand(imageName: string, useGpu: boolean): string[] {
 		const { binaryPath, modelsFolder, htrCliImagesFolder } = this.options;
-		return [
+		const args = [
 			binaryPath,
 			'-m', `${modelsFolder}/Model-7.6B-Q4_K_M.gguf`,
 			'--mmproj', `${modelsFolder}/mmproj-model-f16.gguf`,
@@ -57,6 +94,12 @@ export default class HtrCli implements WorkHandler {
 			'--image', `${htrCliImagesFolder}/${imageName}`,
 			'-p', systemPrompt,
 		];
+
+		if (useGpu) {
+			args.push('-ngl', '9999');
+		}
+
+		return args;
 	}
 
 	public cleanUpResult(transcriptionAndLogs: string) {
