@@ -1435,8 +1435,15 @@ function renderLine(line: any) {
 		// ENEX notes sometimes have hidden tags. We could strip off these
 		// sections but in the spirit of preserving all data we wrap them in
 		// a hidden tag too.
+		const renderedHiddenContent = renderLines(line.lines);
+		const contentText = renderedHiddenContent.join('').replace(/\[\[NEWLINE\]\]|\[\[BLOCK_OPEN\]\]|\[\[BLOCK_CLOSE\]\]|\[\[SPACE\]\]|\[\[MERGED\]\]/g, '').replace(/\s+/g, '');
+
+		if (!contentText) {
+			return [];
+		}
+
 		let hiddenLines = ['<div style="display: none;">'];
-		hiddenLines = hiddenLines.concat(renderLines(line.lines));
+		hiddenLines = hiddenLines.concat(renderedHiddenContent);
 		hiddenLines.push('</div>');
 
 		// We need to add two new lines after the HTML block, or the Markdown
