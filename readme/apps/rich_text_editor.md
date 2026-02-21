@@ -48,10 +48,9 @@ These replacements can be disabled in settings &gt; note, using the "Auto-format
 
 ## Video tutorial
 
-Watch this short video to learn how to format your notes with bold, italics, lists, links, and more without needing to write Markdown:
+Watch this short video to learn how to select and use the Rich Text editor:
 
 [![Watch the video](https://img.youtube.com/vi/RE_7VVG3qPE/hqdefault.jpg)](https://www.youtube.com/watch?v=RE_7VVG3qPE)
-
 
 ## Rich text editor on mobile
 

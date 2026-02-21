@@ -26,7 +26,7 @@ In both cases you can either import a single file or a directory that contains m
 
 ## Video tutorial
 
-Watch this short video to learn how to Migrate from Evernote to Joplin:
+Watch this short video to learn how to export your notebooks from Evernote and import them on Joplin:
 
 [![Watch the video](https://img.youtube.com/vi/_nSrvfUwORM/hqdefault.jpg)](https://www.youtube.com/watch?v=_nSrvfUwORM)  
 
@@ -71,7 +71,7 @@ This requires Joplin >=v3.5.5 and the OneNote Windows desktop app. Be aware that
 
 ## Video tutorial
 
-Watch this short video to learn how to migrate from Onenote to Joplin:
+Watch this short video to learn how to export your notebooks from Onenote and import them on Joplin:
 
 [![Watch the video](https://img.youtube.com/vi/xgYcLZsw0IA/hqdefault.jpg)](https://www.youtube.com/watch?v=xgYcLZsw0IA&t=2s)
 
