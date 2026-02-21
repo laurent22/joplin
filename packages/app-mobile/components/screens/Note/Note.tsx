@@ -135,7 +135,7 @@ interface State {
 	mode: NoteViewerMode;
 	readOnly: boolean;
 	searchVisible: boolean;
-	folder: FolderEntity|null;
+	folder: FolderEntity | null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastSavedNote: any;
 	isLoading: boolean;
@@ -151,7 +151,7 @@ interface State {
 	imageEditorResource: ResourceEntity;
 	imageEditorResourceFilepath: string;
 	noteResources: Record<string, ResourceInfo>;
-	newAndNoTitleChangeNoteId: boolean|null;
+	newAndNoTitleChangeNoteId: boolean | null;
 	noteLastLoadTime: number;
 
 	undoRedoButtonState: {
@@ -170,7 +170,7 @@ type ScrollEventSlice = { fraction: number };
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
-	private lastBodyScroll: number|undefined = undefined;
+	private lastBodyScroll: number | undefined = undefined;
 
 	private saveActionQueues_: Record<string, AsyncActionQueue>;
 	private doFocusUpdate_: boolean;
@@ -180,12 +180,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private editorRef: any;
 	private titleTextFieldRef: RefObject<TextInput>;
 	private navHandler: OnNavigateCallback;
-	private backHandler: ()=> Promise<boolean>;
+	private backHandler: () => Promise<boolean>;
 	private undoRedoService_: UndoRedoService;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private noteTagDialog_closeRequested: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private refreshResource: (resource: any, noteBody?: string)=> Promise<void>;
+	private refreshResource: (resource: ResourceEntity, noteBody?: string) => Promise<void>;
 	private selection: SelectionRange;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private menuOptionsCache_: Record<string, any>;
@@ -195,7 +194,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private folderPickerOptions_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dialogbox: any;
-	private commandRegistration_: RegisteredRuntime|null = null;
+	private commandRegistration_: RegisteredRuntime | null = null;
 	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
 		return shared.noteComponent_change(this, 'body', saveEvent.body);
 	});
@@ -321,8 +320,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			this.setState({ noteTagDialogShown: false });
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.refreshResource = async (resource: any, noteBody: string = null) => {
+		this.refreshResource = async (resource: ResourceEntity, noteBody: string | null = null) => {
 			if (noteBody === null && this.state.note && this.state.note.body) noteBody = this.state.note.body;
 			if (noteBody === null) return;
 
@@ -386,7 +384,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					this.setState({ showAudioRecorder: visible });
 				},
 				getMode: () => this.state.mode,
-				setMode: (mode: 'view'|'edit') => {
+				setMode: (mode: 'view' | 'edit') => {
 					this.setState({ mode });
 				},
 				dispatch: this.props.dispatch,
@@ -406,23 +404,27 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
-			this.setState({ undoRedoButtonState: {
-				canUndo: !!event.undoDepth,
-				canRedo: !!event.redoDepth,
-			} });
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: !!event.undoDepth,
+					canRedo: !!event.redoDepth,
+				},
+			});
 		}
 	}
 
 	private undoRedoService_stackChange() {
 		if (!this.useEditorBeta()) {
-			this.setState({ undoRedoButtonState: {
-				canUndo: this.undoRedoService_.canUndo,
-				canRedo: this.undoRedoService_.canRedo,
-			} });
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: this.undoRedoService_.canUndo,
+					canRedo: this.undoRedoService_.canRedo,
+				},
+			});
 		}
 	}
 
-	private async undoRedo(type: 'undo'|'redo') {
+	private async undoRedo(type: 'undo' | 'redo') {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
@@ -438,7 +440,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	private screenHeader_undoButtonPress() {
 		if (this.useEditorBeta()) {
-			this.editorRef.current.undo();
+			this.editorRef.current?.undo();
 		} else {
 			void this.undoRedo('undo');
 		}
@@ -446,7 +448,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	private screenHeader_redoButtonPress() {
 		if (this.useEditorBeta()) {
-			this.editorRef.current.redo();
+			this.editorRef.current?.redo();
 		} else {
 			void this.undoRedo('redo');
 		}
@@ -708,12 +710,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
-		if (this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
+		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
+		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
 			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
 			if (!editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime) {
 				void shared.reloadNote(this);
 				this.refreshKey = this.props.editorNoteReloadTimeRequest;
+			}
 
+			if ((!editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime) || editorPluginIdsChanged) {
 				// Clear the undo / redo state, as undo / redo steps wont be in sync with the current content after the note editor has been refreshed
 				if (!this.useEditorBeta()) {
 					void this.undoRedoService_.reset();
@@ -869,10 +874,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (resizeLargeImages === 'alwaysAsk') {
 				const userAnswer = await this.props.dialogs.showMenu(
 					`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize)}\n\n${_('(You may disable this prompt in the options)')}`, [
-						{ text: _('Yes'), id: 'yes' },
-						{ text: _('No'), id: 'no' },
-						{ text: _('Cancel'), id: 'cancel' },
-					]);
+					{ text: _('Yes'), id: 'yes' },
+					{ text: _('No'), id: 'no' },
+					{ text: _('Cancel'), id: 'cancel' },
+				]);
 				if (userAnswer === 'yes') return await saveResizedImage();
 				if (userAnswer === 'no') return await saveOriginalImage();
 				if (userAnswer === 'cancel' || !userAnswer) return false;
@@ -921,7 +926,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public async attachFile(
 		pickerResponse: PickerResponse,
 		fileType: string,
-	): Promise<ResourceEntity|null> {
+	): Promise<ResourceEntity | null> {
 		logger.debug('Attaching file:', pickerResponse?.uri);
 		if (!pickerResponse) {
 			// User has cancelled
@@ -1004,7 +1009,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return resource;
 	}
 
-	private async cameraView_onPhoto(data: CameraResult|CameraResult[]) {
+	private async cameraView_onPhoto(data: CameraResult | CameraResult[]) {
 		if (!Array.isArray(data)) {
 			data = [data];
 		}
@@ -1040,7 +1045,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async updateDrawing(svgData: string) {
-		let resource: ResourceEntity|null = this.state.imageEditorResource;
+		let resource: ResourceEntity | null = this.state.imageEditorResource;
 
 		if (!resource) {
 			resource = await this.attachNewDrawing(svgData);
@@ -1554,7 +1559,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		);
 	};
 
-	private onMarkdownEditorScroll = () => {};
+	private onMarkdownEditorScroll = () => { };
 
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
@@ -1635,9 +1640,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			return <PluginUserWebView
 				viewInfo={{ plugin: editorPlugin, view: editorView }}
 				themeId={this.props.themeId}
-				onLoadEnd={() => {}}
+				onLoadEnd={() => { }}
 				pluginHtmlContents={this.props.pluginHtmlContents}
-				setDialogControl={() => {}}
+				setDialogControl={() => { }}
 				style={{}}
 			/>;
 		};
@@ -1711,10 +1716,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
-							// need some extra padding for iOS so that the keyboard won't cover last line of the note
-							// see https://github.com/laurent22/joplin/issues/3607
-							// Property is gone as of RN 0.72?
-							// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
+						// need some extra padding for iOS so that the keyboard won't cover last line of the note
+						// see https://github.com/laurent22/joplin/issues/3607
+						// Property is gone as of RN 0.72?
+						// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
 						/>
 					);
 				} else {
@@ -1814,9 +1819,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					placeholderTextColor={theme.colorFaded}
 					editable={!this.state.readOnly}
 					multiline={this.state.multiline}
-					submitBehavior = "blurAndSubmit"
+					submitBehavior='blurAndSubmit'
 				/>
-				{ titleToggleButton }
+				{titleToggleButton}
 			</View>
 		);
 
