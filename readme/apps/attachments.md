@@ -29,3 +29,9 @@ Opening some types of attachments can be dangerous. Some computers try to run so
 If you're certain that a file type is always safe to open, regardless of its source, check the `Always open this file type without asking` box to stop receiving warnings for that file type. It might make sense to do this, for example, if you work with a large number of `.doc` files and know that they're safe to open in the version of Word you have installed.
 
 **What are some examples of unsafe file types?** This depends on your computer. For example, on most Windows systems, `.COM`, `.EXE`, and `.BAT` files are unsafe.
+
+## Video tutorial
+
+Watch this short video to learn how attachments work in Joplin:
+
+[![Watch the video](https://img.youtube.com/vi/lfW3A24f8X4/hqdefault.jpg)](https://www.youtube.com/watch?v=lfW3A24f8X4)
