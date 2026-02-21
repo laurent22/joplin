@@ -1183,6 +1183,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		newNote.todo_due = date ? date.getTime() : 0;
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
+		if (!date) await this.saveOneProperty('alarm_recurrence', '');
 
 		this.setState({ alarmDialogShown: false });
 	}

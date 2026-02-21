@@ -222,6 +222,7 @@ export interface NoteTagEntity {
 }
 export interface NoteEntity {
   'altitude'?: number;
+  'alarm_recurrence'?: string;
   'application_data'?: string;
   'author'?: string;
   'body'?: string;

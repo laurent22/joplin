@@ -1,9 +1,50 @@
 import Logger from '@joplin/utils/Logger';
 import Alarm from '../models/Alarm';
+import { NoteEntity } from './database/types';
 
 import Note from '../models/Note';
 
 export default class AlarmService {
+	private static alarmRecurrenceFrequency(note: NoteEntity) {
+		if (!note?.alarm_recurrence) return null;
+
+		const parts = note.alarm_recurrence.toUpperCase().split(';').map(p => p.trim());
+		for (const part of parts) {
+			if (!part.startsWith('FREQ=')) continue;
+			return part.slice(5);
+		}
+
+		return null;
+	}
+
+	private static nextTriggerTime(note: NoteEntity, now: number = Date.now()): number {
+		if (!note?.todo_due) return 0;
+
+		const frequency = this.alarmRecurrenceFrequency(note);
+		if (!frequency) return note.todo_due;
+
+		const nextDate = new Date(note.todo_due);
+		let guard = 0;
+
+		while (nextDate.getTime() < now) {
+			if (frequency === 'DAILY') {
+				nextDate.setDate(nextDate.getDate() + 1);
+			} else if (frequency === 'WEEKLY') {
+				nextDate.setDate(nextDate.getDate() + 7);
+			} else if (frequency === 'MONTHLY') {
+				nextDate.setMonth(nextDate.getMonth() + 1);
+			} else if (frequency === 'YEARLY') {
+				nextDate.setFullYear(nextDate.getFullYear() + 1);
+			} else {
+				return note.todo_due;
+			}
+
+			guard++;
+			if (guard > 5000) throw new Error(`Could not compute next recurrence date for note ${note.id}`);
+		}
+
+		return nextDate.getTime();
+	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static driver_: any;
@@ -61,6 +102,9 @@ export default class AlarmService {
 
 			if (typeof noteOrId === 'object') {
 				note = noteOrId;
+				if (!('alarm_recurrence' in noteOrId)) {
+					note = await Note.load(noteOrId.id);
+				}
 				noteId = note.id;
 			} else {
 				note = await Note.load(noteOrId);
@@ -68,6 +112,13 @@ export default class AlarmService {
 			}
 
 			if (!note && !isDeleted) return;
+
+			if (note) {
+				const nextTrigger = this.nextTriggerTime(note);
+				if (nextTrigger && nextTrigger !== note.todo_due) {
+					note = await Note.save({ id: note.id, todo_due: nextTrigger });
+				}
+			}
 
 			const driver = this.driver();
 

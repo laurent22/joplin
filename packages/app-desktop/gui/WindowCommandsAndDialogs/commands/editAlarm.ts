@@ -7,6 +7,31 @@ import time from '@joplin/lib/time';
 import { formatMsToDateTimeLocal } from '@joplin/utils/time';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
+const recurrenceToOption = (recurrence: string) => {
+	const normalized = recurrence ? recurrence.toUpperCase() : '';
+	if (normalized.includes('FREQ=DAILY')) return 'DAILY';
+	if (normalized.includes('FREQ=WEEKLY')) return 'WEEKLY';
+	if (normalized.includes('FREQ=MONTHLY')) return 'MONTHLY';
+	if (normalized.includes('FREQ=YEARLY')) return 'YEARLY';
+	return 'NONE';
+};
+
+const recurrenceOptionLabel = (option: string) => {
+	if (option === 'DAILY') return _('Daily');
+	if (option === 'WEEKLY') return _('Weekly');
+	if (option === 'MONTHLY') return _('Monthly');
+	if (option === 'YEARLY') return _('Yearly');
+	return _('Never');
+};
+
+const optionToRecurrence = (option: string) => {
+	if (option === 'DAILY') return 'FREQ=DAILY';
+	if (option === 'WEEKLY') return 'FREQ=WEEKLY';
+	if (option === 'MONTHLY') return 'FREQ=MONTHLY';
+	if (option === 'YEARLY') return 'FREQ=YEARLY';
+	return '';
+};
+
 export const declaration: CommandDeclaration = {
 	name: 'editAlarm',
 	label: () => _('Set alarm'),
@@ -33,26 +58,58 @@ export const runtime = (comp: any): CommandRuntime => {
 					value: note.todo_due ? formatMsToDateTimeLocal(note.todo_due) : formatMsToDateTimeLocal(defaultDate.getTime()),
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					onClose: async (answer: any, buttonType: string) => {
-						let newNote: NoteEntity = null;
-
 						if (buttonType === 'clear') {
-							newNote = {
+							const newNote: NoteEntity = {
 								id: note.id,
 								todo_due: 0,
+								alarm_recurrence: '',
 							};
-						} else if (answer !== null) {
-							newNote = {
-								id: note.id,
-								todo_due: answer,
-							};
-						}
 
-						if (newNote) {
 							await Note.save(newNote);
 							eventManager.emit(EventName.AlarmChange, { noteId: note.id, note: newNote });
+							comp.setState({ promptOptions: null });
+							return;
 						}
 
-						comp.setState({ promptOptions: null });
+						if (answer === null) {
+							comp.setState({ promptOptions: null });
+							return;
+						}
+
+						const selectedOption = recurrenceToOption(note.alarm_recurrence);
+
+						comp.setState({
+							promptOptions: {
+								label: _('Repeat:'),
+								inputType: 'dropdown',
+								buttons: ['ok', 'cancel'],
+								autocomplete: [
+									{ value: 'NONE', label: _('Never') },
+									{ value: 'DAILY', label: _('Daily') },
+									{ value: 'WEEKLY', label: _('Weekly') },
+									{ value: 'MONTHLY', label: _('Monthly') },
+									{ value: 'YEARLY', label: _('Yearly') },
+								],
+								value: { value: selectedOption, label: recurrenceOptionLabel(selectedOption) },
+								onClose: async (repeatAnswer: { value: string }|null) => {
+									let newNote: NoteEntity = null;
+									if (repeatAnswer !== null) {
+										newNote = {
+											id: note.id,
+											todo_due: answer,
+											alarm_recurrence: optionToRecurrence(repeatAnswer.value),
+										};
+									}
+
+									if (newNote) {
+										await Note.save(newNote);
+										eventManager.emit(EventName.AlarmChange, { noteId: note.id, note: newNote });
+									}
+
+									comp.setState({ promptOptions: null });
+								},
+							},
+						});
 					},
 				},
 			});
