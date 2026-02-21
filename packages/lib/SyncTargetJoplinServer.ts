@@ -64,13 +64,14 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return _('Joplin Server');
 	}
 
-	public async isAuthenticated() {
+	public async isAuthenticated(): Promise<boolean> {
 		try {
 			const fileApi = await this.fileApi();
 			const api = fileApi.driver().api();
 			const sessionId = await api.getSessionId();
 			return !!sessionId;
-		} catch (error) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
 			if (error.code === 403) {
 				return false;
 			}
@@ -78,7 +79,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		}
 	}
 
-	public authRouteName() {
+	public authRouteName(): string {
 		return 'JoplinServerLogin';
 	}
 
