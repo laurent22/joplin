@@ -568,6 +568,7 @@ export const databaseSchema: DatabaseTables = {
 		type_: { type: 'number' },
 	},
 	notes: {
+		alarm_interval: { type: 'string' },
 		altitude: { type: 'number' },
 		application_data: { type: 'string' },
 		author: { type: 'string' },

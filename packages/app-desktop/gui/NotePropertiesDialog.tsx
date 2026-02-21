@@ -91,7 +91,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			revisionsLink: _('Note History'),
 			markup_language: _('Markup'),
 			todo_due: _('Alarm date'),
-			alarm_interval: _('Repeat'),
+			alarm_interval: _('Alarm Interval'),
 		};
 	}
 
