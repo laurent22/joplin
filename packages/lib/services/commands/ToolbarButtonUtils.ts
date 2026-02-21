@@ -56,10 +56,12 @@ export default class ToolbarButtonUtils {
 		const newIcon = this.service.iconName(commandName);
 		let newLabel = this.service.label(commandName);
 
-		const accelerator = KeymapService.instance().getDefaultAccelerator(commandName);
-		if (accelerator) {
-			const label = `${newLabel} (${accelerator})`;
-			newLabel = newLabel ? label : accelerator;
+		if (KeymapService.instance().acceleratorExists(commandName)) {
+			const accelerator = KeymapService.instance().getDefaultAccelerator(commandName);
+			if (accelerator) {
+				const label = `${newLabel} (${accelerator})`;
+				newLabel = newLabel ? label : accelerator;
+			}
 		}
 
 		if (

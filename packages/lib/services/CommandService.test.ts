@@ -49,6 +49,10 @@ const registerSecondaryRuntime = (service: CommandService, commandName: string, 
 describe('services_CommandService', () => {
 
 	beforeEach(async () => {
+		jest.spyOn(KeymapService.instance(), 'getDefaultAccelerator').mockImplementation((commandName: string) => {
+			if (commandName === 'test1') return 'Ctrl+T';
+			return '';
+		});
 		KeymapService.destroyInstance();
 		KeymapService.instance().initialize();
 
@@ -332,5 +336,9 @@ describe('services_CommandService', () => {
 
 		const command = service.commandByName('test1');
 		expect(command.declaration.iconName).toBe('fas fa-cog');
+	});
+
+	afterEach(() => {
+		jest.restoreAllMocks();
 	});
 });

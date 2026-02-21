@@ -11,6 +11,7 @@ import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import Setting from '@joplin/lib/models/Setting';
 import { RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import mockCommandRuntimes from './testing/mockCommandRuntimes';
+import KeymapService from '@joplin/lib/services/KeymapService';
 
 let store: Store<AppState>;
 
@@ -65,6 +66,7 @@ let mockCommands: RegisteredRuntime|null = null;
 
 describe('EditorToolbar', () => {
 	beforeEach(async () => {
+		jest.spyOn(KeymapService.instance(), 'acceleratorExists').mockReturnValue(false);
 		await setupDatabase(0);
 		await switchClient(0);
 
@@ -142,5 +144,9 @@ describe('EditorToolbar', () => {
 		expect(screen.queryByRole('checkbox', { name: 'Math' })).toBeNull();
 
 		toolbar.unmount();
+	});
+
+	afterEach(() => {
+		jest.restoreAllMocks();
 	});
 });
