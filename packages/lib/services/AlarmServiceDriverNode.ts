@@ -36,6 +36,7 @@ export default class AlarmServiceDriverNode {
 	}
 
 	public logger() {
+		if (!this.service_) throw new Error('AlarmServiceDriverNode: service not set - call setService() before using logger()');
 		return this.service_.logger();
 	}
 

@@ -89,7 +89,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<Props, Sel
 
 	public static getDerivedStateFromProps(nextProps: Props, prevState: SelectDateTimeState): Partial<SelectDateTimeState> | null {
 		const updates: Partial<SelectDateTimeState> = {};
-		if (nextProps.date !== prevState.date) {
+		if ((nextProps.date?.getTime() ?? null) !== (prevState.date?.getTime() ?? null)) {
 			updates.date = nextProps.date;
 		}
 		if (nextProps.interval !== undefined && nextProps.interval !== prevState.selectedInterval) {
@@ -136,32 +136,48 @@ export default class SelectDateTimeDialog extends React.PureComponent<Props, Sel
 		];
 	}
 
+	private static readonly pillStyles = StyleSheet.create({
+		container: {
+			marginTop: 12,
+			width: '100%' as const,
+			paddingHorizontal: 10,
+		},
+		pillsRow: {
+			flexDirection: 'row' as const,
+			flexWrap: 'wrap' as const,
+			justifyContent: 'center' as const,
+		},
+		pill: {
+			paddingHorizontal: 14,
+			paddingVertical: 6,
+			margin: 4,
+			borderRadius: 16,
+			borderWidth: 1,
+		},
+		pillText: {
+			fontSize: 12,
+		},
+	});
+
 	private renderIntervalPills() {
 		const theme = themeStyle(this.props.themeId);
+		const { pillStyles } = SelectDateTimeDialog;
 
 		const intervals = this.getIntervalOptions();
 
 		return (
-			<View style={{ marginTop: 12, width: '100%', paddingHorizontal: 10 }}>
+			<View style={pillStyles.container}>
 				<Text style={{ ...theme.normalText, color: theme.colorFaded, fontSize: 12, marginBottom: 6 }}>{_('Repeat')}</Text>
-				<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+				<View style={pillStyles.pillsRow}>
 					{intervals.map(item => {
 						const isSelected = this.state.selectedInterval === item.value;
 						return (
 							<TouchableOpacity
 								key={item.value}
 								onPress={() => this.setState({ selectedInterval: item.value })}
-								style={{
-									paddingHorizontal: 14,
-									paddingVertical: 6,
-									margin: 4,
-									borderRadius: 16,
-									borderWidth: 1,
-									borderColor: theme.color,
-									backgroundColor: isSelected ? theme.color : theme.backgroundColor,
-								}}
+								style={[pillStyles.pill, { borderColor: theme.color, backgroundColor: isSelected ? theme.color : theme.backgroundColor }]}
 							>
-								<Text style={{ color: isSelected ? theme.backgroundColor : theme.color, fontSize: 12 }}>
+								<Text style={[pillStyles.pillText, { color: isSelected ? theme.backgroundColor : theme.color }]}>
 									{item.label}
 								</Text>
 							</TouchableOpacity>

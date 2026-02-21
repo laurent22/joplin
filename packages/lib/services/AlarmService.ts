@@ -204,9 +204,10 @@ export default class AlarmService {
 					trigger_time: nextTrigger,
 				});
 
-				// Schedule the next notification directly
+				// Clear old notification then schedule the next one to avoid duplicates
 				const updatedAlarm = await Alarm.load(String(alarmId));
 				if (updatedAlarm) {
+					await this.driver().clearNotification(alarmId);
 					const notification = await Alarm.makeNotification(updatedAlarm, note);
 					this.logger().info(`Rescheduling repeating alarm ${alarmId} for note ${note.id}`, notification);
 					await this.driver().scheduleNotification(notification);
