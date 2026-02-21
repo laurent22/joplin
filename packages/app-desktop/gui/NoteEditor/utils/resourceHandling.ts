@@ -249,7 +249,61 @@ export function sanitizeGoogleDocsHtml(html: string): string {
 
 	walkAndClean(doc.body);
 
-	// --- Step 2: Normalize top-level <br>-separated inlines into <p> blocks ---
+	// --- Step 2: Split <p> elements containing <br> into multiple <p> blocks ---
+	// Google Docs wraps <br> inside styled <span> elements
+	// (e.g. <span style="..."><br/></span>). We first unwrap those, then split
+	// the <p> at <br> boundaries into separate <p> blocks.
+	// Only targets <p> elements — leaves <li>, <td>, <blockquote> etc. alone.
+	const paragraphs = Array.from(doc.querySelectorAll('p'));
+	for (const p of paragraphs) {
+		if (!p.querySelector('br')) continue;
+		if (!p.parentNode) continue;
+
+		// Unwrap <br> from inline wrappers like <span><br></span>.
+		for (const child of Array.from(p.childNodes)) {
+			if (child.nodeType !== Node.ELEMENT_NODE) continue;
+			const el = child as Element;
+			const tag = el.tagName.toLowerCase();
+			if (tag === 'br') continue;
+			if (blockTags.has(tag)) continue;
+
+			// If this inline element contains ONLY <br> tags (no visible text),
+			// replace the wrapper with its <br> children directly.
+			if (!hasVisibleText(el) && el.querySelector('br')) {
+				const brs = el.querySelectorAll('br');
+				for (const br of Array.from(brs)) {
+					p.insertBefore(br, el);
+				}
+				el.remove();
+			}
+		}
+
+		// Now split the <p> at <br> boundaries.
+		const nodes = Array.from(p.childNodes);
+		const groups: Node[][] = [[]];
+
+		for (const node of nodes) {
+			if (node.nodeType === Node.ELEMENT_NODE && (node as Element).tagName.toLowerCase() === 'br') {
+				groups.push([]);
+				continue;
+			}
+			groups[groups.length - 1].push(node);
+		}
+
+		const parent = p.parentNode;
+		for (const group of groups) {
+			if (!group.length) continue;
+			const text = group.map(n => n.textContent).join('').trim();
+			if (!text) continue;
+
+			const newP = doc.createElement('p');
+			for (const node of group) newP.appendChild(node);
+			parent.insertBefore(newP, p);
+		}
+		parent.removeChild(p);
+	}
+
+	// --- Step 3: Normalize top-level <br>-separated inlines into <p> blocks ---
 	const normalizeBrs = (container: Element) => {
 		const children = Array.from(container.childNodes);
 		// Only normalize if there are <br> elements at this level.
@@ -316,6 +370,15 @@ export function sanitizeGoogleDocsHtml(html: string): string {
 	// Only normalize at the top-level container (body or Google's root wrapper).
 	normalizeBrs(doc.body);
 
+	// --- Step 4: Remove any remaining top-level <br> elements ---
+	// After Steps 2-3, any <br> still at the body level is between <p> blocks
+	// and redundant. Remove them to prevent literal <br> in Markdown output.
+	for (const node of Array.from(doc.body.childNodes)) {
+		if (node.nodeType === Node.ELEMENT_NODE && (node as Element).tagName.toLowerCase() === 'br') {
+			node.remove();
+		}
+	}
+
 	return doc.body.innerHTML;
 }
 
@@ -329,6 +392,10 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 
 	// Sanitize Google Docs-specific HTML quirks before the round-trip.
 	html = sanitizeGoogleDocsHtml(html);
+
+	// The sanitizer's DOMParser→innerHTML round-trip may reintroduce &nbsp;
+	// entities from the original HTML. Replace them with regular spaces.
+	html = html.replace(/&nbsp;/g, ' ').replace(/[\u00A0]/g, ' ');
 
 	html = await processImagesInPastedHtml(html);
 

@@ -104,6 +104,67 @@ describe('resourceHandling', () => {
 		expect(result).toContain('<br>');
 	});
 
+	it('should split <p> containing <br> into multiple <p> blocks', () => {
+		const html = '<b id="docs-internal-guid-abc123" style="font-weight:normal">' +
+			'<p><span>Line one</span><br><span>Line two</span><br><span>Line three</span></p></b>';
+		const result = sanitizeGoogleDocsHtml(html);
+		expect(result).not.toMatch(/<br\s*\/?>/i);
+		expect(result).toContain('Line one');
+		expect(result).toContain('Line two');
+		expect(result).toContain('Line three');
+		expect((result.match(/<p>/g) || []).length).toBeGreaterThanOrEqual(3);
+	});
+
+	it('should handle trailing <br> inside <p>', () => {
+		const html = '<b id="docs-internal-guid-abc123" style="font-weight:normal">' +
+			'<p><span>Line 1</span><br><span>Line 2</span><br><span>Line 3</span><br></p></b>';
+		const result = sanitizeGoogleDocsHtml(html);
+		expect(result).not.toMatch(/<br\s*\/?>/i);
+		expect(result).toContain('Line 1');
+		expect(result).toContain('Line 2');
+		expect(result).toContain('Line 3');
+	});
+
+	it('should unwrap <br> from <span> wrappers (real Google Docs format)', () => {
+		const html = '<b id="docs-internal-guid-abc123" style="font-weight:normal">' +
+			'<p>' +
+			'<span style="font-size:11pt">Line 1</span>' +
+			'<span style="font-size:11pt"><br></span>' +
+			'<span style="font-size:11pt">Line 2</span>' +
+			'<span style="font-size:11pt"><br></span>' +
+			'<span style="font-size:11pt">Line 3</span>' +
+			'<span style="font-size:11pt"><br><br></span>' +
+			'</p></b>';
+		const result = sanitizeGoogleDocsHtml(html);
+		expect(result).not.toMatch(/<br\s*\/?>/i);
+		expect(result).toContain('Line 1');
+		expect(result).toContain('Line 2');
+		expect(result).toContain('Line 3');
+		expect((result.match(/<p>/g) || []).length).toBeGreaterThanOrEqual(3);
+	});
+
+	it('should handle <br> between and after <p> blocks', () => {
+		// <br> after <p> at body level
+		const html = '<b id="docs-internal-guid-abc123" style="font-weight:normal">' +
+			'<p><span>Line 1</span></p><br><p><span>Line 2</span></p><br></b>';
+		const result = sanitizeGoogleDocsHtml(html);
+		expect(result).not.toMatch(/<br\s*\/?>/i);
+		expect(result).toContain('Line 1');
+		expect(result).toContain('Line 2');
+	});
+
+	it('should handle Google Docs structure with empty paragraph breaks', () => {
+		const html = '<b id="docs-internal-guid-xyz" style="font-weight:normal">' +
+			'<p><span>Line one</span><br><span>Line 2</span><br><span>Line 3</span></p>' +
+			'<p><br></p>' +
+			'<p><span>Hello</span>&nbsp;&nbsp;<span>World</span></p></b>';
+		const result = sanitizeGoogleDocsHtml(html);
+		expect(result).not.toMatch(/<br\s*\/?>/i);
+		expect(result).toContain('Line one');
+		expect(result).toContain('Hello');
+		expect(result).toContain('World');
+	});
+
 	it('should NOT touch content when <p> blocks already exist', () => {
 		const html = '<b id="docs-internal-guid-xyz" style="font-weight:normal">' +
 			'<p>Para 1</p><br><p>Para 2</p></b>';
@@ -111,11 +172,47 @@ describe('resourceHandling', () => {
 		// Existing <p> blocks should be preserved as-is.
 		expect(result).toContain('<p>Para 1</p>');
 		expect(result).toContain('<p>Para 2</p>');
+		// The <br> between <p> blocks should be removed.
+		expect(result).not.toMatch(/<br\s*\/?>/i);
 	});
 
 	it('should return non-Google Docs HTML unchanged', () => {
 		const html = '<b></b><span>Hello</span><br><span>World</span>';
 		const result = sanitizeGoogleDocsHtml(html);
 		expect(result).toBe(html);
+	});
+
+	it('end-to-end: Google Docs paste produces clean Markdown with all content preserved', async () => {
+		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
+
+		const googleDocsInput =
+			'<b id="docs-internal-guid-abc123" style="font-weight:normal">' +
+			'<p><span style="font-size:11pt">Hello World</span></p>' +
+			'<p><span style="font-size:11pt">Line one</span><br>' +
+			'<span style="font-size:11pt">Line two</span><br>' +
+			'<span style="font-size:11pt">Line three</span></p>' +
+			'</b>' +
+			'<b style="font-weight:normal"></b>';
+
+		const result = await processPastedHtml(googleDocsInput, htmlToMd, markupToHtml);
+
+		// Req 1: Text content is preserved exactly
+		expect(result).toContain('Hello World');
+		expect(result).toContain('Line one');
+		expect(result).toContain('Line two');
+		expect(result).toContain('Line three');
+
+		// Req 2: Paragraph breaks are preserved
+		expect((result.match(/<p>/g) || []).length).toBeGreaterThanOrEqual(4);
+
+		// Req 3: No stray ** lines appear
+		expect(result).not.toMatch(/^\*\*$/m);
+		expect(result).not.toContain('****');
+
+		// Req 4: No injected formatting markup
+		expect(result).not.toMatch(/<br\s*\/?>/i);
+
+		// Req 5: No &nbsp; entities from Google Docs
+		expect(result).not.toContain('&nbsp;');
 	});
 });
