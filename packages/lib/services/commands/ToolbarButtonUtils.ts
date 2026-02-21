@@ -3,6 +3,7 @@ import { stateUtils } from '../../reducer';
 import focusEditorIfEditorCommand from './focusEditorIfEditorCommand';
 import { WhenClauseContext } from './stateToWhenClauseContext';
 import Logger from '@joplin/utils/Logger';
+import KeymapService from '../KeymapService';
 
 const logger = Logger.create('ToolbarButtonUtils');
 
@@ -53,7 +54,13 @@ export default class ToolbarButtonUtils {
 		const newVisible = this.service.isVisible(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
 		const newIcon = this.service.iconName(commandName);
-		const newLabel = this.service.label(commandName);
+		let newLabel = this.service.label(commandName);
+
+		const accelerator = KeymapService.instance().getDefaultAccelerator(commandName);
+		if (accelerator) {
+			const label = `${newLabel} (${accelerator})`;
+			newLabel = newLabel ? label : accelerator;
+		}
 
 		if (
 			this.toolbarButtonCache_[commandName] &&
