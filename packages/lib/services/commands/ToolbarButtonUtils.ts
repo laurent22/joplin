@@ -56,12 +56,17 @@ export default class ToolbarButtonUtils {
 		const newIcon = this.service.iconName(commandName);
 		let newLabel = this.service.label(commandName);
 
-		if (KeymapService.instance().acceleratorExists(commandName)) {
-			const accelerator = KeymapService.instance().getDefaultAccelerator(commandName);
-			if (accelerator) {
-				const label = `${newLabel} (${accelerator})`;
-				newLabel = newLabel ? label : accelerator;
+		try {
+			if (KeymapService.instance().acceleratorExists(commandName)) {
+				const accelerator = KeymapService.instance().getDefaultAccelerator(commandName);
+				if (accelerator) {
+					const label = `${newLabel} (${accelerator})`;
+					newLabel = newLabel ? label : accelerator;
+				}
 			}
+		} catch (error) {
+			// If KeymapService is not initialized (common in mobile or certain test
+			// environments), we simply skip adding the accelerator to the tooltip.
 		}
 
 		if (

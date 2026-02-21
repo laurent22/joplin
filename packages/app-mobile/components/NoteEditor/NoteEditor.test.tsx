@@ -17,7 +17,6 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import { MarkupLanguage } from '@joplin/renderer';
 import { EditorType } from './types';
-import KeymapService from '@joplin/lib/services/KeymapService';
 
 let store: Store<AppState>;
 let registeredRuntime: RegisteredRuntime;
@@ -53,7 +52,6 @@ describe('NoteEditor', () => {
 	});
 
 	beforeEach(async () => {
-		jest.spyOn(KeymapService.instance(), 'acceleratorExists').mockReturnValue(false);
 		// Required to use ExtendedWebView
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);

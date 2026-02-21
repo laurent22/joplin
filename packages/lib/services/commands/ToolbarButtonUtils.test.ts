@@ -49,6 +49,9 @@ describe('ToolbarButtonUtils', () => {
 
 	// before each test mocks the data again
 	beforeEach(() => {
+		jest.spyOn(KeymapService.prototype, 'acceleratorExists').mockImplementation((commandName: string) => {
+			return commandName === 'testCommand1';
+		});
 		// initialized the testCommand1 to have an accelerator of Ctrl + T
 		jest.spyOn(KeymapService.instance(), 'getDefaultAccelerator').mockImplementation((commandName: string) => {
 			if (commandName === 'testCommand1') return 'Ctrl+T';
