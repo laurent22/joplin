@@ -69,7 +69,7 @@ class WelcomeUtils {
 			};
 			const folder = await Folder.save({
 				title: _('Welcome!'),
-				icon: JSON.stringify(folderIcon),
+				icon: Folder.serializeIcon(folderIcon),
 			});
 			if (!output.defaultFolderId) output.defaultFolderId = folder.id;
 		}
