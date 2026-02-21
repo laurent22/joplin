@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { themeStyle } from './global-style';
 import { _ } from '@joplin/lib/locale';
-import { View, Button, Text, StyleSheet } from 'react-native';
+import { View, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import time from '@joplin/lib/time';
 import { Platform } from 'react-native';
 import Modal from './Modal';
@@ -52,17 +52,33 @@ const styles = StyleSheet.create({
 	},
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
+interface Props {
+	themeId: number;
+	shown: boolean;
+	date: Date | null;
+	// Optional repeat interval: 'none' | 'daily' | 'weekly' | 'monthly'
+	interval?: string;
+	onAccept: (date: Date | null, interval: string)=> void;
+	onReject: ()=> void;
+}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(props: any) {
+interface SelectDateTimeState {
+	date: Date | null;
+	mode: string;
+	showPicker: boolean;
+	selectedInterval: string;
+}
+
+export default class SelectDateTimeDialog extends React.PureComponent<Props, SelectDateTimeState> {
+
+	public constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			date: null,
 			mode: 'date',
 			showPicker: false,
+			selectedInterval: props.interval || 'none',
 		};
 
 		this.onReject = this.onReject.bind(this);
@@ -71,15 +87,17 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.onSetDate = this.onSetDate.bind(this);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: Props) {
 		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });
+		}
+		if (newProps.interval !== undefined && newProps.interval !== this.state.selectedInterval) {
+			this.setState({ selectedInterval: newProps.interval });
 		}
 	}
 
 	public onAccept() {
-		if (this.props.onAccept) this.props.onAccept(this.state.date);
+		if (this.props.onAccept) this.props.onAccept(this.state.date, this.state.selectedInterval || 'none');
 	}
 
 	public onReject() {
@@ -87,7 +105,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 	public onClear() {
-		if (this.props.onAccept) this.props.onAccept(null);
+		if (this.props.onAccept) this.props.onAccept(null, 'none');
 	}
 
 	public onPickerConfirm(selectedDate: Date) {
@@ -107,6 +125,47 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.setState({ date: new Date(event.target.value) });
 	};
 
+	private renderIntervalPills() {
+		const theme = themeStyle(this.props.themeId);
+
+		const intervals = [
+			{ value: 'none', label: _('No repeat') },
+			{ value: 'daily', label: _('Daily') },
+			{ value: 'weekly', label: _('Weekly') },
+			{ value: 'monthly', label: _('Monthly') },
+		];
+
+		return (
+			<View style={{ marginTop: 12, width: '100%', paddingHorizontal: 10 }}>
+				<Text style={{ ...theme.normalText, color: theme.colorFaded, fontSize: 12, marginBottom: 6 }}>{_('Repeat')}</Text>
+				<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+					{intervals.map(item => {
+						const isSelected = this.state.selectedInterval === item.value;
+						return (
+							<TouchableOpacity
+								key={item.value}
+								onPress={() => this.setState({ selectedInterval: item.value })}
+								style={{
+									paddingHorizontal: 14,
+									paddingVertical: 6,
+									margin: 4,
+									borderRadius: 16,
+									borderWidth: 1,
+									borderColor: theme.color,
+									backgroundColor: isSelected ? theme.color : theme.backgroundColor,
+								}}
+							>
+								<Text style={{ color: isSelected ? theme.backgroundColor : theme.color, fontSize: 12 }}>
+									{item.label}
+								</Text>
+							</TouchableOpacity>
+						);
+					})}
+				</View>
+			</View>
+		);
+	}
+
 	public renderContent() {
 		const theme = themeStyle(this.props.themeId);
 
@@ -115,11 +174,40 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 			// See https://developer.mozilla.org/en-US/docs/Web/HTML/Date_and_time_formats#local_date_and_time_strings
 			// for the expected date input format:
 			const dateString = this.state.date ? formatMsToLocal(this.state.date.getTime(), 'YYYY-MM-DD[T]HH:mm:ss') : '';
-			return <input
-				type="datetime-local"
-				value={dateString}
-				onChange={this.onInputChange}
-			></input>;
+			return (
+				<View style={{ margin: 10, alignItems: 'center' }}>
+					<input
+						type="datetime-local"
+						value={dateString}
+						onChange={this.onInputChange}
+					/>
+					<View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+						{[
+							{ value: 'none', label: _('No repeat') },
+							{ value: 'daily', label: _('Daily') },
+							{ value: 'weekly', label: _('Weekly') },
+							{ value: 'monthly', label: _('Monthly') },
+						].map(item => (
+							<button
+								key={item.value}
+								onClick={() => this.setState({ selectedInterval: item.value })}
+								style={{
+									margin: 4,
+									padding: '4px 12px',
+									borderRadius: 14,
+									border: `1px solid ${this.state.selectedInterval === item.value ? '#007AFF' : '#ccc'}`,
+									backgroundColor: this.state.selectedInterval === item.value ? '#007AFF' : 'transparent',
+									color: this.state.selectedInterval === item.value ? '#fff' : 'inherit',
+									cursor: 'pointer',
+									fontSize: 12,
+								}}
+							>
+								{item.label}
+							</button>
+						))}
+					</View>
+				</View>
+			);
 		}
 
 		return (
@@ -136,6 +224,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 					onConfirm={this.onPickerConfirm}
 					onCancel={this.onPickerCancel}
 				/>
+				{this.renderIntervalPills()}
 			</View>
 		);
 	}
@@ -177,3 +266,4 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 }
+

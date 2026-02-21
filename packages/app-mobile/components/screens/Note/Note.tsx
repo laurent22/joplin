@@ -1162,7 +1162,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 	}
 
-	public async onAlarmDialogAccept(date: Date) {
+	public async onAlarmDialogAccept(date: Date | null, interval: string) {
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
@@ -1179,10 +1179,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			alert('Warning: The due-date has been saved, but showing notifications is not supported by Joplin Web.');
 		}
 
-		const newNote = { ...this.state.note };
-		newNote.todo_due = date ? date.getTime() : 0;
-
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
+		// If date is cleared, reset the repeat interval too
+		await this.saveOneProperty('alarm_interval', date ? interval : 'none');
 
 		this.setState({ alarmDialogShown: false });
 	}
@@ -1871,7 +1870,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
 
-				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} interval={this.state.note.alarm_interval ?? 'none'} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				{noteTagDialog}
 				<ShareNoteDialog

@@ -1,6 +1,7 @@
 import BaseModel from '../BaseModel';
 import Note from './Note';
 import { RRule } from 'rrule';
+import { simpleIntervalToRRule, isRRuleString } from '../utils/rruleUtils';
 
 export interface Notification {
 	id: number;
@@ -9,25 +10,6 @@ export interface Notification {
 	title: string;
 	body?: string;
 }
-
-// Alarm model with support for recurring notifications using RRULE (RFC 5545)
-//
-// Supports both simple intervals (backward compatible) and RRULE strings:
-//
-// Simple intervals (converted to RRULE automatically):
-// - 'daily'   → Daily recurrence
-// - 'weekly'  → Weekly recurrence
-// - 'monthly' → Monthly recurrence
-// - 'none'    → One-time alarm
-//
-// RRULE examples:
-// - 'FREQ=DAILY;INTERVAL=1'                    → Every day
-// - 'FREQ=WEEKLY;BYDAY=MO,WE,FR'               → Every Mon, Wed, Fri
-// - 'FREQ=MONTHLY;BYMONTHDAY=1'                → First day of each month
-// - 'FREQ=MONTHLY;BYDAY=1MO'                   → First Monday of each month
-// - 'FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=25'     → Every Christmas
-//
-// Use createRRule() helper for building custom RRULE patterns
 export default class Alarm extends BaseModel {
 	public static tableName() {
 		return 'alarms';
@@ -68,15 +50,10 @@ export default class Alarm extends BaseModel {
 		let triggerDate = new Date(alarm.trigger_time);
 
 		// If this is a repeating alarm and should trigger
-		if (alarm.repeat_interval && alarm.repeat_interval !== 'none') {
-			if (this.shouldTriggerAlarm(alarm)) {
-				// Use current trigger time
-				triggerDate = new Date(alarm.trigger_time);
-			} else {
-				// Calculate next trigger time
-				const nextTrigger = this.calculateNextTriggerTime(alarm.trigger_time, alarm.repeat_interval);
-				triggerDate = new Date(nextTrigger);
-			}
+		if (!this.shouldTriggerAlarm(alarm)) {
+			// Calculate next trigger time for repeating alarms, but not beyond todo due date
+			const nextTrigger = this.calculateNextTriggerTime(alarm.trigger_time, alarm.repeat_interval, note.todo_due);
+			triggerDate = new Date(nextTrigger);
 		}
 
 		const output: Notification = {
@@ -93,36 +70,6 @@ export default class Alarm extends BaseModel {
 
 	public static async allDue() {
 		return this.modelSelectAll('SELECT * FROM alarms WHERE trigger_time >= ?', [Date.now()]);
-	}
-
-	// Convert simple interval strings to RRULE strings for backward compatibility
-	private static simpleIntervalToRRule(period: string, dtstart: Date): string {
-		switch (period) {
-		case 'daily':
-			return new RRule({
-				freq: RRule.DAILY,
-				dtstart,
-			}).toString();
-		case 'weekly':
-			return new RRule({
-				freq: RRule.WEEKLY,
-				dtstart,
-			}).toString();
-		case 'monthly':
-			return new RRule({
-				freq: RRule.MONTHLY,
-				dtstart,
-			}).toString();
-		case 'none':
-		default:
-			return '';
-		}
-	}
-
-	// Check if repeat_interval is a simple string or RRULE
-	private static isRRuleString(interval: string): boolean {
-		if (!interval || interval === 'none') return false;
-		return interval.startsWith('DTSTART') || interval.startsWith('FREQ');
 	}
 
 	// Check if alarm should trigger based on repeat_interval and last_trigger_time
@@ -168,8 +115,9 @@ export default class Alarm extends BaseModel {
 	}
 
 	// Calculate next trigger time for repeating alarms using RRULE
+	// Does not schedule beyond the maxDate (e.g., todo due date)
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static calculateNextTriggerTime(currentTriggerTime: number, repeatInterval: string): number {
+	public static calculateNextTriggerTime(currentTriggerTime: number, repeatInterval: string, maxDate?: number): number {
 		if (!repeatInterval || repeatInterval === 'none') {
 			return currentTriggerTime;
 		}
@@ -179,8 +127,8 @@ export default class Alarm extends BaseModel {
 			let rruleString = repeatInterval;
 
 			// Convert simple interval to RRULE if needed (backward compatibility)
-			if (!this.isRRuleString(repeatInterval)) {
-				rruleString = this.simpleIntervalToRRule(repeatInterval, currentDate);
+			if (!isRRuleString(repeatInterval)) {
+				rruleString = simpleIntervalToRRule(repeatInterval, currentDate);
 				if (!rruleString) return currentTriggerTime;
 			}
 
@@ -193,38 +141,18 @@ export default class Alarm extends BaseModel {
 				return currentTriggerTime;
 			}
 
-			return nextDate.getTime();
+			const nextTriggerTime = nextDate.getTime();
+
+			// Check if next trigger exceeds the max date (e.g., todo due date)
+			if (maxDate && nextTriggerTime > maxDate) {
+				this.logger().info(`Next trigger ${nextDate.toISOString()} exceeds max date ${new Date(maxDate).toISOString()}, returning current trigger time`);
+				return currentTriggerTime;
+			}
+
+			return nextTriggerTime;
 		} catch (error) {
 			this.logger().error(`Error calculating next trigger time for interval "${repeatInterval}":`, error);
 			return currentTriggerTime;
 		}
-	}
-
-	// Helper to create RRULE string from common patterns
-	public static createRRule(options: {
-		freq: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY';
-		interval?: number;
-		byweekday?: number[];
-		bymonthday?: number;
-		dtstart: Date;
-	}): string {
-		const freqMap: Record<string, number> = {
-			DAILY: RRule.DAILY,
-			WEEKLY: RRule.WEEKLY,
-			MONTHLY: RRule.MONTHLY,
-			YEARLY: RRule.YEARLY,
-		};
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const rruleOptions: any = {
-			freq: freqMap[options.freq],
-			dtstart: options.dtstart,
-		};
-
-		if (options.interval) rruleOptions.interval = options.interval;
-		if (options.byweekday) rruleOptions.byweekday = options.byweekday;
-		if (options.bymonthday) rruleOptions.bymonthday = options.bymonthday;
-
-		return new RRule(rruleOptions).toString();
 	}
 }

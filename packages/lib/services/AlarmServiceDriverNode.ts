@@ -177,7 +177,7 @@ export default class AlarmServiceDriverNode {
 				void this.scheduleNotification(this.notifications_[notification.id]);
 			}, maxInterval);
 		} else {
-			timeoutId = shim.setTimeout(() => {
+			timeoutId = shim.setTimeout(async () => {
 				if (shouldUseElectronNotifications()) {
 					this.displayElectronNotification(notification);
 				} else {
@@ -187,6 +187,11 @@ export default class AlarmServiceDriverNode {
 				this.clearNotification(notification.id);
 
 				eventManager.emit(EventName.NoteAlarmTrigger, { noteId: notification.noteId });
+
+				// Reschedule repeating alarms or clean up one-time alarms
+				if (this.service_) {
+					await this.service_.handleNotificationTrigger(notification.id);
+				}
 			}, interval);
 		}
 

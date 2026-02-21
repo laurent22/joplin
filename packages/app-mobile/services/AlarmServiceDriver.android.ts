@@ -6,9 +6,16 @@ const ReactNativeAN = require('@joplin/react-native-alarm-notification').default
 export default class AlarmServiceDriver {
 
 	private logger_: Logger;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private service_: any = null;
 
 	public constructor(logger: Logger) {
 		this.logger_ = logger;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public setService(v: any) {
+		this.service_ = v;
 	}
 
 	public hasPersistentNotifications() {
@@ -51,6 +58,9 @@ export default class AlarmServiceDriver {
 	}
 
 	public async scheduleNotification(notification: Notification) {
+		// Note: Android alarms are OS-level persistent notifications.
+		// Rescheduling of repeating alarms is handled via service_.handleNotificationTrigger()
+		// which is called on app startup through AlarmService.updateAllNotifications().
 		const alarmNotifData = {
 			title: notification.title,
 			message: notification.body ? notification.body : '-', // Required

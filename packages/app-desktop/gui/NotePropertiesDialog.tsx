@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import DialogButtonRow from './DialogButtonRow';
 import Note from '@joplin/lib/models/Note';
+import AlarmService from '@joplin/lib/services/AlarmService';
 import bridge from '../services/bridge';
 import shim from '@joplin/lib/shim';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -30,6 +31,9 @@ interface FormNote {
 	todo_completed?: number;
 	user_created_time: number;
 	user_updated_time: number;
+	// Optional alarm fields - only present for todo notes
+	todo_due?: number;
+	alarm_interval?: string;
 }
 
 interface State {
@@ -45,7 +49,7 @@ interface State {
 const uniqueId = (key: string) => `note-properties-dialog-${key}`;
 
 const isPropertyDatetimeRelated = (key: string) => {
-	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time';
+	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time' || key === 'todo_due';
 };
 
 class NotePropertiesDialog extends React.Component<Props, State> {
@@ -86,6 +90,8 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			source_url: _('URL'),
 			revisionsLink: _('Note History'),
 			markup_language: _('Markup'),
+			todo_due: _('Alarm date'),
+			alarm_interval: _('Repeat'),
 		};
 	}
 
@@ -143,6 +149,12 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			formNote.todo_completed = note.todo_completed;
 		}
 
+		// Only show alarm fields for todo notes
+		if (note.is_todo) {
+			formNote.todo_due = note.todo_due || 0;
+			formNote.alarm_interval = note.alarm_interval || 'none';
+		}
+
 		if (Number(note.latitude) || Number(note.longitude)) {
 			formNote.location = `${note.latitude}, ${note.longitude}`;
 		}
@@ -160,6 +172,13 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 
 		note.source_url = formNote.source_url;
+
+		// Map alarm fields if present (todo notes only)
+		if ('todo_due' in formNote) {
+			note.todo_due = formNote.todo_due || 0;
+			// If due date is cleared, also clear the repeat interval
+			note.alarm_interval = note.todo_due ? (formNote.alarm_interval || 'none') : 'none';
+		}
 
 		return note;
 	}
@@ -222,6 +241,10 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			const note = this.formNoteToNote(this.state.formNote);
 			note.updated_time = Date.now();
 			await Note.save(note, { autoTimestamp: false });
+			// Update alarm scheduling when alarm-related fields change
+			if ('todo_due' in this.state.formNote) {
+				await AlarmService.updateNoteNotification(note);
+			}
 		} else {
 			await this.cancelProperty();
 		}
@@ -334,11 +357,13 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 
 		if (this.state.editedKey === key) {
 			if (isPropertyDatetimeRelated(key)) {
+				// For todo_due, treat value 0 as empty (no alarm set)
+				const initialValue = (key === 'todo_due' && !value) ? '' : formatMsToDateTimeLocal(value);
 				controlComp = <input
 					type="datetime-local"
-					defaultValue={formatMsToDateTimeLocal(value)}
+					defaultValue={initialValue}
 					ref={this.inputRef}
-					onChange={event => this.setState({ editedValue: formatDateTimeLocalToMs(event.target.value) })}
+					onChange={event => this.setState({ editedValue: event.target.value ? formatDateTimeLocalToMs(event.target.value) : 0 })}
 					onKeyDown={event => onKeyDown(event)}
 					style={styles.input}
 					id={uniqueId(key)}
@@ -404,10 +429,37 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					displayedValue = '';
 				}
 			} else if (isPropertyDatetimeRelated(key)) {
-				displayedValue = formatMsToLocal(value);
+				// For todo_due, value 0 means no alarm set
+				displayedValue = (key === 'todo_due' && !value) ? _('Not set') : formatMsToLocal(value);
 			}
 
-			if (['source_url', 'location'].indexOf(key) >= 0) {
+			// alarm_interval: always render as an inline select (no edit-button pattern)
+			if (key === 'alarm_interval') {
+				const hasDueDate = !!(this.state.formNote?.todo_due);
+				const intervalOptions = [
+					{ value: 'none', label: _('None') },
+					{ value: 'daily', label: _('Daily') },
+					{ value: 'weekly', label: _('Weekly') },
+					{ value: 'monthly', label: _('Monthly') },
+				];
+				controlComp = (
+					<select
+						value={value || 'none'}
+						disabled={!hasDueDate}
+						onChange={(e) => {
+							this.setState({ formNote: { ...this.state.formNote, alarm_interval: e.target.value } });
+						}}
+						style={{ ...styles.input, opacity: hasDueDate ? 1 : 0.5 }}
+						id={uniqueId(key)}
+					>
+						{intervalOptions.map(opt => (
+							<option key={opt.value} value={opt.value}>{opt.label}</option>
+						))}
+					</select>
+				);
+				// No pencil-edit button for this field
+				editCompHandler = null;
+			} else if (['source_url', 'location'].indexOf(key) >= 0) {
 				let url = '';
 				if (key === 'source_url') url = value;
 				if (key === 'location') {

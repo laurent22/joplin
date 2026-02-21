@@ -7,22 +7,33 @@ export default class AlarmServiceDriver {
 	private hasPermission_: boolean = null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private inAppNotificationHandler_: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private service_: any = null;
 	private logger_: Logger;
 
 	public constructor(logger: Logger) {
 		this.logger_ = logger;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		PushNotificationIOS.addEventListener('localNotification', (instance: any) => {
-			if (!this.inAppNotificationHandler_) return;
-
+		PushNotificationIOS.addEventListener('localNotification', async (instance: any) => {
 			if (!instance || !instance._data || !instance._data.id) {
 				this.logger_.warn('PushNotificationIOS.addEventListener: Did not receive a proper notification instance');
 				return;
 			}
 
 			const id = instance._data.id;
-			this.inAppNotificationHandler_(id);
+
+			if (this.inAppNotificationHandler_) this.inAppNotificationHandler_(id);
+
+			// Reschedule repeating alarms or clean up one-time alarms
+			if (this.service_) {
+				await this.service_.handleNotificationTrigger(Number(id));
+			}
 		});
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public setService(v: any) {
+		this.service_ = v;
 	}
 
 	public hasPersistentNotifications() {
