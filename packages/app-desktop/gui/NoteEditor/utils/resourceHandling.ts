@@ -189,14 +189,29 @@ const blockTags = new Set([
 	'blockquote', 'pre', 'hr', 'figure', 'figcaption', 'section',
 ]);
 
-function hasVisibleText(node: Node): boolean {
+// Void elements that represent meaningful content even without text.
+const meaningfulVoidTags = new Set(['img', 'video', 'svg', 'canvas', 'audio']);
+
+function hasVisibleContent(node: Node): boolean {
 	if (node.nodeType === Node.TEXT_NODE) return node.textContent.trim().length > 0;
 	if (node.nodeType === Node.ELEMENT_NODE) {
+		const tag = (node as Element).tagName?.toLowerCase();
+		if (meaningfulVoidTags.has(tag)) return true;
 		for (const child of Array.from(node.childNodes)) {
-			if (hasVisibleText(child)) return true;
+			if (hasVisibleContent(child)) return true;
 		}
 	}
 	return false;
+}
+
+function groupHasContent(group: Node[]): boolean {
+	const text = group.map(n => n.textContent).join('').trim();
+	if (text) return true;
+	return group.some(n =>
+		n.nodeType === Node.ELEMENT_NODE &&
+		(meaningfulVoidTags.has((n as Element).tagName?.toLowerCase()) ||
+			!!(n as Element).querySelector?.(Array.from(meaningfulVoidTags).join(','))),
+	);
 }
 
 // Sanitize HTML produced by Google Docs before the HTML→Markdown round-trip.
@@ -223,7 +238,7 @@ export function sanitizeGoogleDocsHtml(html: string): string {
 			const tag = el.tagName.toLowerCase();
 
 			if (removableInlineTags.has(tag)) {
-				if (!hasVisibleText(el)) {
+				if (!hasVisibleContent(el)) {
 					// Empty formatting tag — remove entirely.
 					el.remove();
 					continue;
@@ -269,7 +284,7 @@ export function sanitizeGoogleDocsHtml(html: string): string {
 
 			// If this inline element contains ONLY <br> tags (no visible text),
 			// replace the wrapper with its <br> children directly.
-			if (!hasVisibleText(el) && el.querySelector('br')) {
+			if (!hasVisibleContent(el) && el.querySelector('br')) {
 				const brs = el.querySelectorAll('br');
 				for (const br of Array.from(brs)) {
 					p.insertBefore(br, el);
@@ -293,8 +308,7 @@ export function sanitizeGoogleDocsHtml(html: string): string {
 		const parent = p.parentNode;
 		for (const group of groups) {
 			if (!group.length) continue;
-			const text = group.map(n => n.textContent).join('').trim();
-			if (!text) continue;
+			if (!groupHasContent(group)) continue;
 
 			const newP = doc.createElement('p');
 			for (const node of group) newP.appendChild(node);
@@ -357,9 +371,8 @@ export function sanitizeGoogleDocsHtml(html: string): string {
 				}
 			}
 
-			// Skip groups that are only whitespace.
-			const groupText = group.map(n => n.textContent).join('').trim();
-			if (!groupText) continue;
+			// Skip groups that have no visible content.
+			if (!groupHasContent(group)) continue;
 
 			const p = doc.createElement('p');
 			for (const node of group) p.appendChild(node);
