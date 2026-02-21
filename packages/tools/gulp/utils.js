@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const execa = require('execa');
 const glob = require('glob');
+const path = require('path');
 
 const utils = {};
 
@@ -119,17 +120,69 @@ utils.copyDir = async function(src, dest, options) {
 
 		await utils.execCommand(cmd.join(' '));
 	} else {
-		let excludedFlag = '';
-		if (options.excluded.length) {
-			excludedFlag = options.excluded.map(f => {
-				return `--exclude "${f}"`;
-			}).join(' ');
+		const args = ['-a'];
+		if (options.delete) args.push('--delete');
+		for (const excludedPath of options.excluded) {
+			args.push('--exclude', excludedPath);
 		}
+		args.push(`${src}/`, `${dest}/`);
 
-		let deleteFlag = '';
-		if (options.delete) deleteFlag = '--delete';
+		try {
+			await execa('rsync', args);
+		} catch (error) {
+			if (error.code !== 'ENOENT') throw error;
 
-		await utils.execCommand(`rsync -a ${deleteFlag} ${excludedFlag} "${src}/" "${dest}/"`);
+			console.warn('`rsync` was not found. Falling back to a Node.js copy operation.');
+
+			const isExcluded = (() => {
+				const wildcardToRegex = pattern => new RegExp(`^${pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`);
+
+				return sourcePath => {
+					const sourcePathPosix = sourcePath.replace(/\\/g, '/');
+					const relativePath = path.relative(src, sourcePath).replace(/\\/g, '/');
+					if (!relativePath) return false;
+
+					for (const excludedPath of options.excluded) {
+						const excludedPathPosix = excludedPath.replace(/\\/g, '/').replace(/^\.?\//, '');
+						const hasWildcard = excludedPathPosix.includes('*');
+
+						if (path.isAbsolute(excludedPath)) {
+							const absoluteExcludedPath = path.resolve(excludedPath).replace(/\\/g, '/');
+							if (sourcePathPosix === absoluteExcludedPath || sourcePathPosix.startsWith(`${absoluteExcludedPath}/`)) return true;
+							continue;
+						}
+
+						if (excludedPathPosix.endsWith('/')) {
+							const excludedDir = excludedPathPosix.slice(0, -1);
+							if (relativePath === excludedDir || relativePath.startsWith(`${excludedDir}/`)) return true;
+							continue;
+						}
+
+						if (hasWildcard) {
+							if (wildcardToRegex(excludedPathPosix).test(relativePath)) return true;
+							if (wildcardToRegex(excludedPathPosix).test(path.basename(relativePath))) return true;
+							continue;
+						}
+
+						if (relativePath === excludedPathPosix || relativePath.startsWith(`${excludedPathPosix}/`)) return true;
+
+						const pathParts = relativePath.split('/');
+						if (pathParts.includes(excludedPathPosix)) return true;
+					}
+
+					return false;
+				};
+			})();
+
+			if (options.delete) {
+				await fs.remove(dest);
+				await fs.mkdirp(dest);
+			}
+
+			await fs.copy(src, dest, {
+				filter: sourcePath => !isExcluded(sourcePath),
+			});
+		}
 	}
 };
 
