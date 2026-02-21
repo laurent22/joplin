@@ -107,7 +107,7 @@ export default class JoplinServerApi {
 		}
 	}
 
-	private async sessionId() {
+	public async getSessionId() {
 		const session = await this.session();
 		return session ? session.id : '';
 	}
@@ -172,7 +172,7 @@ export default class JoplinServerApi {
 
 		let sessionId = '';
 		if (path !== 'api/sessions' && !sessionId) {
-			sessionId = await this.sessionId();
+			sessionId = await this.getSessionId();
 		}
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;

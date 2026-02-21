@@ -631,9 +631,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			let bodyToRender = props.content;
 
 			if (!props.visiblePanes.includes('viewer')) {
-				// If the viewer is not visible, it will never render and send the 'noteRenderComplete'
-				// IPC message. We manually trigger this so that pending scroll restorations 
-				// (e.g., returning from a global search) can still be executed.
 				if (props.onMessage) props.onMessage({ channel: 'noteRenderComplete' });
 				return;
 			}

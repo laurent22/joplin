@@ -130,9 +130,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	public screenFromName(screenName: string) {
-		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
-		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
-		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'encryption') return <EncryptionConfigScreen />;
+		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId} />;
+		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId} />;
 		if (screenName === 'joplinCloud') return <JoplinCloudConfigScreen />;
 
 		throw new Error(`Invalid screen name: ${screenName}`);
@@ -259,7 +259,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				}
 
 				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer')) {
-					const goToJoplinServerLogin = () => {
+					const goToJoplinServerLogin = async () => {
+						await shared.saveSettings(this);
 						this.props.dispatch({
 							type: 'NAV_GO',
 							routeName: 'JoplinServerLogin',

@@ -68,7 +68,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		try {
 			const fileApi = await this.fileApi();
 			const api = fileApi.driver().api();
-			const sessionId = await api.sessionId();
+			const sessionId = await api.getSessionId();
 			return !!sessionId;
 		} catch (error) {
 			if (error.code === 403) {

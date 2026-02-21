@@ -66,7 +66,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const rootRef = useRef(null);
 	const webviewRef = useRef(null);
 
-	type OnChangeCallback = (event: OnChangeEvent) => void;
+	type OnChangeCallback = (_event: OnChangeEvent)=> void;
 	const props_onChangeRef = useRef<OnChangeCallback>(null);
 	props_onChangeRef.current = props.onChange;
 
@@ -205,10 +205,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			let bodyToRender = props.content;
 
 			if (!props.visiblePanes.includes('viewer')) {
-				// If the viewer is not visible, it will never render and send the 'noteRenderComplete'
-				// IPC message. We manually trigger this so that pending scroll restorations 
-				// (e.g., returning from a global search) can still be executed.
-				if (props.onMessage) props.onMessage({ channel: 'noteRenderComplete' });
+				props.onMessage({ channel: 'noteRenderComplete' });
 				return;
 			}
 
@@ -248,7 +245,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [
 		props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage,
 		props.visiblePanes, props.resourceInfos, props.markupToHtml, props.contentMaxWidth,
-		props.noteId, props.useCustomPdfViewer,
+		props.noteId, props.useCustomPdfViewer, props.onMessage,
 	]);
 
 	useEffect(() => {

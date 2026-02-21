@@ -24,6 +24,7 @@ import ProfileEditor from './ProfileEditor';
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
+import { syncTargetIdServer } from '@joplin/lib/services/joplinCloudUtils';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import WindowCommandsAndDialogs from './WindowCommandsAndDialogs/WindowCommandsAndDialogs';
 import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
@@ -162,8 +163,7 @@ class RootComponent extends React.Component<Props, any> {
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			JoplinServerLogin: { screen: (props: any) => <JoplinCloudLoginScreen {...props} syncTargetId={9} />, title: () => _('Joplin Server Login') },
+			JoplinServerLogin: { screen: (props: React.ComponentProps<typeof JoplinCloudLoginScreen>) => <JoplinCloudLoginScreen {...props} syncTargetId={syncTargetIdServer} />, title: () => _('Joplin Server Login') },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()), title: () => _('Joplin Server Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
