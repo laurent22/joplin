@@ -91,8 +91,10 @@ export default class AlarmService {
 				// If the repeat interval changed, update the alarm and reschedule
 				if (alarm.repeat_interval !== newInterval) {
 					this.logger().info(`Updating repeat_interval for alarm ${alarm.id} from "${alarm.repeat_interval}" to "${newInterval}"`);
-					await Alarm.save({ id: String(alarm.id), repeat_interval: newInterval });
-					alarm = await Alarm.byNoteId(note.id);
+					await Alarm.save({ id: alarm.id, repeat_interval: newInterval });
+					// Update in-memory rather than re-fetching to avoid a null result
+					// if the note object passed here is partial.
+					alarm = { ...alarm, repeat_interval: newInterval };
 					await driver.clearNotification(alarm.id);
 					const notification = await Alarm.makeNotification(alarm, note);
 					await driver.scheduleNotification(notification);
