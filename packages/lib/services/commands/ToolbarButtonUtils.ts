@@ -49,24 +49,20 @@ export default class ToolbarButtonUtils {
 		return this.service_;
 	}
 
-	private commandToToolbarButton(commandName: string, whenClauseContext: WhenClauseContext): ToolbarButtonInfo {
+	private commandToToolbarButton(commandName: string, whenClauseContext: WhenClauseContext, keymapService: KeymapService | null): ToolbarButtonInfo {
 		const newEnabled = this.service.isEnabled(commandName, whenClauseContext);
 		const newVisible = this.service.isVisible(commandName, whenClauseContext);
 		const newTitle = this.service.title(commandName);
 		const newIcon = this.service.iconName(commandName);
 		let newLabel = this.service.label(commandName);
 
-		try {
-			if (KeymapService.instance().acceleratorExists(commandName)) {
-				const accelerator = KeymapService.instance().getDefaultAccelerator(commandName);
-				if (accelerator) {
-					const label = `${newLabel} (${accelerator})`;
-					newLabel = newLabel ? label : accelerator;
-				}
+
+		if (keymapService && keymapService.acceleratorExists(commandName)) {
+			const accelerator = keymapService.getDefaultAccelerator(commandName);
+			if (accelerator) {
+				const label = `${newLabel} (${accelerator})`;
+				newLabel = newLabel ? label : accelerator;
 			}
-		} catch (error) {
-			// If KeymapService is not initialized (common in mobile or certain test
-			// environments), we simply skip adding the accelerator to the tooltip.
 		}
 
 		if (
@@ -105,7 +101,7 @@ export default class ToolbarButtonUtils {
 	// the output also won't change. Invididual toolbarButtonInfo also won't changed
 	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any): ToolbarItem[] {
+	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any, keymapService: (KeymapService | null) = null): ToolbarItem[] {
 		const output: ToolbarItem[] = [];
 
 		for (const commandName of commandNames) {
@@ -118,7 +114,7 @@ export default class ToolbarButtonUtils {
 			}
 
 			try {
-				const button = this.commandToToolbarButton(commandName, whenClauseContext);
+				const button = this.commandToToolbarButton(commandName, whenClauseContext, keymapService);
 				if (button.visible) {
 					output.push(button);
 				}

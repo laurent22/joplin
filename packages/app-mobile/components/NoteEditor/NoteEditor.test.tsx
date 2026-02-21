@@ -62,7 +62,6 @@ describe('NoteEditor', () => {
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
 		registeredRuntime.deregister();
 	});
 

@@ -77,7 +77,6 @@ describe('EditorToolbar', () => {
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
 		mockCommands?.deregister();
 		mockCommands = null;
 	});

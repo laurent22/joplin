@@ -1,8 +1,8 @@
-import MenuUtils from '../services/commands/MenuUtils';
-import ToolbarButtonUtils from '../services/commands/ToolbarButtonUtils';
-import CommandService, { CommandDeclaration, CommandRuntime } from '../services/CommandService';
-import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
-import KeymapService from '../services/KeymapService';
+import MenuUtils from './commands/MenuUtils';
+import ToolbarButtonUtils from './commands/ToolbarButtonUtils';
+import CommandService, { CommandDeclaration, CommandRuntime } from './CommandService';
+import stateToWhenClauseContext from './commands/stateToWhenClauseContext';
+import KeymapService from './KeymapService';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } from '../testing/test-utils';
 
 interface TestCommand {
@@ -47,7 +47,6 @@ const registerSecondaryRuntime = (service: CommandService, commandName: string, 
 };
 
 describe('services_CommandService', () => {
-
 	beforeEach(async () => {
 		KeymapService.destroyInstance();
 		KeymapService.instance().initialize();
@@ -77,7 +76,7 @@ describe('services_CommandService', () => {
 			},
 		}));
 
-		const toolbarInfos = toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {});
+		const toolbarInfos = toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {}, KeymapService.instance());
 
 		await toolbarInfos[0].onClick();
 		await toolbarInfos[1].onClick();
@@ -104,7 +103,7 @@ describe('services_CommandService', () => {
 		const toolbarInfos = toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {
 			oneNoteSelected: false,
 			multipleNotesSelected: true,
-		});
+		}, KeymapService.instance());
 
 		expect(toolbarInfos[0].enabled).toBe(false);
 		expect(toolbarInfos[1].enabled).toBe(true);
@@ -137,12 +136,12 @@ describe('services_CommandService', () => {
 		const toolbarInfos1 = toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {
 			cond1: true,
 			cond2: false,
-		});
+		}, KeymapService.instance());
 
 		const toolbarInfos2 = toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {
 			cond1: true,
 			cond2: false,
-		});
+		}, KeymapService.instance());
 
 		expect(toolbarInfos1).toBe(toolbarInfos2);
 		expect(toolbarInfos1[0] === toolbarInfos2[0]).toBe(true);
@@ -151,7 +150,7 @@ describe('services_CommandService', () => {
 		const toolbarInfos3 = toolbarButtonUtils.commandsToToolbarButtons(['test1', 'test2'], {
 			cond1: true,
 			cond2: true,
-		});
+		}, KeymapService.instance());
 
 		expect(toolbarInfos2 === toolbarInfos3).toBe(false);
 		expect(toolbarInfos2[0] === toolbarInfos3[0]).toBe(true);
@@ -161,10 +160,10 @@ describe('services_CommandService', () => {
 			expect(toolbarButtonUtils.commandsToToolbarButtons(['test1', '-', 'test2'], {
 				cond1: true,
 				cond2: false,
-			})).toBe(toolbarButtonUtils.commandsToToolbarButtons(['test1', '-', 'test2'], {
+			}, KeymapService.instance())).toBe(toolbarButtonUtils.commandsToToolbarButtons(['test1', '-', 'test2'], {
 				cond1: true,
 				cond2: false,
-			}));
+			}, KeymapService.instance()));
 		}
 	}));
 
