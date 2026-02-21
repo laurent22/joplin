@@ -77,6 +77,7 @@ describe('EditorToolbar', () => {
 	});
 
 	afterEach(() => {
+		jest.restoreAllMocks();
 		mockCommands?.deregister();
 		mockCommands = null;
 	});
@@ -142,9 +143,5 @@ describe('EditorToolbar', () => {
 		expect(screen.queryByRole('checkbox', { name: 'Math' })).toBeNull();
 
 		toolbar.unmount();
-	});
-
-	afterEach(() => {
-		jest.restoreAllMocks();
 	});
 });

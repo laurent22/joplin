@@ -62,6 +62,7 @@ describe('NoteEditor', () => {
 	});
 
 	afterEach(() => {
+		jest.restoreAllMocks();
 		registeredRuntime.deregister();
 	});
 
@@ -134,9 +135,5 @@ describe('NoteEditor', () => {
 		expect(screen.queryByText(warningBannerQuery)).toBeNull();
 
 		wrappedNoteEditor.unmount();
-	});
-
-	afterEach(() => {
-		jest.restoreAllMocks();
 	});
 });
