@@ -47,8 +47,8 @@ describe('ToolbarButtonUtils', () => {
 		CommandService.instance().registerCommands(commands);
 	});
 
-	// The repo might have a global test mock cleaner which wipes the mock data after each test so I initialized a beforeEach() as test were failing before it
-	beforeEach(()=>{
+	// before each test mocks the data again
+	beforeEach(() => {
 		// initialized the testCommand1 to have an accelerator of Ctrl + T
 		jest.spyOn(KeymapService.instance(), 'getDefaultAccelerator').mockImplementation((commandName: string) => {
 			if (commandName === 'testCommand1') return 'Ctrl+T';
@@ -115,7 +115,7 @@ describe('ToolbarButtonUtils', () => {
 	});
 
 	// for security
-	afterEach(()=>{
+	afterEach(() => {
 		jest.restoreAllMocks();
 	});
 });
