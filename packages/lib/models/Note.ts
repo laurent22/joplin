@@ -972,7 +972,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static dueNotes() {
-		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?', [time.unixMs()]);
+		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, alarm_recurrence, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > 0 AND (todo_due > ? OR alarm_recurrence != "")', [time.unixMs()]);
 	}
 
 	public static needAlarm(note: NoteEntity) {
