@@ -10891,7 +10891,7 @@ __metadata:
     "@types/node-rsa": "npm:1.1.4"
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
-    "@types/rrule": "npm:^2.2.9"
+    "@types/rrule": "npm:2.2.9"
     "@types/uuid": "npm:10.0.0"
     adm-zip: "npm:0.5.16"
     async-mutex: "npm:0.5.0"
@@ -10937,7 +10937,7 @@ __metadata:
     redux: "npm:4.2.1"
     relative: "npm:3.0.2"
     reselect: "npm:4.1.8"
-    rrule: "npm:^2.8.1"
+    rrule: "npm:2.8.1"
     server-destroy: "npm:1.0.1"
     sharp: "npm:0.34.5"
     sprintf-js: "npm:1.1.3"
@@ -17169,7 +17169,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/rrule@npm:^2.2.9":
+"@types/rrule@npm:2.2.9":
   version: 2.2.9
   resolution: "@types/rrule@npm:2.2.9"
   dependencies:
@@ -46389,7 +46389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rrule@npm:*, rrule@npm:^2.8.1":
+"rrule@npm:*, rrule@npm:2.8.1":
   version: 2.8.1
   resolution: "rrule@npm:2.8.1"
   dependencies:
