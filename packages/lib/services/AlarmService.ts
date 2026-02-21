@@ -85,7 +85,35 @@ export default class AlarmService {
 			}
 
 			if (!clearAlarm && alarm) {
-				// Alarm already exists and set at the right time
+				// Alarm already exists at the right time
+				const newInterval = note.alarm_interval || 'none';
+
+				// If the repeat interval changed, update the alarm and reschedule
+				if (alarm.repeat_interval !== newInterval) {
+					this.logger().info(`Updating repeat_interval for alarm ${alarm.id} from "${alarm.repeat_interval}" to "${newInterval}"`);
+					await Alarm.save({ id: String(alarm.id), repeat_interval: newInterval });
+					alarm = await Alarm.byNoteId(note.id);
+					await driver.clearNotification(alarm.id);
+					const notification = await Alarm.makeNotification(alarm, note);
+					await driver.scheduleNotification(notification);
+					return;
+				}
+
+				// For repeating alarms, if todo_due moved to before the next trigger, reschedule from todo_due
+				if (isRepeatingAlarm && note.todo_due && note.todo_due < alarm.trigger_time) {
+					this.logger().info(`todo_due moved before trigger_time for repeating alarm ${alarm.id}, rescheduling from todo_due`);
+					await driver.clearNotification(alarm.id);
+					await Alarm.delete(alarm.id, { sourceDescription: 'AlarmService/updateNoteNotification' });
+					await Alarm.save({
+						note_id: note.id,
+						trigger_time: note.todo_due,
+						repeat_interval: newInterval,
+					});
+					alarm = await Alarm.byNoteId(note.id);
+					const notification = await Alarm.makeNotification(alarm, note);
+					await driver.scheduleNotification(notification);
+					return;
+				}
 
 				// For persistent notifications (those that stay active after the app has been closed, like on mobile), if we have
 				// an alarm object we can be sure that the notification has already been set, so there's nothing to do.

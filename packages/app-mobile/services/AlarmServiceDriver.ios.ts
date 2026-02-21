@@ -2,13 +2,15 @@ import { Notification } from '@joplin/lib/models/Alarm';
 import Logger from '@joplin/utils/Logger';
 const PushNotificationIOS = require('@react-native-community/push-notification-ios').default;
 
+interface AlarmServiceInterface {
+	handleNotificationTrigger(id: number): Promise<void>;
+}
+
 export default class AlarmServiceDriver {
 
 	private hasPermission_: boolean = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private inAppNotificationHandler_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private service_: any = null;
+	private inAppNotificationHandler_: ((id: string)=> void) | null = null;
+	private service_: AlarmServiceInterface | null = null;
 	private logger_: Logger;
 
 	public constructor(logger: Logger) {
@@ -31,8 +33,7 @@ export default class AlarmServiceDriver {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setService(v: any) {
+	public setService(v: AlarmServiceInterface) {
 		this.service_ = v;
 	}
 
@@ -44,8 +45,7 @@ export default class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setInAppNotificationHandler(v: any) {
+	public setInAppNotificationHandler(v: (id: string)=> void) {
 		this.inAppNotificationHandler_ = v;
 	}
 

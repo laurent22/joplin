@@ -2,7 +2,13 @@ import eventManager, { EventName } from '../eventManager';
 import { Notification } from '../models/Alarm';
 import shim from '../shim';
 import Setting from '../models/Setting';
+import Logger from '@joplin/utils/Logger';
 const notifier = require('node-notifier');
+
+interface AlarmServiceInterface {
+	handleNotificationTrigger(id: number): Promise<void>;
+	logger(): Logger;
+}
 
 interface Options {
 	appName: string;
@@ -17,8 +23,7 @@ export default class AlarmServiceDriverNode {
 	private appName_: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private notifications_: any = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private service_: any = null;
+	private service_: AlarmServiceInterface | null = null;
 
 	public constructor(options: Options) {
 		// Note: appName is required to get the notification to work. It must be the same as the appId defined in package.json
@@ -26,8 +31,7 @@ export default class AlarmServiceDriverNode {
 		this.appName_ = options.appName;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setService(s: any) {
+	public setService(s: AlarmServiceInterface) {
 		this.service_ = s;
 	}
 

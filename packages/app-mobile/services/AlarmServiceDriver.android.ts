@@ -3,19 +3,22 @@ import { Notification } from '@joplin/lib/models/Alarm';
 
 const ReactNativeAN = require('@joplin/react-native-alarm-notification').default;
 
+interface AlarmServiceInterface {
+	handleNotificationTrigger(id: number): Promise<void>;
+}
+
 export default class AlarmServiceDriver {
 
 	private logger_: Logger;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private service_: any = null;
 
 	public constructor(logger: Logger) {
 		this.logger_ = logger;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setService(v: any) {
-		this.service_ = v;
+	// Android handles notification triggers via AlarmService.updateAllNotifications() on app startup.
+	// No direct service reference is needed in this driver, but setService is kept for API consistency.
+	public setService(_v: AlarmServiceInterface) {
+		// Not used on Android
 	}
 
 	public hasPersistentNotifications() {

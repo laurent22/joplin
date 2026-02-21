@@ -87,13 +87,15 @@ export default class SelectDateTimeDialog extends React.PureComponent<Props, Sel
 		this.onSetDate = this.onSetDate.bind(this);
 	}
 
-	public UNSAFE_componentWillReceiveProps(newProps: Props) {
-		if (newProps.date !== this.state.date) {
-			this.setState({ date: newProps.date });
+	public static getDerivedStateFromProps(nextProps: Props, prevState: SelectDateTimeState): Partial<SelectDateTimeState> | null {
+		const updates: Partial<SelectDateTimeState> = {};
+		if (nextProps.date !== prevState.date) {
+			updates.date = nextProps.date;
 		}
-		if (newProps.interval !== undefined && newProps.interval !== this.state.selectedInterval) {
-			this.setState({ selectedInterval: newProps.interval });
+		if (nextProps.interval !== undefined && nextProps.interval !== prevState.selectedInterval) {
+			updates.selectedInterval = nextProps.interval;
 		}
+		return Object.keys(updates).length > 0 ? updates : null;
 	}
 
 	public onAccept() {
@@ -125,15 +127,19 @@ export default class SelectDateTimeDialog extends React.PureComponent<Props, Sel
 		this.setState({ date: new Date(event.target.value) });
 	};
 
-	private renderIntervalPills() {
-		const theme = themeStyle(this.props.themeId);
-
-		const intervals = [
+	private getIntervalOptions() {
+		return [
 			{ value: 'none', label: _('No repeat') },
 			{ value: 'daily', label: _('Daily') },
 			{ value: 'weekly', label: _('Weekly') },
 			{ value: 'monthly', label: _('Monthly') },
 		];
+	}
+
+	private renderIntervalPills() {
+		const theme = themeStyle(this.props.themeId);
+
+		const intervals = this.getIntervalOptions();
 
 		return (
 			<View style={{ marginTop: 12, width: '100%', paddingHorizontal: 10 }}>
@@ -182,12 +188,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<Props, Sel
 						onChange={this.onInputChange}
 					/>
 					<View style={{ marginTop: 10, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-						{[
-							{ value: 'none', label: _('No repeat') },
-							{ value: 'daily', label: _('Daily') },
-							{ value: 'weekly', label: _('Weekly') },
-							{ value: 'monthly', label: _('Monthly') },
-						].map(item => (
+						{this.getIntervalOptions().map(item => (
 							<button
 								key={item.value}
 								onClick={() => this.setState({ selectedInterval: item.value })}
