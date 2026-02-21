@@ -23,7 +23,7 @@ export default class SyncTargetFilesystem extends BaseSyncTarget {
 	}
 
 	public async isAuthenticated() {
-		return true;
+		return !!this.syncPath_()?.trim();
 	}
 
 	private syncPath_() {
@@ -31,6 +31,11 @@ export default class SyncTargetFilesystem extends BaseSyncTarget {
 	}
 
 	public async initFileApi() {
+		const syncPath = this.syncPath_()?.trim();
+		if (!syncPath) {
+			throw new Error('File system sync path is not set. Please configure the sync path in the settings.');
+		}
+
 		const driver = new FileApiDriverLocal();
 
 		const fileApi = new FileApi(() => {
@@ -41,7 +46,6 @@ export default class SyncTargetFilesystem extends BaseSyncTarget {
 		fileApi.setLogger(this.logger());
 		fileApi.setSyncTargetId(SyncTargetFilesystem.id());
 
-		const syncPath = this.syncPath_();
 		await driver.mkdir(syncPath);
 		return fileApi;
 	}
