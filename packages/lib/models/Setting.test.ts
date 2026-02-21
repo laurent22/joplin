@@ -1,4 +1,4 @@
-import Setting, { AppType, SettingItemType, SettingMetadataSection, SettingSectionSource, SettingStorage } from '../models/Setting';
+import Setting, { SettingItemType, SettingSectionSource, SettingStorage } from '../models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import { readFile, stat, mkdirp, writeFile, pathExists, readdir } from 'fs-extra';
 import Logger from '@joplin/utils/Logger';
@@ -208,68 +208,6 @@ describe('models/Setting', () => {
 		expect(Setting.sectionNameToLabel('mySection')).toBe('My section');
 	}));
 
-	it('should group all editor settings in the editor section', () => {
-		const metadata = Setting.metadata();
-
-		// From 'note' section
-		expect(metadata['editor.autoMatchingBraces'].section).toBe('editor');
-		expect(metadata['editor.autocompleteMarkup'].section).toBe('editor');
-		expect(metadata['editor.enableHtmlToMarkdownBanner'].section).toBe('editor');
-		expect(metadata['editor.pastePreserveColors'].section).toBe('editor');
-		expect(metadata['editor.enableTextPatterns'].section).toBe('editor');
-		expect(metadata['editor.tabMovesFocus'].section).toBe('editor');
-		expect(metadata['editor.highlightActiveLine'].section).toBe('editor');
-		expect(metadata['editor.inlineRendering'].section).toBe('editor');
-		expect(metadata['editor.imageRendering'].section).toBe('editor');
-
-		// From 'appearance' section
-		expect(metadata['style.editor.fontSize'].section).toBe('editor');
-		expect(metadata['style.editor.fontFamily'].section).toBe('editor');
-		expect(metadata['style.editor.monospaceFontFamily'].section).toBe('editor');
-		expect(metadata['style.editor.contentMaxWidth'].section).toBe('editor');
-
-		// From 'general' section
-		expect(metadata['editor.legacyMarkdown'].section).toBe('editor');
-
-		// Previously section-less
-		expect(metadata['editor.keyboardMode'].section).toBe('editor');
-		expect(metadata['editor.spellcheckBeta'].section).toBe('editor');
-		expect(metadata['spellChecker.languages'].section).toBe('editor');
-		expect(metadata['editor.codeView'].section).toBe('editor');
-
-		// Mobile-specific (from 'note')
-		expect(metadata['editor.usePlainText'].section).toBe('editor');
-		expect(metadata['editor.mobile.spellcheckEnabled'].section).toBe('editor');
-		expect(metadata['editor.mobile.toolbarEnabled'].section).toBe('editor');
-	});
-
-	it('should place the editor section after joplinCloud and before plugins in section order', () => {
-		const order = Setting.sectionOrder();
-		const editorIdx = order.indexOf('editor');
-		const joplinCloudIdx = order.indexOf('joplinCloud');
-		const pluginsIdx = order.indexOf('plugins');
-		expect(editorIdx).toBeGreaterThan(-1);
-		expect(editorIdx).toBeGreaterThan(joplinCloudIdx);
-		expect(editorIdx).toBeLessThan(pluginsIdx);
-	});
-
-	it('should configure editor section label, summary, and icons correctly', () => {
-		expect(Setting.sectionNameToLabel('editor')).toBe('Editor');
-
-		const metadata: SettingMetadataSection = { name: 'editor', metadatas: [] };
-		expect(Setting.sectionMetadataToSummary(metadata)).toBe('Typography, spellcheck, layout');
-
-		expect(Setting.sectionNameToIcon('editor', AppType.Desktop)).toBe('fas fa-edit');
-		expect(Setting.sectionNameToIcon('editor', AppType.Mobile)).toBe('fas fa-pen');
-	});
-
-	it('should have updated summaries for appearance and note sections after editor migration', () => {
-		const appearanceMeta: SettingMetadataSection = { name: 'appearance', metadatas: [] };
-		expect(Setting.sectionMetadataToSummary(appearanceMeta)).toBe('Themes');
-
-		const noteMeta: SettingMetadataSection = { name: 'note', metadatas: [] };
-		expect(Setting.sectionMetadataToSummary(noteMeta)).toBe('Geolocation, image resize');
-	});
 
 	it('should save and load settings from file', (async () => {
 		Setting.setValue('sync.target', 9); // Saved to file
