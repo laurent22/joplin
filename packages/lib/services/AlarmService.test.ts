@@ -133,6 +133,63 @@ describe('services/AlarmService', () => {
 			expect(alarm).not.toBeNull();
 			expect(alarm.repeat_interval).toBe('daily');
 		});
+
+		it('should update repeat_interval and reschedule when alarm_interval changes on existing alarm', async () => {
+			const folder = await Folder.save({ title: 'folder' });
+			const todoDue = Date.now() + 7 * 24 * 60 * 60 * 1000;
+			const note = await Note.save({
+				title: 'todo interval change',
+				is_todo: 1,
+				todo_due: todoDue,
+				alarm_interval: 'weekly',
+				parent_id: folder.id,
+			});
+
+			// Alarm exists with the old interval
+			await Alarm.save({ note_id: note.id, trigger_time: todoDue, repeat_interval: 'daily' });
+			const beforeAlarm = await Alarm.byNoteId(note.id);
+
+			await AlarmService.updateNoteNotification(note);
+
+			const afterAlarm = await Alarm.byNoteId(note.id);
+			expect(afterAlarm).not.toBeNull();
+			// repeat_interval should now reflect the new alarm_interval
+			expect(afterAlarm.repeat_interval).toBe('weekly');
+			// The old alarm id is preserved (only the interval is updated, not recreated)
+			expect(afterAlarm.id).toBe(beforeAlarm.id);
+			// Driver should have rescheduled (cleared + scheduled)
+			expect(mockDriver.clearedNotifications).toContain(beforeAlarm.id);
+			expect(mockDriver.scheduledNotifications[beforeAlarm.id]).toBeTruthy();
+		});
+
+		it('should reschedule alarm from todo_due when todo_due moves earlier than trigger_time', async () => {
+			const folder = await Folder.save({ title: 'folder' });
+			const now = Date.now();
+			const note = await Note.save({
+				title: 'early due todo',
+				is_todo: 1,
+				todo_due: now + 2 * 60 * 60 * 1000, // 2 hours from now
+				alarm_interval: 'daily',
+				parent_id: folder.id,
+			});
+
+			// Alarm has a trigger_time further in the future than todo_due
+			await Alarm.save({
+				note_id: note.id,
+				trigger_time: now + 25 * 60 * 60 * 1000, // 25 hours — past todo_due
+				repeat_interval: 'daily',
+			});
+			const beforeAlarm = await Alarm.byNoteId(note.id);
+
+			await AlarmService.updateNoteNotification(note);
+
+			const afterAlarm = await Alarm.byNoteId(note.id);
+			expect(afterAlarm).not.toBeNull();
+			// trigger_time should have been reset to todo_due
+			expect(afterAlarm.trigger_time).toBe(note.todo_due);
+			// Old alarm should have been cleared
+			expect(mockDriver.clearedNotifications).toContain(beforeAlarm.id);
+		});
 	});
 
 	describe('handleNotificationTrigger', () => {
@@ -203,6 +260,35 @@ describe('services/AlarmService', () => {
 				expect(alarm.repeat_interval).toBe('none');
 			}
 			// (alarm could also be null if max date logic removes it entirely — both are valid)
+		});
+
+		it('should clear old notification before scheduling the next one on reschedule', async () => {
+			const folder = await Folder.save({ title: 'folder' });
+			const todoDue = Date.now() + 30 * 24 * 60 * 60 * 1000;
+			const triggerTime = Date.now() + 86400000;
+			const note = await Note.save({
+				title: 'clear before reschedule',
+				is_todo: 1,
+				todo_due: todoDue,
+				alarm_interval: 'daily',
+				parent_id: folder.id,
+			});
+
+			await Alarm.save({ note_id: note.id, trigger_time: triggerTime, repeat_interval: 'daily' });
+			const savedAlarm = await Alarm.byNoteId(note.id);
+
+			// Pre-populate the mock driver as if a notification is already scheduled
+			mockDriver.scheduledNotifications[savedAlarm.id] = { id: savedAlarm.id };
+			mockDriver.clearedNotifications = [];
+
+			await AlarmService.handleNotificationTrigger(savedAlarm.id);
+
+			// clearNotification must have been called with the alarm id before scheduleNotification
+			expect(mockDriver.clearedNotifications).toContain(savedAlarm.id);
+			// A new notification must have been scheduled
+			const rescheduledAlarm = await Alarm.byNoteId(note.id);
+			expect(rescheduledAlarm).not.toBeNull();
+			expect(mockDriver.scheduledNotifications[rescheduledAlarm.id]).toBeTruthy();
 		});
 	});
 });
