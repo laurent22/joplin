@@ -57,6 +57,28 @@ The transcribe container runs with these security measures:
 
 ---
 
+# GPU Support
+
+To use GPU acceleration, configure the `TRANSCRIBE_DEVICE` environment variable and pass GPU resources to the Docker container. 
+
+- `TRANSCRIBE_DEVICE=auto`: Detects GPU at startup using `nvidia-smi`. Falls back to CPU if none is found.
+- `TRANSCRIBE_DEVICE=cuda` or `gpu`: Forces GPU usage.
+- `TRANSCRIBE_DEVICE=cpu`: Forces CPU usage.
+
+To start the container with GPU access, run:
+
+```shell
+docker run --gpus all --env-file .env-transcribe -p 4567:4567 \
+	-v ./packages/transcribe/images:/app/packages/transcribe/images \
+	-v ./data/transcribe-models:/opt/models:ro \
+	-e HTR_CLI_MODELS_FOLDER=/opt/models \
+	transcribe
+```
+
+If GPU initialization fails (e.g. driver issue), it will gracefully fall back to CPU execution.
+
+---
+
 # Development Setup
 
 ## Testing
