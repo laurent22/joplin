@@ -2,38 +2,41 @@ import * as React from 'react';
 import { describe, it, expect, jest } from '@jest/globals';
 import { fireEvent, render, screen } from '../utils/testing/testingLibrary';
 import SelectDateTimeDialog from './SelectDateTimeDialog';
+import TestProviderStack from './testing/TestProviderStack';
+import createMockReduxStore from '../utils/testing/createMockReduxStore';
 
 // Minimal theme ID (1 = light)
 const themeId = 1;
+
+// Modal uses SafeAreaProvider and FocusControl — TestProviderStack supplies both.
+const store = createMockReduxStore();
+
+const renderDialog = (props: Partial<React.ComponentProps<typeof SelectDateTimeDialog>> = {}) => {
+	const defaults: React.ComponentProps<typeof SelectDateTimeDialog> = {
+		themeId,
+		shown: true,
+		date: null,
+		onAccept: jest.fn(),
+		onReject: jest.fn(),
+		...props,
+	};
+	return render(
+		<TestProviderStack store={store}>
+			<SelectDateTimeDialog {...defaults} />
+		</TestProviderStack>,
+	);
+};
 
 describe('SelectDateTimeDialog', () => {
 	it('should not render when shown=false', () => {
 		const onAccept = jest.fn();
 		const onReject = jest.fn();
-		const { queryByText } = render(
-			<SelectDateTimeDialog
-				themeId={themeId}
-				shown={false}
-				date={null}
-				onAccept={onAccept}
-				onReject={onReject}
-			/>,
-		);
+		const { queryByText } = renderDialog({ shown: false, onAccept, onReject });
 		expect(queryByText('Set alarm')).toBeNull();
 	});
 
 	it('should render the modal when shown=true', () => {
-		const onAccept = jest.fn();
-		const onReject = jest.fn();
-		render(
-			<SelectDateTimeDialog
-				themeId={themeId}
-				shown={true}
-				date={null}
-				onAccept={onAccept}
-				onReject={onReject}
-			/>,
-		);
+		renderDialog();
 		expect(screen.getByText('Set alarm')).toBeTruthy();
 		expect(screen.getByText('Save alarm')).toBeTruthy();
 		expect(screen.getByText('Clear alarm')).toBeTruthy();
@@ -41,17 +44,7 @@ describe('SelectDateTimeDialog', () => {
 	});
 
 	it('should render repeat interval pills', () => {
-		const onAccept = jest.fn();
-		const onReject = jest.fn();
-		render(
-			<SelectDateTimeDialog
-				themeId={themeId}
-				shown={true}
-				date={null}
-				onAccept={onAccept}
-				onReject={onReject}
-			/>,
-		);
+		renderDialog();
 		expect(screen.getByText('No repeat')).toBeTruthy();
 		expect(screen.getByText('Daily')).toBeTruthy();
 		expect(screen.getByText('Weekly')).toBeTruthy();
@@ -59,38 +52,18 @@ describe('SelectDateTimeDialog', () => {
 	});
 
 	it('should initialise selectedInterval from props.interval', () => {
-		const onAccept = jest.fn();
-		const onReject = jest.fn();
-		// We pass 'daily' as interval prop — the 'Daily' pill should reflect it
-		// (styling test is platform-specific, but we verify no error is raised)
-		render(
-			<SelectDateTimeDialog
-				themeId={themeId}
-				shown={true}
-				date={new Date('2025-06-01T10:00:00Z')}
-				interval='daily'
-				onAccept={onAccept}
-				onReject={onReject}
-			/>,
-		);
+		renderDialog({
+			date: new Date('2025-06-01T10:00:00Z'),
+			interval: 'daily',
+		});
 		expect(screen.getByText('Daily')).toBeTruthy();
 	});
 
 	it('should call onAccept with date and selected interval when Save is pressed', () => {
 		const onAccept = jest.fn();
-		const onReject = jest.fn();
 		const date = new Date('2025-06-01T10:00:00Z');
 
-		render(
-			<SelectDateTimeDialog
-				themeId={themeId}
-				shown={true}
-				date={date}
-				interval='none'
-				onAccept={onAccept}
-				onReject={onReject}
-			/>,
-		);
+		renderDialog({ date, interval: 'none', onAccept });
 
 		// Press 'Weekly' pill to change interval
 		fireEvent.press(screen.getByText('Weekly'));
@@ -106,17 +79,7 @@ describe('SelectDateTimeDialog', () => {
 
 	it('should call onAccept with null and none when Clear is pressed', () => {
 		const onAccept = jest.fn();
-		const onReject = jest.fn();
-		render(
-			<SelectDateTimeDialog
-				themeId={themeId}
-				shown={true}
-				date={new Date()}
-				interval='daily'
-				onAccept={onAccept}
-				onReject={onReject}
-			/>,
-		);
+		renderDialog({ date: new Date(), interval: 'daily', onAccept });
 
 		fireEvent.press(screen.getByText('Clear alarm'));
 
@@ -124,17 +87,8 @@ describe('SelectDateTimeDialog', () => {
 	});
 
 	it('should call onReject when Cancel is pressed', () => {
-		const onAccept = jest.fn();
 		const onReject = jest.fn();
-		render(
-			<SelectDateTimeDialog
-				themeId={themeId}
-				shown={true}
-				date={null}
-				onAccept={onAccept}
-				onReject={onReject}
-			/>,
-		);
+		renderDialog({ onReject });
 
 		fireEvent.press(screen.getByText('Cancel'));
 

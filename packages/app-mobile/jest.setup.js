@@ -92,6 +92,10 @@ for (const packageName of emptyMockPackages) {
 	});
 }
 
+jest.mock('react-native-modal-datetime-picker', () => {
+	return { default: () => null };
+});
+
 jest.mock('react-native-file-viewer', () => {
 	return { default: { } };
 });

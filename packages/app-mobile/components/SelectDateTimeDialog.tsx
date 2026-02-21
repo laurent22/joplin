@@ -67,6 +67,9 @@ interface SelectDateTimeState {
 	mode: string;
 	showPicker: boolean;
 	selectedInterval: string;
+	// Tracks the last-seen props.interval so getDerivedStateFromProps only
+	// overrides local state when the prop itself changes.
+	prevInterval: string | undefined;
 }
 
 export default class SelectDateTimeDialog extends React.PureComponent<Props, SelectDateTimeState> {
@@ -79,6 +82,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<Props, Sel
 			mode: 'date',
 			showPicker: false,
 			selectedInterval: props.interval || 'none',
+			prevInterval: props.interval,
 		};
 
 		this.onReject = this.onReject.bind(this);
@@ -92,8 +96,13 @@ export default class SelectDateTimeDialog extends React.PureComponent<Props, Sel
 		if ((nextProps.date?.getTime() ?? null) !== (prevState.date?.getTime() ?? null)) {
 			updates.date = nextProps.date;
 		}
-		if (nextProps.interval !== undefined && nextProps.interval !== prevState.selectedInterval) {
-			updates.selectedInterval = nextProps.interval;
+		// Only sync from props when the prop itself has changed, not when
+		// local state was updated by user interaction (e.g. pressing a pill).
+		if (nextProps.interval !== prevState.prevInterval) {
+			updates.prevInterval = nextProps.interval;
+			if (nextProps.interval !== undefined) {
+				updates.selectedInterval = nextProps.interval;
+			}
 		}
 		return Object.keys(updates).length > 0 ? updates : null;
 	}

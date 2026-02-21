@@ -35,6 +35,7 @@ conflict_original_id:
 master_key_id: 
 user_data: 
 deleted_time: 0
+alarm_interval: 
 type_: 1`;
 }
 
