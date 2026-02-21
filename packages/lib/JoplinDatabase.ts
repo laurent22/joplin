@@ -444,7 +444,7 @@ export default class JoplinDatabase extends Database {
 			}
 
 			if (targetVersion === 6) {
-				queries.push('CREATE TABLE alarms (id INTEGER PRIMARY KEY AUTOINCREMENT, note_id TEXT NOT NULL, trigger_time INT NOT NULL, repeat_interval TEXT DEFAULT \'none\', last_trigger_time INT NOT NULL DEFAULT 0)');
+				queries.push('CREATE TABLE alarms (id INTEGER PRIMARY KEY AUTOINCREMENT, note_id TEXT NOT NULL, trigger_time INT NOT NULL)');
 				queries.push('CREATE INDEX alarm_note_id ON alarms (note_id)');
 			}
 

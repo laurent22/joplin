@@ -48,7 +48,8 @@ export default class AlarmService {
 			this.logger().info(`Clearing notification for non-existing note. Alarm ${alarmIds[i]}`);
 			await this.driver().clearNotification(alarmIds[i]);
 		}
-		await Alarm.batchDelete(alarmIds, { sourceDescription: 'AlarmService/garbageCollect' });
+		// alarmIdsWithoutNotes returns numeric IDs; batchDelete expects strings
+		await Alarm.batchDelete(alarmIds.map((id: number) => String(id)), { sourceDescription: 'AlarmService/garbageCollect' });
 	}
 
 	// When passing a note, make sure it has all the required properties
@@ -74,7 +75,12 @@ export default class AlarmService {
 			let alarm = noteId ? await Alarm.byNoteId(noteId) : null;
 			let clearAlarm = false;
 
-			if (isDeleted || !Note.needAlarm(note) || (alarm && alarm.trigger_time !== note.todo_due)) {
+			const isRepeatingAlarm = alarm && alarm.repeat_interval && alarm.repeat_interval !== 'none';
+
+			// For repeating alarms, don't clear just because trigger_time differs from todo_due
+			// since the trigger_time is updated to the next occurrence after each fire.
+			// For one-time alarms, clear if trigger_time doesn't match todo_due (user changed the due date).
+			if (isDeleted || !Note.needAlarm(note) || (!isRepeatingAlarm && alarm && alarm.trigger_time !== note.todo_due)) {
 				clearAlarm = !!alarm;
 			}
 
@@ -144,22 +150,38 @@ export default class AlarmService {
 			if (alarm.repeat_interval && alarm.repeat_interval !== 'none') {
 				this.logger().info(`Repeating alarm ${alarmId} triggered, rescheduling...`);
 
+				const note = await Note.load(alarm.note_id);
+				if (!note) {
+					this.logger().warn(`Note ${alarm.note_id} not found for alarm ${alarmId}, deleting alarm`);
+					await Alarm.delete(String(alarmId), { sourceDescription: 'AlarmService/handleNotificationTrigger' });
+					return;
+				}
+
 				// Update last trigger time
 				await Alarm.updateLastTriggered(alarmId);
 
-				// Calculate next trigger time
-				const nextTrigger = Alarm.calculateNextTriggerTime(alarm.trigger_time, alarm.repeat_interval);
+				// Calculate next trigger time, capped at the todo due date
+				const nextTrigger = Alarm.calculateNextTriggerTime(alarm.trigger_time, alarm.repeat_interval, note.todo_due);
+
+				// If next trigger is same as current (no future occurrence before due date), stop rescheduling
+				if (nextTrigger === alarm.trigger_time) {
+					this.logger().info(`No more occurrences for alarm ${alarmId} before due date, removing repeat interval`);
+					await Alarm.save({ id: String(alarmId), repeat_interval: 'none' });
+					return;
+				}
 
 				// Update alarm with new trigger time
 				await Alarm.save({
-					id: alarmId,
+					id: String(alarmId),
 					trigger_time: nextTrigger,
 				});
 
-				// Reschedule the notification
-				const note = await Note.load(alarm.note_id);
-				if (note) {
-					await this.updateNoteNotification(note);
+				// Schedule the next notification directly
+				const updatedAlarm = await Alarm.load(String(alarmId));
+				if (updatedAlarm) {
+					const notification = await Alarm.makeNotification(updatedAlarm, note);
+					this.logger().info(`Rescheduling repeating alarm ${alarmId} for note ${note.id}`, notification);
+					await this.driver().scheduleNotification(notification);
 				}
 			} else {
 				// Non-repeating alarm - delete it after triggering
