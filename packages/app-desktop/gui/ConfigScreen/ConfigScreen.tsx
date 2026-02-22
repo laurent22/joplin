@@ -289,7 +289,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 					const goToSamlLogin = async () => {
 						// Save settings to allow SAML auth with the correct URL.
-						await shared.saveSettings(this);
+						const ok = await shared.saveSettings(this);
+						if (!ok) return;
 
 						this.props.dispatch({
 							type: 'NAV_GO',

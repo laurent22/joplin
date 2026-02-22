@@ -56,9 +56,15 @@ export const OauthLoginScreenComponent = (props: OauthLoginScreenProps) => {
 				if (apiKey) headers['X-JOPLIN-CUSTOM-API-KEY'] = apiKey;
 
 				const response = await fetch(applicationAuthUrl(applicationAuthId), { headers });
+
+				if (!response.ok) {
+					logger.warn(`Auth URL fetch failed: ${response.status} ${response.statusText}`);
+					return;
+				}
+
 				const jsonBody = await response.json();
 
-				if (response.ok && jsonBody.status === 'finished') {
+				if (jsonBody.status === 'finished') {
 					Setting.setValue(`sync.${props.syncTargetId}.username`, jsonBody.id);
 					Setting.setValue(`sync.${props.syncTargetId}.password`, jsonBody.password);
 					Setting.setValue('sync.target', SyncTargetRegistry.nameToId(props.syncTargetName));
