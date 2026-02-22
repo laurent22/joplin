@@ -9,23 +9,30 @@ import { allForDisplay } from '../../../folders-screen-utils';
 const { ErrorNotFound } = require('../utils/errors');
 
 export default async function(request: Request, id: string = null, link: string = null) {
+	const includeDeleted = request.query.include_deleted === '1';
 	if (request.method === RequestMethod.GET && !id) {
+
 		if (request.query.as_tree) {
 			const folders = await allForDisplay({
 				fields: requestFields(request, BaseModel.TYPE_FOLDER),
-				includeDeleted: false,
+				includeDeleted: includeDeleted,
 			});
 			const output = await Folder.allAsTree(folders);
 			return output;
 		} else {
-			return defaultAction(BaseModel.TYPE_FOLDER, request, id, link, null, { sql: 'deleted_time = 0' });
+			return defaultAction(BaseModel.TYPE_FOLDER, request, id, link, null, includeDeleted ? null : { sql: 'deleted_time = 0' });
 		}
 	}
 
 	if (request.method === RequestMethod.GET && id) {
 		if (link && link === 'notes') {
 			const folder = await Folder.load(id);
-			return paginatedResults(BaseModel.TYPE_NOTE, request, { sql: 'parent_id = ? AND deleted_time = 0', params: [folder.id] });
+
+			let sql = 'parent_id = ?';
+			if (!includeDeleted) {
+				sql += ' AND deleted_time = 0';
+			}
+			return paginatedResults(BaseModel.TYPE_NOTE, request, { sql, params: [folder.id] });
 		} else if (link) {
 			throw new ErrorNotFound();
 		}

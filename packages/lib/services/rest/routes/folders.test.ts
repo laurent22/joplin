@@ -68,4 +68,59 @@ describe('routes/folders', () => {
 		expect((await Note.load(note1.id)).deleted_time).toBeGreaterThanOrEqual(beforeTime);
 		expect(await Note.load(note2.id)).toBeFalsy();
 	});
+
+	test('should return deleted folders when include_deleted is set', async () => {
+		const api = new Api();
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		await Folder.delete(folder1.id, { toTrash: true });
+
+		{
+			const page = await api.route(RequestMethod.GET, 'folders');
+			expect(page.items.length).toBe(1);
+			expect(page.items[0].id).toBe(folder2.id);
+		}
+
+		{
+			const page = await api.route(RequestMethod.GET, 'folders', { include_deleted: '1' });
+			expect(page.items.length).toBe(2);
+		}
+	});
+
+	test('should return deleted folders in tree view when include_deleted is set', async () => {
+		const api = new Api();
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		await Folder.delete(folder1.id, { toTrash: true });
+
+		{
+			const tree = await api.route(RequestMethod.GET, 'folders', { as_tree: 1 });
+			expect(tree.length).toBe(1);
+			expect(tree[0].id).toBe(folder2.id);
+		}
+
+		{
+			const tree = await api.route(RequestMethod.GET, 'folders', { as_tree: 1, include_deleted: '1' });
+			expect(tree.length).toBe(2);
+		}
+	});
+
+	test('should return deleted notes in folder when include_deleted is set', async () => {
+		const api = new Api();
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ parent_id: folder.id });
+		const note2 = await Note.save({ parent_id: folder.id });
+		await Note.delete(note1.id, { toTrash: true });
+
+		{
+			const notes = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`);
+			expect(notes.items.length).toBe(1);
+			expect(notes.items[0].id).toBe(note2.id);
+		}
+
+		{
+			const notes = await api.route(RequestMethod.GET, `folders/${folder.id}/notes`, { include_deleted: '1' });
+			expect(notes.items.length).toBe(2);
+		}
+	});
 });
