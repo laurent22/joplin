@@ -331,8 +331,4 @@ describe('services_CommandService', () => {
 		const command = service.commandByName('test1');
 		expect(command.declaration.iconName).toBe('fas fa-cog');
 	});
-
-	afterEach(() => {
-		jest.restoreAllMocks();
-	});
 });
