@@ -50,10 +50,6 @@ describe('services_CommandService', () => {
 	beforeEach(async () => {
 		KeymapService.destroyInstance();
 		KeymapService.instance().initialize();
-		jest.spyOn(KeymapService.instance(), 'getDefaultAccelerator').mockImplementation((commandName: string) => {
-			if (commandName === 'test1') return 'Ctrl+T';
-			return '';
-		});
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
