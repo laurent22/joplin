@@ -2,6 +2,7 @@ import versionInfo from './versionInfo';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
 import Plugin from './services/plugins/Plugin';
+import Setting from './models/Setting';
 
 jest.mock('./registry');
 
@@ -126,5 +127,40 @@ describe('getPluginLists', () => {
 		}
 		message.concat('\n...');
 		expect(v.message).toMatch(new RegExp(message));
+	});
+});
+
+describe('sync target and editor info', () => {
+
+	beforeAll(() => {
+		(reg.db as jest.Mock).mockReturnValue(mockedDb);
+	});
+
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
+
+	it('should show sync target name', () => {
+		// SyncTargetNone is registered in test-utils (loaded via jest.setup),
+		// and sync.target defaults to 0 (None).
+		const v = versionInfo(packageInfo, {});
+		expect(v.body).toContain('Sync target: (None)');
+	});
+
+	it('should show Markdown editor by default', () => {
+		// editor.codeView defaults to true → Markdown
+		const v = versionInfo(packageInfo, {});
+		expect(v.body).toContain('Editor: Markdown');
+	});
+
+	it('should show Rich Text editor when codeView is false', () => {
+		const original = Setting.value('editor.codeView');
+		Setting.setValue('editor.codeView', false);
+		try {
+			const v = versionInfo(packageInfo, {});
+			expect(v.body).toContain('Editor: Rich Text');
+		} finally {
+			Setting.setValue('editor.codeView', original);
+		}
 	});
 });
