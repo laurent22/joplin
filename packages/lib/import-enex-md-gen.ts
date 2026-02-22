@@ -1436,7 +1436,7 @@ function renderLine(line: any) {
 		// sections but in the spirit of preserving all data we wrap them in
 		// a hidden tag too.
 		const rendered = renderLines(line.lines);
-		const content = rendered.join('').replace(/\[\[.*?\]\]/g, '').replace(/\s+/g, '');
+		const content = rendered.join('').replace(/\[\[NEWLINE\]\]|\[\[BLOCK_OPEN\]\]|\[\[BLOCK_CLOSE\]\]|\[\[SPACE\]\]|\[\[MERGED\]\]/g, '').replace(/\s+/g, '');
 		if (!content) return [];
 
 		let hiddenLines = ['<div style="display: none;">'];
