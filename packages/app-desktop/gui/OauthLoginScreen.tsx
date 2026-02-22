@@ -76,8 +76,6 @@ export const OauthLoginScreenComponent = (props: OauthLoginScreenProps) => {
 					dispatch({ type: 'COMPLETED' });
 					stopPolling();
 					void reg.scheduleSync(0);
-				} else if (!response.ok) {
-					logger.warn(`Polling received non-ok response: ${response.status} ${response.statusText}`);
 				}
 			} catch (error) {
 				logger.error(error);
