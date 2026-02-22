@@ -15,6 +15,7 @@ import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
 import { Prec } from '@codemirror/state';
 import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
+import handleBacktick from './editorCommands/handleBacktick';
 import renderingExtension from './extensions/rendering/renderingExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
 import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
@@ -22,7 +23,7 @@ import renderBlockImages from './extensions/rendering/renderBlockImages';
 
 const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
-		const openingBrackets = '`([{\'"‘“（《「『【〔〖〘〚'.split('');
+		const openingBrackets = '([{\'"‘“（《「『【〔〖〘〚'.split('');
 
 		const language = settings.language;
 		if (language === EditorLanguageType.Markdown) {
@@ -80,6 +81,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	if (settings.automatchBraces) {
 		extensions.push(closeBrackets());
 		extensions.push(keymap.of(closeBracketsKeymap));
+		extensions.push(Prec.high(keymap.of([{ key: '`', run: handleBacktick }])));
 	}
 
 	if (settings.keymap === EditorKeymap.Vim) {
