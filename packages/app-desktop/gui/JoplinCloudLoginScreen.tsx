@@ -4,6 +4,7 @@ import { AppState } from '../app.reducer';
 import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 import { OauthLoginScreenComponent } from './OauthLoginScreen';
 import { _ } from '@joplin/lib/locale';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 
 const { connect } = require('react-redux');
 
@@ -19,7 +20,7 @@ const JoplinCloudScreenConnected = (props: Props) => {
 			dispatch={props.dispatch}
 			apiUrl={props.joplinCloudApi}
 			websiteUrl={props.joplinCloudWebsite}
-			syncTargetId={10}
+			syncTargetId={SyncTargetRegistry.nameToId('joplinCloud')}
 			syncTargetName='joplinCloud'
 			messageText={_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}
 			extraComponent={<JoplinCloudSignUpCallToAction />}

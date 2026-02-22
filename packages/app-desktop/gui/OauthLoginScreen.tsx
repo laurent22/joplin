@@ -71,11 +71,12 @@ export const OauthLoginScreenComponent = (props: OauthLoginScreenProps) => {
 					stopPolling();
 					void reg.scheduleSync(0);
 				} else if (!response.ok) {
-					// Stop on non-ok (like 500) if it expects it, or just keep trying. Only error if explicit?
+					logger.warn(`Polling received non-ok response: ${response.status} ${response.statusText}`);
 				}
 			} catch (error) {
 				logger.error(error);
-				dispatch({ type: 'ERROR', payload: error.message });
+				const message = error instanceof Error ? error.message : String(error);
+				dispatch({ type: 'ERROR', payload: message });
 				stopPolling();
 			} finally {
 				isWaitingResponse = false;
