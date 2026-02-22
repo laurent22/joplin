@@ -1,6 +1,10 @@
-import { EditorSelection, StateCommand } from '@codemirror/state';
+import { EditorSelection } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
 
-const handleBacktick: StateCommand = ({ state, dispatch }) => {
+const handleBacktick = (view: EditorView) => {
+	const { state, dispatch } = view;
+	if (view.composing || view.compositionStarted || view.state.readOnly) return false;
+
 	const changes = state.changeByRange(range => {
 		if (!range.empty) return { range };
 
