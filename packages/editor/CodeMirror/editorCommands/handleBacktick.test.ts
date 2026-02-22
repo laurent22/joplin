@@ -1,4 +1,4 @@
-import { EditorSelection, Prec } from '@codemirror/state';
+import { EditorSelection } from '@codemirror/state';
 import { keymap } from '@codemirror/view';
 import createTestEditor from '../testing/createTestEditor';
 import pressReleaseKey from '../testing/pressReleaseKey';
@@ -39,7 +39,7 @@ describe('handleBacktick', () => {
 			initialText,
 			EditorSelection.cursor(cursorPos),
 			[],
-			[Prec.high(keymap.of([{ key: '`', run: handleBacktick }]))],
+			[keymap.of([{ key: '`', run: handleBacktick }])],
 			false,
 		);
 
@@ -54,7 +54,7 @@ describe('handleBacktick', () => {
 			'hello',
 			EditorSelection.range(0, 5),
 			[],
-			[Prec.high(keymap.of([{ key: '`', run: handleBacktick }]))],
+			[keymap.of([{ key: '`', run: handleBacktick }])],
 			false,
 		);
 
@@ -68,7 +68,7 @@ describe('handleBacktick', () => {
 			'',
 			EditorSelection.cursor(0),
 			[],
-			[Prec.high(keymap.of([{ key: '`', run: handleBacktick }]))],
+			[keymap.of([{ key: '`', run: handleBacktick }])],
 			false,
 		);
 

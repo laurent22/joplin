@@ -37,4 +37,5 @@ const handleBacktick: StateCommand = ({ state, dispatch }) => {
 	dispatch(state.update(changes, { scrollIntoView: true, userEvent: 'input' }));
 	return true;
 };
+
 export default handleBacktick;
