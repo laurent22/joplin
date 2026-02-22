@@ -81,7 +81,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	if (settings.automatchBraces) {
 		extensions.push(closeBrackets());
 		extensions.push(keymap.of(closeBracketsKeymap));
-		extensions.push(Prec.high(keymap.of([{ key: '`', run: handleBacktick }])));
+		extensions.push(keymap.of([{ key: '`', run: handleBacktick }]));
 	}
 
 	if (settings.keymap === EditorKeymap.Vim) {
