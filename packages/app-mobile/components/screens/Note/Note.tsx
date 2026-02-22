@@ -526,10 +526,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		styles.noteBodyViewerPreview = {
 			...styles.noteBodyViewer,
-			borderTopColor: theme.dividerColor,
-			borderTopWidth: 1,
-			borderBottomColor: theme.dividerColor,
-			borderBottomWidth: 1,
 		};
 
 		styles.titleContainer = {
@@ -537,9 +533,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			borderBottomColor: theme.dividerColor,
-			borderBottomWidth: 1,
 			maxHeight: '40%',
+		};
+
+		styles.separator = {
+			height: StyleSheet.hairlineWidth,
+			backgroundColor: theme.dividerColor,
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
@@ -1782,42 +1781,45 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			/>;
 
 		const titleComp = (
-			<View
-				style={titleContainerStyle}
-				onLayout={(e) => {
-					const width = e.nativeEvent.layout.width;
-					if (width !== this.state.titleContainerWidth) {
-						this.setState({ titleContainerWidth: width });
-					}
-				}}
-			>
-				<TextWrapCalculator
-					textCompStyle={this.styles().titleTextInput}
-					textCompContainerWidth={this.state.titleContainerWidth}
-					showMultilineToggle={this.state.showMultilineToggle}
-					multiline={this.state.multiline}
-					text={note.title}
-					updateState={textWrapCalculator_updateState}
-				/>
-				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
-				<TextInput
-					key={this.state.multiline ? 'multiLine' : 'singleLine'}
-					ref={this.titleTextFieldRef}
-					underlineColorAndroid="#ffffff00"
-					autoCapitalize="sentences"
-					style={this.styles().titleTextInput}
-					value={note.title}
-					onChangeText={this.title_changeText}
-					selectionColor={theme.textSelectionColor}
-					keyboardAppearance={theme.keyboardAppearance}
-					placeholder={_('Add title')}
-					placeholderTextColor={theme.colorFaded}
-					editable={!this.state.readOnly}
-					multiline={this.state.multiline}
-					submitBehavior = "blurAndSubmit"
-				/>
-				{ titleToggleButton }
-			</View>
+			<>
+				<View
+					style={titleContainerStyle}
+					onLayout={(e) => {
+						const width = e.nativeEvent.layout.width;
+						if (width !== this.state.titleContainerWidth) {
+							this.setState({ titleContainerWidth: width });
+						}
+					}}
+				>
+					<TextWrapCalculator
+						textCompStyle={this.styles().titleTextInput}
+						textCompContainerWidth={this.state.titleContainerWidth}
+						showMultilineToggle={this.state.showMultilineToggle}
+						multiline={this.state.multiline}
+						text={note.title}
+						updateState={textWrapCalculator_updateState}
+					/>
+					{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
+					<TextInput
+						key={this.state.multiline ? 'multiLine' : 'singleLine'}
+						ref={this.titleTextFieldRef}
+						underlineColorAndroid="#ffffff00"
+						autoCapitalize="sentences"
+						style={this.styles().titleTextInput}
+						value={note.title}
+						onChangeText={this.title_changeText}
+						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
+						placeholder={_('Add title')}
+						placeholderTextColor={theme.colorFaded}
+						editable={!this.state.readOnly}
+						multiline={this.state.multiline}
+						submitBehavior = "blurAndSubmit"
+					/>
+					{ titleToggleButton }
+				</View>
+				<View style={this.styles().separator} />
+			</>
 		);
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
