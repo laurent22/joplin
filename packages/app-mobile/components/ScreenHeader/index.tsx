@@ -71,6 +71,9 @@ interface ScreenHeaderProps {
 	showContextMenuButton?: boolean;
 	showPluginEditorButton?: boolean;
 	showBackButton?: boolean;
+	showViewToggleButton?: boolean;
+	onViewTogglePress?: OnPressCallback;
+	viewToggleIconName?: string;
 
 	saveButtonDisabled?: boolean;
 	showSaveButton?: boolean;
@@ -168,7 +171,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			contextMenuTrigger: {
 				fontSize: 30,
-				paddingLeft: 10,
+				paddingLeft: 5,
 				paddingRight: theme.marginRight,
 				color: theme.color2,
 				fontWeight: 'bold',
@@ -371,6 +374,16 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				description: _('Redo'),
 				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
+			});
+		};
+
+		const renderViewToggleButton = () => {
+			if (!this.props.showViewToggleButton || !this.props.onViewTogglePress || !this.props.viewToggleIconName) return null;
+			return renderTopButton({
+				iconName: this.props.viewToggleIconName,
+				description: _('Toggle view/edit'),
+				onPress: this.props.onViewTogglePress,
+				visible: true,
 			});
 		};
 
@@ -653,7 +666,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
-		const betaIconComp = betaIconButton();
+		const betaIconComp = !showSideMenuButton ? null : betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const customDeleteButtonComp = this.props.onDeleteButtonPress ? customDeleteButton(this.styles(), this.props.onDeleteButtonPress) : null;
@@ -673,6 +686,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			{searchButtonComp}
 			{deleteButtonComp}
 			{customDeleteButtonComp}
+			{renderViewToggleButton()}
 		</>;
 
 		const titleComp = createTitleComponent(hideableRightComponents);

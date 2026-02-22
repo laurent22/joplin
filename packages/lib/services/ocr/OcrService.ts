@@ -4,7 +4,7 @@ import Setting from '../../models/Setting';
 import shim from '../../shim';
 import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
-import { emptyRecognizeResult, RecognizeResult } from './utils/types';
+import { emptyRecognizeResult, PdfOcrDetails, PdfOcrPage, RecognizeResult, RecognizeResultLine } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
@@ -82,37 +82,73 @@ export default class OcrService {
 		if (!driver) throw new Error(`Unknown driver ID: ${resource.ocr_driver_id}`);
 
 		if (resource.mime === 'application/pdf') {
-			// OCR can be slow for large PDFs.
-			// Skip it if the PDF already includes text.
-			const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
-			const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+			// Save OCR details if the setting is enabled OR if this specific resource
+			// was marked with TodoAccessible status (requesting accessible PDF creation)
+			const saveOcrDetails = Setting.value('ocr.pdfMode') === 'accessible' || resource.ocr_status === ResourceOcrStatus.TodoAccessible;
 
-			if (pagesWithText.length > 0) {
-				return {
-					...emptyRecognizeResult(),
-					ocr_status: ResourceOcrStatus.Done,
-					ocr_text: pageTexts.join('\n'),
-				};
+			// OCR can be slow for large PDFs.
+			// Skip it if the PDF already includes text (unless accessible processing is requested)
+			if (!saveOcrDetails) {
+				const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
+				const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+
+				if (pagesWithText.length > 0) {
+					return {
+						...emptyRecognizeResult(),
+						ocr_status: ResourceOcrStatus.Done,
+						ocr_text: pageTexts.join('\n'),
+					};
+				}
 			}
 
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
-			const results: RecognizeResult[] = [];
 
-			let pageIndex = 0;
-			for (const imageFilePath of imageFilePaths) {
-				logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
-				results.push(await driver.recognize(language, imageFilePath, resource.id));
-				pageIndex++;
+			const results: RecognizeResult[] = [];
+			const pdfOcrPages: PdfOcrPage[] = [];
+
+			try {
+				let pageIndex = 0;
+				for (const imagePath of imageFilePaths) {
+					logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
+					const result = await driver.recognize(language, imagePath, resource.id);
+					results.push(result);
+
+					if (saveOcrDetails) {
+						// Parse OCR details for this page
+						let pageLines: RecognizeResultLine[] = [];
+						try {
+							pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
+						} catch (error) {
+							logger.warn(`Failed to parse OCR details for page ${pageIndex + 1}: ${error.message}`);
+						}
+						pdfOcrPages.push({
+							lines: pageLines,
+						});
+					}
+
+					pageIndex++;
+				}
+			} finally {
+				for (const imagePath of imageFilePaths) {
+					await shim.fsDriver().remove(imagePath);
+				}
 			}
 
-			for (const imageFilePath of imageFilePaths) {
-				await shim.fsDriver().remove(imageFilePath);
+			// Only create PDF OCR details structure if setting is enabled
+			let ocrDetails = '';
+			if (saveOcrDetails) {
+				const pdfOcrDetails: PdfOcrDetails = {
+					version: 1,
+					pages: pdfOcrPages,
+				};
+				ocrDetails = JSON.stringify(pdfOcrDetails);
 			}
 
 			return {
 				...emptyRecognizeResult(),
 				ocr_status: ResourceOcrStatus.Done,
 				ocr_text: results.map(r => r.ocr_text).join('\n'),
+				ocr_details: ocrDetails,
 			};
 		} else {
 			return driver.recognize(language, resourceFilePath, resource.id);
@@ -192,6 +228,7 @@ export default class OcrService {
 						'file_extension',
 						'encryption_applied',
 						'ocr_driver_id',
+						'ocr_status',
 					],
 				});
 
