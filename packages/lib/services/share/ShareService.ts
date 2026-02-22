@@ -15,6 +15,7 @@ import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } from './reducer';
 import PerformanceLogger from '../../PerformanceLogger';
+import SyncTargetRegistry from '../../SyncTargetRegistry';
 
 const logger = Logger.create('ShareService');
 const perfLogger = PerformanceLogger.create();
@@ -86,7 +87,11 @@ export default class ShareService {
 			userContentBaseUrl: () => Setting.value(`sync.${syncTargetId}.userContentPath`),
 			username: () => Setting.value(`sync.${syncTargetId}.username`),
 			password: () => Setting.value(`sync.${syncTargetId}.password`),
-			apiKey: () => Setting.value(`sync.${syncTargetId}.apiKey`),
+			apiKey: () => {
+				if (!Setting.value(`sync.${syncTargetId}.apiKey`)) { return null; } else {
+					return Setting.value(`sync.${syncTargetId}.apiKey`);
+				}
+			},
 			session: () => {
 				if (syncTargetId === 11) {
 					return {
@@ -390,8 +395,12 @@ export default class ShareService {
 	public async deleteShare(shareId: string) {
 		await this.api().exec('DELETE', `api/shares/${shareId}`);
 	}
-
+	private isServerSyncTarget(): boolean {
+		const syncTargetId = Setting.value('sync.target');
+		return SyncTargetRegistry.infoById(syncTargetId).supportsShare;
+	}
 	private async loadShares() {
+		if (!this.isServerSyncTarget()) return [];
 		return this.api().exec('GET', 'api/shares');
 	}
 
@@ -527,6 +536,13 @@ export default class ShareService {
 	}
 
 	public async refreshShares(): Promise<StateShare[]> {
+		if (!this.isServerSyncTarget()) {
+			this.store.dispatch({
+				type: 'SHARE_SET',
+				shares: [],
+			});
+			return [];
+		}
 		const result = await this.loadShares();
 
 		logger.info('Refreshed shares:', result);
