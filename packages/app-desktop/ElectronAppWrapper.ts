@@ -257,6 +257,12 @@ export default class ElectronAppWrapper {
 		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
 
 		this.win_ = new BrowserWindow(windowOptions);
+		this.win_.webContents.once('did-finish-load', () => {
+			void this.win_?.webContents.openDevTools({
+				mode: 'detach',
+				activate: false,
+			});
+		});
 
 		require('@electron/remote/main').enable(this.win_.webContents);
 
