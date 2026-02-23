@@ -274,7 +274,7 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
-		const handleDeleted = async (change: Change, item: Item|null) => {
+		const handleDeleted = async (change: Change, item: Item|null, share: Share|null) => {
 			if (item) {
 				const userItem = await this.models().userItem().byUserAndItemId(change.user_id, item.id);
 				if (!userItem) return; // Already deleted?
@@ -282,8 +282,13 @@ export default class ShareModel extends BaseModel<Share> {
 				// Check if the user should still have access to the item. If not, the userItem was probably created
 				// by a race condition (e.g. handleUpdated adding UserItems) and should be deleted.
 				const isOwner = item.owner_id === change.user_id;
-				const isShareMember = !!item.jop_share_id && !!await this.models().share().byUserAndItemId(change.user_id, item.id);
-				if (!isOwner && !isShareMember) {
+				const isShareMember = async () => {
+					if (!share) return false;
+					const shareUsers = await this.allShareUserIds(share);
+					return shareUsers.includes(change.user_id);
+				};
+
+				if (!isOwner && !await isShareMember()) {
 					logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item.jop_share_id);
 					await this.models().userItem().deleteByUserItemIds([userItem.id]);
 				}
@@ -409,10 +414,10 @@ export default class ShareModel extends BaseModel<Share> {
 
 							// An item can still be found for a delete change, for example, if an item was removed from the share:
 							if (change.type === ChangeType.Delete) {
-								await handleDeleted(change, item);
+								await handleDeleted(change, item, itemShare);
 							}
 						} else if (change.type === ChangeType.Delete) {
-							await handleDeleted(change, null);
+							await handleDeleted(change, null, null);
 						}
 					}
 

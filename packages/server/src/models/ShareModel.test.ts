@@ -2,6 +2,7 @@ import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models,
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { ShareType } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
+import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
 
 describe('ShareModel', () => {
 
@@ -245,7 +246,9 @@ describe('ShareModel', () => {
 		expect(await getUser2UserItems()).toHaveLength(1);
 
 		// The extra UserItem should be removed when processing the share's changes:
-		await models().share().updateSharedItems3();
+		await withWarningSilenced(/Deleting unexpected userItem for user/, async () => {
+			await models().share().updateSharedItems3();
+		});
 		expect(await getUser2UserItems()).toHaveLength(0);
 	});
 });
