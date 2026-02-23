@@ -202,6 +202,8 @@ const EncryptionConfigScreen = (props: Props) => {
 		} else {
 			const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
 			newPassword = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
+
+			if (newPassword === null) return;
 		}
 
 		if (hasMasterPassword && newEnabled) {
