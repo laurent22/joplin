@@ -27,7 +27,8 @@ export default async function(request: Request, id: string = null, link: string 
 	if (request.method === RequestMethod.GET && id) {
 		if (link && link === 'notes') {
 			const folder = await Folder.load(id);
-
+			if (!folder) throw new ErrorNotFound();
+			
 			let sql = 'parent_id = ?';
 			if (!includeDeleted) {
 				sql += ' AND deleted_time = 0';
