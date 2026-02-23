@@ -12,6 +12,9 @@ describe('pathUtils', () => {
 			['nor dots...', 'nor dots'],
 			['  no space before either', 'no space before either'],
 			['no\nnewline\n\rplease', 'no_newline__please'],
+			['C#', 'C#'],
+			['F# programming', 'F# programming'],
+			['Note with # hash', 'Note with # hash'],
 			['thatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylong', 'thatsreallylongthatsreallylongthatsreallylongthats'],
 		];
 
