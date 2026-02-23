@@ -216,3 +216,9 @@ The functionality added by these plugins is not part of the CommonMark spec so, 
 | [Emoji](https://github.com/markdown-it/markdown-it-emoji) | `:smile:` | Transforms into 😄. See [this list](https://gist.github.com/rxaviers/7360908) for more emojis | no |[View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/emoji_plugin.jpg) |
 | [Insert](https://github.com/markdown-it/markdown-it-ins) | `++inserted++` | Transforms into `<ins>inserted</ins>` (<ins>inserted</ins>) | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/insert_plugin.jpg) |
 | [Multitable](https://github.com/RedBug312/markdown-it-multimd-table) | See [MultiMarkdown](https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html) page | Adds more power and customization to markdown tables | no | [View](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/md_plugins/multitable_plugin.jpg) |
+
+## Video tutorial
+
+Watch this short video to learn how markdown editor works:
+
+[![Watch the video](https://img.youtube.com/vi/IfK2DgKQ4rw/hqdefault.jpg)](https://www.youtube.com/watch?v=IfK2DgKQ4rw)

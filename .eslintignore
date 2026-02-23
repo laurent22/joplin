@@ -169,6 +169,7 @@ packages/app-desktop/bridge.js
 packages/app-desktop/checkForUpdates.js
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyToClipboard.js
+packages/app-desktop/commands/createAccessibleDocument.js
 packages/app-desktop/commands/editProfileConfig.js
 packages/app-desktop/commands/emptyTrash.js
 packages/app-desktop/commands/exportDeletionLog.test.js
@@ -1266,6 +1267,7 @@ packages/lib/SyncTargetRegistry.js
 packages/lib/Synchronizer.js
 packages/lib/TaskQueue.js
 packages/lib/WebDavApi.js
+packages/lib/WelcomeUtils.test.js
 packages/lib/WelcomeUtils.js
 packages/lib/array.js
 packages/lib/callbackUrlUtils.test.js
@@ -1553,6 +1555,7 @@ packages/lib/services/ocr/OcrService.js
 packages/lib/services/ocr/drivers/OcrDriverTesseract.js
 packages/lib/services/ocr/drivers/OcrDriverTranscribe.test.js
 packages/lib/services/ocr/drivers/OcrDriverTranscribe.js
+packages/lib/services/ocr/utils/createAccessiblePdf.js
 packages/lib/services/ocr/utils/filterOcrText.test.js
 packages/lib/services/ocr/utils/filterOcrText.js
 packages/lib/services/ocr/utils/types.js
@@ -1890,11 +1893,11 @@ packages/tools/fuzzer/utils/SeededRandom.js
 packages/tools/fuzzer/utils/diffSortedStringArrays.test.js
 packages/tools/fuzzer/utils/diffSortedStringArrays.js
 packages/tools/fuzzer/utils/extractResourceIds.js
+packages/tools/fuzzer/utils/getBinaryDiffDebugMessage.js
 packages/tools/fuzzer/utils/getNumberProperty.js
 packages/tools/fuzzer/utils/getProperty.js
 packages/tools/fuzzer/utils/getStringProperty.js
 packages/tools/fuzzer/utils/hangingIndent.js
-packages/tools/fuzzer/utils/logDiffDebug.js
 packages/tools/fuzzer/utils/openDebugSession.js
 packages/tools/fuzzer/utils/randomId.test.js
 packages/tools/fuzzer/utils/randomId.js

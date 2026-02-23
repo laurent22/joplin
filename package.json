@@ -124,6 +124,7 @@
     "depd@npm:~1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
     "depd@npm:2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
     "depd@npm:^1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
-    "depd@npm:^1.1.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch"
+    "depd@npm:^1.1.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "formidable@npm:^2.0.1": "patch:formidable@npm%3A2.1.2#~/.yarn/patches/formidable-npm-2.1.2-40ba18d67f.patch"
   }
 }

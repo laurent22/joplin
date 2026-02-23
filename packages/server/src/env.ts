@@ -42,8 +42,6 @@ const defaultEnvValues: EnvVariables = {
 	MAX_TIME_DRIFT: 2000,
 	NTP_SERVER: 'pool.ntp.org:123',
 
-	DELTA_INCLUDES_ITEMS: true,
-
 	// Whether or not to allow users logging in with a username/password combo.
 	// If this is disabled, a SAML-based login flow must be configured.
 	LOCAL_AUTH_ENABLED: true,
@@ -206,7 +204,6 @@ export interface EnvVariables {
 
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
-	DELTA_INCLUDES_ITEMS: boolean;
 	IS_ADMIN_INSTANCE: boolean;
 	INSTANCE_NAME: string;
 

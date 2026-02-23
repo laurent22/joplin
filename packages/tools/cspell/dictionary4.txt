@@ -255,3 +255,5 @@ mtmd
 gguf
 armor
 clearsign
+ligne
+payant

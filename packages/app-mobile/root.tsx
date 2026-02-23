@@ -225,6 +225,10 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		void ResourceFetcher.instance().autoAddResources();
 	}
 
+	if (['NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
+		Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
+	}
+
 	if (doRefreshFolders) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);

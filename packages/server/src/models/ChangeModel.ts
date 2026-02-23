@@ -51,11 +51,8 @@ export function requestDeltaPagination(query: any): ChangePagination {
 
 export default class ChangeModel extends BaseModel<Change> {
 
-	public deltaIncludesItems_: boolean;
-
 	public constructor(db: DbConnection, dbSlave: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, dbSlave, modelFactory, config);
-		this.deltaIncludesItems_ = config.DELTA_INCLUDES_ITEMS;
 	}
 
 	public get tableName(): string {
@@ -307,36 +304,18 @@ export default class ChangeModel extends BaseModel<Change> {
 			false,
 		);
 
-		let items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
+		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
 
 		let processedChanges = this.compressChanges_(changes);
 		processedChanges = await this.removeDeletedItems(processedChanges, items);
 
-		if (this.deltaIncludesItems_) {
-			items = await this.models().item().loadWithContentMulti(processedChanges.map(c => c.item_id), {
-				fields: [
-					'content',
-					'id',
-					'jop_encryption_applied',
-					'jop_id',
-					'jop_parent_id',
-					'jop_share_id',
-					'jop_type',
-					'jop_updated_time',
-				],
-			});
-		}
-
 		const finalChanges = processedChanges.map(change => {
 			const item = items.find(item => item.id === change.item_id);
-			if (!item) return this.deltaIncludesItems_ ? { ...change, jopItem: null } : { ...change };
+			if (!item) return { ...change };
 			const deltaChange: DeltaChange = {
 				...change,
 				jop_updated_time: item.jop_updated_time,
 			};
-			if (this.deltaIncludesItems_) {
-				deltaChange.jopItem = item.jop_type ? this.models().item().itemToJoplinItem(item) : null;
-			}
 			return deltaChange;
 		});
 

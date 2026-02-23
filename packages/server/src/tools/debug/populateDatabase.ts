@@ -7,6 +7,7 @@ import { makeFolderSerializedBody, makeNoteSerializedBody, makeResourceSerialize
 import { randomElement } from '../../utils/array';
 import { CustomErrorCode } from '../../utils/errors';
 import uuid from '@joplin/lib/uuid';
+import { randomWeightedElement } from '@joplin/utils/array';
 
 let logger_: Logger = null;
 
@@ -67,30 +68,6 @@ type Reaction = (context: Context, user: User)=> Promise<boolean>;
 
 const randomInt = (min: number, max: number) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-const randomWeightedElement = <T> (items: T[], weights: number[]): T => {
-	if (items.length !== weights.length) {
-		throw new Error('Items and weights must have the same length');
-	}
-	// Normalize the weights so that they add up to one.
-	const weightsSum = weights.reduce((a, b) => a + b, 0);
-	const normalizedWeights = weights.map(w => w / weightsSum);
-
-	// Pair items and weights
-	const weightedItems = items.map((item, index) => ({ item, weight: normalizedWeights[index] }));
-
-	let weightSum = 0;
-	const value = Math.random();
-	// Find the last item with `value` in its range
-	for (const item of weightedItems) {
-		weightSum += item.weight;
-		if (weightSum > value) {
-			return item.item;
-		}
-	}
-
-	return null;
 };
 
 const shuffled = <T> (items: T[]) => {

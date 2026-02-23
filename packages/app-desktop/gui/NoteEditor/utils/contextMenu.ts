@@ -207,6 +207,16 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
 			},
 		},
+		createAccessibleDocument: {
+			label: _('Create accessible document'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resource } = await resourceInfo(options);
+				await CommandService.instance().execute('createAccessibleDocument', resource.id);
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+			},
+		},
 		separator3: makeSeparator(),
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),

@@ -7,6 +7,7 @@ import uuid from './uuid';
 import { fileExtension, basename } from './path-utils';
 import { _ } from './locale';
 const { pregQuote } = require('./string-utils');
+import { FolderIconType } from './services/database/types';
 
 export interface ItemMetadatum {
 	id: string;
@@ -60,7 +61,16 @@ class WelcomeUtils {
 
 		// Actually we don't really support multiple folders at this point, because not needed
 		for (let i = 0; i < folderAssets.length; i++) {
-			const folder = await Folder.save({ title: _('Welcome!') });
+			const folderIcon = {
+				emoji: '👋',
+				name: '',
+				dataUrl: '',
+				type: FolderIconType.Emoji,
+			};
+			const folder = await Folder.save({
+				title: _('Welcome!'),
+				icon: Folder.serializeIcon(folderIcon),
+			});
 			if (!output.defaultFolderId) output.defaultFolderId = folder.id;
 		}
 
