@@ -326,6 +326,25 @@ a:not([draggable=true]), img:not([draggable=true]) {
 }
 .smalltalk .page {
 	max-width: 30em;
+	background: var(--joplin-background-color);
+	color: inherit;
+}
+.smalltalk .page header { text-shadow: none; }
+.smalltalk input {
+	background-color: inherit;
+	color: inherit;
+	border-color: var(--joplin-divider-color);
+}
+.smalltalk button,
+.smalltalk button:enabled:hover,
+.smalltalk button:enabled:active,
+.smalltalk button:enabled:focus {
+	background-image: none;
+	background-color: var(--joplin-background-color4);
+	color: var(--joplin-color4);
+	border-color: var(--joplin-border-color4);
+	box-shadow: none;
+	text-shadow: none;
 }
 mark {
 	background: #CF3F00;
