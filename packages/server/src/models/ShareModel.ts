@@ -286,8 +286,8 @@ export default class ShareModel extends BaseModel<Share> {
 					await this.models().userItem().deleteByUserItemIds([userItem.id]);
 				}
 			} else {
-				// Otherwise, the item no longer exists, for now, skip additional checks as possibly
-				// unnecessary.
+				// Otherwise, the item no longer exists. For now, for performance (to avoid a large number of database queries),
+				// skip additional checks.
 			}
 		};
 
