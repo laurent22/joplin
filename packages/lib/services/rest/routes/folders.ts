@@ -28,7 +28,6 @@ export default async function(request: Request, id: string = null, link: string 
 		if (link && link === 'notes') {
 			const folder = await Folder.load(id);
 			if (!folder) throw new ErrorNotFound();
-			
 			const sql = includeDeleted ? 'parent_id = ?' : 'parent_id = ? AND deleted_time = 0';
 			return paginatedResults(BaseModel.TYPE_NOTE, request, { sql, params: [folder.id] });
 		} else if (link) {
