@@ -327,8 +327,8 @@ a:not([draggable=true]), img:not([draggable=true]) {
 .smalltalk .page {
 	max-width: 30em;
 	background: var(--joplin-background-color);
-	color: inherit;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+	color: inherit;
 }
 .smalltalk .page header { text-shadow: none; }
 .smalltalk input {
