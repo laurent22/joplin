@@ -197,7 +197,15 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const removeUserItem = async (shareUserId: Uuid, itemId: Uuid) => {
-			await this.models().userItem().remove(shareUserId, itemId);
+			try {
+				await this.models().userItem().remove(shareUserId, itemId);
+			} catch (error) {
+				if (error.httpCode === ErrorNotFound.httpCode) {
+					logger.warn('Could not remove a user item because it has already been removed:', error);
+				} else {
+					throw error;
+				}
+			}
 		};
 
 		const handleCreated = async (change: Change, item: Item, share: Share) => {
@@ -250,15 +258,7 @@ export default class ShareModel extends BaseModel<Share> {
 					const shareUserIds = await this.allShareUserIds(previousShare);
 					for (const shareUserId of shareUserIds) {
 						if (shareUserId === change.user_id) continue;
-						try {
-							await removeUserItem(shareUserId, item.id);
-						} catch (error) {
-							if (error.httpCode === ErrorNotFound.httpCode) {
-								logger.warn('Could not remove a user item because it has already been removed:', error);
-							} else {
-								throw error;
-							}
-						}
+						await removeUserItem(shareUserId, item.id);
 					}
 				}
 
@@ -290,7 +290,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 				if (!isOwner && !await isShareMember()) {
 					logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item.jop_share_id);
-					await this.models().userItem().deleteByUserItemIds([userItem.id]);
+					await removeUserItem(change.user_id, item.id);
 				}
 			} else {
 				// Otherwise, the item no longer exists. For now, for performance (to avoid a large number of database queries),
