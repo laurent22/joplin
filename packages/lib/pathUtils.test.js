@@ -13,6 +13,7 @@ describe('pathUtils', () => {
 			['  no space before either', 'no space before either'],
 			['no\nnewline\n\rplease', 'no_newline__please'],
 			['thatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylong', 'thatsreallylongthatsreallylongthatsreallylongthats'],
+			['C#', 'C#'],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {

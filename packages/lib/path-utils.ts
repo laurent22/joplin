@@ -4,7 +4,7 @@ import { _ } from './locale';
 import { fileExtension, filename, safeFileExtension } from '@joplin/utils/path';
 export * from '@joplin/utils/path';
 
-let friendlySafeFilename_blackListChars = '/\n\r<>:\'"\\|?*#';
+let friendlySafeFilename_blackListChars = '/\n\r<>:\'"\\|?*';
 for (let i = 0; i < 32; i++) {
 	friendlySafeFilename_blackListChars += String.fromCharCode(i);
 }
