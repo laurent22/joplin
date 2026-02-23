@@ -47,9 +47,11 @@ const registerSecondaryRuntime = (service: CommandService, commandName: string, 
 };
 
 describe('services_CommandService', () => {
+
 	beforeEach(async () => {
 		KeymapService.destroyInstance();
 		KeymapService.instance().initialize();
+
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
