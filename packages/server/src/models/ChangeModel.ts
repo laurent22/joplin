@@ -76,6 +76,14 @@ export default class ChangeModel extends BaseModel<Change> {
 		return `${this.baseUrl}/changes`;
 	}
 
+	public async last() {
+		const change = await this.db(this.tableName)
+			.select(...this.defaultFields)
+			.orderBy('counter', 'desc')
+			.first();
+		return change;
+	}
+
 	public async allFromId(id: string, limit: number = SqliteMaxVariableNum): Promise<PaginatedChanges> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);

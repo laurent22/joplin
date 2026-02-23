@@ -1,0 +1,4 @@
+label,Avg. update shared items duration (ms),standardDeviation(update shared items duration) (ms)
+scenario 1,469.4521069933331,20.885878953713174
+scenario 2,60.66102224333406,3.9480624090944367
+scenario 3,476.5888333966672,21.14444656014254
