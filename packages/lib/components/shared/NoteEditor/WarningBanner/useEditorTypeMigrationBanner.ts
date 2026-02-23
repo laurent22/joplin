@@ -19,7 +19,7 @@ const useEditorTypeMigrationBanner = ({ markdownEditorEnabled, inEditorRendering
 
 		return {
 			enabled,
-			label: _('Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the "Note" section of Settings.'),
+			label: _('Certain Markdown formatting is now rendered in the editor by default. For example, **bold** will appear as actual bold text. You can change this behaviour in the "Editor" section of Settings.'),
 			disable: {
 				label: _('Disable it'),
 				onPress: () => {
