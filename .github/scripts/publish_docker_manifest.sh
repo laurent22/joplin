@@ -1,9 +1,13 @@
 #!/bin/bash
 
 VERSION=$(echo "$GIT_TAG_NAME" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+MAJOR=$(echo "$VERSION" | cut -d. -f1)
+MINOR=$(echo "$VERSION" | cut -d. -f1-2)
 
 echo "GIT_TAG_NAME=$GIT_TAG_NAME"
 echo "VERSION=$VERSION"
+echo "MAJOR=$MAJOR"
+echo "MINOR=$MINOR"
 echo "SERVER_TAG_PREFIX=$SERVER_TAG_PREFIX"
 echo "SERVER_REPOSITORY=$SERVER_REPOSITORY"
 
@@ -24,11 +28,16 @@ if [ $? -ne 0 ]; then
 	exit 0
 fi
 
-docker manifest create $SERVER_REPOSITORY:$VERSION \
-	$SERVER_REPOSITORY:arm64-$VERSION \
-	$SERVER_REPOSITORY:amd64-$VERSION
+# Create and push multi-arch manifests for all tag variants
+for TAG in "$VERSION" "$MINOR" "$MAJOR" "latest"; do
+	echo "Creating manifest for tag: $TAG"
 
-docker manifest annotate $SERVER_REPOSITORY:$VERSION $SERVER_REPOSITORY:arm64-$VERSION --arch arm64
-docker manifest annotate $SERVER_REPOSITORY:$VERSION $SERVER_REPOSITORY:amd64-$VERSION --arch amd64
+	docker manifest create $SERVER_REPOSITORY:$TAG \
+		$SERVER_REPOSITORY:arm64-$TAG \
+		$SERVER_REPOSITORY:amd64-$TAG
 
-docker manifest push $SERVER_REPOSITORY:$VERSION
+	docker manifest annotate $SERVER_REPOSITORY:$TAG $SERVER_REPOSITORY:arm64-$TAG --arch arm64
+	docker manifest annotate $SERVER_REPOSITORY:$TAG $SERVER_REPOSITORY:amd64-$TAG --arch amd64
+
+	docker manifest push $SERVER_REPOSITORY:$TAG
+done
