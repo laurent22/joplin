@@ -6,7 +6,13 @@ const handleBacktick = (view: EditorView) => {
 	if (view.composing || view.compositionStarted || view.state.readOnly) return false;
 
 	const changes = state.changeByRange(range => {
-		if (!range.empty) return { range };
+		if (!range.empty) {
+			const selectedText = state.doc.sliceString(range.from, range.to);
+			return {
+				range: EditorSelection.range(range.from + 1, range.to + 1),
+				changes: { from: range.from, to: range.to, insert: `\`${selectedText}\`` },
+			};
+		}
 
 		const pos = range.from;
 		const textBefore = state.doc.sliceString(Math.max(0, pos - 2), pos);
