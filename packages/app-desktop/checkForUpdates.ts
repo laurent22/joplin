@@ -65,7 +65,7 @@ async function addSkippedVersion(s: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async function checkForUpdates(inBackground: boolean, parentWindow: any, options: CheckForUpdateOptions) {
+export default async function checkForUpdates(inBackground: boolean, parentWindow: any, options: CheckForUpdateOptions, dispatch?: (action: any)=> void) {
 	if (isCheckingForUpdate_) {
 		logger.info('Skipping check because it is already running');
 		return;
@@ -94,6 +94,16 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 
 			if (shouldSkip) {
 				logger.info('Not displaying notification because version has been skipped');
+			} else if (dispatch) {
+				dispatch({
+					type: 'DIALOG_OPEN',
+					name: 'whatsNew',
+					props: {
+						release: release,
+						isAutoUpdate: false,
+						onSkip: () => { void addSkippedVersion(release.version); },
+					},
+				});
 			} else {
 				const fullReleaseNotes = release.notes.trim() ? `\n\n${release.notes.trim()}` : '';
 				const MAX_RELEASE_NOTES_LENGTH = 1000;

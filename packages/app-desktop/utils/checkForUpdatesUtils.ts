@@ -25,6 +25,7 @@ export interface Release {
 	downloadUrl: string;
 	notes: string;
 	pageUrl: string;
+	mediaUrl?: string;
 }
 
 export type Platform = typeof process.platform;
@@ -36,6 +37,19 @@ function getMajorMinorTagName(tagName: string) {
 	s.pop();
 	return s.join('.');
 }
+
+export const extractMediaUrl = (body: string): string | undefined => {
+	const patterns = [
+		/https:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+/,
+		/https:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/,
+		/https:\/\/youtu\.be\/[\w-]+/,
+	];
+	for (const pattern of patterns) {
+		const match = body.match(pattern);
+		if (match) return match[0];
+	}
+	return undefined;
+};
 
 export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform, arch: Architecture, portable: boolean, options: CheckForUpdateOptions) => {
 	options = { includePreReleases: false, ...options };
@@ -135,6 +149,7 @@ export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform
 		notes: cleanUpReleaseNotes(fullReleaseNotes),
 		pageUrl: release.html_url,
 		prerelease: release.prerelease,
+		mediaUrl: extractMediaUrl(release.body),
 	};
 
 	return output;

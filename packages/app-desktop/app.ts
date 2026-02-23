@@ -618,7 +618,7 @@ class Application extends BaseApplication {
 				if (shim.isWindows() || shim.isMac()) {
 					const runAutoUpdateCheck = () => {
 						if (Setting.value('autoUpdateEnabled')) {
-							void checkForUpdates(true, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+							void checkForUpdates(true, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') }, this.store().dispatch);
 						}
 					};
 

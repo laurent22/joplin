@@ -543,7 +543,8 @@ function useMenu(props: Props) {
 				if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
 					ipcRenderer.send('check-for-updates');
 				} else {
-					void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') }, (action: any) => props.dispatch(action));
 				}
 
 			}

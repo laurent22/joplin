@@ -8,8 +8,11 @@ import shim from '@joplin/lib/shim';
 import { PopupNotificationContext } from '../PopupNotification/PopupNotificationProvider';
 import Button, { ButtonLevel } from '../Button/Button';
 import { NotificationType } from '../PopupNotification/types';
+import { Release } from '../../utils/checkForUpdatesUtils';
 
 interface Props {
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	dispatch?: Function;
 }
 
 export enum UpdateNotificationEvents {
@@ -28,7 +31,24 @@ const handleApplyUpdate = () => {
 	ipcRenderer.send('apply-update-now');
 };
 
-const UpdateNotification: React.FC<Props> = () => {
+const releaseFromUpdateInfo = (info: UpdateInfo): Release => {
+	let notes = '';
+	if (typeof info.releaseNotes === 'string') {
+		notes = info.releaseNotes;
+	} else if (Array.isArray(info.releaseNotes)) {
+		notes = info.releaseNotes.map(n => n.note).join('\n\n');
+	}
+
+	return {
+		version: info.version,
+		prerelease: false,
+		downloadUrl: '',
+		notes: notes,
+		pageUrl: `https://github.com/laurent22/joplin/releases/tag/v${info.version}`,
+	};
+};
+
+const UpdateNotification: React.FC<Props> = (props) => {
 	const popupManager = useContext(PopupNotificationContext);
 
 	const handleUpdateDownloaded = useCallback((_event: IpcRendererEvent, info: UpdateInfo) => {
@@ -39,6 +59,24 @@ const UpdateNotification: React.FC<Props> = () => {
 					_('See changelog')
 				}</button>
 				<div className='buttons'>
+					{props.dispatch && (
+						<Button
+							level={ButtonLevel.Tertiary}
+							onClick={() => {
+								notification.remove();
+								props.dispatch({
+									type: 'DIALOG_OPEN',
+									name: 'whatsNew',
+									props: {
+										release: releaseFromUpdateInfo(info),
+										isAutoUpdate: true,
+										onDownload: handleApplyUpdate,
+									},
+								});
+							}}
+							title={_('View details')}
+						/>
+					)}
 					<Button
 						level={ButtonLevel.Tertiary}
 						onClick={() => {
@@ -55,7 +93,7 @@ const UpdateNotification: React.FC<Props> = () => {
 				</div>
 			</div>
 		));
-	}, [popupManager]);
+	}, [popupManager, props.dispatch]);
 
 	const handleUpdateNotAvailable = useCallback(() => {
 		const notification = popupManager.createPopup(() => (
