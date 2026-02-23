@@ -43,6 +43,7 @@ const markdownUtils = {
 		url = url.replace(/\(/g, '%28');
 		url = url.replace(/\)/g, '%29');
 		url = url.replace(/ /g, '%20');
+		url = url.replace(/#/g, '%23');
 		return url;
 	},
 
@@ -68,6 +69,7 @@ const markdownUtils = {
 		url = url.replace(/%28/g, '(');
 		url = url.replace(/%29/g, ')');
 		url = url.replace(/%20/g, ' ');
+		url = url.replace(/%23/g, '#');
 		return url;
 	},
 

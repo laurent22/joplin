@@ -82,6 +82,7 @@ describe('markdownUtils', () => {
 			['file:///Users/who put spaces in their username??/.config/joplin', 'file:///Users/who%20put%20spaces%20in%20their%20username??/.config/joplin'],
 			['file:///Users/(and brackets???)/.config/joplin', 'file:///Users/%28and%20brackets???%29/.config/joplin'],
 			['file:///Users/thisisfine/.config/joplin', 'file:///Users/thisisfine/.config/joplin'],
+			['../C#/note.md', '../C%23/note.md'],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
