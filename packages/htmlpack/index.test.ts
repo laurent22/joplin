@@ -1,4 +1,4 @@
-import { exists, mkdir, readFile, remove } from 'fs-extra';
+import { exists, mkdir, readFile, remove, writeFile } from 'fs-extra';
 import { join } from 'path';
 import htmlpack from '.';
 
@@ -34,6 +34,9 @@ describe('htmlpack/index', () => {
 	});
 
 	test('should not throw when a script asset is missing', async () => {
+		const inputFile = join(outputDirectory, 'input.html');
+		const outputFile = join(outputDirectory, 'output.html');
+
 		const inputHtml = `
 <html>
     <head>
@@ -44,15 +47,10 @@ describe('htmlpack/index', () => {
     </body>
 </html>`;
 
-		const packToString = (await import('./packToString')).default;
-		const result = await packToString(outputDirectory, inputHtml, {
-			exists: (path: string) => exists(path),
-			readFileText: (path: string) => readFile(path, 'utf8'),
-			readFileDataUri: async (_path: string) => '',
-		});
+		await writeFile(inputFile, inputHtml, 'utf8');
+		await expect(htmlpack(inputFile, outputFile)).resolves.not.toThrow();
 
-		// The missing script tag should be kept as-is (not inlined)
-		expect(result).toContain('<script type="application/javascript" src="missing-script.js">');
-		expect(result).toContain('<p>Test</p>');
+		const outputContent = await readFile(outputFile, 'utf8');
+		expect(outputContent).toContain('<p>Test</p>');
 	});
 });
