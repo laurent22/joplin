@@ -34,6 +34,12 @@ describe('handleBacktick', () => {
 			afterOnePress: '```sql\ncode\n```',
 			expectedCursorPos: 15,
 		},
+		{
+			initialText: '`hi`',
+			cursorPos: 3,
+			afterOnePress: '`hi`',
+			expectedCursorPos: 4,
+		},
 	])('should handle backtick correctly (case %#)', async ({ initialText, cursorPos, afterOnePress, expectedCursorPos }) => {
 		const editor = await createTestEditor(
 			initialText,

@@ -21,6 +21,11 @@ const handleBacktick = (view: EditorView) => {
 		}
 
 		if (backticksBefore === 0) {
+			if (charAfter === '`') {
+				return {
+					range: EditorSelection.cursor(pos + 1),
+				};
+			}
 			return {
 				range: EditorSelection.cursor(pos + 1),
 				changes: { from: pos, to: pos, insert: '``' },
