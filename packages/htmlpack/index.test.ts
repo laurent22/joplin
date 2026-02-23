@@ -32,4 +32,27 @@ describe('htmlpack/index', () => {
     </body>
 </html>`);
 	});
+
+	test('should not throw when a script asset is missing', async () => {
+		const inputHtml = `
+<html>
+    <head>
+        <script type="application/javascript" src="missing-script.js"></script>
+    </head>
+    <body>
+        <p>Test</p>
+    </body>
+</html>`;
+
+		const packToString = (await import('./packToString')).default;
+		const result = await packToString(outputDirectory, inputHtml, {
+			exists: (path: string) => exists(path),
+			readFileText: (path: string) => readFile(path, 'utf8'),
+			readFileDataUri: async (_path: string) => '',
+		});
+
+		// The missing script tag should be kept as-is (not inlined)
+		expect(result).toContain('<script type="application/javascript" src="missing-script.js">');
+		expect(result).toContain('<p>Test</p>');
+	});
 });
