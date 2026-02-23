@@ -3,6 +3,8 @@ import { EditorCommandType } from '../../types';
 import commands from './commands';
 import createTestEditor from '../testing/createTestEditor';
 import selectDocumentEnd from './selectDocumentEnd';
+import { TextSelection } from 'prosemirror-state';
+import schema from '../schema';
 
 const selectAll = (editor: EditorView) => {
 	commands[EditorCommandType.SelectAll](editor.state, editor.dispatch, editor);
@@ -127,6 +129,39 @@ describe('ProseMirror/commands', () => {
 		expect(editor.state.doc.toJSON()).toMatchObject({
 			content: expectedDoc,
 		});
+	});
+
+	test('cursor at the end of an inline code span should not have code mark active', () => {
+		// Regression test for https://github.com/laurent22/joplin/issues/14424
+		// On Android, tapping after an inline code span at the end of a line would
+		// leave the cursor stuck inside the code mark, causing new text to be typed
+		// in code format. Setting inclusive: false on the code mark fixes this.
+		const editor = createTestEditor({ html: '<p><code>hello</code></p>' });
+
+		// Position cursor at the very end of the code span (after 'hello').
+		// For <p><code>hello</code></p>: pos 0 = before paragraph, pos 1-6 = content, pos 6 = end of paragraph content.
+		const docEnd = editor.state.doc.content.size;
+		const resolvedPos = editor.state.doc.resolve(docEnd - 1);
+		const selection = TextSelection.create(editor.state.doc, resolvedPos.pos);
+		editor.dispatch(editor.state.tr.setSelection(selection));
+
+		const activeMarks = editor.state.selection.$head.marks();
+		const hasCodeMark = activeMarks.some(m => m.type === schema.marks.code);
+		expect(hasCodeMark).toBe(false);
+	});
+
+	test('cursor inside an inline code span should still have code mark active', () => {
+		// Verify that inclusive: false only affects the right boundary, not the interior.
+		// Typing inside a code span must still produce code-formatted text.
+		const editor = createTestEditor({ html: '<p><code>hello</code></p>' });
+
+		// Position cursor in the middle of the code span (after 'hel', before 'lo') = pos 4
+		const selection = TextSelection.create(editor.state.doc, 4);
+		editor.dispatch(editor.state.tr.setSelection(selection));
+
+		const activeMarks = editor.state.selection.$head.marks();
+		const hasCodeMark = activeMarks.some(m => m.type === schema.marks.code);
+		expect(hasCodeMark).toBe(true);
 	});
 
 	test('indentLess should remove spaces from the beginning of the line', () => {

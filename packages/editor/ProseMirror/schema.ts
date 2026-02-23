@@ -179,6 +179,7 @@ const marks = {
 	code: {
 		parseDOM: [{ tag: 'code' }],
 		code: true,
+		inclusive: false,
 		toDOM: () => domOutputSpecs.code,
 		excludes: '_',
 	},
