@@ -9,6 +9,7 @@ export const defaultEnvValues: EnvVariables = {
 	HTR_CLI_IMAGES_FOLDER: '',
 	HTR_CLI_BINARY_PATH: '',
 	HTR_CLI_MODELS_FOLDER: '',
+	HTR_CLI_NGL: 0, // GPU layers to offload (0 = CPU only; 999 = all layers when using a GPU build)
 	QUEUE_DRIVER: 'pg', // 'sqlite'
 	QUEUE_DATABASE_PASSWORD: '',
 	QUEUE_DATABASE_NAME: '',
@@ -29,6 +30,7 @@ export interface EnvVariables {
 	HTR_CLI_IMAGES_FOLDER: string;
 	HTR_CLI_BINARY_PATH: string;
 	HTR_CLI_MODELS_FOLDER: string;
+	HTR_CLI_NGL: number;
 	QUEUE_DRIVER: string;
 	QUEUE_DATABASE_PASSWORD: string;
 	QUEUE_DATABASE_NAME: string;

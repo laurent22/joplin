@@ -38,6 +38,7 @@ const init = async (logger: LoggerWrapper) => {
 		htrCliImagesFolder: envVariables.HTR_CLI_IMAGES_FOLDER,
 		binaryPath: envVariables.HTR_CLI_BINARY_PATH,
 		modelsFolder: envVariables.HTR_CLI_MODELS_FOLDER,
+		gpuLayers: envVariables.HTR_CLI_NGL > 0 ? envVariables.HTR_CLI_NGL : undefined,
 	});
 
 	const jobProcessor = new JobProcessor(queue, htrCli, fileStorage);

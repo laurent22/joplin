@@ -10,7 +10,8 @@ ENV NODE_ENV=production
 
 RUN corepack enable
 
-# Download llama.cpp binary
+# Download llama.cpp binary (CPU-only by default). For GPU, use a CUDA/Metal build
+# and set HTR_CLI_BINARY_PATH + HTR_CLI_NGL at runtime, or build a custom image.
 WORKDIR /opt/llama
 RUN wget -q https://github.com/ggml-org/llama.cpp/releases/download/b5449/llama-b5449-bin-ubuntu-x64.zip \
     && unzip llama-b5449-bin-ubuntu-x64.zip \

@@ -32,6 +32,29 @@ docker run --env-file .env-transcribe -p 4567:4567 \
 	transcribe
 ```
 
+### GPU support
+
+The default Docker image uses a **CPU-only** binary. To use the GPU:
+
+1. **Use a GPU-capable binary.** Either build llama.cpp with CUDA (NVIDIA) or Metal (Apple), or use a [llama.cpp release](https://github.com/ggml-org/llama.cpp/releases) that includes GPU support. Point `HTR_CLI_BINARY_PATH` at that binary (e.g. by building a custom image or mounting the binary).
+2. **Set GPU layer offload.** Set the environment variable `HTR_CLI_NGL` to the number of model layers to run on the GPU (e.g. `999` for all layers):
+   ```shell
+   -e HTR_CLI_NGL=999
+   ```
+   Leave unset or set to `0` for CPU-only.
+
+In Docker Compose, add `HTR_CLI_NGL=999` to the `transcribe` service environment when using a GPU-capable image or host-mounted binary.
+
+### Using llamafile (optional)
+
+[llamafile](https://github.com/mozilla-ai/llamafile) provides single-file executables (llama.cpp + Cosmopolitan) that run on many OSes and support GPU (CUDA, Metal) via the same `-ngl` flag. You can use a llamafile-built multimodal CLI as a drop-in for `llama-mtmd-cli`:
+
+- Set `HTR_CLI_BINARY_PATH` to the path of the llamafile executable.
+- Set `HTR_CLI_NGL=999` (or another value) for GPU offload when the binary supports it.
+- Keep the same model and mmproj paths; the server passes `-m`, `--mmproj`, and `--image` as with the standard binary.
+
+This can simplify deployment (one fat binary per platform) when the llamafile CLI is compatible with the flags used by the transcribe server.
+
 ## Using Docker Compose
 
 The minimal configuration is provided in `.env-sample` and `docker-compose.server.yml`.
@@ -87,9 +110,10 @@ yarn start
 
 ### Environment variables
 
-- `HTR_CLI_BINARY_PATH`: Path to the llama-mtmd-cli binary
+- `HTR_CLI_BINARY_PATH`: Path to the llama-mtmd-cli (or compatible) binary
 - `HTR_CLI_MODELS_FOLDER`: Path to the models directory
 - `HTR_CLI_IMAGES_FOLDER`: Path where uploaded images are stored
+- `HTR_CLI_NGL`: Number of model layers to offload to GPU (0 = CPU only; 999 = all layers). Only used when the binary supports GPU (e.g. CUDA/Metal build or llamafile)
 
 ---
 

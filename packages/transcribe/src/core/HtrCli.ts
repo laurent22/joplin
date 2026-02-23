@@ -11,6 +11,7 @@ export interface HtrCliOptions {
 	htrCliImagesFolder: string;
 	binaryPath: string;
 	modelsFolder: string;
+	gpuLayers?: number; // -ngl: number of layers to offload to GPU (0 = CPU only)
 }
 
 export default class HtrCli implements WorkHandler {
@@ -22,7 +23,8 @@ export default class HtrCli implements WorkHandler {
 	}
 
 	public async init() {
-		logger.info('Using embedded llama.cpp binary');
+		const gpu = (this.options.gpuLayers ?? 0) > 0;
+		logger.info(gpu ? `Using binary with GPU offload (${this.options.gpuLayers} layers)` : 'Using binary (CPU only)');
 	}
 
 	public async run(imageName: string) {
@@ -44,8 +46,8 @@ export default class HtrCli implements WorkHandler {
 	}
 
 	private buildCommand(imageName: string): string[] {
-		const { binaryPath, modelsFolder, htrCliImagesFolder } = this.options;
-		return [
+		const { binaryPath, modelsFolder, htrCliImagesFolder, gpuLayers } = this.options;
+		const args: string[] = [
 			binaryPath,
 			'-m', `${modelsFolder}/Model-7.6B-Q4_K_M.gguf`,
 			'--mmproj', `${modelsFolder}/mmproj-model-f16.gguf`,
@@ -57,6 +59,11 @@ export default class HtrCli implements WorkHandler {
 			'--image', `${htrCliImagesFolder}/${imageName}`,
 			'-p', systemPrompt,
 		];
+		const ngl = gpuLayers ?? 0;
+		if (ngl > 0) {
+			args.push('-ngl', String(ngl));
+		}
+		return args;
 	}
 
 	public cleanUpResult(transcriptionAndLogs: string) {
