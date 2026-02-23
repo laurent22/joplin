@@ -274,6 +274,23 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
+		const handleDeleted = async (change: Change, item: Item|null, itemShare: Share|null) => {
+			if (item) {
+				const userItem = await this.models().userItem().byUserAndItemId(change.user_id, item.id);
+				if (!userItem) return; // Already deleted?
+
+				// Check if the user should still have access to the item. If not, the userItem was probably created
+				// by a race condition (e.g. handleUpdated adding UserItems) and should be deleted.
+				if (!itemShare && item?.owner_id !== change.user_id) {
+					logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item.jop_share_id);
+					await this.models().userItem().deleteByUserItemIds([userItem.id]);
+				}
+			} else {
+				// Otherwise, the item no longer exists, for now, skip additional checks as possibly
+				// unnecessary.
+			}
+		};
+
 		// This function add any missing item to a user's collection. Normally
 		// it shouldn't be necessary since items are added or removed based on
 		// the Change events, but it seems it can happen anyway, possibly due to
@@ -387,11 +404,14 @@ export default class ShareModel extends BaseModel<Share> {
 
 								await handleUpdated(change, item, itemShare, nextShareId);
 							}
-						}
 
-						// We don't need to handle ChangeType.Delete because when an
-						// item is deleted, all its associated userItems are deleted
-						// too.
+							// An item can still be found for a delete change, for example, if an item was removed from the share:
+							if (change.type === ChangeType.Delete) {
+								await handleDeleted(change, item, itemShare);
+							}
+						} else if (change.type === ChangeType.Delete) {
+							await handleDeleted(change, null, null);
+						}
 					}
 
 					await checkForMissingUserItems(shares);
