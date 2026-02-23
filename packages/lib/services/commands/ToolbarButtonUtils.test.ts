@@ -45,8 +45,7 @@ describe('ToolbarButtonUtils', () => {
 		// Boot up the real service
 		KeymapService.destroyInstance();
 		keymapService = KeymapService.instance();
-		keymapService.initialize(['testCommand1', 'testCommand2', 'invisibleUnlessTrashSelected']);
-		keymapService.registerCommandAccelerator('testCommand1', 'Ctrl+T');
+		keymapService.initialize();
 
 		const commands = createTestCommands();
 		for (const command of commands) {
