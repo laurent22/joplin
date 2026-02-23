@@ -15,7 +15,7 @@ export default async function(request: Request, id: string = null, link: string 
 		if (request.query.as_tree) {
 			const folders = await allForDisplay({
 				fields: requestFields(request, BaseModel.TYPE_FOLDER),
-				includeDeleted: includeDeleted,
+				includeDeleted,
 			});
 			const output = await Folder.allAsTree(folders);
 			return output;
@@ -29,10 +29,7 @@ export default async function(request: Request, id: string = null, link: string 
 			const folder = await Folder.load(id);
 			if (!folder) throw new ErrorNotFound();
 			
-			let sql = 'parent_id = ?';
-			if (!includeDeleted) {
-				sql += ' AND deleted_time = 0';
-			}
+			const sql = includeDeleted ? 'parent_id = ?' : 'parent_id = ? AND deleted_time = 0';
 			return paginatedResults(BaseModel.TYPE_NOTE, request, { sql, params: [folder.id] });
 		} else if (link) {
 			throw new ErrorNotFound();
