@@ -275,22 +275,30 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleDeleted = async (change: Change, item: Item|null, share: Share|null) => {
-			const deletedByOwner = item?.owner_id !== change.user_id;
+			const deletedByOwner = item?.owner_id === change.user_id;
 			if (item && !deletedByOwner) {
 				const userItem = await this.models().userItem().byUserAndItemId(change.user_id, item.id);
-				if (!userItem) return; // Already deleted?
 
-				// Check if the user should still have access to the item. If not, the userItem was probably created
-				// by a race condition (e.g. handleUpdated adding UserItems) and should be deleted.
-				const isShareMember = async () => {
-					if (!share) return false;
-					const shareUsers = await this.allShareUserIds(share);
-					return shareUsers.includes(change.user_id);
-				};
+				if (userItem) {
+					perfTimer.push('handleDeleted');
 
-				if (!await isShareMember()) {
-					logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item.jop_share_id);
-					await removeUserItem(change.user_id, item.id);
+					// Check if the user should still have access to the item. If not, the userItem was probably created
+					// by a race condition (e.g. handleUpdated adding UserItems) and should be deleted.
+					const isShareMember = async () => {
+						if (!share) return false;
+						const shareUsers = await this.allShareUserIds(share);
+						return shareUsers.includes(change.user_id);
+					};
+
+					if (!await isShareMember()) {
+						logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item.jop_share_id);
+
+						// Delete by the UserItem's ID to avoid race conditions. If a new user item is created for the same
+						// (user, item) pair (perhaps after removing the original), it should not be deleted by this task:
+						await this.models().userItem().deleteByUserItemIds([userItem.id]);
+					}
+
+					perfTimer.pop();
 				}
 			} else {
 				// Otherwise, the item no longer exists. For now, for performance (to avoid a large number of database queries),
