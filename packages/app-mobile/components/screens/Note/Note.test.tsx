@@ -126,20 +126,17 @@ const openNoteActionsMenu = async () => {
 };
 
 const expectToBeEditing = async (editing: boolean) => {
-	await waitFor(() => {
-		const editButton = screen.queryByLabelText('Edit');
-		if (editing) {
-			expect(editButton).toBeNull();
-		} else {
-			expect(editButton).not.toBeNull();
-		}
-	});
+	if (editing) {
+		await getMarkdownEditorControl();
+	} else {
+		await getNoteViewerDom();
+	}
 };
 
 const openEditor = async () => {
-	const editButton = await screen.findByLabelText('Edit');
+	const editToggle = await screen.findByLabelText('Toggle view/edit');
 
-	fireEvent.press(editButton);
+	fireEvent.press(editToggle);
 	await expectToBeEditing(true);
 };
 
@@ -147,6 +144,18 @@ const runEditorCommand = async (commandName: string) => {
 	await act(() => {
 		return CommandService.instance().execute(commandName);
 	});
+};
+
+const setupNoteWithPanes = async (panes: string[], noteTitle = 'Test note') => {
+	store.dispatch({
+		type: 'NOTE_VISIBLE_PANES_SET',
+		panes: panes,
+	});
+	await openNewNote({ title: noteTitle, body: 'Test body' });
+	const renderResult = render(<WrappedNoteScreen />);
+	const titleInput = await screen.findByDisplayValue(noteTitle);
+	expect(titleInput).toBeVisible();
+	return renderResult;
 };
 
 describe('screens/Note', () => {
@@ -363,5 +372,115 @@ describe('screens/Note', () => {
 		await expectToBeEditing(false);
 
 		unmount();
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should initialize in the correct mode when noteVisiblePanes is %j', async (panes) => {
+		await setupNoteWithPanes(panes);
+		await expectToBeEditing(panes.includes('editor'));
+	});
+
+	it('should show toggle button', async () => {
+		await setupNoteWithPanes(['viewer']);
+		const toggleButton = await screen.findByLabelText('Toggle view/edit');
+		expect(toggleButton).toBeVisible();
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should switch modes when toggle button is pressed', async (panes) => {
+		const initialEditing = panes.includes('editor');
+		const expectedEditing = !initialEditing;
+		await setupNoteWithPanes(panes);
+		await expectToBeEditing(initialEditing);
+		const toggleButton = await screen.findByLabelText('Toggle view/edit');
+		fireEvent.press(toggleButton);
+		await expectToBeEditing(expectedEditing);
+	});
+
+	it('should always start in edit mode for provisional notes regardless of noteVisiblePanes', async () => {
+		store.dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: ['viewer'],
+		});
+		const noteId = await openNewNote({ title: 'Provisional note', body: 'Test body' });
+		// Mark note as provisional by dispatching NOTE_UPDATE_ONE with provisional flag
+		const note = await Note.load(noteId);
+		store.dispatch({
+			type: 'NOTE_UPDATE_ONE',
+			note: note,
+			provisional: true,
+		});
+		render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Provisional note');
+		expect(titleInput).toBeVisible();
+		await expectToBeEditing(true);
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should preserve noteVisiblePanes state when leaving and returning to the same note', async (panes) => {
+		const firstRender = await setupNoteWithPanes(panes);
+		await expectToBeEditing(panes.includes('editor'));
+		// Navigate away
+		await act(async () => {
+			store.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+			});
+		});
+		firstRender.unmount();
+
+		// Navigate back to the same note
+		const currentState = store.getState();
+		const noteId = currentState.selectedNoteIds[0];
+		await act(async () => {
+			await openExistingNote(noteId);
+		});
+		render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Test note');
+		expect(titleInput).toBeVisible();
+		// Should still be in the same mode
+		await expectToBeEditing(panes.includes('editor'));
+		expect(store.getState().noteVisiblePanes).toEqual(panes);
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should preserve noteVisiblePanes state when navigating from note 1 to note 2', async (panes) => {
+		// Open note 1
+		await act(async () => {
+			store.dispatch({
+				type: 'NOTE_VISIBLE_PANES_SET',
+				panes: panes,
+			});
+		});
+		await act(async () => {
+			return await openNewNote({ title: 'Note 1', body: 'Test body 1' });
+		});
+		const render1 = render(<WrappedNoteScreen />);
+		const titleInput1 = await screen.findByDisplayValue('Note 1');
+		expect(titleInput1).toBeVisible();
+		await expectToBeEditing(panes.includes('editor'));
+		render1.unmount();
+
+		// Open note 2
+		const note2Id = await act(async () => {
+			return await openNewNote({ title: 'Note 2', body: 'Test body 2' });
+		});
+		await act(async () => {
+			await openExistingNote(note2Id);
+		});
+		render(<WrappedNoteScreen />);
+		const titleInput2 = await screen.findByDisplayValue('Note 2');
+		expect(titleInput2).toBeVisible();
+		// Note 2 should be in the same mode
+		await expectToBeEditing(panes.includes('editor'));
+		expect(store.getState().noteVisiblePanes).toEqual(panes);
 	});
 });

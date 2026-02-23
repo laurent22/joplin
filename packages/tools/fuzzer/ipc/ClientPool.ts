@@ -66,7 +66,7 @@ export default class ClientPool {
 		for (const client of this.clients) {
 			logger.info('Creating items for ', client.email);
 			const actionCount = this.context_.randomFrom([0, 10, 100]);
-			await client.createOrUpdateMany(actionCount);
+			await client.createOrUpdateMany(actionCount, { createProbability: 1, updateProbability: 1, deleteProbability: 1 });
 
 			await client.sync();
 		}

@@ -29,6 +29,7 @@ export interface Props {
 	noteId: string;
 	folders: FolderEntity[];
 	sharedData: SharedData|undefined;
+	noteVisiblePanes: string[];
 }
 
 export interface BaseState {
@@ -293,7 +294,8 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 
 	const note = await Note.load(comp.props.noteId);
 
-	let mode = 'view';
+	const panes = comp.props.noteVisiblePanes;
+	let mode = panes.includes('editor') ? 'edit' : 'view';
 
 	if (isProvisionalNote && !comp.props.sharedData) {
 		mode = 'edit';

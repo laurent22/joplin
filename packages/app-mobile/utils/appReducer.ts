@@ -260,6 +260,13 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'SYNC_WIZARD_VISIBLE_CHANGE':
 			newState = { ...state, syncWizardVisible: action.visible };
 			break;
+
+		case 'NOTE_VISIBLE_PANES_SET':
+			newState = {
+				...state,
+				noteVisiblePanes: Array.isArray(action.panes) && action.panes.length ? action.panes : ['viewer'],
+			};
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;

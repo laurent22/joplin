@@ -38,3 +38,9 @@ Joplin can be configured to show a notification for incomplete to-dos. This is d
 **On mobile:** Open the note actions menu, then click "set alarm".
 
 Also see [the notifications documentation](https://joplinapp.org/help/apps/notifications) for how notifications are displayed.
+
+## Video tutorial
+
+Watch this short video to learn how to create, manage, and organize tasks effectively:
+
+[![Watch the video](https://img.youtube.com/vi/BtXgBYebR_Y/hqdefault.jpg)](https://www.youtube.com/watch?v=BtXgBYebR_Y)
