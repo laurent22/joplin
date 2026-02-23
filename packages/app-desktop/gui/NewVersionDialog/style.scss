@@ -1,0 +1,46 @@
+.new-version-dialog {
+	.new-version-content {
+		max-width: 560px;
+		width: 100%;
+
+		.release-notes-link {
+			font-size: 1.1em;
+			display: block;
+			margin-bottom: 16px;
+		}
+
+		.changelog-section {
+			margin-top: 8px;
+
+			.changelog-label {
+				font-weight: bold;
+				margin-bottom: 8px;
+			}
+
+			.changelog-text {
+				max-height: 280px;
+				overflow-y: auto;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				font-size: 0.9em;
+				font-family: inherit;
+				padding: 12px;
+				border-radius: 4px;
+				margin-bottom: 8px;
+			}
+
+			.full-changelog-link {
+				font-size: 0.85em;
+			}
+		}
+	}
+
+	.new-version-buttons {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		margin-top: 16px;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+	}
+}
