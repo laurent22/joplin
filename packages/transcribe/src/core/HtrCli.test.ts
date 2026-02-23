@@ -53,6 +53,7 @@ describe('HtrCli', () => {
 	};
 
 	beforeEach(() => {
+		(execCommand as jest.Mock).mockClear();
 		(execCommand as jest.Mock).mockResolvedValue(fakeExecOutput);
 	});
 
