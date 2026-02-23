@@ -4,6 +4,7 @@ import focusEditorIfEditorCommand from './focusEditorIfEditorCommand';
 import { WhenClauseContext } from './stateToWhenClauseContext';
 import Logger from '@joplin/utils/Logger';
 import KeymapService from '../KeymapService';
+import { _ } from '../../locale';
 
 const logger = Logger.create('ToolbarButtonUtils');
 
@@ -60,7 +61,7 @@ export default class ToolbarButtonUtils {
 		if (keymapService && keymapService.acceleratorExists(commandName)) {
 			const accelerator = keymapService.getDefaultAccelerator(commandName);
 			if (accelerator) {
-				const label = `${newLabel} (${accelerator})`;
+				const label = _('%s (%s)', newLabel, accelerator);
 				newLabel = newLabel ? label : accelerator;
 			}
 		}
