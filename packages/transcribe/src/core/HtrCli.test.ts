@@ -46,39 +46,37 @@ describe('HtrCli', () => {
 		expect(result).toMatchSnapshot();
 	});
 
-	describe('gPU CLI flag', () => {
-		const baseOpts = {
-			htrCliImagesFolder: '/img',
-			binaryPath: '/bin/llama-mtmd-cli',
-			modelsFolder: '/models',
-		};
+	const baseOpts = {
+		htrCliImagesFolder: '/img',
+		binaryPath: '/bin/llama-mtmd-cli',
+		modelsFolder: '/models',
+	};
 
-		beforeEach(() => {
-			(execCommand as jest.Mock).mockResolvedValue(fakeExecOutput);
-		});
+	beforeEach(() => {
+		(execCommand as jest.Mock).mockResolvedValue(fakeExecOutput);
+	});
 
-		it('should NOT add -ngl when gpuLayers is 0 or undefined', async () => {
-			// undefined (omit gpuLayers)
-			const cliUndefined = new HtrCli({ ...baseOpts });
-			await cliUndefined.run('test.png');
-			let command = (execCommand as jest.Mock).mock.calls[0][0] as string[];
-			expect(command).not.toContain('-ngl');
+	it('gPU CLI flag - should NOT add -ngl when gpuLayers is 0 or undefined', async () => {
+		// undefined (omit gpuLayers)
+		const cliUndefined = new HtrCli({ ...baseOpts });
+		await cliUndefined.run('test.png');
+		let command = (execCommand as jest.Mock).mock.calls[0][0] as string[];
+		expect(command).not.toContain('-ngl');
 
-			// explicit 0
-			(execCommand as jest.Mock).mockClear();
-			const cliZero = new HtrCli({ ...baseOpts, gpuLayers: 0 });
-			await cliZero.run('test.png');
-			command = (execCommand as jest.Mock).mock.calls[0][0] as string[];
-			expect(command).not.toContain('-ngl');
-		});
+		// explicit 0
+		(execCommand as jest.Mock).mockClear();
+		const cliZero = new HtrCli({ ...baseOpts, gpuLayers: 0 });
+		await cliZero.run('test.png');
+		command = (execCommand as jest.Mock).mock.calls[0][0] as string[];
+		expect(command).not.toContain('-ngl');
+	});
 
-		it('should add -ngl <value> when gpuLayers is greater than 0', async () => {
-			const cliGpu = new HtrCli({ ...baseOpts, gpuLayers: 999 });
-			await cliGpu.run('test.png');
-			const command = (execCommand as jest.Mock).mock.calls[0][0] as string[];
-			const nglIndex = command.indexOf('-ngl');
-			expect(nglIndex).toBeGreaterThanOrEqual(0);
-			expect(command[nglIndex + 1]).toBe('999');
-		});
+	it('gPU CLI flag - should add -ngl <value> when gpuLayers is greater than 0', async () => {
+		const cliGpu = new HtrCli({ ...baseOpts, gpuLayers: 999 });
+		await cliGpu.run('test.png');
+		const command = (execCommand as jest.Mock).mock.calls[0][0] as string[];
+		const nglIndex = command.indexOf('-ngl');
+		expect(nglIndex).toBeGreaterThanOrEqual(0);
+		expect(command[nglIndex + 1]).toBe('999');
 	});
 });
