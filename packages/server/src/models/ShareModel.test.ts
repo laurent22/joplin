@@ -1,7 +1,7 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { ShareType } from '../services/database/types';
-import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
+import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
 
 describe('ShareModel', () => {
 
@@ -211,4 +211,41 @@ describe('ShareModel', () => {
 		expect(await models().userItem().byUserId(user3.id)).toHaveLength(4);
 	});
 
+	test('should delete UserItem records when a user no longer has access to a share', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		const getUser2UserItems = () => models().userItem().byUserId(user2.id);
+		expect(await getUser2UserItems()).toHaveLength(0);
+
+		await createItemTree(session1.user_id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+		const shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+		const note = await models().item().loadByJopId(session1.user_id, '00000000000000000000000000000001');
+		expect(shareRoot).toBeTruthy();
+
+		const { share, shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+		await updateItemShareId(session1, shareRoot.id, share.id);
+		await updateItemShareId(session1, note.id, share.id);
+		await models().share().updateSharedItems3();
+
+		// Should have shared successfully:
+		expect(await getUser2UserItems()).toHaveLength(2);
+
+		// Removing the user from the share should delete the UserItems
+		await models().shareUser().delete(shareUser.id);
+		expect(await getUser2UserItems()).toHaveLength(0);
+
+		// Simulate a race condition by restoring one of the user items:
+		await models().userItem().add(user2.id, note.id);
+		expect(await getUser2UserItems()).toHaveLength(1);
+
+		// The extra UserItem should be removed when processing the share's changes:
+		await models().share().updateSharedItems3();
+		expect(await getUser2UserItems()).toHaveLength(0);
+	});
 });
