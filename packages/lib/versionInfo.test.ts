@@ -126,7 +126,7 @@ describe('versionInfo', () => {
 
 		// message should be abridged (20 plugins + ellipsis)
 		expect(v.message).toContain('...');
-		// Plugin21 is the last one alphabetically, so it should be truncated
+		// Plugin9 is last alphabetically (string sort), so it gets truncated
 		expect(v.message).not.toContain('Plugin9: 1');
 	});
 
