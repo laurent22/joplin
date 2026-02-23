@@ -277,13 +277,14 @@ test.describe('markdownEditor', () => {
 	});
 
 	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow, electronApp }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
+		const mainScreen = await new MainScreen(mainWindow);
+		// Workaround: Required for extracting content accurately from the Markdown editor
+		await mainScreen.noteEditor.disableInlineRendering(electronApp);
+
+		await mainScreen.setup();
 		await mainScreen.createNewNote('Original');
 		const noteEditor = mainScreen.noteEditor;
 		await noteEditor.hideViewer();
-
-		// Workaround: Required for extracting content accurately from the Markdown editor
-		await noteEditor.disableInlineRendering(electronApp);
 
 		await noteEditor.focusCodeMirrorEditor();
 		await mainWindow.keyboard.type('# Test');
