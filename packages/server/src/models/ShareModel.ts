@@ -323,6 +323,15 @@ export default class ShareModel extends BaseModel<Share> {
 
 				for (const row of shareItemCountPerUser) {
 					if (row.item_count > 0 && !shareParticipants.includes(row.user_id)) {
+						// It's possible for user_items entries to still exist as the result of a race
+						// between loops that create user_items and the logic that deletes user_items
+						// when removing a user from a share.
+						//
+						// This cleanup logic and handleDeleted are both responsible for cleaning up
+						// after such a race condition. Both are important:
+						// - This logic cleans up user_items related to deletions that occurred before
+						//   the handleDeleted logic was added (around March 2026).
+						// - handleDeleted handles some cases not handled here, but only applies to new changes.
 						logger.warn(`checkForMissingUserItems: User ${row.user_id} has items but is not authorized for share ${share.id}. Cleaning up.`);
 						await this.models().userItem().deleteByShareAndUserId(share.id, row.user_id);
 						continue;
