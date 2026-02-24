@@ -10,6 +10,7 @@ import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
+import eventManager, { EventName } from '../../eventManager';
 const fastDeepEqual = require('fast-deep-equal');
 
 const logger = Logger.create('syncInfoUtils');
@@ -21,6 +22,11 @@ export interface SyncInfoValueBoolean {
 
 export interface SyncInfoValueString {
 	value: string;
+	updatedTime: number;
+}
+
+export interface SyncInfoValueInt {
+	value: number;
 	updatedTime: number;
 }
 
@@ -43,6 +49,17 @@ let appMinVersion_ = '3.0.0';
 export const setAppMinVersion = (v: string) => {
 	appMinVersion_ = v;
 };
+
+export function setupRevisionServiceSettingsSync() {
+	const revisionServiceKeys = ['revisionService.enabled', 'revisionService.ttlDays'];
+	eventManager.on(EventName.SettingsChange, (event) => {
+		if (!event.keys.some(k => revisionServiceKeys.includes(k))) return;
+		const s = localSyncInfo();
+		if (event.keys.includes('revisionService.enabled')) s.revisionServiceEnabled = Setting.value('revisionService.enabled');
+		if (event.keys.includes('revisionService.ttlDays')) s.revisionServiceTtlDays = Setting.value('revisionService.ttlDays');
+		saveLocalSyncInfo(s);
+	});
+}
 
 export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	if (Setting.value('syncInfoCache')) return; // Already initialized
@@ -75,6 +92,10 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	//   most likely not what the user wants.
 	syncInfo.setKeyTimestamp('e2ee', 0);
 	syncInfo.setKeyTimestamp('activeMasterKeyId', 0);
+	syncInfo.revisionServiceEnabled = Setting.valueNoThrow('revisionService.enabled', true);
+	syncInfo.revisionServiceTtlDays = Setting.valueNoThrow('revisionService.ttlDays', 90);
+	syncInfo.setKeyTimestamp('revisionServiceEnabled', 0);
+	syncInfo.setKeyTimestamp('revisionServiceTtlDays', 0);
 
 	await saveLocalSyncInfo(syncInfo);
 }
@@ -219,6 +240,8 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 
 	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
 	output.setWithTimestamp(s1.keyTimestamp('ppk') > s2.keyTimestamp('ppk') ? s1 : s2, 'ppk');
+	output.setWithTimestamp(s1.keyTimestamp('revisionServiceEnabled') > s2.keyTimestamp('revisionServiceEnabled') ? s1 : s2, 'revisionServiceEnabled');
+	output.setWithTimestamp(s1.keyTimestamp('revisionServiceTtlDays') > s2.keyTimestamp('revisionServiceTtlDays') ? s1 : s2, 'revisionServiceTtlDays');
 	output.version = s1.version > s2.version ? s1.version : s2.version;
 
 	mergeActiveMasterKeys(s1, s2, output);
@@ -255,11 +278,15 @@ export class SyncInfo {
 	private masterKeys_: MasterKeyEntity[] = [];
 	private ppk_: SyncInfoValuePublicPrivateKeyPair;
 	private appMinVersion_: string = appMinVersion_;
+	private revisionServiceEnabled_: SyncInfoValueBoolean;
+	private revisionServiceTtlDays_: SyncInfoValueInt;
 
 	public constructor(serialized: string = null) {
 		this.e2ee_ = { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = { value: '', updatedTime: 0 };
 		this.ppk_ = { value: null, updatedTime: 0 };
+		this.revisionServiceEnabled_ = { value: true, updatedTime: 0 };
+		this.revisionServiceTtlDays_ = { value: 90, updatedTime: 0 };
 
 		if (serialized) this.load(serialized);
 	}
@@ -273,6 +300,8 @@ export class SyncInfo {
 			masterKeys: this.masterKeys,
 			ppk: this.ppk_,
 			appMinVersion: this.appMinVersion,
+			revisionServiceEnabled: this.revisionServiceEnabled_,
+			revisionServiceTtlDays: this.revisionServiceTtlDays_,
 		};
 	}
 
@@ -315,6 +344,8 @@ export class SyncInfo {
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
 		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
+		this.revisionServiceEnabled_ = 'revisionServiceEnabled' in s ? s.revisionServiceEnabled : { value: true, updatedTime: 0 };
+		this.revisionServiceTtlDays_ = 'revisionServiceTtlDays' in s ? s.revisionServiceTtlDays : { value: 90, updatedTime: 0 };
 
 		// Migration for master keys that didn't have "hasBeenUsed" property -
 		// in that case we assume they've been used at least once.
@@ -380,6 +411,26 @@ export class SyncInfo {
 		if (v === this.activeMasterKeyId) return;
 
 		this.activeMasterKeyId_ = { value: v, updatedTime: Date.now() };
+	}
+
+	public get revisionServiceEnabled(): boolean {
+		return this.revisionServiceEnabled_.value;
+	}
+
+	public set revisionServiceEnabled(v: boolean) {
+		if (v === this.revisionServiceEnabled) return;
+
+		this.revisionServiceEnabled_ = { value: v, updatedTime: Date.now() };
+	}
+
+	public get revisionServiceTtlDays(): number {
+		return this.revisionServiceTtlDays_.value;
+	}
+
+	public set revisionServiceTtlDays(v: number) {
+		if (v === this.revisionServiceTtlDays) return;
+
+		this.revisionServiceTtlDays_ = { value: v, updatedTime: Date.now() };
 	}
 
 	public get masterKeys(): MasterKeyEntity[] {

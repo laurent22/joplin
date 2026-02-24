@@ -3,7 +3,7 @@
 import KeychainService from './keychain/KeychainService';
 import Setting from '../models/Setting';
 import uuid from '../uuid';
-import { migrateLocalSyncInfo } from './synchronizer/syncInfoUtils';
+import { migrateLocalSyncInfo, setupRevisionServiceSettingsSync } from './synchronizer/syncInfoUtils';
 import KeychainServiceDriverBase from './keychain/KeychainServiceDriverBase';
 import shim from '../shim';
 
@@ -46,6 +46,7 @@ export async function loadKeychainServiceAndSettings(keychainServiceDrivers: Key
 	// contains the master keys, etc. Once it has been set, it becomes a noop
 	// on future calls.
 	await migrateLocalSyncInfo(Setting.db());
+	setupRevisionServiceSettingsSync();
 
 	if (!clientIdSetting) Setting.setValue('clientId', clientId);
 	await KeychainService.instance().detectIfKeychainSupported();

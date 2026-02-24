@@ -283,6 +283,14 @@ describe('syncInfoUtils', () => {
 					'publicKey': '-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCA...',
 				},
 			},
+			'revisionServiceEnabled': {
+				'updatedTime': 0,
+				'value': true,
+			},
+			'revisionServiceTtlDays': {
+				'updatedTime': 0,
+				'value': 90,
+			},
 			'version': 3,
 		});
 	});
@@ -392,4 +400,29 @@ describe('syncInfoUtils', () => {
 		Setting.setValue('sync.wipeOutFailSafe', true);
 		expect(fetchSyncInfo(fileApi())).resolves.not.toThrow();
 	}));
+
+	it('should merge revision service settings based on timestamps', () => {
+		const s1 = new SyncInfo();
+		s1.revisionServiceEnabled = false;
+		s1.revisionServiceTtlDays = 30;
+
+		const s2 = new SyncInfo();
+		s2.revisionServiceEnabled = true;
+		s2.revisionServiceTtlDays = 90;
+
+		s1.setKeyTimestamp('revisionServiceEnabled', 200);
+		s1.setKeyTimestamp('revisionServiceTtlDays', 100);
+		s2.setKeyTimestamp('revisionServiceEnabled', 100);
+		s2.setKeyTimestamp('revisionServiceTtlDays', 200);
+
+		const merged = mergeSyncInfos(s1, s2);
+		expect(merged.revisionServiceEnabled).toBe(false);
+		expect(merged.revisionServiceTtlDays).toBe(90);
+	});
+
+	it('should use default revision service settings when not present in sync info', () => {
+		const s = new SyncInfo(JSON.stringify({ version: 3 }));
+		expect(s.revisionServiceEnabled).toBe(true);
+		expect(s.revisionServiceTtlDays).toBe(90);
+	});
 });
