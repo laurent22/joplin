@@ -128,13 +128,12 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 
 	return (
 		<Modal
-			animationType="fade"
 			containerStyle={styles.modalContent}
-			transparent={true}
 			visible={props.visible}
-			onRequestClose={() => {
+			onClose={() => {
 				props.editorControl.hideLinkDialog();
-			}}>
+			}}
+		>
 			<Text style={styles.header}>{_('Edit link')}</Text>
 			<View>
 				{linkTextInput}

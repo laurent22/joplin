@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from '../app.reducer';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../services/bridge';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow, { ClickEvent } from './DialogButtonRow';
 import styled from 'styled-components';
 import { reg } from '@joplin/lib/registry';

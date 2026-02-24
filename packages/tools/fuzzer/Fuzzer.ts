@@ -12,6 +12,7 @@ import randomId from './utils/randomId';
 import { ItemId } from './model/types';
 import openDebugSession from './utils/openDebugSession';
 import { readFile } from 'fs/promises';
+import { randomWeightedElement } from '@joplin/utils/array';
 
 const logger = Logger.create('Fuzzer');
 
@@ -148,7 +149,12 @@ const createContext = (config: FuzzerConfig, random: RandomNumberGenerators, ser
 
 		execApi: server.execApi.bind(server),
 		randInt: (a, b) => random.generalRandom.nextInRange(a, b),
-		randomFrom: (data) => data[random.generalRandom.nextInRange(0, data.length)],
+		randomFrom: (data, weights) => {
+			if (!weights) return data[random.generalRandom.nextInRange(0, data.length)];
+
+			const nextFloat = () => random.generalRandom.nextInRange(0, 100_000) / 100_000;
+			return randomWeightedElement(data, weights, nextFloat);
+		},
 		randomString: random.randomStringGenerator,
 		randomId: random.randomIdGenerator,
 		keepAccounts: config.keepAccountsOnClose,

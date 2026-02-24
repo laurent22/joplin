@@ -482,11 +482,18 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		return true;
 	}, {});
 
-	addAction('createOrUpdateMany', async ({ count }) => {
-		await client.createOrUpdateMany(count);
+	addAction('createOrUpdateMany', async ({ count, updateProbability, deleteProbability, createProbability }) => {
+		await client.createOrUpdateMany(count, {
+			updateProbability,
+			deleteProbability,
+			createProbability,
+		});
 		return true;
 	}, {
 		count: () => context.randInt(1, 512),
+		createProbability: () => 0.3,
+		updateProbability: () => 0.5,
+		deleteProbability: () => 0.2,
 	});
 
 	addAction('publishNote', async ({ id }) => {

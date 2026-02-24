@@ -69,6 +69,7 @@ interface Props {
 	onSelectionChange: OnSelectionChange;
 	onUndoRedoDepthChange: OnUndoRedoDepthChange;
 	onAttach: OnAttach;
+	refreshKey?: number;
 }
 
 function fontFamilyFromSettings() {
@@ -456,6 +457,7 @@ function NoteEditor(props: Props) {
 				minHeight: '30%',
 			}}>
 				<EditorComponent
+					key={props.refreshKey}
 					editorRef={editorRef}
 					webviewRef={webviewRef}
 					themeId={props.themeId}

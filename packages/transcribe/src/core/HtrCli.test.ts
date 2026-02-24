@@ -2,7 +2,7 @@ import { readFile } from 'fs-extra';
 import HtrCli from './HtrCli';
 
 describe('HtrCli', () => {
-	const dt = new HtrCli('', '');
+	const dt = new HtrCli({ htrCliImagesFolder: '', binaryPath: '', modelsFolder: '' });
 	it('should parse multiline result', async () => {
 		const testCase = await readFile('./test-cases/1.txt');
 		const result = dt.cleanUpResult(testCase.toString());

@@ -1,4 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Tue, 10 Feb 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate><item><title><![CDATA[Joplin will come preloaded on the HMD Terra M]]></title><description><![CDATA[<div style="overflow: auto;">
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 23 Feb 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 23 Feb 2026 00:00:00 GMT</pubDate><item><title><![CDATA[Introducing our Warrant Canary]]></title><description><![CDATA[<p>We have introduced a publicly signed warrant canary for Joplin.</p>
+<p>A warrant canary is a regularly updated statement confirming that, as of the stated date, the project has not received secret legal orders, gag orders, or demands requiring the introduction of backdoors into the software or its infrastructure.</p>
+<p>The canary is:</p>
+<ul>
+<li>
+<p>Cryptographically signed using a dedicated OpenPGP key</p>
+</li>
+<li>
+<p>Updated every 60 days</p>
+</li>
+<li>
+<p>Published in plain text for independent verification</p>
+</li>
+</ul>
+<p>If the canary is not updated within its stated validity window, it should be considered expired.</p>
+<p>You can view and verify the current canary here:</p>
+<p><a href="https://raw.githubusercontent.com/laurent22/joplin/refs/heads/dev/readme/canary.txt">https://raw.githubusercontent.com/laurent22/joplin/refs/heads/dev/readme/canary.txt</a></p>
+<p>With additional information on how it is generated and managed there:</p>
+<p><a href="https://github.com/laurent22/joplin/blob/dev/readme/canary.md">https://github.com/laurent22/joplin/blob/dev/readme/canary.md</a></p>
+<p>This measure is intended to improve transparency and provide an additional signal to the community. It does not prevent legal orders, but it helps ensure that any material change in our legal status cannot occur silently.</p>
+]]></description><link>https://joplinapp.org/news/20260223-warrant-canary</link><guid isPermaLink="false">20260223-warrant-canary</guid><pubDate>Mon, 23 Feb 2026 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin will come preloaded on the HMD Terra M]]></title><description><![CDATA[<div style="overflow: auto;">
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260210-hmd-joplin-logo.png" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
 <p>We’re happy to announce a collaboration with <a href="https://www.hmdsecure.com/">HMD Secure</a>, who will preload Joplin on their upcoming device, the HMD Terra M.</p>
 <p>This partnership brings Joplin to a new class of rugged, professional devices built for instant reliable communication, and reflects a shared focus on reliability, security, and long-term use.</p>
@@ -508,15 +528,4 @@ sys 0m38.013s</p>
 ]]></description><link>https://joplinapp.org/news/20230508-release-2-10</link><guid isPermaLink="false">20230508-release-2-10</guid><pubDate>Wed, 10 May 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.10</twitter-text></item><item><title><![CDATA[Joplin will participate in JdLL 2023!]]></title><description><![CDATA[<p>On 1 and 2 April 2023, we will have a stand for Joplin at the <a href="https://www.jdll.org/">Journées du Logiciel Libre</a> in Lyon, France. The JdLL has been taking place in Lyon for 24 years and is a popular open source conference in France. We had a stand in 2020 and 2021 but that was cancelled due to Covid, so this year is a first for Joplin!</p>
 <p>Admission is free, so don't hesitate to come and meet us, exchange ideas and learn more about Joplin!</p>
 <p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230202-jdll.jpg" alt="Joplin at JdLL 2023"></p>
-]]></description><link>https://joplinapp.org/news/20230302-jdll-2023</link><guid isPermaLink="false">20230302-jdll-2023</guid><pubDate>Thu, 02 Mar 2023 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Introducing the "GitHub Actions Raw Log Viewer" extension for Chrome]]></title><description><![CDATA[<p>If you've ever used GitHub Actions, you will find that they provide by default a nice coloured output for the log. It looks good and it's even interactive! (You can click to collapse/expand blocks of text) But unfortunately it doesn't scale to large workflows, like we have for Joplin - the log can freeze and it will take forever to search for something. Indeed searching is done in &quot;real time&quot;... which mostly means it will freeze for a minute or two for each letter you type in the search box. Not great.</p>
-<p>Thankfully GitHub provides an alternative access: the raw logs. This is much better because they will open as plain text, without any styling or JS magic, which means you can use the browser native search and it will be fast.</p>
-<p>But now the problem is that raw logs look like this:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230116-ga-raw-log.png" alt="Raw log without extension"></p>
-<p>While it's not impossible to read, all colours that would display nicely in a terminal are gone and replaced by <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a>. You can find what you need in there but it's not particularly easy.</p>
-<p>This is where the new <strong>GitHub Action Raw Log Viewer</strong> extension for Chrome can help. It will parse your raw log and convert the ANSI codes to proper colours. This results in a much more readable rendering:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230116-ga-raw-log-colored.png" alt="Raw log with extension"></p>
-<p>The extension is fast even for very large logs and it's of course easy to search for text since it simply works with your browser built-in search.</p>
-<p>The extension is open source, with the code available here: <a href="https://github.com/laurent22/github-actions-logs-extension">https://github.com/laurent22/github-actions-logs-extension</a></p>
-<p>And to install it, follow this link:</p>
-<p><a href="https://chrome.google.com/webstore/detail/github-action-raw-log-vie/lgejlnoopmcdglhfjblaeldbcfnmjddf"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230116-extension-get-it-now.png" alt="Download GitHub Action Raw Log Viewer extension"></a></p>
-]]></description><link>https://joplinapp.org/news/20230116-github-actions-log-viewer</link><guid isPermaLink="false">20230116-github-actions-log-viewer</guid><pubDate>Mon, 16 Jan 2023 00:00:00 GMT</pubDate><twitter-text>Introducing the &quot;GitHub Action Raw Log Viewer&quot; extension for Chrome</twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20230302-jdll-2023</link><guid isPermaLink="false">20230302-jdll-2023</guid><pubDate>Thu, 02 Mar 2023 00:00:00 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
