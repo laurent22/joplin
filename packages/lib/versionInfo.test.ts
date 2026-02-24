@@ -124,9 +124,12 @@ describe('versionInfo', () => {
 		}
 		expect(v.body).not.toContain('...');
 
-		// message should be abridged (20 plugins + ellipsis)
+		// message should be abridged: first 20 sorted entries + '...'
+		// Intl.Collator sorts as: Plugin1, Plugin10..19, Plugin2, Plugin20, Plugin21, Plugin3..9
+		// so Plugin9 (the 21st entry) should be excluded from message
 		expect(v.message).toContain('...');
-		// Plugin9 is last alphabetically (string sort), so it gets truncated
+		expect(v.message).toContain('Plugin1: 1');
+		expect(v.message).toContain('Plugin20: 1');
 		expect(v.message).not.toContain('Plugin9: 1');
 	});
 
