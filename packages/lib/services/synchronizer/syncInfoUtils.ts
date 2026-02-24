@@ -51,13 +51,20 @@ export const setAppMinVersion = (v: string) => {
 };
 
 export function setupRevisionServiceSettingsSync() {
-	const revisionServiceKeys = ['revisionService.enabled', 'revisionService.ttlDays'];
 	eventManager.on(EventName.SettingsChange, (event) => {
-		if (!event.keys.some(k => revisionServiceKeys.includes(k))) return;
+		const relevant = event.keys.filter(k => k === 'revisionService.enabled' || k === 'revisionService.ttlDays');
+		if (!relevant.length) return;
 		const s = localSyncInfo();
-		if (event.keys.includes('revisionService.enabled')) s.revisionServiceEnabled = Setting.value('revisionService.enabled');
-		if (event.keys.includes('revisionService.ttlDays')) s.revisionServiceTtlDays = Setting.value('revisionService.ttlDays');
-		saveLocalSyncInfo(s);
+		let changed = false;
+		if (relevant.includes('revisionService.enabled')) {
+			const next = Setting.value('revisionService.enabled');
+			if (s.revisionServiceEnabled !== next) { s.revisionServiceEnabled = next; changed = true; }
+		}
+		if (relevant.includes('revisionService.ttlDays')) {
+			const next = Setting.value('revisionService.ttlDays');
+			if (s.revisionServiceTtlDays !== next) { s.revisionServiceTtlDays = next; changed = true; }
+		}
+		if (changed) saveLocalSyncInfo(s);
 	});
 }
 
