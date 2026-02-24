@@ -275,12 +275,21 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleDeleted = async (change: Change, item: Item|null, share: Share|null) => {
+			// On deletion, we check for extra user_items entries for items that still exist.
+			// These user_items can be created by race conditions between updateSharedItems3
+			// and logic for removing users from a share.
+			//
+			// For now, only check the case where:
+			// 1. the item exists, and thus the user_items entry could allow access to the item
+			// 2. the item was most likely shared.
+			//
 			if (!item) return;
-			const deletedByOwner = item.owner_id === change.user_id;
-			if (deletedByOwner) return;
+			// For performance: Skip deletions not associated with shared items:
+			const deletedForOwner = item.owner_id === change.user_id;
+			if (!deletedForOwner && !item.jop_share_id) return;
 
 			// If the userItem exists, the user still has access to the item, despite the deletion change:
-			const userItem = await this.models().userItem().byUserAndItemId(change.user_id, item.id);
+			const userItem = await this.models().userItem().byUserAndItemId(change.user_id, change.item_id);
 			if (userItem) {
 				perfTimer.push('handleDeleted');
 
@@ -293,7 +302,7 @@ export default class ShareModel extends BaseModel<Share> {
 				// Check if the user should still have access to the item. If not, the userItem was probably created
 				// by a race condition (e.g. handleUpdated adding UserItems) and should be deleted.
 				if (!await isShareMember()) {
-					logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item.jop_share_id);
+					logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item?.jop_share_id);
 
 					// Delete by the UserItem's ID to avoid race conditions. If a new user item is created for the same
 					// (user, item) pair (perhaps after removing the original), it should not be deleted by this task:
