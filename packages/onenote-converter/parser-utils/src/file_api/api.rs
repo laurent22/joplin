@@ -1,3 +1,4 @@
+use sanitize_filename::{sanitize_with_options, Options as SanitizeOptions};
 use std::io::{Read, Seek};
 
 pub type ApiResult<T> = std::result::Result<T, std::io::Error>;

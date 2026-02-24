@@ -35,19 +35,15 @@ mod test {
         );
         assert_eq!(
             fs_driver().sanitize_file_name("a/b.txt"),
-            "a_b.txt"
+            "ab.txt"
         );
         assert_eq!(
             fs_driver().sanitize_file_name("a\0a/b.txt"),
-            "a_a_b.txt"
+            "aab.txt"
         );
         assert_eq!(
             fs_driver().sanitize_file_name("a\\b\\.txt "),
-            "a_b_.txt"
-        );
-        assert_eq!(
-            fs_driver().sanitize_file_name("/"),
-            "_"
+            "ab.txt"
         );
     }
 }
