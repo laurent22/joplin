@@ -60,6 +60,8 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 					}),
 				}),
 				markdownLanguage.data.compute([closingFencedBlock], state => {
+					// Don't auto-complete `s when closing a code block.
+					// See https://github.com/laurent22/joplin/issues/12569.
 					if (state.field(closingFencedBlock)) {
 						return { closeBrackets: { brackets: openingBrackets.filter(b => b !== '`') } };
 					}
