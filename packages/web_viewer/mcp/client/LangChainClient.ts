@@ -2,6 +2,7 @@ import { MultiServerMCPClient } from '@langchain/mcp-adapters';
 import { createAgent } from 'langchain';
 import { ChatOpenAI } from '@langchain/openai';
 import { ProxyAgent, fetch as undiciFetch } from 'undici';
+import { Config } from '../../config.ts';
 
 export class LangChainClient {
   public static async sendMcpQuestion() {
@@ -17,21 +18,27 @@ export class LangChainClient {
     // MCPサーバーが公開している tools を LangChain Tool として取得
     const tools = await mcp.getTools(); // :contentReference[oaicite:1]{index=1}
 
-    const proxyAgent = new ProxyAgent({
-      uri: 'http://127.0.0.1:8082',
-      requestTls: {
-        rejectUnauthorized: false,
-      },
-    });
-    const model = new ChatOpenAI({
+    // Proxy設定
+    const modelConfig: ConstructorParameters<typeof ChatOpenAI>[0] = {
       model: 'gpt-5-mini', // adjust if needed
       apiKey: process.env.JOPLIN_OAI_KEY,
-      configuration: {
-        fetch: ((url: any, init: any) => {
+    };
+
+    if (Config.useProxy) {
+      const proxyAgent = new ProxyAgent({
+        uri: 'http://127.0.0.1:8082',
+        requestTls: {
+          rejectUnauthorized: false,
+        },
+      });
+      modelConfig.configuration = {
+        fetch: ((url: string, init?: object) => {
           return undiciFetch(url, { ...init, dispatcher: proxyAgent });
         }) as unknown as typeof globalThis.fetch,
-      },
-    });
+      };
+    }
+
+    const model = new ChatOpenAI(modelConfig);
 
     const agent = createAgent({
       model,
