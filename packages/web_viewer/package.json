@@ -13,7 +13,7 @@
     "fix": "npm run format && npm run lint:fix",
     "mcp:dev": "ts-node-esm ./mcp/server/index.ts",
     "mcp:client": "ts-node-esm ./mcp/client/index.ts",
-    "mcp:server": "node dist-server/mcp/server/index.js",
+    "mcp:server": "ts-node-esm ./mcp/server/index.ts",
     "agent": "ts-node-esm mcp/client/LangChainClient.ts"
   },
   "dependencies": {
