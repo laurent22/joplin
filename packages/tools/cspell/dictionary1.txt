@@ -75,7 +75,6 @@ Ayiti
 azamah
 Azərbaycan
 backoff
-Backquote
 bahasa
 Bangla
 bbox

@@ -1032,8 +1032,6 @@ packages/editor/CodeMirror/editorCommands/cutOrCopyText.js
 packages/editor/CodeMirror/editorCommands/duplicateLine.test.js
 packages/editor/CodeMirror/editorCommands/duplicateLine.js
 packages/editor/CodeMirror/editorCommands/editorCommands.js
-packages/editor/CodeMirror/editorCommands/handleBacktick.test.js
-packages/editor/CodeMirror/editorCommands/handleBacktick.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.test.js
 packages/editor/CodeMirror/editorCommands/insertLineAfter.js
 packages/editor/CodeMirror/editorCommands/insertNewlineContinueMarkup.test.js
