@@ -323,9 +323,34 @@ a:not([draggable=true]), img:not([draggable=true]) {
 }
 .smalltalk input {
 	margin-top: 1em;
+	background-color: var(--joplin-background-color);
+	color: var(--joplin-color);
+	border: 1px solid var(--joplin-divider-color);
 }
 .smalltalk .page {
 	max-width: 30em;
+	background-color: var(--joplin-background-color);
+	color: var(--joplin-color);
+}
+.smalltalk .page header {
+	color: var(--joplin-color);
+}
+.smalltalk button {
+	background-image: none;
+	box-shadow: none;
+	text-shadow: none;
+	background-color: var(--joplin-background-color);
+	color: var(--joplin-color) ;
+	border: 1px solid var(--joplin-divider-color) ;
+}
+.smalltalk button:enabled:hover, .smalltalk button:enabled:active {
+	background-color: var(--joplin-background-color-hover3);
+	background-image: none;
+	box-shadow: none;
+	text-shadow: none;
+}
+.smalltalk button:enabled:focus, .smalltalk input:enabled:focus {
+	border-color: var(--joplin-focus-outline-color);
 }
 mark {
 	background: #CF3F00;
