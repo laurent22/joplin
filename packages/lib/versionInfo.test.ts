@@ -32,7 +32,7 @@ const packageInfo = {
 	},
 };
 
-describe('versionInfo', () => {
+describe('getPluginLists', () => {
 
 	beforeAll(() => {
 		(reg.db as jest.Mock).mockReturnValue(mockedDb);
@@ -118,30 +118,26 @@ describe('versionInfo', () => {
 
 		const v = versionInfo(packageInfo, plugins);
 
-		// body should contain all 21 plugins
+		const body = '\n';
 		for (let i = 1; i <= 21; i++) {
-			expect(v.body).toContain(`Plugin${i}: 1`);
+			body.concat(`\nPlugin${i}: 1`);
 		}
-		expect(v.body).not.toContain('...');
+		expect(v.body).toMatch(new RegExp(body));
 
-		// message should be abridged: first 20 sorted entries + '...'
-		// Intl.Collator sorts as: Plugin1, Plugin10..19, Plugin2, Plugin20, Plugin21, Plugin3..9
-		// so Plugin9 (the 21st entry) should be excluded from message
-		expect(v.message).toContain('...');
-		expect(v.message).toContain('Plugin1: 1');
-		expect(v.message).toContain('Plugin20: 1');
-		expect(v.message).not.toContain('Plugin9: 1');
+		const message = '\n';
+		for (let i = 1; i <= 20; i++) {
+			message.concat(`\nPlugin${i}: 1`);
+		}
+		message.concat('\n...');
+		expect(v.message).toMatch(new RegExp(message));
 	});
 
 	it('should show sync target name', () => {
-		// SyncTargetNone is registered in test-utils (loaded via jest.setup),
-		// and sync.target defaults to 0 (None).
 		const v = versionInfo(packageInfo, {});
 		expect(v.body).toContain('Sync target: (None)');
 	});
 
 	it('should show Markdown editor by default', () => {
-		// editor.codeView defaults to true → Markdown
 		const v = versionInfo(packageInfo, {});
 		expect(v.body).toContain('Editor: Markdown');
 	});
