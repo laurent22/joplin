@@ -246,7 +246,7 @@ describe('ShareModel', () => {
 		expect(await getUser2UserItems()).toHaveLength(1);
 
 		// The extra UserItem should be removed when processing the share's changes:
-		await withWarningSilenced(/Deleting unexpected userItem for user/, async () => {
+		await withWarningSilenced(/has items but is not authorized for share/, async () => {
 			await models().share().updateSharedItems3();
 		});
 		expect(await getUser2UserItems()).toHaveLength(0);
