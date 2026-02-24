@@ -477,6 +477,7 @@ describe('services_PluginService', () => {
 	it('should report a missing app_min_version field specifically', () => {
 		const service = newPluginService();
 		const manifest = {
+			manifest_version: 1,
 			id: 'test.plugin',
 			name: 'Test Plugin',
 			version: '1.0.0',
@@ -484,6 +485,6 @@ describe('services_PluginService', () => {
 		};
 
 		const error = service.describeIncompatibility(manifest as unknown as PluginManifest);
-		expect(error).toContain('missing the required "app_min_version" field');
+		expect(error).toContain('Invalid plugin manifest: Missing required field: app_min_version');
 	});
 });
