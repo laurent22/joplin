@@ -48,7 +48,7 @@ describe('htmlpack/index', () => {
 </html>`;
 
 		await writeFile(inputFile, inputHtml, 'utf8');
-		await expect(htmlpack(inputFile, outputFile)).resolves.not.toThrow();
+		await htmlpack(inputFile, outputFile);
 
 		const outputContent = await readFile(outputFile, 'utf8');
 		expect(outputContent).toContain('<p>Test</p>');
