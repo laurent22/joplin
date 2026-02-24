@@ -2,7 +2,7 @@ import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './t
 
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
-import { rtrimSlashes } from '../../path-utils';
+import { friendlySafeFilename, rtrimSlashes } from '../../path-utils';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import { join, resolve, normalize, sep, dirname, extname, basename, relative } from 'path';
 import Logger from '@joplin/utils/Logger';

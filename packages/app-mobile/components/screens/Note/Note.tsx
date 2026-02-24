@@ -245,12 +245,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			titleContainerWidth: 0,
 		};
 
-		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
-		if (initialCursorLocation) {
-			this.selection = { start: initialCursorLocation, end: initialCursorLocation };
-		}
 		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
-		this.lastBodyScroll = initialScroll;
+		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
+		// Ignore the initial scroll and cursor location when there's a note hash. The editor/viewer should jump to
+		// the hash, rather than the last position.
+		if (!props.noteHash) {
+			if (initialCursorLocation) {
+				this.selection = { start: initialCursorLocation, end: initialCursorLocation };
+			}
+			this.lastBodyScroll = initialScroll;
+		}
 
 		this.titleTextFieldRef = React.createRef();
 
