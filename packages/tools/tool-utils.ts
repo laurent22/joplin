@@ -323,14 +323,10 @@ export async function githubUsername(email: string, name: string) {
 
 	const oauthToken = await githubOauthToken();
 
+	// Do not fall back to name-based search as it can match the wrong user
+	// https://github.com/laurent22/joplin/issues/13852
 	const urlsToTry = [
 		`https://api.github.com/search/users?q=${encodeURI(email)}+in:email`,
-
-		// Note that this can fail if the email could not be found and the user
-		// shares a name with someone else. It's rare enough that we can leave
-		// it for now.
-		// https://github.com/laurent22/joplin/pull/5390
-		`https://api.github.com/search/users?q=user:${encodeURI(name)}`,
 	];
 
 	for (const url of urlsToTry) {

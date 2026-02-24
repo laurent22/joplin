@@ -10,7 +10,7 @@
 ## [server-v3.5.1](https://github.com/laurent22/joplin/releases/tag/server-v3.5.1) - 2025-12-03T11:56:31Z
 
 - New: Add support for DELETE_EXPIRED_SESSIONS_SCHEDULE to prevent auto-logout when using SAML login (ae289be)
-- Improved: Add LOG_LEVEL env var to control logging verbosity (#13503) (#13147 by [@bartolomeo](https://github.com/bartolomeo))
+- Improved: Add LOG_LEVEL env var to control logging verbosity (#13503) (#13147 by Bartolomeo)
 - Improved: Database: Adjust connection pool configuration, make connection pool size configurable (#13681 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
 - Improved: Enable publish and share notebook for SAML login (defe36b)
 - Improved: Improve SAML login error handling and add doc regarding email and displayName attributes (98effef)
