@@ -139,13 +139,23 @@ const createRandomNumberGenerators = (config: RandomConfig): RandomNumberGenerat
 	};
 };
 
+interface ExtendedFuzzContext extends FuzzContext {
+	setCurrentStep(step: number): void;
+}
+
 
 const createContext = (config: FuzzerConfig, random: RandomNumberGenerators, server: Server, profilesDirectory: string) => {
-	const fuzzContext: FuzzContext = {
+	let currentStep = 0;
+	const fuzzContext: ExtendedFuzzContext = {
 		serverUrl: server.url,
 		isJoplinCloud: config.isJoplinCloud,
 		enableE2ee: config.enableE2ee,
 		baseDir: profilesDirectory,
+
+		currentStep: () => currentStep,
+		setCurrentStep: (step: number) => {
+			currentStep = step;
+		},
 
 		execApi: server.execApi.bind(server),
 		randInt: (a, b) => random.generalRandom.nextInRange(a, b),
@@ -172,7 +182,7 @@ export default class Fuzzer {
 		private clients_: ClientPool,
 		private server_: Server,
 		private actionRunner_: ActionRunner,
-		private context_: FuzzContext,
+		private context_: ExtendedFuzzContext,
 	) {
 	}
 
@@ -338,6 +348,9 @@ export default class Fuzzer {
 			this.server_.assertCanUseSnapshots();
 		}
 
+		// Set the step to 0 during setup:
+		this.context_.setCurrentStep(0);
+
 		if (this.state_.currentStep <= 0) {
 			logger.info('Starting setup:');
 			await this.actionRunner_.doActions(this.config_.setupActions);
@@ -353,6 +366,7 @@ export default class Fuzzer {
 			stepIndex++
 		) {
 			this.state_.currentStep = stepIndex;
+			this.context_.setCurrentStep(stepIndex);
 
 			const client = this.clients_.randomClient();
 			this.actionRunner_.switchClient(client);

@@ -1150,11 +1150,7 @@ class Client implements ActionableClient {
 
 				output.push(`id: ${id} (${itemTitle(id)})`);
 				if (log.length > 0) {
-					output.push(
-						log
-							.map(item => `\t${item.source}: ${item.action}`)
-							.join('\n'),
-					);
+					output.push(`\t${hangingIndent(log, '\t')}`);
 				} else {
 					output.push('\tNo history found');
 				}

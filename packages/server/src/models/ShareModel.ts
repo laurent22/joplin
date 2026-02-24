@@ -319,8 +319,15 @@ export default class ShareModel extends BaseModel<Share> {
 			for (const share of shares) {
 				const realShareItemCount = await this.itemCountByShareId(share.id);
 				const shareItemCountPerUser = await this.itemCountByShareIdPerUser(share.id);
+				const shareParticipants = await this.allShareUserIds(share);
 
 				for (const row of shareItemCountPerUser) {
+					if (row.item_count > 0 && !shareParticipants.includes(row.user_id)) {
+						logger.warn(`checkForMissingUserItems: User ${row.user_id} has items but is not authorized for share ${share.id}. Cleaning up.`);
+						await this.models().userItem().deleteByShareAndUserId(share.id, row.user_id);
+						continue;
+					}
+
 					if (row.item_count < realShareItemCount) {
 						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}`);
 						await this.createSharedFolderUserItems(share.id, row.user_id);

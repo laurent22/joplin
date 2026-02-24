@@ -13,6 +13,8 @@ export interface FuzzContext {
 	enableE2ee: boolean;
 	baseDir: string;
 
+	currentStep(): number;
+
 	randInt: (low: number, high: number)=> number;
 	randomString: (targetLength: number)=> string;
 	randomId: ()=> string;
