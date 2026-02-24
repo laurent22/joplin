@@ -251,4 +251,51 @@ describe('ShareModel', () => {
 		});
 		expect(await getUser2UserItems()).toHaveLength(0);
 	});
+
+	test('should correct owner_id when removing an item from a share', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		await createItemTree(session1.user_id, '', {
+			'000000000000000000000000000000F1': {
+			},
+		});
+		await createItemTree(session2.user_id, '', {
+			'000000000000000000000000000000F2': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		let shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+		let note = await models().item().loadByJopId(session2.user_id, '00000000000000000000000000000001');
+		expect(shareRoot).toBeTruthy();
+		expect(note.owner_id).toBe(session2.user_id);
+
+		const { share, shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+		shareRoot = await updateItemShareId(session1, shareRoot.id, share.id);
+		await models().share().updateSharedItems3();
+
+
+		// Moving the note into the share should not change the owner
+		// (it may make sense to change this behavior in the future)
+		note = await updateItemShareId(session1, note.id, share.id);
+		// NOTE! It seems that currently, the owner_id is updated when moving an item into a share
+		expect((await models().item().load(note.id)).owner_id).toBe(session1.user_id);
+		note = await models().item().saveForUser(session2.user_id, {
+			...note,
+			jop_parent_id: '000000000000000000000000000000F1',
+		});
+
+		await models().share().updateSharedItems3();
+		note = await models().item().load(note.id);
+		expect(note.owner_id).toBe(session2.user_id);
+
+		// Removing the note's owner from the share should change the note's owner ID
+		await models().shareUser().delete(shareUser.id);
+
+		await models().share().updateSharedItems3();
+		note = await models().item().load(note.id);
+		expect(note.owner_id).toBe(session1.user_id);
+	});
 });

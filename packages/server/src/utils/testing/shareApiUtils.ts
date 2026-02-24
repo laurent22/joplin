@@ -83,7 +83,7 @@ export const updateItemShareId = async (session: Session, itemId: Uuid, shareId:
 	const item = await models().item().load(itemId);
 	const joplinItem = await models().item().loadAsJoplinItem<FolderEntity|NoteEntity>(itemId);
 
-	await updateItem(session.id, `root:/${item.name}:`, await serializeJoplinItem({
+	return await updateItem(session.id, `root:/${item.name}:`, await serializeJoplinItem({
 		...joplinItem,
 		share_id: shareId,
 	}));
