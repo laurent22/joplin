@@ -275,23 +275,21 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleDeleted = async (change: Change, item: Item|null, share: Share|null) => {
-			// On deletion, we check for extra user_items entries for items that still exist.
-			// These user_items can be created by race conditions between updateSharedItems3
-			// and logic for removing users from a share.
+			// On deletion, we check for extra user_items entries and incorrect ownership for
+			// items that still exist:
+			// - Unexpected user_items can be created by race conditions between updateSharedItems3
+			//   and logic for removing users from a share.
+			// - Outdated owner_id information can be caused by moving an item into a share,
+			//   then removing the item's original owner from the share.
 			//
-			// For now, only check the case where:
-			// 1. the item exists, and thus the user_items entry could allow access to the item
-			// 2. the item was most likely shared.
-			//
+			// For now, only check the case where  the item exists, and thus the user_items entry could allow access to the item
 			if (!item) return;
-			// For performance: Skip deletions not associated with shared items:
-			const deletedForOwner = item.owner_id === change.user_id;
-			if (!deletedForOwner && !item.jop_share_id) return;
+
+			perfTimer.push('handleDeleted');
 
 			// If the userItem exists, the user still has access to the item, despite the deletion change:
-			const userItem = await this.models().userItem().byUserAndItemId(change.user_id, change.item_id);
+			let userItem = await this.models().userItem().byUserAndItemId(change.user_id, change.item_id);
 			if (userItem) {
-				perfTimer.push('handleDeleted');
 
 				const isShareMember = async () => {
 					if (!share) return false;
@@ -307,10 +305,44 @@ export default class ShareModel extends BaseModel<Share> {
 					// Delete by the UserItem's ID to avoid race conditions. If a new user item is created for the same
 					// (user, item) pair (perhaps after removing the original), it should not be deleted by this task:
 					await this.models().userItem().deleteByUserItemIds([userItem.id]);
+					userItem = null;
 				}
 
-				perfTimer.pop();
 			}
+
+			// If an item was deleted for the owner, and the owner no longer has access, the item should now be owned by
+			// a different user:
+			const deletedForOwner = item.owner_id === change.user_id;
+			if (deletedForOwner && !userItem) {
+				let newOwnerId = share?.owner_id;
+				if (!newOwnerId) {
+					const userItems = await this.models().userItem().byItemIds([item.id]);
+					if (userItems.length) {
+						newOwnerId = userItems[0].user_id;
+					}
+				}
+
+				if (!newOwnerId) {
+					logger.warn('Item', item.id, 'deleted for owner', item.owner_id, 'and still exists, but no users have access.');
+				} else {
+					try {
+						await this.models().item().saveForUser(newOwnerId, {
+							...item,
+							owner_id: newOwnerId,
+						}, { isNew: false });
+					} catch (error) {
+						// Guard against a potential race condition: Handle the case where the item was deleted for all users
+						// during the share update process:
+						if (error instanceof ErrorBadRequest) {
+							logger.warn('handleDeleted: Unable to update owner_id on item', item.id, error);
+						} else {
+							throw error;
+						}
+					}
+				}
+			}
+
+			perfTimer.pop();
 		};
 
 		// This function add any missing item to a user's collection. Normally

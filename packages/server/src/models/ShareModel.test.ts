@@ -251,4 +251,46 @@ describe('ShareModel', () => {
 		});
 		expect(await getUser2UserItems()).toHaveLength(0);
 	});
+
+	test('should update owner_id when adding an item to a share', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		await createItemTree(session1.user_id, '', {
+			'000000000000000000000000000000F1': {
+			},
+		});
+		await createItemTree(session2.user_id, '', {
+			'000000000000000000000000000000F2': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+
+		// Note should initially be owned by user 2
+		let note = await models().item().loadByJopId(session2.user_id, '00000000000000000000000000000001');
+		expect(note.owner_id).toBe(session2.user_id);
+
+		const { share, shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+		await updateItemShareId(session1, shareRoot.id, share.id);
+		await models().share().updateSharedItems3();
+
+		// Changing the note's share ID and parent should not change the owner ID
+		note = await updateItemShareId(session2, note.id, share.id);
+		note = await models().item().saveForUser(session1.user_id, {
+			...note,
+			jop_parent_id: '000000000000000000000000000000F1',
+		});
+		expect(note.owner_id).toBe(session2.user_id);
+
+		// Removing the note's owner from the share should change the owner ID
+		await models().shareUser().delete(shareUser.id);
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		expect(updatedNote.owner_id).not.toBe(session2.user_id);
+		expect(updatedNote.owner_id).toBe(session1.user_id);
+	});
 });
