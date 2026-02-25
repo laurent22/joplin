@@ -11,10 +11,10 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix --ignore-pattern public/**",
     "format": "prettier --write .",
     "fix": "npm run format && npm run lint:fix",
-    "mcp:dev": "ts-node-esm ./mcp/server/index.ts",
-    "mcp:client": "ts-node-esm ./mcp/client/index.ts",
-    "mcp:server": "ts-node-esm ./mcp/server/index.ts",
-    "agent": "ts-node-esm mcp/client/LangChainClient.ts"
+    "mcp:dev": "tsx ./mcp/server/index.ts",
+    "mcp:client": "tsx ./mcp/client/index.ts",
+    "mcp:server": "tsx ./mcp/server/index.ts",
+    "agent": "tsx mcp/client/LangChainClient.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
@@ -59,6 +59,7 @@
     "prettier": "^3.4.2",
     "tailwindcss": "^4",
     "ts-node": "^10.9.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
