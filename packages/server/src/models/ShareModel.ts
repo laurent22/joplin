@@ -321,7 +321,7 @@ export default class ShareModel extends BaseModel<Share> {
 				let newOwnerId;
 				// Check that the share owner still has access: Handle the case where the item's parent share
 				// is changed after the item and share have been loaded.
-				if (share && usersWithAccess.includes(share?.owner_id)) {
+				if (share && usersWithAccess.includes(share.owner_id)) {
 					// Case where the item was moved to a different share or the original owner was removed from the
 					// share:
 					newOwnerId = share.owner_id;
