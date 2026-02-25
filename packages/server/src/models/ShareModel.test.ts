@@ -259,7 +259,7 @@ describe('ShareModel', () => {
 		expect(await getUser2UserItems()).toHaveLength(0);
 	});
 
-	test('should update owner_id when adding an item to a share', async () => {
+	test('should update owner_id when the original owner no longer has access', async () => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2, user: user2 } = await createUserAndSession(2);
 
