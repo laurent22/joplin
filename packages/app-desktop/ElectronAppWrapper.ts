@@ -78,6 +78,20 @@ export default class ElectronAppWrapper {
 	private ipcLogger_: Logger;
 	private ipcLoggerFilePath_: string;
 
+	private showMainWindow_() {
+		const w = this.win_;
+		if (!w) return;
+
+		// On macOS, app-level hidden state can prevent window-only show from working
+		// after Cmd+W + app switch.
+		if (process.platform === 'darwin') this.electronApp_.show();
+
+		if (w.isMinimized()) w.restore();
+		w.show();
+		// eslint-disable-next-line no-restricted-properties
+		w.focus();
+	}
+
 	public constructor(electronApp: App, { env, profilePath, isDebugMode, initialCallbackUrl, isEndToEndTesting }: Options) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
@@ -423,10 +437,10 @@ export default class ElectronAppWrapper {
 
 					if (w.isFullScreen()) {
 						// leave fullscreen, then hide
-						w.once('leave-full-screen', () => w.hide());
+						w.once('leave-full-screen', () => this.hide());
 						w.setFullScreen(false);
 					} else {
-						w.hide();
+						this.hide();
 					}
 				}
 			} else {
@@ -884,7 +898,13 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('activate', () => {
-			this.win_.show();
+			this.showMainWindow_();
+		});
+
+		// macOS can bring app back via Cmd+Tab without always following the same
+		// activation path as dock clicks.
+		this.electronApp_.on('did-become-active', () => {
+			this.showMainWindow_();
 		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
