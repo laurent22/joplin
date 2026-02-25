@@ -327,7 +327,7 @@ export default class ShareModel extends BaseModel<Share> {
 				} else {
 					try {
 						await this.models().item().saveForUser(newOwnerId, {
-							...item,
+							id: item.id,
 							owner_id: newOwnerId,
 						}, { isNew: false });
 					} catch (error) {
