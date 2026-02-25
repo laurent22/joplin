@@ -18,7 +18,8 @@ describe('services/DecryptionWorker', () => {
 		]);
 
 		for (const result of results) {
-			expect(result).not.toBeNull();
+			expect(result === null).toBe(false);
+			expect(result === undefined).toBe(false);
 			expect(result).toHaveProperty('error');
 		}
 	});
