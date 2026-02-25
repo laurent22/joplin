@@ -314,12 +314,24 @@ export default class ShareModel extends BaseModel<Share> {
 			// a different user:
 			const deletedForOwner = item.owner_id === change.user_id;
 			if (deletedForOwner && !userItem) {
-				let newOwnerId = share?.owner_id;
-				if (!newOwnerId) {
-					const userItems = await this.models().userItem().byItemIds([item.id]);
-					if (userItems.length) {
-						newOwnerId = userItems[0].user_id;
-					}
+				const userItems = await this.models().userItem().byItemIds([item.id]);
+				const usersWithAccess = userItems.map(item => item.user_id);
+
+				let newOwnerId;
+				// Check that the share owner still has access: Make race conditions related to changing shares
+				// or unsharing while the maintenance task is running.
+				if (share && usersWithAccess.includes(share?.owner_id)) {
+					// Case where the item was moved to a different share or the original owner was removed from the
+					// share:
+					newOwnerId = share.owner_id;
+				} else if (usersWithAccess.length === 1) {
+					// Case where the item was moved out of a share by a user that didn't previously own the item,
+					// or the item's share was deleted:
+					newOwnerId = usersWithAccess[0];
+				} else {
+					// May happen due to a race condition related to moving an item between shares
+					// while processing the item's shares/deletions.
+					logger.warn('handleDeleted: Unable to accurately fix owner_id for item', item.id, 'in share', share, 'and users with access', usersWithAccess);
 				}
 
 				if (!newOwnerId) {
