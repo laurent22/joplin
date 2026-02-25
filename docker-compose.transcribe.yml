@@ -1,27 +1,21 @@
 # Standalone docker-compose for Joplin Transcribe
 #
-# Usage:
-#   1. Download models to ./data/models/
-#   2. Copy .env-transcribe-sample to .env-transcribe and set API_KEY
-#   3. Run: docker compose -f docker-compose.transcribe.yml up
-#
-# The service uses SQLite for the queue (no external database needed).
+# Uses SQLite for the queue (no external database needed).
 # Data is stored in a named volume for proper permissions.
 #
-# USAGE
+# Usage:
 #
-# # Download models
+#   1. Download models:
+#      mkdir -p ./data/models
+#      wget -O ./data/models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
+#      wget -O ./data/models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
 #
-# mkdir -p ./data/models
-# wget -O ./data/models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
-# wget -O ./data/models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
+#   2. Configure:
+#      cp .env-transcribe-sample .env
+#      # Edit .env and set API_KEY
 #
-# # Configure
-# cp .env-transcribe-sample .env
-# # Edit .env and set API_KEY
-#
-# # Run
-# docker compose -f docker-compose.transcribe.yml up
+#   3. Run:
+#      docker compose -f docker-compose.transcribe.yml up
 
 volumes:
     transcribe-data:

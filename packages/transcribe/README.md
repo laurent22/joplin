@@ -8,14 +8,14 @@ The transcribe server embeds the llama.cpp binary directly in the Docker image. 
 
 ```shell
 mkdir -p ./data/models
-chmod 777 ./data
+chmod 755 ./data
 wget -O ./data/models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
 wget -O ./data/models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
 ```
 
 ### 2. Configure environment
 
-1. Copy `/.env-transcribe-sample` to your Docker configuration directory.
+1. Copy `.env-transcribe-sample` to your Docker configuration directory.
 2. Rename it to `.env-transcribe`.
 3. Set `API_KEY` to a secure value.
 

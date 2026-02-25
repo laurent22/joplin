@@ -66,11 +66,19 @@ export function parseEnv(rawEnv: Record<string, string | undefined>): ComputedEn
 	}
 
 	// Derive paths from DATA_DIR
+	let queueDatabaseName: string;
+	if (output.QUEUE_DRIVER === 'sqlite') {
+		queueDatabaseName = `${output.DATA_DIR}/queue.sqlite3`;
+	} else {
+		// For PostgreSQL, use env var or default to 'transcribe'
+		queueDatabaseName = rawEnv['QUEUE_DATABASE_NAME'] || 'transcribe';
+	}
+
 	const computed: ComputedEnvVariables = {
 		...output,
 		HTR_CLI_IMAGES_FOLDER: `${output.DATA_DIR}/images`,
 		HTR_CLI_MODELS_FOLDER: `${output.DATA_DIR}/models`,
-		QUEUE_DATABASE_NAME: output.QUEUE_DRIVER === 'sqlite' ? `${output.DATA_DIR}/queue.sqlite3` : '',
+		QUEUE_DATABASE_NAME: queueDatabaseName,
 	};
 
 	return computed;
@@ -78,13 +86,16 @@ export function parseEnv(rawEnv: Record<string, string | undefined>): ComputedEn
 
 // Should always be called after require('dotenv').config()
 const env = (): ComputedEnvVariables => {
-	return parseEnv(
-		Object.keys(defaultEnvValues)
-			.reduce((env: Record<string, string | undefined>, key) => {
-				env[key] = process.env[key];
-				return env;
-			}, {}),
-	);
+	const rawEnv = Object.keys(defaultEnvValues)
+		.reduce((env: Record<string, string | undefined>, key) => {
+			env[key] = process.env[key];
+			return env;
+		}, {} as Record<string, string | undefined>);
+
+	// Also include QUEUE_DATABASE_NAME for PostgreSQL driver
+	rawEnv['QUEUE_DATABASE_NAME'] = process.env['QUEUE_DATABASE_NAME'];
+
+	return parseEnv(rawEnv);
 };
 
 export default env;
