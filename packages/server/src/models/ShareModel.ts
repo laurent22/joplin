@@ -332,7 +332,7 @@ export default class ShareModel extends BaseModel<Share> {
 				} else {
 					// May happen due to a race condition related to moving an item between shares
 					// while processing the item's shares/deletions.
-					logger.warn('handleDeleted: Unable to accurately fix owner_id for item', item.id, 'in share', share, 'and users with access', usersWithAccess);
+					logger.warn('handleDeleted: Unable to accurately fix owner_id for item', item.id, 'in share', share?.id, 'and users with access', usersWithAccess);
 				}
 
 				if (!newOwnerId) {
