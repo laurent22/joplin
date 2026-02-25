@@ -282,7 +282,8 @@ export default class ShareModel extends BaseModel<Share> {
 			// - Outdated owner_id information can be caused by moving an item into a share,
 			//   then removing the item's original owner from the share.
 			//
-			// For now, only check the case where  the item exists, and thus the user_items entry could allow access to the item
+			// For now, only check the case where  the item exists, and thus the user_items entry
+			// could allow access to the item.
 			if (!item) return;
 
 			perfTimer.push('handleDeleted');
