@@ -31,7 +31,7 @@ const packageInfo = {
 	},
 };
 
-describe('getPluginLists', () => {
+describe('versionInfo', () => {
 
 	beforeAll(() => {
 		(reg.db as jest.Mock).mockReturnValue(mockedDb);
@@ -114,17 +114,18 @@ describe('getPluginLists', () => {
 
 		const v = versionInfo(packageInfo, plugins);
 
-		const body = '\n';
+		const pluginMessage = [];
 		for (let i = 1; i <= 21; i++) {
-			body.concat(`\nPlugin${i}: 1`);
+			pluginMessage.push(`Plugin${i}: 1`);
 		}
-		expect(v.body).toMatch(new RegExp(body));
+		// Plugin order should be determined by locale:
+		pluginMessage.sort(Intl.Collator().compare);
 
-		const message = '\n';
-		for (let i = 1; i <= 20; i++) {
-			message.concat(`\nPlugin${i}: 1`);
-		}
-		message.concat('\n...');
-		expect(v.message).toMatch(new RegExp(message));
+		// The body should contain the full plugin list
+		expect(v.body).toContain(pluginMessage.join('\n'));
+
+		// The message should only include the first 20.
+		const nonEllipsizedEntries = pluginMessage.slice(0, 20);
+		expect(v.message).toContain(`${nonEllipsizedEntries.join('\n')}\n...`);
 	});
 });

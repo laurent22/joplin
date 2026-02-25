@@ -708,12 +708,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
-		if (this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
+		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
+		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
 			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
-			if (!editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime) {
+			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
+
+			if (explicitReloadRequired) {
 				void shared.reloadNote(this);
 				this.refreshKey = this.props.editorNoteReloadTimeRequest;
+			}
 
+			if (explicitReloadRequired || (editorPlugin && editorPluginIdsChanged)) {
 				// Clear the undo / redo state, as undo / redo steps wont be in sync with the current content after the note editor has been refreshed
 				if (!this.useEditorBeta()) {
 					void this.undoRedoService_.reset();
