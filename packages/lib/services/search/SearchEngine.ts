@@ -45,11 +45,14 @@ export interface ProcessResultsRow {
 	id: string;
 	parent_id: string;
 	title: string;
-	offsets: string;
+	offsets?: string;
 	item_id: string;
 	user_updated_time: number;
 	user_created_time: number;
-	matchinfo: Buffer;
+	matchinfo?: Buffer;
+	rank?: number;
+	title_matched?: number;
+	body_matched?: number;
 	item_type?: ModelType;
 	fields?: string[];
 	weight?: number;
@@ -83,9 +86,9 @@ export interface ParsedQuery {
 }
 
 export default class SearchEngine {
-
 	public static instance_: SearchEngine = null;
-	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
+	public static relevantFields =
+		'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
 	public static SEARCH_TYPE_AUTO = SearchType.Auto;
 	public static SEARCH_TYPE_BASIC = SearchType.Basic;
 	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
@@ -137,8 +140,10 @@ export default class SearchEngine {
 	}
 
 	private async doInitialNoteIndexing_() {
-		const notes = await this.db().selectAll<NoteEntity>('SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0');
-		const noteIds = notes.map(n => n.id);
+		const notes = await this.db().selectAll<NoteEntity>(
+			'SELECT id FROM notes WHERE is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0',
+		);
+		const noteIds = notes.map((n) => n.id);
 
 		const lastChangeId = await ItemChange.lastChangeId();
 
@@ -150,17 +155,34 @@ export default class SearchEngine {
 			const notes = await Note.modelSelectAll(`
 				SELECT ${SearchEngine.relevantFields}
 				FROM notes
-				WHERE id IN (${BaseModel.escapeIdsForSql(currentIds)}) AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`);
+				WHERE id IN (${BaseModel.escapeIdsForSql(
+		currentIds,
+	)}) AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`);
 			const queries = [];
 
 			for (let i = 0; i < notes.length; i++) {
 				const note = notes[i];
 				const n = this.normalizeNote_(note);
-				queries.push({ sql: `
+				queries.push({
+					sql: `
 				INSERT INTO notes_normalized(${SearchEngine.relevantFields})
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] },
-				);
+					params: [
+						n.id,
+						n.title,
+						n.body,
+						n.user_created_time,
+						n.user_updated_time,
+						n.is_todo,
+						n.todo_completed,
+						n.todo_due,
+						n.parent_id,
+						n.latitude,
+						n.longitude,
+						n.altitude,
+						n.source_url,
+					],
+				});
 			}
 
 			await this.db().transactionExecBatch(queries);
@@ -176,7 +198,10 @@ export default class SearchEngine {
 			try {
 				await this.syncTables();
 			} catch (error) {
-				this.logger().error('SearchEngine::scheduleSyncTables: Error while syncing tables:', error);
+				this.logger().error(
+					'SearchEngine::scheduleSyncTables: Error while syncing tables:',
+					error,
+				);
 			}
 			this.scheduleSyncTablesIID_ = null;
 		}, 10000);
@@ -232,28 +257,54 @@ export default class SearchEngine {
 
 				const queries = [];
 
-				const noteIds = changes.map(a => a.item_id);
+				const noteIds = changes.map((a) => a.item_id);
 				const notes = await Note.modelSelectAll(`
 					SELECT ${SearchEngine.relevantFields}
-					FROM notes WHERE id IN (${Note.escapeIdsForSql(noteIds)}) AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`,
-				);
+					FROM notes WHERE id IN (${Note.escapeIdsForSql(
+		noteIds,
+	)}) AND is_conflict = 0 AND encryption_applied = 0 AND deleted_time = 0`);
 
 				for (let i = 0; i < changes.length; i++) {
 					const change = changes[i];
 
-					if (change.type === ItemChange.TYPE_CREATE || change.type === ItemChange.TYPE_UPDATE) {
-						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+					if (
+						change.type === ItemChange.TYPE_CREATE ||
+            change.type === ItemChange.TYPE_UPDATE
+					) {
+						queries.push({
+							sql: 'DELETE FROM notes_normalized WHERE id = ?',
+							params: [change.item_id],
+						});
 						const note = this.noteById_(notes, change.item_id);
 						if (note) {
 							const n = this.normalizeNote_(note);
-							queries.push({ sql: `
+							queries.push({
+								sql: `
 							INSERT INTO notes_normalized(${SearchEngine.relevantFields})
 							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] });
+								params: [
+									change.item_id,
+									n.title,
+									n.body,
+									n.user_created_time,
+									n.user_updated_time,
+									n.is_todo,
+									n.todo_completed,
+									n.todo_due,
+									n.parent_id,
+									n.latitude,
+									n.longitude,
+									n.altitude,
+									n.source_url,
+								],
+							});
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {
-						queries.push({ sql: 'DELETE FROM notes_normalized WHERE id = ?', params: [change.item_id] });
+						queries.push({
+							sql: 'DELETE FROM notes_normalized WHERE id = ?',
+							params: [change.item_id],
+						});
 						report.deleted++;
 					} else {
 						throw new Error(`Invalid change type: ${change.type}`);
@@ -267,7 +318,10 @@ export default class SearchEngine {
 				await Setting.saveAll();
 			}
 		} catch (error) {
-			this.logger().error('SearchEngine: Error while processing changes:', error);
+			this.logger().error(
+				'SearchEngine: Error while processing changes:',
+				error,
+			);
 		}
 
 		await ItemChangeUtils.deleteProcessedChanges();
@@ -277,7 +331,11 @@ export default class SearchEngine {
 			updated_time: number;
 		}
 
-		const lastProcessedResource: LastProcessedResource = !Setting.value('searchEngine.lastProcessedResource') ? { updated_time: 0, id: '' } : JSON.parse(Setting.value('searchEngine.lastProcessedResource'));
+		const lastProcessedResource: LastProcessedResource = !Setting.value(
+			'searchEngine.lastProcessedResource',
+		)
+			? { updated_time: 0, id: '' }
+			: JSON.parse(Setting.value('searchEngine.lastProcessedResource'));
 
 		this.logger().info('Updating items_normalized from', lastProcessedResource);
 
@@ -299,10 +357,7 @@ export default class SearchEngine {
 				for (const resource of resources) {
 					queries.push({
 						sql: 'DELETE FROM items_normalized WHERE item_id = ? AND item_type = ?',
-						params: [
-							resource.id,
-							ModelType.Resource,
-						],
+						params: [resource.id, ModelType.Resource],
 					});
 
 					queries.push({
@@ -325,14 +380,27 @@ export default class SearchEngine {
 				}
 
 				await this.db().transactionExecBatch(queries);
-				Setting.setValue('searchEngine.lastProcessedResource', JSON.stringify(lastProcessedResource));
+				Setting.setValue(
+					'searchEngine.lastProcessedResource',
+					JSON.stringify(lastProcessedResource),
+				);
 				await Setting.saveAll();
 			}
 		} catch (error) {
-			this.logger().error('SearchEngine: Error while processing resources:', error);
+			this.logger().error(
+				'SearchEngine: Error while processing resources:',
+				error,
+			);
 		}
 
-		this.logger().info(sprintf('SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d', Date.now() - startTime, report.inserted, report.deleted));
+		this.logger().info(
+			sprintf(
+				'SearchEngine: Updated FTS table in %dms. Inserted: %d. Deleted: %d',
+				Date.now() - startTime,
+				report.inserted,
+				report.deleted,
+			),
+		);
 
 		this.isIndexing_ = false;
 		syncTask.onEnd();
@@ -355,7 +423,8 @@ export default class SearchEngine {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private fieldNamesFromOffsets_(offsets: any[]) {
-		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
+		const notesNormalizedFieldNames =
+      this.db().tableFieldNames('notes_normalized');
 		const occurrenceCount = Math.floor(offsets.length / 4);
 		const output: string[] = [];
 		for (let i = 0; i < occurrenceCount; i++) {
@@ -384,7 +453,7 @@ export default class SearchEngine {
 
 		if (rows.length === 0) return;
 
-		const matchInfo = rows.map(row => new Uint32Array(row.matchinfo.buffer));
+		const matchInfo = rows.map((row) => new Uint32Array(row.matchinfo.buffer));
 		const generalInfo = matchInfo[0];
 
 		const K1 = 1.2;
@@ -402,8 +471,8 @@ export default class SearchEngine {
 		const avgBodyTokens = generalInfo[5];
 		const avgTokens = [null, avgTitleTokens, avgBodyTokens]; // we only need cols 1 and 2
 
-		const numTitleTokens = matchInfo.map(m => m[4 + numColumns]); // l
-		const numBodyTokens = matchInfo.map(m => m[5 + numColumns]);
+		const numTitleTokens = matchInfo.map((m) => m[4 + numColumns]); // l
+		const numBodyTokens = matchInfo.map((m) => m[5 + numColumns]);
 		const numTokens = [null, numTitleTokens, numBodyTokens];
 
 		// In byte size, we have for notes_normalized:
@@ -413,37 +482,35 @@ export default class SearchEngine {
 		// n 1
 		// a 12
 		// l 12
-		const X = matchInfo.map(m => m.slice(1 + 1 + 1 + numColumns + numColumns)); // x
+		const X = matchInfo.map((m) =>
+			m.slice(1 + 1 + 1 + numColumns + numColumns),
+		); // x
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const hitsThisRow = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
+		const hitsThisRow = (array: any, c: number, p: number) =>
+			array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const docsWithHits = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
+		const docsWithHits = (array: any, c: number, p: number) =>
+			array[3 * (c + p * numColumns) + 2];
 
-		const IDF = (n: number, N: number) => Math.max(Math.log(((N - n + 0.5) / (n + 0.5)) + 1), 0);
+		const IDF = (n: number, N: number) =>
+			Math.max(Math.log((N - n + 0.5) / (n + 0.5) + 1), 0);
 
 		// https://en.wikipedia.org/wiki/Okapi_BM25
-		const BM25 = (idf: number, freq: number, numTokens: number, avgTokens: number) => {
+		const BM25 = (
+			idf: number,
+			freq: number,
+			numTokens: number,
+			avgTokens: number,
+		) => {
 			if (avgTokens === 0) {
 				return 0; // To prevent division by zero
 			}
-			return idf * (freq * (K1 + 1)) / (freq + K1 * (1 - B + B * (numTokens / avgTokens)));
-		};
-
-		const msSinceEpoch = Math.round(new Date().getTime());
-		const msPerDay = 86400000;
-		const weightForDaysSinceLastUpdate = (row: ProcessResultsRow) => {
-			// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
-			// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
-			// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
-			if (!row.user_updated_time) {
-				return 0;
-			}
-
-			const alpha = 200;
-			const daysSinceLastUpdate = (msSinceEpoch - row.user_updated_time) / msPerDay;
-			return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));
+			return (
+				(idf * (freq * (K1 + 1))) /
+        (freq + K1 * (1 - B + B * (numTokens / avgTokens)))
+			);
 		};
 
 		for (let i = 0; i < rows.length; i++) {
@@ -451,23 +518,62 @@ export default class SearchEngine {
 			row.weight = 0;
 			for (let j = 0; j < numPhrases; j++) {
 				// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-				columns.forEach(column => {
+				columns.forEach((column) => {
 					const rowsWithHits = docsWithHits(X[i], column, j);
 					const frequencyHits = hitsThisRow(X[i], column, j);
 					const idf = IDF(rowsWithHits, numRows);
 
-					row.weight += BM25(idf, frequencyHits, numTokens[column][i], avgTokens[column]);
+					row.weight += BM25(
+						idf,
+						frequencyHits,
+						numTokens[column][i],
+						avgTokens[column],
+					);
 				});
 			}
 
-			row.weight += weightForDaysSinceLastUpdate(row);
+			row.weight += this.weightForDaysSinceLastUpdate_(row);
 		}
+	}
+
+	private weightForDaysSinceLastUpdate_(row: ProcessResultsRow) {
+		// BM25 weights typically range 0-10, and last updated date should weight similarly, though prioritizing recency logarithmically.
+		// An alpha of 200 ensures matches in the last week will show up front (11.59) and often so for matches within 2 weeks (5.99),
+		// but is much less of a factor at 30 days (2.84) or very little after 90 days (0.95), focusing mostly on content at that point.
+		if (!row.user_updated_time) {
+			return 0;
+		}
+
+		const msSinceEpoch = Math.round(new Date().getTime());
+		const msPerDay = 86400000;
+		const alpha = 200;
+		const daysSinceLastUpdate =
+      (msSinceEpoch - row.user_updated_time) / msPerDay;
+		return alpha * Math.log(1 + 1 / Math.max(daysSinceLastUpdate, 0.5));
+	}
+
+	private processFts5Results_(rows: ProcessResultsRow[]) {
+		for (let i = 0; i < rows.length; i++) {
+			const row = rows[i];
+			// FTS5 rank is negative BM25, so negate it
+			row.weight = -(row.rank || 0);
+			row.weight += this.weightForDaysSinceLastUpdate_(row);
+			row.fields = this.detectMatchedFieldsFts5_(row);
+		}
+	}
+
+	private detectMatchedFieldsFts5_(row: ProcessResultsRow): string[] {
+		const fields: string[] = [];
+		if (row.title_matched) fields.push('title');
+		if (row.body_matched) fields.push('body');
+		return fields;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private processBasicSearchResults_(rows: any[], parsedQuery: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map((term: any) => term.valueRegex || term.value) : [];
+		const valueRegexs = parsedQuery.keys.includes('_')
+			? parsedQuery.terms['_'].map((term: string | ComplexTerm) => (typeof term === 'string' ? term : (term.valueRegex || term.value)))
+			: [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
 
@@ -481,17 +587,24 @@ export default class SearchEngine {
 				body: !isOnlyTitle,
 			};
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			row.fields = Object.keys(matchedFields).filter((key: any) => matchedFields[key]);
+			row.fields = Object.keys(matchedFields).filter(
+				(key: string) => matchedFields[key],
+			);
 			row.weight = 0;
 			row.fuzziness = 0;
 		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(
+		rows: ProcessResultsRow[],
+		parsedQuery: ParsedQuery,
+		isBasicSearchResults = false,
+	) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
+		} else if (this.db().ftsVersion() >= 5) {
+			this.processFts5Results_(rows);
 		} else {
 			this.calculateWeightBM25_(rows);
 			for (let i = 0; i < rows.length; i++) {
@@ -531,7 +644,10 @@ export default class SearchEngine {
 
 		let regexString = pregQuote(term);
 		if (regexString[regexString.length - 1] === '*') {
-			regexString = `${regexString.substr(0, regexString.length - 2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
+			regexString =
+				`${regexString.substr(0, regexString.length - 2)}[^${pregQuote(
+					' \t\n\r,.,+-*?!={}<>|:"\'()[]',
+				)}]` + '*?';
 			// regexString = regexString.substr(0, regexString.length - 2) + '.*?';
 		}
 
@@ -539,8 +655,8 @@ export default class SearchEngine {
 	}
 
 	public async parseQuery(query: string): Promise<ParsedQuery> {
-
-		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
+		const trimQuotes = (str: string) =>
+			str.startsWith('"') ? str.substr(1, str.length - 2) : str;
 
 		let allTerms: Term[] = [];
 
@@ -554,11 +670,17 @@ export default class SearchEngine {
 			console.warn(error);
 		}
 
-		const textTerms = allTerms.filter(x => x.name === 'text' && !x.negated).map(x => trimQuotes(x.value));
-		const titleTerms = allTerms.filter(x => x.name === 'title' && !x.negated).map(x => trimQuotes(x.value));
-		const bodyTerms = allTerms.filter(x => x.name === 'body' && !x.negated).map(x => trimQuotes(x.value));
+		const textTerms = allTerms
+			.filter((x) => x.name === 'text' && !x.negated)
+			.map((x) => trimQuotes(x.value));
+		const titleTerms = allTerms
+			.filter((x) => x.name === 'title' && !x.negated)
+			.map((x) => trimQuotes(x.value));
+		const bodyTerms = allTerms
+			.filter((x) => x.name === 'body' && !x.negated)
+			.map((x) => trimQuotes(x.value));
 
-		const terms: Terms = { _: textTerms, 'title': titleTerms, 'body': bodyTerms };
+		const terms: Terms = { _: textTerms, title: titleTerms, body: bodyTerms };
 
 		// Filter terms:
 		// - Convert wildcards to regex
@@ -587,9 +709,18 @@ export default class SearchEngine {
 				}
 
 				if (term.indexOf('*') >= 0) {
-					terms[col][i] = { type: 'regex', value: term, scriptType: scriptType(term), valueRegex: this.queryTermToRegex(term) };
+					terms[col][i] = {
+						type: 'regex',
+						value: term,
+						scriptType: scriptType(term),
+						valueRegex: this.queryTermToRegex(term),
+					};
 				} else {
-					terms[col][i] = { type: 'text', value: term, scriptType: scriptType(term) };
+					terms[col][i] = {
+						type: 'text',
+						value: term,
+						scriptType: scriptType(term),
+					};
 				}
 			}
 
@@ -611,7 +742,7 @@ export default class SearchEngine {
 		// diacritics.
 		//
 
-		allTerms = allTerms.map(x => {
+		allTerms = allTerms.map((x) => {
 			if (x.name === 'text' || x.name === 'title' || x.name === 'body') {
 				return { ...x, value: this.normalizeText_(x.value) };
 			}
@@ -623,7 +754,7 @@ export default class SearchEngine {
 			keys: keys,
 			terms: terms, // text terms
 			allTerms: allTerms,
-			any: !!allTerms.find(term => term.name === 'any'),
+			any: !!allTerms.find((term) => term.name === 'any'),
 		};
 	}
 
@@ -664,7 +795,10 @@ export default class SearchEngine {
 			// We log additional information to help determine the cause of the issue.
 			//
 			// See https://discourse.joplinapp.org/t/search-not-working-on-ios/35754
-			this.logger().error(`Error while normalizing text for note ${note.id}:`, error);
+			this.logger().error(
+				`Error while normalizing text for note ${note.id}:`,
+				error,
+			);
 
 			// Unnormalized text can break the search engine, specifically NUL characters.
 			// Thus, we remove the text entirely.
@@ -685,7 +819,9 @@ export default class SearchEngine {
 			if ((parsedQuery.terms as any)[key].length === 0) continue;
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const term = (parsedQuery.terms as any)[key].map((x: Term) => x.value).join(' ');
+			const term = (parsedQuery.terms as any)[key]
+				.map((x: Term) => x.value)
+				.join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
@@ -696,8 +832,8 @@ export default class SearchEngine {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private determineSearchType_(query: string, preferredSearchType: any) {
-		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
-		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
+		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) { return SearchEngine.SEARCH_TYPE_BASIC; }
+		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) { return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT; }
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
@@ -710,7 +846,12 @@ export default class SearchEngine {
 			console.warn(error);
 		}
 
-		const textQuery = allTerms.filter(x => x.name === 'text' || x.name === 'title' || x.name === 'body').map(x => x.value).join(' ');
+		const textQuery = allTerms
+			.filter(
+				(x) => x.name === 'text' || x.name === 'title' || x.name === 'body',
+			)
+			.map((x) => x.value)
+			.join(' ');
 		const st = scriptType(textQuery);
 
 		if (!Setting.value('db.ftsEnabled')) {
@@ -725,7 +866,9 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
+	private async searchFromItemIds(
+		searchString: string,
+	): Promise<ProcessResultsRow[]> {
 		let itemId = '';
 
 		if (isCallbackUrl(searchString)) {
@@ -764,7 +907,10 @@ export default class SearchEngine {
 		return [];
 	}
 
-	public async search(searchString: string, options: SearchOptions = null): Promise<ProcessResultsRow[]> {
+	public async search(
+		searchString: string,
+		options: SearchOptions = null,
+	): Promise<ProcessResultsRow[]> {
 		if (!searchString) return [];
 
 		options = {
@@ -774,7 +920,10 @@ export default class SearchEngine {
 			...options,
 		};
 
-		const searchType = this.determineSearchType_(searchString, options.searchType);
+		const searchType = this.determineSearchType_(
+			searchString,
+			options.searchType,
+		);
 		const parsedQuery = await this.parseQuery(searchString);
 
 		let rows: ProcessResultsRow[] = [];
@@ -793,12 +942,14 @@ export default class SearchEngine {
 			// https://github.com/laurent22/joplin/issues/1075#issuecomment-459258856
 
 			if (options.appendWildCards) {
-				parsedQuery.allTerms = parsedQuery.allTerms.map(t => {
+				parsedQuery.allTerms = parsedQuery.allTerms.map((t) => {
 					if (t.name === 'text' && !t.wildcard) {
 						t = {
 							...t,
 							wildcard: true,
-							value: t.value.endsWith('"') ? `${t.value.substring(0, t.value.length - 1)}*"` : `${t.value}*`,
+							value: t.value.endsWith('"')
+								? `${t.value.substring(0, t.value.length - 1)}*"`
+								: `${t.value}*`,
 						};
 					}
 					return t;
@@ -806,13 +957,19 @@ export default class SearchEngine {
 			}
 
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
+			const ftsVersion = this.db().ftsVersion();
 			try {
-				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
-
+				const { query, params } = queryBuilder(
+					parsedQuery.allTerms,
+					useFts,
+					ftsVersion,
+				);
 				rows = await this.db().selectAll<ProcessResultsRow>(query, params);
-				const queryHasFilters = !!parsedQuery.allTerms.find(t => t.name !== 'text');
+				const queryHasFilters = !!parsedQuery.allTerms.find(
+					(t) => t.name !== 'text',
+				);
 
-				rows = rows.map(r => {
+				rows = rows.map((r) => {
 					return {
 						...r,
 						item_type: ModelType.Note,
@@ -820,34 +977,60 @@ export default class SearchEngine {
 				});
 
 				if (!queryHasFilters && Setting.value('ocr.searchInExtractedContent')) {
-					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
+					const toSearch = parsedQuery.allTerms.map((t) => t.value).join(' ');
 
 					let itemRows: ProcessResultsRow[] = [];
 
 					try {
-						itemRows = await this.db().selectAll<ProcessResultsRow>(`
-							SELECT
-								id,
-								title,
-								user_updated_time,
-								offsets(items_fts) AS offsets,
-								matchinfo(items_fts, 'pcnalx') AS matchinfo,
-								item_id,
-								item_type
-							FROM items_fts
-							WHERE title MATCH ? OR body MATCH ?
-						`, [toSearch, toSearch]);
+						if (ftsVersion >= 5) {
+							itemRows = await this.db().selectAll<ProcessResultsRow>(
+								`
+								SELECT
+									id,
+									title,
+									user_updated_time,
+									rank,
+									instr(highlight(items_fts, 1, X'1F', X'1E'), X'1F') AS title_matched,
+									instr(highlight(items_fts, 2, X'1F', X'1E'), X'1F') AS body_matched,
+									item_id,
+									item_type
+								FROM items_fts
+								WHERE items_fts MATCH ?
+							`,
+								[toSearch],
+							);
+						} else {
+							itemRows = await this.db().selectAll<ProcessResultsRow>(
+								`
+								SELECT
+									id,
+									title,
+									user_updated_time,
+									offsets(items_fts) AS offsets,
+									matchinfo(items_fts, 'pcnalx') AS matchinfo,
+									item_id,
+									item_type
+								FROM items_fts
+								WHERE title MATCH ? OR body MATCH ?
+							`,
+								[toSearch, toSearch],
+							);
+						}
 					} catch (error) {
 						// Android <= 25 doesn't support the following syntax:
 						//    WHERE title MATCH ? OR body MATCH ?
 						// Thus, we skip resource search on these devices.
-						if (!error.message?.includes?.('unable to use function MATCH in the requested context')) {
+						if (
+							!error.message?.includes?.(
+								'unable to use function MATCH in the requested context',
+							)
+						) {
 							throw error;
 						}
 					}
 
 					const resourcesToNotes = await NoteResource.associatedResourceNotes(
-						itemRows.map(r => r.item_id),
+						itemRows.map((r) => r.item_id),
 						{
 							fields: ['note_id', 'parent_id', 'deleted_time'],
 						},
@@ -863,15 +1046,17 @@ export default class SearchEngine {
 						itemRow.parent_id = note ? note.parent_id : null;
 					}
 
-					if (!options.includeOrphanedResources) itemRows = itemRows.filter(r => !!r.id);
-					itemRows = itemRows.filter(r => !deletedNoteIds.includes(r.id));
+					if (!options.includeOrphanedResources) { itemRows = itemRows.filter((r) => !!r.id); }
+					itemRows = itemRows.filter((r) => !deletedNoteIds.includes(r.id));
 
 					rows = rows.concat(itemRows);
 				}
 
 				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
 			} catch (error) {
-				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
+				this.logger().warn(
+					`Cannot execute MATCH query: ${searchString}: ${error.message}`,
+				);
 				rows = [];
 			}
 		}
