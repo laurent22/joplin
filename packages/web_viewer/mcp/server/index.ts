@@ -4,6 +4,14 @@ import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js
 import { z } from 'zod';
 import { ViewerUtil } from '../../lib/viewerUtil';
 
+// Parse command line arguments
+const args = process.argv.slice(2);
+const profileNameIndex = args.indexOf('--profileName');
+if (profileNameIndex !== -1 && profileNameIndex + 1 < args.length) {
+  process.env.PROFILE_NAME = args[profileNameIndex + 1];
+  console.log(`Profile name set to: ${process.env.PROFILE_NAME}`);
+}
+
 function createServer() {
   const server = new McpServer({
     name: 'Demo',
