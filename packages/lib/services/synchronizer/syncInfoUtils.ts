@@ -54,11 +54,13 @@ export function onRevisionServiceSettingsChanged(key: string, value: unknown) {
 	const s = localSyncInfo();
 	let changed = false;
 	if (key === 'revisionService.enabled' && s.revisionServiceEnabled !== value) {
-		s.revisionServiceEnabled = value as boolean;
+		if (typeof value !== 'boolean') return;
+		s.revisionServiceEnabled = value;
 		changed = true;
 	}
 	if (key === 'revisionService.ttlDays' && s.revisionServiceTtlDays !== value) {
-		s.revisionServiceTtlDays = value as number;
+		if (typeof value !== 'number') return;
+		s.revisionServiceTtlDays = value;
 		changed = true;
 	}
 	if (changed) saveLocalSyncInfo(s);
