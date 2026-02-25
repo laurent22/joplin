@@ -10,7 +10,6 @@ import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
-import eventManager, { EventName } from '../../eventManager';
 const fastDeepEqual = require('fast-deep-equal');
 
 const logger = Logger.create('syncInfoUtils');
@@ -50,22 +49,19 @@ export const setAppMinVersion = (v: string) => {
 	appMinVersion_ = v;
 };
 
-export function setupRevisionServiceSettingsSync() {
-	eventManager.on(EventName.SettingsChange, (event) => {
-		const relevant = event.keys.filter(k => k === 'revisionService.enabled' || k === 'revisionService.ttlDays');
-		if (!relevant.length) return;
-		const s = localSyncInfo();
-		let changed = false;
-		if (relevant.includes('revisionService.enabled')) {
-			const next = Setting.value('revisionService.enabled');
-			if (s.revisionServiceEnabled !== next) { s.revisionServiceEnabled = next; changed = true; }
-		}
-		if (relevant.includes('revisionService.ttlDays')) {
-			const next = Setting.value('revisionService.ttlDays');
-			if (s.revisionServiceTtlDays !== next) { s.revisionServiceTtlDays = next; changed = true; }
-		}
-		if (changed) saveLocalSyncInfo(s);
-	});
+export function onRevisionServiceSettingsChanged(key: string, value: unknown) {
+	if (key !== 'revisionService.enabled' && key !== 'revisionService.ttlDays') return;
+	const s = localSyncInfo();
+	let changed = false;
+	if (key === 'revisionService.enabled' && s.revisionServiceEnabled !== value) {
+		s.revisionServiceEnabled = value as boolean;
+		changed = true;
+	}
+	if (key === 'revisionService.ttlDays' && s.revisionServiceTtlDays !== value) {
+		s.revisionServiceTtlDays = value as number;
+		changed = true;
+	}
+	if (changed) saveLocalSyncInfo(s);
 }
 
 export async function migrateLocalSyncInfo(db: JoplinDatabase) {
@@ -99,8 +95,8 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	//   most likely not what the user wants.
 	syncInfo.setKeyTimestamp('e2ee', 0);
 	syncInfo.setKeyTimestamp('activeMasterKeyId', 0);
-	syncInfo.revisionServiceEnabled = Setting.valueNoThrow('revisionService.enabled', true);
-	syncInfo.revisionServiceTtlDays = Setting.valueNoThrow('revisionService.ttlDays', 90);
+	syncInfo.revisionServiceEnabled = Setting.value('revisionService.enabled');
+	syncInfo.revisionServiceTtlDays = Setting.value('revisionService.ttlDays');
 	syncInfo.setKeyTimestamp('revisionServiceEnabled', 0);
 	syncInfo.setKeyTimestamp('revisionServiceTtlDays', 0);
 
