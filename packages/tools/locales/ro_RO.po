@@ -338,7 +338,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "Notație muzicală ABC: Opțiuni"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -434,7 +434,7 @@ msgstr "Adaugă corp"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:31
 msgid "Add column"
-msgstr ""
+msgstr "Adaugă coloană"
 
 #: packages/app-mobile/components/buttons/FloatingActionButton.tsx:66
 #: packages/app-mobile/components/ComboBox.tsx:103
@@ -451,9 +451,8 @@ msgid "Add recipient:"
 msgstr "Adaugă destinatar:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:26
-#, fuzzy
 msgid "Add row"
-msgstr "Adaugă un nou"
+msgstr "Adaugă rând"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
@@ -813,7 +812,7 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Bloc de cod"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -931,9 +930,8 @@ msgid "Cannot change encrypted item"
 msgstr "Nu se poate schimba itemul criptat"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Nu se poate create o notiță nouă: %s"
+msgstr "Nu se poate converti un element doar în citire: „%s”"
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1091,7 +1089,7 @@ msgstr "Se verifică... Te rog să aștepți."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "Caractere chinezești/japoneze/coreene"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1257,7 +1255,7 @@ msgstr "Comandă"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "COMANDĂ"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1321,9 +1319,8 @@ msgid "Configuration"
 msgstr "Configurare"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
-msgstr "Scurtături tastatură"
+msgstr "Scurtături tastatură configurate:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1296
 msgid "Configures the size of scrollbars used in the app."
@@ -1399,9 +1396,8 @@ msgid "Convert it"
 msgstr "Convertește-o"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
-msgstr "Convertește notița în Markdown"
+msgstr "Convertește în Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1350
 msgid "Convert to note"
@@ -1508,9 +1504,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Nu s-a putut conecta la repozitoriul de plugin-uri."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
-msgstr "Nu s-a putut converti notița în Markdown: %s"
+msgstr "Nu s-au putut converti notițele în Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:235
 msgid "Could not export notes: %s"
@@ -1780,9 +1775,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Ștergi atașamentul „%s”?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:41
-#, fuzzy
 msgid "Delete column"
-msgstr "Șterge linia"
+msgstr "Șterge coloana"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1824,19 +1818,19 @@ msgid "Delete profile \"%s\""
 msgstr "Ștergi profilul „%s”?"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Ștergi profilul „%s”?\n"
+"\n"
 "Toate datele, inclusiv notițele, caietele de notițe și etichetele vor fi "
 "șterse definitiv."
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
-#, fuzzy
 msgid "Delete row"
-msgstr "Șterge notița"
+msgstr "Șterge rândul"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:487
 msgid "Delete selected notes"
@@ -1849,6 +1843,10 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"Ștergi eticheta „%s”?\n"
+"\n"
+"Toate notițele asociate cu această etichetă vor rămâne, dar eticheta va fi "
+"ștearsă din toate notițele."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -2033,7 +2031,7 @@ msgstr "Afișează informațiile complete despre notiță."
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "Afișează scurtăturile de tastatură configurate."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2253,9 +2251,8 @@ msgid "Edit profile configuration..."
 msgstr "Editează configurările profilului…"
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "Editează notiță."
+msgstr "Editează eticheta"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2365,9 +2362,8 @@ msgid "Enable abbreviation syntax"
 msgstr "Activează sintaxa abrevierii"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "Activează suportul pentru sintaxa Fountain"
+msgstr "Activează suportul pentru notația muzicală ABC"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3146,9 +3142,8 @@ msgid "Import or export your data"
 msgstr "Importă sau exportă datele tale"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
-msgstr "Se importă..."
+msgstr "Importă..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3548,7 +3543,7 @@ msgstr "Lanț de chei suportat: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "TASTE"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
@@ -3780,6 +3775,8 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Administrează profilurile. Poți redenumi sau șterge profile. Profilul activ "
+"nu poate fi șters."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3942,16 +3939,15 @@ msgstr[1] "Muți %d notițe în caietul „%s”?"
 msgstr[2] "Muți %d de notițe în caietul „%s”?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"Muți caietul „%s” în coșul de gunoi?\n"
+"Muți %d caiete în coșul de gunoi?\n"
 "\n"
-"Toate notițele și secțiunile din acest caiet vor fi de asemenea mutate în "
+"Toate notițele și secțiunile din aceste caiete vor fi de asemenea mutate în "
 "coș."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
@@ -4193,7 +4189,7 @@ msgstr "Nu există actualizări"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "Nu s-a setat niciun URL pentru autentificarea SAML."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4537,7 +4533,7 @@ msgstr "Deschide ghidul de sincronizare…"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "Licențe open-source"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4576,6 +4572,8 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"Opțiunile care trebuie folosite la redarea codului ABC. Trebuie să fie un "
+"obiect JSON5. Lista completă de opțiuni este disponibilă la: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4726,7 +4724,7 @@ msgid ""
 msgstr ""
 "Te rog să deschizi următoarea adresă URL în browser pentru a autentifica "
 "aplicația. Aplicația va crea un dosar în „Apps/Joplin” și va citi și scrie "
-"doar fișiere în acest dosar. Nu va avea acces la nici un fișier din afara "
+"doar fișiere în acest dosar. Nu va avea acces la niciun fișier din afara "
 "acestui dosar și nici la alte date personale. Nu se vor partaja date cu "
 "nicio terță parte."
 
@@ -4944,9 +4942,8 @@ msgid "Profile name"
 msgstr "Numele profilului"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "Confirmarea parolei nu poate fi un câmp gol"
+msgstr "Numele profilului nu poate fi un câmp gol"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -5141,11 +5138,8 @@ msgid "Remove"
 msgstr "Șterge"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
-msgstr ""
-"Ștergi modelul și îl descarci din nou?\n"
-"Acest lucru nu poate fi anulat."
+msgstr "Ștergi %d etichete din toate notele? Acest lucru nu poate fi anulat."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5561,7 +5555,7 @@ msgstr "Selectează caietul părinte"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "Selectează tipul de fișier pentru a fi importat:"
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -5888,7 +5882,7 @@ msgstr "Sursă: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "SPAȚIU"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
@@ -6201,18 +6195,16 @@ msgid "Tab moves focus"
 msgstr "Tasta tab mută focalizarea"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "Activează"
+msgstr "Tabel"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "Utilizare: %s"
+msgstr "Etichetă: %s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6442,7 +6434,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Notița „%s” a fost restaurată cu succes în caietul „%s”."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -6453,11 +6444,11 @@ msgstr[0] ""
 "Notița a fost convertită în Markdown și notița originală a fost mutată în "
 "coșul de gunoi"
 msgstr[1] ""
-"Notița a fost convertită în Markdown și notița originală a fost mutată în "
-"coșul de gunoi"
+"Notițele au fost convertite în Markdown și notițele originale au fost mutate "
+"în coșul de gunoi"
 msgstr[2] ""
-"Notița a fost convertită în Markdown și notița originală a fost mutată în "
-"coșul de gunoi"
+"Notițele au fost convertite în Markdown și notițele originale au fost mutate "
+"în coșul de gunoi"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -7048,7 +7039,7 @@ msgstr "Încearcă acum"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "TIP"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""
