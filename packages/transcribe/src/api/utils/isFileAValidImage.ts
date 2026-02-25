@@ -10,7 +10,7 @@ const isFileAValidImage = async (filepath: string): Promise<[boolean, string]> =
 	}
 
 	const isValid = supportedImageFormat.includes(result.mime);
-	return [isValid, result.mime];
+	return [isValid, result.ext];
 };
 
 export default isFileAValidImage;
