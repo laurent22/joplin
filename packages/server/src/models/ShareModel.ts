@@ -336,7 +336,7 @@ export default class ShareModel extends BaseModel<Share> {
 				}
 
 				if (!newOwnerId) {
-					logger.warn('Item', item.id, 'deleted for owner', item.owner_id, 'and still exists, but no users have access.');
+					logger.warn('handleDeleted: Item', item.id, 'deleted for owner', item.owner_id, 'and still exists, but no new owner ID was assigned.');
 				} else {
 					try {
 						await this.models().item().saveForUser(newOwnerId, {
