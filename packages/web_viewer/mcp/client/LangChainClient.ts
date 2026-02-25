@@ -4,8 +4,19 @@ import { ChatOpenAI } from '@langchain/openai';
 import { ProxyAgent, fetch as undiciFetch } from 'undici';
 import { Config } from '../../config.ts';
 
+export interface ChatHistory {
+  id: string;
+  text: string;
+  isUser: boolean;
+  loading?: boolean;
+}
+
 export class LangChainClient {
-  public static async sendMcpQuestion(message: string): Promise<string> {
+  public static async sendMcpQuestion(
+    message: string,
+    systemPrompt?: string,
+    histories: ChatHistory[] = []
+  ): Promise<string> {
     const mcp = new MultiServerMCPClient({
       myServer: {
         transport: 'http',
@@ -45,8 +56,24 @@ export class LangChainClient {
       tools,
     });
 
+    const messages: Array<{ role: string; content: string }> = [];
+    if (systemPrompt) {
+      messages.push({ role: 'system', content: systemPrompt });
+    }
+
+    // 会話履歴を追加
+    for (const history of histories) {
+      messages.push({
+        role: history.isUser ? 'user' : 'assistant',
+        content: history.text,
+      });
+    }
+
+    // 現在のメッセージを追加
+    messages.push({ role: 'user', content: message });
+
     const result = await agent.invoke({
-      messages: [{ role: 'user', content: message }],
+      messages,
     });
 
     // Extract the final AI reply content

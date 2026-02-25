@@ -151,28 +151,36 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
   }, []);
 
   // AgenticSearch APIを呼び出す
-  const callAgenticSearchAPI = React.useCallback(async (message: string, botId: string) => {
-    const response = await fetch('/api/agent', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message,
-      }),
-    });
+  const callAgenticSearchAPI = React.useCallback(
+    async (
+      message: string,
+      histories: Array<{ id: string; text: string; isUser: boolean; loading?: boolean }>,
+      botId: string
+    ) => {
+      const response = await fetch('/api/agent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          histories,
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error('APIエラーが発生しました');
-    }
+      if (!response.ok) {
+        throw new Error('APIエラーが発生しました');
+      }
 
-    const data = await response.json();
+      const data = await response.json();
 
-    // レスポンスをボットメッセージとして表示
-    setChatMessages((prev) =>
-      prev.map((msg) => (msg.id === botId ? { ...msg, text: data.response, loading: false } : msg))
-    );
-  }, []);
+      // レスポンスをボットメッセージとして表示
+      setChatMessages((prev) =>
+        prev.map((msg) => (msg.id === botId ? { ...msg, text: data.response, loading: false } : msg))
+      );
+    },
+    []
+  );
 
   // 通常のチャットAPIを呼び出す
   const callNormalChatAPI = React.useCallback(
@@ -236,7 +244,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     try {
       // AgenticSearchのチェック状態で呼び出すAPIを切り替え
       if (useAgenticSearchRef.current) {
-        await callAgenticSearchAPI(userInput, botId);
+        await callAgenticSearchAPI(userInput, currentHistories, botId);
       } else {
         await callNormalChatAPI(userInput, currentHistories, botId);
       }

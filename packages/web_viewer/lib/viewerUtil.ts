@@ -30,6 +30,7 @@ export type TreeNode = FolderTreeNode | NoteTreeNode;
 export interface SimpleFolderNode {
   id: string;
   title: string;
+  type: 'Folder';
   children: SimpleTreeNode[];
 }
 
@@ -88,8 +89,8 @@ export class ViewerUtil {
       // Folderの場合は id, title, children のみ（再帰的に処理）
       const folderNode = tree as FolderTreeNode;
       return {
-        id: folderNode.id,
         title: folderNode.title,
+        type: folderNode.type as string,
         children: folderNode.children.map((child) => ViewerUtil.simpleTreeNode(child)),
       };
     }
