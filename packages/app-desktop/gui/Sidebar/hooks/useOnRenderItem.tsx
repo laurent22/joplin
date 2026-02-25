@@ -63,16 +63,13 @@ const isElementVisibleInContainer = (element: HTMLElement, container: HTMLElemen
 
 const focusListItem = (item: HTMLElement|null) => {
 	if (item) {
-		const tree = item.closest('[role="tree"]');
 		const itemList = item.closest('.item-list');
 
 		if (itemList instanceof HTMLElement && !isElementVisibleInContainer(item, itemList)) {
 			return;
 		}
 
-		if (tree && !tree.contains(document.activeElement)) {
-			focus('useOnRenderItem', item, { preventScroll: true });
-		}
+		focus('useOnRenderItem', item, { preventScroll: true });
 	}
 };
 
