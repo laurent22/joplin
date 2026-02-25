@@ -25,6 +25,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
   const [chatMessages, setChatMessages] = React.useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const useAgenticSearchRef = React.useRef(true);
   const [isResizing, setIsResizing] = React.useState(false);
   const [dialogWidth, setDialogWidth] = React.useState(900);
   const [dialogHeight, setDialogHeight] = React.useState(700);
@@ -149,6 +150,58 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     }
   }, []);
 
+  // AgenticSearch APIを呼び出す
+  const callAgenticSearchAPI = React.useCallback(async (message: string, botId: string) => {
+    const response = await fetch('/api/agent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('APIエラーが発生しました');
+    }
+
+    const data = await response.json();
+
+    // レスポンスをボットメッセージとして表示
+    setChatMessages((prev) =>
+      prev.map((msg) => (msg.id === botId ? { ...msg, text: data.response, loading: false } : msg))
+    );
+  }, []);
+
+  // 通常のチャットAPIを呼び出す
+  const callNormalChatAPI = React.useCallback(
+    async (
+      message: string,
+      histories: Array<{ id: string; text: string; isUser: boolean; loading?: boolean }>,
+      botId: string
+    ) => {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          histories,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('APIエラーが発生しました');
+      }
+
+      // ストリーミングレスポンスを処理
+      await processStreamingResponse(response, botId);
+    },
+    [processStreamingResponse]
+  );
+
   // チャット送信
   const handleChatSend = React.useCallback(async () => {
     if (chatInput.trim() === '' || isLoading) return;
@@ -181,24 +234,12 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     setChatMessages((prev) => [...prev, loadingMessage]);
 
     try {
-      // API呼び出し - 過去の会話履歴も送信
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: userInput,
-          histories: currentHistories,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('APIエラーが発生しました');
+      // AgenticSearchのチェック状態で呼び出すAPIを切り替え
+      if (useAgenticSearchRef.current) {
+        await callAgenticSearchAPI(userInput, botId);
+      } else {
+        await callNormalChatAPI(userInput, currentHistories, botId);
       }
-
-      // ストリーミングレスポンスを処理
-      await processStreamingResponse(response, botId);
     } catch (error) {
       console.error('Chat API error:', error);
       setChatMessages((prev) =>
@@ -211,7 +252,7 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [chatInput, chatMessages, processStreamingResponse, isLoading]);
+  }, [chatInput, chatMessages, callAgenticSearchAPI, callNormalChatAPI, isLoading]);
 
   const handleChatInputKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -284,7 +325,18 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
         }}
       >
         <h2 style={{ margin: 0, fontSize: '18px' }}>AI チャット</h2>
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <label
+            style={{ display: 'flex', alignItems: 'center', fontSize: '14px', cursor: 'pointer' }}
+          >
+            <input
+              type="checkbox"
+              defaultChecked={useAgenticSearchRef.current}
+              onChange={(e) => (useAgenticSearchRef.current = e.target.checked)}
+              style={{ marginRight: 4, cursor: 'pointer' }}
+            />
+            AgenticSearch
+          </label>
           <IconButton
             size="small"
             onClick={handleClearHistory}

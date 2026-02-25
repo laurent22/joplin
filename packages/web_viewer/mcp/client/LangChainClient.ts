@@ -5,7 +5,7 @@ import { ProxyAgent, fetch as undiciFetch } from 'undici';
 import { Config } from '../../config.ts';
 
 export class LangChainClient {
-  public static async sendMcpQuestion() {
+  public static async sendMcpQuestion(message: string): Promise<string> {
     const mcp = new MultiServerMCPClient({
       myServer: {
         transport: 'http',
@@ -46,10 +46,10 @@ export class LangChainClient {
     });
 
     const result = await agent.invoke({
-      messages: [{ role: 'user', content: `MCPを利用して100と30渡して計算結果を表示してください` }],
+      messages: [{ role: 'user', content: message }],
     });
 
-    // Print only the final AI reply content
+    // Extract the final AI reply content
     const msgs = Array.isArray(result?.messages) ? result.messages : [];
     const lastAi = msgs
       .slice()
@@ -61,14 +61,18 @@ export class LangChainClient {
           m.content
         );
       });
+
     if (lastAi && lastAi.content) {
       console.log(lastAi.content);
+      return String(lastAi.content);
     } else if (typeof result === 'string') {
       console.log(result);
+      return result;
     } else {
-      console.log(JSON.stringify(result, null, 2));
+      console.log(result);
+      return JSON.stringify(result, null, 2);
     }
   }
 }
 
-LangChainClient.sendMcpQuestion().catch(console.error);
+// LangChainClient.sendMcpQuestion().catch(console.error);
