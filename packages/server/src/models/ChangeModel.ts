@@ -85,7 +85,12 @@ export default class ChangeModel extends BaseModel<Change> {
 		const hasMore = !!results.length;
 		const cursor = results.length ? results[results.length - 1].id : id;
 		results = await this.removeDeletedItems(results);
-		results = await this.compressChanges_(results);
+		// We can't compress changes here, since compressChanges_ assumes:
+		// - that all changes are for the same user, which isn't the case here
+		// - create -> delete can be compressed to a no-op, which isn't always true when processing
+		//   all changes.
+		//
+		// results = await this.compressChanges_(results);
 		return {
 			items: results,
 			has_more: hasMore,

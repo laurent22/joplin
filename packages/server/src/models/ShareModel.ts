@@ -197,7 +197,15 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const removeUserItem = async (shareUserId: Uuid, itemId: Uuid) => {
-			await this.models().userItem().remove(shareUserId, itemId);
+			try {
+				await this.models().userItem().remove(shareUserId, itemId);
+			} catch (error) {
+				if (error.httpCode === ErrorNotFound.httpCode) {
+					logger.warn('Could not remove a user item because it has already been removed:', error);
+				} else {
+					throw error;
+				}
+			}
 		};
 
 		const handleCreated = async (change: Change, item: Item, share: Share) => {
@@ -250,15 +258,7 @@ export default class ShareModel extends BaseModel<Share> {
 					const shareUserIds = await this.allShareUserIds(previousShare);
 					for (const shareUserId of shareUserIds) {
 						if (shareUserId === change.user_id) continue;
-						try {
-							await removeUserItem(shareUserId, item.id);
-						} catch (error) {
-							if (error.httpCode === ErrorNotFound.httpCode) {
-								logger.warn('Could not remove a user item because it has already been removed:', error);
-							} else {
-								throw error;
-							}
-						}
+						await removeUserItem(shareUserId, item.id);
 					}
 				}
 
@@ -270,6 +270,40 @@ export default class ShareModel extends BaseModel<Share> {
 					}
 				}
 			} finally {
+				perfTimer.pop();
+			}
+		};
+
+		const handleDeleted = async (change: Change, item: Item|null, share: Share|null) => {
+			// On deletion, we check for extra user_items entries for items that still exist.
+			// These user_items can be created by race conditions between updateSharedItems3
+			// and logic for removing users from a share.
+			//
+			// For now, only check the case where the item exists, and thus the user_items
+			// entry could allow access to the item.
+			if (!item) return;
+
+			// If the userItem exists, the user still has access to the item, despite the deletion change:
+			const userItem = await this.models().userItem().byUserAndItemId(change.user_id, change.item_id);
+			if (userItem) {
+				perfTimer.push('handleDeleted');
+
+				const isShareMember = async () => {
+					if (!share) return false;
+					const shareUsers = await this.allShareUserIds(share);
+					return shareUsers.includes(change.user_id);
+				};
+
+				// Check if the user should still have access to the item. If not, the userItem was probably created
+				// by a race condition (e.g. handleUpdated adding UserItems) and should be deleted.
+				if (!await isShareMember()) {
+					logger.warn('Deleting unexpected userItem for user', change.user_id, 'and share', item?.jop_share_id);
+
+					// Delete by the UserItem's ID to avoid race conditions. If a new user item is created for the same
+					// (user, item) pair (perhaps after removing the original), it should not be deleted by this task:
+					await this.models().userItem().deleteByUserItemIds([userItem.id]);
+				}
+
 				perfTimer.pop();
 			}
 		};
@@ -293,6 +327,15 @@ export default class ShareModel extends BaseModel<Share> {
 
 				for (const row of shareItemCountPerUser) {
 					if (row.item_count > 0 && !shareParticipants.includes(row.user_id)) {
+						// It's possible for user_items entries to still exist as the result of a race
+						// between loops that create user_items and the logic that deletes user_items
+						// when removing a user from a share.
+						//
+						// This cleanup logic and handleDeleted are both responsible for cleaning up
+						// after such a race condition. Both are important:
+						// - This logic cleans up user_items related to deletions that occurred before
+						//   the handleDeleted logic was added (around March 2026).
+						// - handleDeleted handles some cases not handled here, but only applies to new changes.
 						logger.warn(`checkForMissingUserItems: User ${row.user_id} has items but is not authorized for share ${share.id}. Cleaning up.`);
 						await this.models().userItem().deleteByShareAndUserId(share.id, row.user_id);
 						continue;
@@ -394,11 +437,14 @@ export default class ShareModel extends BaseModel<Share> {
 
 								await handleUpdated(change, item, itemShare, nextShareId);
 							}
-						}
 
-						// We don't need to handle ChangeType.Delete because when an
-						// item is deleted, all its associated userItems are deleted
-						// too.
+							// An item can still be found for a delete change, for example, if an item was removed from the share:
+							if (change.type === ChangeType.Delete) {
+								await handleDeleted(change, item, itemShare);
+							}
+						} else if (change.type === ChangeType.Delete) {
+							await handleDeleted(change, null, null);
+						}
 					}
 
 					await checkForMissingUserItems(shares);
