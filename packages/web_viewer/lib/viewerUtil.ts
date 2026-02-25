@@ -89,8 +89,9 @@ export class ViewerUtil {
       // Folderの場合は id, title, children のみ（再帰的に処理）
       const folderNode = tree as FolderTreeNode;
       return {
+        id: folderNode.id,
         title: folderNode.title,
-        type: folderNode.type as string,
+        type: folderNode.type,
         children: folderNode.children.map((child) => ViewerUtil.simpleTreeNode(child)),
       };
     }
