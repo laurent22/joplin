@@ -379,7 +379,6 @@ class WebDavApi {
 	}
 
 	private async fetchWithIfNoneMatchTest(url: string, fetchOptions: FetchOptions): Promise<Response> {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let response: Response = null;
 
 		if (['GET', 'HEAD'].indexOf(fetchOptions.method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
