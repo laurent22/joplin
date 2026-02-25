@@ -1,165 +1,170 @@
-body, textarea {
-	margin: 0;
-	padding: 0;
-	border: none;
+body,
+textarea {
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
 :root {
-	background-color: var(--joplin-background-color);
+  background-color: var(--joplin-background-color);
 }
 
 #react-root {
-	height: 100%;
-	overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 table {
-	border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 table th {
-	text-align: left;
+  text-align: left;
 }
 
-table td, table th {
-	padding: .5em;
-	border: 1px solid #ccc;
+table td,
+table th {
+  padding: 0.5em;
+  border: 1px solid #ccc;
 }
 
 a {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 ::-webkit-scrollbar {
-	width: var(--scrollbar-size, 7px);
-	height: var(--scrollbar-size, 7px);
+  width: var(--scrollbar-size, 7px);
+  height: var(--scrollbar-size, 7px);
 }
 
 ::-webkit-scrollbar-corner {
-	background: none;
+  background: none;
 }
 
 ::-webkit-scrollbar-track {
-	border: none;
+  border: none;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--scrollbar-thumb-color);
-	border-radius: calc(var(--scrollbar-size, 7px) * 0.7);
+  background: var(--scrollbar-thumb-color);
+  border-radius: calc(var(--scrollbar-size, 7px) * 0.7);
 }
 
 ::-webkit-scrollbar-track:hover {
-	background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--scrollbar-thumb-color-hover);
+  background: var(--scrollbar-thumb-color-hover);
 }
 
 :root {
-	--scrollbar-thumb-color: var(--joplin-scrollbar-thumb-color);
-	--scrollbar-thumb-color-hover: var(--joplin-scrollbar-thumb-color-hover);
+  --scrollbar-thumb-color: var(--joplin-scrollbar-thumb-color);
+  --scrollbar-thumb-color-hover: var(--joplin-scrollbar-thumb-color-hover);
 }
 
 // Uses a scrollbar with secondary colors. Should be used for content with
 // background matching joplin-background-color2.
 ._scrollbar2 {
-	--scrollbar-thumb-color: var(--joplin-scrollbar-thumb-color2);
-	--scrollbar-thumb-color-hover: var(--joplin-scrollbar-thumb-color-hover2);
+  --scrollbar-thumb-color: var(--joplin-scrollbar-thumb-color2);
+  --scrollbar-thumb-color-hover: var(--joplin-scrollbar-thumb-color-hover2);
 }
 
 .fade_out {
-	-webkit-transition: 0.15s;
-	transition: 0.15s;
-	opacity: 0;
+  -webkit-transition: 0.15s;
+  transition: 0.15s;
+  opacity: 0;
 }
 
 .fade_in {
-	-webkit-transition: 0.3s;
-	transition: 0.3s;
-	opacity: 1;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  opacity: 1;
 }
 
 .editor-toolbar .button,
 .header .button {
-	border: 1px solid rgba(0,160,255,0);
+  border: 1px solid rgba(0, 160, 255, 0);
 }
 
 .icon-button:hover {
-	background-color: rgba(0,0,0,0.05) !important;
-	border: 1px solid rgba(0,0,0,0.10);
-	border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
 .icon-button:active {
-	background-color: rgba(0,0,0,0.10) !important;
-	border: 1px solid rgba(0,0,0,0.15);
-	border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
 }
 
 .rdtPicker {
-	min-width: 250px;
-	width: auto !important;
+  min-width: 250px;
+  width: auto !important;
 }
 
 .smalltalk {
-	font-family: sans-serif;
+  font-family: sans-serif;
 }
 
 .note-property-box .rdt {
-	display: inline-block;
+  display: inline-block;
 }
 
 .help-tooltip {
-	font-family: sans-serif;
-	max-width: 200px;
+  font-family: sans-serif;
+  max-width: 200px;
 }
 
 :disabled {
-	opacity: 0.6;
+  opacity: 0.6;
 }
 
 .config-menu-bar button:focus {
-	outline: 0 none;
+  outline: 0 none;
 }
 
 .modal-message {
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	color: grey;
-	font-size: 1.2em;
-	margin: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: grey;
+  font-size: 1.2em;
+  margin: 40px 20px;
 }
 
 .loading-animation {
-	margin-right: 20px;
-	width: 20px;
-	height: 20px;
-	display: inline-block;
-	vertical-align: middle;
-	border: 5px solid lightgrey;
-	border-top: 4px solid white;
-	border-radius: 50%;
-	transition-property: transform;
-	animation-name: rotate;
-	animation-duration: 1.2s;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
+  margin-right: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 5px solid lightgrey;
+  border-top: 4px solid white;
+  border-radius: 50%;
+  transition-property: transform;
+  animation-name: rotate;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 
-	@media (prefers-reduced-motion: reduce) {
-		animation-name: none;
-	}
+  @media (prefers-reduced-motion: reduce) {
+    animation-name: none;
+  }
 }
 
 @keyframes rotate {
-	from {transform: rotate(0deg);}
-	to {transform: rotate(360deg);}
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-
 *:focus-visible {
-	outline: 1px solid var(--joplin-focus-outline-color);
+  outline: 1px solid var(--joplin-focus-outline-color);
 }
 
 // The browser-default focus-visible indicator was originally removed for aesthetic
@@ -170,99 +175,102 @@ a {
 // sufficient because it matches any focused input (https://stackoverflow.com/a/66109577).
 //
 // See https://github.com/laurent22/joplin/issues/9982.
-input:not([type=button]):not([type=checkbox]) {
-	&:focus-visible {
-		outline: none;
-	}
+input:not([type="button"]):not([type="checkbox"]) {
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 /* =========================================================================================
 General classes
 ========================================================================================= */
 
-body, button {
-	color: var(--joplin-color);
-	font-size: 13px;
+body,
+button {
+  color: var(--joplin-color);
+  font-size: 13px;
 }
 
-div, span, a {
-	font-family: Roboto;
+div,
+span,
+a {
+  font-family: Roboto;
 }
 
 h2 {
-	font-size: 20px;
+  font-size: 20px;
 
-	&.-no-top-margin {
-		margin-top: 0;
-	}
+  &.-no-top-margin {
+    margin-top: 0;
+  }
 }
 
 .form {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .form > .form-input-group {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .form > .form-input-group > label {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .form > .form-input-group-checkbox {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .form > .form-input-group-checkbox > input {
-	display: flex;
-	margin-right: 6px;
+  display: flex;
+  margin-right: 6px;
 }
 
 .form > .form-input-group-checkbox > label {
-	display: flex;
-	margin-bottom: 0;
+  display: flex;
+  margin-bottom: 0;
 }
 
 .bold {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 p,
 div.form,
 .form > .form-input-group {
-	margin-top: 0;
-	margin-bottom: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 p {
-	&.-small {
-		font-size: 11px;
-	}
+  &.-small {
+    font-size: 11px;
+  }
 }
 
 .form > .form-input-group:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 button {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 button:disabled {
-	cursor: default;
+  cursor: default;
 }
 
 a {
-	color: var(--joplin-url-color);
+  color: var(--joplin-url-color);
 }
 
 p.info-text {
-	font-style: italic;
-	color: var(--joplin-color-faded);
+  font-style: italic;
+  color: var(--joplin-color-faded);
 }
 
 // Hides elements, but still exposes them to accessibility tools.
@@ -270,15 +278,15 @@ p.info-text {
 // screen readers to ignore the element.
 // See https://www.w3.org/WAI/tutorials/forms/labels/#hiding-label-text
 .visually-hidden {
-	opacity: 0;
-	z-index: -1;
-	width: 1px;
-	height: 1px;
-	margin: -1px;
-	padding: 0;
-	overflow: hidden;
-	pointer-events: none;
-	position: absolute;
+  opacity: 0;
+  z-index: -1;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
 }
 
 /* =========================================================================================
@@ -286,25 +294,25 @@ Component-specific classes
 ========================================================================================= */
 
 .config-screen .config-section {
-	border-bottom: 1px solid var(--joplin-divider-color);
-	padding-bottom: 20px;
+  border-bottom: 1px solid var(--joplin-divider-color);
+  padding-bottom: 20px;
 }
 
 .master-password-dialog .dialog-root {
-	min-width: 500px;
-	max-width: 600px;
+  min-width: 500px;
+  max-width: 600px;
 }
 
 .master-password-dialog .dialog-content {
-	background-color: var(--joplin-background-color3);
-	padding: 1em;
-	padding-bottom: 1px;
+  background-color: var(--joplin-background-color3);
+  padding: 1em;
+  padding-bottom: 1px;
 }
 
 .master-password-dialog .current-password-wrapper {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 // .master-password-dialog .current-password-wrapper input {
@@ -312,36 +320,69 @@ Component-specific classes
 // 	margin-right: 10px;
 // }
 
-
 // Disable dragging of links (which are often buttons)
-a:not([draggable=true]), img:not([draggable=true]) {
-	-webkit-user-drag: none;
+a:not([draggable="true"]),
+img:not([draggable="true"]) {
+  -webkit-user-drag: none;
 }
 
 .smalltalk {
-	background-color: rgba(0,0,0,.5);
-}
-.smalltalk input {
-	margin-top: 1em;
-}
-.smalltalk .page {
-	max-width: 30em;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .page {
+    max-width: 30em;
+    background: var(--joplin-background-color);
+    color: var(--joplin-color);
+    box-shadow:
+      0 4px 23px 5px rgba(0, 0, 0, 0.3),
+      0 2px 6px rgba(0, 0, 0, 0.2);
+
+    header {
+      color: var(--joplin-color);
+      text-shadow: none;
+    }
+  }
+
+  input {
+    margin-top: 1em;
+    background-color: var(--joplin-background-color);
+    color: var(--joplin-color);
+    border: 1px solid var(--joplin-divider-color);
+  }
+
+  button {
+    background-image: none;
+    background-color: var(--joplin-background-color);
+    color: var(--joplin-color);
+    border: 1px solid var(--joplin-divider-color);
+    text-shadow: none;
+    box-shadow: none;
+
+    &:enabled:hover {
+      background-color: var(--joplin-background-color-hover3);
+    }
+
+    &:enabled:active {
+      background-image: none;
+      background-color: var(--joplin-selected-color);
+    }
+  }
 }
 mark {
-	background: #CF3F00;
-	color: white;
+  background: #cf3f00;
+  color: white;
 }
 
 /*
 	Adds support for RTL text in the note body. It automatically detects the direction using the content.
 	Issue: https://github.com/laurent22/joplin/issues/3991
 */
-.CodeMirror-line  {
-	unicode-bidi: plaintext;
+.CodeMirror-line {
+  unicode-bidi: plaintext;
 }
 
 // Legacy CodeMirror editor overrides
 .CodeMirror5 > .CodeMirror {
-	height: 100%;
-	width: 100%;
+  height: 100%;
+  width: 100%;
 }
