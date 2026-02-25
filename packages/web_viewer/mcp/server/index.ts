@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js';
 import { z } from 'zod';
+import { ViewerUtil } from '../../lib/viewerUtil';
 
 function createServer() {
   const server = new McpServer({
@@ -21,6 +22,20 @@ function createServer() {
     async ({ a, b }) => ({
       content: [{ type: 'text', text: String(a + b + 10) }],
     })
+  );
+
+  server.registerTool(
+    'get_note_tree',
+    {
+      description: 'Get folders and notes as a tree structure',
+      inputSchema: z.object({}),
+    },
+    async () => {
+      const tree = ViewerUtil.selectFolderAndNotesAndCreateTree();
+      return {
+        content: [{ type: 'text', text: JSON.stringify(tree) }],
+      };
+    }
   );
 
   return server;
