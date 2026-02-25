@@ -40,8 +40,9 @@ function createServer() {
     },
     async () => {
       const tree = ViewerUtil.selectFolderAndNotesAndCreateTree();
+      const simpleTree = ViewerUtil.simpleTreeNodes(tree);
       return {
-        content: [{ type: 'text', text: JSON.stringify(tree) }],
+        content: [{ type: 'text', text: JSON.stringify(simpleTree) }],
       };
     }
   );
