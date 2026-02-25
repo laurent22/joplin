@@ -54,12 +54,25 @@ type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
+const isElementVisibleInContainer = (element: HTMLElement, container: HTMLElement) => {
+	const elementRect = element.getBoundingClientRect();
+	const containerRect = container.getBoundingClientRect();
+
+	return elementRect.bottom > containerRect.top && elementRect.top < containerRect.bottom;
+};
+
 const focusListItem = (item: HTMLElement|null) => {
 	if (item) {
-		// Avoid scrolling to the selected item when refocusing the note list. Such a refocus
-		// can happen if the note list rerenders and the selection is scrolled out of view and
-		// can cause scroll to change unexpectedly.
-		focus('useOnRenderItem', item, { preventScroll: true });
+		const tree = item.closest('[role="tree"]');
+		const itemList = item.closest('.item-list');
+
+		if (itemList instanceof HTMLElement && !isElementVisibleInContainer(item, itemList)) {
+			return;
+		}
+
+		if (tree && !tree.contains(document.activeElement)) {
+			focus('useOnRenderItem', item, { preventScroll: true });
+		}
 	}
 };
 

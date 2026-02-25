@@ -28,12 +28,16 @@ const useScrollToSelectionHandler = (
 			return lastSelectedItemKey.current;
 		}
 	}, [listItems, selectedIndex]);
-	lastSelectedItemKey.current = selectedItemKey;
 
 	const selectedIndexRef = useRef(selectedIndex);
 	selectedIndexRef.current = selectedIndex;
 
 	useEffect(() => {
+		if (selectedItemKey === lastSelectedItemKey.current) {
+			return;
+		}
+		lastSelectedItemKey.current = selectedItemKey;
+
 		if (!itemListRef.current || !selectedItemKey) return;
 
 		const hasFocus = !!itemListRef.current.container.contains(document.activeElement);
