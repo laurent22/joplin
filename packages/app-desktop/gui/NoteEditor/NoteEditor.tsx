@@ -14,7 +14,7 @@ import useFormNote, { OnLoadEvent, OnSetFormNote } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef } from './utils/types';
+import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef, NoteBodyEditorType } from './utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
@@ -715,11 +715,11 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 	const noteId = stateUtils.selectedNoteId(windowState);
 
-	let bodyEditor = windowState.editorCodeView ? 'CodeMirror6' : 'TinyMCE';
+	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
-		bodyEditor = 'PlainText';
+		bodyEditor = NoteBodyEditorType.PlainText;
 	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
-		bodyEditor = 'CodeMirror5';
+		bodyEditor = NoteBodyEditorType.CodeMirror5;
 	}
 
 	const mainWindowState = stateUtils.windowStateById(state, defaultWindowId);
@@ -766,6 +766,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		shareCacheSetting: state.settings['sync.shareCache'],
 		searchResults: state.searchResults,
 		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
+		enableInEditorRendering: state.settings['editor.inlineRendering'],
 	};
 };
 

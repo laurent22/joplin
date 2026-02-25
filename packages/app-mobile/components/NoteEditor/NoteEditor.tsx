@@ -34,6 +34,8 @@ import { MarkupLanguage } from '@joplin/renderer';
 import WarningBanner from './WarningBanner';
 import useIsScreenReaderEnabled from '../../utils/hooks/useIsScreenReaderEnabled';
 import Logger from '@joplin/utils/Logger';
+import { AppState } from '../../utils/types';
+import { connect } from 'react-redux';
 import { Second } from '@joplin/utils/time';
 import useDebounced from '../../utils/hooks/useDebounced';
 
@@ -62,6 +64,8 @@ interface Props {
 	readOnly: boolean;
 	plugins: PluginStates;
 	noteResources: ResourceInfos;
+	editorImageRendering: boolean;
+	editorInlineRendering: boolean;
 
 	onScroll: OnScroll;
 	onChange: OnChange;
@@ -257,12 +261,48 @@ const useEditorControl = (
 	}, [webviewRef, editorRef, setLinkDialogVisible, setSearchState]);
 };
 
-const useHighlightActiveLine = () => {
+const useEditorSettings = (props: Props) => {
 	const screenReaderEnabled = useIsScreenReaderEnabled();
 	// Guess whether highlighting the active line can be enabled without triggering
 	// https://github.com/codemirror/dev/issues/1559.
 	const canHighlight = Platform.OS !== 'ios' || !screenReaderEnabled;
-	return canHighlight && Setting.value('editor.highlightActiveLine');
+	const highlightActiveLine = canHighlight && Setting.value('editor.highlightActiveLine');
+
+	// Also disable inline rendering. As of January 2026, inline rendering
+	// seems to cause screen readers to behave strangely (e.g. sometimes not announce full
+	// line content, reading "image" when not in an image, etc.)
+	// However, `screenReaderEnabled` is always `true` on web (likely due to the lack of an API
+	// to reliably detect whether the user is using a screen reader), so also allow inline rendering
+	// to be enabled on web:
+	const inlineRenderingEnabled = props.editorInlineRendering && (!screenReaderEnabled || Platform.OS === 'web');
+
+	const editorSettings: EditorSettings = useMemo(() => ({
+		themeData: editorTheme(props.themeId),
+		markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
+		katexEnabled: Setting.value('markdown.plugin.katex'),
+		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
+		inlineRenderingEnabled,
+		imageRenderingEnabled: props.editorImageRendering,
+		language: props.markupLanguage === MarkupLanguage.Html ? EditorLanguageType.Html : EditorLanguageType.Markdown,
+		useExternalSearch: true,
+		readOnly: props.readOnly,
+		highlightActiveLine,
+
+		keymap: EditorKeymap.Default,
+		preferMacShortcuts: shim.mobilePlatform() === 'ios',
+
+		automatchBraces: false,
+		ignoreModifiers: false,
+		autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
+
+		// For now, mobile CodeMirror uses its built-in focus toggle shortcut.
+		tabMovesFocus: false,
+		indentWithTabs: true,
+
+		editorLabel: _('Markdown editor'),
+	}), [props.themeId, props.readOnly, props.markupLanguage, highlightActiveLine, inlineRenderingEnabled, props.editorImageRendering]);
+
+	return editorSettings;
 };
 
 const useHasSpaceForToolbar = () => {
@@ -281,32 +321,7 @@ const useHasSpaceForToolbar = () => {
 function NoteEditor(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
-	const highlightActiveLine = useHighlightActiveLine();
-	const editorSettings: EditorSettings = useMemo(() => ({
-		themeData: editorTheme(props.themeId),
-		markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
-		katexEnabled: Setting.value('markdown.plugin.katex'),
-		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
-		inlineRenderingEnabled: Setting.value('editor.inlineRendering'),
-		imageRenderingEnabled: Setting.value('editor.imageRendering'),
-		language: props.markupLanguage === MarkupLanguage.Html ? EditorLanguageType.Html : EditorLanguageType.Markdown,
-		useExternalSearch: true,
-		readOnly: props.readOnly,
-		highlightActiveLine,
-
-		keymap: EditorKeymap.Default,
-		preferMacShortcuts: shim.mobilePlatform() === 'ios',
-
-		automatchBraces: false,
-		ignoreModifiers: false,
-		autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
-
-		// For now, mobile CodeMirror uses its built-in focus toggle shortcut.
-		tabMovesFocus: false,
-		indentWithTabs: true,
-
-		editorLabel: _('Markdown editor'),
-	}), [props.themeId, props.readOnly, props.markupLanguage, highlightActiveLine]);
+	const editorSettings = useEditorSettings(props);
 
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
@@ -475,7 +490,11 @@ function NoteEditor(props: Props) {
 				/>
 			</View>
 
-			<WarningBanner editorType={props.mode}/>
+			<WarningBanner
+				editorType={props.mode}
+				markupLanguage={props.markupLanguage}
+				inEditorRendering={editorSettings.inlineRenderingEnabled}
+			/>
 
 			<SearchPanel
 				editorSettings={editorSettings}
@@ -488,4 +507,10 @@ function NoteEditor(props: Props) {
 	);
 }
 
-export default NoteEditor;
+export default connect((state: AppState) => {
+	return {
+		themeId: state.settings.theme,
+		editorInlineRendering: state.settings['editor.inlineRendering'],
+		editorImageRendering: state.settings['editor.imageRendering'],
+	};
+}, null, null, { forwardRef: true })(NoteEditor);

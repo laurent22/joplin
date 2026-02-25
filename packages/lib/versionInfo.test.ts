@@ -2,6 +2,7 @@ import versionInfo from './versionInfo';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
 import Plugin from './services/plugins/Plugin';
+import Setting from './models/Setting';
 
 jest.mock('./registry');
 
@@ -127,5 +128,26 @@ describe('versionInfo', () => {
 		// The message should only include the first 20.
 		const nonEllipsizedEntries = pluginMessage.slice(0, 20);
 		expect(v.message).toContain(`${nonEllipsizedEntries.join('\n')}\n...`);
+	});
+
+	it('should show sync target name', () => {
+		const v = versionInfo(packageInfo, {});
+		expect(v.body).toContain('Sync target: (None)');
+	});
+
+	it('should show Markdown editor by default', () => {
+		const v = versionInfo(packageInfo, {});
+		expect(v.body).toContain('Editor: Markdown');
+	});
+
+	it('should show Rich Text editor when codeView is false', () => {
+		const original = Setting.value('editor.codeView');
+		Setting.setValue('editor.codeView', false);
+		try {
+			const v = versionInfo(packageInfo, {});
+			expect(v.body).toContain('Editor: Rich Text');
+		} finally {
+			Setting.setValue('editor.codeView', original);
+		}
 	});
 });
