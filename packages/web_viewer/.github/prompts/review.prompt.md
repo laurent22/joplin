@@ -1,6 +1,7 @@
 ---
 name: review
-description: Describe when to use this prompt
+description: review the difference between two specified commit hash values and analyze the changes.
+argument-hint: Please provide two commit hash values to compare.
 ---
 
 Review the difference between two specified commit hash values.
