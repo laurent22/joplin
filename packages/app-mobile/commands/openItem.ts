@@ -9,6 +9,7 @@ import { BaseItemEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import showResource from './util/showResource';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import NavService from '@joplin/lib/services/NavService';
 
 const logger = Logger.create('openItemCommand');
 
@@ -22,8 +23,14 @@ const openItemById = async (itemId: string, hash?: string) => {
 
 	if (item.type_ === ModelType.Note) {
 		await goToNote(itemId, hash);
+
 	} else if (item.type_ === ModelType.Resource) {
 		await showResource(item);
+
+	} else if (item.type_ === ModelType.Folder) {
+		// ✅ Added support for opening folder links on mobile
+		await NavService.go('Notes', { folderId: item.id });
+
 	} else {
 		throw new Error(`Unsupported item type for links: ${item.type_}`);
 	}
