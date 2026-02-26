@@ -54,6 +54,8 @@ type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
+// Checks whether an element is at least partially visible within a scrollable
+// container by comparing their bounding rectangles.
 const isElementVisibleInContainer = (element: HTMLElement, container: HTMLElement) => {
 	const elementRect = element.getBoundingClientRect();
 	const containerRect = container.getBoundingClientRect();
@@ -65,10 +67,16 @@ const focusListItem = (item: HTMLElement|null) => {
 	if (item) {
 		const itemList = item.closest('.item-list');
 
+		// If the item is scrolled out of view, skip focusing it entirely.
+		// Without this guard, a re-render (e.g. after expanding/collapsing a folder)
+		// would focus the selected item and cause the browser to scroll it into view,
+		// producing an unexpected "scroll jump" back to the selection.
 		if (itemList instanceof HTMLElement && !isElementVisibleInContainer(item, itemList)) {
 			return;
 		}
 
+		// preventScroll: true avoids a secondary scroll caused by the focus() call
+		// itself when the item is near the edge of the visible area.
 		focus('useOnRenderItem', item, { preventScroll: true });
 	}
 };
