@@ -809,6 +809,8 @@
 			);
 		}));
 
+		// By default, Chromium inlines body styles (e.g. theme background color) into the clipboard HTML.
+		// Intercept the copy event and write only the selected content to bypass this behaviour.
 		document.addEventListener('copy', webviewLib.logEnabledEventHandler(e => {
 			const selection = window.getSelection();
 			if (!selection || selection.isCollapsed) return;

@@ -405,7 +405,10 @@ test.describe('markdownEditor', () => {
 		await noteEditor.expectToHaveText('A');
 	});
 
-	test('copying from the preview pane should not include theme background color', async ({ mainWindow }) => {
+	test('copying from the preview pane should not include theme background color', async ({ mainWindow, electronApp }) => {
+		// Set dark theme so we know #1D2024 would be present in clipboard without the fix
+		await setSettingValue(electronApp, mainWindow, 'theme', 2);
+
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
@@ -427,7 +430,34 @@ test.describe('markdownEditor', () => {
 			return clipboard.readHTML();
 		});
 
-		expect(clipboardHtml).not.toContain('background-color');
+		// #1D2024 is the dark theme backgroundColor - it should not appear in clipboard
+		expect(clipboardHtml).not.toContain('#1D2024');
+	});
+	
+	test('copying a bold word from the preview pane should preserve bold formatting', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test bold copy');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('**bold text**');
+
+		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
+		await expect(viewerFrame.locator('strong')).toHaveText('bold text');
+
+		// Double-click selects just the word — selection lands on the text node inside
+		// <strong>, not <strong> itself. Without the ancestor re-wrapping fix, <strong>
+		// would be dropped by cloneContents() and this assertion would fail.
+		await viewerFrame.locator('strong').dblclick();
+		const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+		await mainWindow.keyboard.press(`${modifier}+c`);
+
+		const clipboardHtml = await mainWindow.evaluate(() => {
+			const { clipboard } = require('electron');
+			return clipboard.readHTML();
+		});
+
 		expect(clipboardHtml).toContain('<strong>');
 	});
 });
