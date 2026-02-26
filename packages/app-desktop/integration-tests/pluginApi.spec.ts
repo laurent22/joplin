@@ -81,38 +81,28 @@ test.describe('pluginApi', () => {
 		await expectVisible(false);
 	});
 
-	test('should dismiss a plugin dialog when clicking Cancel with isolated iframes', async ({ startAppWithPlugins }) => {
-		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.createNewNote('Test note');
+	// Regression tests for #13718
+	for (const method of ['Cancel button', 'Escape key'] as const) {
+		test(`should dismiss a plugin dialog via ${method} with isolated iframes`, async ({ startAppWithPlugins }) => {
+			const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.createNewNote('Test note');
 
-		await setSettingValue(app, mainWindow, 'featureFlag.plugins.isolatePluginWebViews', true);
+			await setSettingValue(app, mainWindow, 'featureFlag.plugins.isolatePluginWebViews', true);
 
-		await mainScreen.goToAnything.runCommand(app, 'showTestDialogWithDismiss');
-		const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
-		await dialogContent.locator('p').waitFor();
+			await mainScreen.goToAnything.runCommand(app, 'showTestDialogWithDismiss');
+			const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
+			await dialogContent.locator('p').waitFor();
 
-		await mainScreen.dialog.getByRole('button', { name: 'Cancel' }).click();
-		await expect(mainScreen.dialog).toBeHidden();
+			if (method === 'Cancel button') {
+				await mainScreen.dialog.getByRole('button', { name: 'Cancel' }).click();
+			} else {
+				await mainWindow.keyboard.press('Escape');
+			}
 
-		await mainScreen.noteEditor.expectToHaveText('cancel');
-	});
-
-	// Regression test for #13718
-	test('should dismiss a plugin dialog when pressing Escape with isolated iframes', async ({ startAppWithPlugins }) => {
-		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.createNewNote('Test note');
-
-		await setSettingValue(app, mainWindow, 'featureFlag.plugins.isolatePluginWebViews', true);
-
-		await mainScreen.goToAnything.runCommand(app, 'showTestDialogWithDismiss');
-		const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
-		await dialogContent.locator('p').waitFor();
-
-		await mainWindow.keyboard.press('Escape');
-		await expect(mainScreen.dialog).toBeHidden();
-	});
+			await expect(mainScreen.dialog).toBeHidden();
+		});
+	}
 
 	test('should be possible to create multiple toasts with the same text from a plugin', async ({ startAppWithPlugins }) => {
 		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/showToast.js']);
