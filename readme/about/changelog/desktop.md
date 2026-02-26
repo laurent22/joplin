@@ -1,5 +1,12 @@
 # Joplin Desktop Changelog
 
+## [v3.5.13](https://github.com/laurent22/joplin/releases/tag/v3.5.13) - 2026-02-25T21:19:11Z
+
+- Improved: Importing from OneNote: Enable stricter path sanitization on Windows ([#14321](https://github.com/laurent22/joplin/issues/14321) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade tar to v7.5.8 ([#14464](https://github.com/laurent22/joplin/issues/14464) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unexpected conflicts created during sync ([#14453](https://github.com/laurent22/joplin/issues/14453) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: `.onepkg` file import: Fix import failure when notebook titles contain certain Unicode characters ([#14090](https://github.com/laurent22/joplin/issues/14090)) ([#14084](https://github.com/laurent22/joplin/issues/14084) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.6.2](https://github.com/laurent22/joplin/releases/tag/v3.6.2) (Pre-release) - 2026-01-18T20:10:43Z
 
 - Improved: Accessibility: Include accessibility information in exported PDFs ([#14111](https://github.com/laurent22/joplin/issues/14111)) ([#14086](https://github.com/laurent22/joplin/issues/14086) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

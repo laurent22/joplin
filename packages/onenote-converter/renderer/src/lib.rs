@@ -1,6 +1,5 @@
 use color_eyre::eyre::{Result, eyre};
 pub use parser::Parser;
-use sanitize_filename::sanitize;
 use std::{io::Read, panic};
 use wasm_bindgen::{JsError, prelude::wasm_bindgen};
 
@@ -104,12 +103,12 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
 
         let path_segments_without_filename = &path_segments[0..path_segments.len() - 1];
         for part in path_segments_without_filename {
-            output_path = fs_driver().join(&output_path, &sanitize(part));
+            output_path = fs_driver().join(&output_path, &fs_driver().sanitize_file_name(part));
             fs_driver().make_dir(&output_path)?;
         }
 
         let file_name = path_segments.last().unwrap_or(&"");
-        Ok((output_path, sanitize(file_name)))
+        Ok((output_path, fs_driver().sanitize_file_name(file_name)))
     };
 
     let mut parser = Parser::new();

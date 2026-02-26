@@ -212,7 +212,10 @@ describe('ShareModel', () => {
 		expect(await models().userItem().byUserId(user3.id)).toHaveLength(4);
 	});
 
-	test('should delete UserItem records when a user no longer has access to a share', async () => {
+	test.each([
+		{ alsoUnshare: false, label: '' },
+		{ alsoUnshare: true, label: 'and the item is also unshared' },
+	])('should delete UserItem records when a user no longer has access to a share $label', async ({ alsoUnshare }) => {
 		const { session: session1 } = await createUserAndSession(1);
 		const { session: session2, user: user2 } = await createUserAndSession(2);
 
@@ -245,8 +248,12 @@ describe('ShareModel', () => {
 		await models().userItem().add(user2.id, note.id);
 		expect(await getUser2UserItems()).toHaveLength(1);
 
+		if (alsoUnshare) {
+			await updateItemShareId(session1, note.id, '');
+		}
+
 		// The extra UserItem should be removed when processing the share's changes:
-		await withWarningSilenced(/has items but is not authorized for share/, async () => {
+		await withWarningSilenced(/Deleting unexpected userItem for user/, async () => {
 			await models().share().updateSharedItems3();
 		});
 		expect(await getUser2UserItems()).toHaveLength(0);

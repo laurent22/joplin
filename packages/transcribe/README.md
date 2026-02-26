@@ -4,33 +4,33 @@
 
 The transcribe server embeds the llama.cpp binary directly in the Docker image. The AI models must be downloaded separately and mounted as a volume.
 
-### 1. Download the models
-
-Create a directory for the models and download them:
+### 1. Create data directory and download models
 
 ```shell
-mkdir -p ./data/transcribe-models
-wget -O ./data/transcribe-models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
-wget -O ./data/transcribe-models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
+mkdir -p ./data/models
+chmod 755 ./data
+wget -O ./data/models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
+wget -O ./data/models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
 ```
 
 ### 2. Configure environment
 
 1. Copy `.env-transcribe-sample` to your Docker configuration directory.
 2. Rename it to `.env-transcribe`.
+3. Set `API_KEY` to a secure value.
 
 ### 3. Run the server
 
-The models directory on your host is mounted into the container at `/opt/models`. The `HTR_CLI_MODELS_FOLDER` environment variable refers to the path inside the container, not the host path.
-
 ```shell
-docker build -f ./Dockerfile.transcribe -t transcribe .
-docker run --env-file .env-transcribe -p 4567:4567 \
-	-v ./packages/transcribe/images:/app/packages/transcribe/images \
-	-v ./data/transcribe-models:/opt/models:ro \
-	-e HTR_CLI_MODELS_FOLDER=/opt/models \
-	transcribe
+docker run --rm --env-file .env-transcribe -p 4567:4567 \
+	-v ./data:/data \
+	joplin/transcribe:amd64-latest
 ```
+
+The container automatically creates the following inside `/data`:
+- `images/` - uploaded images
+- `models/` - AI models (you provide these)
+- `queue.sqlite3` - job queue database
 
 ## Using Docker Compose
 
@@ -55,8 +55,6 @@ The transcribe container runs with these security measures:
 - **Resource limits**: Memory and CPU limits prevent runaway processes
 - **No Docker socket**: Unlike previous versions, no Docker socket mount is required
 
----
-
 # Development Setup
 
 ## Testing
@@ -70,13 +68,6 @@ Run all tests with:
 yarn test-all
 ```
 
-## Database Setup
-
-The queue driver can be **SQLite** or **PostgreSQL**:
-
-* Set `QUEUE_DRIVER` to `sqlite` or `pg`.
-* If using SQLite, `QUEUE_DATABASE_NAME` specifies the path to the database file.
-
 ## Starting the Server
 
 From `packages/transcribe`, run:
@@ -87,11 +78,18 @@ yarn start
 
 ### Environment variables
 
+Required:
+- `API_KEY`: Authentication key for API requests
+- `DATA_DIR`: Base directory for all data (images, models, database)
 - `HTR_CLI_BINARY_PATH`: Path to the llama-mtmd-cli binary
-- `HTR_CLI_MODELS_FOLDER`: Path to the models directory
-- `HTR_CLI_IMAGES_FOLDER`: Path where uploaded images are stored
 
----
+Optional:
+- `QUEUE_DRIVER`: `sqlite` (default in Docker) or `pg` for PostgreSQL
+
+The following paths are automatically derived from `DATA_DIR`:
+- `$DATA_DIR/images` - uploaded images
+- `$DATA_DIR/models` - AI models
+- `$DATA_DIR/queue.sqlite3` - SQLite database (when using sqlite driver)
 
 # API Endpoints
 
@@ -123,8 +121,6 @@ curl --request POST \
 	--header 'Content-Type: multipart/form-data' \
 	--form file=@/home/js/Pictures/2025-07-24_17-42_1.png
 ```
-
----
 
 ## GET `/transcribe/{jobId}`
 
