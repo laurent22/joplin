@@ -48,6 +48,7 @@ interface Props {
 	selectedIndex: number;
 	selectedIndexes: number[];
 	listItems: ListItem[];
+	allFoldersCollapsed: boolean;
 }
 
 type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
@@ -76,6 +77,8 @@ const useOnRenderItem = (props: Props) => {
 	pluginsRef.current = props.plugins;
 	const foldersRef = useRef<FolderEntity[]>(null);
 	foldersRef.current = props.folders;
+
+	const allFoldersCollapsed = props.allFoldersCollapsed;
 
 	const onTagDrop_: DragEventHandler<HTMLElement> = useCallback(async event => {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
@@ -429,6 +432,7 @@ const useOnRenderItem = (props: Props) => {
 				item={item}
 				selectionState={selectionState}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
+				allFoldersCollapsed={allFoldersCollapsed}
 				index={index}
 				itemCount={itemCount}
 			/>;
@@ -474,6 +478,7 @@ const useOnRenderItem = (props: Props) => {
 		props.selectedIndex,
 		props.selectedIndexes,
 		props.containerRef,
+		allFoldersCollapsed,
 		itemCount,
 	]);
 };

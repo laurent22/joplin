@@ -25,6 +25,7 @@ export const StyledHeader = styled.div`
 	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding / 2}px;
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	user-select: none;
 	text-transform: uppercase;
 	//cursor: pointer;
@@ -52,6 +53,16 @@ export const StyledHeaderLabel = styled.span`
 	color: ${(props: StyleProps) => props.theme.color2};
 	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize * 1.1)}px;
 	font-weight: bold;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 30px;
+`;
+
+export const StyledHeaderButtons = styled.div`
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
 `;
 
 function listItemTextColor(props: StyleProps) {
