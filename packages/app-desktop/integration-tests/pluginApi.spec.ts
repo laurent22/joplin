@@ -2,6 +2,7 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { msleep, Second } from '@joplin/utils/time';
+import setSettingValue from './util/setSettingValue';
 
 test.describe('pluginApi', () => {
 	test('the editor.setText command should update the current note (use RTE: false)', async ({ startAppWithPlugins }) => {
@@ -78,6 +79,39 @@ test.describe('pluginApi', () => {
 		// Submitting the dialog should include form data in the output
 		await mainScreen.dialog.getByRole('button', { name: 'Okay' }).click();
 		await expectVisible(false);
+	});
+
+	test('should dismiss a plugin dialog when clicking Cancel with isolated iframes', async ({ startAppWithPlugins }) => {
+		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test note');
+
+		await setSettingValue(app, mainWindow, 'featureFlag.plugins.isolatePluginWebViews', true);
+
+		await mainScreen.goToAnything.runCommand(app, 'showTestDialogWithDismiss');
+		const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
+		await dialogContent.locator('p').waitFor();
+
+		await mainScreen.dialog.getByRole('button', { name: 'Cancel' }).click();
+		await expect(mainScreen.dialog).toBeHidden();
+
+		await mainScreen.noteEditor.expectToHaveText('cancel');
+	});
+
+	// Regression test for #13718
+	test('should dismiss a plugin dialog when pressing Escape with isolated iframes', async ({ startAppWithPlugins }) => {
+		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test note');
+
+		await setSettingValue(app, mainWindow, 'featureFlag.plugins.isolatePluginWebViews', true);
+
+		await mainScreen.goToAnything.runCommand(app, 'showTestDialogWithDismiss');
+		const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
+		await dialogContent.locator('p').waitFor();
+
+		await mainWindow.keyboard.press('Escape');
+		await expect(mainScreen.dialog).toBeHidden();
 	});
 
 	test('should be possible to create multiple toasts with the same text from a plugin', async ({ startAppWithPlugins }) => {
