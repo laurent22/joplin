@@ -812,6 +812,7 @@
 		document.addEventListener('copy', webviewLib.logEnabledEventHandler(e => {
 			const selection = window.getSelection();
 			if (!selection || selection.isCollapsed) return;
+			if (selection.rangeCount === 0 || !e.clipboardData) return;
 
 			const range = selection.getRangeAt(0);
 			const wrapper = document.createElement('div');
@@ -823,7 +824,7 @@
 			let node = range.commonAncestorContainer;
 			if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
 
-			while (node && node.id !== 'rendered-md' && node.id !== 'joplin-container-content') {
+			while (node && node !== document.body && node.id !== 'rendered-md' && node.id !== 'joplin-container-content') {
 				if (inlineTags.has(node.tagName)) {
 					const el = node.cloneNode(false);
 					while (wrapper.firstChild) el.appendChild(wrapper.firstChild);

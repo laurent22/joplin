@@ -418,8 +418,9 @@ test.describe('markdownEditor', () => {
 		await expect(viewerFrame.locator('strong')).toHaveText('bold text');
 
 		await viewerFrame.locator('#rendered-md').click();
-		await mainWindow.keyboard.press('Control+a');
-		await mainWindow.keyboard.press('Control+c');
+		const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+		await mainWindow.keyboard.press(`${modifier}+a`);
+		await mainWindow.keyboard.press(`${modifier}+c`);
 
 		const clipboardHtml = await mainWindow.evaluate(() => {
 			const { clipboard } = require('electron');
