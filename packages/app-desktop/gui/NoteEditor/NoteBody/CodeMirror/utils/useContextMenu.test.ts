@@ -6,36 +6,36 @@ describe('useContextMenu', () => {
 
 	it('should return type=image when cursor is inside markdown image', () => {
 		const line = `![alt text](:/${resourceId})`;
-		expect(getResourceIdFromMarkup(line, 15)).toEqual({ resourceId, type: 'image' });
+		expect(getResourceIdFromMarkup(line, 15, 0)).toEqual({ resourceId, type: 'image', markup: line, from: 0, to: line.length });
 	});
 
 	it('should return type=file when cursor is inside markdown link', () => {
 		const line = `[document.pdf](:/${resourceId})`;
-		expect(getResourceIdFromMarkup(line, 15)).toEqual({ resourceId, type: 'file' });
+		expect(getResourceIdFromMarkup(line, 15, 0)).toEqual({ resourceId, type: 'file', markup: line, from: 0, to: line.length });
 	});
 
 	it('should return null when cursor is outside markup', () => {
 		const line = `Some text ![alt](:/${resourceId}) more text`;
-		expect(getResourceIdFromMarkup(line, 5)).toBeNull();
-		expect(getResourceIdFromMarkup(line, line.length - 5)).toBeNull();
+		expect(getResourceIdFromMarkup(line, 5, 0)).toBeNull();
+		expect(getResourceIdFromMarkup(line, line.length - 5, 0)).toBeNull();
 	});
 
 	it('should correctly distinguish between image and file on same line', () => {
 		const line = `![image](:/${resourceId}) [file](:/${resourceId2})`;
-		expect(getResourceIdFromMarkup(line, 10)).toEqual({ resourceId, type: 'image' });
-		expect(getResourceIdFromMarkup(line, 48)).toEqual({ resourceId: resourceId2, type: 'file' });
+		expect(getResourceIdFromMarkup(line, 10, 0)).toEqual({ resourceId, type: 'image', markup: `![image](:/${resourceId})`, from: 0, to: 44 });
+		expect(getResourceIdFromMarkup(line, 48, 0)).toEqual({ resourceId: resourceId2, type: 'file', markup: `[file](:/${resourceId2})`, from: 45, to: 87 });
 	});
 
 	it('should return null for empty line', () => {
-		expect(getResourceIdFromMarkup('', 0)).toBeNull();
+		expect(getResourceIdFromMarkup('', 0, 0)).toBeNull();
 	});
 
 	it('should return null for line without resources', () => {
-		expect(getResourceIdFromMarkup('Just some regular text', 10)).toBeNull();
+		expect(getResourceIdFromMarkup('Just some regular text', 10, 0)).toBeNull();
 	});
 
 	it('should return null for non-resource URLs', () => {
-		expect(getResourceIdFromMarkup('![alt](https://example.com/image.png)', 10)).toBeNull();
-		expect(getResourceIdFromMarkup('[link](https://example.com)', 10)).toBeNull();
+		expect(getResourceIdFromMarkup('![alt](https://example.com/image.png)', 10, 0)).toBeNull();
+		expect(getResourceIdFromMarkup('[link](https://example.com)', 10, 0)).toBeNull();
 	});
 });

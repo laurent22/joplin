@@ -85,7 +85,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 		return {
 			isActive: () => { return true; },
 			label: '',
-			onAction: () => {},
+			onAction: () => { },
 			isSeparator: true,
 		};
 	};
@@ -256,14 +256,14 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				handleCopyToClipboard(options);
 				options.insertContent('');
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
 		},
 		copy: {
 			label: _('Copy'),
 			onAction: async (options: ContextMenuOptions) => {
 				handleCopyToClipboard(options);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
+			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => (!!options.textToCopy || !!options.htmlToCopy),
 		},
 		paste: {
 			label: _('Paste'),
