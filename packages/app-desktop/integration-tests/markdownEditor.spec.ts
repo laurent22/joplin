@@ -433,8 +433,8 @@ test.describe('markdownEditor', () => {
 		// #1D2024 is the dark theme backgroundColor - it should not appear in clipboard
 		expect(clipboardHtml).not.toContain('#1D2024');
 	});
-	
-	test('copying a bold word from the preview pane should preserve bold formatting', async ({ mainWindow, electronApp }) => {
+
+	test('copying a bold word from the preview pane should preserve bold formatting', async ({ mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
@@ -446,9 +446,8 @@ test.describe('markdownEditor', () => {
 		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
 		await expect(viewerFrame.locator('strong')).toHaveText('bold text');
 
-		// Double-click selects just the word — selection lands on the text node inside
-		// <strong>, not <strong> itself. Without the ancestor re-wrapping fix, <strong>
-		// would be dropped by cloneContents() and this assertion would fail.
+		// Double-click selects the text node inside <strong>, not <strong> itself.
+		// Without the ancestor re-wrapping fix, <strong> would be dropped.
 		await viewerFrame.locator('strong').dblclick();
 		const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
 		await mainWindow.keyboard.press(`${modifier}+c`);
