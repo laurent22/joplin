@@ -327,9 +327,9 @@ interface ConnectProps {
 }
 
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
-	const selectedFolder: FolderEntity = state.notesParentType === 'Folder' ? Folder.byId(state.folders, state.selectedFolderId) : null;
-	const userId = state.settings['sync.userId'];
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+	const selectedFolder: FolderEntity = windowState.notesParentType === 'Folder' ? Folder.byId(state.folders, windowState.selectedFolderId) : null;
+	const userId = state.settings['sync.userId'];
 
 	return {
 		notes: windowState.notes,
@@ -337,7 +337,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		selectedNoteIds: windowState.selectedNoteIds,
 		selectedFolderId: windowState.selectedFolderId,
 		themeId: state.settings.theme,
-		notesParentType: state.notesParentType,
+		notesParentType: windowState.notesParentType,
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
@@ -346,11 +346,11 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		noteSortOrder: state.settings['notes.sortOrder.field'],
 		uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
 		showCompletedTodos: state.settings.showCompletedTodos,
-		highlightedWords: state.highlightedWords,
+		highlightedWords: windowState.highlightedWords,
 		plugins: state.pluginService.plugins,
 		customCss: state.customViewerCss,
 		focusedField: state.focusedField,
-		parentFolderIsReadOnly: state.notesParentType === 'Folder' && selectedFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, selectedFolder as ItemSlice, userId, state.shareService) : false,
+		parentFolderIsReadOnly: windowState.notesParentType === 'Folder' && selectedFolder ? itemIsReadOnlySync(ModelType.Folder, ItemChange.SOURCE_UNSPECIFIED, selectedFolder as ItemSlice, userId, state.shareService) : false,
 		selectedFolderInTrash: itemIsInTrash(selectedFolder),
 	};
 };
