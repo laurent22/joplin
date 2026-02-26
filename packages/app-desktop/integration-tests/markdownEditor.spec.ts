@@ -404,5 +404,29 @@ test.describe('markdownEditor', () => {
 		await activateMainMenuItem(electronApp, 'Redo');
 		await noteEditor.expectToHaveText('A');
 	});
-});
 
+	test('copying from the preview pane should not include theme background color', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test copy formatting');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('**bold text**');
+
+		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
+		await expect(viewerFrame.locator('strong')).toHaveText('bold text');
+
+		await viewerFrame.locator('#rendered-md').click();
+		await mainWindow.keyboard.press('Control+a');
+		await mainWindow.keyboard.press('Control+c');
+
+		const clipboardHtml = await mainWindow.evaluate(() => {
+			const { clipboard } = require('electron');
+			return clipboard.readHTML();
+		});
+
+		expect(clipboardHtml).not.toContain('background-color');
+		expect(clipboardHtml).toContain('<strong>');
+	});
+});
