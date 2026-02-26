@@ -112,10 +112,21 @@ interface ContextMenuProps {
 	editorRef: RefObject<CodeMirrorControl>;
 	editorClassName: string;
 	containerRef: RefObject<HTMLDivElement | null>;
+	inheritedReadOnly?: boolean;
 }
 
 const useContextMenu = (props: ContextMenuProps) => {
-	const editorRef = props.editorRef;
+	const {
+		plugins,
+		dispatch,
+		editorClassName,
+		editorRef,
+		containerRef,
+		editorCutText,
+		editorCopyText,
+		editorPaste,
+		inheritedReadOnly,
+	} = props;
 	const windowId = useContext(WindowIdContext);
 
 	// The below code adds support for spellchecking when it is enabled
@@ -124,7 +135,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 	useEffect(() => {
 		const isAncestorOfCodeMirrorEditor = (elem: Element) => {
 			for (; elem.parentElement; elem = elem.parentElement) {
-				if (elem.classList.contains(props.editorClassName)) {
+				if (elem.classList.contains(editorClassName)) {
 					return true;
 				}
 			}
@@ -139,8 +150,8 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		const pointerInsideEditor = (params: ContextMenuParams, allowNonEditable = false) => {
 			const x = params.x, y = params.y, isEditable = params.isEditable;
-			const containerDoc = props.containerRef.current?.ownerDocument;
-			const elements = containerDoc?.getElementsByClassName(props.editorClassName);
+			const containerDoc = containerRef.current?.ownerDocument;
+			const elements = containerDoc?.getElementsByClassName(editorClassName);
 
 			// Note: We can't check inputFieldType here. When spellcheck is enabled,
 			// params.inputFieldType is "none". When spellcheck is disabled,
@@ -159,7 +170,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 		};
 
 		const getClickedImageContainer = (params: ContextMenuParams) => {
-			const containerDoc = props.containerRef.current?.ownerDocument;
+			const containerDoc = containerRef.current?.ownerDocument;
 			if (!containerDoc) return null;
 
 			const zoom = Setting.value('windowContentZoomFactor');
@@ -209,13 +220,13 @@ const useContextMenu = (props: ContextMenuProps) => {
 						changes: { from, to, insert: content },
 					});
 				},
-				isReadOnly: false,
+				isReadOnly: !!inheritedReadOnly,
 				fireEditorEvent: () => { },
 				htmlToMd: null,
 				mdToHtml: null,
 			};
 
-			const resourceMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
+			const resourceMenuItems = await buildMenuItems(menuItems(dispatch), contextMenuOptions);
 			for (const item of resourceMenuItems) {
 				menu.append(item);
 			}
@@ -258,7 +269,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 						const sourceFrom = Number(imageContainer.dataset.sourceFrom);
 						const sourceTo = Number(imageContainer.dataset.sourceTo);
 
-						if (resourceId && !isNaN(sourceFrom) && !isNaN(sourceTo)) {
+						if (!isNaN(sourceFrom) && !isNaN(sourceTo)) {
 							event.preventDefault();
 							moveCursorToImageLine(imageContainer);
 							const markup = getMarkupAt(sourceFrom, sourceTo);
@@ -292,7 +303,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 					label: _('Cut'),
 					enabled: hasSelectedText,
 					click: async () => {
-						props.editorCutText();
+						editorCutText();
 					},
 				}),
 			);
@@ -302,7 +313,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 					label: _('Copy'),
 					enabled: hasSelectedText,
 					click: async () => {
-						props.editorCopyText();
+						editorCopyText();
 					},
 				}),
 			);
@@ -312,7 +323,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 					label: _('Paste'),
 					enabled: true,
 					click: async () => {
-						props.editorPaste();
+						editorPaste();
 					},
 				}),
 			);
@@ -351,7 +362,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
+			menuUtils.pluginContextMenuItems(plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});
 
@@ -368,8 +379,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 		};
 	}, [
-		props.plugins, props.dispatch, props.editorClassName, editorRef, props.containerRef,
-		props.editorCutText, props.editorCopyText, props.editorPaste,
+		plugins, dispatch, editorClassName, editorRef, containerRef,
+		editorCutText, editorCopyText, editorPaste,
+		inheritedReadOnly,
 		windowId,
 	]);
 };

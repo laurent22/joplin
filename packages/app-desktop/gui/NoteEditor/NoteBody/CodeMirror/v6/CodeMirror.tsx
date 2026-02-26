@@ -84,7 +84,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [props.content]);
 
-	const onEditorPaste = useCallback(async (event: Event|null = null) => {
+	const onEditorPaste = useCallback(async (event: Event | null = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
 		if (editorRef.current) {
@@ -308,9 +308,10 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		editorRef,
 		editorClassName: 'cm-editor',
 		containerRef: rootRef,
+		inheritedReadOnly: props.disabled,
 	});
 
-	const lastSearchState = useRef<SearchState|null>(null);
+	const lastSearchState = useRef<SearchState | null>(null);
 	const onEditorEvent = useCallback((event: EditorEvent) => {
 		if (event.kind === EditorEventType.Scroll) {
 			editor_scroll();
@@ -444,7 +445,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={rootRef}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId} windowId={windowId}/>
+					<Toolbar themeId={props.themeId} windowId={windowId} />
 					{props.noteToolbar}
 				</div>
 				{editorViewerRow}

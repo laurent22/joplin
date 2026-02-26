@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext, RefObject } from 'react';
 
 // eslint-disable-next-line no-unused-vars
+import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
 import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
@@ -49,8 +50,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const editorRef = useRef(null);
-	const [editorRoot, setEditorRoot] = useState<HTMLDivElement|null>(null);
-	const rootRef = useRef<HTMLDivElement|null>(null);
+	const [editorRoot, setEditorRoot] = useState<HTMLDivElement | null>(null);
+	const rootRef = useRef<HTMLDivElement | null>(null);
 	rootRef.current = editorRoot;
 
 	const webviewRef = useRef(null);
@@ -414,7 +415,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [styles.editor.codeMirrorTheme]);
 
 	useEffect(() => {
-		if (!editorRoot) return () => {};
+		if (!editorRoot) return () => { };
 
 		const theme = themeStyle(props.themeId);
 
@@ -724,9 +725,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		plugins: props.plugins,
 		dispatch: props.dispatch,
 		editorCutText, editorCopyText, editorPaste,
-		editorRef,
+		editorRef: (editorRef as unknown) as RefObject<CodeMirrorControl>,
 		editorClassName: 'codeMirrorEditor',
 		containerRef: rootRef,
+		inheritedReadOnly: props.disabled,
 	});
 
 	function renderEditor() {
@@ -789,7 +791,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={setEditorRoot}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId} windowId={windowId}/>
+					<Toolbar themeId={props.themeId} windowId={windowId} />
 					{props.noteToolbar}
 				</div>
 				{editorViewerRow}
