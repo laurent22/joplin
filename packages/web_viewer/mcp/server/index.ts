@@ -3,6 +3,8 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js';
 import { z } from 'zod';
 import { ViewerUtil } from '../../lib/viewerUtil';
+import { Note } from '@/lib/note';
+import TurndownService from 'turndown';
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -18,19 +20,19 @@ function createServer() {
     version: '1.0.0',
   });
 
-  server.registerTool(
-    'add_test',
-    {
-      description: '与えられた数値の足し算をする（さらに10を足す）',
-      inputSchema: z.object({
-        a: z.number().describe('最初の数値'),
-        b: z.number().describe('2番目の数値'),
-      }),
-    },
-    async ({ a, b }) => ({
-      content: [{ type: 'text', text: String(a + b + 10) }],
-    })
-  );
+  // server.registerTool(
+  //   'add_test',
+  //   {
+  //     description: '与えられた数値の足し算をする（さらに10を足す）',
+  //     inputSchema: z.object({
+  //       a: z.number().describe('最初の数値'),
+  //       b: z.number().describe('2番目の数値'),
+  //     }),
+  //   },
+  //   async ({ a, b }) => ({
+  //     content: [{ type: 'text', text: String(a + b + 10) }],
+  //   })
+  // );
 
   server.registerTool(
     'get_note_tree',
@@ -43,6 +45,48 @@ function createServer() {
       const simpleTree = ViewerUtil.simpleTreeNodes(tree);
       return {
         content: [{ type: 'text', text: JSON.stringify(simpleTree) }],
+      };
+    }
+  );
+
+  server.registerTool(
+    'get_note_content',
+    {
+      description: 'Get the content of a specific note',
+      inputSchema: z.object({
+        noteId: z.string().describe('The ID of the note'),
+        offset: z.number().describe('The offset to start reading the note content from').optional(),
+        length: z.number().describe('The length of the content to read').optional(),
+      }),
+    },
+    async ({ noteId, offset, length }) => {
+      // Implement the logic to get the note content based on noteId, offset, and length
+      const content = Note.getNoteById(noteId);
+      if (!content) {
+        return {
+          content: [{ type: 'text', text: '' }],
+        };
+      }
+
+      let bodyText = content.body ?? '';
+
+      // If the note contains HTML content (markup_language === 1), convert to Markdown
+      if (bodyText) {
+        const turndownService = new TurndownService({
+          headingStyle: 'atx',
+          codeBlockStyle: 'fenced',
+        });
+        bodyText = turndownService.turndown(bodyText);
+      }
+
+      if (offset !== undefined && length !== undefined) {
+        const text = bodyText.slice(offset, offset + length);
+        return {
+          content: [{ type: 'text', text }],
+        };
+      }
+      return {
+        content: [{ type: 'text', text: bodyText }],
       };
     }
   );

@@ -28,6 +28,7 @@
     "@mui/x-tree-view": "^8.26.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.90.20",
+    "@types/turndown": "^5.0.6",
     "better-sqlite3": "^12.6.2",
     "cheerio": "^1.2.0",
     "express": "^5.2.1",
@@ -42,6 +43,7 @@
     "react-markdown": "^10.1.0",
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^4.5.8",
+    "turndown": "^7.2.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
