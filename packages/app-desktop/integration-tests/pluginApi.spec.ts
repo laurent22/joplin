@@ -88,6 +88,7 @@ test.describe('pluginApi', () => {
 			const mainScreen = await new MainScreen(mainWindow).setup();
 			await mainScreen.createNewNote('Test note');
 
+			// WebView isolation is currently behind a feature flag:
 			await setSettingValue(app, mainWindow, 'featureFlag.plugins.isolatePluginWebViews', true);
 
 			await mainScreen.goToAnything.runCommand(app, 'showTestDialogWithDismiss');
