@@ -7,7 +7,7 @@ import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
 import * as React from 'react';
-import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions, PanResponder, GestureResponderEvent, PanResponderGestureState } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
@@ -200,6 +200,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return shared.noteComponent_change(this, 'body', saveEvent.body);
 	});
 	private refreshKey: number | undefined;
+	private edgeSwipeResponder: any;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
@@ -358,6 +359,32 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 		this.speechToTextDialog_onText = this.speechToTextDialog_onText.bind(this);
 		this.audioRecorderDialog_onDismiss = this.audioRecorderDialog_onDismiss.bind(this);
+
+		if (Platform.OS === 'ios') {
+			this.edgeSwipeResponder = PanResponder.create({
+				onMoveShouldSetPanResponder: (_evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+					const isFromLeftEdge = _evt.nativeEvent.pageX < 25;
+					const isHorizontalSwipe = Math.abs(gestureState.dx) > 20 && Math.abs(gestureState.dy) < 20;
+					return isFromLeftEdge && isHorizontalSwipe;
+				},
+				onPanResponderRelease: (_evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+					if (gestureState.dx > 80) {
+						this.handleSwipeBack();
+					}
+				},
+			});
+		}
+	}
+
+	private handleSwipeBack() {
+		if (this.state.mode === 'edit') {
+			this.toggleVisiblePanes();
+			return;
+		}
+
+		this.props.dispatch({
+			type: 'NAV_BACK',
+		});
 	}
 
 	private registerCommands() {
@@ -1873,7 +1900,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		/>;
 
 		return (
-			<View style={this.rootStyle(this.props.themeId).root}>
+			<View
+				style={this.rootStyle(this.props.themeId).root}
+				{...(Platform.OS === 'ios' && this.edgeSwipeResponder
+					? this.edgeSwipeResponder.panHandlers
+					: {})}
+			>
 				{!increaseSpaceForEditor && header}
 				{!increaseSpaceForEditor && titleComp}
 				{bodyComponent}
