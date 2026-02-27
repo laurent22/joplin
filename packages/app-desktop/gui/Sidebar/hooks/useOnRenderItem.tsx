@@ -65,19 +65,31 @@ const isElementVisibleInContainer = (element: HTMLElement, container: HTMLElemen
 
 const focusListItem = (item: HTMLElement|null) => {
 	if (item) {
+		const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 		const itemList = item.closest('.item-list');
+		const activeTreeItem = activeElement?.closest('[role="treeitem"]');
+		const focusWasLost = activeElement === document.body;
 
-		// If the item is scrolled out of view, skip focusing it entirely.
-		// Without this guard, a re-render (e.g. after expanding/collapsing a folder)
-		// would focus the selected item and cause the browser to scroll it into view,
-		// producing an unexpected "scroll jump" back to the selection.
-		if (itemList instanceof HTMLElement && !isElementVisibleInContainer(item, itemList)) {
+		// If the currently focused element is a tree item inside the same list,
+		// the user is navigating with the keyboard — always allow focus to move
+		// to the newly selected item so arrow-key scrolling is not interrupted.
+		const isKeyboardNavigating = !!activeTreeItem && itemList?.contains(activeTreeItem);
+
+		// Avoid disturbing scroll while user is manually scrolling through the list.
+		// However, if focus was lost (activeElement -> <body>), or the user is
+		// navigating with the keyboard, allow re-focusing even when the selected
+		// item is currently out of view.
+		if (itemList instanceof HTMLElement && !isElementVisibleInContainer(item, itemList) && !focusWasLost && !isKeyboardNavigating) {
 			return;
 		}
 
-		// preventScroll: true avoids a secondary scroll caused by the focus() call
-		// itself when the item is near the edge of the visible area.
-		focus('useOnRenderItem', item, { preventScroll: true });
+		// Move focus only if needed: either focus was lost, or selection changed
+		// to a different tree item.
+		if (focusWasLost || activeTreeItem !== item) {
+			// preventScroll: true avoids a secondary scroll caused by the focus() call
+			// itself when the item is near the edge of the visible area.
+			focus('useOnRenderItem', item, { preventScroll: true });
+		}
 	}
 };
 
@@ -381,7 +393,12 @@ const useOnRenderItem = (props: Props) => {
 			multipleItemsSelected: props.selectedIndexes.length > 1,
 		};
 
-		const focusInList = document.hasFocus() && props.containerRef.current?.contains(document.activeElement);
+		const sidebarContainsFocus = props.containerRef.current?.contains(document.activeElement);
+		// Focus moves to <body> when the previously-focused element is removed
+		// from the DOM (e.g. scrolled out of the virtualized list). We still
+		// want to restore focus to the newly-selected item in that case.
+		const focusLostFromDom = document.activeElement === document.body;
+		const focusInList = document.hasFocus() && (sidebarContainsFocus || focusLostFromDom);
 		const anchorRef = (focusInList && primarySelected) ? focusListItem : noFocusListItem;
 
 		if (item.kind === ListItemType.Tag) {
