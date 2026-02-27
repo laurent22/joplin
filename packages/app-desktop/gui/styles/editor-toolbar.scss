@@ -8,8 +8,11 @@
 	padding-right: var(--joplin-main-padding);
 
 	&.-scrollable {
-		overflow-x: auto;
-	}
+        overflow-x: auto;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
 
 	> .group {
 		display: flex;
