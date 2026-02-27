@@ -2,7 +2,7 @@ import { rtrimSlashes } from '@joplin/lib/path-utils';
 import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig, SamlConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
-import { EnvVariables } from './env';
+import { EnvVariables, MailerSecurity } from './env';
 import parseStorageDriverConnectionString from './models/items/storage/parseStorageConnectionString';
 
 interface PackageJson {
@@ -84,12 +84,20 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables, slav
 	};
 }
 
+export function mailerSecurityForPort(port: number, security: MailerSecurity): MailerSecurity {
+	if (port === 587 && security === MailerSecurity.Tls) return MailerSecurity.Starttls;
+	if (port === 465 && security === MailerSecurity.Starttls) return MailerSecurity.Tls;
+	return security;
+}
+
 function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
+
+	const security = mailerSecurityForPort(env.MAILER_PORT, env.MAILER_SECURITY);
 	return {
 		enabled: env.MAILER_ENABLED,
 		host: env.MAILER_HOST,
 		port: env.MAILER_PORT,
-		security: env.MAILER_SECURITY,
+		security,
 		authUser: env.MAILER_AUTH_USER,
 		authPassword: env.MAILER_AUTH_PASSWORD,
 		noReplyName: env.MAILER_NOREPLY_NAME,
