@@ -1295,6 +1295,7 @@ packages/lib/components/EncryptionConfigScreen/utils.test.js
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/shared/NoteEditor/WarningBanner/onRichTextDismissLinkClick.js
 packages/lib/components/shared/NoteEditor/WarningBanner/onRichTextReadMoreLinkClick.js
+packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner.js
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.js
 packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.js

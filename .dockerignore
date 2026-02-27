@@ -17,3 +17,4 @@ packages/server/db-*.sqlite
 packages/server/dist/
 packages/server/logs/
 packages/server/temp/
+packages/transcribe/.env

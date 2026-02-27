@@ -5,6 +5,7 @@ import { reg } from './registry';
 import KeychainService from './services/keychain/KeychainService';
 import { Plugins } from './services/plugins/PluginService';
 import shim from './shim';
+import SyncTargetRegistry from './SyncTargetRegistry';
 
 const logger = Logger.create('versionInfo');
 
@@ -82,6 +83,15 @@ export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) 
 		logger.error('Failed to determine if keychain is supported', error);
 	}
 
+	let syncTargetName = '?';
+	try {
+		syncTargetName = SyncTargetRegistry.infoById(Setting.value('sync.target')).label;
+	} catch (error) {
+		logger.error('Failed to get sync target name', error);
+	}
+
+	const editorType = Setting.value('editor.codeView') ? _('Markdown') : _('Rich Text');
+
 	const body = [
 		_('%s %s (%s, %s)', p.name, p.version, Setting.value('env'), shim.platformName()),
 		'',
@@ -91,6 +101,8 @@ export default function versionInfo(packageInfo: PackageInfo, plugins: Plugins) 
 		_('Profile Version: %s', reg.db().version()),
 		_('Keychain Supported: %s', keychainSupported ? _('Yes') : _('No')),
 		_('Alternative instance ID: %s', Setting.value('altInstanceId') || '-'),
+		_('Sync target: %s', syncTargetName),
+		_('Editor: %s', editorType),
 	];
 
 	if (gitInfo) {
