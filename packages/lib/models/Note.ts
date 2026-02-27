@@ -710,15 +710,14 @@ export default class Note extends BaseItem {
 
 		// Convert note body to Markdown via WebWorker and save to markdown_notes / markdown_notes_normalized / markdown_notes_fts
 		try {
-			const fullNote = await Note.load(note.id);
-			if (fullNote && fullNote.body) {
+			if (o.body) {
 				const mdService = MarkdownNoteService.instance();
 				if (mdService.db()) {
 					mdService.processNote(
-						fullNote.id,
-						fullNote.parent_id || '',
-						fullNote.title || '',
-						fullNote.body
+						note.id,
+						o.parent_id || '',
+						o.title || '',
+						o.body
 					);
 				}
 			}
