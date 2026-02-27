@@ -81,14 +81,14 @@ const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEdi
 	// Save to settings after enabledItems changes, but skip on initial mount and after
 	// reinitialize — those are state restores, not user edits, and must not overwrite settings.
 	const isInitialMount = useRef(true);
-	const skipNextSave = useRef(false);
+	const skipSaveCount = useRef(0);
 	useEffect(() => {
 		if (isInitialMount.current) {
 			isInitialMount.current = false;
 			return;
 		}
-		if (skipNextSave.current) {
-			skipNextSave.current = false;
+		if (skipSaveCount.current > 0) {
+			skipSaveCount.current--;
 			return;
 		}
 		const commandNames = enabledItems.map(item => item.commandName);
@@ -96,7 +96,7 @@ const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEdi
 	}, [enabledItems]);
 
 	const reinitialize = useCallback((selectedNames: string[]) => {
-		skipNextSave.current = true;
+		skipSaveCount.current++;
 		setEnabledItems(buildEnabledItems(selectedNames));
 		const enabledNames = new Set(selectedNames.filter(n => n !== '-'));
 		setDisabledItems(buildDisabledItems(enabledNames));
