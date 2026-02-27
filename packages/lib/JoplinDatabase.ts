@@ -197,6 +197,8 @@ export default class JoplinDatabase extends Database {
 			'revisions',
 			'resources_to_download',
 			'key_values',
+			'markdown_notes',
+			'markdown_notes_normalized',
 		];
 
 		const queries = [];
@@ -343,7 +345,7 @@ export default class JoplinDatabase extends Database {
 		// must be set in the synchronizer too.
 
 		// Note: v16 and v17 don't do anything. They were used to debug an issue.
-		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34];
+		const existingDatabaseVersions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35];
 
 		let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
 
@@ -862,6 +864,62 @@ export default class JoplinDatabase extends Database {
 			if (targetVersion == 34) {
 				queries.push('CREATE VIRTUAL TABLE search_aux USING fts4aux(notes_fts)');
 				queries.push('CREATE VIRTUAL TABLE notes_spellfix USING spellfix1');
+			}
+
+			if (targetVersion == 35) {
+				// Create markdown_notes table to store markdownified notes
+				const markdownNotesTable = `
+					CREATE TABLE markdown_notes (
+						id TEXT PRIMARY KEY,
+						parent_id TEXT NOT NULL DEFAULT "",
+						title TEXT NOT NULL DEFAULT "",
+						body TEXT NOT NULL DEFAULT "",
+						created_time INT NOT NULL,
+						updated_time INT NOT NULL
+					);
+				`;
+				queries.push(this.sqlStringToLines(markdownNotesTable)[0]);
+				queries.push('CREATE INDEX markdown_notes_title ON markdown_notes (title)');
+				queries.push('CREATE INDEX markdown_notes_updated_time ON markdown_notes (updated_time)');
+				queries.push('CREATE INDEX markdown_notes_parent_id ON markdown_notes (parent_id)');
+
+				// Create markdown_notes_normalized table
+				const markdownNotesNormalized = `
+					CREATE TABLE markdown_notes_normalized (
+						id TEXT NOT NULL,
+						title TEXT NOT NULL DEFAULT "",
+						body TEXT NOT NULL DEFAULT ""
+					);
+				`;
+				queries.push(this.sqlStringToLines(markdownNotesNormalized)[0]);
+				queries.push('CREATE INDEX markdown_notes_normalized_id ON markdown_notes_normalized (id)');
+
+				// Create markdown_notes_fts virtual table for full-text search
+				const mdTableFields = 'id, title, body';
+				queries.push(`
+					CREATE VIRTUAL TABLE markdown_notes_fts USING fts4(
+						content="markdown_notes_normalized",
+						notindexed="id",
+						${mdTableFields}
+					);`);
+
+				// Triggers to keep markdown_notes_normalized and markdown_notes_fts in sync
+				queries.push(`
+					CREATE TRIGGER markdown_notes_fts_before_update BEFORE UPDATE ON markdown_notes_normalized BEGIN
+						DELETE FROM markdown_notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER markdown_notes_fts_before_delete BEFORE DELETE ON markdown_notes_normalized BEGIN
+						DELETE FROM markdown_notes_fts WHERE docid=old.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER markdown_notes_after_update AFTER UPDATE ON markdown_notes_normalized BEGIN
+						INSERT INTO markdown_notes_fts(docid, ${mdTableFields}) SELECT rowid, ${mdTableFields} FROM markdown_notes_normalized WHERE new.rowid = markdown_notes_normalized.rowid;
+					END;`);
+				queries.push(`
+					CREATE TRIGGER markdown_notes_after_insert AFTER INSERT ON markdown_notes_normalized BEGIN
+						INSERT INTO markdown_notes_fts(docid, ${mdTableFields}) SELECT rowid, ${mdTableFields} FROM markdown_notes_normalized WHERE new.rowid = markdown_notes_normalized.rowid;
+					END;`);
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };
