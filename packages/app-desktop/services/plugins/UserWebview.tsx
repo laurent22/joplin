@@ -135,6 +135,7 @@ function UserWebview(props: Props, ref: any) {
 
 	return <iframe
 		id={props.viewId}
+		title={props.viewId}
 		style={style}
 		className={`plugin-user-webview ${props.fitToContent ? '-fit-to-content' : ''} ${props.borderBottom ? '-border-bottom' : ''}`}
 		ref={viewRef}
