@@ -7,7 +7,7 @@ describe('services/DecryptionWorker', () => {
 		await switchClient(1);
 	});
 
-	it('concurrent start() calls should not crash with null result', async () => {
+	it('should not return null when a call to .start is cancelled', async () => {
 		const worker = decryptionWorker();
 
 		// Both calls should return a valid DecryptionResult, even if the
