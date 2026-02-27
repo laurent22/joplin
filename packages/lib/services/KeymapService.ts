@@ -8,7 +8,6 @@ import BaseService from './BaseService';
 
 const modifiersRegExp = {
 	darwin: /^(Ctrl|Option|Shift|Cmd)$/,
-	// Added Super and Meta so both are accepted on Linux/Windows
 	default: /^(Ctrl|Alt|AltGr|Shift|Super|Meta)$/,
 };
 
@@ -347,31 +346,48 @@ export default class KeymapService extends BaseService {
 			}
 		}
 	}
+	private normalizeModifierAliases(accelerator: string | null): string | null {
+		if (!accelerator) return accelerator;
+		return accelerator
+			.split('+')
+			.map((part) => {
+				const trimmed = part.trim();
+				const lower = trimmed.toLowerCase();
+				if (lower === 'meta' || lower === 'm' || lower === 'super') return 'Super';
+				return trimmed;
+			})
+			.join('+');
+	}
 
 	public validateKeymap(proposedKeymapItem: KeymapItem = null) {
 		const usedAccelerators = new Set();
 
 		// Validate as if the proposed change is already present in the current keymap
 		// Helpful for detecting any errors that'll occur, when the proposed change is performed on the keymap
-		if (proposedKeymapItem) usedAccelerators.add(proposedKeymapItem.accelerator);
+		if (proposedKeymapItem?.accelerator) {
+			usedAccelerators.add(this.normalizeModifierAliases(proposedKeymapItem.accelerator));
+		}
 
 		for (const item of Object.values(this.keymap)) {
-			const [itemAccelerator, itemCommand] = [item.accelerator, item.command];
-			if (proposedKeymapItem && itemCommand === proposedKeymapItem.command) continue; // Ignore the original accelerator
+			const normalizedAccelerator = this.normalizeModifierAliases(item.accelerator);
+			const itemCommand = item.command;
+			if (proposedKeymapItem && itemCommand === proposedKeymapItem.command) continue;
 
-			if (usedAccelerators.has(itemAccelerator)) {
-				const originalItem = (proposedKeymapItem && proposedKeymapItem.accelerator === itemAccelerator)
+			if (usedAccelerators.has(normalizedAccelerator)) {
+				const originalItem = (proposedKeymapItem &&
+					this.normalizeModifierAliases(proposedKeymapItem.accelerator) === normalizedAccelerator)
 					? proposedKeymapItem
-					: Object.values(this.keymap).find(_item => _item.accelerator === itemAccelerator);
+					: Object.values(this.keymap).find(_item =>
+						this.normalizeModifierAliases(_item.accelerator) === normalizedAccelerator);
 
 				throw new Error(_(
 					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
-					itemAccelerator,
+					item.accelerator,
 					originalItem.command,
 					itemCommand,
 				));
-			} else if (itemAccelerator) {
-				usedAccelerators.add(itemAccelerator);
+			} else if (normalizedAccelerator) {
+				usedAccelerators.add(normalizedAccelerator);
 			}
 		}
 	}
@@ -382,7 +398,7 @@ export default class KeymapService extends BaseService {
 		const parts = accelerator.split('+');
 		const isValid = parts.every((part, index) => {
 			const isKey = keysRegExp.test(part);
-			const isModifier = this.modifiersRegExp.test(part); // now accepts Super
+			const isModifier = this.modifiersRegExp.test(part);
 
 			if (isKey) {
 				// Key must be unique
@@ -418,8 +434,6 @@ export default class KeymapService extends BaseService {
 		default:
 			if (altKey) parts.push('Alt');
 			if (shiftKey) parts.push('Shift');
-			// Added: detect Super (Windows key) on Linux
-			// Use getModifierState if available, fallback to metaKey for compatibility
 			if (event.getModifierState?.('Super') || (metaKey && this.platform !== 'darwin')) {
 				parts.push('Super');
 			}

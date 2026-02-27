@@ -31,7 +31,6 @@ const normalizeAccelerator = (accelerator: string, editorVersion: CodeMirrorVers
 		if (/^(cmd|meta|m)$/i.test(mod)) {
 			cmd = true;
 		} else if (/^super$/i.test(mod)) {
-			// NEW: Recognize Super and map it to Cmd (Meta on Linux)
 			cmd = true;
 		} else if (/^a(lt)?$/i.test(mod)) {
 			alt = true;
@@ -45,7 +44,7 @@ const normalizeAccelerator = (accelerator: string, editorVersion: CodeMirrorVers
 	}
 	if (alt) { name = `Alt-${name}`; }
 	if (ctrl) { name = `Ctrl-${name}`; }
-	if (cmd) { name = `Cmd-${name}`; } // Super now becomes Cmd here
+	if (cmd) { name = `Cmd-${name}`; }
 	if (shift) { name = `Shift-${name}`; }
 	return name;
 	// End of code taken from codemirror/lib/codemirror.js
