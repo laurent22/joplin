@@ -1,7 +1,7 @@
 
 import manifestFromObject from './manifestFromObject';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function validateManifest(manifest: any): void {
-	manifestFromObject(manifest);
+export default function validateManifest(manifest: unknown): void {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	manifestFromObject(manifest as any);
 }
