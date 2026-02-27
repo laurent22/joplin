@@ -405,8 +405,8 @@ test.describe('markdownEditor', () => {
 		await noteEditor.expectToHaveText('A');
 	});
 
-	test('copying from the preview pane should not include theme background color', async ({ mainWindow, electronApp }) => {
-		// Set dark theme so we know #1D2024 would be present in clipboard without the fix
+	test('copying from the preview pane should not include theme background color and should preserve bold formatting', async ({ mainWindow, electronApp }) => {
+		// Set dark theme so background-color would be present in clipboard without the fix
 		await setSettingValue(electronApp, mainWindow, 'theme', 2);
 
 		const mainScreen = await new MainScreen(mainWindow).setup();
@@ -415,36 +415,10 @@ test.describe('markdownEditor', () => {
 		await mainScreen.createNewNote('Test copy formatting');
 		const noteEditor = mainScreen.noteEditor;
 		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('**bold text**');
+		await mainWindow.keyboard.type('**hello**');
 
 		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
-		await expect(viewerFrame.locator('strong')).toHaveText('bold text');
-
-		await viewerFrame.locator('#rendered-md').click();
-		const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
-		await mainWindow.keyboard.press(`${modifier}+a`);
-		await mainWindow.keyboard.press(`${modifier}+c`);
-
-		const clipboardHtml = await mainWindow.evaluate(() => {
-			const { clipboard } = require('electron');
-			return clipboard.readHTML();
-		});
-
-		// #1D2024 is the dark theme backgroundColor - it should not appear in clipboard
-		expect(clipboardHtml).not.toContain('#1D2024');
-	});
-
-	test('copying a bold word from the preview pane should preserve bold formatting', async ({ mainWindow }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.waitFor();
-
-		await mainScreen.createNewNote('Test bold copy');
-		const noteEditor = mainScreen.noteEditor;
-		await noteEditor.focusCodeMirrorEditor();
-		await mainWindow.keyboard.type('**bold text**');
-
-		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
-		await expect(viewerFrame.locator('strong')).toHaveText('bold text');
+		await expect(viewerFrame.locator('strong')).toHaveText('hello');
 
 		// Double-click selects the text node inside <strong>, not <strong> itself.
 		// Without the ancestor re-wrapping fix, <strong> would be dropped.
@@ -457,6 +431,8 @@ test.describe('markdownEditor', () => {
 			return clipboard.readHTML();
 		});
 
+		expect(clipboardHtml).toContain('hello');
+		expect(clipboardHtml).not.toMatch(/background-color\s*:/i);
 		expect(clipboardHtml).toContain('<strong>');
 	});
 });
