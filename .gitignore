@@ -1594,6 +1594,7 @@ packages/lib/services/plugins/utils/makeListener.js
 packages/lib/services/plugins/utils/manifestFromObject.js
 packages/lib/services/plugins/utils/mapEventHandlersToIds.js
 packages/lib/services/plugins/utils/types.js
+packages/lib/services/plugins/utils/validateManifest.js
 packages/lib/services/plugins/utils/validatePluginId.test.js
 packages/lib/services/plugins/utils/validatePluginId.js
 packages/lib/services/plugins/utils/validatePluginPlatforms.test.js

@@ -1,5 +1,6 @@
 import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
+import validateManifest from './utils/validateManifest';
 import Global from './api/Global';
 import BasePluginRunner from './BasePluginRunner';
 import BaseService from '../BaseService';
@@ -34,7 +35,7 @@ export interface Plugins {
 }
 
 export interface SettingAndValue {
-	[settingName: string]: string|number|boolean;
+	[settingName: string]: string | number | boolean;
 }
 
 export interface DefaultPluginSettings {
@@ -211,7 +212,7 @@ export default class PluginService extends BaseService {
 		return this.pluginById(id).manifest?.name ?? 'Unknown';
 	}
 
-	public viewControllerByViewId(id: string): ViewController|null {
+	public viewControllerByViewId(id: string): ViewController | null {
 		for (const [, plugin] of Object.entries(this.plugins_)) {
 			if (plugin.hasViewController(id)) return plugin.viewController(id);
 		}
@@ -522,7 +523,7 @@ export default class PluginService extends BaseService {
 	public describeIncompatibility(manifest: PluginManifest) {
 
 		try {
-			manifestFromObject(manifest);
+			validateManifest(manifest);
 		} catch (error) {
 			return _('Invalid plugin manifest: %s', error.message);
 		}
