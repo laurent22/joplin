@@ -208,7 +208,11 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
-		const handleCreated = async (change: Change, item: Item, share: Share) => {
+		// For performance, handleCreated acts on all changes for a particular item at once.
+		//
+		// This function must behave correctly regardless of whether it is called before or after
+		// other events are processed.
+		const handleCreated = async (item: Item, changes: Change[], share: Share) => {
 			if (!item.jop_share_id) return;
 
 			// When a folder is unshared, the share object is deleted, then all
@@ -229,7 +233,9 @@ export default class ShareModel extends BaseModel<Share> {
 
 			const shareUserIds = await this.allShareUserIds(share);
 			for (const shareUserId of shareUserIds) {
-				if (shareUserId === change.user_id) continue;
+				const hasCreationEvent = changes.some(change => change.user_id === shareUserId);
+				if (hasCreationEvent) continue;
+
 				await addUserItem(shareUserId, item.id);
 			}
 
@@ -404,6 +410,21 @@ export default class ShareModel extends BaseModel<Share> {
 			perfTimer.pop();
 		};
 
+		const buildItemToChangeTypeMap = (changeType: ChangeType, changes: Change[]) => {
+			const itemToChanges = new Map<Uuid, Change[]>();
+			for (const change of changes) {
+				if (change.type !== changeType) continue;
+
+				const itemChanges = itemToChanges.get(change.item_id);
+				if (itemChanges) {
+					itemChanges.push(change);
+				} else {
+					itemToChanges.set(change.item_id, [change]);
+				}
+			}
+			return itemToChanges;
+		};
+
 		// This loop essentially applies the change made by one user to all the
 		// other users in the share.
 		//
@@ -449,18 +470,17 @@ export default class ShareModel extends BaseModel<Share> {
 				await this.withTransaction(async () => {
 					perfTimer.push(`Processing ${changes.length} changes`);
 
-					const itemToUpdates = new Map<Uuid, Change[]>();
-					for (const change of changes) {
-						if (change.type === ChangeType.Update) {
-							const updates = itemToUpdates.get(change.item_id);
-							if (updates) {
-								updates.push(change);
-							} else {
-								itemToUpdates.set(change.item_id, [change]);
-							}
-						}
+					// Performance: Group creation events per-item
+					const itemToCreations = buildItemToChangeTypeMap(ChangeType.Create, changes);
+					for (const [itemId, itemChanges] of itemToCreations.entries()) {
+						const item = items.find(i => i.id === itemId);
+						if (!item) continue;
+
+						const itemShare = shares.find(s => s.id === item.jop_share_id);
+						await handleCreated(item, itemChanges, itemShare);
 					}
 
+					const itemToUpdates = buildItemToChangeTypeMap(ChangeType.Update, changes);
 					for (const change of changes) {
 						const item = items.find(i => i.id === change.item_id);
 
@@ -468,10 +488,6 @@ export default class ShareModel extends BaseModel<Share> {
 						// deleted, so take this into account.
 						if (item) {
 							const itemShare = shares.find(s => s.id === item.jop_share_id);
-
-							if (change.type === ChangeType.Create) {
-								await handleCreated(change, item, itemShare);
-							}
 
 							if (change.type === ChangeType.Update) {
 								const allUpdates = itemToUpdates.get(item.id);
