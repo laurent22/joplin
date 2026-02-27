@@ -103,9 +103,9 @@ const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEdi
 	}, [buildEnabledItems, buildDisabledItems]);
 
 	const handleMoveUp = useCallback((index: number) => {
-		if (index <= 0) return;
-
 		setEnabledItems(prev => {
+			if (index <= 0) return prev;
+
 			const newItems = [...prev];
 			[newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]];
 			return newItems;
