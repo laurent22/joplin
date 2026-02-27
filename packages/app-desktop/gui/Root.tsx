@@ -16,7 +16,7 @@ import Setting from '@joplin/lib/models/Setting';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import DialogTitle from './DialogTitle';
 import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './DialogButtonRow';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 import ImportScreen from './ImportScreen';
 import ResourceScreen from './ResourceScreen';

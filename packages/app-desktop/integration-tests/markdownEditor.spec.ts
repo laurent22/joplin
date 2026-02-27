@@ -276,8 +276,12 @@ test.describe('markdownEditor', () => {
 		expect(imageSize[1]).toBeGreaterThan(0);
 	});
 
-	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
+	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow);
+		// Workaround: Required for extracting content accurately from the Markdown editor
+		await mainScreen.noteEditor.disableInlineRendering(electronApp);
+
+		await mainScreen.setup();
 		await mainScreen.createNewNote('Original');
 		const noteEditor = mainScreen.noteEditor;
 		await noteEditor.hideViewer();

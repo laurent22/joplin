@@ -20,6 +20,7 @@
     "./ipc": "./dist/ipc.js",
     "./path": "./dist/path.js",
     "./cli": "./dist/cli.js",
+    "./array": "./dist/array.js",
     "./version": "./dist/version.js"
   },
   "publishConfig": {

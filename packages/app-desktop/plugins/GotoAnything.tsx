@@ -21,7 +21,7 @@ import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import Resource from '@joplin/lib/models/Resource';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
-import Dialog from '../gui/Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 
 const logger = Logger.create('GotoAnything');
@@ -356,13 +356,18 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Folder.search({ titlePattern: searchQuery });
+				searchQuery = this.state.query.substr(1).trim();
+				const normalizedSearchQuery = removeDiacritics(searchQuery).toLowerCase();
 
-				for (let i = 0; i < results.length; i++) {
-					const row = results[i];
-					const path = Folder.folderPathString(this.props.folders, row.parent_id);
-					results[i] = { ...row, path: path ? path : '/' };
+				results = [];
+				for (const folder of this.props.folders) {
+					if (folder.deleted_time) continue;
+
+					const normalizedTitle = removeDiacritics(folder.title).toLowerCase();
+					if (normalizedSearchQuery && normalizedTitle.indexOf(normalizedSearchQuery) < 0) continue;
+
+					const path = Folder.folderPathString(this.props.folders, folder.parent_id);
+					results.push({ ...folder, path: path ? path : '/' });
 				}
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;

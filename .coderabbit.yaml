@@ -1,18 +1,93 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: "en-GB"
-early_access: false
 reviews:
-  profile: "chill"
-  request_changes_workflow: false
-  high_level_summary: true
+  high_level_summary: false
+  estimate_code_review_effort: false
   poem: false
-  review_status: true
-  collapse_walkthrough: false
   auto_review:
     enabled: true
     drafts: false
-    ignored_pr_authors:
+    ignore_usernames:
       - "renovate[bot]"
-  path_instructions: []
-chat:
-  auto_reply: true
+  auto_apply_labels: true
+  labeling_instructions:
+    - label: "accessibility"
+      instructions: "Apply when the PR contains changes related to accessibility, screen readers, keyboard navigation, or ARIA attributes"
+    - label: "android"
+      instructions: "Apply when the PR modifies files under packages/app-mobile/android/. Or when the PR modifies files under packages/app-mobile and the change is specific to Android only"
+    - label: "api"
+      instructions: "Apply when the PR modifies files under packages/lib/services/rest/"
+    - label: "bug"
+      instructions: "Apply when the PR fixes a bug or unexpected behaviour"
+    - label: "ci"
+      instructions: "Apply when the PR modifies files under .github/workflows/ or .circleci/"
+    - label: "cli"
+      instructions: "Apply when the PR modifies files under packages/app-cli/, except if all the modified files are under packages/app-cli/tests/"
+    - label: "clipper"
+      instructions: "Apply when the PR modifies files under packages/app-clipper/"
+    - label: "database"
+      instructions: "Apply when the PR is mainly about modifying database schema, migrations, or database-related logic"
+    - label: "desktop"
+      instructions: "Apply when the PR modifies files under packages/app-desktop/"
+    - label: "documentation"
+      instructions: "Apply when the PR modifies files under readme/"
+    - label: "draw"
+      instructions: "Apply when the PR modifies files under packages/default-plugins and relates to the JS-Draw drawing plugin"
+    - label: "editor"
+      instructions: "Apply when the PR modifies files under packages/editor/ or packages/app-mobile/components/NoteEditor/"
+    - label: "enhancement"
+      instructions: "Apply when the PR adds a new feature or improves existing functionality (not a bug fix)"
+    - label: "export"
+      instructions: "Apply when the PR is mainly about changes to the export functionality (PDF, HTML, JEX, etc.)"
+    - label: "import"
+      instructions: "Apply when the PR is mainly about changes to the import functionality (Evernote, Markdown, etc.)"
+    - label: "iOS"
+      instructions: "Apply when the PR modifies files under packages/app-mobile/ios/. Or when the PR modifies files under packages/app-mobile and the change is specific to iOS only"
+    - label: "linux"
+      instructions: "Apply when the PR is mainly about changes specific to Linux"
+    - label: "linux/wayland"
+      instructions: "Apply when the PR is mainly about changes specific to Linux Wayland"
+    - label: "macOS"
+      instructions: "Apply when the PR is mainly about changes specific to macOS"
+    - label: "markdown-editor"
+      instructions: "Apply when the PR modifies files under packages/editor/CodeMirror"
+    - label: "mobile"
+      instructions: "Apply when the PR modifies files under packages/app-mobile/"
+    - label: "OCR"
+      instructions: "Apply when the PR contains changes related to OCR (optical character recognition) functionality"
+    - label: "performance"
+      instructions: "Apply when the PR improves performance, reduces memory usage, or optimises speed"
+    - label: "plugins"
+      instructions: "Apply when the PR modifies files under packages/lib/services/plugins/ or packages/plugin-repo-cli/"
+    - label: "Regression"
+      instructions: "Apply when the linked issue, if any, has the Regression label"
+    - label: "renderer"
+      instructions: "Apply when the PR modifies files under packages/renderer/ or packages/turndown/"
+    - label: "search"
+      instructions: "Apply when the PR is mainly about changes to the search functionality"
+    - label: "security"
+      instructions: "Apply when the PR is mainly about addressing a security vulnerability or improving security"
+    - label: "server"
+      instructions: "Apply when the PR modifies files under packages/server/"
+    - label: "Sharing"
+      instructions: "Apply when the PR is mainly about changes to the note or notebook/folder sharing features"
+    - label: "sync"
+      instructions: "Apply when the PR modifies files under packages/lib/services/synchronizer/, packages/lib/Sync*.ts or packages/lib/services/e2ee/"
+    - label: "tags"
+      instructions: "Apply when the PR is mainly about changes to the tag management or tagging functionality"
+    - label: "transcribe"
+      instructions: "Apply when the PR modifies files under packages/transcribe"
+    - label: "translation"
+      instructions: "Apply when the PR modifies files under packages/tools/locales/ or **/locales/"
+    - label: "Voice typing"
+      instructions: "Apply when the PR is mainly about changes to the voice typing functionality"
+    - label: "web"
+      instructions: "Apply when the PR modifies files under packages/app-web/. Or when the PR modifies files under packages/app-mobile and the change is specific to the web app only"
+    - label: "windows"
+      instructions: "Apply when the PR is mainly about changes specific to Windows"
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "readme/dev/coding_style.md"
+      - "readme/dev/index.md"

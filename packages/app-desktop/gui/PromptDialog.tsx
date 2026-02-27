@@ -5,7 +5,7 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import { ChangeEvent } from 'react';
 import { formatDateTimeLocalToMs, isValidDate } from '@joplin/utils/time';
 import lightTheme from '@joplin/lib/themes/light';
@@ -250,6 +250,16 @@ export default class PromptDialog extends React.Component<Props, any> {
 					// Do nothing
 				} else {
 					onClose(true);
+				}
+			} else if (event.key === 'Escape') {
+				// react-select calls preventDefault() on the Escape keydown
+				// event, which prevents the native <dialog> cancel event from
+				// firing. We handle Escape explicitly here to ensure the dialog
+				// can be closed with the Escape key.
+				if ((this.props.inputType === 'tags' || this.props.inputType === 'dropdown') && this.menuIsOpened_) {
+					// Let react-select close the dropdown menu
+				} else {
+					onClose(false, 'cancel');
 				}
 			}
 		};

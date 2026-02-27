@@ -270,6 +270,10 @@ Deletes the note with ID :id
 
 By default, the note will be moved **to the trash**. To permanently delete it, add the query parameter `permanent=1`
 
+### DELETE /notes/:id/revisions
+
+Deletes all the revisions attached to this note.
+
 ## Folders
 
 This is actually a notebook. Internally notebooks are called "folders".

@@ -212,7 +212,12 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().name), click: () => { app.mainWindow().show(); } },
 				{ type: 'separator' },
-				{ label: _('Quit'), click: () => { void app.quit(); } },
+				{ label: _('Quit'), click: () => {
+					app.quitWithSyncCheck(
+						(action: { type: string; [key: string]: unknown }) => this.store().dispatch(action),
+						this.store().getState().syncPending,
+					);
+				} },
 			]);
 			app.createTray(contextMenu);
 		}
@@ -633,6 +638,7 @@ class Application extends BaseApplication {
 
 			if (Setting.value('env') === 'dev') {
 				void AlarmService.updateAllNotifications();
+				RevisionService.instance().runInBackground();
 			} else {
 				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 				void reg.scheduleSync(1000).then(() => {
@@ -641,10 +647,11 @@ class Application extends BaseApplication {
 					void AlarmService.updateAllNotifications();
 
 					void DecryptionWorker.instance().scheduleStart();
+
+					RevisionService.instance().runInBackground();
 				});
 			}
 
-			RevisionService.instance().runInBackground();
 			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		});
 

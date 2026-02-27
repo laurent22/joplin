@@ -658,13 +658,84 @@ footer .bottom-links-row p {
 }
 
 .language-switcher {
-	display: inline;
+	display: inline-block;
+	position: relative;
+	margin-left: 20px;
 }
 
 .language-switcher > button {
 	border: none;
 	background-color: transparent;
 	color: #0557ba;
+	cursor: pointer;
+	padding: 0;
+}
+
+.language-switcher > button:hover {
+	opacity: 0.8;
+}
+
+.language-switcher .dropdown-menu {
+	min-width: 100px;
+	padding: 5px 0 !important;
+	margin: 0 !important;
+	text-align: left;
+}
+
+.language-switcher .dropdown-menu li {
+	padding: 0 !important;
+	margin: 0 !important;
+	list-style: none;
+}
+
+.language-switcher .dropdown-item {
+	color: #333 !important;
+	padding: 8px 15px !important;
+	margin: 0 !important;
+	display: block;
+	text-align: left;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.language-switcher .dropdown-item.active {
+	background-color: #0557ba !important;
+	color: #fff !important;
+	margin: 0 !important;
+	border-radius: 0 !important;
+}
+
+.language-switcher .dropdown-item:hover:not(.active) {
+	background-color: #f0f0f0;
+}
+
+/* Language switcher on front page (blue background) */
+.navbar-frontpage .language-switcher > button {
+	color: #fff;
+}
+
+/* Mobile language section */
+.menu-mobile-language {
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu-language-label {
+	color: #90b1d9;
+	margin-bottom: 10px;
+	font-size: 0.9em;
+}
+
+.mobile-language-link {
+	display: inline-block;
+	margin: 0 10px;
+	padding: 5px 15px;
+	border-radius: 5px;
+}
+
+.mobile-language-link.active {
+	background-color: rgba(255, 255, 255, 0.2);
 }
 
 .joplin-cloud-feature-list .feature-description {

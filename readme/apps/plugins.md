@@ -47,3 +47,9 @@ Alternatively you can simply remove *.jpl from the plugin directory (see Install
 There is documentation of the plugin API along with documentation on plugin development. Check the [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/index.md) page for these items.
 For community discussion and assistance on plugin development please also see the [Joplin Discourse `plugins development` category](https://discourse.joplinapp.org/c/development/plugins/19).
 Other resources can be found in the `Joplin API - Get Started` and `Joplin API - Reference` categories on the [Joplin Help page](https://joplinapp.org/help/)
+
+## Video tutorial
+
+Watch this short video to learn how to find and install plugins:
+
+[![Watch the video](https://img.youtube.com/vi/wutW3IXGTNI/hqdefault.jpg)](https://www.youtube.com/watch?v=wutW3IXGTNI)
