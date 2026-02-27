@@ -65,6 +65,7 @@ import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import { nativeTheme } from 'electron';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -176,6 +177,7 @@ class Application extends BaseApplication {
 
 		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key)) || action.type === 'SETTING_UPDATE_ALL')) {
 			this.handleThemeAutoDetect();
+			this.updateNativeTitleBarTheme();
 		}
 
 		if (action.type === 'PLUGIN_ADD') {
@@ -194,6 +196,29 @@ class Application extends BaseApplication {
 			Setting.setValue('theme', Setting.value('preferredDarkTheme'));
 		} else {
 			Setting.setValue('theme', Setting.value('preferredLightTheme'));
+		}
+	}
+
+	public updateNativeTitleBarTheme() {
+		// 1. If auto-detect is on, let the OS decide
+		if (Setting.value('themeAutoDetect')) {
+			nativeTheme.themeSource = 'system';
+			return;
+		}
+
+		// 2. If auto-detect is off, grab the current Joplin theme
+		const currentTheme = Setting.value('theme');
+		const darkThemes = [
+			Setting.value('preferredDarkTheme'),
+			2, // Setting.THEME_DARK
+			22, // Setting.THEME_OLED_DARK
+		];
+
+		// 3. Force the Windows/macOS title bar to match
+		if (darkThemes.includes(currentTheme)) {
+			nativeTheme.themeSource = 'dark';
+		} else {
+			nativeTheme.themeSource = 'light';
 		}
 	}
 
