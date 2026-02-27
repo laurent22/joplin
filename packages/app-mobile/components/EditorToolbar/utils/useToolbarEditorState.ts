@@ -88,7 +88,7 @@ const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEdi
 			return;
 		}
 		if (skipSaveCount.current > 0) {
-			skipSaveCount.current--;
+			skipSaveCount.current = 0;
 			return;
 		}
 		const commandNames = enabledItems.map(item => item.commandName);
