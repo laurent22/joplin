@@ -6682,16 +6682,6 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-
-#: packages/lib/models/settings/builtInMetadata.ts:1738
-#: packages/lib/models/settings/builtInMetadata.ts:1753
-#: packages/lib/models/settings/builtInMetadata.ts:1768
-msgid ""
-"The factor property sets how the item will grow or shrink to fit the "
-"available space in its container with respect to the other items. Thus an "
-"item with a factor of 2 will take twice as much space as an item with a "
-"factor of 1.Restart app to see changes."
-msgstr ""
 "Свойството фактор определя как елементът ще расте или се свива за да се вмести в достъпното "
 "пространство в контейнера си спрямо другите елементи. Така елемент с фактор 2 ще заеме двойно "
 "повече място от елемент с фактор 1. Рестартирайте приложението за да видите промените."
