@@ -20,6 +20,14 @@ const getDefaultPluginsInfo = (): DefaultPluginsInfo => {
 		'io.github.personalizedrefrigerator.js-draw': {
 
 		},
+
+		'joplin.plugin.benji.favorites': {
+
+		},
+
+		'io.github.jackgruber.notelistpreview': {
+
+		},
 	};
 	return defaultPlugins;
 };

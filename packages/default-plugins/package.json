@@ -14,7 +14,9 @@
   },
   "devDependencies": {
     "@types/yargs": "17.0.35",
+    "joplin-plugin-benji-favorites": "1.3.2",
     "joplin-plugin-freehand-drawing": "4.3.0",
+    "joplin-plugin-notelistpreview": "1.1.0",
     "ts-node": "10.9.2",
     "typescript": "5.8.3"
   },

@@ -7,5 +7,13 @@
 	"io.github.personalizedrefrigerator.js-draw": {
 		"cloneUrl": "https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing.git",
 		"package": "joplin-plugin-freehand-drawing"
+	},
+	"joplin.plugin.benji.favorites": {
+		"cloneUrl": "https://github.com/benji300/joplin-favorites.git",
+		"package": "joplin-plugin-benji-favorites"
+	},
+	"io.github.jackgruber.notelistpreview": {
+		"cloneUrl": "https://github.com/JackGruber/joplin-plugin-notelistpreview.git",
+		"package": "joplin-plugin-notelistpreview"
 	}
 }
