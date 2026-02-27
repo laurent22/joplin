@@ -8,7 +8,8 @@ import BaseService from './BaseService';
 
 const modifiersRegExp = {
 	darwin: /^(Ctrl|Option|Shift|Cmd)$/,
-	default: /^(Ctrl|Alt|AltGr|Shift|Super)$/,
+	// Added Super and Meta so both are accepted on Linux/Windows
+	default: /^(Ctrl|Alt|AltGr|Shift|Super|Meta)$/,
 };
 
 const defaultKeymapItems = {
@@ -381,7 +382,7 @@ export default class KeymapService extends BaseService {
 		const parts = accelerator.split('+');
 		const isValid = parts.every((part, index) => {
 			const isKey = keysRegExp.test(part);
-			const isModifier = this.modifiersRegExp.test(part);
+			const isModifier = this.modifiersRegExp.test(part); // now accepts Super
 
 			if (isKey) {
 				// Key must be unique
@@ -417,6 +418,11 @@ export default class KeymapService extends BaseService {
 		default:
 			if (altKey) parts.push('Alt');
 			if (shiftKey) parts.push('Shift');
+			// Added: detect Super (Windows key) on Linux
+			// Use getModifierState if available, fallback to metaKey for compatibility
+			if (event.getModifierState?.('Super') || (metaKey && this.platform !== 'darwin')) {
+				parts.push('Super');
+			}
 		}
 
 		// Finally, the key
