@@ -294,6 +294,7 @@ export default class JoplinDatabase extends Database {
 					if (tableName == 'table_fields') continue;
 					if (tableName == 'sqlite_sequence') continue;
 					if (tableName.indexOf('notes_fts') === 0) continue;
+					if (tableName.indexOf('markdown_notes_fts') === 0) continue;
 					if (tableName == 'notes_spellfix') continue;
 					if (tableName == 'search_aux') continue;
 					chain.push(() => {

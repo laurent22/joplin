@@ -42,6 +42,7 @@ import SearchEngine from './services/searchengine/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
+import MarkdownNoteService from './services/MarkdownNoteService';
 const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
 import MigrationService from './services/MigrationService';
 const { toSystemSlashes } = require('./path-utils');
@@ -816,6 +817,9 @@ export default class BaseApplication {
 		SearchEngine.instance().setDb(reg.db());
 		SearchEngine.instance().setLogger(reg.logger());
 		SearchEngine.instance().scheduleSyncTables();
+
+		MarkdownNoteService.instance().setDb(reg.db());
+		MarkdownNoteService.instance().setLogger(reg.logger());
 
 		const currentFolderId = Setting.value('activeFolderId');
 		let currentFolder = null;

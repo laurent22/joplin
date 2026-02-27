@@ -128,6 +128,21 @@ export interface NotesNormalizedEntity {
   'source_url'?: string;
   'type_'?: number;
 }
+export interface MarkdownNoteEntity {
+  'id'?: string | null;
+  'parent_id'?: string;
+  'title'?: string;
+  'body'?: string;
+  'created_time'?: number;
+  'updated_time'?: number;
+  'type_'?: number;
+}
+export interface MarkdownNoteNormalizedEntity {
+  'id'?: string;
+  'title'?: string;
+  'body'?: string;
+  'type_'?: number;
+}
 export interface ResourceLocalStateEntity {
   'id'?: number | null;
   'resource_id'?: string;
