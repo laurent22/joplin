@@ -4,6 +4,7 @@ import { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synch
 import Note from '../../models/Note';
 import Revision from '../../models/Revision';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/utils';
+import { onRevisionServiceSettingsChanged } from './syncInfoUtils';
 
 describe('Synchronizer.revisions', () => {
 
@@ -301,4 +302,27 @@ describe('Synchronizer.revisions', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should sync revision service settings across clients', (async () => {
+		const changeSetting = (key: string, value: unknown) => {
+			Setting.setValue(key, value);
+			onRevisionServiceSettingsChanged(key, value);
+		};
+
+		changeSetting('revisionService.enabled', false);
+		await synchronizerStart();
+		await switchClient(2);
+
+		expect(Setting.value('revisionService.enabled')).toBe(true);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.enabled')).toBe(false);
+
+		changeSetting('revisionService.enabled', true);
+		await synchronizerStart();
+		await switchClient(1);
+
+		expect(Setting.value('revisionService.enabled')).toBe(false);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.enabled')).toBe(true);
+	}));
 });
