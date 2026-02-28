@@ -175,6 +175,13 @@ export default class InteropServiceHelper {
 				fs.rmSync(workspace, { recursive: true, force: true });
 			}
 			fs.mkdirSync(path, { recursive: true });
+		} else if (module.format === 'markdowndb') {
+			// No dialog needed — markdowndb saves directly to DB
+			path = `${Setting.value('profileDir')}/markdowndb_workspace`;
+			if (fs.existsSync(path)) {
+				fs.rmSync(path, { recursive: true, force: true });
+			}
+			fs.mkdirSync(path, { recursive: true });
 		} else {
 			path = bridge().showOpenDialog({
 				properties: ['openDirectory', 'createDirectory'],
