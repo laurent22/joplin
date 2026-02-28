@@ -10,7 +10,7 @@ import Folder from '@joplin/lib/models/Folder';
 import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir, mockMobilePlatform } from '@joplin/lib/testing/test-utils';
 import { newPluginScript } from '../../testUtils';
 import { join } from 'path';
-import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import type { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
 const testPluginDir = `${supportDir}/plugins`;
 
@@ -24,8 +24,8 @@ function newPluginService(appVersion = '1.4') {
 		},
 		runner,
 		{
-			dispatch: () => {},
-			getState: () => {},
+			dispatch: () => { },
+			getState: () => { },
 		},
 	);
 	return service;
@@ -309,7 +309,7 @@ describe('services_PluginService', () => {
 			});
 		`;
 
-		let resetPlatformMock = () => {};
+		let resetPlatformMock = () => { };
 		if (!isDesktop) {
 			resetPlatformMock = mockMobilePlatform(MobilePlatform.Android).reset;
 		}
