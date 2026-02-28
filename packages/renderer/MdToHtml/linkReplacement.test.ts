@@ -79,6 +79,7 @@ describe('linkReplacement', () => {
 		expect(linkHtml).toContain('ontouchend');
 		expect(linkHtml).toContain('ontouchcancel');
 	});
+
 	test('should show Joplin Icon for internal link by default', () => {
 		const resourceId = 'e6afba55bdf74568ac94f8d1e3578d2c';
 		const linkHtml = linkReplacement(`:/${resourceId}`, {

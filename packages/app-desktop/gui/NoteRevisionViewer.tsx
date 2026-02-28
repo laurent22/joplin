@@ -83,7 +83,7 @@ const useNoteContent = (
 		viewerRef.current.setHtml(result.html, {
 			pluginAssets: result.pluginAssets,
 		});
-	}, [note, viewerRef]);
+	}, [note, viewerRef, markupToHtml, showNoteLinkIcon]);
 
 	return note;
 };
