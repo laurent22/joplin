@@ -606,7 +606,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
-msgstr "Намерена е автоматично запазено изображение. Да прикача ли копие към бележката?"
+msgstr "Намерено е автоматично запазено изображение. Да прикача ли копие към бележката?"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:125
 msgid ""
@@ -729,17 +729,17 @@ msgstr "Прикачва зададения файл към бележката."
 #: packages/server/src/models/UserModel.ts:348
 #, fuzzy
 msgid "attachment"
-msgstr "прикачи файл"
+msgstr "прикачен файл"
 
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:77
 #, fuzzy
 msgid "Attachment"
-msgstr "Прикачи файл"
+msgstr "Прикачен файл"
 
 #: packages/lib/models/Resource.ts:509
 #, fuzzy
 msgid "Attachment conflict: \"%s\""
-msgstr "Конфликт на прикачени файлове: \"%s\""
+msgstr "Конфликт на прикачен файлове: \"%s\""
 
 #: packages/lib/models/settings/builtInMetadata.ts:467
 msgid "Attachment download behaviour"
@@ -2275,7 +2275,7 @@ msgstr "Нарисувай рисунка"
 #: packages/app-mobile/components/screens/Note/Note.tsx:1026
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
 msgid "Drawing"
-msgstr "Изображение"
+msgstr "Рисунка"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1580
 msgid "Drop notes or files here"
@@ -4241,7 +4241,7 @@ msgstr "Прикачи файл"
 #: packages/app-mobile/setupQuickActions.ts:34
 #, fuzzy
 msgid "New drawing"
-msgstr "Ново изображение"
+msgstr "Нова рисунка"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:120
 #, fuzzy
@@ -6983,7 +6983,7 @@ msgstr ""
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:44
 msgid "This drawing may have unsaved changes."
-msgstr "Това изображение може да има незапазени промени."
+msgstr "Тази рисунка може да има незапазени промени."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid ""
@@ -7367,8 +7367,9 @@ msgid ""
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Напишете заглавие на бележка на която да идем. Или напишете # следвано от "
-"име на таг, или @ следвано от име на тетрадка."
+"Напишете заглавие на бележка или част от съдържанието ѝ, за да преминете към нея. Или напишете # следвано от "
+"име на таг, или @ следвано от име на тетрадка. Или напишете : за да "
+"търсите команди."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:706
 #, fuzzy
@@ -8300,7 +8301,7 @@ msgstr "Намали"
 #~ "Type a note title or part of its content to jump to it. Or type # "
 #~ "followed by a tag name, or @ followed by a notebook name."
 #~ msgstr ""
-#~ "Напишете заглавие на бележка на която да идем. Или напишете # следвано от "
+#~ "Напишете заглавие на бележка или част от съдържанието ѝ, за да преминете към нея. Или напишете # следвано от "
 #~ "име на таг, или @ следване от име на тетрадка."
 
 #, fuzzy
