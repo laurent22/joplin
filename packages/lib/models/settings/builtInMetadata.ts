@@ -1967,7 +1967,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'survey.webClientEval2025.progress': {
-			value: SurveyProgress.NotStarted,
+			// Ended in February 2026. See https://github.com/laurent22/joplin/pull/14497.
+			value: SurveyProgress.Dismissed,
 			type: SettingItemType.Int,
 			public: false,
 			isEnum: true,
