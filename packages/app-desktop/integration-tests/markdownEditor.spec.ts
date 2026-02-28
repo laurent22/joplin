@@ -161,7 +161,7 @@ test.describe('markdownEditor', () => {
 		const viewer = noteEditor.getNoteViewerFrameLocator();
 		await expect(viewer.locator('h1')).toHaveText('Testing');
 
-		const matches = viewer.locator('mark');
+		const matches = viewer.locator('mark-ghost');
 		await expect(matches).toHaveCount(0);
 
 		await mainWindow.keyboard.press(process.platform === 'darwin' ? 'Meta+f' : 'Control+f');
