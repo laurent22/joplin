@@ -91,6 +91,48 @@ function createServer() {
     }
   );
 
+  server.registerTool(
+    'search_markdown_notes',
+    {
+      description: 'Full-text search over markdown_notes. Returns matching notes with their content. Use this to find notes relevant to a query.',
+      inputSchema: z.object({
+        query: z.string().describe('Search keyword(s) for full-text search (SQLite FTS4 MATCH syntax)'),
+        maxResults: z.number().describe('Maximum number of results to return').optional(),
+      }),
+    },
+    async ({ query, maxResults }) => {
+      try {
+        const searchResults = Note.selectAllMarkdownFts(query);
+        const limited = maxResults ? searchResults.slice(0, maxResults) : searchResults;
+        const ids = limited.map((r) => r.id);
+        const notes = Note.markdownByIds(ids);
+        const noteMap: Record<string, typeof notes[0]> = {};
+        for (const n of notes) {
+          noteMap[n.id] = n;
+        }
+
+        const results = limited.map((r) => {
+          const note = noteMap[r.id];
+          return {
+            id: r.id,
+            title: r.title,
+            parent_id: r.parent_id,
+            body: note?.body ?? '',
+          };
+        });
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(results) }],
+        };
+      } catch (error) {
+        return {
+          content: [{ type: 'text', text: `Search error: ${error instanceof Error ? error.message : String(error)}` }],
+          isError: true,
+        };
+      }
+    }
+  );
+
   return server;
 }
 
