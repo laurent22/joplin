@@ -14,6 +14,27 @@ export interface SearchResult {
   parent_id: string | null;
 }
 
+export interface MarkdownSearchResult {
+  id: string;
+  title: string;
+  offsets: string;
+  parent_id: string | null;
+}
+
+export interface MarkdownNoteEntity {
+  id: string;
+  parent_id: string;
+  title: string;
+  body: string;
+  created_time: number;
+  updated_time: number;
+}
+
+export interface MarkdownSearchApiResult {
+  results: MarkdownSearchResult[];
+  noteMap: Record<string, MarkdownNoteEntity>;
+}
+
 export interface SearchApiResult {
   results: SearchResult[];
   noteMap: Record<string, NoteEntity>;
@@ -69,5 +90,51 @@ export class Note {
     const stmt = db.prepare(sql);
     const rows = stmt.all(...ids);
     return rows as NoteEntity[];
+  }
+
+  public static selectAllMarkdownFts(matchQuery: string): MarkdownSearchResult[] {
+    const db = getDatabase();
+    const sql = `
+            SELECT
+                markdown_notes_fts.id,
+                markdown_notes_fts.title,
+                offsets(markdown_notes_fts) AS offsets
+            FROM markdown_notes_fts
+            WHERE markdown_notes_fts MATCH ?`;
+
+    const stmt = db.prepare(sql);
+    const rows = stmt.all(matchQuery);
+
+    // parent_id is not in the FTS table, so we join from markdown_notes
+    const ids = (rows as any[]).map((r) => r.id);
+    if (ids.length === 0) return [];
+
+    const parentMap: Record<string, string | null> = {};
+    const placeholders = ids.map(() => '?').join(',');
+    const parentRows = db
+      .prepare(`SELECT id, parent_id FROM markdown_notes WHERE id IN (${placeholders})`)
+      .all(...ids) as { id: string; parent_id: string }[];
+    parentRows.forEach((r) => {
+      parentMap[r.id] = r.parent_id || null;
+    });
+
+    return (rows as any[]).map((r) => ({
+      id: r.id,
+      title: r.title,
+      offsets: r.offsets,
+      parent_id: parentMap[r.id] || null,
+    }));
+  }
+
+  public static markdownByIds(ids: string[], fields: string[] = ['*']): MarkdownNoteEntity[] {
+    if (!ids.length) return [];
+
+    const db = getDatabase();
+    const placeholders = ids.map(() => '?').join(',');
+    const sql = `SELECT ${fields.join(', ')} FROM markdown_notes WHERE id IN (${placeholders})`;
+
+    const stmt = db.prepare(sql);
+    const rows = stmt.all(...ids);
+    return rows as MarkdownNoteEntity[];
   }
 }
