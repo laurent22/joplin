@@ -75,6 +75,7 @@ export interface NoteEditorProps {
 	bodyEditor: NoteBodyEditorType;
 	startupPluginsLoaded: boolean;
 	enableHtmlToMarkdownBanner: boolean;
+	showNoteLinkIcon: boolean;
 }
 
 export interface NoteBodyEditorRef {
@@ -156,6 +157,7 @@ export interface NoteBodyEditorProps {
 	useCustomPdfViewer: boolean;
 	watchedNoteFiles: string[];
 	enableHtmlToMarkdownBanner: boolean;
+	showNoteLinkIcon: boolean;
 }
 
 export interface NoteBodyEditorPropsAndRef extends NoteBodyEditorProps {
