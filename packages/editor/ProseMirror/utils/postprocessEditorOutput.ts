@@ -13,12 +13,12 @@ const removeListItemWrapperParagraphs = (container: HTMLElement) => {
 	for (const item of listItems) {
 		trimEmptyParagraphs(item);
 
-		// Replace <li><p>...text...</p></li> with <li>...text...</li>
-		if (item.children.length === 1) {
-			const firstChild = item.children[0];
-			if (firstChild.tagName === 'P') {
-				firstChild.replaceWith(...firstChild.childNodes);
-			}
+		// Unwrap single <p> wrappers to prevent Turndown from adding
+		// extra blank lines around list item content.
+		const firstChild = item.firstElementChild;
+		const paragraphCount = Array.from(item.children).filter(el => el.tagName === 'P').length;
+		if (firstChild?.tagName === 'P' && paragraphCount === 1) {
+			firstChild.replaceWith(...firstChild.childNodes);
 		}
 	}
 };
