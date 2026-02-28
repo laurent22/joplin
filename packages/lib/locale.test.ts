@@ -15,6 +15,27 @@ describe('locale', () => {
 		}
 	});
 
+	// Regression test for https://github.com/laurent22/joplin/issues/14500
+	// macOS provides locale codes with hyphens (e.g. "zh-TW") but Joplin stores
+	// them with underscores ("zh_TW"). Without normalization, "zh-TW" falls
+	// through to the language-only loop and incorrectly returns "zh_CN".
+	it('should normalize hyphenated locale codes from the OS to underscore format', () => {
+		const testCases: [string, string[], string][] = [
+			// The core bug: zh-TW must resolve to zh_TW, NOT zh_CN
+			['zh-TW', ['zh_CN', 'zh_TW', 'en_GB'], 'zh_TW'],
+			// zh-CN should still work correctly
+			['zh-CN', ['zh_CN', 'zh_TW', 'en_GB'], 'zh_CN'],
+			// Other common macOS hyphenated codes should also work
+			['en-GB', ['en_GB', 'fr_FR'], 'en_GB'],
+			['pt-BR', ['pt_BR', 'en_GB'], 'pt_BR'],
+		];
+
+		for (const [input, locales, expected] of testCases) {
+			const actual = closestSupportedLocale(input, true, locales);
+			expect(actual).toBe(expected);
+		}
+	});
+
 	it('should translate plurals - en_GB', () => {
 		setLocale('en_GB');
 		expect(_n('Copy Shareable Link', 'Copy Shareable Links', 1)).toBe('Copy Shareable Link');

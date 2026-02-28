@@ -553,6 +553,13 @@ function supportedLocalesToLanguages(options: SupportedLocalesToLanguagesOptions
 
 function closestSupportedLocale(canonicalName: string, defaultToEnglish = true, locales: string[] = null) {
 	locales = locales === null ? supportedLocales() : locales;
+
+	// Normalize hyphens to underscores so that locale codes provided by the OS
+	// (e.g. "zh-TW" on macOS) match Joplin's stored locale format ("zh_TW").
+	// Without this, "zh-TW" falls through to the language-only loop and
+	// incorrectly returns "zh_CN" instead of "zh_TW". See: #14500
+	canonicalName = canonicalName.replace(/-/g, '_');
+
 	if (locales.indexOf(canonicalName) >= 0) return canonicalName;
 
 	const requiredLanguage = languageCodeOnly(canonicalName).toLowerCase();
