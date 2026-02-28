@@ -591,6 +591,45 @@ export default class SearchEngine {
 		}
 	}
 
+	// Search markdown_notes_fts for Markdown-converted notes
+	async searchMarkdown(searchString: string) {
+		if (!searchString) return [];
+
+		const parsedQuery = await this.parseQuery(searchString);
+		const allTerms = parsedQuery.allTerms.filter((x: any) => x.name === 'text' || x.name === 'title' || x.name === 'body');
+		const includedTerms = allTerms.filter((x: any) => !x.negated);
+
+		if (includedTerms.length === 0) return [];
+
+		const matchTerms = includedTerms.map((term: any) => {
+			if (term.name === 'text') return term.value;
+			return `${term.name}:${term.value}`;
+		});
+		const matchQuery = matchTerms.join(' ');
+
+		try {
+			const sql = `
+				SELECT
+					markdown_notes_fts.id,
+					markdown_notes_fts.title,
+					offsets(markdown_notes_fts) AS offsets,
+					mn.parent_id
+				FROM markdown_notes_fts
+				JOIN markdown_notes AS mn ON mn.id = markdown_notes_fts.id
+				WHERE markdown_notes_fts MATCH ?
+			`;
+			const rows = await this.db().selectAll(sql, [matchQuery]);
+			// Add fields=['body'] so GotoAnything shows fragments
+			return rows.map((row: any) => ({
+				...row,
+				fields: ['body'],
+			}));
+		} catch (error) {
+			this.logger().warn(`Cannot execute markdown FTS MATCH query: ${searchString}: ${error.message}`);
+			return [];
+		}
+	}
+
 	async destroy() {
 		if (this.scheduleSyncTablesIID_) {
 			shim.clearTimeout(this.scheduleSyncTablesIID_);

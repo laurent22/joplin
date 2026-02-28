@@ -52,6 +52,7 @@ interface State {
 	showHelp: boolean;
 	resultsInBody: boolean;
 	filterWord: string;
+	useMarkdownSearch: boolean;
 }
 
 // 検索結果クリック時にgotoItemへ渡す型
@@ -105,7 +106,10 @@ class Dialog extends React.PureComponent<Props, State> {
 			showHelp: false,
 			resultsInBody: false,
 			filterWord: '',
+			useMarkdownSearch: false,
 		};
+
+		this.onMarkdownSearchChange = this.onMarkdownSearchChange.bind(this);
 
 		this.styles_ = {};
 
@@ -231,6 +235,12 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
+	onMarkdownSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({ useMarkdownSearch: event.target.checked }, () => {
+			if (this.state.query) this.scheduleListUpdate();
+		});
+	}
+
 	input_onChange(event: any) {
 		if (gOnChangeTimer) {
 			clearTimeout(gOnChangeTimer);
@@ -326,85 +336,145 @@ class Dialog extends React.PureComponent<Props, State> {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = this.makeSearchQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery);
 
-				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
+				if (this.state.useMarkdownSearch) {
+					// Markdown search via markdown_notes_fts
+					results = await SearchEngine.instance().searchMarkdown(searchQuery);
+					resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
-				if (!resultsInBody || this.state.query.length <= 1) {
-					for (let i = 0; i < results.length; i++) {
-						const row = results[i];
-						const path = Folder.folderPathString(this.props.folders, row.parent_id);
-						results[i] = Object.assign({}, row, { path: path });
-					}
-				} else {
-					const limit = 20;
-					const searchKeywords = await this.keywords(searchQuery);
-					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
-					// Can't make any sense of this code so...
-					// @ts-ignore
-					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
+					if (!resultsInBody || this.state.query.length <= 1) {
+						for (let i = 0; i < results.length; i++) {
+							const row = results[i];
+							const path = Folder.folderPathString(this.props.folders, row.parent_id);
+							results[i] = Object.assign({}, row, { path: path });
+						}
+					} else {
+						const limit = 20;
+						const searchKeywords = await this.keywords(searchQuery);
+						const ids = results.map((r: any) => r.id).slice(0, limit);
+						const placeholders = ids.map(() => '?').join(',');
+						const mdNotes = ids.length > 0
+							? await Note.db().selectAll(`SELECT id, body FROM markdown_notes WHERE id IN (${placeholders})`, ids)
+							: [];
+						const notesById: Record<string, any> = {};
+						for (const n of mdNotes) {
+							notesById[n.id] = n;
+						}
 
-					let ri = 0;
-					const exists: Record<string, boolean> = {};
-					const tempResults: SearchResult[] = [];
-					for (let i = 0; i < results.length; i++) {
-						const row = results[i];
-						const path = Folder.folderPathString(this.props.folders, row.parent_id);
+						let ri = 0;
+						const exists: Record<string, boolean> = {};
+						const tempResults: SearchResult[] = [];
+						for (let i = 0; i < results.length; i++) {
+							const row = results[i];
+							const path = Folder.folderPathString(this.props.folders, row.parent_id);
 
-						if (row.fields.includes('body')) {
-							let fragments = '...';
-							const fragmentsList: string[] = [];
+							if (row.fields.includes('body')) {
+								let fragments = '...';
+								const fragmentsList: string[] = [];
 
-							if (i < limit) { // Display note fragments of search keyword matches
-								const indices = [];
-								const note = notesById[row.id];
-								const body = note.body; // this.markupToHtml().stripMarkup(note.markup_language, note.body, { collapseWhiteSpaces: false });
+								if (i < limit) {
+									const indices = [];
+									const note = notesById[row.id];
+									if (!note) continue;
+									const body = note.body;
 
-								// Iterate over all matches in the body for each search keyword
-								for (let { valueRegex } of searchKeywords) {
-									valueRegex = removeDiacritics(valueRegex);
-
-									for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
-										// Populate 'indices' with [begin index, end index] of each note fragment
-										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
-										indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
-										if (indices.length > 20) break;
-									}
-								}
-
-								// Merge multiple overlapping fragments into a single fragment to prevent repeated content
-								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
-								// will result in 'Joplin is a free, open source note taking application'
-								// const mergedIndices = mergeOverlappingIntervals(indices, 1);
-								for (const index of indices) {
-									fragments = body.slice(index[0], index[1]); // .join(' ... ');
-									if (fragments.length > 0) {
-										if (exists[fragments]) {
-											// console.log(`Duplicate fragment found: ${fragments}`);
-											continue; // Prevent duplicates
+									for (let { valueRegex } of searchKeywords) {
+										valueRegex = removeDiacritics(valueRegex);
+										for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
+											indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
+											if (indices.length > 20) break;
 										}
-										exists[fragments] = true;
-										fragmentsList.push(fragments);
-										// console.log(`Found fragment: ${fragments}`);
+									}
+
+									for (const index of indices) {
+										fragments = body.slice(index[0], index[1]);
+										if (fragments.length > 0) {
+											if (exists[fragments]) continue;
+											exists[fragments] = true;
+											fragmentsList.push(fragments);
+										}
 									}
 								}
-								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
-								// if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
-
-							}
-							for (const tempFragment of fragmentsList) {
-								tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
+								for (const tempFragment of fragmentsList) {
+									tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
+									ri++;
+								}
+							} else {
+								tempResults.push(Object.assign({}, row, { key: ri, path: path, fragments: '' }));
 								ri++;
 							}
-						} else {
-							// results[ri] = Object.assign({}, row, { key: ri, path: path, fragments: '' });
-							tempResults.push(Object.assign({}, row, { key: ri, path: path, fragments: '' }));
-							ri++;
 						}
+						results = tempResults;
 					}
-					results = tempResults;
-					if (!this.props.showCompletedTodos) {
-						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
+				} else {
+					// Default HTML search via notes_fts
+					results = await SearchEngine.instance().search(searchQuery);
+
+					resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
+
+					if (!resultsInBody || this.state.query.length <= 1) {
+						for (let i = 0; i < results.length; i++) {
+							const row = results[i];
+							const path = Folder.folderPathString(this.props.folders, row.parent_id);
+							results[i] = Object.assign({}, row, { path: path });
+						}
+					} else {
+						const limit = 20;
+						const searchKeywords = await this.keywords(searchQuery);
+						const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed'] });
+						// Can't make any sense of this code so...
+						// @ts-ignore
+						const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
+
+						let ri = 0;
+						const exists: Record<string, boolean> = {};
+						const tempResults: SearchResult[] = [];
+						for (let i = 0; i < results.length; i++) {
+							const row = results[i];
+							const path = Folder.folderPathString(this.props.folders, row.parent_id);
+
+							if (row.fields.includes('body')) {
+								let fragments = '...';
+								const fragmentsList: string[] = [];
+
+								if (i < limit) { // Display note fragments of search keyword matches
+									const indices = [];
+									const note = notesById[row.id];
+									const body = note.body;
+
+									for (let { valueRegex } of searchKeywords) {
+										valueRegex = removeDiacritics(valueRegex);
+
+										for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
+											indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
+											if (indices.length > 20) break;
+										}
+									}
+
+									for (const index of indices) {
+										fragments = body.slice(index[0], index[1]);
+										if (fragments.length > 0) {
+											if (exists[fragments]) {
+												continue;
+											}
+											exists[fragments] = true;
+											fragmentsList.push(fragments);
+										}
+									}
+								}
+								for (const tempFragment of fragmentsList) {
+									tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
+									ri++;
+								}
+							} else {
+								tempResults.push(Object.assign({}, row, { key: ri, path: path, fragments: '' }));
+								ri++;
+							}
+						}
+						results = tempResults;
+						if (!this.props.showCompletedTodos) {
+							results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
+						}
 					}
 				}
 			}
@@ -669,6 +739,10 @@ class Dialog extends React.PureComponent<Props, State> {
 					<div style={style.inputHelpWrapper}>
 						<label style={{ marginRight: 8 }}>フィルタ</label>
 						<input type="text" style={{ flex: 1, width: '100%' }} onKeyDown={this.filterOnKeyDown}/>
+						<label style={{ marginLeft: 12, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+							<input type="checkbox" checked={this.state.useMarkdownSearch} onChange={this.onMarkdownSearchChange} style={{ marginRight: 4 }} />
+							Markdown検索
+						</label>
 					</div>
 					{this.renderList()}
 				</div>
