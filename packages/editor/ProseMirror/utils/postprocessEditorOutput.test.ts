@@ -5,8 +5,6 @@ const normalizeHtmlString = (html: string) => {
 };
 
 describe('postprocessEditorOutput', () => {
-	// Removing extra space around list items prevents extra space from being
-	// added when converting from HTML to Markdown
 	test('should remove extra paragraphs from around list items', () => {
 		const doc = new DOMParser().parseFromString(`
 			<body>
@@ -32,8 +30,6 @@ describe('postprocessEditorOutput', () => {
 		);
 	});
 
-	// Unwrapping paragraph in list items with nested lists prevents Turndown from
-	// adding extra blank lines above the nested list
 	test('should remove wrapper paragraph from list items with nested lists', () => {
 		const doc = new DOMParser().parseFromString(`
 			<body>
@@ -102,8 +98,30 @@ describe('postprocessEditorOutput', () => {
 		);
 	});
 
-	// Removing extra space around checklist item content prevents extra space from being
-	// added when converting from HTML to Markdown
+	test('should remove wrapper paragraph from checklist items with nested lists', () => {
+		const doc = new DOMParser().parseFromString(`
+			<body>
+				<ul>
+					<li><input><div><p>Parent</p><ul><li><input><div><p>Nested</p></div></li></ul></div></li>
+					<li><input><div><p>After nested</p></div></li>
+				</ul>
+			</body>
+		`, 'text/html');
+
+		const output = postprocessEditorOutput(doc.body);
+
+		expect(
+			normalizeHtmlString(output.querySelector('ul').outerHTML),
+		).toBe(
+			normalizeHtmlString(`
+				<ul>
+					<li><input><span>Parent</span><ul><li><input><span>Nested</span></li></ul></li>
+					<li><input><span>After nested</span></li>
+				</ul>
+			`),
+		);
+	});
+
 	test('should remove wrapper paragraphs from around checklist items', () => {
 		const doc = new DOMParser().parseFromString(`
 			<body>

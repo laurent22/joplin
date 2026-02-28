@@ -8,41 +8,45 @@ const fixResourceUrls = (container: HTMLElement) => {
 	}
 };
 
+const unwrapSingleParagraph = (parent: Element) => {
+	const firstChild = parent.firstElementChild;
+	const paragraphCount = Array.from(parent.children).filter(el => el.tagName === 'P').length;
+	if (firstChild?.tagName === 'P' && paragraphCount === 1) {
+		firstChild.replaceWith(...firstChild.childNodes);
+	}
+};
+
 const removeListItemWrapperParagraphs = (container: HTMLElement) => {
 	const listItems = container.querySelectorAll<HTMLLIElement>('li');
 	for (const item of listItems) {
 		trimEmptyParagraphs(item);
-
-		// Unwrap single <p> wrappers to prevent Turndown from adding
-		// extra blank lines around list item content.
-		const firstChild = item.firstElementChild;
-		const paragraphCount = Array.from(item.children).filter(el => el.tagName === 'P').length;
-		if (firstChild?.tagName === 'P' && paragraphCount === 1) {
-			firstChild.replaceWith(...firstChild.childNodes);
-		}
+		unwrapSingleParagraph(item);
 	}
 };
 
-// Avoids extra newlines from being included in the output Markdown
 const removeChecklistItemWrapperParagraphs = (container: HTMLElement) => {
 	const listItems = container.querySelectorAll<HTMLLIElement>('li');
 	for (const item of listItems) {
-		// Is it a checklist item?
-		if (item.children.length !== 2) continue;
-		const input = item.children[0];
-		const content = item.children[1];
-		if (input.tagName !== 'INPUT' || content.tagName !== 'DIV') continue;
+		const input = item.firstElementChild;
+		if (input?.tagName !== 'INPUT') continue;
+		const content = input.nextElementSibling;
+		if (!content || content.tagName !== 'DIV') continue;
 
 		trimEmptyParagraphs(content);
 
-		// Replace <li><input/><div><p>...text...</p></div></li> with <li><input/><span>...text...</span></li>
-		if (content.children.length === 1) {
-			const firstChild = content.children[0];
-			if (firstChild.tagName === 'P') {
-				const newContent = document.createElement('span');
-				newContent.replaceChildren(...firstChild.childNodes);
-				content.replaceWith(newContent);
-			}
+		// Hoist nested sublists out of the <div> so Turndown sees <li>
+		// as their direct parent and uses single newlines.
+		for (const nested of Array.from(content.querySelectorAll(':scope > ul, :scope > ol'))) {
+			content.after(nested);
+		}
+
+		// Replace <div><p>text</p></div> with <span>text</span>
+		const firstChild = content.firstElementChild;
+		const paragraphCount = Array.from(content.children).filter(el => el.tagName === 'P').length;
+		if (firstChild?.tagName === 'P' && paragraphCount === 1) {
+			const span = document.createElement('span');
+			span.replaceChildren(...firstChild.childNodes);
+			content.replaceWith(span);
 		}
 	}
 };
