@@ -119,11 +119,11 @@ function createServer() {
           ? new RegExp(keywords.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi')
           : null;
 
-        const results = limited.map((r) => {
+        const results = limited.flatMap((r) => {
           const note = noteMap[r.id];
           const body = note?.body ?? '';
 
-          let snippets: string[] = [];
+          let snippets: { note_id: string; note_title: string; text: string }[] = [];
           if (pattern && body) {
             // Collect all match positions
             const matches: { start: number; end: number }[] = [];
@@ -148,22 +148,21 @@ function createServer() {
               snippets = ranges.map((range) => {
                 const prefix = range.start > 0 ? '...' : '';
                 const suffix = range.end < body.length ? '...' : '';
-                return `${prefix}${body.slice(range.start, range.end)}${suffix}`;
+                return {
+                  note_id: r.id,
+                  note_title: r.title,
+                  text: `${prefix}${body.slice(range.start, range.end)}${suffix}`,
+                };
               });
             } else {
               // No regex match found — return head of body as fallback
-              snippets = [body.slice(0, snippetRadius * 2)];
+              snippets = [{ note_id: r.id, note_title: r.title, text: body.slice(0, snippetRadius * 2) }];
             }
           } else if (body) {
-            snippets = [body.slice(0, snippetRadius * 2)];
+            snippets = [{ note_id: r.id, note_title: r.title, text: body.slice(0, snippetRadius * 2) }];
           }
 
-          return {
-            id: r.id,
-            title: r.title,
-            parent_id: r.parent_id,
-            snippets,
-          };
+          return snippets;
         });
 
         return {
