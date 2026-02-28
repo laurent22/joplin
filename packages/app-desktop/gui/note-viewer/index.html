@@ -507,7 +507,7 @@
 			if (!options) options = {};
 
 			// TODO: Add support for scriptType on mobile and CLI
-
+			CSS.highlights.clear();
 			if (!mark_) {
 				mark_ = new Mark(document.getElementById('joplin-container-content'), {
 					exclude: ['img'],
