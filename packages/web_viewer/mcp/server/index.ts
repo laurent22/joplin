@@ -94,13 +94,15 @@ function createServer() {
   server.registerTool(
     'search_markdown_notes',
     {
-      description: 'Full-text search over markdown_notes. Returns matching notes with their content. Use this to find notes relevant to a query.',
+      description: 'Full-text search over markdown_notes. Returns snippets around matched keywords instead of full note bodies.',
       inputSchema: z.object({
         query: z.string().describe('Search keyword(s) for full-text search (SQLite FTS4 MATCH syntax)'),
         maxResults: z.number().describe('Maximum number of results to return').optional(),
+        contextChars: z.number().describe('Number of characters to include before and after each match (default: 1000)').optional(),
       }),
     },
-    async ({ query, maxResults }) => {
+    async ({ query, maxResults, contextChars }) => {
+      const snippetRadius = contextChars ?? 1000;
       try {
         const searchResults = Note.selectAllMarkdownFts(query);
         const limited = maxResults ? searchResults.slice(0, maxResults) : searchResults;
@@ -111,13 +113,56 @@ function createServer() {
           noteMap[n.id] = n;
         }
 
+        // Build a case-insensitive regex from the query keywords
+        const keywords = query.replace(/[*"]/g, '').split(/\s+/).filter(Boolean);
+        const pattern = keywords.length
+          ? new RegExp(keywords.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi')
+          : null;
+
         const results = limited.map((r) => {
           const note = noteMap[r.id];
+          const body = note?.body ?? '';
+
+          let snippets: string[] = [];
+          if (pattern && body) {
+            // Collect all match positions
+            const matches: { start: number; end: number }[] = [];
+            let m: RegExpExecArray | null;
+            while ((m = pattern.exec(body)) !== null) {
+              matches.push({ start: m.index, end: m.index + m[0].length });
+            }
+
+            if (matches.length > 0) {
+              // Merge overlapping snippet ranges
+              const ranges: { start: number; end: number }[] = [];
+              for (const match of matches) {
+                const rangeStart = Math.max(0, match.start - snippetRadius);
+                const rangeEnd = Math.min(body.length, match.end + snippetRadius);
+                const last = ranges[ranges.length - 1];
+                if (last && rangeStart <= last.end) {
+                  last.end = Math.max(last.end, rangeEnd);
+                } else {
+                  ranges.push({ start: rangeStart, end: rangeEnd });
+                }
+              }
+              snippets = ranges.map((range) => {
+                const prefix = range.start > 0 ? '...' : '';
+                const suffix = range.end < body.length ? '...' : '';
+                return `${prefix}${body.slice(range.start, range.end)}${suffix}`;
+              });
+            } else {
+              // No regex match found — return head of body as fallback
+              snippets = [body.slice(0, snippetRadius * 2)];
+            }
+          } else if (body) {
+            snippets = [body.slice(0, snippetRadius * 2)];
+          }
+
           return {
             id: r.id,
             title: r.title,
             parent_id: r.parent_id,
-            body: note?.body ?? '',
+            snippets,
           };
         });
 
