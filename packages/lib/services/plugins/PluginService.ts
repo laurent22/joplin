@@ -519,7 +519,7 @@ export default class PluginService extends BaseService {
 		return isCompatible(this.appVersion_, this.appType_, manifest);
 	}
 
-	private validateManifest(manifest: PluginManifest): void {
+	private validateManifest(manifest: unknown): void {
 		manifestFromObject(manifest);
 	}
 
