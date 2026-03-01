@@ -1,0 +1,12 @@
+.dialog-modal-layer.editor-mode-selector-dialog {
+	align-items: center;
+
+	> .content {
+		min-width: min(560px, calc(100vw - 40px));
+		padding: 22px;
+	}
+
+	.dialog-content {
+		font-size: 15px;
+	}
+}

@@ -18,6 +18,7 @@ export interface AppStateRoute {
 export enum AppStateDialogName {
 	SyncWizard = 'syncWizard',
 	MasterPassword = 'masterPassword',
+	EditorModeSelector = 'editorModeSelector',
 }
 
 export interface AppStateDialog {

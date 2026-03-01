@@ -4,6 +4,7 @@ import SyncWizardDialog from '../../SyncWizard/Dialog';
 import MasterPasswordDialog from '../../MasterPasswordDialog/Dialog';
 import EditFolderDialog from '../../EditFolderDialog/Dialog';
 import PdfViewer from '../../PdfViewer';
+import EditorModeSelectorDialog from '../../EditorModeSelectorDialog';
 
 interface RegisteredDialogProps {
 	themeId: number;
@@ -42,6 +43,12 @@ const appDialogs: Record<string, RegisteredDialog> = {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		render: (props: RegisteredDialogProps, customProps: any) => {
 			return <PdfViewer key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
+		},
+	},
+	editorModeSelector: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		render: (props: RegisteredDialogProps, customProps: any) => {
+			return <EditorModeSelectorDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 };

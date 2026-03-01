@@ -31,6 +31,7 @@ import EditorWindow from './NoteEditor/EditorWindow';
 import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
 import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
+import openEditorModeSelector from './editorModeSelectorStartup';
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
 
 interface Props {
@@ -94,6 +95,10 @@ class RootComponent extends React.Component<Props, any> {
 		}
 
 		await WelcomeUtils.install(Setting.value('locale'), this.props.dispatch);
+
+		setTimeout(() => {
+			openEditorModeSelector(this.props.dispatch);
+		}, 0);
 	}
 
 	private renderModalMessage(props: ModalDialogProps) {
