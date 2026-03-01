@@ -11148,7 +11148,7 @@ __metadata:
     query-string: "npm:7.1.3"
     rate-limiter-flexible: "npm:7.4.0"
     raw-body: "npm:3.0.2"
-    samlify: "npm:2.10.1"
+    samlify: "npm:2.10.2"
     short-uuid: "npm:5.2.0"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
@@ -46582,9 +46582,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"samlify@npm:2.10.1":
-  version: 2.10.1
-  resolution: "samlify@npm:2.10.1"
+"samlify@npm:2.10.2":
+  version: 2.10.2
+  resolution: "samlify@npm:2.10.2"
   dependencies:
     "@authenio/xml-encryption": "npm:^2.0.2"
     "@xmldom/xmldom": "npm:^0.8.6"
@@ -46597,7 +46597,7 @@ __metadata:
     xml-crypto: "npm:^6.1.2"
     xml-escape: "npm:^1.1.0"
     xpath: "npm:^0.0.32"
-  checksum: 10/f44259ec1f03faacedbd9b3098b07893dd69204492d1f4c63dca0bd8b979ed9ea76e3911f7e953baa4e11787acdb9f33e5449e21b0199f7ff627f449a9ce3897
+  checksum: 10/2f46e2b172fd43c3c63ad18e9a715e6cbfaf4a781ef8f6b2f7f42c3a3998ae7e07fc41a3d24a5f54f88e716535b3a8e0c2953a3788fef0430762b29e8f8b9ffe
   languageName: node
   linkType: hard
 
