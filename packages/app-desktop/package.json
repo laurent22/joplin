@@ -140,7 +140,7 @@
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "7zip-bin": "5.2.0",
-    "@axe-core/playwright": "4.10.2",
+    "@axe-core/playwright": "4.11.0",
     "@electron/notarize": "2.5.0",
     "@electron/rebuild": "3.7.2",
     "@fortawesome/fontawesome-free": "5.15.4",

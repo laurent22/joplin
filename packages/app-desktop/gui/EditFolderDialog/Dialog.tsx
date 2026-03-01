@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useState, useRef, useEffect, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
 import StyledInput from '../style/StyledInput';
 import { IconSelector, ChangeEvent } from './IconSelector';

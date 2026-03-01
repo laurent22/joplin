@@ -1,5 +1,6 @@
 import { rootDir } from '../tool-utils';
 import { mergePotToPo } from '../utils/translation';
+import { supportedLocales } from './utils/supportedLocales';
 const { GettextExtractor, HtmlExtractors } = require('gettext-extractor');
 
 const websiteAssetsDir = `${rootDir}/Assets/WebsiteAssets`;
@@ -23,7 +24,11 @@ const createPotFile = async (potFilePath: string) => {
 const main = async () => {
 	const potFilePath = `${websiteAssetsDir}/website.pot`;
 	await createPotFile(potFilePath);
-	await mergePotToPo(potFilePath, `${localesDir}/zh_CN.po`);
+
+	for (const locale of supportedLocales) {
+		if (locale.id === 'en_GB') continue; // English is the source language
+		await mergePotToPo(potFilePath, `${localesDir}/${locale.id}.po`);
+	}
 };
 
 main().catch((error) => {

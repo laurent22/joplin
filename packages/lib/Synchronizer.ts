@@ -59,6 +59,7 @@ function isCannotSyncError(error: any): boolean {
 export default class Synchronizer {
 
 	public static verboseMode = true;
+	public static partialSyncSteps = ['update_remote', 'delete_remote'];
 
 	private db_: JoplinDatabase;
 	private api_: FileApi;
@@ -530,6 +531,13 @@ export default class Synchronizer {
 
 					// console.info('NEW', newInfo);
 
+					if (newInfo.revisionServiceEnabled !== localInfo.revisionServiceEnabled) {
+						Setting.setValue('revisionService.enabled', newInfo.revisionServiceEnabled);
+					}
+					if (newInfo.revisionServiceTtlDays !== localInfo.revisionServiceTtlDays) {
+						Setting.setValue('revisionService.ttlDays', newInfo.revisionServiceTtlDays);
+					}
+
 					if (newInfo.e2ee !== previousE2EE) {
 						if (newInfo.e2ee) {
 							const mk = getActiveMasterKey(newInfo);
@@ -870,7 +878,7 @@ export default class Synchronizer {
 
 				let context = null;
 				let newDeltaContext = null;
-				const localFoldersToDelete = [];
+				const localFoldersToDelete = new Set<string>();
 				let hasCancelled = false;
 				if (lastContext.delta) context = lastContext.delta;
 
@@ -972,6 +980,8 @@ export default class Synchronizer {
 									reason = 'remote exists but local does not';
 									content = await loadContent();
 									ItemClass = content ? BaseItem.itemClass(content) : null;
+								} else {
+									reason = 'skipping: the item was deleted';
 								}
 							} else {
 								ItemClass = BaseItem.itemClass(local);
@@ -980,6 +990,11 @@ export default class Synchronizer {
 									action = SyncAction.DeleteLocal;
 									reason = 'remote has been deleted';
 								} else {
+									if (localFoldersToDelete.has(remoteId)) {
+										logger.debug('Removing a scheduled folder deletion (', remoteId, '). It was recreated by sync.');
+										localFoldersToDelete.delete(remoteId);
+									}
+
 									if (this.api().supportsAccurateTimestamp && remote.jop_updated_time === local.updated_time) {
 										// Nothing to do, and no need to fetch the content
 									} else {
@@ -1031,7 +1046,7 @@ export default class Synchronizer {
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 							const options: any = {
 								autoTimestamp: false,
-								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, time.unixMs(), remote.updated_time),
+								nextQueries: BaseItem.updateSyncTimeQueries(syncTargetId, content, BaseItem.remoteItemSyncTime(content.updated_time), remote.updated_time),
 								changeSource: ItemChange.SOURCE_SYNC,
 							};
 							if (action === SyncAction.CreateLocal) options.isNew = true;
@@ -1066,7 +1081,12 @@ export default class Synchronizer {
 									await MasterKey.save(content);
 								}
 							} else {
-								await ItemClass.save(content, options);
+								const saved = await ItemClass.save(content, options);
+
+								// Ensure that the item can be found if another create/update event is received for the same item:
+								if (!local) {
+									locals.push(saved);
+								}
 							}
 
 							if (creatingOrUpdatingResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: content.id });
@@ -1083,7 +1103,7 @@ export default class Synchronizer {
 							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 						} else if (action === SyncAction.DeleteLocal) {
 							if (local.type_ === BaseModel.TYPE_FOLDER) {
-								localFoldersToDelete.push(local);
+								localFoldersToDelete.add(local.id);
 								continue;
 							}
 
@@ -1133,12 +1153,12 @@ export default class Synchronizer {
 				// ------------------------------------------------------------------------
 
 				if (!this.cancelling()) {
-					for (let i = 0; i < localFoldersToDelete.length; i++) {
-						const item = localFoldersToDelete[i];
-						const noteIds = await Folder.noteIds(item.id);
+					for (const folderId of localFoldersToDelete) {
+						const noteIds = await Folder.noteIds(folderId);
 						if (noteIds.length) {
+							logger.warn('Conflict: Folder to be deleted', folderId, 'still contains notes', noteIds);
 							// CONFLICT
-							await Folder.markNotesAsConflict(item.id);
+							await Folder.markNotesAsConflict(folderId);
 						}
 
 						const deletionOptions: DeleteOptions = {
@@ -1147,7 +1167,7 @@ export default class Synchronizer {
 							changeSource: ItemChange.SOURCE_SYNC,
 							sourceDescription: 'Sync',
 						};
-						await Folder.delete(item.id, deletionOptions);
+						await Folder.delete(folderId, deletionOptions);
 					}
 				}
 
@@ -1240,6 +1260,7 @@ export default class Synchronizer {
 		this.state_ = 'idle';
 
 		if (errorToThrow) throw errorToThrow;
+		let hasOutgoingChanges = false;
 
 		// If there are any un-synced outgoing changes made up to the point just before the sync completes, then trigger the sync again to reduce the likelihood
 		// that the user will close or minimise the app when there are un-synced changes, because the sync is reported as completed.
@@ -1250,8 +1271,11 @@ export default class Synchronizer {
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
 				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				hasOutgoingChanges = true;
 			}
 		}
+
+		if (!hasOutgoingChanges) this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
 
 		return outputContext;
 	}

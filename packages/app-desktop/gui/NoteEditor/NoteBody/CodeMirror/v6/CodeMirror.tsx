@@ -222,6 +222,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
 				globalSettings: getGlobalSettings(Setting),
+				showNoteLinkIcon: props.showNoteLinkIcon,
 			}));
 
 			if (cancelled) return;
@@ -244,7 +245,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [
 		props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage,
 		props.visiblePanes, props.resourceInfos, props.markupToHtml, props.contentMaxWidth,
-		props.noteId, props.useCustomPdfViewer,
+		props.noteId, props.useCustomPdfViewer, props.showNoteLinkIcon,
 	]);
 
 	useEffect(() => {
@@ -303,6 +304,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	useContextMenu({
 		plugins: props.plugins,
+		dispatch: props.dispatch,
 		editorCutText, editorCopyText, editorPaste,
 		editorRef,
 		editorClassName: 'cm-editor',

@@ -22,12 +22,14 @@ export const parseCreateJobRequest = async (ctx: AppContext) => {
 		throw new ErrorBadRequest(`Image format not accepted: ${formatProvided}. Try using: ${supportedImageFormat.join(' or ')}`);
 	}
 
+	// Use the detected format as extension (formatProvided is 'png', 'jpeg', or 'bmp')
 	return {
 		storeImage: (file: string) => ctx.storage.store(file),
 		sendToQueue: (data: JobData) => ctx.queue.send(data),
 		filepath: file.filepath,
 		imageMaxDimension: env().IMAGE_MAX_DIMENSION,
-		randomName: createFilename(),
+		randomName: createFilename(formatProvided),
+		imagesFolder: env().HTR_CLI_IMAGES_FOLDER,
 	};
 };
 

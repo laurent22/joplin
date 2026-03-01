@@ -258,7 +258,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		let addIt = false;
 
 		// "All" refers to desktop, CLI and mobile app. Clipper and Server are not included.
-		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server' && platform !== 'cloud')) addIt = true;
+		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server' && platform !== 'cloud' && platform !== 'transcribe')) addIt = true;
 		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;

@@ -38,7 +38,7 @@
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "packageJsonLint": "node ./packages/tools/packageJsonLint.js",
-    "syncFuzzer": "node ./packages/tools/fuzzer/sync-fuzzer.js",
+    "syncFuzzer": "node ./packages/tools/fuzzer/cli.js",
     "postinstall": "husky && gulp build",
     "postPreReleasesToForum": "node ./packages/tools/postPreReleasesToForum",
     "publishAll": "git pull && yarn buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
@@ -60,6 +60,7 @@
     "test": "yarn workspaces foreach --worktree --parallel --verbose --interlaced --jobs 2 run test",
     "tsc": "yarn workspaces foreach --worktree --parallel --verbose --interlaced run tsc",
     "updateIgnored": "node packages/tools/gulp/tasks/updateIgnoredTypeScriptBuildRun.js",
+    "updateCanary": "node ./packages/tools/updateCanary",
     "updateMarkdownDoc": "node ./packages/tools/updateMarkdownDoc",
     "updateNews": "node ./packages/tools/website/updateNews",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
@@ -86,7 +87,7 @@
     "gulp": "4.0.2",
     "husky": "9.1.7",
     "lerna": "3.22.1",
-    "lint-staged": "16.2.6",
+    "lint-staged": "16.2.7",
     "madge": "8.0.0",
     "npm-package-json-lint": "9.0.0",
     "typescript": "5.8.3"
@@ -123,6 +124,7 @@
     "depd@npm:~1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
     "depd@npm:2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
     "depd@npm:^1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
-    "depd@npm:^1.1.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch"
+    "depd@npm:^1.1.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
+    "formidable@npm:^2.0.1": "patch:formidable@npm%3A2.1.2#~/.yarn/patches/formidable-npm-2.1.2-40ba18d67f.patch"
   }
 }

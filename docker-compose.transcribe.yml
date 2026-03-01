@@ -1,0 +1,44 @@
+# Standalone docker-compose for Joplin Transcribe
+#
+# Uses SQLite for the queue (no external database needed).
+# Data is stored in a named volume for proper permissions.
+#
+# Usage:
+#
+#   1. Download models:
+#      mkdir -p ./data/models
+#      wget -O ./data/models/Model-7.6B-Q4_K_M.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/Model-7.6B-Q4_K_M.gguf
+#      wget -O ./data/models/mmproj-model-f16.gguf https://huggingface.co/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf
+#
+#   2. Configure:
+#      cp .env-transcribe-sample .env
+#      # Edit .env and set API_KEY
+#
+#   3. Run:
+#      docker compose -f docker-compose.transcribe.yml up
+
+volumes:
+    transcribe-data:
+
+services:
+    transcribe:
+        image: joplin/transcribe:amd64-latest
+        ports:
+            - "4567:4567"
+        volumes:
+            - transcribe-data:/data
+            - ./data/models:/data/models:ro
+        restart: unless-stopped
+        # Security: limit resources to prevent runaway processes
+        deploy:
+            resources:
+                limits:
+                    memory: 16G
+                    cpus: '4'
+        # Security: read-only root filesystem
+        read_only: true
+        tmpfs:
+            - /tmp
+            - /home/transcribe/.cache
+        env_file:
+            - .env

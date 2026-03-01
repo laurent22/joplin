@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
+import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode, ErrorBadRequest } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
@@ -1065,6 +1065,8 @@ export default class ItemModel extends BaseModel<Item> {
 			if (!item.owner_id) item.owner_id = userId;
 		} else {
 			const beforeSaveItem = await this.load(item.id, { fields: ['name', 'jop_share_id'] });
+			if (!beforeSaveItem) throw new ErrorBadRequest('Item does not exist');
+
 			previousName = beforeSaveItem.name;
 			previousItem = {
 				jop_share_id: beforeSaveItem.jop_share_id,

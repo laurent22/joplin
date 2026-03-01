@@ -34,6 +34,7 @@ interface Props {
 	onScroll: OnScrollCallback;
 	onLoadEnd?: ()=> void;
 	pluginStates: PluginStates;
+	showNoteLinkIcon: boolean;
 }
 
 const onJoplinLinkClick = async (message: string) => {
@@ -84,6 +85,7 @@ function NoteBodyViewer(props: Props) {
 		initialScrollPercent: props.initialScrollPercent,
 
 		paddingBottom: props.paddingBottom,
+		showNoteLinkIcon: props.showNoteLinkIcon,
 	});
 
 	const onLoadEnd = useCallback(() => {
@@ -115,4 +117,5 @@ export default connect((state: AppState) => ({
 	themeId: state.settings.theme,
 	fontSize: state.settings['style.viewer.fontSize'],
 	pluginStates: state.pluginService.plugins,
+	showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 }))(NoteBodyViewer);

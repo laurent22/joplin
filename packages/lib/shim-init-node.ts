@@ -1,4 +1,5 @@
-import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo, PdfPageImage } from './shim';
+import createAccessiblePdf from './services/ocr/utils/createAccessiblePdf';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
 import FsDriverNode from './fs-driver-node';
@@ -838,7 +839,7 @@ function shimInit(options: ShimInitOptions = null) {
 		return textByPage;
 	};
 
-	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
+	shim.pdfToImagesWithDimensions = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<PdfPageImage[]> => {
 		if (typeof HTMLCanvasElement === 'undefined') {
 			throw new Error('Unsupported -- the Canvas element is required.');
 		}
@@ -851,7 +852,7 @@ function shimInit(options: ShimInitOptions = null) {
 			const quality = 0.8;
 			const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
 				return new Promise(resolve => {
-					canvas.toBlob(blob => resolve(blob), 'image/jpg', quality);
+					canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
 				});
 			};
 
@@ -860,7 +861,7 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const filePrefix = `page_${Date.now()}`;
-		const output: string[] = [];
+		const output: PdfPageImage[] = [];
 		const doc = await loadPdf(pdfPath);
 
 		try {
@@ -883,9 +884,14 @@ function shimInit(options: ShimInitOptions = null) {
 
 				const buffer = await canvasToBuffer(canvas);
 				const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
-				output.push(filePath);
 				await writeFile(filePath, buffer, 'binary');
 				if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+
+				output.push({
+					path: filePath,
+					width: viewport.width,
+					height: viewport.height,
+				});
 			}
 		} finally {
 			await doc.destroy();
@@ -894,9 +900,44 @@ function shimInit(options: ShimInitOptions = null) {
 		return output;
 	};
 
+	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
+		const pagesWithDimensions = await shim.pdfToImagesWithDimensions(pdfPath, outputDirectoryPath, options);
+		return pagesWithDimensions.map(p => p.path);
+	};
+
 	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
 		const doc = await loadPdf(pdfPath);
 		return { pageCount: doc.numPages };
+	};
+
+	shim.createAccessiblePdf = async (originalPdfPath: string, ocrDetails: string, outputPath: string, tempDir: string): Promise<void> => {
+		const workDir = `${tempDir}/accessible_pdf_${Date.now()}`;
+		await shim.fsDriver().mkdir(workDir);
+
+		try {
+			// Convert PDF pages to images with dimensions
+			const pageImages = await shim.pdfToImagesWithDimensions(originalPdfPath, workDir);
+
+			// Read all images into buffers with their dimensions
+			const pageImagesWithBuffers: { buffer: Buffer; width: number; height: number }[] = [];
+			for (const pageImage of pageImages) {
+				const buffer = await fs.readFile(pageImage.path);
+				pageImagesWithBuffers.push({
+					buffer,
+					width: pageImage.width,
+					height: pageImage.height,
+				});
+			}
+
+			// Create the accessible PDF
+			const pdfBytes = await createAccessiblePdf(pageImagesWithBuffers, ocrDetails);
+
+			// Write the output file
+			await writeFile(outputPath, pdfBytes);
+		} finally {
+			// Clean up work directory
+			await shim.fsDriver().remove(workDir);
+		}
 	};
 }
 
