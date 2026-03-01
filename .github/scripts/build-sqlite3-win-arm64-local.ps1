@@ -96,7 +96,7 @@ function Patch-Sqlite3ActionProject {
 	$updated = $content
 	# Generated vcxproj can emit `call node` patterns that fail to resolve in
 	# some MSBuild contexts. Force absolute node path for custom action command.
-	$xmlNodePath = $NodeExePath.Replace('\\', '\\\\')
+	$xmlNodePath = $NodeExePath.Replace('\', '\\')
 	$updated = $updated -replace 'call call &quot;node&quot;', "call &quot;$xmlNodePath&quot;"
 	$updated = $updated -replace 'call &quot;node&quot;', "call &quot;$xmlNodePath&quot;"
 
@@ -104,7 +104,8 @@ function Patch-Sqlite3ActionProject {
 		Set-Content -Path $actionProject.FullName -Value $updated
 	}
 
-	$solutionPath = Join-Path (Split-Path $actionProject.Directory.FullName -Parent) 'binding.sln'
+	$actionProjectDir = Split-Path $actionProject.FullName -Parent
+	$solutionPath = Join-Path (Split-Path $actionProjectDir -Parent) 'binding.sln'
 	if (-not (Test-Path $solutionPath)) {
 		throw "Could not find sqlite3 solution at $solutionPath"
 	}

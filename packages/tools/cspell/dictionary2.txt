@@ -228,6 +228,7 @@ msgfmt
 msgmerge
 msgstr
 msleep
+Msvs
 mtext
 mult
 multicursor
@@ -250,6 +251,7 @@ mytest
 mytoken
 myvalue
 nanoid
+napi
 Naveen
 Navier
 naviji

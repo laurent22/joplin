@@ -14,12 +14,29 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 
-$vsDevShellCandidates = @(
-	' C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\Launch-VsDevShell.ps1'.Trim(),
-	' C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\Launch-VsDevShell.ps1'.Trim()
-)
+function Resolve-VsDevShellPath {
+	$vswherePath = 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe'
+	if (Test-Path $vswherePath) {
+		$installationPath = & $vswherePath -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+		if ($installationPath) {
+			$devShellPath = Join-Path $installationPath 'Common7\Tools\Launch-VsDevShell.ps1'
+			if (Test-Path $devShellPath) {
+				return $devShellPath
+			}
+		}
+	}
 
-$vsDevShell = $vsDevShellCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+	$vsDevShellCandidates = @(
+		'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\Launch-VsDevShell.ps1',
+		'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1',
+		'C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\Tools\Launch-VsDevShell.ps1',
+		'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1'
+	)
+
+	return $vsDevShellCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+}
+
+$vsDevShell = Resolve-VsDevShellPath
 if (-not $vsDevShell) {
 	throw 'Could not find Launch-VsDevShell.ps1. Install VS 2022 Build Tools or Visual Studio with C++ workload.'
 }

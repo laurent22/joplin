@@ -77,6 +77,12 @@ To compile the OneNote converter blocker in a session-only way (repo-local `wasm
 
 `packages/onenote-converter/tools/build.js` now supports `WASM_PACK_BIN` to force a specific `wasm-pack` executable path (used by the script above).
 
+Optional flags for `build-onenote-win-arm64-local.ps1`:
+
+- `-ForceWasmPackInstall` to reinstall local `wasm-pack`
+- `-SkipInstall` to skip `yarn install --mode=skip-build`
+- `-Release` to build release profile (sets `IS_CONTINUOUS_INTEGRATION=1` in-session)
+
 To compile the sqlite3 blocker for desktop in a session-only way:
 
 ```powershell
@@ -84,12 +90,6 @@ To compile the sqlite3 blocker for desktop in a session-only way:
 ```
 
 This script applies local compatibility workarounds for Visual Studio 18 + `node-gyp` and for the generated sqlite3 MSBuild action command, then builds `node_sqlite3.node` for `napi-v6-win32-unknown-arm64`.
-
-Optional flags:
-
-- `-ForceWasmPackInstall` to reinstall local `wasm-pack`
-- `-SkipInstall` to skip `yarn install --mode=skip-build`
-- `-Release` to build release profile (sets `IS_CONTINUOUS_INTEGRATION=1` in-session)
 
 ## Notes
 
