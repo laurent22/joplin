@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text, Switch } from 'react-native';
 import { connect } from 'react-redux';
 import Folder from '@joplin/lib/models/Folder';
 import BaseModel from '@joplin/lib/BaseModel';
@@ -13,6 +13,8 @@ import TextInput from '../TextInput';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../../utils/types';
 import { Dispatch } from 'redux';
+import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
+import { themeStyle } from '../global-style';
 
 interface Props {
 	folderId: string;
@@ -25,6 +27,8 @@ interface Props {
 interface State {
 	folder: FolderEntity;
 	lastSavedFolder: FolderEntity|null;
+	useOwnSortOrder: boolean;
+	lastSavedUseOwnSortOrder: boolean;
 }
 
 class FolderScreenComponent extends BaseScreenComponent<Props, State> {
@@ -34,6 +38,8 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		this.state = {
 			folder: Folder.new(),
 			lastSavedFolder: null,
+			useOwnSortOrder: false,
+			lastSavedUseOwnSortOrder: false,
 		};
 	}
 
@@ -43,13 +49,18 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 			this.setState({
 				folder: folder,
 				lastSavedFolder: { ...folder },
+				useOwnSortOrder: false,
+				lastSavedUseOwnSortOrder: false,
 			});
 		} else {
+			const useOwnSortOrder = PerFolderSortOrderService.isSet(this.props.folderId);
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			void Folder.load(this.props.folderId).then(folder => {
 				this.setState({
 					folder: folder,
 					lastSavedFolder: { ...folder },
+					useOwnSortOrder: useOwnSortOrder,
+					lastSavedUseOwnSortOrder: useOwnSortOrder,
 				});
 			});
 		}
@@ -59,7 +70,9 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		if (!this.state.folder || !this.state.lastSavedFolder) return false;
 		const diff = BaseModel.diffObjects(this.state.folder, this.state.lastSavedFolder);
 		delete diff.type_;
-		return !!Object.getOwnPropertyNames(diff).length;
+		const folderModified = !!Object.getOwnPropertyNames(diff).length;
+		const sortOrderModified = this.state.useOwnSortOrder !== this.state.lastSavedUseOwnSortOrder;
+		return folderModified || sortOrderModified;
 	}
 
 	private folderComponent_change(propName: keyof FolderEntity, propValue: string) {
@@ -80,6 +93,9 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 		this.folderComponent_change('parent_id', parent);
 	}
 
+	private useOwnSortOrder_change(value: boolean) {
+		this.setState({ useOwnSortOrder: value });
+	}
 
 	private async saveFolderButton_press() {
 		let folder = { ...this.state.folder };
@@ -92,9 +108,14 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 			return;
 		}
 
+		if (this.state.useOwnSortOrder !== this.state.lastSavedUseOwnSortOrder) {
+			PerFolderSortOrderService.set(folder.id, this.state.useOwnSortOrder);
+		}
+
 		this.setState({
 			lastSavedFolder: { ...folder },
 			folder: folder,
+			lastSavedUseOwnSortOrder: this.state.useOwnSortOrder,
 		});
 
 		this.props.dispatch({
@@ -106,6 +127,23 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 
 	public override render() {
 		const saveButtonDisabled = !this.isModified() || !this.state.folder.title;
+		const theme = themeStyle(this.props.themeId);
+
+		const renderOwnSortOrderToggle = () => {
+			if (!this.props.folderId) return null;
+
+			return (
+				<View style={styles.sortOrderContainer}>
+					<Text style={{ color: theme.color, flex: 1 }}>{_('Use own sort order')}</Text>
+					<Switch
+						value={this.state.useOwnSortOrder}
+						onValueChange={value => this.useOwnSortOrder_change(value)}
+						trackColor={{ false: theme.dividerColor }}
+						accessibilityLabel={_('Use own sort order')}
+					/>
+				</View>
+			);
+		};
 
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
@@ -129,6 +167,7 @@ class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 						darkText
 					/>
 				</View>
+				{renderOwnSortOrderToggle()}
 				<View style={{ flex: 1 }} />
 			</View>
 		);
@@ -146,6 +185,14 @@ export default connect((state: AppState) => {
 const styles = StyleSheet.create({
 	folderPickerContainer: {
 		height: 46,
+		paddingLeft: 14,
+		paddingRight: 14,
+		paddingTop: 12,
+		paddingBottom: 12,
+	},
+	sortOrderContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
 		paddingLeft: 14,
 		paddingRight: 14,
 		paddingTop: 12,

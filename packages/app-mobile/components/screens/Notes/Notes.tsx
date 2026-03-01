@@ -20,6 +20,7 @@ import { DialogContext, DialogControl } from '../../DialogManager';
 import { useContext } from 'react';
 import { MenuChoice } from '../../DialogManager/types';
 import NewNoteButton from './NewNoteButton';
+import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
 
 interface Props {
 	dispatch: Dispatch;
@@ -41,6 +42,7 @@ interface Props {
 	selectedTagId: string;
 	selectedSmartFilterId: string;
 	notesParentType: string;
+	perFolderSortOrders: Record<string, string | boolean>;
 }
 
 interface State {
@@ -74,20 +76,31 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		const buttons: MenuChoice<IdType>[] = [];
 		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
 
+		const hasPerFolderSortOrder = this.props.notesParentType === 'Folder' &&
+			this.props.selectedFolderId &&
+			PerFolderSortOrderService.isSet(this.props.selectedFolderId);
+
+		const perFolderSortOrder = hasPerFolderSortOrder
+			? PerFolderSortOrderService.get(this.props.selectedFolderId)
+			: null;
+
+		const currentField = perFolderSortOrder?.field ?? Setting.value('notes.sortOrder.field');
+		const currentReverse = perFolderSortOrder?.reverse ?? Setting.value('notes.sortOrder.reverse');
+
 		for (const field in sortNoteOptions) {
 			if (!sortNoteOptions.hasOwnProperty(field)) continue;
 			buttons.push({
 				text: sortNoteOptions[field],
 				iconChecked: 'fas fa-circle',
-				checked: Setting.value('notes.sortOrder.field') === field,
+				checked: currentField === field,
 				id: { name: 'notes.sortOrder.field', value: field },
 			});
 		}
 
 		buttons.push({
 			text: `[ ${Setting.settingMetadata('notes.sortOrder.reverse').label()} ]`,
-			checked: Setting.value('notes.sortOrder.reverse'),
-			id: { name: 'notes.sortOrder.reverse', value: !Setting.value('notes.sortOrder.reverse') },
+			checked: currentReverse,
+			id: { name: 'notes.sortOrder.reverse', value: !currentReverse },
 		});
 
 		buttons.push({
@@ -105,7 +118,14 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		const r = await this.props.dialogManager.showMenu(Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
 		if (!r) return;
 
-		Setting.setValue(r.name, r.value);
+		if (hasPerFolderSortOrder && (r.name === 'notes.sortOrder.field' || r.name === 'notes.sortOrder.reverse')) {
+			const newField = r.name === 'notes.sortOrder.field' ? r.value as string : currentField;
+			const newReverse = r.name === 'notes.sortOrder.reverse' ? r.value as boolean : currentReverse;
+			PerFolderSortOrderService.setPerFolderSortOrder(this.props.selectedFolderId, newField, newReverse);
+			await this.refreshNotes();
+		} else {
+			Setting.setValue(r.name, r.value);
+		}
 	};
 
 	public styles() {
@@ -136,16 +156,41 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 	}
 
 	public async componentDidUpdate(prevProps: Props) {
-		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType || prevProps.uncompletedTodosOnTop !== this.props.uncompletedTodosOnTop || prevProps.showCompletedTodos !== this.props.showCompletedTodos) {
+		if (prevProps.notesOrder !== this.props.notesOrder || prevProps.selectedFolderId !== this.props.selectedFolderId || prevProps.selectedTagId !== this.props.selectedTagId || prevProps.selectedSmartFilterId !== this.props.selectedSmartFilterId || prevProps.notesParentType !== this.props.notesParentType || prevProps.uncompletedTodosOnTop !== this.props.uncompletedTodosOnTop || prevProps.showCompletedTodos !== this.props.showCompletedTodos || prevProps.perFolderSortOrders !== this.props.perFolderSortOrders) {
+			PerFolderSortOrderService.reloadPerFolderSortOrders();
 			await this.refreshNotes(this.props);
 		}
+	}
+
+	private getNotesOrder(props: Props): PreviewsOrder[] {
+		if (props.notesParentType === 'Folder' && props.selectedFolderId) {
+			const perFolderSortOrder = PerFolderSortOrderService.get(props.selectedFolderId);
+			if (perFolderSortOrder) {
+				if (perFolderSortOrder.field === 'order') {
+					return [
+						{ by: 'order', dir: 'DESC' },
+						{ by: 'user_created_time', dir: 'DESC' },
+					];
+				} else {
+					return [
+						{
+							by: perFolderSortOrder.field,
+							dir: perFolderSortOrder.reverse ? 'DESC' : 'ASC',
+						},
+					];
+				}
+			}
+		}
+		return props.notesOrder;
 	}
 
 	public async refreshNotes(props: Props|null = null) {
 		if (props === null) props = this.props;
 
+		const notesOrder = this.getNotesOrder(props);
+
 		const options = {
-			order: props.notesOrder,
+			order: notesOrder,
 			uncompletedTodosOnTop: props.uncompletedTodosOnTop,
 			showCompletedTodos: props.showCompletedTodos,
 			caseInsensitive: true,
@@ -305,6 +350,7 @@ const NotesScreen = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
+		perFolderSortOrders: state.settings['notes.perFolderSortOrders'] ?? {},
 	};
 })(NotesScreenWrapper);
 

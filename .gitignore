@@ -909,6 +909,7 @@ packages/app-mobile/services/e2ee/RSA.react-native.web.js
 packages/app-mobile/services/e2ee/crypto.js
 packages/app-mobile/services/plugins/PlatformImplementation.js
 packages/app-mobile/services/profiles/index.js
+packages/app-mobile/services/sortOrder/PerFolderSortOrderService.js
 packages/app-mobile/services/voiceTyping/VoiceTyping.js
 packages/app-mobile/services/voiceTyping/utils/unzip.android.js
 packages/app-mobile/services/voiceTyping/utils/unzip.js
