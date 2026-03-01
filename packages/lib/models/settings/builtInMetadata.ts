@@ -101,6 +101,14 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'editor.modeSelectorShown': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.File,
+		},
+
 		'sync.openSyncWizard': {
 			value: null as boolean,
 			type: SettingItemType.Button,
