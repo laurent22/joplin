@@ -60,6 +60,7 @@ export enum ResourceOcrStatus {
 	Processing = 1,
 	Done = 2,
 	Error = 3,
+	TodoAccessible = 4, // Like Todo, but requests full OCR details for accessible PDF creation
 }
 
 export type UserData = Record<string, Record<string, UserDataValue>>;

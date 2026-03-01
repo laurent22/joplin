@@ -257,13 +257,8 @@ const buildStartupTasks = (
 		AlarmService.setDriver(new AlarmServiceDriver(reg.logger()));
 	});
 	addTask('buildStartupTasks/openDatabase', async () => {
-		if (Setting.value('env') === 'prod') {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
-		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
-
-			// await db.clearForTesting();
-		}
+		await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+		// if (Setting.value('env') === 'dev') await db.clearForTesting();
 	});
 	addTask('buildStartupTasks/setUpSettings', async () => {
 		await loadKeychainServiceAndSettings([]);
@@ -372,6 +367,19 @@ const buildStartupTasks = (
 			ids: Setting.value('collapsedFolderIds'),
 		});
 	});
+	addTask('buildStartupTasks/initialize note visible panes', async () => {
+		const panes = Setting.value('noteVisiblePanes') || ['viewer'];
+
+		dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: panes,
+		});
+
+		dispatch({
+			type: 'NOTE_EDITOR_VISIBLE_CHANGE',
+			visible: panes.includes('editor'),
+		});
+	});
 	addTask('buildStartupTasks/load tags', async () => {
 		const tags = await Tag.allWithNotes();
 
@@ -422,10 +430,6 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
 
-		// Collect revisions more frequently on mobile because it doesn't auto-save
-		// and it cannot collect anything when the app is not active.
-		RevisionService.instance().runInBackground(1000 * 30);
-
 		reg.setupRecurrentSync();
 
 		// When the app starts we want the full sync to
@@ -439,6 +443,10 @@ const buildStartupTasks = (
 			void AlarmService.updateAllNotifications();
 
 			void DecryptionWorker.instance().scheduleStart();
+
+			// Collect revisions more frequently on mobile because it doesn't auto-save
+			// and it cannot collect anything when the app is not active.
+			RevisionService.instance().runInBackground(1000 * 30);
 		});
 	});
 	addTask('buildStartupTasks/set up welcome utils', async () => {

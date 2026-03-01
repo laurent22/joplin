@@ -28,6 +28,6 @@ Using Joplin Cloud Pro or Teams, you have the ability to customise the banner th
 
 ## Video Tutorial
 
-For a video tutorial on how to publish a note and customise the banner please click on the thumbnail:
+Watch this short video to learn how to publish a note and customise the banner:
 
 [![Watch the video](https://img.youtube.com/vi/i1xgInm0PTE/hqdefault.jpg)](https://youtu.be/i1xgInm0PTE)

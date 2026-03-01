@@ -1,6 +1,12 @@
 <!--
 
-Please prefix the title with the platform you are targetting:
+Before contributing, please read the contribution guidelines: https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md
+
+If this is a Google Summer of Code pull request, please read the [GSoC pull request guidelines](https://github.com/joplin/gsoc/blob/master/pull_request_guidelines.md).
+
+---
+
+**Pull request title**: Please prefix the title with the platform you are targetting.
 
 Here are some examples of good titles:
 
@@ -19,7 +25,5 @@ If it's two platforms, separate them with commas - "Desktop, Mobile" or if it's 
 If it's not related to any platform (such as a translation, change to the documentation, etc.), simply don't add a platform.
 
 Then please append the issue that you've addressed or fixed. Use "Resolves #123" for new features or improvements and "Fixes #123" for bug fixes.
-
-AND PLEASE READ THE GUIDE: https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md
 
 -->

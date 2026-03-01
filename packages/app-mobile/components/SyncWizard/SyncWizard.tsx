@@ -8,7 +8,7 @@ import { Icon, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import JoplinCloudIcon from './JoplinCloudIcon';
 import NavService from '@joplin/lib/services/NavService';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import CardButton from '../buttons/CardButton';
 import Setting from '@joplin/lib/models/Setting';
 
@@ -46,6 +46,14 @@ const styles = StyleSheet.create({
 		verticalAlign: 'middle',
 	},
 });
+
+const useShouldShowOtherButton = () => {
+	// Always show "other" on non-web platforms
+	if (Platform.OS !== 'web') return true;
+	// Don't show "other" when hosted on Joplin Cloud (other sync
+	// targets can still be selected from settings).
+	return location.origin !== 'https://app.joplincloud.com';
+};
 
 interface SyncProviderProps {
 	title: string;
@@ -102,6 +110,8 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 		await NavService.go('Config', { sectionName: 'sync' });
 	}, [onDismiss]);
 
+	const showOther = useShouldShowOtherButton();
+
 	return <DismissibleDialog
 		themeId={themeId}
 		visible={visible}
@@ -126,14 +136,14 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 				onPress={onSelectJoplinCloud}
 				disabled={false}
 			/>
-			<SyncProvider
+			{showOther && <SyncProvider
 				title={_('Other')}
 				description={_('Select one of the other supported sync targets.')}
 				icon={() => <Icon size={iconSize} source='dots-horizontal-circle'/>}
 				featuresList={[]}
 				onPress={onSelectOtherTarget}
 				disabled={false}
-			/>
+			/>}
 		</View>
 	</DismissibleDialog>;
 };

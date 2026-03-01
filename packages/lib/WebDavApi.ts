@@ -1,5 +1,5 @@
 import Logger from '@joplin/utils/Logger';
-import shim from './shim';
+import shim, { FetchOptions } from './shim';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const parseXmlString: (xml: string, options: any, callback: (error: Error | null, result: any)=> void)=> void = require('xml2js').parseString;
 import JoplinError from './JoplinError';
@@ -41,6 +41,13 @@ interface ExecOptions {
 	path?: string;
 }
 
+// detection state, whether invalid If-None-Match header is accepted by server
+enum ExcludeIfNoneMatch {
+	Unknown = 1,
+	No = 2,
+	Yes = 3,
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type JsonValue = any;
 
@@ -48,11 +55,13 @@ class WebDavApi {
 	private logger_: Logger;
 	private options_: WebDavApiOptions;
 	private lastRequests_: LoggedRequest[];
+	private excludeIfNoneMatch: ExcludeIfNoneMatch;
 
 	public constructor(options: WebDavApiOptions) {
 		this.logger_ = new Logger();
 		this.options_ = options;
 		this.lastRequests_ = [];
+		this.excludeIfNoneMatch = ExcludeIfNoneMatch.Unknown;
 		// Prevent unused method warning - this method is kept for debugging
 		void this._requestToCurl;
 	}
@@ -369,6 +378,42 @@ class WebDavApi {
 		}
 	}
 
+	private async fetchWithIfNoneMatchTest(url: string, fetchOptions: FetchOptions): Promise<Response> {
+		let response: Response = null;
+
+		if (['GET', 'HEAD'].indexOf(fetchOptions.method) < 0 && this.excludeIfNoneMatch === ExcludeIfNoneMatch.Unknown) {
+			// some webserver, for example Apache Tomcat do not accept invalid If-None-Match header,
+			// which is being sent to resolve issue with Seafile and network library on iOS
+			// to fix this issue, a request is sent with invalid If-None-Match header at first
+			//
+			// if it succeeds, excludeIfNoneMatch  flag is set to No, to indicate,
+			// that  subsequent request will be sent with If-None-Match header
+			//
+			// if first request with invalid If-None-Match header fails, it's retried without the header
+			// if successful, excludeIfNoneMatch is set to Yes, to indicate,
+			// that subsequent request will be sent without If-None-Match header
+			response = await shim.fetch(url, fetchOptions);
+			if (response.ok) {
+				this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
+			} else if (response.status === 400) {
+				const fetchOptionsAlt = { ... fetchOptions };
+				fetchOptionsAlt.headers = { ... fetchOptions.headers };
+				delete fetchOptionsAlt.headers['If-None-Match'];
+				const responseAlt = await shim.fetch(url, fetchOptionsAlt);
+				if (responseAlt.ok) {
+					this.excludeIfNoneMatch = ExcludeIfNoneMatch.Yes;
+					return responseAlt;
+				}	else if (response.status === 400) {
+					this.excludeIfNoneMatch = ExcludeIfNoneMatch.No;
+				}
+			}
+		} else {
+			response = await shim.fetch(url, fetchOptions);
+		}
+		return response;
+	}
+
+
 	// curl -u admin:123456 'http://nextcloud.local/remote.php/dav/files/admin/' -X PROPFIND --data '<?xml version="1.0" encoding="UTF-8"?>
 	//  <d:propfind xmlns:d="DAV:">
 	//    <d:prop xmlns:oc="http://owncloud.org/ns">
@@ -410,7 +455,9 @@ class WebDavApi {
 		// The "solution", an ugly one, is to send a purposely invalid string as eTag, which will bypass the If-None-Match check  - Seafile
 		// finds out that no resource has this ID and simply sends the requested data.
 		// Also add a random value to make sure the eTag is unique for each call.
-		if (['GET', 'HEAD'].indexOf(method) < 0) headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+		if (['GET', 'HEAD'].indexOf(method) < 0 && this.excludeIfNoneMatch !== ExcludeIfNoneMatch.Yes) {
+			headers['If-None-Match'] = `JoplinIgnore-${Math.floor(Math.random() * 100000)}`;
+		}
 		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -447,7 +494,7 @@ class WebDavApi {
 			response = await shim.uploadBlob(url, fetchOptions);
 		} else if (options.target === 'string') {
 			if (typeof body === 'string') fetchOptions.headers['Content-Length'] = `${shim.stringByteLength(body)}`;
-			response = await shim.fetch(url, fetchOptions);
+			response = await this.fetchWithIfNoneMatchTest(url, fetchOptions);
 		} else {
 			// file
 			response = await shim.fetchBlob(url, fetchOptions);

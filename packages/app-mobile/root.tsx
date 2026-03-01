@@ -225,6 +225,10 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		void ResourceFetcher.instance().autoAddResources();
 	}
 
+	if (['NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
+		Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
+	}
+
 	if (doRefreshFolders) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
@@ -823,13 +827,11 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							<SafeAreaProvider>
 								<FocusControl.MainAppContent style={{ flex: 1 }}>
 									{shouldShowMainContent ? mainContent : (
-										<SafeAreaView>
-											<BiometricPopup
-												dispatch={this.props.dispatch}
-												themeId={this.props.themeId}
-												sensorInfo={this.state.sensorInfo}
-											/>
-										</SafeAreaView>
+										<BiometricPopup
+											dispatch={this.props.dispatch}
+											themeId={this.props.themeId}
+											sensorInfo={this.state.sensorInfo}
+										/>
 									)}
 								</FocusControl.MainAppContent>
 							</SafeAreaProvider>

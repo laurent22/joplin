@@ -5,6 +5,9 @@ import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../datab
 import { msleep } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
+import createAccessiblePdf from './utils/createAccessiblePdf';
+import { PdfOcrDetails } from './utils/types';
+import * as fs from 'fs-extra';
 
 describe('OcrService', () => {
 
@@ -333,4 +336,58 @@ describe('OcrService', () => {
 
 		await service.dispose();
 	});
+
+	it('should throw error for unsupported OCR details version', async () => {
+		const ocrDetails = {
+			version: 999,
+			pages: [] as PdfOcrDetails['pages'],
+		};
+
+		await expect(createAccessiblePdf([], JSON.stringify(ocrDetails)))
+			.rejects.toThrow('Unsupported PDF OCR details version: 999');
+	});
+
+	it('should throw error for page count mismatch', async () => {
+		const ocrDetails: PdfOcrDetails = {
+			version: 1,
+			pages: [{ lines: [] }],
+		};
+
+		await expect(createAccessiblePdf([], JSON.stringify(ocrDetails)))
+			.rejects.toThrow('Page count mismatch: 0 images vs 1 OCR pages');
+	});
+
+	it('should create a multi-page PDF', async () => {
+		const jpegBuffer = await fs.readFile(`${supportDir}/photo.jpg`);
+
+		const ocrDetails: PdfOcrDetails = {
+			version: 1,
+			pages: [
+				{
+					lines: [{ words: [{ t: 'Page1', bb: [10, 60, 10, 30] }] }],
+				},
+				{
+					lines: [{ words: [{ t: 'Page2', bb: [10, 60, 10, 30] }] }],
+				},
+			],
+		};
+
+		const pdfBytes = await createAccessiblePdf(
+			[
+				{ buffer: jpegBuffer, width: 200, height: 200 },
+				{ buffer: jpegBuffer, width: 200, height: 200 },
+			],
+			JSON.stringify(ocrDetails),
+		);
+
+		expect(pdfBytes).toBeInstanceOf(Uint8Array);
+		const pdfContent = new TextDecoder().decode(pdfBytes);
+		expect(pdfContent.startsWith('%PDF-')).toBe(true);
+		expect(pdfContent).toContain('%%EOF');
+
+		// Multi-page PDF should be roughly twice the size of single page
+		// (minus some overhead for shared resources like fonts)
+		expect(pdfBytes.length).toBeGreaterThan(jpegBuffer.length * 1.5);
+	});
+
 });

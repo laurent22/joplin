@@ -19,7 +19,6 @@ const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
-import FloatingActionButton from '../../buttons/FloatingActionButton';
 import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { MenuOptionType } from '../../ScreenHeader';
@@ -122,6 +121,7 @@ interface Props extends BaseProps {
 	pluginHtmlContents: PluginHtmlContents;
 	editorNoteReloadTimeRequest: number;
 	canPublish: boolean;
+	noteVisiblePanes: string[];
 }
 
 interface ComponentProps extends Props {
@@ -199,6 +199,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
 		return shared.noteComponent_change(this, 'body', saveEvent.body);
 	});
+	private refreshKey: number | undefined;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
@@ -208,9 +209,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public constructor(props: ComponentProps) {
 		super(props);
 
+		const initialMode = props.noteVisiblePanes?.includes('editor') ? 'edit' : 'view';
+
 		this.state = {
 			note: Note.new(),
-			mode: 'view',
+			mode: initialMode,
 			readOnly: false,
 			folder: null,
 			lastSavedNote: null,
@@ -242,12 +245,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			titleContainerWidth: 0,
 		};
 
-		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
-		if (initialCursorLocation) {
-			this.selection = { start: initialCursorLocation, end: initialCursorLocation };
-		}
 		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
-		this.lastBodyScroll = initialScroll;
+		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
+		// Ignore the initial scroll and cursor location when there's a note hash. The editor/viewer should jump to
+		// the hash, rather than the last position.
+		if (!props.noteHash) {
+			if (initialCursorLocation) {
+				this.selection = { start: initialCursorLocation, end: initialCursorLocation };
+			}
+			this.lastBodyScroll = initialScroll;
+		}
 
 		this.titleTextFieldRef = React.createRef();
 
@@ -293,14 +300,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 			if (this.state.mode === 'edit') {
 				Keyboard.dismiss();
-
-				this.setState({
-					mode: 'view',
-				});
-
 				await this.undoRedoService_.reset();
-
-				return true;
 			}
 
 			if (this.state.fromShare) {
@@ -393,6 +393,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				setMode: (mode: 'view'|'edit') => {
 					this.setState({ mode });
 				},
+				dispatch: this.props.dispatch,
 			},
 			commands,
 			true,
@@ -711,10 +712,27 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
-		if (this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
+		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
+		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
 			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
-			if (!editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime) {
-				void shared.reloadNote(this);
+			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
+
+			if (explicitReloadRequired) {
+				void this.reloadNoteAndUpdateRefreshKey();
+			}
+
+			if (explicitReloadRequired || (editorPlugin && editorPluginIdsChanged)) {
+				// Clear the undo / redo state, as undo / redo steps wont be in sync with the current content after the note editor has been refreshed
+				if (!this.useEditorBeta()) {
+					void this.undoRedoService_.reset();
+				}
+
+				this.setState({
+					undoRedoButtonState: {
+						canUndo: false,
+						canRedo: false,
+					},
+				});
 			}
 		}
 
@@ -753,6 +771,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			type: 'SET_NOTE_EDITOR_VISIBLE',
 			visible: false,
 		});
+	}
+
+	private async reloadNoteAndUpdateRefreshKey() {
+		await shared.reloadNote(this);
+		this.refreshKey = this.props.editorNoteReloadTimeRequest;
 	}
 
 	private title_changeText(text: string) {
@@ -1445,6 +1468,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
+	private toggleVisiblePanes = () => {
+		const isSwitchingToEdit = this.state.mode === 'view';
+		void CommandService.instance().execute('toggleVisiblePanes');
+		if (isSwitchingToEdit) {
+			this.doFocusUpdate_ = true;
+		}
+	};
+
 	public scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
 
@@ -1705,7 +1736,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
 						toolbarEnabled={this.props.toolbarEnabled && !increaseSpaceForEditor}
-						themeId={this.props.themeId}
 						noteId={this.props.noteId}
 						noteHash={this.props.noteHash}
 						initialText={note.body}
@@ -1736,31 +1766,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						onScroll={this.props.editorType === EditorType.RichText ? this.onBodyViewerScroll : this.onMarkdownEditorScroll}
 
 						mode={this.props.editorType}
+						refreshKey={this.refreshKey}
 					/>;
 				}
 			}
 		}
-
-		const voiceTypingDialogShown = this.state.showSpeechToTextDialog || this.state.showAudioRecorder;
-		const renderActionButton = () => {
-			if (voiceTypingDialogShown) return null;
-			if (editorView) return null;
-			if (!this.state.note || !!this.state.note.deleted_time) return null;
-
-			const editButton = {
-				label: _('Edit'),
-				icon: 'create',
-				onPress: () => {
-					this.setState({ mode: 'edit' });
-
-					this.doFocusUpdate_ = true;
-				},
-			};
-
-			if (this.state.mode === 'edit') return null;
-
-			return <FloatingActionButton mainButton={editButton} />;
-		};
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -1860,6 +1870,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 			onUndoButtonPress={this.screenHeader_undoButtonPress}
 			onRedoButtonPress={this.screenHeader_redoButtonPress}
+			showViewToggleButton={!!this.state.note && !this.state.note.deleted_time && !editorView}
+			viewToggleIconName={this.state.mode === 'edit' ? 'ionicon book' : 'ionicon pencil'}
+			onViewTogglePress={this.toggleVisiblePanes}
 			title={getDisplayParentTitle(this.state.note, this.state.folder)}
 		/>;
 
@@ -1869,7 +1882,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				{!increaseSpaceForEditor && titleComp}
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
-				{renderActionButton()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1937,6 +1949,7 @@ const NoteScreen = connect((state: AppState) => {
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		editorNoteReloadTimeRequest: state.editorNoteReloadTimeRequest,
+		noteVisiblePanes: state.noteVisiblePanes,
 
 		editorType: state.settings['editor.codeView'] ? EditorType.Markdown : EditorType.RichText,
 

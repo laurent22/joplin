@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import { _ } from '@joplin/lib/locale';

@@ -208,6 +208,7 @@ describe('models/Setting', () => {
 		expect(Setting.sectionNameToLabel('mySection')).toBe('My section');
 	}));
 
+
 	it('should save and load settings from file', (async () => {
 		Setting.setValue('sync.target', 9); // Saved to file
 		Setting.setValue('encryption.passwordCache', {}); // Saved to keychain or db

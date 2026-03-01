@@ -13,10 +13,12 @@ export interface FuzzContext {
 	enableE2ee: boolean;
 	baseDir: string;
 
+	currentStep(): number;
+
 	randInt: (low: number, high: number)=> number;
 	randomString: (targetLength: number)=> string;
 	randomId: ()=> string;
-	randomFrom: <T> (data: T[])=> T;
+	randomFrom: <T> (data: T[], weights?: number[])=> T;
 
 	execApi(method: HttpMethod, route: string, body: Json|undefined): Promise<Json>;
 }

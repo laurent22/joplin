@@ -57,6 +57,7 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogVaria
 			},
 			closeButton: {
 				margin: 0,
+				marginRight: -8,
 			},
 			// Ensure that the close button is aligned with the center of the header:
 			// Make its container smaller and center it.
@@ -91,8 +92,8 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogVaria
 			dialogSurface: {
 				borderRadius: 24,
 				backgroundColor: theme.backgroundColor,
-				paddingHorizontal: 16,
-				paddingVertical: 24,
+				paddingHorizontal: theme.margin,
+				paddingVertical: theme.margin,
 				...dialogSizing,
 			},
 		});
@@ -123,13 +124,10 @@ const DismissibleDialog: React.FC<Props> = props => {
 	return (
 		<Modal
 			visible={props.visible}
-			onDismiss={props.onDismiss}
-			onRequestClose={props.onDismiss}
+			onClose={props.onDismiss}
 			containerStyle={styles.dialogContainer}
 			modalBackgroundStyle={styles.modalBackground}
-			animationType='fade'
 			backgroundColor={theme.backgroundColorTransparent2}
-			transparent={true}
 			scrollOverflow={props.scrollOverflow}
 			// Allows the modal background to extend under the statusbar
 			statusBarTranslucent

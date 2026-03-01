@@ -20,7 +20,7 @@ import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { createInterface } from 'readline/promises';
 import Stream = require('stream');
 import ProgressBar from '../utils/ProgressBar';
-import logDiffDebug from '../utils/logDiffDebug';
+import getDiffDebugMessage from '../utils/getBinaryDiffDebugMessage';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import diffSortedStringArrays from '../utils/diffSortedStringArrays';
 import extractResourceIds from '../utils/extractResourceIds';
@@ -132,6 +132,12 @@ interface CreateRandomItemOptions extends CreateOrUpdateOptions {
 	parentId: ItemId;
 	id?: ItemId;
 	quiet?: boolean;
+}
+
+interface CreateOrUpdateManyOptions {
+	createProbability: number;
+	updateProbability: number;
+	deleteProbability: number;
 }
 
 class ApiResponseError extends Error {
@@ -708,7 +714,7 @@ class Client implements ActionableClient {
 		}
 	}
 
-	public async createOrUpdateMany(actionCount: number) {
+	public async createOrUpdateMany(actionCount: number, options: CreateOrUpdateManyOptions) {
 		logger.info(`Creating/updating ${actionCount} items...`);
 		const bar = new ProgressBar('Creating/updating');
 
@@ -725,9 +731,7 @@ class Client implements ActionableClient {
 			},
 			update: async (targetNote: NoteData) => {
 				const keep = targetNote.body.substring(
-					// Problems start to appear when notes get long.
-					// See https://github.com/laurent22/joplin/issues/13644.
-					0, Math.min(this.context_.randInt(0, targetNote.body.length), 5000),
+					0, this.context_.randInt(0, targetNote.body.length),
 				);
 				const append = this.context_.randomString(this.context_.randInt(0, 5000));
 				await this.updateNote({
@@ -739,21 +743,21 @@ class Client implements ActionableClient {
 				await this.deleteNote(targetNote.id, { quiet: true });
 			},
 		};
+		const actionKeys: (keyof typeof actions)[] = ['create', 'update', 'delete'];
 
 		for (let i = 0; i < actionCount; i++) {
 			bar.update(i, actionCount);
 
-			const actionId = this.context_.randInt(0, 100);
-
 			const targetNote = await this.randomNote({ includeReadOnly: false });
-			if (!targetNote) {
-				await actions.create();
-			} else if (actionId > 60) {
-				await actions.update(targetNote);
-			} else if (actionId > 50) {
-				await actions.delete(targetNote);
-			} else {
-				await actions.create();
+			const actionWeights = [
+				options.createProbability,
+				targetNote ? options.updateProbability : 0,
+				targetNote ? options.deleteProbability : 0,
+			];
+
+			const actionId = this.context_.randomFrom(actionKeys, actionWeights);
+			if (actionId) {
+				await actions[actionId](targetNote);
 			}
 		}
 		bar.complete();
@@ -824,8 +828,8 @@ class Client implements ActionableClient {
 		} catch (error) {
 			// Log additional information to help debug binary differences
 			if (lastActualNote) {
-				logDiffDebug(lastActualNote.title, expected.title);
-				logDiffDebug(lastActualNote.body, expected.body);
+				logger.warn(getDiffDebugMessage(lastActualNote.title, expected.title));
+				logger.warn(getDiffDebugMessage(lastActualNote.body, expected.body));
 			}
 			// Log all transactions associated with the item
 			this.globalActionTracker_.printActionLog(expected.id);
@@ -836,7 +840,7 @@ class Client implements ActionableClient {
 
 	public async createRandomNote({ parentId, id, quiet = false }: CreateRandomItemOptions) {
 		const titleLength = this.context_.randInt(0, 256);
-		const bodyLength = this.context_.randInt(0, 2000);
+		const bodyLength = this.context_.randInt(0, 10_000);
 		await this.createNote({
 			published: false,
 			parentId,
@@ -1146,11 +1150,7 @@ class Client implements ActionableClient {
 
 				output.push(`id: ${id} (${itemTitle(id)})`);
 				if (log.length > 0) {
-					output.push(
-						log
-							.map(item => `\t${item.source}: ${item.action}`)
-							.join('\n'),
-					);
+					output.push(`\t${hangingIndent(log, '\t')}`);
 				} else {
 					output.push('\tNo history found');
 				}
@@ -1177,6 +1177,38 @@ class Client implements ActionableClient {
 			}
 		};
 
+		const assertSameBodies = (actualSorted: NoteData[], expectedSorted: NoteData[], assertionLabel: string) => {
+			if (actualSorted.length !== expectedSorted.length) {
+				throw new Error(`Input arrays have different lengths (in: ${assertionLabel})`);
+			}
+
+			const differentItems = [];
+			for (let i = 0; i < actualSorted.length; i++) {
+				const actualBody = actualSorted[i].body;
+				const expectedBody = expectedSorted[i].body;
+
+				if (actualBody !== expectedBody) {
+					differentItems.push([actualSorted[i], expectedSorted[i]]);
+				}
+			}
+
+			if (differentItems.length) {
+				const message = [`Some items have different bodies (in: ${assertionLabel})`];
+				for (const [actual, expected] of differentItems) {
+					message.push(`- item: ${actual.id}${actual.id !== expected.id ? ` (compare ${expected.id}) ` : ''}:`);
+					message.push(` ${hangingIndent(getDiffDebugMessage(actual.body, expected.body))}`);
+
+					// Only display full bodies for easy-to-inspect content:
+					const simpleBodyExp = /^[a-z0-9;.,!?[\]() \t\n"']{0,200}$/i;
+					if (actual.body.match(simpleBodyExp) && expected.body.match(simpleBodyExp)) {
+						message.push(`  actual:  ${JSON.stringify(actual)}`);
+						message.push(`  expected:${JSON.stringify(expected)}`);
+					}
+				}
+				throw new Error(message.join('\n'));
+			}
+		};
+
 		const checkNoteState = async () => {
 			const notes = [...await this.listNotes()];
 			const expectedNotes = [...await this.tracker_.listNotes()];
@@ -1187,6 +1219,7 @@ class Client implements ActionableClient {
 			assertNoAdjacentEqualIds(notes, 'notes');
 			assertNoAdjacentEqualIds(expectedNotes, 'expectedNotes');
 			await assertSameIds(notes, expectedNotes, 'Note IDs should match');
+			assertSameBodies(notes, expectedNotes, 'should have the same note bodies');
 			assert.deepEqual(notes, expectedNotes, 'should have the same notes as the expected state');
 		};
 

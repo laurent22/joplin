@@ -132,6 +132,7 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 		if (!src) return null;
 
 		const scriptFilePath = `${baseDir}/${src}`;
+		if (!await fs.exists(scriptFilePath)) return null;
 		let content = await fs.readFileText(scriptFilePath);
 
 		// There's no simple way to insert arbitrary content in <script> tags.
