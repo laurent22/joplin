@@ -83,6 +83,7 @@ const followLinkTooltip = (onOpenExternalLink: OnOpenLink) => {
 	];
 };
 
+// Duplicated from `followLinkTooltip` in this file.
 // Returns only the tooltip field + theme, without ctrlClickLinksExtension
 // or referenceLinkStateField. Use this when ctrlClickLinksExtension is
 // already loaded separately to avoid duplicate StateField registration.
