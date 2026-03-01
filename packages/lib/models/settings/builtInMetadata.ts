@@ -2078,6 +2078,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: false,
 		},
+
+		'notes.showNoteLinkIcon': {
+			value: true,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			section: 'note',
+			public: true,
+			isGlobal: true,
+			label: () => _('Show Joplin icon for note links'),
+			appTypes: [AppType.Desktop, AppType.Mobile],
+		},
 	} satisfies Record<string, SettingItem>;
 
 	for (const [key, md] of Object.entries(output)) {

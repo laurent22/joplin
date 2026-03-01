@@ -1404,6 +1404,7 @@ packages/lib/services/AlarmServiceDriverNode.js
 packages/lib/services/BaseService.js
 packages/lib/services/CommandService.test.js
 packages/lib/services/CommandService.js
+packages/lib/services/DecryptionWorker.test.js
 packages/lib/services/DecryptionWorker.js
 packages/lib/services/ExternalEditWatcher.js
 packages/lib/services/ExternalEditWatcher/utils.js

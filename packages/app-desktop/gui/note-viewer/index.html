@@ -35,6 +35,10 @@
 		ul ul, ul ol, ol ul, ol ol   {
 			margin-bottom: 0px;			
 		}
+		::highlight(search-results) {
+    		background-color: #f7d26e;
+    		color: black;
+		}
 	</style>
 </head>
 
@@ -503,7 +507,7 @@
 			if (!options) options = {};
 
 			// TODO: Add support for scriptType on mobile and CLI
-
+			CSS.highlights.clear();
 			if (!mark_) {
 				mark_ = new Mark(document.getElementById('joplin-container-content'), {
 					exclude: ['img'],
@@ -519,7 +523,8 @@
 
 			let selectedElement = null;
 			let elementIndex = 0;
-
+			
+			const allRanges = [];
 			const markKeywordOptions = {};
 
 			if ('separateWordSearch' in options) markKeywordOptions.separateWordSearch = options.separateWordSearch;
@@ -527,9 +532,17 @@
 			try {
 				for (const keyword of keywords) {
 					markJsUtils.markKeyword(mark_, keyword, {
-						pregQuote: pregQuote,
-						replaceRegexDiacritics: replaceRegexDiacritics,
-					}, markKeywordOptions);
+                        pregQuote: pregQuote,
+                        replaceRegexDiacritics: replaceRegexDiacritics,
+                    }, {
+                        ...markKeywordOptions,
+                        element: 'mark-ghost',
+                        each: (node) => {
+                            const range = new Range();
+                            range.selectNodeContents(node);
+                            allRanges.push(range);
+                        }
+                    });
 				}
 			} catch (error) {
 				if (error.name !== 'SyntaxError') {
@@ -539,6 +552,10 @@
 				// when the input is really big, this catch is here to avoid the application crashing
 				// https://github.com/laurent22/joplin/issues/7634
 				console.error('Error while trying to highlight words from search: ', error);
+			}
+			if (allRanges.length > 0) {
+				const searchResultsHighlight = new Highlight(...allRanges);
+            	CSS.highlights.set("search-results", searchResultsHighlight);
 			}
 		}
 
@@ -807,6 +824,37 @@
 				}
 			}
 			);
+		}));
+
+		// By default, Chromium inlines body styles (e.g. theme background color) into the clipboard HTML.
+		// Intercept the copy event and write only the selected content to bypass this behaviour.
+		document.addEventListener('copy', webviewLib.logEnabledEventHandler(e => {
+			const selection = window.getSelection();
+			if (!selection || selection.isCollapsed) return;
+			if (selection.rangeCount === 0 || !e.clipboardData) return;
+
+			const range = selection.getRangeAt(0);
+			const wrapper = document.createElement('div');
+			wrapper.appendChild(range.cloneContents());
+
+			wrapper.querySelectorAll('style').forEach(s => s.remove());
+
+			const inlineTags = new Set(['STRONG', 'EM', 'CODE', 'S', 'DEL', 'INS', 'MARK', 'SUP', 'SUB', 'U', 'SPAN', 'A']);
+			let node = range.commonAncestorContainer;
+			if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+
+			while (node && node !== document.body && node.id !== 'rendered-md' && node.id !== 'joplin-container-content') {
+				if (inlineTags.has(node.tagName)) {
+					const el = node.cloneNode(false);
+					while (wrapper.firstChild) el.appendChild(wrapper.firstChild);
+					wrapper.appendChild(el);
+				}
+				node = node.parentElement;
+			}
+
+			e.clipboardData.setData('text/html', wrapper.innerHTML);
+			e.clipboardData.setData('text/plain', selection.toString());
+			e.preventDefault();
 		}));
 
 		let lastClientWidth_ = NaN, lastClientHeight_ = NaN, lastScrollTop_ = NaN;
