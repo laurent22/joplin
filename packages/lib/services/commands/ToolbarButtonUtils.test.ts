@@ -4,6 +4,7 @@ import ToolbarButtonUtils from './ToolbarButtonUtils';
 import reducer, { defaultState } from '../../reducer';
 import stateToWhenClauseContext from './stateToWhenClauseContext';
 import KeymapService from '../KeymapService';
+import shim from '../../shim';
 
 const createTestCommands = () => {
 	const simpleCommands = [
@@ -62,8 +63,7 @@ describe('ToolbarButtonUtils', () => {
 			keymapService,
 		);
 
-		const expectedAccel = keymapService.getDefaultAccelerator('newNote');
-		const expectedTooltip = expectedAccel ? `New Note (${expectedAccel})` : 'New Note';
+		const expectedTooltip = shim.isMac() ? 'New Note (Cmd+N)' : 'New Note (Ctrl+N)';
 
 		expect(buttons).toMatchObject([
 			{
