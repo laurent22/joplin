@@ -15,6 +15,7 @@ const createEditorSettings = (themeId: number) => {
 		tabMovesFocus: false,
 		inlineRenderingEnabled: true,
 		highlightActiveLine: false,
+		showLinkTooltip: false,
 
 		keymap: EditorKeymap.Default,
 		preferMacShortcuts: false,

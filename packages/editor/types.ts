@@ -215,6 +215,7 @@ export interface EditorSettings {
 	imageRenderingEnabled: boolean;
 	readOnly: boolean;
 	highlightActiveLine: boolean;
+	showLinkTooltip: boolean;
 
 	indentWithTabs: boolean;
 

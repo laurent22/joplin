@@ -356,6 +356,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			inlineRenderingEnabled: Setting.value('editor.inlineRendering'),
 			imageRenderingEnabled: Setting.value('editor.imageRendering'),
 			highlightActiveLine: Setting.value('editor.highlightActiveLine'),
+			showLinkTooltip: Setting.value('editor.showLinkTooltip'),
 			themeData: {
 				...styles.globalTheme,
 				marginLeft: 0,

@@ -1542,6 +1542,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'editor',
 			storage: SettingStorage.File,
 		},
+		'editor.showLinkTooltip': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'editor',
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Show link tooltip'),
+			description: () => _('Shows a clickable tooltip when the cursor is on a link, allowing you to follow it without switching to view mode.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
 		'editor.highlightActiveLine': {
 			value: false,
 			type: SettingItemType.Bool,

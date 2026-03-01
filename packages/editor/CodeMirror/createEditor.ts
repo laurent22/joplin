@@ -37,7 +37,8 @@ import overwriteModeExtension from './extensions/overwriteModeExtension';
 import handleLinkEditRequests, { showLinkEditor } from './utils/handleLinkEditRequests';
 import selectedNoteIdExtension, { setNoteIdEffect } from './extensions/selectedNoteIdExtension';
 import ctrlKeyStateClassExtension from './extensions/modifierKeyCssExtension';
-import followLinkTooltip from './extensions/links/followLinkTooltipExtension';
+import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension';
+import { linkTooltipOnly } from './extensions/links/followLinkTooltipExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
 import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
 import editorSettingsExtension, { setEditorSettingsEffect } from './extensions/editorSettingsExtension';
@@ -176,6 +177,7 @@ const createEditor = (
 
 	const historyCompartment = new Compartment();
 	const dynamicConfig = new Compartment();
+	const linkTooltipCompartment = new Compartment();
 
 	// Give the default keymap low precedence so that it is overridden
 	// by extensions with default precedence.
@@ -259,9 +261,16 @@ const createEditor = (
 				EditorState.allowMultipleSelections.of(true),
 				rectangularSelection(),
 				drawSelection(),
-				followLinkTooltip(link => {
+				ctrlClickLinksExtension(link => {
 					props.onEvent({ kind: EditorEventType.FollowLink, link });
 				}),
+				linkTooltipCompartment.of(
+					props.settings.showLinkTooltip
+						? linkTooltipOnly(link => {
+							props.onEvent({ kind: EditorEventType.FollowLink, link });
+						})
+						: [],
+				),
 				ctrlClickCheckboxExtension(),
 
 				highlightSpecialChars(),
@@ -350,6 +359,13 @@ const createEditor = (
 				effects: [
 					dynamicConfig.reconfigure(
 						configFromSettings(newSettings, context),
+					),
+					linkTooltipCompartment.reconfigure(
+						newSettings.showLinkTooltip
+							? linkTooltipOnly(link => {
+								props.onEvent({ kind: EditorEventType.FollowLink, link });
+							})
+							: [],
 					),
 					setEditorSettingsEffect.of(newSettings),
 				],

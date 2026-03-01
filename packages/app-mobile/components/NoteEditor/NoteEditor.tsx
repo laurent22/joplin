@@ -287,6 +287,7 @@ const useEditorSettings = (props: Props) => {
 		useExternalSearch: true,
 		readOnly: props.readOnly,
 		highlightActiveLine,
+		showLinkTooltip: Setting.value('editor.showLinkTooltip'),
 
 		keymap: EditorKeymap.Default,
 		preferMacShortcuts: shim.mobilePlatform() === 'ios',

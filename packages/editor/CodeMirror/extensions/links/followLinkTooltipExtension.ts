@@ -83,4 +83,48 @@ const followLinkTooltip = (onOpenExternalLink: OnOpenLink) => {
 	];
 };
 
+// Returns only the tooltip field + theme, without ctrlClickLinksExtension
+// or referenceLinkStateField. Use this when ctrlClickLinksExtension is
+// already loaded separately to avoid duplicate StateField registration.
+export const linkTooltipOnly = (onOpenExternalLink: OnOpenLink) => {
+	const onOpenLink = (link: string, view: EditorView) => {
+		openLink(link, view, onOpenExternalLink);
+	};
+
+	const followLinkTooltipField = StateField.define<readonly Tooltip[]>({
+		create: state => getLinkTooltips(onOpenLink, state),
+		update: (tooltips, transaction) => {
+			if (!transaction.docChanged && !transaction.selection) {
+				return tooltips;
+			}
+
+			return getLinkTooltips(onOpenLink, transaction.state);
+		},
+		provide: field => {
+			const tooltipsFromState = (state: EditorState) => state.field(field);
+			return showTooltip.computeN([field], tooltipsFromState);
+		},
+	});
+
+	return [
+		EditorView.theme({
+			'& .cm-md-link-tooltip > button': {
+				backgroundColor: 'transparent',
+				border: 'transparent',
+				fontSize: 'inherit',
+
+				whiteSpace: 'pre',
+				maxWidth: '95vw',
+				textOverflow: 'ellipsis',
+				overflowX: 'hidden',
+
+				textDecoration: 'underline',
+				cursor: 'pointer',
+				color: 'var(--joplin-url-color)',
+			},
+		}),
+		followLinkTooltipField,
+	];
+};
+
 export default followLinkTooltip;
