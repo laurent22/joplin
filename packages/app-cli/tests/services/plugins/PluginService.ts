@@ -305,7 +305,7 @@ describe('services_PluginService', () => {
 			*/
 
 			joplin.plugins.register({
-				onStart: async function() { },
+				onStart: async function() {},
 			});
 		`;
 
