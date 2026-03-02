@@ -139,6 +139,10 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'globalHotkey' || action.type === 'SETTING_UPDATE_ALL') {
+			this.updateGlobalHotkey();
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
 			void this.setupOcrService();
 		}
@@ -221,6 +225,10 @@ class Application extends BaseApplication {
 			]);
 			app.createTray(contextMenu);
 		}
+	}
+
+	public updateGlobalHotkey() {
+		bridge().updateGlobalHotkey(Setting.value('globalHotkey') as string);
 	}
 
 	public setupContextMenu() {
@@ -595,6 +603,7 @@ class Application extends BaseApplication {
 		});
 
 		addTask('app/updateTray', () => this.updateTray());
+		addTask('app/updateGlobalHotkey', () => this.updateGlobalHotkey());
 
 		addTask('app/set main window state', () => {
 			if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {

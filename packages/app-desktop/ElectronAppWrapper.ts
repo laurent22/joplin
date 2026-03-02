@@ -877,6 +877,7 @@ export default class ElectronAppWrapper {
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;
+			bridge().updateGlobalHotkey('');
 		});
 
 		this.electronApp_.on('window-all-closed', () => {

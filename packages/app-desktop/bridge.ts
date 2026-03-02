@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem, globalShortcut } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -322,6 +322,33 @@ export class Bridge {
 
 	public switchToMainWindow() {
 		this.switchToWindow(defaultWindowId);
+	}
+
+	// Registers a global shortcut that shows/hides the main window even when
+	// Joplin is not focused. Pass an empty string to disable the shortcut.
+	// Uses Electron accelerator format e.g. "CommandOrControl+Shift+J".
+	public updateGlobalHotkey(hotkey: string) {
+		globalShortcut.unregisterAll();
+
+		if (!hotkey) return;
+
+		const registered = globalShortcut.register(hotkey, () => {
+			const win = this.mainWindow();
+			if (!win) return;
+
+			if (win.isVisible() && win.isFocused()) {
+				win.hide();
+			} else {
+				if (win.isMinimized()) win.restore();
+				win.show();
+				// eslint-disable-next-line no-restricted-properties
+				win.focus();
+			}
+		});
+
+		if (!registered) {
+			console.warn(`updateGlobalHotkey: Could not register global shortcut "${hotkey}" - it may already be in use by another application.`);
+		}
 	}
 
 	// zoom should be in the range [0..1]
