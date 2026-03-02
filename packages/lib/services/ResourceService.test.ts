@@ -264,42 +264,44 @@ describe('services/ResourceService', () => {
 		expect((await NoteResource.all()).length).toBe(1);
 	});
 
-	it('should delete leftover .crypted files from the resource directory', async () => {
+	it('should delete leftover .crypted files only when the resource is not actively being decrypted', async () => {
 		const service = new ResourceService();
 		const resourceDir = Resource.baseDirectoryPath();
 
-		// Create a fake .crypted leftover file (simulates a crash during decryption)
-		const cryptedFilePath1 = `${resourceDir}/abc123def456abc123def456abc123de.crypted`;
-		const cryptedFilePath2 = `${resourceDir}/cafe1234cafe1234cafe1234cafe1234.crypted`;
-
-		// Also create a regular resource file that should NOT be deleted
+		// Attach a real resource so we can test both the safe-to-delete and skip cases
 		const folder = await Folder.save({ title: 'test folder' });
 		const note = await Note.save({ title: 'test note', parent_id: folder.id });
-		const noteWithResource = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 		const resource = (await Resource.all())[0];
+
+		// Case 1: orphan .crypted file with no matching resource in DB — safe to delete
+		const orphanCryptedPath = `${resourceDir}/abc123def456abc123def456abc123de.crypted`;
+		await shim.fsDriver().writeFile(orphanCryptedPath, 'orphan data', 'utf8');
+
+		// Case 2: .crypted file whose resource is already decrypted (encryption_blob_encrypted = 0) — safe to delete
+		const decryptedResourceCryptedPath = `${resourceDir}/${resource.id}.crypted`;
+		await Resource.save({ id: resource.id, encryption_blob_encrypted: 0 }, { autoTimestamp: false });
+		await shim.fsDriver().writeFile(decryptedResourceCryptedPath, 'stale crypted data', 'utf8');
+
+		// Case 3: .crypted file whose resource is still marked encrypted — must NOT be deleted
+		const encryptedResource = await Resource.save({ title: 'encrypted', encryption_blob_encrypted: 1, mime: 'application/octet-stream', file_extension: '' });
+		const activeCryptedPath = `${resourceDir}/${encryptedResource.id}.crypted`;
+		await shim.fsDriver().writeFile(activeCryptedPath, 'active crypted data', 'utf8');
+
+		// Regular resource file should never be touched
 		const resourceFilePath = Resource.fullPath(resource);
 
-		// Write the fake .crypted files
-		await shim.fsDriver().writeFile(cryptedFilePath1, 'fake encrypted data 1', 'utf8');
-		await shim.fsDriver().writeFile(cryptedFilePath2, 'fake encrypted data 2', 'utf8');
-
-		// Verify they exist before cleanup
-		expect(await shim.fsDriver().exists(cryptedFilePath1)).toBe(true);
-		expect(await shim.fsDriver().exists(cryptedFilePath2)).toBe(true);
-		expect(await shim.fsDriver().exists(resourceFilePath)).toBe(true);
-
-		// Run the cleanup
 		await service.deleteCryptedFiles();
 
-		// .crypted files should be gone
-		expect(await shim.fsDriver().exists(cryptedFilePath1)).toBe(false);
-		expect(await shim.fsDriver().exists(cryptedFilePath2)).toBe(false);
+		// Orphan and already-decrypted .crypted files should be removed
+		expect(await shim.fsDriver().exists(orphanCryptedPath)).toBe(false);
+		expect(await shim.fsDriver().exists(decryptedResourceCryptedPath)).toBe(false);
 
-		// Regular resource file should be untouched
+		// Active decryption file must be preserved
+		expect(await shim.fsDriver().exists(activeCryptedPath)).toBe(true);
+
+		// Regular resource blob must be untouched
 		expect(await shim.fsDriver().exists(resourceFilePath)).toBe(true);
-
-		// Suppress unused variable warning
-		void noteWithResource;
 	});
 
 });
