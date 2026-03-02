@@ -310,4 +310,14 @@ describe('tableUtils', () => {
 		expect(table!.header.cells).toHaveLength(2);
 		expect(table!.body).toHaveLength(0);
 	});
+
+	it('should reject non-integer dimensions', () => {
+		expect(() => generateTable(1.5, 2)).toThrow();
+		expect(() => generateTable(2, 2.5)).toThrow();
+	});
+
+	it('should reject invalid dimensions', () => {
+		expect(() => generateTable(0, 0)).toThrow();
+		expect(() => generateTable(-1, 2)).toThrow();
+	});
 });

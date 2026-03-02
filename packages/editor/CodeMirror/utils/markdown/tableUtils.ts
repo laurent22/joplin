@@ -290,6 +290,9 @@ export const deleteColumn = (table: Table, colIndex: number): Table | null => {
 
 // Generate a new empty Markdown table with the specified dimensions.
 export const generateTable = (rows: number, columns: number): string => {
+	if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
+		throw new Error('Row and column counts must be integers');
+	}
 	if (columns <= 0) throw new Error('Table must have at least one column');
 	if (rows < 0) throw new Error('Row count must not be negative');
 
