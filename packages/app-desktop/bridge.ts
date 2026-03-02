@@ -583,7 +583,7 @@ export class Bridge {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
-		} else if (process.env.APPIMAGE) {
+		} else if (process.env.APPIMAGE && !this.altInstanceId_) {
 			app.relaunch({
 				execPath: process.env.APPIMAGE,
 				args: ['--appimage-extract-and-run'],
