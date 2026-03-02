@@ -927,8 +927,8 @@ describe('reducer', () => {
 	});
 	// Regression test for #13883.
 	it.each([
-		[undefined],
-		[false],
+		undefined,
+		false,
 	])('should not change selected note in background window when active window note moves folders (preserveSelection: %j)', async (
 		preserveSelectionOption,
 	) => {
