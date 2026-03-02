@@ -1,5 +1,5 @@
 import { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } from './testing/test-utils';
-import reducer, { defaultState, defaultWindowId, MAX_HISTORY, State } from './reducer';
+import reducer, { defaultState, defaultWindowId, MAX_HISTORY, State, stateUtils } from './reducer';
 import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/database/types';
 import Note from './models/Note';
 import BaseModel from './BaseModel';
@@ -924,5 +924,49 @@ describe('reducer', () => {
 		// The other window should be focused
 		expect(state.windowId).toBe(defaultWindowId);
 		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
+
+	it('should provide correct per-window state via windowStateById after WINDOW_FOCUS swap', async () => {
+		const folders = await createNTestFolders(2);
+		const notes1 = await createNTestNotes(3, folders[0]);
+		const notes2 = await createNTestNotes(3, folders[1]);
+		let state = initTestState(folders, 0, notes1, [0]);
+
+		// Main window is viewing folder[0]
+		expect(state.notesParentType).toBe('Folder');
+		expect(state.selectedFolderId).toBe(folders[0].id);
+
+		// Open a secondary window with a note from folder[1]
+		const secondaryWindowId = 'window-secondary';
+		state = createBackgroundWindow(state, secondaryWindowId, notes2[0], notes2);
+
+		// Before focus swap: each window should have its own state
+		const mainBefore = stateUtils.windowStateById(state, defaultWindowId);
+		expect(mainBefore.notesParentType).toBe('Folder');
+		expect(mainBefore.selectedFolderId).toBe(folders[0].id);
+
+		const secondaryBefore = stateUtils.windowStateById(state, secondaryWindowId);
+		expect(secondaryBefore.notesParentType).toBe('Folder');
+		expect(secondaryBefore.selectedFolderId).toBe(notes2[0].parent_id);
+
+		// Focus the secondary window (this swaps the states)
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: secondaryWindowId });
+
+		// After focus swap: windowStateById should still return correct state for each window
+		const mainAfterSwap = stateUtils.windowStateById(state, defaultWindowId);
+		expect(mainAfterSwap.notesParentType).toBe('Folder');
+		expect(mainAfterSwap.selectedFolderId).toBe(folders[0].id);
+
+		const secondaryAfterSwap = stateUtils.windowStateById(state, secondaryWindowId);
+		expect(secondaryAfterSwap.notesParentType).toBe('Folder');
+		expect(secondaryAfterSwap.selectedFolderId).toBe(notes2[0].parent_id);
+
+		// Focus back to main window
+		state = reducer(state, { type: 'WINDOW_FOCUS', windowId: defaultWindowId });
+
+		// After switching back: main window state should still be correct
+		const mainFinal = stateUtils.windowStateById(state, defaultWindowId);
+		expect(mainFinal.notesParentType).toBe('Folder');
+		expect(mainFinal.selectedFolderId).toBe(folders[0].id);
 	});
 });
