@@ -474,6 +474,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		noteId: props.noteId,
 		watchedNoteFiles: props.watchedNoteFiles,
 		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
+		showNoteLinkIcon: props.showNoteLinkIcon,
 	};
 
 	let editor = null;
@@ -767,6 +768,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		searchResults: state.searchResults,
 		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
 		enableInEditorRendering: state.settings['editor.inlineRendering'],
+		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 	};
 };
 

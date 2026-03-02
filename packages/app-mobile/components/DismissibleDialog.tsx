@@ -57,6 +57,7 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogVaria
 			},
 			closeButton: {
 				margin: 0,
+				marginRight: -8,
 			},
 			// Ensure that the close button is aligned with the center of the header:
 			// Make its container smaller and center it.
@@ -91,8 +92,8 @@ const useStyles = (themeId: number, containerStyle: ViewStyle, size: DialogVaria
 			dialogSurface: {
 				borderRadius: 24,
 				backgroundColor: theme.backgroundColor,
-				paddingHorizontal: 16,
-				paddingVertical: 24,
+				paddingHorizontal: theme.margin,
+				paddingVertical: theme.margin,
 				...dialogSizing,
 			},
 		});
