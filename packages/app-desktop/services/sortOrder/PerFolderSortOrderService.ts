@@ -1,6 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import eventManager from '@joplin/lib/eventManager';
 import { notesSortOrderFieldArray, setNotesSortOrder } from './notesSortOrderUtils';
+import { parseNotesParent } from '@joplin/lib/reducer';
 
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
@@ -45,6 +46,16 @@ export default class PerFolderSortOrderService {
 		eventManager.appStateOn('selectedFolderId', this.onFolderSelectionMayChange.bind(this, 'selectedFolderId'));
 		eventManager.appStateOn('selectedSmartFilterId', this.onFolderSelectionMayChange.bind(this, 'selectedSmartFilterId'));
 		this.previousFolderId = Setting.value('activeFolderId');
+
+		// activeFolderId is only saved for folder selections, not smart filters
+		// (e.g. All Notes). Use notesParent, which is persisted for all view
+		// types, so the correct previousFolderId is restored on relaunch.
+		// Without this, closing with All Notes selected would cause its per-folder
+		// sort to bleed into the shared sort order used by other notebooks.
+		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+		if (notesParent.type === 'Folder' || notesParent.type === 'SmartFilter') {
+			this.previousFolderId = notesParent.selectedItemId;
+		}
 	}
 
 	public static isSet(folderId: string): boolean {

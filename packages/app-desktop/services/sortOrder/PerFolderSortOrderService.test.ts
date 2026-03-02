@@ -2,6 +2,7 @@ import PerFolderSortOrderService from './PerFolderSortOrderService';
 import { setNotesSortOrder } from './notesSortOrderUtils';
 import Setting from '@joplin/lib/models/Setting';
 import { AppState, createAppDefaultState } from '../../app.reducer';
+import { serializeNotesParent } from '@joplin/lib/reducer';
 import eventManager from '@joplin/lib/eventManager';
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
@@ -136,5 +137,44 @@ describe('PerFolderSortOrderService', () => {
 
 		expect(Setting.value('notes.sortOrder.field')).toBe('user_updated_time');
 		expect(Setting.value('notes.sortOrder.reverse')).toBe(true);
+	});
+
+	test('should not let All Notes sort bleed into shared sort order on relaunch', () => {
+		// Simulates the relaunch scenario described in the bug:
+		// 1. User sets notebook (no own sort) to Alphabetical
+		// 2. User enables own sort for All Notes and sets it to Date Modified
+		// 3. User closes Joplin with All Notes as the last selected view
+		// 4. On relaunch, notebook should still sort Alphabetically, not by Date Modified
+
+		// Step 1: set shared sort as Alphabetical while on folderId1 (no own sort)
+		switchToFolder(folderId1);
+		setNotesSortOrder('title', false);
+
+		// Step 2: enable own sort for All Notes and set it to Date Modified
+		switchToAllNotes();
+		PerFolderSortOrderService.set(ALL_NOTES_FILTER_ID, true);
+		setNotesSortOrder('user_updated_time', true);
+
+		expect(PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID)).toBe(true);
+		expect(Setting.value('notes.sortOrder.field')).toBe('user_updated_time');
+
+		// Step 3: simulate relaunch with All Notes as the last selected view.
+		// activeFolderId only persists folder IDs (not smart filter IDs), so it
+		// still holds folderId1. notesParent correctly persists All Notes.
+		Setting.setValue('activeFolderId', folderId1);
+		Setting.setValue('notesParent', serializeNotesParent({ type: 'SmartFilter', selectedItemId: ALL_NOTES_FILTER_ID }));
+
+		// Re-initialize as if the app just started
+		PerFolderSortOrderService.initialize();
+		Setting.setValue('notes.perFolderSortOrderEnabled', true);
+
+		// Step 4: app restores All Notes — simulate the first state change on startup
+		updateAppState(createAppDefaultState({}));
+		switchToAllNotes();
+
+		// Navigate to folderId1 (no own sort) — must use shared sort (Alphabetical), not All Notes' sort
+		switchToFolder(folderId1);
+		expect(Setting.value('notes.sortOrder.field')).toBe('title');
+		expect(Setting.value('notes.sortOrder.reverse')).toBe(false);
 	});
 });
