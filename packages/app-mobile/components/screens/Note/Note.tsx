@@ -1783,12 +1783,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const dueDate = Note.dueDateObject(note);
 
 		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
-			// Toggling multiline may result in the keyboard popping when the note is opened due to remounting of the component, so prevent this
-			// by disabling showSoftInputOnFocus temporarily
-			this.setState({ showSoftInputOnFocus: false }, () => {
-				this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline }, () => {
-					this.setState({ showSoftInputOnFocus: true });
-				});
+			// Initialising the title field may result in the keyboard popping up when the note is opened, due to remounting of the component, so prevent this
+			// by only enabling showSoftInputOnFocus after the first onLayout has completed the state change performed here
+			this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline }, () => {
+				if (!this.state.showSoftInputOnFocus) {
+					requestAnimationFrame(() => {
+						this.setState({ showSoftInputOnFocus: true });
+					});
+				}
 			});
 		};
 
