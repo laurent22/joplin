@@ -253,10 +253,22 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 							return false;
 						},
 						// Table editing commands are only supported in the v6 editor
-						'editor.tableAddRow': () => false,
-						'editor.tableAddColumn': () => false,
-						'editor.tableDeleteRow': () => false,
-						'editor.tableDeleteColumn': () => false,
+						'editor.tableAddRow': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableAddColumn': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableDeleteRow': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableDeleteColumn': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
 					};
 
 					if (commands[cmd.name]) {

@@ -7,6 +7,19 @@ import { EditorState } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { parseTable, serializeTable, addRow, addColumn, deleteRow, deleteColumn } from '../utils/markdown/tableUtils';
 
+// Check if a pipe at position `i` in `text` is unescaped.
+// A pipe is escaped if preceded by an odd number of backslashes.
+const isUnescapedPipe = (text: string, i: number): boolean => {
+	if (text[i] !== '|') return false;
+	let backslashes = 0;
+	let j = i - 1;
+	while (j >= 0 && text[j] === '\\') {
+		backslashes++;
+		j--;
+	}
+	return backslashes % 2 === 0;
+};
+
 // ---------------------------------------------------------------------------
 // Table context detection
 // ---------------------------------------------------------------------------
@@ -77,13 +90,13 @@ export const getCellAtCursor = (state: EditorState, tableRange: TableRange): Cel
 			// Map lineIdx to row: 0 → header (row 0), 2+ → body (row 1+)
 			const row = lineIdx === 0 ? 0 : lineIdx - 1;
 
-			// Find which column the cursor is in by counting pipes
+			// Find which column the cursor is in by counting unescaped pipes
 			const offsetInLine = pos - lineStart;
 			const lineText = lines[lineIdx];
 			let col = -1; // Before the first pipe = not in a cell
 
 			for (let i = 0; i < offsetInLine; i++) {
-				if (lineText[i] === '|') {
+				if (isUnescapedPipe(lineText, i)) {
 					col++;
 				}
 			}
@@ -92,8 +105,13 @@ export const getCellAtCursor = (state: EditorState, tableRange: TableRange): Cel
 			// If col < 0, cursor is before the first pipe
 			if (col < 0) col = 0;
 
-			// Count total columns to clamp
-			const totalPipes = (lineText.match(/\|/g) || []).length;
+			// Count total columns to clamp (count only unescaped pipes)
+			let totalPipes = 0;
+			for (let i = 0; i < lineText.length; i++) {
+				if (isUnescapedPipe(lineText, i)) {
+					totalPipes++;
+				}
+			}
 			const totalCols = Math.max(1, totalPipes - 1);
 			if (col >= totalCols) col = totalCols - 1;
 
@@ -123,11 +141,11 @@ export const getCellContentPosition = (
 
 	const lineText = lines[lineIdx];
 
-	// Find the position of the (col+1)th pipe (0-indexed)
+	// Find the position of the (col+1)th unescaped pipe (0-indexed)
 	let pipeCount = 0;
 	let charIdx = 0;
 	for (; charIdx < lineText.length; charIdx++) {
-		if (lineText[charIdx] === '|') {
+		if (isUnescapedPipe(lineText, charIdx)) {
 			if (pipeCount === col) {
 				// Found the pipe before our target cell. Skip pipe and leading space.
 				charIdx++;

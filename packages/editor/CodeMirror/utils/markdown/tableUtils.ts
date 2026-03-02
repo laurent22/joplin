@@ -27,6 +27,19 @@ export interface Table {
 // ---------------------------------------------------------------------------
 
 // Split a single table row line into cell contents.
+// Check if a pipe at position `i` in `text` is unescaped.
+// A pipe is escaped if preceded by an odd number of backslashes.
+const isUnescapedPipe = (text: string, i: number): boolean => {
+	if (text[i] !== '|') return false;
+	let backslashes = 0;
+	let j = i - 1;
+	while (j >= 0 && text[j] === '\\') {
+		backslashes++;
+		j--;
+	}
+	return backslashes % 2 === 0;
+};
+
 // Handles leading/trailing pipes and trims whitespace from each cell.
 //
 // Example: "| foo | bar |" → ["foo", "bar"]
@@ -34,9 +47,23 @@ const splitRow = (line: string): string[] => {
 	// Remove leading/trailing pipe and whitespace
 	let trimmed = line.trim();
 	if (trimmed.startsWith('|')) trimmed = trimmed.slice(1);
-	if (trimmed.endsWith('|')) trimmed = trimmed.slice(0, -1);
+	if (trimmed.length > 0 && isUnescapedPipe(trimmed, trimmed.length - 1)) {
+		trimmed = trimmed.slice(0, -1);
+	}
 
-	return trimmed.split('|').map(cell => cell.trim());
+	// Split on unescaped pipes only
+	const cells: string[] = [];
+	let current = '';
+	for (let i = 0; i < trimmed.length; i++) {
+		if (isUnescapedPipe(trimmed, i)) {
+			cells.push(current.trim());
+			current = '';
+		} else {
+			current += trimmed[i];
+		}
+	}
+	cells.push(current.trim());
+	return cells;
 };
 
 // Parse a delimiter cell (e.g. "---", ":---", "---:", ":---:") into a ColumnAlignment.
@@ -263,6 +290,9 @@ export const deleteColumn = (table: Table, colIndex: number): Table | null => {
 
 // Generate a new empty Markdown table with the specified dimensions.
 export const generateTable = (rows: number, columns: number): string => {
+	if (columns <= 0) throw new Error('Table must have at least one column');
+	if (rows < 0) throw new Error('Row count must not be negative');
+
 	const header: TableRow = {
 		cells: new Array(columns).fill(null).map(() => ({ content: '   ' })),
 	};
