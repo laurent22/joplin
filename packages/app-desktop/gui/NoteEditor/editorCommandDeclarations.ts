@@ -183,6 +183,22 @@ const declarations: CommandDeclaration[] = [
 	{
 		name: 'viewer.focus',
 	},
+	{
+		name: 'editor.tableAddRow',
+		label: () => _('Table: Add row'),
+	},
+	{
+		name: 'editor.tableAddColumn',
+		label: () => _('Table: Add column'),
+	},
+	{
+		name: 'editor.tableDeleteRow',
+		label: () => _('Table: Delete row'),
+	},
+	{
+		name: 'editor.tableDeleteColumn',
+		label: () => _('Table: Delete column'),
+	},
 ];
 
 export default declarations;

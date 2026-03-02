@@ -1060,6 +1060,7 @@ packages/editor/CodeMirror/editorCommands/markdownCommands.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
+packages/editor/CodeMirror/editorCommands/tableCommands.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickCheckboxExtension.js
@@ -1146,6 +1147,8 @@ packages/editor/CodeMirror/utils/markdown/getCheckboxAtPosition.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.test.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.js
 packages/editor/CodeMirror/utils/markdown/stripBlockquote.js
+packages/editor/CodeMirror/utils/markdown/tableUtils.test.js
+packages/editor/CodeMirror/utils/markdown/tableUtils.js
 packages/editor/CodeMirror/utils/markdown/toggleCheckboxAt.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/CodeMirror/vendor/announceSearchMatch.js

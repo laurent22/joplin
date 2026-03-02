@@ -33,6 +33,12 @@ export enum EditorCommandType {
 	InsertTable = 'textTable',
 	InsertCodeBlock = 'textCodeBlock',
 
+	// Table editing commands
+	TableAddRow = 'tableAddRow',
+	TableAddColumn = 'tableAddColumn',
+	TableDeleteRow = 'tableDeleteRow',
+	TableDeleteColumn = 'tableDeleteColumn',
+
 	// Find commands
 	ToggleSearch = 'textSearch',
 	ShowSearch = 'find',
