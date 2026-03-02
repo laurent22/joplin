@@ -47,6 +47,7 @@ export class Bridge {
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
+	private currentGlobalHotkey_ = '';
 
 	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 		this.electronWrapper_ = electronWrapper;
@@ -328,7 +329,12 @@ export class Bridge {
 	// Joplin is not focused. Pass an empty string to disable the shortcut.
 	// Uses Electron accelerator format e.g. "CommandOrControl+Shift+J".
 	public updateGlobalHotkey(hotkey: string) {
-		globalShortcut.unregisterAll();
+		// Unregister only the previously registered Joplin shortcut, not all
+		// global shortcuts (which could include those registered by plugins).
+		if (this.currentGlobalHotkey_) {
+			globalShortcut.unregister(this.currentGlobalHotkey_);
+			this.currentGlobalHotkey_ = '';
+		}
 
 		if (!hotkey) return;
 
@@ -348,6 +354,8 @@ export class Bridge {
 
 		if (!registered) {
 			console.warn(`updateGlobalHotkey: Could not register global shortcut "${hotkey}" - it may already be in use by another application.`);
+		} else {
+			this.currentGlobalHotkey_ = hotkey;
 		}
 	}
 
