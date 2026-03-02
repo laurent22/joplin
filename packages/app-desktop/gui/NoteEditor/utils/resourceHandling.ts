@@ -174,18 +174,18 @@ const processImagesInPastedHtml = async (html: string) => {
 						const fileExt = mimeUtils.toFileExtension(mimeType) || 'bin';
 						const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${fileExt}`;
 						try {
-              await shim.fsDriver().writeFile(filePath, base64Data, "base64");
-              const createdResource = await shim.createResourceFromPath(filePath);
-              mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
-            } finally {
-              try {
-                if (await shim.fsDriver().exists(filePath)) {
-                  await shim.fsDriver().remove(filePath);
-                }
-              } catch (cleanupError) {
-                logger.warn("processPastedHtml: Error removing temporary file.", cleanupError);
-              }
-            }
+							await shim.fsDriver().writeFile(filePath, base64Data, 'base64');
+							const createdResource = await shim.createResourceFromPath(filePath);
+							mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+						} finally {
+							try {
+								if (await shim.fsDriver().exists(filePath)) {
+									await shim.fsDriver().remove(filePath);
+								}
+							} catch (cleanupError) {
+								logger.warn('processPastedHtml: Error removing temporary file.', cleanupError);
+							}
+						}
 					} else {
 						mappedResources[imageSrc] = imageSrc;
 					}
@@ -221,18 +221,18 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	// breaks the Markdown raw HTML block (a blank line ends the block, making the
 	// parser treat the <img> as plain text). Normalize them to spaces here.
 	html = html.replace(
-    /(\balt\s*=\s*)(["'])([\s\S]*?)\2/gi,
-    (_m, prefix, quote, altText) => {
-      // Replace HTML-encoded newlines/control chars and literal ones with a space
-      // eslint-disable-next-line no-control-regex
-      const normalized = altText
-        .replace(/&#(?:10|13);|&#x(?:0*[aAdD]);/gi, " ")
-        .replace(/[\r\n\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, " ")
-        .replace(/ {2,}/g, " ")
-        .trim();
-      return `${prefix}${quote}${normalized}${quote}`;
-    },
-  );
+		/(\balt\s*=\s*)(["'])([\s\S]*?)\2/gi,
+		(_m, prefix, quote, altText) => {
+			// Replace HTML-encoded newlines/control chars and literal ones with a space
+			const normalized = altText
+				.replace(/&#(?:10|13);|&#x(?:0*[aAdD]);/gi, ' ')
+				// eslint-disable-next-line no-control-regex
+				.replace(/[\r\n\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ' ')
+				.replace(/ {2,}/g, ' ')
+				.trim();
+			return `${prefix}${quote}${normalized}${quote}`;
+		},
+	);
 
 	// TinyMCE can accept any type of HTML, including HTML that may not be preserved once saved as
 	// Markdown. For example the content may have a dark background which would be supported by
