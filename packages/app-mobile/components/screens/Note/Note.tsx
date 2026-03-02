@@ -1783,11 +1783,19 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const dueDate = Note.dueDateObject(note);
 
 		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
-			// Initialising the title field may result in the keyboard popping up when the note is opened, due to remounting of the component, so prevent this
+			// Initialising the title field in multiline mode may result in the keyboard popping up when the note is opened, so prevent this
 			// by only enabling showSoftInputOnFocus after the first onLayout has completed the state change performed here
 			this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline }, () => {
 				if (!this.state.showSoftInputOnFocus) {
+					// showSoftInputOnFocus is only false on load of the screen, so this block does not execute for subsequent layout changes
 					requestAnimationFrame(() => {
+						if (!this.state.multiline && this.titleTextFieldRef) {
+							// The issue with the keyboard popping up on focus of the title field is only applicable when the input is in multiline mode
+							// When the title is initialised with multiline as false, the change from the intialised state causes focus to be lost, so we
+							// should explictly refocus on the title for accessibility
+							focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+						}
+
 						this.setState({ showSoftInputOnFocus: true });
 					});
 				}
