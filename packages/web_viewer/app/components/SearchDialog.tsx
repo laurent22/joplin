@@ -14,9 +14,13 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import { useQuery } from '@tanstack/react-query';
-import { SearchApiResult, SearchResult } from '@/lib/note';
+import { SearchApiResult, SearchResult, MarkdownSearchApiResult, MarkdownSearchResult } from '@/lib/note';
 import * as cheerio from 'cheerio';
+
+type AnySearchResult = SearchResult | MarkdownSearchResult;
 
 type Props = {
   open: boolean;
@@ -31,6 +35,7 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
   const [searchInput, setSearchInput] = React.useState('');
   const [filterInput, setFilterInput] = React.useState('');
   const [activeFilter, setActiveFilter] = React.useState('');
+  const [useMarkdownFts, setUseMarkdownFts] = React.useState(true);
 
   // HTMLエスケープ用のヘルパー関数
   const escapeHtml = (str: string): string => {
@@ -66,11 +71,11 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     return result;
   };
 
-  // react-queryでAPI呼び出し
+  // react-queryでAPI呼び出し（既存のnotes_fts検索）
   const {
     data: searchApiResults,
-    isLoading,
-    error,
+    isLoading: isLoadingLegacy,
+    error: errorLegacy,
   } = useQuery<{ success: boolean; data: SearchApiResult }>({
     queryKey: ['search', internalQuery],
     queryFn: async () => {
@@ -88,8 +93,36 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
       }
       return response.json();
     },
-    enabled: !!internalQuery,
+    enabled: !!internalQuery && !useMarkdownFts,
   });
+
+  // react-queryでAPI呼び出し（markdown_notes_fts検索）
+  const {
+    data: markdownSearchApiResults,
+    isLoading: isLoadingMarkdown,
+    error: errorMarkdown,
+  } = useQuery<{ success: boolean; data: MarkdownSearchApiResult }>({
+    queryKey: ['search-markdown', internalQuery],
+    queryFn: async () => {
+      if (!internalQuery)
+        return {
+          success: true,
+          data: {
+            results: [],
+            noteMap: {},
+          },
+        };
+      const response = await fetch(`/api/search-markdown?query=${encodeURIComponent(internalQuery)}`);
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+      return response.json();
+    },
+    enabled: !!internalQuery && useMarkdownFts,
+  });
+
+  const isLoading = useMarkdownFts ? isLoadingMarkdown : isLoadingLegacy;
+  const error = useMarkdownFts ? errorMarkdown : errorLegacy;
 
   React.useEffect(() => {
     if (open) {
@@ -102,12 +135,24 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     setInternalQuery(searchInput);
   };
 
-  const results = React.useMemo(() => {
+  const results: Array<SearchResult | MarkdownSearchResult> = React.useMemo(() => {
+    if (useMarkdownFts) {
+      return markdownSearchApiResults?.data.results || [];
+    }
     return searchApiResults?.data.results || [];
-  }, [searchApiResults?.data.results]);
+  }, [useMarkdownFts, searchApiResults?.data.results, markdownSearchApiResults?.data.results]);
 
   const noteMap = React.useMemo(() => {
     const map: Record<string, string> = {};
+
+    if (useMarkdownFts) {
+      // markdown_notesのbodyはMarkdownテキストなのでそのまま使う
+      Object.entries(markdownSearchApiResults?.data.noteMap || {}).forEach(([id, note]) => {
+        map[id] = note.body || '';
+      });
+      return map;
+    }
+
     Object.entries(searchApiResults?.data.noteMap || {}).forEach(([id, note]) => {
       const body = note.body || '';
       const $ = cheerio.load(`<root>${body}</root>`);
@@ -174,12 +219,12 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
       map[id] = text;
     });
     return map;
-  }, [searchApiResults?.data.noteMap]);
+  }, [useMarkdownFts, searchApiResults?.data.noteMap, markdownSearchApiResults?.data.noteMap]);
 
   // フラグメント抽出をメモ化（検索文字が変わった時のみ再計算）
   const expandedResults = React.useMemo(() => {
     const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
-    const results_array: Array<{ item: SearchResult; fragment?: string; index?: number }> = [];
+    const results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }> = [];
 
     // 処理時間計測開始
     // const t0 = performance.now();
@@ -266,7 +311,7 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
   const renderResults = React.useMemo(() => {
     const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
 
-    const renderItem = (item: SearchResult, fragment?: string, index?: number) => {
+    const renderItem = (item: AnySearchResult, fragment?: string, index?: number) => {
       const fragmentNoBr = fragment?.replaceAll('\n', ' ');
 
       // フラグメントからキーワードを含む行を抽出
@@ -375,6 +420,25 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     <Dialog open={true} onClose={onClose} maxWidth="md" fullWidth hidden={!open}>
       <DialogTitle>検索</DialogTitle>
       <DialogContent>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={useMarkdownFts}
+              onChange={(e) => {
+                setUseMarkdownFts(e.target.checked);
+                if (internalQuery) {
+                  // モード切替時に再検索
+                  setInternalQuery('');
+                  setTimeout(() => setInternalQuery(searchInput), 0);
+                }
+              }}
+              size="small"
+            />
+          }
+          label="Markdown FTS検索"
+          sx={{ mb: 1 }}
+        />
+
         <TextField
           variant="outlined"
           size="small"

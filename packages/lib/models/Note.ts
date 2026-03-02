@@ -7,6 +7,7 @@ import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { NoteEntity } from '../services/database/types';
 import Tag from './Tag';
+import MarkdownNoteService from '../services/MarkdownNoteService';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
@@ -707,6 +708,23 @@ export default class Note extends BaseItem {
 			});
 		}
 
+		// Convert note body to Markdown via WebWorker and save to markdown_notes / markdown_notes_normalized / markdown_notes_fts
+		try {
+			if (o.body) {
+				const mdService = MarkdownNoteService.instance();
+				if (mdService.db()) {
+					mdService.processNote(
+						note.id,
+						o.parent_id || '',
+						o.title || '',
+						o.body
+					);
+				}
+			}
+		} catch (error) {
+			this.logger().warn('Note.save: Error processing markdown note:', error);
+		}
+
 		return note;
 	}
 
@@ -727,6 +745,16 @@ export default class Note extends BaseItem {
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];
 				void ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+
+				// Delete from markdown_notes tables
+				try {
+					const mdService = MarkdownNoteService.instance();
+					if (mdService.db()) {
+						void mdService.deleteMarkdownNote(id);
+					}
+				} catch (error) {
+					this.logger().warn('Note.batchDelete: Error deleting markdown note:', error);
+				}
 
 				this.dispatch({
 					type: 'NOTE_DELETE',

@@ -177,6 +177,12 @@ export default class InteropService {
 					target: FileSystemItem.Directory,
 					description: _('Create vector DB'),
 				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'markdowndb',
+					target: FileSystemItem.Directory,
+					description: _('Convert all notes to Markdown and save to DB'),
+				},
 			];
 
 			this.defaultModules_ = importModules.concat(exportModules);
