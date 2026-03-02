@@ -52,9 +52,13 @@ export default function useMessageHandler(
 			let itemType = arg0 && arg0.type;
 			const resourceId = arg0.resourceId;
 			if (itemType === ContextMenuItemType.Resource && resourceId) {
-				const item = await BaseItem.loadItemById(resourceId);
-				if (item?.type_ === BaseModel.TYPE_NOTE) {
-					itemType = ContextMenuItemType.NoteLink;
+				try {
+					const item = await BaseItem.loadItemById(resourceId);
+					if (item?.type_ === BaseModel.TYPE_NOTE) {
+						itemType = ContextMenuItemType.NoteLink;
+					}
+				} catch (error) {
+					reg.logger().warn('useMessageHandler: failed to load item for context menu, defaulting to Resource', error);
 				}
 			}
 			const menu = await contextMenu({

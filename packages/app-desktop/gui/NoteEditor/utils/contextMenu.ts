@@ -110,6 +110,10 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 		openNoteInNewWindow: {
 			label: _('Open in new window'),
 			onAction: async (options: ContextMenuOptions) => {
+				if (!options.resourceId) {
+					void shim.showErrorDialog(_('Could not open note: no note ID found.'));
+					return;
+				}
 				await CommandService.instance().execute('openNoteInNewWindow', options.resourceId);
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.NoteLink,

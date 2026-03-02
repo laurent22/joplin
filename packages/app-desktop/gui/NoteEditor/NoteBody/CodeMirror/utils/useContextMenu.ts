@@ -18,6 +18,7 @@ import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import { reg } from '@joplin/lib/registry';
 
 export type ResourceMarkupType = 'image' | 'file';
 
@@ -189,8 +190,13 @@ const useContextMenu = (props: ContextMenuProps) => {
 			if (type === 'image') {
 				itemType = ContextMenuItemType.Image;
 			} else {
-				const item = await BaseItem.loadItemById(resourceId);
-				itemType = item?.type_ === BaseModel.TYPE_NOTE ? ContextMenuItemType.NoteLink : ContextMenuItemType.Resource;
+				try {
+					const item = await BaseItem.loadItemById(resourceId);
+					itemType = item?.type_ === BaseModel.TYPE_NOTE ? ContextMenuItemType.NoteLink : ContextMenuItemType.Resource;
+				} catch (error) {
+					reg.logger().warn('useContextMenu: failed to load item for context menu, defaulting to Resource', error);
+					itemType = ContextMenuItemType.Resource;
+				}
 			}
 			const contextMenuOptions: ContextMenuOptions = {
 				itemType,
