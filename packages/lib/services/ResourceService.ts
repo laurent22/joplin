@@ -149,6 +149,44 @@ export default class ResourceService extends BaseService {
 		task.onEnd();
 	}
 
+	// Deletes any leftover .crypted files from the resource directory.
+	// These files are created by Resource.decrypt() when it renames the encrypted
+	// blob before decrypting it, but they are never cleaned up if the app crashes
+	// or is interrupted mid-decryption. It is safe to delete them on startup since
+	// the original encrypted blob is no longer needed once decryption completes.
+	public async deleteCryptedFiles() {
+		const resourceDir = Resource.baseDirectoryPath();
+		if (!resourceDir) {
+			this.logger().warn('ResourceService::deleteCryptedFiles: Resource directory not set, skipping cleanup');
+			return;
+		}
+
+		const dirExists = await shim.fsDriver().exists(resourceDir);
+		if (!dirExists) return;
+
+		const stats = await shim.fsDriver().readDirStats(resourceDir);
+		let deletedCount = 0;
+
+		for (const stat of stats) {
+			if (stat.path.endsWith('.crypted')) {
+				const fullPath = `${resourceDir}/${stat.path}`;
+				try {
+					await shim.fsDriver().remove(fullPath);
+					deletedCount++;
+					this.logger().info(`ResourceService::deleteCryptedFiles: Deleted leftover encrypted file: ${stat.path}`);
+				} catch (error) {
+					this.logger().warn(`ResourceService::deleteCryptedFiles: Could not delete ${fullPath}: ${error.message}`);
+				}
+			}
+		}
+
+		if (deletedCount > 0) {
+			this.logger().info(`ResourceService::deleteCryptedFiles: Cleaned up ${deletedCount} leftover .crypted file(s)`);
+		} else {
+			this.logger().info('ResourceService::deleteCryptedFiles: No leftover .crypted files found');
+		}
+	}
+
 	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists = true) {
 		const itDoes = await shim.fsDriver().waitTillExists(filePath, waitTillExists ? 10000 : 0);
 		if (!itDoes) {
@@ -172,6 +210,7 @@ export default class ResourceService extends BaseService {
 		try {
 			await this.indexNoteResources();
 			await this.deleteOrphanResources();
+			await this.deleteCryptedFiles();
 		} finally {
 			this.maintenanceCalls_.pop();
 		}

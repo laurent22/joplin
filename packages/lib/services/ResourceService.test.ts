@@ -264,4 +264,42 @@ describe('services/ResourceService', () => {
 		expect((await NoteResource.all()).length).toBe(1);
 	});
 
+	it('should delete leftover .crypted files from the resource directory', async () => {
+		const service = new ResourceService();
+		const resourceDir = Resource.baseDirectoryPath();
+
+		// Create a fake .crypted leftover file (simulates a crash during decryption)
+		const cryptedFilePath1 = `${resourceDir}/abc123def456abc123def456abc123de.crypted`;
+		const cryptedFilePath2 = `${resourceDir}/cafe1234cafe1234cafe1234cafe1234.crypted`;
+
+		// Also create a regular resource file that should NOT be deleted
+		const folder = await Folder.save({ title: 'test folder' });
+		const note = await Note.save({ title: 'test note', parent_id: folder.id });
+		const noteWithResource = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+		const resource = (await Resource.all())[0];
+		const resourceFilePath = Resource.fullPath(resource);
+
+		// Write the fake .crypted files
+		await shim.fsDriver().writeFile(cryptedFilePath1, 'fake encrypted data 1', 'utf8');
+		await shim.fsDriver().writeFile(cryptedFilePath2, 'fake encrypted data 2', 'utf8');
+
+		// Verify they exist before cleanup
+		expect(await shim.fsDriver().exists(cryptedFilePath1)).toBe(true);
+		expect(await shim.fsDriver().exists(cryptedFilePath2)).toBe(true);
+		expect(await shim.fsDriver().exists(resourceFilePath)).toBe(true);
+
+		// Run the cleanup
+		await service.deleteCryptedFiles();
+
+		// .crypted files should be gone
+		expect(await shim.fsDriver().exists(cryptedFilePath1)).toBe(false);
+		expect(await shim.fsDriver().exists(cryptedFilePath2)).toBe(false);
+
+		// Regular resource file should be untouched
+		expect(await shim.fsDriver().exists(resourceFilePath)).toBe(true);
+
+		// Suppress unused variable warning
+		void noteWithResource;
+	});
+
 });
