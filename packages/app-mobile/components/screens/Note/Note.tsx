@@ -247,12 +247,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			showSoftInputOnFocus: false,
 		};
 
-		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
-		if (initialCursorLocation) {
-			this.selection = { start: initialCursorLocation, end: initialCursorLocation };
-		}
 		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
-		this.lastBodyScroll = initialScroll;
+		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
+		// Ignore the initial scroll and cursor location when there's a note hash. The editor/viewer should jump to
+		// the hash, rather than the last position.
+		if (!props.noteHash) {
+			if (initialCursorLocation) {
+				this.selection = { start: initialCursorLocation, end: initialCursorLocation };
+			}
+			this.lastBodyScroll = initialScroll;
+		}
 
 		this.titleTextFieldRef = React.createRef();
 
@@ -716,8 +720,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
 
 			if (explicitReloadRequired) {
-				void shared.reloadNote(this);
-				this.refreshKey = this.props.editorNoteReloadTimeRequest;
+				void this.reloadNoteAndUpdateRefreshKey();
 			}
 
 			if (explicitReloadRequired || (editorPlugin && editorPluginIdsChanged)) {
@@ -770,6 +773,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			type: 'SET_NOTE_EDITOR_VISIBLE',
 			visible: false,
 		});
+	}
+
+	private async reloadNoteAndUpdateRefreshKey() {
+		await shared.reloadNote(this);
+		this.refreshKey = this.props.editorNoteReloadTimeRequest;
 	}
 
 	private title_changeText(text: string) {

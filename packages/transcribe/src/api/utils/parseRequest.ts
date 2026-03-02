@@ -29,6 +29,7 @@ export const parseCreateJobRequest = async (ctx: AppContext) => {
 		filepath: file.filepath,
 		imageMaxDimension: env().IMAGE_MAX_DIMENSION,
 		randomName: createFilename(formatProvided),
+		imagesFolder: env().HTR_CLI_IMAGES_FOLDER,
 	};
 };
 

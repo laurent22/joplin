@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, ViewStyle, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
@@ -20,7 +20,6 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
-import WebBetaButton from './WebBetaButton';
 
 import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
@@ -456,18 +455,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
-		const betaIconButton = () => {
-			if (Platform.OS !== 'web') return null;
-
-			return (
-				<WebBetaButton
-					themeId={themeId}
-					wrapperStyle={this.styles().iconButton}
-					iconStyle={this.styles().topIcon}
-				/>
-			);
-		};
-
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const renderTogglePluginEditorButton = (styles: any, onPress: OnPressCallback, disabled: boolean) => {
 			if (!this.props.showPluginEditorButton) return null;
@@ -666,7 +653,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
-		const betaIconComp = !showSideMenuButton ? null : betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const customDeleteButtonComp = this.props.onDeleteButtonPress ? customDeleteButton(this.styles(), this.props.onDeleteButtonPress) : null;
@@ -680,7 +666,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// space while in use, we allow certain buttons to be hidden.
 		const hideableRightComponents = <>
 			{pluginPanelsComp}
-			{betaIconComp}
 			{togglePluginEditorButton}
 			{selectAllButtonComp}
 			{searchButtonComp}

@@ -6,7 +6,7 @@ import initiateLogger from '../services/initiateLogger';
 import createQueue from '../services/createQueue';
 import FileStorage from '../services/FileStorage';
 import router from './router';
-import env, { EnvVariables } from '../env';
+import env, { ComputedEnvVariables } from '../env';
 import HtrCli from '../core/HtrCli';
 import JobProcessor from '../workers/JobProcessor';
 
@@ -47,11 +47,10 @@ const init = async (logger: LoggerWrapper) => {
 	logger.info('Server started successfully');
 };
 
-const checkServerConfigurations = (envVariables: EnvVariables) => {
+const checkServerConfigurations = (envVariables: ComputedEnvVariables) => {
 	if (!envVariables.API_KEY) throw Error('API_KEY environment variable not set.');
-	if (!envVariables.HTR_CLI_IMAGES_FOLDER) throw Error('HTR_CLI_IMAGES_FOLDER environment variable not set. This should point to a folder where images will be stored.');
+	if (!envVariables.DATA_DIR) throw Error('DATA_DIR environment variable not set. This should point to a folder where data will be stored.');
 	if (!envVariables.HTR_CLI_BINARY_PATH) throw Error('HTR_CLI_BINARY_PATH environment variable not set. This should point to the llama-mtmd-cli binary.');
-	if (!envVariables.HTR_CLI_MODELS_FOLDER) throw Error('HTR_CLI_MODELS_FOLDER environment variable not set. This should point to the folder containing the AI models.');
 };
 
 const main = async () => {

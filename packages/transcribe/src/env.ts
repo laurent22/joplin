@@ -6,12 +6,10 @@ export const defaultEnvValues: EnvVariables = {
 	QUEUE_TTL: 15 * Minute,
 	QUEUE_RETRY_COUNT: 2,
 	QUEUE_MAINTENANCE_INTERVAL: 60 * Second,
-	HTR_CLI_IMAGES_FOLDER: '',
+	DATA_DIR: '',
 	HTR_CLI_BINARY_PATH: '',
-	HTR_CLI_MODELS_FOLDER: '',
 	QUEUE_DRIVER: 'pg', // 'sqlite'
 	QUEUE_DATABASE_PASSWORD: '',
-	QUEUE_DATABASE_NAME: '',
 	QUEUE_DATABASE_USER: '',
 	QUEUE_DATABASE_PORT: 5432,
 	FILE_STORAGE_MAINTENANCE_INTERVAL: 1 * Hour,
@@ -26,12 +24,10 @@ export interface EnvVariables {
 	QUEUE_TTL: number;
 	QUEUE_RETRY_COUNT: number;
 	QUEUE_MAINTENANCE_INTERVAL: number;
-	HTR_CLI_IMAGES_FOLDER: string;
+	DATA_DIR: string;
 	HTR_CLI_BINARY_PATH: string;
-	HTR_CLI_MODELS_FOLDER: string;
 	QUEUE_DRIVER: string;
 	QUEUE_DATABASE_PASSWORD: string;
-	QUEUE_DATABASE_NAME: string;
 	QUEUE_DATABASE_USER: string;
 	QUEUE_DATABASE_PORT: number;
 	FILE_STORAGE_MAINTENANCE_INTERVAL: number;
@@ -40,7 +36,13 @@ export interface EnvVariables {
 	IMAGE_MAX_DIMENSION: number;
 }
 
-export function parseEnv(rawEnv: Record<string, string | undefined>): EnvVariables {
+export interface ComputedEnvVariables extends EnvVariables {
+	HTR_CLI_IMAGES_FOLDER: string;
+	HTR_CLI_MODELS_FOLDER: string;
+	QUEUE_DATABASE_NAME: string;
+}
+
+export function parseEnv(rawEnv: Record<string, string | undefined>): ComputedEnvVariables {
 	const output: EnvVariables = {
 		...defaultEnvValues,
 	};
@@ -48,7 +50,7 @@ export function parseEnv(rawEnv: Record<string, string | undefined>): EnvVariabl
 	for (const [key, value] of Object.entries(defaultEnvValues)) {
 		const rawEnvValue = rawEnv[key];
 
-		if (rawEnvValue === undefined) continue;
+		if (rawEnvValue === undefined || rawEnvValue === '') continue;
 
 		const typedKey = key as keyof EnvVariables;
 
@@ -63,19 +65,37 @@ export function parseEnv(rawEnv: Record<string, string | undefined>): EnvVariabl
 		}
 	}
 
-	return output;
+	// Derive paths from DATA_DIR
+	let queueDatabaseName: string;
+	if (output.QUEUE_DRIVER === 'sqlite') {
+		queueDatabaseName = `${output.DATA_DIR}/queue.sqlite3`;
+	} else {
+		// For PostgreSQL, use env var or default to 'transcribe'
+		queueDatabaseName = rawEnv['QUEUE_DATABASE_NAME'] || 'transcribe';
+	}
+
+	const computed: ComputedEnvVariables = {
+		...output,
+		HTR_CLI_IMAGES_FOLDER: `${output.DATA_DIR}/images`,
+		HTR_CLI_MODELS_FOLDER: `${output.DATA_DIR}/models`,
+		QUEUE_DATABASE_NAME: queueDatabaseName,
+	};
+
+	return computed;
 }
 
 // Should always be called after require('dotenv').config()
-const env = () => {
-	return parseEnv(
-		Object.keys(defaultEnvValues)
-			.reduce((env: Record<string, string | undefined>, key) => {
-				env[key] = process.env[key];
-				return env;
-			}, {}),
-	);
+const env = (): ComputedEnvVariables => {
+	const rawEnv = Object.keys(defaultEnvValues)
+		.reduce((env: Record<string, string | undefined>, key) => {
+			env[key] = process.env[key];
+			return env;
+		}, {} as Record<string, string | undefined>);
 
+	// Also include QUEUE_DATABASE_NAME for PostgreSQL driver
+	rawEnv['QUEUE_DATABASE_NAME'] = process.env['QUEUE_DATABASE_NAME'];
+
+	return parseEnv(rawEnv);
 };
 
 export default env;

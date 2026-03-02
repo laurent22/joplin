@@ -240,6 +240,7 @@ const useWebViewSetup = (props: Props): Result => {
 					}
 				},
 				removeUnusedPluginAssets: options.removeUnusedPluginAssets,
+				showNoteLinkIcon: options.showNoteLinkIcon,
 				globalSettings: {
 					'markdown.plugin.abc.options': Setting.value('markdown.plugin.abc.options'),
 				},

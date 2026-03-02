@@ -10671,7 +10671,7 @@ __metadata:
     react-native-file-viewer: "npm:2.1.5"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
-    react-native-localize: "npm:3.5.4"
+    react-native-localize: "npm:3.6.0"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-nitro-modules: "npm:0.33.2"
     react-native-paper: "npm:5.14.5"
@@ -10942,7 +10942,7 @@ __metadata:
     sqlite3: "npm:5.1.6"
     string-padding: "npm:1.0.2"
     string-to-stream: "npm:3.0.1"
-    tar: "npm:6.2.1"
+    tar: "npm:7.5.8"
     tcp-port-used: "npm:1.0.2"
     tesseract.js: "npm:6.0.1"
     typescript: "npm:5.8.3"
@@ -11148,7 +11148,7 @@ __metadata:
     query-string: "npm:7.1.3"
     rate-limiter-flexible: "npm:7.4.0"
     raw-body: "npm:3.0.2"
-    samlify: "npm:2.10.1"
+    samlify: "npm:2.10.2"
     short-uuid: "npm:5.2.0"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
@@ -11182,7 +11182,7 @@ __metadata:
     dayjs: "npm:1.11.19"
     execa: "npm:4.1.0"
     fs-extra: "npm:11.3.2"
-    gettext-extractor: "npm:4.0.1"
+    gettext-extractor: "npm:4.0.3"
     gettext-parser: "npm:7.0.1"
     glob: "npm:11.0.3"
     gulp: "npm:4.0.2"
@@ -30552,17 +30552,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-extractor@npm:4.0.1":
-  version: 4.0.1
-  resolution: "gettext-extractor@npm:4.0.1"
+"gettext-extractor@npm:4.0.3":
+  version: 4.0.3
+  resolution: "gettext-extractor@npm:4.0.3"
   dependencies:
     "@types/parse5": "npm:^5"
     css-selector-parser: "npm:^1.3"
-    glob: "npm:11.0.1"
+    glob: "npm:11.1.0"
     parse5: "npm:5 - 6"
     pofile: "npm:1.0.x"
     typescript: "npm:^5.4.0"
-  checksum: 10/768a63bb07336d4364381feba14d4463dc5fc9c81e8c74746f0d6e0745663f6549b343a02f54139f9e8f91a953f5b477823c6e6ae3005c369f72306c62e9c13c
+  checksum: 10/ae8848b7b31e921510b750906df0afe819abfc1da955a19bae68f27ca2fc951e43b028b9f8ccdf4910ee822dedc6c3b03b5b8faf731ad7eceab0ef511732d30f
   languageName: node
   linkType: hard
 
@@ -30770,22 +30770,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:11.0.1":
-  version: 11.0.1
-  resolution: "glob@npm:11.0.1"
-  dependencies:
-    foreground-child: "npm:^3.1.0"
-    jackspeak: "npm:^4.0.1"
-    minimatch: "npm:^10.0.0"
-    minipass: "npm:^7.1.2"
-    package-json-from-dist: "npm:^1.0.0"
-    path-scurry: "npm:^2.0.0"
-  bin:
-    glob: dist/esm/bin.mjs
-  checksum: 10/57b12a05cc25f1c38f3b24cf6ea7a8bacef11e782c4b9a8c5b0bef3e6c5bcb8c4548cb31eb4115592e0490a024c1bde7359c470565608dd061d3b21179740457
-  languageName: node
-  linkType: hard
-
 "glob@npm:11.0.3":
   version: 11.0.3
   resolution: "glob@npm:11.0.3"
@@ -30799,6 +30783,22 @@ __metadata:
   bin:
     glob: dist/esm/bin.mjs
   checksum: 10/2ae536c1360c0266b523b2bfa6aadc10144a8b7e08869b088e37ac3c27cd30774f82e4bfb291cde796776e878f9e13200c7ff44010eb7054e00f46f649397893
+  languageName: node
+  linkType: hard
+
+"glob@npm:11.1.0":
+  version: 11.1.0
+  resolution: "glob@npm:11.1.0"
+  dependencies:
+    foreground-child: "npm:^3.3.1"
+    jackspeak: "npm:^4.1.1"
+    minimatch: "npm:^10.1.1"
+    minipass: "npm:^7.1.2"
+    package-json-from-dist: "npm:^1.0.0"
+    path-scurry: "npm:^2.0.0"
+  bin:
+    glob: dist/esm/bin.mjs
+  checksum: 10/da4501819633daff8822c007bb3f93d5c4d2cbc7b15a8e886660f4497dd251a1fb4f53a85fba1e760b31704eff7164aeb2c7a82db10f9f2c362d12c02fe52cf3
   languageName: node
   linkType: hard
 
@@ -34489,7 +34489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jackspeak@npm:^4.0.1, jackspeak@npm:^4.1.1":
+"jackspeak@npm:^4.1.1":
   version: 4.1.1
   resolution: "jackspeak@npm:4.1.1"
   dependencies:
@@ -38645,7 +38645,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.0, minimatch@npm:^10.0.1, minimatch@npm:^10.1.1":
+"minimatch@npm:^10.0.1, minimatch@npm:^10.1.1":
   version: 10.1.1
   resolution: "minimatch@npm:10.1.1"
   dependencies:
@@ -44258,11 +44258,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.5.4":
-  version: 3.5.4
-  resolution: "react-native-localize@npm:3.5.4"
+"react-native-localize@npm:3.6.0":
+  version: 3.6.0
+  resolution: "react-native-localize@npm:3.6.0"
   peerDependencies:
-    "@expo/config-plugins": ^9.0.0 || ^10.0.0
+    "@expo/config-plugins": "*"
     react: "*"
     react-native: "*"
     react-native-macos: "*"
@@ -44271,7 +44271,7 @@ __metadata:
       optional: true
     react-native-macos:
       optional: true
-  checksum: 10/afcd00e12561d147ad50b5d2f240a7b7853c5bd8226386e0afab61c7acd7b8a2b40651552272dbb293f5ed68800e0e3e48bd939d98888be81a0f9687c70cdb6b
+  checksum: 10/1a443a77f3431ad638c577c1fc1b2f0b6234c61fd66dcf1ca095303b23dea47fb8bd0d40b18abc2917b874c9df75fe638c40bec6745fce995ad01ccef69d250e
   languageName: node
   linkType: hard
 
@@ -46582,9 +46582,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"samlify@npm:2.10.1":
-  version: 2.10.1
-  resolution: "samlify@npm:2.10.1"
+"samlify@npm:2.10.2":
+  version: 2.10.2
+  resolution: "samlify@npm:2.10.2"
   dependencies:
     "@authenio/xml-encryption": "npm:^2.0.2"
     "@xmldom/xmldom": "npm:^0.8.6"
@@ -46597,7 +46597,7 @@ __metadata:
     xml-crypto: "npm:^6.1.2"
     xml-escape: "npm:^1.1.0"
     xpath: "npm:^0.0.32"
-  checksum: 10/f44259ec1f03faacedbd9b3098b07893dd69204492d1f4c63dca0bd8b979ed9ea76e3911f7e953baa4e11787acdb9f33e5449e21b0199f7ff627f449a9ce3897
+  checksum: 10/2f46e2b172fd43c3c63ad18e9a715e6cbfaf4a781ef8f6b2f7f42c3a3998ae7e07fc41a3d24a5f54f88e716535b3a8e0c2953a3788fef0430762b29e8f8b9ffe
   languageName: node
   linkType: hard
 
@@ -49859,17 +49859,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:6.2.1, tar@npm:^6.2.1":
-  version: 6.2.1
-  resolution: "tar@npm:6.2.1"
+"tar@npm:7.5.8":
+  version: 7.5.8
+  resolution: "tar@npm:7.5.8"
   dependencies:
-    chownr: "npm:^2.0.0"
-    fs-minipass: "npm:^2.0.0"
-    minipass: "npm:^5.0.0"
-    minizlib: "npm:^2.1.1"
-    mkdirp: "npm:^1.0.3"
-    yallist: "npm:^4.0.0"
-  checksum: 10/bfbfbb2861888077fc1130b84029cdc2721efb93d1d1fb80f22a7ac3a98ec6f8972f29e564103bbebf5e97be67ebc356d37fa48dbc4960600a1eb7230fbd1ea0
+    "@isaacs/fs-minipass": "npm:^4.0.0"
+    chownr: "npm:^3.0.0"
+    minipass: "npm:^7.1.2"
+    minizlib: "npm:^3.1.0"
+    yallist: "npm:^5.0.0"
+  checksum: 10/5fddc22e0fd03e73d5e9e922e71d8681f85443dee4f21403059a757e186ae4004abc9a709cdc7f4143d7d75758a2935f7306b3cc193123d46b6f786dd2b99c2a
   languageName: node
   linkType: hard
 
@@ -49913,6 +49912,20 @@ __metadata:
     mkdirp: "npm:^1.0.3"
     yallist: "npm:^4.0.0"
   checksum: 10/4848b92da8581e64ce4d8a760b47468dd9d212a4612846d8dd75b5c224a42c66ed5bcf8cfa9e9cd2eb64ebe1351413fb3eac93324a4eee536f0941beefa1f2eb
+  languageName: node
+  linkType: hard
+
+"tar@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "tar@npm:6.2.1"
+  dependencies:
+    chownr: "npm:^2.0.0"
+    fs-minipass: "npm:^2.0.0"
+    minipass: "npm:^5.0.0"
+    minizlib: "npm:^2.1.1"
+    mkdirp: "npm:^1.0.3"
+    yallist: "npm:^4.0.0"
+  checksum: 10/bfbfbb2861888077fc1130b84029cdc2721efb93d1d1fb80f22a7ac3a98ec6f8972f29e564103bbebf5e97be67ebc356d37fa48dbc4960600a1eb7230fbd1ea0
   languageName: node
   linkType: hard
 

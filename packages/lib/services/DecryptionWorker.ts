@@ -349,6 +349,15 @@ export default class DecryptionWorker {
 		if (lastError) {
 			throw lastError;
 		}
+
+		// If this task was skipped due to a concurrent start() call, return an empty
+		// DecryptionResult instead of null. AsyncActionQueue drops earlier tasks when
+		// multiple are queued, but start() guarantees Promise<DecryptionResult> and
+		// must not resolve null.
+		if (!output) {
+			return { error: null, decryptedItemCount: 0, skippedItemCount: 0 };
+		}
+
 		return output;
 	}
 
