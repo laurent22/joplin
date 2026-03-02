@@ -163,6 +163,7 @@ interface State {
 	multiline: boolean;
 	showMultilineToggle: boolean | null;
 	titleContainerWidth: number;
+	showSoftInputOnFocus: boolean;
 }
 
 type ScrollEventSlice = { fraction: number };
@@ -243,6 +244,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			multiline: false,
 			showMultilineToggle: null,
 			titleContainerWidth: 0,
+			showSoftInputOnFocus: false,
 		};
 
 		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
@@ -1773,7 +1775,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const dueDate = Note.dueDateObject(note);
 
 		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
-			this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline });
+			// Toggling multiline may result in the keyboard popping when the note is opened due to remounting of the component, so prevent this
+			// by disabling showSoftInputOnFocus temporarily
+			this.setState({ showSoftInputOnFocus: false }, () => {
+				this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline }, () => {
+					this.setState({ showSoftInputOnFocus: true });
+				});
+			});
 		};
 
 		const titleToggleButton = !this.state.showMultilineToggle ? null :
@@ -1819,6 +1827,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					editable={!this.state.readOnly}
 					multiline={this.state.multiline}
 					submitBehavior = "blurAndSubmit"
+					showSoftInputOnFocus={this.state.showSoftInputOnFocus}
 				/>
 				{ titleToggleButton }
 			</View>
