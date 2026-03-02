@@ -1060,6 +1060,7 @@ packages/editor/CodeMirror/editorCommands/markdownCommands.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
+packages/editor/CodeMirror/editorCommands/tableCommands.test.js
 packages/editor/CodeMirror/editorCommands/tableCommands.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js

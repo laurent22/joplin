@@ -320,4 +320,26 @@ describe('tableUtils', () => {
 		expect(() => generateTable(0, 0)).toThrow();
 		expect(() => generateTable(-1, 2)).toThrow();
 	});
+
+	it('addRow should reject out-of-range afterIndex', () => {
+		const table = parseTable([
+			'| A | B |',
+			'|---|---|',
+			'| 1 | 2 |',
+		].join('\n'));
+
+		expect(() => addRow(table!, -2)).toThrow(RangeError);
+		expect(() => addRow(table!, 5)).toThrow(RangeError);
+	});
+
+	it('addColumn should reject out-of-range afterIndex', () => {
+		const table = parseTable([
+			'| A | B |',
+			'|---|---|',
+			'| 1 | 2 |',
+		].join('\n'));
+
+		expect(() => addColumn(table!, -2)).toThrow(RangeError);
+		expect(() => addColumn(table!, 5)).toThrow(RangeError);
+	});
 });

@@ -221,9 +221,16 @@ const emptyRow = (colCount: number): TableRow => {
 	return { cells: new Array(colCount).fill(null).map(() => ({ content: '' })) };
 };
 
+const assertAfterIndex = (afterIndex: number, max: number): void => {
+	if (!Number.isInteger(afterIndex) || afterIndex < -1 || afterIndex > max) {
+		throw new RangeError(`afterIndex must be an integer between -1 and ${max}`);
+	}
+};
+
 // Insert a new empty row after the given index.
 // Use afterIndex = -1 to insert at the beginning of the body.
 export const addRow = (table: Table, afterIndex: number): Table => {
+	assertAfterIndex(afterIndex, table.body.length - 1);
 	const colCount = table.header.cells.length;
 	const newBody = [...table.body];
 	newBody.splice(afterIndex + 1, 0, emptyRow(colCount));
@@ -234,6 +241,7 @@ export const addRow = (table: Table, afterIndex: number): Table => {
 // Insert a new empty column after the given index.
 // Use afterIndex = -1 to insert at the beginning.
 export const addColumn = (table: Table, afterIndex: number): Table => {
+	assertAfterIndex(afterIndex, table.header.cells.length - 1);
 	const insertAt = afterIndex + 1;
 	const emptyCell = (): TableCell => ({ content: '' });
 

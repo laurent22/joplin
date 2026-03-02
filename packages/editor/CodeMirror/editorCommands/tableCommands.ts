@@ -93,7 +93,11 @@ export const getCellAtCursor = (state: EditorState, tableRange: TableRange): Cel
 			// Find which column the cursor is in by counting unescaped pipes
 			const offsetInLine = pos - lineStart;
 			const lineText = lines[lineIdx];
-			let col = -1; // Before the first pipe = not in a cell
+			const hasLeadingPipe = lineText.trimStart().startsWith('|');
+
+			// If the line has a leading pipe, cursor before it is col -1 (not in a cell yet).
+			// If no leading pipe, cursor starts in col 0 (already in the first cell).
+			let col = hasLeadingPipe ? -1 : 0;
 
 			for (let i = 0; i < offsetInLine; i++) {
 				if (isUnescapedPipe(lineText, i)) {
@@ -101,18 +105,25 @@ export const getCellAtCursor = (state: EditorState, tableRange: TableRange): Cel
 				}
 			}
 
-			// col is now the 0-based column index (after the first |)
-			// If col < 0, cursor is before the first pipe
 			if (col < 0) col = 0;
 
-			// Count total columns to clamp (count only unescaped pipes)
+			// Count total columns: number of unescaped pipes + 1 if no leading pipe,
+			// or pipes - 1 if there are leading/trailing pipes
 			let totalPipes = 0;
 			for (let i = 0; i < lineText.length; i++) {
 				if (isUnescapedPipe(lineText, i)) {
 					totalPipes++;
 				}
 			}
-			const totalCols = Math.max(1, totalPipes - 1);
+			const hasTrailingPipe = lineText.trimEnd().endsWith('|');
+			let totalCols: number;
+			if (hasLeadingPipe && hasTrailingPipe) {
+				totalCols = Math.max(1, totalPipes - 1);
+			} else if (!hasLeadingPipe && !hasTrailingPipe) {
+				totalCols = totalPipes + 1;
+			} else {
+				totalCols = totalPipes;
+			}
 			if (col >= totalCols) col = totalCols - 1;
 
 			return { row, col };
@@ -140,19 +151,40 @@ export const getCellContentPosition = (
 	if (lineIdx >= lines.length) return null;
 
 	const lineText = lines[lineIdx];
-
-	// Find the position of the (col+1)th unescaped pipe (0-indexed)
-	let pipeCount = 0;
+	const hasLeadingPipe = lineText.trimStart().startsWith('|');
 	let charIdx = 0;
-	for (; charIdx < lineText.length; charIdx++) {
-		if (isUnescapedPipe(lineText, charIdx)) {
-			if (pipeCount === col) {
-				// Found the pipe before our target cell. Skip pipe and leading space.
-				charIdx++;
-				while (charIdx < lineText.length && lineText[charIdx] === ' ') charIdx++;
-				break;
+
+	if (hasLeadingPipe) {
+		// Standard format: | A | B | — find the (col)th pipe and skip past it
+		let pipeCount = 0;
+		for (; charIdx < lineText.length; charIdx++) {
+			if (isUnescapedPipe(lineText, charIdx)) {
+				if (pipeCount === col) {
+					charIdx++;
+					while (charIdx < lineText.length && lineText[charIdx] === ' ') charIdx++;
+					break;
+				}
+				pipeCount++;
 			}
-			pipeCount++;
+		}
+	} else {
+		// No leading pipe: A | B — cells are separated by pipes
+		if (col === 0) {
+			// First cell starts at the beginning of the line (skip whitespace)
+			while (charIdx < lineText.length && lineText[charIdx] === ' ') charIdx++;
+		} else {
+			// Find the (col-1)th pipe separator and skip past it
+			let pipeCount = 0;
+			for (; charIdx < lineText.length; charIdx++) {
+				if (isUnescapedPipe(lineText, charIdx)) {
+					if (pipeCount === col - 1) {
+						charIdx++;
+						while (charIdx < lineText.length && lineText[charIdx] === ' ') charIdx++;
+						break;
+					}
+					pipeCount++;
+				}
+			}
 		}
 	}
 
