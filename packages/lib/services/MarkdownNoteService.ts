@@ -7,6 +7,8 @@ export interface MarkdownNoteData {
 	parentId: string;
 	title: string;
 	markdownBody: string;
+	normalizedTitle: string;
+	normalizedBody: string;
 }
 
 export default class MarkdownNoteService {
@@ -49,11 +51,6 @@ export default class MarkdownNoteService {
 		}
 	}
 
-	private normalizeText(text: string): string {
-		const normalizedText = text.normalize ? text.normalize() : text;
-		return removeDiacritics(normalizedText.toLowerCase());
-	}
-
 	// Save markdown note data to markdown_notes and markdown_notes_normalized tables
 	async saveMarkdownNote(data: MarkdownNoteData) {
 		if (!this.db_) {
@@ -79,8 +76,8 @@ export default class MarkdownNoteService {
 				  VALUES (?, ?, ?)`,
 			params: [
 				data.noteId,
-				this.normalizeText(data.title),
-				this.normalizeText(data.markdownBody),
+				data.normalizedTitle,
+				data.normalizedBody,
 			],
 		});
 
@@ -131,6 +128,8 @@ export default class MarkdownNoteService {
 				parentId: result.parentId,
 				title: result.title,
 				markdownBody: result.markdownBody,
+				normalizedTitle: result.normalizedTitle,
+				normalizedBody: result.normalizedBody,
 			});
 		};
 
@@ -147,12 +146,18 @@ export default class MarkdownNoteService {
 			const HtmlToMd = require('../HtmlToMd').default;
 			const htmlToMd = new HtmlToMd();
 			const markdownBody = htmlToMd.parse(body);
+			const normalizedText = (text: string) => {
+				const n = text.normalize ? text.normalize() : text;
+				return removeDiacritics(n.toLowerCase());
+			};
 
 			await this.saveMarkdownNote({
 				noteId,
 				parentId,
 				title,
 				markdownBody,
+				normalizedTitle: normalizedText(title),
+				normalizedBody: normalizedText(markdownBody),
 			});
 		} catch (error) {
 			this.logger().error(`MarkdownNoteService: Fallback processing error for note ${noteId}:`, error);

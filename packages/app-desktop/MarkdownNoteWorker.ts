@@ -7,6 +7,7 @@ export = {};
 
 const TurndownService = require('@joplin/turndown');
 const turndownPluginGfm = require('@joplin/turndown-plugin-gfm').gfm;
+const { removeDiacritics } = require('@joplin/lib/string-utils.js');
 
 interface MarkdownNoteTask {
 	noteId: string;
@@ -17,6 +18,11 @@ interface MarkdownNoteTask {
 
 const gTaskQueue: MarkdownNoteTask[] = [];
 let gTaskQueueRunning = false;
+
+function normalizeText(text: string): string {
+	const normalizedText = text.normalize ? text.normalize() : text;
+	return removeDiacritics(normalizedText.toLowerCase());
+}
 
 function htmlToMarkdown(html: string): string {
 	const turndown = new TurndownService({
@@ -46,6 +52,8 @@ function processQueue() {
 				parentId,
 				title,
 				markdownBody,
+				normalizedTitle: normalizeText(title),
+				normalizedBody: normalizeText(markdownBody),
 				error: null,
 			});
 		} catch (error) {
@@ -54,6 +62,8 @@ function processQueue() {
 				parentId,
 				title,
 				markdownBody: '',
+				normalizedTitle: '',
+				normalizedBody: '',
 				error: error.message || 'Unknown error during HTML to Markdown conversion',
 			});
 		}
