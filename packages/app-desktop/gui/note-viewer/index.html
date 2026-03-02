@@ -510,7 +510,7 @@
 			CSS.highlights.clear();
 			if (!mark_) {
 				mark_ = new Mark(document.getElementById('joplin-container-content'), {
-					exclude: ['img'],
+					exclude: ['img','pre.mermaid'],
 					acrossElements: true,
 				});
 			}

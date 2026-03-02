@@ -13,6 +13,15 @@ const isInsideContainer = (node, tagName) => {
 	return false;
 };
 
+const isInsideMermaidElement = (node) => {
+	while (node) {
+		if (node.tagName && node.tagName.toLowerCase() === 'pre' &&
+			node.classList && node.classList.contains('mermaid')) return true;
+		node = node.parentNode;
+	}
+	return false;
+};
+
 markJsUtils.markKeyword = (mark, keyword, stringUtils, extraOptions = null) => {
 	if (typeof keyword === 'string') {
 		keyword = {
@@ -60,6 +69,9 @@ markJsUtils.markKeyword = (mark, keyword, stringUtils, extraOptions = null) => {
 				//
 				// https://github.com/joplin/plugin-abc-sheet-music
 				if (isInsideContainer(node, 'SVG')) return false;
+				// Mermaid reads its source from the raw text of <pre class="mermaid">.
+				// Injecting <mark> tags corrupts the syntax and breaks rendering.
+				if (isInsideMermaidElement(node)) return false;
 				return true;
 			},
 			...extraOptions,
