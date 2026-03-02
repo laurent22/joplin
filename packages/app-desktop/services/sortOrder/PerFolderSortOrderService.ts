@@ -45,16 +45,13 @@ export default class PerFolderSortOrderService {
 		eventManager.appStateOn('notesParentType', this.onFolderSelectionMayChange.bind(this, 'notesParentType'));
 		eventManager.appStateOn('selectedFolderId', this.onFolderSelectionMayChange.bind(this, 'selectedFolderId'));
 		eventManager.appStateOn('selectedSmartFilterId', this.onFolderSelectionMayChange.bind(this, 'selectedSmartFilterId'));
-		this.previousFolderId = Setting.value('activeFolderId');
-
-		// activeFolderId is only saved for folder selections, not smart filters
-		// (e.g. All Notes). Use notesParent, which is persisted for all view
-		// types, so the correct previousFolderId is restored on relaunch.
-		// Without this, closing with All Notes selected would cause its per-folder
-		// sort to bleed into the shared sort order used by other notebooks.
+		// notesParent persists the last view type (including smart filters like All Notes),
+		// unlike activeFolderId which only tracks folder selections.
 		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
 		if (notesParent.type === 'Folder' || notesParent.type === 'SmartFilter') {
 			this.previousFolderId = notesParent.selectedItemId;
+		} else {
+			this.previousFolderId = null;
 		}
 	}
 
