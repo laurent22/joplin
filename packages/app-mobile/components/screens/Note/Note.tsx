@@ -750,13 +750,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (prevState.multiline !== this.state.multiline && this.titleTextFieldRef.current) {
 			focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
 		}
-
-		// Text input change transitions below 2 characters can cause an unnecessary state change when showMultilineToggle is not yet set,
-		// which messes with the title input focus. This is because onTextLayout on the Text component in TextWrapCalculator does not fire again
-		// after onLayout has executed on the containing view, when the text contents are 0 or 1 characters
-		if (prevState.titleContainerWidth !== this.state.titleContainerWidth && this.state.showMultilineToggle === null && this.state.note.title?.length <= 2) {
-			this.setState({ showMultilineToggle: false, multiline: false });
-		}
 	}
 
 	public componentWillUnmount() {
@@ -1815,7 +1808,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					textCompContainerWidth={this.state.titleContainerWidth}
 					showMultilineToggle={this.state.showMultilineToggle}
 					multiline={this.state.multiline}
-					text={note.title}
+					text={this.state.titleContainerWidth !== 0 ? note.title : undefined}
 					updateState={textWrapCalculator_updateState}
 					readOnly={false}
 				/>
