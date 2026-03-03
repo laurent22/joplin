@@ -222,29 +222,6 @@ Ensure-NodeExecutableOnPath -NodeExePath $nodeExePath
 # Keep python explicit for node-gyp to reduce interpreter ambiguity on Windows.
 Set-PythonForBuild
 
-Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\app-desktop\node_modules\node-gyp\lib\find-visualstudio.js')
-Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\app-desktop\node_modules\@electron\node-gyp\lib\find-visualstudio.js')
-Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\lib\node_modules\node-gyp\lib\find-visualstudio.js')
-Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\lib\node_modules\@electron\node-gyp\lib\find-visualstudio.js')
-
-$sqliteBindingFiles = Get-ChildItem -Path (Join-Path $repoRoot 'packages') -Filter 'binding.gyp' -File -Recurse -ErrorAction SilentlyContinue |
-	Where-Object { $_.FullName -match '\\node_modules\\sqlite3\\binding\.gyp$' }
-foreach ($file in $sqliteBindingFiles) {
-	Patch-Sqlite3BindingGypNodeAddonApi -FilePath $file.FullName
-}
-
-$sqliteDepsGypFiles = Get-ChildItem -Path (Join-Path $repoRoot 'packages') -Filter 'sqlite3.gyp' -File -Recurse -ErrorAction SilentlyContinue |
-	Where-Object { $_.FullName -match '\\node_modules\\sqlite3\\deps\\sqlite3\.gyp$' }
-foreach ($file in $sqliteDepsGypFiles) {
-	Patch-Sqlite3DepsGypNodeExecutable -FilePath $file.FullName -NodeExePath $nodeExePath
-}
-
-$keytarBindingFiles = Get-ChildItem -Path (Join-Path $repoRoot 'packages') -Filter 'binding.gyp' -File -Recurse -ErrorAction SilentlyContinue |
-	Where-Object { $_.FullName -match '\\node_modules\\keytar\\binding\.gyp$' }
-foreach ($file in $keytarBindingFiles) {
-	Patch-KeytarBindingGypNodeAddonApi -FilePath $file.FullName
-}
-
 if ($Clean) {
 	Write-Host 'Running git clean -xfd ...'
 	git clean -xfd
@@ -270,6 +247,29 @@ if (-not $SkipInstall) {
 	}
 
 	Invoke-CorepackYarn -Args $installArgs
+}
+
+Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\app-desktop\node_modules\node-gyp\lib\find-visualstudio.js')
+Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\app-desktop\node_modules\@electron\node-gyp\lib\find-visualstudio.js')
+Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\lib\node_modules\node-gyp\lib\find-visualstudio.js')
+Patch-NodeGypVs18Support -FilePath (Join-Path $repoRoot 'packages\lib\node_modules\@electron\node-gyp\lib\find-visualstudio.js')
+
+$sqliteBindingFiles = Get-ChildItem -Path (Join-Path $repoRoot 'packages') -Filter 'binding.gyp' -File -Recurse -ErrorAction SilentlyContinue |
+	Where-Object { $_.FullName -match '\\node_modules\\sqlite3\\binding\.gyp$' }
+foreach ($file in $sqliteBindingFiles) {
+	Patch-Sqlite3BindingGypNodeAddonApi -FilePath $file.FullName
+}
+
+$sqliteDepsGypFiles = Get-ChildItem -Path (Join-Path $repoRoot 'packages') -Filter 'sqlite3.gyp' -File -Recurse -ErrorAction SilentlyContinue |
+	Where-Object { $_.FullName -match '\\node_modules\\sqlite3\\deps\\sqlite3\.gyp$' }
+foreach ($file in $sqliteDepsGypFiles) {
+	Patch-Sqlite3DepsGypNodeExecutable -FilePath $file.FullName -NodeExePath $nodeExePath
+}
+
+$keytarBindingFiles = Get-ChildItem -Path (Join-Path $repoRoot 'packages') -Filter 'binding.gyp' -File -Recurse -ErrorAction SilentlyContinue |
+	Where-Object { $_.FullName -match '\\node_modules\\keytar\\binding\.gyp$' }
+foreach ($file in $keytarBindingFiles) {
+	Patch-KeytarBindingGypNodeAddonApi -FilePath $file.FullName
 }
 
 if (-not $SkipDist) {
