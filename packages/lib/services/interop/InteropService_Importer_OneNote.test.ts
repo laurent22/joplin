@@ -358,7 +358,10 @@ describe('InteropService_Importer_OneNote', () => {
 			errorMessage = String(error);
 		});
 
-		const notes = await importNote(`${supportDir}/onenote/truncated.zip`, { onError });
+		const notes = await withWarningSilenced(
+			/Unexpected end of file/,
+			() => importNote(`${supportDir}/onenote/truncated.zip`, { onError }),
+		);
 		// The truncated section should have failed to import
 		expect(onError).toHaveBeenCalledTimes(1);
 		expect(errorMessage).toMatch(/Unexpected end of file/);
