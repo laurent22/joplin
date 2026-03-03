@@ -436,18 +436,21 @@ const buildStartupTasks = (
 		// start almost immediately to get the latest data.
 		// doWifiConnectionCheck set to true so initial sync
 		// doesn't happen on mobile data
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		void reg.scheduleSync(100, null, true).then(() => {
-			// Wait for the first sync before updating the notifications, since synchronisation
-			// might change the notifications.
-			void AlarmService.updateAllNotifications();
+		setTimeout(() => {
+			// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+			void reg.scheduleSync(0, null, true).then(() => {
+				// Wait for the first sync before updating the notifications, since synchronisation
+				// might change the notifications.
+				void AlarmService.updateAllNotifications();
 
-			void DecryptionWorker.instance().scheduleStart();
+				void DecryptionWorker.instance().scheduleStart();
 
-			// Collect revisions more frequently on mobile because it doesn't auto-save
-			// and it cannot collect anything when the app is not active.
-			RevisionService.instance().runInBackground(1000 * 30);
-		});
+				// Collect revisions more frequently on mobile because it doesn't auto-save
+				// and it cannot collect anything when the app is not active.
+				RevisionService.instance().runInBackground(1000 * 30);
+			});
+		}, 100);
 	});
 	addTask('buildStartupTasks/set up welcome utils', async () => {
 		await WelcomeUtils.install(Setting.value('locale'), dispatch);
