@@ -1205,7 +1205,10 @@ export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> P
 		mock.mockImplementation((message?: unknown, ...args: unknown[]) => {
 			const fullMessage = [message, ...args].join(' ');
 			if (!fullMessage.match(warningRegex)) {
-				console.error(`Unexpected warning: ${message}`, ...args);
+				// Avoid recursively calling the mock:
+				mock.mockRestore();
+
+				console.error(`Unexpected warning: ${message}\nNote: Further warnings will not be silenced.`, ...args);
 			}
 		});
 	};
