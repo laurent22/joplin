@@ -24,7 +24,7 @@ enum Mode {
 	Reset = 2,
 }
 
-export default function(props: Props) {
+export default function (props: Props) {
 	const [status, setStatus] = useState(MasterPasswordStatus.NotSet);
 	const [hasMasterPasswordEncryptedData, setHasMasterPasswordEncryptedData] = useState(true);
 	const [currentPassword, setCurrentPassword] = useState('');
@@ -177,11 +177,16 @@ export default function(props: Props) {
 							onChange={onPasswordChange1}
 						/>
 						{needToRepeatPassword && (
+							<>
 							<LabelledPasswordInput
 								labelText={_('Re-enter password')}
 								value={password2}
 								onChange={onPasswordChange2}
 							/>
+							{password1 && password2 && password1 !== password2 && ( <p style={{color: 'var(--joplin-color-error)', marginTop: 0}}>
+								{_('Passwords do not match!')}
+							</p>)}
+							</>
 						)}
 					</div>
 					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>
@@ -224,7 +229,7 @@ export default function(props: Props) {
 	function renderDialogWrapper() {
 		return (
 			<div className="dialog-root">
-				<DialogTitle title={dialogTitle}/>
+				<DialogTitle title={dialogTitle} />
 				{renderContent()}
 				<DialogButtonRow
 					themeId={props.themeId}
