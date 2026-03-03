@@ -1,4 +1,4 @@
-use crate::errors::{Result};
+use crate::errors::Result;
 use crate::templates::section::TocEntry;
 use crate::{page, templates};
 use parser::page::Page;

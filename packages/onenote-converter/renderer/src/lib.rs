@@ -113,7 +113,9 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
 
     let build_output_dir = |file_path_in_archive: &str| -> Result<(String, String)> {
         let mut output_path = String::from(output_dir);
-
+        
+        // Split on both "\"s and "/"s since CAB archives seem to use Windows-style paths,
+        // where both / and \ are valid path separators.
         let is_path_separator = |c| c == '\\' || c == '/';
         let path_segments: Vec<&str> = file_path_in_archive.split(is_path_separator).collect();
 
