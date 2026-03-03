@@ -8,11 +8,23 @@ const fixResourceUrls = (container: HTMLElement) => {
 	}
 };
 
-const unwrapSingleParagraph = (parent: Element) => {
+const hasNonElementContent = (parent: Element) => {
+	for (const child of parent.childNodes) {
+		if (child.nodeType === Node.TEXT_NODE && child.textContent.trim()) return true;
+	}
+	return false;
+};
+
+const hasSingleParagraphChild = (parent: Element) => {
+	if (hasNonElementContent(parent)) return false;
 	const firstChild = parent.firstElementChild;
-	const paragraphCount = Array.from(parent.children).filter(el => el.tagName === 'P').length;
-	if (firstChild?.tagName === 'P' && paragraphCount === 1) {
-		firstChild.replaceWith(...firstChild.childNodes);
+	if (firstChild?.tagName !== 'P') return false;
+	return Array.from(parent.children).filter(el => el.tagName === 'P').length === 1;
+};
+
+const unwrapSingleParagraph = (parent: Element) => {
+	if (hasSingleParagraphChild(parent)) {
+		parent.firstElementChild.replaceWith(...parent.firstElementChild.childNodes);
 	}
 };
 
@@ -36,16 +48,14 @@ const removeChecklistItemWrapperParagraphs = (container: HTMLElement) => {
 
 		// Hoist nested sublists out of the <div> so Turndown sees <li>
 		// as their direct parent and uses single newlines.
-		for (const nested of Array.from(content.querySelectorAll(':scope > ul, :scope > ol'))) {
+		for (const nested of content.querySelectorAll(':scope > ul, :scope > ol')) {
 			content.after(nested);
 		}
 
 		// Replace <div><p>text</p></div> with <span>text</span>
-		const firstChild = content.firstElementChild;
-		const paragraphCount = Array.from(content.children).filter(el => el.tagName === 'P').length;
-		if (firstChild?.tagName === 'P' && paragraphCount === 1) {
+		if (hasSingleParagraphChild(content)) {
 			const span = document.createElement('span');
-			span.replaceChildren(...firstChild.childNodes);
+			span.replaceChildren(...content.firstElementChild.childNodes);
 			content.replaceWith(span);
 		}
 	}
