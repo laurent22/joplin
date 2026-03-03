@@ -43,7 +43,7 @@ const electronContextMenu = require('./services/electron-context-menu');
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
 
-import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';

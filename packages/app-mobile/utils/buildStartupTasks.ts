@@ -92,6 +92,7 @@ import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -389,6 +390,9 @@ const buildStartupTasks = (
 		});
 	});
 	addTask('buildStartupTasks/clear shared files cache', clearSharedFilesCache);
+	addTask('buildStartupTasks/initialize PerFolderSortOrderService', async () => {
+		PerFolderSortOrderService.initialize();
+	});
 	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 

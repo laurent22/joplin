@@ -1,7 +1,7 @@
-import Setting from '@joplin/lib/models/Setting';
-import eventManager from '@joplin/lib/eventManager';
+import Setting from '../../models/Setting';
+import eventManager from '../../eventManager';
 import { notesSortOrderFieldArray, setNotesSortOrder } from './notesSortOrderUtils';
-import { parseNotesParent } from '@joplin/lib/reducer';
+import { parseNotesParent } from '../../reducer';
 
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';

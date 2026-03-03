@@ -13,13 +13,15 @@ import { _ } from '@joplin/lib/locale';
 import { BaseScreenComponent } from '../../base-screen';
 import { AppState } from '../../../utils/types';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
-import { itemIsInTrash } from '@joplin/lib/services/trash';
+import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
 import AccessibleView from '../../accessibility/AccessibleView';
 import { Dispatch } from 'redux';
 import { DialogContext, DialogControl } from '../../DialogManager';
 import { useContext } from 'react';
 import { MenuChoice } from '../../DialogManager/types';
 import NewNoteButton from './NewNoteButton';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 interface Props {
 	dispatch: Dispatch;
@@ -70,7 +72,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 	};
 
 	private sortButton_press = async () => {
-		type IdType = { name: string; value: string|boolean };
+		type IdType = { name: string; value: string|boolean; isPerFolderToggle?: boolean };
 		const buttons: MenuChoice<IdType>[] = [];
 		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
 
@@ -102,11 +104,62 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 			id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
 		});
 
+		// Show "use own sort order" toggle for folders and the All Notes smart filter,
+		// but not for tags, conflicts folder, or trash folder.
+		const showPerFolderToggle = this.shouldShowPerFolderSortToggle();
+		if (showPerFolderToggle) {
+			const currentFolderId = this.getCurrentFolderIdForSort();
+			const isSet = PerFolderSortOrderService.isSet(currentFolderId);
+			buttons.push({
+				text: `[ ${_('Use own sort order')} ]`,
+				checked: isSet,
+				id: { name: 'perFolderSortOrder', value: !isSet, isPerFolderToggle: true },
+			});
+		}
+
 		const r = await this.props.dialogManager.showMenu(Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
 		if (!r) return;
 
-		Setting.setValue(r.name, r.value);
+		if (r.isPerFolderToggle) {
+			const currentFolderId = this.getCurrentFolderIdForSort();
+			PerFolderSortOrderService.set(currentFolderId, r.value as boolean);
+		} else {
+			Setting.setValue(r.name, r.value);
+		}
 	};
+
+	private shouldShowPerFolderSortToggle(): boolean {
+		// Only show for folders and the All Notes smart filter
+		// Don't show for tags, conflicts folder, or trash folder
+		if (this.props.notesParentType === 'Tag') {
+			return false;
+		}
+
+		if (this.props.notesParentType === 'Folder') {
+			const folderId = this.props.selectedFolderId;
+			// Don't show for conflicts folder or trash folder
+			if (folderId === Folder.conflictFolderId() || folderId === getTrashFolderId()) {
+				return false;
+			}
+			return true;
+		}
+
+		if (this.props.notesParentType === 'SmartFilter') {
+			// Only show for All Notes smart filter
+			return this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
+		}
+
+		return false;
+	}
+
+	private getCurrentFolderIdForSort(): string {
+		if (this.props.notesParentType === 'Folder') {
+			return this.props.selectedFolderId;
+		} else if (this.props.notesParentType === 'SmartFilter') {
+			return this.props.selectedSmartFilterId;
+		}
+		return '';
+	}
 
 	public styles() {
 		if (!this.styles_) this.styles_ = {};
