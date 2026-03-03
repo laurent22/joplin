@@ -755,7 +755,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		// which messes with the title input focus. This is because onTextLayout on the Text component in TextWrapCalculator does not fire again
 		// after onLayout has executed on the containing view, when the text contents are 0 or 1 characters
 		if (prevState.titleContainerWidth !== this.state.titleContainerWidth && this.state.showMultilineToggle === null && this.state.note.title?.length <= 2) {
-			this.setState({ showMultilineToggle: false, multiline: true });
+			this.setState({ showMultilineToggle: false, multiline: false });
 		}
 	}
 

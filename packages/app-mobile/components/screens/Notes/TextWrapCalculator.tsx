@@ -33,8 +33,8 @@ const TextWrapCalculator: React.FC<Props> = props => {
 				const showToggle = numberOfLines > 1;
 				let enableMultiline;
 				if (props.showMultilineToggle === null) {
-					// Upon opening the screen, multiline should be enabled when not wrapped, or disabled when wrapped (so that the element starts collapsed)
-					enableMultiline = !showToggle;
+					// Upon opening the screen, multiline should always be disabled, so long titles start collapsed and it does not open the keyboard automatically
+					enableMultiline = false;
 				} else {
 					// In every other case, retain the value of multiline so that it does not change while the user is typing, but only showMultilineToggle changes
 					enableMultiline = props.multiline;
