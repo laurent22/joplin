@@ -38,9 +38,6 @@ function Resolve-CommandPath {
 	throw "$Description not found in PATH. Tried: $($Names -join ', ')"
 }
 
-$corepackPath = Resolve-CommandPath -Names @('corepack.cmd', 'corepack') -Description 'corepack'
-$npmPath = Resolve-CommandPath -Names @('npm.cmd', 'npm') -Description 'npm'
-
 # Run Yarn through corepack and stop on non-zero exit.
 function Invoke-CorepackYarn {
 	param(
@@ -215,6 +212,9 @@ function Ensure-NodeExecutableOnPath {
 }
 
 . (Join-Path $PSScriptRoot 'dev-shell-win-arm64.ps1') -Arch $TargetArch -HostArch $TargetArch -MsvsVersion $MsvsVersion -SetLocationToRepo
+
+$corepackPath = Resolve-CommandPath -Names @('corepack.cmd', 'corepack') -Description 'corepack'
+$npmPath = Resolve-CommandPath -Names @('npm.cmd', 'npm') -Description 'npm'
 
 $nodeExePath = Resolve-CommandPath -Names @('node.exe', 'node') -Description 'node'
 Ensure-NodeExecutableOnPath -NodeExePath $nodeExePath
