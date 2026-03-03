@@ -85,6 +85,22 @@ reviews:
       instructions: "Apply when the PR modifies files under packages/app-web/. Or when the PR modifies files under packages/app-mobile and the change is specific to the web app only"
     - label: "windows"
       instructions: "Apply when the PR is mainly about changes specific to Windows"
+
+  pre_merge_checks:
+    description:
+      mode: "warning"
+    custom_checks:
+      - name: "PR Description Must Follow Guidelines"
+        mode: "error"
+        instructions: |
+          Fail if the pull request description does not include clear sections for:
+          - Problem or user-impact description
+          - A high-level Solution explanation
+          - Any Test Plan or verification steps
+
+          The description should align with our PR guidelines
+          at https://github.com/joplin/gsoc/blob/master/pull_request_guidelines.md
+          and should not just restate the diff or implementation details.
 knowledge_base:
   code_guidelines:
     enabled: true

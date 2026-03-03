@@ -2015,7 +2015,7 @@ PODS:
     - Yoga
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
-  - RNDateTimePicker (8.4.7):
+  - RNDateTimePicker (8.5.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2041,7 +2041,7 @@ PODS:
     - React-Core
   - RNFileViewer (2.1.5):
     - React-Core
-  - RNLocalize (3.5.4):
+  - RNLocalize (3.6.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2627,10 +2627,10 @@ SPEC CHECKSUMS:
   rn-fetch-blob: 25612b6d6f6e980c6f17ed98ba2f58f5696a51ca
   RNCClipboard: 88d7eeb555d1183915f0885bdbc5c97eb6f7f3ba
   RNCPushNotificationIOS: 6c4ca3388c7434e4a662b92e4dfeeee858e6f440
-  RNDateTimePicker: f11373a05d806e849ab984e2806c531278b47cdd
+  RNDateTimePicker: 19ffa303c4524ec0a2dfdee2658198451c16b7f1
   RNDeviceInfo: bcce8752b5043a623fe3c26789679b473f705d3c
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
-  RNLocalize: da3c00bf1044a67e72cf8b450289e263fd5baab3
+  RNLocalize: 83a242b38886bf7e84073410c101e9ea39a1c1a5
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
   RNShare: 0e600372fb35783fe30d413efd28d11de2bf6cf0

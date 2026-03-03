@@ -531,6 +531,13 @@ export default class Synchronizer {
 
 					// console.info('NEW', newInfo);
 
+					if (newInfo.revisionServiceEnabled !== localInfo.revisionServiceEnabled) {
+						Setting.setValue('revisionService.enabled', newInfo.revisionServiceEnabled);
+					}
+					if (newInfo.revisionServiceTtlDays !== localInfo.revisionServiceTtlDays) {
+						Setting.setValue('revisionService.ttlDays', newInfo.revisionServiceTtlDays);
+					}
+
 					if (newInfo.e2ee !== previousE2EE) {
 						if (newInfo.e2ee) {
 							const mk = getActiveMasterKey(newInfo);

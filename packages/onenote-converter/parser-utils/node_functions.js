@@ -48,6 +48,10 @@ function fileReader(path) {
 	};
 }
 
+function isWindows() {
+	return process.platform === 'win32';
+}
+
 module.exports = {
 	mkdirSyncRecursive,
 	isDirectory,
@@ -55,4 +59,5 @@ module.exports = {
 	removePrefix,
 	normalizeAndWriteFile,
 	fileReader,
+	isWindows,
 };

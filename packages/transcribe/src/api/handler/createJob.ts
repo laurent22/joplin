@@ -11,10 +11,11 @@ type CreateJobContext = {
 	filepath: string;
 	imageMaxDimension: number;
 	randomName: string;
+	imagesFolder: string;
 };
 
 const createJob = async (context: CreateJobContext) => {
-	const imageResizedPath = join('images', context.randomName);
+	const imageResizedPath = join(context.imagesFolder, context.randomName);
 
 	await resizeImageAndDeleteInput(context.filepath, imageResizedPath, context.imageMaxDimension);
 
