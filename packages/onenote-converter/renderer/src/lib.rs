@@ -3,7 +3,7 @@ pub use parser::Parser;
 use std::{io::Read, panic};
 use wasm_bindgen::{JsError, prelude::wasm_bindgen};
 
-use parser_utils::{FileHandle, fs_driver, log, log_warn};
+use parser_utils::{FileHandle, fs_driver, log};
 
 use crate::errors::ErrorKind;
 
@@ -47,18 +47,10 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
                 return Ok(());
             }
 
-            let section = match Parser::new().parse_section(path.to_owned()) {
-                Ok(s) => s,
-                Err(e) => {
-                    log_warn!("Failed to parse '{}': {}", _name, e);
-                    return Ok(());
-                }
-            };
+            let section = Parser::new().parse_section(path.to_owned())?;
 
             let section_output_dir = fs_driver().get_output_path(base_path, output_dir, path);
-            if let Err(e) = section::Renderer::new().render(&section, section_output_dir.to_owned()) {
-                log_warn!("Failed to render '{}': {}", _name, e);
-            }
+            section::Renderer::new().render(&section, section_output_dir.to_owned())?;
         }
 
         ".onetoc2" => {
@@ -113,7 +105,7 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
 
     let build_output_dir = |file_path_in_archive: &str| -> Result<(String, String)> {
         let mut output_path = String::from(output_dir);
-        
+
         // Split on both "\"s and "/"s since CAB archives seem to use Windows-style paths,
         // where both / and \ are valid path separators.
         let is_path_separator = |c| c == '\\' || c == '/';
