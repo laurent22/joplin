@@ -3,7 +3,7 @@ pub use parser::Parser;
 use std::{io::Read, panic};
 use wasm_bindgen::{JsError, prelude::wasm_bindgen};
 
-use parser_utils::{FileHandle, fs_driver, log};
+use parser_utils::{FileHandle, fs_driver, log, log_warn};
 
 use crate::errors::ErrorKind;
 
@@ -47,16 +47,30 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
                 return Ok(());
             }
 
-            let section = Parser::new().parse_section(path.to_owned())?;
+            let section = match Parser::new().parse_section(path.to_owned()) {
+                Ok(s) => s,
+                Err(e) => {
+                    log_warn!("Failed to parse '{}': {}", _name, e);
+                    return Ok(());
+                }
+            };
 
             let section_output_dir = fs_driver().get_output_path(base_path, output_dir, path);
-            section::Renderer::new().render(&section, section_output_dir.to_owned())?;
+            if let Err(e) = section::Renderer::new().render(&section, section_output_dir.to_owned()) {
+                log_warn!("Failed to render '{}': {}", _name, e);
+            }
         }
+
         ".onetoc2" => {
             let _name: String = fs_driver().get_file_name(path).expect("Missing file name");
             log!("Parsing .onetoc2 file: {}", _name);
 
-            let notebook = Parser::new().parse_notebook(path.to_owned())?;
+            let notebook = match Parser::new().parse_notebook(path.to_owned()) {
+                Ok(n) => n,
+                Err(e) => {
+                    return Err(eyre!("Failed to parse notebook '{}': {}", _name, e));
+                }
+            };
 
             let notebook_name = fs_driver()
                 .get_parent_dir(path)
@@ -69,12 +83,16 @@ pub fn convert(path: &str, output_dir: &str, base_path: &str) -> Result<()> {
             let notebook_output_dir = fs_driver().get_output_path(base_path, output_dir, path);
             log!("Notebook directory: {:?}", notebook_output_dir);
 
-            notebook::Renderer::new().render(&notebook, &notebook_name, &notebook_output_dir)?;
+            if let Err(e) = notebook::Renderer::new().render(&notebook, &notebook_name, &notebook_output_dir) {
+                return Err(eyre!("Failed to render notebook '{}': {}", _name, e));
+            }
         }
+
         ".onepkg" => {
             let file_data = fs_driver().open_file(path)?;
             convert_onepkg(file_data, output_dir)?;
         }
+
         ext => return Err(eyre!("Invalid file extension: {}, file: {}", ext, path)),
     }
 
@@ -96,8 +114,6 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
     let build_output_dir = |file_path_in_archive: &str| -> Result<(String, String)> {
         let mut output_path = String::from(output_dir);
 
-        // Split on both "\"s and "/"s since CAB archives seem to use Windows-style paths,
-        // where both / and \ are valid path separators.
         let is_path_separator = |c| c == '\\' || c == '/';
         let path_segments: Vec<&str> = file_path_in_archive.split(is_path_separator).collect();
 

@@ -125,3 +125,21 @@ fn convert_ink() {
     let rendered_file = fs::read_to_string(content_file).expect("should read the content file");
     assert!(rendered_file.contains("<svg style"));
 }
+
+#[test]
+fn convert_truncated_file_should_not_error() {
+    let TestResources {
+        output_dir,
+        test_data_dir,
+    } = setup("broken_truncated");
+
+    // A truncated/broken .one file should not return an error -- it should
+    // be skipped gracefully.
+    let result = convert(
+        &test_data_dir.join("broken_truncated.one").to_string_lossy(),
+        &output_dir.to_string_lossy(),
+        &test_data_dir.to_string_lossy(),
+    );
+
+    assert!(result.is_ok());
+}

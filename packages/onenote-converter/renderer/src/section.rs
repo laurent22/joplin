@@ -1,4 +1,4 @@
-use crate::errors::{ErrorKind, Result};
+use crate::errors::{Result};
 use crate::templates::section::TocEntry;
 use crate::{page, templates};
 use parser::page::Page;
@@ -16,7 +16,7 @@ pub(crate) struct RenderedSection {
     pub(crate) section_dir: String,
 }
 
-const ERRORS_NOTE_NAME: &str = "⚠️ Errors ⚠️";
+const ERRORS_NOTE_NAME: &str = "âš ï¸ Errors âš ï¸";
 
 impl Renderer {
     pub fn new() -> Self {
@@ -84,15 +84,13 @@ impl Renderer {
         log!("ToC: {}", toc_path);
 
         if errors_path.is_some() {
-            Err(ErrorKind::RenderFailed(format!(
+            log_warn!(
                 "Some pages failed to render. First error: {:?}. Full error report written to {}",
                 errors.first(),
                 ERRORS_NOTE_NAME,
-            ))
-            .into())
-        } else {
-            Ok(RenderedSection { section_dir })
+            );
         }
+        Ok(RenderedSection { section_dir })
     }
 
     fn render_page_to_file<F>(

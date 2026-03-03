@@ -44,9 +44,6 @@ pub enum ErrorKind {
     #[error("Parsing failed: {0}")]
     ParseFailed(parser_utils::errors::Error),
 
-    #[error("Rendering failed: {0}")]
-    RenderFailed(String),
-
     #[error("IO failure: {0}")]
     IoError(std::io::Error),
 
