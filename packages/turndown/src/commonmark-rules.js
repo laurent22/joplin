@@ -840,6 +840,14 @@ rules.joplinHtmlInMarkdown = {
     return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
   },
 
+  escapeContent: function () {
+    // Do not escape content inside HTML blocks - content is raw HTML/Markdown
+    // that must be preserved as-is. Without this, switching between Markdown
+    // and Rich Text editors adds extra backslashes on every switch.
+    // Fixes: https://github.com/laurent22/joplin/issues/14078
+    return false;
+  },
+
   replacement: function (content, node) {
     node.classList.remove('jop-noMdConv');
     const nodeName = node.nodeName.toLowerCase();

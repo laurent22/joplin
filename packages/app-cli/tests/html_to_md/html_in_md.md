@@ -6,4 +6,4 @@ Line 5
 
 Line 6
 
-<div>Markdown **inside**</div>
+<div>Markdown **inside**</div><div style="color:red">**bold** and _italic_</div>
