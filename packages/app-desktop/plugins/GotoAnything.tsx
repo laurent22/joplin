@@ -23,25 +23,6 @@ import * as cheerio from 'cheerio';
 
 const PLUGIN_NAME = 'gotoAnything';
 
-// UTF-8 バイトオフセット → JS 文字列インデックス のマッピングを構築
-const buildByteToCharMap = (text: string): number[] => {
-	const encoder = new TextEncoder();
-	const map: number[] = [];
-	let bytePos = 0;
-	let charPos = 0;
-	while (charPos < text.length) {
-		const codePoint = text.codePointAt(charPos)!;
-		const charByteLen = encoder.encode(String.fromCodePoint(codePoint)).length;
-		for (let b = 0; b < charByteLen; b++) {
-			map[bytePos + b] = charPos;
-		}
-		bytePos += charByteLen;
-		charPos += codePoint > 0xffff ? 2 : 1;
-	}
-	map[bytePos] = text.length;
-	return map;
-};
-
 interface SearchResult {
 	id: string;
 	title: string;
@@ -369,6 +350,7 @@ class Dialog extends React.PureComponent<Props, State> {
 						}
 					} else {
 						const limit = 20;
+						const searchKeywords = await this.keywords(searchQuery);
 						const ids = results.map((r: any) => r.id).slice(0, limit);
 						const placeholders = ids.map(() => '?').join(',');
 						const mdNotes = ids.length > 0
@@ -379,10 +361,6 @@ class Dialog extends React.PureComponent<Props, State> {
 							notesById[n.id] = n;
 						}
 
-						// markdown_notes_fts の列順: 0=id(notindexed), 1=title, 2=body
-						const BODY_COL = 2;
-						const CONTEXT = 20;
-
 						let ri = 0;
 						const exists: Record<string, boolean> = {};
 						const tempResults: SearchResult[] = [];
@@ -391,41 +369,34 @@ class Dialog extends React.PureComponent<Props, State> {
 							const path = Folder.folderPathString(this.props.folders, row.parent_id);
 
 							if (row.fields.includes('body')) {
+								let fragments = '...';
 								const fragmentsList: string[] = [];
 
 								if (i < limit) {
+									const indices = [];
 									const note = notesById[row.id];
 									if (!note) continue;
 									const body = note.body;
 
-									if (row.offsets) {
-										const byteToChar = buildByteToCharMap(body);
-										const nums = row.offsets.split(' ').map(Number);
-										for (let j = 0; j + 3 < nums.length; j += 4) {
-											if (nums[j] === BODY_COL) {
-												const byteOffset = nums[j + 2];
-												const byteLen = nums[j + 3];
-												const charStart = byteToChar[byteOffset] ?? 0;
-												const charEnd = byteToChar[byteOffset + byteLen] ?? charStart + 1;
-												const fragStart = Math.max(0, charStart - CONTEXT);
-												const fragEnd = Math.min(body.length, charEnd + CONTEXT);
-												const fragment = body.slice(fragStart, fragEnd);
-												if (fragment.length > 0 && !exists[fragment]) {
-													exists[fragment] = true;
-													fragmentsList.push(fragment);
-												}
-											}
+									for (let { valueRegex } of searchKeywords) {
+										valueRegex = removeDiacritics(valueRegex);
+										for (const match of removeDiacritics(body).matchAll(new RegExp(valueRegex, 'ig'))) {
+											indices.push([match.index, nextWhitespaceIndex(body, match.index + match[0].length + 15)]);
+											if (indices.length > 20) break;
+										}
+									}
+
+									for (const index of indices) {
+										fragments = body.slice(index[0], index[1]);
+										if (fragments.length > 0) {
+											if (exists[fragments]) continue;
+											exists[fragments] = true;
+											fragmentsList.push(fragments);
 										}
 									}
 								}
-
-								if (fragmentsList.length > 0) {
-									for (const tempFragment of fragmentsList) {
-										tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
-										ri++;
-									}
-								} else {
-									tempResults.push(Object.assign({}, row, { key: ri, path, fragments: '' }));
+								for (const tempFragment of fragmentsList) {
+									tempResults.push(Object.assign({}, row, { key: ri, path, fragments: tempFragment }));
 									ri++;
 								}
 							} else {
