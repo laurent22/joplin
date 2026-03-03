@@ -35,10 +35,10 @@ interface WrapperProps {
 
 let store: Store<AppState>;
 
-const mockNavigation = { state: {} };
+const mockNavigation = { state: { } };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
 	return <TestProviderStack store={store}>
-		<NoteScreen navigation={mockNavigation} />
+		<NoteScreen navigation={mockNavigation}/>
 	</TestProviderStack>;
 };
 
