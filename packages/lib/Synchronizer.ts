@@ -778,14 +778,8 @@ export default class Synchronizer {
 											await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
 										}
 									} finally {
-										// Clean up temp .crypted file created by fullPathForSyncUpload()
-										// in all exit paths: successful upload, skipped upload, or error.
 										if (isTemporaryCryptedFile) {
-											try {
-												await shim.fsDriver().remove(localResourceContentPath);
-											} catch (cleanupError) {
-												logger.warn(`Failed to remove temp .crypted file after sync upload: ${cleanupError.message}`);
-											}
+											await Resource.removeCryptedFile(localResourceContentPath);
 										}
 									}
 								} catch (error) {

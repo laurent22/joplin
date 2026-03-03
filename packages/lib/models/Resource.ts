@@ -217,17 +217,22 @@ export default class Resource extends BaseItem {
 		decryptedItem.encryption_blob_encrypted = 0;
 		const savedItem = await super.save(decryptedItem, { autoTimestamp: false });
 
-		// Clean up the .crypted file now that decryption is complete and
-		// encryption_blob_encrypted = 0 has been persisted to the database.
-		if (encryptedPath !== plainTextPath && await this.fsDriver().exists(encryptedPath)) {
-			try {
-				await this.fsDriver().remove(encryptedPath);
-			} catch (error) {
-				this.logger().warn(`Failed to remove .crypted file after decryption: ${error.message}`);
-			}
-		}
+		await this.removeCryptedFile(encryptedPath);
+
 
 		return savedItem;
+	}
+
+	// Best-effort removal of a .crypted file. Used after decryption completes
+	// and after sync upload to clean up temporary encrypted artifacts.
+	public static async removeCryptedFile(cryptedPath: string) {
+		try {
+			if (await this.fsDriver().exists(cryptedPath)) {
+				await this.fsDriver().remove(cryptedPath);
+			}
+		} catch (error) {
+			this.logger().warn(`Failed to remove .crypted file ${cryptedPath}: ${error.message}`);
+		}
 	}
 
 	// Prepare the resource by encrypting it if needed.
