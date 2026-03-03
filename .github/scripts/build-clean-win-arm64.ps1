@@ -194,17 +194,12 @@ function Ensure-NodeExecutableOnPath {
 		New-Item -Path $localBinPath -ItemType Directory -Force | Out-Null
 	}
 
-	if (-not (Test-Path $localNodeExe)) {
-		if (-not (Test-Path $NodeExePath)) {
-			throw "node executable not found at $NodeExePath"
-		}
-
-		Copy-Item -Path $NodeExePath -Destination $localNodeExe -Force
+	if (-not (Test-Path $NodeExePath)) {
+		throw "node executable not found at $NodeExePath"
 	}
 
-	if (-not (Test-Path $localNodeNoExt)) {
-		Copy-Item -Path $localNodeExe -Destination $localNodeNoExt -Force
-	}
+	Copy-Item -Path $NodeExePath -Destination $localNodeExe -Force
+	Copy-Item -Path $localNodeExe -Destination $localNodeNoExt -Force
 
 	if ($env:Path -notlike "$localBinPath;*") {
 		$env:Path = "$localBinPath;$($env:Path)"
