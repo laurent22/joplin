@@ -18,6 +18,11 @@ interface Props {
 // Even if already using a Text element, a separate hidden Text element must be used for text wrapping estimation, because if onTextLayout is used on a visible
 // component, it prevents text highlighting from working.
 const TextWrapCalculator: React.FC<Props> = props => {
+	// Text values which are initially 0 or 1 characters in length do not trigger onTextLayout a second time after textCompContainerWidth has been set,
+	// which may result in a component remount after entering the first character on the TextInput this is linked to, which will cause change or loss of focus.
+	// Set the text to a dummy value of at least 2 characters when the titleContainerWidth is not yet measured, to ensure onTextLayout will fire a second time
+	const text = props.textCompContainerWidth !== 0 ? props.text : 'abc';
+
 	return Platform.OS === 'web' ? null : <Text
 		pointerEvents='none'
 		style={[
@@ -47,7 +52,7 @@ const TextWrapCalculator: React.FC<Props> = props => {
 			}
 		}}
 	>
-		{props.text}
+		{text}
 	</Text>;
 };
 

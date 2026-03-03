@@ -1808,7 +1808,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					textCompContainerWidth={this.state.titleContainerWidth}
 					showMultilineToggle={this.state.showMultilineToggle}
 					multiline={this.state.multiline}
-					text={this.state.titleContainerWidth !== 0 ? note.title : undefined}
+					text={note.title}
 					updateState={textWrapCalculator_updateState}
 					readOnly={false}
 				/>
