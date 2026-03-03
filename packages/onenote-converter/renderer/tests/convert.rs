@@ -127,7 +127,7 @@ fn convert_ink() {
 }
 
 #[test]
-fn convert_truncated_file_should_not_error() {
+fn convert_truncated_file_returns_error() {
     let TestResources {
         output_dir,
         test_data_dir,
