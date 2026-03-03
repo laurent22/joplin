@@ -29,6 +29,30 @@ type Props = {
   setQuery: (v: string) => void;
 };
 
+// UTF-8 バイトオフセット → JS 文字列インデックス のマッピングを構築（純粋関数）
+const buildByteToCharMap = (text: string): number[] => {
+  const encoder = new TextEncoder();
+  const map: number[] = [];
+  let bytePos = 0;
+  let charPos = 0;
+  while (charPos < text.length) {
+    const codePoint = text.codePointAt(charPos)!;
+    const charByteLen = encoder.encode(String.fromCodePoint(codePoint)).length;
+    for (let b = 0; b < charByteLen; b++) {
+      map[bytePos + b] = charPos;
+    }
+    bytePos += charByteLen;
+    charPos += codePoint > 0xffff ? 2 : 1;
+  }
+  map[bytePos] = text.length;
+  return map;
+};
+
+// 正規表現のメタ文字をエスケープする（純粋関数）
+const escapeRegExp = (str: string): string => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 function SearchDialog({ open, onClose, initialSearchInput }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
@@ -42,10 +66,6 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
-  };
-
-  const escapeRegExp = (str: string): string => {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
 
   // GotoAnythingと同じsurroundKeywords実装
@@ -221,35 +241,15 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     return map;
   }, [useMarkdownFts, searchApiResults?.data.noteMap, markdownSearchApiResults?.data.noteMap]);
 
-  // フラグメント抽出をメモ化（検索文字が変わった時のみ再計算）
-  const expandedResults = React.useMemo(() => {
-    const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
-    const results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }> = [];
-    const processedIds = new Set<string>();
-
-    // MarkdownFTS: FTS4 の offsets を使ってヒット箇所を抽出
-    const extractFragmentsFromMarkdownFts = () => {
+  // MarkdownFTS: FTS4 の offsets を使ってヒット箇所を抽出
+  const extractFragmentsFromMarkdownFts = React.useCallback(
+    (
+      queryKeywords: string[],
+      processedIds: Set<string>,
+      results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }>
+    ) => {
       const BODY_COL = 2; // markdown_notes_fts の列順: 0=id(notindexed), 1=title, 2=body
       const CONTEXT = 20;
-      const encoder = new TextEncoder();
-
-      // UTF-8 バイトオフセット → JS 文字列インデックス のマッピングを構築
-      const buildByteToCharMap = (text: string): number[] => {
-        const map: number[] = [];
-        let bytePos = 0;
-        let charPos = 0;
-        while (charPos < text.length) {
-          const codePoint = text.codePointAt(charPos)!;
-          const charByteLen = encoder.encode(String.fromCodePoint(codePoint)).length;
-          for (let b = 0; b < charByteLen; b++) {
-            map[bytePos + b] = charPos;
-          }
-          bytePos += charByteLen;
-          charPos += codePoint > 0xffff ? 2 : 1;
-        }
-        map[bytePos] = text.length;
-        return map;
-      };
 
       (results as MarkdownSearchResult[]).forEach((item) => {
         if (processedIds.has(item.id)) return;
@@ -300,10 +300,17 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
           results_array.push({ item });
         }
       });
-    };
+    },
+    [results, noteMap]
+  );
 
-    // Legacy HTML 検索: matchAll でキーワード出現位置を検索
-    const extractFragmentsFromLegacySearch = () => {
+  // Legacy HTML 検索: matchAll でキーワード出現位置を検索
+  const extractFragmentsFromLegacySearch = React.useCallback(
+    (
+      queryKeywords: string[],
+      processedIds: Set<string>,
+      results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }>
+    ) => {
       results.forEach((item) => {
         if (processedIds.has(item.id)) return;
         processedIds.add(item.id);
@@ -350,17 +357,25 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
           results_array.push({ item });
         }
       });
-    };
+    },
+    [results, noteMap]
+  );
+
+  // フラグメント抽出をメモ化（検索文字が変わった時のみ再計算）
+  const expandedResults = React.useMemo(() => {
+    const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
+    const results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }> = [];
+    const processedIds = new Set<string>();
 
     // 検索モードに応じてフラグメント抽出を実行
     if (useMarkdownFts) {
-      extractFragmentsFromMarkdownFts();
+      extractFragmentsFromMarkdownFts(queryKeywords, processedIds, results_array);
     } else {
-      extractFragmentsFromLegacySearch();
+      extractFragmentsFromLegacySearch(queryKeywords, processedIds, results_array);
     }
 
     return results_array;
-  }, [internalQuery, results, noteMap, useMarkdownFts]);
+  }, [internalQuery, useMarkdownFts, extractFragmentsFromMarkdownFts, extractFragmentsFromLegacySearch]);
 
   // フィルタリング適用（メモ化された結果から軽量にフィルタ）
   const filteredResults = React.useMemo(() => {
