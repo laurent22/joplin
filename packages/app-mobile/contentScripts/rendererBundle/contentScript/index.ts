@@ -55,7 +55,17 @@ const initializeMessenger = (options: RendererWebViewOptions) => {
 
 	return { messenger };
 };
-
+export const handleAnchorClick = (event: MouseEvent) => {
+	if (!(event.target instanceof Element)) return;
+	const anchor = event.target.closest('a');
+	if (anchor && anchor.getAttribute('href')?.startsWith('#') && anchor.hash) {
+		const targetElement = document.getElementById(decodeURIComponent(anchor.hash.slice(1)));
+		if (targetElement) {
+			event.preventDefault();
+			targetElement.scrollIntoView();
+		}
+	}
+};
 // eslint-disable-next-line import/prefer-default-export -- This is a bundle entrypoint
 export const initialize = (options: RendererWebViewOptions) => {
 	const { messenger } = initializeMessenger(options);
@@ -78,5 +88,7 @@ export const initialize = (options: RendererWebViewOptions) => {
 	//   the listener is added to window with window.addEventListener('scroll', ...).
 	document.scrollingElement?.addEventListener('scroll', onMainContentScroll);
 	window.addEventListener('scroll', onMainContentScroll);
+
+	document.addEventListener('click', handleAnchorClick, true);
 };
 
