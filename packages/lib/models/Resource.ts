@@ -219,7 +219,7 @@ export default class Resource extends BaseItem {
 
 		// Clean up the .crypted file now that decryption is complete and
 		// encryption_blob_encrypted = 0 has been persisted to the database.
-		if (encryptedPath !== plainTextPath) {
+		if (encryptedPath !== plainTextPath && await this.fsDriver().exists(encryptedPath)) {
 			try {
 				await this.fsDriver().remove(encryptedPath);
 			} catch (error) {
