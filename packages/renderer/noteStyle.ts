@@ -399,8 +399,8 @@ export default function(theme: any, options: Options = null) {
 			display: inline-block;
 			margin-left: -1.5em;
 			width: 1.5em;
-			pointer-events: all;
-			cursor: pointer;
+			pointer-events: none;
+			cursor: default;
 			color: ${theme.color};
 		}
 
