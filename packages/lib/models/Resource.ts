@@ -208,14 +208,26 @@ export default class Resource extends BaseItem {
 				// at all. It can happen for example when there's a crash between the moment the data
 				// is decrypted and the resource item is updated.
 				this.logger().warn(`Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ${item.id}`);
-				this.fsDriver().move(encryptedPath, plainTextPath);
+				await this.fsDriver().move(encryptedPath, plainTextPath);
 			} else {
 				throw error;
 			}
 		}
 
 		decryptedItem.encryption_blob_encrypted = 0;
-		return super.save(decryptedItem, { autoTimestamp: false });
+		const savedItem = await super.save(decryptedItem, { autoTimestamp: false });
+
+		// Clean up the .crypted file now that decryption is complete and
+		// encryption_blob_encrypted = 0 has been persisted to the database.
+		if (encryptedPath !== plainTextPath) {
+			try {
+				await this.fsDriver().remove(encryptedPath);
+			} catch (error) {
+				this.logger().warn(`Failed to remove .crypted file after decryption: ${error.message}`);
+			}
+		}
+
+		return savedItem;
 	}
 
 	// Prepare the resource by encrypting it if needed.
@@ -232,17 +244,26 @@ export default class Resource extends BaseItem {
 		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
-			return { path: plainTextPath, resource: resource };
+			return { path: plainTextPath, resource: resource, isTemporary: false };
 		}
 
 		const encryptedPath = this.fullPath(resource, true);
-		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
+		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource, isTemporary: false };
 
 		try {
 			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {
 				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
 			});
 		} catch (error) {
+			// Clean up partial .crypted file if encryption failed mid-write
+			try {
+				if (await this.fsDriver().exists(encryptedPath)) {
+					await this.fsDriver().remove(encryptedPath);
+				}
+			} catch (_) {
+				// Best-effort cleanup
+			}
+
 			if (error.code === 'ENOENT') {
 				throw new JoplinError(
 					`Trying to encrypt resource but only metadata is present: ${error.toString()}`, 'fileNotFound',
@@ -253,7 +274,7 @@ export default class Resource extends BaseItem {
 
 		const resourceCopy = { ...resource };
 		resourceCopy.encryption_blob_encrypted = 1;
-		return { path: encryptedPath, resource: resourceCopy };
+		return { path: encryptedPath, resource: resourceCopy, isTemporary: true };
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

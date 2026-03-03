@@ -761,6 +761,7 @@ export default class Synchronizer {
 									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 									local = resource as any;
 									const localResourceContentPath = result.path;
+									const isTemporaryCryptedFile = result.isTemporary;
 
 									if (resource.size >= 10 * 1000 * 1000) {
 										logger.warn(`Uploading a large resource (resourceId: ${local.id}, size:${resource.size} bytes) which may tie up the sync process.`);
@@ -771,9 +772,21 @@ export default class Synchronizer {
 									// that case, it means the resource metadata
 									// (title, filename, etc.) has been changed,
 									// but not the data blob.
-									const syncItem = await BaseItem.syncItem(syncTargetId, resource.id, { fields: ['sync_time', 'force_sync'] });
-									if (!syncItem || syncItem.sync_time < resource.blob_updated_time || syncItem.force_sync) {
-										await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
+									try {
+										const syncItem = await BaseItem.syncItem(syncTargetId, resource.id, { fields: ['sync_time', 'force_sync'] });
+										if (!syncItem || syncItem.sync_time < resource.blob_updated_time || syncItem.force_sync) {
+											await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
+										}
+									} finally {
+										// Clean up temp .crypted file created by fullPathForSyncUpload()
+										// in all exit paths: successful upload, skipped upload, or error.
+										if (isTemporaryCryptedFile) {
+											try {
+												await shim.fsDriver().remove(localResourceContentPath);
+											} catch (cleanupError) {
+												logger.warn(`Failed to remove temp .crypted file after sync upload: ${cleanupError.message}`);
+											}
+										}
 									}
 								} catch (error) {
 									if (isCannotSyncError(error)) {
