@@ -106,7 +106,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			showHelp: false,
 			resultsInBody: false,
 			filterWord: '',
-			useMarkdownSearch: false,
+			useMarkdownSearch: true,
 		};
 
 		this.onMarkdownSearchChange = this.onMarkdownSearchChange.bind(this);
