@@ -216,7 +216,11 @@ export default class Resource extends BaseItem {
 
 		// Clean up the .crypted file now that decryption is complete.
 		if (encryptedPath !== plainTextPath && await this.fsDriver().exists(encryptedPath)) {
-			await this.fsDriver().remove(encryptedPath);
+			try {
+				await this.fsDriver().remove(encryptedPath);
+			} catch (error) {
+				this.logger().warn(`Could not remove temporary encrypted file ${encryptedPath}: ${error.message}`);
+			}
 		}
 
 		decryptedItem.encryption_blob_encrypted = 0;
@@ -668,18 +672,28 @@ export default class Resource extends BaseItem {
 			return;
 		}
 
-		const stats = await this.fsDriver().readDirStats(resourceDir);
+		let stats = null;
+		try {
+			stats = await this.fsDriver().readDirStats(resourceDir);
+		} catch (error) {
+			this.logger().warn(`Resource.cleanupCryptedFiles: could not list ${resourceDir}: ${error.message}`);
+			return;
+		}
 		let removedCount = 0;
 
 		for (const stat of stats) {
 			if (!stat.path.endsWith('.crypted')) continue;
 
-			const id = pathUtils.filename(stat.path);
-			const resource = await this.load(id);
+			try {
+				const id = pathUtils.filename(stat.path);
+				const resource = await this.load(id);
 
-			if (!resource || !resource.encryption_blob_encrypted) {
-				await this.fsDriver().remove(`${resourceDir}/${stat.path}`);
-				removedCount++;
+				if (!resource || !resource.encryption_blob_encrypted) {
+					await this.fsDriver().remove(`${resourceDir}/${stat.path}`);
+					removedCount++;
+				}
+			} catch (error) {
+				this.logger().warn(`Resource.cleanupCryptedFiles: failed for ${stat.path}: ${error.message}`);
 			}
 		}
 

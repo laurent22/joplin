@@ -756,6 +756,8 @@ export default class Synchronizer {
 							} else {
 								try {
 									const remoteContentPath = resourceRemotePath(local.id);
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+									const wasBlobAlreadyEncrypted = !!(local as any).encryption_blob_encrypted;
 									const result = await Resource.fullPathForSyncUpload(local);
 									const resource = result.resource;
 									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -780,8 +782,13 @@ export default class Synchronizer {
 									// created by fullPathForSyncUpload() for
 									// this upload. It is a temporary artifact
 									// and will be re-created on the next sync
-									// if needed.
-									if (resource.encryption_blob_encrypted) {
+									// if needed. We only remove it if the blob
+									// was NOT already encrypted before the call
+									// to fullPathForSyncUpload(), which is what
+									// distinguishes a freshly-created temp file
+									// from a canonical pre-existing encrypted
+									// blob that we must not delete.
+									if (resource.encryption_blob_encrypted && !wasBlobAlreadyEncrypted) {
 										await Resource.fsDriver().remove(localResourceContentPath);
 									}
 								} catch (error) {
