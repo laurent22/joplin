@@ -29,6 +29,30 @@ type Props = {
   setQuery: (v: string) => void;
 };
 
+// UTF-8 バイトオフセット → JS 文字列インデックス のマッピングを構築（純粋関数）
+const buildByteToCharMap = (text: string): number[] => {
+  const encoder = new TextEncoder();
+  const map: number[] = [];
+  let bytePos = 0;
+  let charPos = 0;
+  while (charPos < text.length) {
+    const codePoint = text.codePointAt(charPos)!;
+    const charByteLen = encoder.encode(String.fromCodePoint(codePoint)).length;
+    for (let b = 0; b < charByteLen; b++) {
+      map[bytePos + b] = charPos;
+    }
+    bytePos += charByteLen;
+    charPos += codePoint > 0xffff ? 2 : 1;
+  }
+  map[bytePos] = text.length;
+  return map;
+};
+
+// 正規表現のメタ文字をエスケープする（純粋関数）
+const escapeRegExp = (str: string): string => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 function SearchDialog({ open, onClose, initialSearchInput }: Props) {
   const dialogInputRef = React.useRef<HTMLInputElement | null>(null);
   const [internalQuery, setInternalQuery] = React.useState('');
@@ -42,10 +66,6 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
-  };
-
-  const escapeRegExp = (str: string): string => {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
 
   // GotoAnythingと同じsurroundKeywords実装
@@ -221,49 +241,54 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     return map;
   }, [useMarkdownFts, searchApiResults?.data.noteMap, markdownSearchApiResults?.data.noteMap]);
 
-  // フラグメント抽出をメモ化（検索文字が変わった時のみ再計算）
-  const expandedResults = React.useMemo(() => {
-    const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
-    const results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }> = [];
+  // MarkdownFTS: FTS4 の offsets を使ってヒット箇所を抽出
+  const extractFragmentsFromMarkdownFts = React.useCallback(
+    (
+      queryKeywords: string[],
+      processedIds: Set<string>,
+      results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }>
+    ) => {
+      const BODY_COL = 2; // markdown_notes_fts の列順: 0=id(notindexed), 1=title, 2=body
+      const CONTEXT = 20;
 
-    // 処理時間計測開始
-    // const t0 = performance.now();
+      (results as MarkdownSearchResult[]).forEach((item) => {
+        if (processedIds.has(item.id)) return;
+        processedIds.add(item.id);
 
-    const processedIds = new Set<string>();
+        const noteText = noteMap[item.id];
+        if (!noteText || !item.offsets) {
+          results_array.push({ item });
+          return;
+        }
 
-    results.forEach((item) => {
-      // 既に処理済みのIDはスキップ
-      if (processedIds.has(item.id)) {
-        return;
-      }
-      processedIds.add(item.id);
+        // offsets 文字列をパースして body 列のマッチだけ抽出
+        const nums = item.offsets.split(' ').map(Number);
+        const bodyOffsets: { byteOffset: number; byteLen: number }[] = [];
+        for (let i = 0; i + 3 < nums.length; i += 4) {
+          if (nums[i] === BODY_COL) {
+            bodyOffsets.push({ byteOffset: nums[i + 2], byteLen: nums[i + 3] });
+          }
+        }
 
-      const noteText = noteMap[item.id];
-      if (noteText) {
+        if (bodyOffsets.length === 0) {
+          results_array.push({ item });
+          return;
+        }
+
+        const byteToChar = buildByteToCharMap(noteText);
         const fragments: string[] = [];
         const fragmentSet = new Set<string>();
 
-        // 各キーワードについてnoteText内のすべての出現位置を検索
-        queryKeywords.forEach((keyword) => {
-          if (!keyword) return;
+        bodyOffsets.forEach(({ byteOffset, byteLen }) => {
+          const charStart = byteToChar[byteOffset] ?? 0;
+          const charEnd = byteToChar[byteOffset + byteLen] ?? charStart + 1;
+          const fragStart = Math.max(0, charStart - CONTEXT);
+          const fragEnd = Math.min(noteText.length, charEnd + CONTEXT);
+          const fragment = noteText.slice(fragStart, fragEnd);
 
-          const escapedKeyword = escapeRegExp(keyword);
-          const regex = new RegExp(escapedKeyword, 'gi');
-          const matches = noteText.matchAll(regex);
-
-          for (const match of matches) {
-            const index = match.index!;
-
-            // 前後20文字を含めて取得
-            const start = Math.max(0, index - 20);
-            const end = Math.min(noteText.length, index + keyword.length + 20);
-            const fragment = noteText.slice(start, end);
-
-            // 重複を避けるため、Set で管理
-            if (!fragmentSet.has(fragment)) {
-              fragmentSet.add(fragment);
-              fragments.push(fragment);
-            }
+          if (!fragmentSet.has(fragment)) {
+            fragmentSet.add(fragment);
+            fragments.push(fragment);
           }
         });
 
@@ -272,23 +297,85 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
             results_array.push({ item, fragment, index: idx });
           });
         } else {
-          // フラグメントがない場合はタイトルのみ表示
           results_array.push({ item });
         }
-      } else {
-        // bodyがない場合はタイトルのみ表示
-        results_array.push({ item });
-      }
-    });
+      });
+    },
+    [results, noteMap]
+  );
 
-    // 処理時間計測終了 (ミリ秒)
-    // const t1 = performance.now();
-    // console.log(
-    //   `SearchDialog: fragment extraction took ${(t1 - t0).toFixed(2)}ms for ${results.length} results and ${queryKeywords.length} keywords`
-    // );
+  // Legacy HTML 検索: matchAll でキーワード出現位置を検索
+  const extractFragmentsFromLegacySearch = React.useCallback(
+    (
+      queryKeywords: string[],
+      processedIds: Set<string>,
+      results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }>
+    ) => {
+      results.forEach((item) => {
+        if (processedIds.has(item.id)) return;
+        processedIds.add(item.id);
+
+        const noteText = noteMap[item.id];
+        if (noteText) {
+          const fragments: string[] = [];
+          const fragmentSet = new Set<string>();
+
+          // 各キーワードについて noteText 内のすべての出現位置を検索
+          queryKeywords.forEach((keyword) => {
+            if (!keyword) return;
+
+            const escapedKeyword = escapeRegExp(keyword);
+            const regex = new RegExp(escapedKeyword, 'gi');
+            const matches = noteText.matchAll(regex);
+
+            for (const match of matches) {
+              const index = match.index!;
+
+              // 前後 20 文字を含めて取得
+              const start = Math.max(0, index - 20);
+              const end = Math.min(noteText.length, index + keyword.length + 20);
+              const fragment = noteText.slice(start, end);
+
+              // 重複を避けるため Set で管理
+              if (!fragmentSet.has(fragment)) {
+                fragmentSet.add(fragment);
+                fragments.push(fragment);
+              }
+            }
+          });
+
+          if (fragments.length > 0) {
+            fragments.forEach((fragment, idx) => {
+              results_array.push({ item, fragment, index: idx });
+            });
+          } else {
+            // フラグメントがない場合はタイトルのみ表示
+            results_array.push({ item });
+          }
+        } else {
+          // body がない場合はタイトルのみ表示
+          results_array.push({ item });
+        }
+      });
+    },
+    [results, noteMap]
+  );
+
+  // フラグメント抽出をメモ化（検索文字が変わった時のみ再計算）
+  const expandedResults = React.useMemo(() => {
+    const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
+    const results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }> = [];
+    const processedIds = new Set<string>();
+
+    // 検索モードに応じてフラグメント抽出を実行
+    if (useMarkdownFts) {
+      extractFragmentsFromMarkdownFts(queryKeywords, processedIds, results_array);
+    } else {
+      extractFragmentsFromLegacySearch(queryKeywords, processedIds, results_array);
+    }
 
     return results_array;
-  }, [internalQuery, results, noteMap]);
+  }, [internalQuery, useMarkdownFts, extractFragmentsFromMarkdownFts, extractFragmentsFromLegacySearch]);
 
   // フィルタリング適用（メモ化された結果から軽量にフィルタ）
   const filteredResults = React.useMemo(() => {
