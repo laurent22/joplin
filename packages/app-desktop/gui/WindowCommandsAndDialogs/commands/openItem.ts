@@ -37,21 +37,17 @@ export const runtime = (): CommandRuntime => {
 				// shell.openPath seems to work with file:// urls on Windows,
 				// but doesn't on macOS, so we need to convert it to a path
 				// before passing it to openPath.
-				const decoded = urlDecode(link);
-				const afterProtocol = decoded.substring(7);
+				let decoded = urlDecode(link);
 
-				// Normalize backslashes to forward slashes so fileUriToPath can
-				// handle them correctly. This covers UNC paths like
-				// file://\\server\share and paths like file:///path\to\share.
-				// We skip this when the path starts with a drive letter (e.g.
-				// file://C:\path) because replacing would cause fileUriToPath
-				// to misinterpret the drive letter as a hostname.
+				// On Windows, UNC paths like file://\\server\share have backslashes
+				// right after file:// which makes the URL invalid. Convert them
+				// to forward slashes so fileUriToPath can handle them correctly.
 				// https://github.com/laurent22/joplin/issues/14196
-				const normalized = /^[a-zA-Z][:|]/.test(afterProtocol)
-					? decoded
-					: `file://${afterProtocol.replace(/\\/g, '/')}`;
+				if (decoded.startsWith('file://\\')) {
+					decoded = `file://${decoded.substring(7).replace(/\\/g, '/')}`;
+				}
 
-				const decodedPath = fileUriToPath(normalized, shim.platformName());
+				const decodedPath = fileUriToPath(decoded, shim.platformName());
 				void bridge().openItem(decodedPath);
 			} else if (urlProtocol(link)) {
 				void bridge().openExternal(link);
