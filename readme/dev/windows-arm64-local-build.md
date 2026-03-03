@@ -9,6 +9,7 @@ This workflow is designed to avoid changing global machine configuration.
 - Sets `node-gyp` Visual Studio selection only for the current terminal session.
 - Sets `SKIP_ONENOTE_CONVERTER_BUILD=1` during install to avoid requiring `wasm-pack` on unsupported ARM64 environments.
 - Sets `npm_config_build_from_source=true` and `npm_config_fallback_to_build=true` during install so native modules (notably `sqlite3`) compile locally when no prebuilt binary exists.
+- Uses the standard desktop build CLI (`yarn dist --win --<arch>`) for both ARM64 and x64.
 - Supports ARM64 or x64 build target selection.
 
 ## Files

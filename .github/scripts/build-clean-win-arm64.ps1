@@ -288,31 +288,13 @@ if (-not $SkipDist) {
 		Invoke-NpmPkgSet -Assignment 'build.win.target[1].arch[0]=arm64'
 	}
 
-	if ($TargetArch -eq 'arm64') {
-		# Run explicit pipeline steps for ARM64 to avoid npx resolution quirks and
-		# preserve control over rebuild order.
-		Write-Host 'Running yarn run gulp before-dist ...'
-		Invoke-CorepackYarn -Args @('run', 'gulp', 'before-dist')
-
-		Write-Host 'Running yarn run gulp electronRebuild ...'
-		Invoke-CorepackYarn -Args @('run', 'gulp', 'electronRebuild')
-
-		$builderArgs = @('run', 'electron-builder', '--win', '--arm64')
-		if (-not $Publish) {
-			$builderArgs += '--publish=never'
-		}
-
-		Write-Host "Running yarn $($builderArgs -join ' ') ..."
-		Invoke-CorepackYarn -Args $builderArgs
-	} else {
-		$distArgs = @('dist', '--win', '--x64')
-		if (-not $Publish) {
-			$distArgs += '--publish=never'
-		}
-
-		Write-Host "Running yarn $($distArgs -join ' ') ..."
-		Invoke-CorepackYarn -Args $distArgs
+	$distArgs = @('dist', '--win', "--$TargetArch")
+	if (-not $Publish) {
+		$distArgs += '--publish=never'
 	}
+
+	Write-Host "Running yarn $($distArgs -join ' ') ..."
+	Invoke-CorepackYarn -Args $distArgs
 }
 
 Write-Host 'Build script completed.'
