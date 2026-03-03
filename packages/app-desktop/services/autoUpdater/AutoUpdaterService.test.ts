@@ -79,4 +79,28 @@ describe('AutoUpdaterService', () => {
 		expect(release).toBeDefined();
 		expect(() => service.getDownloadUrlForPlatform(release, 'linux', 'amd64')).toThrow('The AutoUpdaterService does not support the following platform: linux');
 	});
+
+	it('should throw a user-friendly error when rate limited', async () => {
+		global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: false,
+				status: 403,
+				text: () => Promise.resolve('{"message":"API rate limit exceeded for 1.2.3.4.","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}'),
+			}),
+		) as jest.Mock;
+
+		await expect(service.fetchLatestRelease(false)).rejects.toThrow('rate limit has been exceeded');
+	});
+
+	it('should throw a user-friendly error on generic HTTP failure', async () => {
+		global.fetch = jest.fn(() =>
+			Promise.resolve({
+				ok: false,
+				status: 500,
+				text: () => Promise.resolve('Internal Server Error'),
+			}),
+		) as jest.Mock;
+
+		await expect(service.fetchLatestRelease(false)).rejects.toThrow('Error 500');
+	});
 });

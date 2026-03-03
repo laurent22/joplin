@@ -29,7 +29,13 @@ async function fetchLatestReleases() {
 
 	if (!response.ok) {
 		const responseText = await response.text();
-		throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
+		logger.error(`Cannot get latest release info (${response.status}): ${responseText.substr(0, 500)}`);
+
+		if ((response.status === 403 || response.status === 429) && responseText.includes('rate limit')) {
+			throw new Error(_('Could not check for updates. The server rate limit has been exceeded — this is a temporary issue, please try again later.'));
+		}
+
+		throw new Error(_('Could not check for updates. Please try again later (Error %s).', String(response.status)));
 	}
 
 	return (await response.json()) as GitHubRelease[];
