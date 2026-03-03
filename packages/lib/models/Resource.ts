@@ -208,10 +208,15 @@ export default class Resource extends BaseItem {
 				// at all. It can happen for example when there's a crash between the moment the data
 				// is decrypted and the resource item is updated.
 				this.logger().warn(`Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ${item.id}`);
-				this.fsDriver().move(encryptedPath, plainTextPath);
+				await this.fsDriver().move(encryptedPath, plainTextPath);
 			} else {
 				throw error;
 			}
+		}
+
+		// Clean up the .crypted file now that decryption is complete.
+		if (encryptedPath !== plainTextPath && await this.fsDriver().exists(encryptedPath)) {
+			await this.fsDriver().remove(encryptedPath);
 		}
 
 		decryptedItem.encryption_blob_encrypted = 0;
@@ -653,6 +658,34 @@ export default class Resource extends BaseItem {
 
 	public static load(id: string, options: LoadOptions = null): Promise<ResourceEntity> {
 		return super.load(id, options);
+	}
+
+	// We remove leftover .crypted files from the resources directory.
+	public static async cleanupCryptedFiles() {
+		const resourceDir = this.baseDirectoryPath();
+
+		if (!resourceDir || !await this.fsDriver().exists(resourceDir)) {
+			return;
+		}
+
+		const stats = await this.fsDriver().readDirStats(resourceDir);
+		let removedCount = 0;
+
+		for (const stat of stats) {
+			if (!stat.path.endsWith('.crypted')) continue;
+
+			const id = pathUtils.filename(stat.path);
+			const resource = await this.load(id);
+
+			if (!resource || !resource.encryption_blob_encrypted) {
+				await this.fsDriver().remove(`${resourceDir}/${stat.path}`);
+				removedCount++;
+			}
+		}
+
+		if (removedCount > 0) {
+			this.logger().info(`Resource.cleanupCryptedFiles: removed ${removedCount} leftover .crypted file(s)`);
+		}
 	}
 
 }

@@ -775,6 +775,15 @@ export default class Synchronizer {
 									if (!syncItem || syncItem.sync_time < resource.blob_updated_time || syncItem.force_sync) {
 										await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
 									}
+
+									// We clean up the .crypted file that was
+									// created by fullPathForSyncUpload() for
+									// this upload. It is a temporary artifact
+									// and will be re-created on the next sync
+									// if needed.
+									if (resource.encryption_blob_encrypted) {
+										await Resource.fsDriver().remove(localResourceContentPath);
+									}
 								} catch (error) {
 									if (isCannotSyncError(error)) {
 										await handleCannotSyncItem(ItemClass, syncTargetId, local, error.message);

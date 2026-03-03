@@ -875,6 +875,11 @@ export default class BaseApplication {
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
+		// We clean up leftover .crypted files from previous sessions. These
+		// files accumulate when decryption or sync upload completes but the
+		// .crypted temporary file is not removed.
+		await Resource.cleanupCryptedFiles();
+
 		ResourceFetcher.instance().setFileApi(() => {
 			return reg.syncTarget().fileApi();
 		});
