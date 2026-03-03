@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
-import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
+import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease, handleReleaseResponseError } from './utils/checkForUpdatesUtils';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { compareVersions } from 'compare-versions';
 const packageInfo: PackageInfo = require('./packageInfo.js');
@@ -30,12 +30,7 @@ async function fetchLatestReleases() {
 	if (!response.ok) {
 		const responseText = await response.text();
 		logger.error(`Cannot get latest release info (${response.status}): ${responseText.substr(0, 500)}`);
-
-		if ((response.status === 403 || response.status === 429) && responseText.includes('rate limit')) {
-			throw new Error(_('Could not check for updates. The server rate limit has been exceeded — this is a temporary issue, please try again later.'));
-		}
-
-		throw new Error(_('Could not check for updates. Please try again later (Error %s).', String(response.status)));
+		handleReleaseResponseError(response.status, responseText);
 	}
 
 	return (await response.json()) as GitHubRelease[];

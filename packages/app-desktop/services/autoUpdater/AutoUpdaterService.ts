@@ -4,7 +4,7 @@ import path = require('path');
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import type ShimType from '@joplin/lib/shim';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
-import { GitHubRelease, GitHubReleaseAsset } from '../../utils/checkForUpdatesUtils';
+import { GitHubRelease, GitHubReleaseAsset, handleReleaseResponseError } from '../../utils/checkForUpdatesUtils';
 import * as semver from 'semver';
 
 export enum AutoUpdaterEvents {
@@ -116,12 +116,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		if (!response.ok) {
 			const responseText = await response.text();
 			this.logger_.error(`Cannot get latest release info (${response.status}): ${responseText.substr(0, 500)}`);
-
-			if ((response.status === 403 || response.status === 429) && responseText.includes('rate limit')) {
-				throw new Error('Could not check for updates. The server rate limit has been exceeded — this is a temporary issue, please try again later.');
-			}
-
-			throw new Error(`Could not check for updates. Please try again later (Error ${response.status}).`);
+			handleReleaseResponseError(response.status, responseText);
 		}
 
 		const releases: GitHubRelease[] = await response.json();

@@ -139,3 +139,14 @@ export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform
 
 	return output;
 };
+
+// Throws a user-friendly error based on the HTTP response status and body.
+// Detects rate-limit errors (403/429) with case-insensitive matching and
+// throws a specific message; otherwise throws a generic error with the status code.
+export const handleReleaseResponseError = (status: number, responseText: string): never => {
+	if ((status === 403 || status === 429) && responseText.toLowerCase().includes('rate limit')) {
+		throw new Error('Could not check for updates. The server rate limit has been exceeded — this is a temporary issue, please try again later.');
+	}
+
+	throw new Error(`Could not check for updates. Please try again later (Error ${status}).`);
+};

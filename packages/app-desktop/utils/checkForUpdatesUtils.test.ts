@@ -1,4 +1,4 @@
-import { extractVersionInfo, Release, Platform, Architecture, GitHubRelease } from './checkForUpdatesUtils';
+import { extractVersionInfo, Release, Platform, Architecture, GitHubRelease, handleReleaseResponseError } from './checkForUpdatesUtils';
 import { releases1, releases2 } from './checkForUpdatesUtilsTestData';
 
 describe('checkForUpdates', () => {
@@ -127,7 +127,7 @@ describe('checkForUpdates', () => {
 		};
 
 		const releaseData = releaseDataWithExtension('-arm64.DMG');
-		const releaseInfo = extractVersionInfo([releaseData], 'darwin', 'arm64', false, { });
+		const releaseInfo = extractVersionInfo([releaseData], 'darwin', 'arm64', false, {});
 
 		// Should match, with uppercase .DMG
 		expect(releaseInfo).toMatchObject({
@@ -139,7 +139,7 @@ describe('checkForUpdates', () => {
 
 		// Should not match when the extension is invalid
 		expect(
-			extractVersionInfo([releaseDataWithExtension('-arm64.dmG')], 'darwin', 'arm64', false, { }),
+			extractVersionInfo([releaseDataWithExtension('-arm64.dmG')], 'darwin', 'arm64', false, {}),
 		).toMatchObject({
 			version: '2.12.4',
 			downloadUrl: null,
@@ -148,4 +148,28 @@ describe('checkForUpdates', () => {
 		});
 	});
 
+	it('should throw rate limit error for 403 with rate limit text', () => {
+		expect(() => handleReleaseResponseError(403, '{"message":"API rate limit exceeded"}'))
+			.toThrow('rate limit has been exceeded');
+	});
+
+	it('should throw rate limit error for 429 with rate limit text', () => {
+		expect(() => handleReleaseResponseError(429, 'Rate Limit reached'))
+			.toThrow('rate limit has been exceeded');
+	});
+
+	it('should detect rate limit case-insensitively', () => {
+		expect(() => handleReleaseResponseError(403, 'Rate LIMIT exceeded'))
+			.toThrow('rate limit has been exceeded');
+	});
+
+	it('should throw generic error for non-rate-limit errors', () => {
+		expect(() => handleReleaseResponseError(500, 'Internal Server Error'))
+			.toThrow('Error 500');
+	});
+
+	it('should throw generic error for 403 without rate limit text', () => {
+		expect(() => handleReleaseResponseError(403, 'Forbidden'))
+			.toThrow('Error 403');
+	});
 });
