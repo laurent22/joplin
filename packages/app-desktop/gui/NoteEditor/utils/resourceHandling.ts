@@ -177,6 +177,8 @@ const processImagesInPastedHtml = async (html: string) => {
 							await shim.fsDriver().writeFile(filePath, base64Data, 'base64');
 							const createdResource = await shim.createResourceFromPath(filePath);
 							mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+						} catch (writeError) {
+							throw new Error(`processPastedHtml: Failed to write or create resource from pasted image: ${writeError.message}`);
 						} finally {
 							try {
 								await shim.fsDriver().remove(filePath);
