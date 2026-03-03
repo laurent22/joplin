@@ -96,4 +96,17 @@ describe('HtmlToMd', () => {
 		expect(htmlToMd.parse('> 1 _2_ 3.pdf', { disableEscapeContent: false })).toBe('\\> 1 \\_2_ 3.pdf');
 	});
 
+	it('should support tightLists option', async () => {
+		const htmlToMd = new HtmlToMd();
+		const html = '<ul><li><p><strong>Item 1</strong></p></li><li><p><strong>Item 2</strong></p></li><li><p><strong>Item 3</strong></p></li></ul>';
+
+		// Without tightLists, paragraphs inside list items produce extra blank lines
+		const looseResult = htmlToMd.parse(html, { tightLists: false });
+		expect(looseResult).toContain('\n    \n');
+
+		// With tightLists, list items are compact without blank lines
+		const tightResult = htmlToMd.parse(html, { tightLists: true });
+		expect(tightResult).toBe('- **Item 1**\n- **Item 2**\n- **Item 3**');
+	});
+
 });

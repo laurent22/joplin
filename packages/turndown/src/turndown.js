@@ -54,6 +54,7 @@ export default function TurndownService (options) {
     preformattedCode: false,
     preserveNestedTables: false,
     preserveColorStyles: false,
+    tightLists: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
