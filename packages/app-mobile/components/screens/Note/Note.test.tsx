@@ -35,10 +35,10 @@ interface WrapperProps {
 
 let store: Store<AppState>;
 
-const mockNavigation = { state: { } };
+const mockNavigation = { state: {} };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
 	return <TestProviderStack store={store}>
-		<NoteScreen navigation={mockNavigation}/>
+		<NoteScreen navigation={mockNavigation} />
 	</TestProviderStack>;
 };
 
@@ -445,13 +445,13 @@ describe('screens/Note', () => {
 		await act(async () => {
 			await openExistingNote(noteId);
 		});
-		const secondRender = render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 		const titleInput = await screen.findByDisplayValue('Test note');
 		expect(titleInput).toBeVisible();
 		// Should still be in the same mode
 		await expectToBeEditing(panes.includes('editor'));
 		expect(store.getState().noteVisiblePanes).toEqual(panes);
-		secondRender.unmount();
+		unmount();
 	});
 
 	it.each([
@@ -481,13 +481,13 @@ describe('screens/Note', () => {
 		await act(async () => {
 			await openExistingNote(note2Id);
 		});
-		const render2 = render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 		const titleInput2 = await screen.findByDisplayValue('Note 2');
 		expect(titleInput2).toBeVisible();
 		// Note 2 should be in the same mode
 		await expectToBeEditing(panes.includes('editor'));
 		expect(store.getState().noteVisiblePanes).toEqual(panes);
-		render2.unmount();
+		unmount();
 	});
 
 	it('should set the initial editor cursor location to the specified hash', async () => {
