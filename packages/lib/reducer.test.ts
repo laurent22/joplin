@@ -787,7 +787,6 @@ describe('reducer', () => {
 		}
 	});
 
-	// Regression test for #10589.
 	it.each([
 		[true, false],
 		[undefined, false],
@@ -925,7 +924,7 @@ describe('reducer', () => {
 		expect(state.windowId).toBe(defaultWindowId);
 		expect(state.selectedNoteIds).toEqual([notes[0].id]);
 	});
-	// Regression test for #13883.
+
 	it.each([
 		undefined,
 		false,
