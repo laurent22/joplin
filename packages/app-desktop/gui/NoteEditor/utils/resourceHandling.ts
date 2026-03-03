@@ -225,6 +225,7 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 			const normalized = altText
 				.replace(/&#(?:10|13);|&#x(?:0*[aAdD]);/gi, ' ')
 				// eslint-disable-next-line no-control-regex
+				// biome-ignore lint/suspicious/noControlCharactersInRegex: intentional sanitisation of control chars
 				.replace(/[\r\n\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ' ')
 				.replace(/ {2,}/g, ' ')
 				.trim();
