@@ -8,6 +8,7 @@ interface Props {
 	multiline: boolean;
 	text: string;
 	updateState: (showMultilineToggle: boolean, multiline: boolean)=> void;
+	readOnly: boolean;
 }
 
 // This component can be used to estimate when text wrapping is required for a TextInput or Text element, to conditionally display a button to enable / disable
@@ -33,8 +34,9 @@ const TextWrapCalculator: React.FC<Props> = props => {
 				const showToggle = numberOfLines > 1;
 				let enableMultiline;
 				if (props.showMultilineToggle === null) {
-					// Upon opening the screen, multiline should always be disabled, so long titles start collapsed and it does not open the keyboard automatically
-					enableMultiline = false;
+					// Upon opening the screen, multiline should always be disabled, so long titles start collapsed and it does not open the keyboard automatically.
+					// If the field is readonly, the keyboard opening is a non issue, and multiline should be enabled when not expandable to make text selectable
+					enableMultiline = props.readOnly ? !showToggle : false;
 				} else {
 					// In every other case, retain the value of multiline so that it does not change while the user is typing, but only showMultilineToggle changes
 					enableMultiline = props.multiline;
