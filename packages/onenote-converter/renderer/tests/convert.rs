@@ -133,13 +133,15 @@ fn convert_truncated_file_should_not_error() {
         test_data_dir,
     } = setup("broken_truncated");
 
-    // A truncated/broken .one file should not return an error -- it should
-    // be skipped gracefully.
+    // A truncated/broken .one file should return an error with a clear message
+    // rather than panicking or crashing.
     let result = convert(
         &test_data_dir.join("broken_truncated.one").to_string_lossy(),
         &output_dir.to_string_lossy(),
         &test_data_dir.to_string_lossy(),
     );
 
-    assert!(result.is_ok());
+    assert!(result.is_err());
+    let error_message = format!("{:?}", result.unwrap_err());
+    assert!(error_message.contains("Unexpected end of file"));
 }

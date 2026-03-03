@@ -1,4 +1,4 @@
-use crate::errors::Result;
+use crate::errors::{ErrorKind, Result};
 use crate::templates::section::TocEntry;
 use crate::{page, templates};
 use parser::page::Page;
@@ -84,13 +84,15 @@ impl Renderer {
         log!("ToC: {}", toc_path);
 
         if errors_path.is_some() {
-            log_warn!(
+            Err(ErrorKind::RenderFailed(format!(
                 "Some pages failed to render. First error: {:?}. Full error report written to {}",
                 errors.first(),
                 ERRORS_NOTE_NAME,
-            );
+            ))
+            .into())
+        } else {
+            Ok(RenderedSection { section_dir })
         }
-        Ok(RenderedSection { section_dir })
     }
 
     fn render_page_to_file<F>(
