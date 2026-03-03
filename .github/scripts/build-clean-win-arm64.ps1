@@ -280,24 +280,30 @@ if (-not $SkipDist) {
 
 	$env:npm_config_arch = $TargetArch
 	$env:npm_config_target_arch = $TargetArch
+	$packageJsonPath = Join-Path $desktopPath 'package.json'
+	$packageJsonBackup = [System.IO.File]::ReadAllBytes($packageJsonPath)
 
-	Invoke-NpmPkgSet -Assignment 'build.win.artifactName=${productName}-${version}-${arch}.${ext}'
-	Invoke-NpmPkgSet -Assignment 'build.portable.artifactName=${productName}Portable-${version}-${arch}.${ext}'
+	try {
+		Invoke-NpmPkgSet -Assignment 'build.win.artifactName=${productName}-${version}-${arch}.${ext}'
+		Invoke-NpmPkgSet -Assignment 'build.portable.artifactName=${productName}Portable-${version}-${arch}.${ext}'
 
-	if ($TargetArch -eq 'arm64') {
-		Invoke-NpmPkgSet -Assignment 'build.win.target[0].target=nsis'
-		Invoke-NpmPkgSet -Assignment 'build.win.target[0].arch[0]=arm64'
-		Invoke-NpmPkgSet -Assignment 'build.win.target[1].target=portable'
-		Invoke-NpmPkgSet -Assignment 'build.win.target[1].arch[0]=arm64'
+		if ($TargetArch -eq 'arm64') {
+			Invoke-NpmPkgSet -Assignment 'build.win.target[0].target=nsis'
+			Invoke-NpmPkgSet -Assignment 'build.win.target[0].arch[0]=arm64'
+			Invoke-NpmPkgSet -Assignment 'build.win.target[1].target=portable'
+			Invoke-NpmPkgSet -Assignment 'build.win.target[1].arch[0]=arm64'
+		}
+
+		$distArgs = @('dist', '--win', "--$TargetArch")
+		if (-not $Publish) {
+			$distArgs += '--publish=never'
+		}
+
+		Write-Host "Running yarn $($distArgs -join ' ') ..."
+		Invoke-CorepackYarn -Args $distArgs
+	} finally {
+		[System.IO.File]::WriteAllBytes($packageJsonPath, $packageJsonBackup)
 	}
-
-	$distArgs = @('dist', '--win', "--$TargetArch")
-	if (-not $Publish) {
-		$distArgs += '--publish=never'
-	}
-
-	Write-Host "Running yarn $($distArgs -join ' ') ..."
-	Invoke-CorepackYarn -Args $distArgs
 }
 
 Write-Host 'Build script completed.'
