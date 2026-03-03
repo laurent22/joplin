@@ -718,8 +718,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
 
 			if (explicitReloadRequired) {
-				void shared.reloadNote(this);
-				this.refreshKey = this.props.editorNoteReloadTimeRequest;
+				void this.reloadNoteAndUpdateRefreshKey();
 			}
 
 			if (explicitReloadRequired || (editorPlugin && editorPluginIdsChanged)) {
@@ -772,6 +771,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			type: 'SET_NOTE_EDITOR_VISIBLE',
 			visible: false,
 		});
+	}
+
+	private async reloadNoteAndUpdateRefreshKey() {
+		await shared.reloadNote(this);
+		this.refreshKey = this.props.editorNoteReloadTimeRequest;
 	}
 
 	private title_changeText(text: string) {
@@ -1806,6 +1810,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					multiline={this.state.multiline}
 					text={note.title}
 					updateState={textWrapCalculator_updateState}
+					readOnly={false}
 				/>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput

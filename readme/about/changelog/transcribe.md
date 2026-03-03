@@ -1,5 +1,9 @@
 # Transcribe Changelog
 
+## [transcribe-v3.6.6](https://github.com/laurent22/joplin/releases/tag/transcribe-v3.6.6) - 2026-02-26T21:08:33Z
+
+- Improved: Upgraded image to node: 24-bookworm to fix build issue (513341f)
+
 ## [transcribe-v3.6.5](https://github.com/laurent22/joplin/releases/tag/transcribe-v3.6.5) - 2026-02-26T15:06:49Z
 
 - Fixed: Fixed location of llamacpp library (df10bbd)
