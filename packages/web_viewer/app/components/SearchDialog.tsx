@@ -225,14 +225,11 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
   const expandedResults = React.useMemo(() => {
     const queryKeywords = internalQuery.split(' ').filter((k) => k.trim());
     const results_array: Array<{ item: AnySearchResult; fragment?: string; index?: number }> = [];
-
     const processedIds = new Set<string>();
 
-    if (useMarkdownFts) {
-      // MarkdownFTS: FTS4 の offsets を使ってヒット箇所を抽出する
-      // offsets 文字列形式: "col term byteOffset byteLen ..." (4 整数 × マッチ数)
-      // markdown_notes_fts の列順: 0=id(notindexed), 1=title, 2=body
-      const BODY_COL = 2;
+    // MarkdownFTS: FTS4 の offsets を使ってヒット箇所を抽出
+    const extractFragmentsFromMarkdownFts = () => {
+      const BODY_COL = 2; // markdown_notes_fts の列順: 0=id(notindexed), 1=title, 2=body
       const CONTEXT = 20;
       const encoder = new TextEncoder();
 
@@ -303,8 +300,10 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
           results_array.push({ item });
         }
       });
-    } else {
-      // Legacy HTML 検索: matchAll でキーワード出現位置を検索
+    };
+
+    // Legacy HTML 検索: matchAll でキーワード出現位置を検索
+    const extractFragmentsFromLegacySearch = () => {
       results.forEach((item) => {
         if (processedIds.has(item.id)) return;
         processedIds.add(item.id);
@@ -351,6 +350,13 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
           results_array.push({ item });
         }
       });
+    };
+
+    // 検索モードに応じてフラグメント抽出を実行
+    if (useMarkdownFts) {
+      extractFragmentsFromMarkdownFts();
+    } else {
+      extractFragmentsFromLegacySearch();
     }
 
     return results_array;
