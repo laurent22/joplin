@@ -51,7 +51,6 @@ interface SearchResult {
 	path?: string;
 	type?: number;
 	key: string;
-	offsets?: string;
 }
 
 interface Props {
@@ -72,6 +71,7 @@ interface State {
 	showHelp: boolean;
 	resultsInBody: boolean;
 	filterWord: string;
+	useMarkdownSearch: boolean;
 }
 
 // 検索結果クリック時にgotoItemへ渡す型
@@ -109,8 +109,6 @@ class Dialog extends React.PureComponent<Props, State> {
 	private itemListRef: any;
 	private listUpdateIID_: any;
 	private markupToHtml_: any;
-	private useMarkdownSearch_ = false;
-	private markdownCheckboxRef_ = React.createRef<HTMLInputElement>();
 
 	constructor(props: Props) {
 		super(props);
@@ -127,6 +125,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			showHelp: false,
 			resultsInBody: false,
 			filterWord: '',
+			useMarkdownSearch: false,
 		};
 
 		this.onMarkdownSearchChange = this.onMarkdownSearchChange.bind(this);
@@ -215,10 +214,6 @@ class Dialog extends React.PureComponent<Props, State> {
 	componentDidMount() {
 		document.addEventListener('keydown', this.onKeyDown);
 
-		if (this.markdownCheckboxRef_.current) {
-			this.markdownCheckboxRef_.current.addEventListener('change', this.onMarkdownSearchChange);
-		}
-
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: 'gotoAnything',
@@ -228,10 +223,6 @@ class Dialog extends React.PureComponent<Props, State> {
 	componentWillUnmount() {
 		if (this.listUpdateIID_) shim.clearTimeout(this.listUpdateIID_);
 		document.removeEventListener('keydown', this.onKeyDown);
-
-		if (this.markdownCheckboxRef_.current) {
-			this.markdownCheckboxRef_.current.removeEventListener('change', this.onMarkdownSearchChange);
-		}
 
 		this.props.dispatch({
 			type: 'VISIBLE_DIALOGS_REMOVE',
@@ -263,10 +254,10 @@ class Dialog extends React.PureComponent<Props, State> {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-
-
-	onMarkdownSearchChange() {
-		this.useMarkdownSearch_ = this.markdownCheckboxRef_.current?.checked ?? false;
+	onMarkdownSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+		this.setState({ useMarkdownSearch: event.target.checked }, () => {
+			if (this.state.query) this.scheduleListUpdate();
+		});
 	}
 
 	input_onChange(event: any) {
@@ -365,7 +356,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = this.makeSearchQuery(this.state.query);
 
-				if (this.useMarkdownSearch_) {
+				if (this.state.useMarkdownSearch) {
 					// Markdown search via markdown_notes_fts
 					results = await SearchEngine.instance().searchMarkdown(searchQuery);
 					resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
@@ -778,7 +769,7 @@ class Dialog extends React.PureComponent<Props, State> {
 						<label style={{ marginRight: 8 }}>フィルタ</label>
 						<input type="text" style={{ flex: 1, width: '100%' }} onKeyDown={this.filterOnKeyDown}/>
 						<label style={{ marginLeft: 12, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-							<input type="checkbox" ref={this.markdownCheckboxRef_} style={{ marginRight: 4 }} />
+							<input type="checkbox" checked={this.state.useMarkdownSearch} onChange={this.onMarkdownSearchChange} style={{ marginRight: 4 }} />
 							Markdown検索
 						</label>
 					</div>
