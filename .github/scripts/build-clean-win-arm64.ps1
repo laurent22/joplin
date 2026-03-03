@@ -286,13 +286,10 @@ if (-not $SkipDist) {
 	try {
 		Invoke-NpmPkgSet -Assignment 'build.win.artifactName=${productName}-${version}-${arch}.${ext}'
 		Invoke-NpmPkgSet -Assignment 'build.portable.artifactName=${productName}Portable-${version}-${arch}.${ext}'
-
-		if ($TargetArch -eq 'arm64') {
-			Invoke-NpmPkgSet -Assignment 'build.win.target[0].target=nsis'
-			Invoke-NpmPkgSet -Assignment 'build.win.target[0].arch[0]=arm64'
-			Invoke-NpmPkgSet -Assignment 'build.win.target[1].target=portable'
-			Invoke-NpmPkgSet -Assignment 'build.win.target[1].arch[0]=arm64'
-		}
+		Invoke-NpmPkgSet -Assignment 'build.win.target[0].target=nsis'
+		Invoke-NpmPkgSet -Assignment "build.win.target[0].arch[0]=$TargetArch"
+		Invoke-NpmPkgSet -Assignment 'build.win.target[1].target=portable'
+		Invoke-NpmPkgSet -Assignment "build.win.target[1].arch[0]=$TargetArch"
 
 		$distArgs = @('dist', '--win', "--$TargetArch")
 		if (-not $Publish) {

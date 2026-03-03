@@ -1,7 +1,14 @@
 const execCommand = require('./execCommand');
 
+const targetArch = () => {
+	const envArch = process.env.npm_config_arch || process.env.NPM_CONFIG_ARCH || process.env.npm_config_target_arch || process.env.NPM_CONFIG_TARGET_ARCH;
+	if (envArch) return envArch.toLowerCase();
+
+	return process.arch.toLowerCase();
+};
+
 const isArm64 = () => {
-	return process.arch === 'arm64';
+	return targetArch() === 'arm64';
 };
 
 const isWindows = () => {
