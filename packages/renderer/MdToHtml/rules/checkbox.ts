@@ -27,16 +27,15 @@ function pluginAssets(theme: any) {
 					position: relative;
 					top: 1px;
 				}
-				
-				ul.joplin-checklist {
-					list-style:none;
-				}
-
 				/*
 					FOR THE RICH TEXT EDITOR
 				*/
 
-				ul.joplin-checklist li::before {
+				.jop-tinymce ul.joplin-checklist {
+					list-style:none;
+				}
+
+				.jop-tinymce ul.joplin-checklist li::before {
 					content:"\\f14a";
 					font-family:"Font Awesome 5 Free";
 					background-size: 16px 16px;
@@ -49,7 +48,7 @@ function pluginAssets(theme: any) {
 					color: ${theme.color};
 				}
 
-				.joplin-checklist li:not(.checked)::before {
+				.jop-tinymce .joplin-checklist li:not(.checked)::before {
 					content:"\\f0c8";
 				}`,
 		},

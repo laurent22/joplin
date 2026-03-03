@@ -674,11 +674,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const options: any = {
-			pluginAssets: [
-				// Font Awesome is required to render joplin-checklist icons (e.g. inside tables stored as HTML)
-				{ path: `${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`, mime: 'text/css', name: 'fontawesome/all.min.css' },
-				...renderedBody.pluginAssets,
-			],
+			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 			markupLineCount: editorRef.current?.lineCount() || 0,
 		};

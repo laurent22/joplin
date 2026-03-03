@@ -389,6 +389,25 @@ export default function(theme: any, options: Options = null) {
 			opacity: 0.5;
 		}
 
+		ul.joplin-checklist {
+			list-style: none;
+			padding-left: 1.5em;
+		}
+
+		ul.joplin-checklist li::before {
+			content: "☑ ";
+			display: inline-block;
+			margin-left: -1.5em;
+			width: 1.5em;
+			pointer-events: all;
+			cursor: pointer;
+			color: ${theme.color};
+		}
+
+		ul.joplin-checklist li:not(.checked)::before {
+			content: "☐ ";
+		}
+
 		.exported-note {
 			padding: 1em;
 		}
