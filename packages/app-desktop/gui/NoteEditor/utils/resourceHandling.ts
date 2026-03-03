@@ -179,9 +179,7 @@ const processImagesInPastedHtml = async (html: string) => {
 							mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
 						} finally {
 							try {
-								if (await shim.fsDriver().exists(filePath)) {
-									await shim.fsDriver().remove(filePath);
-								}
+								await shim.fsDriver().remove(filePath);
 							} catch (cleanupError) {
 								logger.warn('processPastedHtml: Error removing temporary file.', cleanupError);
 							}
