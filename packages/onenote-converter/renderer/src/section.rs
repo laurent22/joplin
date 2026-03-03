@@ -16,7 +16,7 @@ pub(crate) struct RenderedSection {
     pub(crate) section_dir: String,
 }
 
-const ERRORS_NOTE_NAME: &str = "âš ï¸ Errors âš ï¸";
+const ERRORS_NOTE_NAME: &str = "⚠️ Errors ⚠️";
 
 impl Renderer {
     pub fn new() -> Self {
