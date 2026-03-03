@@ -10,6 +10,7 @@ import TagList from '../TagList';
 import { _ } from '@joplin/lib/locale';
 import { useCallback } from 'react';
 import KeymapService from '@joplin/lib/services/KeymapService';
+import bridge from '../../services/bridge';
 
 interface Props {
 	themeId: number;
@@ -17,6 +18,7 @@ interface Props {
 	noteId: string;
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	selectedNoteTags: TagEntity[];
+	sourceUrl?: string;
 }
 
 interface StatusIndicatorProps {
@@ -67,6 +69,36 @@ const StatusBar: React.FC<Props> = props => {
 		</div>;
 	}
 
+	function renderSourceUrl() {
+		if (!props.sourceUrl) return null;
+
+		const allowedSchemes = ['http:', 'https:', 'mailto:'];
+		let urlScheme = '';
+		try {
+			urlScheme = new URL(props.sourceUrl).protocol;
+		} catch (_e) {
+			return null;
+		}
+		if (!allowedSchemes.includes(urlScheme)) return null;
+
+		const theme = themeStyle(props.themeId);
+		const onSourceUrlClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+			event.preventDefault();
+			void bridge().openExternal(props.sourceUrl);
+		};
+
+		const displayUrl = props.sourceUrl.length > 50 ? `${props.sourceUrl.substring(0, 50)}...` : props.sourceUrl;
+
+		return (
+			<div style={{ display: 'flex', alignItems: 'center', marginLeft: 10 }}>
+				<i className='icon-link' style={{ ...theme.clickableTextStyle, marginRight: 5, fontSize: 12 }}></i>
+				<a href={props.sourceUrl} onClick={onSourceUrlClick} style={{ ...theme.clickableTextStyle, textDecoration: 'underline' }} title={props.sourceUrl}>
+					{displayUrl}
+				</a>
+			</div>
+		);
+	}
+
 	const keyboardStatus = <StatusIndicator
 		commandName='toggleTabMovesFocus'
 		label={props.tabMovesFocus ? _('Tab moves focus') : _('Tab indents')}
@@ -75,6 +107,7 @@ const StatusBar: React.FC<Props> = props => {
 
 	return <div className='editor-status-bar'>
 		{renderTagBar()}
+		{renderSourceUrl()}
 		<div className='spacer'/>
 		{keyboardStatus}
 	</div>;
