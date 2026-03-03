@@ -48,8 +48,9 @@ const removeChecklistItemWrapperParagraphs = (container: HTMLElement) => {
 
 		// Hoist nested sublists out of the <div> so Turndown sees <li>
 		// as their direct parent and uses single newlines.
-		for (const nested of content.querySelectorAll(':scope > ul, :scope > ol')) {
-			content.after(nested);
+		const nestedLists = content.querySelectorAll(':scope > ul, :scope > ol');
+		for (let i = nestedLists.length - 1; i >= 0; i--) {
+			content.after(nestedLists[i]);
 		}
 
 		// Replace <div><p>text</p></div> with <span>text</span>
