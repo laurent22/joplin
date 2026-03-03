@@ -241,6 +241,17 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
     return map;
   }, [useMarkdownFts, searchApiResults?.data.noteMap, markdownSearchApiResults?.data.noteMap]);
 
+  // noteMap から byteToCharMap のキャッシュを事前に構築（メモ化）
+  const byteToCharMapCache = React.useMemo(() => {
+    const cache: Record<string, number[]> = {};
+    Object.entries(noteMap).forEach(([noteId, noteText]) => {
+      if (noteText) {
+        cache[noteId] = buildByteToCharMap(noteText);
+      }
+    });
+    return cache;
+  }, [noteMap]);
+
   // MarkdownFTS: FTS4 の offsets を使ってヒット箇所を抽出
   const extractFragmentsFromMarkdownFts = React.useCallback(
     (
@@ -275,7 +286,7 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
           return;
         }
 
-        const byteToChar = buildByteToCharMap(noteText);
+        const byteToChar = byteToCharMapCache[item.id];
         const fragments: string[] = [];
         const fragmentSet = new Set<string>();
 
@@ -301,7 +312,7 @@ function SearchDialog({ open, onClose, initialSearchInput }: Props) {
         }
       });
     },
-    [results, noteMap]
+    [results, noteMap, byteToCharMapCache]
   );
 
   // Legacy HTML 検索: matchAll でキーワード出現位置を検索
