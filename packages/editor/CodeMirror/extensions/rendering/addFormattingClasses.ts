@@ -5,6 +5,8 @@ const linkClassName = 'cm-ext-unfocused-link';
 const urlMarkDecoration = Decoration.mark({ class: linkClassName });
 const strikethroughClassName = 'cm-ext-strikethrough';
 const strikethroughMarkDecoration = Decoration.mark({ class: strikethroughClassName });
+const insertClassName = 'cm-ext-insert';
+const insertMarkDecoration = Decoration.mark({ class: insertClassName });
 
 const addFormattingClasses = [
 	EditorView.theme({
@@ -14,6 +16,9 @@ const addFormattingClasses = [
 		[`& .${strikethroughClassName}, & .${strikethroughClassName} span`]: {
 			textDecoration: 'line-through',
 		},
+		[`& .${insertClassName}, & .${insertClassName} span`]: {
+			textDecoration: 'underline',
+		},
 	}),
 	makeInlineReplaceExtension({
 		createDecoration: (node) => {
@@ -22,6 +27,9 @@ const addFormattingClasses = [
 			}
 			if (node.name === 'Strikethrough') {
 				return strikethroughMarkDecoration;
+			}
+			if (node.name === 'Insert') {
+				return insertMarkDecoration;
 			}
 			return null;
 		},
