@@ -354,7 +354,7 @@ describe('InteropService_Importer_OneNote', () => {
 
 	it('should report failure, but continue importing other sections', async () => {
 		let errorMessage;
-		const onError = jest.fn((error) => {
+		const onError = jest.fn((error: unknown) => {
 			errorMessage = String(error);
 		});
 
