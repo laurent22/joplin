@@ -151,4 +151,21 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		const content = await exportAndLoad(`${exportDir()}/folder1/- title with dash.md`);
 		expect(content).toContain('title: \'- title with dash\'');
 	}));
+
+	test('should export notebook icon when folder has an emoji icon', (async () => {
+		const icon = JSON.stringify({ type: 1, emoji: '📝', name: '', dataUrl: '' });
+		const folder1 = await Folder.save({ title: 'folder1', icon });
+		await Note.save({ title: 'IconNote', body: '**my note**', parent_id: folder1.id });
+
+		const content = await exportAndLoad(`${exportDir()}/folder1/IconNote.md`);
+		expect(content).toContain('notebook_icon: 📝');
+	}));
+
+	test('should not export notebook_icon when folder has no icon', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: 'NoIcon', body: '**my note**', parent_id: folder1.id });
+
+		const content = await exportAndLoad(`${exportDir()}/folder1/NoIcon.md`);
+		expect(content).not.toContain('notebook_icon');
+	}));
 });

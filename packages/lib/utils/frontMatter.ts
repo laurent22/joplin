@@ -8,6 +8,7 @@ const moment = require('moment');
 export interface ParsedMeta {
 	metadata: NoteEntity;
 	tags: string[];
+	notebookIcon: string;
 }
 
 const convertDate = (datetime: number): string => {
@@ -27,7 +28,7 @@ const dateStringToDate = (dateString: string, defaultValue: number) => {
 	}
 };
 
-export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
+export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags', 'notebook_icon'];
 
 // There is a special case (negative numbers) where the yaml library will force quotations
 // These need to be stripped
@@ -54,7 +55,7 @@ function trimQuotes(rawOutput: string): string {
 	}).join('\n');
 }
 
-export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
+export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], folderIcon = '') => {
 	const md: MdFrontMatterExport = {};
 	// Every variable needs to be converted separately, so they will be handles in groups
 	//
@@ -92,6 +93,9 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
 	// tags
 	if (tagTitles.length) md['tags'] = tagTitles;
 
+	// notebook icon
+	if (folderIcon) md['notebook_icon'] = folderIcon;
+
 	// This guarentees that fields will always be ordered the same way
 	// which can be useful if users are using this for generating diffs
 	const sort = (a: string, b: string) => {
@@ -108,9 +112,9 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
 	return trimQuotes(rawOutput);
 };
 
-export const serialize = async (modNote: NoteEntity, tagTitles: string[]) => {
+export const serialize = async (modNote: NoteEntity, tagTitles: string[], folderIcon = '') => {
 	const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
-	const metadata = noteToFrontMatter(modNote, tagTitles);
+	const metadata = noteToFrontMatter(modNote, tagTitles, folderIcon);
 	return `---\n${metadata}---\n\n${noteContent}`;
 };
 
@@ -138,12 +142,12 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 function extractAuthor(author: unknown): string {
 	if (!author) return '';
 
-	if (typeof(author) === 'string') {
+	if (typeof (author) === 'string') {
 		return author;
 	} else if (Array.isArray(author)) {
 		// Joplin only supports a single author, so we take the first one
 		return extractAuthor(author[0]);
-	} else if (typeof(author) === 'object') {
+	} else if (typeof (author) === 'object') {
 		if ('name' in author) {
 			return (author as { name: string }).name;
 		}
@@ -195,7 +199,7 @@ const toLowerCase = (obj: Record<string, any>): Record<string, any> => {
 };
 
 export const parse = (note: string): ParsedMeta => {
-	if (!note.startsWith('---')) return { metadata: { body: note }, tags: [] };
+	if (!note.startsWith('---')) return { metadata: { body: note }, tags: [], notebookIcon: '' };
 
 	const { header, body } = getNoteHeader(note);
 
@@ -249,6 +253,9 @@ export const parse = (note: string): ParsedMeta => {
 		}
 	}
 
+	// Notebook icon
+	const notebookIcon = ('notebook_icon' in md) ? md['notebook_icon'] : '';
+
 	// Tags are handled separately from typical metadata
 	let tags: string[] = [];
 	if ('tags' in md) {
@@ -266,5 +273,5 @@ export const parse = (note: string): ParsedMeta => {
 
 	metadata['body'] = body;
 
-	return { metadata, tags };
+	return { metadata, tags, notebookIcon };
 };

@@ -1,8 +1,9 @@
 import InteropService_Exporter_Md from './InteropService_Exporter_Md';
 import BaseModel from '../../BaseModel';
+import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
-import { NoteEntity } from '../database/types';
+import { FolderIcon, NoteEntity } from '../database/types';
 import { serialize } from '../../utils/frontMatter';
 
 interface NoteTagContext {
@@ -13,7 +14,11 @@ interface TagContext {
 	tagTitles: Record<string, string>;
 }
 
-interface FrontMatterContext extends NoteTagContext, TagContext {}
+interface FolderIconContext {
+	folderIcons: Record<string, string>;
+}
+
+interface FrontMatterContext extends NoteTagContext, TagContext, FolderIconContext { }
 
 export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
@@ -60,6 +65,32 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			}
 
 			this.updateContext(context);
+		} else if (itemType === BaseModel.TYPE_FOLDER) {
+			// Map folder ID to icon emoji
+			const context: FolderIconContext = {
+				folderIcons: {},
+			};
+			for (let i = 0; i < itemsToExport.length; i++) {
+				const it = itemsToExport[i].type;
+
+				if (it !== itemType) continue;
+
+				const itemOrId = itemsToExport[i].itemOrId;
+				const folder = typeof itemOrId === 'object' ? itemOrId : await Folder.load(itemOrId);
+
+				if (!folder || !folder.icon) continue;
+
+				try {
+					const icon: FolderIcon = JSON.parse(folder.icon);
+					if (icon.emoji) {
+						context.folderIcons[folder.id] = icon.emoji;
+					}
+				} catch (_e) {
+					// Skip if icon JSON is invalid
+				}
+			}
+
+			this.updateContext(context);
 		}
 	}
 
@@ -73,7 +104,9 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			tagTitles = tagIds.map((id: string) => context.tagTitles[id]).filter(e => !!e).sort();
 		}
 
-		return serialize(modNote, tagTitles);
+		const folderIcon = (context.folderIcons && modNote.parent_id) ? context.folderIcons[modNote.parent_id] || '' : '';
+
+		return serialize(modNote, tagTitles, folderIcon);
 	}
 
 }
