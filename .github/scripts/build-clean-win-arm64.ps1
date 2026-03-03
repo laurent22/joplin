@@ -225,6 +225,9 @@ Set-PythonForBuild
 if ($Clean) {
 	Write-Host 'Running git clean -xfd ...'
 	git clean -xfd
+	if ($LASTEXITCODE -ne 0) {
+		throw "git clean -xfd failed with exit code $LASTEXITCODE"
+	}
 }
 
 if (-not $SkipInstall) {
