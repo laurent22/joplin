@@ -84,8 +84,18 @@ export default class PerFolderSortOrderService {
 			if (newOwn === targetOwn) return;
 		}
 		if (newOwn) {
-			const field = Setting.value('notes.sortOrder.field');
-			const reverse = Setting.value('notes.sortOrder.reverse');
+			let field: string, reverse: boolean;
+			if (!this.isSet(selectedId)) {
+				field = Setting.value('notes.sortOrder.field');
+				reverse = Setting.value('notes.sortOrder.reverse');
+			} else {
+				field = this.sharedSortOrder.field;
+				if (Setting.value('notes.perFieldReversalEnabled')) {
+					reverse = this.sharedSortOrder[field] as boolean;
+				} else {
+					reverse = this.sharedSortOrder.reverse;
+				}
+			}
 			this.setSharedSortOrder(field, reverse);
 			PerFolderSortOrderService.setPerFolderSortOrder(targetId, field, reverse);
 		} else {
