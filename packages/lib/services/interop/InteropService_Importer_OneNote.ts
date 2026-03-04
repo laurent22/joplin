@@ -176,8 +176,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		};
 	}
 
-	// Public to allow testing
-	public async postprocessGeneratedHtmlInFolder_(baseFolder: string) {
+	private async postprocessGeneratedHtmlInFolder_(baseFolder: string) {
 		const htmlFiles = await this.getValidHtmlFiles_(resolve(baseFolder));
 
 		for (const file of htmlFiles) {
