@@ -33,7 +33,7 @@ cliUtils.printArray = function(logFunction, rows) {
 			const item = rows[row][col];
 			const isLastCol = col === colWidths.length - 1;
 			if (isLastCol) {
-				line.push(item !== null && item !== undefined ? item.toString() : '');
+				line.push(item ? item.toString() : '');
 			} else {
 				const width = colWidths[col];
 				const dir = colAligns[col] === ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
