@@ -105,20 +105,21 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		});
 
 		const showPerFolderToggle = this.shouldShowPerFolderSortToggle();
+		const currentFolderId = this.getCurrentFolderIdForSort();
+		const perFolderSortOrderIsSet = PerFolderSortOrderService.isSet(currentFolderId);
+
 		if (showPerFolderToggle) {
-			const currentFolderId = this.getCurrentFolderIdForSort();
-			const isSet = PerFolderSortOrderService.isSet(currentFolderId);
 			buttons.push({
 				text: `[ ${_('Use own sort order')} ]`,
-				checked: isSet,
-				id: { name: 'perFolderSortOrder', value: !isSet },
+				checked: perFolderSortOrderIsSet,
+				id: { name: 'perFolderSortOrder', value: !perFolderSortOrderIsSet },
 			});
 		}
 
 		const r = await this.props.dialogManager.showMenu(Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
 		if (!r) return;
 
-		if (showPerFolderToggle) {
+		if (showPerFolderToggle && perFolderSortOrderIsSet) {
 			const currentFolderId = this.getCurrentFolderIdForSort();
 			PerFolderSortOrderService.set(currentFolderId, r.value as boolean);
 		} else {
