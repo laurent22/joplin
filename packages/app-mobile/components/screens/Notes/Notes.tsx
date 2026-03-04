@@ -72,7 +72,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 	};
 
 	private sortButton_press = async () => {
-		type IdType = { name: string; value: string|boolean; isPerFolderToggle?: boolean };
+		type IdType = { name: string; value: string|boolean };
 		const buttons: MenuChoice<IdType>[] = [];
 		const sortNoteOptions = Setting.enumOptions('notes.sortOrder.field');
 
@@ -104,8 +104,6 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 			id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
 		});
 
-		// Show "use own sort order" toggle for folders and the All Notes smart filter,
-		// but not for tags, conflicts folder, or trash folder.
 		const showPerFolderToggle = this.shouldShowPerFolderSortToggle();
 		if (showPerFolderToggle) {
 			const currentFolderId = this.getCurrentFolderIdForSort();
@@ -113,14 +111,14 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 			buttons.push({
 				text: `[ ${_('Use own sort order')} ]`,
 				checked: isSet,
-				id: { name: 'perFolderSortOrder', value: !isSet, isPerFolderToggle: true },
+				id: { name: 'perFolderSortOrder', value: !isSet },
 			});
 		}
 
 		const r = await this.props.dialogManager.showMenu(Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
 		if (!r) return;
 
-		if (r.isPerFolderToggle) {
+		if (showPerFolderToggle) {
 			const currentFolderId = this.getCurrentFolderIdForSort();
 			PerFolderSortOrderService.set(currentFolderId, r.value as boolean);
 		} else {
@@ -128,25 +126,17 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		}
 	};
 
+	// Show "use own sort order" toggle for folders and the All Notes smart filter,
+	// but not for tags, conflicts folder, or trash folder.
 	private shouldShowPerFolderSortToggle(): boolean {
-		// Only show for folders and the All Notes smart filter
-		// Don't show for tags, conflicts folder, or trash folder
-		if (this.props.notesParentType === 'Tag') {
-			return false;
+		const { notesParentType, selectedFolderId, selectedSmartFilterId } = this.props;
+
+		if (notesParentType === 'Folder') {
+			return selectedFolderId !== Folder.conflictFolderId() && selectedFolderId !== getTrashFolderId();
 		}
 
-		if (this.props.notesParentType === 'Folder') {
-			const folderId = this.props.selectedFolderId;
-			// Don't show for conflicts folder or trash folder
-			if (folderId === Folder.conflictFolderId() || folderId === getTrashFolderId()) {
-				return false;
-			}
-			return true;
-		}
-
-		if (this.props.notesParentType === 'SmartFilter') {
-			// Only show for All Notes smart filter
-			return this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
+		if (notesParentType === 'SmartFilter') {
+			return selectedSmartFilterId === ALL_NOTES_FILTER_ID;
 		}
 
 		return false;
