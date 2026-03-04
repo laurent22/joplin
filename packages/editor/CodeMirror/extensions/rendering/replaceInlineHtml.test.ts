@@ -3,16 +3,6 @@ import createTestEditor from '../../testing/createTestEditor';
 import replaceInlineHtml from './replaceInlineHtml';
 import waitFor from '@joplin/lib/testing/waitFor';
 
-const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['HTMLTag']) => {
-	const editor = await createTestEditor(
-		initialMarkdown,
-		EditorSelection.cursor(0),
-		expectedTags,
-		[replaceInlineHtml],
-	);
-	return editor;
-};
-
 const createEditorWithCursor = async (initialMarkdown: string, cursorIndex: number, expectedTags: string[] = ['HTMLTag']) => {
 	const editor = await createTestEditor(
 		initialMarkdown,
@@ -21,6 +11,10 @@ const createEditorWithCursor = async (initialMarkdown: string, cursorIndex: numb
 		[replaceInlineHtml],
 	);
 	return editor;
+};
+
+const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['HTMLTag']) => {
+	return createEditorWithCursor(initialMarkdown, 0, expectedTags);
 };
 
 describe('replaceInlineHtml', () => {
@@ -78,7 +72,9 @@ describe('replaceInlineHtml', () => {
 		const markdown = '<strike>';
 		const editor = await createEditorWithCursor(markdown, markdown.length, []);
 
-		expect(editor.contentDOM.querySelector('strike')).toBeFalsy();
-		expect(editor.contentDOM.textContent).toContain('<strike>');
+		await waitFor(() => {
+			expect(editor.contentDOM.querySelector('strike')).toBeFalsy();
+			expect(editor.contentDOM.textContent).toContain('<strike>');
+		});
 	});
 });
