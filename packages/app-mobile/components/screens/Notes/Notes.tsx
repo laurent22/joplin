@@ -121,6 +121,10 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 		if (r.name === 'perFolderSortOrder') {
 			PerFolderSortOrderService.set(currentFolderId, r.value as boolean);
+		} else if (r.name === 'notes.sortOrder.field' || r.name === 'notes.sortOrder.reverse') {
+			Setting.setValue(r.name, r.value);
+			// Update the appropriate sort order storage based on whether per-folder sort is enabled
+			PerFolderSortOrderService.onSortOrderChange(currentFolderId);
 		} else {
 			Setting.setValue(r.name, r.value);
 		}

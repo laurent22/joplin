@@ -84,24 +84,29 @@ export default class PerFolderSortOrderService {
 			if (newOwn === targetOwn) return;
 		}
 		if (newOwn) {
-			let field: string, reverse: boolean;
-			if (!this.isSet(selectedId)) {
-				field = Setting.value('notes.sortOrder.field');
-				reverse = Setting.value('notes.sortOrder.reverse');
-			} else {
-				field = this.sharedSortOrder.field;
-				if (Setting.value('notes.perFieldReversalEnabled')) {
-					reverse = this.sharedSortOrder[field] as boolean;
-				} else {
-					reverse = this.sharedSortOrder.reverse;
-				}
-			}
+			const field = Setting.value('notes.sortOrder.field');
+			const reverse = Setting.value('notes.sortOrder.reverse');
+			this.setSharedSortOrder(field, reverse);
 			PerFolderSortOrderService.setPerFolderSortOrder(targetId, field, reverse);
 		} else {
 			PerFolderSortOrderService.deletePerFolderSortOrder(targetId);
+			this.loadSharedSortOrder();
+			setNotesSortOrder(this.sharedSortOrder.field, this.sharedSortOrder.reverse);
 		}
 	}
 
+	public static onSortOrderChange(folderId: string) {
+		if (!folderId) return;
+		const field = Setting.value('notes.sortOrder.field');
+		const reverse = Setting.value('notes.sortOrder.reverse');
+		if (this.isSet(folderId)) {
+			// Folder has per-folder sort enabled, update its entry
+			this.setPerFolderSortOrder(folderId, field, reverse);
+		} else {
+			// Folder uses shares sort, update the shared sort
+			this.setSharedSortOrder(field, reverse);
+		}
+	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static onFolderSelectionMayChange(cause: string, event: any) {
