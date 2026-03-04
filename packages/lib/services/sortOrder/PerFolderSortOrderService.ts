@@ -101,7 +101,15 @@ export default class PerFolderSortOrderService {
 		} else {
 			PerFolderSortOrderService.deletePerFolderSortOrder(targetId);
 			this.loadSharedSortOrder();
-			setNotesSortOrder(this.sharedSortOrder.field, this.sharedSortOrder.reverse);
+
+			const field = this.sharedSortOrder.field;
+			let reverse: boolean;
+			if (Setting.value('notes.perFieldReversalEnabled')) {
+				reverse = this.sharedSortOrder[field] as boolean;
+			} else {
+				reverse = this.sharedSortOrder.reverse;
+			}
+			setNotesSortOrder(field, reverse);
 		}
 	}
 

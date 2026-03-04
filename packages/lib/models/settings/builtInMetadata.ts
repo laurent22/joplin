@@ -863,7 +863,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'note',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFieldReverse': {
 			value: {
@@ -876,7 +876,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'note',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFolderSortOrderEnabled': {
 			value: true,
