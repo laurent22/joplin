@@ -198,7 +198,12 @@ function Ensure-NodeExecutableOnPath {
 		throw "node executable not found at $NodeExePath"
 	}
 
-	Copy-Item -Path $NodeExePath -Destination $localNodeExe -Force
+	$resolvedNodeExe = [System.IO.Path]::GetFullPath($NodeExePath)
+	$resolvedLocalNodeExe = [System.IO.Path]::GetFullPath($localNodeExe)
+
+	if ($resolvedNodeExe -ne $resolvedLocalNodeExe) {
+		Copy-Item -Path $NodeExePath -Destination $localNodeExe -Force
+	}
 	Copy-Item -Path $localNodeExe -Destination $localNodeNoExt -Force
 
 	if ($env:Path -notlike "$localBinPath;*") {
