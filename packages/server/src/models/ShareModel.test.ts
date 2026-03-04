@@ -1,7 +1,53 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { ShareType } from '../services/database/types';
-import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
+import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
+import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
+
+// Goes through the process of:
+// 1. Creating two users/sessions
+// 2. Creating a share and accepting it
+// 3. Moving a note created by the share recipient in to the share
+//
+// This creates a note owned by the share recipient, but within the
+// share.
+const createShareWithNoteOwnedByRecipient = async () => {
+	const { session: session1 } = await createUserAndSession(1);
+	const { session: session2, user: user2 } = await createUserAndSession(2);
+
+	await createItemTree(session1.user_id, '', {
+		'000000000000000000000000000000F1': {
+		},
+	});
+	await createItemTree(session2.user_id, '', {
+		'000000000000000000000000000000F2': {
+			'00000000000000000000000000000001': null,
+		},
+	});
+
+	const shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+
+	// Note should initially be owned by user 2
+	let note = await models().item().loadByJopId(session2.user_id, '00000000000000000000000000000001');
+	expect(note.owner_id).toBe(session2.user_id);
+
+	const { share, shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+	await updateItemShareId(session1, shareRoot.id, share.id);
+	await models().share().updateSharedItems3();
+
+	// Changing the note's share ID and parent should not change the owner ID
+	note = await updateItemShareId(session2, note.id, share.id);
+	note = await models().item().saveForUser(session1.user_id, {
+		...note,
+		jop_parent_id: '000000000000000000000000000000F1',
+	});
+
+	await models().share().updateSharedItems3();
+	expect(note.owner_id).toBe(session2.user_id);
+
+	return { share, shareUser, note, session1, session2 };
+};
 
 describe('ShareModel', () => {
 
@@ -211,4 +257,88 @@ describe('ShareModel', () => {
 		expect(await models().userItem().byUserId(user3.id)).toHaveLength(4);
 	});
 
+	test.each([
+		{ alsoUnshare: false, label: '' },
+		{ alsoUnshare: true, label: 'and the item is also unshared' },
+	])('should delete UserItem records when a user no longer has access to a share $label', async ({ alsoUnshare }) => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		const getUser2UserItems = () => models().userItem().byUserId(user2.id);
+		expect(await getUser2UserItems()).toHaveLength(0);
+
+		await createItemTree(session1.user_id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+		const shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+		const note = await models().item().loadByJopId(session1.user_id, '00000000000000000000000000000001');
+		expect(shareRoot).toBeTruthy();
+
+		const { share, shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+		await updateItemShareId(session1, shareRoot.id, share.id);
+		await updateItemShareId(session1, note.id, share.id);
+		await models().share().updateSharedItems3();
+
+		// Should have shared successfully:
+		expect(await getUser2UserItems()).toHaveLength(2);
+
+		// Removing the user from the share should delete the UserItems
+		await models().shareUser().delete(shareUser.id);
+		expect(await getUser2UserItems()).toHaveLength(0);
+
+		// Simulate a race condition by restoring one of the user items:
+		await models().userItem().add(user2.id, note.id);
+		expect(await getUser2UserItems()).toHaveLength(1);
+
+		if (alsoUnshare) {
+			await updateItemShareId(session1, note.id, '');
+		}
+
+		// The extra UserItem should be removed when processing the share's changes:
+		await withWarningSilenced(/Deleting unexpected userItem for user/, async () => {
+			await models().share().updateSharedItems3();
+		});
+		expect(await getUser2UserItems()).toHaveLength(0);
+	});
+
+	test.each([
+		{ deleteShare: false, label: '' },
+		// Deleting the share means that the maintenance task can't use share.owner_id to
+		// determine the new owner for the item.
+		{ deleteShare: true, label: 'and the share is deleted' },
+	])('should update owner_id when the original owner no longer has access $label', async ({ deleteShare }) => {
+		const { share, shareUser, note, session1, session2 } = await createShareWithNoteOwnedByRecipient();
+		expect(note.owner_id).toBe(session2.user_id);
+
+		// Remove session2.user_id from the share either by deleting the entire share or
+		// by removing the shareUser.
+		if (deleteShare) {
+			await models().share().delete(share.id);
+		} else {
+			await models().shareUser().delete(shareUser.id);
+		}
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		// The owner_id should be updated
+		expect(updatedNote.owner_id).toBe(session1.user_id);
+		// ...but it should still be part of the share.
+		expect(updatedNote.jop_share_id).toBe(share.id);
+	});
+
+	test('should not update owner_id after unsharing if an item has been moved out of a share by the item\'s owner', async () => {
+		const { shareUser, note, session2 } = await createShareWithNoteOwnedByRecipient();
+
+		await updateItemShareId(session2, note.id, '');
+
+		// Removing session2 from the share should keep the item's owner the same
+		await models().shareUser().delete(shareUser.id);
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		expect(updatedNote.owner_id).toBe(session2.user_id);
+	});
 });

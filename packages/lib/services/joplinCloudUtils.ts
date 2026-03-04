@@ -103,7 +103,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 
 		const response = await fetch(applicationsUrl, {
 			headers: {
-				'X-JOPLIN-CUSTOM-API-KEY': '',
+				'X-JOPLIN-CUSTOM-API-KEY': Setting.value('sync.10.apiKey'),
 			},
 		});
 		const jsonBody = await response.json();

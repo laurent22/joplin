@@ -27,11 +27,12 @@ import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
 
 export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
-	const s = {
+	const s: Record<ResourceOcrStatus, string> = {
 		[ResourceOcrStatus.Todo]: _('Idle'),
 		[ResourceOcrStatus.Processing]: _('Processing'),
 		[ResourceOcrStatus.Error]: _('Error'),
 		[ResourceOcrStatus.Done]: _('Done'),
+		[ResourceOcrStatus.TodoAccessible]: _('Idle'),
 	};
 
 	return s[status];
@@ -444,7 +445,11 @@ export default class Resource extends BaseItem {
 		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
 	}
 
-	public static async duplicateResource(resourceId: string): Promise<ResourceEntity> {
+	public static async duplicateResource(
+		resourceId: string,
+		// Overrides property values in the duplicate resource.
+		propertyOverrides: ResourceEntity = {},
+	): Promise<ResourceEntity> {
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 
@@ -452,7 +457,10 @@ export default class Resource extends BaseItem {
 		delete newResource.id;
 		delete newResource.is_shared;
 		delete newResource.share_id;
-		newResource = await Resource.save(newResource);
+		newResource = await Resource.save({
+			...newResource,
+			...propertyOverrides,
+		});
 
 		const newLocalState = { ...localState };
 		newLocalState.resource_id = newResource.id;
@@ -518,13 +526,14 @@ export default class Resource extends BaseItem {
 				SELECT ${selectSql}
 				FROM resources
 				WHERE
-					(ocr_status = ? or ocr_status = ?) AND
+					(ocr_status = ? OR ocr_status = ? OR ocr_status = ?) AND
 					encryption_applied = 0 AND
 					mime IN ('${supportedMimeTypes.join('\',\'')}')
 			`,
 			params: [
 				ResourceOcrStatus.Todo,
 				ResourceOcrStatus.Processing,
+				ResourceOcrStatus.TodoAccessible,
 			],
 		};
 	}

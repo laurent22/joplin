@@ -149,6 +149,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"درباره"
 	],
@@ -401,6 +404,9 @@
 	"Beta": [
 		"بتا"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"پررنگ"
 	],
@@ -530,6 +536,9 @@
 	"Checking... Please wait.": [
 		"در حال بررسی... لطفا صبور باشید."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"یک گزینه را انتخاب کنید"
 	],
@@ -607,6 +616,9 @@
 	],
 	"Command": [
 		"فرمان"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"پالت فرمان"
@@ -915,6 +927,9 @@
 	"Delete selected notes": [
 		"حذف یادداشت‌های انتخاب شده"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"دفترچه‌ی صندوق ورودی حذف شود؟\n\nاگر دفترچه صندوق ورودی را حذف کنید، ممکن است هر ایمیلی که اخیراً به آن ارسال شده است نیز از بین برود."
 	],
@@ -1004,6 +1019,9 @@
 	],
 	"Displays the complete information about note.": [
 		"مشخصات کامل یادداشت را نمایش می‌دهد."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"یادداشت مشخص شده را نمایش بده."
@@ -1837,6 +1855,9 @@
 	"Keychain Supported: %s": [
 		"Keychain پشتیبانی می‌شود: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"کلید‌ها نیازمند ارتقاء می‌باشند"
 	],
@@ -1963,6 +1984,9 @@
 	],
 	"Manage your plugins": [
 		"مدیریت افزونه‌های شما"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"تنظیمات رمزنگاری انتها به انتها (E2EE) را مدیریت می‌کند. دستورات شامل `enable`، `disable`، `decrypt`، `status`، `decrypt-file` و `target-status` هستند."
@@ -2168,6 +2192,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"هیچ ویرایشگر متنی مشخص نشده است. لطفا با استفاده از `<editor-path> تنظیمات ویرایشگر` آن را مشخص کنید"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2339,6 +2366,9 @@
 	"Open Sync Wizard...": [
 		"بازکردن راهنمای همگام‌سازی..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"باز کردن..."
 	],
@@ -2350,6 +2380,9 @@
 	],
 	"Options": [
 		"گزینه ها"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"لیست مرتب شده"
@@ -2885,6 +2918,9 @@
 	"Select parent notebook": [
 		"انتخاب دفترچه والد"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -3061,6 +3097,9 @@
 	],
 	"Source: ": [
 		"منبع "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"فاصله‌ساز"
@@ -3627,6 +3666,9 @@
 	],
 	"Try it now": [
 		"هم‌اکنون تلاش کن"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"برای اطلاعات بیشتر درباره یک فرمان، 'help [command]' را تایپ کنید. یا برای اطلاعات کامل استفاده، «help all» را تایپ کنید."

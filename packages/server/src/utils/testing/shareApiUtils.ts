@@ -1,10 +1,10 @@
-import { FolderEntity } from '@joplin/lib/services/database/types';
-import { linkedResourceIds } from '../joplinUtils';
-import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../services/database/types';
+import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import { linkedResourceIds, serializeJoplinItem } from '../joplinUtils';
+import { Item, Session, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
-import { checkContextError, createFolder, createItem, koaAppContext, models, updateFolder, createResource } from './testUtils';
+import { checkContextError, createFolder, createItem, koaAppContext, models, updateFolder, createResource, updateItem } from './testUtils';
 import { makeFolderSerializedBody, makeNoteSerializedBody } from './serializedItems';
 
 interface ShareResult {
@@ -66,10 +66,28 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 		}
 
 		const result = await models().item().saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+
+		for (const [, resultItem] of Object.entries(result)) {
+			if (resultItem.error) {
+				resultItem.error.message = `Cannot create item tree: ${resultItem.error.message}`;
+				throw resultItem.error;
+			}
+		}
+
 		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }
+
+export const updateItemShareId = async (session: Session, itemId: Uuid, shareId: Uuid) => {
+	const item = await models().item().load(itemId);
+	const joplinItem = await models().item().loadAsJoplinItem<FolderEntity|NoteEntity>(itemId);
+
+	return await updateItem(session.id, `root:/${item.name}:`, await serializeJoplinItem({
+		...joplinItem,
+		share_id: shareId,
+	}));
+};
 
 export async function inviteUserToShare(share: Share, sharerSessionId: string, recipientEmail: string, acceptShare = true) {
 	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {

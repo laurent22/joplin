@@ -6,8 +6,7 @@ import ScreenHeader from '../ScreenHeader';
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import useProfileConfig from './useProfileConfig';
 import { _ } from '@joplin/lib/locale';
-import { deleteProfileById } from '@joplin/lib/services/profileConfig';
-import { saveProfileConfig, switchProfile } from '../../services/profiles';
+import { switchProfile } from '../../services/profiles';
 import { themeStyle } from '../global-style';
 import shim from '@joplin/lib/shim';
 import { DialogContext } from '../DialogManager';
@@ -16,6 +15,11 @@ import { TextStyle } from 'react-native';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import { Dispatch } from 'redux';
 import NavService from '@joplin/lib/services/NavService';
+import Logger from '@joplin/utils/Logger';
+import deleteProfile from './utils/deleteProfile';
+import DatabaseDriverReactNative from '../../utils/database-driver-react-native';
+
+const logger = Logger.create('ProfileSwitcher');
 
 interface Props {
 	themeId: number;
@@ -42,6 +46,7 @@ const useStyle = (themeId: number) => {
 	}, [themeId]);
 };
 
+
 interface ProfileItemProps {
 	themeId: number;
 	profile: Profile;
@@ -61,7 +66,7 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 			}
 		};
 
-		const switchProfileMessage = _('To switch the profile, the app is going to close and you will need to restart it.');
+		const switchProfileMessage = _('To switch the profile, the app is going to restart.');
 		if (shim.mobilePlatform() === 'web') {
 			if (confirm(switchProfileMessage)) {
 				void doIt();
@@ -95,10 +100,14 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 	const onDeleteProfile = useCallback(async (profile: Profile) => {
 		const doIt = async () => {
 			try {
-				const newConfig = deleteProfileById(profileConfig, profile.id);
-				await saveProfileConfig(newConfig);
+				await deleteProfile({
+					toDelete: profile,
+					profileConfig,
+					databaseDriver: new DatabaseDriverReactNative(),
+				});
 				setProfileConfigTime(Date.now());
 			} catch (error) {
+				logger.error(error);
 				dialogs.prompt(_('Error'), error.message);
 			}
 		};

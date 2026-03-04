@@ -7,7 +7,7 @@ import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
 import * as React from 'react';
-import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
@@ -19,7 +19,6 @@ const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
-import FloatingActionButton from '../../buttons/FloatingActionButton';
 import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import ScreenHeader, { MenuOptionType } from '../../ScreenHeader';
@@ -76,6 +75,13 @@ import { EditorType } from '../../NoteEditor/types';
 import { IconButton } from 'react-native-paper';
 import { writeTextToCacheFile } from '../../../utils/ShareUtils';
 import shareFile from '../../../utils/shareFile';
+import NotePositionService from '@joplin/lib/services/NotePositionService';
+import useKeyboardState from '../../../utils/hooks/useKeyboardState';
+import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
+import useDebounced from '../../../utils/hooks/useDebounced';
+import { Second } from '@joplin/utils/time';
+import TextWrapCalculator from '../Notes/TextWrapCalculator';
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const emptyArray: any[] = [];
@@ -115,17 +121,20 @@ interface Props extends BaseProps {
 	pluginHtmlContents: PluginHtmlContents;
 	editorNoteReloadTimeRequest: number;
 	canPublish: boolean;
+	noteVisiblePanes: string[];
 }
 
 interface ComponentProps extends Props {
 	dialogs: DialogControl;
 	visibleEditorPluginIds: string[];
+	lowVerticalSpace: boolean;
 }
 
 interface State {
 	note: NoteEntity;
 	mode: NoteViewerMode;
 	readOnly: boolean;
+	searchVisible: boolean;
 	folder: FolderEntity|null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastSavedNote: any;
@@ -152,7 +161,11 @@ interface State {
 
 	showSpeechToTextDialog: boolean;
 	multiline: boolean;
+	showMultilineToggle: boolean | null;
+	titleContainerWidth: number;
 }
+
+type ScrollEventSlice = { fraction: number };
 
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
 	// This isn't in this.state because we don't want changing scroll to trigger
@@ -186,6 +199,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
 		return shared.noteComponent_change(this, 'body', saveEvent.body);
 	});
+	private refreshKey: number | undefined;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
@@ -195,9 +209,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public constructor(props: ComponentProps) {
 		super(props);
 
+		const initialMode = props.noteVisiblePanes?.includes('editor') ? 'edit' : 'view';
+
 		this.state = {
 			note: Note.new(),
-			mode: 'view',
+			mode: initialMode,
 			readOnly: false,
 			folder: null,
 			lastSavedNote: null,
@@ -211,6 +227,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			showCamera: false,
 			showImageEditor: false,
 			showAudioRecorder: false,
+			searchVisible: false,
 			imageEditorResource: null,
 			noteResources: {},
 			imageEditorResourceFilepath: null,
@@ -224,7 +241,20 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 			showSpeechToTextDialog: false,
 			multiline: false,
+			showMultilineToggle: null,
+			titleContainerWidth: 0,
 		};
+
+		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
+		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
+		// Ignore the initial scroll and cursor location when there's a note hash. The editor/viewer should jump to
+		// the hash, rather than the last position.
+		if (!props.noteHash) {
+			if (initialCursorLocation) {
+				this.selection = { start: initialCursorLocation, end: initialCursorLocation };
+			}
+			this.lastBodyScroll = initialScroll;
+		}
 
 		this.titleTextFieldRef = React.createRef();
 
@@ -270,14 +300,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 			if (this.state.mode === 'edit') {
 				Keyboard.dismiss();
-
-				this.setState({
-					mode: 'view',
-				});
-
 				await this.undoRedoService_.reset();
-
-				return true;
 			}
 
 			if (this.state.fromShare) {
@@ -318,6 +341,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.properties_onPress = this.properties_onPress.bind(this);
+		this.revealInNotebook_onPress = this.revealInNotebook_onPress.bind(this);
 		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
@@ -369,6 +393,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				setMode: (mode: 'view'|'edit') => {
 					this.setState({ mode });
 				},
+				dispatch: this.props.dispatch,
 			},
 			commands,
 			true,
@@ -379,6 +404,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return this.props.useEditorBeta;
 	}
 
+	private onSearchVisibleChange_ = (visible: boolean) => {
+		this.setState({ searchVisible: visible });
+	};
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
@@ -526,7 +554,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			marginTop: 0,
 			paddingLeft: 0,
 			color: theme.color,
-			backgroundColor: theme.backgroundColor,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)
@@ -685,10 +712,27 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
-		if (this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds) {
+		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
+		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
 			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
-			if (!editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime) {
-				void shared.reloadNote(this);
+			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
+
+			if (explicitReloadRequired) {
+				void this.reloadNoteAndUpdateRefreshKey();
+			}
+
+			if (explicitReloadRequired || (editorPlugin && editorPluginIdsChanged)) {
+				// Clear the undo / redo state, as undo / redo steps wont be in sync with the current content after the note editor has been refreshed
+				if (!this.useEditorBeta()) {
+					void this.undoRedoService_.reset();
+				}
+
+				this.setState({
+					undoRedoButtonState: {
+						canUndo: false,
+						canRedo: false,
+					},
+				});
 			}
 		}
 
@@ -729,13 +773,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		});
 	}
 
+	private async reloadNoteAndUpdateRefreshKey() {
+		await shared.reloadNote(this);
+		this.refreshKey = this.props.editorNoteReloadTimeRequest;
+	}
+
 	private title_changeText(text: string) {
 		let newText = text;
-		if (Platform.OS !== 'web') {
-			// Manipulating the underlying text inside of onChangeText causes issues with the cursor position jumping to the end while typing
-			// when the Web app is being used on a desktop OS, so providing a toggle to expand the title field can only be done on mobile platforms
-			newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
-		}
+		newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
 		shared.noteComponent_change(this, 'title', newText);
 		this.setState({ newAndNoTitleChangeNoteId: null });
 	}
@@ -770,8 +815,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.selection = event.nativeEvent.selection;
 	};
 
-	private onMarkdownEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
+	private onEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
 		this.selection = { start: event.from, end: event.to };
+
+		NotePositionService.instance().updateCursorPosition(
+			this.props.noteId, defaultWindowId, { markdown: event.from },
+		);
 	};
 
 	public makeSaveAction(state: State) {
@@ -1117,6 +1166,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
 	}
 
+	private revealInNotebook_onPress() {
+		const folderId = this.state.folder?.id;
+		if (folderId) {
+			void NavService.go('Notes', { folderId: folderId });
+		} else {
+			void NavService.go('Notes', { smartFilterId: ALL_NOTES_FILTER_ID });
+		}
+	}
+
 	public async onAlarmDialogAccept(date: Date) {
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
@@ -1291,8 +1349,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
-		const voiceTypingSupported = Platform.OS === 'android';
-		if (voiceTypingSupported) {
+		if (VoiceTyping.supported()) {
 			output.push({
 				title: _('Voice typing...'),
 				onPress: () => {
@@ -1367,6 +1424,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			});
 		}
 
+		output.push({
+			title: _('Reveal in notebook'),
+			onPress: () => {
+				this.revealInNotebook_onPress();
+			},
+		});
+
 		if (isDeleted) {
 			output.push({
 				title: _('Restore'),
@@ -1403,6 +1467,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private async todoCheckbox_change(checked: boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
+
+	private toggleVisiblePanes = () => {
+		const isSwitchingToEdit = this.state.mode === 'view';
+		void CommandService.instance().execute('toggleVisiblePanes');
+		if (isSwitchingToEdit) {
+			this.doFocusUpdate_ = true;
+		}
+	};
 
 	public scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
@@ -1487,9 +1559,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return this.folderPickerOptions_;
 	}
 
-	private onBodyViewerScroll = (scrollTop: number) => {
-		this.lastBodyScroll = scrollTop;
+	private onBodyViewerScroll = (event: ScrollEventSlice) => {
+		this.lastBodyScroll = event.fraction;
+
+		NotePositionService.instance().updateScrollPosition(
+			this.props.noteId, defaultWindowId, event.fraction,
+		);
 	};
+
+	private onMarkdownEditorScroll = () => {};
 
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
@@ -1580,6 +1658,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		// Currently keyword highlighting is supported only when FTS is available.
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
+		const increaseSpaceForEditor = this.props.lowVerticalSpace
+			&& this.state.mode === 'edit'
+			// For now, only dismiss other UI when search is visible. This provides a way to re-show the hidden UI (by dismissing search).
+			&& this.state.searchVisible
+			// Tapping on the title input when search is visible should edit the title, even if showing the keyboard decreases the
+			// available space.
+			&& !this.titleTextFieldRef.current?.isFocused();
+
 		let bodyComponent = null;
 
 		if (editorView) {
@@ -1604,7 +1690,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							onMarkForDownload={this.onMarkForDownload}
 							onRequestEditResource={this.onEditResource}
 							onScroll={this.onBodyViewerScroll}
-							initialScroll={this.lastBodyScroll}
+							initialScrollPercent={this.lastBodyScroll}
 						/>
 					);
 			} else {
@@ -1649,8 +1735,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
-						toolbarEnabled={this.props.toolbarEnabled}
-						themeId={this.props.themeId}
+						toolbarEnabled={this.props.toolbarEnabled && !increaseSpaceForEditor}
 						noteId={this.props.noteId}
 						noteHash={this.props.noteHash}
 						initialText={note.body}
@@ -1658,8 +1743,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						markupLanguage={this.state.note.markup_language}
 						globalSearch={this.props.searchQuery}
 						onChange={this.onMarkdownEditorTextChange}
-						onSelectionChange={this.onMarkdownEditorSelectionChange}
+						onSelectionChange={this.onEditorSelectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+						onSearchVisibleChange={this.onSearchVisibleChange_}
 						onAttach={this.onAttach}
 						noteResources={this.state.noteResources}
 						readOnly={this.state.readOnly}
@@ -1671,32 +1757,20 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							paddingLeft: 0,
 							paddingRight: 0,
 						}}
+
+						// For now, only save/restore the scroll location for the Rich Text editor since that editor's
+						// scroll should roughly match the viewer. In the future, it may make sense to refactor this to
+						// use mapsToLine (similar to what's done on desktop) to sync the Markdown editor scroll, but this
+						// will require refactoring.
+						initialScroll={this.props.editorType === EditorType.RichText ? this.lastBodyScroll : undefined}
+						onScroll={this.props.editorType === EditorType.RichText ? this.onBodyViewerScroll : this.onMarkdownEditorScroll}
+
 						mode={this.props.editorType}
+						refreshKey={this.refreshKey}
 					/>;
 				}
 			}
 		}
-
-		const voiceTypingDialogShown = this.state.showSpeechToTextDialog || this.state.showAudioRecorder;
-		const renderActionButton = () => {
-			if (voiceTypingDialogShown) return null;
-			if (editorView) return null;
-			if (!this.state.note || !!this.state.note.deleted_time) return null;
-
-			const editButton = {
-				label: _('Edit'),
-				icon: 'create',
-				onPress: () => {
-					this.setState({ mode: 'edit' });
-
-					this.doFocusUpdate_ = true;
-				},
-			};
-
-			if (this.state.mode === 'edit') return null;
-
-			return <FloatingActionButton mainButton={editButton} />;
-		};
 
 		// Save button is not really needed anymore with the improved save logic
 		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
@@ -1706,7 +1780,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const dueDate = Note.dueDateObject(note);
 
-		const titleToggleButton = Platform.OS === 'web' ? null :
+		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
+			this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline });
+		};
+
+		const titleToggleButton = !this.state.showMultilineToggle ? null :
 			<IconButton
 				icon={(!this.state.multiline && 'menu-down') || (this.state.multiline && 'menu-up')}
 				accessibilityLabel={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
@@ -1716,7 +1794,24 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			/>;
 
 		const titleComp = (
-			<View style={titleContainerStyle}>
+			<View
+				style={titleContainerStyle}
+				onLayout={(e) => {
+					const width = e.nativeEvent.layout.width;
+					if (width !== this.state.titleContainerWidth) {
+						this.setState({ titleContainerWidth: width });
+					}
+				}}
+			>
+				<TextWrapCalculator
+					textCompStyle={this.styles().titleTextInput}
+					textCompContainerWidth={this.state.titleContainerWidth}
+					showMultilineToggle={this.state.showMultilineToggle}
+					multiline={this.state.multiline}
+					text={note.title}
+					updateState={textWrapCalculator_updateState}
+					readOnly={false}
+				/>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
 					key={this.state.multiline ? 'multiLine' : 'singleLine'}
@@ -1762,28 +1857,32 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const { editorPlugin: activeEditorPlugin } = getActivePluginEditorView(this.props.plugins, this.props.windowId);
 
+		const header = <ScreenHeader
+			folderPickerOptions={this.folderPickerOptions()}
+			menuOptions={this.menuOptions()}
+			showSaveButton={showSaveButton}
+			saveButtonDisabled={saveButtonDisabled}
+			onSaveButtonPress={this.saveNoteButton_press}
+			showSideMenuButton={false}
+			showSearchButton={false}
+			showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
+			showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
+			showPluginEditorButton={!!activeEditorPlugin}
+			undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
+			onUndoButtonPress={this.screenHeader_undoButtonPress}
+			onRedoButtonPress={this.screenHeader_redoButtonPress}
+			showViewToggleButton={!!this.state.note && !this.state.note.deleted_time && !editorView}
+			viewToggleIconName={this.state.mode === 'edit' ? 'ionicon book' : 'ionicon pencil'}
+			onViewTogglePress={this.toggleVisiblePanes}
+			title={getDisplayParentTitle(this.state.note, this.state.folder)}
+		/>;
+
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
-				<ScreenHeader
-					folderPickerOptions={this.folderPickerOptions()}
-					menuOptions={this.menuOptions()}
-					showSaveButton={showSaveButton}
-					saveButtonDisabled={saveButtonDisabled}
-					onSaveButtonPress={this.saveNoteButton_press}
-					showSideMenuButton={false}
-					showSearchButton={false}
-					showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
-					showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
-					showPluginEditorButton={!!activeEditorPlugin}
-					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
-					onUndoButtonPress={this.screenHeader_undoButtonPress}
-					onRedoButtonPress={this.screenHeader_redoButtonPress}
-					title={getDisplayParentTitle(this.state.note, this.state.folder)}
-				/>
-				{titleComp}
+				{!increaseSpaceForEditor && header}
+				{!increaseSpaceForEditor && titleComp}
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
-				{renderActionButton()}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1798,6 +1897,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 }
 
+const useHasLowAvailableSpace = () => {
+	const windowDimensions = useWindowDimensions();
+	const keyboardState = useKeyboardState();
+	const verticalSpaceAvailable = windowDimensions.height - keyboardState.dockedKeyboardHeight;
+
+	const lowVerticalScreenSpace = verticalSpaceAvailable < 270;
+	// Debounce state updates to avoid multiple re-renders when the keyboard is hidden, then quickly
+	// re-shown (e.g. when moving focus between text inputs).
+	return useDebounced(lowVerticalScreenSpace, Second / 10);
+};
+
 // We added this change to reset the component state when the props.noteId is changed.
 // NoteScreenComponent original implementation assumed that noteId would never change,
 // which can cause some bugs where previously set state to another note would interfere
@@ -1805,9 +1915,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 const NoteScreenWrapper = (props: Props) => {
 	const dialogs = useContext(DialogContext);
 	const visibleEditorPluginIds = useVisiblePluginEditorViewIds(props.plugins, props.windowId);
+	const lowVerticalSpace = useHasLowAvailableSpace();
 
 	return (
-		<NoteScreenComponent key={props.noteId} dialogs={dialogs} visibleEditorPluginIds={visibleEditorPluginIds} {...props} />
+		<NoteScreenComponent
+			key={props.noteId}
+			dialogs={dialogs}
+			visibleEditorPluginIds={visibleEditorPluginIds}
+			lowVerticalSpace={lowVerticalSpace}
+			{...props}
+		/>
 	);
 };
 
@@ -1833,6 +1950,7 @@ const NoteScreen = connect((state: AppState) => {
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		editorNoteReloadTimeRequest: state.editorNoteReloadTimeRequest,
+		noteVisiblePanes: state.noteVisiblePanes,
 
 		editorType: state.settings['editor.codeView'] ? EditorType.Markdown : EditorType.RichText,
 

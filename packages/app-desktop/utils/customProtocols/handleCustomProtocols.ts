@@ -1,7 +1,7 @@
 import { net, protocol } from 'electron';
 import { dirname, resolve, normalize } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-import { contentProtocolName } from './constants';
+import { contentProtocolName, pluginProtocolName } from './constants';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
@@ -12,7 +12,7 @@ export interface AccessController {
 	remove(): void;
 }
 
-export interface CustomProtocolHandler {
+export interface CustomContentProtocolHandler {
 	// note-viewer/ URLs
 	allowReadAccessToDirectory(path: string): void;
 	allowReadAccessToFile(path: string): AccessController;
@@ -21,6 +21,20 @@ export interface CustomProtocolHandler {
 	// file-media/ URLs
 	setMediaAccessEnabled(enabled: boolean): void;
 	getMediaAccessKey(): string;
+}
+
+export interface ContentScriptRegistration {
+	uri: string;
+	revoke: ()=> void;
+}
+
+export interface CustomPluginProtocolHandler {
+	registerContentScript(id: string, js: string): ContentScriptRegistration;
+}
+
+export interface CustomProtocolHandlers {
+	appContent: CustomContentProtocolHandler;
+	pluginContent: CustomPluginProtocolHandler;
 }
 
 
@@ -130,29 +144,26 @@ const makeAccessDeniedResponse = (message: string) => {
 	});
 };
 
-// Creating a custom protocol allows us to isolate iframes by giving them
-// different domain names from the main Joplin app.
-//
-// For example, an iframe with url joplin-content://note-viewer/path/to/iframe.html will run
-// in a different process from a parent frame with url file://path/to/iframe.html.
-//
-// See note_viewer_isolation.md for why this is important.
-//
-// TODO: Use Logger.create (doesn't work for now because Logger is only initialized
-// in the main process.)
-const handleCustomProtocols = (): CustomProtocolHandler => {
-	const logger = {
-		// Disabled for now
-		debug: (..._message: unknown[]) => {},
-	};
+const makeNotFoundResponse = () => {
+	return new Response('not found', {
+		status: 404,
+	});
+};
 
+type LoggerSlice = {
+	debug: (...message: unknown[])=> void;
+};
+
+const handleContentProtocol = (logger: LoggerSlice) => {
 	// Allow-listed files/directories for joplin-content://note-viewer/
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
 	// Access for joplin-content://file-media/
 	let mediaAccessKey: string|false = false;
 
-	// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
+	const appBundleDirectory = dirname(dirname(__dirname));
+
+	// Serves main app content (e.g. the note viewer)
 	protocol.handle(contentProtocolName, async request => {
 		const url = new URL(request.url);
 		const host = url.host;
@@ -210,10 +221,24 @@ const handleCustomProtocols = (): CustomProtocolHandler => {
 
 		const rangeHeader = request.headers.get('Range');
 		let response;
-		if (!rangeHeader) {
-			response = await net.fetch(asFileUrl);
-		} else {
-			response = await handleRangeRequest(request, pathname);
+		try {
+			if (!rangeHeader) {
+				response = await net.fetch(asFileUrl);
+			} else {
+				response = await handleRangeRequest(request, pathname);
+			}
+		} catch (error) {
+			if (
+				// Errors from NodeJS fs methods (e.g. fs.stat()
+				error.code === 'ENOENT'
+				// Errors from Electron's net.fetch(). Use error.message since these errors don't
+				// seem to have a specific .code or .name.
+				|| error.message === 'net::ERR_FILE_NOT_FOUND'
+			) {
+				response = makeNotFoundResponse();
+			} else {
+				throw error;
+			}
 		}
 
 		if (mediaOnly) {
@@ -231,8 +256,7 @@ const handleCustomProtocols = (): CustomProtocolHandler => {
 		return response;
 	});
 
-	const appBundleDirectory = dirname(dirname(__dirname));
-	const result: CustomProtocolHandler = {
+	const result: CustomContentProtocolHandler = {
 		allowReadAccessToDirectory: (path: string) => {
 			path = resolve(appBundleDirectory, path);
 			logger.debug('protocol handler: Allow read access to directory', path);
@@ -286,6 +310,86 @@ const handleCustomProtocols = (): CustomProtocolHandler => {
 		},
 	};
 	return result;
+};
+
+const handlePluginProtocol = (logger: LoggerSlice) => {
+	const hostedContentScriptJs = new Map<string, string>(); // Maps from content script IDs to content script data
+	protocol.handle(pluginProtocolName, async request => {
+		const url = new URL(request.url);
+		const host = url.host;
+
+		if (host !== 'plugins') {
+			return new Response('Unknown hostname', { status: 400 });
+		}
+
+		if (request.method !== 'GET') {
+			return new Response('Unsupported request method', { status: 405 });
+		}
+
+		const contentScriptPath = '/content-script/';
+		if (url.pathname.startsWith(contentScriptPath)) {
+			const contentScriptId = url.pathname.substring(contentScriptPath.length);
+			logger.debug('Request for content script with ID', contentScriptId);
+
+			const js = hostedContentScriptJs.get(contentScriptId);
+			if (!js) {
+				return new Response('Content script not found', { status: 404 });
+			}
+
+			return new Response(js, {
+				headers: [
+					['Content-Type', 'application/javascript'],
+				],
+			});
+		} else {
+			return new Response('Path not found', { status: 404 });
+		}
+	});
+
+	const handler: CustomPluginProtocolHandler = {
+		// Hosts a content script with the given `js` using the plugin protocol.
+		// This can be used to allow loading trusted plugin JavaScript without relying on eval,
+		// inline scripts, or other techniques that would violate the application's
+		// Content-Security-Policy.
+		//
+		// Caution: This assumes that `js` is provided by a trusted source. Be careful
+		// when building/providing `js` to this function.
+		registerContentScript: (id: string, js: string) => {
+			id = encodeURIComponent(id);
+			logger.debug('Registering content script with ID', id);
+
+			hostedContentScriptJs.set(id, js);
+
+			return {
+				uri: `${pluginProtocolName}://plugins/content-script/${id}`,
+				revoke: () => {
+					hostedContentScriptJs.delete(id);
+				},
+			};
+		},
+	};
+	return handler;
+};
+
+// Creating a custom protocol allows us to isolate iframes by giving them
+// different domain names from the main Joplin app.
+//
+// For example, an iframe with url joplin-content://note-viewer/path/to/iframe.html will run
+// in a different process from a parent frame with url file://path/to/iframe.html.
+//
+// See note_viewer_isolation.md for why this is important.
+//
+// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
+//
+const handleCustomProtocols = (): CustomProtocolHandlers => {
+	const logger = {
+		// Disabled for now
+		debug: (..._message: unknown[]) => {},
+	};
+
+	const appContent = handleContentProtocol(logger);
+	const pluginContent = handlePluginProtocol(logger);
+	return { appContent, pluginContent };
 };
 
 export default handleCustomProtocols;

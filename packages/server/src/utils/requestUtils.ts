@@ -4,6 +4,7 @@ import { AppContext } from './types';
 import * as formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
+import { uuidgen } from './uuid';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type BodyFields = Record<string, any>;
@@ -80,6 +81,16 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 		const form = formidable({
 			allowEmptyFiles: true,
 			minFileSize: 0,
+			filename: (_name) => {
+				// Joplin uses a version of Formidable in which the default filename generation
+				// logic is insecure. See:
+				// 1. https://github.com/node-formidable/formidable/commit/022c2c5577dfe14d2947f10909d81b03b6070bf5
+				// 2. https://github.com/node-formidable/formidable/commit/720cdfdfb9d8c8ae99817f2b70ac76153d50ad13
+				//
+				// Issue 2 should only impact Joplin if returning untrusted values from `filename`. Issue 1
+				// is related to possible collisions in how formidable generates random filenames.
+				return `upload-${uuidgen()}`;
+			},
 		});
 
 		try {

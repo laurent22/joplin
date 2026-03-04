@@ -2,14 +2,23 @@ const welcomeAssetsAny = require('./welcomeAssets');
 import Note from './models/Note';
 import Setting from './models/Setting';
 import Folder from './models/Folder';
-import shim from './shim';
+import shim, { MobilePlatform } from './shim';
 import uuid from './uuid';
 import { fileExtension, basename } from './path-utils';
 import { _ } from './locale';
 const { pregQuote } = require('./string-utils');
+import { FolderIconType } from './services/database/types';
+
+export enum WelcomeAssetPlatform {
+	Desktop = 'desktop',
+	Cli = 'cli',
+	Mobile = 'mobile',
+	Web = 'web',
+}
 
 export interface ItemMetadatum {
 	id: string;
+	platform?: WelcomeAssetPlatform;
 }
 
 export type ItemMetadata = Record<string, ItemMetadatum>;
@@ -29,6 +38,7 @@ export interface WelcomeAssetNote {
 	title: string;
 	body: string;
 	resources: Record<string, WelcomeAssetResource>;
+	platform?: WelcomeAssetPlatform;
 }
 
 export interface WelcomeAssetFolder {
@@ -46,7 +56,7 @@ export type WelcomeAssets = Record<string, AssetContent>;
 
 class WelcomeUtils {
 
-	public static async createWelcomeItems(locale: string): Promise<CreateWelcomeItemsResult> {
+	public static async createWelcomeItems(locale: string, platform: WelcomeAssetPlatform): Promise<CreateWelcomeItemsResult> {
 		const output: CreateWelcomeItemsResult = {
 			defaultFolderId: null,
 		};
@@ -60,7 +70,16 @@ class WelcomeUtils {
 
 		// Actually we don't really support multiple folders at this point, because not needed
 		for (let i = 0; i < folderAssets.length; i++) {
-			const folder = await Folder.save({ title: _('Welcome!') });
+			const folderIcon = {
+				emoji: '👋',
+				name: '',
+				dataUrl: '',
+				type: FolderIconType.Emoji,
+			};
+			const folder = await Folder.save({
+				title: _('Welcome!'),
+				icon: Folder.serializeIcon(folderIcon),
+			});
 			if (!output.defaultFolderId) output.defaultFolderId = folder.id;
 		}
 
@@ -69,6 +88,10 @@ class WelcomeUtils {
 		for (let i = noteAssets.length - 1; i >= 0; i--) {
 			const noteAsset = noteAssets[i];
 			const enGbNoteAsset = enGbWelcomeAssets.notes[i];
+
+			if (noteAsset.platform && noteAsset.platform !== platform) {
+				continue;
+			}
 
 			let noteBody = noteAsset.body;
 
@@ -99,6 +122,18 @@ class WelcomeUtils {
 		return output;
 	}
 
+	private static detectPlatform_() {
+		if (shim.mobilePlatform() === MobilePlatform.Web) {
+			return WelcomeAssetPlatform.Web;
+		} else if (shim.mobilePlatform()) {
+			return WelcomeAssetPlatform.Mobile;
+		} else if (shim.isElectron()) {
+			return WelcomeAssetPlatform.Desktop;
+		} else {
+			return WelcomeAssetPlatform.Cli;
+		}
+	}
+
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static async install(locale: string, dispatch: Function) {
 		if (!Setting.value('welcome.enabled')) {
@@ -107,7 +142,7 @@ class WelcomeUtils {
 		}
 
 		if (!Setting.value('welcome.wasBuilt')) {
-			const result = await WelcomeUtils.createWelcomeItems(locale);
+			const result = await WelcomeUtils.createWelcomeItems(locale, this.detectPlatform_());
 			Setting.setValue('welcome.wasBuilt', true);
 
 			dispatch({

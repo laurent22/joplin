@@ -184,6 +184,7 @@ interface Props {
 	windowId: string;
 	secondaryWindowFocused: boolean;
 	showMenuBar: boolean;
+	syncPending: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -362,7 +363,12 @@ function useMenu(props: Props) {
 			const quitMenuItem = {
 				label: _('Quit'),
 				accelerator: keymapService.getAccelerator('quit'),
-				click: () => { void bridge().electronApp().quit(); },
+				click: () => {
+					bridge().electronApp().quitWithSyncCheck(
+						(action: { type: string; [key: string]: unknown }) => props.dispatch(action),
+						props.syncPending,
+					);
+				},
 			};
 
 			const sortNoteFolderItems = (type: string) => {
@@ -615,6 +621,18 @@ function useMenu(props: Props) {
 
 				...(shim.isMac() ? [] : profilesAndAppInstancesItems),
 
+				shim.isMac() ? noItem : {
+					type: 'separator',
+				},
+
+				shim.isMac() ? noItem : {
+					label: _('Close Window'),
+					accelerator: keymapService.getAccelerator('closeWindow'),
+					click: () => {
+						bridge().activeWindow()?.close();
+					},
+				},
+
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
@@ -691,19 +709,11 @@ function useMenu(props: Props) {
 						menuItemDic.textCut,
 						menuItemDic.textPaste,
 						menuItemDic.pasteAsText,
+						menuItemDic.pasteAsMarkdown,
 						menuItemDic.textSelectAll,
 						separator(),
-						// Using the generic "undo"/"redo" roles mean the menu
-						// item will work in every text fields, whether it's the
-						// editor or a regular text field.
-						{
-							role: 'undo',
-							label: _('Undo'),
-						},
-						{
-							role: 'redo',
-							label: _('Redo'),
-						},
+						menuItemDic.globalUndo,
+						menuItemDic.globalRedo,
 						separator(),
 						menuItemDic.textBold,
 						menuItemDic.textItalic,
@@ -1036,6 +1046,7 @@ function useMenu(props: Props) {
 		props.profileConfig,
 		switchProfileMenuItems,
 		menuItemDic,
+		props.syncPending,
 	]);
 
 	useMenuStates(menu, props);
@@ -1122,6 +1133,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		noteListRendererIds: state.noteListRendererIds,
 		noteListRendererId: state.settings['notes.listRendererId'],
 		showMenuBar: state.settings.showMenuBar,
+		syncPending: state.syncPending,
 	};
 };
 

@@ -10,7 +10,7 @@ const defaultRendererSettings: RenderSettings = {
 	resources: {},
 	codeTheme: 'atom-one-light.css',
 	noteHash: '',
-	initialScroll: 0,
+	initialScrollPercent: 0,
 	readAssetBlob: async (_path: string) => new Blob(),
 	removeUnusedPluginAssets: true,
 
@@ -21,6 +21,7 @@ const defaultRendererSettings: RenderSettings = {
 
 	pluginSettings: {},
 	requestPluginSetting: () => { },
+	showNoteLinkIcon: true,
 };
 
 const makeRenderer = (options: Partial<RendererSetupOptions>) => {

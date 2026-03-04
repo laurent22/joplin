@@ -519,7 +519,19 @@ export default class PluginService extends BaseService {
 		return isCompatible(this.appVersion_, this.appType_, manifest);
 	}
 
+	private validateManifest(manifest: unknown): void {
+		manifestFromObject(manifest);
+	}
+
 	public describeIncompatibility(manifest: PluginManifest) {
+
+		try {
+			this.validateManifest(manifest);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return _('Invalid plugin manifest: %s', message);
+		}
+
 		if (this.isCompatible(manifest)) return null;
 
 		const minVersion = minVersionForPlatform(this.appType_, manifest);

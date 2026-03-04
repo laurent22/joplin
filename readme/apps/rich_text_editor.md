@@ -45,3 +45,19 @@ On desktop, the following patterns are replaced:
 Most replacements require pressing the <kbd>space</kbd> or <kbd>enter</kbd> key after the closing formatting character. For example, typing `==test==` does not highlight "test", but pressing a space after the last `=` does.
 
 These replacements can be disabled in settings &gt; note, using the "Auto-format Markdown" setting.
+
+## Video tutorial - Desktop
+
+Watch this short video to learn how to select and use the Rich Text editor:
+
+[![Watch the video](https://img.youtube.com/vi/RE_7VVG3qPE/hqdefault.jpg)](https://www.youtube.com/watch?v=RE_7VVG3qPE)
+
+## Rich text editor on mobile
+
+The rich text editor is also available on mobile devices. You can select it when editing a note by clicking on the kebab menu and choosing "Edit as Rich Text".
+
+## Video tutorial - Mobile
+
+Watch this short video to learn how to select and use the Rich Text editor on mobile devices:
+
+[![Watch the video](https://img.youtube.com/vi/eXH5Z0b28eM/hqdefault.jpg)](https://www.youtube.com/watch?v=eXH5Z0b28eM)

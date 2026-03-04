@@ -13,7 +13,7 @@ import { Dispatch } from 'redux';
 import ModalMessageOverlay from './ModalMessageOverlay';
 import { EditorNoteStatuses, stateUtils } from '@joplin/lib/reducer';
 import dialogs from '../dialogs';
-import useDocument from '../hooks/useDocument';
+import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import useWindowCommands from './utils/useWindowCommands';
 import PluginDialogs from './PluginDialogs';
 import useSyncDialogState from './utils/useSyncDialogState';

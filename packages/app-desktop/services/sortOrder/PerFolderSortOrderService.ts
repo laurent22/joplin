@@ -1,6 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import eventManager from '@joplin/lib/eventManager';
 import { notesSortOrderFieldArray, setNotesSortOrder } from './notesSortOrderUtils';
+import { parseNotesParent } from '@joplin/lib/reducer';
 
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
@@ -44,7 +45,14 @@ export default class PerFolderSortOrderService {
 		eventManager.appStateOn('notesParentType', this.onFolderSelectionMayChange.bind(this, 'notesParentType'));
 		eventManager.appStateOn('selectedFolderId', this.onFolderSelectionMayChange.bind(this, 'selectedFolderId'));
 		eventManager.appStateOn('selectedSmartFilterId', this.onFolderSelectionMayChange.bind(this, 'selectedSmartFilterId'));
-		this.previousFolderId = Setting.value('activeFolderId');
+		// notesParent persists the last view type (including smart filters like All Notes),
+		// unlike activeFolderId which only tracks folder selections.
+		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+		if (notesParent.type === 'Folder' || notesParent.type === 'SmartFilter') {
+			this.previousFolderId = notesParent.selectedItemId;
+		} else {
+			this.previousFolderId = null;
+		}
 	}
 
 	public static isSet(folderId: string): boolean {

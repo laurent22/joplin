@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef, useCallback, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from '../DialogButtonRow';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import styled from 'styled-components';
 import DialogTitle from '../DialogTitle';
 import SyncTargetRegistry, { SyncTargetInfo } from '@joplin/lib/SyncTargetRegistry';

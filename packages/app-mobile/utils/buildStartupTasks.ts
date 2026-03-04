@@ -1,6 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
-import Logger, { TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -90,6 +90,8 @@ import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import { Profile } from '@joplin/lib/services/profileConfig/types';
 import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
+import VoiceTyping from '../services/voiceTyping/VoiceTyping';
+import whisper from '../services/voiceTyping/whisper';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -178,6 +180,9 @@ const buildStartupTasks = (
 		Setting.setConstant('pluginAssetDir', `${Setting.value('resourceDir')}/pluginAssets`);
 		Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 		Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
+		Setting.setConstant('sync.9.apiKey', '');
+		Setting.setConstant('sync.10.apiKey', '');
+		Setting.setConstant('sync.11.apiKey', '');
 	});
 	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));
@@ -195,11 +200,8 @@ const buildStartupTasks = (
 		const mainLogger = new Logger();
 		mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 		mainLogger.setLevel(Logger.LEVEL_INFO);
-
-		if (Setting.value('env') === 'dev') {
-			mainLogger.addTarget(TargetType.Console);
-			mainLogger.setLevel(Logger.LEVEL_DEBUG);
-		}
+		mainLogger.addTarget(TargetType.Console);
+		mainLogger.setLevel(Setting.value('env') === 'dev' ? LogLevel.Debug : LogLevel.Info);
 
 		Logger.initializeGlobalLogger(mainLogger);
 		initLib(mainLogger);
@@ -255,13 +257,8 @@ const buildStartupTasks = (
 		AlarmService.setDriver(new AlarmServiceDriver(reg.logger()));
 	});
 	addTask('buildStartupTasks/openDatabase', async () => {
-		if (Setting.value('env') === 'prod') {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
-		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
-
-			// await db.clearForTesting();
-		}
+		await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+		// if (Setting.value('env') === 'dev') await db.clearForTesting();
 	});
 	addTask('buildStartupTasks/setUpSettings', async () => {
 		await loadKeychainServiceAndSettings([]);
@@ -359,12 +356,28 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/migrate PPK', async () => {
 		await migratePpk();
 	});
+	addTask('buildStartupTasks/set up voice typing', async () => {
+		VoiceTyping.initialize([whisper]);
+	});
 	addTask('buildStartupTasks/load folders', async () => {
 		await refreshFolders(dispatch, '');
 
 		dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
 			ids: Setting.value('collapsedFolderIds'),
+		});
+	});
+	addTask('buildStartupTasks/initialize note visible panes', async () => {
+		const panes = Setting.value('noteVisiblePanes') || ['viewer'];
+
+		dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: panes,
+		});
+
+		dispatch({
+			type: 'NOTE_EDITOR_VISIBLE_CHANGE',
+			visible: panes.includes('editor'),
 		});
 	});
 	addTask('buildStartupTasks/load tags', async () => {
@@ -417,10 +430,6 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
 
-		// Collect revisions more frequently on mobile because it doesn't auto-save
-		// and it cannot collect anything when the app is not active.
-		RevisionService.instance().runInBackground(1000 * 30);
-
 		reg.setupRecurrentSync();
 
 		// When the app starts we want the full sync to
@@ -434,6 +443,10 @@ const buildStartupTasks = (
 			void AlarmService.updateAllNotifications();
 
 			void DecryptionWorker.instance().scheduleStart();
+
+			// Collect revisions more frequently on mobile because it doesn't auto-save
+			// and it cannot collect anything when the app is not active.
+			RevisionService.instance().runInBackground(1000 * 30);
 		});
 	});
 	addTask('buildStartupTasks/set up welcome utils', async () => {

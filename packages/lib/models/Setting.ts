@@ -61,6 +61,10 @@ export interface Constants {
 	syncVersion: number;
 	startupDevPlugins: string[];
 	isSubProfile: boolean;
+
+	'sync.9.apiKey': string;
+	'sync.10.apiKey': string;
+	'sync.11.apiKey': string;
 }
 
 interface SettingSections {
@@ -165,6 +169,11 @@ interface UserSettingMigration {
 	// and "newName" should be the regular setting name. Additionally, it's expected that the
 	// setting is stored in the database (as they all are as of Nov 2025).
 	isPluginSetting: boolean;
+}
+
+interface SubValuesOptions {
+	includeBaseKeyInName?: boolean;
+	includeConstants?: boolean;
 }
 
 const userSettingMigration: UserSettingMigration[] = [
@@ -296,6 +305,10 @@ class Setting extends BaseModel {
 		syncVersion: 3,
 		startupDevPlugins: [],
 		isSubProfile: false,
+
+		'sync.9.apiKey': '',
+		'sync.10.apiKey': '',
+		'sync.11.apiKey': '',
 	};
 
 	public static autoSaveEnabled = true;
@@ -1092,18 +1105,29 @@ class Setting extends BaseModel {
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: any = null) {
+	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: SubValuesOptions|null = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
+
+		const subKey = (key: string) => {
+			return includeBaseKeyInName ? key : key.substring(baseKey.length + 1);
+		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
-		for (const key in settings) {
-			if (!settings.hasOwnProperty(key)) continue;
-			if (key.indexOf(baseKey) === 0) {
-				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
-				output[subKey] = settings[key];
+		for (const [key, value] of Object.entries(settings)) {
+			if (key.startsWith(baseKey)) {
+				output[subKey(key)] = value;
 			}
 		}
+
+		if (options?.includeConstants) {
+			for (const [key, value] of Object.entries(this.constants_)) {
+				if (key.startsWith(baseKey)) {
+					output[subKey(key)] = value;
+				}
+			}
+		}
+
 		return output;
 	}
 
@@ -1267,6 +1291,7 @@ class Setting extends BaseModel {
 			'sync',
 			'encryption',
 			'joplinCloud',
+			'editor',
 			'plugins',
 			'markdownPlugins',
 			'note',
@@ -1328,6 +1353,7 @@ class Setting extends BaseModel {
 		if (name === 'general') return _('General');
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
+		if (name === 'editor') return _('Editor');
 		if (name === 'note') return _('Note');
 		if (name === 'folder') return _('Notebook');
 		if (name === 'markdownPlugins') return _('Markdown');
@@ -1364,11 +1390,12 @@ class Setting extends BaseModel {
 		// TODO: This is currently specific to the mobile app
 		const sectionNameToSummary: Record<string, string> = {
 			'general': _('Language, date format'),
-			'appearance': _('Themes, editor font'),
+			'appearance': _('Themes'),
 			'sync': _('Sync, encryption, proxy'),
 			'joplinCloud': _('Email To Note, login information'),
+			'editor': _('Typography, spellcheck, layout'),
 			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
-			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
+			'note': _('Geolocation, image resize'),
 			'revisionService': _('Toggle note history, keep notes for'),
 			'tools': _('Logs, profiles, sync status'),
 			'importOrExport': _('Import or export your data'),
@@ -1402,6 +1429,7 @@ class Setting extends BaseModel {
 			'general': 'icon-general',
 			'sync': 'icon-sync',
 			'appearance': 'icon-appearance',
+			'editor': 'fas fa-edit',
 			'note': 'icon-note',
 			'folder': 'icon-notebooks',
 			'plugins': 'icon-plugins',
@@ -1426,6 +1454,7 @@ class Setting extends BaseModel {
 			'general': 'fa fa-sliders-h',
 			'sync': 'fa fa-sync',
 			'appearance': 'fa fa-ruler',
+			'editor': 'fas fa-pen',
 			'note': 'fa fa-sticky-note',
 			'revisionService': 'far fa-history',
 			'plugins': 'fa fa-puzzle-piece',

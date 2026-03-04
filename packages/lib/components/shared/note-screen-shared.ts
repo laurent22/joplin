@@ -29,6 +29,7 @@ export interface Props {
 	noteId: string;
 	folders: FolderEntity[];
 	sharedData: SharedData|undefined;
+	noteVisiblePanes: string[];
 }
 
 export interface BaseState {
@@ -151,7 +152,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 
 	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? { ...note } : await Note.save(note, saveOptions);
 
-	const stateNote = state.note;
+	const stateNote = comp.state.note;
 
 	// Note was reloaded while being saved.
 	if (!recreatedNote && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
@@ -293,7 +294,8 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 
 	const note = await Note.load(comp.props.noteId);
 
-	let mode = 'view';
+	const panes = comp.props.noteVisiblePanes;
+	let mode = panes.includes('editor') ? 'edit' : 'view';
 
 	if (isProvisionalNote && !comp.props.sharedData) {
 		mode = 'edit';

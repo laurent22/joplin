@@ -11,6 +11,7 @@ widestring = "1.0.2"
 uuid = "1.1.2"
 lazy_static = "1.4"
 wasm-bindgen = "0.2"
+sanitize-filename = "0.3.0"
 parser-macros = { path = "../parser-macros" }
 
 [dependencies.web-sys]

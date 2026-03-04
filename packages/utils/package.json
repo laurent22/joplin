@@ -1,6 +1,6 @@
 {
   "name": "@joplin/utils",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "Utilities for Joplin",
   "repository": "https://github.com/laurent22/joplin/tree/dev/packages/utils",
   "exports": {
@@ -20,6 +20,7 @@
     "./ipc": "./dist/ipc.js",
     "./path": "./dist/path.js",
     "./cli": "./dist/cli.js",
+    "./array": "./dist/array.js",
     "./version": "./dist/version.js"
   },
   "publishConfig": {
@@ -37,9 +38,9 @@
   "dependencies": {
     "@joplin/fork-htmlparser2": "^4.1.60",
     "async-mutex": "0.5.0",
-    "dayjs": "1.11.18",
+    "dayjs": "1.11.19",
     "execa": "5.1.1",
-    "fs-extra": "11.3.1",
+    "fs-extra": "11.3.2",
     "glob": "11.0.3",
     "html-entities": "1.4.0",
     "markdown-it": "13.0.2",

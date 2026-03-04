@@ -6,6 +6,7 @@ export enum ErrorCode {
 	NoSub = 'no_sub',
 	NoStripeSub = 'no_stripe_sub',
 	InvalidOrigin = 'invalidOrigin',
+	IsReadOnly = 'isReadOnly',
 	TaskAlreadyRunning = 'taskAlreadyRunning',
 }
 

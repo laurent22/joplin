@@ -161,6 +161,7 @@ const nodes = addDefaultToplevelAttributes({
 		inline: true,
 		group: 'inlineBreak',
 		selectable: false,
+		leafText: () => '\n',
 		parseDOM: [{ tag: 'br' }],
 		toDOM: () => domOutputSpecs.br,
 	},

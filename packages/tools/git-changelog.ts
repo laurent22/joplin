@@ -258,7 +258,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		let addIt = false;
 
 		// "All" refers to desktop, CLI and mobile app. Clipper and Server are not included.
-		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server' && platform !== 'cloud')) addIt = true;
+		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server' && platform !== 'cloud' && platform !== 'transcribe')) addIt = true;
 		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
@@ -478,8 +478,15 @@ async function findFirstRelevantTag(baseTag: string, platform: Platform, allTags
 	for (let i = baseTagIndex - 1; i >= 0; i--) {
 		const tag = allTags[i];
 		if (platformFromTag(tag) !== platform) continue;
+
 		const currentVersion = versionFromTag(tag);
-		if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+
+		try {
+			if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+		} catch (error) {
+			console.warn(`Skipping invalid tag: ${tag}`);
+			continue;
+		}
 
 		try {
 			const logs = await gitLog(tag);

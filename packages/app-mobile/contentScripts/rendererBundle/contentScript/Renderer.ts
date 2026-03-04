@@ -20,13 +20,14 @@ export interface RenderSettings {
 	resources: ResourceInfos;
 	codeTheme: string;
 	noteHash: string;
-	initialScroll: number;
+	initialScrollPercent: number;
 	// If [null], plugin assets are not added to the document
 	pluginAssetContainerSelector: string|null;
 	removeUnusedPluginAssets: boolean;
 
 	splitted?: boolean; // Move CSS into a separate output
 	mapsToLine?: boolean; // Sourcemaps
+	showNoteLinkIcon?: boolean;
 
 	createEditPopupSyntax: string;
 	destroyEditPopupSyntax: string;
@@ -136,6 +137,7 @@ export default class Renderer {
 			splitted: settings.splitted,
 			mapsToLine: settings.mapsToLine,
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
+			showNoteLinkIcon: settings.showNoteLinkIcon,
 			globalSettings: settings.globalSettings,
 		};
 

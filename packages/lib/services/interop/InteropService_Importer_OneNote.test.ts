@@ -42,6 +42,19 @@ const normalizeNoteForSnapshot = (body: string) => {
 	return removeItemIds(removeDefaultCss(body));
 };
 
+// A single Markdown string is much easier to visually compare during snapshot testing.
+// Prefer notesToMarkdownString to normalizeNoteForSnapshot when the exact output HTML
+// doesn't matter.
+const notesToMarkdownString = (notes: NoteEntity[]) => {
+	const converter = new HtmlToMd();
+	return notes.map(note => {
+		return [
+			`# Note: ${note.title}`,
+			converter.parse(normalizeNoteForSnapshot(note.body)),
+		].join('\n\n');
+	}).sort().join('\n\n\n');
+};
+
 // This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
@@ -185,16 +198,21 @@ describe('InteropService_Importer_OneNote', () => {
 		const content = await readFile(filepath, 'utf-8');
 
 		const jsdom = new JSDOM('<div></div>');
-		InteropService.instance().domParser = new jsdom.window.DOMParser();
-		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
+		const domParser = new jsdom.window.DOMParser();
+		const xmlSerializer = new jsdom.window.XMLSerializer();
 
 		const importer = new InteropService_Importer_OneNote();
 		await importer.init('asdf', {
-			domParser: new jsdom.window.DOMParser(),
-			xmlSerializer: new jsdom.window.XMLSerializer(),
+			domParser,
+			xmlSerializer,
 		});
 
-		expectWithInstructions(importer.extractSvgs(content, titleGenerator())).toMatchSnapshot();
+		const dom = domParser.parseFromString(content, 'text/html');
+		const extracted = importer.extractSvgs(dom, titleGenerator());
+		expect(extracted).toMatchObject({ changed: true });
+		expectWithInstructions(
+			{ html: dom.body.outerHTML, svgs: extracted.svgs },
+		).toMatchSnapshot();
 	});
 
 	it('should ignore broken characters at the start of paragraph', async () => {
@@ -226,7 +244,7 @@ describe('InteropService_Importer_OneNote', () => {
 		const noteToTest = notes.find(n => n.title === 'Tips from a Pro Using Trees for Dramatic Landscape Photography');
 
 		expectWithInstructions(noteToTest).toBeTruthy();
-		expectWithInstructions(noteToTest.body).toContain('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>');
+		expectWithInstructions(noteToTest.body).toContain('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&amp;section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&amp;page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&amp;end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>');
 	});
 
 	it('should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker', async () => {
@@ -316,5 +334,18 @@ describe('InteropService_Importer_OneNote', () => {
 		const markdown = converter.parse(importedNote.body);
 
 		expect(markdown).toMatchSnapshot('Math');
+	});
+
+	it('should apply position data for embedded files', async () => {
+		const notes = await importNote(`${supportDir}/onenote/testOneNoteEmbeddedWordDoc.one`);
+		const importedNote = notes.find(n => n.title.startsWith('Embedded doc sheet'));
+
+		expect(normalizeNoteForSnapshot(importedNote.body)).toMatchSnapshot('EmbeddedFiles');
+	});
+
+	it('should correctly import .onepkg notebooks', async () => {
+		const notes = await importNote(`${supportDir}/onenote/test.onepkg`);
+
+		expect(notesToMarkdownString(notes)).toMatchSnapshot();
 	});
 });

@@ -1,5 +1,6 @@
 use super::ApiResult;
 use super::FileApiDriver;
+use super::FileHandle;
 use std::fs;
 use std::path;
 use std::path::Path;
@@ -7,6 +8,16 @@ use std::path::Path;
 pub struct FileApiDriverImpl {}
 
 impl FileApiDriver for FileApiDriverImpl {
+    #[cfg(target_os = "windows")]
+    fn is_windows(&self) -> bool {
+        true
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    fn is_windows(&self) -> bool {
+        false
+    }
+
     fn is_directory(&self, path: &str) -> ApiResult<bool> {
         let metadata = fs::metadata(path)?;
         let file_type = metadata.file_type();
@@ -24,6 +35,10 @@ impl FileApiDriver for FileApiDriverImpl {
 
     fn read_file(&self, path: &str) -> ApiResult<Vec<u8>> {
         fs::read(path)
+    }
+
+    fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>> {
+        Ok(Box::new(fs::File::open(path)?))
     }
 
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()> {
@@ -71,6 +86,8 @@ impl FileApiDriver for FileApiDriverImpl {
         Path::new(path_1).join(path_2).to_string_lossy().into()
     }
 }
+
+impl FileHandle for fs::File {}
 
 #[cfg(test)]
 mod test {

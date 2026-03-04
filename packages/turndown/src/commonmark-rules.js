@@ -24,7 +24,7 @@ var rules = {}
 rules.paragraph = {
   filter: 'p',
 
-  replacement: function (content) {
+  replacement: function (content, node, options) {
     // If the line starts with a nonbreaking space, replace it. By default, the
     // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
     // because the space is nonbreaking, we want to keep it.
@@ -36,6 +36,18 @@ rules.paragraph = {
     // take up by default no space. Output nothing.
     if (content === '') {
       return '';
+    }
+
+    // When tightLists is enabled, paragraphs inside list items should not add
+    // extra blank lines, but only if the list item contains a single paragraph
+    if (options.tightLists && node.parentNode && node.parentNode.nodeName === 'LI') {
+      const parentLi = node.parentNode;
+      const paragraphs = Array.from(parentLi.childNodes).filter(
+        child => child.nodeName === 'P'
+      );
+      if (paragraphs.length === 1) {
+        return content;
+      }
     }
 
     return '\n\n' + content + '\n\n'
@@ -176,6 +188,27 @@ rules.resourcePlaceholder = {
     }
   }
 }
+
+// Math renderers often include:
+// - MathML
+// - Stylized display HTML for browsers that don't suppport MathML.
+//
+// Joplin usually can't properly import the display HTML (and the MathML can usually
+// be imported separately). Skip it:
+rules.ignoreMathDisplay = {
+  filter: function (node) {
+    const hidden = node.getAttribute('aria-hidden') === 'true';
+    const hasClass = (className) => node.classList.contains(className);
+
+    const isWikipediaMathFallback = node.nodeName === 'IMG' && (
+      hasClass('mwe-math-fallback-image-display') || hasClass('mwe-math-fallback-image-inline')
+    ) && hidden;
+    const isKatexDisplay = node.nodeName === 'SPAN' && hasClass('katex-html') && hidden;
+    return isWikipediaMathFallback || isKatexDisplay;
+  },
+
+  replacement: () => '',
+};
 
 // ==============================
 // END Joplin format support
@@ -690,7 +723,7 @@ rules.picture = {
 
 function findFirstDescendant(node, byType, name) {
   for (const childNode of node.childNodes) {
-    if (byType === 'class' && childNode.classList.contains(name)) return childNode;
+    if (byType === 'class' && childNode.classList && childNode.classList.contains(name)) return childNode;
     if (byType === 'nodeName' && childNode.nodeName === name) return childNode;
 
     const sub = findFirstDescendant(childNode, byType, name);
@@ -775,6 +808,35 @@ rules.mathjaxScriptBlock = {
 // ===============================================================================
 
 // ===============================================================================
+// MathML support (Wikipedia & KaTeX math)
+// ===============================================================================
+
+// Returns the contents of a <semantics><annotation>...</annotation></semantics> within
+// a math block.
+const getSourceText = (mathNode) => {
+  const semantics = findFirstDescendant(mathNode, 'nodeName', 'semantics');
+  if (!semantics) return '';
+
+  const annotation = findFirstDescendant(semantics, 'nodeName', 'annotation');
+  if (!annotation) return '';
+  return annotation.textContent;
+};
+
+rules.mathMlScriptBlock = {
+  filter: function (node) {
+    return node.nodeName === 'math' && !!getSourceText(node);
+  },
+
+  escapeContent: function() {
+    return false;
+  },
+
+  replacement: function (_content, node, _options) {
+    return '$' + getSourceText(node) + '$';
+  }
+};
+
+// ===============================================================================
 // Joplin "noMdConv" support
 // 
 // Tags that have the class "jop-noMdConv" are not converted to Markdown
@@ -814,7 +876,7 @@ function joplinEditableBlockInfo(node) {
   let sourceNode = null;
   let isInline = false;
   for (const childNode of node.childNodes) {
-    if (childNode.classList.contains('joplin-source')) {
+    if (childNode.classList && childNode.classList.contains('joplin-source')) {
       sourceNode = childNode;
       break;
     }

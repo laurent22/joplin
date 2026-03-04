@@ -1,6 +1,6 @@
 import Note from '@joplin/lib/models/Note';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import useFormNote, { HookDependencies } from './useFormNote';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
@@ -37,7 +37,7 @@ describe('useFormNote', () => {
 		const formNote = renderHook(props => useFormNote(props), {
 			initialProps: makeFormNoteProps(),
 		});
-		await formNote.waitFor(() => {
+		await waitFor(() => {
 			// id is falsy until after the first load of the form note.
 			expect(formNote.result.current.formNote.id).not.toBeFalsy();
 		});
@@ -55,11 +55,9 @@ describe('useFormNote', () => {
 		});
 
 		// Changing encryption_applied should cause a re-render
-		await act(async () => {
-			await formNote.waitFor(() => {
-				expect(formNote.result.current.formNote).toMatchObject({
-					encryption_applied: 1,
-				});
+		await waitFor(() => {
+			expect(formNote.result.current.formNote).toMatchObject({
+				encryption_applied: 1,
 			});
 		});
 
@@ -72,7 +70,7 @@ describe('useFormNote', () => {
 		});
 
 		// Ending decryption should also cause a re-render
-		await formNote.waitFor(() => {
+		await waitFor(() => {
 			expect(formNote.result.current.formNote).toMatchObject({
 				encryption_applied: 0,
 			});
@@ -98,7 +96,7 @@ describe('useFormNote', () => {
 		const formNote = renderHook(props => useFormNote(props), {
 			initialProps: makeFormNoteProps(),
 		});
-		await formNote.waitFor(() => {
+		await waitFor(() => {
 			expect(formNote.result.current.formNote).toMatchObject({
 				is_conflict: 1,
 				title: testNote.title,
@@ -127,7 +125,7 @@ describe('useFormNote', () => {
 			initialProps: props,
 		});
 
-		await formNote.waitFor(() => {
+		await waitFor(() => {
 			expect(formNote.result.current.formNote.title).toBe('Test Note!');
 		});
 
@@ -136,7 +134,7 @@ describe('useFormNote', () => {
 			await Note.save({ id: note.id, title: 'Modified' });
 		});
 
-		await formNote.waitFor(() => {
+		await waitFor(() => {
 			expect(formNote.result.current.formNote.title).toBe('Modified');
 		});
 
@@ -160,8 +158,8 @@ describe('useFormNote', () => {
 			initialProps: makeFormNoteProps(),
 		});
 
-		await formNote.waitFor(() => {
-			return Object.values(formNote.result.current.resourceInfos).length > 0;
+		await waitFor(() => {
+			expect(Object.values(formNote.result.current.resourceInfos).length).toBeGreaterThan(0);
 		});
 		const initialResourceInfos = formNote.result.current.resourceInfos;
 		expect(initialResourceInfos).toMatchObject({
@@ -171,7 +169,7 @@ describe('useFormNote', () => {
 		await act(async () => {
 			await Resource.save({ ...resource, filename: 'test.txt' });
 		});
-		await formNote.waitFor(() => {
+		await waitFor(() => {
 			const resourceInfo = formNote.result.current.resourceInfos[resource.id];
 			expect(resourceInfo.item).toMatchObject({
 				id: resource.id, filename: 'test.txt',
