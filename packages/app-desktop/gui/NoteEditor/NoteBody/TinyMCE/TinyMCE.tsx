@@ -33,6 +33,7 @@ import { DropHandler } from '../../utils/useDropHandler';
 import Logger from '@joplin/utils/Logger';
 import useWebViewApi from './utils/useWebViewApi';
 import useLinkTooltips from './utils/useLinkTooltips';
+import { embedPdfLinks, ensureTrailingEditableParagraph, restorePdfEmbedsToLinks } from './utils/embedPdf';
 import { focus } from '@joplin/lib/utils/focusHandler';
 const md5 = require('md5');
 const { clipboard } = require('electron');
@@ -186,7 +187,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		return {
 			content: async () => {
 				if (!editorRef.current) return '';
-				return prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editorRef.current.getContent(), props.contentOriginalCss);
+				return prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, restorePdfEmbedsToLinks(editorRef.current.getContent()), props.contentOriginalCss);
 			},
 			resetScroll: () => {
 				if (editor) editor.getWin().scrollTo(0, 0);
@@ -749,7 +750,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					'media-src \'self\' blob: data: *', // Audio and video players
 
 					// Disallow certain unused features
-					'child-src https://*.youtube.com https://*.youtube-nocookie.com', // Allow YouTube embeds
+					// file: is required for local PDF iframes from the resource directory.
+					// This is scoped to Electron where file:// access is already sandboxed
+					// to allowedFilePrefixes — arbitrary local HTML cannot be framed from web content.
+					'child-src https://*.youtube.com https://*.youtube-nocookie.com file:', // Allow YouTube embeds and local PDF iframes
 					'object-src \'none\'', // Objects can be used for script injection
 					'form-action \'none\'', // No submitting forms
 
@@ -922,6 +926,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						for (const code of codeElements) {
 							code.setAttribute('spellcheck', 'false');
 						}
+						embedPdfLinks(editor);
+						ensureTrailingEditableParagraph(editor);
 					};
 
 					editor.on('SetContent', () => {
@@ -1235,7 +1241,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		nextOnChangeEventInfo.current = null;
 
 		resetLinkTooltips();
-		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, info.editor.getContent(), info.contentOriginalCss);
+		const contentMd = await prop_htmlToMarkdownRef.current(info.contentMarkupLanguage, restorePdfEmbedsToLinks(info.editor.getContent()), info.contentOriginalCss);
 
 		lastOnChangeEventInfo.current.content = contentMd;
 		lastOnChangeEventInfo.current.resourceInfos = await attachedResources(contentMd);

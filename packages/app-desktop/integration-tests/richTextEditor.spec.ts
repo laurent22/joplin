@@ -281,5 +281,49 @@ test.describe('richTextEditor', () => {
 		await expect(editorBody).toHaveText('');
 	});
 
-});
+	test('should render PDF attachments inline and round-trip back to markdown correctly', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('PDF embed test');
+		const editor = mainScreen.noteEditor;
 
+		await editor.focusCodeMirrorEditor();
+		await setFilePickerResponse(electronApp, [join(__dirname, 'resources', 'small-pdf.pdf')]);
+		await editor.attachFileButton.click();
+
+		const resourceLinkExpression = /\[.*\]\(:\/(\w+)\)/;
+		await expect.poll(async () => editor.codeMirrorEditor.innerText()).toMatch(resourceLinkExpression);
+		const markdownBefore = await editor.codeMirrorEditor.innerText();
+		const resourceId = markdownBefore.match(resourceLinkExpression)[1];
+
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.waitFor();
+
+		const rteFrame = editor.getRichTextFrameLocator();
+
+		// The PDF link must be replaced with an iframe embed — not a plain link.
+		await rteFrame.locator('iframe.joplin-pdf-embed').waitFor();
+
+		// No raw <a href="...pdf"> (without the hidden marker) must be visible.
+		await expect(rteFrame.locator('a[href$=".pdf"]:not([data-joplin-pdf-hidden])')).not.toBeAttached();
+
+		// Click the spacer paragraph to position the cursor after the PDF.
+		const sentinelP = rteFrame.locator('p[data-joplin-cursor-spacer="true"]');
+		await sentinelP.click();
+		await mainWindow.keyboard.type('After PDF');
+
+		await expect(editor.getRichTextEditorBody()).toContainText('After PDF');
+
+		await editor.toggleEditorsButton.click();
+		await editor.codeMirrorEditor.waitFor();
+
+		await expect.poll(async () => editor.codeMirrorEditor.innerText()).toContain('After PDF');
+
+		const markdownAfter = await editor.codeMirrorEditor.innerText();
+
+		expect(markdownAfter).toContain(`:/${resourceId}`);
+		expect(markdownAfter).not.toContain('<iframe');
+		expect(markdownAfter).not.toContain('data-joplin-pdf-hidden');
+		expect(markdownAfter).not.toContain('joplin-pdf-embed');
+		expect(markdownAfter).toContain('After PDF');
+	});
+});
