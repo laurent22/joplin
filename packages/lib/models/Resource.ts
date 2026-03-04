@@ -265,8 +265,8 @@ export default class Resource extends BaseItem {
 				if (await this.fsDriver().exists(encryptedPath)) {
 					await this.fsDriver().remove(encryptedPath);
 				}
-			} catch (_) {
-				// Best-effort cleanup
+			} catch (error) {
+				this.logger().warn('Failed to clean up partial .crypted file:', error);
 			}
 
 			if (error.code === 'ENOENT') {
