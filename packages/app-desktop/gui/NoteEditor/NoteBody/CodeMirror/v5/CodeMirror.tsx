@@ -49,8 +49,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const editorRef = useRef(null);
-	const [editorRoot, setEditorRoot] = useState<HTMLDivElement|null>(null);
-	const rootRef = useRef<HTMLDivElement|null>(null);
+	const [editorRoot, setEditorRoot] = useState<HTMLDivElement | null>(null);
+	const rootRef = useRef<HTMLDivElement | null>(null);
 	rootRef.current = editorRoot;
 
 	const webviewRef = useRef(null);
@@ -338,7 +338,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [editorPasteText, onEditorPaste]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const loadScript = async (script: any) => {
+	const loadScript = async (script: any, document: Document) => {
 		return new Promise((resolve) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let element: any = document.createElement('script');
@@ -367,6 +367,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	};
 
 	useEffect(() => {
+		if (!editorRoot) return () => { };
 		let cancelled = false;
 
 		async function loadScripts() {
@@ -393,13 +394,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				});
 			}
 
+			const ownerDoc = editorRoot.ownerDocument;
 			for (const s of scriptsToLoad) {
-				if (document.getElementById(s.id)) {
+				if (ownerDoc.getElementById(s.id)) {
 					s.loaded = true;
 					continue;
 				}
 
-				await loadScript(s);
+				await loadScript(s, ownerDoc);
 				if (cancelled) return;
 
 				s.loaded = true;
@@ -411,10 +413,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		return () => {
 			cancelled = true;
 		};
-	}, [styles.editor.codeMirrorTheme]);
+	}, [styles.editor.codeMirrorTheme, editorRoot]);
 
 	useEffect(() => {
-		if (!editorRoot) return () => {};
+		if (!editorRoot) return () => { };
 
 		const theme = themeStyle(props.themeId);
 
@@ -568,10 +570,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				opacity: .5;
 			}
 
-			.CodeMirror-cursor {
-				border-left-color: ${theme.color};
-			}
-				
 			/* We need to use important to override theme specific values */
 			.cm-error {
 				color: inherit !important;
@@ -794,7 +792,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={setEditorRoot}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId} windowId={windowId}/>
+					<Toolbar themeId={props.themeId} windowId={windowId} />
 					{props.noteToolbar}
 				</div>
 				{editorViewerRow}
