@@ -13,6 +13,7 @@ const commandsWithDependencies = [
 	require('../commands/focusElementNoteViewer'),
 	require('../commands/focusElementToolbar'),
 	require('../commands/pasteAsText'),
+	require('../commands/pasteAsMarkdown'),
 ];
 
 type OnBodyChange = (event: OnChangeEvent)=> void;
