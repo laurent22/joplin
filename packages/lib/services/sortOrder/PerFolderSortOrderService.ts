@@ -100,28 +100,33 @@ export default class PerFolderSortOrderService {
 			PerFolderSortOrderService.setPerFolderSortOrder(targetId, field, reverse);
 		} else {
 			PerFolderSortOrderService.deletePerFolderSortOrder(targetId);
-			this.loadSharedSortOrder();
+			if (targetId === selectedId) {
+				this.loadSharedSortOrder();
 
-			const field = this.sharedSortOrder.field;
-			let reverse: boolean;
-			if (Setting.value('notes.perFieldReversalEnabled')) {
-				reverse = this.sharedSortOrder[field] as boolean;
-			} else {
-				reverse = this.sharedSortOrder.reverse;
+				const field = this.sharedSortOrder.field;
+				let reverse: boolean;
+				if (Setting.value('notes.perFieldReversalEnabled')) {
+					reverse = this.sharedSortOrder[field] as boolean;
+				} else {
+					reverse = this.sharedSortOrder.reverse;
+				}
+				setNotesSortOrder(field, reverse);
 			}
-			setNotesSortOrder(field, reverse);
 		}
 	}
 
 	public static onSortOrderChange(folderId: string) {
-		if (!folderId) return;
 		const field = Setting.value('notes.sortOrder.field');
 		const reverse = Setting.value('notes.sortOrder.reverse');
+		if (!folderId) {
+			this.setSharedSortOrder(field, reverse);
+			return;
+		}
 		if (this.isSet(folderId)) {
 			// Folder has per-folder sort enabled, update its entry
 			this.setPerFolderSortOrder(folderId, field, reverse);
 		} else {
-			// Folder uses shares sort, update the shared sort
+			// Folder uses shared sort, update the shared sort
 			this.setSharedSortOrder(field, reverse);
 		}
 	}
