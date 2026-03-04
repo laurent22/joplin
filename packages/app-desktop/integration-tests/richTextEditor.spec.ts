@@ -304,7 +304,7 @@ test.describe('richTextEditor', () => {
 		await rteFrame.locator('iframe.joplin-pdf-embed').waitFor();
 
 		// No raw <a href="...pdf"> (without the hidden marker) must be visible.
-		await expect(rteFrame.locator('a[href$=".pdf"]:not([data-joplin-pdf-hidden])')).not.toBeAttached();
+		await expect(rteFrame.locator(`a[href=":/${resourceId}"]:not([data-joplin-pdf-hidden])`)).not.toBeAttached();
 
 		// Click the spacer paragraph to position the cursor after the PDF.
 		const sentinelP = rteFrame.locator('p[data-joplin-cursor-spacer="true"]');

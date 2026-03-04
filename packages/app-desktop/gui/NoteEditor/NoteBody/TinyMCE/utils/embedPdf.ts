@@ -18,7 +18,6 @@ export const embedPdfLinks = (editorInstance: Editor): void => {
 	for (const anchor of doc.querySelectorAll<HTMLAnchorElement>('a[href]')) {
 		const href = anchor.getAttribute('href');
 		if (!href || !isPdfUrl(href)) continue;
-		// Guard against double-wrapping when SetContent fires more than once.
 		if (anchor.closest('.joplin-pdf-embed-wrapper')) continue;
 
 		const wrapper = doc.createElement('div');
@@ -53,8 +52,10 @@ export const embedPdfLinks = (editorInstance: Editor): void => {
 			);
 
 		if (isOnlyChildOfBlock && parent.parentNode) {
+			wrapper.setAttribute('data-joplin-restore-tag', parent.tagName.toLowerCase());
 			parent.parentNode.replaceChild(wrapper, parent);
 		} else {
+			wrapper.setAttribute('data-joplin-restore-tag', 'inline');
 			anchor.parentNode?.replaceChild(wrapper, anchor);
 		}
 	}
@@ -78,10 +79,10 @@ export const ensureTrailingEditableParagraph = (editorInstance: Editor): void =>
 	body.appendChild(p);
 };
 
-// Reverses embedPdfLinks before save. Re-wraps the recovered anchor in <p>
-// because embedPdfLinks replaced the whole parent <p> with the wrapper div.
-// Empty cursor-spacer paragraphs from ensureTrailingEditableParagraph are
-// removed; non-empty ones have only their sentinel attribute stripped.
+// Reverses embedPdfLinks before save. Restores the anchor into the original
+// block element (stored in data-joplin-restore-tag) or inline if the anchor
+// had siblings. Empty cursor-spacer paragraphs are removed; non-empty ones
+// have only their sentinel attribute stripped.
 export const restorePdfEmbedsToLinks = (html: string): string => {
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(html, 'text/html');
@@ -94,9 +95,14 @@ export const restorePdfEmbedsToLinks = (html: string): string => {
 		if (!hiddenAnchor.getAttribute('style')) {
 			hiddenAnchor.removeAttribute('style');
 		}
-		const p = doc.createElement('p');
-		p.appendChild(hiddenAnchor);
-		wrapper.parentNode.replaceChild(p, wrapper);
+		const restoreTag = wrapper.getAttribute('data-joplin-restore-tag') ?? 'p';
+		if (restoreTag === 'inline') {
+			wrapper.parentNode.replaceChild(hiddenAnchor, wrapper);
+		} else {
+			const block = doc.createElement(restoreTag);
+			block.appendChild(hiddenAnchor);
+			wrapper.parentNode.replaceChild(block, wrapper);
+		}
 	}
 
 	for (const spacer of doc.querySelectorAll<HTMLElement>('[data-joplin-cursor-spacer]')) {
