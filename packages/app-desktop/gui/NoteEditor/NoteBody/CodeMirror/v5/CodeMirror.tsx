@@ -568,6 +568,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				opacity: .5;
 			}
 
+			.CodeMirror-cursor {
+				border-left-color: ${theme.color};
+			}
+				
 			/* We need to use important to override theme specific values */
 			.cm-error {
 				color: inherit !important;
