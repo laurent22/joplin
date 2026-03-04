@@ -1,6 +1,7 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
+import { processImagesInPastedHtml } from '../utils/resourceHandling';
 
 const { clipboard } = require('electron');
 
@@ -22,11 +23,18 @@ const htmlToMd = () => {
 export const runtime = (comp: any): CommandRuntime => {
 	return {
 		execute: async () => {
-			const html = clipboard.readHTML();
-			// If HTML is available, convert it to Markdown; otherwise fall back to plain text
-			const textToInsert = html ? htmlToMd().parse(html, { tightLists: true }) : clipboard.readText();
-			if (textToInsert) {
-				comp.editorRef.current.execCommand({ name: 'insertText', value: textToInsert });
+			let html = clipboard.readHTML();
+			if (html) {
+				// Download images and convert them to Joplin resources
+				html = await processImagesInPastedHtml(html, { useInternalUrls: true });
+				const markdown = htmlToMd().parse(html, { tightLists: true });
+				comp.editorRef.current.execCommand({ name: 'insertText', value: markdown });
+			} else {
+				// Fall back to plain text if no HTML is available
+				const text = clipboard.readText();
+				if (text) {
+					comp.editorRef.current.execCommand({ name: 'insertText', value: text });
+				}
 			}
 		},
 		enabledCondition: 'oneNoteSelected && markdownEditorVisible',
