@@ -121,6 +121,9 @@ describe('HtmlToMd', () => {
 		const collapsedResult = htmlToMd.parse(html, { collapseMultipleBlankLines: true });
 		expect(collapsedResult).not.toContain('\n\n\n');
 		expect(collapsedResult).not.toContain('\n\n  \n');
+
+		// Verify that a single blank line is preserved (not fully removed)
+		expect(collapsedResult).toContain('\n\n');
 	});
 
 });
