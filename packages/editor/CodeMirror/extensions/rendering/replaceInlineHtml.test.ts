@@ -64,4 +64,21 @@ describe('replaceInlineHtml', () => {
 			expect(editor.contentDOM.querySelectorAll('sub')).toHaveLength(1);
 		});
 	});
+
+	test('should not hide incomplete inline HTML tags', async () => {
+		const markdown = '<sup>x';
+		const editor = await createEditorWithCursor(markdown, markdown.length);
+
+		await waitFor(() => {
+			expect(editor.contentDOM.textContent).toContain('<sup>x');
+		});
+	});
+
+	test('should not style incomplete inline HTML tags', async () => {
+		const markdown = '<strike>';
+		const editor = await createEditorWithCursor(markdown, markdown.length, []);
+
+		expect(editor.contentDOM.querySelector('strike')).toBeFalsy();
+		expect(editor.contentDOM.textContent).toContain('<strike>');
+	});
 });

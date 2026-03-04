@@ -89,12 +89,14 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 
 		if (info.opening) {
 			const closingTag = findClosingTag(node, state);
-			return [node.from, closingTag ? closingTag.to : node.to];
+			if (!closingTag) return null;
+			return [node.from, closingTag.to];
 		}
 
 		if (info.closing) {
 			const openingTag = findOpeningTag(node, state);
-			return [openingTag ? openingTag.from : node.from, node.to];
+			if (!openingTag) return null;
+			return [openingTag.from, node.to];
 		}
 
 		return null;
@@ -111,8 +113,7 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 			return selectionTouchesTag(node, state);
 		},
 		createDecoration: (node, state) => {
-			const info = htmlNodeInfo(node, state);
-			return info && isMatchingTag(info) ? hideDecoration : null;
+			return getMatchingTagRange(node, state) ? hideDecoration : null;
 		},
 	});
 
@@ -123,6 +124,7 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 		createDecoration: (node, state) => {
 			const info = htmlNodeInfo(node, state);
 			if (!info || !isMatchingOpeningTag(info)) return null;
+			if (!getMatchingTagRange(node, state)) return null;
 			return onRenderContent(info);
 		},
 		getDecorationRange(node, state) {
