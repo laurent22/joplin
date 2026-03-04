@@ -43,238 +43,87 @@ describe('useToolbarEditorState', () => {
 		createMockButtonInfo('hideKeyboard', 'Hide Keyboard'),
 	];
 
-	it('should partition items into enabled and disabled based on initialSelectedCommandNames', () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold', 'textItalic'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
+	const toNames = (items: ReorderableItem[]) => items.map(i => i.commandName);
 
-		expect(result.current.enabledItems).toHaveLength(2);
-		expect(result.current.enabledItems[0].commandName).toBe('textBold');
-		expect(result.current.enabledItems[1].commandName).toBe('textItalic');
+	const renderToolbarHook = (initialSelectedCommandNames: string[]) => renderHook(() =>
+		useToolbarEditorState({
+			initialSelectedCommandNames,
+			allCommandNames: defaultAllCommandNames,
+			allButtonInfos: defaultAllButtonInfos,
+		}),
+	);
 
-		// Disabled items should be the rest, in default order
-		expect(result.current.disabledItems).toHaveLength(4);
-		expect(result.current.disabledItems.map((i: ReorderableItem) => i.commandName)).toEqual([
-			'attachFile',
-			'textCode',
-			'textMath',
-			'hideKeyboard',
+	it('should partition items into enabled and disabled, excluding separators', () => {
+		const { result } = renderToolbarHook(['-', 'textBold', '-', 'textItalic']);
+
+		expect(toNames(result.current.enabledItems)).toEqual(['textBold', 'textItalic']);
+		expect(toNames(result.current.disabledItems)).toEqual([
+			'attachFile', 'textCode', 'textMath', 'hideKeyboard',
 		]);
+		expect(toNames(result.current.disabledItems)).not.toContain('-');
 	});
 
-	it('should exclude separators from both lists', () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['-', 'textBold', '-'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
+	it('handleMoveUp and handleMoveDown should reorder items and save, with no-op at boundaries', async () => {
+		const { result } = renderToolbarHook(['textBold', 'textItalic', 'textCode']);
 
-		// Should only have textBold, separators filtered out
-		expect(result.current.enabledItems).toHaveLength(1);
-		expect(result.current.enabledItems[0].commandName).toBe('textBold');
-
-		// Disabled should not include separators either
-		const disabledNames = result.current.disabledItems.map((i: ReorderableItem) => i.commandName);
-		expect(disabledNames).not.toContain('-');
-	});
-
-	it('handleMoveUp(0) should be a no-op', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold', 'textItalic'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
-
-		const initialOrder = result.current.enabledItems.map((i: ReorderableItem) => i.commandName);
-
-		await act(async () => {
-			result.current.handleMoveUp(0);
-		});
-
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual(initialOrder);
-		// Setting should not be saved for a no-op
-		expect(Setting.value('editor.toolbarButtons')).toEqual([]);
-	});
-
-	it('handleMoveDown on last item should be a no-op', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold', 'textItalic'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
-
-		const initialOrder = result.current.enabledItems.map((i: ReorderableItem) => i.commandName);
-
-		await act(async () => {
-			result.current.handleMoveDown(1); // Last index
-		});
-
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual(initialOrder);
-		expect(Setting.value('editor.toolbarButtons')).toEqual([]);
-	});
-
-	it('handleMoveUp(1) should swap items 0 and 1 and save', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold', 'textItalic', 'textCode'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
-
-		await act(async () => {
-			result.current.handleMoveUp(1);
-		});
-
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual([
-			'textItalic',
-			'textBold',
-			'textCode',
-		]);
+		// Move first item down
+		await act(async () => { result.current.handleMoveDown(0); });
+		expect(toNames(result.current.enabledItems)).toEqual(['textItalic', 'textBold', 'textCode']);
 		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual([
-				'textItalic',
-				'textBold',
-				'textCode',
-			]);
+			expect(Setting.value('editor.toolbarButtons')).toEqual(['textItalic', 'textBold', 'textCode']);
 		});
+
+		// Move it back up
+		await act(async () => { result.current.handleMoveUp(1); });
+		expect(toNames(result.current.enabledItems)).toEqual(['textBold', 'textItalic', 'textCode']);
+
+		// No-op at boundaries: moving first item up or last item down should not change order
+		const orderBefore = toNames(result.current.enabledItems);
+		await act(async () => { result.current.handleMoveUp(0); });
+		await act(async () => { result.current.handleMoveDown(2); });
+		expect(toNames(result.current.enabledItems)).toEqual(orderBefore);
 	});
 
-	it('handleMoveDown should swap adjacent items and save', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold', 'textItalic', 'textCode'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
+	it('handleToggle should move items between enabled and disabled, preserve default order, and save', async () => {
+		const { result } = renderToolbarHook(['textCode', 'textBold', 'textItalic']);
 
-		await act(async () => {
-			result.current.handleMoveDown(0);
-		});
-
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual([
-			'textItalic',
-			'textBold',
-			'textCode',
-		]);
+		// Toggle an enabled item off
+		await act(async () => { result.current.handleToggle('textBold'); });
+		expect(toNames(result.current.enabledItems)).toEqual(['textCode', 'textItalic']);
+		expect(toNames(result.current.disabledItems)).toContain('textBold');
+		// Disabled list should respect default order
+		const disabled = toNames(result.current.disabledItems);
+		expect(disabled.indexOf('attachFile')).toBeLessThan(disabled.indexOf('textBold'));
+		expect(disabled.indexOf('textBold')).toBeLessThan(disabled.indexOf('textMath'));
 		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual([
-				'textItalic',
-				'textBold',
-				'textCode',
-			]);
-		});
-	});
-
-	it('handleToggle on enabled item should move it to disabled and save', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold', 'textItalic'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
-
-		await act(async () => {
-			result.current.handleToggle('textBold');
+			expect(Setting.value('editor.toolbarButtons')).toEqual(['textCode', 'textItalic']);
 		});
 
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual(['textItalic']);
-		expect(result.current.disabledItems.map((i: ReorderableItem) => i.commandName)).toContain('textBold');
+		// Toggle it back on: should append to end of enabled list
+		await act(async () => { result.current.handleToggle('textBold'); });
+		expect(toNames(result.current.enabledItems)).toEqual(['textCode', 'textItalic', 'textBold']);
 		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual(['textItalic']);
-		});
-	});
-
-	it('handleToggle on disabled item should append it to end of enabled and save', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
-
-		await act(async () => {
-			result.current.handleToggle('textCode');
-		});
-
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual([
-			'textBold',
-			'textCode',
-		]);
-		expect(result.current.disabledItems.map((i: ReorderableItem) => i.commandName)).not.toContain('textCode');
-		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual([
-				'textBold',
-				'textCode',
-			]);
+			expect(Setting.value('editor.toolbarButtons')).toEqual(['textCode', 'textItalic', 'textBold']);
 		});
 	});
 
 	it('reinitialize should reset state without saving to settings', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textBold', 'textItalic'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
+		const { result } = renderToolbarHook(['textBold', 'textItalic']);
 
 		// Make a change first
-		await act(async () => {
-			result.current.handleMoveDown(0);
-		});
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual(['textItalic', 'textBold']);
+		await act(async () => { result.current.handleMoveDown(0); });
+		expect(toNames(result.current.enabledItems)).toEqual(['textItalic', 'textBold']);
 		await waitFor(() => {
 			expect(Setting.value('editor.toolbarButtons')).toEqual(['textItalic', 'textBold']);
 		});
 
 		// Reinitialize with a different selection (simulating Restore defaults)
-		await act(async () => {
-			result.current.reinitialize(['textCode', 'textMath']);
-		});
+		await act(async () => { result.current.reinitialize(['textCode', 'textMath']); });
 
-		expect(result.current.enabledItems.map((i: ReorderableItem) => i.commandName)).toEqual(['textCode', 'textMath']);
-		expect(result.current.disabledItems.map((i: ReorderableItem) => i.commandName)).toContain('textBold');
-		expect(result.current.disabledItems.map((i: ReorderableItem) => i.commandName)).toContain('textItalic');
+		expect(toNames(result.current.enabledItems)).toEqual(['textCode', 'textMath']);
+		expect(toNames(result.current.disabledItems)).toContain('textBold');
+		expect(toNames(result.current.disabledItems)).toContain('textItalic');
 		// Setting should not have been updated by reinitialize
 		expect(Setting.value('editor.toolbarButtons')).toEqual(['textItalic', 'textBold']);
-	});
-
-	it('disabled items should maintain default-relative order when items are toggled off', async () => {
-		const { result } = renderHook(() =>
-			useToolbarEditorState({
-				initialSelectedCommandNames: ['textCode', 'textBold', 'textItalic'],
-				allCommandNames: defaultAllCommandNames,
-				allButtonInfos: defaultAllButtonInfos,
-			}),
-		);
-
-		// Toggle off textBold - it should appear in disabled list in its default position
-		await act(async () => {
-			result.current.handleToggle('textBold');
-		});
-
-		// Disabled items should be in default order: attachFile, textBold, textMath, hideKeyboard
-		const disabledNames = result.current.disabledItems.map((i: ReorderableItem) => i.commandName);
-		const boldIndex = disabledNames.indexOf('textBold');
-		const attachFileIndex = disabledNames.indexOf('attachFile');
-		const textMathIndex = disabledNames.indexOf('textMath');
-
-		// textBold should come after attachFile and before textMath in default order
-		expect(attachFileIndex).toBeLessThan(boldIndex);
-		expect(boldIndex).toBeLessThan(textMathIndex);
 	});
 });

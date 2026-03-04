@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import createRootStyle from '../../utils/createRootStyle';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { AccessibilityInfo, View, StyleSheet, ScrollView } from 'react-native';
 import { Divider, IconButton, Text, TouchableRipple } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
@@ -18,6 +18,7 @@ import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseC
 import { DeleteButton } from '../buttons';
 import shim from '@joplin/lib/shim';
 import useToolbarEditorState, { ReorderableItem } from './utils/useToolbarEditorState';
+import focusView from '../../utils/focusView';
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
@@ -101,31 +102,73 @@ interface EnabledItemRowProps {
 	isFirst: boolean;
 	isLast: boolean;
 	styles: Styles;
+	viewRef?: React.RefObject<View>;
 	onToggle: (commandName: string)=> void;
 	onMoveUp: (index: number)=> void;
 	onMoveDown: (index: number)=> void;
 }
 
 const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
-	item, index, isFirst, isLast, styles, onToggle, onMoveUp, onMoveDown,
+	item, index, isFirst, isLast, styles, viewRef, onToggle, onMoveUp, onMoveDown,
 }) => {
 	const title = item.buttonInfo.title || item.buttonInfo.tooltip;
 
+	// Local refs and state for keeping arrow focus after a move
+	const upArrowRef = useRef<View>(null);
+	const downArrowRef = useRef<View>(null);
+	const pendingArrowFocusRef = useRef<'up'|'down'|null>(null);
+
 	const handleToggle = useCallback(() => {
 		onToggle(item.commandName);
-	}, [onToggle, item.commandName]);
+		AccessibilityInfo.announceForAccessibility(_('%s removed from toolbar', title));
+	}, [onToggle, item.commandName, title]);
 
 	const handleMoveUp = useCallback(() => {
+		pendingArrowFocusRef.current = 'up';
 		onMoveUp(index);
-	}, [onMoveUp, index]);
+		AccessibilityInfo.announceForAccessibility(_('%s moved up', title));
+	}, [onMoveUp, index, title]);
 
 	const handleMoveDown = useCallback(() => {
+		pendingArrowFocusRef.current = 'down';
 		onMoveDown(index);
-	}, [onMoveDown, index]);
+		AccessibilityInfo.announceForAccessibility(_('%s moved down', title));
+	}, [onMoveDown, index, title]);
+
+	// After a move re-render, focus the arrow that was pressed.
+	// If we hit a boundary (now first or last), swap to the opposite arrow.
+	// index/isFirst/isLast reflect the new position after the parent re-renders.
+	//
+	// We delay the focusView call: when an item moves DOWN, TalkBack re-evaluates
+	// focus after the accessibility tree update (content changed ahead of the focused
+	// element), jumping to X. The delay lets TalkBack settle so our call wins.
+	// Refs are captured before the timeout to avoid stale closures.
+	// useEffect (not useLayoutEffect) is correct here since the 100ms delay
+	// already negates any synchronous-paint timing advantage.
+	useEffect(() => {
+		const direction = pendingArrowFocusRef.current;
+		if (!direction) return;
+		pendingArrowFocusRef.current = null;
+
+		const upRef = upArrowRef.current;
+		const downRef = downArrowRef.current;
+		const atFirst = isFirst;
+		const atLast = isLast;
+
+		const timeoutId = setTimeout(() => {
+			const target = direction === 'up'
+				? (atFirst ? downRef : upRef)
+				: (atLast ? upRef : downRef);
+			if (target) focusView('toolbar-editor-arrow', target);
+		}, 100);
+
+		return () => clearTimeout(timeoutId);
+	}, [index, isFirst, isLast]);
 
 	return (
 		<View style={styles.listItem}>
 			<TouchableRipple
+				ref={viewRef}
 				accessibilityRole='checkbox'
 				accessibilityState={{ checked: true }}
 				aria-checked={true}
@@ -140,6 +183,7 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 			</TouchableRipple>
 			<View style={styles.arrowButtonsContainer}>
 				<IconButton
+					ref={upArrowRef}
 					icon='arrow-up'
 					size={20}
 					onPress={handleMoveUp}
@@ -148,6 +192,7 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 					accessibilityLabel={_('Move %s up', title)}
 				/>
 				<IconButton
+					ref={downArrowRef}
 					icon='arrow-down'
 					size={20}
 					onPress={handleMoveDown}
@@ -173,7 +218,8 @@ const DisabledItemRow: React.FC<DisabledItemRowProps> = ({
 
 	const handleToggle = useCallback(() => {
 		onToggle(item.commandName);
-	}, [onToggle, item.commandName]);
+		AccessibilityInfo.announceForAccessibility(_('%s added to toolbar', title));
+	}, [onToggle, item.commandName, title]);
 
 	return (
 		<TouchableRipple
@@ -201,18 +247,48 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 		);
 	}, [props.defaultToolbarButtonInfos]);
 
+	const [pendingFocusCommand, setPendingFocusCommand] = useState<string|null>(null);
+	const pendingFocusRef = useRef<View>(null);
+
 	const {
 		enabledItems,
 		disabledItems,
 		handleMoveUp,
 		handleMoveDown,
-		handleToggle,
+		handleToggle: doToggle,
 		reinitialize,
 	} = useToolbarEditorState({
 		initialSelectedCommandNames: props.selectedCommandNames,
 		allCommandNames: props.allCommandNames,
 		allButtonInfos,
 	});
+
+	const handleToggle = useCallback((commandName: string) => {
+		const enabledIndex = enabledItems.findIndex(item => item.commandName === commandName);
+		const isBeingEnabled = enabledIndex === -1;
+
+		if (isBeingEnabled) {
+			setPendingFocusCommand(commandName);
+		} else if (enabledItems.length > 1) {
+			const nextFocus = enabledIndex < enabledItems.length - 1
+				? enabledItems[enabledIndex + 1].commandName
+				: enabledItems[enabledIndex - 1].commandName;
+			setPendingFocusCommand(nextFocus);
+		}
+
+		doToggle(commandName);
+	}, [doToggle, enabledItems]);
+
+	// useLayoutEffect fires synchronously after mutations, before TalkBack processes
+	// the re-render's accessibility events — this prevents the brief flash to X.
+	// Clearing pendingFocusCommand after focus is applied removes the ambient state
+	// so stale re-triggers cannot occur.
+	useLayoutEffect(() => {
+		if (pendingFocusCommand && pendingFocusRef.current) {
+			focusView('toolbar-editor', pendingFocusRef.current);
+			setPendingFocusCommand(null);
+		}
+	}, [enabledItems, pendingFocusCommand]);
 
 	// Re-sync local state whenever the dialog becomes visible (e.g. after Restore defaults)
 	const prevVisible = useRef(props.visible);
@@ -262,6 +338,7 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 						isFirst={index === 0}
 						isLast={index === enabledItems.length - 1}
 						styles={styles}
+						viewRef={item.commandName === pendingFocusCommand ? pendingFocusRef : undefined}
 						onToggle={handleToggle}
 						onMoveUp={handleMoveUp}
 						onMoveDown={handleMoveDown}

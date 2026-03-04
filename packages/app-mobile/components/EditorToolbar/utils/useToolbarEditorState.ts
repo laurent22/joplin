@@ -22,6 +22,11 @@ interface UseToolbarEditorStateResult {
 	reinitialize: (selectedNames: string[])=> void;
 }
 
+type ItemsState = {
+	enabledItems: ReorderableItem[];
+	disabledItems: ReorderableItem[];
+};
+
 const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEditorStateResult => {
 	const { initialSelectedCommandNames, allCommandNames, allButtonInfos } = props;
 
@@ -68,68 +73,63 @@ const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEdi
 		return items;
 	}, [allCommandNamesWithoutSeparators, buttonInfoMap]);
 
-	// Initialize state
-	const [enabledItems, setEnabledItems] = useState<ReorderableItem[]>(() => {
-		return buildEnabledItems(initialSelectedCommandNames);
-	});
-
-	const [disabledItems, setDisabledItems] = useState<ReorderableItem[]>(() => {
-		const enabledNames = new Set(initialSelectedCommandNames.filter(n => n !== '-'));
-		return buildDisabledItems(enabledNames);
-	});
+	// Both lists are combined into one state object so that handleToggle can update them
+	// atomically in a single functional updater. This eliminates the stale-closure race
+	// that would occur if they were separate useState values (rapid double-taps could see
+	// an outdated snapshot of enabledItems and toggle in the wrong direction).
+	const [{ enabledItems, disabledItems }, setItems] = useState<ItemsState>(() => ({
+		enabledItems: buildEnabledItems(initialSelectedCommandNames),
+		disabledItems: buildDisabledItems(new Set(initialSelectedCommandNames.filter(n => n !== '-'))),
+	}));
 
 	// Save to settings after enabledItems changes, but skip on initial mount and after
 	// reinitialize — those are state restores, not user edits, and must not overwrite settings.
 	const isInitialMount = useRef(true);
-	const skipSaveCount = useRef(0);
+	const isReinitializing = useRef(false);
 	useEffect(() => {
 		if (isInitialMount.current) {
 			isInitialMount.current = false;
 			return;
 		}
-		if (skipSaveCount.current > 0) {
-			skipSaveCount.current = 0;
+		if (isReinitializing.current) {
+			isReinitializing.current = false;
 			return;
 		}
-		const commandNames = enabledItems.map(item => item.commandName);
-		Setting.setValue('editor.toolbarButtons', commandNames);
+		Setting.setValue('editor.toolbarButtons', enabledItems.map(item => item.commandName));
 	}, [enabledItems]);
 
 	const reinitialize = useCallback((selectedNames: string[]) => {
-		skipSaveCount.current++;
-		setEnabledItems(buildEnabledItems(selectedNames));
-		const enabledNames = new Set(selectedNames.filter(n => n !== '-'));
-		setDisabledItems(buildDisabledItems(enabledNames));
+		isReinitializing.current = true;
+		setItems({
+			enabledItems: buildEnabledItems(selectedNames),
+			disabledItems: buildDisabledItems(new Set(selectedNames.filter(n => n !== '-'))),
+		});
 	}, [buildEnabledItems, buildDisabledItems]);
 
 	const handleMoveUp = useCallback((index: number) => {
-		setEnabledItems(prev => {
+		setItems(prev => {
 			if (index <= 0) return prev;
-
-			const newItems = [...prev];
-			[newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]];
-			return newItems;
+			const newEnabled = [...prev.enabledItems];
+			[newEnabled[index - 1], newEnabled[index]] = [newEnabled[index], newEnabled[index - 1]];
+			return { ...prev, enabledItems: newEnabled };
 		});
 	}, []);
 
 	const handleMoveDown = useCallback((index: number) => {
-		setEnabledItems(prev => {
-			if (index >= prev.length - 1) return prev;
-
-			const newItems = [...prev];
-			[newItems[index], newItems[index + 1]] = [newItems[index + 1], newItems[index]];
-			return newItems;
+		setItems(prev => {
+			if (index >= prev.enabledItems.length - 1) return prev;
+			const newEnabled = [...prev.enabledItems];
+			[newEnabled[index], newEnabled[index + 1]] = [newEnabled[index + 1], newEnabled[index]];
+			return { ...prev, enabledItems: newEnabled };
 		});
 	}, []);
 
 	const handleToggle = useCallback((commandName: string) => {
-		const isCurrentlyEnabled = enabledItems.some(item => item.commandName === commandName);
+		setItems(prev => {
+			const isCurrentlyEnabled = prev.enabledItems.some(item => item.commandName === commandName);
 
-		if (isCurrentlyEnabled) {
-			// Remove from enabled, add to disabled in default-relative order
-			setEnabledItems(prev => prev.filter(item => item.commandName !== commandName));
-
-			setDisabledItems(prev => {
+			if (isCurrentlyEnabled) {
+				const newEnabled = prev.enabledItems.filter(item => item.commandName !== commandName);
 				const buttonInfo = buttonInfoMap.get(commandName);
 				if (!buttonInfo) return prev;
 
@@ -141,26 +141,23 @@ const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEdi
 						newDisabled.push({ commandName, buttonInfo });
 						inserted = true;
 					} else {
-						const existing = prev.find(item => item.commandName === name);
-						if (existing) {
-							newDisabled.push(existing);
-						}
+						const existing = prev.disabledItems.find(item => item.commandName === name);
+						if (existing) newDisabled.push(existing);
 					}
 				}
-				if (!inserted) {
-					newDisabled.push({ commandName, buttonInfo });
-				}
-				return newDisabled;
-			});
-		} else {
-			// Remove from disabled, append to end of enabled
-			const buttonInfo = buttonInfoMap.get(commandName);
-			if (!buttonInfo) return;
+				if (!inserted) newDisabled.push({ commandName, buttonInfo });
 
-			setDisabledItems(prev => prev.filter(item => item.commandName !== commandName));
-			setEnabledItems(prev => [...prev, { commandName, buttonInfo }]);
-		}
-	}, [enabledItems, buttonInfoMap, allCommandNamesWithoutSeparators]);
+				return { enabledItems: newEnabled, disabledItems: newDisabled };
+			} else {
+				const buttonInfo = buttonInfoMap.get(commandName);
+				if (!buttonInfo) return prev;
+				return {
+					enabledItems: [...prev.enabledItems, { commandName, buttonInfo }],
+					disabledItems: prev.disabledItems.filter(item => item.commandName !== commandName),
+				};
+			}
+		});
+	}, [buttonInfoMap, allCommandNamesWithoutSeparators]);
 
 	return {
 		enabledItems,
