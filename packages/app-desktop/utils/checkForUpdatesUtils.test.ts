@@ -148,28 +148,13 @@ describe('checkForUpdates', () => {
 		});
 	});
 
-	it('should throw rate limit error for 403 with rate limit text', () => {
-		expect(() => handleReleaseResponseError(403, '{"message":"API rate limit exceeded"}'))
-			.toThrow('rate limit has been exceeded');
-	});
-
-	it('should throw rate limit error for 429 with rate limit text', () => {
-		expect(() => handleReleaseResponseError(429, 'Rate Limit reached'))
-			.toThrow('rate limit has been exceeded');
-	});
-
-	it('should detect rate limit case-insensitively', () => {
-		expect(() => handleReleaseResponseError(403, 'Rate LIMIT exceeded'))
-			.toThrow('rate limit has been exceeded');
-	});
-
-	it('should throw generic error for non-rate-limit errors', () => {
-		expect(() => handleReleaseResponseError(500, 'Internal Server Error'))
-			.toThrow('Error 500');
-	});
-
-	it('should throw generic error for 403 without rate limit text', () => {
-		expect(() => handleReleaseResponseError(403, 'Forbidden'))
-			.toThrow('Error 403');
+	test.each([
+		[403, '{"message":"API rate limit exceeded"}', 'rate limit has been exceeded', 'rate limit error for 403 with rate limit JSON'],
+		[429, 'Rate Limit reached', 'rate limit has been exceeded', 'rate limit error for 429 with rate limit text'],
+		[403, 'Rate LIMIT exceeded', 'rate limit has been exceeded', 'case-insensitive rate limit detection'],
+		[500, 'Internal Server Error', 'Error 500', 'generic error for non-rate-limit status'],
+		[403, 'Forbidden', 'Error 403', 'generic error for 403 without rate limit text'],
+	])('should throw expected error for %s (%s)', (status, body, expectedError, _description) => {
+		expect(() => handleReleaseResponseError(status, body)).toThrow(expectedError);
 	});
 });
