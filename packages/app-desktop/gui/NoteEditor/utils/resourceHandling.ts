@@ -2,6 +2,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import { ResourceEntity } from '@joplin/lib/services/database/types';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
 import rendererHtmlUtils, { extractHtmlBody, removeWrappingParagraphAndTrailingEmptyElements } from '@joplin/renderer/htmlUtils';
@@ -120,9 +121,20 @@ export async function getResourcesFromPasteEvent(event: any) {
 }
 
 
-const processImagesInPastedHtml = async (html: string) => {
+export interface ProcessImagesOptions {
+	// When true, returns Joplin internal URLs (:/resourceId) instead of file:// URLs
+	useInternalUrls?: boolean;
+}
+
+export const processImagesInPastedHtml = async (html: string, options: ProcessImagesOptions = {}) => {
 	const allImageUrls: string[] = [];
 	const mappedResources: Record<string, string> = {};
+
+	const resourceUrl = (resource: ResourceEntity) => {
+		return options.useInternalUrls
+			? Resource.internalUrl(resource)
+			: `file://${encodeURI(Resource.fullPath(resource))}`;
+	};
 
 	htmlUtils.replaceImageUrls(html, (src: string) => {
 		allImageUrls.push(src);
@@ -138,7 +150,7 @@ const processImagesInPastedHtml = async (html: string) => {
 			await shim.fetchBlob(imageSrc, { path: filePath });
 			const createdResource = await shim.createResourceFromPath(filePath);
 			await shim.fsDriver().remove(filePath);
-			mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+			mappedResources[imageSrc] = resourceUrl(createdResource);
 		} catch (error) {
 			logger.warn(`Error creating a resource for ${imageSrc}.`, error);
 			mappedResources[imageSrc] = imageSrc;
@@ -156,10 +168,15 @@ const processImagesInPastedHtml = async (html: string) => {
 					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
 
 					if (imageFilePath.startsWith(resourceDirPath)) {
-						mappedResources[imageSrc] = imageSrc;
+						if (options.useInternalUrls) {
+							const resourceId = Resource.pathToId(imageFilePath);
+							mappedResources[imageSrc] = `:/${resourceId}`;
+						} else {
+							mappedResources[imageSrc] = imageSrc;
+						}
 					} else {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
-						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+						mappedResources[imageSrc] = resourceUrl(createdResource);
 					}
 				} else if (imageSrc.startsWith('data:')) {
 					mappedResources[imageSrc] = imageSrc;
