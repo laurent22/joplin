@@ -168,7 +168,12 @@ export const processImagesInPastedHtml = async (html: string, options: ProcessIm
 					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
 
 					if (imageFilePath.startsWith(resourceDirPath)) {
-						mappedResources[imageSrc] = imageSrc;
+						if (options.useInternalUrls) {
+							const resourceId = Resource.pathToId(imageFilePath);
+							mappedResources[imageSrc] = `:/${resourceId}`;
+						} else {
+							mappedResources[imageSrc] = imageSrc;
+						}
 					} else {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
 						mappedResources[imageSrc] = resourceUrl(createdResource);

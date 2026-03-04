@@ -109,4 +109,18 @@ describe('HtmlToMd', () => {
 		expect(tightResult).toBe('- **Item 1**\n- **Item 2**\n- **Item 3**');
 	});
 
+	it('should support collapseMultipleBlankLines option', async () => {
+		const htmlToMd = new HtmlToMd();
+		const html = '<p>First</p><br><br><br><p>Second</p>';
+
+		// Without collapseMultipleBlankLines, multiple blank lines are preserved
+		const looseResult = htmlToMd.parse(html, { collapseMultipleBlankLines: false });
+		expect(looseResult).toContain('\n\n  \n');
+
+		// With collapseMultipleBlankLines, multiple blank lines are collapsed into one
+		const collapsedResult = htmlToMd.parse(html, { collapseMultipleBlankLines: true });
+		expect(collapsedResult).not.toContain('\n\n\n');
+		expect(collapsedResult).not.toContain('\n\n  \n');
+	});
+
 });
