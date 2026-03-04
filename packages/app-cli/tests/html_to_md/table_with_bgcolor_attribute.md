@@ -1,0 +1,1 @@
+<div class="joplin-table-wrapper"><table bgcolor="#3598DB" bordercolor="#BFEDD2"><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td>Cell A</td><td>Cell B</td></tr><tr><td>Cell C</td><td>Cell D</td></tr></tbody></table></div>
