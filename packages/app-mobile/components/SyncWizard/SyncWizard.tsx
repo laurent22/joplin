@@ -11,6 +11,7 @@ import NavService from '@joplin/lib/services/NavService';
 import { Platform, StyleSheet, View } from 'react-native';
 import CardButton from '../buttons/CardButton';
 import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
 
 interface Props {
 	dispatch: Dispatch;
@@ -47,12 +48,14 @@ const styles = StyleSheet.create({
 	},
 });
 
+const isAppJoplinCloud = () => {
+	return Platform.OS === 'web' && location.origin === 'https://app.joplincloud.com';
+};
+
 const useShouldShowOtherButton = () => {
-	// Always show "other" on non-web platforms
-	if (Platform.OS !== 'web') return true;
 	// Don't show "other" when hosted on Joplin Cloud (other sync
 	// targets can still be selected from settings).
-	return location.origin !== 'https://app.joplincloud.com';
+	return !isAppJoplinCloud();
 };
 
 interface SyncProviderProps {
@@ -102,7 +105,15 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 
 	const onSelectJoplinCloud = useCallback(async () => {
 		onDismiss();
-		await NavService.go('JoplinCloudLogin');
+		if (Platform.OS === 'web' && !isAppJoplinCloud()) {
+			if (await shim.showConfirmationDialog(
+				_('Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?'),
+			)) {
+				await shim.openUrl('https://app.joplincloud.com/');
+			}
+		} else {
+			await NavService.go('JoplinCloudLogin');
+		}
 	}, [onDismiss]);
 
 	const onSelectOtherTarget = useCallback(async () => {
