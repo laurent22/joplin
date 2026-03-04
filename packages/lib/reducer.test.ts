@@ -787,7 +787,6 @@ describe('reducer', () => {
 		}
 	});
 
-	// Regression test for #10589.
 	it.each([
 		[true, false],
 		[undefined, false],
@@ -924,5 +923,45 @@ describe('reducer', () => {
 		// The other window should be focused
 		expect(state.windowId).toBe(defaultWindowId);
 		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
+
+	it.each([
+		undefined,
+		false,
+	])('should not change selected note in background window when active window note moves folders (preserveSelection: %j)', async (
+		preserveSelectionOption,
+	) => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// select the 1st folder and the 1st note in the primary window
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// open note[2] in a background (secondary) window
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		// background window should be on notes[2]
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		BaseModel.dispatch = jest.fn((action: unknown) => {
+			state = reducer(state, action);
+		});
+
+		// move notes[0] (selected in primary window) to a different folder
+		await Note.moveToFolder(
+			state.selectedNoteIds[0],
+			folders[1].id,
+			{ dispatchOptions: { preserveSelection: preserveSelectionOption } },
+		);
+
+		expect(BaseModel.dispatch).toHaveBeenCalled();
+
+		// primary window should have switched away from the moved note
+		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
+
+		// background window should still be on notes[2], not have jumped to whatever
+		// the primary window selected next
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
 	});
 });

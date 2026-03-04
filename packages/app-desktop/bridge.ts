@@ -583,6 +583,11 @@ export class Bridge {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
+		} else if (process.env.APPIMAGE && !this.altInstanceId_) {
+			app.relaunch({
+				execPath: process.env.APPIMAGE,
+				args: ['--appimage-extract-and-run'],
+			});
 		} else if (this.altInstanceId_) {
 			// Couldn't get it to work using relaunch() - it would just "close" the app, but it
 			// would still be open in the tray except unusable. Or maybe it reopens it quickly but

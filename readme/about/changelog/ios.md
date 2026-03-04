@@ -1,5 +1,39 @@
 # Joplin iOS Changelog
 
+## [ios-v13.6.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.2) - 2026-03-02T17:51:24Z
+
+- New: Add an import txt function (#13742 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Add new option to disable the Joplin icon for internal note links (#14503) (#12220 by [@Harsh16gupta](https://github.com/Harsh16gupta))
+- Improved: Add waving hand emoji to welcome notebook (#14398) (#13755 by Ashutosh Singh)
+- Improved: Markdown editor: Enable in-editor rendering by default (#13878) (#13215 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move editor settings to dedicated editor section (#14403) (#13216 by [@kanishka0411](https://github.com/kanishka0411))
+- Improved: Prevent race condition when refreshing note contents on mobile (#14486 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Refresh note when updated via the API when in edit mode (#14378 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Remember the viewing / editing mode (updated) (#14363) (#11521 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Remove redundant navigation history for notes or folders which were deleted (#13428 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Store note history settings in sync info (#14449) (#14336 by [@yugalkaushik](https://github.com/yugalkaushik))
+- Improved: Trigger a note refresh when viewing or editing a note and the contents are updated via the API (#13671 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Updated packages @react-native-community/datetimepicker (v8.5.1), form-data (v4.0.5), react (v19.1.5), react-native-localize (v3.6.0), react-native-share (v12.2.1), react-native-svg (v15.14.0), react-native-webview (v13.16.0), sharp (v0.34.5), style-to-js (v1.1.21)
+- Improved: Upgrade React Native to v0.81.6 (#14330 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Add a reveal in notebook option for notes (#14338) (#14255 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Defer starting revision service maintenance until the initial sync has completed (#14394) (#13660 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix biometric 'try again' button is off-screen on certain devices (#14373) (#14195 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix heading links (#14201 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix missing conflict scenario (#13624) (#13611 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix profile data not deleted when removing profiles (#14369) (#13871 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix status 400 error on Tomcat WebDAV servers (#14332 by [@horvatkm](https://github.com/horvatkm))
+- Fixed: Fix unexpected conflicts created during sync (#14453 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unexpected conflicts sometimes created after a full sync (#14388) (#14383 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Handle missing script assets in HTML export (#14442) (#12545 by [@kanishka0411](https://github.com/kanishka0411))
+- Fixed: Hide the expand / collapse title button when the title is too long (#14203) (#14194 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Improve dropdown menu positioning (#14288) (#14275 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Make the view / edit note button hidden when an editor plugin is visible (#14458) (#14452 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Reset undo/redo button state when toggling an editor plugin (#14444) (#14387 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Support include_deleted parameter for GET /folders endpoint (#14421) (#14335 by Sriram Varun Kumar)
+- Fixed: Uses consistent padding in plugin info dialog (#14466) (#11793 by [@Nagmani001](https://github.com/Nagmani001))
+- Fixed: When cleaning old revisions, ensure revisions are merged for all revision branches (#13795) (#13782 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: YouTube videos are displayed inline too (#14370) (#14352)
+
 ## [ios-v13.6.1](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.1) - 2026-02-04T14:45:26Z
 
 - New: Add more error information when the profile is corrupted (f075b56)

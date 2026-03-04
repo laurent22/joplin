@@ -646,6 +646,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
+				showNoteLinkIcon: props.showNoteLinkIcon,
 			}));
 
 			if (cancelled) return;
@@ -666,7 +667,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			shim.clearTimeout(timeoutId);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
+	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml, props.showNoteLinkIcon]);
 
 	useEffect(() => {
 		if (!webviewReady) return;

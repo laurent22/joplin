@@ -1,4 +1,4 @@
-FROM node:24-bullseye
+FROM node:24-bookworm
 
 RUN apt-get update \
     && apt-get install -y \
@@ -54,6 +54,7 @@ USER transcribe
 
 # Set environment variables
 ENV HTR_CLI_BINARY_PATH=/opt/llama/build/bin/llama-mtmd-cli
+ENV LD_LIBRARY_PATH=/opt/llama/build/bin
 ENV DATA_DIR=/data
 ENV QUEUE_DRIVER=sqlite
 

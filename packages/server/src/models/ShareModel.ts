@@ -208,7 +208,11 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
-		const handleCreated = async (change: Change, item: Item, share: Share) => {
+		// For performance, handleCreated acts on all changes for a particular item at once.
+		//
+		// This function must behave correctly regardless of whether it is called before or after
+		// other events are processed.
+		const handleCreated = async (item: Item, changes: Change[], share: Share) => {
 			if (!item.jop_share_id) return;
 
 			// When a folder is unshared, the share object is deleted, then all
@@ -229,7 +233,9 @@ export default class ShareModel extends BaseModel<Share> {
 
 			const shareUserIds = await this.allShareUserIds(share);
 			for (const shareUserId of shareUserIds) {
-				if (shareUserId === change.user_id) continue;
+				const hasCreationEvent = changes.some(change => change.user_id === shareUserId);
+				if (hasCreationEvent) continue;
+
 				await addUserItem(shareUserId, item.id);
 			}
 
@@ -275,18 +281,22 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const handleDeleted = async (change: Change, item: Item|null, share: Share|null) => {
-			// On deletion, we check for extra user_items entries for items that still exist.
-			// These user_items can be created by race conditions between updateSharedItems3
-			// and logic for removing users from a share.
+			// On deletion, we check for extra user_items entries and incorrect ownership for
+			// items that still exist:
+			// - Unexpected user_items can be created by race conditions between updateSharedItems3
+			//   and logic for removing users from a share.
+			// - Outdated owner_id information can be caused by moving an item into a share,
+			//   then removing the item's original owner from the share.
 			//
-			// For now, only check the case where the item exists, and thus the user_items
-			// entry could allow access to the item.
+			// For now, only check the case where the item exists, and thus the user_items entry
+			// could allow access to the item.
 			if (!item) return;
 
+			perfTimer.push('handleDeleted');
+
 			// If the userItem exists, the user still has access to the item, despite the deletion change:
-			const userItem = await this.models().userItem().byUserAndItemId(change.user_id, change.item_id);
+			let userItem = await this.models().userItem().byUserAndItemId(change.user_id, change.item_id);
 			if (userItem) {
-				perfTimer.push('handleDeleted');
 
 				const isShareMember = async () => {
 					if (!share) return false;
@@ -302,10 +312,56 @@ export default class ShareModel extends BaseModel<Share> {
 					// Delete by the UserItem's ID to avoid race conditions. If a new user item is created for the same
 					// (user, item) pair (perhaps after removing the original), it should not be deleted by this task:
 					await this.models().userItem().deleteByUserItemIds([userItem.id]);
+					userItem = null;
 				}
 
-				perfTimer.pop();
 			}
+
+			// If an item was deleted for the owner, and the owner no longer has access, the item should now be owned by
+			// a different user:
+			const deletedForOwner = item.owner_id === change.user_id;
+			if (deletedForOwner && !userItem) {
+				const userItems = await this.models().userItem().byItemIds([item.id]);
+				const usersWithAccess = userItems.map(item => item.user_id);
+
+				let newOwnerId;
+				// Check that the share owner still has access: Handle the case where the item's parent share
+				// is changed after the item and share have been loaded.
+				if (share && usersWithAccess.includes(share.owner_id)) {
+					// Case where the item was moved to a different share or the original owner was removed from the
+					// share:
+					newOwnerId = share.owner_id;
+				} else if (usersWithAccess.length === 1) {
+					// Case where the item was moved out of a share by a user that didn't previously own the item,
+					// or the item's share was deleted:
+					newOwnerId = usersWithAccess[0];
+				} else {
+					// May happen due to a race condition related to moving an item between shares
+					// while processing the item's shares/deletions.
+					logger.warn('handleDeleted: Unable to accurately fix owner_id for item', item.id, 'in share', share?.id, 'and users with access', usersWithAccess);
+				}
+
+				if (!newOwnerId) {
+					logger.warn('handleDeleted: Item', item.id, 'deleted for owner', item.owner_id, 'and still exists, but no new owner ID was assigned.');
+				} else {
+					try {
+						await this.models().item().saveForUser(newOwnerId, {
+							id: item.id,
+							owner_id: newOwnerId,
+						}, { isNew: false });
+					} catch (error) {
+						// Guard against a potential race condition: Handle the case where the item was deleted for all users
+						// during the share update process:
+						if (error instanceof ErrorBadRequest) {
+							logger.warn('handleDeleted: Unable to update owner_id on item', item.id, error);
+						} else {
+							throw error;
+						}
+					}
+				}
+			}
+
+			perfTimer.pop();
 		};
 
 		// This function add any missing item to a user's collection. Normally
@@ -354,6 +410,21 @@ export default class ShareModel extends BaseModel<Share> {
 			perfTimer.pop();
 		};
 
+		const buildItemToChangeTypeMap = (changeType: ChangeType, changes: Change[]) => {
+			const itemToChanges = new Map<Uuid, Change[]>();
+			for (const change of changes) {
+				if (change.type !== changeType) continue;
+
+				const itemChanges = itemToChanges.get(change.item_id);
+				if (itemChanges) {
+					itemChanges.push(change);
+				} else {
+					itemToChanges.set(change.item_id, [change]);
+				}
+			}
+			return itemToChanges;
+		};
+
 		// This loop essentially applies the change made by one user to all the
 		// other users in the share.
 		//
@@ -399,18 +470,17 @@ export default class ShareModel extends BaseModel<Share> {
 				await this.withTransaction(async () => {
 					perfTimer.push(`Processing ${changes.length} changes`);
 
-					const itemToUpdates = new Map<Uuid, Change[]>();
-					for (const change of changes) {
-						if (change.type === ChangeType.Update) {
-							const updates = itemToUpdates.get(change.item_id);
-							if (updates) {
-								updates.push(change);
-							} else {
-								itemToUpdates.set(change.item_id, [change]);
-							}
-						}
+					// Performance: Group creation events per-item
+					const itemToCreations = buildItemToChangeTypeMap(ChangeType.Create, changes);
+					for (const [itemId, itemChanges] of itemToCreations.entries()) {
+						const item = items.find(i => i.id === itemId);
+						if (!item) continue;
+
+						const itemShare = shares.find(s => s.id === item.jop_share_id);
+						await handleCreated(item, itemChanges, itemShare);
 					}
 
+					const itemToUpdates = buildItemToChangeTypeMap(ChangeType.Update, changes);
 					for (const change of changes) {
 						const item = items.find(i => i.id === change.item_id);
 
@@ -418,10 +488,6 @@ export default class ShareModel extends BaseModel<Share> {
 						// deleted, so take this into account.
 						if (item) {
 							const itemShare = shares.find(s => s.id === item.jop_share_id);
-
-							if (change.type === ChangeType.Create) {
-								await handleCreated(change, item, itemShare);
-							}
 
 							if (change.type === ChangeType.Update) {
 								const allUpdates = itemToUpdates.get(item.id);
