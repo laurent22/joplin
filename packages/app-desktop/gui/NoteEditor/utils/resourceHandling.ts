@@ -167,7 +167,10 @@ export const processImagesInPastedHtml = async (html: string, options: ProcessIm
 					const imageFilePath = path.normalize(fileUriToPath(imageSrc));
 					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
 
-					if (imageFilePath.startsWith(resourceDirPath)) {
+					// Use path.relative for robust containment check - startsWith can falsely match sibling paths
+					const rel = path.relative(resourceDirPath, imageFilePath);
+					const isInsideResourceDir = rel && !rel.startsWith('..') && !path.isAbsolute(rel);
+					if (isInsideResourceDir) {
 						if (options.useInternalUrls) {
 							const resourceId = Resource.pathToId(imageFilePath);
 							mappedResources[imageSrc] = `:/${resourceId}`;
