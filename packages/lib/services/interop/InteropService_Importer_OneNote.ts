@@ -224,11 +224,11 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const prefixRemoved = link.href.substring(separatorIndex);
 			const params = new URLSearchParams(prefixRemoved);
 			const pageId = params.get('page-id');
-			const targetPage = (await idMap()).get(pageId);
+			const targetPage = pageId ? (await idMap()).get(pageId) : null;
 
 			// The target page might be in a different notebook (imported separately)
 			if (!targetPage) {
-				logger.info('Page not found for internal link. Page ID: ', pageId);
+				logger.info('Page not found for internal link. Page ID: ', pageId, 'link:', JSON.stringify(link.href));
 			} else {
 				changed = true;
 				link.href = relative(baseFolder, targetPage.path);
