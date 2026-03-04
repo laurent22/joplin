@@ -709,6 +709,7 @@ function useMenu(props: Props) {
 						menuItemDic.textCut,
 						menuItemDic.textPaste,
 						menuItemDic.pasteAsText,
+						menuItemDic.pasteAsMarkdown,
 						menuItemDic.textSelectAll,
 						separator(),
 						menuItemDic.globalUndo,

@@ -24,7 +24,7 @@ var rules = {}
 rules.paragraph = {
   filter: 'p',
 
-  replacement: function (content) {
+  replacement: function (content, node, options) {
     // If the line starts with a nonbreaking space, replace it. By default, the
     // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
     // because the space is nonbreaking, we want to keep it.
@@ -36,6 +36,18 @@ rules.paragraph = {
     // take up by default no space. Output nothing.
     if (content === '') {
       return '';
+    }
+
+    // When tightLists is enabled, paragraphs inside list items should not add
+    // extra blank lines, but only if the list item contains a single paragraph
+    if (options.tightLists && node.parentNode && node.parentNode.nodeName === 'LI') {
+      const parentLi = node.parentNode;
+      const paragraphs = Array.from(parentLi.childNodes).filter(
+        child => child.nodeName === 'P'
+      );
+      if (paragraphs.length === 1) {
+        return content;
+      }
     }
 
     return '\n\n' + content + '\n\n'
