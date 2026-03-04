@@ -13,6 +13,16 @@ const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['
 	return editor;
 };
 
+const createEditorWithCursor = async (initialMarkdown: string, cursorIndex: number, expectedTags: string[] = ['HTMLTag']) => {
+	const editor = await createTestEditor(
+		initialMarkdown,
+		EditorSelection.cursor(cursorIndex),
+		expectedTags,
+		[replaceInlineHtml],
+	);
+	return editor;
+};
+
 describe('replaceInlineHtml', () => {
 	jest.retryTimes(2);
 
@@ -33,6 +43,25 @@ describe('replaceInlineHtml', () => {
 		// Retry on failure to handle the case where the syntax tree is slow:
 		await waitFor(() => {
 			expect(editor.contentDOM.querySelector(expectedTagsQuery)).toBeTruthy();
+		});
+	});
+
+	test('should keep other inline HTML rendered when cursor is on same line, but not touching tags', async () => {
+		const markdown = 'A <sub>one</sub> B <sub>two</sub>';
+		const editor = await createEditorWithCursor(markdown, markdown.indexOf('A'));
+
+		await waitFor(() => {
+			expect(editor.contentDOM.querySelectorAll('sub')).toHaveLength(2);
+		});
+	});
+
+	test('should reveal only the inline HTML touched by the cursor', async () => {
+		const markdown = 'A <sub>one</sub> B <sub>two</sub>';
+		const cursorAtFirstSubContent = markdown.indexOf('one') + 1;
+		const editor = await createEditorWithCursor(markdown, cursorAtFirstSubContent);
+
+		await waitFor(() => {
+			expect(editor.contentDOM.querySelectorAll('sub')).toHaveLength(1);
 		});
 	});
 });
