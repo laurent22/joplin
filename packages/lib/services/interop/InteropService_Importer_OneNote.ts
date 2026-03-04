@@ -162,8 +162,9 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		return {
-			// Accept null input to match the behavior of a `new Map()`
 			get: (id: string|null)=>{
+				// Accepting null input matches the behavior of a JavaScript Map's .get method
+				// and simplifies handling 'not found' edge cases:
 				if (!id) return null;
 
 				const path = pageIdToPath.get(id.toUpperCase());
