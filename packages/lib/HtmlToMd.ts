@@ -13,6 +13,7 @@ export interface ParseOptions {
 	disableEscapeContent?: boolean;
 	convertEmbeddedPdfsToLinks?: boolean;
 	tightLists?: boolean;
+	collapseMultipleBlankLines?: boolean;
 }
 
 export default class HtmlToMd {
@@ -38,6 +39,7 @@ export default class HtmlToMd {
 
 			disableEscapeContent: 'disableEscapeContent' in options ? options.disableEscapeContent : false,
 			tightLists: !!options.tightLists,
+			collapseMultipleBlankLines: !!options.collapseMultipleBlankLines,
 		};
 		if (options.convertEmbeddedPdfsToLinks) {
 			// Turndown ignores empty <object> tags, so we need to handle this case separately

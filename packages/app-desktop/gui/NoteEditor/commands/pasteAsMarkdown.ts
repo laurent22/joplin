@@ -27,7 +27,7 @@ export const runtime = (comp: any): CommandRuntime => {
 			if (html) {
 				// Download images and convert them to Joplin resources
 				html = await processImagesInPastedHtml(html, { useInternalUrls: true });
-				const markdown = htmlToMd().parse(html, { tightLists: true });
+				const markdown = htmlToMd().parse(html, { tightLists: true, collapseMultipleBlankLines: true });
 				comp.editorRef.current.execCommand({ name: 'insertText', value: markdown });
 			} else {
 				// Fall back to plain text if no HTML is available

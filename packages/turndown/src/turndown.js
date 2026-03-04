@@ -55,6 +55,7 @@ export default function TurndownService (options) {
     preserveNestedTables: false,
     preserveColorStyles: false,
     tightLists: false,
+    collapseMultipleBlankLines: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
@@ -239,7 +240,14 @@ function postProcess (output) {
     }
   })
 
-  return output.replace(/^[\t\r\n]+/, '').replace(/[\t\r\n\s]+$/, '')
+  output = output.replace(/^[\t\r\n]+/, '').replace(/[\t\r\n\s]+$/, '')
+
+  // Collapse multiple blank lines (or lines with only whitespace) into a single blank line
+  if (this.options.collapseMultipleBlankLines) {
+    output = output.replace(/(\n\s*){3,}/g, '\n\n')
+  }
+
+  return output
 }
 
 /**
