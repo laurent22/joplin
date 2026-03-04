@@ -2,6 +2,7 @@ import PerFolderSortOrderService from './PerFolderSortOrderService';
 import { setNotesSortOrder } from './notesSortOrderUtils';
 import Setting from '@joplin/lib/models/Setting';
 import { AppState, createAppDefaultState } from '../../app.reducer';
+import { serializeNotesParent } from '@joplin/lib/reducer';
 import eventManager from '@joplin/lib/eventManager';
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
@@ -136,5 +137,32 @@ describe('PerFolderSortOrderService', () => {
 
 		expect(Setting.value('notes.sortOrder.field')).toBe('user_updated_time');
 		expect(Setting.value('notes.sortOrder.reverse')).toBe(true);
+	});
+
+	test('should not let All Notes sort bleed into shared sort order on relaunch', () => {
+		switchToFolder(folderId1);
+		setNotesSortOrder('title', false);
+
+		switchToAllNotes();
+		PerFolderSortOrderService.set(ALL_NOTES_FILTER_ID, true);
+		setNotesSortOrder('user_updated_time', true);
+
+		expect(PerFolderSortOrderService.isSet(ALL_NOTES_FILTER_ID)).toBe(true);
+		expect(Setting.value('notes.sortOrder.field')).toBe('user_updated_time');
+
+		// Simulate relaunch: activeFolderId holds the last notebook, notesParent holds All Notes
+		Setting.setValue('activeFolderId', folderId1);
+		Setting.setValue('notesParent', serializeNotesParent({ type: 'SmartFilter', selectedItemId: ALL_NOTES_FILTER_ID }));
+
+		PerFolderSortOrderService.initialize();
+		Setting.setValue('notes.perFolderSortOrderEnabled', true);
+
+		updateAppState(createAppDefaultState({}));
+		switchToAllNotes();
+
+		// Navigating to the notebook must restore shared sort (title), not All Notes' sort
+		switchToFolder(folderId1);
+		expect(Setting.value('notes.sortOrder.field')).toBe('title');
+		expect(Setting.value('notes.sortOrder.reverse')).toBe(false);
 	});
 });

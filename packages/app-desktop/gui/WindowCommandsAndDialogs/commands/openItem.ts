@@ -30,19 +30,27 @@ export const runtime = (): CommandRuntime => {
 				} else {
 					void bridge().openExternal(link);
 				}
-			} else if (urlProtocol(link)) {
-				if (link.indexOf('file://') === 0) {
-					// When using the file:// protocol, openPath doesn't work (does
-					// nothing) with URL-encoded paths.
-					//
-					// shell.openPath seems to work with file:// urls on Windows,
-					// but doesn't on macOS, so we need to convert it to a path
-					// before passing it to openPath.
-					const decodedPath = fileUriToPath(urlDecode(link), shim.platformName());
-					void bridge().openItem(decodedPath);
-				} else {
-					void bridge().openExternal(link);
+			} else if (link.indexOf('file://') === 0) {
+				// When using the file:// protocol, openPath doesn't work (does
+				// nothing) with URL-encoded paths.
+				//
+				// shell.openPath seems to work with file:// urls on Windows,
+				// but doesn't on macOS, so we need to convert it to a path
+				// before passing it to openPath.
+				let decoded = urlDecode(link);
+
+				// On Windows, UNC paths like file://\\server\share have backslashes
+				// right after file:// which makes the URL invalid. Convert them
+				// to forward slashes so fileUriToPath can handle them correctly.
+				// https://github.com/laurent22/joplin/issues/14196
+				if (decoded.startsWith('file://\\')) {
+					decoded = `file://${decoded.substring(7).replace(/\\/g, '/')}`;
 				}
+
+				const decodedPath = fileUriToPath(decoded, shim.platformName());
+				void bridge().openItem(decodedPath);
+			} else if (urlProtocol(link)) {
+				void bridge().openExternal(link);
 			} else {
 				bridge().showErrorMessageBox(_('Unsupported link or message: %s', link));
 			}

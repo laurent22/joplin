@@ -4,7 +4,7 @@ import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSyn
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
-import WelcomeUtils from '../../WelcomeUtils';
+import WelcomeUtils, { WelcomeAssetPlatform } from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
 import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
 import { ErrorCode } from '../../errors';
@@ -355,12 +355,12 @@ describe('Synchronizer.basics', () => {
 	it('should create a new Welcome notebook on each client', (async () => {
 		// Create the Welcome items on two separate clients
 
-		await WelcomeUtils.createWelcomeItems('en_GB');
+		await WelcomeUtils.createWelcomeItems('en_GB', WelcomeAssetPlatform.Cli);
 		await synchronizerStart();
 
 		await switchClient(2);
 
-		await WelcomeUtils.createWelcomeItems('en_GB');
+		await WelcomeUtils.createWelcomeItems('en_GB', WelcomeAssetPlatform.Cli);
 		const beforeFolderCount = (await Folder.all()).length;
 		const beforeNoteCount = (await Note.all()).length;
 		expect(beforeFolderCount === 1).toBe(true);
