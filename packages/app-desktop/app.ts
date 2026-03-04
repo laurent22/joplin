@@ -212,6 +212,10 @@ class Application extends BaseApplication {
 			Setting.value('preferredDarkTheme'),
 			Setting.THEME_DARK,
 			Setting.THEME_OLED_DARK,
+			Setting.THEME_SOLARIZED_DARK,
+			Setting.THEME_DRACULA,
+			Setting.THEME_NORD,
+			Setting.THEME_ARITIM_DARK,
 		];
 
 		// 3. Force the Windows/macOS title bar to match
