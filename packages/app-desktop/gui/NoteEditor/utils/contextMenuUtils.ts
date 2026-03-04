@@ -1,8 +1,13 @@
 import Resource from '@joplin/lib/models/Resource';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import BaseModel from '@joplin/lib/BaseModel';
 import Logger from '@joplin/utils/Logger';
 import bridge from '../../../services/bridge';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
-import { ContextMenuItemType, EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/types';
+import {
+	ContextMenuItemType,
+	EditContextMenuFilterObject,
+} from '@joplin/lib/services/plugins/api/types';
 import eventManager from '@joplin/lib/eventManager';
 import CommandService from '@joplin/lib/services/CommandService';
 import { type MenuItem as MenuItemType } from 'electron';
@@ -13,9 +18,21 @@ const logger = Logger.create('contextMenuUtils');
 // Re-export for backward compatibility
 export { ContextMenuItemType };
 
+export async function isNoteId(resourceId: string): Promise<boolean> {
+	if (!resourceId) return false;
+	try {
+		const item = await BaseItem.loadItemById(resourceId);
+		return !!(item && item.type_ === BaseModel.TYPE_NOTE);
+	} catch (error) {
+		logger.warn('Could not load item by ID in isNoteId:', error);
+		return false;
+	}
+}
+
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType;
 	resourceId: string;
+	isNoteLink: boolean;
 	mime: string;
 	filename: string;
 	linkToOpen: string;
@@ -45,9 +62,17 @@ export interface ContextMenuItems {
 }
 
 export async function resourceInfo(options: ContextMenuOptions) {
-	const resource = options.resourceId ? await Resource.load(options.resourceId) : null;
+	const resource = options.resourceId
+		? await Resource.load(options.resourceId)
+		: null;
 	const resourcePath = resource ? Resource.fullPath(resource) : null;
-	const filename = resource ? (resource.filename ? resource.filename : resource.title) : options.filename ? options.filename : '';
+	const filename = resource
+		? resource.filename
+			? resource.filename
+			: resource.title
+		: options.filename
+			? options.filename
+			: '';
 	return { resource, resourcePath, filename };
 }
 
@@ -60,7 +85,10 @@ export const svgDimensions = (document: Document, svg: string) => {
 	try {
 		const parser = new DOMParser();
 		const id = parser.parseFromString(svg, 'text/html').querySelector('svg').id;
-		({ width, height } = document.querySelector<HTMLIFrameElement>('.noteTextViewer').contentWindow.document.querySelector(`#${id}`).getBoundingClientRect());
+		({ width, height } = document
+			.querySelector<HTMLIFrameElement>('.noteTextViewer')
+			.contentWindow.document.querySelector(`#${id}`)
+			.getBoundingClientRect());
 	} catch (error) {
 		logger.warn('Could not get SVG dimensions.');
 		logger.warn('Error was: ', error);
@@ -70,7 +98,12 @@ export const svgDimensions = (document: Document, svg: string) => {
 	}
 	return [width, height];
 };
-export const svgUriToPng = (document: Document, svg: string, width: number, height: number) => {
+export const svgUriToPng = (
+	document: Document,
+	svg: string,
+	width: number,
+	height: number,
+) => {
 	return new Promise<Uint8Array>((resolve, reject) => {
 		let canvas: HTMLCanvasElement;
 		let img: HTMLImageElement;
@@ -106,7 +139,17 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 				canvas.height = height;
 				const ctx = canvas.getContext('2d');
 				if (!ctx) throw new Error('Failed to get context');
-				ctx.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+				ctx.drawImage(
+					img,
+					0,
+					0,
+					canvas.width,
+					canvas.height,
+					0,
+					0,
+					canvas.width,
+					canvas.height,
+				);
 				const pngUri = canvas.toDataURL('image/png');
 				if (!pngUri) throw new Error('Failed to generate png uri');
 				const pngBase64 = pngUri.split(',')[1];
@@ -131,7 +174,10 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 };
 
 // Filter out leading, trailing, and consecutive separators from a list
-const filterSeparators = <T>(items: T[], isSeparator: (item: T)=> boolean): T[] => {
+const filterSeparators = <T>(
+	items: T[],
+	isSeparator: (item: T)=> boolean,
+): T[] => {
 	const filtered: T[] = [];
 	let lastWasSeparator = true;
 	for (const item of items) {
@@ -157,32 +203,45 @@ export interface EditorContextMenuFilterContext {
 	textToCopy?: string;
 }
 
-export const handleEditorContextMenuFilter = async (context?: EditorContextMenuFilterContext) => {
+export const handleEditorContextMenuFilter = async (
+	context?: EditorContextMenuFilterContext,
+) => {
 	let filterObject: EditContextMenuFilterObject = {
 		items: [],
 		context,
 	};
 
-	filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
+	filterObject = await eventManager.filterEmit(
+		'editorContextMenu',
+		filterObject,
+	);
 
-	const filteredItems = filterSeparators(filterObject.items, item => item.type === 'separator');
+	const filteredItems = filterSeparators(
+		filterObject.items,
+		(item) => item.type === 'separator',
+	);
 
 	const output: MenuItemType[] = [];
 	for (const item of filteredItems) {
-		output.push(new MenuItem({
-			label: item.label,
-			click: async () => {
-				const args = item.commandArgs || [];
-				void CommandService.instance().execute(item.commandName, ...args);
-			},
-			type: item.type,
-		}));
+		output.push(
+			new MenuItem({
+				label: item.label,
+				click: async () => {
+					const args = item.commandArgs || [];
+					void CommandService.instance().execute(item.commandName, ...args);
+				},
+				type: item.type,
+			}),
+		);
 	}
 
 	return output;
 };
 
-export const buildMenuItems = async (items: ContextMenuItems, options: ContextMenuOptions) => {
+export const buildMenuItems = async (
+	items: ContextMenuItems,
+	options: ContextMenuOptions,
+) => {
 	const activeItems: ContextMenuItem[] = [];
 	for (const itemKey in items) {
 		const item = items[itemKey];
@@ -217,13 +276,19 @@ export const buildMenuItems = async (items: ContextMenuItems, options: ContextMe
 		});
 	}
 
-	const filteredItems = filterSeparators(activeItems, item => item.isSeparator);
+	const filteredItems = filterSeparators(
+		activeItems,
+		(item) => item.isSeparator,
+	);
 
-	return filteredItems.map(item => new MenuItem({
-		label: item.label,
-		click: () => {
-			item.onAction(options);
-		},
-		type: item.isSeparator ? 'separator' : 'normal',
-	}));
+	return filteredItems.map(
+		(item) =>
+			new MenuItem({
+				label: item.label,
+				click: () => {
+					item.onAction(options);
+				},
+				type: item.isSeparator ? 'separator' : 'normal',
+			}),
+	);
 };

@@ -11,7 +11,7 @@ import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl'
 import bridge from '../../../../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
-import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorContextMenuFilter } from '../../../utils/contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorContextMenuFilter, isNoteId } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
@@ -182,10 +182,14 @@ const useContextMenu = (props: ContextMenuProps) => {
 		const targetWindow = bridge().windowById(windowId);
 
 		const showResourceContextMenu = async (resourceId: string, type: ResourceMarkupType) => {
+			// Check if the item is a note rather than a resource
+			const isNoteLink = await isNoteId(resourceId);
+
 			const menu = new Menu();
 			const contextMenuOptions: ContextMenuOptions = {
 				itemType: type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource,
 				resourceId,
+				isNoteLink,
 				filename: null,
 				mime: null,
 				linkToCopy: null,

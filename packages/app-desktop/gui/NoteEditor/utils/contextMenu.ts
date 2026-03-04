@@ -118,7 +118,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				await fs.copy(resourcePath, filePath);
 			},
 			// We handle images received as text separately as it can be saved in multiple formats
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isNoteLink && !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
 		},
 		saveAsSvg: {
 			label: _('Save as %s', 'SVG'),
@@ -153,7 +153,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				const { resourcePath } = await resourceInfo(options);
 				bridge().showItemInFolder(resourcePath);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isNoteLink && !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
 		},
 		separator2: makeSeparator(),
 		recognizeHandwrittenImage: {
@@ -187,7 +187,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				});
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return !options.isNoteLink && (itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId));
 			},
 		},
 		copyOcrText: {
@@ -204,7 +204,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return !options.isNoteLink && (itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId));
 			},
 		},
 		createAccessibleDocument: {
@@ -214,7 +214,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				await CommandService.instance().execute('createAccessibleDocument', resource.id);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return !options.isNoteLink && (itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId));
 			},
 		},
 		separator3: makeSeparator(),
@@ -231,7 +231,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				if (!path) return;
 				clipboard.writeText(path);
 			},
-			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isNoteLink && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
 		},
 		copyImage: {
 			label: _('Copy image'),

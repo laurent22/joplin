@@ -3,7 +3,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import { useContext, useEffect } from 'react';
 import bridge from '../../../../../services/bridge';
-import { ContextMenuOptions, ContextMenuItemType, buildMenuItems } from '../../../utils/contextMenuUtils';
+import { ContextMenuOptions, ContextMenuItemType, buildMenuItems, isNoteId } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -42,6 +42,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;
 			let resourceId = '';
 			let linkUrl = null;
+			let isNoteLink = false;
 
 			const pathToId = (path: string) => {
 				const id = Resource.pathToId(path);
@@ -53,7 +54,16 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 				resourceId = pathToId((element as HTMLImageElement).src);
 			} else if (element.nodeName === 'A') {
 				resourceId = pathToId((element as HTMLAnchorElement).href);
-				itemType = resourceId ? ContextMenuItemType.Resource : ContextMenuItemType.Link;
+				if (resourceId) {
+					if (await isNoteId(resourceId)) {
+						itemType = ContextMenuItemType.Link;
+						isNoteLink = true;
+					} else {
+						itemType = ContextMenuItemType.Resource;
+					}
+				} else {
+					itemType = ContextMenuItemType.Link;
+				}
 				linkUrl = element.getAttribute('href') || '';
 			} else {
 				itemType = ContextMenuItemType.Text;
@@ -62,6 +72,7 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			contextMenuActionOptions.current = {
 				itemType,
 				resourceId,
+				isNoteLink,
 				filename: null,
 				mime: null,
 				linkToCopy: linkUrl,
