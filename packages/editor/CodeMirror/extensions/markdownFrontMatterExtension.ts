@@ -71,6 +71,14 @@ const frontMatterConfig: MarkdownConfig = {
 			const openingMarkerEnd = cx.lineStart + line.text.length;
 
 			const contentStart = openingMarkerEnd + 1; // Start after the opening --- and newline
+
+			// Pre-scan raw input for closing - before consuming lines via cx.nextLine()
+			const input = (cx as unknown as { input: Input }).input;
+			const remainingText = input.read(contentStart, input.length);
+			if (!/^---\s*$/m.test(remainingText)) {
+				return false;
+			}
+
 			let foundEnd = false;
 
 			// Consume lines until we find the closing ---
