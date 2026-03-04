@@ -65,6 +65,8 @@ import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import { themeStyle } from '@joplin/lib/theme';
+import { ThemeAppearance } from '@joplin/lib/themes/type';
 import { nativeTheme } from 'electron';
 
 const perfLogger = PerformanceLogger.create();
@@ -207,19 +209,10 @@ class Application extends BaseApplication {
 		}
 
 		// 2. If auto-detect is off, grab the current Joplin theme
-		const currentTheme = Setting.value('theme');
-		const darkThemes = [
-			Setting.value('preferredDarkTheme'),
-			Setting.THEME_DARK,
-			Setting.THEME_OLED_DARK,
-			Setting.THEME_SOLARIZED_DARK,
-			Setting.THEME_DRACULA,
-			Setting.THEME_NORD,
-			Setting.THEME_ARITIM_DARK,
-		];
+		const theme = themeStyle(Setting.value('theme'));
 
 		// 3. Force the Windows/macOS title bar to match
-		if (darkThemes.includes(currentTheme)) {
+		if (theme.appearance === ThemeAppearance.Dark) {
 			nativeTheme.themeSource = 'dark';
 		} else {
 			nativeTheme.themeSource = 'light';
