@@ -900,7 +900,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Object,
 			section: 'folder',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'folders.sortOrder.field': {
 			value: 'title',
