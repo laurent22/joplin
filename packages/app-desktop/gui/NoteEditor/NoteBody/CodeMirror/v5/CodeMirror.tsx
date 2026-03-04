@@ -49,8 +49,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const [webviewReady, setWebviewReady] = useState(false);
 
 	const editorRef = useRef(null);
-	const [editorRoot, setEditorRoot] = useState<HTMLDivElement | null>(null);
-	const rootRef = useRef<HTMLDivElement | null>(null);
+	const [editorRoot, setEditorRoot] = useState<HTMLDivElement|null>(null);
+	const rootRef = useRef<HTMLDivElement|null>(null);
 	rootRef.current = editorRoot;
 
 	const webviewRef = useRef(null);
@@ -416,7 +416,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [styles.editor.codeMirrorTheme, editorRoot]);
 
 	useEffect(() => {
-		if (!editorRoot) return () => { };
+		if (!editorRoot) return () => {};
 
 		const theme = themeStyle(props.themeId);
 
