@@ -39,9 +39,15 @@ rules.paragraph = {
     }
 
     // When tightLists is enabled, paragraphs inside list items should not add
-    // extra blank lines
+    // extra blank lines, but only if the list item contains a single paragraph
     if (options.tightLists && node.parentNode && node.parentNode.nodeName === 'LI') {
-      return content;
+      const parentLi = node.parentNode;
+      const paragraphs = Array.from(parentLi.childNodes).filter(
+        child => child.nodeName === 'P'
+      );
+      if (paragraphs.length === 1) {
+        return content;
+      }
     }
 
     return '\n\n' + content + '\n\n'
