@@ -34,7 +34,7 @@ export interface Plugins {
 }
 
 export interface SettingAndValue {
-	[settingName: string]: string | number | boolean;
+	[settingName: string]: string|number|boolean;
 }
 
 export interface DefaultPluginSettings {
@@ -81,7 +81,7 @@ function makePluginId(source: string): string {
 	return uslug(source).substr(0, 32);
 }
 
-type LoadedPluginsChangeListener = () => void;
+type LoadedPluginsChangeListener = ()=> void;
 
 export default class PluginService extends BaseService {
 
@@ -143,7 +143,7 @@ export default class PluginService extends BaseService {
 		this.isSafeMode_ = v;
 	}
 
-	public addLoadedPluginsChangeListener(listener: () => void) {
+	public addLoadedPluginsChangeListener(listener: ()=> void) {
 		this.pluginsChangeListeners_.push(listener);
 
 		return {
@@ -211,7 +211,7 @@ export default class PluginService extends BaseService {
 		return this.pluginById(id).manifest?.name ?? 'Unknown';
 	}
 
-	public viewControllerByViewId(id: string): ViewController | null {
+	public viewControllerByViewId(id: string): ViewController|null {
 		for (const [, plugin] of Object.entries(this.plugins_)) {
 			if (plugin.hasViewController(id)) return plugin.viewController(id);
 		}
