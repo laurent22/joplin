@@ -2,7 +2,7 @@ import { EditorSelection, EditorState } from '@codemirror/state';
 
 import createTestEditor from '../testing/createTestEditor';
 import findNodesWithName from '../testing/findNodesWithName';
-import { highlightMarkerTagName, highlightTagName } from './markdownHighlightExtension';
+import { highlightMarkerTagName, highlightTagName, insertMarkerTagName, insertTagName } from './markdownHighlightExtension';
 
 const createEditorState = async (initialText: string, expectedTags: string[]): Promise<EditorState> => {
 	return (await createTestEditor(initialText, EditorSelection.cursor(0), expectedTags)).state;
@@ -67,6 +67,65 @@ describe('MarkdownHighlightExtension', () => {
 
 		if (expectedMarkerRanges) {
 			const markerNodes = findNodesWithName(editor, highlightMarkerTagName);
+			expect(markerNodes).toMatchObject(expectedMarkerRanges);
+		}
+	});
+
+	it.each([
+		{ // Should support single-word insert
+			text: '++insert++',
+			expectedInsertRanges: [{ from: 0, to: '++insert++'.length }],
+			expectedMarkerRanges: [
+				{ from: 0, to: 2 },
+				{ from: '++insert'.length, to: '++insert++'.length },
+			],
+		},
+		{ // Should support multi-word insert
+			text: '++insert test++',
+			expectedInsertRanges: [{ from: 0, to: '++insert test++'.length }],
+			expectedMarkerRanges: [
+				{ from: 0, to: 2 },
+				{ from: '++insert test'.length, to: '++insert test++'.length },
+			],
+		},
+		{ // Should support within-word insert
+			text: 'test++ing++',
+			expectedInsertRanges: [{ from: 'test'.length, to: 'test++ing++'.length }],
+		},
+		{ // Should not parse if only one +
+			text: 'test++ing+',
+			expectedInsertRanges: [],
+		},
+		{ // Should not parse within inline code
+			text: '`++insert test++`',
+			expectedInsertRanges: [],
+			expectedMarkerRanges: [],
+		},
+		{ // Should parse across line breaks
+			text: '++insert\ntest++ test',
+			expectedInsertRanges: [{ from: 0, to: '++insert\ntest++'.length }],
+		},
+		{ // Should not parse across paragraph breaks
+			text: '++insert\n\ntest++ test',
+			expectedInsertRanges: [],
+			expectedMarkerRanges: [],
+		},
+	])('should parse inline insert (case %#: %j)', async ({ text, expectedInsertRanges, expectedMarkerRanges }) => {
+		const expectedNodes: string[] = [];
+		if (expectedInsertRanges.length) {
+			expectedNodes.push(insertTagName);
+		}
+		if (expectedMarkerRanges?.length) {
+			expectedNodes.push(insertMarkerTagName);
+		}
+
+		const editor = await createEditorState(text, expectedNodes);
+
+		const insertNodes = findNodesWithName(editor, insertTagName);
+		expect(insertNodes).toMatchObject(expectedInsertRanges);
+
+		if (expectedMarkerRanges) {
+			const markerNodes = findNodesWithName(editor, insertMarkerTagName);
 			expect(markerNodes).toMatchObject(expectedMarkerRanges);
 		}
 	});
