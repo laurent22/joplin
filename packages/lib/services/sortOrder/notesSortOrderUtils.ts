@@ -1,4 +1,4 @@
-import Setting from '@joplin/lib/models/Setting';
+import Setting from '../../models/Setting';
 
 let fields: string[] = null;
 let perFieldReverse: { [field: string]: boolean } = null;

@@ -13,13 +13,15 @@ import { _ } from '@joplin/lib/locale';
 import { BaseScreenComponent } from '../../base-screen';
 import { AppState } from '../../../utils/types';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
-import { itemIsInTrash } from '@joplin/lib/services/trash';
+import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
 import AccessibleView from '../../accessibility/AccessibleView';
 import { Dispatch } from 'redux';
 import { DialogContext, DialogControl } from '../../DialogManager';
 import { useContext } from 'react';
 import { MenuChoice } from '../../DialogManager/types';
 import NewNoteButton from './NewNoteButton';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 interface Props {
 	dispatch: Dispatch;
@@ -102,11 +104,56 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 			id: { name: 'showCompletedTodos', value: !Setting.value('showCompletedTodos') },
 		});
 
+		const showPerFolderToggle = this.shouldShowPerFolderSortToggle();
+		const currentFolderId = this.getCurrentFolderIdForSort();
+
+		if (showPerFolderToggle) {
+			const isSet = PerFolderSortOrderService.isSet(currentFolderId);
+			buttons.push({
+				text: `[ ${_('Use own sort order')} ]`,
+				checked: isSet,
+				id: { name: 'perFolderSortOrder', value: !isSet },
+			});
+		}
+
 		const r = await this.props.dialogManager.showMenu(Setting.settingMetadata('notes.sortOrder.field').label(), buttons);
 		if (!r) return;
 
-		Setting.setValue(r.name, r.value);
+		if (r.name === 'perFolderSortOrder') {
+			PerFolderSortOrderService.set(currentFolderId, r.value as boolean);
+		} else if (r.name === 'notes.sortOrder.field' || r.name === 'notes.sortOrder.reverse') {
+			Setting.setValue(r.name, r.value);
+			// Update the appropriate sort order storage based on whether per-folder sort is enabled
+			PerFolderSortOrderService.onSortOrderChange(currentFolderId);
+		} else {
+			Setting.setValue(r.name, r.value);
+		}
 	};
+
+	// Show "use own sort order" toggle for folders and the All Notes smart filter,
+	// but not for tags, conflicts folder, or trash folder.
+	private shouldShowPerFolderSortToggle(): boolean {
+		const { notesParentType, selectedFolderId, selectedSmartFilterId } = this.props;
+
+		if (notesParentType === 'Folder') {
+			return selectedFolderId !== Folder.conflictFolderId() && selectedFolderId !== getTrashFolderId();
+		}
+
+		if (notesParentType === 'SmartFilter') {
+			return selectedSmartFilterId === ALL_NOTES_FILTER_ID;
+		}
+
+		return false;
+	}
+
+	private getCurrentFolderIdForSort(): string {
+		if (this.props.notesParentType === 'Folder') {
+			return this.props.selectedFolderId;
+		} else if (this.props.notesParentType === 'SmartFilter') {
+			return this.props.selectedSmartFilterId;
+		}
+		return '';
+	}
 
 	public styles() {
 		if (!this.styles_) this.styles_ = {};
