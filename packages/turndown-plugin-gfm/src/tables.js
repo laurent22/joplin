@@ -319,7 +319,7 @@ const tableShouldBeHtml = (tableNode, options) => {
 
   return nodeContains(tableNode, 'code') ||
     nodeContains(tableNode, possibleTags) ||
-    tableHasCustomStyles(tableNode);
+    (options.preserveTableStyles && tableHasCustomStyles(tableNode));
 }
 
 // Various conditions under which a table should be skipped - i.e. each cell

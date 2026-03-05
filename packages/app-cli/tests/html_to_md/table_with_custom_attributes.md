@@ -1,4 +1,4 @@
-<table cellpadding="8">
+<table bgcolor="#f0f0f0" cellpadding="8">
 	<thead>
 		<tr>
 			<th>Name</th>
