@@ -230,4 +230,62 @@ describe('models/Tag', () => {
 		expect(tag2).not.toBe(undefined);
 		expect(tag1).not.toStrictEqual(tag2);
 	});
+
+	// --- NEW TESTS FOR FIX #14540 ---
+
+	it('should not create a duplicate tag when Tag.save() is called twice with the same title (sync scenario)', async () => {
+		// Simulate what happens during sync on a fresh device:
+		// Tag.save() is called without an id (new object), but the tag already exists locally.
+		// Expected: second save() returns the existing tag, no duplicate is created.
+		await Tag.save({ title: 'meetings' });
+		const returned = await Tag.save({ title: 'meetings' });
+
+		const allMatching = await Tag.modelSelectAll('SELECT * FROM tags WHERE title = \'meetings\'');
+		expect(allMatching.length).toBe(1);
+		expect(returned.id).toBe(allMatching[0].id);
+	});
+
+	it('should not create duplicate tags when addNoteTagByTitle is called and tag already exists', async () => {
+		// First call creates the tag and associates it with note1
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+
+		await Tag.addNoteTagByTitle(note1.id, 'meetings');
+		// Second call on a different note — should reuse existing tag, not create a new one
+		await Tag.addNoteTagByTitle(note2.id, 'meetings');
+
+		const allMatching = await Tag.modelSelectAll('SELECT * FROM tags WHERE title = \'meetings\'');
+		expect(allMatching.length).toBe(1);
+
+		// Both notes should be associated with the same single tag
+		const tagId = allMatching[0].id;
+		expect(await Tag.hasNote(tagId, note1.id)).toBe(true);
+		expect(await Tag.hasNote(tagId, note2.id)).toBe(true);
+	});
+
+	it('should not create duplicate tags when setNoteTagsByTitles is called across multiple notes with same tag', async () => {
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+		const note3 = await Note.save({});
+
+		await Tag.setNoteTagsByTitles(note1.id, ['meetings']);
+		await Tag.setNoteTagsByTitles(note2.id, ['meetings']);
+		await Tag.setNoteTagsByTitles(note3.id, ['meetings']);
+
+		const allMatching = await Tag.modelSelectAll('SELECT * FROM tags WHERE title = \'meetings\'');
+		expect(allMatching.length).toBe(1);
+	});
+
+	it('should return existing tag (not create new) when save() called without id and title matches existing tag', async () => {
+		const original = await Tag.save({ title: 'work' });
+
+		// Simulate sync: save called again with same title but no id
+		const result = await Tag.save({ title: 'work' });
+
+		expect(result.id).toBe(original.id);
+
+		const allMatching = await Tag.modelSelectAll('SELECT * FROM tags WHERE title = \'work\'');
+		expect(allMatching.length).toBe(1);
+	});
+
 });

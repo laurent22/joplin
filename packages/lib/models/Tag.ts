@@ -237,6 +237,20 @@ export default class Tag extends BaseItem {
 			}
 		}
 
+		// --- FIX START ---
+		// During sync, a new tag object (without an id) may be saved even though a tag
+		// with the same title already exists locally. This happens because loadByTitle()
+		// is called before the local DB is fully populated after a fresh device setup,
+		// causing a new duplicate tag to be created and then propagated to all devices.
+		// To prevent this, we check for an existing tag by title whenever a new tag
+		// (one without an id) is being saved, regardless of userSideValidation.
+		// Fixes: https://github.com/laurent22/joplin/issues/14540
+		if (!o.id && 'title' in o) {
+			const existingTag = await Tag.loadByTitle(o.title);
+			if (existingTag) return existingTag;
+		}
+		// --- FIX END ---
+
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return super.save(o, options).then((tag: TagEntity) => {
 			if (options.dispatchUpdateAction) {
