@@ -235,7 +235,7 @@ export default function(props: Props) {
 	function renderDialogWrapper() {
 		return (
 			<div className="dialog-root">
-				<DialogTitle title={dialogTitle} />
+				<DialogTitle title={dialogTitle}/>
 				{renderContent()}
 				<DialogButtonRow
 					themeId={props.themeId}
