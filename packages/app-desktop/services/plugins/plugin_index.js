@@ -130,10 +130,38 @@
 		console.warn('Unhandled plugin message:', message);
 	});
 
+	// Track whether the plugin has called joplin.plugins.register().
+	// If the plugin script throws before register() is called, the 'started'
+	// event will never fire, which blocks other plugins from working.
+	// See: https://github.com/laurent22/joplin/issues/12793
+	let registerCalled = false;
+
+	const originalTarget = target;
+	const wrappedTarget = (path, args) => {
+		if (path === 'plugins.register') {
+			registerCalled = true;
+		}
+		return originalTarget(path, args);
+	};
+
+	// Catch unhandled errors from the plugin script. If the plugin throws
+	// before calling register(), notify the host so it can unblock startup.
+	window.onerror = (message) => {
+		if (!registerCalled) {
+			console.error(`Plugin "${pluginId}" threw an error before registering:`, message);
+			ipcRendererSend('pluginMessage', {
+				target: 'mainWindow',
+				pluginId: pluginId,
+				path: '__pluginFailedToStart__',
+				args: [String(message)],
+			});
+		}
+	};
+
 	const pluginScriptPath = urlParams.get('pluginScript');
 	const script = document.createElement('script');
 	script.src = pluginScriptPath;
 	document.head.appendChild(script);
 
-	globalObject.joplin = sandboxProxy(target);
+	globalObject.joplin = sandboxProxy(wrappedTarget);
 })(window);
