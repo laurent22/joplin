@@ -1,18 +1,17 @@
 name: Build macOS M1
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 jobs:
   Main:
     # We always process desktop release tags, because they also publish the release
     if: github.repository == 'laurent22/joplin'
     runs-on: macos-latest
     steps:
-
       - uses: actions/checkout@v4
       - uses: olegtarasov/get-tag@v2.1.4
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
-          cache: 'yarn'
+          node-version: "24"
+          cache: "yarn"
 
       - name: Install Yarn
         run: |
@@ -28,7 +27,7 @@ jobs:
       # See github-action-main.yml for explanation
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: "3.14"
 
       - name: Set Publish Flag
         run: |

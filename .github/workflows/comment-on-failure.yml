@@ -5,7 +5,8 @@ on:
       - Joplin Continuous Integration
       - react-native-android-build-apk
       - Build macOS M1
-    types: [ completed ]
+    types: [completed]
+  workflow_dispatch:
 
 jobs:
   comment-failure:

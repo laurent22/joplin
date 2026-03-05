@@ -2,7 +2,7 @@
 # tell us automatically if something got broken when a dependency was changed.
 
 name: react-native-android-build-apk
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   AssembleRelease:
@@ -16,25 +16,25 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '20'
-          
+          distribution: "temurin"
+          java-version: "20"
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
-          cache: 'yarn'
+          node-version: "24"
+          cache: "yarn"
 
       - name: Install Yarn
         run: |
           corepack enable
 
       - name: Install
-        run:  yarn install
+        run: yarn install
         env:
           SKIP_ONENOTE_CONVERTER_BUILD: 1
-      
+
       - name: Free disk space
         run: |
           sudo rm -rf /usr/share/dotnet || true
@@ -45,7 +45,7 @@ jobs:
           cd packages/app-mobile/android
           sed -i -- 's/signingConfig signingConfigs.release/signingConfig signingConfigs.debug/' app/build.gradle
           ./gradlew assembleRelease
-      
+
       - name: Verify alignment
         run: |
           cd packages/app-mobile/android/app
