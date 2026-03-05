@@ -115,8 +115,7 @@ class ImageWidget extends WidgetType {
 		container.addEventListener('mousedown', (e) => {
 			if (e.button !== 0) return;
 			e.preventDefault();
-			const sourceFrom = Number(container.dataset.sourceFrom);
-			const pos = Math.min(sourceFrom, view.state.doc.length);
+			const pos = Math.min(view.posAtDOM(container), view.state.doc.length);
 			view.dispatch({
 				selection: { anchor: view.state.doc.lineAt(pos).from },
 				scrollIntoView: false,
