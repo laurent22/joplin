@@ -128,9 +128,13 @@ function createServer() {
           .number()
           .describe('Maximum number of snippets to return (default: 200)')
           .optional(),
+        snippetsOffset: z
+          .number()
+          .describe('Offset (starting index) of snippets to return (default: 0)')
+          .optional(),
       }),
     },
-    async ({ query, maxResults, contextChars, maxSnippets }) => {
+    async ({ query, maxResults, contextChars, maxSnippets, snippetsOffset }) => {
       const CONTEXT = contextChars ?? 100;
       const BODY_COL = 2; // markdown_notes_fts 列順: 0=id(notindexed), 1=title, 2=body
       try {
@@ -194,7 +198,7 @@ function createServer() {
         });
 
         return {
-          content: [{ type: 'text', text: JSON.stringify(results.slice(0, maxSnippets ?? 200)) }],
+          content: [{ type: 'text', text: JSON.stringify(results.slice(snippetsOffset ?? 0, (snippetsOffset ?? 0) + (maxSnippets ?? 200))) }],
         };
       } catch (error) {
         return {
