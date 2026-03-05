@@ -6,6 +6,25 @@ import { ViewerUtil } from '../../lib/viewerUtil';
 import { Note } from '@/lib/note';
 import TurndownService from 'turndown';
 
+// UTF-8 バイトオフセット → JS 文字列インデックス のマッピングを構築
+function buildByteToCharMap(text: string): number[] {
+  const encoder = new TextEncoder();
+  const map: number[] = [];
+  let bytePos = 0;
+  let charPos = 0;
+  while (charPos < text.length) {
+    const codePoint = text.codePointAt(charPos)!;
+    const charByteLen = encoder.encode(String.fromCodePoint(codePoint)).length;
+    for (let b = 0; b < charByteLen; b++) {
+      map[bytePos + b] = charPos;
+    }
+    bytePos += charByteLen;
+    charPos += codePoint > 0xffff ? 2 : 1;
+  }
+  map[bytePos] = text.length;
+  return map;
+}
+
 // Parse command line arguments
 const args = process.argv.slice(2);
 const profileNameIndex = args.indexOf('--profileName');
@@ -98,11 +117,12 @@ function createServer() {
       inputSchema: z.object({
         query: z.string().describe('Search keyword(s) for full-text search (SQLite FTS4 MATCH syntax)'),
         maxResults: z.number().describe('Maximum number of results to return').optional(),
-        contextChars: z.number().describe('Number of characters to include before and after each match (default: 1000)').optional(),
+        contextChars: z.number().describe('Number of characters to include before and after each match (default: 100)').optional(),
       }),
     },
     async ({ query, maxResults, contextChars }) => {
-      const snippetRadius = contextChars ?? 1000;
+      const CONTEXT = contextChars ?? 100;
+      const BODY_COL = 2; // markdown_notes_fts 列順: 0=id(notindexed), 1=title, 2=body
       try {
         const searchResults = Note.selectAllMarkdownFts(query);
         const limited = maxResults ? searchResults.slice(0, maxResults) : searchResults;
@@ -113,53 +133,45 @@ function createServer() {
           noteMap[n.id] = n;
         }
 
-        // Build a case-insensitive regex from the query keywords
-        const keywords = query.replace(/[*"]/g, '').split(/\s+/).filter(Boolean);
-        const pattern = keywords.length
-          ? new RegExp(keywords.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi')
-          : null;
-
         const results = limited.flatMap((r) => {
           const note = noteMap[r.id];
           const body = note?.body ?? '';
+          if (!body) return [];
 
-          let snippets: { note_id: string; note_title: string; text: string }[] = [];
-          if (pattern && body) {
-            // Collect all match positions
-            const matches: { start: number; end: number }[] = [];
-            let m: RegExpExecArray | null;
-            while ((m = pattern.exec(body)) !== null) {
-              matches.push({ start: m.index, end: m.index + m[0].length });
-            }
+          // offsets フィールドが無い場合はボディ先頭を返すフォールバック
+          if (!r.offsets) {
+            return [{ note_id: r.id, note_title: r.title, text: body.slice(0, CONTEXT * 2) }];
+          }
 
-            if (matches.length > 0) {
-              // Merge overlapping snippet ranges
-              const ranges: { start: number; end: number }[] = [];
-              for (const match of matches) {
-                const rangeStart = Math.max(0, match.start - snippetRadius);
-                const rangeEnd = Math.min(body.length, match.end + snippetRadius);
-                const last = ranges[ranges.length - 1];
-                if (last && rangeStart <= last.end) {
-                  last.end = Math.max(last.end, rangeEnd);
-                } else {
-                  ranges.push({ start: rangeStart, end: rangeEnd });
-                }
-              }
-              snippets = ranges.map((range) => {
-                const prefix = range.start > 0 ? '...' : '';
-                const suffix = range.end < body.length ? '...' : '';
-                return {
-                  note_id: r.id,
-                  note_title: r.title,
-                  text: `${prefix}${body.slice(range.start, range.end)}${suffix}`,
-                };
-              });
-            } else {
-              // No regex match found — return head of body as fallback
-              snippets = [{ note_id: r.id, note_title: r.title, text: body.slice(0, snippetRadius * 2) }];
+          // FTS4 offsets をパース: 4 整数ずつ [col, term, byteOffset, byteLen]
+          const nums = r.offsets.split(' ').map(Number);
+          const bodyOffsets: { byteOffset: number; byteLen: number }[] = [];
+          for (let i = 0; i + 3 < nums.length; i += 4) {
+            if (nums[i] === BODY_COL) {
+              bodyOffsets.push({ byteOffset: nums[i + 2], byteLen: nums[i + 3] });
             }
-          } else if (body) {
-            snippets = [{ note_id: r.id, note_title: r.title, text: body.slice(0, snippetRadius * 2) }];
+          }
+
+          if (bodyOffsets.length === 0) {
+            return [{ note_id: r.id, note_title: r.title, text: body.slice(0, CONTEXT * 2) }];
+          }
+
+          const byteToChar = buildByteToCharMap(body);
+          const snippets: { note_id: string; note_title: string; text: string }[] = [];
+          const seen = new Set<string>();
+
+          for (const { byteOffset, byteLen } of bodyOffsets) {
+            const charStart = byteToChar[byteOffset] ?? 0;
+            const charEnd = byteToChar[byteOffset + byteLen] ?? charStart + 1;
+            const fragStart = Math.max(0, charStart - CONTEXT);
+            const fragEnd = Math.min(body.length, charEnd + CONTEXT);
+            const prefix = fragStart > 0 ? '...' : '';
+            const suffix = fragEnd < body.length ? '...' : '';
+            const text = `${prefix}${body.slice(fragStart, fragEnd)}${suffix}`;
+            if (!seen.has(text)) {
+              seen.add(text);
+              snippets.push({ note_id: r.id, note_title: r.title, text });
+            }
           }
 
           return snippets;
