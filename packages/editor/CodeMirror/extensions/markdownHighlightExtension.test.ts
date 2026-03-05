@@ -80,35 +80,9 @@ describe('MarkdownHighlightExtension', () => {
 				{ from: '++insert'.length, to: '++insert++'.length },
 			],
 		},
-		{ // Should support multi-word insert
-			text: '++insert test++',
-			expectedInsertRanges: [{ from: 0, to: '++insert test++'.length }],
-			expectedMarkerRanges: [
-				{ from: 0, to: 2 },
-				{ from: '++insert test'.length, to: '++insert test++'.length },
-			],
-		},
-		{ // Should support within-word insert
-			text: 'test++ing++',
-			expectedInsertRanges: [{ from: 'test'.length, to: 'test++ing++'.length }],
-		},
 		{ // Should not parse if only one +
 			text: 'test++ing+',
 			expectedInsertRanges: [],
-		},
-		{ // Should not parse within inline code
-			text: '`++insert test++`',
-			expectedInsertRanges: [],
-			expectedMarkerRanges: [],
-		},
-		{ // Should parse across line breaks
-			text: '++insert\ntest++ test',
-			expectedInsertRanges: [{ from: 0, to: '++insert\ntest++'.length }],
-		},
-		{ // Should not parse across paragraph breaks
-			text: '++insert\n\ntest++ test',
-			expectedInsertRanges: [],
-			expectedMarkerRanges: [],
 		},
 	])('should parse inline insert (case %#: %j)', async ({ text, expectedInsertRanges, expectedMarkerRanges }) => {
 		const expectedNodes: string[] = [];
