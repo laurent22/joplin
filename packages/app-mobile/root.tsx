@@ -324,19 +324,19 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			// Trigger sync immediately when the app becomes active (resume from background/lock screen).
 			// Guard: only transition from non-active → active, and respect a 30-second cool-down to
 			// prevent sync spam on rapid lock/unlock cycles.
-			const MIN_RESUME_SYNC_INTERVAL_MS = 30_000;
+			const minResumeSyncIntervalMs = 30_000;
 			if (
 				this.previousAppState_ !== 'active' &&
 				nextAppState === 'active'
 			) {
 				const elapsed = Date.now() - this.lastResumeSyncTime_;
-				if (elapsed > MIN_RESUME_SYNC_INTERVAL_MS) {
+				if (elapsed > minResumeSyncIntervalMs) {
 					logger.info(`onAppStateChange_: App became active - scheduling immediate sync (elapsed since last resume sync: ${elapsed}ms)`);
 					this.lastResumeSyncTime_ = Date.now();
 
 					void reg.scheduleSync(0, null, true);
 				} else {
-					logger.info(`onAppStateChange_: App became active but skipping sync - cool-down not elapsed (${elapsed}ms < ${MIN_RESUME_SYNC_INTERVAL_MS}ms)`);
+					logger.info(`onAppStateChange_: App became active but skipping sync - cool-down not elapsed (${elapsed}ms < ${minResumeSyncIntervalMs}ms)`);
 				}
 			}
 
