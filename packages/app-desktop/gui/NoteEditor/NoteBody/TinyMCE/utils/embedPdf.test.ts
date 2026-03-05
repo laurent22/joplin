@@ -105,6 +105,24 @@ describe('embedPdf', () => {
 		expect(last?.getAttribute('data-joplin-cursor-spacer')).toBe('true');
 	});
 
+	test('ensureTrailingEditableParagraph: appends a sentinel <p> when the wrapper is the last child of a block element', () => {
+		const editor = createMockEditor('');
+		const doc = editor.dom.doc;
+		const p = doc.createElement('p');
+		p.appendChild(doc.createTextNode('Some text'));
+		p.appendChild(doc.createElement('br'));
+		const wrapper = doc.createElement('div');
+		wrapper.className = 'joplin-editable joplin-pdf-embed-wrapper';
+		wrapper.setAttribute('contenteditable', 'false');
+		p.appendChild(wrapper);
+		doc.body.appendChild(p);
+
+		ensureTrailingEditableParagraph(editor);
+		const last = doc.body.lastElementChild;
+		expect(last?.tagName).toBe('P');
+		expect(last?.getAttribute('data-joplin-cursor-spacer')).toBe('true');
+	});
+
 	test('ensureTrailingEditableParagraph: does nothing when the last element is already editable', () => {
 		const editor = createMockEditor('<p>Some text</p>');
 		ensureTrailingEditableParagraph(editor);

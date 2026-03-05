@@ -74,10 +74,19 @@ export const ensureTrailingEditableParagraph = (editorInstance: Editor): void =>
 	if (!body) return;
 	const lastChild = body.lastElementChild;
 	if (!lastChild) return;
-	const isNonEditable =
-		lastChild.classList.contains('joplin-editable') ||
-		lastChild.getAttribute('contenteditable') === 'false';
-	if (!isNonEditable) return;
+
+	const isNonEditable = (el: Element): boolean =>
+		el.classList.contains('joplin-editable') ||
+		el.getAttribute('contenteditable') === 'false';
+
+	// The wrapper may be a direct body child, or nested inside a block when the
+	// PDF link had sibling content (e.g. <p>text<br><div wrapper></div></p>).
+	const needsSentinel =
+		isNonEditable(lastChild) ||
+		(lastChild.lastElementChild !== null && isNonEditable(lastChild.lastElementChild));
+
+	if (!needsSentinel) return;
+
 	const p = editorInstance.dom.doc.createElement('p');
 	p.setAttribute('data-joplin-cursor-spacer', 'true');
 	p.appendChild(editorInstance.dom.doc.createElement('br'));
