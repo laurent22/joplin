@@ -53,7 +53,7 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 	while (output.length) {
 		const c = output[output.length - 1];
 		if (c === ' ' || c === '.') {
-			output = output.substr(0, output.length - 1);
+			output = output.slice(0, -1);
 		} else {
 			break;
 		}
@@ -62,7 +62,7 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 	while (output.length) {
 		const c = output[0];
 		if (c === ' ') {
-			output = output.substr(1, output.length - 1);
+			output = output.substring(1);
 		} else {
 			break;
 		}
@@ -70,5 +70,5 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 
 	if (!output) return _('Untitled') + fileExt;
 
-	return output.substr(0, maxLength) + fileExt;
+	return output.substring(0, maxLength) + fileExt;
 }

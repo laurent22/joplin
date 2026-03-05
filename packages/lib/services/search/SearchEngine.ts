@@ -526,12 +526,12 @@ export default class SearchEngine {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public queryTermToRegex(term: any) {
 		while (term.length && term.indexOf('*') === 0) {
-			term = term.substr(1);
+			term = term.substring(1);
 		}
 
 		let regexString = pregQuote(term);
 		if (regexString[regexString.length - 1] === '*') {
-			regexString = `${regexString.substr(0, regexString.length - 2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
+			regexString = `${regexString.slice(0, -2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
 			// regexString = regexString.substr(0, regexString.length - 2) + '.*?';
 		}
 
@@ -540,7 +540,7 @@ export default class SearchEngine {
 
 	public async parseQuery(query: string): Promise<ParsedQuery> {
 
-		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
+		const trimQuotes = (str: string) => str.startsWith('"') ? str.slice(1, -1) : str;
 
 		let allTerms: Term[] = [];
 

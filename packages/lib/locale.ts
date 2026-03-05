@@ -588,12 +588,12 @@ function languageName(canonicalName: string, defaultToEnglish = true) {
 
 function languageCodeOnly(canonicalName: string) {
 	if (canonicalName.length < 2) return canonicalName;
-	return canonicalName.substr(0, 2);
+	return canonicalName.substring(0, 2);
 }
 
 function countryCodeOnly(canonicalName: string) {
 	if (canonicalName.length <= 2) return '';
-	return canonicalName.substr(3);
+	return canonicalName.substring(3);
 }
 
 function countryDisplayName(canonicalName: string) {
