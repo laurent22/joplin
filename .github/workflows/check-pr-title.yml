@@ -1,8 +1,15 @@
 name: Check pull request title
 on: [pull_request]
+
+permissions:
+  contents: read
+
 jobs:
   main:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      statuses: write
     steps:
       - uses: Slashgear/action-check-pr-title@v4.3.0
         with:

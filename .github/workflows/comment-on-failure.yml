@@ -7,8 +7,14 @@ on:
       - Build macOS M1
     types: [ completed ]
 
+permissions:
+  contents: read
+
 jobs:
   comment-failure:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - uses: quipper/comment-failure-action@v0.1.1

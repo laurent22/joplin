@@ -5,11 +5,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   Main:
     # We always process desktop release tags, because they also publish the release
     if: github.repository == 'laurent22/joplin'
     runs-on: macos-latest
+    permissions:
+      contents: write
     steps:
 
       - uses: actions/checkout@v4

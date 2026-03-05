@@ -2,6 +2,10 @@ name: automerge
 on:
   schedule:
     - cron: '*/10 * * * *'
+
+permissions:
+  contents: read
+
 jobs:
 
   # This job will make the action fail if any of the checks hasn't passed
@@ -15,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - id: automerge
         name: automerge
