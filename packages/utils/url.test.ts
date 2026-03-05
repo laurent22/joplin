@@ -28,6 +28,17 @@ describe('utils/url', () => {
 		expect(fileUriToPath('file:///c:/AUTOEXEC.BAT', 'win32')).toBe('c:\\AUTOEXEC.BAT');
 	}));
 
+	it('should handle Windows UNC paths with forward slashes', () => {
+		// UNC path file://\\server\share after backslash-to-slash normalization
+		// becomes file:////server/share which fileUriToPath should handle correctly.
+		// https://github.com/laurent22/joplin/issues/14196
+		expect(fileUriToPath('file:////server01/share/path/to/file.txt', 'win32'))
+			.toBe('\\\\server01\\share\\path\\to\\file.txt');
+
+		expect(fileUriToPath('file:////server01/path/to/file%20with%20spaces.txt', 'win32'))
+			.toBe('\\\\server01\\path\\to\\file with spaces.txt');
+	});
+
 	it('should correctly identify https and http URLs', () => {
 		expect(isHttpOrHttpsUrl('https://example.com')).toBe(true);
 		expect(isHttpOrHttpsUrl('http://example.com')).toBe(true);
