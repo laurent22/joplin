@@ -26,6 +26,22 @@ export interface NoteTreeNode {
 
 export type TreeNode = FolderTreeNode | NoteTreeNode;
 
+// 簡略化されたツリーノードの型定義
+export interface SimpleFolderNode {
+  id: string;
+  title: string;
+  type: 'Folder';
+  children: SimpleTreeNode[];
+}
+
+export interface SimpleNoteNode {
+  id: string;
+  title: string;
+  type: 'Note';
+}
+
+export type SimpleTreeNode = SimpleFolderNode | SimpleNoteNode;
+
 export interface SuccessResponse {
   success: true;
   data: TreeNode[];
@@ -59,6 +75,30 @@ export class ViewerUtil {
 
     const folderTree = ViewerUtil.createFolderTree(folderList);
     return folderTree;
+  }
+
+  public static simpleTreeNode(tree: TreeNode): SimpleTreeNode {
+    if (tree.type === 'Note') {
+      // Noteの場合は id, title, type のみ
+      return {
+        id: tree.id,
+        title: tree.title,
+        type: tree.type,
+      };
+    } else {
+      // Folderの場合は id, title, children のみ（再帰的に処理）
+      const folderNode = tree as FolderTreeNode;
+      return {
+        id: folderNode.id,
+        title: folderNode.title,
+        type: folderNode.type,
+        children: folderNode.children.map((child) => ViewerUtil.simpleTreeNode(child)),
+      };
+    }
+  }
+
+  public static simpleTreeNodes(trees: TreeNode[]): SimpleTreeNode[] {
+    return trees.map((tree) => ViewerUtil.simpleTreeNode(tree));
   }
 
   public static selectFolderAndNotesAndCreateTree() {

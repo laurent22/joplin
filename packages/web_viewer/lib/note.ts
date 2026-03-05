@@ -94,6 +94,11 @@ export class Note {
 
   public static selectAllMarkdownFts(matchQuery: string): MarkdownSearchResult[] {
     const db = getDatabase();
+
+    // Split by half-width or full-width spaces and OR-join for FTS MATCH
+    const terms = matchQuery.split(/[\s\u3000]+/).filter(Boolean);
+    const ftsQuery = terms.length > 1 ? terms.join(' OR ') : (terms[0] || matchQuery);
+
     const sql = `
             SELECT
                 markdown_notes_fts.id,
@@ -103,7 +108,7 @@ export class Note {
             WHERE markdown_notes_fts MATCH ?`;
 
     const stmt = db.prepare(sql);
-    const rows = stmt.all(matchQuery);
+    const rows = stmt.all(ftsQuery);
 
     // parent_id is not in the FTS table, so we join from markdown_notes
     const ids = (rows as any[]).map((r) => r.id);

@@ -10,32 +10,46 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-pattern public/**",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix --ignore-pattern public/**",
     "format": "prettier --write .",
-    "fix": "npm run format && npm run lint:fix"
+    "fix": "npm run format && npm run lint:fix",
+    "mcp:dev": "tsx ./mcp/server/index.ts",
+    "mcp:client": "tsx ./mcp/client/index.ts",
+    "mcp:server": "tsx ./mcp/server/index.ts",
+    "agent": "tsx mcp/client/LangChainClient.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@langchain/mcp-adapters": "^1.1.3",
+    "@langchain/openai": "^1.2.7",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
     "@mui/x-tree-view": "^8.26.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.90.20",
+    "@types/turndown": "^5.0.6",
     "better-sqlite3": "^12.6.2",
     "cheerio": "^1.2.0",
+    "express": "^5.2.1",
     "faiss-node": "^0.5.1",
     "html-react-parser": "^5.2.16",
+    "https-proxy-agent": "^7.0.6",
+    "langchain": "^1.2.24",
     "mark.js": "^8.11.1",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
     "react-redux": "^9.2.0",
-    "react-resizable-panels": "^4.5.8"
+    "react-resizable-panels": "^4.5.8",
+    "turndown": "^7.2.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.6",
     "@types/mark.js": "^8.11.12",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -46,6 +60,8 @@
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.4.2",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
