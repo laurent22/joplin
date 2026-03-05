@@ -289,6 +289,16 @@ const useContextMenu = (props: ContextMenuProps) => {
 				}),
 			);
 
+			menu.append(
+				new MenuItem({
+					label: _('Paste as Markdown'),
+					enabled: true,
+					click: async () => {
+						await CommandService.instance().execute('pasteAsMarkdown');
+					},
+				}),
+			);
+
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
 
 			for (const item of spellCheckerMenuItems) {

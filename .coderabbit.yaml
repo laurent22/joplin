@@ -107,3 +107,4 @@ knowledge_base:
     filePatterns:
       - "readme/dev/coding_style.md"
       - "readme/dev/index.md"
+      - "CLAUDE.md"

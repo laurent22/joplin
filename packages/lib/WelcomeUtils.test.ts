@@ -1,7 +1,8 @@
 import { setupDatabaseAndSynchronizer, switchClient } from './testing/test-utils';
-import WelcomeUtils from './WelcomeUtils';
+import WelcomeUtils, { WelcomeAssetPlatform } from './WelcomeUtils';
 import Folder from './models/Folder';
 import { FolderIconType } from './services/database/types';
+import Note from './models/Note';
 
 describe('WelcomeUtils', () => {
 
@@ -11,7 +12,7 @@ describe('WelcomeUtils', () => {
 	});
 
 	it('should create welcome items with waving hand emoji icon for the folder', async () => {
-		const result = await WelcomeUtils.createWelcomeItems('en_GB');
+		const result = await WelcomeUtils.createWelcomeItems('en_GB', WelcomeAssetPlatform.Desktop);
 
 		expect(result.defaultFolderId).toBeTruthy();
 
@@ -23,4 +24,21 @@ describe('WelcomeUtils', () => {
 		expect(icon.emoji).toBe('👋');
 	});
 
+
+	it.each([
+		WelcomeAssetPlatform.Web, WelcomeAssetPlatform.Desktop,
+	])('should create web welcome notes only on web (testing platform: %s)', async (platform) => {
+		const result = await WelcomeUtils.createWelcomeItems('en_GB', platform);
+
+		const notes = await Note.previews(result.defaultFolderId);
+
+		const webAppNoteTitle = '0. About the web app';
+		const noteTitles = notes.map(note => note.title);
+
+		if (platform === WelcomeAssetPlatform.Web) {
+			expect(noteTitles).toContain(webAppNoteTitle);
+		} else {
+			expect(noteTitles).not.toContain(webAppNoteTitle);
+		}
+	});
 });
