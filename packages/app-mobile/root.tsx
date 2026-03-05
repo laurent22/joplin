@@ -327,7 +327,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			const minResumeSyncIntervalMs = 30_000;
 			if (nextAppState === 'active') {
 				const elapsed = Date.now() - this.lastResumeSyncTime_;
-				if (elapsed > minResumeSyncIntervalMs) {
+				if (elapsed >= minResumeSyncIntervalMs) {
 					logger.info(`onAppStateChange_: App became active - scheduling immediate sync (elapsed since last resume sync: ${elapsed}ms)`);
 					this.lastResumeSyncTime_ = Date.now();
 
