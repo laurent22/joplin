@@ -142,12 +142,12 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 function extractAuthor(author: unknown): string {
 	if (!author) return '';
 
-	if (typeof (author) === 'string') {
+	if (typeof(author) === 'string') {
 		return author;
 	} else if (Array.isArray(author)) {
 		// Joplin only supports a single author, so we take the first one
 		return extractAuthor(author[0]);
-	} else if (typeof (author) === 'object') {
+	} else if (typeof(author) === 'object') {
 		if ('name' in author) {
 			return (author as { name: string }).name;
 		}

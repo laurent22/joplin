@@ -18,7 +18,7 @@ interface FolderIconContext {
 	folderIcons: Record<string, string>;
 }
 
-interface FrontMatterContext extends NoteTagContext, TagContext, FolderIconContext { }
+interface FrontMatterContext extends NoteTagContext, TagContext, FolderIconContext {}
 
 export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
