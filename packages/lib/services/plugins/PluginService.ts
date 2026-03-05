@@ -81,7 +81,7 @@ function makePluginId(source: string): string {
 	return uslug(source).substr(0, 32);
 }
 
-type LoadedPluginsChangeListener = ()=> void;
+type LoadedPluginsChangeListener = () => void;
 
 export default class PluginService extends BaseService {
 
@@ -143,7 +143,7 @@ export default class PluginService extends BaseService {
 		this.isSafeMode_ = v;
 	}
 
-	public addLoadedPluginsChangeListener(listener: ()=> void) {
+	public addLoadedPluginsChangeListener(listener: () => void) {
 		this.pluginsChangeListeners_.push(listener);
 
 		return {
