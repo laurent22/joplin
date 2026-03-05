@@ -227,9 +227,7 @@ export default class Resource extends BaseItem {
 	// and after sync upload to clean up temporary encrypted artifacts.
 	public static async removeCryptedFile(cryptedPath: string) {
 		try {
-			if (await this.fsDriver().exists(cryptedPath)) {
-				await this.fsDriver().remove(cryptedPath);
-			}
+			await this.fsDriver().remove(cryptedPath);
 		} catch (error) {
 			this.logger().warn(`Failed to remove .crypted file ${cryptedPath}: ${error.message}`);
 		}
@@ -260,14 +258,7 @@ export default class Resource extends BaseItem {
 				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
 			});
 		} catch (error) {
-			// Clean up partial .crypted file if encryption failed mid-write
-			try {
-				if (await this.fsDriver().exists(encryptedPath)) {
-					await this.fsDriver().remove(encryptedPath);
-				}
-			} catch (error) {
-				this.logger().warn('Failed to clean up partial .crypted file:', error);
-			}
+			await this.removeCryptedFile(encryptedPath);
 
 			if (error.code === 'ENOENT') {
 				throw new JoplinError(
