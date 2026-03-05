@@ -84,7 +84,7 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 		if (!info || !isMatchingTag(info)) return null;
 
 		if (info.opening && info.closing) {
-			return [node.from, node.to];
+			return null;
 		}
 
 		if (info.opening) {
