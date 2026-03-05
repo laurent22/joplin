@@ -322,13 +322,10 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			PoorManIntervals.update();
 
 			// Trigger sync immediately when the app becomes active (resume from background/lock screen).
-			// Guard: only transition from non-active → active, and respect a 30-second cool-down to
+			// Only run when the app becomes active, with a 30-second minimum interval
 			// prevent sync spam on rapid lock/unlock cycles.
 			const minResumeSyncIntervalMs = 30_000;
-			if (
-				this.previousAppState_ !== 'active' &&
-				nextAppState === 'active'
-			) {
+			if (nextAppState === 'active') {
 				const elapsed = Date.now() - this.lastResumeSyncTime_;
 				if (elapsed > minResumeSyncIntervalMs) {
 					logger.info(`onAppStateChange_: App became active - scheduling immediate sync (elapsed since last resume sync: ${elapsed}ms)`);
@@ -336,7 +333,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 					void reg.scheduleSync(0, null, true);
 				} else {
-					logger.info(`onAppStateChange_: App became active but skipping sync - cool-down not elapsed (${elapsed}ms < ${minResumeSyncIntervalMs}ms)`);
+					logger.info(`onAppStateChange_: App became active but skipping sync - minimum interval not reached (${elapsed}ms < ${minResumeSyncIntervalMs}ms)`);
 				}
 			}
 
