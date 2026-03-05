@@ -13,28 +13,15 @@ const createMockEditor = (bodyHtml: string): Editor => {
 };
 
 describe('embedPdf', () => {
-	test('isPdfUrl: detects a simple file:// PDF URL', () => {
-		expect(isPdfUrl('file:///path/to/file.pdf')).toBe(true);
-	});
-
-	test('isPdfUrl: is case-insensitive', () => {
-		expect(isPdfUrl('file:///path/to/FILE.PDF')).toBe(true);
-	});
-
-	test('isPdfUrl: ignores query strings', () => {
-		expect(isPdfUrl('file:///path/to/file.pdf?v=1')).toBe(true);
-	});
-
-	test('isPdfUrl: ignores fragments', () => {
-		expect(isPdfUrl('file:///path/to/file.pdf#page=2')).toBe(true);
-	});
-
-	test('isPdfUrl: returns false for a non-PDF URL', () => {
-		expect(isPdfUrl('file:///path/to/image.png')).toBe(false);
-	});
-
-	test('isPdfUrl: handles a relative path via fallback', () => {
-		expect(isPdfUrl('documents/report.pdf')).toBe(true);
+	test.each<[string, string, boolean]>([
+		['detects a simple file:// PDF URL', 'file:///path/to/file.pdf', true],
+		['is case-insensitive', 'file:///path/to/FILE.PDF', true],
+		['ignores query strings', 'file:///path/to/file.pdf?v=1', true],
+		['ignores fragments', 'file:///path/to/file.pdf#page=2', true],
+		['returns false for a non-PDF URL', 'file:///path/to/image.png', false],
+		['handles a relative path via fallback', 'documents/report.pdf', true],
+	])('isPdfUrl: %s', (_, url, expected) => {
+		expect(isPdfUrl(url)).toBe(expected);
 	});
 
 	test('embedPdfLinks: replaces a PDF link that is the sole child of <p> with a wrapper div', () => {
@@ -92,6 +79,20 @@ describe('embedPdf', () => {
 		const wrapper = editor.dom.doc.querySelector('.joplin-pdf-embed-wrapper');
 		expect(wrapper).not.toBeNull();
 		expect(wrapper?.getAttribute('data-joplin-restore-tag')).toBe('h2');
+	});
+
+	test('embedPdfLinks: sets iframe src to a joplin-content:// URL for file:// links', () => {
+		const editor = createMockEditor('<p><a href="file:///path/to/a.pdf">a.pdf</a></p>');
+		embedPdfLinks(editor);
+		const iframe = editor.dom.doc.querySelector<HTMLIFrameElement>('iframe');
+		expect(iframe?.getAttribute('src')).toBe('joplin-content://note-viewer/path/to/a.pdf');
+	});
+
+	test('embedPdfLinks: preserves non-file:// links in iframe src unchanged', () => {
+		const editor = createMockEditor('<p><a href="joplin-content://note-viewer/path/to/a.pdf">a.pdf</a></p>');
+		embedPdfLinks(editor);
+		const iframe = editor.dom.doc.querySelector<HTMLIFrameElement>('iframe');
+		expect(iframe?.getAttribute('src')).toBe('joplin-content://note-viewer/path/to/a.pdf');
 	});
 
 	test('ensureTrailingEditableParagraph: appends a sentinel <p> when the last element is a joplin-editable block', () => {

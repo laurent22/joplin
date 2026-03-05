@@ -10,6 +10,11 @@ export const isPdfUrl = (url: string): boolean => {
 	}
 };
 
+const toContentProtocolUrl = (href: string): string => {
+	if (!href.startsWith('file://')) return href;
+	return `joplin-content://note-viewer${new URL(href).pathname}`;
+};
+
 // Transforms <a href="...pdf"> links into non-editable iframe wrappers for
 // inline rendering. A hidden <a> is preserved inside the wrapper so that
 // restorePdfEmbedsToLinks can reconstruct the original link on save.
@@ -25,7 +30,7 @@ export const embedPdfLinks = (editorInstance: Editor): void => {
 		wrapper.setAttribute('contenteditable', 'false');
 
 		const iframe = doc.createElement('iframe');
-		iframe.src = href;
+		iframe.src = toContentProtocolUrl(href);
 		iframe.className = 'joplin-pdf-embed';
 		iframe.setAttribute('width', '100%');
 		iframe.setAttribute('height', '500');

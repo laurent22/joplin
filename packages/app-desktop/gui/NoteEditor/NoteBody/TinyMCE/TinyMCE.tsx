@@ -750,10 +750,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					'media-src \'self\' blob: data: *', // Audio and video players
 
 					// Disallow certain unused features
-					// file: is required for local PDF iframes from the resource directory.
-					// This is scoped to Electron where file:// access is already sandboxed
-					// to allowedFilePrefixes — arbitrary local HTML cannot be framed from web content.
-					'child-src https://*.youtube.com https://*.youtube-nocookie.com file:', // Allow YouTube embeds and local PDF iframes
+					'child-src https://*.youtube.com https://*.youtube-nocookie.com joplin-content://*', // Allow YouTube embeds and PDF iframes
 					'object-src \'none\'', // Objects can be used for script injection
 					'form-action \'none\'', // No submitting forms
 
