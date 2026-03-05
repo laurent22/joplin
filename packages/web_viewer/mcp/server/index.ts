@@ -113,11 +113,17 @@ function createServer() {
   server.registerTool(
     'search_markdown_notes',
     {
-      description: 'Full-text search over markdown_notes. Returns snippets around matched keywords instead of full note bodies.',
+      description:
+        'Full-text search over markdown_notes. Returns snippets around matched keywords instead of full note bodies.',
       inputSchema: z.object({
-        query: z.string().describe('Search keyword(s) for full-text search (SQLite FTS4 MATCH syntax)'),
+        query: z
+          .string()
+          .describe('Search keyword(s) for full-text search (SQLite FTS4 MATCH syntax)'),
         maxResults: z.number().describe('Maximum number of results to return').optional(),
-        contextChars: z.number().describe('Number of characters to include before and after each match (default: 100)').optional(),
+        contextChars: z
+          .number()
+          .describe('Number of characters to include before and after each match (default: 100)')
+          .optional(),
       }),
     },
     async ({ query, maxResults, contextChars }) => {
@@ -125,10 +131,16 @@ function createServer() {
       const BODY_COL = 2; // markdown_notes_fts 列順: 0=id(notindexed), 1=title, 2=body
       try {
         const searchResults = Note.selectAllMarkdownFts(query);
-        const limited = maxResults ? searchResults.slice(0, maxResults) : searchResults;
+        // Sort by relevance: count total term matches across all columns from FTS4 offsets (groups of 4 integers)
+        const ranked = [...searchResults].sort((a, b) => {
+          const countA = a.offsets ? Math.floor(a.offsets.split(' ').length / 4) : 0;
+          const countB = b.offsets ? Math.floor(b.offsets.split(' ').length / 4) : 0;
+          return countB - countA;
+        });
+        const limited = maxResults ? ranked.slice(0, maxResults) : ranked;
         const ids = limited.map((r) => r.id);
         const notes = Note.markdownByIds(ids);
-        const noteMap: Record<string, typeof notes[0]> = {};
+        const noteMap: Record<string, (typeof notes)[0]> = {};
         for (const n of notes) {
           noteMap[n.id] = n;
         }
@@ -178,11 +190,16 @@ function createServer() {
         });
 
         return {
-          content: [{ type: 'text', text: JSON.stringify(results) }],
+          content: [{ type: 'text', text: JSON.stringify(results.slice(0, 200)) }],
         };
       } catch (error) {
         return {
-          content: [{ type: 'text', text: `Search error: ${error instanceof Error ? error.message : String(error)}` }],
+          content: [
+            {
+              type: 'text',
+              text: `Search error: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
           isError: true,
         };
       }
