@@ -2,7 +2,7 @@
 # tell us automatically if something got broken when a dependency was changed.
 
 name: react-native-android-build-apk
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
