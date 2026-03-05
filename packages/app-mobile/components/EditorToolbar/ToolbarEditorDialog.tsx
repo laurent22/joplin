@@ -147,7 +147,6 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 	// already negates any synchronous-paint timing advantage.
 	useEffect(() => {
 		const direction = pendingArrowFocusRef.current;
-		if (!direction) return;
 		pendingArrowFocusRef.current = null;
 
 		const upRef = upArrowRef.current;
@@ -156,6 +155,7 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 		const atLast = isLast;
 
 		const timeoutId = setTimeout(() => {
+			if (!direction) return;
 			const target = direction === 'up'
 				? (atFirst ? downRef : upRef)
 				: (atLast ? upRef : downRef);
