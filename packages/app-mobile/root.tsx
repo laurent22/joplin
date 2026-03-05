@@ -296,7 +296,6 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private unsubscribeNetInfoHandler_: NetInfoSubscription|undefined;
 	private unsubscribeNewShareListener_: UnsubscribeShareListener|undefined;
 	private onAppStateChange_: (nextAppState: AppStateStatus)=> void;
-	private previousAppState_: AppStateStatus = RNAppState.currentState;
 	private lastResumeSyncTime_ = 0;
 	private backButtonHandler_: BackButtonHandler;
 	private handleNewShare_: ()=> void;
@@ -318,7 +317,6 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		};
 
 		this.onAppStateChange_ = (nextAppState: AppStateStatus) => {
-			logger.info(`onAppStateChange_: ${this.previousAppState_} => ${nextAppState}`);
 			PoorManIntervals.update();
 
 			// Trigger sync immediately when the app becomes active (resume from background/lock screen).
@@ -336,8 +334,6 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 					logger.info(`onAppStateChange_: App became active but skipping sync - minimum interval not reached (${elapsed}ms < ${minResumeSyncIntervalMs}ms)`);
 				}
 			}
-
-			this.previousAppState_ = nextAppState;
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
