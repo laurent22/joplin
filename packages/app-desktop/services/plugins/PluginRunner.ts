@@ -173,6 +173,7 @@ export default class PluginRunner extends BasePluginRunner {
 				// is not blocked. See: https://github.com/laurent22/joplin/issues/12793
 				if (message.path === '__pluginFailedToStart__') {
 					logger.error(`Plugin "${plugin.id}" failed to start:`, message.args?.[0]);
+					plugin.running = false;
 					plugin.emit('started');
 					return;
 				}
