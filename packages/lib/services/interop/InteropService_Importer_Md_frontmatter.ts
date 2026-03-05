@@ -11,7 +11,7 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 	public async importFile(filePath: string, parentFolderId: string) {
 		try {
 			const note = await super.importFile(filePath, parentFolderId);
-			const { metadata, tags, notebookIcon } = parse(note.body);
+			const { metadata, tags, folderIcon } = parse(note.body);
 
 			const updatedNote = {
 				...note,
@@ -26,13 +26,13 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 
 			for (const tag of tags) { await Tag.addNoteTagByTitle(noteItem.id, tag); }
 
-			// Restore notebook icon if present in frontmatter
-			if (notebookIcon && parentFolderId) {
+			// Restore folder icon if present in frontmatter
+			if (folderIcon && parentFolderId) {
 				const folder = await Folder.load(parentFolderId);
 				if (folder && !folder.icon) {
 					const icon = defaultFolderIcon();
 					icon.type = FolderIconType.Emoji;
-					icon.emoji = notebookIcon;
+					icon.emoji = folderIcon;
 					await Folder.save({ id: parentFolderId, icon: JSON.stringify(icon) }, { isNew: false });
 				}
 			}

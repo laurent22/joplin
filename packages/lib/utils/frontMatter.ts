@@ -8,7 +8,7 @@ const moment = require('moment');
 export interface ParsedMeta {
 	metadata: NoteEntity;
 	tags: string[];
-	notebookIcon: string;
+	folderIcon: string;
 }
 
 const convertDate = (datetime: number): string => {
@@ -28,7 +28,7 @@ const dateStringToDate = (dateString: string, defaultValue: number) => {
 	}
 };
 
-export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags', 'notebook_icon'];
+export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags', 'folder_icon'];
 
 // There is a special case (negative numbers) where the yaml library will force quotations
 // These need to be stripped
@@ -93,8 +93,8 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], folderI
 	// tags
 	if (tagTitles.length) md['tags'] = tagTitles;
 
-	// notebook icon
-	if (folderIcon) md['notebook_icon'] = folderIcon;
+	// folder icon
+	if (folderIcon) md['folder_icon'] = folderIcon;
 
 	// This guarentees that fields will always be ordered the same way
 	// which can be useful if users are using this for generating diffs
@@ -199,7 +199,7 @@ const toLowerCase = (obj: Record<string, any>): Record<string, any> => {
 };
 
 export const parse = (note: string): ParsedMeta => {
-	if (!note.startsWith('---')) return { metadata: { body: note }, tags: [], notebookIcon: '' };
+	if (!note.startsWith('---')) return { metadata: { body: note }, tags: [], folderIcon: '' };
 
 	const { header, body } = getNoteHeader(note);
 
@@ -253,8 +253,8 @@ export const parse = (note: string): ParsedMeta => {
 		}
 	}
 
-	// Notebook icon
-	const notebookIcon = ('notebook_icon' in md) ? md['notebook_icon'] : '';
+	// Folder icon
+	const folderIcon = ('folder_icon' in md) ? String(md['folder_icon'] ?? '') : '';
 
 	// Tags are handled separately from typical metadata
 	let tags: string[] = [];
@@ -273,5 +273,5 @@ export const parse = (note: string): ParsedMeta => {
 
 	metadata['body'] = body;
 
-	return { metadata, tags, notebookIcon };
+	return { metadata, tags, folderIcon };
 };

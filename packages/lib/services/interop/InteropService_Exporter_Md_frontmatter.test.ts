@@ -158,14 +158,14 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		await Note.save({ title: 'IconNote', body: '**my note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/IconNote.md`);
-		expect(content).toContain('notebook_icon: 📝');
+		expect(content).toContain('folder_icon: 📝');
 	}));
 
-	test('should not export notebook_icon when folder has no icon', (async () => {
+	test('should not export folder_icon when folder has no icon', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'NoIcon', body: '**my note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/NoIcon.md`);
-		expect(content).not.toContain('notebook_icon');
+		expect(content).not.toContain('folder_icon');
 	}));
 });

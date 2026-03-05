@@ -5,6 +5,9 @@ import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
 import { FolderIcon, NoteEntity } from '../database/types';
 import { serialize } from '../../utils/frontMatter';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('InteropService_Exporter_Md_frontmatter');
 
 interface NoteTagContext {
 	noteTags: Record<string, string[]>;
@@ -85,8 +88,8 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 					if (icon.emoji) {
 						context.folderIcons[folder.id] = icon.emoji;
 					}
-				} catch (_e) {
-					// Skip if icon JSON is invalid
+				} catch (e) {
+					logger.warn(`Failed to parse folder icon JSON for folder ${folder.id}:`, e);
 				}
 			}
 
