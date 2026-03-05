@@ -2,6 +2,7 @@ name: Joplin Continuous Integration
 on: [push, pull_request]
 jobs:
   Main:
+    timeout-minutes: 90
     # We always process server or desktop release tags, because they also publish the release
     if: github.repository == 'laurent22/joplin'
     runs-on: ${{ matrix.os }}
@@ -122,6 +123,7 @@ jobs:
           "${GITHUB_WORKSPACE}/.github/scripts/publish_docker_manifest.sh"
 
   ServerDockerImage:
+    timeout-minutes: 60
     if: github.repository == 'laurent22/joplin'
     runs-on: ${{ matrix.os }}
     strategy:
