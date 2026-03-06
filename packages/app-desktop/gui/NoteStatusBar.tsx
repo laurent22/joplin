@@ -15,8 +15,11 @@ class NoteStatusBarComponent extends React.Component<Props> {
 		const theme = themeStyle(this.props.themeId);
 
 		const style = {
-			root: { ...theme.textStyle, backgroundColor: theme.backgroundColor,
-				color: theme.colorFaded },
+			root: {
+				...theme.textStyle,
+				backgroundColor: theme.backgroundColor,
+				color: theme.colorFaded,
+			},
 		};
 
 		return style;
@@ -24,7 +27,23 @@ class NoteStatusBarComponent extends React.Component<Props> {
 
 	public render() {
 		const note = this.props.note;
-		return <div style={this.style().root}>{time.formatMsToLocal(note.user_updated_time)}</div>;
+
+		if (!note) return null;
+
+		const dateTime = time.formatMsToLocal(note.user_updated_time);
+		const relative = time.formatRelative(note.user_updated_time);
+
+		const parts = dateTime.split(' ');
+		const timeStr = parts.pop();
+		const date = parts.join(' ');
+
+		return (
+			<div style={this.style().root}>
+				<div>Last synced: {relative}</div>
+				<div>{date}</div>
+				<div>{timeStr}</div>
+			</div>
+		);
 	}
 }
 
