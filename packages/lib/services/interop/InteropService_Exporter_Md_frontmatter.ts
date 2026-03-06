@@ -1,11 +1,12 @@
 import InteropService_Exporter_Md from './InteropService_Exporter_Md';
 import { ModelType } from '../../BaseModel';
-import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
-import { FolderIcon, NoteEntity } from '../database/types';
+import shim from '../../shim';
+import { FolderIcon, FolderIconType, NoteEntity } from '../database/types';
 import { serialize } from '../../utils/frontMatter';
 import Logger from '@joplin/utils/Logger';
+import * as yaml from 'js-yaml';
 
 const logger = Logger.create('InteropService_Exporter_Md_frontmatter');
 
@@ -17,11 +18,7 @@ interface TagContext {
 	tagTitles: Record<string, string>;
 }
 
-interface FolderIconContext {
-	folderIcons: Record<string, string>;
-}
-
-interface FrontMatterContext extends NoteTagContext, TagContext, FolderIconContext {}
+interface FrontMatterContext extends NoteTagContext, TagContext {}
 
 export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
@@ -64,30 +61,61 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			}
 
 			this.updateContext(context);
-		} else if (itemType === ModelType.Folder) {
-			// Map folder ID to icon emoji
-			const context: FolderIconContext = {
-				folderIcons: {},
-			};
-			for (const exportItem of itemsToExport) {
-				if (exportItem.type !== itemType) continue;
+		}
+	}
 
-				const itemOrId = exportItem.itemOrId;
-				const folder = typeof itemOrId === 'object' ? itemOrId : await Folder.load(itemOrId);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async processItem(itemType: number, item: any) {
+		await super.processItem(itemType, item);
 
-				if (!folder || !folder.icon) continue;
-
-				try {
-					const icon: FolderIcon = JSON.parse(folder.icon);
-					if (icon.emoji) {
-						context.folderIcons[folder.id] = icon.emoji;
-					}
-				} catch (e) {
-					logger.warn(`Failed to parse folder icon JSON for folder ${folder.id}:`, e);
+		// Write _notebook.yml with folder icon when processing a folder
+		if (item.type_ === ModelType.Folder && item.icon) {
+			try {
+				const icon: FolderIcon = JSON.parse(item.icon);
+				const dirPath = `${this.destDir_}/${await this.makeDirPath_(item)}`;
+				const iconObj = await this.serializeFolderIcon(icon, dirPath);
+				if (iconObj) {
+					const metadataPath = `${dirPath}_notebook.yml`;
+					const yamlContent = yaml.dump({ icon: iconObj }, { noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA });
+					await shim.fsDriver().writeFile(metadataPath, yamlContent, 'utf-8');
 				}
+			} catch (e) {
+				logger.warn(`Failed to export folder icon for folder ${item.id}:`, e);
 			}
+		}
+	}
 
-			this.updateContext(context);
+	private async serializeFolderIcon(icon: FolderIcon, dirPath: string): Promise<Record<string, string> | null> {
+		switch (icon.type) {
+		case FolderIconType.Emoji:
+			if (!icon.emoji) return null;
+			return { type: 'emoji', emoji: icon.emoji };
+		case FolderIconType.FontAwesome:
+			if (!icon.name) return null;
+			return { type: 'fontawesome', name: icon.name };
+		case FolderIconType.DataUrl:
+			if (!icon.dataUrl) return null;
+			try {
+				let extension = '.png';
+				const mimeMatch = icon.dataUrl.match(/data:image\/([a-zA-Z0-9]+);base64,/);
+				if (mimeMatch && mimeMatch[1]) {
+					extension = `.${mimeMatch[1]}`;
+					if (extension === '.jpeg') extension = '.jpg';
+				}
+
+				const base64Data = icon.dataUrl.replace(/^data:image\/\w+;base64,/, '');
+				const fileName = `_folder_icon${extension}`;
+
+				// writeFile with 'base64' encoding decodes the base64 string to binary
+				await shim.fsDriver().writeFile(`${dirPath}${fileName}`, base64Data, 'base64');
+
+				return { type: 'dataurl', dataurl: fileName };
+			} catch (e) {
+				logger.warn('Failed to save DataUrl icon to file:', e);
+				return null;
+			}
+		default:
+			return null;
 		}
 	}
 
@@ -101,9 +129,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			tagTitles = tagIds.map((id: string) => context.tagTitles[id]).filter(e => !!e).sort();
 		}
 
-		const folderIcon = (context.folderIcons && modNote.parent_id) ? context.folderIcons[modNote.parent_id] || '' : '';
-
-		return serialize(modNote, tagTitles, folderIcon);
+		return serialize(modNote, tagTitles);
 	}
 
 }

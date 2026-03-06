@@ -8,7 +8,6 @@ const moment = require('moment');
 export interface ParsedMeta {
 	metadata: NoteEntity;
 	tags: string[];
-	folderIcon: string;
 }
 
 const convertDate = (datetime: number): string => {
@@ -28,7 +27,7 @@ const dateStringToDate = (dateString: string, defaultValue: number) => {
 	}
 };
 
-export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags', 'folder_icon'];
+export const fieldOrder = ['title', 'id', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
 
 // There is a special case (negative numbers) where the yaml library will force quotations
 // These need to be stripped
@@ -55,7 +54,7 @@ function trimQuotes(rawOutput: string): string {
 	}).join('\n');
 }
 
-export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], folderIcon = '') => {
+export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[]) => {
 	const md: MdFrontMatterExport = {};
 	// Every variable needs to be converted separately, so they will be handles in groups
 	//
@@ -93,9 +92,6 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], folderI
 	// tags
 	if (tagTitles.length) md['tags'] = tagTitles;
 
-	// folder icon
-	if (folderIcon) md['folder_icon'] = folderIcon;
-
 	// This guarentees that fields will always be ordered the same way
 	// which can be useful if users are using this for generating diffs
 	const sort = (a: string, b: string) => {
@@ -112,9 +108,9 @@ export const noteToFrontMatter = (note: NoteEntity, tagTitles: string[], folderI
 	return trimQuotes(rawOutput);
 };
 
-export const serialize = async (modNote: NoteEntity, tagTitles: string[], folderIcon = '') => {
+export const serialize = async (modNote: NoteEntity, tagTitles: string[]) => {
 	const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
-	const metadata = noteToFrontMatter(modNote, tagTitles, folderIcon);
+	const metadata = noteToFrontMatter(modNote, tagTitles);
 	return `---\n${metadata}---\n\n${noteContent}`;
 };
 
@@ -199,7 +195,7 @@ const toLowerCase = (obj: Record<string, any>): Record<string, any> => {
 };
 
 export const parse = (note: string): ParsedMeta => {
-	if (!note.startsWith('---')) return { metadata: { body: note }, tags: [], folderIcon: '' };
+	if (!note.startsWith('---')) return { metadata: { body: note }, tags: [] };
 
 	const { header, body } = getNoteHeader(note);
 
@@ -253,9 +249,6 @@ export const parse = (note: string): ParsedMeta => {
 		}
 	}
 
-	// Folder icon
-	const folderIcon = ('folder_icon' in md) ? String(md['folder_icon'] ?? '') : '';
-
 	// Tags are handled separately from typical metadata
 	let tags: string[] = [];
 	if ('tags' in md) {
@@ -273,5 +266,5 @@ export const parse = (note: string): ParsedMeta => {
 
 	metadata['body'] = body;
 
-	return { metadata, tags, folderIcon };
+	return { metadata, tags };
 };

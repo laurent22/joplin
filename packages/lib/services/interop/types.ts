@@ -97,5 +97,4 @@ export interface MdFrontMatterExport {
 	'updated'?: string;
 	'created'?: string;
 	'tags'?: string[];
-	'folder_icon'?: string;
 }
