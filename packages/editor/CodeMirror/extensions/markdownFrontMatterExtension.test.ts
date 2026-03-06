@@ -54,15 +54,15 @@ describe('MarkdownFrontMatterExtension', () => {
 		expect(frontMatterNodes.length).toBe(0);
 	});
 
-	it('should not swallow document content when closing delimiter is missing (issue #14542)', async () => {
+	it('should treat the entire document as frontmatter when closing delimiter is missing (issue #14542)', async () => {
 		const documentText = '---\nsome: frontmatter\n--\n\n# Hey';
-		const editor = await createEditorState(documentText, ['ATXHeading1']);
+		const editor = await createEditorState(documentText, [frontMatterTagName]);
 		const frontMatterNodes = findNodesWithName(editor, frontMatterTagName);
-		const headingNodes = findNodesWithName(editor, 'ATXHeading1');
 
-		expect(frontMatterNodes.length).toBe(0);
-		// The heading must be parsed as a proper ATX heading, not plain text
-		expect(headingNodes.length).toBe(1);
+		// Frontmatter block must be recognised and span the entire document
+		expect(frontMatterNodes.length).toBe(1);
+		expect(frontMatterNodes[0].from).toBe(0);
+		expect(frontMatterNodes[0].to).toBe(documentText.length);
 	});
 
 	it('should handle empty FrontMatter block', async () => {
