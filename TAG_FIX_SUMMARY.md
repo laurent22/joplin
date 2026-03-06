@@ -213,7 +213,7 @@ The fix introduces a deduplication step BEFORE processing tags:
 - **Backward Compatible:** No changes to the public API or behavior except fixing the duplicate bug
 
 ### Algorithm Flowchart
-```
+```text
 Input: tagTitles array
   ↓
 [Loop 1] Deduplicate with case-insensitive comparison
