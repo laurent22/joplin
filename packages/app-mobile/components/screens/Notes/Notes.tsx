@@ -299,6 +299,10 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		const selectedNoteId = this.props.selectedNoteIds[0];
 		const selectedFolderId = this.props.selectedFolderId;
 		if (!selectedNoteId || !selectedFolderId) return;
+
+		this.props.setRearrangeModalVisible(false);
+		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+
 		try {
 			await Note.insertNotesAt(
 				selectedFolderId,
@@ -307,8 +311,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 				this.props.uncompletedTodosOnTop,
 				this.props.showCompletedTodos,
 			);
-			this.props.setRearrangeModalVisible(false);
-			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+
 			const newProps = { ...this.props, notesSource: '' };
 			await this.refreshNotes(newProps);
 		} catch (error) {

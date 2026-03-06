@@ -105,7 +105,7 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 	const styles = useStyles(themeId);
 	const theme = themeStyle(themeId);
 
-	const [selectedTargetValue, setSelectedTargetValue] = useState<string>(MOVE_TO_TOP_VALUE);
+	const [selectedTargetValue, setSelectedTargetValue] = useState<string | null>(MOVE_TO_TOP_VALUE);
 
 	// Calculate valid move positions based on uncompletedTodosOnTop setting
 	const listItems = useMemo(() => {
@@ -183,9 +183,14 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 				setSelectedTargetValue(MOVE_TO_TOP_VALUE);
 			}
 		}
+		if (visible) {
+			const firstValidItem = listItems.find(item => !item.isDisabled);
+			setSelectedTargetValue(firstValidItem ? firstValidItem.id : null);
+		}
 	}, [visible, listItems]);
 
 	const handleConfirm = useCallback(() => {
+		if (!selectedTargetValue) return;
 		const selectedItem = listItems.find(item => item.id === selectedTargetValue);
 		if (selectedItem && !selectedItem.isDisabled) {
 			onConfirm(selectedItem.targetIndex);
@@ -196,6 +201,7 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 
 	const noteTitle = Note.displayTitle(selectedNote);
 	const truncatedTitle = truncateTitle(noteTitle, MAX_NOTE_TITLE_LENGTH);
+	const hasValidTarget = !!selectedTargetValue && listItems.some(item => item.id === selectedTargetValue && !item.isDisabled);
 
 	return (
 		<Modal
@@ -241,7 +247,6 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 									}
 								}}
 								disabled={item.isDisabled}
-								focusable={!item.isDisabled}
 								importantForAccessibility={'yes'}
 								accessibilityRole="radio"
 								accessibilityLabel={accessibilityLabel}
@@ -263,7 +268,7 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 
 			<View style={styles.buttonContainer}>
 				<Button onPress={onClose}>{_('Cancel')}</Button>
-				<PrimaryButton onPress={handleConfirm}>
+				<PrimaryButton onPress={handleConfirm} disabled={!hasValidTarget}>
 					{_('Apply')}
 				</PrimaryButton>
 			</View>
