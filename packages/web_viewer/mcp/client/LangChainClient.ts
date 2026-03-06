@@ -162,6 +162,14 @@ export class LangChainClient {
       const msg = Array.isArray(chunk) ? chunk[0] : chunk;
       if (!msg || !('content' in msg)) continue;
 
+      // AIメッセージのみを対象とする（ToolMessageやHumanMessageは除外）
+      // msg.type === 'tool' はツール実行結果（検索結果JSONなど）
+      if (msg.type && msg.type !== 'ai') continue;
+
+      // ツール呼び出しリクエスト（中間のAIメッセージ）はスキップ
+      if (msg.tool_calls && msg.tool_calls.length > 0) continue;
+      if (msg.tool_call_chunks && msg.tool_call_chunks.length > 0) continue;
+
       const content = msg.content;
       if (typeof content === 'string' && content) {
         onToken(content);
