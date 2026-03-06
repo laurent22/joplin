@@ -84,7 +84,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 		const baseFolder = this.getEntryDirectory(unzipTempDirectory, files[0].path);
 		// If baseFolder has a file extension, files are at the root of the zip (no subfolder).
-		const baseFolderIsFile = extname(baseFolder) !== '';
+		const baseFolderIsFile = ['.one', '.onepkg', '.onetoc2'].includes(extname(baseFolder).toLowerCase());
 		const notebookBaseDir = baseFolderIsFile ? join(unzipTempDirectory, sep) : join(unzipTempDirectory, baseFolder, sep);
 		const outputDirectory2 = baseFolderIsFile ? tempOutputDirectory : join(tempOutputDirectory, baseFolder);
 
