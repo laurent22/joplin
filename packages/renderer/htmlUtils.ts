@@ -139,49 +139,63 @@ class HtmlUtils {
 
 		interface TagStackEntry {
 			name: string;
-			hidden: boolean;
+			displayNone: boolean;
+			visibilityHidden: boolean;
 		}
 
 		const tagStack: TagStackEntry[] = [];
-		// Tracks depth of hidden elements (display:none or visibility:hidden).
-		// When > 0, all text content is suppressed.
-		let hiddenDepth = 0;
+		// display:none hides the element and all descendants unconditionally.
+		let displayNoneDepth = 0;
+		// visibility:hidden hides text, but a child with visibility:visible
+		// can override it. We track inherited depth separately.
+		let visibilityHiddenDepth = 0;
 
 		const currentTag = () => {
 			if (!tagStack.length) return '';
 			return tagStack[tagStack.length - 1].name;
 		};
 
-		const isHiddenStyle = (attribs: Record<string, string>) => {
-			const style = attribs?.style;
-			if (!style) return false;
-			return /display\s*:\s*none/i.test(style) || /visibility\s*:\s*hidden/i.test(style);
-		};
+		const hasDisplayNone = (style: string) => /display\s*:\s*none/i.test(style);
+		const hasVisibilityHidden = (style: string) => /visibility\s*:\s*hidden/i.test(style);
+		const hasVisibilityVisible = (style: string) => /visibility\s*:\s*visible/i.test(style);
 
 		const disallowedTags = ['script', 'style', 'head', 'iframe', 'frameset', 'frame', 'object', 'base'];
 
 		const parser = new htmlparser2.Parser({
 
 			onopentag: (name: string, attribs: Record<string, string>) => {
-				const hidden = isHiddenStyle(attribs);
-				tagStack.push({ name: name.toLowerCase(), hidden });
-				if (hidden) {
-					hiddenDepth++;
+				const style = attribs?.style ?? '';
+				const isDisplayNone = hasDisplayNone(style);
+				// visibility:visible on a child resets inherited visibility:hidden
+				let isVisibilityHidden = false;
+				if (hasVisibilityHidden(style)) {
+					isVisibilityHidden = true;
+				} else if (hasVisibilityVisible(style) && visibilityHiddenDepth > 0) {
+					isVisibilityHidden = false;
+					visibilityHiddenDepth = 0;
 				}
+
+				tagStack.push({
+					name: name.toLowerCase(),
+					displayNone: isDisplayNone,
+					visibilityHidden: isVisibilityHidden,
+				});
+
+				if (isDisplayNone) displayNoneDepth++;
+				if (isVisibilityHidden) visibilityHiddenDepth++;
 			},
 
 			ontext: (decodedText: string) => {
 				if (disallowedTags.includes(currentTag())) return;
-				if (hiddenDepth > 0) return;
+				if (displayNoneDepth > 0 || visibilityHiddenDepth > 0) return;
 				output.push(decodedText);
 			},
 
 			onclosetag: (name: string) => {
 				const entry = tagStack.length ? tagStack[tagStack.length - 1] : null;
 				if (entry && entry.name === name.toLowerCase()) {
-					if (entry.hidden) {
-						hiddenDepth = Math.max(0, hiddenDepth - 1);
-					}
+					if (entry.displayNone) displayNoneDepth = Math.max(0, displayNoneDepth - 1);
+					if (entry.visibilityHidden) visibilityHiddenDepth = Math.max(0, visibilityHiddenDepth - 1);
 					tagStack.pop();
 				}
 			},

@@ -50,6 +50,14 @@ describe('htmlUtils', () => {
 			'<div>visible <span style="display: none">hidden</span> also visible</div>',
 			'visible also visible',
 		],
+		[
+			'<div style="visibility: hidden">hidden <span style="visibility: visible">shown</span></div>',
+			'shown',
+		],
+		[
+			'<div style="display: none"><span style="visibility: visible">still hidden</span></div>',
+			'',
+		],
 	])('should exclude text in hidden elements (case %#)', (input, expected) => {
 		const actual = htmlUtils.stripHtml(input);
 		expect(actual).toBe(expected);
