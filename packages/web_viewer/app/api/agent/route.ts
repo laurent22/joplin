@@ -67,11 +67,8 @@ export async function POST(request: NextRequest) {
           controller.close();
         } catch (error) {
           console.error('Agent stream error:', error);
-          const errorData = JSON.stringify({
-            error: 'AIエージェントでエラーが発生しました',
-            details: error instanceof Error ? error.message : String(error),
-          });
-          controller.enqueue(encoder.encode(`data: ${errorData}\n\n`));
+          const errorMessage = `\n\nエラーが発生しました: ${error instanceof Error ? error.message : String(error)}`;
+          controller.enqueue(encoder.encode(errorMessage));
           controller.close();
         }
       },
