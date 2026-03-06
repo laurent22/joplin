@@ -188,8 +188,9 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const parseStorageDriver = (envVarValue: string, envVarName: string) => {
 		try {
 			return parseStorageDriverConnectionString(envVarValue);
-		} catch (error: any) {
-			throw new Error(`Invalid configuration for ${envVarName}: ${error.message}`);
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new Error(`Invalid configuration for ${envVarName}: ${errorMessage}`);
 		}
 	};
 

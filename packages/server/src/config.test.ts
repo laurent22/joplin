@@ -9,7 +9,7 @@ describe('config', () => {
 			STORAGE_DRIVER: 'Type=InvalidType',
 			RUNNING_IN_DOCKER: 0,
 			DB_CLIENT: 'sqlite',
-		} as EnvVariables;
+		} as unknown as EnvVariables;
 
 		await expect(async () => initConfig(Env.Dev, env)).rejects.toThrow('Invalid configuration for STORAGE_DRIVER');
 	});
@@ -19,7 +19,7 @@ describe('config', () => {
 			STORAGE_DRIVER_FALLBACK: 'Path=/only/path/no/type',
 			RUNNING_IN_DOCKER: 0,
 			DB_CLIENT: 'sqlite',
-		} as EnvVariables;
+		} as unknown as EnvVariables;
 
 		await expect(async () => initConfig(Env.Dev, env)).rejects.toThrow('Invalid configuration for STORAGE_DRIVER_FALLBACK');
 	});
