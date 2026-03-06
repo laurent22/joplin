@@ -266,7 +266,9 @@ const TagEditor: React.FC<Props> = props => {
 	}, [props.allTags, props.tags]);
 
 	const onCanAddTag = useCallback((tag: string) => {
-		return !allTagsSetNormalized.has((tag || '').trim().normalize('NFC').toLowerCase());
+		const normalized = (tag || '').trim().normalize('NFC');
+		if (!normalized) return false;
+		return !allTagsSetNormalized.has(normalized.toLowerCase());
 	}, [allTagsSetNormalized]);
 
 	const showAssociatedTags = props.mode === TagEditorMode.Large || props.tags.length > 0;
