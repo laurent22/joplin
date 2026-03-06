@@ -1,5 +1,5 @@
 import InteropService_Exporter_Md from './InteropService_Exporter_Md';
-import BaseModel from '../../BaseModel';
+import { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
@@ -29,17 +29,15 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		await super.prepareForProcessingItemType(itemType, itemsToExport);
 
-		if (itemType === BaseModel.TYPE_NOTE_TAG) {
+		if (itemType === ModelType.NoteTag) {
 			// Get tag list for each note
 			const context: NoteTagContext = {
 				noteTags: {},
 			};
-			for (let i = 0; i < itemsToExport.length; i++) {
-				const it = itemsToExport[i].type;
+			for (const exportItem of itemsToExport) {
+				if (exportItem.type !== itemType) continue;
 
-				if (it !== itemType) continue;
-
-				const itemOrId = itemsToExport[i].itemOrId;
+				const itemOrId = exportItem.itemOrId;
 				const noteTag = typeof itemOrId === 'object' ? itemOrId : await NoteTag.load(itemOrId);
 
 				if (!noteTag) continue;
@@ -49,17 +47,15 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			}
 
 			this.updateContext(context);
-		} else if (itemType === BaseModel.TYPE_TAG) {
+		} else if (itemType === ModelType.Tag) {
 			// Map tag ID to title
 			const context: TagContext = {
 				tagTitles: {},
 			};
-			for (let i = 0; i < itemsToExport.length; i++) {
-				const it = itemsToExport[i].type;
+			for (const exportItem of itemsToExport) {
+				if (exportItem.type !== itemType) continue;
 
-				if (it !== itemType) continue;
-
-				const itemOrId = itemsToExport[i].itemOrId;
+				const itemOrId = exportItem.itemOrId;
 				const tag = typeof itemOrId === 'object' ? itemOrId : await Tag.load(itemOrId);
 
 				if (!tag) continue;
@@ -68,17 +64,15 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			}
 
 			this.updateContext(context);
-		} else if (itemType === BaseModel.TYPE_FOLDER) {
+		} else if (itemType === ModelType.Folder) {
 			// Map folder ID to icon emoji
 			const context: FolderIconContext = {
 				folderIcons: {},
 			};
-			for (let i = 0; i < itemsToExport.length; i++) {
-				const it = itemsToExport[i].type;
+			for (const exportItem of itemsToExport) {
+				if (exportItem.type !== itemType) continue;
 
-				if (it !== itemType) continue;
-
-				const itemOrId = itemsToExport[i].itemOrId;
+				const itemOrId = exportItem.itemOrId;
 				const folder = typeof itemOrId === 'object' ? itemOrId : await Folder.load(itemOrId);
 
 				if (!folder || !folder.icon) continue;
