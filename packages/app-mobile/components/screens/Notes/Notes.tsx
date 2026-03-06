@@ -63,6 +63,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 	private onAppStateChangeSub_: NativeEventSubscription = null;
 	private styles_: Record<number, Styles> = {};
 	private folderPickerOptions_: FolderPickerOptions;
+	private rearrangeInProgress_ = false;
 
 	public constructor(props: ComponentProps) {
 		super(props);
@@ -296,12 +297,11 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 	};
 
 	private onRearrangeConfirm = async (targetIndex: number) => {
+		if (this.rearrangeInProgress_) return;
 		const selectedNoteId = this.props.selectedNoteIds[0];
 		const selectedFolderId = this.props.selectedFolderId;
 		if (!selectedNoteId || !selectedFolderId) return;
-
-		this.props.setRearrangeModalVisible(false);
-		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+		this.rearrangeInProgress_ = true;
 
 		try {
 			await Note.insertNotesAt(
@@ -312,10 +312,15 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 				this.props.showCompletedTodos,
 			);
 
+			this.props.setRearrangeModalVisible(false);
+			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+
 			const newProps = { ...this.props, notesSource: '' };
 			await this.refreshNotes(newProps);
 		} catch (error) {
 			alert(_('Could not move note: %s', error.message));
+		} finally {
+			this.rearrangeInProgress_ = false;
 		}
 	};
 
