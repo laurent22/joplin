@@ -47,8 +47,23 @@ pub trait FileApiDriver: Send + Sync {
         (base.into(), ext)
     }
     fn remove_prefix<'a>(&self, full_path: &'a str, prefix: &str) -> &'a str {
-        if let Some(without_prefix) = full_path.strip_prefix(prefix) {
-            without_prefix
+        let mut full_norm = full_path.replace('\\', "/").to_lowercase();
+        let mut pref_norm = prefix.replace('\\', "/").to_lowercase();
+        
+        if full_norm.ends_with('/') {
+            full_norm.pop();
+        }
+        if pref_norm.ends_with('/') {
+            pref_norm.pop();
+        }
+
+        if full_norm.starts_with(&pref_norm) {
+            let without_prefix = &full_path[pref_norm.len()..];
+            if without_prefix.starts_with('/') || without_prefix.starts_with('\\') {
+                &without_prefix[1..]
+            } else {
+                without_prefix
+            }
         } else {
             full_path
         }
