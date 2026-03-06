@@ -187,12 +187,27 @@ export default class Tag extends BaseItem {
 		// We still compare lowercased tag titles here, so that special unicode characters will match regardless of case. But this won't stop the user from renaming
 		// a tag to a title which matches another tag except for one or more special unicode characters having a different case. But this seems a reasonable compromise
 		// due to the lack of native case insensitive text comparison functionality for special unicode characters in sqlite without any extensions
-		const previousTags = await this.tagsByNoteId(noteId);
-		const addedTitlesLowercased = [];
+
+		// Deduplicate tag titles using case-insensitive comparison and preserve the first occurrence's casing
+		const uniqueTitles: string[] = [];
+		const seenTitlesLowercased = new Set<string>();
 
 		for (let i = 0; i < tagTitles.length; i++) {
 			const title = tagTitles[i].trim();
 			if (!title) continue;
+
+			const titleLowercased = title.toLowerCase();
+			if (!seenTitlesLowercased.has(titleLowercased)) {
+				seenTitlesLowercased.add(titleLowercased);
+				uniqueTitles.push(title);
+			}
+		}
+
+		const previousTags = await this.tagsByNoteId(noteId);
+		const addedTitlesLowercased = [];
+
+		for (let i = 0; i < uniqueTitles.length; i++) {
+			const title = uniqueTitles[i];
 			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
 			await this.addNote(tag.id, noteId);

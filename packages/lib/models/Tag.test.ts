@@ -230,4 +230,133 @@ describe('models/Tag', () => {
 		expect(tag2).not.toBe(undefined);
 		expect(tag1).not.toStrictEqual(tag2);
 	});
+
+	// Tests for issue #14540 - duplicate tag creation fix
+	it('should not create duplicate tags when adding the same tag with different cases', async () => {
+		const note1 = await Note.save({});
+		
+		// Add same tag with different cases
+		await Tag.setNoteTagsByTitles(note1.id, ['test', 'Test', 'TEST']);
+		
+		// Should only have one tag linked to the note
+		const tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(1);
+		expect(tags[0].title).toBe('test');
+	});
+
+	it('should not create duplicate tags within a single setNoteTagsByTitles call', async () => {
+		const note1 = await Note.save({});
+		
+		// Add duplicate tag titles in the same call
+		await Tag.setNoteTagsByTitles(note1.id, ['mytag', 'mytag', 'mytag']);
+		
+		// Should only have one tag linked to the note
+		const tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(1);
+		expect(tags[0].title).toBe('mytag');
+	});
+
+	it('should reuse existing tags when adding a duplicate tag', async () => {
+		const note1 = await Note.save({});
+		const note2 = await Note.save({});
+		
+		// Add tag to first note
+		await Tag.setNoteTagsByTitles(note1.id, ['shared-tag']);
+		const tag1 = await Tag.loadByTitle('shared-tag');
+		
+		// Add same tag to second note
+		await Tag.setNoteTagsByTitles(note2.id, ['shared-tag']);
+		const tag2 = await Tag.loadByTitle('shared-tag');
+		
+		// Should be the same tag
+		expect(tag1.id).toBe(tag2.id);
+		
+		// Only one tag should exist in the database
+		const allTags = await Tag.allWithNotes();
+		expect(allTags.filter(t => t.title.toLowerCase() === 'shared-tag').length).toBe(1);
+	});
+
+	it('should handle deduplication with multiple tags', async () => {
+		const note1 = await Note.save({});
+		
+		// Add multiple tags with some duplicates
+		await Tag.setNoteTagsByTitles(note1.id, ['tag1', 'tag2', 'tag1', 'tag3', 'tag2', 'tag1']);
+		
+		// Should only have 3 unique tags linked to the note
+		const tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(3);
+		
+		const tagTitles = tags.map(t => t.title).sort();
+		expect(tagTitles).toEqual(['tag1', 'tag2', 'tag3']);
+	});
+
+	it('should preserve first occurrence casing when deduplicating', async () => {
+		const note1 = await Note.save({});
+		
+		// Add tag with specific casing
+		await Tag.setNoteTagsByTitles(note1.id, ['MyTag', 'MYTAG', 'mytag']);
+		
+		// Should preserve the first occurrence's casing
+		const tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(1);
+		expect(tags[0].title).toBe('MyTag');
+	});
+
+	it('should correctly link tags to note after deduplication', async () => {
+		const note1 = await Note.save({});
+		
+		// Add deduplicated tags
+		await Tag.setNoteTagsByTitles(note1.id, ['tag1', 'tag1']);
+		const tag1 = await Tag.loadByTitle('tag1');
+		
+		// Verify the note is correctly linked to the tag
+		expect(await Tag.hasNote(tag1.id, note1.id)).toBe(true);
+		
+		// Verify the tag's note count
+		const tagWithCount = await Tag.loadWithCount(tag1.id);
+		expect(tagWithCount.note_count).toBe(1);
+	});
+
+	it('should handle switching between different tag sets with duplicates', async () => {
+		const note1 = await Note.save({});
+		
+		// First set of tags with duplicates
+		await Tag.setNoteTagsByTitles(note1.id, ['tag1', 'tag1', 'tag2']);
+		let tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(2);
+		
+		// Switch to different set with duplicates
+		await Tag.setNoteTagsByTitles(note1.id, ['tag2', 'tag3', 'tag3']);
+		tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(2);
+		
+		const tagTitles = tags.map(t => t.title).sort();
+		expect(tagTitles).toEqual(['tag2', 'tag3']);
+	});
+
+	it('should not create tags that are just whitespace', async () => {
+		const note1 = await Note.save({});
+		
+		// Add whitespace-only tags
+		await Tag.setNoteTagsByTitles(note1.id, ['  ', '\t', '\n', 'validtag']);
+		
+		// Should only have one tag linked to the note
+		const tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(1);
+		expect(tags[0].title).toBe('validtag');
+	});
+
+	it('should handle case-insensitive deduplication with trim', async () => {
+		const note1 = await Note.save({});
+		
+		// Add tags with whitespace and different cases
+		await Tag.setNoteTagsByTitles(note1.id, [' tag1 ', 'TAG1', '  tag1  ']);
+		
+		// Should only have one tag
+		const tags = await Tag.tagsByNoteId(note1.id);
+		expect(tags.length).toBe(1);
+		// First occurrence after trim should be ' tag1 '.trim() = 'tag1'
+		expect(tags[0].title).toBe('tag1');
+	});
 });
+
