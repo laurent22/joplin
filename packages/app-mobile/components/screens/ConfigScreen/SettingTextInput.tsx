@@ -16,12 +16,14 @@ interface Props {
 	description?: ReactNode;
 }
 
-const SettingTextInput: FunctionComponent<Props> = props => {
+const SettingTextInput: FunctionComponent<Props> = (props) => {
 	const [valueState, setValueState] = useState(props.value);
 	const md = Setting.settingMetadata(props.settingId);
 	const themeId = props.themeId;
 	const theme = themeStyle(themeId);
-	const settingDescription = md.description ? md.description(AppType.Mobile) : '';
+	const settingDescription = md.description
+		? md.description(AppType.Mobile)
+		: '';
 	const styleSheet = props.styles.styleSheet;
 	const containerStyles = props.styles.getContainerStyle(!!settingDescription);
 	const labelId = useId();
@@ -35,10 +37,12 @@ const SettingTextInput: FunctionComponent<Props> = props => {
 				<TextInput
 					autoCorrect={false}
 					autoComplete="off"
+					autoCapitalize="none"
+					autoCorrect={false}
+					importantForAutofill="no"
+					textContentType="password"
 					selectionColor={theme.textSelectionColor}
 					keyboardAppearance={theme.keyboardAppearance}
-					autoCapitalize="none"
-					key="control"
 					style={styleSheet.settingControl}
 					value={valueState}
 					onChangeText={(newValue: string) => {
