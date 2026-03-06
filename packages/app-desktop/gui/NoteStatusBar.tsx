@@ -24,17 +24,15 @@ class NoteStatusBarComponent extends React.Component<Props> {
 
 		return style;
 	}
-
 	public render() {
 		const note = this.props.note;
-
 		if (!note) return null;
 
 		const dateTime = time.formatMsToLocal(note.user_updated_time);
 		const relative = time.formatRelative(note.user_updated_time);
 
 		const parts = dateTime.split(' ');
-		const timeStr = parts.pop();
+		const timeStr = parts.pop() || '';
 		const date = parts.join(' ');
 
 		return (
