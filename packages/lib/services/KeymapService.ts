@@ -129,7 +129,7 @@ const defaultKeymapItems = {
 };
 
 export interface KeymapItem {
-	accelerator: string;
+	accelerator: string | null;
 	command: string;
 }
 

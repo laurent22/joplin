@@ -83,6 +83,7 @@ class Application extends BaseApplication {
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
 	private protocolHandler_: CustomContentProtocolHandler;
+	private previousShowHideAccelerator_: string | null = null;
 
 	public constructor() {
 		super();
@@ -225,6 +226,7 @@ class Application extends BaseApplication {
 
 	public updateGlobalHotkey() {
 		const accelerator = KeymapService.instance().getAccelerator('showHideApp');
+		this.previousShowHideAccelerator_ = accelerator;
 		bridge().updateGlobalHotkey(accelerator ?? '');
 	}
 
@@ -519,7 +521,10 @@ class Application extends BaseApplication {
 				reg.logger().error(error);
 			}
 
-			keymapService.on(EventName.KeymapChange, () => this.updateGlobalHotkey());
+			keymapService.on(EventName.KeymapChange, () => {
+				const accelerator = keymapService.getAccelerator('showHideApp');
+				if (accelerator !== this.previousShowHideAccelerator_) this.updateGlobalHotkey();
+			});
 		});
 
 		addTask('app/initialize PerFolderSortOrderService', () => {
