@@ -21,7 +21,8 @@ const InsertDelimiter = { resolve: insertTagName, mark: insertMarkerTagName };
 
 const isSpaceOrEmpty = (text: string) => text.match(/^\s*$/);
 
-// Creates a MarkdownConfig for a double-character inline delimiter syntax.
+// Markdown extension for recognizing highlighting. This is similar to the upstream
+// extension for strikethrough:
 // https://github.com/lezer-parser/markdown/blob/d6f0aa095722329a0188b9c7afe207dab4835e55/src/extension.ts#L10
 const createDoubleCharInlineConfig = (
 	charCode: number,
