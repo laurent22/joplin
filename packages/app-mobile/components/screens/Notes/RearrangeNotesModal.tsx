@@ -27,12 +27,10 @@ const truncateTitle = (title: string, maxLength: number): string => {
 	return `${title.substring(0, maxLength - 3)}...`;
 };
 
-// Returns true if the note is an uncompleted todo
 const isUncompletedTodo = (note: NoteEntity): boolean => {
 	return !!note.is_todo && !note.todo_completed;
 };
 
-// Returns a checkbox emoji prefix for todos
 const getTodoPrefix = (note: NoteEntity): string => {
 	if (!note.is_todo) return '';
 	return note.todo_completed ? '☑ ' : '☐ ';
@@ -143,14 +141,13 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 		const isAlreadyAtTop = selectedNoteCurrentIndex === 0;
 		const cannotMoveAboveUncompletedTodos = uncompletedTodosOnTop && !selectedIsUncompleted && firstCompletedOrNonTodoIndex > 0;
 		const moveToTopDisabled = isAlreadyAtTop || cannotMoveAboveUncompletedTodos;
-		const effectiveTopIndex = cannotMoveAboveUncompletedTodos ? firstCompletedOrNonTodoIndex : 0;
 
 		const items = [
 			{
 				id: MOVE_TO_TOP_VALUE,
 				title: _('[MOVE TO TOP]'),
 				isDisabled: moveToTopDisabled,
-				targetIndex: effectiveTopIndex,
+				targetIndex: 0,
 			},
 			...notes.map((note, index) => {
 				// Disable if:
