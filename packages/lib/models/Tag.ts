@@ -64,7 +64,6 @@ export default class Tag extends BaseItem {
 		};
 
 		await super.delete(id, options);
-		this.invalidateCache();
 
 		this.dispatch({
 			type: 'TAG_DELETE',
@@ -172,37 +171,23 @@ export default class Tag extends BaseItem {
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN (${this.escapeIdsForSql(commonTagIds)})`);
 	}
 
-	private static allNormalizedCache_: TagEntity[] = null;
-	private static allNormalizedCacheTime_ = 0;
-
 	public static async loadByTitle(title: string): Promise<TagEntity> {
 		const normalizedTitle = title.trim().normalize('NFC');
 		const tag = await this.loadByField('title', normalizedTitle, { caseInsensitive: true });
 		if (tag) return tag;
 
 		// Fallback for tags that might have different normalization or whitespace in the database.
-		// We load all tags because the number of tags is usually small and this ensures we
-		// never create a duplicate for an existing visually-identical tag.
-		// We cache the results for 30 seconds to avoid performance issues during bulk imports.
-		const now = Date.now();
-		if (!this.allNormalizedCache_ || now - this.allNormalizedCacheTime_ > 30000) {
-			this.allNormalizedCache_ = await Tag.all();
-			this.allNormalizedCacheTime_ = now;
-		}
-
+		// We only select id and title to keep this relatively fast even if there are many tags.
+		// Once most tags are normalized in the database, this fallback will be rarely hit.
+		const allTags = await this.db().selectAll<{ id: string; title: string }>('SELECT id, title FROM tags');
 		const searchTitleLower = normalizedTitle.toLowerCase();
-		for (const t of this.allNormalizedCache_) {
+		for (const t of allTags) {
 			if (t.title && t.title.trim().normalize('NFC').toLowerCase() === searchTitleLower) {
-				return t;
+				return Tag.load(t.id);
 			}
 		}
 
 		return null;
-	}
-
-	public static invalidateCache() {
-		this.allNormalizedCache_ = null;
-		this.allNormalizedCacheTime_ = 0;
 	}
 
 	public static async addNoteTagByTitle(noteId: string, tagTitle: string) {
@@ -279,7 +264,6 @@ export default class Tag extends BaseItem {
 
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return super.save(tagToSave, options).then((tag: TagEntity) => {
-			this.invalidateCache();
 			if (options.dispatchUpdateAction) {
 				this.dispatch({
 					type: 'TAG_UPDATE_ONE',
