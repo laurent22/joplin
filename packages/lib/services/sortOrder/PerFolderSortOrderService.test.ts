@@ -1,17 +1,16 @@
 import PerFolderSortOrderService from './PerFolderSortOrderService';
 import { setNotesSortOrder } from './notesSortOrderUtils';
-import Setting from '@joplin/lib/models/Setting';
-import { AppState, createAppDefaultState } from '../../app.reducer';
-import { serializeNotesParent } from '@joplin/lib/reducer';
-import eventManager from '@joplin/lib/eventManager';
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+import Setting from '../../models/Setting';
+import { defaultState, serializeNotesParent, State } from '../../reducer';
+import eventManager from '../../eventManager';
+const { shimInit } = require('../../shim-init-node.js');
+const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids');
 
 const folderId1 = 'aa012345678901234567890123456789';
 const folderId2 = 'bb012345678901234567890123456789';
 
-let appState: AppState|null = null;
-const updateAppState = (update: Partial<AppState>) => {
+let appState: State = null;
+const updateAppState = (update: Partial<State>) => {
 	appState = { ...appState, ...update };
 	eventManager.appStateEmit(appState);
 };
@@ -40,7 +39,7 @@ describe('PerFolderSortOrderService', () => {
 	beforeEach(() => {
 		PerFolderSortOrderService.initialize();
 		Setting.setValue('notes.perFolderSortOrderEnabled', true);
-		updateAppState(createAppDefaultState({}));
+		updateAppState(defaultState);
 		switchToFolder(folderId1);
 	});
 	afterEach(() => {
@@ -157,7 +156,7 @@ describe('PerFolderSortOrderService', () => {
 		PerFolderSortOrderService.initialize();
 		Setting.setValue('notes.perFolderSortOrderEnabled', true);
 
-		updateAppState(createAppDefaultState({}));
+		updateAppState(defaultState);
 		switchToAllNotes();
 
 		// Navigating to the notebook must restore shared sort (title), not All Notes' sort

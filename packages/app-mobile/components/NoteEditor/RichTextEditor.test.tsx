@@ -460,6 +460,24 @@ describe('RichTextEditor', () => {
 		});
 	});
 
+	it.each(['-', '1.'])('should not add extra blank lines around nested lists (marker: %j)', async (marker) => {
+		const nested = marker === '1.' ? '1.' : '-';
+		let body = `${marker} a\n${marker} b\n    ${nested} c\n    ${nested} d\n${marker} e`;
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' testing');
+
+		await waitFor(async () => {
+			// Nested lists should not have extra blank lines above or below
+			expect(body).not.toMatch(/\n\n\s*[-\d]/);
+		});
+	});
+
 	it('should preserve table of contents blocks on edit', async () => {
 		let body = '# Heading\n\n# Heading 2\n\n[toc]\n\nTest.';
 

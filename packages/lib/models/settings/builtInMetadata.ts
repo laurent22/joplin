@@ -863,7 +863,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'note',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFieldReverse': {
 			value: {
@@ -876,7 +876,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'note',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFolderSortOrderEnabled': {
 			value: true,
@@ -884,7 +884,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'folder',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFolderSortOrders': {
 			value: {} as Record<string, string | boolean>,
@@ -892,7 +892,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'folder',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.sharedSortOrder': {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code from before rule was applied.
@@ -900,7 +900,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Object,
 			section: 'folder',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'folders.sortOrder.field': {
 			value: 'title',

@@ -4,6 +4,10 @@
 name: react-native-android-build-apk
 on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   AssembleRelease:
     if: github.repository == 'laurent22/joplin'

@@ -8,6 +8,8 @@
 - Comments should be only with `//` and should not contain jsdoc syntax
 - If you duplicate a substantial block of code, add a comment above it noting the duplication and referencing the original location.
 - When creating Jest tests, there should be only one `describe()` statement in the file.
+- Focus on testing essential behaviour and edge cases — avoid adding tests for every minor detail.
+- Avoid duplicating code in tests; when testing the same logic with different inputs, use `test.each` or shared helpers instead of repeating similar test blocks.
 
 ## Full Documentation
 
