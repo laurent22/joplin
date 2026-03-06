@@ -101,7 +101,7 @@ class ImageWidget extends WidgetType {
 		return true;
 	}
 
-	public toDOM(_view: EditorView) {
+	public toDOM(view: EditorView) {
 		const container = document.createElement('div');
 		container.classList.add(imageClassName);
 		container.dataset.sourceFrom = String(this.sourceFrom_);
@@ -112,6 +112,16 @@ class ImageWidget extends WidgetType {
 		container.appendChild(image);
 		this.updateDOM(container);
 
+		container.addEventListener('mousedown', (e) => {
+			if (e.button !== 0) return;
+			e.preventDefault();
+			const pos = Math.min(view.posAtDOM(container), view.state.doc.length);
+			view.dispatch({
+				selection: { anchor: view.state.doc.lineAt(pos).from },
+				scrollIntoView: false,
+			});
+		});
+
 		return container;
 	}
 
@@ -121,6 +131,10 @@ class ImageWidget extends WidgetType {
 
 	public get estimatedHeight() {
 		return imageHeightCache.get(this.cacheKey) ?? -1;
+	}
+
+	public ignoreEvent() {
+		return true;
 	}
 }
 
