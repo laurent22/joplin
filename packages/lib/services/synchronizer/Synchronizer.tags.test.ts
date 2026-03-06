@@ -37,9 +37,9 @@ describe('Synchronizer.tags', () => {
 		}
 		const remoteTag = await Tag.loadByTitle(tag.title);
 		expect(!!remoteTag).toBe(true);
-		expect(remoteTag.id).toBe(tag.id);
-		await Tag.addNote(remoteTag.id, n1.id);
-		await Tag.addNote(remoteTag.id, n2.id);
+		expect(remoteTag!.id).toBe(tag.id);
+		await Tag.addNote(remoteTag!.id, n1.id);
+		await Tag.addNote(remoteTag!.id, n2.id);
 		let noteIds = await Tag.noteIds(tag.id);
 		expect(noteIds.length).toBe(2);
 		await synchronizerStart();

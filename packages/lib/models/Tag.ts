@@ -171,7 +171,7 @@ export default class Tag extends BaseItem {
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN (${this.escapeIdsForSql(commonTagIds)})`);
 	}
 
-	public static async loadByTitle(title: string): Promise<TagEntity> {
+	public static async loadByTitle(title: string): Promise<TagEntity | null> {
 		const normalizedTitle = title.trim().normalize('NFC');
 		const tag = await this.loadByField('title', normalizedTitle, { caseInsensitive: true });
 		if (tag) return tag;
@@ -179,7 +179,9 @@ export default class Tag extends BaseItem {
 		// Fallback for tags that might have different normalization or whitespace in the database.
 		// We only select id and title to keep this relatively fast even if there are many tags.
 		// Once most tags are normalized in the database, this fallback will be rarely hit.
-		const allTags = await this.db().selectAll<{ id: string; title: string }>('SELECT id, title FROM tags');
+		// We order by id to ensure that if multiple visual duplicates exist, all clients converge
+		// to the same deterministic ID.
+		const allTags = await this.db().selectAll<{ id: string; title: string }>('SELECT id, title FROM tags ORDER BY id ASC');
 		const searchTitleLower = normalizedTitle.toLowerCase();
 		for (const t of allTags) {
 			if (t.title && t.title.trim().normalize('NFC').toLowerCase() === searchTitleLower) {

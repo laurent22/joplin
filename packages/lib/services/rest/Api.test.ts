@@ -629,10 +629,10 @@ describe('services/rest/Api', () => {
 		}));
 		const newTag = await Tag.loadByTitle(newTagTitle);
 		const tagIds = await NoteTag.tagIdsByNoteId(note.id);
-		expect(response.tags === `${tag1.title},${newTag.title}`).toBe(true);
+		expect(response.tags === `${tag1.title},${newTag!.title}`).toBe(true);
 		expect(tagIds.length === 2).toBe(true);
 		expect(tagIds.includes(tag1.id)).toBe(true);
-		expect(tagIds.includes(newTag.id)).toBe(true);
+		expect(tagIds.includes(newTag!.id)).toBe(true);
 	}));
 
 	it('should not update tags if tags is not mentioned when updating', (async () => {
