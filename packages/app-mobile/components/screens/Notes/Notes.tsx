@@ -13,13 +13,14 @@ import { _ } from '@joplin/lib/locale';
 import { BaseScreenComponent } from '../../base-screen';
 import { AppState } from '../../../utils/types';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
-import { itemIsInTrash } from '@joplin/lib/services/trash';
+import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
 import AccessibleView from '../../accessibility/AccessibleView';
 import { Dispatch } from 'redux';
 import { DialogContext, DialogControl } from '../../DialogManager';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { MenuChoice } from '../../DialogManager/types';
 import NewNoteButton from './NewNoteButton';
+import RearrangeNotesModal from './RearrangeNotesModal';
 
 interface Props {
 	dispatch: Dispatch;
@@ -34,6 +35,7 @@ interface Props {
 	uncompletedTodosOnTop: boolean;
 	showCompletedTodos: boolean;
 	noteSelectionEnabled: boolean;
+	notes: NoteEntity[];
 
 	selectedNoteIds: string[];
 	activeFolderId: string;
@@ -49,6 +51,8 @@ interface State {
 
 interface ComponentProps extends Props {
 	dialogManager: DialogControl;
+	rearrangeModalVisible: boolean;
+	setRearrangeModalVisible: (visible: boolean)=> void;
 }
 
 type Styles = Record<string, ViewStyle|TextStyle>;
@@ -107,6 +111,17 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 		Setting.setValue(r.name, r.value);
 	};
+
+	public canRearrangeNotes(): boolean {
+		const { notesParentType, folders, selectedFolderId } = this.props;
+
+		if (Setting.value('notes.sortOrder.field') !== 'order') return false;
+		if (notesParentType === 'Folder') {
+			const folder = Folder.byId(folders, selectedFolderId);
+			return folder && folder.id !== Folder.conflictFolderId() && folder.id !== getTrashFolderId() && folder.deleted_time === 0;
+		}
+		return false;
+	}
 
 	public styles() {
 		if (!this.styles_) this.styles_ = {};
@@ -225,6 +240,33 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		return this.folderPickerOptions_;
 	}
 
+	private onRearrangeButtonPress = () => {
+		this.props.setRearrangeModalVisible(true);
+	};
+
+	private onRearrangeModalClose = () => {
+		this.props.setRearrangeModalVisible(false);
+	};
+
+	private onRearrangeConfirm = async (targetIndex: number) => {
+		const selectedNoteId = this.props.selectedNoteIds[0];
+		if (!selectedNoteId || !this.props.selectedFolderId) return;
+
+		this.props.setRearrangeModalVisible(false);
+		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+
+		await Note.insertNotesAt(
+			this.props.selectedFolderId,
+			[selectedNoteId],
+			targetIndex,
+			this.props.uncompletedTodosOnTop,
+			this.props.showCompletedTodos,
+		);
+
+		const newProps = { ...this.props, notesSource: '' };
+		await this.refreshNotes(newProps);
+	};
+
 	public render() {
 		const parent = this.parentItem();
 		const theme = themeStyle(this.props.themeId);
@@ -261,6 +303,9 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 		// Ensure that screen readers can't focus the notes list when it isn't visible.
 		const accessibilityHidden = !this.props.visible;
+		const canRearrange = this.canRearrangeNotes();
+		const singleNoteSelected = this.props.selectedNoteIds.length === 1;
+		const selectedNote = singleNoteSelected ? this.props.notes.find(n => n.id === this.props.selectedNoteIds[0]) : null;
 
 		return (
 			<AccessibleView
@@ -275,9 +320,21 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 					folderPickerOptions={this.folderPickerOptions()}
 					showSearchButton={true}
 					showSideMenuButton={true}
+					showRearrangeButton={canRearrange && this.props.noteSelectionEnabled}
+					rearrangeButtonDisabled={!singleNoteSelected}
+					onRearrangeButtonPress={this.onRearrangeButtonPress}
 				/>
 				<NoteList />
 				{actionButtonComp}
+				<RearrangeNotesModal
+					visible={this.props.rearrangeModalVisible}
+					selectedNote={selectedNote}
+					notes={this.props.notes}
+					onClose={this.onRearrangeModalClose}
+					onConfirm={this.onRearrangeConfirm}
+					themeId={this.props.themeId}
+					uncompletedTodosOnTop={this.props.uncompletedTodosOnTop}
+				/>
 			</AccessibleView>
 		);
 	}
@@ -285,7 +342,16 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 const NotesScreenWrapper: React.FC<Props> = props => {
 	const dialogManager = useContext(DialogContext);
-	return <NotesScreenComponent {...props} dialogManager={dialogManager}/>;
+	const [rearrangeModalVisible, setRearrangeModalVisible] = useState(false);
+
+	return (
+		<NotesScreenComponent
+			{...props}
+			dialogManager={dialogManager}
+			rearrangeModalVisible={rearrangeModalVisible}
+			setRearrangeModalVisible={setRearrangeModalVisible}
+		/>
+	);
 };
 
 const NotesScreen = connect((state: AppState) => {
