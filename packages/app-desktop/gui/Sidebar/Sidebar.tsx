@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledRoot } from './styles';
+import { useState, useCallback } from 'react';
+import { StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledRoot, StyledSyncReportToggle } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import Synchronizer from '@joplin/lib/Synchronizer';
@@ -52,32 +53,52 @@ const SidebarComponent = (props: Props) => {
 		resourceFetcherText = _('Fetching resources: %d/%d', props.resourceFetcher.fetchingCount, props.resourceFetcher.toFetchCount);
 	}
 
+	const [syncReportExpanded, setSyncReportExpanded] = useState(false);
+
+	const toggleSyncReport = useCallback(() => {
+		setSyncReportExpanded(prev => !prev);
+	}, []);
+
 	const lines = Synchronizer.reportToLines(props.syncReport);
 	if (resourceFetcherText) lines.push(resourceFetcherText);
 	if (decryptionReportText) lines.push(decryptionReportText);
-	const syncReportText = [];
-	for (let i = 0; i < lines.length; i++) {
-		syncReportText.push(
-			<StyledSyncReportText key={i}>
-				{lines[i]}
-			</StyledSyncReportText>,
-		);
-	}
 
 	const syncButton = renderSynchronizeButton(props.syncStarted ? 'cancel' : 'sync');
 
-	const syncReportComp = !syncReportText.length ? null : (
-		<StyledSyncReport key="sync_report">
-			{syncReportText}
-		</StyledSyncReport>
+	// Toggle to show/hide the sync panel
+	const toggleButton = (
+		<StyledSyncReportToggle
+			onClick={toggleSyncReport}
+			aria-expanded={syncReportExpanded}
+			aria-label={syncReportExpanded ? _('Hide synchronisation panel') : _('Show synchronisation panel')}
+			title={syncReportExpanded ? _('Hide synchronisation panel') : _('Show synchronisation panel')}
+		>
+			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'up'}`} />
+		</StyledSyncReportToggle>
 	);
+
+	// Sync panel (report + button), only visible when expanded
+	const syncPanelContent = syncReportExpanded ? (
+		<>
+			{lines.length > 0 && (
+				<StyledSyncReport key="sync_report">
+					{lines.map((line, i) => (
+						<StyledSyncReportText key={i}>
+							{line}
+						</StyledSyncReportText>
+					))}
+				</StyledSyncReport>
+			)}
+			{syncButton}
+		</>
+	) : null;
 
 	return (
 		<StyledRoot className='sidebar _scrollbar2' role='navigation' aria-label={_('Sidebar')}>
-			<div style={{ flex: 1 }}><FolderAndTagList/></div>
+			<div style={{ flex: 1 }}><FolderAndTagList /></div>
 			<div style={{ flex: 0, padding: theme.mainPadding }}>
-				{syncReportComp}
-				{syncButton}
+				{toggleButton}
+				{syncPanelContent}
 			</div>
 		</StyledRoot>
 	);

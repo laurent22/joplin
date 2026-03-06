@@ -117,6 +117,25 @@ export const StyledSyncReportText = styled.div`
 	width: 100%;
 `;
 
+export const StyledSyncReportToggle = styled.button`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	border: none;
+	color: ${(props: StyleProps) => props.theme.color2};
+	opacity: 0.5;
+	cursor: pointer;
+	padding: 4px 0;
+	width: 100%;
+	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize * 1.6)}px;
+	transition: opacity 0.2s;
+	&:hover {
+		opacity: 1;
+	}
+`;
+
+
 // Workaround sidebar rendering bug on Linux Intel GPU.
 // https://github.com/laurent22/joplin/issues/7506
 export const StyledSpanFix = styled.span`
