@@ -137,28 +137,53 @@ class HtmlUtils {
 	public stripHtml(html: string) {
 		const output: string[] = [];
 
-		const tagStack: string[] = [];
+		interface TagStackEntry {
+			name: string;
+			hidden: boolean;
+		}
+
+		const tagStack: TagStackEntry[] = [];
+		// Tracks depth of hidden elements (display:none or visibility:hidden).
+		// When > 0, all text content is suppressed.
+		let hiddenDepth = 0;
 
 		const currentTag = () => {
 			if (!tagStack.length) return '';
-			return tagStack[tagStack.length - 1];
+			return tagStack[tagStack.length - 1].name;
+		};
+
+		const isHiddenStyle = (attribs: Record<string, string>) => {
+			const style = attribs?.style;
+			if (!style) return false;
+			return /display\s*:\s*none/i.test(style) || /visibility\s*:\s*hidden/i.test(style);
 		};
 
 		const disallowedTags = ['script', 'style', 'head', 'iframe', 'frameset', 'frame', 'object', 'base'];
 
 		const parser = new htmlparser2.Parser({
 
-			onopentag: (name: string) => {
-				tagStack.push(name.toLowerCase());
+			onopentag: (name: string, attribs: Record<string, string>) => {
+				const hidden = isHiddenStyle(attribs);
+				tagStack.push({ name: name.toLowerCase(), hidden });
+				if (hidden) {
+					hiddenDepth++;
+				}
 			},
 
 			ontext: (decodedText: string) => {
 				if (disallowedTags.includes(currentTag())) return;
+				if (hiddenDepth > 0) return;
 				output.push(decodedText);
 			},
 
 			onclosetag: (name: string) => {
-				if (currentTag() === name.toLowerCase()) tagStack.pop();
+				const entry = tagStack.length ? tagStack[tagStack.length - 1] : null;
+				if (entry && entry.name === name.toLowerCase()) {
+					if (entry.hidden) {
+						hiddenDepth = Math.max(0, hiddenDepth - 1);
+					}
+					tagStack.pop();
+				}
 			},
 
 		}, { decodeEntities: true });

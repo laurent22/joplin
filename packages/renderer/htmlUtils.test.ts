@@ -29,6 +29,32 @@ describe('htmlUtils', () => {
 		}
 	});
 
+	test.each([
+		[
+			'<div style="display: none">hidden</div> visible',
+			' visible',
+		],
+		[
+			'<span style="visibility: hidden">hidden</span> visible',
+			' visible',
+		],
+		[
+			'<div style="display:none"><span>nested hidden</span></div> visible',
+			' visible',
+		],
+		[
+			'<div style="display: none">hidden</div><div style="display: none">also hidden</div> visible',
+			' visible',
+		],
+		[
+			'<div>visible <span style="display: none">hidden</span> also visible</div>',
+			'visible also visible',
+		],
+	])('should exclude text in hidden elements (case %#)', (input, expected) => {
+		const actual = htmlUtils.stripHtml(input);
+		expect(actual).toBe(expected);
+	});
+
 	test('should extract the HTML body', () => {
 		const testCases: [string, string][] = [
 			[
