@@ -38,7 +38,6 @@ const SettingTextInput: FunctionComponent<Props> = (props) => {
 					autoCorrect={false}
 					autoComplete="off"
 					autoCapitalize="none"
-					autoCorrect={false}
 					importantForAutofill="no"
 					textContentType="password"
 					selectionColor={theme.textSelectionColor}
