@@ -95,7 +95,7 @@ export async function checkTestData(data: any) {
 					for (const tagTitle of obj.tags) {
 						const tag = await Tag.loadByTitle(tagTitle);
 						if (!tag) throw new Error(`Cannot load note tag: ${tagTitle}`);
-						const hasNote = await Tag.hasNote(tag!.id, note.id);
+						const hasNote = await Tag.hasNote(tag.id, note.id);
 						if (!hasNote) throw new Error(`Tag not associated with note: ${tagTitle}`);
 					}
 				}
