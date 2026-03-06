@@ -378,14 +378,16 @@ describe('screens/Note', () => {
 		[['viewer']],
 		[['editor']],
 	])('should initialize in the correct mode when noteVisiblePanes is %j', async (panes) => {
-		await setupNoteWithPanes(panes);
+		const { unmount } = await setupNoteWithPanes(panes);
 		await expectToBeEditing(panes.includes('editor'));
+		unmount();
 	});
 
 	it('should show toggle button', async () => {
-		await setupNoteWithPanes(['viewer']);
+		const { unmount } = await setupNoteWithPanes(['viewer']);
 		const toggleButton = await screen.findByLabelText('Toggle view/edit');
 		expect(toggleButton).toBeVisible();
+		unmount();
 	});
 
 	it.each([
@@ -394,11 +396,12 @@ describe('screens/Note', () => {
 	])('should switch modes when toggle button is pressed', async (panes) => {
 		const initialEditing = panes.includes('editor');
 		const expectedEditing = !initialEditing;
-		await setupNoteWithPanes(panes);
+		const { unmount } = await setupNoteWithPanes(panes);
 		await expectToBeEditing(initialEditing);
 		const toggleButton = await screen.findByLabelText('Toggle view/edit');
 		fireEvent.press(toggleButton);
 		await expectToBeEditing(expectedEditing);
+		unmount();
 	});
 
 	it('should always start in edit mode for provisional notes regardless of noteVisiblePanes', async () => {
@@ -414,10 +417,11 @@ describe('screens/Note', () => {
 			note: note,
 			provisional: true,
 		});
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 		const titleInput = await screen.findByDisplayValue('Provisional note');
 		expect(titleInput).toBeVisible();
 		await expectToBeEditing(true);
+		unmount();
 	});
 
 	it.each([
@@ -441,12 +445,13 @@ describe('screens/Note', () => {
 		await act(async () => {
 			await openExistingNote(noteId);
 		});
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 		const titleInput = await screen.findByDisplayValue('Test note');
 		expect(titleInput).toBeVisible();
 		// Should still be in the same mode
 		await expectToBeEditing(panes.includes('editor'));
 		expect(store.getState().noteVisiblePanes).toEqual(panes);
+		unmount();
 	});
 
 	it.each([
@@ -476,12 +481,13 @@ describe('screens/Note', () => {
 		await act(async () => {
 			await openExistingNote(note2Id);
 		});
-		render(<WrappedNoteScreen />);
+		const { unmount } = render(<WrappedNoteScreen />);
 		const titleInput2 = await screen.findByDisplayValue('Note 2');
 		expect(titleInput2).toBeVisible();
 		// Note 2 should be in the same mode
 		await expectToBeEditing(panes.includes('editor'));
 		expect(store.getState().noteVisiblePanes).toEqual(panes);
+		unmount();
 	});
 
 	it('should set the initial editor cursor location to the specified hash', async () => {
