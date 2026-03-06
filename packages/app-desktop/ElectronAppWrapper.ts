@@ -270,9 +270,12 @@ export default class ElectronAppWrapper {
 		);
 
 		if (!screen.getDisplayMatching(this.win_.getBounds())) {
-			const { width: windowWidth, height: windowHeight } = this.win_.getBounds();
-			const { width: primaryDisplayWidth, height: primaryDisplayHeight } = screen.getPrimaryDisplay().workArea;
-			this.win_.setPosition(primaryDisplayWidth / 2 - windowWidth, primaryDisplayHeight / 2 - windowHeight);
+    		const { width: windowWidth, height: windowHeight } = this.win_.getBounds();
+    		const { width: primaryDisplayWidth, height: primaryDisplayHeight } = screen.getPrimaryDisplay().workArea;
+    		this.win_.setPosition(
+					Math.round((primaryDisplayWidth - windowWidth) / 2),
+        			Math.round((primaryDisplayHeight - windowHeight) / 2)
+			);
 		}
 
 		let unresponsiveTimeout: ReturnType<typeof setTimeout>|null = null;
