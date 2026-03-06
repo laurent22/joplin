@@ -237,6 +237,19 @@ export default class Tag extends BaseItem {
 			}
 		}
 
+		// Prevent duplicate tags: when saving a new tag (no id) with a title
+		// that already exists, reuse the existing tag's id so the save
+		// proceeds as an update rather than creating a duplicate row.
+		if (!o.id && 'title' in o) {
+			o.title = (o.title || '').trim();
+			if (o.title) {
+				const existingTag = await Tag.loadByTitle(o.title);
+				if (existingTag) {
+					o.id = existingTag.id;
+				}
+			}
+		}
+
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return super.save(o, options).then((tag: TagEntity) => {
 			if (options.dispatchUpdateAction) {

@@ -230,4 +230,27 @@ describe('models/Tag', () => {
 		expect(tag2).not.toBe(undefined);
 		expect(tag1).not.toStrictEqual(tag2);
 	});
+
+	it('should not create a duplicate when saving a tag with an existing title', async () => {
+		const tag1 = await Tag.save({ title: 'meeting' });
+		const tag2 = await Tag.save({ title: 'meeting' });
+		expect(tag2.id).toBe(tag1.id);
+
+		const allTags = await Tag.all();
+		const matching = allTags.filter(t => t.title === 'meeting');
+		expect(matching.length).toBe(1);
+	});
+
+	it('should associate note correctly when tag is reused via save', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+
+		const tag1 = await Tag.save({ title: 'project' });
+		await Tag.addNote(tag1.id, note1.id);
+
+		// Save again with same title — should reuse tag1
+		const tag2 = await Tag.save({ title: 'project' });
+		expect(tag2.id).toBe(tag1.id);
+		expect(await Tag.hasNote(tag2.id, note1.id)).toBe(true);
+	});
 });
