@@ -64,19 +64,27 @@ describe('resourceHandling', () => {
 		expect(await processPastedHtml(html, htmlToMd, markupToHtml)).toBe(html);
 	});
 
-	it('should process Google Docs mixed content without producing **', async () => {
+	it('should process Google Docs mixed content with line breaks without producing artifacts', async () => {
 		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
 
 		const html = `
-			<meta charset='utf-8'>
-			<meta charset="utf-8">
-			<b style="font-weight:normal;" id="docs-internal-guid-xyz">
-				<p>Lauren Ipsum is a name that suggests a person, perhaps someone who is a writer.</p>
-				<h1>Lauren Ipsum is a name that suggests</h1>
-				<p>Lauren Ipsum is a name that suggests a person, perhaps someone who is a writer.</p>
-				<br />
-			</b>
-			`;
+		<meta charset='utf-8'>
+		<meta charset="utf-8">
+		<b style="font-weight:normal;" id="docs-internal-guid-xyz">
+			<p>
+				Lauren Ipsum is a name that suggests a person
+				<br class="kix-line-break">
+				perhaps someone who is a writer.
+			</p>
+			<h1>Lauren Ipsum is a name that suggests</h1>
+			<p>
+				Lauren Ipsum is a name that suggests a person
+				<br>
+				perhaps someone who is a writer.
+			</p>
+			<br />
+		</b>
+	`;
 
 		const result = await processPastedHtml(html, htmlToMd, markupToHtml);
 
@@ -86,5 +94,11 @@ describe('resourceHandling', () => {
 		// Heading preserved
 		expect(result).toContain('<h1');
 		expect(result).toContain('Lauren Ipsum is a name that suggests');
+
+		// Ensure text content remains intact
+		expect(result).toContain('perhaps someone who is a writer');
+
+		// Ensure no literal <br> text artifacts appear
+		expect(result).not.toContain('&lt;br');
 	});
 });
