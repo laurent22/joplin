@@ -50,9 +50,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const response = await LangChainClient.sendMcpQuestion(message, gSystemPrompt, histories);
+    // ストリーミングレスポンス（chat/route.ts と同様の方式）
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          await LangChainClient.sendMcpQuestionStream(
+            message,
+            (token: string) => {
+              console.log(`Token: ${token}`);
+              controller.enqueue(encoder.encode(token));
+            },
+            gSystemPrompt,
+            histories
+          );
+          controller.close();
+        } catch (error) {
+          console.error('Agent stream error:', error);
+          const errorData = JSON.stringify({
+            error: 'AIエージェントでエラーが発生しました',
+            details: error instanceof Error ? error.message : String(error),
+          });
+          controller.enqueue(encoder.encode(`data: ${errorData}\n\n`));
+          controller.close();
+        }
+      },
+    });
 
-    return NextResponse.json({ response });
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      },
+    });
   } catch (error) {
     console.error('Error processing agent request:', error);
     return NextResponse.json(
