@@ -28,7 +28,7 @@ interface Props {
 	searchResultProps?: ScrollViewProps;
 }
 
-const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
+const useStyles = (themeId: number, headerStyle: TextStyle | undefined) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		return StyleSheet.create({
@@ -211,9 +211,12 @@ const TagEditor: React.FC<Props> = props => {
 	const comboBoxItems = useMemo(() => {
 		return props.allTags
 			// Exclude tags already associated with the note
-			.filter(tag => !props.tags.some(o => o.toLowerCase() === tag.title?.toLowerCase()))
+			.filter(tag => {
+				const tagTitle = (tag.title || '').trim().normalize('NFC').toLowerCase();
+				return !props.tags.some(o => (o || '').trim().normalize('NFC').toLowerCase() === tagTitle);
+			})
 			.map((tag): Option => {
-				const title = tag.title ?? 'Untitled';
+				const title = (tag.title || '').trim().normalize('NFC');
 				return {
 					title,
 					icon: null,
@@ -230,14 +233,16 @@ const TagEditor: React.FC<Props> = props => {
 	}, []);
 
 	const onAddTag = useCallback((title: string) => {
-		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', title));
-		props.onTagsChange([...props.tags, title.trim()]);
+		const normalizedTitle = (title || '').trim().normalize('NFC');
+		if (!normalizedTitle) return;
+		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', normalizedTitle));
+		props.onTagsChange([...props.tags, normalizedTitle]);
 	}, [props.tags, props.onTagsChange]);
 
 	const onRemoveTag = useCallback(async (title: string) => {
 		if (!title) return;
-		const lowercaseTitle = title.toLowerCase();
-		const previousTagIndex = props.tags.findIndex(item => item.toLowerCase() === lowercaseTitle);
+		const normalizedTitle = title.trim().normalize('NFC').toLowerCase();
+		const previousTagIndex = props.tags.findIndex(item => (item || '').trim().normalize('NFC').toLowerCase() === normalizedTitle);
 		const targetTag = props.tags[previousTagIndex + 1] ?? props.tags[previousTagIndex - 1];
 		setAutofocusTag(targetTag);
 
@@ -245,7 +250,7 @@ const TagEditor: React.FC<Props> = props => {
 		// prevent focus from occasionally jumping away from the tag box.
 		await msleep(100);
 		AccessibilityInfo.announceForAccessibility(_('Removed tag: %s', title));
-		props.onTagsChange(props.tags.filter(tag => tag.toLowerCase() !== lowercaseTitle));
+		props.onTagsChange(props.tags.filter(tag => (tag || '').trim().normalize('NFC').toLowerCase() !== normalizedTitle));
 	}, [props.tags, props.onTagsChange]);
 
 	const onComboBoxSelect = useCallback((item: { title: string }) => {
@@ -255,13 +260,13 @@ const TagEditor: React.FC<Props> = props => {
 
 	const allTagsSetNormalized = useMemo(() => {
 		return new Set([
-			...props.allTags.map(tag => tag.title?.trim()?.toLowerCase()),
-			...props.tags.map(tag => tag.trim().toLowerCase()),
+			...props.allTags.map(tag => (tag.title || '').trim().normalize('NFC').toLowerCase()),
+			...props.tags.map(tag => (tag || '').trim().normalize('NFC').toLowerCase()),
 		]);
 	}, [props.allTags, props.tags]);
 
 	const onCanAddTag = useCallback((tag: string) => {
-		return !allTagsSetNormalized.has(tag.trim().toLowerCase());
+		return !allTagsSetNormalized.has((tag || '').trim().normalize('NFC').toLowerCase());
 	}, [allTagsSetNormalized]);
 
 	const showAssociatedTags = props.mode === TagEditorMode.Large || props.tags.length > 0;
@@ -276,7 +281,7 @@ const TagEditor: React.FC<Props> = props => {
 				autofocusTag={autofocusTag}
 				onAutoFocusComplete={onAutoFocusComplete}
 			/>
-			<Divider style={styles.divider}/>
+			<Divider style={styles.divider} />
 		</>}
 		<Text style={styles.header} role='heading'>{_('Add tags:')}</Text>
 		<ComboBox

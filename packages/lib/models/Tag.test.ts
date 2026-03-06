@@ -230,4 +230,35 @@ describe('models/Tag', () => {
 		expect(tag2).not.toBe(undefined);
 		expect(tag1).not.toStrictEqual(tag2);
 	});
+
+	it('should not create duplicate tags when tagging with existing titles (issue #14540)', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+
+		// Test 1: Simple existing tag
+		const tag1 = await Tag.save({ title: 'meetings' });
+		await Tag.setNoteTagsByTitles(note1.id, ['meetings']);
+		let allTags = await Tag.all();
+		expect(allTags.length).toBe(1);
+		expect(allTags[0].id).toBe(tag1.id);
+
+		// Test 2: Whitespace issues
+		await Tag.setNoteTagsByTitles(note1.id, ['meetings ']);
+		allTags = await Tag.all();
+		expect(allTags.length).toBe(1);
+
+		// Test 3: Normalization issues
+		const composed = '\u00E9';
+		const decomposed = '\u0065\u0301';
+		await Tag.save({ title: composed });
+		await Tag.setNoteTagsByTitles(note1.id, [decomposed]);
+		allTags = await Tag.all();
+		// In addition to 'meetings', we should have only one 'é' tag
+		expect(allTags.length).toBe(2);
+
+		// Test 4: Case change should not create new tag but match existing
+		await Tag.setNoteTagsByTitles(note1.id, ['MEETINGS']);
+		allTags = await Tag.all();
+		expect(allTags.length).toBe(2);
+	});
 });

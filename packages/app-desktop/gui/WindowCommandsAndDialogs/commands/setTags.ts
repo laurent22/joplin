@@ -18,7 +18,8 @@ export const runtime = (comp: any): CommandRuntime => {
 			const startTags = tags
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.map((a: any) => {
-					return { value: a.id, label: a.title };
+					const title = (a.title || '').trim().normalize('NFC');
+					return { value: a.id, label: title };
 				})
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.sort((a: any, b: any) => {
@@ -29,12 +30,13 @@ export const runtime = (comp: any): CommandRuntime => {
 			const allTags = await Tag.allWithNotes();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const tagSuggestions = allTags.map((a: any) => {
-				return { value: a.id, label: a.title };
+				const title = (a.title || '').trim().normalize('NFC');
+				return { value: a.id, label: title };
 			})
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				.sort((a: any, b: any) => {
-				// sensitivity accent will treat accented characters as different
-				// but treats caps as equal
+					// sensitivity accent will treat accented characters as different
+					// but treats caps as equal
 					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 				});
 
@@ -48,13 +50,13 @@ export const runtime = (comp: any): CommandRuntime => {
 					onClose: async (answer: any[]) => {
 						if (answer !== null) {
 							const endTagTitles = answer.map(a => {
-								return a.label.trim();
+								return (a.label || '').trim().normalize('NFC');
 							});
 							if (noteIds.length === 1) {
 								await Tag.setNoteTagsByTitles(noteIds[0], endTagTitles);
 							} else {
 								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								const startTagTitles = startTags.map((a: any) => { return a.label.trim(); });
+								const startTagTitles = startTags.map((a: any) => { return (a.label || '').trim().normalize('NFC'); });
 								const addTags = endTagTitles.filter((value: string) => !startTagTitles.includes(value));
 								const delTags = startTagTitles.filter((value: string) => !endTagTitles.includes(value));
 
@@ -62,7 +64,7 @@ export const runtime = (comp: any): CommandRuntime => {
 								for (let i = 0; i < noteIds.length; i++) {
 									const tags = await Tag.tagsByNoteId(noteIds[i]);
 									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-									let tagTitles = tags.map((a: any) => { return a.title; });
+									let tagTitles = tags.map((a: any) => { return (a.title || '').trim().normalize('NFC'); });
 									tagTitles = tagTitles.concat(addTags);
 									tagTitles = tagTitles.filter((value: string) => !delTags.includes(value));
 									await Tag.setNoteTagsByTitles(noteIds[i], tagTitles);

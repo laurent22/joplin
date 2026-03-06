@@ -172,9 +172,22 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async loadByTitle(title: string): Promise<TagEntity> {
-		// Case insensitive doesn't work with special Unicode characters like Ö, but as these characters are no longer converted to lowercase on save, this is ok
-		// For the original issue, see https://github.com/laurent22/joplin/issues/11179
-		return this.loadByField('title', title, { caseInsensitive: true });
+		const normalizedTitle = title.trim().normalize('NFC');
+		const tag = await this.loadByField('title', normalizedTitle, { caseInsensitive: true });
+		if (tag) return tag;
+
+		// Fallback for tags that might have different normalization or whitespace in the database.
+		// We load all tags because the number of tags is usually small and this ensures we
+		// never create a duplicate for an existing visually-identical tag.
+		const allTags = await Tag.all();
+		const searchTitleLower = normalizedTitle.toLowerCase();
+		for (const t of allTags) {
+			if (t.title && t.title.trim().normalize('NFC').toLowerCase() === searchTitleLower) {
+				return t;
+			}
+		}
+
+		return null;
 	}
 
 	public static async addNoteTagByTitle(noteId: string, tagTitle: string) {
@@ -188,20 +201,27 @@ export default class Tag extends BaseItem {
 		// a tag to a title which matches another tag except for one or more special unicode characters having a different case. But this seems a reasonable compromise
 		// due to the lack of native case insensitive text comparison functionality for special unicode characters in sqlite without any extensions
 		const previousTags = await this.tagsByNoteId(noteId);
-		const addedTitlesLowercased = [];
+		const addedTitlesLowercased: string[] = [];
+		const addedTagIds: string[] = [];
 
-		for (let i = 0; i < tagTitles.length; i++) {
-			const title = tagTitles[i].trim();
-			if (!title) continue;
+		// Deduplicate incoming titles after normalization
+		const uniqueNormalizedTitles = Array.from(new Set(tagTitles.map(t => (t || '').trim().normalize('NFC')).filter(t => !!t)));
+
+		for (const title of uniqueNormalizedTitles) {
 			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
 			await this.addNote(tag.id, noteId);
 			addedTitlesLowercased.push(title.toLowerCase());
+			addedTagIds.push(tag.id);
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitlesLowercased.indexOf(previousTags[i].title.toLowerCase()) < 0) {
-				await this.removeNote(previousTags[i].id, noteId);
+			const tag = previousTags[i];
+			const title = (tag.title || '').trim().normalize('NFC');
+			if (!title) continue;
+			const prevTitleLower = title.toLowerCase();
+			if (addedTitlesLowercased.indexOf(prevTitleLower) < 0 || addedTagIds.indexOf(tag.id) < 0) {
+				await this.removeNote(tag.id, noteId);
 			}
 		}
 	}
@@ -225,20 +245,25 @@ export default class Tag extends BaseItem {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async save(o: TagEntity, options: any = null) {
-		options = { dispatchUpdateAction: true,
-			userSideValidation: false, ...options };
+		options = {
+			dispatchUpdateAction: true,
+			userSideValidation: false, ...options,
+		};
+
+		const tagToSave = { ...o };
+		if (tagToSave.title) {
+			tagToSave.title = tagToSave.title.trim().normalize('NFC');
+		}
 
 		if (options.userSideValidation) {
-			if ('title' in o) {
-				o.title = o.title.trim();
-
-				const existingTag = await Tag.loadByTitle(o.title);
-				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
+			if ('title' in tagToSave) {
+				const existingTag = await Tag.loadByTitle(tagToSave.title);
+				if (existingTag && existingTag.id !== tagToSave.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', tagToSave.title));
 			}
 		}
 
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		return super.save(o, options).then((tag: TagEntity) => {
+		return super.save(tagToSave, options).then((tag: TagEntity) => {
 			if (options.dispatchUpdateAction) {
 				this.dispatch({
 					type: 'TAG_UPDATE_ONE',
