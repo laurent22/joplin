@@ -5,6 +5,7 @@ import { AppState, AppStateRoute } from '../app.reducer';
 import bridge from '../services/bridge';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { WindowIdContext } from './NewWindowOrIFrame';
+import useCtrlWheelZoom from './hooks/useCtrlWheelZoom';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of code from before rule was applied
 type ScreenProps = any;
@@ -89,19 +90,6 @@ const useContainerSize = (container: HTMLElement|null) => {
 	}, [container]);
 
 	return size;
-};
-
-const useCtrlWheelZoom = () => {
-	useEffect(() => {
-		const handleWheel = (e: WheelEvent) => {
-			if (e.ctrlKey || e.metaKey) {
-				e.preventDefault();
-				Setting.incValue('windowContentZoomFactor', e.deltaY < 0 ? 10 : -10);
-			}
-		};
-		document.addEventListener('wheel', handleWheel, { passive: false });
-		return () => document.removeEventListener('wheel', handleWheel);
-	}, []);
 };
 
 const NavigatorComponent: React.FC<Props> = props => {
