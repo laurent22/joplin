@@ -6,9 +6,21 @@ import Setting from '../Setting';
 
 // Should return an error message if there's a problem, and an empty string if not.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type ValidationHandler = (oldValue: any, newValue: any)=> Promise<string>;
+type ValidationHandler = (oldValue: any, newValue: any) => Promise<string>;
+
+const validateUrlProtocol = async (_oldValue: string, newValue: string) => {
+	if (newValue && !newValue.match(/^https?:\/\//)) {
+		return _('The URL must include the protocol prefix (http:// or https://).');
+	}
+	return '';
+};
 
 const validations: Record<string, ValidationHandler> = {
+
+	'sync.5.path': validateUrlProtocol,
+	'sync.6.path': validateUrlProtocol,
+	'sync.9.path': validateUrlProtocol,
+	'sync.11.path': validateUrlProtocol,
 
 	'sync.target': async (oldValue: number, newValue: number) => {
 		if (oldValue === 0 || newValue === 0) return '';

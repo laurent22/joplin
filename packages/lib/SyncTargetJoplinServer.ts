@@ -80,11 +80,17 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi|null = null) {
+	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi | null = null) {
 		const output = {
 			ok: false,
 			errorMessage: '',
 		};
+
+		const path = options.path();
+		if (!path || (!path.startsWith('http://') && !path.startsWith('https://'))) {
+			output.errorMessage = _('The URL must include the protocol prefix (http:// or https://).');
+			return output;
+		}
 
 		syncTargetId = syncTargetId === null ? this.id() : syncTargetId;
 

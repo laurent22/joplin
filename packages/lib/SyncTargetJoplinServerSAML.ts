@@ -54,7 +54,7 @@ export const authenticateWithCode = async (code: string) => {
 // Based on the regular Joplin Server sync target.
 export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 
-	private lastFileApiOptions_: FileApiOptions|null = null;
+	private lastFileApiOptions_: FileApiOptions | null = null;
 
 	public static override id() {
 		return 11;
@@ -87,8 +87,16 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 
 	public static override async checkConfig(fileApi: FileApiOptions) {
 		try {
+			const path = fileApi.path();
+			if (!path || (!path.startsWith('http://') && !path.startsWith('https://'))) {
+				return {
+					ok: false,
+					errorMessage: _('The URL must include the protocol prefix (http:// or https://).'),
+				};
+			}
+
 			// Simulate a login request
-			const result = await fetch(`${fileApi.path()}/api/saml`);
+			const result = await fetch(`${path}/api/saml`);
 
 			if (result.status === 200) { // The server successfully responded, SAML is enabled
 				return {
@@ -107,7 +115,7 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 						if (json.error) {
 							message = json.error;
 						}
-					} catch (_e) {} // eslint-disable-line no-empty -- Keep the plain text response as the error message, ignore the parsing exception
+					} catch (_e) { } // eslint-disable-line no-empty -- Keep the plain text response as the error message, ignore the parsing exception
 				}
 
 				return {
