@@ -252,12 +252,12 @@ app.post('/mcp', async (req, res) => {
       if (chunk) {
         chunks.push(Buffer.from(chunk));
       }
-      const body = Buffer.concat(chunks).toString('utf8');
-      console.log('[MCP Response]', {
-        timestamp: new Date().toISOString(),
-        statusCode: res.statusCode,
-        body: body,
-      });
+      // const body = Buffer.concat(chunks).toString('utf8');
+      // console.log('[MCP Response]', {
+      //   timestamp: new Date().toISOString(),
+      //   statusCode: res.statusCode,
+      //   body: body,
+      // });
       return originalEnd(chunk, ...args);
     };
 

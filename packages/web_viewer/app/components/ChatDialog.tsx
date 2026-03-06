@@ -172,14 +172,10 @@ export default function ChatDialog({ open, onClose }: ChatDialogProps) {
         throw new Error('APIエラーが発生しました');
       }
 
-      const data = await response.json();
-
-      // レスポンスをボットメッセージとして表示
-      setChatMessages((prev) =>
-        prev.map((msg) => (msg.id === botId ? { ...msg, text: data.response, loading: false } : msg))
-      );
+      // ストリーミングレスポンスを処理
+      await processStreamingResponse(response, botId);
     },
-    []
+    [processStreamingResponse]
   );
 
   // 通常のチャットAPIを呼び出す
