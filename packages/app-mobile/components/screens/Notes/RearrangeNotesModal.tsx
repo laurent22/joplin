@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Modal from '../../Modal';
 import { themeStyle } from '../../global-style';
 import { _ } from '@joplin/lib/locale';
@@ -214,14 +214,23 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 
 			<Text style={styles.dropdownLabel}>{_('Select target position:')}</Text>
 
-			<View style={styles.listContainer}>
+			<View
+				style={styles.listContainer}
+				accessibilityRole="radiogroup"
+				accessibilityLabel={_('Select target position')}
+			>
 				<ScrollView>
 					{listItems.map((item, index) => {
 						const isSelected = selectedTargetValue === item.id;
 						const isLast = index === listItems.length - 1;
 
+						const accessibilityLabel =
+							item.id === MOVE_TO_TOP_VALUE
+								? _('Move to top')
+								: _('Move below %s', item.title);
+
 						return (
-							<TouchableOpacity
+							<Pressable
 								key={item.id}
 								style={[
 									styles.listItem,
@@ -235,7 +244,11 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 									}
 								}}
 								disabled={item.isDisabled}
+								focusable={!item.isDisabled}
+								importantForAccessibility={item.isDisabled ? 'no' : 'yes'}
 								accessibilityRole="radio"
+								accessibilityLabel={accessibilityLabel}
+								accessibilityHint={item.isDisabled ? _('This position is not valid') : undefined}
 								accessibilityState={{ checked: isSelected, disabled: item.isDisabled }}
 							>
 								<Text
@@ -245,7 +258,7 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 								>
 									{item.title}
 								</Text>
-							</TouchableOpacity>
+							</Pressable>
 						);
 					})}
 				</ScrollView>
