@@ -185,6 +185,14 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const forkVersion = packageJson.joplinServer?.forkVersion;
 	const dbConfig = databaseConfigFromEnv(runningInDocker_, env, false);
 
+	const parseStorageDriver = (envVarValue: string, envVarName: string) => {
+		try {
+			return parseStorageDriverConnectionString(envVarValue);
+		} catch (error: any) {
+			throw new Error(`Invalid configuration for ${envVarName}: ${error.message}`);
+		}
+	};
+
 	config_ = {
 		...env,
 		appVersion: forkVersion ? forkVersion : packageJson.version,
@@ -221,8 +229,8 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		// auth provider URL, the cookies won't be set property. "Lax" solves this and this is what
 		// most web apps use these days. It is still reasonably secure.
 		cookieSameSite: isUsingExternalAuth(env) ? 'lax' : true,
-		storageDriver: parseStorageDriverConnectionString(env.STORAGE_DRIVER),
-		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
+		storageDriver: parseStorageDriver(env.STORAGE_DRIVER, 'STORAGE_DRIVER'),
+		storageDriverFallback: parseStorageDriver(env.STORAGE_DRIVER_FALLBACK, 'STORAGE_DRIVER_FALLBACK'),
 		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
 		maxTimeDrift: env.MAX_TIME_DRIFT,
 		ldap: ldapConfigFromEnv(env),
