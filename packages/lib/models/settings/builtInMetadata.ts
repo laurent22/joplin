@@ -1177,18 +1177,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon'), show: settings => !!settings['showTrayIcon'] },
 
-		globalHotkey: {
-			value: '',
-			type: SettingItemType.String,
-			storage: SettingStorage.File,
-			isGlobal: true,
-			section: 'application',
-			public: true,
-			appTypes: [AppType.Desktop],
-			label: () => _('Global shortcut to show/hide Joplin'),
-			description: () => _('Shortcut that can be used even when Joplin is not focused or is hidden. For example: %s or %s. Leave empty to disable.', 'CommandOrControl+Shift+J', 'Ctrl+Alt+J'),
-		},
-
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
 		'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },

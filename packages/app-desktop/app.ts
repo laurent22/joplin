@@ -139,10 +139,6 @@ class Application extends BaseApplication {
 			this.updateTray();
 		}
 
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'globalHotkey' || action.type === 'SETTING_UPDATE_ALL') {
-			this.updateGlobalHotkey();
-		}
-
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
 			void this.setupOcrService();
 		}
@@ -228,7 +224,8 @@ class Application extends BaseApplication {
 	}
 
 	public updateGlobalHotkey() {
-		bridge().updateGlobalHotkey(Setting.value('globalHotkey') as string);
+		const accelerator = KeymapService.instance().getAccelerator('showHideApp');
+		bridge().updateGlobalHotkey(accelerator ?? '');
 	}
 
 	public setupContextMenu() {
@@ -521,6 +518,8 @@ class Application extends BaseApplication {
 			} catch (error) {
 				reg.logger().error(error);
 			}
+
+			keymapService.on(EventName.KeymapChange, () => this.updateGlobalHotkey());
 		});
 
 		addTask('app/initialize PerFolderSortOrderService', () => {
