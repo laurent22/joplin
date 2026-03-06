@@ -242,7 +242,7 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 								}}
 								disabled={item.isDisabled}
 								focusable={!item.isDisabled}
-								importantForAccessibility={item.isDisabled ? 'no' : 'yes'}
+								importantForAccessibility={'yes'}
 								accessibilityRole="radio"
 								accessibilityLabel={accessibilityLabel}
 								accessibilityHint={item.isDisabled ? _('This position is not valid') : undefined}

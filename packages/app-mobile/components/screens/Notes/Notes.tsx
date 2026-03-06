@@ -297,21 +297,23 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 	private onRearrangeConfirm = async (targetIndex: number) => {
 		const selectedNoteId = this.props.selectedNoteIds[0];
-		if (!selectedNoteId || !this.props.selectedFolderId) return;
-
-		this.props.setRearrangeModalVisible(false);
-		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
-
-		await Note.insertNotesAt(
-			this.props.selectedFolderId,
-			[selectedNoteId],
-			targetIndex,
-			this.props.uncompletedTodosOnTop,
-			this.props.showCompletedTodos,
-		);
-
-		const newProps = { ...this.props, notesSource: '' };
-		await this.refreshNotes(newProps);
+		const selectedFolderId = this.props.selectedFolderId;
+		if (!selectedNoteId || !selectedFolderId) return;
+		try {
+			await Note.insertNotesAt(
+				selectedFolderId,
+				[selectedNoteId],
+				targetIndex,
+				this.props.uncompletedTodosOnTop,
+				this.props.showCompletedTodos,
+			);
+			this.props.setRearrangeModalVisible(false);
+			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+			const newProps = { ...this.props, notesSource: '' };
+			await this.refreshNotes(newProps);
+		} catch (error) {
+			alert(_('Could not move note: %s', error.message));
+		}
 	};
 
 	public render() {
