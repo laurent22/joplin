@@ -91,6 +91,19 @@ const useContainerSize = (container: HTMLElement|null) => {
 	return size;
 };
 
+const useCtrlWheelZoom = () => {
+	useEffect(() => {
+		const handleWheel = (e: WheelEvent) => {
+			if (e.ctrlKey || e.metaKey) {
+				e.preventDefault();
+				Setting.incValue('windowContentZoomFactor', e.deltaY < 0 ? 10 : -10);
+			}
+		};
+		document.addEventListener('wheel', handleWheel, { passive: false });
+		return () => document.removeEventListener('wheel', handleWheel);
+	}, []);
+};
+
 const NavigatorComponent: React.FC<Props> = props => {
 	const route = props.route;
 	const screenInfo = props.screens[route?.routeName];
@@ -98,6 +111,7 @@ const NavigatorComponent: React.FC<Props> = props => {
 
 	useWindowTitleManager(screenInfo);
 	useWindowRefocusManager(route);
+	useCtrlWheelZoom();
 	const size = useContainerSize(container);
 
 	if (!route) throw new Error('Route must not be null');
