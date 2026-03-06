@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Joplin</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background-color: #1D2B40;
+			overflow: hidden;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+		}
+
+		.splash-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 20px;
+		}
+
+		.splash-logo {
+			width: 96px;
+			height: 96px;
+			animation: fadeIn 0.4s ease-out;
+		}
+
+		.splash-title {
+			color: #ffffff;
+			font-size: 28px;
+			font-weight: 300;
+			letter-spacing: 4px;
+			animation: fadeIn 0.4s ease-out 0.1s both;
+		}
+
+		.splash-loader {
+			width: 40px;
+			height: 4px;
+			margin-top: 8px;
+			border-radius: 2px;
+			background-color: rgba(255, 255, 255, 0.15);
+			overflow: hidden;
+			animation: fadeIn 0.4s ease-out 0.2s both;
+		}
+
+		.splash-loader-bar {
+			width: 40%;
+			height: 100%;
+			border-radius: 2px;
+			background-color: rgba(255, 255, 255, 0.6);
+			animation: loading 1.2s ease-in-out infinite;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(8px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes loading {
+			0% {
+				transform: translateX(-100%);
+			}
+			50% {
+				transform: translateX(150%);
+			}
+			100% {
+				transform: translateX(-100%);
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="splash-container">
+		<svg class="splash-logo" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+			<circle cx="48" cy="48" r="44" fill="#4A90D9"/>
+			<text x="48" y="60" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="bold" fill="white">J</text>
+		</svg>
+		<div class="splash-title">JOPLIN</div>
+		<div class="splash-loader">
+			<div class="splash-loader-bar"></div>
+		</div>
+	</div>
+</body>
+</html>

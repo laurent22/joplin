@@ -56,6 +56,7 @@ export default class ElectronAppWrapper {
 	private isEndToEndTesting_: boolean;
 
 	private win_: BrowserWindow = null;
+	private splashWindow_: BrowserWindow = null;
 	private mainWindowHidden_ = true;
 	private pluginWindows_: PluginWindows = {};
 	private secondaryWindows_: Map<SecondaryWindowId, SecondaryWindowData> = new Map();
@@ -174,6 +175,9 @@ export default class ElectronAppWrapper {
 	// Assumes that the renderer process may be in an invalid state and so cannot
 	// be accessed.
 	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
+		// Ensure the splash screen is dismissed so the error dialog is visible
+		this.destroySplashWindow();
+
 		await bridge().captureException(new Error(errorMessage));
 
 		const buttons = [];
@@ -205,6 +209,46 @@ export default class ElectronAppWrapper {
 		} else if (response === exitIndex) {
 			process.exit(1);
 		}
+	}
+
+	private createSplashWindow() {
+		const splashWidth = 320;
+		const splashHeight = 240;
+		const primaryDisplay = screen.getPrimaryDisplay();
+		const { width, height } = primaryDisplay.workArea;
+
+		this.splashWindow_ = new BrowserWindow({
+			width: splashWidth,
+			height: splashHeight,
+			x: Math.round((width - splashWidth) / 2),
+			y: Math.round((height - splashHeight) / 2),
+			frame: false,
+			transparent: false,
+			alwaysOnTop: true,
+			resizable: false,
+			show: false,
+			skipTaskbar: true,
+			backgroundColor: '#1D2B40',
+			webPreferences: {
+				nodeIntegration: false,
+				contextIsolation: true,
+			},
+		});
+
+		this.splashWindow_.once('ready-to-show', () => {
+			if (this.splashWindow_ && !this.splashWindow_.isDestroyed()) {
+				this.splashWindow_.show();
+			}
+		});
+
+		void this.splashWindow_.loadFile(path.join(__dirname, 'splash.html'));
+	}
+
+	public destroySplashWindow() {
+		if (this.splashWindow_ && !this.splashWindow_.isDestroyed()) {
+			this.splashWindow_.destroy();
+		}
+		this.splashWindow_ = null;
 	}
 
 	public createWindow() {
@@ -249,7 +293,10 @@ export default class ElectronAppWrapper {
 			//
 			// On Linux/GNOME, however, the window doesn't show correctly if show is false initially:
 			// https://github.com/laurent22/joplin/issues/8256
-			show: debugEarlyBugs || shim.isGNOME(),
+			//
+			// When the splash screen is active, keep the main window hidden so it
+			// doesn't appear as a dark rectangle behind the splash.
+			show: this.splashWindow_ ? false : (debugEarlyBugs || shim.isGNOME()),
 		};
 
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
@@ -872,8 +919,48 @@ export default class ElectronAppWrapper {
 
 		await this.fixLinuxAccessibility_();
 
+		// Show splash screen while the main window loads, but skip it
+		// when the user has configured the app to start minimized in
+		// the tray — no point showing a splash they don't want to see.
+		// Both settings use SettingStorage.File so they are available
+		// in the main process via settings.json.
+		let showSplash = true;
+		const settingsPath = path.join(this.profilePath_, 'settings.json');
+		if (fs.pathExistsSync(settingsPath)) {
+			try {
+				const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+				if (settings && settings.startMinimized && settings.showTrayIcon) {
+					showSplash = false;
+				}
+			} catch (_e) {
+				// Ignore — show splash on any parse error
+			}
+		}
+
+		if (showSplash) {
+			this.createSplashWindow();
+		}
+
 		this.customProtocolHandlers_ = handleCustomProtocols();
 		this.createWindow();
+
+		// Safety timeout: if the renderer never sends 'hide-splash'
+		// (e.g. due to a crash or startup error), destroy the splash
+		// after 30 seconds so it doesn't block the error dialog.
+		let splashTimeout: ReturnType<typeof setTimeout> | null = null;
+		if (showSplash) {
+			splashTimeout = setTimeout(() => {
+				this.destroySplashWindow();
+				if (this.win_ && !this.win_.isDestroyed()) this.win_.show();
+			}, 30 * 1000);
+		}
+
+		// Listen for the renderer to signal that the app is ready,
+		// then destroy splash and show the main window.
+		ipcMain.once('hide-splash', () => {
+			if (splashTimeout) clearTimeout(splashTimeout);
+			this.destroySplashWindow();
+		});
 
 		this.electronApp_.on('before-quit', () => {
 			this.willQuitApp_ = true;

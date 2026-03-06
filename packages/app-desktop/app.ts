@@ -597,6 +597,9 @@ class Application extends BaseApplication {
 		addTask('app/updateTray', () => this.updateTray());
 
 		addTask('app/set main window state', () => {
+			// Hide the splash screen now that the app is ready
+			ipcRenderer.send('hide-splash');
+
 			if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
 				bridge().mainWindow().hide();
 			} else {
