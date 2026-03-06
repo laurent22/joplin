@@ -65,6 +65,8 @@ import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import { themeStyle } from '@joplin/lib/theme';
+import { ThemeAppearance } from '@joplin/lib/themes/type';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -176,6 +178,11 @@ class Application extends BaseApplication {
 
 		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key)) || action.type === 'SETTING_UPDATE_ALL')) {
 			this.handleThemeAutoDetect();
+			// Update window background color when theme changes
+			const themeId = Setting.value('theme');
+			if (themeId) {
+				this.updateWindowBackgroundForTheme(themeId);
+			}
 		}
 
 		if (action.type === 'PLUGIN_ADD') {
@@ -195,6 +202,12 @@ class Application extends BaseApplication {
 		} else {
 			Setting.setValue('theme', Setting.value('preferredLightTheme'));
 		}
+	}
+
+	private updateWindowBackgroundForTheme(themeId: number) {
+		const theme = themeStyle(themeId);
+		const isDark = theme.appearance === ThemeAppearance.Dark;
+		bridge().updateWindowBackgroundColor(isDark);
 	}
 
 	private bridge_nativeThemeUpdated() {

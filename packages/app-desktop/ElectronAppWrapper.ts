@@ -604,6 +604,12 @@ export default class ElectronAppWrapper {
 		this.electronApp_.hide();
 	}
 
+	public updateWindowBackgroundColor(isDark: boolean) {
+		if (!this.win_) return;
+		const backgroundColor = isDark ? '#333' : '#fff';
+		this.win_.setBackgroundColor(backgroundColor);
+	}
+
 	public buildDir() {
 		if (this.buildDir_) return this.buildDir_;
 		let dir = `${__dirname}/build`;
