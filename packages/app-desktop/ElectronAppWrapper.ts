@@ -25,6 +25,10 @@ import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
 import getAppName from '@joplin/lib/getAppName';
 import { execCommand } from '@joplin/utils';
 
+// Window background colors for theme support
+const DARK_BACKGROUND_COLOR = '#333';
+const LIGHT_BACKGROUND_COLOR = '#fff';
+
 interface RendererProcessQuitReply {
 	canClose: boolean;
 }
@@ -237,7 +241,7 @@ export default class ElectronAppWrapper {
 			// A backgroundColor is needed to enable sub-pixel rendering.
 			// Based on https://www.electronjs.org/docs/latest/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do,
 			// this needs to be a non-transparent color:
-			backgroundColor: nativeTheme.shouldUseDarkColors ? '#333' : '#fff',
+			backgroundColor: nativeTheme.shouldUseDarkColors ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -606,7 +610,7 @@ export default class ElectronAppWrapper {
 
 	public updateWindowBackgroundColor(isDark: boolean) {
 		if (!this.win_) return;
-		const backgroundColor = isDark ? '#333' : '#fff';
+		const backgroundColor = isDark ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR;
 		this.win_.setBackgroundColor(backgroundColor);
 	}
 

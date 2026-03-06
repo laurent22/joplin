@@ -179,10 +179,7 @@ class Application extends BaseApplication {
 		if (this.hasGui() && ((action.type === 'SETTING_UPDATE_ONE' && ['themeAutoDetect', 'theme', 'preferredLightTheme', 'preferredDarkTheme'].includes(action.key)) || action.type === 'SETTING_UPDATE_ALL')) {
 			this.handleThemeAutoDetect();
 			// Update window background color when theme changes
-			const themeId = Setting.value('theme');
-			if (themeId) {
-				this.updateWindowBackgroundForTheme(themeId);
-			}
+			this.updateWindowBackgroundForTheme(Setting.value('theme'));
 		}
 
 		if (action.type === 'PLUGIN_ADD') {
@@ -538,6 +535,9 @@ class Application extends BaseApplication {
 			// which mean state.settings will not be initialised. So we
 			// manually call dispatchUpdateAll() to force an update.
 			Setting.dispatchUpdateAll();
+
+			// Update window background color to match the user's theme preference
+			this.updateWindowBackgroundForTheme(Setting.value('theme'));
 		});
 
 		addTask('app/update folders and tags', async () => {
