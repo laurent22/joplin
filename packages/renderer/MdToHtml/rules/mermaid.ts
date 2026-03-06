@@ -111,7 +111,7 @@ const exportGraphButton = (ruleOptions: RuleOptions) => {
 	// OnClick is handled in the renderer script
 	return `
 		<div class="mermaid-export-graph">
-			<button style="${style}" alt="Export mermaid graph">${downloadIcon()}</button>
+			<button style="${style}" aria-label="Download Mermaid chart" title="Download Mermaid chart">${downloadIcon()}</button>
 		</div>
 	`;
 };
