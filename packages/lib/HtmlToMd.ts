@@ -18,7 +18,7 @@ export interface ParseOptions {
 
 export default class HtmlToMd {
 
-	public parse(html: string|HTMLElement, options: ParseOptions = {}) {
+	public parse(html: string | HTMLElement, options: ParseOptions = {}) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const turndownOpts: any = {
 			headingStyle: 'atx',
@@ -62,6 +62,23 @@ export default class HtmlToMd {
 			};
 		}
 		const turndown = new TurndownService(turndownOpts);
+
+		turndown.addRule('ignoreGoogleDocsWrapper', {
+			filter: (node: Element) => {
+				if (!node.nodeName) return false;
+
+				const tag = node.nodeName.toLowerCase();
+				if (tag !== 'b' && tag !== 'strong') return false;
+
+				const style = node.getAttribute && node.getAttribute('style');
+				if (!style) return false;
+
+				// Only ignore if it is fake bold
+				return /font-weight\s*:\s*(normal|400)\b/i.test(style);
+			},
+			replacement: (content: string) => content,
+		});
+
 		turndown.use(turndownPluginGfm);
 		turndown.remove('script');
 		turndown.remove('style');

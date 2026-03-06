@@ -63,4 +63,28 @@ describe('resourceHandling', () => {
 		const html = `<img src="file://${encodeURI(Setting.value('resourceDir'))}/resource.png" alt="test"/>`;
 		expect(await processPastedHtml(html, htmlToMd, markupToHtml)).toBe(html);
 	});
+
+	it('should process Google Docs mixed content without producing **', async () => {
+		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
+
+		const html = `
+			<meta charset='utf-8'>
+			<meta charset="utf-8">
+			<b style="font-weight:normal;" id="docs-internal-guid-xyz">
+				<p>Lauren Ipsum is a name that suggests a person, perhaps someone who is a writer.</p>
+				<h1>Lauren Ipsum is a name that suggests</h1>
+				<p>Lauren Ipsum is a name that suggests a person, perhaps someone who is a writer.</p>
+				<br />
+			</b>
+			`;
+
+		const result = await processPastedHtml(html, htmlToMd, markupToHtml);
+
+		// No markdown bold artifacts
+		expect(result).not.toContain('**');
+
+		// Heading preserved
+		expect(result).toContain('<h1');
+		expect(result).toContain('Lauren Ipsum is a name that suggests');
+	});
 });
