@@ -97,13 +97,13 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			if (!icon.dataUrl) return null;
 			try {
 				let extension = '.png';
-				const mimeMatch = icon.dataUrl.match(/data:image\/([a-zA-Z0-9]+);base64,/);
+				const mimeMatch = icon.dataUrl.match(/data:image\/([a-zA-Z0-9+\-.]+);base64,/);
 				if (mimeMatch && mimeMatch[1]) {
-					extension = `.${mimeMatch[1]}`;
+					extension = `.${mimeMatch[1].split('+')[0]}`;
 					if (extension === '.jpeg') extension = '.jpg';
 				}
 
-				const base64Data = icon.dataUrl.replace(/^data:image\/\w+;base64,/, '');
+				const base64Data = icon.dataUrl.replace(/^data:image\/[^;]+;base64,/, '');
 				const fileName = `_folder_icon${extension}`;
 
 				// writeFile with 'base64' encoding decodes the base64 string to binary
