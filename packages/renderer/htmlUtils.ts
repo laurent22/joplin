@@ -140,14 +140,18 @@ class HtmlUtils {
 		interface TagStackEntry {
 			name: string;
 			displayNone: boolean;
-			visibilityHidden: boolean;
+			// Tracks the visibility state this element introduced.
+			// 'hidden' = this element set visibility:hidden
+			// 'visible' = this element overrode an ancestor's visibility:hidden
+			// null = this element didn't change visibility
+			visibilityChange: 'hidden' | 'visible' | null;
+			// The visibilityHiddenDepth before this element was opened,
+			// used to restore state when a visibility:visible element closes.
+			savedVisibilityDepth: number;
 		}
 
 		const tagStack: TagStackEntry[] = [];
-		// display:none hides the element and all descendants unconditionally.
 		let displayNoneDepth = 0;
-		// visibility:hidden hides text, but a child with visibility:visible
-		// can override it. We track inherited depth separately.
 		let visibilityHiddenDepth = 0;
 
 		const currentTag = () => {
@@ -166,23 +170,26 @@ class HtmlUtils {
 			onopentag: (name: string, attribs: Record<string, string>) => {
 				const style = attribs?.style ?? '';
 				const isDisplayNone = hasDisplayNone(style);
-				// visibility:visible on a child resets inherited visibility:hidden
-				let isVisibilityHidden = false;
+
+				let visibilityChange: 'hidden' | 'visible' | null = null;
+				const savedVisibilityDepth = visibilityHiddenDepth;
+
 				if (hasVisibilityHidden(style)) {
-					isVisibilityHidden = true;
+					visibilityChange = 'hidden';
+					visibilityHiddenDepth++;
 				} else if (hasVisibilityVisible(style) && visibilityHiddenDepth > 0) {
-					isVisibilityHidden = false;
+					visibilityChange = 'visible';
 					visibilityHiddenDepth = 0;
 				}
 
 				tagStack.push({
 					name: name.toLowerCase(),
 					displayNone: isDisplayNone,
-					visibilityHidden: isVisibilityHidden,
+					visibilityChange,
+					savedVisibilityDepth,
 				});
 
 				if (isDisplayNone) displayNoneDepth++;
-				if (isVisibilityHidden) visibilityHiddenDepth++;
 			},
 
 			ontext: (decodedText: string) => {
@@ -195,7 +202,9 @@ class HtmlUtils {
 				const entry = tagStack.length ? tagStack[tagStack.length - 1] : null;
 				if (entry && entry.name === name.toLowerCase()) {
 					if (entry.displayNone) displayNoneDepth = Math.max(0, displayNoneDepth - 1);
-					if (entry.visibilityHidden) visibilityHiddenDepth = Math.max(0, visibilityHiddenDepth - 1);
+					if (entry.visibilityChange) {
+						visibilityHiddenDepth = entry.savedVisibilityDepth;
+					}
 					tagStack.pop();
 				}
 			},
