@@ -285,14 +285,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 				style={styles.dateTimeInput}
 			/>;
 		} else if (this.props.inputType === 'tags') {
-			const dedupedAutocomplete = [];
-			const seenKeys = new Set();
+			const uniqueAutocomplete = [];
+			const seenLabels = new Set();
 			const autocompleteOptions = this.props.autocomplete || [];
 			for (const option of autocompleteOptions) {
 				const key = (option.label || '').trim().normalize('NFC').toLowerCase();
-				if (!seenKeys.has(key)) {
-					dedupedAutocomplete.push(option);
-					seenKeys.add(key);
+				if (!seenLabels.has(key)) {
+					uniqueAutocomplete.push(option);
+					seenLabels.add(key);
 				}
 			}
 
@@ -311,7 +311,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 				isMulti={true}
 				isClearable={false}
 				backspaceRemovesValue={true}
-				options={dedupedAutocomplete}
+				options={uniqueAutocomplete}
 				onChange={onSelectChange}
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onKeyDown={(event: any) => onKeyDown(event)}
