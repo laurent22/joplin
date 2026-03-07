@@ -6,7 +6,7 @@ import { EditorState, Prec, StateField } from '@codemirror/state';
 import { deleteMarkupBackward, markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import markdownMathExtension from './extensions/markdownMathExtension';
-import markdownHighlightExtension from './extensions/markdownHighlightExtension';
+import markdownHighlightExtension, { markdownInsertExtension } from './extensions/markdownHighlightExtension';
 import markdownFrontMatterExtension from './extensions/markdownFrontMatterExtension';
 import lookUpLanguage from './utils/markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
@@ -44,7 +44,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 						markdownFrontMatterExtension,
 
 						settings.markdownMarkEnabled ? markdownHighlightExtension : [],
-
+						settings.markdownInsertEnabled ? markdownInsertExtension : [],
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? markdownMathExtension : [],
 					],

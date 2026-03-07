@@ -6,12 +6,27 @@ import { ContextMenuItemType, EditContextMenuFilterObject } from '@joplin/lib/se
 import eventManager from '@joplin/lib/eventManager';
 import CommandService from '@joplin/lib/services/CommandService';
 import { type MenuItem as MenuItemType } from 'electron';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 const MenuItem = bridge().MenuItem;
 const logger = Logger.create('contextMenuUtils');
 
 // Re-export for backward compatibility
 export { ContextMenuItemType };
+
+// Resolves whether a resource-type item is actually a note link.
+// Falls back to Resource on error or if the item is not found.
+export const resolveContextMenuItemType = async (itemType: ContextMenuItemType, resourceId: string): Promise<ContextMenuItemType> => {
+	if (itemType !== ContextMenuItemType.Resource || !resourceId) return itemType;
+	try {
+		const item = await BaseItem.loadItemById(resourceId);
+		if (item?.type_ === ModelType.Note) return ContextMenuItemType.NoteLink;
+	} catch (error) {
+		logger.warn('resolveContextMenuItemType: failed to load item, defaulting to Resource', error);
+	}
+	return ContextMenuItemType.Resource;
+};
 
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType;

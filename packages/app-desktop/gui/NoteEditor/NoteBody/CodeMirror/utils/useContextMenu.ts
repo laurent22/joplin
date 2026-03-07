@@ -11,7 +11,7 @@ import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl'
 import bridge from '../../../../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
-import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorContextMenuFilter } from '../../../utils/contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorContextMenuFilter, resolveContextMenuItemType } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
@@ -183,8 +183,10 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		const showResourceContextMenu = async (resourceId: string, type: ResourceMarkupType) => {
 			const menu = new Menu();
+			const baseType = type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource;
+			const itemType = await resolveContextMenuItemType(baseType, resourceId);
 			const contextMenuOptions: ContextMenuOptions = {
-				itemType: type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource,
+				itemType,
 				resourceId,
 				filename: null,
 				mime: null,

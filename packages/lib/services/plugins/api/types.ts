@@ -443,6 +443,7 @@ export enum ContextMenuItemType {
 	Resource = 'resource',
 	Text = 'text',
 	Link = 'link',
+	NoteLink = 'noteLink',
 }
 
 export interface EditContextMenuFilterObject {
