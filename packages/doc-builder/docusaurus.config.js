@@ -214,6 +214,12 @@ const config = {
 						label: 'Help',
 					},
 					{
+						to: process.env.WEBSITE_BASE_URL + '/plugins',
+						label: 'Plugins',
+						position: 'right',
+						target: '_self',
+					},
+					{
 						to: 'https://discourse.joplinapp.org',
 						label: 'Forum',
 						position: 'right',
