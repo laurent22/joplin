@@ -43,7 +43,8 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 						// FrontMatter support (YAML blocks at start of document)
 						markdownFrontMatterExtension,
 
-						settings.markdownMarkEnabled ? markdownHighlightExtension : [],					settings.markdownInsertEnabled ? markdownInsertExtension : [],
+						settings.markdownMarkEnabled ? markdownHighlightExtension : [],
+						settings.markdownInsertEnabled ? markdownInsertExtension : [],
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? markdownMathExtension : [],
 					],
