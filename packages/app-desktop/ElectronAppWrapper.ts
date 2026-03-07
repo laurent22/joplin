@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -24,10 +24,8 @@ import { msleep, Second } from '@joplin/utils/time';
 import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
 import getAppName from '@joplin/lib/getAppName';
 import { execCommand } from '@joplin/utils';
-
-// Window background colors for theme support
-const DARK_BACKGROUND_COLOR = '#333';
-const LIGHT_BACKGROUND_COLOR = '#fff';
+import { themeStyle } from '@joplin/lib/theme';
+import Setting from '@joplin/lib/models/Setting';
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
@@ -230,6 +228,10 @@ export default class ElectronAppWrapper {
 		// Load the previous state with fallback to defaults
 		const windowState = windowStateKeeper(stateOptions);
 
+		// Get initial theme colors
+		const initialTheme = themeStyle(Setting.value('theme'));
+		const initialBackgroundColor = initialTheme.backgroundColor;
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const windowOptions: any = {
 			x: windowState.x,
@@ -241,7 +243,14 @@ export default class ElectronAppWrapper {
 			// A backgroundColor is needed to enable sub-pixel rendering.
 			// Based on https://www.electronjs.org/docs/latest/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do,
 			// this needs to be a non-transparent color:
-			backgroundColor: nativeTheme.shouldUseDarkColors ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR,
+			backgroundColor: initialBackgroundColor,
+			// Enable title bar overlay on Windows/Linux for custom title bar colors
+			titleBarStyle: (process.platform === 'win32' || process.platform === 'linux') ? 'hidden' : 'default',
+			titleBarOverlay: (process.platform === 'win32' || process.platform === 'linux') ? {
+				color: initialBackgroundColor,
+				symbolColor: initialTheme.color,
+				height: 30,
+			} : false,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -608,23 +617,32 @@ export default class ElectronAppWrapper {
 		this.electronApp_.hide();
 	}
 
-	public updateWindowBackgroundColor(isDark: boolean) {
+	public updateWindowBackgroundColor(themeId: number) {
 		if (!this.win_) return;
 
-		// Update native theme source to match the selected theme
-		// This updates the title bar and system UI elements
-		// Wrap in try-catch to handle potential "Object has been destroyed" errors on Linux
+		// Get theme colors from the actual theme definition
+		const theme = themeStyle(themeId);
+		const backgroundColor = theme.backgroundColor;
+		const textColor = theme.color;
+
+		// Update window background color
 		try {
-			nativeTheme.themeSource = isDark ? 'dark' : 'light';
+			this.win_.setBackgroundColor(backgroundColor);
 		} catch (error) {
-			// On some Linux systems, setting themeSource can fail if the window is being destroyed
-			// Log the error but don't crash the app
-			this.logger().warn('Failed to update nativeTheme.themeSource:', error);
+			this.logger().warn('Failed to update window background color:', error);
 		}
 
-		// Update window background color for consistency
-		const backgroundColor = isDark ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR;
-		this.win_.setBackgroundColor(backgroundColor);
+		// Update title bar overlay on Windows/Linux
+		if (process.platform === 'win32' || process.platform === 'linux') {
+			try {
+				this.win_.setTitleBarOverlay({
+					color: backgroundColor,
+					symbolColor: textColor,
+				});
+			} catch (error) {
+				this.logger().warn('Failed to update title bar overlay:', error);
+			}
+		}
 	}
 
 	public buildDir() {

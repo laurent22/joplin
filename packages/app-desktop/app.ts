@@ -65,8 +65,6 @@ import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
-import { themeStyle } from '@joplin/lib/theme';
-import { ThemeAppearance } from '@joplin/lib/themes/type';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -202,9 +200,7 @@ class Application extends BaseApplication {
 	}
 
 	private updateWindowBackgroundForTheme(themeId: number) {
-		const theme = themeStyle(themeId);
-		const isDark = theme.appearance === ThemeAppearance.Dark;
-		bridge().updateWindowBackgroundColor(isDark);
+		bridge().updateWindowBackgroundColor(themeId);
 	}
 
 	private bridge_nativeThemeUpdated() {

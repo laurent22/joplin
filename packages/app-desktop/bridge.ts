@@ -512,8 +512,8 @@ export class Bridge {
 	public shouldUseDarkColors() {
 		return nativeTheme.shouldUseDarkColors;
 	}
-	public updateWindowBackgroundColor(isDark: boolean) {
-		this.electronWrapper_.updateWindowBackgroundColor(isDark);
+	public updateWindowBackgroundColor(themeId: number) {
+		this.electronWrapper_.updateWindowBackgroundColor(themeId);
 	}
 
 	public addEventListener(name: string, fn: ()=> void) {
