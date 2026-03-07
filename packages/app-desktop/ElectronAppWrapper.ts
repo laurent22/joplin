@@ -610,6 +610,19 @@ export default class ElectronAppWrapper {
 
 	public updateWindowBackgroundColor(isDark: boolean) {
 		if (!this.win_) return;
+
+		// Update native theme source to match the selected theme
+		// This updates the title bar and system UI elements
+		// Wrap in try-catch to handle potential "Object has been destroyed" errors on Linux
+		try {
+			nativeTheme.themeSource = isDark ? 'dark' : 'light';
+		} catch (error) {
+			// On some Linux systems, setting themeSource can fail if the window is being destroyed
+			// Log the error but don't crash the app
+			this.logger().warn('Failed to update nativeTheme.themeSource:', error);
+		}
+
+		// Update window background color for consistency
 		const backgroundColor = isDark ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR;
 		this.win_.setBackgroundColor(backgroundColor);
 	}
