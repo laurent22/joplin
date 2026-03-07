@@ -22,7 +22,7 @@ import { MenuChoice } from '../../DialogManager/types';
 import NewNoteButton from './NewNoteButton';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
-import RearrangeNotesModal from './RearrangeNotesModal';
+import ChangeNotePositionModal from './ChangeNotePositionModal';
 
 interface Props {
 	dispatch: Dispatch;
@@ -53,8 +53,8 @@ interface State {
 
 interface ComponentProps extends Props {
 	dialogManager: DialogControl;
-	rearrangeModalVisible: boolean;
-	setRearrangeModalVisible: (visible: boolean)=> void;
+	reorderModalVisible: boolean;
+	setReorderModalVisible: (visible: boolean)=> void;
 }
 
 type Styles = Record<string, ViewStyle|TextStyle>;
@@ -63,7 +63,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 	private onAppStateChangeSub_: NativeEventSubscription = null;
 	private styles_: Record<number, Styles> = {};
 	private folderPickerOptions_: FolderPickerOptions;
-	private rearrangeInProgress_ = false;
+	private reorderInProgress_ = false;
 
 	public constructor(props: ComponentProps) {
 		super(props);
@@ -160,7 +160,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		return '';
 	}
 
-	public canRearrangeNotes(): boolean {
+	public canReorderNote(): boolean {
 		const { notesParentType, folders, selectedFolderId } = this.props;
 
 		if (Setting.value('notes.sortOrder.field') !== 'order') return false;
@@ -288,20 +288,20 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		return this.folderPickerOptions_;
 	}
 
-	private onRearrangeButtonPress = () => {
-		this.props.setRearrangeModalVisible(true);
+	private onReorderButtonPress = () => {
+		this.props.setReorderModalVisible(true);
 	};
 
-	private onRearrangeModalClose = () => {
-		this.props.setRearrangeModalVisible(false);
+	private onReorderModalClose = () => {
+		this.props.setReorderModalVisible(false);
 	};
 
-	private onRearrangeConfirm = async (targetIndex: number) => {
-		if (this.rearrangeInProgress_) return;
+	private onReorderConfirm = async (targetIndex: number) => {
+		if (this.reorderInProgress_) return;
 		const selectedNoteId = this.props.selectedNoteIds[0];
 		const selectedFolderId = this.props.selectedFolderId;
 		if (!selectedNoteId || !selectedFolderId) return;
-		this.rearrangeInProgress_ = true;
+		this.reorderInProgress_ = true;
 
 		try {
 			await Note.insertNotesAt(
@@ -312,7 +312,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 				this.props.showCompletedTodos,
 			);
 
-			this.props.setRearrangeModalVisible(false);
+			this.props.setReorderModalVisible(false);
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 
 			const newProps = { ...this.props, notesSource: '' };
@@ -320,7 +320,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 		} catch (error) {
 			alert(_('Could not move note: %s', error.message));
 		} finally {
-			this.rearrangeInProgress_ = false;
+			this.reorderInProgress_ = false;
 		}
 	};
 
@@ -360,7 +360,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 		// Ensure that screen readers can't focus the notes list when it isn't visible.
 		const accessibilityHidden = !this.props.visible;
-		const canRearrange = this.canRearrangeNotes();
+		const canReorder = this.canReorderNote();
 		const singleNoteSelected = this.props.selectedNoteIds.length === 1;
 		const selectedNote = singleNoteSelected ? this.props.notes.find(n => n.id === this.props.selectedNoteIds[0]) : null;
 
@@ -377,18 +377,18 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 					folderPickerOptions={this.folderPickerOptions()}
 					showSearchButton={true}
 					showSideMenuButton={true}
-					showRearrangeButton={canRearrange && this.props.noteSelectionEnabled}
-					rearrangeButtonDisabled={!singleNoteSelected}
-					onRearrangeButtonPress={this.onRearrangeButtonPress}
+					showReorderButton={canReorder && this.props.noteSelectionEnabled}
+					reorderButtonDisabled={!singleNoteSelected}
+					onReorderButtonPress={this.onReorderButtonPress}
 				/>
 				<NoteList />
 				{actionButtonComp}
-				<RearrangeNotesModal
-					visible={this.props.rearrangeModalVisible}
+				<ChangeNotePositionModal
+					visible={this.props.reorderModalVisible}
 					selectedNote={selectedNote}
 					notes={this.props.notes}
-					onClose={this.onRearrangeModalClose}
-					onConfirm={this.onRearrangeConfirm}
+					onClose={this.onReorderModalClose}
+					onConfirm={this.onReorderConfirm}
 					themeId={this.props.themeId}
 					uncompletedTodosOnTop={this.props.uncompletedTodosOnTop}
 				/>
@@ -399,14 +399,14 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 const NotesScreenWrapper: React.FC<Props> = props => {
 	const dialogManager = useContext(DialogContext);
-	const [rearrangeModalVisible, setRearrangeModalVisible] = useState(false);
+	const [reorderModalVisible, setReorderModalVisible] = useState(false);
 
 	return (
 		<NotesScreenComponent
 			{...props}
 			dialogManager={dialogManager}
-			rearrangeModalVisible={rearrangeModalVisible}
-			setRearrangeModalVisible={setRearrangeModalVisible}
+			reorderModalVisible={reorderModalVisible}
+			setReorderModalVisible={setReorderModalVisible}
 		/>
 	);
 };

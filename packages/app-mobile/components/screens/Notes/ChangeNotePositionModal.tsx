@@ -100,7 +100,7 @@ const useStyles = (themeId: number) => {
 	}, [themeId]);
 };
 
-const RearrangeNotesModal: React.FC<Props> = (props) => {
+const ChangeNotePositionModal: React.FC<Props> = (props) => {
 	const { visible, selectedNote, notes, onClose, onConfirm, themeId, uncompletedTodosOnTop } = props;
 	const styles = useStyles(themeId);
 	const theme = themeStyle(themeId);
@@ -210,7 +210,7 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 			backgroundColor={theme.backgroundColorTransparent2}
 			containerStyle={styles.container}
 		>
-			<Text style={styles.heading}>{_('Re-arrange notes')}</Text>
+			<Text style={styles.heading}>{_('Change note position')}</Text>
 			<Text style={styles.description}>
 				{_('Move note "%s" below the selected note, or move it to the top, if allowed', truncatedTitle)}
 			</Text>
@@ -276,4 +276,4 @@ const RearrangeNotesModal: React.FC<Props> = (props) => {
 	);
 };
 
-export default RearrangeNotesModal;
+export default ChangeNotePositionModal;
