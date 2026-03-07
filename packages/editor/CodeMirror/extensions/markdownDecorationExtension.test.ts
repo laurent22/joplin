@@ -28,17 +28,20 @@ left    | right
 		expect(codeBlock.parentElement.classList.contains('.cm-tableRow'));
 	});
 
-	it('should decorate ++insert++ spans', async () => {
+	test.each([
+		0,
+		'before ++'.length + 1,
+	])('should decorate ++insert++ spans when the caret is at %i', async cursorPos => {
 		const editorText = 'before ++inserted++ after';
 		const editor = await createTestEditor(
 			editorText,
-			EditorSelection.cursor(0),
+			EditorSelection.cursor(cursorPos),
 			['Insert'],
 			[decoratorExtension],
 		);
 
 		const insertSpan = editor.contentDOM.querySelector('.cm-insert');
 		expect(insertSpan).not.toBeNull();
-		expect(insertSpan.textContent).toContain('inserted');
+		expect(insertSpan?.textContent).toContain('inserted');
 	});
 });
