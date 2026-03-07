@@ -253,6 +253,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 				multiline={multiline}
 				text={note?.title ?? ''}
 				updateState={textWrapCalculator_updateState}
+				readOnly={true}
 			/>
 			{
 				multiline ?

@@ -338,7 +338,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [editorPasteText, onEditorPaste]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const loadScript = async (script: any) => {
+	const loadScript = async (script: any, document: Document) => {
 		return new Promise((resolve) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let element: any = document.createElement('script');
@@ -367,6 +367,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	};
 
 	useEffect(() => {
+		if (!editorRoot) return () => { };
 		let cancelled = false;
 
 		async function loadScripts() {
@@ -393,13 +394,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				});
 			}
 
+			const ownerDoc = editorRoot.ownerDocument;
 			for (const s of scriptsToLoad) {
-				if (document.getElementById(s.id)) {
+				if (ownerDoc.getElementById(s.id)) {
 					s.loaded = true;
 					continue;
 				}
 
-				await loadScript(s);
+				await loadScript(s, ownerDoc);
 				if (cancelled) return;
 
 				s.loaded = true;
@@ -411,7 +413,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		return () => {
 			cancelled = true;
 		};
-	}, [styles.editor.codeMirrorTheme]);
+	}, [styles.editor.codeMirrorTheme, editorRoot]);
 
 	useEffect(() => {
 		if (!editorRoot) return () => {};

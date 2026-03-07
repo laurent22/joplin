@@ -1,6 +1,7 @@
-import Setting from '@joplin/lib/models/Setting';
-import eventManager from '@joplin/lib/eventManager';
+import Setting from '../../models/Setting';
+import eventManager from '../../eventManager';
 import { notesSortOrderFieldArray, setNotesSortOrder } from './notesSortOrderUtils';
+import { parseNotesParent } from '../../reducer';
 
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
@@ -44,7 +45,14 @@ export default class PerFolderSortOrderService {
 		eventManager.appStateOn('notesParentType', this.onFolderSelectionMayChange.bind(this, 'notesParentType'));
 		eventManager.appStateOn('selectedFolderId', this.onFolderSelectionMayChange.bind(this, 'selectedFolderId'));
 		eventManager.appStateOn('selectedSmartFilterId', this.onFolderSelectionMayChange.bind(this, 'selectedSmartFilterId'));
-		this.previousFolderId = Setting.value('activeFolderId');
+		// notesParent persists the last view type (including smart filters like All Notes),
+		// unlike activeFolderId which only tracks folder selections.
+		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+		if (notesParent.type === 'Folder' || notesParent.type === 'SmartFilter') {
+			this.previousFolderId = notesParent.selectedItemId;
+		} else {
+			this.previousFolderId = null;
+		}
 	}
 
 	public static isSet(folderId: string): boolean {
@@ -88,12 +96,40 @@ export default class PerFolderSortOrderService {
 					reverse = this.sharedSortOrder.reverse;
 				}
 			}
+			this.setSharedSortOrder(field, reverse);
 			PerFolderSortOrderService.setPerFolderSortOrder(targetId, field, reverse);
 		} else {
 			PerFolderSortOrderService.deletePerFolderSortOrder(targetId);
+			if (targetId === selectedId) {
+				this.loadSharedSortOrder();
+
+				const field = this.sharedSortOrder.field;
+				let reverse: boolean;
+				if (Setting.value('notes.perFieldReversalEnabled')) {
+					reverse = this.sharedSortOrder[field] as boolean;
+				} else {
+					reverse = this.sharedSortOrder.reverse;
+				}
+				setNotesSortOrder(field, reverse);
+			}
 		}
 	}
 
+	public static onSortOrderChange(folderId: string) {
+		const field = Setting.value('notes.sortOrder.field');
+		const reverse = Setting.value('notes.sortOrder.reverse');
+		if (!folderId) {
+			this.setSharedSortOrder(field, reverse);
+			return;
+		}
+		if (this.isSet(folderId)) {
+			// Folder has per-folder sort enabled, update its entry
+			this.setPerFolderSortOrder(folderId, field, reverse);
+		} else {
+			// Folder uses shared sort, update the shared sort
+			this.setSharedSortOrder(field, reverse);
+		}
+	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static onFolderSelectionMayChange(cause: string, event: any) {
