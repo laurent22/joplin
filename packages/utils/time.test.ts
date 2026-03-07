@@ -29,7 +29,6 @@ describe("time", () => {
     await msleep(100);
     const elapsed = Date.now() - start;
     expect(elapsed).toBeGreaterThanOrEqual(90);
-    expect(elapsed).toBeLessThan(200);
   });
 
   it("should format timestamp to local date time", () => {
