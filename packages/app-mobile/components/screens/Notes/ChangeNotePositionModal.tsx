@@ -175,14 +175,6 @@ const ChangeNotePositionModal: React.FC<Props> = (props) => {
 
 	// Reset selection when modal opens - select first valid option
 	React.useEffect(() => {
-		if (visible && listItems.length > 0) {
-			const firstValidItem = listItems.find(item => !item.isDisabled);
-			if (firstValidItem) {
-				setSelectedTargetValue(firstValidItem.id);
-			} else {
-				setSelectedTargetValue(MOVE_TO_TOP_VALUE);
-			}
-		}
 		if (visible) {
 			const firstValidItem = listItems.find(item => !item.isDisabled);
 			setSelectedTargetValue(firstValidItem ? firstValidItem.id : null);
