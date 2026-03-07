@@ -18,7 +18,7 @@ export type SvgXml = {
 
 type PageResolutionResult = { path: string };
 type PageIdMap = {
-	get: (pageId: string|null)=> PageResolutionResult|null;
+	get: (pageId: string | null)=> PageResolutionResult | null;
 };
 
 type NativeOneNoteConverter = (notebookPath: string, outputDirectory: string, baseDir: string)=> Promise<void>;
@@ -82,12 +82,15 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			return result;
 		}
 
-		const baseFolder = this.getEntryDirectory(unzipTempDirectory, files[0].path);
-		// If the first notebook file is directly at the archive root (no subfolder),
-		// use unzipTempDirectory as the base instead of joining with baseFolder.
+		const oneNoteEntries = files.filter(file =>
+			['.one', '.onepkg', '.onetoc2'].includes(extname(file.path).toLowerCase()) &&
+			basename(file.path) !== 'OneNote_RecycleBin.onetoc2',
+		);
+		const topLevelEntries = [...new Set(oneNoteEntries.map(file => this.getEntryDirectory(unzipTempDirectory, file.path)))];
+		const baseFolder = topLevelEntries.length === 1 ? topLevelEntries[0] : '';
 		const baseFolderIsFile = ['.one', '.onepkg', '.onetoc2'].includes(extname(baseFolder).toLowerCase());
-		const notebookBaseDir = baseFolderIsFile ? join(unzipTempDirectory, sep) : join(unzipTempDirectory, baseFolder, sep);
-		const outputDirectory2 = baseFolderIsFile ? tempOutputDirectory : join(tempOutputDirectory, baseFolder);
+		const notebookBaseDir = !baseFolder || baseFolderIsFile ? join(unzipTempDirectory, sep) : join(unzipTempDirectory, baseFolder, sep);
+		const outputDirectory2 = !baseFolder || baseFolderIsFile ? tempOutputDirectory : join(tempOutputDirectory, baseFolder);
 
 		const notebookFiles = files.filter(e => {
 			return extname(e.path) !== '.onetoc2' && basename(e.path) !== 'OneNote_RecycleBin.onetoc2';
@@ -165,7 +168,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		return {
-			get: (id: string|null)=>{
+			get: (id: string | null) => {
 				// Accepting null input matches the behavior of a JavaScript Map's .get method
 				// and simplifies handling 'not found' edge cases:
 				if (!id) return null;
