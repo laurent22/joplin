@@ -875,7 +875,7 @@ packages/app-mobile/contentScripts/markdownEditorBundle/useWebViewSetup.js
 packages/app-mobile/contentScripts/markdownEditorBundle/utils/useCodeMirrorPlugins.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.test.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.js
-packages/app-mobile/contentScripts/rendererBundle/contentScript/anchor.test.js
+packages/app-mobile/contentScripts/rendererBundle/contentScript/index.handleAnchorClick.test.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/index.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/types.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/utils/addPluginAssets.js

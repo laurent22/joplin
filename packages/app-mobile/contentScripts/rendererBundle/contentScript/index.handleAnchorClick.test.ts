@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 import { handleAnchorClick } from './index';
 
-describe('in-page anchor link handler', () => {
+describe('index.handleAnchorClick', () => {
 	let document: Document;
 	let scrollIntoViewMock: jest.Mock;
 
