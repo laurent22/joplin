@@ -35,23 +35,23 @@ describe('models/Tag', () => {
 		const tag2 = await Tag.loadByTitle('deux');
 		const tag3 = await Tag.loadByTitle('trois');
 
-		expect((await Tag.noteIds(tag1!.id)).sort()).toEqual([note1.id, note2.id].sort());
-		expect((await Tag.noteIds(tag2!.id)).sort()).toEqual([note3.id].sort());
-		expect((await Tag.noteIds(tag3!.id)).sort()).toEqual([].sort());
+		expect((await Tag.noteIds(tag1.id)).sort()).toEqual([note1.id, note2.id].sort());
+		expect((await Tag.noteIds(tag2.id)).sort()).toEqual([note3.id].sort());
+		expect((await Tag.noteIds(tag3.id)).sort()).toEqual([].sort());
 
-		expect(await Tag.hasNote(tag1!.id, note1.id)).toBe(true);
-		expect(await Tag.hasNote(tag1!.id, note2.id)).toBe(true);
-		expect(await Tag.hasNote(tag1!.id, note3.id)).toBe(false);
-		expect(await Tag.hasNote(tag2!.id, note1.id)).toBe(false);
-		expect(await Tag.hasNote(tag2!.id, note2.id)).toBe(false);
-		expect(await Tag.hasNote(tag2!.id, note3.id)).toBe(true);
-		expect(await Tag.hasNote(tag3!.id, note1.id)).toBe(false);
-		expect(await Tag.hasNote(tag3!.id, note2.id)).toBe(false);
-		expect(await Tag.hasNote(tag3!.id, note3.id)).toBe(false);
+		expect(await Tag.hasNote(tag1.id, note1.id)).toBe(true);
+		expect(await Tag.hasNote(tag1.id, note2.id)).toBe(true);
+		expect(await Tag.hasNote(tag1.id, note3.id)).toBe(false);
+		expect(await Tag.hasNote(tag2.id, note1.id)).toBe(false);
+		expect(await Tag.hasNote(tag2.id, note2.id)).toBe(false);
+		expect(await Tag.hasNote(tag2.id, note3.id)).toBe(true);
+		expect(await Tag.hasNote(tag3.id, note1.id)).toBe(false);
+		expect(await Tag.hasNote(tag3.id, note2.id)).toBe(false);
+		expect(await Tag.hasNote(tag3.id, note3.id)).toBe(false);
 
-		const notesTag1 = await Tag.notes(tag1!.id);
-		const notesTag2 = await Tag.notes(tag2!.id);
-		const notesTag3 = await Tag.notes(tag3!.id);
+		const notesTag1 = await Tag.notes(tag1.id);
+		const notesTag2 = await Tag.notes(tag2.id);
+		const notesTag3 = await Tag.notes(tag3.id);
 		expect(notesTag1.map(n => n.id).sort()).toEqual([note1.id, note2.id].sort());
 		expect(notesTag2.map(n => n.id).sort()).toEqual([note3.id].sort());
 		expect(notesTag3.map(n => n.id).sort()).toEqual([].sort());
@@ -68,10 +68,10 @@ describe('models/Tag', () => {
 
 		await Note.delete(note1.id, { toTrash: true });
 
-		expect(await Tag.noteIds(tag1!.id)).toEqual([note2.id]);
-		expect((await Tag.notes(tag1!.id)).map(n => n.id).sort()).toEqual([note2.id]);
-		expect(await Tag.hasNote(tag1!.id, note1.id)).toBe(false);
-		expect(await Tag.hasNote(tag1!.id, note2.id)).toBe(true);
+		expect(await Tag.noteIds(tag1.id)).toEqual([note2.id]);
+		expect((await Tag.notes(tag1.id)).map(n => n.id).sort()).toEqual([note2.id]);
+		expect(await Tag.hasNote(tag1.id, note1.id)).toBe(false);
+		expect(await Tag.hasNote(tag1.id, note2.id)).toBe(true);
 
 		const allWithNotes = await Tag.allWithNotes();
 		expect(allWithNotes[0].note_count).toBe(1);
@@ -84,7 +84,7 @@ describe('models/Tag', () => {
 		await Tag.setNoteTagsByTitles(note1.id, ['un', 'deux']);
 
 		const tagUn = await Tag.loadByTitle('un');
-		const hasThrown = await checkThrowAsync(async () => await Tag.save({ id: tagUn!.id, title: 'deux' }, { userSideValidation: true }));
+		const hasThrown = await checkThrowAsync(async () => await Tag.save({ id: tagUn.id, title: 'deux' }, { userSideValidation: true }));
 
 		expect(hasThrown).toBe(true);
 	});
@@ -227,7 +227,7 @@ describe('models/Tag', () => {
 		const tag2 = await Tag.loadByTitle('ökonomie');
 		expect(tag1).not.toBeNull();
 		expect(tag2).not.toBeNull();
-		expect(tag1!.id).toBe(tag2!.id);
+		expect(tag1.id).toBe(tag2.id);
 	});
 
 	it('should not create duplicate tags when tagging with existing titles (issue #14540)', async () => {
