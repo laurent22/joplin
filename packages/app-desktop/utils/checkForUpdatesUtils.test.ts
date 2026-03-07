@@ -127,7 +127,7 @@ describe('checkForUpdates', () => {
 		};
 
 		const releaseData = releaseDataWithExtension('-arm64.DMG');
-		const releaseInfo = extractVersionInfo([releaseData], 'darwin', 'arm64', false, {});
+		const releaseInfo = extractVersionInfo([releaseData], 'darwin', 'arm64', false, { });
 
 		// Should match, with uppercase .DMG
 		expect(releaseInfo).toMatchObject({
@@ -139,7 +139,7 @@ describe('checkForUpdates', () => {
 
 		// Should not match when the extension is invalid
 		expect(
-			extractVersionInfo([releaseDataWithExtension('-arm64.dmG')], 'darwin', 'arm64', false, {}),
+			extractVersionInfo([releaseDataWithExtension('-arm64.dmG')], 'darwin', 'arm64', false, { }),
 		).toMatchObject({
 			version: '2.12.4',
 			downloadUrl: null,
