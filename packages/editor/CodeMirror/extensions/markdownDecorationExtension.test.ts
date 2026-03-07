@@ -27,4 +27,18 @@ left    | right
 		expect(codeBlock.textContent).toBe('`foo`');
 		expect(codeBlock.parentElement.classList.contains('.cm-tableRow'));
 	});
+
+	it('should decorate ++insert++ spans', async () => {
+		const editorText = 'before ++inserted++ after';
+		const editor = await createTestEditor(
+			editorText,
+			EditorSelection.cursor(0),
+			['Insert'],
+			[decoratorExtension],
+		);
+
+		const insertSpan = editor.contentDOM.querySelector('.cm-insert');
+		expect(insertSpan).not.toBeNull();
+		expect(insertSpan.textContent).toContain('inserted');
+	});
 });
