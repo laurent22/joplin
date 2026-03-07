@@ -23,6 +23,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 			postMessageSyntax: ruleOptions.postMessageSyntax,
 			enableLongPress: ruleOptions.enableLongPress,
 			itemIdToUrl: ruleOptions.itemIdToUrl,
+			showNoteLinkIcon: ruleOptions.showNoteLinkIcon,
 		});
 
 		ruleOptions.context.currentLinks.push({

@@ -50,6 +50,7 @@ export type ListRendererDependency =
 	'item.selected' |
 	'item.size.height' |
 	'item.size.width' |
+	'note.checkboxes' |
 	'note.folder.title' |
 	'note.isWatched' |
 	'note.tags' |
@@ -59,6 +60,7 @@ export type ListRendererDependency =
 export type ListRendererItemValueTemplates = Record<string, string>;
 
 export const columnNames = [
+	'note.checkboxes',
 	'note.folder.title',
 	'note.is_todo',
 	'note.latitude',

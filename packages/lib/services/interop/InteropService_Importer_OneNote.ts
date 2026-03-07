@@ -4,7 +4,7 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes } from '../../path-utils';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
-import { join, resolve, normalize, sep, dirname, extname, basename, relative } from 'path';
+import { join, resolve, normalize, sep, extname, basename, relative, dirname } from 'path';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
@@ -18,7 +18,7 @@ export type SvgXml = {
 
 type PageResolutionResult = { path: string };
 type PageIdMap = {
-	get: (pageId: string)=> PageResolutionResult|null;
+	get: (pageId: string|null)=> PageResolutionResult|null;
 };
 
 type NativeOneNoteConverter = (notebookPath: string, outputDirectory: string, baseDir: string)=> Promise<void>;
@@ -120,7 +120,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		logger.info('Postprocessing imported content...');
-		await this.postprocessGeneratedHtml_(tempOutputDirectory);
+		await this.postprocessGeneratedHtmlInFolder_(tempOutputDirectory);
 
 		logger.info('Importing HTML into Joplin');
 		const importer = new InteropService_Importer_Md();
@@ -162,7 +162,11 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		return {
-			get: (id: string)=>{
+			get: (id: string|null)=>{
+				// Accepting null input matches the behavior of a JavaScript Map's .get method
+				// and simplifies handling 'not found' edge cases:
+				if (!id) return null;
+
 				const path = pageIdToPath.get(id.toUpperCase());
 
 				if (path) {
@@ -173,32 +177,42 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		};
 	}
 
-	private async postprocessGeneratedHtml_(baseFolder: string) {
+	private async postprocessGeneratedHtmlInFolder_(baseFolder: string) {
 		const htmlFiles = await this.getValidHtmlFiles_(resolve(baseFolder));
-
-		const pipeline = [
-			(dom: Document, currentFolder: string) => this.extractSvgsToFiles_(dom, currentFolder),
-			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder),
-			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
-		];
+		const idMap = await this.buildIdMap_(baseFolder);
 
 		for (const file of htmlFiles) {
 			const fileLocation = join(baseFolder, file.path);
 			const originalHtml = await shim.fsDriver().readFile(fileLocation);
-			const dom = this.domParser.parseFromString(originalHtml, 'text/html');
-
-			let changed = false;
-			for (const task of pipeline) {
-				const result = await task(dom, dirname(fileLocation));
-				changed ||= result;
-			}
+			const { changed, html } = await this.postprocessGeneratedHtml_(originalHtml, dirname(fileLocation), idMap);
 
 			if (changed) {
-				// Don't use xmlSerializer here: It breaks <style> blocks.
-				const updatedHtml = `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`;
-				await shim.fsDriver().writeFile(fileLocation, updatedHtml, 'utf-8');
+				await shim.fsDriver().writeFile(fileLocation, html, 'utf-8');
 			}
 		}
+	}
+
+	// Public to allow testing
+	public async postprocessGeneratedHtml_(html: string, baseFolder: string, idMap: PageIdMap) {
+		const pipeline = [
+			(dom: Document, currentFolder: string) => this.extractSvgsToFiles_(dom, currentFolder),
+			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder, idMap),
+			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
+		];
+		const dom = this.domParser.parseFromString(html, 'text/html');
+
+		let changed = false;
+		for (const task of pipeline) {
+			const result = await task(dom, baseFolder);
+			changed ||= result;
+		}
+
+		if (changed) {
+			// Don't use xmlSerializer here: It breaks <style> blocks.
+			html = `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`;
+		}
+
+		return { changed, html };
 	}
 
 	private async getValidHtmlFiles_(baseFolder: string) {
@@ -207,13 +221,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		return htmlFiles;
 	}
 
-	private async convertExternalLinksToInternalLinks_(dom: Document, baseFolder: string) {
-		let idMap_: PageIdMap|null = null;
-		const idMap = async () => {
-			idMap_ ??= await this.buildIdMap_(baseFolder);
-			return idMap_;
-		};
-
+	private async convertExternalLinksToInternalLinks_(dom: Document, baseFolder: string, idMap: PageIdMap) {
 		const links = dom.querySelectorAll<HTMLAnchorElement>('a[href^="onenote"]');
 		let changed = false;
 		for (const link of links) {
@@ -224,11 +232,11 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const prefixRemoved = link.href.substring(separatorIndex);
 			const params = new URLSearchParams(prefixRemoved);
 			const pageId = params.get('page-id');
-			const targetPage = (await idMap()).get(pageId);
+			const targetPage = idMap.get(pageId);
 
 			// The target page might be in a different notebook (imported separately)
 			if (!targetPage) {
-				logger.info('Page not found for internal link. Page ID: ', pageId);
+				logger.info('Page not found for internal link. Page ID: ', pageId, 'link:', JSON.stringify(link.href));
 			} else {
 				changed = true;
 				link.href = relative(baseFolder, targetPage.path);

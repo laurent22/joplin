@@ -71,6 +71,7 @@ export interface RenderOptions {
 	// Forwarded renderer settings
 	splitted?: boolean;
 	mapsToLine?: boolean;
+	showNoteLinkIcon?: boolean;
 }
 
 type CancelEvent = { cancelled: boolean };

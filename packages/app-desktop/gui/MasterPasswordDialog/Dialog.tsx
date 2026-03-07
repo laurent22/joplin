@@ -3,7 +3,7 @@ import { useCallback, useState, useEffect, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
 import { getMasterPasswordStatus, getMasterPasswordStatusMessage, checkHasMasterPasswordEncryptedData, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword, getMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import { reg } from '@joplin/lib/registry';
@@ -138,6 +138,7 @@ export default function(props: Props) {
 	}, [currentPassword]);
 
 	function renderPasswordForm() {
+		const passwordsMatch = password1 === password2;
 		const renderCurrentPassword = () => {
 			if (!showCurrentPassword) return null;
 
@@ -176,12 +177,22 @@ export default function(props: Props) {
 							value={password1}
 							onChange={onPasswordChange1}
 						/>
+
 						{needToRepeatPassword && (
-							<LabelledPasswordInput
-								labelText={_('Re-enter password')}
-								value={password2}
-								onChange={onPasswordChange2}
-							/>
+							<>
+								<LabelledPasswordInput
+									labelText={_('Re-enter password')}
+									value={password2}
+									onChange={onPasswordChange2}
+									valid={password2 ? passwordsMatch : undefined}
+								/>
+
+								{password2 && !passwordsMatch && (
+									<p className="error-message">
+										{_('Passwords do not match')}
+									</p>
+								)}
+							</>
 						)}
 					</div>
 					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>

@@ -27,6 +27,7 @@ export interface RenderSettings {
 
 	splitted?: boolean; // Move CSS into a separate output
 	mapsToLine?: boolean; // Sourcemaps
+	showNoteLinkIcon?: boolean;
 
 	createEditPopupSyntax: string;
 	destroyEditPopupSyntax: string;
@@ -136,6 +137,7 @@ export default class Renderer {
 			splitted: settings.splitted,
 			mapsToLine: settings.mapsToLine,
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
+			showNoteLinkIcon: settings.showNoteLinkIcon,
 			globalSettings: settings.globalSettings,
 		};
 

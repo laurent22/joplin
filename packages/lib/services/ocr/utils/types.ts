@@ -9,7 +9,7 @@ export const emptyRecognizeResult = (): RecognizeResult => {
 	};
 };
 
-export type RecognizeResultBoundingBox = [number, number, number, number]; // x0, y0, x1, y1
+export type RecognizeResultBoundingBox = [number, number, number, number]; // x0, x1, y0, y1
 
 export interface RecognizeResultWord {
 	t: string;
@@ -26,4 +26,14 @@ export interface RecognizeResult {
 	ocr_text: string;
 	ocr_details: string;
 	ocr_error: string;
+}
+
+// PDF OCR details contain per-page text positions
+export interface PdfOcrPage {
+	lines: RecognizeResultLine[];
+}
+
+export interface PdfOcrDetails {
+	version: 1;
+	pages: PdfOcrPage[];
 }

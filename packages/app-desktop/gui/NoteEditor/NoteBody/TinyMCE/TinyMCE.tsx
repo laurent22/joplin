@@ -40,7 +40,7 @@ const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
 import useTabIndenter from './utils/useTabIndenter';
 import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
-import useDocument from '../../../hooks/useDocument';
+import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import useEditDialog from './utils/useEditDialog';
 import useEditDialogEventListeners from './utils/useEditDialogEventListeners';
 import Setting from '@joplin/lib/models/Setting';
@@ -705,6 +705,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const containerWindow = editorContainerDom.defaultView as any;
+			const isDefaultEnglishLocale = ['en_US', 'en_GB'].includes(language);
+
+			if (!isDefaultEnglishLocale) {
+				await loadScript({
+					id: `tinyMceLang_${language}`,
+					src: `${bridge().vendorDir()}/lib/tinymce/langs/${language}.js`,
+				}, editorContainerDom);
+			}
+
 			const editors = await containerWindow.tinymce.init({
 				selector: `#${editorContainer.id}`,
 
@@ -735,7 +744,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				// Handle the first table row as table header.
 				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
 				table_header_type: 'sectionCells',
-				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
+				language: isDefaultEnglishLocale ? undefined : language,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
 				// See https://www.tiny.cloud/docs/tinymce/latest/tinymce-and-csp/#content_security_policy

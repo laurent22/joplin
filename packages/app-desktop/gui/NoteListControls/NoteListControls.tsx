@@ -6,7 +6,7 @@ import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button'
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
-import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
+import { notesSortOrderNextField } from '@joplin/lib/services/sortOrder/notesSortOrderUtils';
 import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
