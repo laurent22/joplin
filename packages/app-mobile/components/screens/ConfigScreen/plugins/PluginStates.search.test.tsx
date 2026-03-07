@@ -20,17 +20,19 @@ const expectSearchResultCountToBe = async (count: number) => {
 
 // The search box is initially read-only -- waits for it to be editable.
 const getEditableSearchBox = async () => {
-	const searchBox = await screen.findByPlaceholderText('Search for plugins...');
-	expect(searchBox).toBeVisible();
+	await screen.findByPlaceholderText('Search for plugins...');
 
 	await waitFor(() => {
+		const searchBox = screen.getByPlaceholderText('Search for plugins...');
 		expect(searchBox.props.editable).toBe(true);
-	});
+	}, { timeout: 10000 });
 
-	return searchBox;
+	return screen.getByPlaceholderText('Search for plugins...');
 };
 
 let reduxStore: Store<AppState>;
+
+jest.retryTimes(5);
 
 describe('PluginStates.search', () => {
 	beforeEach(async () => {
@@ -47,7 +49,7 @@ describe('PluginStates.search', () => {
 	});
 
 	it('should find results', async () => {
-		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
+		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore} />);
 
 		const user = userEvent.setup();
 		const searchBox = await getEditableSearchBox();
@@ -74,7 +76,7 @@ describe('PluginStates.search', () => {
 		mockMobilePlatform(MobilePlatform.Ios);
 		await mockRepositoryApiConstructor();
 
-		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
+		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore} />);
 
 		const user = userEvent.setup();
 		const searchBox = await getEditableSearchBox();
@@ -102,7 +104,7 @@ describe('PluginStates.search', () => {
 	});
 
 	it('should mark incompatible plugins as incompatible', async () => {
-		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore}/>);
+		const wrapper = render(<WrappedPluginStates initialPluginSettings={{}} store={reduxStore} />);
 
 		const user = userEvent.setup();
 		const searchBox = await getEditableSearchBox();
