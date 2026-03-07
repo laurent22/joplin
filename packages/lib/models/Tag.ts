@@ -173,7 +173,9 @@ export default class Tag extends BaseItem {
 
 	public static async loadByTitle(title: string): Promise<TagEntity | null> {
 		const normalizedTitle = title.trim().normalize('NFC');
-		const tag = await this.loadByField('title', normalizedTitle, { caseInsensitive: true });
+		// We use a manual query here instead of loadByField to ensure deterministic ordering (ORDER BY id ASC)
+		// when visually similar tags exist in the database.
+		const tag = await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY id ASC`, [normalizedTitle]);
 		if (tag) return tag;
 
 		// Fallback for tags that might have different normalization or whitespace in the database.
@@ -249,7 +251,7 @@ export default class Tag extends BaseItem {
 	public static async save(o: TagEntity, options: any = null) {
 		options = {
 			dispatchUpdateAction: true,
-			userSideValidation: false, ...options
+			userSideValidation: false, ...options,
 		};
 
 		const tagToSave = { ...o };

@@ -285,6 +285,17 @@ export default class PromptDialog extends React.Component<Props, any> {
 				style={styles.dateTimeInput}
 			/>;
 		} else if (this.props.inputType === 'tags') {
+			const dedupedAutocomplete = [];
+			const seenKeys = new Set();
+			const autocompleteOptions = this.props.autocomplete || [];
+			for (const option of autocompleteOptions) {
+				const key = (option.label || '').trim().normalize('NFC').toLowerCase();
+				if (!seenKeys.has(key)) {
+					dedupedAutocomplete.push(option);
+					seenKeys.add(key);
+				}
+			}
+
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			inputComp = <CreatableSelect
 				className="tag-selector"
@@ -295,12 +306,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 				ref={this.answerInput_}
 				value={this.state.answer}
 				placeholder=""
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				components={makeAnimated() as any}
 				isMulti={true}
 				isClearable={false}
 				backspaceRemovesValue={true}
-				options={this.props.autocomplete}
+				options={dedupedAutocomplete}
 				onChange={onSelectChange}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onKeyDown={(event: any) => onKeyDown(event)}
 				filterOption={(option, rawInput) => {
 					const input = (rawInput || '').trim().normalize('NFC').toLowerCase();
