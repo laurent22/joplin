@@ -9,8 +9,8 @@
 #
 # APP_BASE_URL: This is the base public URL where the service will be running.
 #	- If Joplin Server needs to be accessible over the internet, configure APP_BASE_URL as follows: https://example.com/joplin. 
-#	- If Joplin Server does not need to be accessible over the internet, set the APP_BASE_URL to your server's hostname. 
-#     For Example: http://[hostname]:22300. The base URL can include the port.
+#	- If Joplin Server does not need to be accessible over the internet, set the APP_BASE_URL with your server's hostname. 
+#     E.g., if your server's hostname is localhost, set it to http://localhost:22300. The base URL can include the port.
 # APP_PORT: The local port on which the Docker container will listen. 
 #	- This would typically be mapped to port to 443 (TLS) with a reverse proxy.
 #	- If Joplin Server does not need to be accessible over the internet, the port can be mapped to 22300.
@@ -27,7 +27,7 @@ services:
             - full
             - server
         volumes:
-            - ./data/postgres:/var/lib/postgresql/data
+            - pgdata:/var/lib/postgresql/data
         networks:
             - app-network
         ports:
@@ -43,8 +43,11 @@ services:
             - full
             - server
         depends_on:
-            - db
-            - transcribe
+            db:
+                condition: service_started
+            transcribe:
+                condition: service_started
+                required: false
         ports:
             - "22300:22300"
         networks:
@@ -62,7 +65,7 @@ services:
             - POSTGRES_HOST=db
             - TRANSCRIBE_API_KEY=${TRANSCRIBE_API_KEY}
             - TRANSCRIBE_BASE_URL=http://transcribe:4567
-            - TRANSCRIBE_ENABLED=${TRANSCRIBE_ENABLED}
+            - TRANSCRIBE_ENABLED=${TRANSCRIBE_ENABLED:-0}
     transcribe-db:
         image: postgres:16
         profiles:
@@ -84,8 +87,8 @@ services:
         profiles:
             - full
         volumes:
-            - ${HTR_CLI_IMAGES_FOLDER}:/app/packages/transcribe/images
-            - ${HTR_CLI_MODELS_FOLDER}:/opt/models:ro
+            - ${HTR_CLI_IMAGES_FOLDER:-./data/images}:/app/packages/transcribe/images
+            - ${HTR_CLI_MODELS_FOLDER:-./data/models}:/opt/models:ro
         depends_on:
             - transcribe-db
         ports:
@@ -116,3 +119,5 @@ services:
             - HTR_CLI_IMAGES_FOLDER=/app/packages/transcribe/images
             - HTR_CLI_MODELS_FOLDER=/opt/models
 
+volumes:
+    pgdata:
