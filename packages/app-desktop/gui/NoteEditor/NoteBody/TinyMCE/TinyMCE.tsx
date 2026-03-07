@@ -122,6 +122,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const editorRef = useRef<Editor>(null);
 	editorRef.current = editor;
 
+	const patchedUndoManagerRef = useRef<Editor['undoManager'] | null>(null);
+
 	const styles = styles_(props);
 	// const theme = themeStyle(props.themeId);
 
@@ -1512,6 +1514,44 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.onWillChange, props.onChange, props.contentMarkupLanguage, props.contentOriginalCss, editor]);
+
+	useEffect(() => {
+		if (!editor) {
+			patchedUndoManagerRef.current = null;
+			return () => {};
+		}
+
+		const undoManager = editor.undoManager;
+		if (patchedUndoManagerRef.current === undoManager) {
+			return () => {};
+		}
+
+		const win = editor.getWin();
+		if (!win) return () => {};
+
+		const originalUndo = undoManager.undo.bind(undoManager);
+		const originalRedo = undoManager.redo.bind(undoManager);
+
+		const saveAndRestoreScroll = (fn: ()=> ReturnType<typeof originalUndo>) => {
+			const scrollX = win.scrollX;
+			const scrollY = win.scrollY;
+			const result = fn();
+			win.scrollTo(scrollX, scrollY);
+			return result;
+		};
+
+		undoManager.undo = () => saveAndRestoreScroll(originalUndo);
+		undoManager.redo = () => saveAndRestoreScroll(originalRedo);
+		patchedUndoManagerRef.current = undoManager;
+
+		return () => {
+			if (patchedUndoManagerRef.current === undoManager) {
+				undoManager.undo = originalUndo;
+				undoManager.redo = originalRedo;
+				patchedUndoManagerRef.current = null;
+			}
+		};
+	}, [editor]);
 
 	// -----------------------------------------------------------------------------------------
 	// Destroy the editor when unmounting
