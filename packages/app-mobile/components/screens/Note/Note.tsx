@@ -7,7 +7,7 @@ import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
 import * as React from 'react';
-import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions, PixelRatio } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
@@ -135,7 +135,7 @@ interface State {
 	mode: NoteViewerMode;
 	readOnly: boolean;
 	searchVisible: boolean;
-	folder: FolderEntity|null;
+	folder: FolderEntity | null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	lastSavedNote: any;
 	isLoading: boolean;
@@ -151,7 +151,7 @@ interface State {
 	imageEditorResource: ResourceEntity;
 	imageEditorResourceFilepath: string;
 	noteResources: Record<string, ResourceInfo>;
-	newAndNoTitleChangeNoteId: boolean|null;
+	newAndNoTitleChangeNoteId: boolean | null;
 	noteLastLoadTime: number;
 
 	undoRedoButtonState: {
@@ -170,7 +170,7 @@ type ScrollEventSlice = { fraction: number };
 class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
 	// This isn't in this.state because we don't want changing scroll to trigger
 	// a re-render.
-	private lastBodyScroll: number|undefined = undefined;
+	private lastBodyScroll: number | undefined = undefined;
 
 	private saveActionQueues_: Record<string, AsyncActionQueue>;
 	private doFocusUpdate_: boolean;
@@ -195,7 +195,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private folderPickerOptions_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dialogbox: any;
-	private commandRegistration_: RegisteredRuntime|null = null;
+	private commandRegistration_: RegisteredRuntime | null = null;
 	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
 		return shared.noteComponent_change(this, 'body', saveEvent.body);
 	});
@@ -390,7 +390,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					this.setState({ showAudioRecorder: visible });
 				},
 				getMode: () => this.state.mode,
-				setMode: (mode: 'view'|'edit') => {
+				setMode: (mode: 'view' | 'edit') => {
 					this.setState({ mode });
 				},
 				dispatch: this.props.dispatch,
@@ -410,23 +410,27 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		if (this.useEditorBeta()) {
-			this.setState({ undoRedoButtonState: {
-				canUndo: !!event.undoDepth,
-				canRedo: !!event.redoDepth,
-			} });
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: !!event.undoDepth,
+					canRedo: !!event.redoDepth,
+				},
+			});
 		}
 	}
 
 	private undoRedoService_stackChange() {
 		if (!this.useEditorBeta()) {
-			this.setState({ undoRedoButtonState: {
-				canUndo: this.undoRedoService_.canUndo,
-				canRedo: this.undoRedoService_.canRedo,
-			} });
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: this.undoRedoService_.canUndo,
+					canRedo: this.undoRedoService_.canRedo,
+				},
+			});
 		}
 	}
 
-	private async undoRedo(type: 'undo'|'redo') {
+	private async undoRedo(type: 'undo' | 'redo') {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
@@ -541,9 +545,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
-			borderBottomColor: theme.dividerColor,
-			borderBottomWidth: 1,
 			maxHeight: '40%',
+		};
+
+		styles.titleSeparator = {
+			height: Math.max(1, PixelRatio.roundToNearestPixel(1)),
+			backgroundColor: theme.dividerColor,
 		};
 
 		styles.titleContainerTodo = { ...styles.titleContainer };
@@ -934,7 +941,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public async attachFile(
 		pickerResponse: PickerResponse,
 		fileType: string,
-	): Promise<ResourceEntity|null> {
+	): Promise<ResourceEntity | null> {
 		logger.debug('Attaching file:', pickerResponse?.uri);
 		if (!pickerResponse) {
 			// User has cancelled
@@ -1017,7 +1024,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return resource;
 	}
 
-	private async cameraView_onPhoto(data: CameraResult|CameraResult[]) {
+	private async cameraView_onPhoto(data: CameraResult | CameraResult[]) {
 		if (!Array.isArray(data)) {
 			data = [data];
 		}
@@ -1053,7 +1060,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async updateDrawing(svgData: string) {
-		let resource: ResourceEntity|null = this.state.imageEditorResource;
+		let resource: ResourceEntity | null = this.state.imageEditorResource;
 
 		if (!resource) {
 			resource = await this.attachNewDrawing(svgData);
@@ -1567,7 +1574,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		);
 	};
 
-	private onMarkdownEditorScroll = () => {};
+	private onMarkdownEditorScroll = () => { };
 
 	public onBodyViewerCheckboxChange(newBody: string) {
 		void this.saveOneProperty('body', newBody);
@@ -1648,9 +1655,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			return <PluginUserWebView
 				viewInfo={{ plugin: editorPlugin, view: editorView }}
 				themeId={this.props.themeId}
-				onLoadEnd={() => {}}
+				onLoadEnd={() => { }}
 				pluginHtmlContents={this.props.pluginHtmlContents}
-				setDialogControl={() => {}}
+				setDialogControl={() => { }}
 				style={{}}
 			/>;
 		};
@@ -1724,10 +1731,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
-							// need some extra padding for iOS so that the keyboard won't cover last line of the note
-							// see https://github.com/laurent22/joplin/issues/3607
-							// Property is gone as of RN 0.72?
-							// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
+						// need some extra padding for iOS so that the keyboard won't cover last line of the note
+						// see https://github.com/laurent22/joplin/issues/3607
+						// Property is gone as of RN 0.72?
+						// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
 						/>
 					);
 				} else {
@@ -1794,43 +1801,46 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			/>;
 
 		const titleComp = (
-			<View
-				style={titleContainerStyle}
-				onLayout={(e) => {
-					const width = e.nativeEvent.layout.width;
-					if (width !== this.state.titleContainerWidth) {
-						this.setState({ titleContainerWidth: width });
-					}
-				}}
-			>
-				<TextWrapCalculator
-					textCompStyle={this.styles().titleTextInput}
-					textCompContainerWidth={this.state.titleContainerWidth}
-					showMultilineToggle={this.state.showMultilineToggle}
-					multiline={this.state.multiline}
-					text={note.title}
-					updateState={textWrapCalculator_updateState}
-					readOnly={false}
-				/>
-				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
-				<TextInput
-					key={this.state.multiline ? 'multiLine' : 'singleLine'}
-					ref={this.titleTextFieldRef}
-					underlineColorAndroid="#ffffff00"
-					autoCapitalize="sentences"
-					style={this.styles().titleTextInput}
-					value={note.title}
-					onChangeText={this.title_changeText}
-					selectionColor={theme.textSelectionColor}
-					keyboardAppearance={theme.keyboardAppearance}
-					placeholder={_('Add title')}
-					placeholderTextColor={theme.colorFaded}
-					editable={!this.state.readOnly}
-					multiline={this.state.multiline}
-					submitBehavior = "blurAndSubmit"
-				/>
-				{ titleToggleButton }
-			</View>
+			<>
+				<View
+					style={titleContainerStyle}
+					onLayout={(e) => {
+						const width = e.nativeEvent.layout.width;
+						if (width !== this.state.titleContainerWidth) {
+							this.setState({ titleContainerWidth: width });
+						}
+					}}
+				>
+					<TextWrapCalculator
+						textCompStyle={this.styles().titleTextInput}
+						textCompContainerWidth={this.state.titleContainerWidth}
+						showMultilineToggle={this.state.showMultilineToggle}
+						multiline={this.state.multiline}
+						text={note.title}
+						updateState={textWrapCalculator_updateState}
+						readOnly={false}
+					/>
+					{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
+					<TextInput
+						key={this.state.multiline ? 'multiLine' : 'singleLine'}
+						ref={this.titleTextFieldRef}
+						underlineColorAndroid="#ffffff00"
+						autoCapitalize="sentences"
+						style={this.styles().titleTextInput}
+						value={note.title}
+						onChangeText={this.title_changeText}
+						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
+						placeholder={_('Add title')}
+						placeholderTextColor={theme.colorFaded}
+						editable={!this.state.readOnly}
+						multiline={this.state.multiline}
+						submitBehavior="blurAndSubmit"
+					/>
+					{titleToggleButton}
+				</View>
+				<View style={this.styles().titleSeparator} testID='note-title-separator' />
+			</>
 		);
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;

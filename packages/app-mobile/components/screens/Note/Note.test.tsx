@@ -35,10 +35,10 @@ interface WrapperProps {
 
 let store: Store<AppState>;
 
-const mockNavigation = { state: { } };
+const mockNavigation = { state: {} };
 const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
 	return <TestProviderStack store={store}>
-		<NoteScreen navigation={mockNavigation}/>
+		<NoteScreen navigation={mockNavigation} />
 	</TestProviderStack>;
 };
 
@@ -499,6 +499,15 @@ describe('screens/Note', () => {
 		const editor = await getMarkdownEditorControl();
 
 		expect(editor.getCursor().line).toBe(4);
+
+		unmount();
+	});
+
+	it('should render a separator below the title field', async () => {
+		const { unmount } = await setupNoteWithPanes(['viewer']);
+
+		const separator = await screen.findByTestId('note-title-separator');
+		expect(separator).toBeVisible();
 
 		unmount();
 	});
