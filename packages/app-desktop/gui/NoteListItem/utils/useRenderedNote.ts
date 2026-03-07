@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ListRenderer, ListRendererDependency, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import Note from '@joplin/lib/models/Note';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
@@ -25,6 +25,12 @@ const hashContent = (content: any) => {
 
 export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
+
+	// Use a ref for the hash check so that renderedNote doesn't need to be in
+	// the effect dependency array — having state in its own deps array causes
+	// cascading re-renders (especially under React 19's stricter update loop
+	// detection) when notes are deleted rapidly.
+	const renderedNoteRef = useRef<RenderedNote>(null);
 
 	let dependencies = columns && columns.length ? columns.map(c => c.name) as ListRendererDependency[] : [];
 	if (listRenderer.dependencies) dependencies = dependencies.concat(listRenderer.dependencies);
@@ -58,7 +64,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				folder ? folder.title : '',
 			]);
 
-			if (renderedNote && renderedNote.hash === viewHash) return null;
+			if (renderedNoteRef.current && renderedNoteRef.current.hash === viewHash) return null;
 
 			const noteTitleHtml = getNoteTitleHtml(highlightedWords, Note.displayTitle(note));
 
@@ -84,7 +90,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 
 			if (event.cancelled) return null;
 
-			setRenderedNote({
+			const newRenderedNote = {
 				id: note.id,
 				hash: viewHash,
 				html: renderTemplate(
@@ -93,11 +99,15 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 					listRenderer.itemValueTemplates,
 					view,
 				),
-			});
+			};
+			renderedNoteRef.current = newRenderedNote;
+			setRenderedNote(newRenderedNote);
 		};
 
 		void renderNote();
-	}, [note, isSelected, isWatched, listRenderer, renderedNote, columns]);
+	// renderedNote is intentionally excluded: the ref (renderedNoteRef) is used
+	// for the hash check to avoid putting state in its own dependency array.
+	}, [note, isSelected, isWatched, listRenderer, columns]);
 
 	return renderedNote;
 };
