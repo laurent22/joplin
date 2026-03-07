@@ -14,6 +14,13 @@ export interface ReplacementExtension {
 	// Disable the decoration when near the cursor. Defaults to true.
 	hideWhenContainsSelection?: boolean;
 
+	// Determines when the decoration is revealed (showing the underlying raw markup instead of the rendered decoration).
+	// 'line': Reveal raw markup if the cursor is on the same line (default).
+	// 'select': Reveal raw markup if the cursor intersects the node.
+	// 'active': Reveal raw markup if the cursor is inside the node or its structural parent.
+	// 'boolean': Custom logic. Return true to reveal, false to keep the decoration.
+	getRevealStrategy?: (node: SyntaxNodeRef, state: EditorState)=> 'line' | 'select' | 'active' | boolean;
+
 	// Allows specifying custom logic to refresh all decorations associated with the extension
 	shouldFullReRender?: (transaction: Transaction)=> boolean;
 }

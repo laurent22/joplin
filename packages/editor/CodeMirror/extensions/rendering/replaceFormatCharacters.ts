@@ -49,6 +49,18 @@ const replaceFormatCharacters = [
 	referenceLinkStateField,
 
 	makeInlineReplaceExtension({
+		getRevealStrategy: (node) => {
+			if (node.name === 'QuoteMark') {
+				return 'line';
+			}
+			if (node.name === 'CodeMark') {
+				if (node.node.parent?.name === 'FencedCode') {
+					return 'line';
+				}
+			}
+
+			return 'active';
+		},
 		createDecoration: (node, state) => {
 			if (shouldFullReplace(node, state)) {
 				return hideDecoration;
