@@ -784,6 +784,14 @@ export default class BaseApplication {
 		await migratePpk();
 		await handleSyncStartupOperation();
 
+		// Clean up orphaned .crypted files from previous sessions.
+		// Must run after DB is ready but before resource services start.
+		try {
+			await Resource.deleteOrphanedCryptedFiles();
+		} catch (error) {
+			appLogger.warn('Failed to clean up .crypted files:', error);
+		}
+
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
 		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));

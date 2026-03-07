@@ -317,7 +317,7 @@ describe('Synchronizer.e2ee', () => {
 		expect(await allSyncTargetItemsEncrypted()).toBe(true);
 	}));
 
-	it('should upload encrypted resource, but it should not mark the blob as encrypted locally, and should clean up temp .crypted file', (async () => {
+	it('should upload encrypted resource, and .crypted file should be cleaned up by startup sweep', (async () => {
 		while (insideBeforeEach) await time.msleep(100);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -329,19 +329,19 @@ describe('Synchronizer.e2ee', () => {
 		await synchronizerStart();
 
 		const resource1 = (await Resource.all())[0];
-		// Resource should remain decrypted locally
 		expect(resource1.encryption_blob_encrypted).toBe(0);
 
-		// The temp .crypted file created for upload should have been cleaned up
 		const cryptedPath = Resource.fullPath(resource1, true);
-		expect(await shim.fsDriver().exists(cryptedPath)).toBe(false);
-
-		// The plaintext resource file should still exist
 		const plainTextPath = Resource.fullPath(resource1);
+		expect(await shim.fsDriver().exists(cryptedPath)).toBe(true);
+		expect(await shim.fsDriver().exists(plainTextPath)).toBe(true);
+
+		await Resource.deleteOrphanedCryptedFiles();
+		expect(await shim.fsDriver().exists(cryptedPath)).toBe(false);
 		expect(await shim.fsDriver().exists(plainTextPath)).toBe(true);
 	}));
 
-	it('should clean up .crypted file after resource decryption', (async () => {
+	it('should clean up .crypted file after resource decryption via startup sweep', (async () => {
 		while (insideBeforeEach) await time.msleep(100);
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -358,14 +358,11 @@ describe('Synchronizer.e2ee', () => {
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 
-		// Decrypt the metadata first (but blob can't be decrypted yet since not fetched)
 		await decryptionWorker().start();
 
 		let resource1 = (await Resource.all())[0];
-		// Metadata is decrypted but blob is still marked as encrypted since it hasn't been fetched
 		expect(resource1.encryption_blob_encrypted).toBe(1);
 
-		// Now fetch and decrypt the blob
 		const resourceFetcher = newResourceFetcher(synchronizer());
 		resourceFetcher.queueDownload_(resource1.id);
 		await resourceFetcher.waitForAllFinished();
@@ -375,13 +372,47 @@ describe('Synchronizer.e2ee', () => {
 		resource1 = await Resource.load(resource1.id);
 		expect(resource1.encryption_blob_encrypted).toBe(0);
 
-		// The .crypted file should have been cleaned up after decryption
 		const cryptedPath = Resource.fullPath(resource1, true);
-		expect(await shim.fsDriver().exists(cryptedPath)).toBe(false);
-
-		// The decrypted plaintext file should exist
 		const plainTextPath = Resource.fullPath(resource1);
+		expect(await shim.fsDriver().exists(cryptedPath)).toBe(true);
 		expect(await shim.fsDriver().exists(plainTextPath)).toBe(true);
+
+		await Resource.deleteOrphanedCryptedFiles();
+		expect(await shim.fsDriver().exists(cryptedPath)).toBe(false);
+		expect(await shim.fsDriver().exists(plainTextPath)).toBe(true);
+	}));
+
+	it('startup sweep should preserve .crypted files for resources still marked as encrypted', (async () => {
+		while (insideBeforeEach) await time.msleep(100);
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+
+		await decryptionWorker().start();
+
+		const resource1 = (await Resource.all())[0];
+		expect(resource1.encryption_blob_encrypted).toBe(1);
+
+		const resourceFetcher = newResourceFetcher(synchronizer());
+		resourceFetcher.queueDownload_(resource1.id);
+		await resourceFetcher.waitForAllFinished();
+
+		const cryptedPath = Resource.fullPath(resource1, true);
+		expect(await shim.fsDriver().exists(cryptedPath)).toBe(true);
+
+		await Resource.deleteOrphanedCryptedFiles();
+		expect(await shim.fsDriver().exists(cryptedPath)).toBe(true);
 	}));
 
 	it('should decrypt the resource metadata, but not try to decrypt the file, if it is not present', (async () => {

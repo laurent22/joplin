@@ -217,19 +217,31 @@ export default class Resource extends BaseItem {
 		decryptedItem.encryption_blob_encrypted = 0;
 		const savedItem = await super.save(decryptedItem, { autoTimestamp: false });
 
-		await this.removeCryptedFile(encryptedPath);
-
-
 		return savedItem;
 	}
 
-	// Best-effort removal of a .crypted file. Used after decryption completes
-	// and after sync upload to clean up temporary encrypted artifacts.
+	// Tries to remove a .crypted file, logs a warning on failure.
 	public static async removeCryptedFile(cryptedPath: string) {
 		try {
 			await this.fsDriver().remove(cryptedPath);
 		} catch (error) {
 			this.logger().warn(`Failed to remove .crypted file ${cryptedPath}: ${error.message}`);
+		}
+	}
+
+	// Deletes .crypted files whose resource is missing or already decrypted.
+	public static async deleteOrphanedCryptedFiles() {
+		const resourceDir = this.baseDirectoryPath();
+		const files = await this.fsDriver().readDirStats(resourceDir);
+		const cryptedFiles = files.filter((f: { path: string }) => f.path.endsWith('.crypted'));
+
+		for (const file of cryptedFiles) {
+			const resourceId = file.path.replace('.crypted', '');
+			const resource = await this.load(resourceId);
+
+			if (!resource || !resource.encryption_blob_encrypted) {
+				await this.removeCryptedFile(`${resourceDir}/${file.path}`);
+			}
 		}
 	}
 
@@ -247,19 +259,17 @@ export default class Resource extends BaseItem {
 		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
-			return { path: plainTextPath, resource: resource, isTemporary: false };
+			return { path: plainTextPath, resource: resource };
 		}
 
 		const encryptedPath = this.fullPath(resource, true);
-		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource, isTemporary: false };
+		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
 
 		try {
 			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {
 				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
 			});
 		} catch (error) {
-			await this.removeCryptedFile(encryptedPath);
-
 			if (error.code === 'ENOENT') {
 				throw new JoplinError(
 					`Trying to encrypt resource but only metadata is present: ${error.toString()}`, 'fileNotFound',
@@ -270,7 +280,7 @@ export default class Resource extends BaseItem {
 
 		const resourceCopy = { ...resource };
 		resourceCopy.encryption_blob_encrypted = 1;
-		return { path: encryptedPath, resource: resourceCopy, isTemporary: true };
+		return { path: encryptedPath, resource: resourceCopy };
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
