@@ -232,7 +232,33 @@ export default class Tag extends BaseItem {
 			if ('title' in o) {
 				o.title = o.title.trim();
 
-				const existingTag = await Tag.loadByTitle(o.title);
+				let existingTag = await Tag.loadByTitle(o.title);
+				if (existingTag && existingTag.id !== o.id) {
+					const linkedNote = await this.db().selectOne(`
+						SELECT nt.id
+						FROM note_tags nt
+						INNER JOIN notes n ON n.id = nt.note_id
+						WHERE nt.tag_id = ?
+						LIMIT 1
+					`, [existingTag.id]);
+
+					if (!linkedNote) {
+						const danglingRelation = await this.db().selectOne(`
+							SELECT id
+							FROM note_tags
+							WHERE tag_id = ?
+							LIMIT 1
+						`, [existingTag.id]);
+
+						// Backward compatibility: cleanup old corrupted tags that only
+						// reference permanently deleted notes, then continue validation.
+						if (danglingRelation) {
+							await Tag.untagAll(existingTag.id);
+							existingTag = null;
+						}
+					}
+				}
+
 				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
 			}
 		}

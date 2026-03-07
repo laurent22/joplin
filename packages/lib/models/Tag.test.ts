@@ -89,6 +89,47 @@ describe('models/Tag', () => {
 		expect(hasThrown).toBe(true);
 	});
 
+	it('should allow reusing a tag title after permanently deleting the previously tagged note', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Tag.setNoteTagsByTitles(note1.id, ['test']);
+
+		await Note.delete(note1.id, { toTrash: false });
+
+		expect(await Tag.loadByTitle('test')).toBeFalsy();
+
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
+		await Tag.setNoteTagsByTitles(note2.id, ['test2']);
+
+		const tag2 = await Tag.loadByTitle('test2');
+		const hasThrown = await checkThrowAsync(async () => await Tag.save({ id: tag2.id, title: 'test' }, { userSideValidation: true }));
+
+		expect(hasThrown).toBe(false);
+
+		const renamedTag = await Tag.loadByTitle('test');
+		expect(renamedTag.id).toBe(tag2.id);
+	});
+
+	it('should cleanup stale duplicate tags that only reference missing notes', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Tag.setNoteTagsByTitles(note1.id, ['test']);
+
+		// Simulate pre-fix corrupted data: note deleted but note_tags entry left behind.
+		await Note.db().exec('DELETE FROM notes WHERE id = ?', [note1.id]);
+
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
+		await Tag.setNoteTagsByTitles(note2.id, ['test2']);
+
+		const tag2 = await Tag.loadByTitle('test2');
+		const hasThrown = await checkThrowAsync(async () => await Tag.save({ id: tag2.id, title: 'test' }, { userSideValidation: true }));
+
+		expect(hasThrown).toBe(false);
+
+		const renamedTag = await Tag.loadByTitle('test');
+		expect(renamedTag.id).toBe(tag2.id);
+	});
+
 	it('should not return tags without notes', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });

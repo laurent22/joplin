@@ -10,6 +10,7 @@ import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { FolderEntity, NoteEntity } from '../services/database/types';
 import Tag from './Tag';
+import NoteTag from './NoteTag';
 const { sprintf } = require('sprintf-js');
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
@@ -940,6 +941,7 @@ export default class Note extends BaseItem {
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
 				const Revision = this.getClass<typeof RevisionClass>('Revision');
 				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
+				await this.deleteTagsForDeletedNotes_(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {
@@ -954,6 +956,39 @@ export default class Note extends BaseItem {
 					originalItem: notes[i],
 				});
 			}
+		}
+	}
+
+	private static async deleteTagsForDeletedNotes_(noteIds: string[], options: DeleteOptions = {}) {
+		const noteTags = await NoteTag.byNoteIds(noteIds);
+		if (!noteTags.length) return;
+
+		const noteTagIds = noteTags.map(noteTag => noteTag.id);
+		const associatedTagIds = unique(noteTags.map(noteTag => noteTag.tag_id));
+
+		await NoteTag.batchDelete(noteTagIds, options);
+
+		// Remove any stale note-tag relation whose note no longer exists.
+		const staleNoteTags = await this.db().selectAll(`
+			SELECT nt.id
+			FROM note_tags nt
+			LEFT JOIN notes n ON n.id = nt.note_id
+			WHERE nt.tag_id IN (${this.escapeIdsForSql(associatedTagIds)}) AND n.id IS NULL
+		`);
+
+		if (staleNoteTags.length) {
+			await NoteTag.batchDelete(staleNoteTags.map(noteTag => noteTag.id), options);
+		}
+
+		const orphanTagRows = await this.db().selectAll(`
+			SELECT id
+			FROM tags
+			WHERE id IN (${this.escapeIdsForSql(associatedTagIds)})
+				AND id NOT IN (SELECT DISTINCT tag_id FROM note_tags)
+		`);
+
+		for (const row of orphanTagRows) {
+			await Tag.delete(row.id, options);
 		}
 	}
 
