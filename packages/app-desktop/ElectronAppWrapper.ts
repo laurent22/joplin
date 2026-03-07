@@ -620,28 +620,30 @@ export default class ElectronAppWrapper {
 	public updateWindowBackgroundColor(themeId: number) {
 		if (!this.win_) return;
 
-		// Get theme colors from the actual theme definition
-		const theme = themeStyle(themeId);
-		const backgroundColor = theme.backgroundColor;
-		const textColor = theme.color;
-
-		// Update window background color
-		try {
-			this.win_.setBackgroundColor(backgroundColor);
-		} catch (error) {
-			this.logger().warn('Failed to update window background color:', error);
+		// Validate themeId to prevent crashes
+		if (!themeId || typeof themeId !== 'number') {
+			this.logger().warn('Invalid themeId provided to updateWindowBackgroundColor:', themeId);
+			return;
 		}
 
-		// Update title bar overlay on Windows/Linux
-		if (process.platform === 'win32' || process.platform === 'linux') {
-			try {
+		try {
+			// Get theme colors from the actual theme definition
+			const theme = themeStyle(themeId);
+			const backgroundColor = theme.backgroundColor;
+			const textColor = theme.color;
+
+			// Update window background color
+			this.win_.setBackgroundColor(backgroundColor);
+
+			// Update title bar overlay on Windows/Linux
+			if (process.platform === 'win32' || process.platform === 'linux') {
 				this.win_.setTitleBarOverlay({
 					color: backgroundColor,
 					symbolColor: textColor,
 				});
-			} catch (error) {
-				this.logger().warn('Failed to update title bar overlay:', error);
 			}
+		} catch (error) {
+			this.logger().warn('Failed to update window colors:', error);
 		}
 	}
 
