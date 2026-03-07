@@ -295,14 +295,12 @@ export default class PromptDialog extends React.Component<Props, any> {
 				ref={this.answerInput_}
 				value={this.state.answer}
 				placeholder=""
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				components={makeAnimated() as any}
 				isMulti={true}
 				isClearable={false}
 				backspaceRemovesValue={true}
 				options={this.props.autocomplete}
 				onChange={onSelectChange}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 				onKeyDown={(event: any) => onKeyDown(event)}
 				filterOption={(option, rawInput) => {
 					const input = (rawInput || '').trim().normalize('NFC').toLowerCase();

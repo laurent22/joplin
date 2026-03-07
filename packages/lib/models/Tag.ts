@@ -203,8 +203,8 @@ export default class Tag extends BaseItem {
 		// a tag to a title which matches another tag except for one or more special unicode characters having a different case. But this seems a reasonable compromise
 		// due to the lack of native case insensitive text comparison functionality for special unicode characters in sqlite without any extensions
 		const previousTags = await this.tagsByNoteId(noteId);
-		const addedTitlesLowercased: string[] = [];
-		const addedTagIds: string[] = [];
+		const addedTitlesLowercased = [];
+		const addedTagIds = [];
 
 		// Deduplicate incoming titles after normalization
 		const uniqueNormalizedTitles = Array.from(new Set(tagTitles.map(t => (t || '').trim().normalize('NFC')).filter(t => !!t)));
@@ -249,7 +249,7 @@ export default class Tag extends BaseItem {
 	public static async save(o: TagEntity, options: any = null) {
 		options = {
 			dispatchUpdateAction: true,
-			userSideValidation: false, ...options,
+			userSideValidation: false, ...options
 		};
 
 		const tagToSave = { ...o };

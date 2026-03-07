@@ -23,7 +23,7 @@ interface Props {
 	allTags: TagEntity[];
 	mode: TagEditorMode;
 	style: ViewStyle;
-	onTagsChange: (newTags: string[])=> void;
+	onTagsChange: (newTags: string[]) => void;
 	headerStyle?: TextStyle;
 	searchResultProps?: ScrollViewProps;
 }
@@ -102,10 +102,10 @@ interface TagChipProps {
 	title: string;
 	themeId: number;
 	styles: Styles;
-	onRemove: (title: string)=> void;
+	onRemove: (title: string) => void;
 
 	autofocus: boolean;
-	onAutoFocusComplete: ()=> void;
+	onAutoFocusComplete: () => void;
 }
 
 const TagCard: React.FC<TagChipProps> = props => {
@@ -144,10 +144,10 @@ const TagCard: React.FC<TagChipProps> = props => {
 interface TagsBoxProps {
 	tags: string[];
 	autofocusTag: string;
-	onAutoFocusComplete: ()=> void;
+	onAutoFocusComplete: () => void;
 	styles: Styles;
 	themeId: number;
-	onRemoveTag: (tag: string)=> void;
+	onRemoveTag: (tag: string) => void;
 }
 
 const TagsBox: React.FC<TagsBoxProps> = props => {
