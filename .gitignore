@@ -1549,6 +1549,7 @@ packages/lib/services/plugins/api/JoplinCommands.js
 packages/lib/services/plugins/api/JoplinContentScripts.js
 packages/lib/services/plugins/api/JoplinData.js
 packages/lib/services/plugins/api/JoplinFilters.js
+packages/lib/services/plugins/api/JoplinFs.js
 packages/lib/services/plugins/api/JoplinImaging.js
 packages/lib/services/plugins/api/JoplinInterop.js
 packages/lib/services/plugins/api/JoplinPlugins.js
