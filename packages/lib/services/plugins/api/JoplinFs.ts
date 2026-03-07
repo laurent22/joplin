@@ -2,7 +2,7 @@
 
 import shim from '../../../shim';
 
-export interface ZipEntry {
+export interface ArchiveEntry {
 	// Full path of the entry within the archive
 	entryName: string;
 	// Filename of the entry
@@ -17,15 +17,16 @@ export interface ZipEntry {
 export default class JoplinFs {
 
 	/**
-	 * Extracts a ZIP archive to the specified directory.
+	 * Extracts an archive to the specified directory. Currently only ZIP files
+	 * are supported.
 	 *
 	 * <span class="platform-desktop">desktop</span>
 	 *
-	 * @param sourcePath Path to the ZIP file to extract
+	 * @param sourcePath Path to the archive file to extract
 	 * @param destinationPath Path to the directory where the contents should be extracted
-	 * @returns List of entries extracted from the ZIP file
+	 * @returns List of entries extracted from the archive
 	 */
-	public async zipExtract(sourcePath: string, destinationPath: string): Promise<ZipEntry[]> {
+	public async archiveExtract(sourcePath: string, destinationPath: string): Promise<ArchiveEntry[]> {
 		const entries = await shim.fsDriver().zipExtract({
 			source: sourcePath,
 			extractTo: destinationPath,
