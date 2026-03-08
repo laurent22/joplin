@@ -897,7 +897,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 				section.lines.push(BLOCK_OPEN);
 				state.inPre = true;
 			} else if (n === 'br') {
-				section.lines.push(NEWLINE);
+				section.lines.push(state.lists.length ? SPACE : NEWLINE);
 			} else if (n === 'en-media') {
 				const hash = nodeAttributes.hash;
 
