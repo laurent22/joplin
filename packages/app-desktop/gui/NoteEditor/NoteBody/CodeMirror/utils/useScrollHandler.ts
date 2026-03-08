@@ -219,9 +219,20 @@ const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 	let linInterp, result;
 	if (l2e) {
 		linInterp = percent * lineCount - lineU;
+		// eslint-disable-next-line no-console
+		console.log(`l2e ${ePercentU} + (${ePercentL} - ${ePercentU}) * ${linInterp}`);
 		result = ePercentU + (ePercentL - ePercentU) * linInterp;
 	} else {
-		linInterp = Math.max(0, Math.min(1, (percent - ePercentU) / (ePercentL - ePercentU))) || 0;
+		// eslint-disable-next-line no-console
+		console.log(`linInterp Max(0, Min(1, (${percent} - ${ePercentU}) / (${ePercentL} - ${ePercentU}))) || 0`);
+		const rawLinInterp = (percent - ePercentU) / (ePercentL - ePercentU);
+		if (!Number.isFinite(rawLinInterp)) {
+			linInterp = percent;
+		} else {
+			linInterp = Math.max(0, Math.min(1, rawLinInterp)) || 0;
+		}
+		// eslint-disable-next-line no-console
+		console.log(`e2l (${lineU} + ${linInterp}) / ${lineCount}`);
 		result = (lineU + linInterp) / lineCount;
 	}
 	return Math.max(0, Math.min(1, result));
