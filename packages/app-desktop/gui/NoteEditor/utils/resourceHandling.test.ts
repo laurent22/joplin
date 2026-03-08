@@ -113,30 +113,20 @@ describe('resourceHandling', () => {
 		}
 	});
 
-	describe('processImagesInPastedHtml - base64', () => {
-		beforeEach(async () => {
-			await setupDatabaseAndSynchronizer(1);
-			await switchClient(1);
-		});
-
-		// 1x1 transparent PNG — smallest valid base64-encoded image for testing
-		const minimalPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-
-		it('should convert base64 image to :/resourceId when useInternalUrls is true', async () => {
-			// Regression test: base64 branch was hardcoding file:// and ignoring useInternalUrls
-			const html = `<img src="data:image/png;base64,${minimalPng}"/>`;
-			const result = await processImagesInPastedHtml(html, { useInternalUrls: true });
-			expect(result).toMatch(/src=":\/[a-f0-9]+"/);
-			expect(result).not.toContain('file://');
-			expect(result).not.toContain('data:');
-		});
-
-		it('should convert base64 image to file:// when useInternalUrls is false', async () => {
-			// Ensures base64 data is always replaced with a short path regardless of mode
-			const html = `<img src="data:image/png;base64,${minimalPng}"/>`;
-			const result = await processImagesInPastedHtml(html, { useInternalUrls: false });
-			expect(result).toContain('file://');
-			expect(result).not.toContain('data:');
-		});
+	// Regression test: base64 branch was hardcoding file:// and ignoring useInternalUrls
+	// 1x1 transparent PNG — smallest valid base64-encoded image for testing
+	const minimalPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+	
+	test.each([
+		{ useInternalUrls: true, expectMatch: /src=":\/[a-f0-9]+"/, expectAbsent: 'file://' },
+		{ useInternalUrls: false, expectMatch: /src="file:\/\//, expectAbsent: 'data:' },
+	])('should convert base64 image using resourceUrl (useInternalUrls=$useInternalUrls)', async ({ useInternalUrls, expectMatch, expectAbsent }) => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+		const html = `<img src="data:image/png;base64,${minimalPng}"/>`;
+		const result = await processImagesInPastedHtml(html, { useInternalUrls });
+		expect(result).toMatch(expectMatch);
+		expect(result).not.toContain(expectAbsent);
+		expect(result).not.toContain('data:');
 	});
 });
