@@ -249,21 +249,22 @@ const useContextMenu = (props: ContextMenuProps) => {
 			// check the selection start position. If no resource is found there,
 			// fall back to detecting the resource from the actual click position.
 			const editor = editorRef.current?.editor;
+			const hasSelectedText = !!editorRef.current?.getSelection();
 
 			let markupResourceInfo: ResourceMarkupInfo | null = null;
 
-			if (editor) {
+			// If text is selected, detect resource from the selection start
+			if (hasSelectedText && editor?.state?.selection?.main) {
 				const pos = editor.state.selection.main.from;
 				const line = editor.state.doc.lineAt(pos);
 
 				markupResourceInfo = getResourceIdFromMarkup(line.text, pos - line.from);
 			}
 
+			// Otherwise detect resource from the click position
 			if (!markupResourceInfo) {
 				markupResourceInfo = getResourceInfoAtClickPos(params);
 			}
-			const hasSelectedText = !!editorRef.current?.getSelection();
-
 			if (markupResourceInfo && pointerInsideEditor(params) && !hasSelectedText) {
 				event.preventDefault();
 				await showResourceContextMenu(markupResourceInfo.resourceId, markupResourceInfo.type);
