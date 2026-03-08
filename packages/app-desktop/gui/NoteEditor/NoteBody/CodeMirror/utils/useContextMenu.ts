@@ -244,10 +244,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			// Check if right-clicking on resource markup text (images or file attachments)
-			// When text is selected, CodeMirror's click position may fall outside the
-			// resource markup. To ensure resource links are detected correctly, first
-			// check the selection start position. If no resource is found there,
-			// fall back to detecting the resource from the actual click position.
+			// When text is selected, CodeMirror's click position may fall slightly
+			// outside the resource markup. Prefer the actual click position first,
+			// then fall back to the selection start if hit-testing misses.
 			const editor = editorRef.current?.editor;
 			const hasSelectedText = !!editorRef.current?.getSelection();
 
