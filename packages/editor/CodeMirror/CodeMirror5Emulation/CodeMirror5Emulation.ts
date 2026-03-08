@@ -270,6 +270,9 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 
 		let height;
 		if (lineNumber >= doc.lines) {
+			// Handle case when lineNumber is at or below the last line
+			// This is necessary to prevent dividing by zero in translateLE_
+			// See: https://github.com/laurent22/joplin/issues/14143#issuecomment-3767793559
 			height = lineBlock.top + lineBlock.height;
 		} else {
 			height = lineBlock.top;
