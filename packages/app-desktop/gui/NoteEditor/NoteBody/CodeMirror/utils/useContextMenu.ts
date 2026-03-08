@@ -245,7 +245,10 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 			// Check if right-clicking on resource markup text (images or file attachments)
 			const markupResourceInfo = getResourceInfoAtClickPos(params);
-			if (markupResourceInfo && pointerInsideEditor(params)) {
+
+			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+
+			if (markupResourceInfo && pointerInsideEditor(params) && !hasSelectedText) {
 				event.preventDefault();
 				await showResourceContextMenu(markupResourceInfo.resourceId, markupResourceInfo.type);
 				return;
@@ -259,7 +262,6 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 			const menu = new Menu();
 
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
 
 			menu.append(
 				new MenuItem({
