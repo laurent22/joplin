@@ -116,7 +116,7 @@ describe('resourceHandling', () => {
 	// Regression test: base64 branch was hardcoding file:// and ignoring useInternalUrls
 	// 1x1 transparent PNG — smallest valid base64-encoded image for testing
 	const minimalPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-	
+
 	test.each([
 		{ useInternalUrls: true, expectMatch: /src=":\/[a-f0-9]+"/, expectAbsent: 'file://' },
 		{ useInternalUrls: false, expectMatch: /src="file:\/\//, expectAbsent: 'data:' },
