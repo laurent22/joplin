@@ -18,6 +18,7 @@ import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
 import handleCustomProtocols, { CustomProtocolHandlers } from './utils/customProtocols/handleCustomProtocols';
 import { clearTimeout, setTimeout } from 'timers';
+import shouldShowSplash from './utils/shouldShowSplash';
 import { resolve } from 'path';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { msleep, Second } from '@joplin/utils/time';
@@ -922,20 +923,7 @@ export default class ElectronAppWrapper {
 		// Show splash screen while the main window loads, but skip it
 		// when the user has configured the app to start minimized in
 		// the tray — no point showing a splash they don't want to see.
-		// Both settings use SettingStorage.File so they are available
-		// in the main process via settings.json.
-		let showSplash = true;
-		const settingsPath = path.join(this.profilePath_, 'settings.json');
-		if (fs.pathExistsSync(settingsPath)) {
-			try {
-				const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
-				if (settings && settings.startMinimized && settings.showTrayIcon) {
-					showSplash = false;
-				}
-			} catch (_e) {
-				// Ignore — show splash on any parse error
-			}
-		}
+		const showSplash = shouldShowSplash(this.profilePath_);
 
 		if (showSplash) {
 			this.createSplashWindow();

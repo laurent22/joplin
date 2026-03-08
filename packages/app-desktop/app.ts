@@ -778,6 +778,7 @@ class Application extends BaseApplication {
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
 			reg.logger().info('app.start: doing upgradeSyncTarget action');
+			ipcRenderer.send('hide-splash');
 			bridge().mainWindow().show();
 			startupTask.onEnd();
 
