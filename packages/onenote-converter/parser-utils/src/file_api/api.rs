@@ -92,6 +92,10 @@ pub trait FileApiDriver: Send + Sync {
             pref_trim.len()
         };
 
+        if prefix_end < full_trim.len() && !full_trim[prefix_end..].starts_with('/') {
+            return full_path;
+        }
+
         if prefix_end <= full_path.len() {
             let without_prefix = &full_path[prefix_end..];
             if without_prefix.starts_with('/') || without_prefix.starts_with('\\') {
@@ -167,6 +171,8 @@ mod tests {
         assert_eq!(driver.remove_prefix("C:\\foo\\bar\\baz.one", "C:\\other"), "C:\\foo\\bar\\baz.one");
         // Trailing slash handled
         assert_eq!(driver.remove_prefix("C:\\foo\\bar\\baz.one", "C:\\foo\\bar\\"), "baz.one");
+        // Prefix matching a partial directory name shouldn't strip anything
+        assert_eq!(driver.remove_prefix("C:\\foo\\barista\\baz.one", "C:\\foo\\bar"), "C:\\foo\\barista\\baz.one");
         
         // Test multibyte characters where lowercasing might change byte length.
         // The previous code panicked if doing `full_path[pref_norm.len()..]` because
@@ -188,6 +194,8 @@ mod tests {
         assert_eq!(driver.remove_prefix("/foo/bar/baz.one", "/other"), "/foo/bar/baz.one");
         // Trailing slash handled
         assert_eq!(driver.remove_prefix("/foo/bar/baz.one", "/foo/bar/"), "baz.one");
+        // Prefix matching a partial directory name shouldn't strip anything
+        assert_eq!(driver.remove_prefix("/foo/barista/baz.one", "/foo/bar"), "/foo/barista/baz.one");
         
         // Unicode paths should work normally as they match exactly
         let multibyte_prefix = "/föö/bår";
