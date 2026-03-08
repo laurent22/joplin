@@ -251,20 +251,19 @@ const useContextMenu = (props: ContextMenuProps) => {
 			const editor = editorRef.current?.editor;
 			const hasSelectedText = !!editorRef.current?.getSelection();
 
-			let markupResourceInfo: ResourceMarkupInfo | null = null;
+			let markupResourceInfo = getResourceInfoAtClickPos(params);
 
-			// If text is selected, detect resource from the selection start
-			if (hasSelectedText && editor?.state?.selection?.main) {
+			// When text is selected, CodeMirror can sometimes report a click
+			// position slightly outside the markup. If click detection fails,
+			// fall back to the selection start position.
+			if (!markupResourceInfo && hasSelectedText && editor?.state?.selection?.main) {
 				const pos = editor.state.selection.main.from;
 				const line = editor.state.doc.lineAt(pos);
 
 				markupResourceInfo = getResourceIdFromMarkup(line.text, pos - line.from);
 			}
 
-			// Otherwise detect resource from the click position
-			if (!markupResourceInfo) {
-				markupResourceInfo = getResourceInfoAtClickPos(params);
-			}
+
 			if (markupResourceInfo && pointerInsideEditor(params) && !hasSelectedText) {
 				event.preventDefault();
 				await showResourceContextMenu(markupResourceInfo.resourceId, markupResourceInfo.type);
