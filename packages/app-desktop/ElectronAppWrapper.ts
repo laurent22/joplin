@@ -470,10 +470,8 @@ export default class ElectronAppWrapper {
 			window.webContents.setZoomFactor(this.mainWindow().webContents.getZoomFactor());
 
 			window.once('close', () => {
-				// Notify the main renderer immediately so it can unmount the React Portal
-				// before the secondary window's frame is disposed. Without this, there is a
-				// ~2s polling gap during which React renders into a destroyed document,
-				// crashing the shared renderer process on Windows.
+				// Immediately notify the main renderer to unmount the Portal before the
+				// frame is disposed — avoids a ~2s gap that crashes the renderer on Windows.
 				if (this.win_ && !this.win_.isDestroyed() && !this.win_.webContents.isDestroyed()) {
 					this.win_.webContents.send('secondary-window-closing', windowId);
 				}

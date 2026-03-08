@@ -55,11 +55,12 @@ const useDocument = (
 						shim.setTimeout(() => resolve(), 2000);
 					});
 
+					// Re-check after sleep to avoid duplicate WINDOW_CLOSE if IPC already fired.
+					if (unmounted) break;
+
 					if (openedWindow?.closed) {
-						// Null out the doc before dispatching WINDOW_CLOSE so React stops
-						// rendering the Portal into the now-destroyed document. Without this,
-						// React 19's stricter Portal cleanup crashes the main renderer process
-						// when the secondary window is closed on Windows.
+						// Null out doc first so React stops rendering into the destroyed window
+						// before WINDOW_CLOSE triggers unmounting (prevents renderer crash on Windows).
 						setDoc(null);
 						onCloseRef.current?.();
 						openedWindow = null;
