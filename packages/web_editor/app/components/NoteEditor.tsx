@@ -4,6 +4,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { NoteEntity } from '@/lib/database';
+import TinyMCEBody from './TinyMCEBody';
 
 export default function NoteEditor() {
   const searchParams = useSearchParams();
@@ -55,8 +56,8 @@ export default function NoteEditor() {
   const note = fetched ?? null;
 
   return (
-    <div className="flex items-center justify-center h-full text-gray-500 text-xl">
-      Hello World — {note?.title}
+    <div style={{ width: '100%', height: '100%' }}>
+      <TinyMCEBody html={note?.body ?? ''} noteId={noteId} readOnly={true} />
     </div>
   );
 }
