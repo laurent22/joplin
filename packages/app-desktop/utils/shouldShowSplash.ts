@@ -9,7 +9,7 @@ export default function shouldShowSplash(profilePath: string): boolean {
 	if (pathExistsSync(settingsPath)) {
 		try {
 			const settings = JSON.parse(readFileSync(settingsPath, 'utf8'));
-			if (settings && settings.startMinimized && settings.showTrayIcon) {
+			if (settings && settings.startMinimized === true && settings.showTrayIcon === true) {
 				return false;
 			}
 		} catch (_e) {
