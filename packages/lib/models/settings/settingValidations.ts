@@ -66,7 +66,7 @@ export default async (settingKeys: string[], newValues: Record<string, any>) => 
 		const oldValue = Setting.value(key);
 		const newValue = newValues[key];
 		const message = await validateSetting(key, oldValue, newValue);
-		return message;
+		if (message) return message;
 	}
 	return '';
 };
