@@ -70,18 +70,30 @@ pub trait FileApiDriver: Send + Sync {
         let full_trim = full_norm.trim_end_matches('/');
         let pref_trim = pref_norm.trim_end_matches('/');
 
-        let starts_with = if is_win {
-            full_trim.to_lowercase().starts_with(&pref_trim.to_lowercase())
+        let prefix_end = if is_win {
+            let mut full_iter = full_trim.char_indices().flat_map(|(idx, ch)| {
+                let end = idx + ch.len_utf8();
+                ch.to_lowercase().map(move |folded| (folded, end))
+            });
+            let mut end = 0;
+
+            for pref_ch in pref_trim.chars().flat_map(char::to_lowercase) {
+                match full_iter.next() {
+                    Some((full_ch, next_end)) if full_ch == pref_ch => end = next_end,
+                    _ => return full_path,
+                }
+            }
+
+            end
         } else {
-            full_trim.starts_with(pref_trim)
+            if !full_trim.starts_with(pref_trim) {
+                return full_path;
+            }
+            pref_trim.len()
         };
 
-        if starts_with {
-            // Safely find the byte index in full_path that corresponds to the end of the prefix.
-            // Since we replaced backwards slashes with forward slashes (which are both 1 byte: ASCII 92 and 47),
-            // and trimmed trailing slashes (also 1 byte), the byte length of pref_trim matches the byte length
-            // of the corresponding prefix in full_path.
-            let without_prefix = &full_path[pref_trim.len()..];
+        if prefix_end <= full_path.len() {
+            let without_prefix = &full_path[prefix_end..];
             if without_prefix.starts_with('/') || without_prefix.starts_with('\\') {
                 &without_prefix[1..]
             } else {
