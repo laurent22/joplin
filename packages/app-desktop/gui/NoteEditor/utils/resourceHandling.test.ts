@@ -1,8 +1,9 @@
 import Setting from '@joplin/lib/models/Setting';
-import { processPastedHtml } from './resourceHandling';
+import { processImagesInPastedHtml, processPastedHtml } from './resourceHandling';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 const createTestMarkupConverters = () => {
 	const markupToHtml: MarkupToHtmlHandler = async (markupLanguage, markup, options) => {
@@ -110,5 +111,32 @@ describe('resourceHandling', () => {
 			// The alt text after normalization must not contain literal newlines
 			expect(result).not.toMatch(/alt="[^"]*\n/);
 		}
+	});
+
+	describe('processImagesInPastedHtml - base64', () => {
+		beforeEach(async () => {
+			await setupDatabaseAndSynchronizer(1);
+			await switchClient(1);
+		});
+
+		// 1x1 transparent PNG — smallest valid base64-encoded image for testing
+		const minimalPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+
+		it('should convert base64 image to :/resourceId when useInternalUrls is true', async () => {
+			// Regression test: base64 branch was hardcoding file:// and ignoring useInternalUrls
+			const html = `<img src="data:image/png;base64,${minimalPng}"/>`;
+			const result = await processImagesInPastedHtml(html, { useInternalUrls: true });
+			expect(result).toMatch(/src=":\/[a-f0-9]+"/);
+			expect(result).not.toContain('file://');
+			expect(result).not.toContain('data:');
+		});
+
+		it('should convert base64 image to file:// when useInternalUrls is false', async () => {
+			// Ensures base64 data is always replaced with a short path regardless of mode
+			const html = `<img src="data:image/png;base64,${minimalPng}"/>`;
+			const result = await processImagesInPastedHtml(html, { useInternalUrls: false });
+			expect(result).toContain('file://');
+			expect(result).not.toContain('data:');
+		});
 	});
 });
