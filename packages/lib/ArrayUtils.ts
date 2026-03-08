@@ -32,7 +32,7 @@ export const binarySearch = function<T>(items: T[], value: T) {
 	return items[middle] !== value ? -1 : middle;
 };
 
-export const findByKey = function<T>(array: T[], key: keyof T, value: any): T | null {
+export const findByKey = function<T, K extends keyof T>(array: T[], key: K, value: T[K]): T | null {
 	for (let i = 0; i < array.length; i++) {
 		const o = array[i];
 		if (typeof o !== 'object') continue;
