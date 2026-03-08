@@ -46,19 +46,42 @@ pub trait FileApiDriver: Send + Sync {
         let base = filename.strip_suffix(&ext).unwrap_or(filename);
         (base.into(), ext)
     }
+    /// Removes a prefix from a given full path.
+    ///
+    /// On Windows, this performs a case-insensitive and slash-agnostic comparison,
+    /// safely extracting the remaining substring without relying on byte length
+    /// mapping between original and lowercased strings. On POSIX systems, this
+    /// performs an exact, case-sensitive string match.
+    ///
+    /// # Arguments
+    ///
+    /// * `full_path` - The absolute path to process.
+    /// * `prefix` - The prefix to remove from the starting portion of the `full_path`.
+    ///
+    /// # Returns
+    ///
+    /// A string slice of `full_path` after the `prefix` is removed. If the `prefix`
+    /// does not match the start of `full_path`, the original `full_path` is returned.
     fn remove_prefix<'a>(&self, full_path: &'a str, prefix: &str) -> &'a str {
-        let mut full_norm = full_path.replace('\\', "/").to_lowercase();
-        let mut pref_norm = prefix.replace('\\', "/").to_lowercase();
-        
-        if full_norm.ends_with('/') {
-            full_norm.pop();
-        }
-        if pref_norm.ends_with('/') {
-            pref_norm.pop();
-        }
+        let is_win = self.is_windows();
+        let full_norm = if is_win { full_path.replace('\\', "/") } else { full_path.to_string() };
+        let pref_norm = if is_win { prefix.replace('\\', "/") } else { prefix.to_string() };
 
-        if full_norm.starts_with(&pref_norm) {
-            let without_prefix = &full_path[pref_norm.len()..];
+        let full_trim = full_norm.trim_end_matches('/');
+        let pref_trim = pref_norm.trim_end_matches('/');
+
+        let starts_with = if is_win {
+            full_trim.to_lowercase().starts_with(&pref_trim.to_lowercase())
+        } else {
+            full_trim.starts_with(pref_trim)
+        };
+
+        if starts_with {
+            // Safely find the byte index in full_path that corresponds to the end of the prefix.
+            // Since we replaced backwards slashes with forward slashes (which are both 1 byte: ASCII 92 and 47),
+            // and trimmed trailing slashes (also 1 byte), the byte length of pref_trim matches the byte length
+            // of the corresponding prefix in full_path.
+            let without_prefix = &full_path[pref_trim.len()..];
             if without_prefix.starts_with('/') || without_prefix.starts_with('\\') {
                 &without_prefix[1..]
             } else {
@@ -79,5 +102,84 @@ pub trait FileApiDriver: Send + Sync {
         let result = self.get_file_name(&dir_name);
 
         result.filter(|value| !value.is_empty())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    struct MockWindowsDriver;
+    impl FileApiDriver for MockWindowsDriver {
+        fn is_windows(&self) -> bool { true }
+        fn is_directory(&self, _path: &str) -> ApiResult<bool> { Ok(false) }
+        fn read_dir(&self, _path: &str) -> ApiResult<Vec<String>> { Ok(vec![]) }
+        fn read_file(&self, _path: &str) -> ApiResult<Vec<u8>> { Ok(vec![]) }
+        fn write_file(&self, _path: &str, _data: &[u8]) -> ApiResult<()> { Ok(()) }
+        fn make_dir(&self, _path: &str) -> ApiResult<()> { Ok(()) }
+        fn exists(&self, _path: &str) -> ApiResult<bool> { Ok(false) }
+        fn open_file(&self, _path: &str) -> ApiResult<Box<dyn FileHandle>> { Err(std::io::Error::new(std::io::ErrorKind::Other, "Not implemented")) }
+        fn get_file_name(&self, _path: &str) -> Option<String> { None }
+        fn get_file_extension(&self, _path: &str) -> String { String::new() }
+        fn get_dir_name(&self, _path: &str) -> String { String::new() }
+        fn join(&self, _path_1: &str, _path_2: &str) -> String { String::new() }
+    }
+
+    struct MockPosixDriver;
+    impl FileApiDriver for MockPosixDriver {
+        fn is_windows(&self) -> bool { false }
+        fn is_directory(&self, _path: &str) -> ApiResult<bool> { Ok(false) }
+        fn read_dir(&self, _path: &str) -> ApiResult<Vec<String>> { Ok(vec![]) }
+        fn read_file(&self, _path: &str) -> ApiResult<Vec<u8>> { Ok(vec![]) }
+        fn write_file(&self, _path: &str, _data: &[u8]) -> ApiResult<()> { Ok(()) }
+        fn make_dir(&self, _path: &str) -> ApiResult<()> { Ok(()) }
+        fn exists(&self, _path: &str) -> ApiResult<bool> { Ok(false) }
+        fn open_file(&self, _path: &str) -> ApiResult<Box<dyn FileHandle>> { Err(std::io::Error::new(std::io::ErrorKind::Other, "Not implemented")) }
+        fn get_file_name(&self, _path: &str) -> Option<String> { None }
+        fn get_file_extension(&self, _path: &str) -> String { String::new() }
+        fn get_dir_name(&self, _path: &str) -> String { String::new() }
+        fn join(&self, _path_1: &str, _path_2: &str) -> String { String::new() }
+    }
+
+    #[test]
+    fn test_remove_prefix_windows() {
+        let driver = MockWindowsDriver;
+        
+        // Exact match
+        assert_eq!(driver.remove_prefix("C:\\foo\\bar\\baz.one", "C:\\foo\\bar"), "baz.one");
+        // Case-insensitive match
+        assert_eq!(driver.remove_prefix("c:\\FOO\\bar\\baz.one", "C:\\foo\\BAR"), "baz.one");
+        // Slashes match
+        assert_eq!(driver.remove_prefix("C:/foo/bar/baz.one", "C:\\foo\\bar"), "baz.one");
+        // No match
+        assert_eq!(driver.remove_prefix("C:\\foo\\bar\\baz.one", "C:\\other"), "C:\\foo\\bar\\baz.one");
+        // Trailing slash handled
+        assert_eq!(driver.remove_prefix("C:\\foo\\bar\\baz.one", "C:\\foo\\bar\\"), "baz.one");
+        
+        // Test multibyte characters where lowercasing might change byte length.
+        // The previous code panicked if doing `full_path[pref_norm.len()..]` because
+        // `İ` could have a diff length lowercased.
+        let multibyte_prefix = "C:\\föö\\bår";
+        let multibyte_full = "C:\\FÖÖ\\BÅR\\baz.one";
+        assert_eq!(driver.remove_prefix(multibyte_full, multibyte_prefix), "baz.one");
+    }
+
+    #[test]
+    fn test_remove_prefix_posix() {
+        let driver = MockPosixDriver;
+        
+        // Exact match
+        assert_eq!(driver.remove_prefix("/foo/bar/baz.one", "/foo/bar"), "baz.one");
+        // Case-sensitive - should NOT match if cases differ
+        assert_eq!(driver.remove_prefix("/FOO/bar/baz.one", "/foo/bar"), "/FOO/bar/baz.one");
+        // No match
+        assert_eq!(driver.remove_prefix("/foo/bar/baz.one", "/other"), "/foo/bar/baz.one");
+        // Trailing slash handled
+        assert_eq!(driver.remove_prefix("/foo/bar/baz.one", "/foo/bar/"), "baz.one");
+        
+        // Unicode paths should work normally as they match exactly
+        let multibyte_prefix = "/föö/bår";
+        let multibyte_full = "/föö/bår/baz.one";
+        assert_eq!(driver.remove_prefix(multibyte_full, multibyte_prefix), "baz.one");
     }
 }
