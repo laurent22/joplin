@@ -90,7 +90,7 @@ export const shuffle = function<T>(array: T[]): T[] {
 };
 
 // Used to replace lodash.pull, so that we don't need to import the whole
-// package. Not optimised.
+// package. Uses Set for O(N) performance.
 export const pull = <T>(array: T[], ...elements: T[]): T[] => {
 	const removeSet = new Set(elements);
 	const output: T[] = [];
