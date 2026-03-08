@@ -268,7 +268,12 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		const lineInfo = doc.line(Math.min(lineNumber + 1, doc.lines));
 		const lineBlock = this.editor.lineBlockAt(lineInfo.from);
 
-		const height = lineBlock.top;
+		let height;
+		if (lineNumber >= doc.lines) {
+			height = lineBlock.top + lineBlock.height;
+		} else {
+			height = lineBlock.top;
+		}
 		if (mode === 'local') {
 			const editorTop = this.editor.lineBlockAt(0).top;
 			return height - editorTop;
