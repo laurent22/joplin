@@ -98,7 +98,7 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		listRef.current.scrollTop = newScrollTop;
 		lastScrollSetTime.current = Date.now();
 		// setScrollTopLikeYouMeanIt(newScrollTop);
-	}, [itemsPerLine, itemSize.height, listSize.height, listRef]); // , setScrollTopLikeYouMeanIt]);
+	}, [itemsPerLine, itemSize.height, listSize.height, listRef]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onScroll = useCallback((event: any) => {
