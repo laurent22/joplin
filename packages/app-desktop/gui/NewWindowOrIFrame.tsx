@@ -40,7 +40,7 @@ const useDocument = (
 
 	useEffect(() => {
 		let openedWindow: Window|null = null;
-		const unmounted = false;
+		let unmounted = false;
 		if (iframeElement) {
 			setDoc(iframeElement?.contentWindow?.document);
 		} else if (mode === WindowMode.NewWindow) {
@@ -56,6 +56,11 @@ const useDocument = (
 					});
 
 					if (openedWindow?.closed) {
+						// Null out the doc before dispatching WINDOW_CLOSE so React stops
+						// rendering the Portal into the now-destroyed document. Without this,
+						// React 19's stricter Portal cleanup crashes the main renderer process
+						// when the secondary window is closed on Windows.
+						setDoc(null);
 						onCloseRef.current?.();
 						openedWindow = null;
 						break;
@@ -65,6 +70,7 @@ const useDocument = (
 		}
 
 		return () => {
+			unmounted = true;
 			// Delay: Closing immediately causes Electron to crash
 			setTimeout(() => {
 				if (!openedWindow?.closed) {
