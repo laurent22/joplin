@@ -102,7 +102,7 @@ interface ContextMenuProps {
 	editorPaste: ()=> void;
 	editorRef: RefObject<CodeMirrorControl>;
 	editorClassName: string;
-	containerRef: RefObject<HTMLDivElement|null>;
+	containerRef: RefObject<HTMLDivElement | null>;
 }
 
 const useContextMenu = (props: ContextMenuProps) => {
@@ -194,9 +194,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 				linkToOpen: null,
 				textToCopy: null,
 				htmlToCopy: null,
-				insertContent: () => {},
+				insertContent: () => { },
 				isReadOnly: true,
-				fireEditorEvent: () => {},
+				fireEditorEvent: () => { },
 				htmlToMd: null,
 				mdToHtml: null,
 			};
@@ -244,9 +244,25 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			// Check if right-clicking on resource markup text (images or file attachments)
-			const markupResourceInfo = getResourceInfoAtClickPos(params);
+			// When text is selected, CodeMirror's click position may fall outside the
+			// resource markup. To ensure resource links are detected correctly, first
+			// check the selection start position. If no resource is found there,
+			// fall back to detecting the resource from the actual click position.
+			const editor = editorRef.current?.editor;
 
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+			let markupResourceInfo: ResourceMarkupInfo | null = null;
+
+			if (editor) {
+				const pos = editor.state.selection.main.from;
+				const line = editor.state.doc.lineAt(pos);
+
+				markupResourceInfo = getResourceIdFromMarkup(line.text, pos - line.from);
+			}
+
+			if (!markupResourceInfo) {
+				markupResourceInfo = getResourceInfoAtClickPos(params);
+			}
+			const hasSelectedText = !!editorRef.current?.getSelection();
 
 			if (markupResourceInfo && pointerInsideEditor(params) && !hasSelectedText) {
 				event.preventDefault();
@@ -340,7 +356,40 @@ const useContextMenu = (props: ContextMenuProps) => {
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});
+			// If a resource link is selected, append resource actions
+			if (markupResourceInfo && hasSelectedText) {
+				const baseType = markupResourceInfo.type === 'image'
+					? ContextMenuItemType.Image
+					: ContextMenuItemType.Resource;
 
+				const itemType = await resolveContextMenuItemType(baseType, markupResourceInfo.resourceId);
+
+				const contextMenuOptions: ContextMenuOptions = {
+					itemType,
+					resourceId: markupResourceInfo.resourceId,
+					filename: null,
+					mime: null,
+					linkToCopy: null,
+					linkToOpen: null,
+					textToCopy: null,
+					htmlToCopy: null,
+					insertContent: () => { },
+					isReadOnly: true,
+					fireEditorEvent: () => { },
+					htmlToMd: null,
+					mdToHtml: null,
+				};
+
+				const resourceMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
+
+				if (resourceMenuItems.length) {
+					menu.append(new MenuItem({ type: 'separator' }));
+				}
+
+				for (const item of resourceMenuItems) {
+					menu.append(item);
+				}
+			}
 			menu.popup({ window: targetWindow });
 		};
 
