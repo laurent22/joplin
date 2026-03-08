@@ -88,7 +88,7 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 	public static override async checkConfig(fileApi: FileApiOptions) {
 		try {
 			const path = fileApi.path();
-			if (!path || (!path.startsWith('http://') && !path.startsWith('https://'))) {
+			if (!path || !/^https?:\/\//i.test(path)) {
 				return {
 					ok: false,
 					errorMessage: _('The URL must include the protocol prefix (http:// or https://).'),

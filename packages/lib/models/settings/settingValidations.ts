@@ -9,7 +9,7 @@ import Setting from '../Setting';
 type ValidationHandler = (oldValue: any, newValue: any)=> Promise<string>;
 
 const validateUrlProtocol = async (_oldValue: string, newValue: string) => {
-	if (newValue && !newValue.match(/^https?:\/\//)) {
+	if (newValue && !newValue.match(/^https?:\/\//i)) {
 		return _('The URL must include the protocol prefix (http:// or https://).');
 	}
 	return '';

@@ -87,7 +87,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		};
 
 		const path = options.path();
-		if (!path || (!path.startsWith('http://') && !path.startsWith('https://'))) {
+		if (!path || !/^https?:\/\//i.test(path)) {
 			output.errorMessage = _('The URL must include the protocol prefix (http:// or https://).');
 			return output;
 		}
