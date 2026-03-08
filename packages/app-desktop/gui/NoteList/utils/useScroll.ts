@@ -10,6 +10,15 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		return Math.max(0, itemSize.height * noteCount - listSize.height);
 	}, [itemSize.height, noteCount, listSize.height]);
 
+	// Refs for values that makeItemIndexVisible reads at call-time.
+	// This keeps the callback reference stable across renders
+	const noteCountRef = useRef(noteCount);
+	noteCountRef.current = noteCount;
+	const scrollTopRef = useRef(scrollTop);
+	scrollTopRef.current = scrollTop;
+	const maxScrollTopRef = useRef(maxScrollTop);
+	maxScrollTopRef.current = maxScrollTop;
+
 	// This ugly hack is necessary because setting scrollTop at a high
 	// frequency, while scrolling with the keyboard, is unreliable - the
 	// property will appear to be set (reading it back gives the correct value),
@@ -60,11 +69,15 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 	// }, []);
 
 	const makeItemIndexVisible = useCallback((itemIndex: number) => {
-		const lineTopFloat = scrollTop / itemSize.height;
+		const currentScrollTop = scrollTopRef.current;
+		const currentNoteCount = noteCountRef.current;
+		const currentMaxScrollTop = maxScrollTopRef.current;
+
+		const lineTopFloat = currentScrollTop / itemSize.height;
 		const topFloat = lineTopFloat * itemsPerLine;
-		const lineBottomFloat = (scrollTop + listSize.height - itemSize.height) / itemSize.height;
+		const lineBottomFloat = (currentScrollTop + listSize.height - itemSize.height) / itemSize.height;
 		const bottomFloat = lineBottomFloat * itemsPerLine;
-		const top = Math.min(noteCount - 1, Math.floor(topFloat) + 1);
+		const top = Math.min(currentNoteCount - 1, Math.floor(topFloat) + 1);
 		const bottom = Math.max(0, Math.floor(bottomFloat));
 
 		if (itemIndex >= top && itemIndex <= bottom) return;
@@ -79,13 +92,13 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 		}
 
 		if (newScrollTop < 0) newScrollTop = 0;
-		if (newScrollTop > maxScrollTop) newScrollTop = maxScrollTop;
+		if (newScrollTop > currentMaxScrollTop) newScrollTop = currentMaxScrollTop;
 
 		setScrollTop(newScrollTop);
 		listRef.current.scrollTop = newScrollTop;
 		lastScrollSetTime.current = Date.now();
 		// setScrollTopLikeYouMeanIt(newScrollTop);
-	}, [itemsPerLine, noteCount, itemSize.height, scrollTop, listSize.height, maxScrollTop, listRef]); // , setScrollTopLikeYouMeanIt]);
+	}, [itemsPerLine, itemSize.height, listSize.height, listRef]); // , setScrollTopLikeYouMeanIt]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onScroll = useCallback((event: any) => {
