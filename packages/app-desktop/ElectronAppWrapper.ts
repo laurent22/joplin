@@ -244,13 +244,6 @@ export default class ElectronAppWrapper {
 			// Based on https://www.electronjs.org/docs/latest/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do,
 			// this needs to be a non-transparent color:
 			backgroundColor: initialBackgroundColor,
-			// Enable title bar overlay on Windows/Linux for custom title bar colors
-			titleBarStyle: (process.platform === 'win32' || process.platform === 'linux') ? 'hidden' : 'default',
-			titleBarOverlay: (process.platform === 'win32' || process.platform === 'linux') ? {
-				color: initialBackgroundColor,
-				symbolColor: initialTheme.color,
-				height: 30,
-			} : false,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -630,18 +623,9 @@ export default class ElectronAppWrapper {
 			// Get theme colors from the actual theme definition
 			const theme = themeStyle(themeId);
 			const backgroundColor = theme.backgroundColor;
-			const textColor = theme.color;
 
 			// Update window background color
 			this.win_.setBackgroundColor(backgroundColor);
-
-			// Update title bar overlay on Windows/Linux
-			if (process.platform === 'win32' || process.platform === 'linux') {
-				this.win_.setTitleBarOverlay({
-					color: backgroundColor,
-					symbolColor: textColor,
-				});
-			}
 		} catch (error) {
 			this.logger().warn('Failed to update window colors:', error);
 		}
