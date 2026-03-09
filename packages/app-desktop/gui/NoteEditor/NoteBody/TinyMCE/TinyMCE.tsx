@@ -907,9 +907,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						const win = editor.getWin();
 						const viewHeight = win.innerHeight;
 
-						// eslint-disable-next-line no-console
-						console.log('performing check', { rectTop: rect.top, rectBottom: rect.bottom, viewHeight: viewHeight, rect: rect });
-
 						if (rect.top < 0) {
 							win.scrollBy(0, rect.top);
 						} else if (rect.bottom > viewHeight) {
