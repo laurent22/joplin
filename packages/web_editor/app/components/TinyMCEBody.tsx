@@ -75,6 +75,15 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
               setEditorReady(true);
             }
           });
+          // クリップボードの生 HTML をそのまま挿入してシンタックスハイライトを保持する
+          editor.on('paste', (e: ClipboardEvent) => {
+            const clipboardData = e.clipboardData;
+            if (!clipboardData) return;
+            const pastedHtml = clipboardData.getData('text/html');
+            if (!pastedHtml) return;
+            e.preventDefault();
+            editor.execCommand('mceInsertContent', false, pastedHtml);
+          });
         },
       })
       .catch((err: any) => {
