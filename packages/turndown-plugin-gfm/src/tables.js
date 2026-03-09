@@ -119,7 +119,8 @@ rules.table = {
         }
       }
 
-      const captionContent = node.caption ? node.caption.textContent || '' : '';
+      const captionNode = node.querySelector ? node.querySelector('caption') : node.caption;
+      const captionContent = captionNode ? captionNode.textContent || '' : '';
       const caption = captionContent ? `${captionContent}\n\n` : '';
       const tableContent = `${emptyHeader}${content}`.trimStart();
       return `\n\n${caption}${tableContent}\n\n`;

@@ -11256,12 +11256,12 @@ __metadata:
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
     "@adobe/css-tools": "npm:4.4.4"
+    "@mixmark-io/domino": "npm:2.2.0"
     "@rollup/plugin-commonjs": "npm:28.0.9"
     "@rollup/plugin-node-resolve": "npm:16.0.3"
     "@rollup/plugin-replace": "npm:6.0.3"
     browserify: "npm:14.5.0"
     html-entities: "npm:1.4.0"
-    jsdom: "npm:26.1.0"
     rollup: "npm:4.2.0"
     standard: "npm:17.1.2"
     turndown-attendant: "npm:0.0.3"
@@ -12639,7 +12639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mixmark-io/domino@npm:^2.2.0":
+"@mixmark-io/domino@npm:2.2.0, @mixmark-io/domino@npm:^2.2.0":
   version: 2.2.0
   resolution: "@mixmark-io/domino@npm:2.2.0"
   checksum: 10/839624ba6baab655c4f7393e8b8561516849926651e02f40484729b9869436b1e077906810bcac0bba4762448512d3ebd2f6d9b463d8ab0d5f54d75ca5306519
