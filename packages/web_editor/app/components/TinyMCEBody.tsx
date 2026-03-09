@@ -70,6 +70,8 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
           editor.on('init', () => {
             if (!destroyed) {
               editorRef.current = editor;
+              editor.setContent(html ?? '');
+              editor.undoManager.reset();
               setEditorReady(true);
             }
           });
@@ -85,6 +87,10 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
       try {
         if (editorRef.current) {
           editorRef.current.destroy();
+        } else {
+          // StrictMode などで init イベント前に cleanup が走った場合、
+          // セレクタ経由で削除して次回の init が失敗しないようにする
+          tinymce.remove(`#${editorId}`);
         }
       } catch (_) {
         // ignore errors on cleanup
