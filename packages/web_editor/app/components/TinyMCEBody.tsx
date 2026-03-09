@@ -82,7 +82,22 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             const pastedHtml = clipboardData.getData('text/html');
             if (!pastedHtml) return;
             e.preventDefault();
-            editor.execCommand('mceInsertContent', false, pastedHtml);
+
+            // VSCode からコピーした HTML はインデントを通常スペースで表現するため、
+            // HTML レンダリング時に連続スペースが折り畳まれてしまう。
+            // テキストノードの連続スペースをノーブレークスペース(\u00A0)に変換して保持する。
+            const doc = new DOMParser().parseFromString(pastedHtml, 'text/html');
+            const preserveSpaces = (node: Node): void => {
+              if (node.nodeType === Node.TEXT_NODE) {
+                node.textContent =
+                  node.textContent?.replace(/ {2,}/g, (m) => '\u00A0'.repeat(m.length)) ?? '';
+              } else {
+                node.childNodes.forEach(preserveSpaces);
+              }
+            };
+            preserveSpaces(doc.body);
+
+            editor.execCommand('mceInsertContent', false, doc.body.innerHTML);
           });
         },
       })
