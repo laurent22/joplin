@@ -434,13 +434,13 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             console.log('meta+shift+b ==> commandline');
             insertCommandPre(editor);
           });
-          editor.addShortcut('meta+shift+w', 'White', 'text_color_command_w');
+          editor.addShortcut('ctrl+w', 'White', 'text_color_command_w');
           editor.addShortcut('meta+shift+r', 'Red', 'text_color_command_r');
           editor.addShortcut('meta+shift+g', 'Green', 'text_color_command_g');
           editor.addShortcut('meta+shift+p', 'Blue', 'text_color_command_b');
           editor.addShortcut('meta+shift+h', 'Dark', 'text_color_command_h');
           editor.addShortcut('meta+shift+e', 'Size 8pt', 'text_size_command_8');
-          editor.addShortcut('meta+shift+t', 'Size 10pt', 'text_size_command_10');
+          editor.addShortcut('meta+shift+j', 'Size 10pt', 'text_size_command_10');
           editor.addShortcut('meta+1', 'H1', 'change_to_h1');
           editor.addShortcut('meta+2', 'H2', 'change_to_h2');
           editor.addShortcut('meta+3', 'H3', 'change_to_h3');
