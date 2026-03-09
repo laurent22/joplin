@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Size } from '@joplin/utils/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 
 const useItemElement = (
 	rootElement: HTMLDivElement, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow,
 ) => {
-	const [itemElement, setItemElement] = useState<HTMLDivElement>(null);
+	const itemElement = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (!rootElement) return () => {};
@@ -22,28 +22,24 @@ const useItemElement = (
 		element.style.height = `${itemSize.height}px`;
 		element.innerHTML = noteHtml;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-		element.addEventListener('click', onClick as any);
+		element.addEventListener('click', (e) => onClick(e as any));
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-		element.addEventListener('dblclick', onDoubleClick as any);
+		element.addEventListener('dblclick', (e) => onDoubleClick(e as any));
 
 		rootElement.appendChild(element);
-
-		setItemElement(element);
-
-		return () => {
-			element.remove();
-		};
-	}, [rootElement, itemSize, noteHtml, noteId, style, onClick, onDoubleClick, flow]);
-
-	useEffect(() => {
-		if (!itemElement) return;
+		itemElement.current = element;
 
 		if (focusVisible) {
-			itemElement.classList.add('-focus-visible');
+			element.classList.add('-focus-visible');
 		} else {
-			itemElement.classList.remove('-focus-visible');
+			element.classList.remove('-focus-visible');
 		}
-	}, [focusVisible, itemElement]);
+
+		return () => {
+			itemElement.current = null;
+			element.remove();
+		};
+	}, [rootElement, itemSize, noteHtml, noteId, flow, style, focusVisible, onClick, onDoubleClick]);
 
 	return itemElement;
 };
