@@ -8,6 +8,7 @@ import { join, resolve, normalize, sep, extname, basename, relative, dirname } f
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
+import { unique } from '../../ArrayUtils';
 
 const logger = Logger.create('InteropService_Importer_OneNote');
 
@@ -18,7 +19,7 @@ export type SvgXml = {
 
 type PageResolutionResult = { path: string };
 type PageIdMap = {
-	get: (pageId: string | null)=> PageResolutionResult | null;
+	get: (pageId: string|null)=> PageResolutionResult|null;
 };
 
 type NativeOneNoteConverter = (notebookPath: string, outputDirectory: string, baseDir: string)=> Promise<void>;
@@ -82,19 +83,21 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			return result;
 		}
 
-		const oneNoteEntries = files.filter(file =>
+		const notebookFiles = files.filter(file =>
 			['.one', '.onepkg', '.onetoc2'].includes(extname(file.path).toLowerCase()) &&
 			basename(file.path) !== 'OneNote_RecycleBin.onetoc2',
 		);
-		const topLevelEntries = [...new Set(oneNoteEntries.map(file => this.getEntryDirectory(unzipTempDirectory, file.path)))];
-		const baseFolder = topLevelEntries.length === 1 ? topLevelEntries[0] : '';
-		const baseFolderIsFile = ['.one', '.onepkg', '.onetoc2'].includes(extname(baseFolder).toLowerCase());
+
+		const topLevelEntries = unique(notebookFiles.map(file => this.getEntryDirectory(unzipTempDirectory, file.path)));
+		if (topLevelEntries.length > 1) {
+			throw new Error(`OneNote zip contains files from multiple top-level directories: ${JSON.stringify(topLevelEntries)}`);
+		}
+
+		const baseFolder = topLevelEntries[0] ?? '';
+		const baseFolderStat = baseFolder ? await shim.fsDriver().stat(join(unzipTempDirectory, baseFolder)) : null;
+		const baseFolderIsFile = baseFolderStat ? !baseFolderStat.isDirectory() : false;
 		const notebookBaseDir = !baseFolder || baseFolderIsFile ? join(unzipTempDirectory, sep) : join(unzipTempDirectory, baseFolder, sep);
 		const outputDirectory2 = !baseFolder || baseFolderIsFile ? tempOutputDirectory : join(tempOutputDirectory, baseFolder);
-
-		const notebookFiles = files.filter(e => {
-			return extname(e.path) !== '.onetoc2' && basename(e.path) !== 'OneNote_RecycleBin.onetoc2';
-		});
 
 		const oneNoteConverter = getOneNoteConverter();
 
@@ -168,7 +171,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		return {
-			get: (id: string | null) => {
+			get: (id: string|null) => {
 				// Accepting null input matches the behavior of a JavaScript Map's .get method
 				// and simplifies handling 'not found' edge cases:
 				if (!id) return null;
