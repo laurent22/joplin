@@ -8,6 +8,24 @@ import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
 import 'tinymce/plugins/table';
 
+/**
+ * HTML テキストノードの連続スペースをノーブレークスペースに変換し、
+ * TinyMCE 上でインデントが崩れないようにする。
+ */
+function preserveHtmlIndent(rawHtml: string): string {
+  const doc = new DOMParser().parseFromString(rawHtml, 'text/html');
+  const walk = (node: Node): void => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      node.textContent =
+        node.textContent?.replace(/ {2,}/g, (m) => '\u00A0'.repeat(m.length)) ?? '';
+    } else {
+      node.childNodes.forEach(walk);
+    }
+  };
+  walk(doc.body);
+  return doc.body.innerHTML;
+}
+
 interface TinyMCEBodyProps {
   html: string;
   noteId: string | null;
@@ -70,7 +88,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
           editor.on('init', () => {
             if (!destroyed) {
               editorRef.current = editor;
-              editor.setContent(html ?? '');
+              editor.setContent(preserveHtmlIndent(html ?? ''));
               editor.undoManager.reset();
               setEditorReady(true);
             }
@@ -83,21 +101,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             if (!pastedHtml) return;
             e.preventDefault();
 
-            // VSCode からコピーした HTML はインデントを通常スペースで表現するため、
-            // HTML レンダリング時に連続スペースが折り畳まれてしまう。
-            // テキストノードの連続スペースをノーブレークスペース(\u00A0)に変換して保持する。
-            const doc = new DOMParser().parseFromString(pastedHtml, 'text/html');
-            const preserveSpaces = (node: Node): void => {
-              if (node.nodeType === Node.TEXT_NODE) {
-                node.textContent =
-                  node.textContent?.replace(/ {2,}/g, (m) => '\u00A0'.repeat(m.length)) ?? '';
-              } else {
-                node.childNodes.forEach(preserveSpaces);
-              }
-            };
-            preserveSpaces(doc.body);
-
-            editor.execCommand('mceInsertContent', false, doc.body.innerHTML);
+            editor.execCommand('mceInsertContent', false, preserveHtmlIndent(pastedHtml));
           });
         },
       })
@@ -129,7 +133,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   useEffect(() => {
     if (!editorReady || !editorRef.current) return;
     const editor = editorRef.current;
-    editor.setContent(html ?? '');
+    editor.setContent(preserveHtmlIndent(html ?? ''));
     editor.undoManager.reset();
   }, [editorReady, noteId, html]);
 
