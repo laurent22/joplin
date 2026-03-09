@@ -11132,7 +11132,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
-    ldapts: "npm:8.0.17"
+    ldapts: "npm:8.0.18"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -36201,16 +36201,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:8.0.17":
-  version: 8.0.17
-  resolution: "ldapts@npm:8.0.17"
+"ldapts@npm:8.0.18":
+  version: 8.0.18
+  resolution: "ldapts@npm:8.0.18"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
     asn1: "npm:0.2.6"
     debug: "npm:4.4.3"
     strict-event-emitter-types: "npm:2.0.0"
     whatwg-url: "npm:15.1.0"
-  checksum: 10/c02962e1e26a78c4d255c4a3509fbabf55acafc98495b0f5c953c7868d37896eae7c99b41fbb648805f8bb7c94365e13591304ce76afe1d3480adb6f7df936d7
+  checksum: 10/bc3f3a0c3bd28c51520dc1337cab5d654806a84103402976dc187433f7840a003a23b10fbb74035fbdb48200cc00c77649ef229155cf43f11bc98727455c8e5f
   languageName: node
   linkType: hard
 
