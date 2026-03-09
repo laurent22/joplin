@@ -43,6 +43,26 @@ function removeInnerBr(element: HTMLElement, editor: any) {
   }
 }
 
+// ---------- ヘルパー: Mermaid スクリプト注入 ----------
+
+/**
+ * TinyMCE の iframe 内に mermaid.min.js と mermaid_render.js を動的に注入する。
+ * mermaid_render.js は joplin-noteDidUpdate イベントを購読して図をレンダリングする。
+ */
+function injectMermaidScripts(editor: any) {
+  const doc = editor.getDoc() as Document;
+  if (doc.querySelector('script[data-mermaid-injected]')) return; // 二重注入防止
+  const script = doc.createElement('script');
+  script.src = '/pluginAssets/mermaid/mermaid.min.js';
+  script.setAttribute('data-mermaid-injected', '1');
+  script.onload = () => {
+    const renderScript = doc.createElement('script');
+    renderScript.src = '/pluginAssets/mermaid/mermaid_render.js';
+    doc.head.appendChild(renderScript);
+  };
+  doc.head.appendChild(script);
+}
+
 // ---------- ヘルパー: カスタムブロック挿入 ----------
 
 function insertCommandPre(editor: any) {
@@ -278,9 +298,14 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
           editor.on('init', () => {
             if (!destroyed) {
               editorRef.current = editor;
+              injectMermaidScripts(editor);
               editor.setContent(preserveHtmlIndent(html ?? ''));
               editor.undoManager.reset();
               setEditorReady(true);
+              // コンテンツ読み込み後に mermaid レンダリングをトリガー
+              setTimeout(() => {
+                editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+              }, 200);
             }
           });
 
@@ -478,6 +503,10 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
     const editor = editorRef.current;
     editor.setContent(preserveHtmlIndent(html ?? ''));
     editor.undoManager.reset();
+    // ノート切り替え後に mermaid 図を再レンダリング
+    setTimeout(() => {
+      editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+    }, 200);
   }, [editorReady, noteId, html]);
 
   return (
