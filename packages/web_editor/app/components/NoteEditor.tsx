@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { NoteEntity } from '@/lib/database';
-import TinyMCEBody from './TinyMCEBody';
+
+const TinyMCEBody = dynamic(() => import('./TinyMCEBody'), { ssr: false });
 
 export default function NoteEditor() {
   const searchParams = useSearchParams();

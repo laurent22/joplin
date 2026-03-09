@@ -1,6 +1,13 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import tinymce from 'tinymce';
+import 'tinymce/icons/default';
+import 'tinymce/themes/silver';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/hr';
+import 'tinymce/plugins/table';
 
 interface TinyMCEBodyProps {
   html: string;
@@ -8,67 +15,24 @@ interface TinyMCEBodyProps {
   readOnly?: boolean;
 }
 
-const TINYMCE_SCRIPT_ID = 'tinymce-cdn-script';
-const TINYMCE_CDN_URL = 'https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js';
-
-function loadTinyMCEScript(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if ((window as any).tinymce) {
-      resolve();
-      return;
-    }
-    const existing = document.getElementById(TINYMCE_SCRIPT_ID);
-    if (existing) {
-      existing.addEventListener('load', () => resolve());
-      existing.addEventListener('error', () => reject(new Error('Failed to load TinyMCE')));
-      return;
-    }
-    const script = document.createElement('script');
-    script.id = TINYMCE_SCRIPT_ID;
-    script.src = TINYMCE_CDN_URL;
-    script.referrerPolicy = 'origin';
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load TinyMCE script'));
-    document.head.appendChild(script);
-  });
-}
-
 export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBodyProps) {
   const rootIdRef = useRef<string>(
     `tinymce-web-${Date.now()}-${Math.round(Math.random() * 10000)}`
   );
   const editorRef = useRef<any>(null);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
-
-  // TinyMCE スクリプトのロード
-  useEffect(() => {
-    let cancelled = false;
-    loadTinyMCEScript()
-      .then(() => {
-        if (!cancelled) setScriptLoaded(true);
-      })
-      .catch((err) => {
-        console.error('TinyMCEBody: failed to load TinyMCE', err);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   // TinyMCE エディタの初期化
   useEffect(() => {
-    if (!scriptLoaded) return;
-
-    const tinymce = (window as any).tinymce;
-    if (!tinymce) return;
-
     let destroyed = false;
     const editorId = rootIdRef.current;
 
     tinymce
       .init({
         selector: `#${editorId}`,
+        license_key: `gpl`,
+        base_url: '/tinymce',
+        suffix: '.min',
         width: '100%',
         height: '100%',
         resize: false,
@@ -77,9 +41,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
         branding: false,
         readonly: readOnly,
         plugins: 'link lists hr table',
-        toolbar: readOnly
-          ? false
-          : 'bold italic | link | bullist numlist | h1 h2 h3 | blockquote',
+        toolbar: readOnly ? false : 'bold italic | link | bullist numlist | h1 h2 h3 | blockquote',
         valid_elements: '*[*]',
         relative_urls: false,
         content_style: `
@@ -131,7 +93,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
     };
     // readOnly は初期化時にのみ参照するため依存配列に含めない
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scriptLoaded]);
+  }, []);
 
   // ノートコンテンツのセット（noteId または html が変わったとき）
   useEffect(() => {
