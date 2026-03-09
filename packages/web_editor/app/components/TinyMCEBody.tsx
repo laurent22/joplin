@@ -6,7 +6,6 @@ import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 import 'tinymce/plugins/link';
 import 'tinymce/plugins/lists';
-import 'tinymce/plugins/hr';
 import 'tinymce/plugins/table';
 
 interface TinyMCEBodyProps {
@@ -40,7 +39,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
         statusbar: false,
         branding: false,
         readonly: readOnly,
-        plugins: 'link lists hr table',
+        plugins: 'link lists table',
         toolbar: readOnly ? false : 'bold italic | link | bullist numlist | h1 h2 h3 | blockquote',
         valid_elements: '*[*]',
         relative_urls: false,
