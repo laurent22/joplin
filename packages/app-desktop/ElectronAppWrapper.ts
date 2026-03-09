@@ -262,6 +262,17 @@ export default class ElectronAppWrapper {
 		// Fix: https://github.com/electron-userland/electron-builder/issues/2269
 		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
 
+		// Windows-only: Enable custom title bar overlay for theme colors
+		// Note: This is NOT enabled on Linux as it causes the menubar to disappear
+		if (process.platform === 'win32') {
+			windowOptions.titleBarStyle = 'hidden';
+			windowOptions.titleBarOverlay = {
+				color: initialBackgroundColor,
+				symbolColor: initialTheme.color,
+				height: 30,
+			};
+		}
+
 		this.win_ = new BrowserWindow(windowOptions);
 
 		require('@electron/remote/main').enable(this.win_.webContents);
@@ -623,9 +634,19 @@ export default class ElectronAppWrapper {
 			// Get theme colors from the actual theme definition
 			const theme = themeStyle(themeId);
 			const backgroundColor = theme.backgroundColor;
+			const textColor = theme.color;
 
 			// Update window background color
 			this.win_.setBackgroundColor(backgroundColor);
+
+			// Windows-only: Update title bar overlay colors
+			// Note: Not used on Linux as it causes menubar to disappear
+			if (process.platform === 'win32') {
+				this.win_.setTitleBarOverlay({
+					color: backgroundColor,
+					symbolColor: textColor,
+				});
+			}
 		} catch (error) {
 			this.logger().warn('Failed to update window colors:', error);
 		}
