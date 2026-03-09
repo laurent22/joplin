@@ -34,6 +34,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
         suffix: '.min',
         width: '100%',
         height: '100%',
+        min_height: 400,
         resize: false,
         menubar: false,
         statusbar: false,
@@ -103,7 +104,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   }, [editorReady, noteId, html]);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <textarea id={rootIdRef.current} defaultValue="" />
     </div>
   );

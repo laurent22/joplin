@@ -58,8 +58,8 @@ export default function NoteEditor() {
   const note = fetched ?? null;
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <TinyMCEBody html={note?.body ?? ''} noteId={noteId} readOnly={true} />
+    <div className="w-full h-full">
+      <TinyMCEBody html={note?.body ?? ''} noteId={noteId} readOnly={false} />
     </div>
   );
 }
