@@ -363,6 +363,75 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             text: 'ToC',
             onAction: () => insertToc(editor),
           });
+
+          // ---------- カスタムコマンド ----------
+
+          // 文字色コマンド
+          editor.addCommand('text_color_command_w', function() {
+            const node = editor.selection.getNode();
+            const color = editor.dom.getStyle(node, 'color', true);
+            console.log(color);
+            editor.execCommand('ForeColor', false, '#FFFFFF');
+          });
+          editor.addCommand('text_color_command_r', function() {
+            const node = editor.selection.getNode();
+            const color = editor.dom.getStyle(node, 'color', true);
+            console.log(color);
+            editor.execCommand('ForeColor', false, '#FF0000');
+          });
+          editor.addCommand('text_color_command_g', function() {
+            const node = editor.selection.getNode();
+            const color = editor.dom.getStyle(node, 'color', true);
+            console.log(color);
+            editor.execCommand('ForeColor', false, 'rgb(22, 145, 121)');
+          });
+          editor.addCommand('text_color_command_b', function() {
+            const node = editor.selection.getNode();
+            const color = editor.dom.getStyle(node, 'color', true);
+            console.log(color);
+            editor.execCommand('ForeColor', false, 'rgb(35, 111, 161)');
+          });
+          editor.addCommand('text_color_command_h', function() {
+            const node = editor.selection.getNode();
+            const color = editor.dom.getStyle(node, 'color', true);
+            console.log(color);
+            editor.execCommand('ForeColor', false, 'rgb(52, 73, 94)');
+          });
+
+          // フォントサイズコマンド
+          editor.addCommand('text_size_command_8', function() {
+            const node = editor.selection.getNode();
+            const fontSize = editor.dom.getStyle(node, 'font-size', true);
+            console.log(fontSize);
+            editor.dom.setStyle(node, 'font-size', '8pt');
+          });
+          editor.addCommand('text_size_command_10', function() {
+            const node = editor.selection.getNode();
+            const fontSize = editor.dom.getStyle(node, 'font-size', true);
+            console.log(fontSize);
+            editor.dom.setStyle(node, 'font-size', '10pt');
+          });
+
+          // ブロック変換コマンド
+          editor.addCommand('change_to_h1', function() { editor.execCommand('FormatBlock', false, 'h1'); });
+          editor.addCommand('change_to_h2', function() { editor.execCommand('FormatBlock', false, 'h2'); });
+          editor.addCommand('change_to_h3', function() { editor.execCommand('FormatBlock', false, 'h3'); });
+          editor.addCommand('change_to_ul', function() { editor.execCommand('InsertUnorderedList'); });
+          editor.addCommand('change_to_ol', function() { editor.execCommand('InsertOrderedList'); });
+
+          // ---------- ショートカットキー ----------
+          editor.addShortcut('meta+shift+w', 'White', 'text_color_command_w');
+          editor.addShortcut('meta+shift+r', 'Red', 'text_color_command_r');
+          editor.addShortcut('meta+shift+g', 'Green', 'text_color_command_g');
+          editor.addShortcut('meta+shift+p', 'Blue', 'text_color_command_b');
+          editor.addShortcut('meta+shift+h', 'Dark', 'text_color_command_h');
+          editor.addShortcut('meta+shift+e', 'Size 8pt', 'text_size_command_8');
+          editor.addShortcut('meta+shift+t', 'Size 10pt', 'text_size_command_10');
+          editor.addShortcut('meta+1', 'H1', 'change_to_h1');
+          editor.addShortcut('meta+2', 'H2', 'change_to_h2');
+          editor.addShortcut('meta+3', 'H3', 'change_to_h3');
+          editor.addShortcut('meta+shift+u', '箇条書き', 'change_to_ul');
+          editor.addShortcut('meta+shift+o', '番号付き箇条書き', 'change_to_ol');
         },
       })
       .catch((err: any) => {
