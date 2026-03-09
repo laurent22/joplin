@@ -46,13 +46,13 @@ export interface PreviewsOptions {
 
 export default class Note extends BaseItem {
 
+	public static defaultIntevalBetweenNotes = 60 * 60 * 1000;
 	public static updateGeolocationEnabled_ = true;
 	private static geolocationUpdating_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static geolocationCache_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private static dueDateObjects_: any;
-	private static defaultIntevalBetweenNotes = 60 * 60 * 1000;
 
 	public static tableName() {
 		return 'notes';

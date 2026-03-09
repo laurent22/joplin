@@ -485,6 +485,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/index.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newFolder.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.test.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.js

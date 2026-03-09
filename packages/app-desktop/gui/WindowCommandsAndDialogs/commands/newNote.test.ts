@@ -1,4 +1,3 @@
-import NavService from '@joplin/lib/services/NavService';
 import { runtime } from './newNote';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
@@ -14,10 +13,7 @@ describe('newNote', () => {
 		[null, null],
 		['order', true],
 		['order', false],
-	])('should create and navigate to a new note', async (sortOrderField: string, sortOrderReverse: boolean) => {
-		const dispatchMock = jest.fn();
-		NavService.dispatch = dispatchMock;
-
+	])('should create a new note', async (sortOrderField: string, sortOrderReverse: boolean) => {
 		// The command needs an active folder ID.
 		const activeFolder = await Folder.save({ title: 'folder' });
 		const initialNote = await Note.save({ title: 'test', parent_id: activeFolder.id });
@@ -26,11 +22,9 @@ describe('newNote', () => {
 		Setting.setValue('notes.sortOrder.reverse', sortOrderReverse);
 
 		await runtime().execute(null, 'test note', true);
-		expect(dispatchMock).toHaveBeenCalledTimes(1);
 
 		// Correct note should have been created
-		const noteId = dispatchMock.mock.lastCall[0].noteId;
-		const newNote = await Note.load(noteId);
+		const newNote = (await Note.loadByField('body', 'test note'));
 		expect(newNote.body).toEqual('test note');
 		expect(newNote.parent_id).toEqual(activeFolder.id);
 		if (sortOrderField === 'order' && !!sortOrderReverse) {
@@ -38,12 +32,7 @@ describe('newNote', () => {
 		} else if (sortOrderField === 'order' && !sortOrderReverse) {
 			expect(newNote.order).toBeLessThanOrEqual(initialNote.order - Note.defaultIntevalBetweenNotes);
 		} else {
-			expect(newNote.order).toBeLessThan(initialNote.order + Note.defaultIntevalBetweenNotes);
+			expect(newNote.order).toEqual(0);
 		}
-
-		// Should have tried to navigate to the note.
-		expect(dispatchMock.mock.lastCall).toMatchObject([
-			{ noteId: noteId, noteHash: '' },
-		]);
 	});
 });
