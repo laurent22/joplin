@@ -55,7 +55,7 @@ describe('useItemElement', () => {
 
 	test('does nothing when rootElement is null', () => {
 		const { result } = renderHook(
-			() => useItemElement(null as unknown as HTMLDivElement, defaultProps.noteId, defaultProps.noteHtml, false, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow),
+			() => useItemElement(null, defaultProps.noteId, defaultProps.noteHtml, false, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow),
 		);
 
 		act(() => {});

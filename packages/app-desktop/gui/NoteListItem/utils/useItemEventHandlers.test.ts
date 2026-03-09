@@ -28,7 +28,7 @@ describe('useItemEventHandlers', () => {
 		itemElement.appendChild(input);
 
 		renderHook(
-			() => useItemEventHandlers(rootElement, ref, onInputChange, onClick),
+			() => useItemEventHandlers(rootElement, ref, onInputChange, onClick, 'test-key'),
 		);
 		act(() => {});
 
@@ -41,7 +41,7 @@ describe('useItemEventHandlers', () => {
 
 		expect(() => {
 			renderHook(
-				() => useItemEventHandlers(rootElement, ref, onInputChange, onClick),
+				() => useItemEventHandlers(rootElement, ref, onInputChange, onClick, 'test-key'),
 			);
 			act(() => {});
 		}).not.toThrow();
@@ -53,7 +53,7 @@ describe('useItemEventHandlers', () => {
 		itemElement.appendChild(input);
 
 		const { unmount } = renderHook(
-			() => useItemEventHandlers(rootElement, itemElement, onInputChange, onClick),
+			() => useItemEventHandlers(rootElement, itemElement, onInputChange, onClick, 'test-key'),
 		);
 		act(() => {});
 

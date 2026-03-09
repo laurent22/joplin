@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 
 const useItemElement = (
-	rootElement: HTMLDivElement, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow,
+	rootElement: HTMLDivElement | null, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow,
 ) => {
 	const itemElement = useRef<HTMLDivElement>(null);
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { OnClick, OnInputChange } from './types';
 import { useEffect } from 'react';
 
-const useItemEventHandlers = (rootElement: HTMLDivElement, itemElementOrRef: HTMLDivElement | React.RefObject<HTMLDivElement | null>, onInputChange: OnInputChange, onClick: OnClick) => {
+const useItemEventHandlers = (rootElement: HTMLDivElement, itemElementOrRef: HTMLDivElement | React.RefObject<HTMLDivElement | null>, onInputChange: OnInputChange, onClick: OnClick, itemKey: string) => {
 	useEffect(() => {
 		const itemElement: HTMLDivElement | null = itemElementOrRef && typeof itemElementOrRef === 'object' && 'current' in itemElementOrRef
 			? (itemElementOrRef as React.RefObject<HTMLDivElement | null>).current
@@ -55,7 +55,7 @@ const useItemEventHandlers = (rootElement: HTMLDivElement, itemElementOrRef: HTM
 				button.removeEventListener('click', onClick as any);
 			}
 		};
-	}, [itemElementOrRef, rootElement, onInputChange, onClick]);
+	}, [itemElementOrRef, rootElement, onInputChange, onClick, itemKey]);
 };
 
 export default useItemEventHandlers;
