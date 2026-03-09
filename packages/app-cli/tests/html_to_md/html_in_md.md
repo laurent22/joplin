@@ -6,4 +6,4 @@ Line 5
 
 Line 6
 
-<div>Markdown **inside**</div>
+<div>HTML <strong>inside</strong></div>

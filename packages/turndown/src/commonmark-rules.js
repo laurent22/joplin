@@ -2,6 +2,8 @@ import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, 
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 
+var rules = {}
+
 function attributesHtml(attributes, options = null) {
   if (!attributes) return '';
 
@@ -19,7 +21,30 @@ function attributesHtml(attributes, options = null) {
   return output.join(' ');
 }
 
-var rules = {}
+// ===============================================================================
+// Joplin "noMdConv" support
+// 
+// Tags that have the class "jop-noMdConv" are not converted to Markdown
+// but left as HTML. This is useful when converting from MD to HTML, then
+// back to MD again. In that case, we'd want to preserve the code that
+// was in HTML originally.
+// ===============================================================================
+
+rules.joplinHtmlInMarkdown = {
+  filter: function (node) {
+    // Tables are special because they may be entirely kept as HTML depending on
+    // the logic in table.js, for example if they contain code.
+    return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
+  },
+
+  replacement: function (content, node) {
+    node.classList.remove('jop-noMdConv');
+    const nodeName = node.nodeName.toLowerCase();
+    let attrString = attributesHtml(node.attributes, { skipEmptyClass: true });
+    if (attrString) attrString = ' ' + attrString;
+    return '<' + nodeName + attrString + '>' + content + '</' + nodeName + '>';
+  }
+}
 
 rules.paragraph = {
   filter: 'p',
@@ -835,31 +860,6 @@ rules.mathMlScriptBlock = {
     return '$' + getSourceText(node) + '$';
   }
 };
-
-// ===============================================================================
-// Joplin "noMdConv" support
-// 
-// Tags that have the class "jop-noMdConv" are not converted to Markdown
-// but left as HTML. This is useful when converting from MD to HTML, then
-// back to MD again. In that case, we'd want to preserve the code that
-// was in HTML originally.
-// ===============================================================================
-
-rules.joplinHtmlInMarkdown = {
-  filter: function (node) {
-    // Tables are special because they may be entirely kept as HTML depending on
-    // the logic in table.js, for example if they contain code.
-    return node && node.classList && node.classList.contains('jop-noMdConv') && node.nodeName !== 'TABLE';
-  },
-
-  replacement: function (content, node) {
-    node.classList.remove('jop-noMdConv');
-    const nodeName = node.nodeName.toLowerCase();
-    let attrString = attributesHtml(node.attributes, { skipEmptyClass: true });
-    if (attrString) attrString = ' ' + attrString;
-    return '<' + nodeName + attrString + '>' + content + '</' + nodeName + '>';
-  }
-}
 
 // ===============================================================================
 // Joplin Source block support
