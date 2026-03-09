@@ -3,31 +3,20 @@ import { SyntaxNodeRef } from '@lezer/common';
 import makeReplaceExtension from './utils/makeInlineReplaceExtension';
 import toggleCheckboxAt from '../../utils/markdown/toggleCheckboxAt';
 
-const checkboxContainerClassName = 'cm-ext-checkbox-toggle';
-const checkboxClassName = 'cm-ext-checkbox';
+const checkboxClassName = 'cm-ext-checkbox-toggle';
 
 
 class CheckboxWidget extends WidgetType {
-	public constructor(
-		private checked: boolean,
-		private depth: number,
-		private label: string,
-		private markup: string,
-	) {
+	public constructor(private checked: boolean, private depth: number, private label: string) {
 		super();
 	}
 
 	public eq(other: CheckboxWidget) {
-		return other.checked === this.checked
-			&& other.depth === this.depth
-			&& other.label === this.label
-			&& other.markup === this.markup;
+		return other.checked === this.checked && other.depth === this.depth && other.label === this.label;
 	}
 
 	private applyContainerClasses(container: HTMLElement) {
-		container.classList.add(checkboxContainerClassName);
-		// For sizing: Should have the same font/styles as non-rendered checkboxes:
-		container.classList.add('cm-taskMarker');
+		container.classList.add(checkboxClassName);
 
 		for (const className of [...container.classList]) {
 			if (className.startsWith('-depth-')) {
@@ -41,22 +30,12 @@ class CheckboxWidget extends WidgetType {
 	public toDOM(view: EditorView) {
 		const container = document.createElement('span');
 
-		const sizingNode = document.createElement('span');
-		sizingNode.classList.add('sizing');
-		sizingNode.textContent = this.markup;
-		container.appendChild(sizingNode);
-
-		const checkboxWrapper = document.createElement('span');
-		checkboxWrapper.classList.add('content');
-		container.appendChild(checkboxWrapper);
-
 		const checkbox = document.createElement('input');
 		checkbox.type = 'checkbox';
 		checkbox.checked = this.checked;
 		checkbox.ariaLabel = this.label;
 		checkbox.title = this.label;
-		checkbox.classList.add(checkboxClassName);
-		checkboxWrapper.appendChild(checkbox);
+		container.appendChild(checkbox);
 
 		checkbox.oninput = () => {
 			toggleCheckboxAt(view.posAtDOM(container))(view);
@@ -87,32 +66,16 @@ const completedListItemDecoration = Decoration.line({ class: completedTaskClassN
 
 const replaceCheckboxes = [
 	EditorView.theme({
-		[`& .${checkboxContainerClassName}`]: {
-			position: 'relative',
-
-			'& > .sizing': {
-				visibility: 'hidden',
-			},
-
-			'& > .content': {
-				position: 'absolute',
-				left: '0',
-				right: '0',
-				top: '0',
-				bottom: '0',
-				textAlign: 'center',
-			},
-		},
 		[`& .${checkboxClassName}`]: {
-			verticalAlign: 'middle',
-
-			// Ensure that the checkbox grows as the font size increases:
-			width: '100%',
-			minHeight: '70%',
-
-			// Shift the checkbox slightly so that it's aligned with the list item bullet point
-			margin: '0',
-			marginBottom: '3px',
+			'& > input': {
+				width: '1.1em',
+				height: '1.1em',
+				margin: '4px',
+				verticalAlign: 'middle',
+			},
+			'&:not(.-depth-1) > input': {
+				marginInlineStart: 0,
+			},
 		},
 		[`& .${completedTaskClassName}`]: {
 			opacity: 0.69,
@@ -121,7 +84,7 @@ const replaceCheckboxes = [
 	EditorView.domEventHandlers({
 		mousedown: (event) => {
 			const target = event.target as Element;
-			if (target.nodeName === 'INPUT' && target.classList?.contains(checkboxClassName)) {
+			if (target.nodeName === 'INPUT' && target.parentElement?.classList?.contains(checkboxClassName)) {
 				// Let the checkbox handle the event
 				return true;
 			}
@@ -129,6 +92,25 @@ const replaceCheckboxes = [
 		},
 	}),
 	makeReplaceExtension({
+		getRevealStrategy: (node, state) => {
+			if (node.name === 'TaskMarker') {
+				const container = node.node.parent?.parent;
+				const listMarker = container?.getChild('ListMark');
+
+				// Intersection check logic similar to nodeIntersectsSelection but with custom range
+				const selection = state.selection.main;
+				const rangeFrom = listMarker ? listMarker.from : node.from;
+				const rangeTo = node.to;
+
+				const rangeContains = (point: number) => point >= rangeFrom && point <= rangeTo;
+				const selectionContains = (point: number) => point >= selection.from && point <= selection.to;
+
+				// Reveal if cursor touches the checkbox or the list bullet point
+				return rangeContains(selection.from) || rangeContains(selection.to)
+					|| selectionContains(rangeFrom) || selectionContains(rangeTo);
+			}
+			return 'line';
+		},
 		createDecoration: (node, state, parentTags) => {
 			const markerIsChecked = (marker: SyntaxNodeRef) => {
 				const content = state.doc.sliceString(marker.from, marker.to);
@@ -138,14 +120,8 @@ const replaceCheckboxes = [
 			if (node.name === 'TaskMarker') {
 				const containerLine = state.doc.lineAt(node.from);
 				const labelText = state.doc.sliceString(node.to, containerLine.to);
-				const markerText = state.doc.sliceString(node.from, node.to);
 
-				return new CheckboxWidget(
-					markerIsChecked(node),
-					parentTags.get('ListItem') ?? 0,
-					labelText,
-					markerText,
-				);
+				return new CheckboxWidget(markerIsChecked(node), parentTags.get('ListItem') ?? 0, labelText);
 			} else if (node.name === 'Task') {
 				const marker = node.node.getChild('TaskMarker');
 				if (marker && markerIsChecked(marker)) {
@@ -162,7 +138,7 @@ const replaceCheckboxes = [
 					return null;
 				}
 
-				return [node.from, node.to];
+				return [listMarker.from, node.to];
 			} else if (node.name === 'Task') {
 				const taskLine = state.doc.lineAt(node.from);
 				return [taskLine.from];

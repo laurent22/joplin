@@ -279,6 +279,7 @@ const useEditorSettings = (props: Props) => {
 	const editorSettings: EditorSettings = useMemo(() => ({
 		themeData: editorTheme(props.themeId),
 		markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
+		markdownInsertEnabled: Setting.value('markdown.plugin.insert'),
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 		inlineRenderingEnabled,
