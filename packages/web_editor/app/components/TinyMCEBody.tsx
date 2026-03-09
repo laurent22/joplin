@@ -53,7 +53,7 @@ function insertCommandPre(editor: any) {
     'box-sizing:border-box;overflow:auto;font-family:Menlo,Monaco,Consolas,"Courier New",monospace;' +
       'font-size:11px;padding:8px;margin:0;line-height:1.42857;word-break:break-all;' +
       'overflow-wrap:break-word;color:rgb(157,165,180);background:rgb(49,54,63);' +
-      'border:none;border-radius:3px;box-shadow:none;',
+      'border:none;border-radius:3px;box-shadow:none;'
   );
   preElement.id = preId;
   preElement.innerText = ' ';
@@ -93,6 +93,45 @@ function insertMermaidDiv(editor: any) {
   editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 }
 
+function insertToc(editor: any) {
+  const headings = editor.dom.select('h1,h2,h3,h4,h5,h6') as HTMLHeadingElement[];
+  if (headings.length === 0) {
+    editor.notificationManager.open({
+      text: '見出し (h1〜h6) が見つかりません。',
+      type: 'info',
+      timeout: 3000,
+    });
+    return;
+  }
+  const baseId = `toc_${Date.now()}`;
+  headings.forEach((h, i) => {
+    if (!h.id) h.id = `${baseId}_h${i}`;
+  });
+  const levelIndent: Record<string, string> = {
+    '1': '0',
+    '2': '20px',
+    '3': '40px',
+    '4': '60px',
+    '5': '80px',
+    '6': '100px',
+  };
+  const items = headings
+    .map((h) => {
+      const level = h.tagName[1];
+      const indent = levelIndent[level] ?? '0';
+      return `<li style="margin:2px 0;padding-left:${indent}"><a href="#${h.id}">${h.innerText}</a></li>`;
+    })
+    .join('');
+  const tocHtml =
+    `<div id="${baseId}" style="border:1px solid #ccc;border-radius:4px;padding:12px 16px;background:#f9f9f9;margin-bottom:1em;">` +
+    `<p style="font-weight:bold;margin:0 0 8px 0;">目次</p>` +
+    `<ul style="list-style:none;margin:0;padding:0;">${items}</ul>` +
+    `</div>`;
+  editor.insertContent(tocHtml);
+  editor.nodeChanged();
+  editor.focus();
+}
+
 function insertKatexDiv(editor: any) {
   const root = document.createElement('div');
   const p = document.createElement('p');
@@ -120,7 +159,7 @@ function insertKatexDiv(editor: any) {
   editor.getDoc().dispatchEvent(
     new CustomEvent('joplin-kartexUpdate', {
       detail: { id: root.id, fontSize, element: editor.dom.select(`div#${root.id}`)[0] },
-    }),
+    })
   );
 }
 
@@ -195,7 +234,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
               'h1 h2 h3 hr blockquote table |',
               'fontfamily fontsize blocks |',
               'forecolor backcolor removeformat |',
-              'cmd mermaid katexMath',
+              'cmd mermaid katexMath toc',
             ].join(' '),
         valid_elements: '*[*]',
         relative_urls: false,
@@ -276,7 +315,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
               editor.insertContent(
                 '<ul style="list-style:none;padding-left:0">' +
                   '<li><input type="checkbox" />&nbsp;</li>' +
-                  '</ul>',
+                  '</ul>'
               );
             },
             onSetup: (api: any) => {
@@ -316,6 +355,13 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             onSetup: (api: any) => {
               api.setActive(false);
             },
+          });
+
+          // toc: 目次挿入
+          editor.ui.registry.addButton('toc', {
+            tooltip: 'Insert Table of Contents',
+            text: 'ToC',
+            onAction: () => insertToc(editor),
           });
         },
       })
