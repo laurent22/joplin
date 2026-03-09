@@ -29,7 +29,7 @@ export const runtime = (): CommandRuntime => {
 				...defaultValues, parent_id: folder.id,
 				is_todo: isTodo ? 1 : 0,
 				body: body,
-				...(order ? { order } : {}),
+				...(order !== undefined ? { order } : {}),
 			};
 
 			newNote = await Note.save(newNote, { provisional: true });

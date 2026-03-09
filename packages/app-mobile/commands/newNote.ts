@@ -29,7 +29,7 @@ export const runtime = (): CommandRuntime => {
 				body,
 				parent_id: folder.id,
 				is_todo: todo ? 1 : 0,
-				...(order ? { order } : {}),
+				...(order !== undefined ? { order } : {}),
 			}, { provisional: true });
 
 			logger.info(`Navigating to note ${note.id}`);
