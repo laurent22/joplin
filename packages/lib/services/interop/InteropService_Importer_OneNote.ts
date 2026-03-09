@@ -89,16 +89,21 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		);
 
 		const topLevelEntries = unique(notebookFiles.map(file => this.getEntryDirectory(unzipTempDirectory, file.path)));
-		if (topLevelEntries.length > 1) {
-			throw new Error(`OneNote zip contains files from multiple top-level directories: ${JSON.stringify(topLevelEntries)}`);
+
+		let baseFolder = '';
+		for (const entry of topLevelEntries) {
+			if (!entry) continue;
+			const stat = await shim.fsDriver().stat(join(unzipTempDirectory, entry));
+			if (stat?.isDirectory()) {
+				if (baseFolder) {
+					throw new Error(`OneNote zip contains files from multiple top-level directories: ${JSON.stringify(topLevelEntries)}`);
+				}
+				baseFolder = entry;
+			}
 		}
 
-		const baseFolder = topLevelEntries[0] ?? '';
-		const baseFolderStat = baseFolder ? await shim.fsDriver().stat(join(unzipTempDirectory, baseFolder)) : null;
-		const baseFolderIsFile = baseFolderStat ? !baseFolderStat.isDirectory() : false;
-		const notebookBaseDir = !baseFolder || baseFolderIsFile ? join(unzipTempDirectory, sep) : join(unzipTempDirectory, baseFolder, sep);
-		const outputDirectory2 = !baseFolder || baseFolderIsFile ? tempOutputDirectory : join(tempOutputDirectory, baseFolder);
-
+		const notebookBaseDir = !baseFolder ? join(unzipTempDirectory, sep) : join(unzipTempDirectory, baseFolder, sep);
+		const outputDirectory2 = !baseFolder ? tempOutputDirectory : join(tempOutputDirectory, baseFolder);
 		const oneNoteConverter = getOneNoteConverter();
 
 		logger.info('Extracting OneNote to HTML');
