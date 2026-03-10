@@ -12,7 +12,11 @@ export async function PUT(req: NextRequest) {
         { status: 400 }
       );
     }
-    Note.updateNoteBody(id, body);
+    const existing = Note.getNoteById(id);
+    if (!existing) {
+      return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
+    }
+    Note.save({ ...existing, body });
     return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json(
