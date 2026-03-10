@@ -50,6 +50,7 @@ export interface WhenClauseContext {
 	someNotesSelected: boolean;
 	syncStarted: boolean;
 	hasActivePluginEditor: boolean;
+	isActiveFolder: boolean;
 }
 
 export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
@@ -68,10 +69,12 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const commandFolderIds = state.notesParentType === 'Folder' ? (options.commandFolderIds || selectedFolderIds) : [];
 	const commandFolders = commandFolderIds.length ? BaseModel.modelsByIds(state.folders, commandFolderIds) : [];
 	const commandFolder = commandFolders.length ? commandFolders[0] : null;
-
 	const { editorPlugin } = state.pluginService ? getActivePluginEditorView(state.pluginService.plugins, windowState.windowId) : { editorPlugin: null };
-
 	const settings = state.settings || {};
+	const activeFolderId = settings?.activeFolderId;
+	const activeFolder = activeFolderId ? BaseModel.byId(state.folders, activeFolderId) : null;
+	const activeFolderIsValid = !!activeFolder && !activeFolder.deleted_time;
+	const isItActiveFolder = !!activeFolderId && activeFolderIsValid;
 
 	return {
 		// Application state
@@ -98,6 +101,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// Folder selection
 		oneFolderSelected: selectedFolderIds.length === 1,
+		isActiveFolder: isItActiveFolder,
 
 		// Current note properties
 		noteIsTodo: selectedNote ? !!selectedNote.is_todo : false,

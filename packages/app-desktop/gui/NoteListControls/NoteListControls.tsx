@@ -98,7 +98,6 @@ function NoteListControls(props: Props) {
 	const newTodoButtonRef = useRef(null);
 	const noteControlsRef = useRef(null);
 	const searchAndSortRef = useRef(null);
-
 	const breakpoint = props.breakpoint;
 	const dynamicBreakpoints = props.dynamicBreakpoints;
 	const lineCount = props.lineCount;
@@ -164,6 +163,7 @@ function NoteListControls(props: Props) {
 		};
 	}, []);
 
+
 	function onNewTodoButtonClick() {
 		void CommandService.instance().execute('newTodo');
 	}
@@ -216,7 +216,6 @@ function NoteListControls(props: Props) {
 
 	function renderNewNoteButtons() {
 		if (!props.showNewNoteButtons) return null;
-
 		return (
 			<TopRow className="new-note-todo-buttons">
 				<StyledButton
@@ -284,11 +283,19 @@ interface ConnectProps {
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+	const hasSelectedNotebook = (windowState.selectedFolderIds?.length ?? 0) === 1;
+	const isActiveFolder = whenClauseContext.isActiveFolder;
+	const canCreateNote = hasSelectedNotebook &&
+        isActiveFolder &&
+        CommandService.instance().isEnabled('newNote', whenClauseContext);
+	const canCreateTodo = hasSelectedNotebook &&
+		isActiveFolder &&
+		CommandService.instance().isEnabled('newTodo', whenClauseContext);
 
 	return {
 		showNewNoteButtons: windowState.selectedFolderId !== getTrashFolderId(),
-		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
-		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
+		newNoteButtonEnabled: canCreateNote,
+		newTodoButtonEnabled: canCreateTodo,
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
 		sortOrderField: state.settings['notes.sortOrder.field'],
 		sortOrderReverse: state.settings['notes.sortOrder.reverse'],
