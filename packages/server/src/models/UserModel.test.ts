@@ -430,7 +430,7 @@ describe('UserModel', () => {
 	});
 
 	test('should throw an error if the password being saved seems to be hashed', async () => {
-		const passwordSimilarToHash = '$2a$10';
+		const passwordSimilarToHash = '$2a$10$LMKVPiNOWDZhtw9NizNIEuNGLsjOxQAcrwQJ0lnKuiaOtyFgZEnwO';
 
 		const user = await models().user().save({
 			email: 'test@example.com',
