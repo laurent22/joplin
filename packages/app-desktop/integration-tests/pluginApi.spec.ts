@@ -206,5 +206,26 @@ test.describe('pluginApi', () => {
 
 		await expect(panelLocator).not.toBeVisible();
 	});
+
+	// Regression test for https://github.com/laurent22/joplin/issues/12793
+	test('a plugin that crashes before register() should not block other plugins', async ({ startAppWithPlugins }) => {
+		// Load a crashing plugin alongside a working plugin. If the fix works,
+		// startAppWithPlugins completes because startup-plugins-loaded fires.
+		// Without the fix, this test would timeout because allPluginsStarted
+		// never becomes true.
+		const { app, mainWindow } = await startAppWithPlugins([
+			'resources/test-plugins/crashBeforeRegister.js',
+			'resources/test-plugins/execCommand.js',
+		]);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test note');
+
+		// Verify the working plugin is functional
+		const editor = mainScreen.noteEditor;
+		await editor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('Should be overwritten.');
+		await mainScreen.goToAnything.runCommand(app, 'testUpdateEditorText');
+		await editor.expectToHaveText('PASS');
+	});
 });
 

@@ -2,38 +2,50 @@ import { tags, Tag } from '@lezer/highlight';
 import { MarkdownConfig, InlineContext, MarkdownExtension } from '@lezer/markdown';
 
 const equalsSignCharcode = 61;
+const plusSignCharcode = 43;
 
 export const highlightTagName = 'Highlight';
 export const highlightMarkerTagName = 'HighlightMarker';
 
+export const insertTagName = 'Insert';
+export const insertMarkerTagName = 'InsertMarker';
+
 export const highlightTag = Tag.define();
 export const highlightMarkerTag = Tag.define(tags.meta);
 
+export const insertTag = Tag.define();
+export const insertMarkerTag = Tag.define(tags.meta);
+
 const HighlightDelimiter = { resolve: highlightTagName, mark: highlightMarkerTagName };
+const InsertDelimiter = { resolve: insertTagName, mark: insertMarkerTagName };
 
 const isSpaceOrEmpty = (text: string) => text.match(/^\s*$/);
 
 // Markdown extension for recognizing highlighting. This is similar to the upstream
 // extension for strikethrough:
 // https://github.com/lezer-parser/markdown/blob/d6f0aa095722329a0188b9c7afe207dab4835e55/src/extension.ts#L10
-const highlightConfig: MarkdownConfig = {
+const createDoubleCharInlineConfig = (
+	charCode: number,
+	tagName: string,
+	delimiter: { resolve: string; mark: string },
+): MarkdownConfig => ({
 	defineNodes: [
 		{
-			name: highlightTagName,
-			style: highlightTag,
+			name: delimiter.resolve,
+			style: tagName === highlightTagName ? highlightTag : insertTag,
 		},
 		{
-			name: highlightMarkerTagName,
-			style: highlightMarkerTag,
+			name: delimiter.mark,
+			style: tagName === highlightTagName ? highlightMarkerTag : insertMarkerTag,
 		},
 	],
 	parseInline: [{
-		name: highlightTagName,
+		name: tagName,
 
 		parse(cx: InlineContext, current: number, pos: number): number {
 			const nextCharCode = cx.char(pos + 1);
 			const nextNextCharCode = cx.char(pos + 2);
-			if (current !== equalsSignCharcode || nextCharCode !== equalsSignCharcode || nextNextCharCode === equalsSignCharcode) {
+			if (current !== charCode || nextCharCode !== charCode || nextNextCharCode === charCode) {
 				return -1;
 			}
 
@@ -50,16 +62,24 @@ const highlightConfig: MarkdownConfig = {
 			}
 
 			return cx.addDelimiter(
-				HighlightDelimiter,
+				delimiter,
 				pos, pos + 2,
 				canStart,
 				canEnd,
 			);
 		},
 	}],
-};
+});
+
+const highlightConfig = createDoubleCharInlineConfig(equalsSignCharcode, highlightTagName, HighlightDelimiter);
+const insertConfig = createDoubleCharInlineConfig(plusSignCharcode, insertTagName, InsertDelimiter);
 
 const markdownHighlightExtension: MarkdownExtension = [
 	highlightConfig,
 ];
+
+export const markdownInsertExtension: MarkdownExtension = [
+	insertConfig,
+];
+
 export default markdownHighlightExtension;
