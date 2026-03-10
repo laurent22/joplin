@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import dialogs from '../dialogs';
-import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
+import { decryptedStatText, determineKeyPassword, dontReencryptData, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
@@ -136,8 +136,8 @@ const EncryptionConfigScreen = (props: Props) => {
 		return (
 			<tr key={mk.id}>
 				<td style={theme.textStyle}>{activeIcon}</td>
-				<td style={theme.textStyle}>{mk.id}<br/>{_('Source: ')}{mk.source_application}</td>
-				<td style={theme.textStyle}>{_('Created: ')}{time.formatMsToLocal(mk.created_time)}<br/>{_('Updated: ')}{time.formatMsToLocal(mk.updated_time)}</td>
+				<td style={theme.textStyle}>{mk.id}<br />{_('Source: ')}{mk.source_application}</td>
+				<td style={theme.textStyle}>{_('Created: ')}{time.formatMsToLocal(mk.created_time)}<br />{_('Updated: ')}{time.formatMsToLocal(mk.updated_time)}</td>
 				{renderPasswordInput(mk.id)}
 				<td style={theme.textStyle}>{passwordOk}</td>
 				<td style={theme.textStyle}>
@@ -157,7 +157,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			mkComps.push(renderMasterKey(mk));
 		}
 
-		const headerComp = isEnabledMasterKeys ? <h2>{_('Encryption keys')}</h2> : <a onClick={() => toggleShowDisabledMasterKeys() } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled keys') : _('Show disabled keys')}</a>;
+		const headerComp = isEnabledMasterKeys ? <h2>{_('Encryption keys')}</h2> : <a onClick={() => toggleShowDisabledMasterKeys()} style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled keys') : _('Show disabled keys')}</a>;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const infoComp: any = null; // isEnabledMasterKeys ? <p>{'Note: Only one key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.'}</p> : null;
 		const tableComp = !showTable ? null : (
@@ -200,8 +200,12 @@ const EncryptionConfigScreen = (props: Props) => {
 			const answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			if (!answer) return;
 		} else {
-			const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
-			newPassword = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
+			if (!hasMasterPassword) {
+				await dialogs.alert(_('Master password has not been set. Please set a master password from the "Master password" section before enabling encryption.'));
+				return;
+			}
+
+			newPassword = props.masterPassword;
 		}
 
 		if (hasMasterPassword && newEnabled) {
@@ -257,9 +261,9 @@ const EncryptionConfigScreen = (props: Props) => {
 		const needPasswordMessage = !needMasterPassword ? null : (
 			<p className="needpassword">
 				{_('Your password is needed to decrypt some of your data.')}
-				<br/>
+				<br />
 				{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}
-				<br/>
+				<br />
 				<MacOSMissingPasswordHelpLink
 					theme={theme}
 					text={_('%s: Missing password.', _('Help'))}
@@ -357,7 +361,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					<button onClick={() => void reencryptData()} style={theme.buttonStyle}>{buttonLabel}</button>
 				</span>
 
-				{ !props.shouldReencrypt ? null : <button onClick={() => dontReencryptData()} style={theme.buttonStyle}>{_('Ignore')}</button> }
+				{!props.shouldReencrypt ? null : <button onClick={() => dontReencryptData()} style={theme.buttonStyle}>{_('Ignore')}</button>}
 			</>
 		);
 	};
@@ -383,7 +387,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					aria-controls={advancedSettingsId}
 				/>
 				<div id={advancedSettingsId}>
-					{ showAdvanced ? reEncryptSection : null }
+					{showAdvanced ? reEncryptSection : null}
 				</div>
 			</div>
 		);
