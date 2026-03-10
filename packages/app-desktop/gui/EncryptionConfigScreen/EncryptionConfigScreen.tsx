@@ -354,7 +354,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				<h2>{_('Re-encryption')}</h2>
 				<p style={theme.textStyle} dangerouslySetInnerHTML={{ __html: t }}></p>
 				<span style={{ marginRight: 10 }}>
-					<button onClick={() => void reencryptData()} style={theme.buttonStyle}>{buttonLabel}</button>
+					<button onClick={() => void reencryptData(msg => dialogs.confirm(msg), msg => dialogs.alert(msg))} style={theme.buttonStyle}>{buttonLabel}</button>
 				</span>
 
 				{ !props.shouldReencrypt ? null : <button onClick={() => dontReencryptData()} style={theme.buttonStyle}>{_('Ignore')}</button> }

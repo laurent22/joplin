@@ -60,14 +60,14 @@ export const enableEncryptionConfirmationMessages = (_masterKey: MasterKeyEntity
 	return msg;
 };
 
-export const reencryptData = async () => {
-	const ok = confirm(_('Please confirm that you would like to re-encrypt your complete database.'));
+export const reencryptData = async (onConfirm: (msg: string) => Promise<boolean>, onAlert: (msg: string) => Promise<void>) => {
+	const ok = await onConfirm(_('Please confirm that you would like to re-encrypt your complete database.'));
 	if (!ok) return;
 
 	await BaseItem.forceSyncAll();
 	void reg.waitForSyncFinishedThenSync();
 	Setting.setValue('encryption.shouldReencrypt', Setting.SHOULD_REENCRYPT_NO);
-	alert(_('Your data is going to be re-encrypted and synced again.'));
+	await onAlert(_('Your data is going to be re-encrypted and synced again.'));
 };
 
 export const dontReencryptData = () => {
