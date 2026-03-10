@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Size } from '@joplin/utils/types';
-import { useCallback, useState, useRef, useMemo } from 'react';
+import { useCallback, useState, useRef, useMemo, useLayoutEffect } from 'react';
 
 const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, listSize: Size, listRef: React.MutableRefObject<HTMLDivElement>) => {
 	const [scrollTop, setScrollTop] = useState(0);
@@ -13,11 +13,15 @@ const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, list
 	// Refs for values that makeItemIndexVisible reads at call-time.
 	// This keeps the callback reference stable across renders
 	const noteCountRef = useRef(noteCount);
-	noteCountRef.current = noteCount;
 	const scrollTopRef = useRef(scrollTop);
-	scrollTopRef.current = scrollTop;
 	const maxScrollTopRef = useRef(maxScrollTop);
-	maxScrollTopRef.current = maxScrollTop;
+
+	useLayoutEffect(() => {
+		noteCountRef.current = noteCount;
+		scrollTopRef.current = scrollTop;
+		maxScrollTopRef.current = maxScrollTop;
+	});
+
 
 	// This ugly hack is necessary because setting scrollTop at a high
 	// frequency, while scrolling with the keyboard, is unreliable - the
