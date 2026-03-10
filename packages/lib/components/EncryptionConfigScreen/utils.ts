@@ -60,7 +60,7 @@ export const enableEncryptionConfirmationMessages = (_masterKey: MasterKeyEntity
 	return msg;
 };
 
-export const reencryptData = async (onConfirm: (msg: string) => Promise<boolean>, onAlert: (msg: string) => Promise<void>) => {
+export const reencryptData = async (onConfirm: (msg: string)=> Promise<boolean>, onAlert: (msg: string)=> Promise<void>) => {
 	const ok = await onConfirm(_('Please confirm that you would like to re-encrypt your complete database.'));
 	if (!ok) return;
 
