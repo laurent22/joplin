@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import dialogs from '../dialogs';
-import { decryptedStatText, determineKeyPassword, dontReencryptData, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
+import { decryptedStatText, determineKeyPassword, enableEncryptionConfirmationMessages, dontReencryptData, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
@@ -201,13 +201,13 @@ const EncryptionConfigScreen = (props: Props) => {
 			if (!answer) return;
 		} else {
 			if (!hasMasterPassword) {
-				await dialogs.alert(_('Master password has not been set. Please set a master password from the "Master password" section before enabling encryption.'));
+				await CommandService.instance().execute('openMasterPasswordDialog');
 				return;
 			}
 
-			newPassword = props.masterPassword;
+			const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
+			newPassword = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
 		}
-
 		if (hasMasterPassword && newEnabled) {
 			if (!(await masterPasswordIsValid(newPassword))) {
 				await dialogs.alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
