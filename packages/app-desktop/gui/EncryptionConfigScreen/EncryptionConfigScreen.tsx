@@ -77,7 +77,8 @@ export const EncryptionConfigScreen = (props: Props) => {
 			try {
 				await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, props.masterPassword);
 			} catch (error) {
-				await dialogs.alert(error.message);
+				const message = error instanceof Error ? error.message : String(error);
+				await dialogs.alert(message);
 			} finally {
 				setPendingEnableEncryption(false);
 			}
