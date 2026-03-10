@@ -1,7 +1,26 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { Note } from '@/lib/note';
 import { ViewerUtil } from '@/lib/viewerUtil';
 import * as cheerio from 'cheerio';
+
+export async function PUT(req: NextRequest) {
+  try {
+    const { id, body } = await req.json();
+    if (!id || body === undefined) {
+      return NextResponse.json(
+        { success: false, error: 'id and body are required' },
+        { status: 400 }
+      );
+    }
+    Note.updateNoteBody(id, body);
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
+  }
+}
 
 export async function GET(req: Request) {
   try {

@@ -1,6 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import Fab from '@mui/material/Fab';
+import CircularProgress from '@mui/material/CircularProgress';
+import Tooltip from '@mui/material/Tooltip';
+import SaveIcon from '@mui/icons-material/Save';
+import CheckIcon from '@mui/icons-material/Check';
 import tinymce from 'tinymce';
 import { insertToc, setupTocAutoUpdate } from './tocPlugin';
 import 'tinymce/icons/default';
@@ -361,6 +366,40 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   );
   const editorRef = useRef<any>(null);
   const [editorReady, setEditorReady] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = useCallback(async () => {
+    if (!noteId || !editorRef.current || isSaving) return;
+    setIsSaving(true);
+    try {
+      const content = editorRef.current.getContent();
+      const res = await fetch('/api/note', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: noteId, body: content }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setIsDirty(false);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      } else {
+        console.error('Save failed:', json.error);
+      }
+    } catch (err) {
+      console.error('Save error:', err);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [noteId, isSaving]);
+
+  // スタレクロージャを防ぐため、常に最新の handleSave を ref に保持
+  const handleSaveRef = useRef(handleSave);
+  useEffect(() => {
+    handleSaveRef.current = handleSave;
+  }, [handleSave]);
 
   // TinyMCE エディタの初期化
   useEffect(() => {
@@ -480,6 +519,13 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
 
           // カスタムフォーマット/トグルボタン群を登録
           setupToolbarButtons(editor);
+
+          // 編集変更の追跡（ダーティ状態）
+          if (!readOnly) {
+            editor.on('input change', () => {
+              setIsDirty(true);
+            });
+          }
 
           // joplinInlineCode: code 書式トグル
           editor.ui.registry.addToggleButton('joplinInlineCode', {
@@ -630,6 +676,8 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
           editor.addShortcut('meta+3', 'H3', 'change_to_h3');
           editor.addShortcut('meta+shift+u', '箇条書き', 'change_to_ul');
           editor.addShortcut('meta+shift+o', '番号付き箇条書き', 'change_to_ol');
+          editor.addShortcut('meta+s', '保存', () => handleSaveRef.current());
+          editor.addShortcut('ctrl+s', '保存', () => handleSaveRef.current());
 
           // ---------- 変更時に目次を自動更新するコールバック (execOnChangeEvent に相当) ----------
           setupTocAutoUpdate(editor);
@@ -665,6 +713,8 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
     const editor = editorRef.current;
     editor.setContent(preserveHtmlIndent(html ?? ''));
     editor.undoManager.reset();
+    setIsDirty(false);
+    setSaved(false);
     // ノート切り替え後に mermaid 図を再レンダリング
     setTimeout(() => {
       editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
@@ -674,8 +724,37 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   }, [editorReady, noteId, html]);
 
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+      }}
+    >
       <textarea id={rootIdRef.current} defaultValue="" />
+      {!readOnly && (
+        <Tooltip title={saved ? '保存しました' : '保存 (Cmd+S)'} placement="left">
+          <span style={{ position: 'absolute', bottom: 20, right: 20 }}>
+            <Fab
+              color={saved ? 'success' : isDirty ? 'primary' : 'default'}
+              size="medium"
+              disabled={isSaving || (!isDirty && !saved)}
+              onClick={handleSave}
+              aria-label="保存"
+            >
+              {isSaving ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : saved ? (
+                <CheckIcon />
+              ) : (
+                <SaveIcon />
+              )}
+            </Fab>
+          </span>
+        </Tooltip>
+      )}
     </div>
   );
 }

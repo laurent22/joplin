@@ -97,7 +97,7 @@ export class Note {
 
     // Split by half-width or full-width spaces and OR-join for FTS MATCH
     const terms = matchQuery.split(/[\s\u3000]+/).filter(Boolean);
-    const ftsQuery = terms.length > 1 ? terms.join(' OR ') : (terms[0] || matchQuery);
+    const ftsQuery = terms.length > 1 ? terms.join(' OR ') : terms[0] || matchQuery;
 
     const sql = `
             SELECT
@@ -141,5 +141,11 @@ export class Note {
     const stmt = db.prepare(sql);
     const rows = stmt.all(...ids);
     return rows as MarkdownNoteEntity[];
+  }
+
+  public static updateNoteBody(id: string, body: string): void {
+    const db = getDatabase();
+    const now = Date.now();
+    db.prepare('UPDATE notes SET body = ?, updated_time = ? WHERE id = ?').run(body, now, id);
   }
 }
