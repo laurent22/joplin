@@ -63,6 +63,60 @@ function injectMermaidScripts(editor: any) {
   doc.head.appendChild(script);
 }
 
+// ---------- ヘルパー: KaTeX スクリプト注入 ----------
+
+/**
+ * TinyMCE の iframe 内に KaTeX CSS・JS と katex_rendrer.js を動的に注入する。
+ * katex_rendrer.js は joplin-kartexUpdate イベントを購読して数式をレンダリングする。
+ */
+function injectKatexScripts(editor: any) {
+  const doc = editor.getDoc() as Document;
+  if (doc.querySelector('script[data-katex-injected]')) return; // 二重注入防止
+
+  // KaTeX CSS
+  if (!doc.querySelector('link[data-katex-css]')) {
+    const link = doc.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/pluginAssets/katex/katex.css';
+    link.setAttribute('data-katex-css', '1');
+    doc.head.appendChild(link);
+  }
+
+  // katex.min.js → auto-render.min.js → katex_rendrer.js の順に注入
+  const script = doc.createElement('script');
+  script.src = '/pluginAssets/katex/katex.min.js';
+  script.setAttribute('data-katex-injected', '1');
+  script.onload = () => {
+    const autoRender = doc.createElement('script');
+    autoRender.src = '/pluginAssets/katex/contrib/auto-render.min.js';
+    autoRender.onload = () => {
+      const renderScript = doc.createElement('script');
+      renderScript.src = '/pluginAssets/katex/katex_rendrer.js';
+      doc.head.appendChild(renderScript);
+    };
+    doc.head.appendChild(autoRender);
+  };
+  doc.head.appendChild(script);
+}
+
+/**
+ * ドキュメント内の全 KaTeX ブロックに joplin-kartexUpdate イベントを発火し、
+ * 数式を再レンダリングする。スクリプト読み込み完了待ちのため遅延してから実行する。
+ */
+function triggerKatexRender(editor: any, delay = 500) {
+  setTimeout(() => {
+    const doc = editor.getDoc() as Document;
+    doc.querySelectorAll('[katexTxt]').forEach((el) => {
+      const fontSize = el.getAttribute('katexFontsize') ?? '1.2';
+      doc.dispatchEvent(
+        new CustomEvent('joplin-kartexUpdate', {
+          detail: { id: el.id, fontSize, element: el },
+        })
+      );
+    });
+  }, delay);
+}
+
 // ---------- ヘルパー: Mermaid ダイアログ ----------
 
 /**
@@ -213,6 +267,71 @@ function insertToc(editor: any) {
   editor.focus();
 }
 
+function updateKatexDiv(
+  editor: any,
+  txt: string,
+  fontSize: string,
+  katexRootElement: HTMLElement
+) {
+  const root = katexRootElement;
+  root.setAttribute('katexTxt', txt);
+  root.setAttribute('katexFontsize', fontSize);
+  const baseId = root.id.split('_')[1];
+  root.innerHTML = '';
+
+  const p = document.createElement('p');
+  p.id = `katexDialog_${baseId}`;
+  p.setAttribute('class', 'JoplinKatex');
+  p.innerText = `\\[ ${txt} \\]`;
+  root.appendChild(p);
+
+  editor.getDoc().dispatchEvent(
+    new CustomEvent('joplin-kartexUpdate', {
+      detail: { id: root.id, fontSize, element: root },
+    })
+  );
+}
+
+function openKatexDialog(
+  editor: any,
+  initialValue: string,
+  fontSize: string,
+  katexRootElement: HTMLElement
+) {
+  editor.windowManager.open({
+    title: 'KaTeX Math',
+    size: 'large',
+    initialData: {
+      formula: initialValue,
+      fontsize: fontSize,
+    },
+    body: {
+      type: 'panel',
+      items: [
+        {
+          type: 'input',
+          name: 'fontsize',
+          label: 'Font size (em)',
+        },
+        {
+          type: 'textarea',
+          name: 'formula',
+          label: 'KaTeX formula',
+        },
+      ],
+    },
+    buttons: [
+      { type: 'cancel', text: 'Close' },
+      { type: 'submit', text: 'Save', primary: true },
+    ],
+    onSubmit: function (api: any) {
+      const data = api.getData();
+      updateKatexDiv(editor, data.formula, data.fontsize, katexRootElement);
+      api.close();
+    },
+  });
+}
+
 function insertKatexDiv(editor: any) {
   const root = document.createElement('div');
   const p = document.createElement('p');
@@ -360,6 +479,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             if (!destroyed) {
               editorRef.current = editor;
               injectMermaidScripts(editor);
+              injectKatexScripts(editor);
               editor.setContent(preserveHtmlIndent(html ?? ''));
               editor.undoManager.reset();
               setEditorReady(true);
@@ -367,6 +487,8 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
               setTimeout(() => {
                 editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
               }, 200);
+              // コンテンツ読み込み後に KaTeX 数式をレンダリング
+              triggerKatexRender(editor, 600);
             }
           });
 
@@ -380,13 +502,19 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             editor.execCommand('mceInsertContent', false, preserveHtmlIndent(pastedHtml));
           });
 
-          // Mermaid 図をダブルクリックしたらダイアログを開く
+          // Mermaid / KaTeX ブロックをダブルクリックしたらダイアログを開く
           editor.on('DblClick', (e: any) => {
             let target = e.target as HTMLElement | null;
             while (target) {
               if (target.id && target.id.split('_')[0] === 'mermaidJoplinRoot') {
                 const dialogTxt = target.getAttribute('mermaidTxt') ?? '';
                 openMermaidDialog(editor, dialogTxt, target);
+                return;
+              }
+              if (target.id && target.id.split('_')[0] === 'katexJoplinRoot') {
+                const katexTxt = target.getAttribute('katexTxt') ?? '';
+                const fontsize = target.getAttribute('katexFontsize') ?? '1.2';
+                openKatexDialog(editor, katexTxt, fontsize, target);
                 return;
               }
               target = target.parentElement;
@@ -581,6 +709,8 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
     setTimeout(() => {
       editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
     }, 200);
+    // ノート切り替え後に KaTeX 数式を再レンダリング
+    triggerKatexRender(editor, 600);
   }, [editorReady, noteId, html]);
 
   return (
