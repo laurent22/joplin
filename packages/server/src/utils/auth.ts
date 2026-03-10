@@ -10,5 +10,5 @@ export async function checkPassword(password: string, hash: string): Promise<boo
 }
 
 export const isHashedPassword = (password: string) => {
-	return password.startsWith('$2a$10');
+	return /^\$2[aby]\$\d{2}\$/.test(password);
 };
