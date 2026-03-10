@@ -116,6 +116,10 @@ const strikethroughDecoration = Decoration.mark({
 	attributes: { class: 'cm-strike' },
 });
 
+const insertDecoration = Decoration.mark({
+	attributes: { class: 'cm-insert' },
+});
+
 const nodeNameToLineDecoration: Record<string, Decoration> = {
 	'FencedCode': codeBlockDecoration,
 	'CodeBlock': codeBlockDecoration,
@@ -150,6 +154,7 @@ const nodeNameToMarkDecoration: Record<string, Decoration> = {
 	'HorizontalRule': horizontalRuleDecoration,
 	'TaskMarker': taskMarkerDecoration,
 	'Strikethrough': strikethroughDecoration,
+	'Insert': insertDecoration,
 	'Highlight': markDecoration,
 };
 

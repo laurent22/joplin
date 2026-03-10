@@ -247,6 +247,12 @@ export default class ShareService {
 	// necessary otherwise sync will try to update items that are not longer
 	// accessible and will throw the error "Could not find share with ID: xxxx")
 	public async checkShareConsistency() {
+		// Sharing is only supported on Joplin Server/Cloud. If the user is
+		// using a different sync target, there is no share API to query and
+		// any share_id values on folders are stale leftovers from a previous
+		// sync target configuration.
+		if (!this.enabled) return;
+
 		const rootSharedFolders = await Folder.rootSharedFolders(this.shares);
 		let hasRefreshedShares = false;
 		let shares = this.shares;

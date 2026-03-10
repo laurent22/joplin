@@ -9,7 +9,7 @@ export default function(config) {
 			name: 'TurndownService',
 			...config.output,
 		},
-		external: ['jsdom'],
+		external: ['@mixmark-io/domino'],
 		plugins: [
 			commonjs(),
 			replace({

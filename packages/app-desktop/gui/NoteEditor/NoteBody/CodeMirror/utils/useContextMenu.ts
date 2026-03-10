@@ -11,7 +11,7 @@ import type CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl'
 import bridge from '../../../../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Resource from '@joplin/lib/models/Resource';
-import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorContextMenuFilter } from '../../../utils/contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, buildMenuItems, handleEditorContextMenuFilter, resolveContextMenuItemType } from '../../../utils/contextMenuUtils';
 import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
@@ -183,8 +183,10 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		const showResourceContextMenu = async (resourceId: string, type: ResourceMarkupType) => {
 			const menu = new Menu();
+			const baseType = type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource;
+			const itemType = await resolveContextMenuItemType(baseType, resourceId);
 			const contextMenuOptions: ContextMenuOptions = {
-				itemType: type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource,
+				itemType,
 				resourceId,
 				filename: null,
 				mime: null,
@@ -242,8 +244,26 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			// Check if right-clicking on resource markup text (images or file attachments)
-			const markupResourceInfo = getResourceInfoAtClickPos(params);
-			if (markupResourceInfo && pointerInsideEditor(params)) {
+			// When text is selected, CodeMirror's click position may fall slightly
+			// outside the resource markup. Prefer the actual click position first,
+			// then fall back to the selection start if hit-testing misses.
+			const editor = editorRef.current?.editor;
+			const hasSelectedText = !!editorRef.current?.getSelection();
+
+			let markupResourceInfo = getResourceInfoAtClickPos(params);
+
+			// When text is selected, CodeMirror can sometimes report a click
+			// position slightly outside the markup. If click detection fails,
+			// fall back to the selection start position.
+			if (!markupResourceInfo && hasSelectedText && editor?.state?.selection?.main) {
+				const pos = editor.state.selection.main.from;
+				const line = editor.state.doc.lineAt(pos);
+
+				markupResourceInfo = getResourceIdFromMarkup(line.text, pos - line.from);
+			}
+
+
+			if (markupResourceInfo && pointerInsideEditor(params) && !hasSelectedText) {
 				event.preventDefault();
 				await showResourceContextMenu(markupResourceInfo.resourceId, markupResourceInfo.type);
 				return;
@@ -257,7 +277,6 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 			const menu = new Menu();
 
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
 
 			menu.append(
 				new MenuItem({
@@ -336,7 +355,40 @@ const useContextMenu = (props: ContextMenuProps) => {
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});
+			// If a resource link is selected, append resource actions
+			if (markupResourceInfo && hasSelectedText) {
+				const baseType = markupResourceInfo.type === 'image'
+					? ContextMenuItemType.Image
+					: ContextMenuItemType.Resource;
 
+				const itemType = await resolveContextMenuItemType(baseType, markupResourceInfo.resourceId);
+
+				const contextMenuOptions: ContextMenuOptions = {
+					itemType,
+					resourceId: markupResourceInfo.resourceId,
+					filename: null,
+					mime: null,
+					linkToCopy: null,
+					linkToOpen: null,
+					textToCopy: null,
+					htmlToCopy: null,
+					insertContent: () => { },
+					isReadOnly: true,
+					fireEditorEvent: () => { },
+					htmlToMd: null,
+					mdToHtml: null,
+				};
+
+				const resourceMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
+
+				if (resourceMenuItems.length) {
+					menu.append(new MenuItem({ type: 'separator' }));
+				}
+
+				for (const item of resourceMenuItems) {
+					menu.append(item);
+				}
+			}
 			menu.popup({ window: targetWindow });
 		};
 

@@ -4,6 +4,12 @@ describe('ArrayUtils', () => {
 
 
 
+	it('should return unique elements', (async () => {
+		expect(ArrayUtils.unique(['un', 'deux', 'un', 'trois', 'deux'])).toEqual(['un', 'deux', 'trois']);
+		expect(ArrayUtils.unique([1, 2, 1, 3, 2])).toEqual([1, 2, 3]);
+		expect(ArrayUtils.unique([])).toEqual([]);
+	}));
+
 	it('should remove array elements', (async () => {
 		let a = ['un', 'deux', 'trois'];
 		a = ArrayUtils.removeElement(a, 'deux');

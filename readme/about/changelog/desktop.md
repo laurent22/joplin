@@ -1,5 +1,28 @@
 # Joplin Desktop Changelog
 
+## [v3.6.4](https://github.com/laurent22/joplin/releases/tag/v3.6.4) (Pre-release) - 2026-03-07T17:19:55Z
+
+- New: Add "Paste as Markdown" command for Markdown editor ([#14556](https://github.com/laurent22/joplin/issues/14556))
+- New: Plugins: Add support for `joplin.fs.archiveExtract` plugin method ([#14625](https://github.com/laurent22/joplin/issues/14625))
+- Improved: Add keyboard shortcuts to toolbar buttons ([#14408](https://github.com/laurent22/joplin/issues/14408)) ([#12326](https://github.com/laurent22/joplin/issues/12326) by [@akshajrawat](https://github.com/akshajrawat))
+- Improved: Show feedback message when master passwords do not match ([#14566](https://github.com/laurent22/joplin/issues/14566) by [@Vinayreddy765](https://github.com/Vinayreddy765))
+- Improved: Translate Find and Replace dialog in Rich Text editor ([#14529](https://github.com/laurent22/joplin/issues/14529)) ([#12210](https://github.com/laurent22/joplin/issues/12210) by [@Harsh16gupta](https://github.com/Harsh16gupta))
+- Fixed: App fails to restart on Linux AppImage ([#14530](https://github.com/laurent22/joplin/issues/14530)) ([#14522](https://github.com/laurent22/joplin/issues/14522) by [@Ahmed-Idani](https://github.com/Ahmed-Idani))
+- Fixed: Auto-scroll to selected note from 'Go to Anything' search results ([#14591](https://github.com/laurent22/joplin/issues/14591)) ([#12355](https://github.com/laurent22/joplin/issues/12355) by [@Harsh16gupta](https://github.com/Harsh16gupta))
+- Fixed: Error message is incorrect when plugin manifest is invalid ([#14374](https://github.com/laurent22/joplin/issues/14374)) ([#14271](https://github.com/laurent22/joplin/issues/14271) by [@akshajrawat](https://github.com/akshajrawat))
+- Fixed: Fix ++insert++ syntax rendering fix in markdown ([#14547](https://github.com/laurent22/joplin/issues/14547)) ([#14543](https://github.com/laurent22/joplin/issues/14543) by [@justin212407](https://github.com/justin212407))
+- Fixed: Fix file:// links with backslashes for Windows UNC paths ([#14541](https://github.com/laurent22/joplin/issues/14541)) ([#14196](https://github.com/laurent22/joplin/issues/14196) by Sriram Varun Kumar)
+- Fixed: Fix issue where the revision service does not start on the first launch of the app ([#14554](https://github.com/laurent22/joplin/issues/14554) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fixes zh_TW locale detection on first start ([#14527](https://github.com/laurent22/joplin/issues/14527)) ([#14500](https://github.com/laurent22/joplin/issues/14500) by Ashutosh Singh)
+- Fixed: Implement cursor-aware markup rendering and hide bulletpoints on task lists ([#14573](https://github.com/laurent22/joplin/issues/14573)) ([#14564](https://github.com/laurent22/joplin/issues/14564) by [@bwat47](https://github.com/bwat47))
+- Fixed: Importing from OneNote: Fix importing cross-page links ([#14567](https://github.com/laurent22/joplin/issues/14567) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Invisible cursor in legacy editor when using dark theme in separate window ([#14557](https://github.com/laurent22/joplin/issues/14557)) ([#13178](https://github.com/laurent22/joplin/issues/13178) by [@yugalkaushik](https://github.com/yugalkaushik))
+- Fixed: Normalize img alt line breaks and convert data: URLs when pasting from Word ([#14518](https://github.com/laurent22/joplin/issues/14518)) ([#13140](https://github.com/laurent22/joplin/issues/13140) by [@manjhss](https://github.com/manjhss))
+- Fixed: Prevent All Notes sort order from overwriting shared notebook sort on relaunch ([#14524](https://github.com/laurent22/joplin/issues/14524)) ([#12313](https://github.com/laurent22/joplin/issues/12313) by [@manjhss](https://github.com/manjhss))
+- Fixed: Prevent a failing plugin from blocking other plugins ([#14577](https://github.com/laurent22/joplin/issues/14577)) ([#12793](https://github.com/laurent22/joplin/issues/12793) by Ashutosh Singh)
+- Fixed: Secondary windows no longer follow primary selection after moving notes ([#14498](https://github.com/laurent22/joplin/issues/14498)) ([#13883](https://github.com/laurent22/joplin/issues/13883) by [@parththirwani](https://github.com/parththirwani))
+- Fixed: Show only relevant options in context menu when right-clicking a note link ([#14528](https://github.com/laurent22/joplin/issues/14528)) ([#14525](https://github.com/laurent22/joplin/issues/14525) by [@manjhss](https://github.com/manjhss))
+
 ## [v3.6.3](https://github.com/laurent22/joplin/releases/tag/v3.6.3) (Pre-release) - 2026-03-02T18:21:09Z
 
 - New: Add context menu to non-image resources in Markdown editor ([#14402](https://github.com/laurent22/joplin/issues/14402))
