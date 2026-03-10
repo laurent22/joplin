@@ -258,3 +258,5 @@ clearsign
 ligne
 payant
 llamacpp
+bgcolor
+bordercolor

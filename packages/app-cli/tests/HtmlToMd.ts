@@ -45,6 +45,10 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveColorStyles = true;
 			}
 
+			if (htmlFilename.indexOf('table_with') === 0 || htmlFilename.indexOf('table_default') === 0) {
+				htmlToMdOptions.preserveTableStyles = true;
+			}
+
 			const html = await readFile(htmlPath, 'utf8');
 			let expectedMd = await readFile(mdPath, 'utf8');
 
