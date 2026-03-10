@@ -261,18 +261,14 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			onAction: async () => {
 				bridge().activeWindow().webContents.cut();
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Link || itemType === ContextMenuItemType.NoteLink || !!options.textToCopy;
-			},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Link || itemType === ContextMenuItemType.NoteLink,
 		},
 		linkCopy: {
 			label: _('Copy'),
 			onAction: async () => {
 				bridge().activeWindow().webContents.copy();
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Link || itemType === ContextMenuItemType.NoteLink || !!options.textToCopy;
-			},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Link || itemType === ContextMenuItemType.NoteLink,
 		},
 		separator4: makeSeparator(),
 		cut: {
@@ -288,7 +284,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			onAction: async (options: ContextMenuOptions) => {
 				handleCopyToClipboard(options);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
 		},
 		paste: {
 			label: _('Paste'),
