@@ -152,14 +152,14 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		expect(content).toContain('title: \'- title with dash\'');
 	}));
 
-	test('should export _notebook.yml with emoji icon', (async () => {
+	test('should export _folder.yml with emoji icon', (async () => {
 		const icon = JSON.stringify({ type: 1, emoji: 'notebook', name: '', dataUrl: '' });
 		const folder1 = await Folder.save({ title: 'folder1', icon });
 		await Note.save({ title: 'IconNote', body: '**my note**', parent_id: folder1.id });
 
 		await exportAndLoad(`${exportDir()}/folder1/IconNote.md`);
 
-		const metadataPath = `${exportDir()}/folder1/_notebook.yml`;
+		const metadataPath = `${exportDir()}/folder1/_folder.yml`;
 		expect(await fs.pathExists(metadataPath)).toBe(true);
 
 		const metadataContent = await fs.readFile(metadataPath, 'utf8');
@@ -167,14 +167,14 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		expect(metadataContent).toContain('emoji: notebook');
 	}));
 
-	test('should export _notebook.yml with FontAwesome icon', (async () => {
+	test('should export _folder.yml with FontAwesome icon', (async () => {
 		const icon = JSON.stringify({ type: 3, emoji: '', name: 'fas fa-music', dataUrl: '' });
 		const folder1 = await Folder.save({ title: 'folder1', icon });
 		await Note.save({ title: 'FANote', body: '**my note**', parent_id: folder1.id });
 
 		await exportAndLoad(`${exportDir()}/folder1/FANote.md`);
 
-		const metadataPath = `${exportDir()}/folder1/_notebook.yml`;
+		const metadataPath = `${exportDir()}/folder1/_folder.yml`;
 		expect(await fs.pathExists(metadataPath)).toBe(true);
 
 		const metadataContent = await fs.readFile(metadataPath, 'utf8');
@@ -182,13 +182,13 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		expect(metadataContent).toContain('name: fas fa-music');
 	}));
 
-	test('should not export _notebook.yml when folder has no icon', (async () => {
+	test('should not export _folder.yml when folder has no icon', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'NoIcon', body: '**my note**', parent_id: folder1.id });
 
 		await exportAndLoad(`${exportDir()}/folder1/NoIcon.md`);
 
-		const metadataPath = `${exportDir()}/folder1/_notebook.yml`;
+		const metadataPath = `${exportDir()}/folder1/_folder.yml`;
 		expect(await fs.pathExists(metadataPath)).toBe(false);
 	}));
 

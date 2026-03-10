@@ -1,5 +1,5 @@
 import InteropService_Exporter_Md from './InteropService_Exporter_Md';
-import { ModelType } from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
 import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
 import shim from '../../shim';
@@ -26,15 +26,17 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		await super.prepareForProcessingItemType(itemType, itemsToExport);
 
-		if (itemType === ModelType.NoteTag) {
+		if (itemType === BaseModel.TYPE_NOTE_TAG) {
 			// Get tag list for each note
 			const context: NoteTagContext = {
 				noteTags: {},
 			};
-			for (const exportItem of itemsToExport) {
-				if (exportItem.type !== itemType) continue;
+			for (let i = 0; i < itemsToExport.length; i++) {
+				const it = itemsToExport[i].type;
 
-				const itemOrId = exportItem.itemOrId;
+				if (it !== itemType) continue;
+
+				const itemOrId = itemsToExport[i].itemOrId;
 				const noteTag = typeof itemOrId === 'object' ? itemOrId : await NoteTag.load(itemOrId);
 
 				if (!noteTag) continue;
@@ -44,15 +46,17 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			}
 
 			this.updateContext(context);
-		} else if (itemType === ModelType.Tag) {
+		} else if (itemType === BaseModel.TYPE_TAG) {
 			// Map tag ID to title
 			const context: TagContext = {
 				tagTitles: {},
 			};
-			for (const exportItem of itemsToExport) {
-				if (exportItem.type !== itemType) continue;
+			for (let i = 0; i < itemsToExport.length; i++) {
+				const it = itemsToExport[i].type;
 
-				const itemOrId = exportItem.itemOrId;
+				if (it !== itemType) continue;
+
+				const itemOrId = itemsToExport[i].itemOrId;
 				const tag = typeof itemOrId === 'object' ? itemOrId : await Tag.load(itemOrId);
 
 				if (!tag) continue;
@@ -64,18 +68,18 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches parent class signature
 	public async processItem(itemType: number, item: any) {
 		await super.processItem(itemType, item);
 
-		// Write _notebook.yml with folder icon when processing a folder
+		// Write _folder.yml with folder icon when processing a folder
 		if (item.type_ === ModelType.Folder && item.icon) {
 			try {
 				const icon: FolderIcon = JSON.parse(item.icon);
 				const dirPath = `${this.destDir_}/${await this.makeDirPath_(item)}`;
-				const iconObj = await this.serializeFolderIcon(icon, dirPath);
+				const iconObj = this.serializeFolderIcon(icon);
 				if (iconObj) {
-					const metadataPath = `${dirPath}_notebook.yml`;
+					const metadataPath = `${dirPath}_folder.yml`;
 					const yamlContent = yaml.dump({ icon: iconObj }, { noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA });
 					await shim.fsDriver().writeFile(metadataPath, yamlContent, 'utf-8');
 				}
@@ -85,7 +89,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		}
 	}
 
-	private async serializeFolderIcon(icon: FolderIcon, dirPath: string): Promise<Record<string, string> | null> {
+	private serializeFolderIcon(icon: FolderIcon): Record<string, string> | null {
 		switch (icon.type) {
 		case FolderIconType.Emoji:
 			if (!icon.emoji) return null;
@@ -95,25 +99,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			return { type: 'fontawesome', name: icon.name };
 		case FolderIconType.DataUrl:
 			if (!icon.dataUrl) return null;
-			try {
-				let extension = '.png';
-				const mimeMatch = icon.dataUrl.match(/data:image\/([a-zA-Z0-9+\-.]+);base64,/);
-				if (mimeMatch && mimeMatch[1]) {
-					extension = `.${mimeMatch[1].split('+')[0]}`;
-					if (extension === '.jpeg') extension = '.jpg';
-				}
-
-				const base64Data = icon.dataUrl.replace(/^data:image\/[^;]+;base64,/, '');
-				const fileName = `_folder_icon${extension}`;
-
-				// writeFile with 'base64' encoding decodes the base64 string to binary
-				await shim.fsDriver().writeFile(`${dirPath}${fileName}`, base64Data, 'base64');
-
-				return { type: 'dataurl', dataurl: fileName };
-			} catch (e) {
-				logger.warn('Failed to save DataUrl icon to file:', e);
-				return null;
-			}
+			return { type: 'dataurl', dataurl: icon.dataUrl };
 		default:
 			return null;
 		}
