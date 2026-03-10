@@ -48,16 +48,12 @@ const useMessenger = (props: UseMessengerProps) => {
 
 	const markupRenderingSettings = useRef<RenderOptions>(null);
 	const baseTheme = props.settings.themeData;
-	const fontSizeUnits = baseTheme.fontSizeUnits ?? 'px';
-	// Use `rem` instead of `em` for noteViewerFontSize to avoid inconsistent font sizing
-	// in monospace elements (browsers default to 13px for monospace, not the usual 16px)
-	const effectiveFontSizeUnits = fontSizeUnits === 'em' ? 'rem' : fontSizeUnits;
 	markupRenderingSettings.current = {
 		themeId: props.themeId,
 		highlightedKeywords: [],
 		resources: props.noteResources,
 		themeOverrides: {
-			noteViewerFontSize: `${baseTheme.fontSize}${effectiveFontSizeUnits}`,
+			noteViewerFontSize: `${baseTheme.fontSize}${baseTheme.fontSizeUnits ?? 'px'}`,
 		},
 		noteHash: '',
 		initialScrollPercent: 0,
