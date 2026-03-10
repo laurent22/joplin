@@ -34,13 +34,14 @@ export default class MainScreen {
 	}
 
 	public async waitFor() {
-		await this.newNoteButton.waitFor();
 		await this.noteList.waitFor();
 	}
 
 	// Follows the steps a user would use to create a new note.
 	public async createNewNote(title: string) {
 		await this.waitFor();
+		// The new note button is only visible when a folder is selected -- wait for it explicitly.
+		await this.newNoteButton.waitFor();
 
 		// Create the new note. Retry this -- creating new notes can sometimes fail if done just after
 		// application startup.
