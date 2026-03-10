@@ -1,4 +1,5 @@
 import { NoteEntity, getDatabase } from './database';
+import TurndownService from 'turndown';
 
 export type { NoteEntity };
 
@@ -208,9 +209,11 @@ export class Note {
 
       // 3. markdown_notes / markdown_notes_normalized を更新
       //    body が存在する場合のみ実行（markdown_notes_fts はトリガーで自動更新される）
+      //    MarkdownNoteService 同様、body は HTML→Markdown 変換してから保存する
       if (current.body) {
         const mdTitle = current.title ?? '';
-        const mdBody = current.body ?? '';
+        const turndown = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced' });
+        const mdBody = turndown.turndown(current.body);
 
         db.prepare('DELETE FROM markdown_notes WHERE id = ?').run(id);
         db.prepare(
