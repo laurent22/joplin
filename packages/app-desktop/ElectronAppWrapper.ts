@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, powerMonitor } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App, powerMonitor } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -228,9 +228,20 @@ export default class ElectronAppWrapper {
 		// Load the previous state with fallback to defaults
 		const windowState = windowStateKeeper(stateOptions);
 
-		// Get initial theme colors
-		const initialTheme = themeStyle(Setting.value('theme'));
-		const initialBackgroundColor = initialTheme.backgroundColor;
+		// Get initial theme colors with fallback to default
+		let initialBackgroundColor = '#1e1e1e'; // Default dark background
+		let initialTextColor = '#dddddd'; // Default light text
+		try {
+			const themeId = Setting.value('theme');
+			if (themeId && typeof themeId === 'number') {
+				const initialTheme = themeStyle(themeId);
+				initialBackgroundColor = initialTheme.backgroundColor;
+				initialTextColor = initialTheme.color;
+			}
+		} catch (error) {
+			// If theme initialization fails, use defaults
+			console.warn('Failed to get initial theme colors, using defaults:', error);
+		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const windowOptions: any = {
@@ -268,7 +279,7 @@ export default class ElectronAppWrapper {
 			windowOptions.titleBarStyle = 'hidden';
 			windowOptions.titleBarOverlay = {
 				color: initialBackgroundColor,
-				symbolColor: initialTheme.color,
+				symbolColor: initialTextColor,
 				height: 30,
 			};
 		}
