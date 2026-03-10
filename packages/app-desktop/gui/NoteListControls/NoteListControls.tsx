@@ -286,7 +286,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 
 	return {
-		showNewNoteButtons: windowState.selectedFolderId !== getTrashFolderId(),
+		showNewNoteButtons: !!windowState.selectedFolderId && windowState.selectedFolderId !== getTrashFolderId(),
 		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
 		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
