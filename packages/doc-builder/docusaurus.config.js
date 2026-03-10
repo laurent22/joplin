@@ -208,6 +208,12 @@ const config = {
 						position: 'right',
 					},
 					{
+						to: process.env.WEBSITE_BASE_URL + '/plugins',
+						label: 'Plugins',
+						position: 'right',
+						target: '_self',
+					},
+					{
 						type: 'docSidebar',
 						sidebarId: 'helpSidebar',
 						position: 'right',

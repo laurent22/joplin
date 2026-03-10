@@ -187,6 +187,9 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-strike': {
 			textDecoration: 'line-through',
 		},
+		'& .cm-insert': {
+			textDecoration: 'underline',
+		},
 
 		// Applying font size changes with CSS rather than the theme below works
 		// around an issue where the border for code blocks in headings was too
