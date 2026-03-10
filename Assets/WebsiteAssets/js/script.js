@@ -145,7 +145,7 @@ function setupLocaleRedirect() {
 	if (!isRootPage) return;
 
 	// Check if user has explicitly chosen to stay on current locale
-	const localePreference = localStorage.getItem('joplin-locale-preference');
+	const localePreference = (localStorage.getItem('joplin-locale-preference') || '').toLowerCase();
 	if (localePreference === 'en') return;
 
 	// Get user's preferred language from browser
