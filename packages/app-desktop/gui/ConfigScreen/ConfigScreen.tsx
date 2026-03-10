@@ -67,12 +67,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private async checkSyncConfig_() {
-		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
-			const isAuthenticated = await reg.syncTarget().isAuthenticated();
+		const syncTarget = reg.syncTarget();
+		const authRouteName = syncTarget.authRouteName();
+		if (authRouteName) {
+			const isAuthenticated = await syncTarget.isAuthenticated();
 			if (!isAuthenticated) {
 				return this.props.dispatch({
 					type: 'NAV_GO',
-					routeName: 'JoplinCloudLogin',
+					routeName: authRouteName,
 				});
 			}
 		}
@@ -261,6 +263,24 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								title={_('Connect to Joplin Cloud')}
 								level={ButtonLevel.Primary}
 								onClick={goToJoplinCloudLogin}
+							/>
+						</div>,
+					);
+				}
+
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer')) {
+					const goToJoplinServerLogin = () => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinCloudLogin',
+						});
+					};
+					settingComps.push(
+						<div key="connect_to_joplin_server_button" style={this.rowStyle_}>
+							<Button
+								title={_('Login with Joplin Server')}
+								level={ButtonLevel.Primary}
+								onClick={goToJoplinServerLogin}
 							/>
 						</div>,
 					);

@@ -12,6 +12,7 @@ import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
 import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 import bridge from '../services/bridge';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
@@ -20,6 +21,7 @@ interface Props {
 	dispatch: Dispatch;
 	joplinCloudWebsite: string;
 	joplinCloudApi: string;
+	syncTargetId: number;
 }
 
 const JoplinCloudScreenComponent = (props: Props) => {
@@ -37,7 +39,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), props.syncTargetId);
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -115,9 +117,22 @@ const JoplinCloudScreenComponent = (props: Props) => {
 };
 
 const mapStateToProps = (state: AppState) => {
+	const syncTargetId = state.settings['sync.target'] as number;
+	const isJoplinCloud = syncTargetId === SyncTargetRegistry.nameToId('joplinCloud');
+
+	// For Joplin Cloud, use the dedicated website URL
+	// For Joplin Server, the website URL is the same as the API path
+	const websiteUrl = isJoplinCloud
+		? state.settings['sync.10.website']
+		: state.settings['sync.9.path'];
+	const apiUrl = isJoplinCloud
+		? state.settings['sync.10.path']
+		: state.settings['sync.9.path'];
+
 	return {
-		joplinCloudWebsite: state.settings['sync.10.website'],
-		joplinCloudApi: state.settings['sync.10.path'],
+		joplinCloudWebsite: websiteUrl,
+		joplinCloudApi: apiUrl,
+		syncTargetId,
 	};
 };
 

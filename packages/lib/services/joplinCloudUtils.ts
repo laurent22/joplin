@@ -5,7 +5,6 @@ import shim from '../shim';
 import { _ } from '../locale';
 import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
-import SyncTargetRegistry from '../SyncTargetRegistry';
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
 type Action = {
@@ -95,7 +94,7 @@ export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 // after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
 // was set to true the next time we call the function the value would still be true.
 // The closure function prevents that.
-export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
+export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTargetId = 10) => {
 	let isWaitingResponse = false;
 	const performLoginRequest = async () => {
 		if (isWaitingResponse) return undefined;
@@ -103,7 +102,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 
 		const response = await fetch(applicationsUrl, {
 			headers: {
-				'X-JOPLIN-CUSTOM-API-KEY': Setting.value('sync.10.apiKey'),
+				'X-JOPLIN-CUSTOM-API-KEY': Setting.value(`sync.${syncTargetId}.apiKey`),
 			},
 		});
 		const jsonBody = await response.json();
@@ -113,9 +112,9 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 			return undefined;
 		}
 
-		Setting.setValue('sync.10.username', jsonBody.id);
-		Setting.setValue('sync.10.password', jsonBody.password);
-		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('joplinCloud'));
+		Setting.setValue(`sync.${syncTargetId}.username`, jsonBody.id);
+		Setting.setValue(`sync.${syncTargetId}.password`, jsonBody.password);
+		Setting.setValue('sync.target', syncTargetId);
 
 		const fileApi = await reg.syncTarget().fileApi();
 		await fileApi.driver().api().loadSession();

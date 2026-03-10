@@ -64,12 +64,26 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return _('Joplin Server');
 	}
 
-	public async isAuthenticated() {
-		return true;
+	public async isAuthenticated(): Promise<boolean> {
+		try {
+			const fileApi = await this.fileApi();
+			const api = fileApi.driver().api();
+			const sessionId = await api.sessionId();
+			return !!sessionId;
+		} catch (error: unknown) {
+			if ((error as { code?: number }).code === 403) {
+				return false;
+			}
+			throw error;
+		}
+	}
+
+	public authRouteName(): string {
+		return 'JoplinCloudLogin';
 	}
 
 	public static requiresPassword() {
-		return true;
+		return false;
 	}
 
 	public static override supportsShare(): boolean {
