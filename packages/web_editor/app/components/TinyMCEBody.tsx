@@ -156,7 +156,7 @@ function insertMermaidDiv(editor: any) {
   const txt = 'sequenceDiagram\n  Alice ->> Bob: Hello Bob, how are you?';
   dialog.id = `mermaidJoplinDialog_${baseId}`;
   dialog.setAttribute('class', 'mermaid');
-  dialog.innerText = txt;
+  dialog.textContent = txt;
   root.id = `mermaidJoplinRoot_${baseId}`;
   root.setAttribute('mermaidTxt', txt);
   root.appendChild(dialog);
