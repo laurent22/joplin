@@ -430,6 +430,7 @@ describe('UserModel', () => {
 	});
 
 	test('should throw an error if the password being saved seems to be hashed', async () => {
+		// cSpell:disable-next-line
 		const passwordSimilarToHash = '$2a$10$LMKVPiNOWDZhtw9NizNIEuNGLsjOxQAcrwQJ0lnKuiaOtyFgZEnwO';
 
 		const user = await models().user().save({
