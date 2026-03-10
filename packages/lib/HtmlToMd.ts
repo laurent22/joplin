@@ -8,6 +8,7 @@ export interface ParseOptions {
 	anchorNames?: string[];
 	preserveImageTagsWithSize?: boolean;
 	preserveNestedTables?: boolean;
+	preserveTableStyles?: boolean;
 	preserveColorStyles?: boolean;
 	baseUrl?: string;
 	disableEscapeContent?: boolean;
@@ -26,6 +27,7 @@ export default class HtmlToMd {
 			codeBlockStyle: 'fenced',
 			preserveImageTagsWithSize: !!options.preserveImageTagsWithSize,
 			preserveNestedTables: !!options.preserveNestedTables,
+			preserveTableStyles: !!options.preserveTableStyles,
 			preserveColorStyles: !!options.preserveColorStyles,
 			bulletListMarker: '-',
 			emDelimiter: '*',

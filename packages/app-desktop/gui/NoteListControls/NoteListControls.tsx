@@ -284,9 +284,11 @@ interface ConnectProps {
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+	const hasFolderForNewNotes = whenClauseContext.selectedFolderIsValid
+		&& windowState.selectedFolderId !== getTrashFolderId();
 
 	return {
-		showNewNoteButtons: windowState.selectedFolderId !== getTrashFolderId(),
+		showNewNoteButtons: hasFolderForNewNotes,
 		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
 		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],

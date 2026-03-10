@@ -19,7 +19,7 @@ import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from 'react-native';
-import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
+import { AppState as RNAppState, AppStateStatus, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
@@ -295,7 +295,8 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private unsubscribeScreenWidthChangeHandler_: EmitterSubscription|undefined;
 	private unsubscribeNetInfoHandler_: NetInfoSubscription|undefined;
 	private unsubscribeNewShareListener_: UnsubscribeShareListener|undefined;
-	private onAppStateChange_: ()=> void;
+	private onAppStateChange_: (nextAppState: AppStateStatus)=> void;
+	private lastResumeSyncTime_ = 0;
 	private backButtonHandler_: BackButtonHandler;
 	private handleNewShare_: ()=> void;
 	private handleOpenURL_: (event: unknown)=> void;
@@ -315,8 +316,24 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			return this.backButtonHandler();
 		};
 
-		this.onAppStateChange_ = () => {
+		this.onAppStateChange_ = (nextAppState: AppStateStatus) => {
 			PoorManIntervals.update();
+
+			// Trigger sync immediately when the app becomes active (resume from background/lock screen).
+			// Only run when the app becomes active, with a 30-second minimum interval
+			// prevent sync spam on rapid lock/unlock cycles.
+			const minResumeSyncIntervalMs = 30_000;
+			if (nextAppState === 'active') {
+				const elapsed = Date.now() - this.lastResumeSyncTime_;
+				if (elapsed >= minResumeSyncIntervalMs) {
+					logger.info(`onAppStateChange_: App became active - scheduling immediate sync (elapsed since last resume sync: ${elapsed}ms)`);
+					this.lastResumeSyncTime_ = Date.now();
+
+					void reg.scheduleSync(0, null, true);
+				} else {
+					logger.info(`onAppStateChange_: App became active but skipping sync - minimum interval not reached (${elapsed}ms < ${minResumeSyncIntervalMs}ms)`);
+				}
+			}
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
