@@ -102,7 +102,7 @@ interface ContextMenuProps {
 	editorPaste: ()=> void;
 	editorRef: RefObject<CodeMirrorControl>;
 	editorClassName: string;
-	containerRef: RefObject<HTMLDivElement | null>;
+	containerRef: RefObject<HTMLDivElement|null>;
 }
 
 const useContextMenu = (props: ContextMenuProps) => {
@@ -194,9 +194,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 				linkToOpen: null,
 				textToCopy: null,
 				htmlToCopy: null,
-				insertContent: () => { },
+				insertContent: () => {},
 				isReadOnly: true,
-				fireEditorEvent: () => { },
+				fireEditorEvent: () => {},
 				htmlToMd: null,
 				mdToHtml: null,
 			};
