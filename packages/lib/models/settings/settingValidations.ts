@@ -3,16 +3,14 @@ import shim from '../../shim';
 import BaseItem from '../BaseItem';
 import Resource from '../Resource';
 import Setting from '../Setting';
+import { validateUrlProtocol as validateUrlProtocol_ } from '../../urlUtils';
 
 // Should return an error message if there's a problem, and an empty string if not.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type ValidationHandler = (oldValue: any, newValue: any)=> Promise<string>;
 
 const validateUrlProtocol = async (_oldValue: string, newValue: string) => {
-	if (newValue && !newValue.match(/^https?:\/\//i)) {
-		return _('The URL must include the protocol prefix (http:// or https://).');
-	}
-	return '';
+	return validateUrlProtocol_(newValue);
 };
 
 const validations: Record<string, ValidationHandler> = {

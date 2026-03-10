@@ -4,6 +4,7 @@ import { _ } from './locale.js';
 import JoplinServerApi, { Session } from './JoplinServerApi';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { FileApiOptions } from './SyncTargetJoplinServer';
+import { validateUrlProtocol } from './urlUtils';
 import Logger from '@joplin/utils/Logger';
 
 export async function newFileApi(id: number, options: FileApiOptions) {
@@ -88,10 +89,11 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 	public static override async checkConfig(fileApi: FileApiOptions) {
 		try {
 			const path = fileApi.path();
-			if (!path || !/^https?:\/\//i.test(path)) {
+			const protocolErrorMessage = validateUrlProtocol(path);
+			if (protocolErrorMessage) {
 				return {
 					ok: false,
-					errorMessage: _('The URL must include the protocol prefix (http:// or https://).'),
+					errorMessage: protocolErrorMessage,
 				};
 			}
 
