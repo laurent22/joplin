@@ -185,7 +185,7 @@ export const processImagesInPastedHtml = async (html: string, options: ProcessIm
 					// Word encodes base64 with MIME line breaks every ~76 chars.
 					// Strip whitespace before decoding, then save as a Joplin resource
 					// so Turndown's outerHTML (used for images with width/height) gets
-					// a short file:// URL instead of 200KB of base64.
+					// a short URL instead of 200KB of base64.
 					const cleanSrc = imageSrc.replace(/\s/g, '');
 					const dataUrlMatch = cleanSrc.match(/^data:([^;]+);base64,(.+)$/);
 					if (dataUrlMatch) {
@@ -196,7 +196,7 @@ export const processImagesInPastedHtml = async (html: string, options: ProcessIm
 						try {
 							await shim.fsDriver().writeFile(filePath, base64Data, 'base64');
 							const createdResource = await shim.createResourceFromPath(filePath);
-							mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+							mappedResources[imageSrc] = resourceUrl(createdResource);
 						} catch (writeError) {
 							writeError.message = `processPastedHtml: Failed to write or create resource from pasted image: ${writeError.message}`;
 							throw writeError;
