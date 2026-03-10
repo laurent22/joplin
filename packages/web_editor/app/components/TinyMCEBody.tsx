@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import tinymce from 'tinymce';
+import { insertToc, setupTocAutoUpdate } from './tocPlugin';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 import 'tinymce/plugins/link';
@@ -228,83 +229,6 @@ function insertMermaidDiv(editor: any) {
   editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
 }
 
-function insertToc(editor: any) {
-  const headings = editor.dom.select('h1,h2,h3,h4,h5,h6') as HTMLHeadingElement[];
-  if (headings.length === 0) {
-    editor.notificationManager.open({
-      text: '見出し (h1〜h6) が見つかりません。',
-      type: 'info',
-      timeout: 3000,
-    });
-    return;
-  }
-  const baseId = `toc_${Date.now()}`;
-  headings.forEach((h, i) => {
-    if (!h.id) h.id = `${baseId}_h${i}`;
-  });
-  const levelIndent: Record<string, string> = {
-    '1': '0',
-    '2': '20px',
-    '3': '40px',
-    '4': '60px',
-    '5': '80px',
-    '6': '100px',
-  };
-  const items = headings
-    .map((h) => {
-      const level = h.tagName[1];
-      const indent = levelIndent[level] ?? '0';
-      return `<li style="margin:2px 0;padding-left:${indent}"><a href="#${h.id}">${h.innerText}</a></li>`;
-    })
-    .join('');
-  const tocHtml =
-    `<div id="${baseId}" data-joplin-toc="1" style="border:1px solid #ccc;border-radius:4px;padding:12px 16px;background:#f9f9f9;margin-bottom:1em;">` +
-    `<p style="font-weight:bold;margin:0 0 8px 0;">目次</p>` +
-    `<ul style="list-style:none;margin:0;padding:0;">${items}</ul>` +
-    `</div>`;
-  editor.insertContent(tocHtml);
-  editor.nodeChanged();
-  editor.focus();
-}
-
-/**
- * ドキュメント内の既存の目次 (data-joplin-toc="1" を持つ div) を
- * 現在の見出し一覧で再構築する。目次が存在しない場合は何もしない。
- */
-function updateToc(editor: any) {
-  const doc = editor.getDoc() as Document;
-  const tocDivs = doc.querySelectorAll('div[data-joplin-toc="1"]');
-  if (tocDivs.length === 0) return;
-
-  const headings = editor.dom.select('h1,h2,h3,h4,h5,h6') as HTMLHeadingElement[];
-  const levelIndent: Record<string, string> = {
-    '1': '0',
-    '2': '20px',
-    '3': '40px',
-    '4': '60px',
-    '5': '80px',
-    '6': '100px',
-  };
-
-  tocDivs.forEach((tocDiv: Element) => {
-    // 目次自体の中の見出しを除外する
-    const nonTocHeadings = headings.filter((h) => !tocDiv.contains(h));
-    // 見出しに id がなければ付与
-    nonTocHeadings.forEach((h, i) => {
-      if (!h.id) h.id = `toc_h${i}_${Date.now()}`;
-    });
-    const items = nonTocHeadings
-      .map((h) => {
-        const level = h.tagName[1];
-        const indent = levelIndent[level] ?? '0';
-        return `<li style="margin:2px 0;padding-left:${indent}"><a href="#${h.id}">${h.innerText}</a></li>`;
-      })
-      .join('');
-    const ul = tocDiv.querySelector('ul');
-    if (ul) ul.innerHTML = items;
-  });
-}
-
 function updateKatexDiv(editor: any, txt: string, fontSize: string, katexRootElement: HTMLElement) {
   const root = katexRootElement;
   root.setAttribute('katexTxt', txt);
@@ -437,7 +361,6 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   );
   const editorRef = useRef<any>(null);
   const [editorReady, setEditorReady] = useState(false);
-  const tocUpdateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // TinyMCE エディタの初期化
   useEffect(() => {
@@ -709,38 +632,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
           editor.addShortcut('meta+shift+o', '番号付き箇条書き', 'change_to_ol');
 
           // ---------- 変更時に目次を自動更新するコールバック (execOnChangeEvent に相当) ----------
-
-          function onTocUpdateHandler() {
-            if (tocUpdateTimeoutRef.current !== null) {
-              clearTimeout(tocUpdateTimeoutRef.current);
-            }
-            tocUpdateTimeoutRef.current = setTimeout(() => {
-              tocUpdateTimeoutRef.current = null;
-              updateToc(editor);
-            }, 1000);
-          }
-
-          editor.on('keyup', onTocUpdateHandler);
-          editor.on('keypress', onTocUpdateHandler);
-          editor.on('compositionend', onTocUpdateHandler);
-          editor.on('paste', onTocUpdateHandler);
-          editor.on('Undo', onTocUpdateHandler);
-          editor.on('Redo', onTocUpdateHandler);
-          editor.on('joplinChange', onTocUpdateHandler);
-          editor.on('ExecCommand', (event: any) => {
-            const c: string = event.command;
-            if (!c) return;
-            if (
-              c.indexOf('Insert') === 0 ||
-              c.indexOf('Header') === 0 ||
-              c.indexOf('FormatBlock') === 0 ||
-              c.indexOf('mceToggle') === 0 ||
-              c.indexOf('mceInsert') === 0 ||
-              c.indexOf('mceTable') === 0
-            ) {
-              onTocUpdateHandler();
-            }
-          });
+          setupTocAutoUpdate(editor);
         },
       })
       .catch((err: any) => {
