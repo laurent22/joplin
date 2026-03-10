@@ -52,7 +52,7 @@ const useNoteContent = (
 
 	const markupToHtml = useMarkupToHtml({
 		themeId,
-		customCss,
+		customCss: `${customCss}\n .joplin-checkbox { pointer-events: none; opacity: 0.5; }`,
 		plugins: {},
 		whiteBackgroundNoteRendering: false,
 		scrollbarSize,
@@ -155,6 +155,10 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		// const args = event.args;
 
 		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
+
+		if (msg.indexOf('checkboxclick:') === 0 || msg === 'noteRenderComplete') {
+			return;
+		}
 
 		try {
 			if (msg.indexOf('joplin://') === 0) {
