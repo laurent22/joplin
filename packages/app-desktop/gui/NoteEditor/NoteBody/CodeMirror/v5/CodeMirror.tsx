@@ -433,7 +433,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [styles.editor.codeMirrorTheme, editorRoot]);
 
 	useEffect(() => {
-		if (!editorRoot) return () => { };
+		if (!editorRoot) return () => {};
 
 		const theme = themeStyle(props.themeId);
 
@@ -809,7 +809,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={setEditorRoot}>
 				<div style={styles.rowToolbar}>
-					<Toolbar themeId={props.themeId} windowId={windowId} />
+					<Toolbar themeId={props.themeId} windowId={windowId}/>
 					{props.noteToolbar}
 				</div>
 				{editorViewerRow}
