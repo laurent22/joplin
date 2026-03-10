@@ -63,6 +63,67 @@ function injectMermaidScripts(editor: any) {
   doc.head.appendChild(script);
 }
 
+// ---------- ヘルパー: Mermaid ダイアログ ----------
+
+/**
+ * mermaidJoplinRoot 要素のテキスト内容を更新し、mermaid を再レンダリングする。
+ */
+function updateMermaidDiv(editor: any, txt: string, mermaidRootElement: HTMLElement) {
+  const root = mermaidRootElement;
+  root.setAttribute('mermaidTxt', txt);
+  const baseId = root.id.split('_')[1];
+  root.innerHTML = '';
+
+  const divDialog = document.createElement('div');
+  divDialog.id = `mermaidJoplinDialog_${baseId}`;
+  divDialog.setAttribute('class', 'mermaid');
+  divDialog.textContent = txt;
+  removeNextSiblingBr(divDialog, editor);
+  removeInnerBr(divDialog, editor);
+
+  root.appendChild(divDialog);
+  editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+}
+
+/**
+ * Mermaid 編集ダイアログを TinyMCE の windowManager で開く。
+ */
+function openMermaidDialog(editor: any, initialValue: string, mermaidRootElement: HTMLElement) {
+  editor.windowManager.open({
+    title: 'Mermaid Diagram',
+    size: 'large',
+    initialData: {
+      diagram: initialValue ?? '',
+    },
+    body: {
+      type: 'panel',
+      items: [
+        {
+          type: 'textarea',
+          name: 'diagram',
+          label: 'Diagram',
+        },
+      ],
+    },
+    buttons: [
+      {
+        type: 'cancel',
+        text: 'Close',
+      },
+      {
+        type: 'submit',
+        text: 'Save',
+        primary: true,
+      },
+    ],
+    onSubmit: function (api: any) {
+      const data = api.getData();
+      updateMermaidDiv(editor, data.diagram, mermaidRootElement);
+      api.close();
+    },
+  });
+}
+
 // ---------- ヘルパー: カスタムブロック挿入 ----------
 
 function insertCommandPre(editor: any) {
@@ -317,6 +378,19 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             if (!pastedHtml) return;
             e.preventDefault();
             editor.execCommand('mceInsertContent', false, preserveHtmlIndent(pastedHtml));
+          });
+
+          // Mermaid 図をダブルクリックしたらダイアログを開く
+          editor.on('DblClick', (e: any) => {
+            let target = e.target as HTMLElement | null;
+            while (target) {
+              if (target.id && target.id.split('_')[0] === 'mermaidJoplinRoot') {
+                const dialogTxt = target.getAttribute('mermaidTxt') ?? '';
+                openMermaidDialog(editor, dialogTxt, target);
+                return;
+              }
+              target = target.parentElement;
+            }
           });
 
           // カスタムフォーマット/トグルボタン群を登録
