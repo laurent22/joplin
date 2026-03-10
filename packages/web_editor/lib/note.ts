@@ -152,8 +152,10 @@ export class Note {
   }
 
   /**
-   * note を notes / markdown_notes / markdown_notes_normalized の各テーブルに保存する。
+   * note を notes / notes_normalized / markdown_notes / markdown_notes_normalized の各テーブルに保存する。
    * packages/lib/models/Note.ts の save() および MarkdownNoteService.saveMarkdownNote() に相当。
+   * - notes_fts        : notes_normalized への INSERT/DELETE トリガーで自動更新
+   * - markdown_notes_fts: markdown_notes_normalized への INSERT/DELETE トリガーで自動更新
    */
   public static save(note: Partial<NoteEntity> & { id: string }): void {
     const db = getDatabase();
@@ -166,46 +168,63 @@ export class Note {
     const values = entries.map(([, v]) => v);
     db.prepare(`UPDATE notes SET ${setClauses} WHERE id = ?`).run(...values, id);
 
-    // 2. markdown_notes / markdown_notes_normalized を更新
-    //    body が渡されている場合のみ（body のない更新では markdown テーブルは触らない）
-    if ('body' in fields) {
-      // parent_id / title は渡された値を優先し、なければ DB から取得
-      let parentId = (fields as any).parent_id as string | undefined;
-      let title = (fields as any).title as string | undefined;
-      if (parentId === undefined || title === undefined) {
-        const row = db
-          .prepare('SELECT parent_id, title FROM notes WHERE id = ?')
-          .get(id) as { parent_id: string; title: string } | undefined;
-        if (row) {
-          if (parentId === undefined) parentId = row.parent_id ?? '';
-          if (title === undefined) title = row.title ?? '';
-        }
-      }
-      parentId = parentId ?? '';
-      title = title ?? '';
-      const body = ((fields as any).body as string) ?? '';
+    // UPDATE 後の最新行を取得（notes_normalized / markdown 系テーブルで必要なフィールドを補完するため）
+    const current = db
+      .prepare(
+        'SELECT id, parent_id, title, body, is_todo, todo_due, todo_completed, latitude, longitude, altitude, source_url, updated_time, created_time, user_created_time, user_updated_time FROM notes WHERE id = ?'
+      )
+      .get(id) as any;
 
-      const normalizedTitle = this.normalizeText(title);
-      const normalizedBody = this.normalizeText(body);
+    if (!current) return;
 
-      // better-sqlite3 の transaction でアトミックに実行
-      db.transaction(() => {
-        // markdown_notes: upsert (delete + insert)
+    // better-sqlite3 の transaction でアトミックに実行
+    db.transaction(() => {
+      // 2. notes_normalized を更新（SearchEngine が使う FTS 用正規化テーブル）
+      //    title / body はダイアクリティクス除去 + 小文字化して格納
+      //    notes_fts はトリガーにより自動更新される
+      const normTitle = this.normalizeText(current.title ?? '');
+      const normBody = this.normalizeText(current.body ?? '');
+
+      db.prepare('DELETE FROM notes_normalized WHERE id = ?').run(id);
+      db.prepare(
+        `INSERT INTO notes_normalized
+           (id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ).run(
+        id,
+        normTitle,
+        normBody,
+        current.user_created_time ?? current.created_time ?? 0,
+        current.user_updated_time ?? current.updated_time ?? now,
+        current.is_todo ?? 0,
+        current.todo_completed ?? 0,
+        current.todo_due ?? 0,
+        current.parent_id ?? '',
+        current.latitude ?? 0,
+        current.longitude ?? 0,
+        current.altitude ?? 0,
+        current.source_url ?? ''
+      );
+
+      // 3. markdown_notes / markdown_notes_normalized を更新
+      //    body が存在する場合のみ実行（markdown_notes_fts はトリガーで自動更新される）
+      if (current.body) {
+        const mdTitle = current.title ?? '';
+        const mdBody = current.body ?? '';
+
         db.prepare('DELETE FROM markdown_notes WHERE id = ?').run(id);
         db.prepare(
           `INSERT INTO markdown_notes (id, parent_id, title, body, created_time, updated_time)
            VALUES (?, ?, ?, ?, ?, ?)`
-        ).run(id, parentId, title, body, now, now);
+        ).run(id, current.parent_id ?? '', mdTitle, mdBody, now, now);
 
-        // markdown_notes_normalized: upsert (delete + insert)
-        // markdown_notes_fts はトリガーにより自動更新される
         db.prepare('DELETE FROM markdown_notes_normalized WHERE id = ?').run(id);
         db.prepare(
           `INSERT INTO markdown_notes_normalized (id, title, body)
            VALUES (?, ?, ?)`
-        ).run(id, normalizedTitle, normalizedBody);
-      })();
-    }
+        ).run(id, this.normalizeText(mdTitle), this.normalizeText(mdBody));
+      }
+    })();
   }
 
   public static updateNoteBody(id: string, body: string): void {
