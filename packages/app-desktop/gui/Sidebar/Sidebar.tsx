@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useCallback } from 'react';
-import { StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledRoot, StyledSyncReportToggle } from './styles';
+import { useCallback } from 'react';
+import { StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledRoot } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import Synchronizer from '@joplin/lib/Synchronizer';
@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
 import FolderAndTagList from './FolderAndTagList';
+import Setting from '@joplin/lib/models/Setting';
+import time from '@joplin/lib/time';
 
 
 interface Props {
@@ -21,6 +23,7 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	syncStarted: boolean;
+	syncReportLogExpanded: boolean;
 }
 
 const SidebarComponent = (props: Props) => {
@@ -53,44 +56,48 @@ const SidebarComponent = (props: Props) => {
 		resourceFetcherText = _('Fetching resources: %d/%d', props.resourceFetcher.fetchingCount, props.resourceFetcher.toFetchCount);
 	}
 
-	const [syncReportExpanded, setSyncReportExpanded] = useState(false);
+	const syncReportExpanded = props.syncReportLogExpanded;
 
 	const toggleSyncReport = useCallback(() => {
-		setSyncReportExpanded(prev => !prev);
-	}, []);
+		Setting.setValue('syncReportLogExpanded', !syncReportExpanded);
+	}, [syncReportExpanded]);
 
 	const lines = Synchronizer.reportToLines(props.syncReport);
 	if (resourceFetcherText) lines.push(resourceFetcherText);
 	if (decryptionReportText) lines.push(decryptionReportText);
 
+	const completedTime = props.syncReport && props.syncReport.completedTime
+		? time.formatMsToLocal(props.syncReport.completedTime)
+		: null;
+
 	const syncButton = renderSynchronizeButton(props.syncStarted ? 'cancel' : 'sync');
 
-	// Toggle to show/hide the sync panel
-	const toggleButton = (
-		<StyledSyncReportToggle
+	// Show toggle when there are log lines or a completed timestamp
+	const hasContent = lines.length > 0 || completedTime;
+
+	// Toggle to show/hide sync log output
+	const toggleButton = hasContent ? (
+		<button
+			className="sidebar-sync-toggle"
 			onClick={toggleSyncReport}
 			aria-expanded={syncReportExpanded}
-			aria-label={syncReportExpanded ? _('Hide synchronisation panel') : _('Show synchronisation panel')}
-			title={syncReportExpanded ? _('Hide synchronisation panel') : _('Show synchronisation panel')}
+			aria-label={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
+			title={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 		>
 			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'up'}`} />
-		</StyledSyncReportToggle>
-	);
+			{!syncReportExpanded && completedTime ? <span className="timestamp">{_('Last sync: %s', completedTime)}</span> : ''}
+		</button>
+	) : null;
 
-	// Sync panel (report + button), only visible when expanded
-	const syncPanelContent = syncReportExpanded ? (
-		<>
-			{lines.length > 0 && (
-				<StyledSyncReport key="sync_report">
-					{lines.map((line, i) => (
-						<StyledSyncReportText key={i}>
-							{line}
-						</StyledSyncReportText>
-					))}
-				</StyledSyncReport>
-			)}
-			{syncButton}
-		</>
+	// Sync log output, only visible when expanded
+	const syncReportComp = (syncReportExpanded && lines.length > 0) ? (
+		<StyledSyncReport key="sync_report">
+			{lines.map((line, i) => (
+				<StyledSyncReportText key={i}>
+					{line}
+				</StyledSyncReportText>
+			))}
+		</StyledSyncReport>
 	) : null;
 
 	return (
@@ -98,7 +105,8 @@ const SidebarComponent = (props: Props) => {
 			<div style={{ flex: 1 }}><FolderAndTagList /></div>
 			<div style={{ flex: 0, padding: theme.mainPadding }}>
 				{toggleButton}
-				{syncPanelContent}
+				{syncReportComp}
+				{syncButton}
 			</div>
 		</StyledRoot>
 	);
@@ -116,6 +124,7 @@ const mapStateToProps = (state: AppState) => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		decryptionWorker: state.decryptionWorker,
 		resourceFetcher: state.resourceFetcher,
+		syncReportLogExpanded: state.settings.syncReportLogExpanded,
 	};
 };
 
