@@ -139,7 +139,7 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 		}
 	}, [doc, props.windowId]);
 
-	const parentNode = loaded ? doc?.body : null;
+	const parentNode = loaded && doc && !doc.defaultView.closed ? doc.body : null;
 	const wrappedChildren = <WindowIdContext.Provider value={props.windowId}>{props.children}</WindowIdContext.Provider>;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needed to allow adding the portal to the DOM

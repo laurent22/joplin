@@ -8,7 +8,7 @@ test.describe('multiWindow', () => {
 		await mainPage.createNewNote('Test');
 
 		const windows = [];
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 8; i++) {
 			const window = await mainPage.openNewWindow(electronApp);
 
 			// Should load successfully
