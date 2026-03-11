@@ -467,11 +467,13 @@ function NoteEditor(props: Props) {
 				editorControl={editorControl}
 				selectionState={selectionState}
 			/>
-			<View style={{
-				flexGrow: 1,
-				flexShrink: 0,
-				minHeight: '30%',
-			}}>
+			<View
+				style={{
+					flexGrow: 1,
+					flexShrink: 0,
+					minHeight: '30%',
+				}}
+			>
 				<EditorComponent
 					key={props.refreshKey}
 					editorRef={editorRef}
