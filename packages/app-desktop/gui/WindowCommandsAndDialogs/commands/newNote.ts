@@ -3,7 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 
-export const newNoteEnabledConditions = 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
+export const newNoteEnabledConditions = 'oneFolderSelected && selectedFolderIsValid && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
 
 export const declaration: CommandDeclaration = {
 	name: 'newNote',

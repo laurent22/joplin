@@ -60,7 +60,7 @@ const useNoteListControlsBreakpoints = (width: number, newNoteButtonElement: Ele
 	const [dynamicBreakpoints, setDynamicBreakpoints] = useState<Breakpoints>({ Sm: BaseBreakpoint.Sm, Md: BaseBreakpoint.Md, Lg: BaseBreakpoint.Lg, Xl: BaseBreakpoint.Xl });
 	const previousWidth = usePrevious(width);
 	const widthHasChanged = width !== previousWidth;
-	const showNewNoteButton = selectedFolderId !== getTrashFolderId();
+	const showNewNoteButton = !!selectedFolderId && selectedFolderId !== getTrashFolderId();
 
 	// Initialize language-specific breakpoints
 	useEffect(() => {
