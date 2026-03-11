@@ -62,7 +62,7 @@ class MainActivity : ReactActivity() {
       val focused = currentFocus
       // Only intercept Tab when focus is in the activity's own window (not in a dialog).
       if (focused != null && focused !is WebView && focused.rootView == window.decorView) {
-        val editorWebView = findFirstWebView(window.decorView)
+        val editorWebView = findEditorWebView(window.decorView)
         if (editorWebView != null) {
           editorWebView.requestFocus()
           return true
@@ -72,11 +72,17 @@ class MainActivity : ReactActivity() {
     return super.dispatchKeyEvent(event)
   }
 
-  private fun findFirstWebView(root: View): WebView? {
-    if (root is WebView) return root
+  // Finds the note editor WebView specifically (MarkdownEditor or RichTextEditor), identified by
+  // the accessibilityLabel set in ExtendedWebView. This avoids routing Tab to unrelated WebViews
+  // like NoteBodyViewer or ImageEditor on other screens.
+  private fun findEditorWebView(root: View): WebView? {
+    if (root is WebView) {
+      val desc = root.contentDescription?.toString()
+      if (desc == "MarkdownEditor" || desc == "RichTextEditor") return root
+    }
     if (root is ViewGroup) {
       for (i in 0 until root.childCount) {
-        val found = findFirstWebView(root.getChildAt(i))
+        val found = findEditorWebView(root.getChildAt(i))
         if (found != null) return found
       }
     }

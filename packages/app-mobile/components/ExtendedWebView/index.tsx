@@ -116,6 +116,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	return (
 		<WebView
 			key={`webview-${reloadCounter}`}
+			accessibilityLabel={props.webviewInstanceId}
 			style={{
 				// `backgroundColor: transparent` prevents a white fhash on iOS.
 				// It seems that `backgroundColor: theme.backgroundColor` does not
