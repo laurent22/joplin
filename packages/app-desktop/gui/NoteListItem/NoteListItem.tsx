@@ -168,7 +168,11 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		aria-setsize={props.noteCount}
 		role='option'
 	>
-		<div className="dragcursor" style={dragCursorStyle}></div>
+		<div
+				className="dragcursor"
+				style={dragCursorStyle}
+				aria-hidden="true"
+			></div>
 	</div>;
 };
 
