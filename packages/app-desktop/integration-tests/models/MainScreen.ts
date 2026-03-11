@@ -67,22 +67,26 @@ export default class MainScreen {
 
 	public async openNewWindow(electronApp: ElectronApplication) {
 		return new Promise<Page>((resolve, reject) => {
-			let resolved = false;
-			const offWindowAdded = () => electronApp.off('window', onWindowAdded);
+			let timeout: NodeJS.Timeout|null = null;
+			const clearListenersAndTimeouts = () => {
+				if (timeout) {
+					clearTimeout(timeout);
+					timeout = null;
+				}
+				electronApp.off('window', onWindowAdded);
+			};
+
 			const onWindowAdded = async (page: Page) => {
 				if ((await page.title()).startsWith('Joplin -')) {
-					offWindowAdded();
-
-					resolved = true;
+					clearListenersAndTimeouts();
 					resolve(page);
 				}
 			};
 			electronApp.on('window', onWindowAdded);
 
-			setTimeout(async () => {
-				if (resolved) return;
-
-				offWindowAdded();
+			timeout = setTimeout(async () => {
+				timeout = null;
+				clearListenersAndTimeouts();
 
 				const windows = electronApp.windows();
 				const titles = await Promise.all(windows.map(w => w.title()));
