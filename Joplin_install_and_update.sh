@@ -308,29 +308,32 @@ if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cin
   DESKTOP_FILE_LOCATION="$DATA_HOME/applications"
 
   # Only later versions of Joplin default to Wayland
-  IS_WAYLAND_BY_DEFAULT=$(compareVersions "$RELEASE_VERSION" "3.5.6")
   # Joplin has a different startup WM class on Wayland and X11:
   STARTUP_WM_CLASS=Joplin
-  if [[ $XDG_SESSION_TYPE != "x11" && $IS_WAYLAND_BY_DEFAULT == "1" ]]; then
-    STARTUP_WM_CLASS=@joplin/app-desktop
-  fi
 
   # Only delete the desktop file if it will be replaced
-  rm -f "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop"
+  rm -f \
+    "$DESKTOP_FILE_LOCATION/joplin.desktop" \
+    "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop"
 
   # On some systems this directory doesn't exist by default
   mkdir -p "$DESKTOP_FILE_LOCATION"
 
   # No spaces or tabs should be used for indentation with Bash heredocs
-  cat >> "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop" <<-EOF
+  cat >> "$DESKTOP_FILE_LOCATION/joplin.desktop" <<-EOF
 [Desktop Entry]
 Encoding=UTF-8
 Name=Joplin
 Comment=Joplin for Desktop
-Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} %u
+Exec=env APPIMAGELAUNCHER_DISABLE=TRUE ELECTRON_OZONE_PLATFORM_HINT=x11 "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} --ozone-platform=x11 %u
 Icon=joplin
-# This will be different between Wayland and X11. On Wayland, the startup
-# WM class is "@joplin/app-desktop". On X11, it's "Joplin".
+# Force X11/XWayland so the runtime WM class stays aligned with the desktop entry.
+# NOTE: Wayland is intentionally disabled here by forcing X11/XWayland mode.
+# Joplin's WM class differs between X11 ("Joplin") and Wayland ("joplin"),
+# which breaks StartupWMClass matching on Wayland — causing taskbar pinning,
+# window grouping, and icon association to fail in some desktop environments.
+# Forcing X11 keeps the WM class consistent with the desktop entry above.
+# Re-evaluate this when Joplin stabilises its Wayland WM class upstream.
 StartupWMClass=${STARTUP_WM_CLASS}
 Type=Application
 Categories=Office;
