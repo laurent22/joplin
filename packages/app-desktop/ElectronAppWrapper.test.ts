@@ -56,5 +56,7 @@ describe('ElectronAppWrapper', () => {
 		await expect(
 			wrapper.handleAppFailure('Test Error', false, true),
 		).resolves.toBeUndefined();
+
+		expect(mockWin.webContents.forcefullyCrashRenderer).not.toHaveBeenCalled();
 	});
 });
