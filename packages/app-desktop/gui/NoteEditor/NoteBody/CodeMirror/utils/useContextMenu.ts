@@ -335,10 +335,17 @@ const useContextMenu = (props: ContextMenuProps) => {
 			}
 
 			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
-				menu.append(new MenuItem(item));
-			});
+			const seenCommands = new Set<string>();
 
+			for (const item of menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu)) {
+				const command = (item as { commandName?: string }).commandName;
+
+				if (command && seenCommands.has(command)) continue;
+
+				if (command) seenCommands.add(command);
+
+				menu.append(new MenuItem(item));
+			}
 			menu.popup({ window: targetWindow });
 		};
 
