@@ -385,7 +385,16 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 		return EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);
 	}
 
-	// If the password has never been set, then whatever password is provided is considered valid.
+	// If there are encrypted master keys or PPK, the password must be validated against them.
+	// If the master password setting is empty but there's encrypted data, we should not accept
+	// any password as valid (the user must provide the correct password).
+	const syncInfo = localSyncInfo();
+	const hasEncryptedData = !!syncInfo.ppk || syncInfo.masterKeys.length > 0;
+	if (hasEncryptedData && !Setting.value('encryption.masterPassword')) {
+		return false;
+	}
+
+	// If the password has never been set and there's no encrypted data, then whatever password is provided is considered valid.
 	if (!Setting.value('encryption.masterPassword')) return true;
 
 	// There may not be any key to decrypt if the master password has been set,
