@@ -24,7 +24,7 @@
 					</button>
 					<ul class="dropdown-menu dropdown-menu-end">
 						{{#availableLocales}}
-							<li><a class="dropdown-item {{#isActive}}active{{/isActive}}" href="{{baseUrl}}/{{pathPrefix}}" onclick="setLocalePreference('{{code}}')">{{name}}</a></li>
+							<li><a class="dropdown-item {{#isActive}}active{{/isActive}}" href="{{baseUrl}}/{{pathPrefix}}" onclick="setLocalePreference('{{code}}', this.href); return false;">{{name}}</a></li>
 						{{/availableLocales}}
 					</ul>
 				</div>
@@ -75,7 +75,7 @@
 						<div class="text-center menu-mobile-language">
 							<p class="fw500 mobile-menu-language-label"><i class="fas fa-globe"></i> Language</p>
 							{{#availableLocales}}
-								<a href="{{baseUrl}}/{{pathPrefix}}" class="fw500 mobile-menu-link mobile-language-link {{#isActive}}active{{/isActive}}" onclick="setLocalePreference('{{code}}')">{{name}}</a>
+								<a href="{{baseUrl}}/{{pathPrefix}}" class="fw500 mobile-menu-link mobile-language-link {{#isActive}}active{{/isActive}}" onclick="setLocalePreference('{{code}}', this.href); return false;">{{name}}</a>
 							{{/availableLocales}}
 						</div>
 					</div>
