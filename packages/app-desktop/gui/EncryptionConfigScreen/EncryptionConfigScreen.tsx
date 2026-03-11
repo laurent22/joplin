@@ -204,7 +204,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			newPassword = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
 		}
 
-		if (hasMasterPassword && newEnabled) {
+		if ((hasMasterPassword || !!masterKey) && newEnabled) {
 			if (!(await masterPasswordIsValid(newPassword))) {
 				await dialogs.alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
 				return;

@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { activeMasterKeySanityCheck, migrateMasterPassword, migratePpk, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
+import { activeMasterKeySanityCheck, masterPasswordIsValid, migrateMasterPassword, migratePpk, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
 import { localSyncInfo, masterKeyById, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
 import { generateKeyPair, generateKeyPairWithAlgorithm, getPpkAlgorithm, ppkPasswordIsValid, testing__setPpkMigrations_ } from './ppk/ppk';
@@ -215,6 +215,18 @@ describe('e2ee/utils', () => {
 
 		const syncInfo = localSyncInfo();
 		expect(syncInfo.activeMasterKeyId).toBe(mk1.id);
+	});
+
+	it('should reject wrong password against master key when encryption.masterPassword is cleared', async () => {
+		const password = '111111';
+		const wrongPassword = 'wrong-password';
+
+		const mk = await MasterKey.save(await encryptionService().generateMasterKey(password));
+		setActiveMasterKeyId(mk.id);
+		Setting.setValue('encryption.masterPassword', '');
+
+		expect(await masterPasswordIsValid(password)).toBe(true);
+		expect(await masterPasswordIsValid(wrongPassword)).toBe(false);
 	});
 
 });
