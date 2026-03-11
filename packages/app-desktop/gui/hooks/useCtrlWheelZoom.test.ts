@@ -41,8 +41,10 @@ describe('useCtrlWheelZoom', () => {
 		renderHook(() => useCtrlWheelZoom());
 
 		const event = new WheelEvent('wheel', { deltaY: -100, metaKey: true, bubbles: true });
+		const preventSpy = jest.spyOn(event, 'preventDefault');
 		document.dispatchEvent(event);
 
+		expect(preventSpy).toHaveBeenCalled();
 		expect(Setting.incValue).toHaveBeenCalledWith('windowContentZoomFactor', 10);
 	});
 
