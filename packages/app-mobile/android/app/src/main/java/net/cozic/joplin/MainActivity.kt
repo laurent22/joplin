@@ -58,7 +58,7 @@ class MainActivity : ReactActivity() {
   // This works because CodeMirror's tabMovesFocus=false means Tab inside the editor is
   // consumed as indentation and never bubbles up to this handler.
   override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-    if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_TAB) {
+    if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_TAB && !event.isShiftPressed) {
       val focused = currentFocus
       // Only intercept Tab when focus is in the activity's own window (not in a dialog).
       if (focused != null && focused !is WebView && focused.rootView == window.decorView) {
