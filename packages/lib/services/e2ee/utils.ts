@@ -369,10 +369,6 @@ export function getMasterPasswordStatusMessage(status: MasterPasswordStatus): st
 }
 
 export async function masterPasswordIsValid(masterPassword: string, activeMasterKey: MasterKeyEntity = null): Promise<boolean> {
-	// A valid password is basically one that decrypts the private key, but due
-	// to backward compatibility not all users have a PPK yet, so we also check
-	// based on the active master key.
-
 	if (!masterPassword) throw new Error('Password is empty');
 
 	const ppk = localSyncInfo().ppk;
@@ -385,21 +381,31 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 		return EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);
 	}
 
-	// If there are encrypted master keys or PPK, the password must be validated against them.
-	// If the master password setting is empty but there's encrypted data, we should not accept
-	// any password as valid (the user must provide the correct password).
+	// If master password setting is empty but we have encrypted data,
+	// try validating against all available master keys
 	const syncInfo = localSyncInfo();
 	const hasEncryptedData = !!syncInfo.ppk || syncInfo.masterKeys.length > 0;
+
 	if (hasEncryptedData && !Setting.value('encryption.masterPassword')) {
+		// Try to validate against each master key
+		for (const mk of syncInfo.masterKeys) {
+			try {
+				const isValid = await EncryptionService.instance().checkMasterKeyPassword(mk, masterPassword);
+				if (isValid) return true;
+			} catch (error) {
+				// Continue to next key if this one fails
+				continue;
+			}
+		}
+		// None of the keys validated the password
 		return false;
 	}
 
-	// If the password has never been set and there's no encrypted data, then whatever password is provided is considered valid.
+	// If the password has never been set and there's no encrypted data,
+	// then whatever password is provided is considered valid
 	if (!Setting.value('encryption.masterPassword')) return true;
 
-	// There may not be any key to decrypt if the master password has been set,
-	// but the user has never synchronized. In which case, it's sufficient to
-	// compare to whatever they've entered earlier.
+	// Compare with stored master password
 	return Setting.value('encryption.masterPassword') === masterPassword;
 }
 

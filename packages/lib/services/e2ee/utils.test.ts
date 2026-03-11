@@ -1,65 +1,59 @@
 import { masterPasswordIsValid } from './utils';
 import Setting from '../../models/Setting';
-import { localSyncInfo, saveLocalSyncInfo } from './syncInfoUtils';
-import { MasterKeyEntity } from './types';
+import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
+import { setupDatabaseAndSynchronizer, encryptionService, switchClient } from '../../testing/test-utils';
 
 describe('e2ee/utils', () => {
-	describe('masterPasswordIsValid', () => {
-		beforeEach(() => {
-			// Reset settings before each test
-			Setting.setValue('encryption.masterPassword', '');
-		});
+	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+		Setting.setValue('encryption.masterPassword', '');
+	});
 
-		it('should reject any password when master password is cleared but encrypted data exists', async () => {
-			// Simulate a scenario where:
-			// 1. Master password was set and encrypted data exists
-			// 2. User clears the master password
-			// 3. User tries to re-enable encryption with any password
+	it('masterPasswordIsValid should reject wrong password when encrypted data exists but master password is cleared', async () => {
+		// This tests the bug fix for #14695:
+		// When user clears master password and re-enables encryption,
+		// the system should validate against existing master keys, not accept any password
 
-			// Set up encrypted data (master keys)
-			const syncInfo = localSyncInfo();
-			const mockMasterKey: MasterKeyEntity = {
-				id: 'test-key-1',
-				created_time: Date.now(),
-				updated_time: Date.now(),
-				encryption_method: 4,
-				source_application: 'joplin',
-				source_application_version: '3.6.0',
-				checksum: 'test-checksum',
-				content: 'encrypted-content',
-			};
-			syncInfo.masterKeys = [mockMasterKey];
-			saveLocalSyncInfo(syncInfo);
+		const service = encryptionService();
+		const correctPassword = 'mySecretPassword123';
+		const wrongPassword = 'wrongPassword456';
 
-			// Clear the master password setting (simulating the "Clear master password" button)
-			Setting.setValue('encryption.masterPassword', '');
+		// Generate a real master key with the correct password
+		const masterKey = await service.generateMasterKey(correctPassword);
 
-			// Try to validate with any password - should fail
-			try {
-				const result = await masterPasswordIsValid('any-password');
-				expect(result).toBe(false);
-			} catch (error) {
-				// If it throws, that's also acceptable behavior
-				expect(error).toBeDefined();
-			}
-		});
+		// Set it in sync info (simulating existing encrypted data)
+		const syncInfo = localSyncInfo();
+		syncInfo.masterKeys = [masterKey];
+		saveLocalSyncInfo(syncInfo);
 
-		it('should accept any password when no encrypted data exists and master password is not set', async () => {
-			// When there's no encrypted data and no master password set,
-			// any password should be considered valid (first-time setup)
-			const syncInfo = localSyncInfo();
-			syncInfo.masterKeys = [];
-			syncInfo.ppk = null;
-			saveLocalSyncInfo(syncInfo);
+		// Clear the master password setting (simulating user clicking "Clear master password")
+		Setting.setValue('encryption.masterPassword', '');
 
-			Setting.setValue('encryption.masterPassword', '');
+		// Wrong password should be rejected
+		const wrongResult = await masterPasswordIsValid(wrongPassword);
+		expect(wrongResult).toBe(false);
 
-			const result = await masterPasswordIsValid('any-password');
-			expect(result).toBe(true);
-		});
+		// Correct password should be accepted
+		const correctResult = await masterPasswordIsValid(correctPassword);
+		expect(correctResult).toBe(true);
+	});
 
-		it('should throw error when password is empty', async () => {
-			await expect(masterPasswordIsValid('')).rejects.toThrow('Password is empty');
-		});
+	it('masterPasswordIsValid should accept any password when no encrypted data exists', async () => {
+		// First-time setup: no encrypted data, no master password set
+		const syncInfo = localSyncInfo();
+		syncInfo.masterKeys = [];
+		syncInfo.ppk = null;
+		saveLocalSyncInfo(syncInfo);
+
+		Setting.setValue('encryption.masterPassword', '');
+
+		// Any password should be accepted
+		const result = await masterPasswordIsValid('anyPassword');
+		expect(result).toBe(true);
+	});
+
+	it('masterPasswordIsValid should throw error when password is empty', async () => {
+		await expect(masterPasswordIsValid('')).rejects.toThrow('Password is empty');
 	});
 });
