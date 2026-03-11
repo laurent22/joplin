@@ -585,6 +585,7 @@ packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/setSettingValue.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/integration-tests/util/waitForNextOpenPath.js
+packages/app-desktop/integration-tests/util/waitForNextWindowMatching.js
 packages/app-desktop/integration-tests/wcag.spec.js
 packages/app-desktop/main-html.js
 packages/app-desktop/main.js
