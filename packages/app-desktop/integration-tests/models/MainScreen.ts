@@ -7,6 +7,7 @@ import setFilePickerResponse from '../util/setFilePickerResponse';
 import NoteList from './NoteList';
 import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
+import { Second } from '@joplin/utils/time';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -62,6 +63,34 @@ export default class MainScreen {
 	public async openSettings(electronApp: ElectronApplication) {
 		// Check both labels so this works on MacOS
 		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
+	}
+
+	public async openNewWindow(electronApp: ElectronApplication) {
+		return new Promise<Page>((resolve, reject) => {
+			let resolved = false;
+			const offWindowAdded = () => electronApp.off('window', onWindowAdded);
+			const onWindowAdded = async (page: Page) => {
+				if ((await page.title()).startsWith('Joplin -')) {
+					offWindowAdded();
+
+					resolved = true;
+					resolve(page);
+				}
+			};
+			electronApp.on('window', onWindowAdded);
+
+			setTimeout(async () => {
+				if (resolved) return;
+
+				offWindowAdded();
+
+				const windows = electronApp.windows();
+				const titles = await Promise.all(windows.map(w => w.title()));
+				reject(new Error(`Opening a window timed out. Open window titles: ${JSON.stringify(titles)}.`));
+			}, 30 * Second);
+
+			void activateMainMenuItem(electronApp, 'Open in new window');
+		});
 	}
 
 	public async search(text: string) {

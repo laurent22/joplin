@@ -536,6 +536,7 @@ packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
+packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/pluginApi.spec.js
 packages/app-desktop/integration-tests/resizableLayout.spec.js
