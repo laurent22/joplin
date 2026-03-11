@@ -1,5 +1,4 @@
 import Setting from '@joplin/lib/models/Setting';
-import { processPastedHtml } from './resourceHandling';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
@@ -21,7 +20,55 @@ const createTestMarkupConverters = () => {
 	return { markupToHtml, htmlToMd };
 };
 
+jest.mock('electron', () => ({
+	clipboard: {
+		has: jest.fn(),
+		readBuffer: jest.fn(),
+	},
+}), { virtual: true });
+
+const mockFsDriver = {
+	writeFile: jest.fn().mockResolvedValue(undefined),
+	remove: jest.fn().mockResolvedValue(undefined),
+};
+
+jest.mock('@joplin/lib/shim', () => ({
+	__esModule: true,
+	default: {
+		attachFileToNoteBody: jest.fn().mockResolvedValue('![](:/fakeResourceId)'),
+		fsDriver: () => mockFsDriver,
+	},
+}));
+
+jest.mock('../../../services/bridge', () => ({
+	__esModule: true,
+	default: () => ({
+		showErrorMessageBox: jest.fn(),
+		showOpenDialog: jest.fn(),
+	}),
+}));
+
+const getResourceHandling = () => require('./resourceHandling');
+
 describe('resourceHandling', () => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const clipboard = (): any => require('electron').clipboard;
+
+	let processPastedHtml: typeof import('./resourceHandling').processPastedHtml;
+	let getResourcesFromPasteEvent: typeof import('./resourceHandling').getResourcesFromPasteEvent;
+
+	beforeAll(() => {
+		const rh = getResourceHandling();
+		processPastedHtml = rh.processPastedHtml;
+		getResourcesFromPasteEvent = rh.getResourcesFromPasteEvent;
+	});
+
+	beforeEach(() => {
+		jest.clearAllMocks();
+		mockFsDriver.writeFile.mockResolvedValue(undefined);
+		mockFsDriver.remove.mockResolvedValue(undefined);
+	});
+
 	it('should sanitize pasted HTML', async () => {
 		Setting.setConstant('resourceDir', '/home/.config/joplin/resources');
 
@@ -30,7 +77,7 @@ describe('resourceHandling', () => {
 			['<a href="javascript: alert()">test</a>', '<a href="#">test</a>'],
 			['<a href="file:///home/.config/joplin/resources/test.pdf">test</a>', '<a href="file:///home/.config/joplin/resources/test.pdf">test</a>'],
 			['<a href="file:///etc/passwd">evil.pdf</a>', '<a href="#">evil.pdf</a>'],
-			['<script >evil()</script>', ''],
+			['<script >evil()</script>', ''],
 			['<script>evil()</script>', ''],
 			[
 				'<img onload="document.body.innerHTML = evil;" src="data:image/svg+xml;base64,=="/>',
@@ -59,8 +106,32 @@ describe('resourceHandling', () => {
 	it('should preserve images pasted from the resource directory', async () => {
 		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
 
-		// All images in the resource directory should be preserved.
 		const html = `<img src="file://${encodeURI(Setting.value('resourceDir'))}/resource.png" alt="test"/>`;
 		expect(await processPastedHtml(html, htmlToMd, markupToHtml)).toBe(html);
+	});
+
+	it('should return empty when clipboard has no image', async () => {
+		clipboard().has.mockReturnValue(false);
+		expect(await getResourcesFromPasteEvent(null)).toEqual([]);
+	});
+
+	it('should return empty when readBuffer returns no data', async () => {
+		clipboard().has.mockImplementation((fmt: string) => fmt === 'image/jpeg');
+		clipboard().readBuffer.mockReturnValue(Buffer.alloc(0));
+		expect(await getResourcesFromPasteEvent(null)).toEqual([]);
+	});
+
+	it('should return a resource and call preventDefault when JPEG is in clipboard', async () => {
+		Setting.setConstant('tempDir', '/tmp/test');
+
+		const mockJpegBuffer = Buffer.from([0xFF, 0xD8, 0xFF, 0xE0]);
+		clipboard().has.mockImplementation((fmt: string) => fmt === 'image/jpeg');
+		clipboard().readBuffer.mockReturnValue(mockJpegBuffer);
+
+		const mockEvent = { preventDefault: jest.fn() };
+		const result = await getResourcesFromPasteEvent(mockEvent);
+
+		expect(result.length).toBeGreaterThan(0);
+		expect(mockEvent.preventDefault).toHaveBeenCalledTimes(1);
 	});
 });
