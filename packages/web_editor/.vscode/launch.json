@@ -50,10 +50,11 @@
       "request": "launch",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
-        "start",
+        "run",
+        "dev",
         "--",
         "--profileName",
-        "joplin_desktop_st"
+        "joplin_desktop_test"
       ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
