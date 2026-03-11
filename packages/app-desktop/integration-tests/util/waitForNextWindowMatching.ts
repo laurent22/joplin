@@ -24,11 +24,21 @@ const waitForNextWindowMatching = (titlePattern: RegExp, electronApp: ElectronAp
 			timeout = null;
 			clearListenersAndTimeouts();
 
-			const windows = electronApp.windows();
-			const titles = await Promise.all(windows.map(w => w.title()));
-			reject(new Error(`Opening a window timed out. Open window titles: ${JSON.stringify(titles)}.`));
+			const windowTitles = await getOpenWindowTitles(electronApp);
+			reject(new Error(`Opening a window timed out. Open window titles: ${JSON.stringify(windowTitles)}.`));
 		}, 30 * Second);
 	});
 };
 
 export default waitForNextWindowMatching;
+
+const getOpenWindowTitles = (electronApp: ElectronApplication) => {
+	const windows = electronApp.windows();
+	return Promise.all(windows.map(async w => {
+		try {
+			return await w.title();
+		} catch (error) {
+			return `(Error: ${error})`;
+		}
+	}));
+};
