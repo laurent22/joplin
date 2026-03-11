@@ -325,6 +325,31 @@ function insertKatexDiv(editor: any) {
   );
 }
 
+// ---------- ヘルパー: エディタコンテンツ取得 ----------
+
+/**
+ * TinyMCE の getContent() は <br data-mce-bogus="1"> を \n に変換してしまうため、
+ * getBody().innerHTML から直接取得し、TinyMCE 内部属性のみを除去する。
+ * これにより Shift+Enter や <pre> ブロック内の <br> がそのまま保持される。
+ */
+function getEditorContent(editor: any): string {
+  const body = editor.getBody() as HTMLElement;
+  const clone = body.cloneNode(true) as HTMLElement;
+
+  // data-mce-bogus="all" の要素（UI 装飾など）は丸ごと削除
+  clone.querySelectorAll('[data-mce-bogus="all"]').forEach((el) => el.remove());
+
+  // 残要素から data-mce-* 内部属性を除去
+  // （data-mce-bogus="1" の <br> は属性除去後 <br> として保持される）
+  clone.querySelectorAll('*').forEach((el) => {
+    Array.from(el.attributes)
+      .filter((attr) => attr.name.startsWith('data-mce-'))
+      .forEach((attr) => el.removeAttribute(attr.name));
+  });
+
+  return clone.innerHTML;
+}
+
 // ---------- ヘルパー: カスタムツールバーボタン登録 ----------
 
 function setupToolbarButtons(editor: any) {
@@ -374,7 +399,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
     if (!noteId || !editorRef.current || isSaving) return;
     setIsSaving(true);
     try {
-      const content = editorRef.current.getContent();
+      const content = getEditorContent(editorRef.current);
       const res = await fetch('/api/note', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
