@@ -16,7 +16,9 @@ export async function PUT(req: NextRequest) {
     if (!existing) {
       return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
     }
-    Note.save({ ...existing, body });
+    const resourceDir = ViewerUtil.getResourceFolderPath();
+    const joplinSchemeBody = ViewerUtil.revertResourceDirToJoplinScheme(body, resourceDir).html();
+    Note.save({ ...existing, body: joplinSchemeBody });
     return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json(

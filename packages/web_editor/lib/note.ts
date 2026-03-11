@@ -187,24 +187,10 @@ export class Note {
       const normBody = this.normalizeText(current.body ?? '');
 
       db.prepare('DELETE FROM notes_normalized WHERE id = ?').run(id);
-      db.prepare(
-        `INSERT INTO notes_normalized
-           (id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-      ).run(
+      db.prepare(`INSERT INTO notes_normalized (id, title, body) VALUES (?, ?, ?)`).run(
         id,
         normTitle,
-        normBody,
-        current.user_created_time ?? current.created_time ?? 0,
-        current.user_updated_time ?? current.updated_time ?? now,
-        current.is_todo ?? 0,
-        current.todo_completed ?? 0,
-        current.todo_due ?? 0,
-        current.parent_id ?? '',
-        current.latitude ?? 0,
-        current.longitude ?? 0,
-        current.altitude ?? 0,
-        current.source_url ?? ''
+        normBody
       );
 
       // 3. markdown_notes / markdown_notes_normalized を更新

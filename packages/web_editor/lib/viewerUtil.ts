@@ -352,4 +352,26 @@ export class ViewerUtil {
 
     return $;
   }
+
+  public static revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: string) => {
+    const $ = cheerio.load(htmlBody);
+    const anchors = [...$(`a[href^="/api/resource/"]`)];
+    for (let i = 0; i < anchors.length; i++) {
+      const anchor = anchors[i] as cheerio.TagElement;
+      const href = anchor.attribs.href;
+      const filename = path.basename(href);
+      const newHref = `joplin_resource://${filename}`;
+      anchor.attribs.href = newHref;
+    }
+
+    const imgs = [...$(`[src^="/api/resource/"]`)];
+    for (let i = 0; i < imgs.length; i++) {
+      const img = imgs[i] as cheerio.TagElement;
+      const src = img.attribs.src;
+      const filename = path.basename(src);
+      const newSrc = `joplin_resource://${filename}`;
+      img.attribs.src = newSrc;
+    }
+    return $;
+  };
 }
