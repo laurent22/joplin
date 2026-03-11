@@ -200,24 +200,8 @@ const EncryptionConfigScreen = (props: Props) => {
 			const answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			if (!answer) return;
 		} else {
-			if (props.masterKeys.length === 0) {
+			if (!hasMasterPassword) {
 				await CommandService.instance().execute('openMasterPasswordDialog');
-
-				const passwordAfterDialog = Setting.value('encryption.masterPassword') as string;
-
-				if (!passwordAfterDialog) return;
-
-				try {
-					await toggleAndSetupEncryption(
-						EncryptionService.instance(),
-						newEnabled,
-						masterKey,
-						passwordAfterDialog,
-					);
-				} catch (error) {
-					await dialogs.alert(error.message);
-				}
-
 				return;
 			}
 			const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
@@ -236,7 +220,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		} catch (error) {
 			await dialogs.alert(error.message);
 		}
-	}, [props.masterPassword, props.masterKeys.length]);
+	}, [props.masterPassword]);
 
 	const renderEncryptionSection = () => {
 		const decryptedItemsInfo = <p>{decryptedStatText(stats)}</p>;
