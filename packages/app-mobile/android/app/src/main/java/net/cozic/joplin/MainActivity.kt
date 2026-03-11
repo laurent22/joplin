@@ -75,14 +75,27 @@ class MainActivity : ReactActivity() {
   // Finds the note editor WebView specifically (MarkdownEditor or RichTextEditor), identified by
   // the accessibilityLabel set in ExtendedWebView. This avoids routing Tab to unrelated WebViews
   // like NoteBodyViewer or ImageEditor on other screens.
+  // Note: React Native sets accessibilityLabel on a wrapper ViewGroup, not on the WebView itself,
+  // so we first find the wrapper by contentDescription, then find the WebView inside it.
   private fun findEditorWebView(root: View): WebView? {
-    if (root is WebView) {
-      val desc = root.contentDescription?.toString()
-      if (desc == "MarkdownEditor" || desc == "RichTextEditor") return root
+    val desc = root.contentDescription?.toString()
+    if (desc == "MarkdownEditor" || desc == "RichTextEditor") {
+      return findFirstWebView(root)
     }
     if (root is ViewGroup) {
       for (i in 0 until root.childCount) {
         val found = findEditorWebView(root.getChildAt(i))
+        if (found != null) return found
+      }
+    }
+    return null
+  }
+
+  private fun findFirstWebView(root: View): WebView? {
+    if (root is WebView) return root
+    if (root is ViewGroup) {
+      for (i in 0 until root.childCount) {
+        val found = findFirstWebView(root.getChildAt(i))
         if (found != null) return found
       }
     }
