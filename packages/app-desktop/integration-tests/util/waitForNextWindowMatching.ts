@@ -13,7 +13,8 @@ const waitForNextWindowMatching = (titlePattern: RegExp, electronApp: ElectronAp
 		};
 
 		const onWindowAdded = async (page: Page) => {
-			if ((await page.title()).match(titlePattern)) {
+			const title = await page.title();
+			if (title.match(titlePattern)) {
 				clearListenersAndTimeouts();
 				resolve(page);
 			}

@@ -66,7 +66,7 @@ export default class MainScreen {
 	}
 
 	public async openNewWindow(electronApp: ElectronApplication) {
-		const pagePromise = waitForNextWindowMatching(/^Joplin - /, electronApp);
+		const pagePromise = waitForNextWindowMatching(/^Joplin -/, electronApp);
 
 		await activateMainMenuItem(electronApp, 'Open in new window');
 		return pagePromise;
