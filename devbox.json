@@ -5,19 +5,21 @@
       "version":   "latest",
       "platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "yarn": "1.22.19",
-    "vips.dev": {
-      "platforms": ["aarch64-darwin"],
-    },
+    "yarn":       "1.22.19",
     "nodejs":     "24.10.0",
     "pkg-config": "latest",
-    "python": "3.13.3",
-    "bat":    "latest",
+    "python":     "3.13.3",
+    "bat":        "latest",
     "electron": {
       "version":            "latest",
       "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "git":    "2.51.0",
+    "vips.dev": "",
+    "git":      "latest",
+    "vips":     "latest",
+    "sqlite":   "latest",
+    "python3":  "latest",
+    "gcc":      "latest",
   },
   "shell": {
     "init_hook": [

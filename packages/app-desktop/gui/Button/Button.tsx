@@ -237,7 +237,7 @@ const Button = React.forwardRef(({
 
 	function onClick() {
 		if (disabled) return;
-		propsOnClick();
+		propsOnClick?.();
 	}
 
 	return (
