@@ -10,6 +10,7 @@ const waitForNextWindowMatching = (titlePattern: RegExp, electronApp: ElectronAp
 				timeout = null;
 			}
 			electronApp.off('window', onWindowAdded);
+			electronApp.off('close', onClose);
 		};
 
 		const onWindowAdded = async (page: Page) => {
@@ -19,7 +20,13 @@ const waitForNextWindowMatching = (titlePattern: RegExp, electronApp: ElectronAp
 				resolve(page);
 			}
 		};
+		const onClose = () => {
+			clearListenersAndTimeouts();
+			reject(new Error('Target application closed.'));
+		};
+
 		electronApp.on('window', onWindowAdded);
+		electronApp.on('close', onClose);
 
 		timeout = setTimeout(async () => {
 			timeout = null;
