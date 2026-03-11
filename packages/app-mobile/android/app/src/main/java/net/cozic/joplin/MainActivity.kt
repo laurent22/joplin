@@ -72,7 +72,7 @@ class MainActivity : ReactActivity() {
     return super.dispatchKeyEvent(event)
   }
 
-  internal fun findFirstWebView(root: View): WebView? {
+  private fun findFirstWebView(root: View): WebView? {
     if (root is WebView) return root
     if (root is ViewGroup) {
       for (i in 0 until root.childCount) {

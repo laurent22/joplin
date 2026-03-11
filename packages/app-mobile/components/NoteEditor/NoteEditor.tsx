@@ -468,10 +468,10 @@ function NoteEditor(props: Props) {
 				selectionState={selectionState}
 			/>
 			<View style={{
-					flexGrow: 1,
-					flexShrink: 0,
-					minHeight: '30%',
-				}}>
+				flexGrow: 1,
+				flexShrink: 0,
+				minHeight: '30%',
+			}}>
 				<EditorComponent
 					key={props.refreshKey}
 					editorRef={editorRef}
