@@ -385,8 +385,12 @@ const useContextMenu = (props: ContextMenuProps) => {
 					menu.append(new MenuItem({ type: 'separator' }));
 				}
 
+				const existingLabels = new Set(menu.items.map(i => i.label));
 				for (const item of resourceMenuItems) {
-					menu.append(item);
+					if (!existingLabels.has(item.label) || item.type === 'separator') {
+						menu.append(item);
+						if (item.label) existingLabels.add(item.label);
+					}
 				}
 			}
 			menu.popup({ window: targetWindow });
