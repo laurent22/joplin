@@ -353,7 +353,7 @@ export class ViewerUtil {
     return $;
   }
 
-  public static revertResourceDirToJoplinScheme = (htmlBody: string) => {
+  public static revertResourceDirToJoplinScheme = (htmlBody: string, resourceDir: string) => {
     const $ = cheerio.load(htmlBody);
     const anchors = [...$(`a[href^="/api/resource/"]`)];
     for (let i = 0; i < anchors.length; i++) {
@@ -374,13 +374,4 @@ export class ViewerUtil {
     }
     return $;
   };
-
-  public static removeDataMceBogus($: cheerio.Root): cheerio.Root {
-    const bogusElements = $('[data-mce-bogus]');
-    for (let i = 0; i < bogusElements.length; i++) {
-      const el = bogusElements[i] as cheerio.TagElement;
-      delete el.attribs['data-mce-bogus'];
-    }
-    return $;
-  }
 }
