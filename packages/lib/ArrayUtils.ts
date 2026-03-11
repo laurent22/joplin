@@ -1,12 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const unique = function<T extends any>(array: T[]): T[] {
-	return array.filter((elem, index, self) => {
-		return index === self.indexOf(elem);
-	});
+export const unique = function<T>(array: T[]): T[] {
+	return [...new Set(array)];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const removeElement = function<T extends any>(array: T[], element: T): T[] {
+export const removeElement = function<T>(array: T[], element: T): T[] {
 	const index = array.indexOf(element);
 	if (index < 0) return array;
 	const newArray = array.slice();
@@ -15,8 +11,7 @@ export const removeElement = function<T extends any>(array: T[], element: T): T[
 };
 
 // https://stackoverflow.com/a/10264318/561309
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const binarySearch = function(items: any[], value: any) {
+export const binarySearch = function<T>(items: T[], value: T) {
 	let startIndex = 0,
 		stopIndex = items.length - 1,
 		middle = Math.floor((stopIndex + startIndex) / 2);
@@ -37,8 +32,7 @@ export const binarySearch = function(items: any[], value: any) {
 	return items[middle] !== value ? -1 : middle;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const findByKey = function(array: any[], key: any, value: any) {
+export const findByKey = function<T, K extends keyof T>(array: T[], key: K, value: T[K]): T | null {
 	for (let i = 0; i < array.length; i++) {
 		const o = array[i];
 		if (typeof o !== 'object') continue;
@@ -47,8 +41,7 @@ export const findByKey = function(array: any[], key: any, value: any) {
 	return null;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const contentEquals = function(array1: any[], array2: any[]) {
+export const contentEquals = function<T>(array1: T[], array2: T[]) {
 	if (array1 === array2) return true;
 	if (!array1.length && !array2.length) return true;
 	if (array1.length !== array2.length) return false;
@@ -85,8 +78,7 @@ export const mergeOverlappingIntervals = function(intervals: any[], limit: numbe
 	return stack;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const shuffle = function(array: any[]) {
+export const shuffle = function<T>(array: T[]): T[] {
 	array = array.slice();
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
@@ -98,13 +90,12 @@ export const shuffle = function(array: any[]) {
 };
 
 // Used to replace lodash.pull, so that we don't need to import the whole
-// package. Not optimised.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const pull = (array: any[], ...elements: any[]) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any[] = [];
+// package. Uses Set for O(N) performance.
+export const pull = <T>(array: T[], ...elements: T[]): T[] => {
+	const removeSet = new Set(elements);
+	const output: T[] = [];
 	for (const e of array) {
-		if (elements.includes(e)) continue;
+		if (removeSet.has(e)) continue;
 		output.push(e);
 	}
 	return output;
