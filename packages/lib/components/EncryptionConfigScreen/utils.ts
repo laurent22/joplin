@@ -62,7 +62,7 @@ export const enableEncryptionConfirmationMessages = (_masterKey: MasterKeyEntity
 };
 
 export const reencryptData = async () => {
-	const ok = confirm(_('Please confirm that you would like to re-encrypt your complete database.'));
+	const ok = await shim.showConfirmationDialog(_('Please confirm that you would like to re-encrypt your complete database.'));
 	if (!ok) return;
 
 	await BaseItem.forceSyncAll();
