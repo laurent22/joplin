@@ -319,7 +319,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			return (
 				<IconButton
 					onPress={onPress}
-					
+
 					themeId={themeId}
 					description={_('Save changes')}
 					disabled={disabled}
@@ -391,7 +391,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			return (
 				<IconButton
 					onPress={onPress}
-					
+
 					themeId={themeId}
 					description={_('Select all')}
 					contentWrapperStyle={styles.iconButton}
@@ -407,7 +407,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			return (
 				<IconButton
 					onPress={onPress}
-					
+
 					description={_('Search')}
 					themeId={themeId}
 					contentWrapperStyle={styles.iconButton}
@@ -423,7 +423,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			return (
 				<IconButton
 					onPress={onPress}
-					
+
 					description={_('Delete')}
 					themeId={themeId}
 					contentWrapperStyle={styles.iconButton}
@@ -463,7 +463,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				<IconButton
 					onPress={onPress}
 					disabled={disabled}
-					
+
 					themeId={themeId}
 					description={_('Toggle plugin editor')}
 					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
@@ -480,7 +480,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				<IconButton
 					onPress={onPress}
 					disabled={disabled}
-					
+
 					themeId={themeId}
 					description={_('Delete')}
 					accessibilityHint={
@@ -500,7 +500,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				<IconButton
 					onPress={onPress}
 					disabled={disabled}
-					
+
 					themeId={themeId}
 					description={_('Restore')}
 					accessibilityHint={
@@ -520,7 +520,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				<IconButton
 					onPress={onPress}
 					disabled={disabled}
-					
+
 					themeId={themeId}
 					description={_('Duplicate')}
 					accessibilityHint={

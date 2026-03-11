@@ -35,7 +35,7 @@ class MainActivity : ReactActivity() {
    */
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
+    
     if (Build.VERSION.SDK_INT >= 35) {
         val rootView = findViewById<View>(android.R.id.content)
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { _, insets ->
