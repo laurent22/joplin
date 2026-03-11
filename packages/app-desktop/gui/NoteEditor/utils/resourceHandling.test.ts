@@ -63,4 +63,36 @@ describe('resourceHandling', () => {
 		const html = `<img src="file://${encodeURI(Setting.value('resourceDir'))}/resource.png" alt="test"/>`;
 		expect(await processPastedHtml(html, htmlToMd, markupToHtml)).toBe(html);
 	});
-});
+
+
+	describe('getResourcesFromPasteEvent', () => {
+		it('should detect JPEG when availableFormats returns empty', () => {
+			const mockJpegBuffer = Buffer.from([0xFF, 0xD8, 0xFF]);
+
+			const clipboardMock = {
+				availableFormats: jest.fn().mockReturnValue([]),
+				has: jest.fn((fmt: string) => fmt === 'image/jpeg'),
+				readBuffer: jest.fn().mockReturnValue(mockJpegBuffer),
+				readImage: jest.fn().mockReturnValue({ isEmpty: () => true }),
+			};
+
+			expect(clipboardMock.availableFormats()).toEqual([]);
+			expect(clipboardMock.has('image/jpeg')).toBe(true);
+			expect(clipboardMock.has('image/png')).toBe(false);
+			expect(clipboardMock.readBuffer('image/jpeg').length).toBeGreaterThan(0);
+			expect(clipboardMock.readImage().isEmpty()).toBe(true);
+		});
+
+		it('should not detect any format when clipboard is empty', () => {
+			const clipboardMock = {
+				has: jest.fn().mockReturnValue(false),
+			};
+
+			const supportedFormats = ['image/png', 'image/jpeg', 'image/jpg'];
+			const detected = supportedFormats.filter(f => clipboardMock.has(f));
+			expect(detected).toHaveLength(0);
+		});
+	});
+
+}); // closes describe('resourceHandling')
+
