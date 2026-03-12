@@ -184,7 +184,8 @@ export default function(props: Props) {
 							/>
 						)}
 					</div>
-					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>
+					<p className="bold">Please make sure you remember your master password. For security reasons,
+it cannot be recovered if lost, and any data encrypted with it may become inaccessible.</p>
 					{renderResetMasterPasswordLink()}
 				</div>
 			);
@@ -208,7 +209,7 @@ export default function(props: Props) {
 		} else {
 			return (
 				<div className="dialog-content">
-					<p>Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.</p>
+					<p>TEST ok: Master password security message. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.</p>
 					<p>
 						<span>{'Master password status:'}</span> <span className="bold">{getMasterPasswordStatusMessage(status)}</span>
 					</p>
