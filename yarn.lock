@@ -10684,7 +10684,7 @@ __metadata:
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.2.1"
     react-native-sqlite-storage: "npm:6.0.1"
-    react-native-svg: "npm:15.14.0"
+    react-native-svg: "npm:15.15.0"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.21.2"
@@ -11132,7 +11132,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
-    ldapts: "npm:8.0.18"
+    ldapts: "npm:8.0.20"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -11198,7 +11198,7 @@ __metadata:
     relative: "npm:3.0.2"
     request: "npm:2.88.2"
     rss: "npm:1.2.2"
-    sass: "npm:1.93.3"
+    sass: "npm:1.94.0"
     sharp: "npm:0.34.5"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
@@ -36201,16 +36201,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:8.0.18":
-  version: 8.0.18
-  resolution: "ldapts@npm:8.0.18"
+"ldapts@npm:8.0.20":
+  version: 8.0.20
+  resolution: "ldapts@npm:8.0.20"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
     asn1: "npm:0.2.6"
     debug: "npm:4.4.3"
     strict-event-emitter-types: "npm:2.0.0"
     whatwg-url: "npm:15.1.0"
-  checksum: 10/bc3f3a0c3bd28c51520dc1337cab5d654806a84103402976dc187433f7840a003a23b10fbb74035fbdb48200cc00c77649ef229155cf43f11bc98727455c8e5f
+  checksum: 10/84f51b9f45ba9ba2a888beabbf3b659da592dfa16c2949bfd50d74d39a36994c770809348ed32e513d3c5e776afa3175c9d5b2f06aafc8247382df0fa834ef93
   languageName: node
   linkType: hard
 
@@ -44420,9 +44420,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:15.14.0":
-  version: 15.14.0
-  resolution: "react-native-svg@npm:15.14.0"
+"react-native-svg@npm:15.15.0":
+  version: 15.15.0
+  resolution: "react-native-svg@npm:15.15.0"
   dependencies:
     css-select: "npm:^5.1.0"
     css-tree: "npm:^1.1.3"
@@ -44430,7 +44430,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/8f067e265cd2749a7f0a3a09eccd6a297f1e99d0306e2c630d354e7093c3cb8e47cd054988f832b05ed80509ebdda7422cb407d8dcf851f1d4e8706f14f38c21
+  checksum: 10/8c410922fd54b2550454d370daecdc604ba992c25afee5b6988d18b660c5e3ce61133dfde15fe0cb6b7e7e248d114d4adb9a2b38fa903a0fe79762ce34fae93c
   languageName: node
   linkType: hard
 
@@ -46633,9 +46633,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.93.3":
-  version: 1.93.3
-  resolution: "sass@npm:1.93.3"
+"sass@npm:1.94.0":
+  version: 1.94.0
+  resolution: "sass@npm:1.94.0"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -46646,7 +46646,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/41f23b10bb203ee46b82b880e566edc3264cd00b0424bb7293c6aedb66fd4d6b9b7a217e91f98fb4653eee6538150bbe1a663abde03ad69cd5172beebf108ae0
+  checksum: 10/625b4d56758544f30a7f955fbc6590366ffb285042a68c09512b2890f23720c2c28d86cf9773a000d8bde2191d9decc8873f3529e7d91d8ba5f0ef204fd243db
   languageName: node
   linkType: hard
 

@@ -7,6 +7,7 @@ import setFilePickerResponse from '../util/setFilePickerResponse';
 import NoteList from './NoteList';
 import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
+import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -62,6 +63,13 @@ export default class MainScreen {
 	public async openSettings(electronApp: ElectronApplication) {
 		// Check both labels so this works on MacOS
 		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
+	}
+
+	public async openNewWindow(electronApp: ElectronApplication) {
+		const pagePromise = waitForNextWindowMatching(/^Joplin -/, electronApp);
+
+		await activateMainMenuItem(electronApp, 'Open in new window');
+		return pagePromise;
 	}
 
 	public async search(text: string) {
