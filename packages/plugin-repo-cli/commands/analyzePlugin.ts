@@ -23,7 +23,9 @@ export default async function(args: any) {
             '-v', `${pluginPath}:/src`,
             'returntocorp/semgrep',
             'semgrep',
+            '--config', 'p/default',
             '--config', 'p/security-audit',
+            '--config', 'p/javascript',
             '--config', 'p/typescript',
             '--error', 
             '/src'
