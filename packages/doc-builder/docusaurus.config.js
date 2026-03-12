@@ -220,6 +220,11 @@ const config = {
 						target: '_self',
 					},
 					{
+						to: '/news',
+						label: 'News',
+						position: 'right',
+					},
+					{
 						type: 'docSidebar',
 						sidebarId: 'helpSidebar',
 						position: 'right',
