@@ -1782,6 +1782,7 @@ packages/pdf-viewer/types.js
 packages/pdf-viewer/ui/GotoPage.js
 packages/pdf-viewer/ui/IconButtons.js
 packages/pdf-viewer/ui/ZoomControls.js
+packages/plugin-repo-cli/commands/analyzePlugin.js
 packages/plugin-repo-cli/commands/updateRelease.js
 packages/plugin-repo-cli/index.js
 packages/plugin-repo-cli/lib/checkIfPluginCanBeAdded.test.js

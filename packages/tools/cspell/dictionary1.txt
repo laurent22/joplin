@@ -367,6 +367,8 @@ Grønland
 grouptoolbarbutton
 Gruber
 gsoc
+semgrep
+returntocorp
 gttest
 Guåhån
 guarentee

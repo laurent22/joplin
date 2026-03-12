@@ -17,6 +17,8 @@ import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, re
 import { execCommand } from '@joplin/utils';
 import validateUntrustedManifest from './lib/validateUntrustedManifest';
 import searchPlugins, { PackageInfo } from './lib/searchPlugins';
+import commandAnalyzePlugin from './commands/analyzePlugin';
+
 
 function pluginInfoFromSearchResults(results: PackageInfo[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
@@ -290,6 +292,7 @@ async function main() {
 		build: commandBuild,
 		version: commandVersion,
 		updateRelease: commandUpdateRelease,
+		analyzePlugin: commandAnalyzePlugin,
 	};
 
 	let selectedCommand = '';
@@ -320,6 +323,15 @@ async function main() {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => {}, (args: any) => setSelectedCommand('updateRelease', args))
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		.command('analyze-plugin <plugin-repo-dir> <plugin-id>', 'Analyze a plugin for security issues', (yargs: any) => {
+			yargs.positional('plugin-id', {
+				type: 'string',
+				describe: 'The id of the plugin to analyze',
+			});
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		}, (args: any) => setSelectedCommand('analyzePlugin', args))
 
 		.help()
 		.argv;
