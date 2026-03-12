@@ -5,7 +5,7 @@ const useRefocusOnDeletion = (
 	noteCount: number,
 	selectedNoteIds: string[],
 	focusedField: string,
-	focusNote: (noteId: string) => void,
+	focusNote: (noteId: string)=> void,
 ) => {
 	const previousNoteCount = usePrevious(noteCount, 0);
 
