@@ -291,7 +291,7 @@ export class ViewerUtil {
   }
 
   public static modifyJoplinResource($: cheerio.Root, resourceDir: string): cheerio.Root {
-    const regex = new RegExp(`^${this.escapeRegExp('joplin_resource:/')}`);
+    const regex = new RegExp(`^${this.escapeRegExp('joplin_resource://')}`);
     const anchors = $('a[href^="joplin_resource://"]');
 
     for (let i = 0; i < anchors.length; i++) {

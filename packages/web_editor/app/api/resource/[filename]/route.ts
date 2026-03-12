@@ -43,10 +43,13 @@ export async function GET(_req: Request, { params }: Props) {
     const ext = path.extname(safeName).toLowerCase();
     const contentType = MIME_MAP[ext] || 'application/octet-stream';
 
+    const expires = new Date(Date.now() + 100 * 365.25 * 24 * 60 * 60 * 1000); // 100年キャッシュ
     return new Response(data, {
       status: 200,
       headers: {
         'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=3153600000, immutable',
+        Expires: expires.toUTCString(),
       },
     });
   } catch (err) {
