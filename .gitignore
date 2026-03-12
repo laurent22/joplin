@@ -133,7 +133,6 @@ packages/app-cli/tests/services/plugins/defaultPluginsUtils.js
 packages/app-cli/tests/services/plugins/sandboxProxy.js
 packages/app-cli/tests/testUtils.js
 packages/app-cli/tools/populateDatabase.js
-packages/app-desktop/ElectronAppWrapper.test.js
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/InteropServiceHelper.js
 packages/app-desktop/app.reducer.test.js
