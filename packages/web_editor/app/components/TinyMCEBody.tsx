@@ -359,13 +359,13 @@ async function uploadAndInsertFile(file: File, editor: any): Promise<void> {
  * ブラウザのデフォルト動作と TinyMCE 組み込み処理を抑制し、
  * DataTransfer に含まれるファイルを順にアップロードしてエディタへ挿入する。
  */
-function handleEditorDrop(e: DragEvent, editor: any): void {
+async function handleEditorDrop(e: DragEvent, editor: any): Promise<void> {
   e.preventDefault();
   e.stopPropagation();
   const files = e.dataTransfer?.files;
   if (!files || files.length === 0) return;
   for (const file of Array.from(files)) {
-    void uploadAndInsertFile(file, editor);
+    await uploadAndInsertFile(file, editor);
   }
 }
 
