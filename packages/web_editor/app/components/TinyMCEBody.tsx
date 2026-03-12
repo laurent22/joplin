@@ -327,6 +327,20 @@ function insertKatexDiv(editor: any) {
 
 // ---------- ヘルパー: Drag & Drop ファイルアップロード ----------
 
+/** ファイル名の拡張子が動画形式かどうかを判定する。 */
+function isVideoFile(filename: string): boolean {
+  const videoExtList = ['.mp4', '.webm', '.ogv', '.m4v', '.mov', '.mkv'];
+  const ext = filename.slice(filename.lastIndexOf('.')).toLowerCase();
+  return videoExtList.includes(ext);
+}
+
+/** ファイル名の拡張子が音声形式かどうかを判定する。 */
+function isAudioFile(filename: string): boolean {
+  const audioExtList = ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac'];
+  const ext = filename.slice(filename.lastIndexOf('.')).toLowerCase();
+  return audioExtList.includes(ext);
+}
+
 /** HTML 特殊文字をエスケープする（XSS 対策）。 */
 function escapeHtml(str: string): string {
   return str
@@ -358,6 +372,10 @@ async function uploadAndInsertFile(file: File, editor: any): Promise<void> {
     const safeName = escapeHtml(file.name);
     if (file.type.startsWith('image/')) {
       editor.insertContent(`<img src="${url}" alt="${safeName}" />`);
+    } else if (isVideoFile(json.filename as string)) {
+      editor.insertContent(`<video controls src="${url}" title="${safeName}"></video>`);
+    } else if (isAudioFile(json.filename as string)) {
+      editor.insertContent(`<audio controls src="${url}" title="${safeName}"></audio>`);
     } else {
       editor.insertContent(`<a href="${url}">${safeName}</a>`);
     }
