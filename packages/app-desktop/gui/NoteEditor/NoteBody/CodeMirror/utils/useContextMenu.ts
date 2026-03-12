@@ -115,6 +115,9 @@ const useContextMenu = (props: ContextMenuProps) => {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
+		const targetWindow = bridge().windowById(windowId);
+		if (!targetWindow) return ()=> {};
+
 		const isAncestorOfCodeMirrorEditor = (elem: Element) => {
 			for (; elem.parentElement; elem = elem.parentElement) {
 				if (elem.classList.contains(props.editorClassName)) {
@@ -162,8 +165,6 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 			return clickedElement?.closest(`.${imageClassName}`) as HTMLElement | null;
 		};
-
-		const targetWindow = bridge().windowById(windowId);
 
 		const appendEditMenuItems = (menu: typeof Menu.prototype) => {
 			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection();
