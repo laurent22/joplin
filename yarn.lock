@@ -10684,7 +10684,7 @@ __metadata:
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.2.1"
     react-native-sqlite-storage: "npm:6.0.1"
-    react-native-svg: "npm:15.15.0"
+    react-native-svg: "npm:15.15.1"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.21.2"
@@ -44420,9 +44420,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:15.15.0":
-  version: 15.15.0
-  resolution: "react-native-svg@npm:15.15.0"
+"react-native-svg@npm:15.15.1":
+  version: 15.15.1
+  resolution: "react-native-svg@npm:15.15.1"
   dependencies:
     css-select: "npm:^5.1.0"
     css-tree: "npm:^1.1.3"
@@ -44430,7 +44430,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/8c410922fd54b2550454d370daecdc604ba992c25afee5b6988d18b660c5e3ce61133dfde15fe0cb6b7e7e248d114d4adb9a2b38fa903a0fe79762ce34fae93c
+  checksum: 10/3a5dbbee0c6a81b3feb2b91a5a617a1a25e01c908686af479fab4fe6661376253ba0e0e1d3eda36f27eab9b2cd2c4c17b68423cfca465df255f20cacc1ba384d
   languageName: node
   linkType: hard
 
