@@ -327,6 +327,16 @@ function insertKatexDiv(editor: any) {
 
 // ---------- ヘルパー: Drag & Drop ファイルアップロード ----------
 
+/** HTML 特殊文字をエスケープする（XSS 対策）。 */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /**
  * ドロップされたファイルを PUT /api/resource/{filename} でアップロードし、
  * 成功したら画像は <img>、その他は <a> タグとしてエディタに挿入する。
@@ -343,11 +353,13 @@ async function uploadAndInsertFile(file: File, editor: any): Promise<void> {
       console.error('TinyMCEBody: upload failed', json.error);
       return;
     }
-    const url = `/api/resource/${encodeURIComponent(file.name)}`;
+    // URL は encodeURIComponent 済み、表示名は escapeHtml でエスケープ
+    const url = `/api/resource/${encodeURIComponent(json.filename as string)}`;
+    const safeName = escapeHtml(file.name);
     if (file.type.startsWith('image/')) {
-      editor.insertContent(`<img src="${url}" alt="${file.name}" />`);
+      editor.insertContent(`<img src="${url}" alt="${safeName}" />`);
     } else {
-      editor.insertContent(`<a href="${url}">${file.name}</a>`);
+      editor.insertContent(`<a href="${url}">${safeName}</a>`);
     }
   } catch (err) {
     console.error('TinyMCEBody: upload error', err);

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { ViewerUtil } from '@/lib/viewerUtil';
 import fs from 'fs/promises';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   params: Promise<{
@@ -64,14 +65,18 @@ export async function PUT(req: Request, { params }: Props) {
 
     // prevent path traversal
     const safeName = path.basename(filename);
+    const ext = path.extname(safeName).toLowerCase();
+    const resourceId = uuidv4().replace(/-/g, '');
+    const newFilename = ext ? `${resourceId}${ext}` : resourceId;
+
     const resourceDir = ViewerUtil.getResourceFolderPath();
     await fs.mkdir(resourceDir, { recursive: true });
-    const filePath = path.join(resourceDir, safeName);
+    const filePath = path.join(resourceDir, newFilename);
 
     const buffer = await req.arrayBuffer();
     await fs.writeFile(filePath, Buffer.from(buffer));
 
-    return NextResponse.json({ success: true, filename: safeName });
+    return NextResponse.json({ success: true, filename: newFilename, originalName: safeName });
   } catch (err) {
     return NextResponse.json(
       { success: false, error: err instanceof Error ? err.message : String(err) },
