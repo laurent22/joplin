@@ -55,7 +55,7 @@ export const authenticateWithCode = async (code: string) => {
 // Based on the regular Joplin Server sync target.
 export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 
-	private lastFileApiOptions_: FileApiOptions | null = null;
+	private lastFileApiOptions_: FileApiOptions|null = null;
 
 	public static override id() {
 		return 11;
@@ -117,7 +117,7 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 						if (json.error) {
 							message = json.error;
 						}
-					} catch (_e) { } // eslint-disable-line no-empty -- Keep the plain text response as the error message, ignore the parsing exception
+					} catch (_e) {} // eslint-disable-line no-empty -- Keep the plain text response as the error message, ignore the parsing exception
 				}
 
 				return {

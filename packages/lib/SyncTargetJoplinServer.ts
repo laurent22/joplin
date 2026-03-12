@@ -81,7 +81,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return super.fileApi();
 	}
 
-	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi | null = null) {
+	public static async checkConfig(options: FileApiOptions, syncTargetId: number = null, fileApi: FileApi|null = null) {
 		const output = {
 			ok: false,
 			errorMessage: '',
