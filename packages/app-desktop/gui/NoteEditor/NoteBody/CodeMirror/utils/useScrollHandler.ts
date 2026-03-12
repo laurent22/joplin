@@ -221,7 +221,14 @@ const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 		linInterp = percent * lineCount - lineU;
 		result = ePercentU + (ePercentL - ePercentU) * linInterp;
 	} else {
-		linInterp = Math.max(0, Math.min(1, (percent - ePercentU) / (ePercentL - ePercentU))) || 0;
+		const rawLinInterp = (percent - ePercentU) / (ePercentL - ePercentU);
+		if (ePercentL === ePercentU) {
+			// Prevents the Viewer from jumping to the bottom of
+			// the document when there is division by zero.
+			linInterp = percent;
+		} else {
+			linInterp = Math.max(0, Math.min(1, rawLinInterp)) || 0;
+		}
 		result = (lineU + linInterp) / lineCount;
 	}
 	return Math.max(0, Math.min(1, result));

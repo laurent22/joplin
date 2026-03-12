@@ -1,8 +1,9 @@
 import Setting from '@joplin/lib/models/Setting';
-import { processPastedHtml } from './resourceHandling';
+import { processImagesInPastedHtml, processPastedHtml } from './resourceHandling';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 const createTestMarkupConverters = () => {
 	const markupToHtml: MarkupToHtmlHandler = async (markupLanguage, markup, options) => {
@@ -110,5 +111,22 @@ describe('resourceHandling', () => {
 			// The alt text after normalization must not contain literal newlines
 			expect(result).not.toMatch(/alt="[^"]*\n/);
 		}
+	});
+
+	// Regression test: base64 branch was hardcoding file:// and ignoring useInternalUrls
+	// 1x1 transparent PNG — smallest valid base64-encoded image for testing
+	const minimalPng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+
+	test.each([
+		{ useInternalUrls: true, expectMatch: /src=":\/[a-f0-9]+"/, expectAbsent: 'file://' },
+		{ useInternalUrls: false, expectMatch: /src="file:\/\//, expectAbsent: 'data:' },
+	])('should convert base64 image using resourceUrl (useInternalUrls=$useInternalUrls)', async ({ useInternalUrls, expectMatch, expectAbsent }) => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+		const html = `<img src="data:image/png;base64,${minimalPng}"/>`;
+		const result = await processImagesInPastedHtml(html, { useInternalUrls });
+		expect(result).toMatch(expectMatch);
+		expect(result).not.toContain(expectAbsent);
+		expect(result).not.toContain('data:');
 	});
 });
