@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Size } from '@joplin/utils/types';
 import { useEffect, useRef } from 'react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
+import { ItemEventHandlers } from './types';
 
 const useItemElement = (
-	rootElement: HTMLDivElement | null, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow,
+	rootElement: HTMLDivElement | null, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow, itemEventHandlers: ItemEventHandlers,
 ) => {
 	const itemElement = useRef<HTMLDivElement>(null);
 
@@ -21,6 +22,26 @@ const useItemElement = (
 		if (flow === ItemFlow.LeftToRight) element.style.width = `${itemSize.width}px`;
 		element.style.height = `${itemSize.height}px`;
 		element.innerHTML = noteHtml;
+		const processedInputs: HTMLInputElement[] = [];
+		const processedButtons: HTMLButtonElement[] = [];
+
+		const inputs = element.getElementsByTagName('input');
+		for (const input of inputs) {
+			if (input.type === 'checkbox' || input.type === 'text') {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
+				input.addEventListener('change', itemEventHandlers.onInputChange as any);
+				processedInputs.push(input);
+			}
+		}
+
+		const buttons = element.getElementsByTagName('button');
+		if (itemEventHandlers.onClick) {
+			for (const button of buttons) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
+				button.addEventListener('click', itemEventHandlers.onClick as any);
+				processedButtons.push(button);
+			}
+		}
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
 		element.addEventListener('click', (e) => onClick(e as any));
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
@@ -36,10 +57,20 @@ const useItemElement = (
 		}
 
 		return () => {
+			for (const input of processedInputs) {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
+				input.removeEventListener('change', itemEventHandlers.onInputChange as any);
+			}
+			if (itemEventHandlers.onClick) {
+				for (const button of processedButtons) {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
+					button.removeEventListener('click', itemEventHandlers.onClick as any);
+				}
+			}
 			itemElement.current = null;
 			element.remove();
 		};
-	}, [rootElement, itemSize, noteHtml, noteId, flow, style, focusVisible, onClick, onDoubleClick]);
+	}, [rootElement, itemSize, noteHtml, noteId, flow, style, focusVisible, onClick, onDoubleClick, itemEventHandlers]);
 
 	return itemElement;
 };

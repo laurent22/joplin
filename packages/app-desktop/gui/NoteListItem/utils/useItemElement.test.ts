@@ -14,6 +14,8 @@ const defaultProps = {
 	flow: ItemFlow.TopToBottom,
 };
 
+const defaultItemEventHandlers = { onInputChange: jest.fn(), onClick: null as import('./types').OnClick | null };
+
 describe('useItemElement', () => {
 	let rootElement: HTMLDivElement;
 
@@ -30,7 +32,7 @@ describe('useItemElement', () => {
 
 	test('returns a ref (no setState, avoids "Maximum update depth exceeded")', () => {
 		const { result } = renderHook(
-			() => useItemElement(rootElement, defaultProps.noteId, defaultProps.noteHtml, defaultProps.focusVisible, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow),
+			() => useItemElement(rootElement, defaultProps.noteId, defaultProps.noteHtml, defaultProps.focusVisible, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow, defaultItemEventHandlers),
 		);
 
 		expect(result.current).toHaveProperty('current');
@@ -38,7 +40,7 @@ describe('useItemElement', () => {
 
 	test('assigns created element to ref.current and cleanup nulls ref and removes element', () => {
 		const { result, unmount } = renderHook(
-			() => useItemElement(rootElement, defaultProps.noteId, defaultProps.noteHtml, false, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow),
+			() => useItemElement(rootElement, defaultProps.noteId, defaultProps.noteHtml, false, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow, defaultItemEventHandlers),
 		);
 
 		act(() => {});
@@ -55,7 +57,7 @@ describe('useItemElement', () => {
 
 	test('does nothing when rootElement is null', () => {
 		const { result } = renderHook(
-			() => useItemElement(null, defaultProps.noteId, defaultProps.noteHtml, false, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow),
+			() => useItemElement(null, defaultProps.noteId, defaultProps.noteHtml, false, defaultProps.style, defaultProps.itemSize, defaultProps.onClick, defaultProps.onDoubleClick, defaultProps.flow, defaultItemEventHandlers),
 		);
 
 		act(() => {});

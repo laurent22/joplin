@@ -72,7 +72,9 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index, props.columns);
 
-	const itemElement = useItemElement(
+	const itemEventHandlers = useItemEventHandlers(onInputChange, null);
+
+	useItemElement(
 		rootElement,
 		noteId,
 		renderedNote ? renderedNote.html : '',
@@ -82,9 +84,9 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.onClick,
 		props.onDoubleClick,
 		props.flow,
+		itemEventHandlers,
 	);
 
-	useItemEventHandlers(rootElement, itemElement, onInputChange, null, noteId);
 
 	const className = useMemo(() => {
 		return [

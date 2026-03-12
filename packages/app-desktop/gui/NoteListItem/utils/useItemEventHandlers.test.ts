@@ -1,67 +1,39 @@
-import { act, renderHook } from '@testing-library/react';
+import * as React from 'react';
+import { renderHook } from '@testing-library/react';
 import useItemEventHandlers from './useItemEventHandlers';
 
 describe('useItemEventHandlers', () => {
-	let rootElement: HTMLDivElement;
-	let itemElement: HTMLDivElement;
 	const onInputChange = jest.fn();
 	const onClick = jest.fn();
 
 	beforeEach(() => {
-		rootElement = document.createElement('div');
-		itemElement = document.createElement('div');
-		document.body.appendChild(rootElement);
-		document.body.appendChild(itemElement);
 		onInputChange.mockClear();
 		onClick.mockClear();
 	});
 
-	afterEach(() => {
-		rootElement.remove();
-		itemElement.remove();
+	test('returns object with onInputChange and onClick', () => {
+		const { result } = renderHook(() => useItemEventHandlers(onInputChange, onClick));
+
+		expect(result.current).toHaveProperty('onInputChange', onInputChange);
+		expect(result.current).toHaveProperty('onClick', onClick);
 	});
 
-	test('accepts ref and uses ref.current (as used by NoteListItem with useItemElement)', () => {
-		const ref = { current: itemElement };
-		const input = document.createElement('input');
-		input.type = 'checkbox';
-		itemElement.appendChild(input);
+	test('returns object with onClick null when passed null', () => {
+		const { result } = renderHook(() => useItemEventHandlers(onInputChange, null));
 
-		renderHook(
-			() => useItemEventHandlers(rootElement, ref, onInputChange, onClick, 'test-key'),
-		);
-		act(() => {});
-
-		input.dispatchEvent(new Event('change', { bubbles: true }));
-		expect(onInputChange).toHaveBeenCalledTimes(1);
+		expect(result.current.onInputChange).toBe(onInputChange);
+		expect(result.current.onClick).toBeNull();
 	});
 
-	test('does not throw when ref.current is null', () => {
-		const ref = { current: null as HTMLDivElement | null };
+	test('returned handlers call the passed-in callbacks when invoked', () => {
+		const { result } = renderHook(() => useItemEventHandlers(onInputChange, onClick));
 
-		expect(() => {
-			renderHook(
-				() => useItemEventHandlers(rootElement, ref, onInputChange, onClick, 'test-key'),
-			);
-			act(() => {});
-		}).not.toThrow();
-	});
+		const changeEvent = { currentTarget: {} } as React.ChangeEvent<HTMLInputElement>;
+		result.current.onInputChange(changeEvent);
+		expect(onInputChange).toHaveBeenCalledWith(changeEvent);
 
-	test('cleanup removes listeners', () => {
-		const input = document.createElement('input');
-		input.type = 'checkbox';
-		itemElement.appendChild(input);
-
-		const { unmount } = renderHook(
-			() => useItemEventHandlers(rootElement, itemElement, onInputChange, onClick, 'test-key'),
-		);
-		act(() => {});
-
-		input.dispatchEvent(new Event('change', { bubbles: true }));
-		expect(onInputChange).toHaveBeenCalledTimes(1);
-
-		unmount();
-		input.dispatchEvent(new Event('change', { bubbles: true }));
-		expect(onInputChange).toHaveBeenCalledTimes(1);
+		const clickEvent = {} as React.MouseEvent<HTMLElement>;
+		result.current.onClick(clickEvent);
+		expect(onClick).toHaveBeenCalledWith(clickEvent);
 	});
 });
