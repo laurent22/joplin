@@ -51,17 +51,17 @@ describe('ChangeModel', () => {
 		expect(allUncompressedChanges.length).toBe(8);
 
 		{
-			// When we get all the changes, we get DELETE 1, CREATE 2, and CREATE 3:
+			// When we get all the changes, we get CREATE 2, DELETE 1, and CREATE 3:
 			// - We don't get CREATE 1 since CREATE 1 -> DELETE 1 was compressed to
 			//   DELETE 1.
 			// - We don't get any UPDATE event since they've been compressed
 			//   down to the CREATE events.
 			const changes = (await changeModel.delta(user.id)).items;
 			expect(changes.length).toBe(3);
-			expect(changes[0].item_id).toBe(item1.id);
-			expect(changes[0].type).toBe(ChangeType.Delete);
-			expect(changes[1].item_id).toBe(item2.id);
-			expect(changes[1].type).toBe(ChangeType.Create);
+			expect(changes[0].item_id).toBe(item2.id);
+			expect(changes[0].type).toBe(ChangeType.Create);
+			expect(changes[1].item_id).toBe(item1.id);
+			expect(changes[1].type).toBe(ChangeType.Delete);
 			expect(changes[2].item_id).toBe(item3.id);
 			expect(changes[2].type).toBe(ChangeType.Create);
 		}
