@@ -25,7 +25,7 @@ export default function NoteEditor() {
       return json.data as NoteEntity & { body?: string };
     },
     enabled: !!noteId,
-    staleTime: 60_000,
+    staleTime: 0,
   });
 
   console.log(`note: id=${noteId}, note_title=${fetched?.title}`);
