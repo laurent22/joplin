@@ -5,7 +5,7 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
-import { getMasterPasswordStatus, getMasterPasswordStatusMessage, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword, getMasterPassword } from '@joplin/lib/services/e2ee/utils';
+import { getMasterPasswordStatus, getMasterPasswordStatusMessage, checkHasMasterPasswordEncryptedData, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword, getMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import { reg } from '@joplin/lib/registry';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import KvStore from '@joplin/lib/services/KvStore';
@@ -26,6 +26,7 @@ enum Mode {
 
 export default function(props: Props) {
 	const [status, setStatus] = useState(MasterPasswordStatus.NotSet);
+	const [hasMasterPasswordEncryptedData, setHasMasterPasswordEncryptedData] = useState(true);
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [currentPasswordIsValid, setCurrentPasswordIsValid] = useState(false);
 	const [password1, setPassword1] = useState('');
@@ -55,8 +56,10 @@ export default function(props: Props) {
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const newStatus = await getMasterPasswordStatus();
+		const hasIt = await checkHasMasterPasswordEncryptedData();
 		if (event.cancelled) return;
 		setStatus(newStatus);
+		setHasMasterPasswordEncryptedData(hasIt);
 	}, []);
 
 	const onButtonRowClick = useCallback(async (event: ClickEvent) => {
@@ -87,8 +90,12 @@ export default function(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [currentPassword, password1, onClose, mode]);
 
-	// Always require the user to confirm the new password
-	const needToRepeatPassword = true;
+	// Show the "Re-enter password" confirmation field
+	const needToRepeatPassword = useMemo(() => {
+		if (mode === Mode.Reset) return true;
+		if (showCurrentPassword) return true;
+		return !hasMasterPasswordEncryptedData;
+	}, [mode, showCurrentPassword, hasMasterPasswordEncryptedData]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onCurrentPasswordChange = useCallback((event: any) => {
@@ -119,8 +126,8 @@ export default function(props: Props) {
 	}, []);
 
 	useEffect(() => {
-		setSaveButtonDisabled(updatingPassword || !password1 || password1 !== password2);
-	}, [password1, password2, updatingPassword]);
+		setSaveButtonDisabled(updatingPassword || (!password1 || (needToRepeatPassword && password1 !== password2)));
+	}, [password1, password2, updatingPassword, needToRepeatPassword]);
 
 	useEffect(() => {
 		setShowPasswordForm([MasterPasswordStatus.NotSet, MasterPasswordStatus.Invalid].includes(status));
