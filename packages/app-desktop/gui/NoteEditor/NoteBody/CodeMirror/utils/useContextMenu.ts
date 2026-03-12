@@ -168,10 +168,11 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		const appendEditMenuItems = (menu: typeof Menu.prototype) => {
 			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection();
-			menu.append(new MenuItem({ label: _('Cut'), enabled: hasSelectedText, click: () => props.editorCutText() }));
+			const isReadOnly = editorRef.current?.editor?.state.readOnly ?? false;
+			menu.append(new MenuItem({ label: _('Cut'), enabled: hasSelectedText && !isReadOnly, click: () => props.editorCutText() }));
 			menu.append(new MenuItem({ label: _('Copy'), enabled: hasSelectedText, click: () => props.editorCopyText() }));
-			menu.append(new MenuItem({ label: _('Paste'), enabled: true, click: () => props.editorPaste() }));
-			menu.append(new MenuItem({ label: _('Paste as Markdown'), enabled: true, click: () => CommandService.instance().execute('pasteAsMarkdown') }));
+			menu.append(new MenuItem({ label: _('Paste'), enabled: !isReadOnly, click: () => props.editorPaste() }));
+			menu.append(new MenuItem({ label: _('Paste as Markdown'), enabled: !isReadOnly, click: () => CommandService.instance().execute('pasteAsMarkdown') }));
 		};
 
 		const showResourceContextMenu = async (resourceId: string, type: ResourceMarkupType) => {
@@ -180,6 +181,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			// Add resource-specific options first
 			const baseType = type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource;
 			const itemType = await resolveContextMenuItemType(baseType, resourceId);
+			const isReadOnly = editorRef.current?.editor?.state.readOnly ?? false;
 			const contextMenuOptions: ContextMenuOptions = {
 				itemType,
 				resourceId,
@@ -190,7 +192,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 				textToCopy: null,
 				htmlToCopy: null,
 				insertContent: () => { editorRef.current?.insertText(''); },
-				isReadOnly: false,
+				isReadOnly,
 				fireEditorEvent: () => {},
 				htmlToMd: null,
 				mdToHtml: null,
