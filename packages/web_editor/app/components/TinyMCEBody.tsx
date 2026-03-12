@@ -325,6 +325,50 @@ function insertKatexDiv(editor: any) {
   );
 }
 
+// ---------- ヘルパー: Drag & Drop ファイルアップロード ----------
+
+/**
+ * ドロップされたファイルを PUT /api/resource/{filename} でアップロードし、
+ * 成功したら画像は <img>、その他は <a> タグとしてエディタに挿入する。
+ */
+async function uploadAndInsertFile(file: File, editor: any): Promise<void> {
+  try {
+    const res = await fetch(`/api/resource/${encodeURIComponent(file.name)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type || 'application/octet-stream' },
+      body: file,
+    });
+    const json = await res.json();
+    if (!json.success) {
+      console.error('TinyMCEBody: upload failed', json.error);
+      return;
+    }
+    const url = `/api/resource/${encodeURIComponent(file.name)}`;
+    if (file.type.startsWith('image/')) {
+      editor.insertContent(`<img src="${url}" alt="${file.name}" />`);
+    } else {
+      editor.insertContent(`<a href="${url}">${file.name}</a>`);
+    }
+  } catch (err) {
+    console.error('TinyMCEBody: upload error', err);
+  }
+}
+
+/**
+ * TinyMCE の drop イベントハンドラ。
+ * ブラウザのデフォルト動作と TinyMCE 組み込み処理を抑制し、
+ * DataTransfer に含まれるファイルを順にアップロードしてエディタへ挿入する。
+ */
+function handleEditorDrop(e: DragEvent, editor: any): void {
+  e.preventDefault();
+  e.stopPropagation();
+  const files = e.dataTransfer?.files;
+  if (!files || files.length === 0) return;
+  for (const file of Array.from(files)) {
+    void uploadAndInsertFile(file, editor);
+  }
+}
+
 // ---------- ヘルパー: エディタコンテンツ取得 ----------
 
 /**
@@ -522,6 +566,9 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             e.preventDefault();
             editor.execCommand('mceInsertContent', false, preserveHtmlIndent(pastedHtml));
           });
+
+          // Drag & Drop によるファイルアップロード
+          editor.on('drop', (e: DragEvent) => handleEditorDrop(e, editor));
 
           // Mermaid / KaTeX ブロックをダブルクリックしたらダイアログを開く
           editor.on('DblClick', (e: any) => {

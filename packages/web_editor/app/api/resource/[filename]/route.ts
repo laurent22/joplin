@@ -54,3 +54,28 @@ export async function GET(_req: Request, { params }: Props) {
     );
   }
 }
+
+export async function PUT(req: Request, { params }: Props) {
+  try {
+    const { filename } = await params;
+    if (!filename) {
+      return NextResponse.json({ success: false, error: 'filename is required' }, { status: 400 });
+    }
+
+    // prevent path traversal
+    const safeName = path.basename(filename);
+    const resourceDir = ViewerUtil.getResourceFolderPath();
+    await fs.mkdir(resourceDir, { recursive: true });
+    const filePath = path.join(resourceDir, safeName);
+
+    const buffer = await req.arrayBuffer();
+    await fs.writeFile(filePath, Buffer.from(buffer));
+
+    return NextResponse.json({ success: true, filename: safeName });
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
+  }
+}
