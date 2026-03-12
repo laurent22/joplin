@@ -112,6 +112,10 @@ const EncryptionConfigScreen = (props: Props) => {
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 							secureTextEntry={true}
+							autoCapitalize='none'
+							autoCorrect={false}
+							textContentType='newPassword'
+							importantForAutofill='yes'
 							value={password}
 							onChangeText={(text: string) => onInputPasswordChange(mk, text)}
 							style={inputStyle}
@@ -180,6 +184,10 @@ const EncryptionConfigScreen = (props: Props) => {
 					keyboardAppearance={theme.keyboardAppearance}
 					style={styles.normalTextInput}
 					secureTextEntry={true}
+					autoCapitalize='none'
+					autoCorrect={false}
+					textContentType='password'
+					importantForAutofill='yes'
 					value={passwordPromptAnswer}
 					onChangeText={(text: string) => {
 						setPasswordPromptAnswer(text);
@@ -193,6 +201,10 @@ const EncryptionConfigScreen = (props: Props) => {
 					keyboardAppearance={theme.keyboardAppearance}
 					style={styles.normalTextInput}
 					secureTextEntry={true}
+					autoCapitalize='none'
+					autoCorrect={false}
+					textContentType='newPassword'
+					importantForAutofill='yes'
 					value={passwordPromptConfirmAnswer}
 					onChangeText={(text: string) => {
 						setPasswordPromptConfirmAnswer(text);
@@ -249,6 +261,10 @@ const EncryptionConfigScreen = (props: Props) => {
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 							secureTextEntry={true}
+							autoCapitalize='none'
+							autoCorrect={false}
+							textContentType='password'
+							importantForAutofill='yes'
 							value={inputMasterPassword}
 							onChangeText={(text: string) => onMasterPasswordChange(text)}
 							style={inputStyle}
