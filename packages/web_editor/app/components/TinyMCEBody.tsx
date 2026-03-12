@@ -6,6 +6,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Tooltip from '@mui/material/Tooltip';
 import SaveIcon from '@mui/icons-material/Save';
 import CheckIcon from '@mui/icons-material/Check';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 import tinymce from 'tinymce';
 import { insertToc, setupTocAutoUpdate } from './tocPlugin';
 import 'tinymce/icons/default';
@@ -468,6 +474,19 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showDirtyDialog, setShowDirtyDialog] = useState(false);
+  const [pendingNote, setPendingNote] = useState<{ noteId: string | null; html: string } | null>(
+    null
+  );
+
+  // isDirty の最新値を副作用外から参照するための ref
+  const isDirtyRef = useRef(isDirty);
+  useEffect(() => {
+    isDirtyRef.current = isDirty;
+  }, [isDirty]);
+
+  // 現在エディタに表示中のノート ID を追跡する ref
+  const currentNoteIdRef = useRef<string | null>(null);
 
   const handleSave = useCallback(async () => {
     if (!noteId || !editorRef.current || isSaving) return;
@@ -499,6 +518,48 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   useEffect(() => {
     handleSaveRef.current = handleSave;
   }, [handleSave]);
+
+  // ページ離脱時（ブラウザ更新・タブ閉じなど）に未保存変更を警告する
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirtyRef.current) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  // エディタにノートコンテンツを適用するヘルパー
+  const applyNoteContent = useCallback((newNoteId: string | null, newHtml: string) => {
+    if (!editorRef.current) return;
+    const editor = editorRef.current;
+    editor.setContent(preserveHtmlIndent(newHtml ?? ''));
+    editor.undoManager.reset();
+    setIsDirty(false);
+    setSaved(false);
+    currentNoteIdRef.current = newNoteId;
+    setTimeout(() => {
+      editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+    }, 200);
+    triggerKatexRender(editor, 600);
+  }, []);
+
+  // ダーティ確認ダイアログで「続行」を選択したとき
+  const handleDirtyDialogConfirm = useCallback(() => {
+    setShowDirtyDialog(false);
+    if (pendingNote) {
+      applyNoteContent(pendingNote.noteId, pendingNote.html);
+      setPendingNote(null);
+    }
+  }, [pendingNote, applyNoteContent]);
+
+  // ダーティ確認ダイアログで「キャンセル」を選択したとき（画面遷移を停止）
+  const handleDirtyDialogCancel = useCallback(() => {
+    setShowDirtyDialog(false);
+    setPendingNote(null);
+  }, []);
 
   // TinyMCE エディタの初期化
   useEffect(() => {
@@ -812,18 +873,16 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   // ノートコンテンツのセット（noteId または html が変わったとき）
   useEffect(() => {
     if (!editorReady || !editorRef.current) return;
-    const editor = editorRef.current;
-    editor.setContent(preserveHtmlIndent(html ?? ''));
-    editor.undoManager.reset();
-    setIsDirty(false);
-    setSaved(false);
-    // ノート切り替え後に mermaid 図を再レンダリング
-    setTimeout(() => {
-      editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
-    }, 200);
-    // ノート切り替え後に KaTeX 数式を再レンダリング
-    triggerKatexRender(editor, 600);
-  }, [editorReady, noteId, html]);
+
+    // ノートが切り替わり、かつ未保存の変更がある場合はダイアログで確認する
+    if (isDirtyRef.current && noteId !== currentNoteIdRef.current) {
+      setPendingNote({ noteId, html });
+      setShowDirtyDialog(true);
+      return;
+    }
+
+    applyNoteContent(noteId, html);
+  }, [editorReady, noteId, html, applyNoteContent]);
 
   return (
     <div
@@ -857,6 +916,22 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
           </span>
         </Tooltip>
       )}
+
+      {/* 未保存変更があるときのノート切り替え確認ダイアログ */}
+      <Dialog open={showDirtyDialog} onClose={handleDirtyDialogCancel}>
+        <DialogTitle>未保存の変更があります</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            現在のノートに保存されていない変更があります。このまま移動すると変更が失われます。
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDirtyDialogCancel}>キャンセル</Button>
+          <Button onClick={handleDirtyDialogConfirm} color="error" variant="contained">
+            続行（変更を破棄）
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
