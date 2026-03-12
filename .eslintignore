@@ -563,6 +563,7 @@ packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
+packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/pluginApi.spec.js
 packages/app-desktop/integration-tests/resizableLayout.spec.js
@@ -584,6 +585,7 @@ packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/setSettingValue.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/integration-tests/util/waitForNextOpenPath.js
+packages/app-desktop/integration-tests/util/waitForNextWindowMatching.js
 packages/app-desktop/integration-tests/wcag.spec.js
 packages/app-desktop/main-html.js
 packages/app-desktop/main.js
