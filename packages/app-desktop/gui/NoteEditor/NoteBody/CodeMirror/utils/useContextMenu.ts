@@ -22,6 +22,8 @@ export type ResourceMarkupType = 'image' | 'file';
 export interface ResourceMarkupInfo {
 	resourceId: string;
 	type: ResourceMarkupType;
+	markupStart: number;
+	markupEnd: number;
 }
 
 // Extract resource ID from resource markup (images or file attachments) at a given cursor position within a line.
@@ -74,7 +76,7 @@ export const getResourceIdFromMarkup = (lineContent: string, cursorPosInLine: nu
 			}
 
 			if (markupEnd !== -1 && cursorPosInLine >= markupStart && cursorPosInLine <= markupEnd) {
-				return { resourceId: resourceInfo.itemId, type: markupType };
+				return { resourceId: resourceInfo.itemId, type: markupType, markupStart, markupEnd };
 			}
 		}
 	}
@@ -164,28 +166,22 @@ const useContextMenu = (props: ContextMenuProps) => {
 			return clickedElement?.closest(`.${imageClassName}`) as HTMLElement | null;
 		};
 
-		// Get resource info from markup at click position (not cursor position)
-		const getResourceInfoAtClickPos = (params: ContextMenuParams): ResourceMarkupInfo | null => {
-			if (!editorRef.current) return null;
-
-			const editor = editorRef.current.editor;
-			if (!editor) return null;
-
-			const zoom = Setting.value('windowContentZoomFactor');
-			const x = convertFromScreenCoordinates(zoom, params.x);
-			const y = convertFromScreenCoordinates(zoom, params.y);
-
-			const clickPos = editor.posAtCoords({ x, y });
-			if (clickPos === null) return null;
-
-			const line = editor.state.doc.lineAt(clickPos);
-			return getResourceIdFromMarkup(line.text, clickPos - line.from);
+		const appendEditMenuItems = (menu: typeof Menu.prototype) => {
+			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection();
+			const isReadOnly = editorRef.current?.editor?.state.readOnly ?? false;
+			menu.append(new MenuItem({ label: _('Cut'), enabled: hasSelectedText && !isReadOnly, click: () => props.editorCutText() }));
+			menu.append(new MenuItem({ label: _('Copy'), enabled: hasSelectedText, click: () => props.editorCopyText() }));
+			menu.append(new MenuItem({ label: _('Paste'), enabled: !isReadOnly, click: () => props.editorPaste() }));
+			menu.append(new MenuItem({ label: _('Paste as Markdown'), enabled: !isReadOnly, click: () => CommandService.instance().execute('pasteAsMarkdown') }));
 		};
 
 		const showResourceContextMenu = async (resourceId: string, type: ResourceMarkupType) => {
 			const menu = new Menu();
+
+			// Add resource-specific options first
 			const baseType = type === 'image' ? ContextMenuItemType.Image : ContextMenuItemType.Resource;
 			const itemType = await resolveContextMenuItemType(baseType, resourceId);
+			const isReadOnly = editorRef.current?.editor?.state.readOnly ?? false;
 			const contextMenuOptions: ContextMenuOptions = {
 				itemType,
 				resourceId,
@@ -195,16 +191,32 @@ const useContextMenu = (props: ContextMenuProps) => {
 				linkToOpen: null,
 				textToCopy: null,
 				htmlToCopy: null,
-				insertContent: () => {},
-				isReadOnly: true,
+				insertContent: () => { editorRef.current?.insertText(''); },
+				isReadOnly,
 				fireEditorEvent: () => {},
 				htmlToMd: null,
 				mdToHtml: null,
 			};
 
-			const resourceMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions);
+			const resourceMenuItems = await buildMenuItems(menuItems(props.dispatch), contextMenuOptions, { excludeEditItems: true, excludePluginItems: true });
 			for (const item of resourceMenuItems) {
 				menu.append(item);
+			}
+
+			// Add edit items
+			menu.append(new MenuItem({ type: 'separator' }));
+			appendEditMenuItems(menu);
+
+			// Add plugin items last
+			const extraItems = await handleEditorContextMenuFilter({
+				resourceId,
+				itemType,
+			});
+			if (extraItems.length) {
+				menu.append(new MenuItem({ type: 'separator' }));
+				for (const item of extraItems) {
+					menu.append(item);
+				}
 			}
 
 			menu.popup({ window: targetWindow });
@@ -228,7 +240,25 @@ const useContextMenu = (props: ContextMenuProps) => {
 			});
 		};
 
+		interface ResourceContextInfo {
+			resourceId: string;
+			type: ResourceMarkupType;
+		}
+
+		const getResourceInfoAtPos = (docPos: number): ResourceContextInfo | null => {
+			const editor = editorRef.current?.editor;
+			if (!editor) return null;
+
+			const line = editor.state.doc.lineAt(docPos);
+			const info = getResourceIdFromMarkup(line.text, docPos - line.from);
+			if (!info) return null;
+
+			return { resourceId: info.resourceId, type: info.type };
+		};
+
 		const onContextMenu = async (event: Event, params: ContextMenuParams) => {
+			let resourceInfo: ResourceContextInfo | null = null;
+
 			// Check if right-clicking on a rendered image first (images may not be "editable")
 			const imageContainer = getClickedImageContainer(params);
 			if (imageContainer && pointerInsideEditor(params, true)) {
@@ -236,19 +266,40 @@ const useContextMenu = (props: ContextMenuProps) => {
 				if (imgElement) {
 					const resourceId = pathToId(imgElement.src);
 					if (resourceId) {
-						event.preventDefault();
 						moveCursorToImageLine(imageContainer);
-						await showResourceContextMenu(resourceId, 'image');
-						return;
+						const sourceFrom = imageContainer.dataset.sourceFrom;
+						if (sourceFrom !== undefined) {
+							const editor = editorRef.current?.editor;
+							if (editor) {
+								const pos = Math.min(Number(sourceFrom), editor.state.doc.length);
+								resourceInfo = getResourceInfoAtPos(pos);
+							}
+						}
+						// Fallback if we couldn't get markup info
+						if (!resourceInfo) {
+							resourceInfo = { resourceId, type: 'image' };
+						}
 					}
 				}
 			}
 
 			// Check if right-clicking on resource markup text (images or file attachments)
-			const markupResourceInfo = getResourceInfoAtClickPos(params);
-			if (markupResourceInfo && pointerInsideEditor(params)) {
+			if (!resourceInfo && pointerInsideEditor(params)) {
+				const editor = editorRef.current?.editor;
+				if (editor) {
+					const zoom = Setting.value('windowContentZoomFactor');
+					const x = convertFromScreenCoordinates(zoom, params.x);
+					const y = convertFromScreenCoordinates(zoom, params.y);
+					const clickPos = editor.posAtCoords({ x, y });
+					if (clickPos !== null) {
+						resourceInfo = getResourceInfoAtPos(clickPos);
+					}
+				}
+			}
+
+			if (resourceInfo) {
 				event.preventDefault();
-				await showResourceContextMenu(markupResourceInfo.resourceId, markupResourceInfo.type);
+				await showResourceContextMenu(resourceInfo.resourceId, resourceInfo.type);
 				return;
 			}
 
@@ -259,48 +310,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			event.preventDefault();
 
 			const menu = new Menu();
-
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
-
-			menu.append(
-				new MenuItem({
-					label: _('Cut'),
-					enabled: hasSelectedText,
-					click: async () => {
-						props.editorCutText();
-					},
-				}),
-			);
-
-			menu.append(
-				new MenuItem({
-					label: _('Copy'),
-					enabled: hasSelectedText,
-					click: async () => {
-						props.editorCopyText();
-					},
-				}),
-			);
-
-			menu.append(
-				new MenuItem({
-					label: _('Paste'),
-					enabled: true,
-					click: async () => {
-						props.editorPaste();
-					},
-				}),
-			);
-
-			menu.append(
-				new MenuItem({
-					label: _('Paste as Markdown'),
-					enabled: true,
-					click: async () => {
-						await CommandService.instance().execute('pasteAsMarkdown');
-					},
-				}),
-			);
+			appendEditMenuItems(menu);
 
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
 
