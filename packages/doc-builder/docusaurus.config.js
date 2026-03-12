@@ -214,17 +214,6 @@ const config = {
 						position: 'right',
 					},
 					{
-						to: process.env.WEBSITE_BASE_URL + '/plugins',
-						label: 'Plugins',
-						position: 'right',
-						target: '_self',
-					},
-					{
-						to: '/news',
-						label: 'News',
-						position: 'right',
-					},
-					{
 						type: 'docSidebar',
 						sidebarId: 'helpSidebar',
 						position: 'right',
