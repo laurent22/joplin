@@ -54,6 +54,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		selectedIndex,
 		selectedIndexes,
 		listItems,
+		allFoldersCollapsed,
 		containerRef: listContainerRef,
 	});
 
@@ -76,7 +77,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 
-	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler });
+	const onRenderContentWrapper = useOnRenderListWrapper({ selectedIndex, onKeyDown: onKeyEventHandler });
 
 	return (
 		<div
