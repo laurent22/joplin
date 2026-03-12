@@ -115,6 +115,11 @@ rules.insert = {
     //
     // https://github.com/laurent22/joplin/issues/5480
     if (node.nodeName === 'INS') return true;
+    if (node.nodeName === 'A' && (
+      node.getAttribute('href') ||
+      node.getAttribute('name') ||
+      node.getAttribute('id')
+    )) return false;
     return getStyleProp(node, 'text-decoration') === 'underline';
   },
 
