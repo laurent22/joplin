@@ -212,6 +212,25 @@ describe('models/Tag', () => {
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	});
 
+	it('should allow renaming a tag to the name of an orphaned tag', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
+
+		await Tag.setNoteTagsByTitles(note1.id, ['un']);
+		await Tag.setNoteTagsByTitles(note2.id, ['deux']);
+
+		await Note.delete(note1.id, { toTrash: true });
+		await Note.delete(note1.id, { toTrash: false });
+
+		const tagDeux = await Tag.loadByTitle('deux');
+		const hasThrown = await checkThrowAsync(async () => await Tag.save({ id: tagDeux.id, title: 'un' }, { userSideValidation: true }));
+		expect(hasThrown).toBe(false);
+
+		const renamedTag = await Tag.load(tagDeux.id);
+		expect(renamedTag.title).toBe('un');
+	});
+
 	it('should allow finding tags when case does not match, for standard ASCII characters', async () => {
 		const note1 = await Note.save({});
 		await Tag.setNoteTagsByTitles(note1.id, ['Hello']);

@@ -233,7 +233,14 @@ export default class Tag extends BaseItem {
 				o.title = o.title.trim();
 
 				const existingTag = await Tag.loadByTitle(o.title);
-				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
+				if (existingTag && existingTag.id !== o.id) {
+					const noteIds = await Tag.noteIds(existingTag.id);
+					if (noteIds.length === 0) {
+						await Tag.untagAll(existingTag.id);
+					} else {
+						throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
+					}
+				}
 			}
 		}
 
