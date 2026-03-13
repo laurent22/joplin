@@ -51,8 +51,11 @@ jest.mock('../../../services/bridge', () => ({
 const getResourceHandling = () => require('./resourceHandling');
 
 describe('resourceHandling', () => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const clipboard = (): any => require('electron').clipboard;
+	type MockClipboard = {
+		has: jest.Mock<boolean, [format: string]>;
+		readBuffer: jest.Mock<Buffer, [format: string]>;
+	};
+	const clipboard = (): MockClipboard => require('electron').clipboard as MockClipboard;
 
 	let processPastedHtml: typeof import('./resourceHandling').processPastedHtml;
 	let getResourcesFromPasteEvent: typeof import('./resourceHandling').getResourcesFromPasteEvent;
