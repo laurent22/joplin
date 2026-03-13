@@ -39,14 +39,6 @@ export default function NoteEditor() {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="p-4">
-        <div className="text-sm text-gray-500">Loading note…</div>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="p-4">
@@ -57,8 +49,27 @@ export default function NoteEditor() {
 
   const note = fetched ?? null;
 
+  // TinyMCEBody は常にマウントしておく（isLoading 中にアンマウントすると
+  // isDirty などの状態がリセットされ、確認ダイアログが表示されなくなるため）
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full" style={{ position: 'relative' }}>
+      {isLoading && (
+        <div
+          className="p-4"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 10,
+            background: 'rgba(255,255,255,0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <div className="text-sm text-gray-500">Loading note…</div>
+        </div>
+      )}
       <TinyMCEBody html={note?.body ?? ''} noteId={noteId} readOnly={false} />
     </div>
   );
