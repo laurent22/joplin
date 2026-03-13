@@ -75,7 +75,7 @@ const NoteList = (props: Props) => {
 
 	const { activeNoteId, setActiveNoteId } = useActiveDescendantId(props.selectedFolderId, props.selectedNoteIds);
 	const focusNote = useFocusNote(listRef, props.notes, makeItemIndexVisible, setActiveNoteId);
-	useRefocusOnDeletion(props.notes.length, props.selectedNoteIds, props.focusedField, focusNote);
+	useRefocusOnDeletion(props.notes.length, props.selectedNoteIds, props.focusedField, props.selectedFolderId, focusNote);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
