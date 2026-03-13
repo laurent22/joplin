@@ -9,7 +9,7 @@ import TagEditor, { TagEditorMode } from '../TagEditor';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import { ViewStyle } from 'react-native';
+import { ViewStyle, Platform } from 'react-native';
 
 interface Props {
 	themeId: number;
