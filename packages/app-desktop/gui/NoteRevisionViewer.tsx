@@ -157,7 +157,10 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
 
 		try {
-			if (msg.indexOf('joplin://') === 0) {
+			if (msg.indexOf('checkboxclick:') === 0) {
+				// Revision previews are read-only. Ignore checkbox toggle IPC messages so they
+				// don't fall through to URL handling (`checkboxclick:` looks like a protocol).
+			} else if (msg.indexOf('joplin://') === 0) {
 				throw new Error(_('Unsupported link or message: %s', msg));
 			} else if (urlUtils.urlProtocol(msg)) {
 				await bridge().openExternal(msg);

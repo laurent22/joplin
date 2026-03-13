@@ -268,7 +268,15 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		const lineInfo = doc.line(Math.min(lineNumber + 1, doc.lines));
 		const lineBlock = this.editor.lineBlockAt(lineInfo.from);
 
-		const height = lineBlock.top;
+		let height;
+		if (lineNumber >= doc.lines) {
+			// Handle case when lineNumber is at or below the last line
+			// This ensures ePercentL != ePercentU in translateLE_, which may cause linInterp to be infinity.
+			// See: https://github.com/laurent22/joplin/issues/14143#issuecomment-3767793559
+			height = lineBlock.top + lineBlock.height;
+		} else {
+			height = lineBlock.top;
+		}
 		if (mode === 'local') {
 			const editorTop = this.editor.lineBlockAt(0).top;
 			return height - editorTop;

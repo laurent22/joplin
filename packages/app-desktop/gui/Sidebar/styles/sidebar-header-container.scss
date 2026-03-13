@@ -1,6 +1,10 @@
-
 .sidebar-header-container {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	height: auto;
+	min-height: 30px;
+	min-width: 0;
+	width: 100%;
+	overflow: hidden;
 }

@@ -10,6 +10,7 @@ const convertHtmlToMarkdown = (html: string|HTMLElement) => {
 		codeBlockStyle: 'fenced',
 		preserveImageTagsWithSize: true,
 		preserveNestedTables: true,
+		preserveTableStyles: true,
 		preserveColorStyles: true,
 		bulletListMarker: '-',
 		emDelimiter: '*',

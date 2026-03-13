@@ -1,12 +1,6 @@
 
 .sidebar-header-button {
-	position: absolute;
-	top: 0;
-	inset-inline-end: 0;
-
-	padding-inline-end: 15px;
-	padding-top: 8px;
-	height: 30px;
+	padding: 4px 8px;
 	border: none;
 
 	background-color: transparent;
@@ -21,9 +15,5 @@
 	&:active {
 		color: var(--joplin-color-active2);
 		background: none;
-	}
-
-	&.-collapseall {
-		right: 25px;
 	}
 }
