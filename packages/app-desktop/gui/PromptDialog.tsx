@@ -130,8 +130,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		this.styles_.select = {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			control: (provided: any) => {
-				return {
-					...provided,
+				return { ...provided,
 					minWidth: 'calc(var(--prompt-width) * 0.2)',
 					maxWidth: 'calc(var(--prompt-width) * 0.5)',
 					fontFamily: theme.fontFamily,
@@ -139,16 +138,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			input: (provided: any) => {
-				return {
-					...provided,
+				return { ...provided,
 					minWidth: '20px',
 					color: theme.color,
 				};
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			menu: (provided: any) => {
-				return {
-					...provided,
+				return { ...provided,
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
@@ -156,8 +153,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			option: (provided: any, state: any) => {
-				return {
-					...provided,
+				return { ...provided,
 					color: theme.color,
 					fontFamily: theme.fontFamily,
 					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
@@ -165,15 +161,13 @@ export default class PromptDialog extends React.Component<Props, any> {
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			multiValueLabel: (provided: any) => {
-				return {
-					...provided,
+				return { ...provided,
 					fontFamily: theme.fontFamily,
 				};
 			},
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			multiValueRemove: (provided: any) => {
-				return {
-					...provided,
+				return { ...provided,
 					color: theme.color,
 				};
 			},
@@ -181,11 +175,9 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.styles_.selectTheme = (tagTheme: any) => {
-			return {
-				...tagTheme,
+			return { ...tagTheme,
 				borderRadius: 2,
-				colors: {
-					...tagTheme.colors,
+				colors: { ...tagTheme.colors,
 					primary: theme.raisedBackgroundColor,
 					primary25: theme.raisedBackgroundColor,
 					neutral0: theme.backgroundColor,

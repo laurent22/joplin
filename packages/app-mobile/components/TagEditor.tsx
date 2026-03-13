@@ -28,7 +28,7 @@ interface Props {
 	searchResultProps?: ScrollViewProps;
 }
 
-const useStyles = (themeId: number, headerStyle: TextStyle | undefined) => {
+const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		return StyleSheet.create({
@@ -209,6 +209,8 @@ const TagEditor: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId, props.headerStyle);
 
 	const comboBoxItems = useMemo(() => {
+		const seenTitles = new Set();
+
 		return props.allTags
 			// Exclude tags already associated with the note
 			.filter(tag => {
@@ -217,13 +219,17 @@ const TagEditor: React.FC<Props> = props => {
 			})
 			.map((tag): Option => {
 				const title = (tag.title || '').trim().normalize('NFC');
+				const key = title.toLowerCase();
+				if (!title || seenTitles.has(key)) return null;
+				seenTitles.add(key);
 				return {
 					title,
 					icon: null,
 					accessibilityHint: _('Adds tag'),
 					willRemoveOnPress: true,
 				};
-			});
+			})
+			.filter((item): item is Option => !!item);
 	}, [props.tags, props.allTags]);
 
 	const [autofocusTag, setAutofocusTag] = useState('');
@@ -283,7 +289,7 @@ const TagEditor: React.FC<Props> = props => {
 				autofocusTag={autofocusTag}
 				onAutoFocusComplete={onAutoFocusComplete}
 			/>
-			<Divider style={styles.divider} />
+			<Divider style={styles.divider}/>
 		</>}
 		<Text style={styles.header} role='heading'>{_('Add tags:')}</Text>
 		<ComboBox

@@ -267,12 +267,6 @@ export default class Tag extends BaseItem {
 			}
 		}
 
-		// Apply NFC normalization to ensure canonical Unicode representation
-		// This prevents duplicate tags that differ only in Unicode encoding (e.g., é vs é)
-		if ('title' in o) {
-			o.title = o.title.trim().normalize('NFC');
-		}
-
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 		return super.save(tagToSave, options).then((tag: TagEntity) => {
 			if (options.dispatchUpdateAction) {
