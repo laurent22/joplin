@@ -655,7 +655,38 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
             const pastedHtml = clipboardData.getData('text/html');
             if (!pastedHtml) return;
             e.preventDefault();
-            editor.execCommand('mceInsertContent', false, preserveHtmlIndent(pastedHtml));
+            const pasteDoc = new DOMParser().parseFromString(pastedHtml, 'text/html');
+
+            // TinyMCE のシリアライザは Ctrl+C 時に data-mce-src の値で src を上書きして
+            // クリップボードに書き込む。Joplin リソースの場合 data-mce-src が
+            // "file:///...:/RESOURCE_HASH" 形式になるため、そのまま貼り付けると
+            // src がローカルパスに置き換わり動画・画像が壊れる。
+            // → src が Joplin リソースパターン（":/HASH"）に一致する要素を検出し、
+            //    title 属性の拡張子と組み合わせて /api/resource/HASH.ext に修正する。
+            pasteDoc.querySelectorAll('[src]').forEach((el) => {
+              const src = el.getAttribute('src') ?? '';
+              const resourceMatch = src.match(/:\/([\da-f]{32,})\s*$/i);
+              if (resourceMatch) {
+                const hash = resourceMatch[1];
+                const title = el.getAttribute('title') ?? '';
+                const extMatch = title.match(/(\.[^.]+)$/);
+                const ext = extMatch ? extMatch[1] : '';
+                el.setAttribute('src', `/api/resource/${hash}${ext}`);
+              }
+            });
+
+            // data-mce-* 内部属性を除去（再挿入時に TinyMCE が再適用するのを防ぐ）
+            pasteDoc.querySelectorAll('*').forEach((el) => {
+              Array.from(el.attributes)
+                .filter((attr) => attr.name.startsWith('data-mce-'))
+                .forEach((attr) => el.removeAttribute(attr.name));
+            });
+
+            editor.execCommand(
+              'mceInsertContent',
+              false,
+              preserveHtmlIndent(pasteDoc.body.innerHTML)
+            );
           });
 
           // Drag & Drop によるファイルアップロード
