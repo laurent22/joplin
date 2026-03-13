@@ -10788,7 +10788,7 @@ __metadata:
     prosemirror-dropcursor: "npm:1.8.2"
     prosemirror-example-setup: "npm:1.2.3"
     prosemirror-gapcursor: "npm:1.3.2"
-    prosemirror-history: "npm:1.4.1"
+    prosemirror-history: "npm:1.5.0"
     prosemirror-inputrules: "npm:1.5.0"
     prosemirror-keymap: "npm:1.2.3"
     prosemirror-model: "npm:1.25.3"
@@ -43360,7 +43360,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-history@npm:1.4.1, prosemirror-history@npm:^1.0.0":
+"prosemirror-history@npm:1.5.0":
+  version: 1.5.0
+  resolution: "prosemirror-history@npm:1.5.0"
+  dependencies:
+    prosemirror-state: "npm:^1.2.2"
+    prosemirror-transform: "npm:^1.0.0"
+    prosemirror-view: "npm:^1.31.0"
+    rope-sequence: "npm:^1.3.0"
+  checksum: 10/f59402632f786e0c757ea31494ab3fb99665b4ca5aaff50dc1918250aa558c23fcc938d1645b1b165c1a87ec9700cec3d53c6bc90e2c977872f144be425b76fd
+  languageName: node
+  linkType: hard
+
+"prosemirror-history@npm:^1.0.0":
   version: 1.4.1
   resolution: "prosemirror-history@npm:1.4.1"
   dependencies:
