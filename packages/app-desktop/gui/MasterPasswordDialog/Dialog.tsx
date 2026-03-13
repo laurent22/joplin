@@ -87,7 +87,12 @@ export default function(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [currentPassword, password1, onClose, mode]);
 
+<<<<<<< HEAD
 	const needToRepeatPassword = true;
+=======
+
+
+>>>>>>> f89adf644 (Desktop: Ensure re-enter password field appears when changing master password (#14658))
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onCurrentPasswordChange = useCallback((event: any) => {
 		setCurrentPassword(event.target.value);
@@ -117,8 +122,8 @@ export default function(props: Props) {
 	}, []);
 
 	useEffect(() => {
-		setSaveButtonDisabled(updatingPassword || (!password1 || (needToRepeatPassword && password1 !== password2)));
-	}, [password1, password2, updatingPassword, needToRepeatPassword]);
+		setSaveButtonDisabled(updatingPassword || (!password1 || (password1 !== password2)));
+	}, [password1, password2, updatingPassword]);
 
 	useEffect(() => {
 		setShowPasswordForm([MasterPasswordStatus.NotSet, MasterPasswordStatus.Invalid].includes(status));
@@ -171,22 +176,22 @@ export default function(props: Props) {
 							onChange={onPasswordChange1}
 						/>
 
-						{needToRepeatPassword && (
-							<>
-								<LabelledPasswordInput
-									labelText={_('Re-enter password')}
-									value={password2}
-									onChange={onPasswordChange2}
-									valid={password2 ? passwordsMatch : undefined}
-								/>
 
-								{password2 && !passwordsMatch && (
-									<p className="error-message">
-										{_('Passwords do not match')}
-									</p>
-								)}
-							</>
-						)}
+						<>
+							<LabelledPasswordInput
+								labelText={_('Re-enter password')}
+								value={password2}
+								onChange={onPasswordChange2}
+								valid={password2 ? passwordsMatch : undefined}
+							/>
+
+							{password2 && !passwordsMatch && (
+								<p className="error-message">
+									{_('Passwords do not match')}
+								</p>
+							)}
+						</>
+
 					</div>
 					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>
 					{renderResetMasterPasswordLink()}
