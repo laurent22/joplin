@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 import { TreeNode, useFolderQuery } from '@/lib/hooks';
 
 // fetch logic moved to `useFolderQuery` in `lib/hooks`
-function renderTree(nodes: TreeNode[], onNoteClick?: () => void) {
+function renderTree(nodes: TreeNode[], onNoteClick?: () => void, currentNoteId?: string | null) {
   return nodes.map((node) => {
     if (node.type === 'Folder') {
       return (
@@ -31,33 +31,36 @@ function renderTree(nodes: TreeNode[], onNoteClick?: () => void) {
             </Box>
           }
         >
-          {node.children && node.children.length > 0 && renderTree(node.children, onNoteClick)}
+          {node.children &&
+            node.children.length > 0 &&
+            renderTree(node.children, onNoteClick, currentNoteId)}
         </TreeItem>
       );
     }
 
+    const isCurrentNote = node.id === currentNoteId;
+
+    const box = (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+        data-nodeid={node.id}
+      >
+        <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
+        <span>{node.title}</span>
+      </Box>
+    );
     // Note node (leaf)
     return (
       <TreeItem
         key={node.id}
         itemId={node.id}
-        label={
-          <Link href={`/note?note_id=${node.id}`}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                textDecoration: 'none',
-                color: 'inherit',
-              }}
-              data-nodeid={node.id}
-            >
-              <DescriptionIcon fontSize="small" sx={{ color: 'rgba(0,0,0,0.6)' }} />
-              <span>{node.title}</span>
-            </Box>
-          </Link>
-        }
+        label={isCurrentNote ? box : <Link href={`/note?note_id=${node.id}`}>{box}</Link>}
         onClick={onNoteClick}
       />
     );
@@ -118,8 +121,8 @@ export default function NoteTree() {
   }, [noteIdFromUrl, folders]);
 
   const treeCompoent = useMemo(() => {
-    return renderTree(folders || [], onClickNote);
-  }, [folders, onClickNote]);
+    return renderTree(folders || [], onClickNote, noteIdFromUrl);
+  }, [folders, onClickNote, noteIdFromUrl]);
 
   if (isLoading) {
     return (
