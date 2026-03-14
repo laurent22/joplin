@@ -45,7 +45,8 @@ export const EncryptionConfigScreen = (props: Props) => {
 	const [pendingEnableEncryption, setPendingEnableEncryption] = useState(false);
 	const [enableEncryptionPromptVisible, setEnableEncryptionPromptVisible] = useState(false);
 	const [enableEncryptionPassword, setEnableEncryptionPassword] = useState('');
-	const [enableEncryptionError, setEnableEncryptionError] = useState('');
+	const promptPromiseRef = useRef<(password: string | null)=> void>(null);
+
 	const wasMasterPasswordDialogOpen = useRef(props.masterPasswordDialogOpen);
 
 	const theme = useMemo(() => {
@@ -237,69 +238,52 @@ export const EncryptionConfigScreen = (props: Props) => {
 		return null;
 	};
 
-	const onEnableEncryptionConfirm = useCallback(async (newPassword: string) => {
-		setEnableEncryptionError('');
-
-		if (!newPassword) {
-			setEnableEncryptionPromptVisible(false);
-			return; // cancelled
-		}
-
-		const masterKey = getDefaultMasterKey();
-		const hasMasterPassword = !!props.masterPassword;
-
-		if (hasMasterPassword) {
-			if (!(await masterPasswordIsValid(newPassword))) {
-				setEnableEncryptionError(_('Invalid password. Please try again. If you have forgotten your password you will need to reset it.'));
-				return;
-			}
-		}
-
-		try {
-			await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, newPassword);
-			setEnableEncryptionPromptVisible(false);
-		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
-			setEnableEncryptionError(message);
-		}
-	}, [props.masterPassword]);
-
 	const onToggleButtonClick = useCallback(async () => {
 		const isEnabled = getEncryptionEnabled();
 		const newEnabled = !isEnabled;
 		const masterKey = getDefaultMasterKey();
 		const hasMasterPassword = !!props.masterPassword;
+		let newPassword: string | null = '';
 
-		// Disabling encryption logic
 		if (isEnabled) {
 			const answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			if (!answer) return;
-
-			// Perform disable request directly as password is not needed
-			try {
-				await toggleAndSetupEncryption(EncryptionService.instance(), newEnabled, masterKey, '');
-			} catch (error) {
-				await dialogs.alert(error.message);
+		} else {
+			if (shouldOpenMasterPasswordDialogForEnable({
+				hasMasterPassword,
+				masterPasswordDialogOpen: props.masterPasswordDialogOpen,
+			})) {
+				setPendingEnableEncryption(true);
+				props.dispatch({
+					type: 'DIALOG_OPEN',
+					name: AppStateDialogName.MasterPassword,
+				});
+				return;
 			}
-			return;
-		}
 
-		if (shouldOpenMasterPasswordDialogForEnable({
-			hasMasterPassword,
-			masterPasswordDialogOpen: props.masterPasswordDialogOpen,
-		})) {
-			setPendingEnableEncryption(true);
-			props.dispatch({
-				type: 'DIALOG_OPEN',
-				name: AppStateDialogName.MasterPassword,
+			// Wait for the custom React Dialog to resolve
+			setEnableEncryptionPassword('');
+			setEnableEncryptionPromptVisible(true);
+			newPassword = await new Promise<string | null>((resolve) => {
+				promptPromiseRef.current = resolve;
 			});
-			return;
+
+			if (newPassword === null) return; // User cancelled
 		}
 
-		// Trigger inner logic for asking password via custom dialog
-		setEnableEncryptionPassword('');
-		setEnableEncryptionError('');
-		setEnableEncryptionPromptVisible(true);
+		if (hasMasterPassword && newEnabled) {
+			if (!(await masterPasswordIsValid(newPassword))) {
+				await dialogs.alert(_('Invalid password. Please try again. If you have forgotten your password you will need to reset it.'));
+				return;
+			}
+		}
+
+		try {
+			await toggleAndSetupEncryption(EncryptionService.instance(), newEnabled, masterKey, newPassword);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			await dialogs.alert(message);
+		}
 	}, [props.dispatch, props.masterPassword, props.masterPasswordDialogOpen]);
 
 	const renderEnableEncryptionDialog = () => {
@@ -313,6 +297,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 
 		const onClose = () => {
 			setEnableEncryptionPromptVisible(false);
+			if (promptPromiseRef.current) promptPromiseRef.current(null);
 		};
 
 		const onDialogButtonRowClick = (event: { buttonName: string }) => {
@@ -321,13 +306,13 @@ export const EncryptionConfigScreen = (props: Props) => {
 				return;
 			}
 			if (event.buttonName === 'ok') {
-				void onEnableEncryptionConfirm(enableEncryptionPassword);
+				setEnableEncryptionPromptVisible(false);
+				if (promptPromiseRef.current) promptPromiseRef.current(enableEncryptionPassword);
 			}
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required because PasswordInput's ChangeEventHandler type is incorrect
 		const onPasswordInputChange = (event: any) => {
-			setEnableEncryptionError('');
 			setEnableEncryptionPassword(event.target.value);
 		};
 
@@ -346,11 +331,6 @@ export const EncryptionConfigScreen = (props: Props) => {
 								value={enableEncryptionPassword}
 								onChange={onPasswordInputChange}
 							/>
-							{enableEncryptionError && (
-								<div style={{ ...theme.textStyle, color: theme.colorError, marginTop: 10, marginBottom: 10 }}>
-									{enableEncryptionError}
-								</div>
-							)}
 						</div>
 					</div>
 					<DialogButtonRow
