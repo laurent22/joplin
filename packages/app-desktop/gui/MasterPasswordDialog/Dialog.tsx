@@ -38,7 +38,7 @@ enum Mode {
 export default function(props: Props) {
 	const [status, setStatus] = useState(MasterPasswordStatus.NotSet);
 	const [hasMasterPasswordEncryptedData, setHasMasterPasswordEncryptedData] =
-    useState(true);
+	useState(true);
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [currentPasswordIsValid, setCurrentPasswordIsValid] = useState(false);
 	const [password1, setPassword1] = useState('');
@@ -153,8 +153,8 @@ export default function(props: Props) {
 	useEffect(() => {
 		setSaveButtonDisabled(
 			updatingPassword ||
-        !password1 ||
-        (needToRepeatPassword && password1 !== password2),
+		!password1 ||
+		(needToRepeatPassword && password1 !== password2),
 		);
 	}, [password1, password2, updatingPassword, needToRepeatPassword]);
 
@@ -189,7 +189,7 @@ export default function(props: Props) {
 			// been encrypted with it).
 
 			const showValidIcon =
-        currentPassword && status !== MasterPasswordStatus.NotSet;
+		currentPassword && status !== MasterPasswordStatus.NotSet;
 			return (
 				<LabelledPasswordInput
 					labelText={_('Current password')}
@@ -206,7 +206,7 @@ export default function(props: Props) {
 			return (
 				<p>
 					<a href="#" onClick={onToggleMode}>
-            Reset master password
+			Reset master password
 					</a>
 				</p>
 			);
@@ -246,8 +246,8 @@ export default function(props: Props) {
 						)}
 					</div>
 					<p className="bold">
-            Please make sure you remember your password. For security reasons,
-            it is not possible to recover it if it is lost.
+						{_('Please make sure you remember your master password.')}{' '}
+						{_('For security reasons it cannot be recovered if lost, and any data encrypted with it may become inaccessible.')}
 					</p>
 					{renderResetMasterPasswordLink()}
 				</div>
@@ -256,7 +256,7 @@ export default function(props: Props) {
 			return (
 				<p>
 					<a onClick={onShowPasswordForm} href="#">
-            Change master password
+			Change master password
 					</a>
 				</p>
 			);
@@ -268,10 +268,10 @@ export default function(props: Props) {
 			return (
 				<div className="dialog-content">
 					<p>
-            Attention: After resetting your password it will no longer be
-            possible to decrypt any data encrypted with your current password.
-            All encrypted shared notebooks will also be unshared, so please ask
-            the notebook owner to share it again with you.
+			Attention: After resetting your password it will no longer be
+			possible to decrypt any data encrypted with your current password.
+			All encrypted shared notebooks will also be unshared, so please ask
+			the notebook owner to share it again with you.
 					</p>
 					{renderPasswordForm()}
 				</div>
@@ -280,10 +280,10 @@ export default function(props: Props) {
 			return (
 				<div className="dialog-content">
 					<p>
-            Your master password is used to protect sensitive information. In
-            particular, it is used to encrypt your notes when end-to-end
-            encryption (E2EE) is enabled, or to share and encrypt notes with
-            someone who has E2EE enabled.
+			Your master password is used to protect sensitive information. In
+			particular, it is used to encrypt your notes when end-to-end
+			encryption (E2EE) is enabled, or to share and encrypt notes with
+			someone who has E2EE enabled.
 					</p>
 					<p>
 						<span>{'Master password status:'}</span>{' '}
