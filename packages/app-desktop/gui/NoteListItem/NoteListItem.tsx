@@ -4,8 +4,7 @@ import { ItemFlow, ListRenderer, NoteListColumns, OnChangeEvent, OnChangeHandler
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
-import useItemEventHandlers from './utils/useItemEventHandlers';
-import { OnInputChange } from './utils/types';
+import { ItemEventHandlers, OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
@@ -72,7 +71,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index, props.columns);
 
-	const itemEventHandlers = useItemEventHandlers(onInputChange, null);
+	const itemEventHandlers = useMemo((): ItemEventHandlers => ({ onInputChange, onClick: null }), [onInputChange]);
 
 	useItemElement(
 		rootElement,
