@@ -69,7 +69,6 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				backgroundColor: hasScrollView ? null : backgroundColor,
 			},
 			keyboardAvoidingView: {
-				...absoluteFill,
 				flex: 1,
 			},
 			modalScrollView: {
