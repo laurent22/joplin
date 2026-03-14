@@ -32,8 +32,12 @@ RCT_EXPORT_METHOD(close) {
   if (self.shareData.resources != nil) {
     for (NSDictionary* resource in self.shareData.resources) {
       NSString* uri = [ShareData resourceURLFromDictionary:resource];
-      if (uri != nil && [NSFileManager.defaultManager fileExistsAtPath:uri]) {
-        [NSFileManager.defaultManager removeItemAtPath:uri error:nil];
+      if (uri != nil) {
+        // Decode the URI to handle URL-encoded characters like %23 (which represents #)
+        NSString* decodedUri = [uri stringByRemovingPercentEncoding];
+        if ([NSFileManager.defaultManager fileExistsAtPath:decodedUri]) {
+          [NSFileManager.defaultManager removeItemAtPath:decodedUri error:nil];
+        }
       }
     }
   }
