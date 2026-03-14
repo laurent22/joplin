@@ -68,7 +68,7 @@ test.describe('pluginApi', () => {
 				return editorContent.textContent();
 			}).toBe(JSON.stringify({
 				visible: visible,
-				active: visible,
+				isActiveThrew: true,
 			}));
 		};
 		await expectVisible(false);

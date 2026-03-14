@@ -69,13 +69,17 @@ joplin.plugins.register({
 			execute: async () => {
 				// panels.visible should also work for dialogs.
 				const visible = await joplin.views.panels.visible(dialogHandle);
-				// For dialogs, isActive should return the visibility.
-				// (Prefer panels.visible for dialogs).
-				const active = await joplin.views.panels.isActive(dialogHandle);
+				// isActive is no longer supported for panels — it should throw.
+				let isActiveThrew = false;
+				try {
+					await joplin.views.panels.isActive(dialogHandle);
+				} catch (e) {
+					isActiveThrew = true;
+				}
 
 				await joplin.commands.execute('editor.setText', JSON.stringify({
 					visible,
-					active,
+					isActiveThrew,
 				}));
 			},
 		});
