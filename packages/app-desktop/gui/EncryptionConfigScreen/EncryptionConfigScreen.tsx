@@ -45,6 +45,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 	const [pendingEnableEncryption, setPendingEnableEncryption] = useState(false);
 	const [enableEncryptionPromptVisible, setEnableEncryptionPromptVisible] = useState(false);
 	const [enableEncryptionPassword, setEnableEncryptionPassword] = useState('');
+	const [enableEncryptionError, setEnableEncryptionError] = useState('');
 	const wasMasterPasswordDialogOpen = useRef(props.masterPasswordDialogOpen);
 
 	const theme = useMemo(() => {
@@ -237,23 +238,29 @@ export const EncryptionConfigScreen = (props: Props) => {
 	};
 
 	const onEnableEncryptionConfirm = useCallback(async (newPassword: string) => {
-		setEnableEncryptionPromptVisible(false);
-		if (!newPassword) return; // cancelled
+		setEnableEncryptionError('');
+
+		if (!newPassword) {
+			setEnableEncryptionPromptVisible(false);
+			return; // cancelled
+		}
 
 		const masterKey = getDefaultMasterKey();
 		const hasMasterPassword = !!props.masterPassword;
 
 		if (hasMasterPassword) {
 			if (!(await masterPasswordIsValid(newPassword))) {
-				await dialogs.alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
+				setEnableEncryptionError(_('Invalid password. Please try again. If you have forgotten your password you will need to reset it.'));
 				return;
 			}
 		}
 
 		try {
 			await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, newPassword);
+			setEnableEncryptionPromptVisible(false);
 		} catch (error) {
-			await dialogs.alert(error.message);
+			const message = error instanceof Error ? error.message : String(error);
+			setEnableEncryptionError(message);
 		}
 	}, [props.masterPassword]);
 
@@ -291,6 +298,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 
 		// Trigger inner logic for asking password via custom dialog
 		setEnableEncryptionPassword('');
+		setEnableEncryptionError('');
 		setEnableEncryptionPromptVisible(true);
 	}, [props.dispatch, props.masterPassword, props.masterPasswordDialogOpen]);
 
@@ -317,6 +325,12 @@ export const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required because PasswordInput's ChangeEventHandler type is incorrect
+		const onPasswordInputChange = (event: any) => {
+			setEnableEncryptionError('');
+			setEnableEncryptionPassword(event.target.value);
+		};
+
 		return (
 			<Dialog onCancel={onClose}>
 				<div className="dialog-root">
@@ -330,8 +344,13 @@ export const EncryptionConfigScreen = (props: Props) => {
 							<PasswordInput
 								inputId="enable-encryption-password"
 								value={enableEncryptionPassword}
-								onChange={(event) => setEnableEncryptionPassword(event.value)}
+								onChange={onPasswordInputChange}
 							/>
+							{enableEncryptionError && (
+								<div style={{ ...theme.textStyle, color: theme.colorError, marginTop: 10, marginBottom: 10 }}>
+									{enableEncryptionError}
+								</div>
+							)}
 						</div>
 					</div>
 					<DialogButtonRow
