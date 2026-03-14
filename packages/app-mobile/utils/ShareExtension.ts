@@ -1,10 +1,16 @@
 import { NativeEventEmitter } from 'react-native';
 import { NativeModules, Platform } from 'react-native';
 
+export interface SharedResource {
+	uri: string;
+	mimeType: string;
+	name: string;
+}
+
 export interface SharedData {
 	title?: string;
 	text?: string;
-	resources?: string[];
+	resources?: SharedResource[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

@@ -1,5 +1,6 @@
 import ShareExtension, { SharedData } from './ShareExtension';
 import shim from '@joplin/lib/shim';
+import { decodeFileUri } from './pathDecoding';
 
 import Note from '@joplin/lib/models/Note';
 import checkPermissions from './checkPermissions.js';
@@ -42,7 +43,24 @@ export default async (sharedData: SharedData, folderId: string, dispatch: Functi
 	dispatch({ type: 'SIDE_MENU_CLOSE' });
 
 	shim.setTimeout(async () => {
-		await NavService.go('Note', { noteId: newNote.id, sharedData });
+		// Decode file paths in shared resources to handle URL-encoded characters (e.g., %23 for #)
+		// This is necessary because iOS passes file URIs with URL encoding
+		const decodedSharedData = { ...sharedData };
+		if (decodedSharedData.resources && decodedSharedData.resources.length > 0) {
+			decodedSharedData.resources = decodedSharedData.resources.map(
+				(resource) => {
+					return {
+						...resource,
+						uri: decodeFileUri(resource.uri),
+					};
+				},
+			);
+		}
+
+		await NavService.go('Note', {
+			noteId: newNote.id,
+			sharedData: decodedSharedData,
+		});
 
 		ShareExtension.close();
 	}, 5);
