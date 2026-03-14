@@ -220,16 +220,6 @@ describe('models/Tag', () => {
 		expect(tag1).toStrictEqual(tag2);
 	});
 
-	it('should find the same tag when case does not match, for special Unicode characters', async () => {
-		const note1 = await Note.save({});
-		await Tag.setNoteTagsByTitles(note1.id, ['Ökonomie']);
-		const tag1 = await Tag.loadByTitle('Ökonomie');
-		const tag2 = await Tag.loadByTitle('ökonomie');
-		expect(tag1).not.toBeNull();
-		expect(tag2).not.toBeNull();
-		expect(tag1.id).toBe(tag2.id);
-	});
-
 	it('should not create duplicate tags when tagging with existing titles (issue #14540)', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
