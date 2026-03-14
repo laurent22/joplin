@@ -46,7 +46,7 @@ export default async (sharedData: SharedData, folderId: string, dispatch: Functi
 		// Decode file paths in shared resources to handle URL-encoded characters (e.g., %23 for #)
 		// This is necessary because iOS passes file URIs with URL encoding
 		const decodedSharedData = { ...sharedData };
-		if (decodedSharedData.resources && decodedSharedData.resources.length > 0) {
+		if (Platform.OS === 'ios' && decodedSharedData.resources && decodedSharedData.resources.length > 0) {
 			decodedSharedData.resources = decodedSharedData.resources.map(
 				(resource) => {
 					return {
