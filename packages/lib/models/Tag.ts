@@ -172,24 +172,17 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async loadByTitle(title: string): Promise<TagEntity | null> {
-		const normalizedTitle = title.trim().normalize('NFC');
+		const trimmedTitle = title.trim();
+		const lowercaseTitle = trimmedTitle.toLowerCase();
+		const normalizedLowercaseTitle = trimmedTitle.normalize('NFC').toLowerCase();
 		// We use a manual query here instead of loadByField to ensure deterministic ordering (ORDER BY created_time ASC)
 		// when visually similar tags exist in the database.
 		// We use created_time instead of id because IDs are UUIDs and cannot be meaningfully ordered.
-		const tag = await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [normalizedTitle]);
+		const tag = await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [lowercaseTitle]);
 		if (tag) return tag;
 
-		// Fallback for tags that might have different normalization or whitespace in the database.
-		// We only select id and title to keep this relatively fast even if there are many tags.
-		// Once most tags are normalized in the database, this fallback will be rarely hit.
-		// We order by created_time to ensure that if multiple visual duplicates exist, all clients converge
-		// to the same deterministic tag (the oldest one).
-		const allTags = await this.db().selectAll<{ id: string; title: string }>('SELECT id, title FROM tags ORDER BY created_time ASC');
-		const searchTitleLower = normalizedTitle.toLowerCase();
-		for (const t of allTags) {
-			if (t.title && t.title.trim().normalize('NFC').toLowerCase() === searchTitleLower) {
-				return Tag.load(t.id);
-			}
+		if (normalizedLowercaseTitle !== lowercaseTitle) {
+			return await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [normalizedLowercaseTitle]);
 		}
 
 		return null;
@@ -209,14 +202,22 @@ export default class Tag extends BaseItem {
 		const addedTitlesLowercased = [];
 		const addedTagIds = [];
 
-		// Deduplicate incoming titles after normalization
-		const uniqueNormalizedTitles = Array.from(new Set(tagTitles.map(t => (t || '').trim().normalize('NFC')).filter(t => !!t)));
+		const uniqueTagTitles = new Map<string, string>();
+		for (const title of tagTitles) {
+			const trimmedTitle = (title || '').trim();
+			if (!trimmedTitle) continue;
 
-		for (const title of uniqueNormalizedTitles) {
+			const normalizedLowercaseTitle = trimmedTitle.normalize('NFC').toLowerCase();
+			if (!uniqueTagTitles.has(normalizedLowercaseTitle)) {
+				uniqueTagTitles.set(normalizedLowercaseTitle, trimmedTitle);
+			}
+		}
+
+		for (const [normalizedLowercaseTitle, title] of uniqueTagTitles) {
 			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
 			await this.addNote(tag.id, noteId);
-			addedTitlesLowercased.push(title.toLowerCase());
+			addedTitlesLowercased.push(normalizedLowercaseTitle);
 			addedTagIds.push(tag.id);
 		}
 
@@ -256,15 +257,17 @@ export default class Tag extends BaseItem {
 		};
 
 		const tagToSave = { ...o };
-		if (tagToSave.title) {
-			tagToSave.title = tagToSave.title.trim().normalize('NFC');
-		}
+		const trimmedTitle = tagToSave.title ? tagToSave.title.trim() : tagToSave.title;
 
 		if (options.userSideValidation) {
-			if ('title' in tagToSave) {
-				const existingTag = await Tag.loadByTitle(tagToSave.title);
-				if (existingTag && existingTag.id !== tagToSave.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', tagToSave.title));
+			if ('title' in tagToSave && trimmedTitle) {
+				const existingTag = await Tag.loadByTitle(trimmedTitle);
+				if (existingTag && existingTag.id !== tagToSave.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', trimmedTitle));
 			}
+		}
+
+		if (trimmedTitle) {
+			tagToSave.title = trimmedTitle.normalize('NFC');
 		}
 
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied

@@ -260,4 +260,17 @@ describe('models/Tag', () => {
 		allTags = await Tag.all();
 		expect(allTags.length).toBe(2);
 	});
+
+	it('should prefer an exact legacy tag match before the normalized fallback', async () => {
+		const decomposed = '\u0065\u0301';
+		const composed = '\u00E9';
+		const legacyTagId = Tag.generateUuid();
+		const normalizedTag = await Tag.save({ title: composed });
+
+		await Tag.db().exec('INSERT INTO tags (id, title, created_time, updated_time) VALUES (?, ?, ?, ?)', [legacyTagId, decomposed, 1, 1]);
+
+		const loadedTag = await Tag.loadByTitle(decomposed);
+		expect(loadedTag.id).toBe(legacyTagId);
+		expect(loadedTag.id).not.toBe(normalizedTag.id);
+	});
 });

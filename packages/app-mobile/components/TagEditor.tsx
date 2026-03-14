@@ -239,10 +239,10 @@ const TagEditor: React.FC<Props> = props => {
 	}, []);
 
 	const onAddTag = useCallback((title: string) => {
-		const normalizedTitle = (title || '').trim().normalize('NFC');
-		if (!normalizedTitle) return;
-		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', normalizedTitle));
-		props.onTagsChange([...props.tags, normalizedTitle]);
+		const trimmedTitle = (title || '').trim();
+		if (!trimmedTitle) return;
+		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', trimmedTitle));
+		props.onTagsChange([...props.tags, trimmedTitle]);
 	}, [props.tags, props.onTagsChange]);
 
 	const onRemoveTag = useCallback(async (title: string) => {
