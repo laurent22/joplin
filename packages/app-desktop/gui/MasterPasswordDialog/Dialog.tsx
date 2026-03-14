@@ -81,7 +81,11 @@ export default function(props: Props) {
 				void reg.waitForSyncFinishedThenSync();
 				onClose();
 			} catch (error) {
-				void shim.showErrorDialog(error.message);
+				if (error instanceof Error) {
+					void shim.showErrorDialog(error.message);
+				} else {
+					void shim.showErrorDialog(String(error));
+				}
 			} finally {
 				setUpdatingPassword(false);
 			}
@@ -195,7 +199,11 @@ export default function(props: Props) {
 							</>
 						)}
 					</div>
-					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>
+					<p className="bold">
+  Please make sure you remember your master password. For security reasons,
+  it cannot be recovered if lost, and any data encrypted with it may become inaccessible.
+					</p>
+
 					{renderResetMasterPasswordLink()}
 				</div>
 			);
