@@ -18,6 +18,7 @@ import { checkIfLoginWasSuccessful, generateApplicationConfirmUrl } from '@jopli
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 
 const logger = Logger.create('command-sync');
 
@@ -261,6 +262,13 @@ class Command extends BaseCommand {
 				this.stdout(_('Downloading resources...'));
 				await ResourceFetcher.instance().fetchAll();
 				await ResourceFetcher.instance().waitForAllFinished();
+				// add searchengine index refresh for solving the issue ## 11631
+				try {
+					this.stdout(_('Updating search index...'));
+					await SearchEngine.instance().syncTables();
+				} catch (error) {
+					this.stderr(_('Search index update failed: %s', error.message));
+				}
 			}
 
 			const noPasswordMkIds = await masterKeysWithoutPassword();
