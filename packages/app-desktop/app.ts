@@ -152,7 +152,7 @@ class Application extends BaseApplication {
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
-			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
+			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE', action.forceReschedule);
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
@@ -640,6 +640,7 @@ class Application extends BaseApplication {
 				void AlarmService.updateAllNotifications();
 				RevisionService.instance().runInBackground();
 			} else {
+				void AlarmService.updateAllNotifications();
 				setTimeout(() => {
 					// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied

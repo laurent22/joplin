@@ -85,7 +85,7 @@ export interface ParsedQuery {
 export default class SearchEngine {
 
 	public static instance_: SearchEngine = null;
-	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, parent_id, latitude, longitude, altitude, source_url';
+	public static relevantFields = 'id, title, body, user_created_time, user_updated_time, is_todo, todo_completed, todo_due, alarm_interval, parent_id, latitude, longitude, altitude, source_url';
 	public static SEARCH_TYPE_AUTO = SearchType.Auto;
 	public static SEARCH_TYPE_BASIC = SearchType.Basic;
 	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
@@ -158,8 +158,8 @@ export default class SearchEngine {
 				const n = this.normalizeNote_(note);
 				queries.push({ sql: `
 				INSERT INTO notes_normalized(${SearchEngine.relevantFields})
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] },
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+				params: [n.id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.alarm_interval, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] },
 				);
 			}
 
@@ -248,8 +248,8 @@ export default class SearchEngine {
 							const n = this.normalizeNote_(note);
 							queries.push({ sql: `
 							INSERT INTO notes_normalized(${SearchEngine.relevantFields})
-							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] });
+							VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+							params: [change.item_id, n.title, n.body, n.user_created_time, n.user_updated_time, n.is_todo, n.todo_completed, n.todo_due, n.alarm_interval, n.parent_id, n.latitude, n.longitude, n.altitude, n.source_url] });
 							report.inserted++;
 						}
 					} else if (change.type === ItemChange.TYPE_DELETE) {

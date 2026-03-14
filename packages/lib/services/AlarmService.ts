@@ -1,7 +1,7 @@
 import Logger from '@joplin/utils/Logger';
 import Alarm from '../models/Alarm';
-
 import Note from '../models/Note';
+import eventManager, { EventName } from '../eventManager';
 
 export default class AlarmService {
 
@@ -15,6 +15,10 @@ export default class AlarmService {
 		this.driver_ = v;
 
 		if (this.driver_.setService) this.driver_.setService(this);
+
+		eventManager.on(EventName.NoteAlarmTrigger, (event) => {
+			void this.updateNoteNotification(event.noteId);
+		});
 	}
 
 	public static driver() {
@@ -54,7 +58,7 @@ export default class AlarmService {
 	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async updateNoteNotification(noteOrId: any, isDeleted = false) {
+	public static async updateNoteNotification(noteOrId: any, isDeleted = false, forceReschedule = false) {
 		try {
 			let note = null;
 			let noteId = null;
@@ -74,17 +78,60 @@ export default class AlarmService {
 			let alarm = noteId ? await Alarm.byNoteId(noteId) : null;
 			let clearAlarm = false;
 
-			if (isDeleted || !Note.needAlarm(note) || (alarm && alarm.trigger_time !== note.todo_due)) {
+			const rescheduleRequested = forceReschedule && note && note.alarm_interval > 0;
+			const isOverdueRepeating = note && note.is_todo && note.alarm_interval > 0 && note.todo_due <= Date.now() && note.todo_due > 0;
+			const needsReschedule = isOverdueRepeating || rescheduleRequested;
+
+			if (isDeleted || !Note.needAlarm(note) || (alarm && alarm.trigger_time !== note.todo_due) || needsReschedule) {
 				clearAlarm = !!alarm;
+			}
+
+			if (clearAlarm || (!alarm && needsReschedule)) {
+				if (clearAlarm) {
+					this.logger().info(`Clearing notification for note ${noteId}`);
+					await driver.clearNotification(alarm.id);
+					await Alarm.delete(alarm.id, { sourceDescription: 'AlarmService/clearAlarm' });
+				}
+
+				if (needsReschedule && !isDeleted) {
+					const interval = Number(note.alarm_interval || 0);
+					const now = Date.now();
+					let nextDue = Number(note.todo_due || 0);
+
+					const intervalToMs = (intervalId: number) => {
+						if (intervalId === 1) return 86400000; // Daily
+						if (intervalId === 2) return 604800000; // Weekly
+						if (intervalId === 3) return 2592000000; // ~Monthly (30 days)
+						if (intervalId === 4) return 31536000000; // Yearly
+						return 0;
+					};
+
+					const intervalMs = intervalToMs(interval);
+					if (intervalMs) {
+						// On explicit reschedule (user changed repeat), always jump forward one interval from now or the existing due, whichever is later.
+						if (rescheduleRequested) {
+							const base = nextDue && nextDue > now ? nextDue : now;
+							nextDue = base + intervalMs;
+						} else {
+							if (!nextDue) nextDue = now + intervalMs;
+
+							while (nextDue <= now) {
+								nextDue += intervalMs;
+							}
+						}
+
+						if (nextDue > note.todo_due) {
+							this.logger().info(`Rescheduling note ${note.id}: ${note.todo_due} -> ${nextDue}`);
+							await Note.save({ id: note.id, todo_due: nextDue }, { autoTimestamp: false });
+							note.todo_due = nextDue;
+							// Don't return, let it continue to save the alarm for the new date
+						}
+					}
+				}
 			}
 
 			if (!clearAlarm && alarm) {
 				// Alarm already exists and set at the right time
-
-				// For persistent notifications (those that stay active after the app has been closed, like on mobile), if we have
-				// an alarm object we can be sure that the notification has already been set, so there's nothing to do.
-				// For non-persistent notifications however we need to check that the notification has been set because, for example,
-				// if the app has just started the notifications need to be set again. so we do this below.
 				if (!driver.hasPersistentNotifications() && !driver.notificationIsSet(alarm.id)) {
 					const notification = await Alarm.makeNotification(alarm, note);
 					this.logger().info(`Scheduling (non-persistent) notification for note ${note.id}`, notification);
@@ -92,12 +139,6 @@ export default class AlarmService {
 				}
 
 				return;
-			}
-
-			if (clearAlarm) {
-				this.logger().info(`Clearing notification for note ${noteId}`);
-				await driver.clearNotification(alarm.id);
-				await Alarm.delete(alarm.id, { sourceDescription: 'AlarmService/clearAlarm' });
 			}
 
 			if (isDeleted || !Note.needAlarm(note)) return;
@@ -109,6 +150,7 @@ export default class AlarmService {
 
 			// Reload alarm to get its ID
 			alarm = await Alarm.byNoteId(note.id);
+			if (!alarm) return;
 
 			const notification = await Alarm.makeNotification(alarm, note);
 			this.logger().info(`Scheduling notification for note ${note.id}`, notification);

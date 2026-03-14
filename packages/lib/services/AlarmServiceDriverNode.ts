@@ -1,5 +1,5 @@
 import eventManager, { EventName } from '../eventManager';
-import { Notification } from '../models/Alarm';
+import type { Notification } from '../models/Alarm';
 import shim from '../shim';
 import Setting from '../models/Setting';
 const notifier = require('node-notifier');

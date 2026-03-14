@@ -24,10 +24,13 @@ interface FormNote {
 	id: string;
 	deleted_time: number;
 	location: string;
+	is_todo: number;
 	markup_language: string;
 	revisionsLink: string;
 	source_url: string;
 	todo_completed?: number;
+	todo_due?: number;
+	alarm_interval?: number;
 	user_created_time: number;
 	user_updated_time: number;
 }
@@ -37,6 +40,7 @@ interface State {
 	formNote: FormNote;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	editedValue: any;
+	initialTodoDue: number|null;
 	isValid: {
 		location: boolean;
 	};
@@ -56,7 +60,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	private styleKey_: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
-	private inputRef: React.RefObject<HTMLInputElement>;
+	private inputRef: React.RefObject<HTMLInputElement|HTMLSelectElement>;
 
 	public constructor(props: Props) {
 		super(props);
@@ -71,6 +75,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			formNote: null,
 			editedKey: null,
 			editedValue: null,
+			initialTodoDue: null,
 			isValid: {
 				location: true,
 			},
@@ -82,6 +87,8 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			user_updated_time: _('Updated'),
 			deleted_time: _('Deleted'),
 			todo_completed: _('Completed'),
+			todo_due: _('Due date'),
+			alarm_interval: _('Alarm interval'),
 			location: _('Location'),
 			source_url: _('URL'),
 			revisionsLink: _('Note History'),
@@ -101,11 +108,11 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 
 	public async loadNote(noteId: string) {
 		if (!noteId) {
-			this.setState({ formNote: null });
+			this.setState({ formNote: null, initialTodoDue: null });
 		} else {
 			const note = await Note.load(noteId);
 			const formNote = this.noteToFormNote(note);
-			this.setState({ formNote: formNote });
+			this.setState({ formNote: formNote, initialTodoDue: note.todo_due || null });
 		}
 	}
 
@@ -130,6 +137,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public noteToFormNote(note: NoteEntity) {
 		const formNote: FormNote = {
 			id: note.id,
+			is_todo: note.is_todo,
 			user_updated_time: note.user_updated_time,
 			user_created_time: note.user_created_time,
 			source_url: note.source_url,
@@ -143,6 +151,14 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 			formNote.todo_completed = note.todo_completed;
 		}
 
+		if (note.todo_due) {
+			formNote.todo_due = note.todo_due;
+		}
+
+		if (note.is_todo) {
+			formNote.alarm_interval = note.alarm_interval || 0;
+		}
+
 		if (Number(note.latitude) || Number(note.longitude)) {
 			formNote.location = `${note.latitude}, ${note.longitude}`;
 		}
@@ -151,12 +167,20 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public formNoteToNote(formNote: FormNote) {
-		const note: NoteEntity = { id: formNote.id, ...this.latLongFromLocation(formNote.location) };
+		const note: NoteEntity = { id: formNote.id, is_todo: formNote.is_todo, ...this.latLongFromLocation(formNote.location) };
 		note.user_created_time = formNote.user_created_time;
 		note.user_updated_time = formNote.user_updated_time;
 
 		if (formNote.todo_completed) {
 			note.todo_completed = formNote.todo_completed;
+		}
+
+		if (formNote.todo_due) {
+			note.todo_due = formNote.todo_due;
+		}
+
+		if ('alarm_interval' in formNote) {
+			note.alarm_interval = formNote.alarm_interval;
 		}
 
 		note.source_url = formNote.source_url;
@@ -217,17 +241,23 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public async closeDialog(applyChanges: boolean) {
-		if (applyChanges) {
-			await this.saveProperty();
-			const note = this.formNoteToNote(this.state.formNote);
-			note.updated_time = Date.now();
-			await Note.save(note, { autoTimestamp: false });
-		} else {
-			await this.cancelProperty();
-		}
+		try {
+			if (applyChanges) {
+				await this.saveProperty();
+				const note = this.formNoteToNote(this.state.formNote);
+				note.updated_time = Date.now();
+				await Note.save(note, { autoTimestamp: false });
+			} else {
+				await this.cancelProperty();
+			}
 
-		if (this.props.onClose) {
-			this.props.onClose();
+			if (this.props.onClose) {
+				this.props.onClose();
+			}
+		} catch (error) {
+			console.error('NotePropertiesDialog::closeDialog Error:', error);
+			const message = _('Could not save note properties: %s', (error as Error).message);
+			await shim.showMessageBox(message);
 		}
 	}
 
@@ -250,7 +280,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 
 		shim.setTimeout(() => {
 			// Opens datetime-local fields with calendar
-			if (this.inputRef.current.showPicker) {
+			if (this.inputRef.current && 'showPicker' in this.inputRef.current && this.inputRef.current.showPicker) {
 				this.inputRef.current.showPicker();
 			} else if (this.inputRef.current) {
 				focus('NotePropertiesDialog::editPropertyButtonClick', (this.inputRef.current));
@@ -261,22 +291,40 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public async saveProperty() {
 		if (!this.state.editedKey) return null;
 
+		const editedKey = this.state.editedKey;
+		const noteId = this.state.formNote.id;
+		const newFormNote = { ...this.state.formNote };
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		(newFormNote as any)[editedKey] = this.state.editedValue;
+
+		if (editedKey === 'alarm_interval') {
+			const interval = Number(this.state.editedValue || 0);
+			const intervalToMs = (intervalId: number) => {
+				if (intervalId === 1) return 86400000; // Daily
+				if (intervalId === 2) return 604800000; // Weekly
+				if (intervalId === 3) return 2592000000; // ~Monthly (30 days)
+				if (intervalId === 4) return 31536000000; // Yearly
+				return 0;
+			};
+
+			const intervalMs = intervalToMs(interval);
+			if (intervalMs) {
+				const latest = noteId ? await Note.load(noteId) : null;
+				const base = latest && latest.todo_due ? Number(latest.todo_due) : Date.now();
+				newFormNote.todo_due = base + intervalMs;
+			}
+		}
+
 		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 		return new Promise((resolve: Function) => {
-			const newFormNote = { ...this.state.formNote };
-
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(newFormNote as any)[this.state.editedKey] = this.state.editedValue;
-
 			this.setState(
 				{
 					formNote: newFormNote,
 					editedKey: null,
 					editedValue: null,
 				},
-				() => {
-					resolve();
-				},
+				() => resolve(),
 			);
 		});
 	}
@@ -376,6 +424,31 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 						}
 					</React.Fragment>
 				);
+				editCompHandler = () => {
+					void this.saveProperty();
+				};
+				editCompIcon = 'fa-save';
+				editComDescription = _('Save changes');
+			} else if (this.state.editedKey === 'alarm_interval') {
+				controlComp = (
+					<select
+						value={this.state.editedValue === null ? Number(value || 0) : Number(this.state.editedValue)}
+						ref={this.inputRef}
+						onChange={event => {
+							this.setState({ editedValue: Number(event.target.value) });
+						}}
+						style={styles.input}
+						id={uniqueId(key)}
+						name={uniqueId(key)}
+						autoFocus
+					>
+						<option value={0}>{_('None')}</option>
+						<option value={1}>{_('Daily')}</option>
+						<option value={2}>{_('Weekly')}</option>
+						<option value={3}>{_('Monthly')}</option>
+						<option value={4}>{_('Yearly')}</option>
+					</select>
+				);
 			} else {
 				controlComp = (
 					<input
@@ -393,6 +466,12 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					/>
 				);
 			}
+
+			editCompHandler = () => {
+				void this.saveProperty();
+			};
+			editCompIcon = 'fa-save';
+			editComDescription = _('Save changes');
 		} else {
 			let displayedValue = value;
 
@@ -403,6 +482,9 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 				} catch (error) {
 					displayedValue = '';
 				}
+			} else if (key === 'alarm_interval') {
+				const map: Record<number, string> = { 0: _('None'), 1: _('Daily'), 2: _('Weekly'), 3: _('Monthly'), 4: _('Yearly') };
+				displayedValue = map[value as number] ?? _('None');
 			} else if (isPropertyDatetimeRelated(key)) {
 				displayedValue = formatMsToLocal(value);
 			}
