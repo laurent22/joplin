@@ -473,7 +473,9 @@ export default class OneDriveApi {
 		body['client_id'] = this.clientId();
 		if (!this.isPublic()) body['client_secret'] = this.clientSecret();
 		body['refresh_token'] = this.auth_.refresh_token;
-		body['redirect_uri'] = 'http://localhost:1917';
+		body['redirect_uri'] = shim.isReactNative()
+			? 'https://joplinapp.org/onedrive-auth'
+			: 'http://localhost:1917';
 		body['grant_type'] = 'refresh_token';
 
 		const response = await shim.fetch(this.tokenBaseUrl(), {
