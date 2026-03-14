@@ -121,10 +121,10 @@ const mapStateToProps = (state: AppState) => {
 	const isJoplinCloud = syncTargetId === SyncTargetRegistry.nameToId('joplinCloud');
 
 	// For Joplin Cloud, use the dedicated website URL
-	// For Joplin Server, the website URL is the same as the API path
+	// For Joplin Server, use sync.9.website when APP_BASE_URL differs from API_BASE_URL, else sync.9.path
 	const websiteUrl = isJoplinCloud
 		? state.settings['sync.10.website']
-		: state.settings['sync.9.path'];
+		: (state.settings['sync.9.website'] || state.settings['sync.9.path']);
 	const apiUrl = isJoplinCloud
 		? state.settings['sync.10.path']
 		: state.settings['sync.9.path'];

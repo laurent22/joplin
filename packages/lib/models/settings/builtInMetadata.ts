@@ -348,6 +348,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => emptyDirWarning,
 			storage: SettingStorage.File,
 		},
+		'sync.9.website': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
+			},
+			public: true,
+			advanced: true,
+			label: () => _('Joplin Server website URL (optional)'),
+			description: () => _('Only needed when the server uses a different URL for the web app (APP_BASE_URL) than for the API. Leave empty when both are the same.'),
+			storage: SettingStorage.File,
+		},
 		'sync.9.userContentPath': {
 			value: '',
 			type: SettingItemType.String,
