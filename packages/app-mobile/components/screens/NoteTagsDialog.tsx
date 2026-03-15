@@ -24,7 +24,7 @@ const modalPropOverrides = {
 		keyboardShouldPersistTaps: true,
 	},
 	containerStyle: {
-		height: '100%',
+		flexGrow: 1,
 	} as ViewStyle,
 };
 
