@@ -3,7 +3,7 @@
 // it uses a <dialog>.
 
 import * as React from 'react';
-import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
@@ -88,7 +88,7 @@ const useStyles = (backgroundColor: string|undefined, keyboardVisible: boolean) 
 	}, [safeAreaPadding, keyboardVisible, backgroundColor]);
 };
 
-const useBackgroundTouchListeners = (onRequestClose: OnClose|null, backdropRef: RefObject<View>) => {
+const useBackgroundTouchListeners = (onRequestClose: OnClose|null) => {
 	const onShouldBackgroundCaptureTouch = useCallback((event: GestureResponderEvent) => {
 		return event.target === event.currentTarget && event.nativeEvent.touches.length === 1;
 	}, []);
@@ -148,8 +148,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	const [containerComponent, setContainerComponent] = useState<View|null>(null);
 	const modalStatus = useModalStatus(containerComponent, forwardedProps.visible);
 
-	const backdropRef = useRef<View>(null);
-	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(onClose, backdropRef);
+	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(onClose);
 
 	// A close button for accessibility tools. Since iOS accessibility focus order is based on the position
 	// of the element on the screen, the close button is placed after the modal content, rather than behind.
@@ -162,7 +161,6 @@ const ModalElement: React.FC<ModalElementProps> = ({
 
 	// The backdrop stays fixed in the background and does not resize.
 	const backdrop = <View
-		ref={backdropRef}
 		style={[styles.modalBackground, modalBackgroundStyle]}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
 		onResponderRelease={onBackgroundTouchFinished}
