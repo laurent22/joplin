@@ -12,6 +12,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import tinymce from 'tinymce';
 import { insertToc, setupTocAutoUpdate } from './tocPlugin';
 import 'tinymce/icons/default';
@@ -463,9 +465,15 @@ interface TinyMCEBodyProps {
   html: string;
   noteId: string | null;
   readOnly?: boolean;
+  updatedTime?: number;
 }
 
-export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBodyProps) {
+export default function TinyMCEBody({
+  html,
+  noteId,
+  readOnly = true,
+  updatedTime,
+}: TinyMCEBodyProps) {
   const rootIdRef = useRef<string>(
     `tinymce-web-${Date.now()}-${Math.round(Math.random() * 10000)}`
   );
@@ -478,6 +486,7 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   const [pendingNote, setPendingNote] = useState<{ noteId: string | null; html: string } | null>(
     null
   );
+  const [conflictError, setConflictError] = useState(false);
 
   // isDirty の最新値を副作用外から参照するための ref
   const isDirtyRef = useRef(isDirty);
@@ -488,6 +497,14 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
   // 現在エディタに表示中のノート ID を追跡する ref
   const currentNoteIdRef = useRef<string | null>(null);
 
+  // コンフリクト判定用の updatedTime を ref で管理する。
+  // ・ノート切り替え時は props の値に同期する
+  // ・保存成功時はサーバーが返した最新値に更新する
+  const currentUpdatedTimeRef = useRef<number | undefined>(updatedTime);
+  useEffect(() => {
+    currentUpdatedTimeRef.current = updatedTime;
+  }, [noteId, updatedTime]);
+
   const handleSave = useCallback(async () => {
     if (!noteId || !editorRef.current || isSaving) return;
     setIsSaving(true);
@@ -496,13 +513,20 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
       const res = await fetch('/api/note', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: noteId, body: content }),
+        body: JSON.stringify({
+          id: noteId,
+          body: content,
+          updatedTime: currentUpdatedTimeRef.current,
+        }),
       });
       const json = await res.json();
       if (json.success) {
+        currentUpdatedTimeRef.current = json.updatedTime;
         setIsDirty(false);
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
+      } else if (json.conflict) {
+        setConflictError(true);
       } else {
         console.error('Save failed:', json.error);
       }
@@ -947,6 +971,18 @@ export default function TinyMCEBody({ html, noteId, readOnly = true }: TinyMCEBo
           </span>
         </Tooltip>
       )}
+
+      {/* 競合エラー Snackbar */}
+      <Snackbar
+        open={conflictError}
+        autoHideDuration={6000}
+        onClose={() => setConflictError(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert severity="error" onClose={() => setConflictError(false)} sx={{ width: '100%' }}>
+          ノートが他の場所で更新されています。リロードしてから再編集してください。
+        </Alert>
+      </Snackbar>
 
       {/* 未保存変更があるときのノート切り替え確認ダイアログ */}
       <Dialog open={showDirtyDialog} onClose={handleDirtyDialogCancel}>

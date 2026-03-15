@@ -70,7 +70,12 @@ export default function NoteEditor() {
           <div className="text-sm text-gray-500">Loading note…</div>
         </div>
       )}
-      <TinyMCEBody html={note?.body ?? ''} noteId={noteId} readOnly={false} />
+      <TinyMCEBody
+        html={note?.body ?? ''}
+        noteId={noteId}
+        readOnly={false}
+        updatedTime={note?.updated_time}
+      />
     </div>
   );
 }

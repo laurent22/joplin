@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 
 export async function PUT(req: NextRequest) {
   try {
-    const { id, body } = await req.json();
+    const { id, body, updatedTime } = await req.json();
     if (!id || body === undefined) {
       return NextResponse.json(
         { success: false, error: 'id and body are required' },
@@ -16,10 +16,21 @@ export async function PUT(req: NextRequest) {
     if (!existing) {
       return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
     }
+    if (updatedTime !== undefined && existing.updated_time !== updatedTime) {
+      return NextResponse.json(
+        {
+          success: false,
+          conflict: true,
+          error: 'ノートが他の場所で更新されています。リロードしてから再編集してください。',
+        },
+        { status: 409 }
+      );
+    }
     const resourceDir = ViewerUtil.getResourceFolderPath();
     const joplinSchemeBody = ViewerUtil.revertResourceDirToJoplinScheme(body, resourceDir).html();
     Note.save({ ...existing, body: joplinSchemeBody });
-    return NextResponse.json({ success: true });
+    const saved = Note.getNoteById(id);
+    return NextResponse.json({ success: true, updatedTime: saved?.updated_time });
   } catch (err) {
     return NextResponse.json(
       { success: false, error: err instanceof Error ? err.message : String(err) },
