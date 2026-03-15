@@ -1,5 +1,13 @@
 import * as React from 'react';
 
+jest.mock('@joplin/lib/utils/focusHandler', () => {
+	const actual = jest.requireActual('@joplin/lib/utils/focusHandler');
+	return {
+		...actual,
+		focus: jest.fn(),
+	};
+});
+
 import { describe, it, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 
@@ -27,10 +35,15 @@ import Resource from '@joplin/lib/models/Resource';
 import TestProviderStack from '../../testing/TestProviderStack';
 import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 jest.retryTimes(2);
 
 interface WrapperProps {
+}
+
+interface TestTreeNode {
+	props: Record<string, unknown>;
 }
 
 let store: Store<AppState>;
@@ -91,6 +104,32 @@ const openNewNote = async (noteProperties: NoteEntity) => {
 
 	await openExistingNote(note.id);
 	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
+
+	return note.id;
+};
+
+const openProvisionalNote = async (noteProperties: Partial<NoteEntity>) => {
+	const note = await Note.save({
+		parent_id: (await Folder.defaultFolder()).id,
+		...noteProperties,
+	}, { provisional: true });
+
+	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
+
+	store.dispatch({
+		type: 'NOTE_UPDATE_ALL',
+		notes: await Note.previews(displayParentId),
+	});
+
+	store.dispatch({
+		type: 'FOLDER_AND_NOTE_SELECT',
+		id: note.id,
+		folderId: displayParentId,
+	});
+
+	await waitFor(() => {
+		expect(store.getState().provisionalNoteIds).toContain(note.id);
+	});
 
 	return note.id;
 };
@@ -162,6 +201,7 @@ describe('screens/Note', () => {
 		// that at least one folder exist.
 		await Folder.save({ title: 'test', parent_id: '' });
 		jest.useRealTimers();
+		(focus as jest.Mock).mockClear();
 	});
 
 	it('should show the currently selected note', async () => {
@@ -309,7 +349,7 @@ describe('screens/Note', () => {
 	it.each([
 		'auto',
 		'manual',
-	])('should correctly auto-download or not auto-download resources in %j mode', async (downloadMode) => {
+	] as const)('should correctly auto-download or not auto-download resources in %j mode', async (downloadMode) => {
 		let note = await Note.save({ title: 'Note 1', parent_id: (await Folder.defaultFolder()).id });
 		note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 
@@ -363,5 +403,43 @@ describe('screens/Note', () => {
 		await expectToBeEditing(false);
 
 		unmount();
+	});
+
+	it('should autofocus the title when opening a new provisional to-do', async () => {
+		await openProvisionalNote({ title: '', body: '', is_todo: 1 });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await screen.findByPlaceholderText('Add title');
+
+		await waitFor(() => {
+			expect(focus).toHaveBeenCalledWith('Note::focusUpdate::title', expect.anything());
+		});
+
+		unmount();
+	});
+
+	it('should not autofocus when opening an existing note in view mode', async () => {
+		await openNewNote({ title: 'Existing note', body: 'Existing body' });
+		const noteScreen = render(<WrappedNoteScreen />);
+
+		await screen.findByDisplayValue('Existing note');
+		await expectToBeEditing(false);
+		(focus as jest.Mock).mockClear();
+
+		await act(async () => {
+			for (const node of noteScreen.UNSAFE_root.findAll((current: TestTreeNode) => Boolean(current.props.onLayout))) {
+				node.props.onLayout({ nativeEvent: { layout: { x: 0, y: 0, width: 240, height: 48 } } } as LayoutChangeEvent);
+			}
+
+			for (const node of noteScreen.UNSAFE_root.findAll((current: TestTreeNode) => Boolean(current.props.onTextLayout))) {
+				node.props.onTextLayout({ nativeEvent: { lines: [{ text: 'Existing note' }] } });
+			}
+		});
+
+		await waitFor(() => {
+			expect(focus).not.toHaveBeenCalled();
+		});
+
+		noteScreen.unmount();
 	});
 });

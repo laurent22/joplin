@@ -729,7 +729,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			this.emitEditorPluginUpdate_();
 		}
 
-		if (prevState.multiline !== this.state.multiline && this.titleTextFieldRef.current) {
+		if (prevState.multiline !== this.state.multiline && this.state.mode === 'edit' && this.titleTextFieldRef.current) {
 			focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
 		}
 	}
@@ -1449,6 +1449,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
 
 		const startTime = Date.now();
+		let wasFocused = false;
+
+		// On Android, route changes can briefly dismiss the soft keyboard after focus
+		// is set. Keep trying for a short grace period so the keyboard reliably appears.
+		const minRetryDurationAfterFirstFocus = Platform.OS === 'android' ? 350 : 0;
 
 		this.focusUpdateIID_ = shim.setInterval(() => {
 			if (!this.state.note) return;
@@ -1457,13 +1462,19 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (this.state.mode === 'view') fieldToFocus = '';
 
 			let done = false;
+			let didFocus = false;
 
 			if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
-				done = true;
 				focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+				didFocus = true;
 			} else if (fieldToFocus === 'body' && this.editorRef?.current) {
-				done = true;
 				focus('Note::focusUpdate::body', this.editorRef.current);
+				didFocus = true;
+			}
+
+			if (didFocus) {
+				wasFocused = true;
+				done = Date.now() - startTime >= minRetryDurationAfterFirstFocus;
 			}
 
 			if (Date.now() - startTime > 5000) {
@@ -1473,6 +1484,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 			if (!this.noteEditorVisible()) {
 				logger.info(`Note editor is not visible - not setting focus on ${fieldToFocus}`);
+				done = true;
+			}
+
+			if (wasFocused && fieldToFocus === '') {
 				done = true;
 			}
 
@@ -1803,7 +1818,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				/>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
-					key={this.state.multiline ? 'multiLine' : 'singleLine'}
 					ref={this.titleTextFieldRef}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
