@@ -55,7 +55,8 @@ export async function GET(req: Request) {
     const $ = cheerio.load(note?.body || '');
     const resourceModifiedHtml = ViewerUtil.modifyJoplinResource($, resourceDir);
     const linkModifiedHtml = ViewerUtil.modifyJoplinLinkAnchor(resourceModifiedHtml);
-    const finalModifiedHtml = ViewerUtil.addKatexCssIfNotExists(linkModifiedHtml);
+    const katexModifiedHtml = ViewerUtil.addKatexCssIfNotExists(linkModifiedHtml);
+    const finalModifiedHtml = ViewerUtil.removeDataMceSrcAttr(katexModifiedHtml);
     if (note) {
       note.body = finalModifiedHtml.html();
     }
