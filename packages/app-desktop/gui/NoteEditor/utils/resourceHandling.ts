@@ -106,11 +106,15 @@ export async function getResourcesFromPasteEvent(event: any) {
 		if (!data || data.length === 0) continue;
 
 		const fileExt = mimeUtils.toFileExtension(format);
-		const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
+		const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${fileExt}`;
 
-		await shim.fsDriver().writeFile(filePath, data, 'buffer');
-		const md = await commandAttachFileToBody('', [filePath]);
-		await shim.fsDriver().remove(filePath);
+		let md = null;
+		try {
+			await shim.fsDriver().writeFile(filePath, data, 'buffer');
+			md = await commandAttachFileToBody('', [filePath]);
+		} finally {
+			await shim.fsDriver().remove(filePath);
+		}
 
 		if (md) {
 			if (event) event.preventDefault();

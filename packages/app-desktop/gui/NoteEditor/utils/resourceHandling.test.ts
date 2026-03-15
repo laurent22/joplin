@@ -12,8 +12,12 @@ jest.mock('electron', () => ({
 	},
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mock reference
-const mockClipboard = (require('electron') as any).clipboard;
+interface ClipboardMock {
+	has: jest.Mock;
+	readBuffer: jest.Mock;
+}
+
+const mockClipboard = (require('electron') as { clipboard: ClipboardMock }).clipboard;
 
 const createTestMarkupConverters = () => {
 	const markupToHtml: MarkupToHtmlHandler = async (markupLanguage, markup, options) => {
