@@ -458,26 +458,32 @@ describe('screens/Note', () => {
 			mockBlur.mockImplementation(() => {
 				isFocusedSpy.mockReturnValue(false);
 			});
+			let focusCalls = 0;
 			mockFocus.mockImplementation(() => {
+				focusCalls += 1;
 				isFocusedSpy.mockReturnValue(true);
-				act(() => {
-					store.dispatch({
-						type: 'KEYBOARD_VISIBLE_CHANGE',
-						visible: true,
+
+				if (focusCalls > 1) {
+					act(() => {
+						store.dispatch({
+							type: 'KEYBOARD_VISIBLE_CHANGE',
+							visible: true,
+						});
 					});
-				});
+				}
 			});
 
 			jest.advanceTimersByTime(200);
 			await waitFor(() => {
-				expect(mockFocus).toHaveBeenCalledTimes(1);
+				expect(mockBlur).toHaveBeenCalledTimes(1);
+				expect(mockFocus).toHaveBeenCalledTimes(2);
 				expect(mockFocus).toHaveBeenLastCalledWith('Note::focusUpdate::title', expect.anything());
 			});
 
 			const postAutofocusFocusCallCount = mockFocus.mock.calls.length;
 			fireEvent.changeText(provisionalTitleInput, 'T');
 			expect(mockFocus).toHaveBeenCalledTimes(postAutofocusFocusCallCount);
-			expect(mockBlur).not.toHaveBeenCalled();
+			expect(mockBlur).toHaveBeenCalledTimes(1);
 
 			provisionalScreen.unmount();
 		});
