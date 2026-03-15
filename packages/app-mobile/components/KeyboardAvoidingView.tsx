@@ -25,4 +25,6 @@ const KeyboardAvoidingView: React.FC<Props> = ({ enabled, children, ...forwarded
 		{children}
 	</NativeKeyboardAvoidingView>;
 };
+
 export default KeyboardAvoidingView;
+
