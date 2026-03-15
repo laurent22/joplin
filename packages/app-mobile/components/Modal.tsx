@@ -90,14 +90,14 @@ const useStyles = (backgroundColor: string|undefined, keyboardVisible: boolean) 
 
 const useBackgroundTouchListeners = (onRequestClose: OnClose|null, backdropRef: RefObject<View>) => {
 	const onShouldBackgroundCaptureTouch = useCallback((event: GestureResponderEvent) => {
-		return event.target === backdropRef.current && event.nativeEvent.touches.length === 1;
-	}, [backdropRef]);
+		return event.target === event.currentTarget && event.nativeEvent.touches.length === 1;
+	}, []);
 
 	const onBackgroundTouchFinished = useCallback((event: GestureResponderEvent) => {
-		if (event.target === backdropRef.current) {
+		if (event.target === event.currentTarget) {
 			onRequestClose?.();
 		}
-	}, [onRequestClose, backdropRef]);
+	}, [onRequestClose]);
 
 	return { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished };
 };
