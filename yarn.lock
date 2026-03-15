@@ -10684,7 +10684,7 @@ __metadata:
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.2.1"
     react-native-sqlite-storage: "npm:6.0.1"
-    react-native-svg: "npm:15.15.0"
+    react-native-svg: "npm:15.15.1"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.21.2"
@@ -10788,7 +10788,7 @@ __metadata:
     prosemirror-dropcursor: "npm:1.8.2"
     prosemirror-example-setup: "npm:1.2.3"
     prosemirror-gapcursor: "npm:1.3.2"
-    prosemirror-history: "npm:1.4.1"
+    prosemirror-history: "npm:1.5.0"
     prosemirror-inputrules: "npm:1.5.0"
     prosemirror-keymap: "npm:1.2.3"
     prosemirror-model: "npm:1.25.3"
@@ -11132,7 +11132,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
-    ldapts: "npm:8.0.20"
+    ldapts: "npm:8.0.24"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -11198,7 +11198,7 @@ __metadata:
     relative: "npm:3.0.2"
     request: "npm:2.88.2"
     rss: "npm:1.2.2"
-    sass: "npm:1.94.0"
+    sass: "npm:1.94.3"
     sharp: "npm:0.34.5"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
@@ -22386,12 +22386,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^4.0.0":
-  version: 4.0.3
-  resolution: "chokidar@npm:4.0.3"
+"chokidar@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "chokidar@npm:5.0.0"
   dependencies:
-    readdirp: "npm:^4.0.1"
-  checksum: 10/bf2a575ea5596000e88f5db95461a9d59ad2047e939d5a4aac59dd472d126be8f1c1ff3c7654b477cf532d18f42a97279ef80ee847972fd2a25410bf00b80b59
+    readdirp: "npm:^5.0.0"
+  checksum: 10/a1c2a4ee6ee81ba6409712c295a47be055fb9de1186dfbab33c1e82f28619de962ba02fc5f9d433daaedc96c35747460d8b2079ac2907de2c95e3f7cce913113
   languageName: node
   linkType: hard
 
@@ -36201,16 +36201,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:8.0.20":
-  version: 8.0.20
-  resolution: "ldapts@npm:8.0.20"
+"ldapts@npm:8.0.24":
+  version: 8.0.24
+  resolution: "ldapts@npm:8.0.24"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
     asn1: "npm:0.2.6"
     debug: "npm:4.4.3"
     strict-event-emitter-types: "npm:2.0.0"
     whatwg-url: "npm:15.1.0"
-  checksum: 10/84f51b9f45ba9ba2a888beabbf3b659da592dfa16c2949bfd50d74d39a36994c770809348ed32e513d3c5e776afa3175c9d5b2f06aafc8247382df0fa834ef93
+  checksum: 10/1bfc3a4c60e5b0f122827489b1fe4168b991ef6a1796f5fd9fdce6e7dfa2a6d14fb2e41ee40a2bb5ffa7d25b9f22502d8f255f19718e9b788cd982bd77a47d3b
   languageName: node
   linkType: hard
 
@@ -43360,7 +43360,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-history@npm:1.4.1, prosemirror-history@npm:^1.0.0":
+"prosemirror-history@npm:1.5.0":
+  version: 1.5.0
+  resolution: "prosemirror-history@npm:1.5.0"
+  dependencies:
+    prosemirror-state: "npm:^1.2.2"
+    prosemirror-transform: "npm:^1.0.0"
+    prosemirror-view: "npm:^1.31.0"
+    rope-sequence: "npm:^1.3.0"
+  checksum: 10/f59402632f786e0c757ea31494ab3fb99665b4ca5aaff50dc1918250aa558c23fcc938d1645b1b165c1a87ec9700cec3d53c6bc90e2c977872f144be425b76fd
+  languageName: node
+  linkType: hard
+
+"prosemirror-history@npm:^1.0.0":
   version: 1.4.1
   resolution: "prosemirror-history@npm:1.4.1"
   dependencies:
@@ -44420,9 +44432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:15.15.0":
-  version: 15.15.0
-  resolution: "react-native-svg@npm:15.15.0"
+"react-native-svg@npm:15.15.1":
+  version: 15.15.1
+  resolution: "react-native-svg@npm:15.15.1"
   dependencies:
     css-select: "npm:^5.1.0"
     css-tree: "npm:^1.1.3"
@@ -44430,7 +44442,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/8c410922fd54b2550454d370daecdc604ba992c25afee5b6988d18b660c5e3ce61133dfde15fe0cb6b7e7e248d114d4adb9a2b38fa903a0fe79762ce34fae93c
+  checksum: 10/3a5dbbee0c6a81b3feb2b91a5a617a1a25e01c908686af479fab4fe6661376253ba0e0e1d3eda36f27eab9b2cd2c4c17b68423cfca465df255f20cacc1ba384d
   languageName: node
   linkType: hard
 
@@ -45124,10 +45136,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readdirp@npm:^4.0.1":
-  version: 4.1.2
-  resolution: "readdirp@npm:4.1.2"
-  checksum: 10/7b817c265940dba90bb9c94d82920d76c3a35ea2d67f9f9d8bd936adcfe02d50c802b14be3dd2e725e002dddbe2cc1c7a0edfb1bc3a365c9dfd5a61e612eea1e
+"readdirp@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "readdirp@npm:5.0.0"
+  checksum: 10/a17a591b51d8b912083660df159e8bd17305dc1a9ef27c869c818bd95ff59e3a6496f97e91e724ef433e789d559d24e39496ea1698822eb5719606dc9c1a923d
   languageName: node
   linkType: hard
 
@@ -46633,12 +46645,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.94.0":
-  version: 1.94.0
-  resolution: "sass@npm:1.94.0"
+"sass@npm:1.94.3":
+  version: 1.94.3
+  resolution: "sass@npm:1.94.3"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
-    chokidar: "npm:^4.0.0"
+    chokidar: "npm:^5.0.0"
     immutable: "npm:^5.0.2"
     source-map-js: "npm:>=0.6.2 <2.0.0"
   dependenciesMeta:
@@ -46646,7 +46658,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/625b4d56758544f30a7f955fbc6590366ffb285042a68c09512b2890f23720c2c28d86cf9773a000d8bde2191d9decc8873f3529e7d91d8ba5f0ef204fd243db
+  checksum: 10/5b641fcf7db4354a9af42b322ab112e7f60dd1bfc98960e5714931e5aca3bee669938df08110a75ae2df373efca7c247433e7271c6f1571e9680d12df3946700
   languageName: node
   linkType: hard
 
