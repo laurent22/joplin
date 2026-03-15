@@ -292,6 +292,39 @@ export const deleteColumn = (table: Table, colIndex: number): Table | null => {
 	return { header: newHeader, alignments: newAlignments, body: newBody };
 };
 
+// Swap two body rows. Row indices are 0-based body indices.
+export const swapRows = (table: Table, indexA: number, indexB: number): Table | null => {
+	if (indexA < 0 || indexA >= table.body.length) return null;
+	if (indexB < 0 || indexB >= table.body.length) return null;
+	if (indexA === indexB) return table;
+
+	const newBody = [...table.body];
+	[newBody[indexA], newBody[indexB]] = [newBody[indexB], newBody[indexA]];
+
+	return { header: table.header, alignments: table.alignments, body: newBody };
+};
+
+// Swap two columns by index.
+export const swapColumns = (table: Table, indexA: number, indexB: number): Table | null => {
+	const colCount = table.header.cells.length;
+	if (indexA < 0 || indexA >= colCount) return null;
+	if (indexB < 0 || indexB >= colCount) return null;
+	if (indexA === indexB) return table;
+
+	const swapInRow = (cells: TableCell[]): TableCell[] => {
+		const newCells = [...cells];
+		[newCells[indexA], newCells[indexB]] = [newCells[indexB], newCells[indexA]];
+		return newCells;
+	};
+
+	const newHeader: TableRow = { cells: swapInRow(table.header.cells) };
+	const newAlignments = [...table.alignments];
+	[newAlignments[indexA], newAlignments[indexB]] = [newAlignments[indexB], newAlignments[indexA]];
+	const newBody = table.body.map(row => ({ cells: swapInRow(row.cells) }));
+
+	return { header: newHeader, alignments: newAlignments, body: newBody };
+};
+
 // ---------------------------------------------------------------------------
 // Table generation
 // ---------------------------------------------------------------------------

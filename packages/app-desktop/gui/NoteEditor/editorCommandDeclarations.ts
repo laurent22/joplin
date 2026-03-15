@@ -186,18 +186,22 @@ const declarations: CommandDeclaration[] = [
 	{
 		name: 'editor.tableAddRow',
 		label: () => _('Table: Add row'),
+		iconName: 'fas fa-plus',
 	},
 	{
 		name: 'editor.tableAddColumn',
 		label: () => _('Table: Add column'),
+		iconName: 'fas fa-columns',
 	},
 	{
 		name: 'editor.tableDeleteRow',
 		label: () => _('Table: Delete row'),
+		iconName: 'fas fa-minus',
 	},
 	{
 		name: 'editor.tableDeleteColumn',
 		label: () => _('Table: Delete column'),
+		iconName: 'fas fa-times',
 	},
 ];
 
