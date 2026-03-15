@@ -113,7 +113,11 @@ export async function getResourcesFromPasteEvent(event: any) {
 			await shim.fsDriver().writeFile(filePath, data, 'buffer');
 			md = await commandAttachFileToBody('', [filePath]);
 		} finally {
-			await shim.fsDriver().remove(filePath);
+			try {
+				await shim.fsDriver().remove(filePath);
+			} catch (cleanupError) {
+				logger.warn('getResourcesFromPasteEvent: Failed to remove temporary file.', cleanupError);
+			}
 		}
 
 		if (md) {

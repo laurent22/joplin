@@ -156,6 +156,7 @@ describe('resourceHandling', () => {
 
 	test.each([
 		{ format: 'image/jpeg', description: 'JPEG (bug #14613)' },
+		{ format: 'image/jpg', description: 'JPG alias' },
 		{ format: 'image/png', description: 'PNG (regression check)' },
 	])('should paste $description image from clipboard via getResourcesFromPasteEvent', async ({ format }) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -171,17 +172,11 @@ describe('resourceHandling', () => {
 		expect(mockEvent.preventDefault).toHaveBeenCalledTimes(1);
 	});
 
-	it('should return empty when clipboard has no image', async () => {
-		mockClipboard.has.mockReturnValue(false);
-		mockClipboard.readBuffer.mockReturnValue(Buffer.alloc(0));
-		const mockEvent = { preventDefault: jest.fn() };
-		const result = await getResourcesFromPasteEvent(mockEvent);
-		expect(result).toEqual([]);
-		expect(mockEvent.preventDefault).not.toHaveBeenCalled();
-	});
-
-	it('should return empty when clipboard buffer is empty despite has() returning true', async () => {
-		mockClipboard.has.mockReturnValue(true);
+	test.each([
+		{ description: 'clipboard has no image', hasResult: false },
+		{ description: 'buffer is empty despite has() returning true', hasResult: true },
+	])('should return empty when $description', async ({ hasResult }) => {
+		mockClipboard.has.mockReturnValue(hasResult);
 		mockClipboard.readBuffer.mockReturnValue(Buffer.alloc(0));
 		const mockEvent = { preventDefault: jest.fn() };
 		const result = await getResourcesFromPasteEvent(mockEvent);
