@@ -20,8 +20,6 @@ const getLabel = (commandName: string): string => {
 		return _('Website and documentation');
 	case 'hideApp':
 		return _('Hide Joplin');
-	case 'showHideApp':
-		return _('Show/Hide Joplin (global shortcut)');
 	case 'minimizeWindow':
 		return _('Minimise');
 	case 'closeWindow':

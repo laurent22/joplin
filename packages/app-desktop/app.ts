@@ -83,8 +83,6 @@ class Application extends BaseApplication {
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
 	private protocolHandler_: CustomContentProtocolHandler;
-	private previousShowHideAccelerator_: string | null = null;
-
 	public constructor() {
 		super();
 
@@ -138,6 +136,10 @@ class Application extends BaseApplication {
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'showTrayIcon' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateTray();
+		}
+
+		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'globalHotkey' || action.type === 'SETTING_UPDATE_ALL') {
+			this.updateGlobalHotkey();
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'ocr.enabled' || action.type === 'SETTING_UPDATE_ALL') {
@@ -225,9 +227,7 @@ class Application extends BaseApplication {
 	}
 
 	public updateGlobalHotkey() {
-		const accelerator = KeymapService.instance().getAccelerator('showHideApp');
-		this.previousShowHideAccelerator_ = accelerator;
-		bridge().updateGlobalHotkey(accelerator ?? '');
+		bridge().updateGlobalHotkey(Setting.value('globalHotkey') as string);
 	}
 
 	public setupContextMenu() {
@@ -521,10 +521,6 @@ class Application extends BaseApplication {
 				reg.logger().error(error);
 			}
 
-			keymapService.on(EventName.KeymapChange, () => {
-				const accelerator = keymapService.getAccelerator('showHideApp');
-				if (accelerator !== this.previousShowHideAccelerator_) this.updateGlobalHotkey();
-			});
 		});
 
 		addTask('app/initialize PerFolderSortOrderService', () => {
