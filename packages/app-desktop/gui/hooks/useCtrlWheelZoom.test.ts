@@ -9,6 +9,10 @@ jest.mock('@joplin/lib/models/Setting', () => ({
 	},
 }));
 
+const dispatchWheel = (options: WheelEventInit) => {
+	document.dispatchEvent(new WheelEvent('wheel', { bubbles: true, ...options }));
+};
+
 describe('useCtrlWheelZoom', () => {
 
 	beforeEach(() => {
@@ -18,27 +22,24 @@ describe('useCtrlWheelZoom', () => {
 	test('should zoom on Ctrl/Meta+Wheel', () => {
 		renderHook(() => useCtrlWheelZoom());
 
-		// Ctrl+WheelUp → zoom in
-		document.dispatchEvent(new WheelEvent('wheel', { deltaY: -100, ctrlKey: true, bubbles: true }));
+		dispatchWheel({ deltaY: -100, ctrlKey: true });
 		expect(Setting.incValue).toHaveBeenCalledWith('windowContentZoomFactor', 10);
 
 		jest.clearAllMocks();
 
-		// Ctrl+WheelDown → zoom out
-		document.dispatchEvent(new WheelEvent('wheel', { deltaY: 100, ctrlKey: true, bubbles: true }));
+		dispatchWheel({ deltaY: 100, ctrlKey: true });
 		expect(Setting.incValue).toHaveBeenCalledWith('windowContentZoomFactor', -10);
 
 		jest.clearAllMocks();
 
-		// Meta+WheelUp → zoom in (macOS)
-		document.dispatchEvent(new WheelEvent('wheel', { deltaY: -100, metaKey: true, bubbles: true }));
+		dispatchWheel({ deltaY: -100, metaKey: true });
 		expect(Setting.incValue).toHaveBeenCalledWith('windowContentZoomFactor', 10);
 	});
 
 	test('should not zoom on wheel without modifier', () => {
 		renderHook(() => useCtrlWheelZoom());
 
-		document.dispatchEvent(new WheelEvent('wheel', { deltaY: -100, bubbles: true }));
+		dispatchWheel({ deltaY: -100 });
 
 		expect(Setting.incValue).not.toHaveBeenCalled();
 	});
