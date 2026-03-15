@@ -13,6 +13,7 @@ import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { _ } from '@joplin/lib/locale';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Dialog from '@joplin/lib/components/Dialog';
+import useKeyboardState from '../utils/hooks/useKeyboardState';
 
 type OnClose = ()=> void;
 type OnShow = ()=> void;
@@ -41,11 +42,12 @@ export interface ModalElementProps {
 	scrollOverflow?: boolean|ScrollViewProps;
 }
 
-const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {
+const useStyles = (backgroundColor: string|undefined, keyboardVisible: boolean) => {
 	const safeAreaPadding = useSafeAreaPadding();
 	return useMemo(() => {
-		// On Android, the top-level container seems to need to be absolutely positioned
-		// to prevent it from being larger than the screen size:
+		const actualSafeAreaPadding = { ...safeAreaPadding };
+		if (keyboardVisible) actualSafeAreaPadding.paddingBottom = 0;
+
 		const absoluteFill = {
 			position: 'absolute',
 			top: 0,
@@ -56,31 +58,24 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 
 		return StyleSheet.create({
 			modalBackground: {
-				...safeAreaPadding,
-				...(hasScrollView ? {
-					flexGrow: 1,
-					flexShrink: 1,
-				} : absoluteFill),
-
-				// When hasScrollView, the modal background is wrapped in a ScrollView. In this case, it's
-				// possible to scroll content outside the background into view. To prevent the edge of the
-				// background from being visible, the background color is applied to the ScrollView container
-				// instead:
-				backgroundColor: hasScrollView ? null : backgroundColor,
+				...absoluteFill,
+				backgroundColor,
+			},
+			contentContainer: {
+				...absoluteFill,
+				...actualSafeAreaPadding,
 			},
 			keyboardAvoidingView: {
 				...absoluteFill,
 				flex: 1,
 			},
 			modalScrollView: {
-				backgroundColor,
 				flexGrow: 1,
 				flexShrink: 1,
 			},
 			modalScrollViewContent: {
-				// Make the scroll view's scrolling region at least as tall as its container.
-				// This makes it possible to vertically center the content of scrollable modals.
 				flexGrow: 1,
+				justifyContent: 'center',
 			},
 			dismissButton: {
 				position: 'absolute',
@@ -90,7 +85,7 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				zIndex: -1,
 			},
 		});
-	}, [hasScrollView, safeAreaPadding, backgroundColor]);
+	}, [safeAreaPadding, keyboardVisible, backgroundColor]);
 };
 
 const useBackgroundTouchListeners = (onRequestClose: OnClose|null, backdropRef: RefObject<View>) => {
@@ -142,21 +137,13 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	containerStyle,
 	backgroundColor,
 	scrollOverflow,
-	modalBackgroundStyle: extraModalBackgroundStyles,
+	modalBackgroundStyle: _extraModalBackgroundStyles,
 	dismissButtonStyle,
 	onClose,
 	...forwardedProps
 }) => {
-	const styles = useStyles(!!scrollOverflow, backgroundColor);
-
-	// contentWrapper adds padding. To allow styling the region outside of the modal
-	// (e.g. to add a background), the content is wrapped twice.
-	const content = (
-		<View style={containerStyle}>
-			{children}
-		</View>
-	);
-
+	const keyboardState = useKeyboardState();
+	const styles = useStyles(backgroundColor, keyboardState.keyboardVisible);
 
 	const [containerComponent, setContainerComponent] = useState<View|null>(null);
 	const modalStatus = useModalStatus(containerComponent, forwardedProps.visible);
@@ -174,43 +161,65 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		accessibilityRole='button'
 	/> : null;
 
-	const contentAndBackdrop = <View
-		ref={setContainerComponent}
-		style={[styles.modalBackground, extraModalBackgroundStyles]}
+	// The backdrop stays fixed in the background and does not resize.
+	const backdrop = <View
+		style={styles.modalBackground}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
 		onResponderRelease={onBackgroundTouchFinished}
+	/>;
+
+	// The close button remains placed within the background area for accessibility.
+	const closeButtonOverlay = <View
+		style={StyleSheet.absoluteFill}
+		pointerEvents="box-none"
 	>
-		{content}
 		{closeButton}
 	</View>;
 
 	const extraScrollViewProps = (typeof scrollOverflow === 'object' ? scrollOverflow : {});
-	const keyboardAvoidingViewEnabled = (Platform.OS === 'android' && Platform.Version < 34) || Platform.OS === 'ios';
+	const keyboardAvoidingViewEnabled =
+		(Platform.OS === 'android' && Platform.Version < 35)
+		|| Platform.OS === 'ios';
+
+	const contentWithResizing = scrollOverflow ? (
+		<KeyboardAvoidingView
+			style={styles.keyboardAvoidingView}
+			enabled={keyboardAvoidingViewEnabled}
+		>
+			<ScrollView
+				{...extraScrollViewProps}
+				style={[styles.modalScrollView, extraScrollViewProps.style]}
+				contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
+			>
+				<View style={containerStyle} ref={setContainerComponent}>
+					{children}
+				</View>
+			</ScrollView>
+		</KeyboardAvoidingView>
+	) : (
+		<View style={[styles.contentContainer, { justifyContent: 'center' }]}>
+			<View style={containerStyle} ref={setContainerComponent}>
+				{children}
+			</View>
+		</View>
+	);
+
 	const result = (
 		<FocusControl.ModalWrapper state={modalStatus}>
 			<ModalComponent
-				// supportedOrientations: On iOS, this allows the dialog to be shown in non-portrait orientations.
 				supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
 				animationType='fade'
 				transparent
-
-				// Web:
 				onClose={onClose}
-				// iOS only: Called after closing
 				onDismiss={onClose}
-				// Called before closing on Android and sometimes called before closing on iOS
 				onRequestClose={onClose}
 				{...forwardedProps}
 			>
-				{scrollOverflow ? (
-					<KeyboardAvoidingView style={styles.keyboardAvoidingView} enabled={keyboardAvoidingViewEnabled}>
-						<ScrollView
-							{...extraScrollViewProps}
-							style={[styles.modalScrollView, extraScrollViewProps.style]}
-							contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
-						>{contentAndBackdrop}</ScrollView>
-					</KeyboardAvoidingView>
-				) : contentAndBackdrop}
+				<View style={StyleSheet.absoluteFill}>
+					{backdrop}
+					{contentWithResizing}
+					{closeButtonOverlay}
+				</View>
 			</ModalComponent>
 		</FocusControl.ModalWrapper>
 	);
