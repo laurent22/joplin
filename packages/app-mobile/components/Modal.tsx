@@ -137,7 +137,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	containerStyle,
 	backgroundColor,
 	scrollOverflow,
-	modalBackgroundStyle: _extraModalBackgroundStyles,
+	modalBackgroundStyle,
 	dismissButtonStyle,
 	onClose,
 	...forwardedProps
@@ -148,9 +148,8 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	const [containerComponent, setContainerComponent] = useState<View|null>(null);
 	const modalStatus = useModalStatus(containerComponent, forwardedProps.visible);
 
-	const containerRef = useRef<View|null>(null);
-	containerRef.current = containerComponent;
-	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(onClose, containerRef);
+	const backdropRef = useRef<View>(null);
+	const { onShouldBackgroundCaptureTouch, onBackgroundTouchFinished } = useBackgroundTouchListeners(onClose, backdropRef);
 
 	// A close button for accessibility tools. Since iOS accessibility focus order is based on the position
 	// of the element on the screen, the close button is placed after the modal content, rather than behind.
@@ -163,7 +162,8 @@ const ModalElement: React.FC<ModalElementProps> = ({
 
 	// The backdrop stays fixed in the background and does not resize.
 	const backdrop = <View
-		style={styles.modalBackground}
+		ref={backdropRef}
+		style={[styles.modalBackground, modalBackgroundStyle]}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
 		onResponderRelease={onBackgroundTouchFinished}
 	/>;
@@ -171,14 +171,14 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	// The close button remains placed within the background area for accessibility.
 	const closeButtonOverlay = <View
 		style={StyleSheet.absoluteFill}
-		pointerEvents="box-none"
+		pointerEvents='box-none'
 	>
 		{closeButton}
 	</View>;
 
 	const extraScrollViewProps = (typeof scrollOverflow === 'object' ? scrollOverflow : {});
 	const keyboardAvoidingViewEnabled =
-		(Platform.OS === 'android' && Platform.Version < 35)
+		(Platform.OS === 'android' && Platform.Version < 34)
 		|| Platform.OS === 'ios';
 
 	const contentWithResizing = scrollOverflow ? (
@@ -188,7 +188,11 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		>
 			<ScrollView
 				{...extraScrollViewProps}
-				style={[styles.modalScrollView, extraScrollViewProps.style]}
+				style={[
+					styles.modalScrollView,
+					extraScrollViewProps.style,
+					(Platform.OS === 'android' && !keyboardAvoidingViewEnabled) ? { marginBottom: keyboardState.dockedKeyboardHeight } : {},
+				]}
 				contentContainerStyle={[styles.modalScrollViewContent, extraScrollViewProps.contentContainerStyle]}
 			>
 				<View style={containerStyle} ref={setContainerComponent}>
