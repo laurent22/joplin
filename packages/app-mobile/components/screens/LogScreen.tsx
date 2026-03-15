@@ -73,7 +73,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 			if (this.refreshLogTimeout) {
 				clearTimeout(this.refreshLogTimeout);
 			}
-			setTimeout(() => {
+			this.refreshLogTimeout = setTimeout(() => {
 				this.refreshLogTimeout = null;
 				void this.refreshLogEntries();
 			}, 600);
