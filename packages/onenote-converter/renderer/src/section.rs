@@ -28,7 +28,7 @@ impl Renderer {
     pub fn render(&mut self, section: &Section, output_dir: String) -> Result<RenderedSection> {
         let section_dir = fs_driver().join(
             output_dir.as_str(),
-            sanitize_filename::sanitize(section.display_name()).as_str(),
+            fs_driver().sanitize_file_name(section.display_name()).as_str(),
         );
         log!(
             "section_dir: {:?} \n output_dir: {:?}",
@@ -168,7 +168,7 @@ impl Renderer {
         let filename = filename_base.trim().replace("/", "_");
         let mut i = 0;
         let mut current_filename =
-            sanitize_filename::sanitize(format!("{}{}", filename, extension));
+            fs_driver().sanitize_file_name(&format!("{}{}", filename, extension));
 
         loop {
             let current_full_path = fs_driver().join(parent_dir, &current_filename);
@@ -179,7 +179,7 @@ impl Renderer {
 
             i += 1;
             current_filename =
-                sanitize_filename::sanitize(format!("{}_{}{}", filename, i, extension));
+                fs_driver().sanitize_file_name(&format!("{}_{}{}", filename, i, extension));
         }
 
         Ok(current_filename)

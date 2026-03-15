@@ -4,7 +4,7 @@ import path = require('path');
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import type ShimType from '@joplin/lib/shim';
 const shim: typeof ShimType = require('@joplin/lib/shim').default;
-import { GitHubRelease, GitHubReleaseAsset } from '../../utils/checkForUpdatesUtils';
+import { GitHubRelease, GitHubReleaseAsset, handleReleaseResponseError } from '../../utils/checkForUpdatesUtils';
 import * as semver from 'semver';
 
 export enum AutoUpdaterEvents {
@@ -115,7 +115,8 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 		if (!response.ok) {
 			const responseText = await response.text();
-			throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
+			this.logger_.error(`Cannot get latest release info (${response.status}): ${responseText.substr(0, 500)}`);
+			handleReleaseResponseError(response.status, responseText);
 		}
 
 		const releases: GitHubRelease[] = await response.json();

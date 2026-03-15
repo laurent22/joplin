@@ -149,4 +149,47 @@ describe('stateToWhenClauseContext', () => {
 			stateToWhenClauseContext(applicationState, { commandFolderIds }),
 		).toHaveProperty('foldersAreDeleted', expectedDeletedState);
 	});
+
+	it.each([
+		{
+			label: 'should be false when no folders exist (new profile)',
+			selectedFolderId: 'non-existent-folder',
+			folders: [],
+			expected: false,
+		},
+		{
+			label: 'should be false when selectedFolderId is null',
+			selectedFolderId: null,
+			folders: [{ id: '1', deleted_time: 0, share_id: '', parent_id: '' }],
+			expected: false,
+		},
+		{
+			label: 'should be false when selected folder has been deleted',
+			selectedFolderId: '1',
+			folders: [{ id: '1', deleted_time: 1000, share_id: '', parent_id: '' }],
+			expected: false,
+		},
+		{
+			label: 'should be true when selected folder exists and is not deleted',
+			selectedFolderId: '1',
+			folders: [{ id: '1', deleted_time: 0, share_id: '', parent_id: '' }],
+			expected: true,
+		},
+		{
+			label: 'should be false when selectedFolderId does not match any folder',
+			selectedFolderId: 'stale-id',
+			folders: [{ id: '1', deleted_time: 0, share_id: '', parent_id: '' }],
+			expected: false,
+		},
+	])('should set selectedFolderIsValid correctly: $label', ({ selectedFolderId, folders, expected }) => {
+		const applicationState = buildState({
+			selectedFolderId,
+			folders,
+			notes: [],
+		});
+
+		expect(
+			stateToWhenClauseContext(applicationState),
+		).toHaveProperty('selectedFolderIsValid', expected);
+	});
 });

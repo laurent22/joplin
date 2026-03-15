@@ -103,9 +103,16 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => (
-				(!options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource))
+				(!options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource || itemType === ContextMenuItemType.NoteLink))
 				|| (!!options.linkToOpen && itemType === ContextMenuItemType.Link)
 			),
+		},
+		openNoteInNewWindow: {
+			label: _('Open in new window'),
+			onAction: async (options: ContextMenuOptions) => {
+				await CommandService.instance().execute('openNoteInNewWindow', options.resourceId);
+			},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.NoteLink,
 		},
 		saveAs: {
 			label: _('Save as...'),
@@ -202,6 +209,16 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				} else {
 					bridge().showInfoMessageBox(_('This attachment does not have OCR data (Status: %s)', resourceOcrStatusToString(resource.ocr_status)));
 				}
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+			},
+		},
+		createAccessibleDocument: {
+			label: _('Create accessible document'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resource } = await resourceInfo(options);
+				await CommandService.instance().execute('createAccessibleDocument', resource.id);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);

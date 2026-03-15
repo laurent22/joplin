@@ -30,6 +30,7 @@ import useFocusVisible from './utils/useFocusVisible';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import useOnNoteDoubleClick from './utils/useOnNoteDoubleClick';
+import useAutoScroll from './utils/useAutoScroll';
 
 const commands = {
 	focusElementNoteList,
@@ -130,6 +131,10 @@ const NoteList = (props: Props) => {
 			CommandService.instance().unregisterRuntime(commands.focusElementNoteList.declaration.name);
 		};
 	}, [focusNote]);
+
+	const selectedNoteId = props.selectedNoteIds.length === 1 ? props.selectedNoteIds[0] : '';
+	const targetIndex = props.notes.findIndex(note => note.id === selectedNoteId);
+	useAutoScroll(selectedNoteId, props.selectedFolderId, targetIndex, makeItemIndexVisible);
 
 	const onItemContextMenu = useOnContextMenu(
 		props.selectedNoteIds,

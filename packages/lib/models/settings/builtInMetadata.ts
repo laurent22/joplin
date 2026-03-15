@@ -95,6 +95,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: false,
+			section: 'editor',
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			storage: SettingStorage.File,
 			isGlobal: true,
@@ -573,8 +574,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop],
-			label: () => _('Enable optical character recognition (OCR)'),
+			label: () => _('OCR: Enable optical character recognition'),
 			description: () => _('When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ocr.pdfMode': {
+			value: 'normal',
+			type: SettingItemType.String,
+			isEnum: true,
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('OCR: PDF processing mode'),
+			description: () => _('Accessible mode saves additional information, enabling creation of accessible PDFs. It increases database size by approximately 10-20 KB per page.'),
+			options: () => ({
+				normal: _('Normal'),
+				accessible: _('Accessible'),
+			}),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -738,7 +755,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Auto-pair braces, parentheses, quotations, etc.'),
 			storage: SettingStorage.File,
@@ -749,7 +766,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Autocomplete Markdown and HTML'),
 			description: () => _('Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.'),
@@ -761,9 +778,10 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable HTML-to-Markdown conversion banner'),
+			description: () => _('If enabled, opening an HTML note displays a prompt to convert the note to Markdown.'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
@@ -771,7 +789,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Preserve colours when pasting text in Rich Text Editor'),
 			storage: SettingStorage.File,
@@ -781,7 +799,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Auto-format Markdown in the Rich Text Editor'),
 			description: () => _('Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.'),
@@ -801,7 +819,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			public: false,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Tab moves focus'),
 			storage: SettingStorage.File,
@@ -845,7 +863,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'note',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFieldReverse': {
 			value: {
@@ -858,7 +876,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'note',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFolderSortOrderEnabled': {
 			value: true,
@@ -866,7 +884,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'folder',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.perFolderSortOrders': {
 			value: {} as Record<string, string | boolean>,
@@ -874,7 +892,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			section: 'folder',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.sharedSortOrder': {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code from before rule was applied.
@@ -882,7 +900,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Object,
 			section: 'folder',
 			public: false,
-			appTypes: [AppType.Cli, AppType.Desktop],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'folders.sortOrder.field': {
 			value: 'title',
@@ -909,7 +927,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.usePlainText': {
 			value: false,
 			type: SettingItemType.Bool,
-			section: 'note',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Mobile],
 			label: () => 'Use the plain text editor',
@@ -922,7 +940,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.mobile.spellcheckEnabled': {
 			value: true,
 			type: SettingItemType.Bool,
-			section: 'note',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Mobile],
 			label: () => _('Enable spellcheck in the text editor'),
@@ -933,7 +951,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.mobile.toolbarEnabled': {
 			value: true,
 			type: SettingItemType.Bool,
-			section: 'note',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Mobile],
 			label: () => _('Enable the Markdown toolbar'),
@@ -1217,7 +1235,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
-			section: 'appearance',
+			section: 'editor',
 			label: () => _('Editor font size'),
 			minimum: 4,
 			maximum: 50,
@@ -1232,7 +1250,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					public: true,
 					label: () => _('Editor font'),
 					appTypes: [AppType.Mobile],
-					section: 'appearance',
+					section: 'editor',
 					options: () => {
 						// IMPORTANT: The font mapping must match the one in global-styles.js::editorFont()
 						if (mobilePlatform === 'ios') {
@@ -1255,7 +1273,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					type: SettingItemType.String,
 					public: true,
 					appTypes: [AppType.Desktop],
-					section: 'appearance',
+					section: 'editor',
 					label: () => _('Editor font family'),
 					description: () =>
 						_('Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.'),
@@ -1268,7 +1286,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			public: true,
 			appTypes: [AppType.Desktop],
-			section: 'appearance',
+			section: 'editor',
 			label: () => _('Editor monospace font family'),
 			description: () =>
 				_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
@@ -1288,7 +1306,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			subType: SettingItemSubType.FontFamily,
 		},
 
-		'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
+		'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, isGlobal: true, appTypes: [AppType.Desktop], section: 'editor', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 		'style.scrollbarSize': {
 			value: ScrollbarSize.Small,
@@ -1442,6 +1460,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 		tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
+		syncReportLogExpanded: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Cli, AppType.Desktop], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 		'export.pdfPageSize': { value: 'A4', type: SettingItemType.String, advanced: true, storage: SettingStorage.File, isGlobal: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page size for PDF export'), options: () => {
 			return {
@@ -1476,6 +1495,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			public: true,
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			isEnum: true,
 			advanced: true,
@@ -1496,6 +1516,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
+			section: 'editor',
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable spell checking in Markdown editor'),
 			storage: SettingStorage.File,
@@ -1503,30 +1524,30 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'editor.inlineRendering': {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Render markup in editor'),
 			description: () => _('Renders markup on all lines that don\'t include the cursor.'),
-			section: 'note',
+			section: 'editor',
 			storage: SettingStorage.File,
 		},
 		'editor.imageRendering': {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Render images'),
 			description: () => _('If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.'),
-			section: 'note',
+			section: 'editor',
 			storage: SettingStorage.File,
 		},
 		'editor.highlightActiveLine': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			section: 'note',
+			section: 'editor',
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Highlight active line'),
 			storage: SettingStorage.File,
@@ -1556,7 +1577,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'editor.beta': {
 			value: false,
 			type: SettingItemType.Bool,
-			section: 'general',
+			section: 'editor',
 			public: false,
 			appTypes: [AppType.Desktop],
 			label: () => 'Opt-in to the editor beta',
@@ -1569,13 +1590,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			value: false,
 			type: SettingItemType.Bool,
-			section: 'general',
+			section: 'editor',
 			public: true,
 			appTypes: [AppType.Desktop],
 			label: () => _('Use the legacy Markdown editor'),
 			description: () => 'Enable the the legacy Markdown editor. Some plugins require this editor to function. However, it has accessibility issues and other plugins will not work.',
 			storage: SettingStorage.File,
 			isGlobal: true,
+		},
+
+		// Used to keep track of editor setting migrations that require prompting the user.
+		'editor.migration': {
+			public: false,
+			value: 0,
+			type: SettingItemType.Int,
 		},
 
 		'linking.extraAllowedExtensions': {
@@ -1723,9 +1751,9 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'camera.type': { value: CameraDirection.Back, type: SettingItemType.Int, public: false, appTypes: [AppType.Mobile] },
 		'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: [AppType.Mobile] },
 
-		'spellChecker.enabled': { value: true, type: SettingItemType.Bool, isGlobal: true, storage: SettingStorage.File, public: false },
-		'spellChecker.language': { value: '', type: SettingItemType.String, isGlobal: true, storage: SettingStorage.File, public: false }, // Depreciated in favour of spellChecker.languages.
-		'spellChecker.languages': { value: [] as string[], type: SettingItemType.Array, isGlobal: true, storage: SettingStorage.File, public: false },
+		'spellChecker.enabled': { value: true, type: SettingItemType.Bool, section: 'editor', isGlobal: true, storage: SettingStorage.File, public: false },
+		'spellChecker.language': { value: '', type: SettingItemType.String, section: 'editor', isGlobal: true, storage: SettingStorage.File, public: false }, // Depreciated in favour of spellChecker.languages.
+		'spellChecker.languages': { value: [] as string[], type: SettingItemType.Array, section: 'editor', isGlobal: true, storage: SettingStorage.File, public: false },
 
 		windowContentZoomFactor: {
 			value: 100,
@@ -1940,7 +1968,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'survey.webClientEval2025.progress': {
-			value: SurveyProgress.NotStarted,
+			// Ended in February 2026. See https://github.com/laurent22/joplin/pull/14497.
+			value: SurveyProgress.Dismissed,
 			type: SettingItemType.Int,
 			public: false,
 			isEnum: true,
@@ -2049,6 +2078,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Keep notes in the trash for'),
 			storage: SettingStorage.File,
 			isGlobal: false,
+		},
+
+		'notes.showNoteLinkIcon': {
+			value: true,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			section: 'note',
+			public: true,
+			isGlobal: true,
+			label: () => _('Show Joplin icon for note links'),
+			appTypes: [AppType.Desktop, AppType.Mobile],
 		},
 	} satisfies Record<string, SettingItem>;
 

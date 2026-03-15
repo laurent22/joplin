@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, powerMonitor } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -176,6 +176,10 @@ export default class ElectronAppWrapper {
 	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
 		await bridge().captureException(new Error(errorMessage));
 
+		if (this.win_ && this.win_.isDestroyed()) {
+			return;
+		}
+
 		const buttons = [];
 		buttons.push(_('Quit'));
 		const exitIndex = 0;
@@ -199,7 +203,7 @@ export default class ElectronAppWrapper {
 			//
 			// Also only run this if not testing (crashing the renderer breaks automated
 			// tests).
-			if (this.win_ && !this.win_.webContents.isCrashed() && !isTesting) {
+			if (this.win_ && !this.win_.isDestroyed() && !this.win_.webContents.isCrashed() && !isTesting) {
 				this.win_.webContents.forcefullyCrashRenderer();
 			}
 		} else if (response === exitIndex) {
@@ -400,6 +404,15 @@ export default class ElectronAppWrapper {
 			webContents.on('focus', onFocus);
 		};
 		addWindowEventHandlers(this.win_.webContents);
+
+		// BrowserWindow 'focus' fires when the OS gives focus to the application window
+		// (i.e. coming from another app or from the taskbar), not on intra-app focus switches.
+		// We use a dedicated IPC channel so the renderer can trigger an immediate sync on
+		// OS-level focus gain without conflating it with the 'window-focused' channel that
+		// handles Joplin-internal window routing.
+		this.win_.on('focus', () => {
+			this.win_?.webContents.send('main-window-focused');
+		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.win_.on('close', (event: any) => {
@@ -891,6 +904,11 @@ export default class ElectronAppWrapper {
 		this.electronApp_.on('open-url', (event: any, url: string) => {
 			event.preventDefault();
 			void this.openCallbackUrl(url);
+		});
+
+		// When the OS wakes from sleep, notify the renderer so it can trigger an immediate sync.
+		powerMonitor.on('resume', () => {
+			this.win_?.webContents.send('system-resumed');
 		});
 	}
 

@@ -2,23 +2,32 @@ import { EditorView, keymap } from '@codemirror/view';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 import createTheme from './theme';
-import { EditorState } from '@codemirror/state';
+import { EditorState, Prec, StateField } from '@codemirror/state';
 import { deleteMarkupBackward, markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import markdownMathExtension from './extensions/markdownMathExtension';
-import markdownHighlightExtension from './extensions/markdownHighlightExtension';
+import markdownHighlightExtension, { markdownInsertExtension } from './extensions/markdownHighlightExtension';
 import markdownFrontMatterExtension from './extensions/markdownFrontMatterExtension';
 import lookUpLanguage from './utils/markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
 import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
-import { Prec } from '@codemirror/state';
 import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
 import renderingExtension from './extensions/rendering/renderingExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
 import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
 import renderBlockImages from './extensions/rendering/renderBlockImages';
+
+const closingFencedBlock = StateField.define<boolean>({
+	create: () => false,
+	update: (_, tr) => {
+		const pos = tr.state.selection.main.from;
+		const textBefore = tr.state.doc.sliceString(Math.max(0, pos - 2), pos);
+		const backticksBefore = textBefore.length - textBefore.replace(/`+$/, '').length;
+		return backticksBefore >= 2;
+	},
+});
 
 const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
@@ -35,7 +44,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 						markdownFrontMatterExtension,
 
 						settings.markdownMarkEnabled ? markdownHighlightExtension : [],
-
+						settings.markdownInsertEnabled ? markdownInsertExtension : [],
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? markdownMathExtension : [],
 					],
@@ -50,7 +59,14 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 						htmlTagLanguage: html({ matchClosingTags: false, autoCloseTags: false }),
 					}),
 				}),
-				markdownLanguage.data.of({ closeBrackets: { brackets: openingBrackets } }),
+				markdownLanguage.data.compute([closingFencedBlock], state => {
+					// Don't auto-complete `s when closing a code block.
+					// See https://github.com/laurent22/joplin/issues/12569.
+					if (state.field(closingFencedBlock)) {
+						return { closeBrackets: { brackets: openingBrackets.filter(b => b !== '`') } };
+					}
+					return { closeBrackets: { brackets: openingBrackets } };
+				}),
 				keymap.of(settings.autocompleteMarkup ? [
 					{ key: 'Enter', run: insertNewlineContinueMarkup },
 					{ key: 'Backspace', run: deleteMarkupBackward },
@@ -66,6 +82,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 
 	const extensions = [
 		languageExtension,
+		closingFencedBlock,
 		createTheme(settings.themeData),
 		EditorView.contentAttributes.of({
 			autocapitalize: 'sentence',

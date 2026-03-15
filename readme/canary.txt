@@ -3,8 +3,8 @@ Hash: SHA512
 
 Joplin Warrant Canary
 
-Statement date: 18 February 2026
-Valid until: 19 April 2026
+Statement date: 19 February 2026
+Valid until: 20 April 2026
 
 This warrant canary is updated every 60 days.
 If this document has not been updated within 75 days of the
@@ -12,11 +12,11 @@ Statement date above, it should be considered expired.
 
 As of the Statement date:
 
-* No National Security Letters have been received.
-* No orders under the USA PATRIOT Act have been received.
-* No orders under the Foreign Intelligence Surveillance Act have been received.
-* No government requests have been received that are accompanied by a gag order.
-* No law enforcement or government agency has required the introduction of backdoors into Joplin.
+* No National Security Letters have been received by the project or its maintainer.
+* No orders under the USA PATRIOT Act or the Foreign Intelligence Surveillance Act have been received by the project or its maintainer.
+* No government request accompanied by a gag order has been received by the project or its maintainer.
+* No government agency or law enforcement body has required the introduction of backdoors into Joplin software, infrastructure, or services.
+* No government agency or law enforcement body has compelled the project or its maintainer to provide access to user data, servers, or infrastructure associated with Joplin.
 
 If any such order is received, and we are legally permitted to do so,
 this statement will be updated accordingly. If we are not legally
@@ -25,22 +25,22 @@ will not be updated.
 
 The public key is available at:
 
-https://github.com/laurent22/joplin/blob/dev/Assets/keys/joplin-canary-signing-key.asc
+https://github.com/laurent22/joplin/raw/dev/Assets/keys/joplin-canary-signing-key.asc
 
 To prevent backdating, this statement includes current public events:
 
 Current international events:
 
-1. Philippine vice-president Sara Duterte announces 2028 presidential bid
-2. African football chief ‘occupying seat illegally’ and must go, says leading executive
+1. Andrew Mountbatten-Windsor arrested as police open investigation into misconduct in public office
+2. South Korea’s former president Yoon Suk Yeol jailed for life for leading insurrection
 
 Canary signing key fingerprint:
 
 F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
 -----BEGIN PGP SIGNATURE-----
 
-iIsEARYKADMWIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaZWUBBUcY2FuYXJ5QGpv
-cGxpbmFwcC5vcmcACgkQlGrp+lkV71N8lwEAuRNboHOsr7/GbDjpEhkLrYOtzf2Y
-3uUBB3YBbPabWvEA/RNCb0sUqFaKUT8Zeq/IsoLydsRsLMYUaUP19WIS/rQM
-=UEz2
+iIsEARYKADMWIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaZbmZRUcY2FuYXJ5QGpv
+cGxpbmFwcC5vcmcACgkQlGrp+lkV71PVYgD+LQ5ubtLvAV7SYU7YHrAyjFPmq85f
+eTFXmYC+nc0da0gBAPnZ1b/OpFHE366CoT/soH1gzUknSRkpCRKxSYpdSh0C
+=DeAc
 -----END PGP SIGNATURE-----

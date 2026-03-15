@@ -3,10 +3,12 @@ import CommandService from '../CommandService';
 import ToolbarButtonUtils from './ToolbarButtonUtils';
 import reducer, { defaultState } from '../../reducer';
 import stateToWhenClauseContext from './stateToWhenClauseContext';
+import KeymapService from '../KeymapService';
+import shim from '../../shim';
 
 const createTestCommands = () => {
 	const simpleCommands = [
-		{ name: 'testCommand1', label: 'Test 1' },
+		{ name: 'newNote', label: 'New Note' },
 		{ name: 'testCommand2', label: 'Test 2' },
 	].map(({ name, label }) => ({
 		declaration: {
@@ -35,9 +37,16 @@ const createTestCommands = () => {
 };
 
 describe('ToolbarButtonUtils', () => {
+	let keymapService: KeymapService;
+
 	beforeAll(() => {
 		const store = createStore(reducer);
 		CommandService.instance().initialize(store, false, stateToWhenClauseContext);
+
+		// Boot up the real service
+		KeymapService.destroyInstance();
+		keymapService = KeymapService.instance();
+		keymapService.initialize();
 
 		const commands = createTestCommands();
 		for (const command of commands) {
@@ -49,14 +58,18 @@ describe('ToolbarButtonUtils', () => {
 	test('should convert command names to toolbar buttons', () => {
 		const utils = new ToolbarButtonUtils(CommandService.instance());
 		const buttons = utils.commandsToToolbarButtons(
-			['testCommand1', 'testCommand2'],
+			['newNote', 'testCommand2'],
 			stateToWhenClauseContext(defaultState),
+			keymapService,
 		);
+
+		const expectedTooltip = shim.isMac() ? 'New Note (Cmd+N)' : 'New Note (Ctrl+N)';
+
 		expect(buttons).toMatchObject([
 			{
 				type: 'button',
-				name: 'testCommand1',
-				tooltip: 'Test 1',
+				name: 'newNote',
+				tooltip: expectedTooltip,
 				enabled: true,
 			},
 			{
@@ -71,8 +84,9 @@ describe('ToolbarButtonUtils', () => {
 	test('should not repeat separators', () => {
 		const utils = new ToolbarButtonUtils(CommandService.instance());
 		const buttons = utils.commandsToToolbarButtons(
-			['testCommand2', '-', '-', '-', 'testCommand1'],
+			['testCommand2', '-', '-', '-', 'newNote'],
 			stateToWhenClauseContext(defaultState),
+			keymapService,
 		);
 		expect(buttons).toMatchObject([
 			{
@@ -82,7 +96,7 @@ describe('ToolbarButtonUtils', () => {
 			{ type: 'separator' },
 			{
 				type: 'button',
-				name: 'testCommand1',
+				name: 'newNote',
 			},
 		]);
 	});
@@ -94,11 +108,13 @@ describe('ToolbarButtonUtils', () => {
 		expect(utils.commandsToToolbarButtons(
 			['invisibleUnlessTrashSelected'],
 			defaultContext,
+			keymapService,
 		)).toMatchObject([]);
 
 		expect(utils.commandsToToolbarButtons(
 			['invisibleUnlessTrashSelected'],
 			{ ...defaultContext, inTrash: true },
+			keymapService,
 		)).toMatchObject([
 			{ type: 'button', name: 'invisibleUnlessTrashSelected' },
 		]);

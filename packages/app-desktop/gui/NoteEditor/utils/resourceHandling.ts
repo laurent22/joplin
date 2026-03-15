@@ -2,6 +2,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import { ResourceEntity } from '@joplin/lib/services/database/types';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
 import rendererHtmlUtils, { extractHtmlBody, removeWrappingParagraphAndTrailingEmptyElements } from '@joplin/renderer/htmlUtils';
@@ -120,9 +121,20 @@ export async function getResourcesFromPasteEvent(event: any) {
 }
 
 
-const processImagesInPastedHtml = async (html: string) => {
+export interface ProcessImagesOptions {
+	// When true, returns Joplin internal URLs (:/resourceId) instead of file:// URLs
+	useInternalUrls?: boolean;
+}
+
+export const processImagesInPastedHtml = async (html: string, options: ProcessImagesOptions = {}) => {
 	const allImageUrls: string[] = [];
 	const mappedResources: Record<string, string> = {};
+
+	const resourceUrl = (resource: ResourceEntity) => {
+		return options.useInternalUrls
+			? Resource.internalUrl(resource)
+			: `file://${encodeURI(Resource.fullPath(resource))}`;
+	};
 
 	htmlUtils.replaceImageUrls(html, (src: string) => {
 		allImageUrls.push(src);
@@ -138,7 +150,7 @@ const processImagesInPastedHtml = async (html: string) => {
 			await shim.fetchBlob(imageSrc, { path: filePath });
 			const createdResource = await shim.createResourceFromPath(filePath);
 			await shim.fsDriver().remove(filePath);
-			mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+			mappedResources[imageSrc] = resourceUrl(createdResource);
 		} catch (error) {
 			logger.warn(`Error creating a resource for ${imageSrc}.`, error);
 			mappedResources[imageSrc] = imageSrc;
@@ -155,14 +167,49 @@ const processImagesInPastedHtml = async (html: string) => {
 					const imageFilePath = path.normalize(fileUriToPath(imageSrc));
 					const resourceDirPath = path.normalize(Setting.value('resourceDir'));
 
-					if (imageFilePath.startsWith(resourceDirPath)) {
-						mappedResources[imageSrc] = imageSrc;
+					// Use path.relative for robust containment check - startsWith can falsely match sibling paths
+					const rel = path.relative(resourceDirPath, imageFilePath);
+					const isInsideResourceDir = rel && !rel.startsWith('..') && !path.isAbsolute(rel);
+					if (isInsideResourceDir) {
+						if (options.useInternalUrls) {
+							const resourceId = Resource.pathToId(imageFilePath);
+							mappedResources[imageSrc] = `:/${resourceId}`;
+						} else {
+							mappedResources[imageSrc] = imageSrc;
+						}
 					} else {
 						const createdResource = await shim.createResourceFromPath(imageFilePath);
-						mappedResources[imageSrc] = `file://${encodeURI(Resource.fullPath(createdResource))}`;
+						mappedResources[imageSrc] = resourceUrl(createdResource);
 					}
 				} else if (imageSrc.startsWith('data:')) {
-					mappedResources[imageSrc] = imageSrc;
+					// Word encodes base64 with MIME line breaks every ~76 chars.
+					// Strip whitespace before decoding, then save as a Joplin resource
+					// so Turndown's outerHTML (used for images with width/height) gets
+					// a short URL instead of 200KB of base64.
+					const cleanSrc = imageSrc.replace(/\s/g, '');
+					const dataUrlMatch = cleanSrc.match(/^data:((?!image\/svg\+xml)[^;]+);base64,(.+)$/);
+					if (dataUrlMatch) {
+						const mimeType = dataUrlMatch[1];
+						const base64Data = dataUrlMatch[2];
+						const fileExt = mimeUtils.toFileExtension(mimeType) || 'bin';
+						const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${fileExt}`;
+						try {
+							await shim.fsDriver().writeFile(filePath, base64Data, 'base64');
+							const createdResource = await shim.createResourceFromPath(filePath);
+							mappedResources[imageSrc] = resourceUrl(createdResource);
+						} catch (writeError) {
+							writeError.message = `processPastedHtml: Failed to write or create resource from pasted image: ${writeError.message}`;
+							throw writeError;
+						} finally {
+							try {
+								await shim.fsDriver().remove(filePath);
+							} catch (cleanupError) {
+								logger.warn('processPastedHtml: Error removing temporary file.', cleanupError);
+							}
+						}
+					} else {
+						mappedResources[imageSrc] = imageSrc;
+					}
 				} else {
 					downloadImages.push(downloadImage(imageSrc));
 				}
@@ -187,6 +234,27 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	html = html.replace(/[\u202F\u00A0]/g, ' ');
 
 	html = await processImagesInPastedHtml(html);
+
+	// Word encodes newlines in alt attributes as HTML entities (&#10; &#13; &#xA; etc.).
+	// These get decoded to literal newline characters by JSDOM when Turndown processes
+	// the HTML. With preserveImageTagsWithSize=true, Turndown returns node.outerHTML
+	// verbatim — embedding literal newlines inside an HTML attribute value, which
+	// breaks the Markdown raw HTML block (a blank line ends the block, making the
+	// parser treat the <img> as plain text). Normalize them to spaces here.
+	html = html.replace(
+		/(\balt\s*=\s*)(["'])([\s\S]*?)\2/gi,
+		(_m, prefix, quote, altText) => {
+			// Replace HTML-encoded newlines/control chars and literal ones with a space
+			const normalized = altText
+				.replace(/&#(?:10|13);|&#x(?:0*[aAdD]);/gi, ' ')
+				// biome-ignore lint/suspicious/noControlCharactersInRegex: intentional sanitisation of control chars
+				// eslint-disable-next-line no-control-regex
+				.replace(/[\r\n\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ' ')
+				.replace(/ {2,}/g, ' ')
+				.trim();
+			return `${prefix}${quote}${normalized}${quote}`;
+		},
+	);
 
 	// TinyMCE can accept any type of HTML, including HTML that may not be preserved once saved as
 	// Markdown. For example the content may have a dark background which would be supported by

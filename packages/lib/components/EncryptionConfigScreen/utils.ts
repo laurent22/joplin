@@ -9,6 +9,7 @@ import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchroniz
 import MasterKey from '../../models/MasterKey';
 import { reg } from '../../registry';
 import Setting from '../../models/Setting';
+import { MessageBoxType } from '../../shim';
 const { useCallback, useEffect, useState } = shim.react();
 
 type PasswordChecks = Record<string, boolean>;
@@ -61,13 +62,13 @@ export const enableEncryptionConfirmationMessages = (_masterKey: MasterKeyEntity
 };
 
 export const reencryptData = async () => {
-	const ok = confirm(_('Please confirm that you would like to re-encrypt your complete database.'));
+	const ok = await shim.showConfirmationDialog(_('Please confirm that you would like to re-encrypt your complete database.'));
 	if (!ok) return;
 
 	await BaseItem.forceSyncAll();
 	void reg.waitForSyncFinishedThenSync();
 	Setting.setValue('encryption.shouldReencrypt', Setting.SHOULD_REENCRYPT_NO);
-	alert(_('Your data is going to be re-encrypted and synced again.'));
+	await shim.showMessageBox(_('Your data is going to be re-encrypted and synced again.'), { type: MessageBoxType.Info });
 };
 
 export const dontReencryptData = () => {

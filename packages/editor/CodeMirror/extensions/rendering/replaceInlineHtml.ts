@@ -2,7 +2,7 @@ import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { Decoration } from '@codemirror/view';
 import htmlNodeInfo, { HtmlNodeInfo } from '../../utils/htmlNodeInfo';
 import { SyntaxNodeRef } from '@lezer/common';
-import { EditorState } from '@codemirror/state';
+import { EditorSelection, EditorState } from '@codemirror/state';
 
 const hideDecoration = Decoration.replace({});
 
@@ -45,17 +45,86 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 		return cursor;
 	};
 
+	const findOpeningTag = (closingTag: SyntaxNodeRef, state: EditorState) => {
+		const closingTagInfo = htmlNodeInfo(closingTag, state);
+		// Self-closing?
+		if (closingTagInfo.opening) {
+			return closingTag;
+		}
+
+		let cursor = closingTag.node.prevSibling;
+		let nestedTagCounter = 1;
+
+		// Find the matching opening tag
+		for (; !!cursor && nestedTagCounter > 0; cursor = cursor.prevSibling) {
+			const info = htmlNodeInfo(cursor, state);
+			if (info && isMatchingClosingTag(info)) {
+				nestedTagCounter ++;
+			} else if (info && isMatchingOpeningTag(info)) {
+				nestedTagCounter --;
+			}
+
+			if (nestedTagCounter === 0) {
+				break;
+			}
+		}
+
+		return cursor;
+	};
+
+	const selectionIntersectsRange = (selection: EditorSelection, from: number, to: number) => {
+		const rangeContains = (point: number) => point >= from && point <= to;
+		const selectionContains = (point: number) => point >= selection.main.from && point <= selection.main.to;
+		return rangeContains(selection.main.from) || rangeContains(selection.main.to)
+			|| selectionContains(from) || selectionContains(to);
+	};
+
+	const getMatchingTagRange = (node: SyntaxNodeRef, state: EditorState): [number, number] | null => {
+		const info = htmlNodeInfo(node, state);
+		if (!info || !isMatchingTag(info)) return null;
+
+		if (info.opening && info.closing) {
+			return null;
+		}
+
+		if (info.opening) {
+			const closingTag = findClosingTag(node, state);
+			if (!closingTag) return null;
+			return [node.from, closingTag.to];
+		}
+
+		if (info.closing) {
+			const openingTag = findOpeningTag(node, state);
+			if (!openingTag) return null;
+			return [openingTag.from, node.to];
+		}
+
+		return null;
+	};
+
+	const selectionTouchesTag = (node: SyntaxNodeRef, state: EditorState) => {
+		const range = getMatchingTagRange(node, state);
+		if (!range) return false;
+		return selectionIntersectsRange(state.selection, range[0], range[1]);
+	};
+
 	const hideTags = makeInlineReplaceExtension({
+		getRevealStrategy: (node, state) => {
+			return selectionTouchesTag(node, state);
+		},
 		createDecoration: (node, state) => {
-			const info = htmlNodeInfo(node, state);
-			return info && isMatchingTag(info) ? hideDecoration : null;
+			return getMatchingTagRange(node, state) ? hideDecoration : null;
 		},
 	});
 
 	const styleContent = makeInlineReplaceExtension({
+		getRevealStrategy: (node, state) => {
+			return selectionTouchesTag(node, state);
+		},
 		createDecoration: (node, state) => {
 			const info = htmlNodeInfo(node, state);
 			if (!info || !isMatchingOpeningTag(info)) return null;
+			if (!getMatchingTagRange(node, state)) return null;
 			return onRenderContent(info);
 		},
 		getDecorationRange(node, state) {

@@ -22,13 +22,19 @@ export interface PdfInfo {
 	pageCount: number;
 }
 
+export interface PdfPageImage {
+	path: string;
+	width: number;
+	height: number;
+}
+
 export interface Keytar {
 	setPassword(key: string, client: string, password: string): Promise<void>;
 	getPassword(key: string, client: string): Promise<string|null>;
 	deletePassword(key: string, client: string): Promise<void>;
 }
 
-interface FetchOptions {
+export interface FetchOptions {
 	method?: string;
 	headers?: Record<string, string>;
 	body?: string;
@@ -407,8 +413,17 @@ const shim = {
 		throw new Error('Not implemented: pdfToImages');
 	},
 
+	// Like pdfToImages but also returns the dimensions of each page image
+	pdfToImagesWithDimensions: async (_pdfPath: string, _outputDirectoryPath: string, _options?: CreatePdfFromImagesOptions): Promise<PdfPageImage[]> => {
+		throw new Error('Not implemented: pdfToImagesWithDimensions');
+	},
+
 	pdfInfo: async (_pdfPath: string): Promise<PdfInfo> => {
 		throw new Error('Not implemented: pdfInfo');
+	},
+
+	createAccessiblePdf: async (_originalPdfPath: string, _ocrDetails: string, _outputPath: string, _tempDir: string): Promise<void> => {
+		throw new Error('Not implemented: createAccessiblePdf');
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

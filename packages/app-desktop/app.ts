@@ -43,7 +43,7 @@ const electronContextMenu = require('./services/electron-context-menu');
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
 
-import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
@@ -638,18 +638,23 @@ class Application extends BaseApplication {
 
 			if (Setting.value('env') === 'dev') {
 				void AlarmService.updateAllNotifications();
+				RevisionService.instance().runInBackground();
 			} else {
-				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-				void reg.scheduleSync(1000).then(() => {
-					// Wait for the first sync before updating the notifications, since synchronisation
-					// might change the notifications.
-					void AlarmService.updateAllNotifications();
+				setTimeout(() => {
+					// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+					void reg.scheduleSync(0).then(() => {
+						// Wait for the first sync before updating the notifications, since synchronisation
+						// might change the notifications.
+						void AlarmService.updateAllNotifications();
 
-					void DecryptionWorker.instance().scheduleStart();
-				});
+						void DecryptionWorker.instance().scheduleStart();
+
+						RevisionService.instance().runInBackground();
+					});
+				}, 1000);
 			}
 
-			RevisionService.instance().runInBackground();
 			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		});
 
@@ -728,6 +733,23 @@ class Application extends BaseApplication {
 					});
 				}
 			});
+
+			// Trigger an immediate sync when the main window gains OS-level focus (i.e. the user
+			// switches back to Joplin from another application) or when the system wakes from sleep.
+			// A 30-second cool-down prevents duplicate syncs during rapid focus-in/focus-out cycles.
+			const minResumeSyncIntervalMs = 30_000;
+			let lastFocusSyncTime = 0;
+
+			const scheduleResumeSync = () => {
+				const now = Date.now();
+				if (now - lastFocusSyncTime > minResumeSyncIntervalMs) {
+					lastFocusSyncTime = now;
+					void reg.scheduleSync(0);
+				}
+			};
+
+			ipcRenderer.on('main-window-focused', scheduleResumeSync);
+			ipcRenderer.on('system-resumed', scheduleResumeSync);
 		});
 
 		addTask('app/initPluginService', () => this.initPluginService());

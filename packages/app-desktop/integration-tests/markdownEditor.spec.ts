@@ -161,7 +161,7 @@ test.describe('markdownEditor', () => {
 		const viewer = noteEditor.getNoteViewerFrameLocator();
 		await expect(viewer.locator('h1')).toHaveText('Testing');
 
-		const matches = viewer.locator('mark');
+		const matches = viewer.locator('mark-ghost');
 		await expect(matches).toHaveCount(0);
 
 		await mainWindow.keyboard.press(process.platform === 'darwin' ? 'Meta+f' : 'Control+f');
@@ -276,8 +276,12 @@ test.describe('markdownEditor', () => {
 		expect(imageSize[1]).toBeGreaterThan(0);
 	});
 
-	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
+	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow);
+		// Workaround: Required for extracting content accurately from the Markdown editor
+		await mainScreen.noteEditor.disableInlineRendering(electronApp);
+
+		await mainScreen.setup();
 		await mainScreen.createNewNote('Original');
 		const noteEditor = mainScreen.noteEditor;
 		await noteEditor.hideViewer();
@@ -400,5 +404,35 @@ test.describe('markdownEditor', () => {
 		await activateMainMenuItem(electronApp, 'Redo');
 		await noteEditor.expectToHaveText('A');
 	});
-});
 
+	test('copying from the preview pane should not include theme background color and should preserve bold formatting', async ({ mainWindow, electronApp }) => {
+		// Set dark theme so background-color would be present in clipboard without the fix
+		await setSettingValue(electronApp, mainWindow, 'theme', 2);
+
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test copy formatting');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('**hello**');
+
+		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
+		await expect(viewerFrame.locator('strong')).toHaveText('hello');
+
+		// Double-click selects the text node inside <strong>, not <strong> itself.
+		// Without the ancestor re-wrapping fix, <strong> would be dropped.
+		await viewerFrame.locator('strong').dblclick();
+		const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+		await mainWindow.keyboard.press(`${modifier}+c`);
+
+		const clipboardHtml = await mainWindow.evaluate(() => {
+			const { clipboard } = require('electron');
+			return clipboard.readHTML();
+		});
+
+		expect(clipboardHtml).toContain('hello');
+		expect(clipboardHtml).not.toMatch(/background-color\s*:/i);
+		expect(clipboardHtml).toContain('<strong>');
+	});
+});

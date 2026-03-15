@@ -41,7 +41,7 @@ export default function(props: Props) {
 		if (mode === Mode.Reset) return false;
 		return true;
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [status]);
+	}, [status, mode]);
 
 	const onClose = useCallback(() => {
 		props.dispatch({
@@ -90,10 +90,12 @@ export default function(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [currentPassword, password1, onClose, mode]);
 
+	// Show the "Re-enter password" confirmation field
 	const needToRepeatPassword = useMemo(() => {
 		if (mode === Mode.Reset) return true;
+		if (showCurrentPassword) return true;
 		return !hasMasterPasswordEncryptedData;
-	}, [hasMasterPasswordEncryptedData, mode]);
+	}, [mode, showCurrentPassword, hasMasterPasswordEncryptedData]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const onCurrentPasswordChange = useCallback((event: any) => {
@@ -138,6 +140,7 @@ export default function(props: Props) {
 	}, [currentPassword]);
 
 	function renderPasswordForm() {
+		const passwordsMatch = password1 === password2;
 		const renderCurrentPassword = () => {
 			if (!showCurrentPassword) return null;
 
@@ -176,12 +179,22 @@ export default function(props: Props) {
 							value={password1}
 							onChange={onPasswordChange1}
 						/>
+
 						{needToRepeatPassword && (
-							<LabelledPasswordInput
-								labelText={_('Re-enter password')}
-								value={password2}
-								onChange={onPasswordChange2}
-							/>
+							<>
+								<LabelledPasswordInput
+									labelText={_('Re-enter password')}
+									value={password2}
+									onChange={onPasswordChange2}
+									valid={password2 ? passwordsMatch : undefined}
+								/>
+
+								{password2 && !passwordsMatch && (
+									<p className="error-message">
+										{_('Passwords do not match')}
+									</p>
+								)}
+							</>
 						)}
 					</div>
 					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>

@@ -1,0 +1,23 @@
+.sidebar-sync-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	border: none;
+	color: var(--joplin-color2);
+	opacity: 0.5;
+	cursor: pointer;
+	padding: 4px 0;
+	width: 100%;
+	font-size: calc(var(--joplin-font-size) * 1.6);
+	transition: opacity 0.2s;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	>.timestamp {
+		font-size: 0.6em;
+		margin-left: 6px;
+	}
+}

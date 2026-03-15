@@ -2,6 +2,7 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { msleep, Second } from '@joplin/utils/time';
+import setSettingValue from './util/setSettingValue';
 
 test.describe('pluginApi', () => {
 	test('the editor.setText command should update the current note (use RTE: false)', async ({ startAppWithPlugins }) => {
@@ -79,6 +80,30 @@ test.describe('pluginApi', () => {
 		await mainScreen.dialog.getByRole('button', { name: 'Okay' }).click();
 		await expectVisible(false);
 	});
+
+	// Regression tests for #13718
+	for (const method of ['Cancel button', 'Escape key'] as const) {
+		test(`should dismiss a plugin dialog via ${method} with isolated iframes`, async ({ startAppWithPlugins }) => {
+			const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/dialogs.js']);
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.createNewNote('Test note');
+
+			// WebView isolation is currently behind a feature flag:
+			await setSettingValue(app, mainWindow, 'featureFlag.plugins.isolatePluginWebViews', true);
+
+			await mainScreen.goToAnything.runCommand(app, 'showTestDialogWithDismiss');
+			const dialogContent = mainScreen.dialog.locator('iframe').contentFrame();
+			await dialogContent.locator('p').waitFor();
+
+			if (method === 'Cancel button') {
+				await mainScreen.dialog.getByRole('button', { name: 'Cancel' }).click();
+			} else {
+				await mainWindow.keyboard.press('Escape');
+			}
+
+			await expect(mainScreen.dialog).toBeHidden();
+		});
+	}
 
 	test('should be possible to create multiple toasts with the same text from a plugin', async ({ startAppWithPlugins }) => {
 		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/showToast.js']);
@@ -180,6 +205,27 @@ test.describe('pluginApi', () => {
 		await mainScreen.goToAnything.runCommand(app, 'testHidePanel');
 
 		await expect(panelLocator).not.toBeVisible();
+	});
+
+	// Regression test for https://github.com/laurent22/joplin/issues/12793
+	test('a plugin that crashes before register() should not block other plugins', async ({ startAppWithPlugins }) => {
+		// Load a crashing plugin alongside a working plugin. If the fix works,
+		// startAppWithPlugins completes because startup-plugins-loaded fires.
+		// Without the fix, this test would timeout because allPluginsStarted
+		// never becomes true.
+		const { app, mainWindow } = await startAppWithPlugins([
+			'resources/test-plugins/crashBeforeRegister.js',
+			'resources/test-plugins/execCommand.js',
+		]);
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test note');
+
+		// Verify the working plugin is functional
+		const editor = mainScreen.noteEditor;
+		await editor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('Should be overwritten.');
+		await mainScreen.goToAnything.runCommand(app, 'testUpdateEditorText');
+		await editor.expectToHaveText('PASS');
 	});
 });
 
