@@ -93,28 +93,29 @@ export function resourcesStatus(resourceInfos: any) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function getResourcesFromPasteEvent(event: any) {
 	const output = [];
-	const formats = clipboard.availableFormats();
-	for (let i = 0; i < formats.length; i++) {
-		const format = formats[i].toLowerCase();
-		const formatType = format.split('/')[0];
 
-		if (formatType === 'image') {
-			// writeImageToFile can process only image/jpeg, image/jpg or image/png mime types
-			if (['image/png', 'image/jpg', 'image/jpeg'].indexOf(format) < 0) {
-				continue;
-			}
+	// clipboard.has() and readBuffer() are used instead of availableFormats() and
+	// readImage(), which don't work for JPEG on Linux.
+	// https://github.com/laurent22/joplin/issues/14613
+	const supportedFormats = ['image/png', 'image/jpeg', 'image/jpg'];
+
+	for (const format of supportedFormats) {
+		if (!clipboard.has(format)) continue;
+
+		const data = clipboard.readBuffer(format);
+		if (!data || data.length === 0) continue;
+
+		const fileExt = mimeUtils.toFileExtension(format);
+		const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
+
+		await shim.fsDriver().writeFile(filePath, data, 'buffer');
+		const md = await commandAttachFileToBody('', [filePath]);
+		await shim.fsDriver().remove(filePath);
+
+		if (md) {
 			if (event) event.preventDefault();
-
-			const image = clipboard.readImage();
-
-			const fileExt = mimeUtils.toFileExtension(format);
-			const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
-
-			await shim.writeImageToFile(image, format, filePath);
-			const md = await commandAttachFileToBody('', [filePath]);
-			await shim.fsDriver().remove(filePath);
-
-			if (md) output.push(md);
+			output.push(md);
+			break;
 		}
 	}
 	return output;
