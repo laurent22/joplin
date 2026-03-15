@@ -143,6 +143,17 @@ export default class TaskQueue {
 		});
 	}
 
+	public async waitForAllResults() {
+		return new Promise((resolve) => {
+			const checkIID = setInterval(() => {
+				if (this.waitingTasks_.length) return;
+				if (Object.keys(this.processingTasks_).length) return;
+				clearInterval(checkIID);
+				resolve(this.results_);
+			}, 100);
+		});
+	}
+
 	public async waitForOneSlot() {
 		return new Promise((resolve) => {
 			const checkIID = setInterval(() => {

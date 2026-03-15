@@ -16,6 +16,7 @@ export enum SyncAction {
 	CreateLocal = 'createLocal',
 	UpdateLocal = 'updateLocal',
 	DeleteLocal = 'deleteLocal',
+	ResolveDuplicateTag = 'resolveDuplicateTag',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

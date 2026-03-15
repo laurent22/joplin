@@ -4,6 +4,7 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import MasterKey from '../../models/MasterKey';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import NoteTag from '../../models/NoteTag';
 
 describe('Synchronizer.tags', () => {
 
@@ -70,4 +71,66 @@ describe('Synchronizer.tags', () => {
 		await shouldSyncTagTest(true);
 	}));
 
+	it('should replace a local tag with its remote counterpart when they both have the same title but different ids',
+		async () => {
+			const n1 = await Note.save({ title: 'mynote' });
+			const localTag = await Tag.save({ title: 'mytag' });
+			await Tag.addNote(localTag.id, n1.id);
+			let noteIds = await Tag.noteIds(localTag.id);
+			expect(noteIds).toContain(n1.id);
+			await synchronizerStart();
+
+			await switchClient(2);
+
+			const n2 = await Note.save({ title: 'mynote2' });
+			const remoteTag = await Tag.save({ title: 'mytag' });
+			await Tag.addNote(remoteTag.id, n2.id);
+			noteIds = await Tag.noteIds(remoteTag.id);
+			expect(noteIds).toContain(n2.id);
+
+			expect(!!localTag).toBe(true);
+			expect(!!remoteTag).toBe(true);
+			expect(localTag.id).not.toBe(remoteTag.id);
+			expect(localTag.title).toBe(remoteTag.title);
+
+			await synchronizerStart();
+
+			const localTagAfterSync = await Tag.load(localTag.id);
+			const remoteTagAfterSync = await Tag.load(remoteTag.id);
+			expect(localTagAfterSync.id).toBe(localTag.id);
+			expect(remoteTagAfterSync).not.toBeDefined();
+		},
+	);
+
+	it('should update the tag_id of note tags when when local tag is a duplicate of a remote tag with the same title',
+		async () => {
+			const n1 = await Note.save({ title: 'mynote' });
+			const localTag = await Tag.save({ title: 'mytag' });
+			await Tag.addNote(localTag.id, n1.id);
+			let noteIds = await Tag.noteIds(localTag.id);
+			expect(noteIds).toContain(n1.id);
+			await synchronizerStart();
+
+			await switchClient(2);
+
+			const n2 = await Note.save({ title: 'mynote2' });
+			const remoteTag = await Tag.save({ title: 'mytag' });
+			await Tag.addNote(remoteTag.id, n2.id);
+			noteIds = await Tag.noteIds(remoteTag.id);
+			expect(noteIds).toContain(n2.id);
+
+			expect(!!localTag).toBe(true);
+			expect(!!remoteTag).toBe(true);
+			expect(localTag.id).not.toBe(remoteTag.id);
+			expect(localTag.title).toBe(remoteTag.title);
+
+			await synchronizerStart();
+
+			const noteTags = await NoteTag.byNoteIds([n1.id, n2.id]);
+			expect(noteTags).toHaveLength(2);
+			const [nt1, nt2] = noteTags;
+			expect(nt1).toHaveProperty('tag_id', localTag.id);
+			expect(nt2).toHaveProperty('tag_id', localTag.id);
+		},
+	);
 });
