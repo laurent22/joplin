@@ -178,6 +178,7 @@ export default function(props: Props) {
 							labelText={enterPasswordLabel}
 							value={password1}
 							onChange={onPasswordChange1}
+							showStrengthIndicator={true}
 						/>
 
 						{needToRepeatPassword && (

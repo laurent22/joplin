@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PasswordInput from './PasswordInput';
+import PasswordStrengthIndicator from './PasswordStrengthIndicator';
 import { useId } from 'react';
 import { ChangeEventHandler } from './types';
 import { _ } from '@joplin/lib/locale';
@@ -9,6 +10,7 @@ interface Props {
 	value: string;
 	onChange: ChangeEventHandler;
 	valid?: boolean;
+	showStrengthIndicator?: boolean;
 }
 
 const LabelledPasswordInput: React.FC<Props> = props => {
@@ -50,6 +52,7 @@ const LabelledPasswordInput: React.FC<Props> = props => {
 			/>
 			{renderStatusIcon()}
 		</div>
+		{props.showStrengthIndicator && <PasswordStrengthIndicator password={props.value} />}
 	</div>;
 };
 
