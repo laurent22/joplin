@@ -185,6 +185,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	</View>;
 
 	const extraScrollViewProps = (typeof scrollOverflow === 'object' ? scrollOverflow : {});
+	const keyBoardAvoidingViewEnabled=(Platform.OS === 'android' && Platform.Version<34) || Platform.OS === 'ios';
 	const result = (
 		<FocusControl.ModalWrapper state={modalStatus}>
 			<ModalComponent
@@ -202,7 +203,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 				{...forwardedProps}
 			>
 				{scrollOverflow ? (
-					<KeyboardAvoidingView style={styles.keyboardAvoidingView} enabled={true}>
+					<KeyboardAvoidingView style={styles.keyboardAvoidingView} enabled={keyBoardAvoidingViewEnabled}>
 						<ScrollView
 							{...extraScrollViewProps}
 							style={[styles.modalScrollView, extraScrollViewProps.style]}
