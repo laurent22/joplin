@@ -104,7 +104,7 @@ interface Props extends BaseProps {
 	provisionalNoteIds: string[];
 	navigation: NoteNavigation;
 	dispatch: Dispatch;
-	noteId: string;
+	noteId: string | null;
 	keyboardVisible: boolean;
 	editorType: EditorType;
 	useEditorBeta: boolean;
