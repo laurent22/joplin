@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { KeyboardAvoidingViewProps, KeyboardAvoidingView as NativeKeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingViewProps, KeyboardAvoidingView as NativeKeyboardAvoidingView, Platform } from 'react-native';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
 
 interface Props extends KeyboardAvoidingViewProps {}
@@ -14,8 +14,11 @@ const KeyboardAvoidingView: React.FC<Props> = ({ enabled, children, ...forwarded
 		!keyboardState.isFloatingKeyboard
 	);
 
+	// On Android 16+, use 'height' behavior instead of 'padding' to avoid the gap issue
+	const behavior = Platform.OS === 'android' && Platform.Version >= 35 ? 'height' : 'padding';
+
 	return <NativeKeyboardAvoidingView
-		behavior='padding'
+		behavior={behavior}
 		{...forwardedProps}
 		enabled={enabled}
 	>

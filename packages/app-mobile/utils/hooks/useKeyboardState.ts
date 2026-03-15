@@ -32,7 +32,7 @@ const useKeyboardState = () => {
 			hideListener.remove();
 			floatingListener.remove();
 		});
-	});
+	}, []); // ← ADD EMPTY DEPENDENCY ARRAY HERE (was missing!)
 
 	return useMemo(() => {
 		return {

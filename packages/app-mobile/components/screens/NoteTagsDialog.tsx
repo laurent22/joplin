@@ -19,12 +19,13 @@ interface Props {
 }
 
 const modalPropOverrides = {
-	scrollOverflow: {
-		// Prevent the keyboard from auto-dismissing when tapping outside the search input
+	scrollOverflow: Platform.OS === 'ios' ? {
+		// iOS: Use scrollOverflow with keyboard persistence
 		keyboardShouldPersistTaps: true,
-	},
+	} : false, // Android: Disable scrollOverflow to avoid KeyboardAvoidingView issues
 	containerStyle: {
 		height: '100%',
+		flex: 1,
 	} as ViewStyle,
 };
 
