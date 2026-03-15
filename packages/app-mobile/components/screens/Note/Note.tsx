@@ -747,7 +747,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			this.emitEditorPluginUpdate_();
 		}
 
-		if (prevState.multiline !== this.state.multiline && this.state.mode === 'edit' && this.titleTextFieldRef.current) {
+		if (
+			prevState.multiline !== this.state.multiline
+			&& this.state.mode === 'edit'
+			&& this.titleTextFieldRef.current
+			&& this.titleTextFieldRef.current.isFocused()
+		) {
 			focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
 		}
 	}
@@ -1497,7 +1502,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 			if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
 				focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
-				didFocus = true;
+				// isFocused() may be false on the same tick as focus() on Android
+				// because focus is asynchronous. We keep calling focus() every tick
+				// and only start the grace period countdown once isFocused() confirms
+				// that focus actually landed.
+				if (this.titleTextFieldRef.current.isFocused()) {
+					didFocus = true;
+				}
 			} else if (fieldToFocus === 'body' && this.editorRef?.current) {
 				focus('Note::focusUpdate::body', this.editorRef.current);
 				didFocus = true;
