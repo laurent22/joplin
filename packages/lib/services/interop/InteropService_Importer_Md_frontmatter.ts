@@ -4,14 +4,17 @@ import Folder from '../../models/Folder';
 import Tag from '../../models/Tag';
 import shim from '../../shim';
 import { parse } from '../../utils/frontMatter';
-import { defaultFolderIcon, FolderIconType } from '../database/types';
+import { FolderIcon, FolderIconType } from '../database/types';
 import * as yaml from 'js-yaml';
 import Logger from '@joplin/utils/Logger';
 
 
 const logger = Logger.create('InteropService_Importer_Md_frontmatter');
 
-interface FolderIconData {
+// The YAML FAILSAFE_SCHEMA returns all values as strings, so the raw parsed
+// icon object has string keys that don't exactly match FolderIcon (e.g.
+// "dataurl" vs "dataUrl"). This interface represents the raw YAML shape.
+interface RawYamlFolderIcon {
 	type?: string;
 	emoji?: string;
 	name?: string;
@@ -19,8 +22,18 @@ interface FolderIconData {
 }
 
 interface FolderMetadata {
-	icon?: FolderIconData;
+	icon?: RawYamlFolderIcon;
 }
+
+// Maps the string labels written by the exporter to FolderIconType enum values.
+const folderIconTypeFromString = (typeStr: string): FolderIconType | null => {
+	switch (typeStr) {
+	case 'emoji': return FolderIconType.Emoji;
+	case 'fontawesome': return FolderIconType.FontAwesome;
+	case 'dataurl': return FolderIconType.DataUrl;
+	default: return null;
+	}
+};
 
 export default class InteropService_Importer_Md_frontmatter extends InteropService_Importer_Md {
 
@@ -53,35 +66,27 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		}
 	}
 
-	private parseFolderIcon(iconData: FolderIconData) {
-		if (!iconData || typeof iconData !== 'object') return null;
+	private parseFolderIcon(raw: RawYamlFolderIcon): FolderIcon | null {
+		if (!raw || typeof raw !== 'object') return null;
 
-		const typeStr = String(iconData.type || '').toLowerCase();
-		const icon = defaultFolderIcon();
+		const iconType = folderIconTypeFromString(raw.type);
+		if (iconType === null) return null;
 
-		switch (typeStr) {
-		case 'emoji':
-			icon.type = FolderIconType.Emoji;
-			icon.emoji = String(iconData.emoji || '');
-			if (!icon.emoji) return null;
-			break;
-		case 'fontawesome':
-			icon.type = FolderIconType.FontAwesome;
-			icon.name = String(iconData.name || '');
-			if (!icon.name) return null;
-			break;
-		case 'dataurl': {
-			const dataUrl = String(iconData.dataurl || '');
-			if (!dataUrl) return null;
-			icon.type = FolderIconType.DataUrl;
-			icon.dataUrl = dataUrl;
-			break;
+		switch (iconType) {
+		case FolderIconType.Emoji:
+			if (!raw.emoji) return null;
+			return { type: FolderIconType.Emoji, emoji: raw.emoji, name: '', dataUrl: '' };
+		case FolderIconType.FontAwesome:
+			if (!raw.name) return null;
+			return { type: FolderIconType.FontAwesome, emoji: '', name: raw.name, dataUrl: '' };
+		case FolderIconType.DataUrl:
+			if (!raw.dataurl) return null;
+			return { type: FolderIconType.DataUrl, emoji: '', name: '', dataUrl: raw.dataurl };
+		default: {
+			const exhaustivenessCheck: never = iconType;
+			throw new Error(`Unknown folder icon type: ${exhaustivenessCheck}`);
 		}
-		default:
-			return null;
 		}
-
-		return icon;
 	}
 
 	public async importFile(filePath: string, parentFolderId: string) {
