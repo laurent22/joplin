@@ -195,6 +195,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private folderPickerOptions_: any;
 	private titleKeyboardRefocusDone_ = false;
+	private titleKeyboardRefocusPendingUntil_ = 0;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dialogbox: any;
 	private commandRegistration_: RegisteredRuntime|null = null;
@@ -1483,6 +1484,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	public scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
 		this.titleKeyboardRefocusDone_ = false;
+		this.titleKeyboardRefocusPendingUntil_ = 0;
 
 		const startTime = Date.now();
 
@@ -1496,16 +1498,21 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			let done = false;
 			const titleInputFocused = !!this.titleTextFieldRef.current?.isFocused?.();
 			const waitingForAndroidTitleKeyboard = Platform.OS === 'android' && fieldToFocus === 'title' && !this.props.keyboardVisible;
+			const readyForAndroidTitleRefocus = this.titleKeyboardRefocusPendingUntil_ > 0 && Date.now() >= this.titleKeyboardRefocusPendingUntil_;
 			const titleFocusSettled = titleInputFocused && !waitingForAndroidTitleKeyboard;
 
 			if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
 				if (titleFocusSettled) {
 					done = true;
+				} else if (readyForAndroidTitleRefocus) {
+					this.titleKeyboardRefocusPendingUntil_ = 0;
+					this.titleKeyboardRefocusDone_ = true;
+					focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
 				} else if (titleInputFocused && waitingForAndroidTitleKeyboard && !this.titleKeyboardRefocusDone_) {
 					// Recover from Android reporting the title as focused while the keyboard stays hidden.
-					this.titleKeyboardRefocusDone_ = true;
 					blur('Note::focusUpdate::titleBlur', this.titleTextFieldRef.current);
-				} else if (!titleInputFocused || !this.titleKeyboardRefocusDone_) {
+					this.titleKeyboardRefocusPendingUntil_ = Date.now() + 75;
+				} else if (!titleInputFocused && !this.titleKeyboardRefocusPendingUntil_) {
 					focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
 				}
 			} else if (fieldToFocus === 'body' && this.editorRef?.current) {

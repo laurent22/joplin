@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
-import { LayoutChangeEvent, TextInput } from 'react-native';
+import { LayoutChangeEvent, PermissionsAndroid, Platform, TextInput } from 'react-native';
 
 jest.mock('@joplin/lib/utils/focusHandler', () => ({
 	focus: jest.fn(),
@@ -447,65 +447,78 @@ describe('screens/Note', () => {
 		mockBlur.mockClear();
 		const isFocusedSpy = jest.spyOn(TextInput.prototype, 'isFocused');
 		isFocusedSpy.mockReturnValue(false);
+		const originalPlatformOsDescriptor = Object.getOwnPropertyDescriptor(Platform, 'OS');
+		const permissionsCheckSpy = jest.spyOn(PermissionsAndroid, 'check').mockResolvedValue(true);
 
-		const provisionalNoteId = await openNewNote({ title: '', body: '', is_todo: 1 });
-		await setNoteProvisional(provisionalNoteId);
+		Object.defineProperty(Platform, 'OS', {
+			configurable: true,
+			value: 'android',
+		});
 
-		await runWithFakeTimers(async () => {
-			const provisionalScreen = render(<WrappedNoteScreen />);
-			const provisionalTitleInput = await screen.findByPlaceholderText('Add title');
-			expect(provisionalTitleInput).toBeVisible();
-			mockBlur.mockImplementation(() => {
-				isFocusedSpy.mockReturnValue(false);
-			});
-			let focusCalls = 0;
-			mockFocus.mockImplementation(() => {
-				focusCalls += 1;
-				isFocusedSpy.mockReturnValue(true);
+		try {
+			const provisionalNoteId = await openNewNote({ title: '', body: '', is_todo: 1 });
+			await setNoteProvisional(provisionalNoteId);
 
-				if (focusCalls > 1) {
-					act(() => {
-						store.dispatch({
-							type: 'KEYBOARD_VISIBLE_CHANGE',
-							visible: true,
+			await runWithFakeTimers(async () => {
+				const provisionalScreen = render(<WrappedNoteScreen />);
+				const provisionalTitleInput = await screen.findByPlaceholderText('Add title');
+				expect(provisionalTitleInput).toBeVisible();
+				mockBlur.mockImplementation(() => {
+					isFocusedSpy.mockReturnValue(false);
+				});
+				let focusCalls = 0;
+				mockFocus.mockImplementation(() => {
+					focusCalls += 1;
+					isFocusedSpy.mockReturnValue(true);
+
+					if (focusCalls > 1) {
+						act(() => {
+							store.dispatch({
+								type: 'KEYBOARD_VISIBLE_CHANGE',
+								visible: true,
+							});
 						});
-					});
-				}
-			});
+					}
+				});
 
-			jest.advanceTimersByTime(200);
-			await waitFor(() => {
+				jest.advanceTimersByTime(200);
+				await waitFor(() => {
+					expect(mockBlur).toHaveBeenCalledTimes(1);
+					expect(mockFocus).toHaveBeenCalledTimes(2);
+					expect(mockFocus).toHaveBeenLastCalledWith('Note::focusUpdate::title', expect.anything());
+				});
+
+				const postAutofocusFocusCallCount = mockFocus.mock.calls.length;
+				fireEvent.changeText(provisionalTitleInput, 'T');
+				expect(mockFocus).toHaveBeenCalledTimes(postAutofocusFocusCallCount);
 				expect(mockBlur).toHaveBeenCalledTimes(1);
-				expect(mockFocus).toHaveBeenCalledTimes(2);
-				expect(mockFocus).toHaveBeenLastCalledWith('Note::focusUpdate::title', expect.anything());
+
+				provisionalScreen.unmount();
 			});
 
-			const postAutofocusFocusCallCount = mockFocus.mock.calls.length;
-			fireEvent.changeText(provisionalTitleInput, 'T');
-			expect(mockFocus).toHaveBeenCalledTimes(postAutofocusFocusCallCount);
-			expect(mockBlur).toHaveBeenCalledTimes(1);
+			mockFocus.mockClear();
+			mockBlur.mockClear();
 
-			provisionalScreen.unmount();
-		});
+			await openNewNote({ title: 'Existing note', body: 'Test body', is_todo: 1 });
+			await runWithFakeTimers(async () => {
+				const existingScreen = render(<WrappedNoteScreen />);
+				const existingTitleInput = await screen.findByDisplayValue('Existing note');
+				expect(existingTitleInput).toBeVisible();
 
-		mockFocus.mockClear();
-		mockBlur.mockClear();
+				jest.advanceTimersByTime(200);
+				await Promise.resolve();
 
-		await openNewNote({ title: 'Existing note', body: 'Test body', is_todo: 1 });
-		await runWithFakeTimers(async () => {
-			const existingScreen = render(<WrappedNoteScreen />);
-			const existingTitleInput = await screen.findByDisplayValue('Existing note');
-			expect(existingTitleInput).toBeVisible();
-
-			jest.advanceTimersByTime(200);
-			await Promise.resolve();
-
-			expect(mockFocus).not.toHaveBeenCalled();
-			expect(mockBlur).not.toHaveBeenCalled();
-			existingScreen.unmount();
-		});
-
-		isFocusedSpy.mockRestore();
+				expect(mockFocus).not.toHaveBeenCalled();
+				expect(mockBlur).not.toHaveBeenCalled();
+				existingScreen.unmount();
+			});
+		} finally {
+			if (originalPlatformOsDescriptor) {
+				Object.defineProperty(Platform, 'OS', originalPlatformOsDescriptor);
+			}
+			permissionsCheckSpy.mockRestore();
+			isFocusedSpy.mockRestore();
+		}
 	});
 
 	it.each([
