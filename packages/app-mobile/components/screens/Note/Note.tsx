@@ -48,7 +48,7 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import debounce from '../../../utils/debounce';
-import { focus } from '@joplin/lib/utils/focusHandler';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
 import CommandService, { RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import { ResourceInfo } from '../../NoteBodyViewer/hooks/useRerenderHandler';
 import getImageDimensions from '../../../utils/image/getImageDimensions';
@@ -105,6 +105,7 @@ interface Props extends BaseProps {
 	navigation: NoteNavigation;
 	dispatch: Dispatch;
 	noteId: string;
+	keyboardVisible: boolean;
 	editorType: EditorType;
 	useEditorBeta: boolean;
 	plugins: PluginStates;
@@ -193,6 +194,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private focusUpdateIID_: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private folderPickerOptions_: any;
+	private titleKeyboardRefocusDone_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public dialogbox: any;
 	private commandRegistration_: RegisteredRuntime|null = null;
@@ -757,6 +759,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		NavService.removeHandler(this.navHandler);
 
 		shared.uninstallResourceHandling(this.refreshResource);
+
+		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
 
 		void this.saveActionQueue(this.state.note.id).processAllNow();
 
@@ -1478,20 +1482,32 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 	public scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
+		this.titleKeyboardRefocusDone_ = false;
 
 		const startTime = Date.now();
 
 		this.focusUpdateIID_ = shim.setInterval(() => {
-			if (!this.state.note) return;
+			// Wait for the actual note state before deciding which field should receive autofocus.
+			if (!this.state.note || this.state.isLoading || this.state.note.id !== this.props.noteId) return;
 
 			let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
 			if (this.state.mode === 'view') fieldToFocus = '';
 
 			let done = false;
+			const titleInputFocused = !!this.titleTextFieldRef.current?.isFocused?.();
+			const waitingForAndroidTitleKeyboard = Platform.OS === 'android' && fieldToFocus === 'title' && !this.props.keyboardVisible;
+			const titleFocusSettled = titleInputFocused && !waitingForAndroidTitleKeyboard;
 
 			if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
-				done = true;
-				focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+				if (titleFocusSettled) {
+					done = true;
+				} else if (titleInputFocused && waitingForAndroidTitleKeyboard && !this.titleKeyboardRefocusDone_) {
+					// Recover from Android reporting the title as focused while the keyboard stays hidden.
+					this.titleKeyboardRefocusDone_ = true;
+					blur('Note::focusUpdate::titleBlur', this.titleTextFieldRef.current);
+				} else if (!titleInputFocused || !this.titleKeyboardRefocusDone_) {
+					focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+				}
 			} else if (fieldToFocus === 'body' && this.editorRef?.current) {
 				done = true;
 				focus('Note::focusUpdate::body', this.editorRef.current);
@@ -1935,6 +1951,7 @@ const NoteScreen = connect((state: AppState) => {
 		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 		noteHash: state.selectedNoteHash,
 		itemType: state.selectedItemType,
+		keyboardVisible: state.keyboardVisible,
 		folders: state.folders,
 		searchQuery: state.searchQuery,
 		themeId: state.settings.theme,
