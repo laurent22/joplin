@@ -201,7 +201,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 				{...forwardedProps}
 			>
 				{scrollOverflow ? (
-					<KeyboardAvoidingView style={styles.keyboardAvoidingView} enabled={true}>
+					<KeyboardAvoidingView style={styles.keyboardAvoidingView} enabled={Platform.OS === 'ios'}>
 						<ScrollView
 							{...extraScrollViewProps}
 							style={[styles.modalScrollView, extraScrollViewProps.style]}
