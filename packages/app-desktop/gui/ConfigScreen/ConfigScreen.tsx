@@ -237,6 +237,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		};
 
 		const hasQuery = !!(this.state.searchQuery && this.state.searchQuery.trim().length);
+		if (hasQuery) sectionStyle.maxWidth = '100%';
 
 		if (!hasQuery && !selected) sectionStyle.display = 'none';
 
@@ -356,9 +357,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			<div style={{
 				...theme.textStyle,
 				fontWeight: 'bold',
+				fontSize: 16,
 				backgroundColor: theme.backgroundColor2,
 				border: `1px solid ${theme.borderColor4}`,
-				borderRadius: 4,
+				borderRadius: 0,
 				padding: `${theme.mainPadding * 0.75}px ${theme.mainPadding}px`,
 				marginBottom: 10,
 			}}>
@@ -447,7 +449,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 
-		const style = {
+		const style: React.CSSProperties = {
 			...this.props.style,
 			overflow: 'hidden',
 			display: 'flex',
@@ -466,6 +468,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			flexDirection: hasQuery ? 'column' : undefined,
 			alignItems: hasQuery ? 'stretch' : undefined,
 			flex: 1,
+			minHeight: 0,
 		};
 
 		const hasChanges = this.hasChanges();
@@ -476,8 +479,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const searchMode = hasQuery;
 
-		if (screenComp) containerStyle.display = 'none';
+		if (screenComp && !searchMode) containerStyle.display = 'none';
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
@@ -489,21 +493,51 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			</div>
 		) : null;
 
-		const rightStyle = { ...style, flex: 1 };
+		const rightStyle: React.CSSProperties = {
+			...style,
+			flex: 1,
+			minHeight: 0,
+		};
+		delete rightStyle.height;
 		delete style.width;
 
-		const searchBar = !screenComp ? (
-			<div style={{ padding: theme.configScreenPadding, paddingBottom: 0 }}>
-				<SearchInput
-					value={this.state.searchQuery}
-					onChange={event => this.onSearchInputChange(event)}
-					onSearchButtonClick={() => this.onSearchButtonClick()}
-					searchStarted={!!(this.state.searchQuery && this.state.searchQuery.trim().length)}
-				/>
+		const searchBar = (
+			<div style={{
+				paddingLeft: theme.configScreenPadding,
+				paddingRight: theme.configScreenPadding,
+				paddingTop: Math.round(theme.mainPadding * 0.66),
+				paddingBottom: 0,
+				marginBottom: Math.round(theme.mainPadding * 0.66),
+				display: 'flex',
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				gap: theme.mainPadding,
+			}}>
+				<div style={{
+					...theme.textStyle,
+					fontWeight: 'bold',
+					fontSize: Math.round(theme.fontSize * 1.1),
+					letterSpacing: '0.05em',
+					textTransform: 'uppercase',
+					whiteSpace: 'nowrap',
+					flexShrink: 0,
+				}}>
+					{_('Configuration')}
+				</div>
+				<div style={{ flex: 1, minWidth: 0 }}>
+					<SearchInput
+						value={this.state.searchQuery}
+						onChange={event => this.onSearchInputChange(event)}
+						onSearchButtonClick={() => this.onSearchButtonClick()}
+						searchStarted={!!(this.state.searchQuery && this.state.searchQuery.trim().length)}
+					/>
+				</div>
 			</div>
-		) : null;
+		);
 
 		const tabComponents: React.ReactNode[] = [];
+		const searchResultComps = searchMode ? shared.settingsToComponents2(this, AppType.Desktop, settings) : null;
 		for (const section of sections) {
 			const sectionId = `setting-section-${section.name}`;
 			let content = null;
@@ -533,23 +567,29 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 
 		return (
-			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
-				<Sidebar
-					selection={this.state.selectedSectionName}
-					onSelectionChange={this.sidebar_selectionChange}
-					sections={sections}
-				/>
-				<div style={rightStyle}>
-					{searchBar}
-					{needRestartComp}
-					{tabComponents}
-					<ButtonBar
-						hasChanges={hasChanges}
-						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
-						onCancelClick={this.onCancelClick}
-						onSaveClick={screenComp ? null : this.onSaveClick}
-						onApplyClick={screenComp ? null : this.onApplyClick}
-					/>
+			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'column', height: this.props.style.height }}>
+				{searchBar}
+				<div style={{ display: 'flex', flexDirection: 'row', flex: 1, minHeight: 0 }}>
+					{!searchMode ? (
+						<Sidebar
+							selection={this.state.selectedSectionName}
+							onSelectionChange={this.sidebar_selectionChange}
+							sections={sections}
+						/>
+					) : null}
+					<div style={rightStyle}>
+						{!searchMode ? needRestartComp : null}
+						{searchMode ? <div style={containerStyle}>{searchResultComps}</div> : tabComponents}
+						{!searchMode ? (
+							<ButtonBar
+								hasChanges={hasChanges}
+								backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+								onCancelClick={this.onCancelClick}
+								onSaveClick={screenComp ? null : this.onSaveClick}
+								onApplyClick={screenComp ? null : this.onApplyClick}
+							/>
+						) : null}
+					</div>
 				</div>
 			</div>
 		);
