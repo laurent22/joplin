@@ -639,27 +639,25 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		});
 
 		return (
-			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'column', height: this.props.style.height }}>
-				{needRestartComp}
-				{searchComp}
-				<div style={{ display: 'flex', flexDirection: 'row', flex: 1, minHeight: 0 }}>
-					{!searching ? (
-						<Sidebar
-							selection={this.state.selectedSectionName}
-							onSelectionChange={this.sidebar_selectionChange}
-							sections={sections}
-						/>
-					) : null}
-					<div style={rightStyle}>
-						{tabComponents}
-						<ButtonBar
-							hasChanges={hasChanges}
-							backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
-							onCancelClick={this.onCancelClick}
-							onSaveClick={screenComp ? null : this.onSaveClick}
-							onApplyClick={screenComp ? null : this.onApplyClick}
-						/>
-					</div>
+			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
+				{!searching ? (
+					<Sidebar
+						selection={this.state.selectedSectionName}
+						onSelectionChange={this.sidebar_selectionChange}
+						sections={sections}
+					/>
+				) : null}
+				<div style={rightStyle}>
+					{needRestartComp}
+					{searchComp}
+					{tabComponents}
+					<ButtonBar
+						hasChanges={hasChanges}
+						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+						onCancelClick={this.onCancelClick}
+						onSaveClick={screenComp ? null : this.onSaveClick}
+						onApplyClick={screenComp ? null : this.onApplyClick}
+					/>
 				</div>
 			</div>
 		);

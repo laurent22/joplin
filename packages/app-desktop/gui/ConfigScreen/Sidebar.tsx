@@ -82,6 +82,18 @@ export default function Sidebar(props: Props) {
 	// Making a tabbed region accessible involves supporting keyboard interaction.
 	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
+		if (event.key === 'Tab' && !event.shiftKey) {
+			const controlledPanelId = event.currentTarget.getAttribute('aria-controls');
+			if (controlledPanelId) {
+				const controlledPanel = document.getElementById(controlledPanelId);
+				if (controlledPanel) {
+					event.preventDefault();
+					focus('Sidebar::tabpanel', controlledPanel as HTMLElement);
+					return;
+				}
+			}
+		}
+
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
 		let newIndex = selectedIndex;
 
