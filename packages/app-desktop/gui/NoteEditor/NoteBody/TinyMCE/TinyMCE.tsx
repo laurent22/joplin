@@ -48,6 +48,7 @@ import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatter
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import useCursorPositioning from './utils/useCursorPositioning';
+import { resourceInfosChanged } from '../../utils/useFormNote';
 
 const logger = Logger.create('TinyMCE');
 
@@ -1066,25 +1067,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		}
 	};
 
-	function resourceInfosEqual(ri1: ResourceInfos, ri2: ResourceInfos): boolean {
-		if (ri1 && !ri2 || !ri1 && ri2) return false;
-		if (!ri1 && !ri2) return true;
-
-		const keys1 = Object.keys(ri1);
-		const keys2 = Object.keys(ri2);
-
-		if (keys1.length !== keys2.length) return false;
-
-		// The attachedResources() call that generates the ResourceInfos object
-		// uses cache for the resource objects, so we can use strict equality
-		// for comparison.
-		for (const k of keys1) {
-			if (ri1[k] !== ri2[k]) return false;
-		}
-
-		return true;
-	}
-
 	const { onRestoreCursorPosition } = useCursorPositioning({
 		initialCursorLocation: props.initialCursorLocation.richText as Bookmark,
 		onCursorUpdate: props.onCursorMotion,
@@ -1104,7 +1086,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
+			// const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
+			let resourcesChanged = false;
+			if (lastOnChangeEventInfo.current.resourceInfos && props.resourceInfos) {
+				resourcesChanged = resourceInfosChanged(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
+			}
+			const resourcesEqual = !resourcesChanged;
 
 			// Use nextOnChangeEventInfo's noteId -- lastOnChangeEventInfo can be slightly out-of-date.
 			const differentNoteId = lastNoteIdRef.current !== props.noteId;
@@ -1112,6 +1099,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 			if (differentNoteId) noteChangeTimeRef.current = Date.now();
 
+			// eslint-disable-next-line no-console
+			console.log('resourcesEqual::', resourcesEqual);
 			if (differentNoteId || differentContent || !resourcesEqual) {
 				const result = await props.markupToHtml(
 					props.contentMarkupLanguage,

@@ -51,7 +51,7 @@ function uninstallResourceChangeHandler(onResourceChangeHandler: ()=> void) {
 	eventManager.off(EventName.ResourceChange, onResourceChangeHandler);
 }
 
-function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
+export function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 	if (Object.keys(a).length !== Object.keys(b).length) return true;
 
 	for (const id in a) {
