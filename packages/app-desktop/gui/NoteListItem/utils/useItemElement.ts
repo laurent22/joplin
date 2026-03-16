@@ -80,18 +80,22 @@ const useItemElement = (
 		rootElement.appendChild(element);
 		itemElement.current = element;
 
-		if (focusVisible) {
-			element.classList.add('-focus-visible');
-		} else {
-			element.classList.remove('-focus-visible');
-		}
-
 		return () => {
 			cleanup();
 			itemElement.current = null;
 			element.remove();
 		};
-	}, [rootElement, itemSize, noteHtml, noteId, flow, style, focusVisible, onClick, onDoubleClick, itemEventHandlers]);
+	}, [rootElement, itemSize, noteHtml, noteId, flow, style, onClick, onDoubleClick, itemEventHandlers]);
+
+	useEffect(() => {
+		const element = itemElement.current;
+		if (!element) return;
+		if (focusVisible) {
+			element.classList.add('-focus-visible');
+		} else {
+			element.classList.remove('-focus-visible');
+		}
+	}, [focusVisible]);
 
 	return itemElement;
 };
