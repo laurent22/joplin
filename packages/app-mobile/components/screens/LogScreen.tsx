@@ -66,7 +66,6 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	private refreshLogTimeout: any = null;
 	public override componentDidUpdate(_prevProps: Props, prevState: State) {
 		if ((prevState?.filter ?? '') !== (this.state.filter ?? '')) {
-			this.logListRef_.current?.scrollToOffset({ offset: 0, animated: false });
 
 			// We refresh the log only after a brief delay -- this prevents the log from updating
 			// with every keystroke in the filter input.
