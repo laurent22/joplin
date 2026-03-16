@@ -317,7 +317,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 		};
 
 		return (
-			<Dialog onCancel={onClose}>
+			<Dialog onCancel={onClose} className="enable-encryption-dialog">
 				<div className="dialog-root">
 					<DialogTitle title={_('Enable encryption')}/>
 					<div className="dialog-content">
