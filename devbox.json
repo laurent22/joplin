@@ -9,7 +9,7 @@
     "vips.dev": {
       "platforms": ["aarch64-darwin"],
     },
-    "nodejs":     "24.10.0",
+    "nodejs":     "24.11.0",
     "pkg-config": "latest",
     "python": "3.13.3",
     "bat":    "latest",
@@ -17,7 +17,7 @@
       "version":            "latest",
       "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "git":    "2.50.1",
+    "git":    "2.51.0",
   },
   "shell": {
     "init_hook": [

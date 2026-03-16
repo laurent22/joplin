@@ -27,6 +27,7 @@ function useCss(themeId: number, editorCss: string): string {
 
 			:root {
 				background-color: ${theme.backgroundColor};
+				font-size: 13pt;
 			}
 
 			body {
@@ -41,7 +42,6 @@ function useCss(themeId: number, editorCss: string): string {
 				padding-bottom: 1px;
 				padding-top: 10px;
 
-				font-size: 13pt;
 				font-family: ${JSON.stringify(theme.fontFamily)}, sans-serif;
 			}
 

@@ -8,7 +8,7 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const getParentName = () => node.node.parent?.name;
 	const getNodeStartLine = () => state.doc.lineAt(node.from);
 
-	if (['HeaderMark', 'CodeMark', 'EmphasisMark', 'StrikethroughMark', 'HighlightMarker'].includes(node.name)) {
+	if (['HeaderMark', 'CodeMark', 'EmphasisMark', 'StrikethroughMark', 'HighlightMarker', 'InsertMarker'].includes(node.name)) {
 		return true;
 	}
 
@@ -49,6 +49,18 @@ const replaceFormatCharacters = [
 	referenceLinkStateField,
 
 	makeInlineReplaceExtension({
+		getRevealStrategy: (node) => {
+			if (node.name === 'QuoteMark') {
+				return 'line';
+			}
+			if (node.name === 'CodeMark') {
+				if (node.node.parent?.name === 'FencedCode') {
+					return 'line';
+				}
+			}
+
+			return 'active';
+		},
 		createDecoration: (node, state) => {
 			if (shouldFullReplace(node, state)) {
 				return hideDecoration;

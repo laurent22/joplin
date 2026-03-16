@@ -209,6 +209,7 @@ export interface EditorSettings {
 	tabMovesFocus: boolean;
 
 	markdownMarkEnabled: boolean;
+	markdownInsertEnabled: boolean;
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
 	inlineRenderingEnabled: boolean;

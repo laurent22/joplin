@@ -1359,13 +1359,35 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onSetAttrib = (event: EditorEvent<any>) => {
-			// Dispatch onChange when a link is edited
+			// Dispatch onChange when a link or table-related formatting is edited
 			const target = Array.isArray(event.attrElm) ? event.attrElm[0] : event.attrElm;
+			if (!target) return;
+
 			if (target.nodeName === 'A') {
 				if (event.attrName === 'title' || event.attrName === 'href' || event.attrName === 'rel') {
 					onChangeHandler();
 				}
 			}
+
+			if (['TABLE', 'TR', 'TD', 'TH'].includes(target.nodeName)) {
+				const attributeName = (event.attrName ?? '').toLowerCase();
+				if (
+					attributeName === 'style' ||
+					attributeName === 'class' ||
+					attributeName === 'bgcolor' ||
+					attributeName === 'bordercolor' ||
+					attributeName === 'background' ||
+					attributeName === 'cellpadding' ||
+					attributeName === 'cellspacing'
+				) {
+					onChangeHandler();
+				}
+			}
+		};
+
+		// Table plugin fires this on structure/style changes from dialogs.
+		const onTableModified = () => {
+			onChangeHandler();
 		};
 
 		// Keypress means that a printable key (letter, digit, etc.) has been
@@ -1514,6 +1536,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
 		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
+		editor.on('TableModified', onTableModified);
 
 		return () => {
 			try {
@@ -1530,6 +1553,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
 				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
+				editor.off('TableModified', onTableModified);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}
