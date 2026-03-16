@@ -105,7 +105,7 @@
     "uuid": "11.1.0",
     "word-wrap": "1.2.5",
     "xml2js": "0.4.23",
-    "zxcvbn": "^4.4.2"
+    "zxcvbn": "4.4.2"
   },
   "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
 }
