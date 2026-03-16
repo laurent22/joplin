@@ -110,6 +110,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const props_onDrop = useRef<DropHandler|null>(null);
 	props_onDrop.current = props.onDrop;
 
+	const internalDraggedImageRef = useRef<HTMLElement | null>(null);
+	const internalDraggedImageHtmlRef = useRef<string>('');
+
 	const markupToHtml = useRef(null);
 	markupToHtml.current = props.markupToHtml;
 
@@ -784,6 +787,23 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				text_patterns_lookup: (ctx: TextPatternContext) => textPatternsLookupRef.current(ctx),
 
 				setup: (editor: Editor) => {
+					editor.on('dragstart', (event) => {
+						const target = event.target as HTMLElement | null;
+
+						if (target?.nodeName === 'IMG') {
+							internalDraggedImageRef.current = target;
+							internalDraggedImageHtmlRef.current = target.outerHTML;
+						} else {
+							internalDraggedImageRef.current = null;
+							internalDraggedImageHtmlRef.current = '';
+						}
+					});
+
+					editor.on('dragend', () => {
+						internalDraggedImageRef.current = null;
+						internalDraggedImageHtmlRef.current = '';
+					});
+
 					editor.addCommand('joplinMath', async () => {
 						const katex = editor.selection.getContent();
 						const md = `$${katex}$`;
@@ -896,9 +916,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					editor.addShortcut('Meta+Shift+8', '', () => editor.execCommand('InsertUnorderedList'));
 					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
-					// Override ScrollIntoView to scroll to the cursor's character position
-					// instead of the start of the paragraph.
-					// See: https://github.com/laurent22/joplin/issues/14143
 					editor.on('ScrollIntoView', (event) => {
 						const sel = editor.getDoc().getSelection();
 						if (!sel || sel.rangeCount === 0) return;
@@ -912,8 +929,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						} else if (rect.bottom > viewHeight) {
 							win.scrollBy(0, rect.bottom - viewHeight);
 						} else if (rect.top === 0 && rect.height === 0) {
-							// Handles edge case where rect is not rendered
-							// See: https://stackoverflow.com/a/14384220/5757550
 							return;
 						}
 						event.preventDefault();
@@ -921,20 +936,70 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					});
 
 					// TODO: remove event on unmount?
+					// editor.on('drop', (event) => {
+					// Prevent the message "Dropped file type is not supported" from showing up.
+					// It was added in TinyMCE 5.4 and doesn't apply since we do support
+					// the file type.
+					//
+					// See https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
+					//
+					// The other suggested solution, setting block_unsupported_drop to false,
+					// causes all dropped files to be placed at the top of the document.
+					//
+					// Because .preventDefault cancels TinyMCE's own drop handler, we only
+					// call .preventDefault if Joplin handled the event:
+					// if (props_onDrop.current(event)) {
+					// event.preventDefault();
+					// }
+					// });
+
 					editor.on('drop', (event) => {
-						// Prevent the message "Dropped file type is not supported" from showing up.
-						// It was added in TinyMCE 5.4 and doesn't apply since we do support
-						// the file type.
-						//
-						// See https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
-						//
-						// The other suggested solution, setting block_unsupported_drop to false,
-						// causes all dropped files to be placed at the top of the document.
-						//
-						// Because .preventDefault cancels TinyMCE's own drop handler, we only
-						// call .preventDefault if Joplin handled the event:
-						if (props_onDrop.current(event)) {
+						const internalDraggedImage = internalDraggedImageRef.current;
+
+						if (internalDraggedImage) {
 							event.preventDefault();
+
+							const imageHtml =
+                internalDraggedImageHtmlRef.current ||
+                internalDraggedImage.outerHTML;
+							const originalParent = internalDraggedImage.parentElement;
+
+							const rng = editor.dom.doc.caretRangeFromPoint?.(
+								event.clientX,
+								event.clientY,
+							);
+							if (rng) {
+								editor.selection.setRng(rng);
+							}
+
+							editor.dom.remove(internalDraggedImage);
+
+							if (
+								originalParent &&
+                !originalParent.textContent?.trim() &&
+                originalParent.children.length === 0
+							) {
+								editor.dom.remove(originalParent);
+							}
+
+							editor.insertContent(imageHtml);
+
+							internalDraggedImageRef.current = null;
+							internalDraggedImageHtmlRef.current = '';
+
+							editor.fire(TinyMceEditorEvents.JoplinChange);
+							dispatchDidUpdate(editor);
+							window.requestAnimationFrame(() => editor.undoManager.add());
+							return;
+						}
+
+						const handledByJoplin = props_onDrop.current(event);
+
+						if (handledByJoplin) {
+							event.preventDefault();
+							internalDraggedImageRef.current = null;
+							internalDraggedImageHtmlRef.current = '';
+							return;
 						}
 					});
 
