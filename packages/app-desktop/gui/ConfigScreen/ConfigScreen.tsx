@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItem, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
@@ -201,8 +201,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const settingComps: React.ReactNode[] = [];
 		const advancedSettingComps: React.ReactNode[] = [];
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const addSettingComponent = (component: React.ReactNode, relatedText: string|string[], md: any) => {
+		const addSettingComponent = (component: React.ReactNode, relatedText: string|string[], md: SettingItem) => {
 			const hasQuery = !!(this.state.searchQuery && this.state.searchQuery.trim().length);
 			const hiddenBySearch = hasQuery && !matchesSearchQuery(this.state.searchQuery, headerTitle, relatedText);
 			if (!component || hiddenBySearch) return;
@@ -473,17 +472,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const hasChanges = this.hasChanges();
 
-		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName);
-
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = this.state.screenName ? <div className='config-screen-content-wrapper' style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 		const searchMode = hasQuery;
+		const settingComps = !searchMode ? shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName) : null;
 
 		if (screenComp && !searchMode) containerStyle.display = 'none';
 
-		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
+		const sections = !searchMode ? shared.settingsSections({ device: AppType.Desktop, settings }) : [];
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
@@ -538,36 +536,38 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const tabComponents: React.ReactNode[] = [];
 		const searchResultComps = searchMode ? shared.settingsToComponents2(this, AppType.Desktop, settings) : null;
-		for (const section of sections) {
-			const sectionId = `setting-section-${section.name}`;
-			let content = null;
-			const visible = section.name === this.state.selectedSectionName;
-			if (visible) {
-				content = (
-					<>
-						{screenComp}
-						<div style={containerStyle}>{settingComps}</div>
-					</>
+		if (!searchMode) {
+			for (const section of sections) {
+				const sectionId = `setting-section-${section.name}`;
+				let content = null;
+				const visible = section.name === this.state.selectedSectionName;
+				if (visible) {
+					content = (
+						<>
+							{screenComp}
+							<div style={containerStyle}>{settingComps}</div>
+						</>
+					);
+				}
+
+				tabComponents.push(
+					<div
+						key={sectionId}
+						id={sectionId}
+						className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
+						hidden={!visible}
+						aria-labelledby={`setting-tab-${section.name}`}
+						tabIndex={0}
+						role='tabpanel'
+					>
+						{content}
+					</div>,
 				);
 			}
-
-			tabComponents.push(
-				<div
-					key={sectionId}
-					id={sectionId}
-					className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
-					hidden={!visible}
-					aria-labelledby={`setting-tab-${section.name}`}
-					tabIndex={0}
-					role='tabpanel'
-				>
-					{content}
-				</div>,
-			);
 		}
 
 		return (
-			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'column', height: this.props.style.height }}>
+			<div className='config-screen' role='main' style={{ display: 'flex', flexDirection: 'column', height: this.props.style.height }}>
 				{searchBar}
 				<div style={{ display: 'flex', flexDirection: 'row', flex: 1, minHeight: 0 }}>
 					{!searchMode ? (
