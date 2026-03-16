@@ -36,6 +36,14 @@
 
 			const options = getOptions(sourceElement);
 			lib.renderAbc(renderContainer, sourceElement.textContent, { ...options });
+
+			for (const svg of renderContainer.querySelectorAll('svg')) {
+				const w = svg.getAttribute('width');
+				const h = svg.getAttribute('height');
+				if (w && h && !svg.getAttribute('viewBox')) {
+					svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+				}
+			}
 		}
 
 		return true;
