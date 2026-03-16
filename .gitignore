@@ -624,6 +624,7 @@ packages/app-mobile/commands/newNote.js
 packages/app-mobile/commands/openItem.js
 packages/app-mobile/commands/openNote.js
 packages/app-mobile/commands/scrollToHash.js
+packages/app-mobile/commands/util/goToFolder.js
 packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BetaChip.js
