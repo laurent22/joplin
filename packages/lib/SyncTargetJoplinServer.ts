@@ -20,15 +20,16 @@ export interface FileApiOptions {
 
 export async function newFileApi(id: number, options: FileApiOptions) {
 	const apiOptions = {
-		baseUrl: () => options.path(),
-		userContentBaseUrl: () => options.userContentPath(),
+		// Trim leading/trailing whitespace from the URLs
+		baseUrl: () => options.path().trim(),
+		userContentBaseUrl: () => options.userContentPath().trim(),
 		username: () => options.username(),
 		password: () => options.password(),
 		apiKey: () => options.apiKey(),
 		session: (): Session => null,
 		env: Setting.value('env'),
 	};
-
+	
 	const api = new JoplinServerApi(apiOptions);
 	const driver = new FileApiDriverJoplinServer(api);
 	const fileApi = new FileApi('', driver);
@@ -87,12 +88,12 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 			errorMessage: '',
 		};
 
-		const path = options.path();
-		const protocolErrorMessage = validateUrlProtocol(path);
-		if (protocolErrorMessage) {
-			output.errorMessage = protocolErrorMessage;
-			return output;
-		}
+		const path = options.path().trim();   // trim before validation
+const protocolErrorMessage = validateUrlProtocol(path);
+if (protocolErrorMessage) {
+	output.errorMessage = protocolErrorMessage;
+	return output;
+}
 
 		syncTargetId = syncTargetId === null ? this.id() : syncTargetId;
 
