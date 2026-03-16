@@ -2,6 +2,12 @@
 
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md), open the **Web Clipper** section and follow the instructions.
 
+> **Requirements:**  
+> - The Joplin Desktop application must be running.  
+> - The Web Clipper service must be enabled from **Tools → Options → Web Clipper**.  
+> - The browser extension must be installed.  
+> - Firewall / antivirus should not block the default port `41184`.
+
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/WebExtensionScreenshot.png" style="max-width: 50%; border: 1px solid gray;">
 
 ## Troubleshooting the web clipper service
@@ -12,7 +18,10 @@ However certain things can interfere with this service and prevent it from being
 
 - Check that the service is started. You can check this in the Web clipper options in the desktop app.
 - Check that the port used by the service is not blocked by a firewall. You can find the port number in the Web clipper options in the desktop Joplin application.
-- Check that no proxy is running on the machine, or make sure that the requests from the web clipper service are filtered and allowed. For example https://github.com/laurent22/joplin/issues/561#issuecomment-392220191
+- Check whether a proxy, VPN, or network filter is running on the machine. Some proxies may block local connections (such as `127.0.0.1`), which prevents the web clipper service from communicating with the browser extension. If a proxy is required, make sure requests to the clipper service are allowed. See also: https://github.com/laurent22/joplin/issues/561#issuecomment-392220191
+- **You can verify that the clipper service is running by opening:**  
+  `http://127.0.0.1:41184/ping`  
+  If everything is working, this URL should return **pong**.
 
 If none of this work, please report it on the [forum](https://discourse.joplinapp.org/) or [GitHub issue tracker](https://github.com/laurent22/joplin/issues)
 
