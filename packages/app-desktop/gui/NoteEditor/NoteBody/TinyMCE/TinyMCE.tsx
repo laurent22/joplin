@@ -1086,7 +1086,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			// const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
 			let resourcesChanged = false;
 			if (lastOnChangeEventInfo.current.resourceInfos && props.resourceInfos) {
 				resourcesChanged = resourceInfosChanged(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
@@ -1098,9 +1097,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			const differentContent = lastOnChangeEventInfo.current.content !== props.content;
 
 			if (differentNoteId) noteChangeTimeRef.current = Date.now();
-
-			// eslint-disable-next-line no-console
-			console.log('resourcesEqual::', resourcesEqual);
 			if (differentNoteId || differentContent || !resourcesEqual) {
 				const result = await props.markupToHtml(
 					props.contentMarkupLanguage,
