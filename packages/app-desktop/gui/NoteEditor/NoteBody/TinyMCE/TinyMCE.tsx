@@ -1067,6 +1067,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		}
 	};
 
+	function resourceInfosEqual(ri1: ResourceInfos, ri2: ResourceInfos): boolean {
+		if (ri1 && !ri2 || !ri1 && ri2) return false;
+		if (!ri1 && !ri2) return true;
+
+		// We do not perform a strict equality check because ri1 and ri2 can be
+		// two different object references with the same content.
+		// See: https://github.com/laurent22/joplin/issues/13276
+		return !resourceInfosChanged(ri1, ri2);
+	}
+
 	const { onRestoreCursorPosition } = useCursorPositioning({
 		initialCursorLocation: props.initialCursorLocation.richText as Bookmark,
 		onCursorUpdate: props.onCursorMotion,
@@ -1086,11 +1096,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			let resourcesChanged = true;
-			if (lastOnChangeEventInfo.current.resourceInfos && props.resourceInfos) {
-				resourcesChanged = resourceInfosChanged(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
-			}
-			const resourcesEqual = !resourcesChanged;
+			const resourcesEqual = resourceInfosEqual(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
 
 			// Use nextOnChangeEventInfo's noteId -- lastOnChangeEventInfo can be slightly out-of-date.
 			const differentNoteId = lastNoteIdRef.current !== props.noteId;
