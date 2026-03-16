@@ -7,7 +7,7 @@ import { AppState } from '../../utils/types';
 import { TagEntity } from '@joplin/lib/services/database/types';
 import TagEditor, { TagEditorMode } from '../TagEditor';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ViewStyle } from 'react-native';
 
@@ -53,6 +53,13 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		props.onCloseRequested?.();
 	}, [props.onCloseRequested]);
 
+	const modalProps = useMemo(() => {
+		return {
+			...modalPropOverrides,
+			onClose: onCancelPress,
+		};
+	}, [onCancelPress]);
+
 	useAsyncEffect(async (event) => {
 		const tags = await Tag.tagsByNoteId(noteId);
 		const noteTags = tags.map(t => t.title);
@@ -68,7 +75,7 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		buttonBarEnabled={!savingTags}
 		okTitle={_('Apply')}
 		cancelTitle={_('Cancel')}
-		modalProps={modalPropOverrides}
+		modalProps={modalProps}
 	>
 		<TagEditor
 			themeId={props.themeId}
