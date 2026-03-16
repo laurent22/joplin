@@ -38,9 +38,9 @@
 			lib.renderAbc(renderContainer, sourceElement.textContent, { ...options });
 
 			for (const svg of renderContainer.querySelectorAll('svg')) {
-				const w = svg.getAttribute('width');
-				const h = svg.getAttribute('height');
-				if (w && h && !svg.getAttribute('viewBox')) {
+				const w = Number.parseFloat(svg.getAttribute('width') ?? '');
+				const h = Number.parseFloat(svg.getAttribute('height') ?? '');
+				if (Number.isFinite(w) && Number.isFinite(h) && w > 0 && h > 0 && !svg.getAttribute('viewBox')) {
 					svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
 				}
 			}
