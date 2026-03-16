@@ -51,8 +51,8 @@ const SearchBar: React.FC<Props> = ({ themeId, value, autoFocus, placeholder, on
 			<TextInput
 				style={styles.searchTextInput}
 				autoFocus={autoFocus}
-				autoCapitalize="none"
-				autoComplete="off"
+				autoCapitalize='none'
+				autoComplete='off'
 				autoCorrect={false}
 				underlineColorAndroid="#ffffff00"
 				onChangeText={onChangeText}
