@@ -699,6 +699,33 @@ export default function TinyMCEBody({
               }
             });
 
+            // href が絶対パスに変換されている <a> 要素を /api/resource/ に修正する。
+            // TinyMCE は relative_urls: false により href を絶対 URL（file:// 等）に解決して
+            // クリップボードへ書き込むため、data-mce-href に残っている元の相対 URL か
+            // "file:///…/resources/HASH.ext" パターンから復元する。
+            pasteDoc.querySelectorAll('a[href]').forEach((el) => {
+              // data-mce-href に /api/resource/ パスが保存されていればそちらを優先
+              const dataMceHref = el.getAttribute('data-mce-href') ?? '';
+              if (dataMceHref.startsWith('/api/resource/')) {
+                el.setAttribute('href', dataMceHref);
+                return;
+              }
+              const href = el.getAttribute('href') ?? '';
+              // "file:///…/resources/HASH.ext" パターン
+              const fileMatch = href.match(/\/resources\/([\da-f]{32,}\.[^/?#\s]+)/i);
+              if (fileMatch) {
+                el.setAttribute('href', `/api/resource/${fileMatch[1]}`);
+                return;
+              }
+              // ":/HASH" パターン（joplin_resource:// 形式）
+              const colonMatch = href.match(/:\/([\da-f]{32,})(\.[^/?#\s]*)?/i);
+              if (colonMatch) {
+                const hash = colonMatch[1];
+                const ext = colonMatch[2] ?? '';
+                el.setAttribute('href', `/api/resource/${hash}${ext}`);
+              }
+            });
+
             // data-mce-* 内部属性を除去（再挿入時に TinyMCE が再適用するのを防ぐ）
             pasteDoc.querySelectorAll('*').forEach((el) => {
               Array.from(el.attributes)
