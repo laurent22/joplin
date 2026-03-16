@@ -84,8 +84,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const q = searchQuery.trim().toLowerCase();
 		if (!q) return true;
 
-		const label = md.label ? md.label().toLowerCase() : '';
-		const description = md.description ? md.description(AppType.Desktop).toLowerCase() : '';
+		const labelText = md.label ? md.label() : '';
+		const descriptionText = md.description ? md.description(AppType.Desktop) : '';
+		const label = String(labelText || '').toLowerCase();
+		const description = String(descriptionText || '').toLowerCase();
 
 		return label.includes(q) || description.includes(q);
 	}
