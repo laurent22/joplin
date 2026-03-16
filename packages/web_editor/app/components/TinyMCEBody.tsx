@@ -620,9 +620,9 @@ export default function TinyMCEBody({
         relative_urls: false,
         content_style: `
           body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-size: 15px;
-            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 20px;
+            line-height: 1.8;
             padding: 16px 24px;
             margin: 0;
           }
