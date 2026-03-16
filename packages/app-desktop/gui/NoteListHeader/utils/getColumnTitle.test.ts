@@ -6,8 +6,8 @@ describe('getColumnTitle', () => {
 	test.each<
 	[name: ColumnName, forHeader: boolean, expected: string]
 	>([
-		['note.checkboxes', true, getColumnTitle('note.checkboxes')],
-		['note.checkboxes', false, getColumnTitle('note.checkboxes')],
+		['note.checkboxes', true, 'Progress'],
+		['note.checkboxes', false, 'Progress'],
 		['note.is_todo', true, '✓'],
 	])('returns expected title for %s (forHeader=%s)', (name, forHeader, expected) => {
 		expect(getColumnTitle(name, forHeader)).toBe(expected);
