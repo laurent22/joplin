@@ -209,6 +209,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
+		if (!event?.section?.name) return;
 		void this.switchSection(event.section.name);
 	}
 
@@ -537,16 +538,28 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			);
 		}
 
+		const noResultsComp = !screenComp && !filteredSections.length ? (
+			<div style={containerStyle}>
+				<div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+					{searchInputComp}
+					<div style={{ ...theme.textStyle, maxWidth: 640 }}>
+						{_('No settings match your search.')}
+					</div>
+				</div>
+			</div>
+		) : null;
+
 		return (
 			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
-				<Sidebar
+				{filteredSections.length ? <Sidebar
 					selection={selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={filteredSections}
-				/>
+				/> : null}
 				<div style={rightStyle}>
 					{needRestartComp}
 					{tabComponents}
+					{noResultsComp}
 					<ButtonBar
 						hasChanges={hasChanges}
 						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
