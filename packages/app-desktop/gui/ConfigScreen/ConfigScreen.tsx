@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
@@ -20,6 +20,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
+import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 
 
 interface Font {
@@ -49,6 +50,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			...shared.defaultScreenState,
 			selectedSectionName: 'general',
 			screenName: '',
+			searchQuery: '',
 			changedSettingKeys: [],
 			needRestart: false,
 			fonts: [],
@@ -64,6 +66,46 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.onSaveClick = this.onSaveClick.bind(this);
 		this.onApplyClick = this.onApplyClick.bind(this);
 		this.handleSettingButton = this.handleSettingButton.bind(this);
+		this.onSearchQueryChange = this.onSearchQueryChange.bind(this);
+		this.onSearchButtonClick = this.onSearchButtonClick.bind(this);
+	}
+
+	private onSearchQueryChange(event: OnChangeEvent) {
+		this.setState({ searchQuery: event.value });
+	}
+
+	private onSearchButtonClick() {
+		this.setState({ searchQuery: '' });
+	}
+
+	private settingMatchesSearch(md: SettingItem, searchQuery: string) {
+		if (!searchQuery) return true;
+
+		const q = searchQuery.trim().toLowerCase();
+		if (!q) return true;
+
+		const label = md.label ? md.label().toLowerCase() : '';
+		const description = md.description ? md.description(AppType.Desktop).toLowerCase() : '';
+
+		return label.includes(q) || description.includes(q);
+	}
+
+	private filterSectionsBySearch(sections: SettingMetadataSection[], searchQuery: string) {
+		const q = searchQuery.trim();
+		if (!q) return sections;
+
+		const output: SettingMetadataSection[] = [];
+
+		for (const section of sections) {
+			if (!section.metadatas.length) continue;
+
+			const metadatas = section.metadatas.filter((md: SettingItem) => this.settingMatchesSearch(md, q));
+			if (!metadatas.length) continue;
+
+			output.push({ ...section, metadatas });
+		}
+
+		return output;
 	}
 
 	private async checkSyncConfig_() {
@@ -420,16 +462,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const hasChanges = this.hasChanges();
 
-		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName);
+		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
+		const filteredSections = this.filterSectionsBySearch(sections, this.state.searchQuery);
+		const selectedSectionName = filteredSections.find((s: SettingMetadataSection) => s.name === this.state.selectedSectionName)
+			? this.state.selectedSectionName
+			: (filteredSections.length ? filteredSections[0].name : '');
+		const selectedSection = filteredSections.find((s: SettingMetadataSection) => s.name === selectedSectionName);
 
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = selectedSection?.isScreen && this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
-
-		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
@@ -442,16 +487,35 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const rightStyle = { ...style, flex: 1 };
 		delete style.width;
 
+		const searchInputComp = screenComp ? null : (
+			<div style={{ marginTop: 20, marginBottom: 10, maxWidth: 640 }}>
+				<SearchInput
+					value={this.state.searchQuery}
+					onChange={this.onSearchQueryChange}
+					onSearchButtonClick={this.onSearchButtonClick}
+					searchStarted={!!this.state.searchQuery}
+					inputRef={null}
+					placeholder={_('Search settings...')}
+				/>
+			</div>
+		);
+
 		const tabComponents: React.ReactNode[] = [];
-		for (const section of sections) {
+		for (const section of filteredSections) {
 			const sectionId = `setting-section-${section.name}`;
 			let content = null;
-			const visible = section.name === this.state.selectedSectionName;
+			const visible = section.name === selectedSectionName;
 			if (visible) {
+				const settingComps = this.sectionToComponent(section.name, section, settings, true);
 				content = (
 					<>
 						{screenComp}
-						<div style={containerStyle}>{settingComps}</div>
+						<div style={containerStyle}>
+							<div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+								{searchInputComp}
+								{settingComps}
+							</div>
+						</div>
 					</>
 				);
 			}
@@ -474,9 +538,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return (
 			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
-					selection={this.state.selectedSectionName}
+					selection={selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
-					sections={sections}
+					sections={filteredSections}
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}
