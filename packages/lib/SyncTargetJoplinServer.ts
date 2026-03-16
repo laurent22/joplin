@@ -5,6 +5,7 @@ import { _ } from './locale';
 import JoplinServerApi, { Session } from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
+import { validateUrlProtocol } from './urlUtils';
 import Logger from '@joplin/utils/Logger';
 
 const staticLogger = Logger.create('SyncTargetJoplinServer');
@@ -85,6 +86,13 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 			ok: false,
 			errorMessage: '',
 		};
+
+		const path = options.path();
+		const protocolErrorMessage = validateUrlProtocol(path);
+		if (protocolErrorMessage) {
+			output.errorMessage = protocolErrorMessage;
+			return output;
+		}
 
 		syncTargetId = syncTargetId === null ? this.id() : syncTargetId;
 

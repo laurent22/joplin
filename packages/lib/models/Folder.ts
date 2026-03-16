@@ -548,7 +548,12 @@ export default class Folder extends BaseItem {
 				share_id: '',
 				updated_time: Date.now(),
 				parent_id: item.parent_id,
-			}, { autoTimestamp: false });
+			}, {
+				autoTimestamp: false,
+				// Required, to handle the case where the item's share_id points
+				// to a read-only share:
+				disableReadOnlyCheck: true,
+			});
 		}
 
 		logger.debug('updateFolderShareIds:', report);
