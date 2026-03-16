@@ -8,8 +8,6 @@ interface Props {
 const PasswordStrengthIndicator: React.FC<Props> = (props: Props) => {
 	const { password } = props;
 
-	// A very basic heuristic for demonstrating the UI component.
-	// For the actual GSoC project, this will be replaced/extended with zxcvbn integration.
 	const calculateStrength = (passwd: string): number => {
 		if (!passwd) return -1;
 		let score = 0;
@@ -38,11 +36,11 @@ const PasswordStrengthIndicator: React.FC<Props> = (props: Props) => {
 	};
 
 	return (
-		<div className="password-strength-indicator">
-			<div className="strength-meter">
+		<div className='password-strength-indicator'>
+			<div className='strength-meter'>
 				<div className={`strength-bar strength-${strength}`}></div>
 			</div>
-			<span className="strength-label">{getStrengthLabel(strength)}</span>
+			<span className='strength-label'>{getStrengthLabel(strength)}</span>
 		</div>
 	);
 };
