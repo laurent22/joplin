@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import { ViewerUtil } from '@/lib/viewerUtil';
+import { Resource } from '@/lib/resource';
 import fs from 'fs/promises';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   params: Promise<{
@@ -50,6 +52,51 @@ export async function GET(_req: Request, { params }: Props) {
         Expires: expires.toUTCString(),
       },
     });
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: Request, { params }: Props) {
+  try {
+    const { filename } = await params;
+    if (!filename) {
+      return NextResponse.json({ success: false, error: 'filename is required' }, { status: 400 });
+    }
+
+    // prevent path traversal
+    const safeName = path.basename(filename);
+    const ext = path.extname(safeName).toLowerCase();
+    const resourceId = uuidv4().replace(/-/g, '');
+    const newFilename = ext ? `${resourceId}${ext}` : resourceId;
+
+    const resourceDir = ViewerUtil.getResourceFolderPath();
+    await fs.mkdir(resourceDir, { recursive: true });
+    const filePath = path.join(resourceDir, newFilename);
+
+    const buffer = await req.arrayBuffer();
+    await fs.writeFile(filePath, Buffer.from(buffer));
+
+    // ファイル書き込み後にメタデータを DB に保存（shim-init-node.js の Resource.save に相当）
+    const stat = await fs.stat(filePath);
+    const mime = MIME_MAP[ext] || 'application/octet-stream';
+    const fileExtension = ext.startsWith('.') ? ext.slice(1) : ext;
+
+    Resource.save({
+      id: resourceId,
+      title: safeName,
+      mime,
+      filename: '',
+      file_extension: fileExtension,
+      size: stat.size,
+      created_time: Date.now(),
+      updated_time: Date.now(),
+    });
+
+    return NextResponse.json({ success: true, filename: newFilename, originalName: safeName });
   } catch (err) {
     return NextResponse.json(
       { success: false, error: err instanceof Error ? err.message : String(err) },

@@ -45,6 +45,12 @@ export const modifyJoplinResource = ($: cheerio.Root, resourceDir: string): chee
 		const newSrc = src.replace(regex, resourceDir);
 		video.attribs.src = newSrc;
 	}
+
+	// TinyMCEのエディタで画像・動画・音声を挿入した際に、data-mce-src属性が追加されることがあるため、これを削除する
+	$('[data-mce-src]').each((_, element) => {
+      const el = element as cheerio.TagElement;
+      delete el.attribs['data-mce-src'];
+    });
 	return $;
 };
 
