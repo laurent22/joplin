@@ -17,6 +17,8 @@ interface ConfigScreenState {
 	settings: any;
 	changedSettingKeys: string[];
 	showAdvancedSettings: boolean;
+	searchQuery: string;
+	searching: boolean;
 }
 
 export const defaultScreenState: ConfigScreenState = {
@@ -24,6 +26,8 @@ export const defaultScreenState: ConfigScreenState = {
 	settings: {},
 	changedSettingKeys: [],
 	showAdvancedSettings: false,
+	searchQuery: '',
+	searching: false,
 };
 
 interface ConfigScreenComponent {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
-import SearchInput from '../lib/SearchInput/SearchInput';
+import SearchInput, { OnChangeEvent as SearchInputChangeEvent } from '../lib/SearchInput/SearchInput';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting, { AppType, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
@@ -21,7 +21,6 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
-import { OnChangeEvent as SearchInputChangeEvent } from '../lib/SearchInput/SearchInput';
 
 
 interface Font {
@@ -165,9 +164,28 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ selectedSectionName: section.name, screenName: screenName });
 	}
 
+	private settingElementId(settingKey: string) {
+		return `config-setting-${settingKey}`;
+	}
+
+	private focusSettingByKey(settingKey: string) {
+		const settingElement = document.getElementById(this.settingElementId(settingKey));
+		if (!settingElement) return;
+
+		settingElement.scrollIntoView({ block: 'center' });
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
-		void this.switchSection(event.section.name);
+		const settingKey = event.settingKey as string|undefined;
+		void (async () => {
+			await this.switchSection(event.section.name);
+			if (!settingKey) return;
+
+			requestAnimationFrame(() => {
+				this.focusSettingByKey(settingKey);
+			});
+		})();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -188,13 +206,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const theme = themeStyle(this.props.themeId);
 
 		const createSettingComponents = (advanced: boolean) => {
-			const output = [];
+			const output: React.ReactNode[] = [];
 
 			for (let i = 0; i < section.metadatas.length; i++) {
 				const md = section.metadatas[i];
 				if (!!md.advanced !== advanced) continue;
 				const settingComp = this.settingToComponent(md.key, settings[md.key]);
-				output.push(settingComp);
+				output.push(
+					<div key={`setting-row-${md.key}`} id={this.settingElementId(md.key)}>
+						{settingComp}
+					</div>,
+				);
 			}
 			return output;
 		};
@@ -496,6 +518,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
+					searchQuery={this.state.searchQuery}
 					topContent={
 						<SearchInput
 							value={this.state.searchQuery || ''}
