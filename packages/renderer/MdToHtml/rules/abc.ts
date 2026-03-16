@@ -92,6 +92,10 @@ const assets = () => {
 				.abc-notation-block svg {
 					background-color: white;
 				}
+				.joplin-abc-notation-rendered {
+					overflow-x: auto !important;
+					overflow-y: hidden;
+				}
 			`,
 		},
 		{

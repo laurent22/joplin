@@ -1815,6 +1815,7 @@ packages/renderer/MdToHtml/createEventHandlingAttrs.js
 packages/renderer/MdToHtml/linkReplacement.test.js
 packages/renderer/MdToHtml/linkReplacement.js
 packages/renderer/MdToHtml/renderMedia.js
+packages/renderer/MdToHtml/rules/abc.test.js
 packages/renderer/MdToHtml/rules/abc.js
 packages/renderer/MdToHtml/rules/checkbox.js
 packages/renderer/MdToHtml/rules/code_inline.js
