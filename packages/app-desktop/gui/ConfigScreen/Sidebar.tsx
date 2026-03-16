@@ -17,6 +17,7 @@ interface Props {
 	selection: string;
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
+	topContent?: React.ReactNode;
 }
 
 export const StyledRoot = styled.div`
@@ -25,6 +26,16 @@ export const StyledRoot = styled.div`
 	flex-direction: column;
 	overflow-x: hidden;
 	overflow-y: auto;
+`;
+
+export const StyledTopContent = styled.div`
+	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
+	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding / 2}px;
+`;
+
+export const StyledTabList = styled.div`
+	display: flex;
+	flex-direction: column;
 `;
 
 export const StyledListItem = styled.a`
@@ -164,8 +175,11 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
-			{buttons}
+		<StyledRoot className='settings-sidebar _scrollbar2'>
+			{props.topContent ? <StyledTopContent>{props.topContent}</StyledTopContent> : null}
+			<StyledTabList role='tablist'>
+				{buttons}
+			</StyledTabList>
 		</StyledRoot>
 	);
 }

@@ -2,6 +2,7 @@ import * as React from 'react';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
+import SearchInput from '../lib/SearchInput/SearchInput';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting, { AppType, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
@@ -20,6 +21,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
+import { OnChangeEvent as SearchInputChangeEvent } from '../lib/SearchInput/SearchInput';
 
 
 interface Font {
@@ -342,6 +344,23 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		shared.updateSettingValue(this, key, value);
 	};
 
+	private onSearchInputChange = (event: SearchInputChangeEvent) => {
+		const searchQuery = event.value;
+		this.setState({
+			searchQuery,
+			searching: !!searchQuery.trim(),
+		});
+	};
+
+	private onSearchButtonClick = () => {
+		if (!this.state.searchQuery) return;
+
+		this.setState({
+			searchQuery: '',
+			searching: false,
+		});
+	};
+
 	public settingToComponent<T extends string>(key: T, value: SettingValueType<T>) {
 		return (
 			<SettingComponent
@@ -477,6 +496,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
+					topContent={
+						<SearchInput
+							value={this.state.searchQuery || ''}
+							onChange={this.onSearchInputChange}
+							onSearchButtonClick={this.onSearchButtonClick}
+							searchStarted={!!this.state.searching}
+							placeholder={_('Search...')}
+						/>
+					}
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}
