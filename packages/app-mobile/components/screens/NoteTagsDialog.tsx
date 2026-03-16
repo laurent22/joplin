@@ -10,6 +10,7 @@ import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ViewStyle } from 'react-native';
+import shim from '@joplin/lib/shim';
 
 interface Props {
 	themeId: number;
@@ -32,6 +33,7 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 	const [noteId, setNoteId] = useState(props.noteId);
 	const [savingTags, setSavingTags] = useState(false);
 	const [noteTags, setNoteTags] = useState<string[]>([]);
+	const [originalTags, setOriginalTags] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (props.noteId) setNoteId(props.noteId);
@@ -53,18 +55,37 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		props.onCloseRequested?.();
 	}, [props.onCloseRequested]);
 
+	const hasUnsavedChanges = useMemo(() => {
+		return () => {
+			if (noteTags.length !== originalTags.length) return true;
+			return noteTags.some(tag => !originalTags.includes(tag)) ||
+				originalTags.some(tag => !noteTags.includes(tag));
+		};
+	}, [noteTags, originalTags]);
+
+	const onModalClose = useCallback(async () => {
+		if (hasUnsavedChanges()) {
+			const shouldDiscard = await shim.showConfirmationDialog(
+				_('You have unsaved tag changes. Discard them?'),
+			);
+			if (!shouldDiscard) return;
+		}
+		onCancelPress();
+	}, [onCancelPress, hasUnsavedChanges]);
+
 	const modalProps = useMemo(() => {
 		return {
 			...modalPropOverrides,
-			onClose: onCancelPress,
+			onClose: onModalClose,
 		};
-	}, [onCancelPress]);
+	}, [onModalClose]);
 
 	useAsyncEffect(async (event) => {
 		const tags = await Tag.tagsByNoteId(noteId);
 		const noteTags = tags.map(t => t.title);
 		if (!event.cancelled) {
 			setNoteTags(noteTags);
+			setOriginalTags(noteTags);
 		}
 	}, [noteId]);
 
