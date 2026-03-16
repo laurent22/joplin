@@ -136,3 +136,12 @@ body {
   font-size: 16px !important;
   line-height: 1.6 !important;
 }
+
+/* KaTeX: override default center alignment to match Editor mode */
+.note-content .katex-display {
+  text-align: left !important;
+}
+
+.note-content .katex-display > .katex {
+  text-align: left !important;
+}
