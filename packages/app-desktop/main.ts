@@ -52,7 +52,6 @@ const { rootProfileDir } = determineBaseAppDirs(profileFromArgs, appName, altIns
 // We create the profile dir as soon as we know where it's going to be located since it's used in
 // various places early in the initialisation code.
 mkdirpSync(rootProfileDir);
-electronApp.setPath('userData', rootProfileDir);
 
 // Required for correct display of Windows notifications. Should be done near the beginning of startup. See
 // https://www.electron.build/nsis.html#guid-vs-application-name
