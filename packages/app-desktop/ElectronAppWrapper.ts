@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, powerMonitor } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App, powerMonitor, nativeTheme } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -228,19 +228,16 @@ export default class ElectronAppWrapper {
 		// Load the previous state with fallback to defaults
 		const windowState = windowStateKeeper(stateOptions);
 
-		// Get initial theme colors with fallback to default
-		let initialBackgroundColor = '#1e1e1e'; // Default dark background
-		let initialTextColor = '#dddddd'; // Default light text
+		// Get initial background color from the current theme, with fallback for early startup
+		let initialBackgroundColor = nativeTheme.shouldUseDarkColors ? '#333' : '#fff';
 		try {
 			const themeId = Setting.value('theme');
 			if (themeId && typeof themeId === 'number') {
-				const initialTheme = themeStyle(themeId);
-				initialBackgroundColor = initialTheme.backgroundColor;
-				initialTextColor = initialTheme.color;
+				initialBackgroundColor = themeStyle(themeId).backgroundColor;
 			}
 		} catch (error) {
-			// If theme initialization fails, use defaults
-			console.warn('Failed to get initial theme colors, using defaults:', error);
+			// Theme may not be loaded yet at startup - fallback is fine
+			console.warn('Failed to get initial theme color, using default:', error);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -272,17 +269,6 @@ export default class ElectronAppWrapper {
 		// Linux icon workaround for bug https://github.com/electron-userland/electron-builder/issues/2098
 		// Fix: https://github.com/electron-userland/electron-builder/issues/2269
 		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
-
-		// Windows-only: Enable custom title bar overlay for theme colors
-		// Note: This is NOT enabled on Linux as it causes the menubar to disappear
-		if (process.platform === 'win32') {
-			windowOptions.titleBarStyle = 'hidden';
-			windowOptions.titleBarOverlay = {
-				color: initialBackgroundColor,
-				symbolColor: initialTextColor,
-				height: 30,
-			};
-		}
 
 		this.win_ = new BrowserWindow(windowOptions);
 
@@ -644,31 +630,18 @@ export default class ElectronAppWrapper {
 	public updateWindowBackgroundColor(themeId: number) {
 		if (!this.win_) return;
 
-		// Validate themeId to prevent crashes
 		if (!themeId || typeof themeId !== 'number') {
 			this.logger().warn('Invalid themeId provided to updateWindowBackgroundColor:', themeId);
 			return;
 		}
 
 		try {
-			// Get theme colors from the actual theme definition
-			const theme = themeStyle(themeId);
-			const backgroundColor = theme.backgroundColor;
-			const textColor = theme.color;
-
-			// Update window background color
+			const backgroundColor = themeStyle(themeId).backgroundColor;
+			// setBackgroundColor prevents the white/dark flash when switching themes.
+			// The native title bar color is managed by the OS and does not need to be updated here.
 			this.win_.setBackgroundColor(backgroundColor);
-
-			// Windows-only: Update title bar overlay colors
-			// Note: Not used on Linux as it causes menubar to disappear
-			if (process.platform === 'win32') {
-				this.win_.setTitleBarOverlay({
-					color: backgroundColor,
-					symbolColor: textColor,
-				});
-			}
 		} catch (error) {
-			this.logger().warn('Failed to update window colors:', error);
+			this.logger().warn('Failed to update window background color:', error);
 		}
 	}
 
