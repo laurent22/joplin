@@ -1086,7 +1086,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		let cancelled = false;
 
 		const loadContent = async () => {
-			let resourcesChanged = false;
+			let resourcesChanged = true;
 			if (lastOnChangeEventInfo.current.resourceInfos && props.resourceInfos) {
 				resourcesChanged = resourceInfosChanged(lastOnChangeEventInfo.current.resourceInfos, props.resourceInfos);
 			}
