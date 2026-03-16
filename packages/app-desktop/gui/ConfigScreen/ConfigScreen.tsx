@@ -20,6 +20,8 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
+import SearchInput, { type OnChangeEvent } from '../lib/SearchInput/SearchInput';
+import matchesSearchQuery from './configScreenUtils';
 
 
 interface Font {
@@ -52,6 +54,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			changedSettingKeys: [],
 			needRestart: false,
 			fonts: [],
+			searchQuery: '',
 		};
 
 		this.rowStyle_ = {
@@ -64,6 +67,14 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.onSaveClick = this.onSaveClick.bind(this);
 		this.onApplyClick = this.onApplyClick.bind(this);
 		this.handleSettingButton = this.handleSettingButton.bind(this);
+	}
+
+	private onSearchInputChange(event: OnChangeEvent) {
+		this.setState({ searchQuery: event.value });
+	}
+
+	private onSearchButtonClick() {
+		this.setState({ searchQuery: '' });
 	}
 
 	private async checkSyncConfig_() {
@@ -184,21 +195,34 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
+		const headerTitle = Setting.sectionNameToLabel(section.name);
 
-		const createSettingComponents = (advanced: boolean) => {
-			const output = [];
 
-			for (let i = 0; i < section.metadatas.length; i++) {
-				const md = section.metadatas[i];
-				if (!!md.advanced !== advanced) continue;
-				const settingComp = this.settingToComponent(md.key, settings[md.key]);
-				output.push(settingComp);
+		const settingComps: React.ReactNode[] = [];
+		const advancedSettingComps: React.ReactNode[] = [];
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const addSettingComponent = (component: React.ReactNode, relatedText: string|string[], md: any) => {
+			const hasQuery = !!(this.state.searchQuery && this.state.searchQuery.trim().length);
+			const hiddenBySearch = hasQuery && !matchesSearchQuery(this.state.searchQuery, headerTitle, relatedText);
+			if (!component || hiddenBySearch) return;
+
+			if (md && md.advanced) {
+				advancedSettingComps.push(component);
+			} else {
+				settingComps.push(component);
 			}
-			return output;
 		};
 
-		const settingComps = createSettingComponents(false);
-		const advancedSettingComps = createSettingComponents(true);
+		for (let i = 0; i < section.metadatas.length; i++) {
+			const md = section.metadatas[i];
+			const settingComp = this.settingToComponent(md.key, settings[md.key]);
+			const relatedText = [
+				md.label ? md.label() : '',
+				md.description ? md.description(AppType.Desktop) : '',
+			];
+			addSettingComponent(settingComp, relatedText, md);
+		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const sectionWidths: Record<string, any> = {
@@ -212,7 +236,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			maxWidth: sectionWidths[section.name] ? sectionWidths[section.name] : 640,
 		};
 
-		if (!selected) sectionStyle.display = 'none';
+		const hasQuery = !!(this.state.searchQuery && this.state.searchQuery.trim().length);
+
+		if (!hasQuery && !selected) sectionStyle.display = 'none';
+
+		if (hasQuery && !settingComps.length && !advancedSettingComps.length) return null;
 
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
@@ -310,19 +338,38 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const advancedSettingsGroupId = `advanced_settings_${key}`;
 
 		if (advancedSettingComps.length) {
-			advancedSettingsButton = (
-				<ToggleAdvancedSettingsButton
-					onClick={() => shared.advancedSettingsButton_click(this)}
-					advancedSettingsVisible={this.state.showAdvancedSettings}
-					aria-controls={advancedSettingsGroupId}
-				/>
-			);
-			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
+			if (!hasQuery) {
+				advancedSettingsButton = (
+					<ToggleAdvancedSettingsButton
+						onClick={() => shared.advancedSettingsButton_click(this)}
+						advancedSettingsVisible={this.state.showAdvancedSettings}
+						aria-controls={advancedSettingsGroupId}
+					/>
+				);
+				advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
+			} else {
+				advancedSettingsSectionStyle.display = 'block';
+			}
 		}
+
+		const sectionHeader = hasQuery ? (
+			<div style={{
+				...theme.textStyle,
+				fontWeight: 'bold',
+				backgroundColor: theme.backgroundColor2,
+				border: `1px solid ${theme.borderColor4}`,
+				borderRadius: 4,
+				padding: `${theme.mainPadding * 0.75}px ${theme.mainPadding}px`,
+				marginBottom: 10,
+			}}>
+				{headerTitle}
+			</div>
+		) : null;
 
 		return (
 			<div key={key} style={sectionStyle}>
-				{this.renderSectionDescription(section)}
+				{sectionHeader}
+				{!hasQuery ? this.renderSectionDescription(section) : null}
 				<div>{settingComps}</div>
 				{advancedSettingsButton}
 				<div
@@ -409,12 +456,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		};
 
 		const settings = this.state.settings;
+		const hasQuery = !!(this.state.searchQuery && this.state.searchQuery.trim().length);
 
 		const containerStyle: React.CSSProperties = {
 			overflow: 'auto',
 			padding: theme.configScreenPadding,
 			paddingTop: 0,
 			display: 'flex',
+			flexDirection: hasQuery ? 'column' : undefined,
+			alignItems: hasQuery ? 'stretch' : undefined,
 			flex: 1,
 		};
 
@@ -441,6 +491,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const rightStyle = { ...style, flex: 1 };
 		delete style.width;
+
+		const searchBar = !screenComp ? (
+			<div style={{ padding: theme.configScreenPadding, paddingBottom: 0 }}>
+				<SearchInput
+					value={this.state.searchQuery}
+					onChange={event => this.onSearchInputChange(event)}
+					onSearchButtonClick={() => this.onSearchButtonClick()}
+					searchStarted={!!(this.state.searchQuery && this.state.searchQuery.trim().length)}
+				/>
+			</div>
+		) : null;
 
 		const tabComponents: React.ReactNode[] = [];
 		for (const section of sections) {
@@ -479,6 +540,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					sections={sections}
 				/>
 				<div style={rightStyle}>
+					{searchBar}
 					{needRestartComp}
 					{tabComponents}
 					<ButtonBar
