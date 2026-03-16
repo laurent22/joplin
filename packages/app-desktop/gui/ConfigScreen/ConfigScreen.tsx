@@ -92,6 +92,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return !!this.state.searchQuery.trim();
 	}
 
+	private onTabPanelKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+		if (event.key === 'Tab' && event.shiftKey && !this.searchStarted()) {
+			event.preventDefault();
+			const selectedTab = document.getElementById(`setting-tab-${this.state.selectedSectionName}`);
+			if (selectedTab) {
+				focus('ConfigScreen::sidebarTab', selectedTab as HTMLElement);
+			}
+		}
+	};
+
 	private async checkSyncConfig_() {
 		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
 			const isAuthenticated = await reg.syncTarget().isAuthenticated();
@@ -607,6 +617,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				className='setting-tab-panel'
 				tabIndex={0}
 				role='tabpanel'
+				onKeyDown={this.onTabPanelKeyDown}
 			>
 				<div style={containerStyle}>{settingComps}</div>
 			</div>
@@ -632,6 +643,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					aria-labelledby={`setting-tab-${section.name}`}
 					tabIndex={0}
 					role='tabpanel'
+					onKeyDown={this.onTabPanelKeyDown}
 				>
 					{content}
 				</div>
