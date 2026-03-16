@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useCallback, useState, useEffect, useMemo } from 'react';
+import { getPasswordStrength, passwordStrengthLabels } from '@joplin/lib/services/e2ee/passwordStrength';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
@@ -170,6 +171,53 @@ export default function(props: Props) {
 		if (showPasswordForm) {
 			const enterPasswordLabel = [MasterPasswordStatus.Loaded, MasterPasswordStatus.Valid].includes(status) ? _('Enter new password') : _('Enter password');
 
+			const strengthResult = getPasswordStrength(password1);
+			const strengthColors = ['#D32F2F', '#E64A19', '#FBC02D', '#7CB342', '#388E3C'];
+			const strengthColor = strengthColors[strengthResult.score];
+			const strengthPercent = password1 ? ((strengthResult.score + 1) / 5) * 100 : 0;
+			const strengthLabel = password1 ? passwordStrengthLabels[strengthResult.score] : '';
+
+			const renderStrengthIndicator = () => {
+				if (!password1) return null;
+
+				return (
+					<div className="password-strength-indicator" style={{ marginTop: 8 }}>
+						<div style={{
+							height: 6,
+							backgroundColor: '#e0e0e0',
+							borderRadius: 3,
+							overflow: 'hidden',
+							marginBottom: 4,
+						}}>
+							<div style={{
+								height: '100%',
+								width: `${strengthPercent}%`,
+								backgroundColor: strengthColor,
+								borderRadius: 3,
+								transition: 'width 0.3s ease, background-color 0.3s ease',
+							}} />
+						</div>
+						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+							<span style={{ fontSize: 12, fontWeight: 'bold', color: strengthColor }}>
+								{strengthLabel}
+							</span>
+						</div>
+						{strengthResult.feedback.warning && (
+							<p style={{ fontSize: 12, color: '#D32F2F', margin: '4px 0 0 0' }}>
+								{strengthResult.feedback.warning}
+							</p>
+						)}
+						{strengthResult.feedback.suggestions.length > 0 && (
+							<ul style={{ fontSize: 12, margin: '4px 0 0 0', paddingLeft: 16, color: '#666' }}>
+								{strengthResult.feedback.suggestions.map((s, i) =>
+									<li key={i}>{s}</li>,
+								)}
+							</ul>
+						)}
+					</div>
+				);
+			};
+
 			return (
 				<div>
 					<div className="form">
@@ -179,6 +227,7 @@ export default function(props: Props) {
 							value={password1}
 							onChange={onPasswordChange1}
 						/>
+						{renderStrengthIndicator()}
 
 						{needToRepeatPassword && (
 							<>

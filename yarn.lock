@@ -10892,6 +10892,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
     "@types/uuid": "npm:10.0.0"
+    "@types/zxcvbn": "npm:^4"
     adm-zip: "npm:0.5.16"
     async-mutex: "npm:0.5.0"
     base-64: "npm:1.0.0"
@@ -10951,6 +10952,7 @@ __metadata:
     uuid: "npm:11.1.0"
     word-wrap: "npm:1.2.5"
     xml2js: "npm:0.4.23"
+    zxcvbn: "npm:^4.4.2"
   languageName: unknown
   linkType: soft
 
@@ -17455,7 +17457,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/zxcvbn@npm:4.4.5":
+"@types/zxcvbn@npm:4.4.5, @types/zxcvbn@npm:^4":
   version: 4.4.5
   resolution: "@types/zxcvbn@npm:4.4.5"
   checksum: 10/279b0d43e21b8de48a9ef98b5753e343673fdb6cfdd2679e2afbb292410d610a0f01d7c1cb1dad1acbd0d35ee01e8a8dbe21cb034a2e2f3458492cf5fd3b44c3
@@ -54751,7 +54753,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zxcvbn@npm:4.4.2":
+"zxcvbn@npm:4.4.2, zxcvbn@npm:^4.4.2":
   version: 4.4.2
   resolution: "zxcvbn@npm:4.4.2"
   checksum: 10/00c4636f10556174858bddd67758ef1e3046d005e9890a208fa5dd9296ec69a3e93ce8300a54d84cf72deea188503d8c5aa67c515daf79da40de378786832807
