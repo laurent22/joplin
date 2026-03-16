@@ -929,6 +929,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						} else if (rect.bottom > viewHeight) {
 							win.scrollBy(0, rect.bottom - viewHeight);
 						} else if (rect.top === 0 && rect.height === 0) {
+							// Handles edge case where rect is not rendered
+							// See: https://stackoverflow.com/a/14384220/5757550
 							return;
 						}
 						event.preventDefault();
