@@ -173,8 +173,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private sectionSearchKeywords(sectionName: string, settings: any): string[] {
+	private sectionSearchKeywords(sectionName: string, settings: Record<string, unknown>): string[] {
 		if (sectionName === 'encryption') {
 			return encryptionSearchKeywords(!!settings['encryption.enabled'], _);
 		}
