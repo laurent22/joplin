@@ -380,6 +380,20 @@ export class ViewerUtil {
       const newSrc = `joplin_resource://${filename}`;
       img.attribs.src = newSrc;
     }
+
+    // 別ノートへのリンクを修正する（modifyJoplinLinkAnchor のリバート）
+    // /note?note_id={id} → joplin://{id}
+    const noteAnchors = [...$('a[href^="/note?note_id="]')];
+    for (let i = 0; i < noteAnchors.length; i++) {
+      const anchor = noteAnchors[i] as cheerio.TagElement;
+      const href = anchor.attribs.href;
+      const url = new URL(href, 'http://localhost:3000'); // ベースURLは何でもいい
+      const noteId = url.searchParams.get('note_id');
+      if (noteId) {
+        anchor.attribs.href = `joplin://${noteId}`;
+      }
+    }
+
     return $;
   };
 }
