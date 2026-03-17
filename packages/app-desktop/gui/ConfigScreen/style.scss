@@ -68,6 +68,10 @@
 	border-radius: 8px;
 	border: 1px solid var(--joplin-border-color4);
 	background: var(--joplin-background-color3);
+
+	&:has(.config-screen-search-input:focus-visible) {
+		border-color: var(--joplin-focus-outline-color);
+	}
 }
 
 .config-screen-search-icon {
