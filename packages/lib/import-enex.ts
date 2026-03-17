@@ -24,6 +24,11 @@ const fs = () => {
 	return fs_;
 };
 
+function isHtmlNote(bodyXml: string): boolean {
+	if (!bodyXml) return false;
+	return /<(iframe|video|table|img)[\s>]/i.test(bodyXml);
+}
+
 function dateToTimestamp(s: string, defaultValue: number = null): number {
 	// Most dates seem to be in this format
 	let m = moment(s, 'YYYYMMDDTHHmmssZ');
@@ -471,22 +476,31 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 					// Convert the ENEX body to either Markdown or HTML
 					// --------------------------------------------------------
 
-					const body: string = importOptions.outputFormat === 'html' ?
-						await enexXmlToHtml(note.bodyXml, note.resources) :
-						await enexXmlToMd(note.bodyXml, note.resources, note.tasks);
-					delete note.bodyXml;
+					let outputFormat = importOptions.outputFormat;
+
+					if (outputFormat === 'md' && note.bodyXml && isHtmlNote(note.bodyXml)) {
+						outputFormat = 'html';
+						}
+
+						const body: string = outputFormat === 'html'
+						? await enexXmlToHtml(note.bodyXml, note.resources)
+						: await enexXmlToMd(note.bodyXml, note.resources, note.tasks);
+											delete note.bodyXml;
 
 					// --------------------------------------------------------
 					// Finish setting up the note
 					// --------------------------------------------------------
 
-					note.id = uuid.create();
-					note.markup_language = importOptions.outputFormat === 'html' ?
-						MarkupToHtml.MARKUP_LANGUAGE_HTML :
-						MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+						note.id = uuid.create();
+						note.markup_language = importOptions.outputFormat === 'html' ?
+							MarkupToHtml.MARKUP_LANGUAGE_HTML :
+							MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
+						note.markup_language = outputFormat === 'html'
+							? MarkupToHtml.MARKUP_LANGUAGE_HTML
+							: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
-					note.parent_id = parentFolderId;
-					note.body = body;
+						note.parent_id = parentFolderId;
+						note.body = body;
 
 					// If the created timestamp was invalid, it would be
 					// set to zero, so set it to the current date here
