@@ -110,24 +110,24 @@ export function setupTocAutoUpdate(editor: any): () => void {
     }
   }
 
-  editor.on('keyup', onTocUpdateHandler);
-  editor.on('keypress', onTocUpdateHandler);
-  editor.on('compositionend', onTocUpdateHandler);
+  // editor.on('keyup', onTocUpdateHandler);
+  // editor.on('keypress', onTocUpdateHandler);
+  // editor.on('compositionend', onTocUpdateHandler);
   editor.on('paste', onTocUpdateHandler);
   editor.on('Undo', onTocUpdateHandler);
   editor.on('Redo', onTocUpdateHandler);
-  editor.on('joplinChange', onTocUpdateHandler);
+  // editor.on('joplinChange', onTocUpdateHandler);
   editor.on('ExecCommand', onExecCommand);
 
   return () => {
     if (timeoutId !== null) clearTimeout(timeoutId);
-    editor.off('keyup', onTocUpdateHandler);
-    editor.off('keypress', onTocUpdateHandler);
-    editor.off('compositionend', onTocUpdateHandler);
+    // editor.off('keyup', onTocUpdateHandler);
+    // editor.off('keypress', onTocUpdateHandler);
+    // editor.off('compositionend', onTocUpdateHandler);
     editor.off('paste', onTocUpdateHandler);
     editor.off('Undo', onTocUpdateHandler);
     editor.off('Redo', onTocUpdateHandler);
-    editor.off('joplinChange', onTocUpdateHandler);
+    // editor.off('joplinChange', onTocUpdateHandler);
     editor.off('ExecCommand', onExecCommand);
   };
 }
