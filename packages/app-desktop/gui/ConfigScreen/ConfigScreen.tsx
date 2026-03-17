@@ -539,6 +539,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								className='config-screen-search-toggle'
 								title={_('Clear search')}
 								aria-label={_('Clear search')}
+								tabIndex={-1}
 								onClick={() => this.setState({ searchQuery: '' })}
 							>
 								{_('Clear')}
@@ -548,6 +549,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							className='config-screen-search-toggle'
 							title={_('Close search')}
 							aria-label={_('Close search')}
+							tabIndex={-1}
 							onClick={() => this.setState({ searching: false, searchQuery: '' })}
 						>
 							<span className='fa fa-times'/>
@@ -558,6 +560,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						className='config-screen-search-toggle'
 						title={_('Search settings')}
 						aria-label={_('Search settings')}
+						tabIndex={-1}
 						onClick={() => this.setState({ searching: true })}
 					>
 						<span className={CommandService.instance().iconName('search')}/>
