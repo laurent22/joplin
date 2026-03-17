@@ -16,6 +16,7 @@ interface Props<ItemType> {
 
 	selectedIndex?: number;
 	alwaysRenderSelection?: boolean;
+	alwaysRenderIndexes?: number[];
 
 	id?: string;
 	role?: string;
@@ -174,6 +175,16 @@ class ItemList<ItemType> extends React.Component<Props<ItemType>, State> {
 			const isValidSelection = this.props.selectedIndex >= 0 && this.props.selectedIndex < items.length;
 			if (!selectionVisible && isValidSelection) {
 				renderableBlocks.push({ from: this.props.selectedIndex, to: this.props.selectedIndex });
+			}
+		}
+
+		if (this.props.alwaysRenderIndexes?.length) {
+			for (const itemIndex of this.props.alwaysRenderIndexes) {
+				const isVisible = itemIndex >= this.state.topItemIndex && itemIndex <= this.state.bottomItemIndex;
+				const isValidIndex = itemIndex >= 0 && itemIndex < items.length;
+				if (!isVisible && isValidIndex) {
+					renderableBlocks.push({ from: itemIndex, to: itemIndex });
+				}
 			}
 		}
 

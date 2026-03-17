@@ -96,6 +96,9 @@ const FolderAndTagList: React.FC<Props> = props => {
 				// The selected item is the only item with tabindex=0. Always render it
 				// to allow the item list to be focused.
 				alwaysRenderSelection={true}
+				// Keep the notebooks header mounted even when offscreen so its action
+				// buttons remain reachable through keyboard tab order.
+				alwaysRenderIndexes={[0]}
 				selectedIndex={selectedIndex}
 
 				itemHeight={30}
