@@ -1,7 +1,7 @@
 .sidebar-sync-toggle {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	background: none;
 	border: none;
 	color: var(--joplin-color2);
@@ -9,6 +9,7 @@
 	cursor: pointer;
 	padding: 4px 0;
 	width: 100%;
+	min-height: calc(var(--joplin-font-size) * 1.6 + 8px);
 	font-size: calc(var(--joplin-font-size) * 1.6);
 	transition: opacity 0.2s;
 
@@ -16,8 +17,15 @@
 		opacity: 1;
 	}
 
+	>.toggle-icon {
+		width: 0.8em;
+		flex-shrink: 0;
+	}
+
 	>.timestamp {
+		display: block;
 		font-size: 0.6em;
 		margin-left: 6px;
+		line-height: 1.3;
 	}
 }

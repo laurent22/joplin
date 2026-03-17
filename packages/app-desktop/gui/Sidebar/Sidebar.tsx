@@ -16,14 +16,14 @@ import time from '@joplin/lib/time';
 
 
 interface Props {
-	themeId: number;
+	themeId?: number;
 	dispatch: Dispatch;
 	decryptionWorker: StateDecryptionWorker;
 	resourceFetcher: StateResourceFetcher;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	syncStarted: boolean;
-	syncReportLogExpanded: boolean;
+	syncReportLogExpanded?: boolean;
 }
 
 const SidebarComponent = (props: Props) => {
@@ -44,7 +44,7 @@ const SidebarComponent = (props: Props) => {
 		);
 	};
 
-	const theme = themeStyle(props.themeId);
+	const theme = themeStyle(props.themeId ?? 1);
 
 	let decryptionReportText = '';
 	if (props.decryptionWorker && props.decryptionWorker.state !== 'idle' && props.decryptionWorker.itemCount) {
@@ -56,7 +56,7 @@ const SidebarComponent = (props: Props) => {
 		resourceFetcherText = _('Fetching resources: %d/%d', props.resourceFetcher.fetchingCount, props.resourceFetcher.toFetchCount);
 	}
 
-	const syncReportExpanded = props.syncReportLogExpanded;
+	const syncReportExpanded = props.syncReportLogExpanded ?? false;
 
 	const toggleSyncReport = useCallback(() => {
 		Setting.setValue('syncReportLogExpanded', !syncReportExpanded);
@@ -69,14 +69,13 @@ const SidebarComponent = (props: Props) => {
 	const completedTime = props.syncReport && props.syncReport.completedTime
 		? time.formatMsToLocal(props.syncReport.completedTime)
 		: null;
+	const lastSyncStatus = props.syncStarted ? _('In progress') : completedTime || '-';
+	const lastSyncText = _('Last sync: %s', lastSyncStatus);
 
 	const syncButton = renderSynchronizeButton(props.syncStarted ? 'cancel' : 'sync');
 
-	// Show toggle when there are log lines or a completed timestamp
-	const hasContent = lines.length > 0 || completedTime;
-
 	// Toggle to show/hide sync log output
-	const toggleButton = hasContent ? (
+	const toggleButton = (
 		<button
 			className="sidebar-sync-toggle"
 			onClick={toggleSyncReport}
@@ -84,10 +83,12 @@ const SidebarComponent = (props: Props) => {
 			aria-label={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 			title={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 		>
-			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'up'}`} />
-			{!syncReportExpanded && completedTime ? <span className="timestamp">{_('Last sync: %s', completedTime)}</span> : ''}
+			<span className="toggle-icon" aria-hidden={true}>
+				<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'up'}`} />
+			</span>
+			<span className="timestamp">{lastSyncText}</span>
 		</button>
-	) : null;
+	);
 
 	// Sync log output, only visible when expanded
 	const syncReportComp = (syncReportExpanded && lines.length > 0) ? (
