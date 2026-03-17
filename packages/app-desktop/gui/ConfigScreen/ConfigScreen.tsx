@@ -24,6 +24,7 @@ import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import SettingHeader from './controls/SettingHeader';
 import { settingMatchesQuery } from './utils/settingMatchesQuery';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 
 
 interface Font {
@@ -179,8 +180,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			screenName = section.name;
 
 			if (this.hasChanges()) {
-				const ok = await shim.showConfirmationDialog(_('This will open a new screen. Save your current changes?'));
-				if (ok) {
+				const answer = await shim.showMessageBox(
+					_('This will open a new screen. Save your current changes?'),
+					{
+						type: MessageBoxType.Confirm,
+						buttons: [_('Save changes'), _('Discard changes')],
+						defaultId: 0,
+						cancelId: 1,
+					},
+				);
+				if (answer === 0) {
 					await shared.saveSettings(this);
 				}
 			}

@@ -896,6 +896,30 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					editor.addShortcut('Meta+Shift+8', '', () => editor.execCommand('InsertUnorderedList'));
 					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
+					// Override ScrollIntoView to scroll to the cursor's character position
+					// instead of the start of the paragraph.
+					// See: https://github.com/laurent22/joplin/issues/14143
+					editor.on('ScrollIntoView', (event) => {
+						const sel = editor.getDoc().getSelection();
+						if (!sel || sel.rangeCount === 0) return;
+
+						const rect = sel.getRangeAt(0).getBoundingClientRect();
+						const win = editor.getWin();
+						const viewHeight = win.innerHeight;
+
+						if (rect.top < 0) {
+							win.scrollBy(0, rect.top);
+						} else if (rect.bottom > viewHeight) {
+							win.scrollBy(0, rect.bottom - viewHeight);
+						} else if (rect.top === 0 && rect.height === 0) {
+							// Handles edge case where rect is not rendered
+							// See: https://stackoverflow.com/a/14384220/5757550
+							return;
+						}
+						event.preventDefault();
+						return;
+					});
+
 					// TODO: remove event on unmount?
 					editor.on('drop', (event) => {
 						// Prevent the message "Dropped file type is not supported" from showing up.
@@ -1335,13 +1359,35 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onSetAttrib = (event: EditorEvent<any>) => {
-			// Dispatch onChange when a link is edited
+			// Dispatch onChange when a link or table-related formatting is edited
 			const target = Array.isArray(event.attrElm) ? event.attrElm[0] : event.attrElm;
+			if (!target) return;
+
 			if (target.nodeName === 'A') {
 				if (event.attrName === 'title' || event.attrName === 'href' || event.attrName === 'rel') {
 					onChangeHandler();
 				}
 			}
+
+			if (['TABLE', 'TR', 'TD', 'TH'].includes(target.nodeName)) {
+				const attributeName = (event.attrName ?? '').toLowerCase();
+				if (
+					attributeName === 'style' ||
+					attributeName === 'class' ||
+					attributeName === 'bgcolor' ||
+					attributeName === 'bordercolor' ||
+					attributeName === 'background' ||
+					attributeName === 'cellpadding' ||
+					attributeName === 'cellspacing'
+				) {
+					onChangeHandler();
+				}
+			}
+		};
+
+		// Table plugin fires this on structure/style changes from dialogs.
+		const onTableModified = () => {
+			onChangeHandler();
 		};
 
 		// Keypress means that a printable key (letter, digit, etc.) has been
@@ -1490,6 +1536,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
 		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
+		editor.on('TableModified', onTableModified);
 
 		return () => {
 			try {
@@ -1506,6 +1553,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
 				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
+				editor.off('TableModified', onTableModified);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}

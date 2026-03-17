@@ -35,8 +35,10 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 	useEffect(() => {
 		if (!editor) return () => {};
 
-		const contextMenuItems = menuItems(dispatch);
 		const targetWindow = bridge().windowById(windowId);
+		if (!targetWindow) return () => {};
+
+		const contextMenuItems = menuItems(dispatch);
 
 		const makeMainMenuItems = async (element: Element) => {
 			let itemType: ContextMenuItemType = ContextMenuItemType.None;

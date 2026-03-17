@@ -10,18 +10,21 @@ import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import { AppState } from '../../app.reducer';
+import { AppState, AppStateDialogName } from '../../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
 import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvancedSettingsButton';
 import MacOSMissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
+import { Dispatch } from 'redux';
+import { shouldCancelPendingEnableAfterMasterPasswordDialog, shouldOpenMasterPasswordDialogForEnable, shouldResumeEnableAfterMasterPasswordDialog } from './enableFlow';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	themeId: any;
+	dispatch: Dispatch;
 	masterKeys: MasterKeyEntity[];
 	passwords: Record<string, string>;
 	notLoadedMasterKeys: string[];
@@ -30,10 +33,13 @@ interface Props {
 	activeMasterKeyId: string;
 	masterPassword: string;
 	ppk: PublicPrivateKeyPair;
+	masterPasswordDialogOpen: boolean;
 }
 
-const EncryptionConfigScreen = (props: Props) => {
+export const EncryptionConfigScreen = (props: Props) => {
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
+	const [pendingEnableEncryption, setPendingEnableEncryption] = useState(false);
+	const wasMasterPasswordDialogOpen = useRef(props.masterPasswordDialogOpen);
 
 	const theme = useMemo(() => {
 		return themeStyle(props.themeId);
@@ -43,6 +49,41 @@ const EncryptionConfigScreen = (props: Props) => {
 	const { passwordChecks, masterPasswordKeys, masterPasswordStatus } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
 	const { showDisabledMasterKeys, toggleShowDisabledMasterKeys } = useToggleShowDisabledMasterKeys();
 	const needMasterPassword = useNeedMasterPassword(passwordChecks, props.masterKeys);
+
+	useEffect(() => {
+		const wasOpen = wasMasterPasswordDialogOpen.current;
+		wasMasterPasswordDialogOpen.current = props.masterPasswordDialogOpen;
+
+		if (shouldCancelPendingEnableAfterMasterPasswordDialog({
+			pendingEnableEncryption,
+			wasMasterPasswordDialogOpen: wasOpen,
+			masterPasswordDialogOpen: props.masterPasswordDialogOpen,
+			masterPassword: props.masterPassword,
+		})) {
+			setPendingEnableEncryption(false);
+			return;
+		}
+
+		if (!shouldResumeEnableAfterMasterPasswordDialog({
+			pendingEnableEncryption,
+			wasMasterPasswordDialogOpen: wasOpen,
+			masterPasswordDialogOpen: props.masterPasswordDialogOpen,
+			masterPassword: props.masterPassword,
+		})) return;
+
+		const masterKey = getDefaultMasterKey();
+
+		void (async () => {
+			try {
+				await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, props.masterPassword);
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				await dialogs.alert(message);
+			} finally {
+				setPendingEnableEncryption(false);
+			}
+		})();
+	}, [pendingEnableEncryption, props.masterPasswordDialogOpen, props.masterPassword]);
 
 	const onUpgradeMasterKey = useCallback(async (mk: MasterKeyEntity) => {
 		const password = determineKeyPassword(mk.id, masterPasswordKeys, props.masterPassword, props.passwords);
@@ -200,6 +241,18 @@ const EncryptionConfigScreen = (props: Props) => {
 			const answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			if (!answer) return;
 		} else {
+			if (shouldOpenMasterPasswordDialogForEnable({
+				hasMasterPassword,
+				masterPasswordDialogOpen: props.masterPasswordDialogOpen,
+			})) {
+				setPendingEnableEncryption(true);
+				props.dispatch({
+					type: 'DIALOG_OPEN',
+					name: AppStateDialogName.MasterPassword,
+				});
+				return;
+			}
+
 			const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
 			newPassword = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
 		}
@@ -216,7 +269,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		} catch (error) {
 			await dialogs.alert(error.message);
 		}
-	}, [props.masterPassword]);
+	}, [props.dispatch, props.masterPassword, props.masterPasswordDialogOpen]);
 
 	const renderEncryptionSection = () => {
 		const decryptedItemsInfo = <p>{decryptedStatText(stats)}</p>;
@@ -415,6 +468,7 @@ const mapStateToProps = (state: AppState) => {
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
 		masterPassword: state.settings['encryption.masterPassword'],
 		ppk: syncInfo.ppk,
+		masterPasswordDialogOpen: !!state.dialogs.find(dialog => dialog.name === AppStateDialogName.MasterPassword),
 	};
 };
 

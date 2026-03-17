@@ -13,6 +13,7 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 		newBody = htmlToMd.parse(html, {
 			preserveImageTagsWithSize: true,
 			preserveNestedTables: true,
+			preserveTableStyles: true,
 			preserveColorStyles: true,
 			...parseOptions,
 		});
