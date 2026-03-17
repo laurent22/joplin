@@ -20,6 +20,10 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim from '@joplin/lib/shim';
+import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
+import SettingHeader from './controls/SettingHeader';
+import { settingMatchesQuery } from './utils/settingMatchesQuery';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 
 interface Font {
@@ -35,6 +39,7 @@ declare global {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class ConfigScreenComponent extends React.Component<any, any> {
+	private searchInputRef_ = React.createRef<HTMLInputElement>();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private rowStyle_: any = null;
@@ -52,6 +57,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			changedSettingKeys: [],
 			needRestart: false,
 			fonts: [],
+			searchQuery: '',
 		};
 
 		this.rowStyle_ = {
@@ -65,6 +71,34 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.onApplyClick = this.onApplyClick.bind(this);
 		this.handleSettingButton = this.handleSettingButton.bind(this);
 	}
+
+	private searchQuery() {
+		return (this.state.searchQuery ?? '').trim();
+	}
+
+	private isSearching() {
+		return !!this.searchQuery();
+	}
+
+	private onSearchUpdate = (event: OnChangeEvent) => {
+		this.setState({ searchQuery: event.value });
+	};
+
+	private onSearchButtonClick = () => {
+		if (this.isSearching()) {
+			this.setState({ searchQuery: '' });
+			return;
+		}
+
+		if (this.searchInputRef_.current) focus('ConfigScreenComponent::onSearchButtonClick', this.searchInputRef_.current);
+	};
+
+	private onSearchKeyDown: React.KeyboardEventHandler<HTMLInputElement> = event => {
+		if (event.key === 'Escape' && this.isSearching()) {
+			event.preventDefault();
+			this.setState({ searchQuery: '' });
+		}
+	};
 
 	private async checkSyncConfig_() {
 		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
@@ -176,21 +210,34 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
+		const isSearching = this.isSearching();
+		const searchQuery = this.searchQuery();
+		const headerTitle = Setting.sectionNameToLabel(section.name);
+		const settingComps: React.ReactNode[] = [];
+		const advancedSettingComps: React.ReactNode[] = [];
 
-		const createSettingComponents = (advanced: boolean) => {
-			const output = [];
+		const addSettingComponent = (
+			component: React.ReactNode,
+			relatedText: string|string[],
+			settingMetadata?: { advanced?: boolean },
+		) => {
+			if (!component) return;
+			const hiddenBySearch = isSearching && !settingMatchesQuery(searchQuery, relatedText, headerTitle);
+			if (hiddenBySearch) return;
 
-			for (let i = 0; i < section.metadatas.length; i++) {
-				const md = section.metadatas[i];
-				if (!!md.advanced !== advanced) continue;
-				const settingComp = this.settingToComponent(md.key, settings[md.key]);
-				output.push(settingComp);
+			if (!isSearching && settingMetadata?.advanced) {
+				advancedSettingComps.push(component);
+			} else {
+				settingComps.push(component);
 			}
-			return output;
 		};
 
-		const settingComps = createSettingComponents(false);
-		const advancedSettingComps = createSettingComponents(true);
+		for (let i = 0; i < section.metadatas.length; i++) {
+			const md = section.metadatas[i];
+			const settingComp = this.settingToComponent(md.key, settings[md.key]);
+			const relatedText = [md.label?.() ?? '', md.description?.(AppType.Desktop) ?? ''];
+			addSettingComponent(settingComp, relatedText, md);
+		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const sectionWidths: Record<string, any> = {
@@ -204,7 +251,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			maxWidth: sectionWidths[section.name] ? sectionWidths[section.name] : 640,
 		};
 
-		if (!selected) sectionStyle.display = 'none';
+		if (!selected && !isSearching) sectionStyle.display = 'none';
 
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
@@ -219,7 +266,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			// saved yet).
 			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
 			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
-				settingComps.push(
+				addSettingComponent(
 					<p key='missing-password-warning' style={warningStyle}>
 						{_('%s: Missing password.', _('Warning'))}
 						{' '}
@@ -228,6 +275,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							text={_('Help')}
 						/>
 					</p>,
+					[_('Warning'), _('Missing password')],
 				);
 			}
 
@@ -247,7 +295,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							routeName: 'JoplinCloudLogin',
 						});
 					};
-					settingComps.push(
+					addSettingComponent(
 						<div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
 							<Button
 								title={_('Connect to Joplin Cloud')}
@@ -255,6 +303,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								onClick={goToJoplinCloudLogin}
 							/>
 						</div>,
+						_('Connect to Joplin Cloud'),
 					);
 				}
 
@@ -271,7 +320,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						});
 					};
 
-					settingComps.push(
+					addSettingComponent(
 						<div key="connect_to_joplin_server_saml_button" style={this.rowStyle_}>
 							<Button
 								title={_('Connect using your organisation account')}
@@ -280,10 +329,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								disabled={!server || server?.trim().length === 0}
 							/>
 						</div>,
+						_('Connect using your organisation account'),
 					);
 				}
 
-				settingComps.push(
+				addSettingComponent(
 					<div key="check_sync_config_button" style={this.rowStyle_}>
 						<Button
 							title={_('Check synchronisation configuration')}
@@ -293,6 +343,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						/>
 						{statusComp}
 					</div>,
+					[_('Check synchronisation configuration'), ...messages],
 				);
 			}
 		}
@@ -312,11 +363,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
 
+		if (!settingComps.length && !advancedSettingComps.length) return null;
+		if (!selected && !isSearching) return null;
+
+		const headerComp = !isSearching ? null : <SettingHeader text={headerTitle}/>;
+
 		return (
 			<div key={key} style={sectionStyle}>
-				{this.renderSectionDescription(section)}
+				{headerComp}
+				{isSearching ? null : this.renderSectionDescription(section)}
 				<div>{settingComps}</div>
-				{advancedSettingsButton}
+				{isSearching ? null : advancedSettingsButton}
 				<div
 					style={advancedSettingsSectionStyle}
 					id={advancedSettingsGroupId}
@@ -391,6 +448,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	public render() {
 		const theme = themeStyle(this.props.themeId);
+		const isSearching = this.isSearching();
 
 		const style = {
 			...this.props.style,
@@ -412,12 +470,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const hasChanges = this.hasChanges();
 
-		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName);
+		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, isSearching ? '' : this.state.selectedSectionName);
 
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = !isSearching && this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
 
@@ -433,6 +491,33 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const rightStyle = { ...style, flex: 1 };
 		delete style.width;
+
+		const headerBarStyle: React.CSSProperties = {
+			display: 'flex',
+			alignItems: 'center',
+			gap: 12,
+			padding: theme.configScreenPadding,
+			borderBottom: `1px solid ${theme.dividerColor}`,
+			backgroundColor: theme.backgroundColor3,
+		};
+
+		const headerTitleStyle: React.CSSProperties = {
+			...theme.textStyle,
+			fontWeight: 700,
+			letterSpacing: 0.6,
+			textTransform: 'uppercase',
+			whiteSpace: 'nowrap',
+		};
+
+		const headerSearchStyle: React.CSSProperties = {
+			flex: 1,
+		};
+
+		const emptySearchState = (
+			<div style={{ ...theme.textStyle, opacity: 0.7 }} aria-live='polite'>
+				{_('No settings match your search')}
+			</div>
+		);
 
 		const tabComponents: React.ReactNode[] = [];
 		for (const section of sections) {
@@ -463,6 +548,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			);
 		}
 
+		const searchResultsComp = !isSearching ? null : (
+			<div id='settings-search-results' style={containerStyle}>
+				{settingComps.length ? settingComps : emptySearchState}
+			</div>
+		);
+
 		return (
 			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
@@ -472,13 +563,27 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}
-					{tabComponents}
+					<div style={headerBarStyle}>
+						<div style={headerTitleStyle}>{_('Configuration')}</div>
+						<div style={headerSearchStyle}>
+							<SearchInput
+								inputRef={this.searchInputRef_}
+								value={this.state.searchQuery}
+								onChange={this.onSearchUpdate}
+								onSearchButtonClick={this.onSearchButtonClick}
+								onKeyDown={this.onSearchKeyDown}
+								searchStarted={isSearching}
+								aria-controls={isSearching ? 'settings-search-results' : `setting-section-${this.state.selectedSectionName}`}
+							/>
+						</div>
+					</div>
+					{searchResultsComp || tabComponents}
 					<ButtonBar
 						hasChanges={hasChanges}
 						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
 						onCancelClick={this.onCancelClick}
-						onSaveClick={screenComp ? null : this.onSaveClick}
-						onApplyClick={screenComp ? null : this.onApplyClick}
+						onSaveClick={screenComp ? undefined : this.onSaveClick}
+						onApplyClick={screenComp ? undefined : this.onApplyClick}
 					/>
 				</div>
 			</div>
