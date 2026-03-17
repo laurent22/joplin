@@ -106,3 +106,6 @@ Your Contributions.
 
 8. You agree to notify the Company of any facts or circumstances of which you
    become aware that would make these representations inaccurate in any respect.
+
+
+   I have read the CLA Document and I hereby sign the CLA
