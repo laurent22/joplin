@@ -195,7 +195,7 @@ export default function(props: Props) {
 							</>
 						)}
 					</div>
-					<p className="bold">Please make sure you remember your master password. For security reasons it cannot be recovered if lost, and any data encrypted with it may become inaccessible.</p>
+					<p className="bold">Please make sure you remember your master password. For security reasons it cannot be recovered if lost, and any data encrypted with it will become inaccessible.</p>
 					{renderResetMasterPasswordLink()}
 				</div>
 			);
