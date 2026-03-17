@@ -20,6 +20,8 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim from '@joplin/lib/shim';
+import CommandService from '@joplin/lib/services/CommandService';
+import { encryptionSearchKeywords, matchesSearchQueryValue } from './searchUtils';
 
 
 interface Font {
@@ -52,6 +54,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			changedSettingKeys: [],
 			needRestart: false,
 			fonts: [],
+			searchQuery: '',
+			searching: false,
 		};
 
 		this.rowStyle_ = {
@@ -155,6 +159,21 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ selectedSectionName: section.name, screenName: screenName });
 	}
 
+	private openSectionFromSearch(name: string) {
+		this.setState({ searching: false, searchQuery: '' }, () => {
+			void this.switchSection(name);
+		});
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private sectionSearchKeywords(sectionName: string, settings: any): string[] {
+		if (sectionName === 'encryption') {
+			return encryptionSearchKeywords(!!settings['encryption.enabled'], _);
+		}
+
+		return [];
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
 		void this.switchSection(event.section.name);
@@ -173,9 +192,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
+	private matchesSearchQuery(relatedText: string|string[], sectionTitle = ''): boolean {
+		return matchesSearchQueryValue(this.state.searchQuery ?? '', relatedText, sectionTitle);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
+		const searchQuery = (this.state.searchQuery ?? '').trim();
+		const searchActive = this.state.searching && searchQuery.length > 0;
+		const sectionLabel = Setting.sectionNameToLabel(section.name);
+		const sectionKeywords = this.sectionSearchKeywords(section.name, settings);
 
 		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
@@ -183,6 +210,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			for (let i = 0; i < section.metadatas.length; i++) {
 				const md = section.metadatas[i];
 				if (!!md.advanced !== advanced) continue;
+				const label = md.label?.() ?? '';
+				const description = md.description?.(AppType.Desktop) ?? '';
+				if (searchActive && !this.matchesSearchQuery([label, description], sectionLabel)) continue;
 				const settingComp = this.settingToComponent(md.key, settings[md.key]);
 				output.push(settingComp);
 			}
@@ -204,8 +234,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			maxWidth: sectionWidths[section.name] ? sectionWidths[section.name] : 640,
 		};
 
-		if (!selected) sectionStyle.display = 'none';
-
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
 		}
@@ -218,10 +246,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			// Don't show the missing password warning if the user just changed the sync target (but hasn't
 			// saved yet).
 			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
-			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+			const missingPasswordText = _('%s: Missing password.', _('Warning'));
+			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings) &&
+				(!searchActive || this.matchesSearchQuery([missingPasswordText, _('Help')], sectionLabel))) {
 				settingComps.push(
 					<p key='missing-password-warning' style={warningStyle}>
-						{_('%s: Missing password.', _('Warning'))}
+						{missingPasswordText}
 						{' '}
 						<MacOSMissingPasswordHelpLink
 							theme={theme}
@@ -240,7 +270,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 
-				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+				const connectToJoplinCloudTitle = _('Connect to Joplin Cloud');
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud') &&
+					(!searchActive || this.matchesSearchQuery([connectToJoplinCloudTitle], sectionLabel))) {
 					const goToJoplinCloudLogin = () => {
 						this.props.dispatch({
 							type: 'NAV_GO',
@@ -250,7 +282,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					settingComps.push(
 						<div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
 							<Button
-								title={_('Connect to Joplin Cloud')}
+								title={connectToJoplinCloudTitle}
 								level={ButtonLevel.Primary}
 								onClick={goToJoplinCloudLogin}
 							/>
@@ -258,7 +290,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					);
 				}
 
-				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+				const connectSamlTitle = _('Connect using your organisation account');
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml') &&
+					(!searchActive || this.matchesSearchQuery([connectSamlTitle], sectionLabel))) {
 					const server = settings['sync.11.path'] as string;
 
 					const goToSamlLogin = async () => {
@@ -274,7 +308,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					settingComps.push(
 						<div key="connect_to_joplin_server_saml_button" style={this.rowStyle_}>
 							<Button
-								title={_('Connect using your organisation account')}
+								title={connectSamlTitle}
 								level={ButtonLevel.Primary}
 								onClick={goToSamlLogin}
 								disabled={!server || server?.trim().length === 0}
@@ -283,18 +317,34 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					);
 				}
 
-				settingComps.push(
-					<div key="check_sync_config_button" style={this.rowStyle_}>
-						<Button
-							title={_('Check synchronisation configuration')}
-							level={ButtonLevel.Secondary}
-							disabled={this.state.checkSyncConfigResult === 'checking'}
-							onClick={this.checkSyncConfig_}
-						/>
-						{statusComp}
-					</div>,
-				);
+				const checkSyncTitle = _('Check synchronisation configuration');
+				if (!searchActive || this.matchesSearchQuery([checkSyncTitle], sectionLabel)) {
+					settingComps.push(
+						<div key="check_sync_config_button" style={this.rowStyle_}>
+							<Button
+								title={checkSyncTitle}
+								level={ButtonLevel.Secondary}
+								disabled={this.state.checkSyncConfigResult === 'checking'}
+								onClick={this.checkSyncConfig_}
+							/>
+							{statusComp}
+						</div>,
+					);
+				}
 			}
+		}
+
+		if (searchActive) {
+			const sectionMatches = this.matchesSearchQuery([sectionLabel, ...sectionKeywords], sectionLabel) ||
+				settingComps.length > 0 ||
+				advancedSettingComps.length > 0;
+			if (!sectionMatches) return null;
+			sectionStyle.marginTop = 0;
+			sectionStyle.marginBottom = 12;
+			sectionStyle.padding = '12px 0 12px 14px';
+			sectionStyle.borderLeft = `2px solid ${theme.dividerColor}`;
+		} else if (!selected) {
+			sectionStyle.display = 'none';
 		}
 
 		let advancedSettingsButton = null;
@@ -312,10 +362,35 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
 		}
 
+		if (searchActive && section.isScreen) {
+			const matchedKeywordEntries = sectionKeywords.filter(keyword => this.matchesSearchQuery(keyword, sectionLabel));
+			for (const keyword of matchedKeywordEntries) {
+				settingComps.push(
+					<div key={`open-section-entry-${section.name}-${keyword}`} style={this.rowStyle_}>
+						<Button
+							title={keyword}
+							level={ButtonLevel.Secondary}
+							onClick={() => this.openSectionFromSearch(section.name)}
+						/>
+					</div>,
+				);
+			}
+		}
+
+		const sectionTitleComp = searchActive ? (
+			<button
+				className='config-screen-search-section-link'
+				onClick={() => this.openSectionFromSearch(section.name)}
+			>
+				{sectionLabel}
+			</button>
+		) : null;
+
 		return (
 			<div key={key} style={sectionStyle}>
+				{sectionTitleComp}
 				{this.renderSectionDescription(section)}
-				<div>{settingComps}</div>
+				<div className='config-screen-settings-list'>{settingComps}</div>
 				{advancedSettingsButton}
 				<div
 					style={advancedSettingsSectionStyle}
@@ -411,13 +486,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		};
 
 		const hasChanges = this.hasChanges();
+		const searchQuery = this.state.searchQuery ?? '';
 
 		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName);
+		const searchResultComps = shared.settingsToComponents2(this, AppType.Desktop, settings, null);
 
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const searchActive = !screenComp && this.state.searching && searchQuery.trim().length > 0;
 
 		if (screenComp) containerStyle.display = 'none';
 
@@ -433,34 +511,97 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const rightStyle = { ...style, flex: 1 };
 		delete style.width;
+		const showSearchBar = !screenComp;
+		const configSearchBar = showSearchBar ? (
+			<div className='config-screen-search-toolbar' style={{ padding: theme.configScreenPadding, paddingBottom: theme.configScreenPadding / 2 }}>
+				{this.state.searching ? (
+					<div className='config-screen-search-input-wrapper'>
+						<div className='config-screen-search-field'>
+							<span className={`config-screen-search-icon ${CommandService.instance().iconName('search')}`}/>
+							<input
+								className='config-screen-search-input'
+								value={searchQuery}
+								onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({ searchQuery: event.currentTarget.value })}
+								placeholder={_('Search settings...')}
+								autoFocus={true}
+							/>
+						</div>
+						{searchQuery.length > 0 ? (
+							<button
+								className='config-screen-search-toggle'
+								title={_('Clear search')}
+								aria-label={_('Clear search')}
+								onClick={() => this.setState({ searchQuery: '' })}
+							>
+								{_('Clear')}
+							</button>
+						) : null}
+						<button
+							className='config-screen-search-toggle'
+							title={_('Close search')}
+							aria-label={_('Close search')}
+							onClick={() => this.setState({ searching: false, searchQuery: '' })}
+						>
+							<span className='fa fa-times'/>
+						</button>
+					</div>
+				) : (
+					<button
+						className='config-screen-search-toggle'
+						title={_('Search settings')}
+						aria-label={_('Search settings')}
+						onClick={() => this.setState({ searching: true })}
+					>
+						<span className={CommandService.instance().iconName('search')}/>
+					</button>
+				)}
+			</div>
+		) : null;
+
+		const visibleSearchResultComps = searchResultComps.filter((c: React.ReactNode) => !!c);
+		const hasSearchResults = visibleSearchResultComps.length > 0;
+		const searchResultsPanel = (
+			<div style={{ ...containerStyle, display: 'block' }}>
+				<div className='config-screen-search-results-title' style={{ ...theme.textStyle, marginBottom: 12, fontWeight: 'bold' }}>
+					{_('Search results')}
+				</div>
+				{hasSearchResults ? visibleSearchResultComps : (
+					<div style={theme.textStyle}>
+						{_('No settings match your search.')}
+					</div>
+				)}
+			</div>
+		);
 
 		const tabComponents: React.ReactNode[] = [];
-		for (const section of sections) {
-			const sectionId = `setting-section-${section.name}`;
-			let content = null;
-			const visible = section.name === this.state.selectedSectionName;
-			if (visible) {
-				content = (
-					<>
-						{screenComp}
-						<div style={containerStyle}>{settingComps}</div>
-					</>
+		if (!searchActive) {
+			for (const section of sections) {
+				const sectionId = `setting-section-${section.name}`;
+				let content = null;
+				const visible = section.name === this.state.selectedSectionName;
+				if (visible) {
+					content = (
+						<>
+							{screenComp}
+							<div style={containerStyle}>{settingComps}</div>
+						</>
+					);
+				}
+
+				tabComponents.push(
+					<div
+						key={sectionId}
+						id={sectionId}
+						className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
+						hidden={!visible}
+						aria-labelledby={`setting-tab-${section.name}`}
+						tabIndex={0}
+						role='tabpanel'
+					>
+						{content}
+					</div>,
 				);
 			}
-
-			tabComponents.push(
-				<div
-					key={sectionId}
-					id={sectionId}
-					className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
-					hidden={!visible}
-					aria-labelledby={`setting-tab-${section.name}`}
-					tabIndex={0}
-					role='tabpanel'
-				>
-					{content}
-				</div>,
-			);
 		}
 
 		return (
@@ -471,8 +612,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					sections={sections}
 				/>
 				<div style={rightStyle}>
+					{configSearchBar}
 					{needRestartComp}
-					{tabComponents}
+					{searchActive ? searchResultsPanel : tabComponents}
 					<ButtonBar
 						hasChanges={hasChanges}
 						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
