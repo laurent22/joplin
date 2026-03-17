@@ -187,7 +187,7 @@ export const processImagesInPastedHtml = async (html: string, options: ProcessIm
 					// so Turndown's outerHTML (used for images with width/height) gets
 					// a short URL instead of 200KB of base64.
 					const cleanSrc = imageSrc.replace(/\s/g, '');
-					const dataUrlMatch = cleanSrc.match(/^data:([^;]+);base64,(.+)$/);
+					const dataUrlMatch = cleanSrc.match(/^data:((?!image\/svg\+xml)[^;]+);base64,(.+)$/);
 					if (dataUrlMatch) {
 						const mimeType = dataUrlMatch[1];
 						const base64Data = dataUrlMatch[2];
