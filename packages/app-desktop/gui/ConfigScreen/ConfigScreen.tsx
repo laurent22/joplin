@@ -21,6 +21,7 @@ const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
+import { settingMatchesSearch } from './configScreenUtils';
 
 
 interface Font {
@@ -78,20 +79,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ searchQuery: '' });
 	}
 
-	private settingMatchesSearch(md: SettingItem, searchQuery: string) {
-		if (!searchQuery) return true;
-
-		const q = searchQuery.trim().toLowerCase();
-		if (!q) return true;
-
-		const labelText = md.label ? md.label() : '';
-		const descriptionText = md.description ? md.description(AppType.Desktop) : '';
-		const label = String(labelText || '').toLowerCase();
-		const description = String(descriptionText || '').toLowerCase();
-
-		return label.includes(q) || description.includes(q);
-	}
-
 	private filterSectionsBySearch(sections: SettingMetadataSection[], searchQuery: string) {
 		const q = searchQuery.trim();
 		if (!q) return sections;
@@ -101,7 +88,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		for (const section of sections) {
 			if (!section.metadatas.length) continue;
 
-			const metadatas = section.metadatas.filter((md: SettingItem) => this.settingMatchesSearch(md, q));
+			const metadatas = section.metadatas.filter((md: SettingItem) => settingMatchesSearch(md, q));
 			if (!metadatas.length) continue;
 
 			output.push({ ...section, metadatas });
