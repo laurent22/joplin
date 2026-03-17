@@ -1,638 +1,546 @@
-import * as React from "react";
-import Sidebar from "./Sidebar";
-import ButtonBar from "./ButtonBar";
-import Button, { ButtonLevel } from "../Button/Button";
-import { _ } from "@joplin/lib/locale";
-import bridge from "../../services/bridge";
-import Setting, {
-  AppType,
-  SettingValueType,
-  SyncStartupOperation,
-} from "@joplin/lib/models/Setting";
-import EncryptionConfigScreen from "../EncryptionConfigScreen/EncryptionConfigScreen";
-import { reg } from "@joplin/lib/registry";
-const { connect } = require("react-redux");
-import { themeStyle } from "@joplin/lib/theme";
-import SyncTargetRegistry from "@joplin/lib/SyncTargetRegistry";
-import * as shared from "@joplin/lib/components/shared/config/config-shared.js";
-import ClipperConfigScreen from "../ClipperConfigScreen";
-import restart from "../../services/restart";
-import JoplinCloudConfigScreen from "../JoplinCloudConfigScreen";
-import ToggleAdvancedSettingsButton from "./controls/ToggleAdvancedSettingsButton";
-import shouldShowMissingPasswordWarning from "@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning";
-import MacOSMissingPasswordHelpLink from "./controls/MissingPasswordHelpLink";
-const { KeymapConfigScreen } = require("../KeymapConfig/KeymapConfigScreen");
-import SettingComponent, {
-  UpdateSettingValueEvent,
-} from "./controls/SettingComponent";
-import shim, { MessageBoxType } from "@joplin/lib/shim";
-import SearchInput from "../lib/SearchInput/SearchInput";
-import filterSettingsByQuery from "./filterSettingsByQuery";
+import * as React from 'react';
+import Sidebar from './Sidebar';
+import ButtonBar from './ButtonBar';
+import Button, { ButtonLevel } from '../Button/Button';
+import { _ } from '@joplin/lib/locale';
+import bridge from '../../services/bridge';
+import Setting, { AppType, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
+import { reg } from '@joplin/lib/registry';
+const { connect } = require('react-redux');
+import { themeStyle } from '@joplin/lib/theme';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import * as shared from '@joplin/lib/components/shared/config/config-shared.js';
+import ClipperConfigScreen from '../ClipperConfigScreen';
+import restart from '../../services/restart';
+import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
+import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
+import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
+import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
+const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
+import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
+import SearchInput from '../lib/SearchInput/SearchInput';
+import filterSettingsByQuery from './filterSettingsByQuery';
+
 
 interface Font {
-  family: string;
+	family: string;
 }
 
 declare global {
-  interface Window {
-    queryLocalFonts(): Promise<Font[]>;
-    openChangelogLink: () => void;
-  }
+	interface Window {
+		queryLocalFonts(): Promise<Font[]>;
+		openChangelogLink: ()=> void;
+	}
 }
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 class ConfigScreenComponent extends React.Component<any, any> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-  private rowStyle_: any = null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-  public constructor(props: any) {
-    super(props);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private rowStyle_: any = null;
 
-    shared.init(reg);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public constructor(props: any) {
+		super(props);
 
-    this.state = {
-      ...shared.defaultScreenState,
-      selectedSectionName: "general",
-      screenName: "",
-      changedSettingKeys: [],
-      needRestart: false,
-      fonts: [],
-      searchQuery: "",
-    };
+		shared.init(reg);
 
-    this.rowStyle_ = {
-      marginBottom: 10,
-    };
+		this.state = {
+			...shared.defaultScreenState,
+			selectedSectionName: 'general',
+			screenName: '',
+			changedSettingKeys: [],
+			needRestart: false,
+			searchQuery: '',
+			fonts: [],
+		};
 
-    this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
-    this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
-    this.onCancelClick = this.onCancelClick.bind(this);
-    this.onSaveClick = this.onSaveClick.bind(this);
-    this.onApplyClick = this.onApplyClick.bind(this);
-    this.handleSettingButton = this.handleSettingButton.bind(this);
-  }
+		this.rowStyle_ = {
+			marginBottom: 10,
+		};
 
-  private onSearchChange = (event: any) => {
-    this.setState({ searchQuery: event.value });
-  };
+		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
+		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
+		this.onCancelClick = this.onCancelClick.bind(this);
+		this.onSaveClick = this.onSaveClick.bind(this);
+		this.onApplyClick = this.onApplyClick.bind(this);
+		this.handleSettingButton = this.handleSettingButton.bind(this);
+	}
 
-  private onSearchClear = () => {
-    this.setState({ searchQuery: "" });
-  };
+	private onSearchChange = (event: any) => {
+		this.setState({ searchQuery: event.value });
+	};
 
-  private async checkSyncConfig_() {
-    if (
-      this.state.settings["sync.target"] ===
-      SyncTargetRegistry.nameToId("joplinCloud")
-    ) {
-      const isAuthenticated = await reg.syncTarget().isAuthenticated();
-      if (!isAuthenticated) {
-        return this.props.dispatch({
-          type: "NAV_GO",
-          routeName: "JoplinCloudLogin",
-        });
-      }
-    }
-    await shared.checkSyncConfig(this, this.state.settings);
-  }
+	private onSearchClear = () => {
+		this.setState({ searchQuery: '' });
+	};
 
-  public UNSAFE_componentWillMount() {
-    this.setState({ settings: this.props.settings });
-  }
+	private async checkSyncConfig_() {
+		if (this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+			const isAuthenticated = await reg.syncTarget().isAuthenticated();
+			if (!isAuthenticated) {
+				return this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'JoplinCloudLogin',
+				});
+			}
+		}
+		await shared.checkSyncConfig(this, this.state.settings);
+	}
 
-  public async componentDidMount() {
-    if (this.props.defaultSection) {
-      this.setState({ selectedSectionName: this.props.defaultSection }, () => {
-        void this.switchSection(this.props.defaultSection);
-      });
-    }
+	public UNSAFE_componentWillMount() {
+		this.setState({ settings: this.props.settings });
+	}
 
-    const fonts = (await window.queryLocalFonts()).map(
-      (font: Font) => font.family,
-    );
-    const uniqueFonts = [...new Set(fonts)];
-    this.setState({ fonts: uniqueFonts });
-  }
+	public async componentDidMount() {
+		if (this.props.defaultSection) {
+			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
+				void this.switchSection(this.props.defaultSection);
+			});
+		}
 
-  private async handleSettingButton(key: string) {
-    if (key === "sync.clearLocalSyncStateButton") {
-      if (
-        !(await shim.showConfirmationDialog(
-          "This cannot be undone. Do you want to continue?",
-        ))
-      )
-        return;
-      Setting.setValue(
-        "sync.startupOperation",
-        SyncStartupOperation.ClearLocalSyncState,
-      );
-      await Setting.saveAll();
-      await restart();
-    } else if (key === "sync.clearLocalDataButton") {
-      if (
-        !(await shim.showConfirmationDialog(
-          "This cannot be undone. Do you want to continue?",
-        ))
-      )
-        return;
-      Setting.setValue(
-        "sync.startupOperation",
-        SyncStartupOperation.ClearLocalData,
-      );
-      await Setting.saveAll();
-      await restart();
-    } else if (key === "ocr.clearLanguageDataCacheButton") {
-      if (!(await shim.showConfirmationDialog(this.restartMessage()))) return;
-      Setting.setValue("ocr.clearLanguageDataCache", true);
-      await restart();
-    } else if (key === "sync.openSyncWizard") {
-      this.props.dispatch({
-        type: "DIALOG_OPEN",
-        name: "syncWizard",
-      });
-    } else {
-      throw new Error(`Unhandled key: ${key}`);
-    }
-  }
+		const fonts = (await window.queryLocalFonts()).map((font: Font) => font.family);
+		const uniqueFonts = [...new Set(fonts)];
+		this.setState({ fonts: uniqueFonts });
+	}
 
-  public sectionByName(name: string) {
-    const sections = shared.settingsSections({
-      device: AppType.Desktop,
-      settings: this.state.settings,
-    });
-    for (const section of sections) {
-      if (section.name === name) return section;
-    }
+	private async handleSettingButton(key: string) {
+		if (key === 'sync.clearLocalSyncStateButton') {
+			if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
+			await Setting.saveAll();
+			await restart();
+		} else if (key === 'sync.clearLocalDataButton') {
+			if (!await shim.showConfirmationDialog('This cannot be undone. Do you want to continue?')) return;
+			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
+			await Setting.saveAll();
+			await restart();
+		} else if (key === 'ocr.clearLanguageDataCacheButton') {
+			if (!await shim.showConfirmationDialog(this.restartMessage())) return;
+			Setting.setValue('ocr.clearLanguageDataCache', true);
+			await restart();
+		} else if (key === 'sync.openSyncWizard') {
+			this.props.dispatch({
+				type: 'DIALOG_OPEN',
+				name: 'syncWizard',
+			});
+		} else {
+			throw new Error(`Unhandled key: ${key}`);
+		}
+	}
 
-    throw new Error(`Invalid section name: ${name}`);
-  }
+	public sectionByName(name: string) {
+		const sections = shared.settingsSections({ device: AppType.Desktop, settings: this.state.settings });
+		for (const section of sections) {
+			if (section.name === name) return section;
+		}
 
-  public screenFromName(screenName: string) {
-    if (screenName === "encryption") return <EncryptionConfigScreen />;
-    if (screenName === "server")
-      return <ClipperConfigScreen themeId={this.props.themeId} />;
-    if (screenName === "keymap")
-      return <KeymapConfigScreen themeId={this.props.themeId} />;
-    if (screenName === "joplinCloud") return <JoplinCloudConfigScreen />;
+		throw new Error(`Invalid section name: ${name}`);
+	}
 
-    throw new Error(`Invalid screen name: ${screenName}`);
-  }
+	public screenFromName(screenName: string) {
+		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
+		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'joplinCloud') return <JoplinCloudConfigScreen />;
 
-  public async switchSection(name: string) {
-    const section = this.sectionByName(name);
-    let screenName = "";
-    if (section.isScreen) {
-      screenName = section.name;
+		throw new Error(`Invalid screen name: ${screenName}`);
+	}
 
-      if (this.hasChanges()) {
-        const answer = await shim.showMessageBox(
-          _("This will open a new screen. Save your current changes?"),
-          {
-            type: MessageBoxType.Confirm,
-            buttons: [_("Save changes"), _("Discard changes")],
-            defaultId: 0,
-            cancelId: 1,
-          },
-        );
-        if (answer === 0) {
-          await shared.saveSettings(this);
-        }
-      }
-    }
+	public async switchSection(name: string) {
+		const section = this.sectionByName(name);
+		let screenName = '';
+		if (section.isScreen) {
+			screenName = section.name;
 
-    this.setState({
-      selectedSectionName: section.name,
-      screenName: screenName,
-    });
-  }
+			if (this.hasChanges()) {
+				const answer = await shim.showMessageBox(
+					_('This will open a new screen. Save your current changes?'),
+					{
+						type: MessageBoxType.Confirm,
+						buttons: [_('Save changes'), _('Discard changes')],
+						defaultId: 0,
+						cancelId: 1,
+					},
+				);
+				if (answer === 0) {
+					await shared.saveSettings(this);
+				}
+			}
+		}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-  private sidebar_selectionChange(event: any) {
-    void this.switchSection(event.section.name);
-  }
+		this.setState({ selectedSectionName: section.name, screenName: screenName });
+	}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-  public renderSectionDescription(section: any) {
-    const description = Setting.sectionDescription(
-      section.name,
-      AppType.Desktop,
-    );
-    if (!description) return null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private sidebar_selectionChange(event: any) {
+		void this.switchSection(event.section.name);
+	}
 
-    const theme = themeStyle(this.props.themeId);
-    return (
-      <div style={{ ...theme.textStyle, marginBottom: 15 }}>{description}</div>
-    );
-  }
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public renderSectionDescription(section: any) {
+		const description = Setting.sectionDescription(section.name, AppType.Desktop);
+		if (!description) return null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-  public sectionToComponent(
-    key: string,
-    section: any,
-    settings: any,
-    selected: boolean,
-  ) {
-    const theme = themeStyle(this.props.themeId);
+		const theme = themeStyle(this.props.themeId);
+		return (
+			<div style={{ ...theme.textStyle, marginBottom: 15 }}>
+				{description}
+			</div>
+		);
+	}
 
-    const createSettingComponents = (advanced: boolean) => {
-      const output = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
+		const theme = themeStyle(this.props.themeId);
 
-      for (let i = 0; i < section.metadatas.length; i++) {
-        const md = section.metadatas[i];
-        if (!!md.advanced !== advanced) continue;
-        const settingComp = this.settingToComponent(md.key, settings[md.key]);
-        output.push(settingComp);
-      }
-      return output;
-    };
+		const createSettingComponents = (advanced: boolean) => {
+			const output = [];
 
-    const settingComps = createSettingComponents(false);
-    const advancedSettingComps = createSettingComponents(true);
+			for (let i = 0; i < section.metadatas.length; i++) {
+				const md = section.metadatas[i];
+				if (!!md.advanced !== advanced) continue;
+				const settingComp = this.settingToComponent(md.key, settings[md.key]);
+				output.push(settingComp);
+			}
+			return output;
+		};
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-    const sectionWidths: Record<string, any> = {
-      plugins: "100%",
-    };
+		const settingComps = createSettingComponents(false);
+		const advancedSettingComps = createSettingComponents(true);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-    const sectionStyle: any = {
-      marginTop: 20,
-      marginBottom: 20,
-      maxWidth: sectionWidths[section.name] ? sectionWidths[section.name] : 640,
-    };
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const sectionWidths: Record<string, any> = {
+			plugins: '100%',
+		};
 
-    if (!selected) sectionStyle.display = "none";
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const sectionStyle: any = {
+			marginTop: 20,
+			marginBottom: 20,
+			maxWidth: sectionWidths[section.name] ? sectionWidths[section.name] : 640,
+		};
 
-    if (section.name === "general") {
-      sectionStyle.borderTopWidth = 0;
-    }
+		if (!selected) sectionStyle.display = 'none';
 
-    if (section.name === "sync") {
-      const syncTargetMd = SyncTargetRegistry.idToMetadata(
-        settings["sync.target"],
-      );
-      const statusStyle = { ...theme.textStyle, marginTop: 10 };
-      const warningStyle = { ...theme.textStyle, color: theme.colorWarn };
+		if (section.name === 'general') {
+			sectionStyle.borderTopWidth = 0;
+		}
 
-      // Don't show the missing password warning if the user just changed the sync target (but hasn't
-      // saved yet).
-      const matchesSavedTarget =
-        settings["sync.target"] === this.props.settings["sync.target"];
-      if (
-        matchesSavedTarget &&
-        shouldShowMissingPasswordWarning(settings["sync.target"], settings)
-      ) {
-        settingComps.push(
-          <p key="missing-password-warning" style={warningStyle}>
-            {_("%s: Missing password.", _("Warning"))}{" "}
-            <MacOSMissingPasswordHelpLink theme={theme} text={_("Help")} />
-          </p>,
-        );
-      }
+		if (section.name === 'sync') {
+			const syncTargetMd = SyncTargetRegistry.idToMetadata(settings['sync.target']);
+			const statusStyle = { ...theme.textStyle, marginTop: 10 };
+			const warningStyle = { ...theme.textStyle, color: theme.colorWarn };
 
-      if (syncTargetMd.supportsConfigCheck) {
-        const messages = shared.checkSyncConfigMessages(this);
-        const statusComp = !messages.length ? null : (
-          <div style={statusStyle} aria-live="polite">
-            {messages[0]}
-            {messages.length >= 2 ? <p>{messages[1]}</p> : null}
-          </div>
-        );
+			// Don't show the missing password warning if the user just changed the sync target (but hasn't
+			// saved yet).
+			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
+			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
+				settingComps.push(
+					<p key='missing-password-warning' style={warningStyle}>
+						{_('%s: Missing password.', _('Warning'))}
+						{' '}
+						<MacOSMissingPasswordHelpLink
+							theme={theme}
+							text={_('Help')}
+						/>
+					</p>,
+				);
+			}
 
-        if (
-          settings["sync.target"] === SyncTargetRegistry.nameToId("joplinCloud")
-        ) {
-          const goToJoplinCloudLogin = () => {
-            this.props.dispatch({
-              type: "NAV_GO",
-              routeName: "JoplinCloudLogin",
-            });
-          };
-          settingComps.push(
-            <div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
-              <Button
-                title={_("Connect to Joplin Cloud")}
-                level={ButtonLevel.Primary}
-                onClick={goToJoplinCloudLogin}
-              />
-            </div>,
-          );
-        }
+			if (syncTargetMd.supportsConfigCheck) {
+				const messages = shared.checkSyncConfigMessages(this);
+				const statusComp = !messages.length ? null : (
+					<div style={statusStyle} aria-live='polite'>
+						{messages[0]}
+						{messages.length >= 1 ? <p>{messages[1]}</p> : null}
+					</div>
+				);
 
-        if (
-          settings["sync.target"] ===
-          SyncTargetRegistry.nameToId("joplinServerSaml")
-        ) {
-          const server = settings["sync.11.path"] as string;
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
+					const goToJoplinCloudLogin = () => {
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinCloudLogin',
+						});
+					};
+					settingComps.push(
+						<div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
+							<Button
+								title={_('Connect to Joplin Cloud')}
+								level={ButtonLevel.Primary}
+								onClick={goToJoplinCloudLogin}
+							/>
+						</div>,
+					);
+				}
 
-          const goToSamlLogin = async () => {
-            // Save settings to allow SAML auth with the correct URL.
-            await shared.saveSettings(this);
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
+					const server = settings['sync.11.path'] as string;
 
-            this.props.dispatch({
-              type: "NAV_GO",
-              routeName: "JoplinServerSamlLogin",
-            });
-          };
+					const goToSamlLogin = async () => {
+						// Save settings to allow SAML auth with the correct URL.
+						await shared.saveSettings(this);
 
-          settingComps.push(
-            <div
-              key="connect_to_joplin_server_saml_button"
-              style={this.rowStyle_}
-            >
-              <Button
-                title={_("Connect using your organisation account")}
-                level={ButtonLevel.Primary}
-                onClick={goToSamlLogin}
-                disabled={!server || server?.trim().length === 0}
-              />
-            </div>,
-          );
-        }
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinServerSamlLogin',
+						});
+					};
 
-        settingComps.push(
-          <div key="check_sync_config_button" style={this.rowStyle_}>
-            <Button
-              title={_("Check synchronisation configuration")}
-              level={ButtonLevel.Secondary}
-              disabled={this.state.checkSyncConfigResult === "checking"}
-              onClick={this.checkSyncConfig_}
-            />
-            {statusComp}
-          </div>,
-        );
-      }
-    }
+					settingComps.push(
+						<div key="connect_to_joplin_server_saml_button" style={this.rowStyle_}>
+							<Button
+								title={_('Connect using your organisation account')}
+								level={ButtonLevel.Primary}
+								onClick={goToSamlLogin}
+								disabled={!server || server?.trim().length === 0}
+							/>
+						</div>,
+					);
+				}
 
-    let advancedSettingsButton = null;
-    const advancedSettingsSectionStyle = { display: "none" };
-    const advancedSettingsGroupId = `advanced_settings_${key}`;
+				settingComps.push(
+					<div key="check_sync_config_button" style={this.rowStyle_}>
+						<Button
+							title={_('Check synchronisation configuration')}
+							level={ButtonLevel.Secondary}
+							disabled={this.state.checkSyncConfigResult === 'checking'}
+							onClick={this.checkSyncConfig_}
+						/>
+						{statusComp}
+					</div>,
+				);
+			}
+		}
 
-    if (advancedSettingComps.length) {
-      advancedSettingsButton = (
-        <ToggleAdvancedSettingsButton
-          onClick={() => shared.advancedSettingsButton_click(this)}
-          advancedSettingsVisible={this.state.showAdvancedSettings}
-          aria-controls={advancedSettingsGroupId}
-        />
-      );
-      advancedSettingsSectionStyle.display = this.state.showAdvancedSettings
-        ? "block"
-        : "none";
-    }
+		let advancedSettingsButton = null;
+		const advancedSettingsSectionStyle = { display: 'none' };
+		const advancedSettingsGroupId = `advanced_settings_${key}`;
 
-    return (
-      <div key={key} style={sectionStyle}>
-        {this.renderSectionDescription(section)}
-        <div>{settingComps}</div>
-        {advancedSettingsButton}
-        <div
-          style={advancedSettingsSectionStyle}
-          id={advancedSettingsGroupId}
-          role="group"
-        >
-          {advancedSettingComps}
-        </div>
-      </div>
-    );
-  }
+		if (advancedSettingComps.length) {
+			advancedSettingsButton = (
+				<ToggleAdvancedSettingsButton
+					onClick={() => shared.advancedSettingsButton_click(this)}
+					advancedSettingsVisible={this.state.showAdvancedSettings}
+					aria-controls={advancedSettingsGroupId}
+				/>
+			);
+			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
+		}
 
-  private onUpdateSettingValue = ({ key, value }: UpdateSettingValueEvent) => {
-    const md = Setting.settingMetadata(key);
-    if (md.needRestart) {
-      this.setState({ needRestart: true });
-    }
-    shared.updateSettingValue(this, key, value);
-  };
+		return (
+			<div key={key} style={sectionStyle}>
+				{this.renderSectionDescription(section)}
+				<div>{settingComps}</div>
+				{advancedSettingsButton}
+				<div
+					style={advancedSettingsSectionStyle}
+					id={advancedSettingsGroupId}
+					role='group'
+				>{advancedSettingComps}</div>
+			</div>
+		);
+	}
 
-  public settingToComponent<T extends string>(
-    key: T,
-    value: SettingValueType<T>,
-  ) {
-    return (
-      <SettingComponent
-        themeId={this.props.themeId}
-        key={key}
-        settingKey={key}
-        value={value}
-        fonts={this.state.fonts}
-        onUpdateSettingValue={this.onUpdateSettingValue}
-        onSettingButtonClick={this.handleSettingButton}
-      />
-    );
-  }
+	private onUpdateSettingValue = ({ key, value }: UpdateSettingValueEvent) => {
+		const md = Setting.settingMetadata(key);
+		if (md.needRestart) {
+			this.setState({ needRestart: true });
+		}
+		shared.updateSettingValue(this, key, value);
+	};
 
-  private restartMessage() {
-    return _(
-      "The application must be restarted for these changes to take effect.",
-    );
-  }
+	public settingToComponent<T extends string>(key: T, value: SettingValueType<T>) {
+		return (
+			<SettingComponent
+				themeId={this.props.themeId}
+				key={key}
+				settingKey={key}
+				value={value}
+				fonts={this.state.fonts}
+				onUpdateSettingValue={this.onUpdateSettingValue}
+				onSettingButtonClick={this.handleSettingButton}
+			/>
+		);
+	}
 
-  private async restartApp() {
-    await Setting.saveAll();
-    await restart();
-  }
+	private restartMessage() {
+		return _('The application must be restarted for these changes to take effect.');
+	}
 
-  private async checkNeedRestart() {
-    if (this.state.needRestart) {
-      const doItNow = await bridge().showConfirmMessageBox(
-        this.restartMessage(),
-        {
-          buttons: [_("Do it now"), _("Later")],
-        },
-      );
+	private async restartApp() {
+		await Setting.saveAll();
+		await restart();
+	}
 
-      if (doItNow) await this.restartApp();
-    }
-  }
+	private async checkNeedRestart() {
+		if (this.state.needRestart) {
+			const doItNow = await bridge().showConfirmMessageBox(this.restartMessage(), {
+				buttons: [_('Do it now'), _('Later')],
+			});
 
-  public async onApplyClick() {
-    const done = await shared.saveSettings(this);
-    if (!done) return;
+			if (doItNow) await this.restartApp();
+		}
+	}
 
-    await this.checkNeedRestart();
-  }
+	public async onApplyClick() {
+		const done = await shared.saveSettings(this);
+		if (!done) return;
 
-  public async onSaveClick() {
-    const done = await shared.saveSettings(this);
-    if (!done) return;
-    await this.checkNeedRestart();
-    this.props.dispatch({ type: "NAV_BACK" });
-  }
+		await this.checkNeedRestart();
+	}
 
-  public onCancelClick() {
-    this.props.dispatch({ type: "NAV_BACK" });
-  }
+	public async onSaveClick() {
+		const done = await shared.saveSettings(this);
+		if (!done) return;
+		await this.checkNeedRestart();
+		this.props.dispatch({ type: 'NAV_BACK' });
+	}
 
-  public hasChanges() {
-    return !!this.state.changedSettingKeys.length;
-  }
+	public onCancelClick() {
+		this.props.dispatch({ type: 'NAV_BACK' });
+	}
 
-  public render() {
-    const theme = themeStyle(this.props.themeId);
+	public hasChanges() {
+		return !!this.state.changedSettingKeys.length;
+	}
 
-    const style = {
-      ...this.props.style,
-      overflow: "hidden",
-      display: "flex",
-      flexDirection: "column",
-      backgroundColor: theme.backgroundColor3,
-    };
+	public render() {
+		const theme = themeStyle(this.props.themeId);
 
-    const settings = this.state.settings;
+		const style = {
+			...this.props.style,
+			overflow: 'hidden',
+			display: 'flex',
+			flexDirection: 'column',
+			backgroundColor: theme.backgroundColor3,
+		};
 
-    const containerStyle: React.CSSProperties = {
-      overflow: "auto",
-      padding: theme.configScreenPadding,
-      paddingTop: 0,
-      display: "flex",
-      flex: 1,
-    };
-const searchBar = (
-  <div style={{ padding: '10px 10px 0 10px' }}>
-    <SearchInput
-      value={this.state.searchQuery}
-      onChange={this.onSearchChange}
-      onSearchButtonClick={this.onSearchClear}
-      searchStarted={!!this.state.searchQuery}
-      placeholder={_('Search settings...')}
-    />
-  </div>
+		const settings = this.state.settings;
+
+		const containerStyle: React.CSSProperties = {
+			overflow: 'auto',
+			padding: theme.configScreenPadding,
+			paddingTop: 0,
+			display: 'flex',
+			flex: 1,
+		};
+    
+    const searchBar = (
+    <div style={{ padding: '10px 10px 0 10px' }}>
+		<SearchInput
+			value={this.state.searchQuery}
+			onChange={this.onSearchChange}
+			onSearchButtonClick={this.onSearchClear}
+			searchStarted={!!this.state.searchQuery}
+			placeholder={_('Search settings...')}
+		/>
+	</div>
 );
-    const hasChanges = this.hasChanges();
 
-    // screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
-    // These screens handle their own loading/saving of settings and have bespoke rendering.
-    // When screenComp is null, it means we are viewing the regular settings.
-    const screenComp = this.state.screenName ? (
-      <div
-        className="config-screen-content-wrapper"
-        style={{ overflow: "scroll", flex: 1 }}
-      >
-        {this.screenFromName(this.state.screenName)}
-      </div>
-    ) : null;
+		const hasChanges = this.hasChanges();
 
-    if (screenComp) containerStyle.display = "none";
+		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
+		// These screens handle their own loading/saving of settings and have bespoke rendering.
+		// When screenComp is null, it means we are viewing the regular settings.
+		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
-  
-  
-  
-const sections = shared.settingsSections({
-  device: AppType.Desktop,
-  settings,
-});
-const allSettingComps: React.ReactNode[] = [];
+		if (screenComp) containerStyle.display = 'none';
+
+		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const needRestartComp: any = this.state.needRestart ? (
+			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
+				{this.restartMessage()}
+				<a style={{ ...theme.urlStyle, marginLeft: 10 }} href="#" onClick={() => { void this.restartApp(); }}>{_('Restart now')}</a>
+			</div>
+		) : null;
+
+		const rightStyle = { ...style, flex: 1 };
+		delete style.width;
+
+		const allSettingComps: React.ReactNode[] = [];
 if (this.state.searchQuery) {
-  const matchedKeys = filterSettingsByQuery(sections , this.state.searchQuery, AppType.Desktop);
-  for (const key of matchedKeys) {
-    allSettingComps.push(this.settingToComponent(key, settings[key]));
-  }
+	const matchedKeys = filterSettingsByQuery(sections, this.state.searchQuery, AppType.Desktop);
+	for (const key of matchedKeys) {
+		allSettingComps.push(this.settingToComponent(key, settings[key]));
+	}
 }
-// Normal mode — use existing tab structure
-const tabComponents: React.ReactNode[] = [];
-const needRestartComp: any = this.state.needRestart ? (
-  <div
-    style={{
-      ...theme.textStyle,
-      padding: 10,
-      paddingLeft: 24,
-      backgroundColor: theme.warningBackgroundColor,
-      color: theme.color,
-    }}
-  >
-    {this.restartMessage()}
-    <a
-      style={{ ...theme.urlStyle, marginLeft: 10 }}
-      href="#"
-      onClick={() => { void this.restartApp(); }}
-    >
-      {_('Restart now')}
-    </a>
-  </div>
-) : null;
 
-const rightStyle = { ...style, flex: 1 };
-delete style.width;
+const tabComponents: React.ReactNode[] = [];
 if (!this.state.searchQuery) {
-  const sectionComps = shared.settingsToComponents2(
-    this, AppType.Desktop, settings, this.state.selectedSectionName,
-  );
-  for (const section of sections) {
-    const sectionId = `setting-section-${section.name}`;
-    const visible = section.name === this.state.selectedSectionName;
-    tabComponents.push(
-      <div
-        key={sectionId}
-        id={sectionId}
-        className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
-        hidden={!visible}
-        aria-labelledby={`setting-tab-${section.name}`}
-        tabIndex={0}
-        role="tabpanel"
-      >
-        {visible ? (
-          <>
-            {screenComp}
-            <div style={containerStyle}>{sectionComps}</div>
-          </>
-        ) : null}
-      </div>,
-    );
-  }
+	const sectionComps = shared.settingsToComponents2(
+		this, AppType.Desktop, settings, this.state.selectedSectionName,
+	);
+	for (const section of sections) {
+		const sectionId = `setting-section-${section.name}`;
+		const visible = section.name === this.state.selectedSectionName;
+		tabComponents.push(
+			<div
+				key={sectionId}
+				id={sectionId}
+				className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
+				hidden={!visible}
+				aria-labelledby={`setting-tab-${section.name}`}
+				tabIndex={0}
+				role='tabpanel'
+			>
+				{visible ? (
+					<>
+						{screenComp}
+						<div style={containerStyle}>{sectionComps}</div>
+					</>
+				) : null}
+			</div>,
+		);
+	}
 }
 
 const mainContent = this.state.searchQuery ? (
-  <div style={containerStyle}>
-    {allSettingComps.length > 0
-      ? allSettingComps
-      : <p style={{ ...theme.textStyle, padding: 10 }}>{_('No results')}</p>
-    }
-  </div>
+	<div style={containerStyle}>
+		{allSettingComps.length > 0
+			? allSettingComps
+			: <p style={{ ...theme.textStyle, padding: 10 }}>{_('No results')}</p>
+		}
+	</div>
 ) : tabComponents;
 
 return (
-  <div
-    className="config-screen"
-    role="main"
-    style={{
-      display: 'flex',
-      flexDirection: 'row',
-      height: this.props.style.height,
-    }}
-  >
-    <Sidebar
-      selection={this.state.selectedSectionName}
-      onSelectionChange={this.sidebar_selectionChange}
-      sections={sections}
-    />
-    <div style={rightStyle}>
-      {needRestartComp}
-      {searchBar}
-      {mainContent}
-      <ButtonBar
-        hasChanges={hasChanges}
-        backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
-        onCancelClick={this.onCancelClick}
-        onSaveClick={screenComp ? null : this.onSaveClick}
-        onApplyClick={screenComp ? null : this.onApplyClick}
-      />
-    </div>
-  </div>
+	<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
+		<Sidebar
+			selection={this.state.selectedSectionName}
+			onSelectionChange={this.sidebar_selectionChange}
+			sections={sections}
+		/>
+		<div style={rightStyle}>
+			{needRestartComp}
+			{searchBar}
+			{mainContent}
+			<ButtonBar
+				hasChanges={hasChanges}
+				backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+				onCancelClick={this.onCancelClick}
+				onSaveClick={screenComp ? null : this.onSaveClick}
+				onApplyClick={screenComp ? null : this.onApplyClick}
+			/>
+		</div>
+	</div>
 );
-
-  }
+	}
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
-  return {
-    themeId: state.settings.theme,
-    settings: state.settings,
-    locale: state.settings.locale,
-  };
+	return {
+		themeId: state.settings.theme,
+		settings: state.settings,
+		locale: state.settings.locale,
+	};
 };
 
 export default connect(mapStateToProps)(ConfigScreenComponent);
+
