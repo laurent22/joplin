@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useCallback, useState, useEffect, useMemo } from 'react';
-import { getPasswordStrength, passwordStrengthLabels } from '@joplin/lib/services/e2ee/passwordStrength';
+import { getPasswordStrength } from '@joplin/lib/services/e2ee/passwordStrength';
+import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
@@ -171,20 +172,22 @@ export default function(props: Props) {
 		if (showPasswordForm) {
 			const enterPasswordLabel = [MasterPasswordStatus.Loaded, MasterPasswordStatus.Valid].includes(status) ? _('Enter new password') : _('Enter password');
 
+			const theme = themeStyle(props.themeId);
 			const strengthResult = getPasswordStrength(password1);
 			const strengthColors = ['#D32F2F', '#E64A19', '#FBC02D', '#7CB342', '#388E3C'];
 			const strengthColor = strengthColors[strengthResult.score];
 			const strengthPercent = password1 ? ((strengthResult.score + 1) / 5) * 100 : 0;
-			const strengthLabel = password1 ? passwordStrengthLabels[strengthResult.score] : '';
+			const strengthLabels = [_('Very Weak'), _('Weak'), _('Fair'), _('Strong'), _('Very Strong')];
+			const strengthLabel = password1 ? strengthLabels[strengthResult.score] : '';
 
 			const renderStrengthIndicator = () => {
 				if (!password1) return null;
 
 				return (
-					<div className="password-strength-indicator" style={{ marginTop: 8 }}>
+					<div style={{ marginTop: 8 }}>
 						<div style={{
 							height: 6,
-							backgroundColor: '#e0e0e0',
+							backgroundColor: theme.dividerColor,
 							borderRadius: 3,
 							overflow: 'hidden',
 							marginBottom: 4,
@@ -197,19 +200,17 @@ export default function(props: Props) {
 								transition: 'width 0.3s ease, background-color 0.3s ease',
 							}} />
 						</div>
-						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-							<span style={{ fontSize: 12, fontWeight: 'bold', color: strengthColor }}>
-								{strengthLabel}
-							</span>
-						</div>
+						<span style={{ fontSize: theme.fontSize, fontWeight: 'bold', color: strengthColor }}>
+							{strengthLabel}
+						</span>
 						{strengthResult.feedback.warning && (
-							<p style={{ fontSize: 12, color: '#D32F2F', margin: '4px 0 0 0' }}>
+							<p style={{ fontSize: theme.fontSize, color: theme.colorError, margin: '4px 0 0 0' }}>
 								{strengthResult.feedback.warning}
 							</p>
 						)}
 						{strengthResult.feedback.suggestions.length > 0 && (
-							<ul style={{ fontSize: 12, margin: '4px 0 0 0', paddingLeft: 16, color: '#666' }}>
-								{strengthResult.feedback.suggestions.map((s, i) =>
+							<ul style={{ fontSize: theme.fontSize, margin: '4px 0 0 0', paddingLeft: 16, color: theme.colorFaded }}>
+								{strengthResult.feedback.suggestions.map((s: string, i: number) =>
 									<li key={i}>{s}</li>,
 								)}
 							</ul>
