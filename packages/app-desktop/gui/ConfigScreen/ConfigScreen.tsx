@@ -21,6 +21,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 
 interface Font {
@@ -161,7 +162,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			}
 		}
 
-		this.setState({ selectedSectionName: section.name, screenName: screenName });
+		await new Promise<void>(resolve => {
+			this.setState({ selectedSectionName: section.name, screenName: screenName }, () => resolve());
+		});
 	}
 
 	private settingElementId(settingKey: string) {
@@ -173,6 +176,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (!settingElement) return;
 
 		settingElement.scrollIntoView({ block: 'center' });
+
+		const focusableElement = settingElement.querySelector<HTMLElement>('input, select, textarea, button, a[href], [tabindex]:not([tabindex="-1"])');
+		if (focusableElement) {
+			focus('ConfigScreen', focusableElement);
+			return;
+		}
+
+		settingElement.setAttribute('tabindex', '-1');
+		focus('ConfigScreen', settingElement as HTMLElement);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -182,9 +194,21 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			await this.switchSection(event.section.name);
 			if (!settingKey) return;
 
-			requestAnimationFrame(() => {
-				this.focusSettingByKey(settingKey);
-			});
+			const settingMetadata = Setting.settingMetadata(settingKey);
+			const isAdvancedSetting = !!settingMetadata?.advanced;
+
+			const focusSetting = () => {
+				requestAnimationFrame(() => {
+					this.focusSettingByKey(settingKey);
+				});
+			};
+
+			if (isAdvancedSetting && !this.state.showAdvancedSettings) {
+				this.setState({ showAdvancedSettings: true }, focusSetting);
+				return;
+			}
+
+			focusSetting();
 		})();
 	}
 

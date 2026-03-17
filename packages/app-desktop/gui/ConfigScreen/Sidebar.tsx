@@ -163,12 +163,19 @@ export default function Sidebar(props: Props) {
 	}
 
 	const sectionsForNav = searching ? searchResultGroups.map(g => g.section) : props.sections;
+	const sectionNamesForNav = sectionsForNav.map(section => section.name);
+	const selectedSectionVisible = sectionNamesForNav.includes(props.selection);
+	const fallbackSelection = sectionsForNav[0]?.name;
+	const tabStopSectionName = selectedSectionVisible ? props.selection : fallbackSelection;
 
 	// Making a tabbed region accessible involves supporting keyboard interaction.
 	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
+		if (!sectionsForNav.length) return;
+
 		const selectedIndex = sectionsForNav.findIndex(section => section.name === props.selection);
-		let newIndex = selectedIndex;
+		let newIndex = selectedIndex >= 0 ? selectedIndex : 0;
+		let handled = true;
 
 		if (event.code === 'ArrowUp') {
 			newIndex --;
@@ -178,7 +185,11 @@ export default function Sidebar(props: Props) {
 			newIndex = 0;
 		} else if (event.code === 'End') {
 			newIndex = sectionsForNav.length - 1;
+		} else {
+			handled = false;
 		}
+
+		if (!handled) return;
 
 		if (newIndex < 0) newIndex += sectionsForNav.length;
 		newIndex %= sectionsForNav.length;
@@ -198,17 +209,16 @@ export default function Sidebar(props: Props) {
 
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
+		const tabIndex = section.name === tabStopSectionName ? 0 : -1;
 		return (
 			<StyledListItem
 				key={section.name}
 				href='#'
-				role='tab'
 				ref={(item: HTMLElement) => { buttonRefs.current[index] = item; }}
 
 				id={`setting-tab-${section.name}`}
-				aria-controls={`setting-section-${section.name}`}
-				aria-selected={selected}
-				tabIndex={selected ? 0 : -1}
+				aria-current={selected ? 'page' : undefined}
+				tabIndex={tabIndex}
 
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
@@ -274,11 +284,13 @@ export default function Sidebar(props: Props) {
 		<StyledRoot
 			className='settings-sidebar _scrollbar2'
 			ref={rootRef}
+			role='navigation'
+			aria-label={_('Settings')}
 			style={fixedWidth === null ? undefined : { width: fixedWidth, minWidth: fixedWidth, maxWidth: fixedWidth }}
 		>
 			{props.topContent ? <StyledTopContent>{props.topContent}</StyledTopContent> : null}
 			{searching && !searchResultGroups.length ? <StyledNoResults>{_('No results')}</StyledNoResults> : null}
-			<StyledTabList role='tablist'>
+			<StyledTabList>
 				{buttons}
 			</StyledTabList>
 		</StyledRoot>
