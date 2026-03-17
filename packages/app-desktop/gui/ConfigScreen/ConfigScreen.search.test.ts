@@ -1,5 +1,5 @@
 import { SettingItem } from '@joplin/lib/models/Setting';
-import { settingMatchesSearch } from './configScreenUtils';
+import settingMatchesSearch from './configScreenUtils';
 
 type SearchableSetting = Pick<SettingItem, 'label' | 'description'>;
 

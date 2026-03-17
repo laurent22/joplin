@@ -21,7 +21,7 @@ const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
-import { settingMatchesSearch } from './configScreenUtils';
+import settingMatchesSearch from './configScreenUtils';
 
 
 interface Font {

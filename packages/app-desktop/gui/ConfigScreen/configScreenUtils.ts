@@ -1,6 +1,6 @@
 import { AppType, SettingItem } from '@joplin/lib/models/Setting';
 
-export const settingMatchesSearch = (md: Pick<SettingItem, 'label' | 'description'>, searchQuery: string): boolean => {
+const settingMatchesSearch = (md: Pick<SettingItem, 'label' | 'description'>, searchQuery: string): boolean => {
 	if (!searchQuery) return true;
 
 	const q = searchQuery.trim().toLowerCase();
@@ -14,3 +14,5 @@ export const settingMatchesSearch = (md: Pick<SettingItem, 'label' | 'descriptio
 
 	return label.includes(q) || description.includes(q);
 };
+
+export default settingMatchesSearch;
