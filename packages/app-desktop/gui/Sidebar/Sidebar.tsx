@@ -72,8 +72,8 @@ const SidebarComponent = (props: Props) => {
 
 	const syncButton = renderSynchronizeButton(props.syncStarted ? 'cancel' : 'sync');
 
-	// Show toggle when there are log lines or a completed timestamp
-	const hasContent = lines.length > 0 || completedTime;
+	// Show toggle when there are log lines, a completed timestamp, OR a sync is in progress
+	const hasContent = lines.length > 0 || completedTime || props.syncStarted;
 
 	// Toggle to show/hide sync log output
 	const toggleButton = hasContent ? (
@@ -85,7 +85,11 @@ const SidebarComponent = (props: Props) => {
 			title={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 		>
 			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'up'}`} />
-			{!syncReportExpanded && completedTime ? <span className="timestamp">{_('Last sync: %s', completedTime)}</span> : ''}
+			{!syncReportExpanded && (completedTime || props.syncStarted) ? (
+				<span className="timestamp">
+					{props.syncStarted ? _('Synchronising...') : _('Last sync: %s', completedTime)}
+				</span>
+			) : ''}
 		</button>
 	) : null;
 
