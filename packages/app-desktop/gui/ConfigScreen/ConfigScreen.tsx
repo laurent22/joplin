@@ -27,7 +27,7 @@ import SettingComponent, {
 } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import SearchInput from '../lib/SearchInput/SearchInput';
-import filterSettingsByQuery from './filterSettingsByQuery';
+import filterSettingsByQuery, { SettingSection } from './filterSettingsByQuery';
 
 interface Font {
 	family: string;
@@ -39,6 +39,7 @@ declare global {
 		openChangelogLink: ()=> void;
 	}
 }
+
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -519,7 +520,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		});
 		const allSettingComps: React.ReactNode[] = [];
 		if (this.state.searchQuery) {
-			const matchedKeys = filterSettingsByQuery(sections, this.state.searchQuery, AppType.Desktop);
+			const matchedKeys = filterSettingsByQuery(sections as SettingSection[], this.state.searchQuery, AppType.Desktop);
 			for (const key of matchedKeys) {
 				allSettingComps.push(this.settingToComponent(key, settings[key]));
 			}

@@ -1,9 +1,16 @@
 import { AppType } from '@joplin/lib/models/Setting';
 
-interface SettingSection {
+
+interface SettingMetadata {
+	key: string;
+	label?: string | ((appType: AppType)=> string);
+	description?: string | ((appType: AppType)=> string);
+	advanced?: boolean;
+}
+
+export interface SettingSection {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Setting metadata type is not exported
-	metadatas: any[];
+	metadatas: SettingMetadata[];
 }
 
 const filterSettingsByQuery = (
