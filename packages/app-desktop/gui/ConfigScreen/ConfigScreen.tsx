@@ -464,74 +464,73 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		delete style.width;
 
 		const allSettingComps: React.ReactNode[] = [];
-if (this.state.searchQuery) {
-	const matchedKeys = filterSettingsByQuery(sections, this.state.searchQuery, AppType.Desktop);
-	for (const key of matchedKeys) {
-		allSettingComps.push(this.settingToComponent(key, settings[key]));
-	}
-}
+		if (this.state.searchQuery) {
+			const matchedKeys = filterSettingsByQuery(sections, this.state.searchQuery, AppType.Desktop);
+			for (const key of matchedKeys) {
+				allSettingComps.push(this.settingToComponent(key, settings[key]));
+			}
+		}
 
-const tabComponents: React.ReactNode[] = [];
-if (!this.state.searchQuery) {
-	const sectionComps = shared.settingsToComponents2(
-		this, AppType.Desktop, settings, this.state.selectedSectionName,
-	);
-	for (const section of sections) {
-		const sectionId = `setting-section-${section.name}`;
-		const visible = section.name === this.state.selectedSectionName;
-		tabComponents.push(
-			<div
-				key={sectionId}
-				id={sectionId}
-				className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
-				hidden={!visible}
-				aria-labelledby={`setting-tab-${section.name}`}
-				tabIndex={0}
-				role='tabpanel'
-			>
-				{visible ? (
-					<>
-						{screenComp}
-						<div style={containerStyle}>{sectionComps}</div>
-					</>
-				) : null}
-			</div>,
+		const tabComponents: React.ReactNode[] = [];
+		if (!this.state.searchQuery) {
+			const sectionComps = shared.settingsToComponents2(
+				this, AppType.Desktop, settings, this.state.selectedSectionName,
+			);
+			for (const section of sections) {
+				const sectionId = `setting-section-${section.name}`;
+				const visible = section.name === this.state.selectedSectionName;
+				tabComponents.push(
+					<div
+						key={sectionId}
+						id={sectionId}
+						className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
+						hidden={!visible}
+						aria-labelledby={`setting-tab-${section.name}`}
+						tabIndex={0}
+						role='tabpanel'
+					>
+						{visible ? (
+							<>
+								{screenComp}
+								<div style={containerStyle}>{sectionComps}</div>
+							</>
+						) : null}
+					</div>,
+				);
+			}
+		}
+
+		const mainContent = this.state.searchQuery ? (
+			<div style={containerStyle}>
+				{allSettingComps.length > 0
+					? allSettingComps
+					: <p style={{ ...theme.textStyle, padding: 10 }}>{_('No results')}</p>
+				}
+			</div>
+		) : tabComponents;
+
+		return (
+			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
+			<Sidebar
+				selection={this.state.selectedSectionName}
+				onSelectionChange={this.sidebar_selectionChange}
+				sections={sections}
+			/>
+			<div style={rightStyle}>
+				{needRestartComp}
+				{searchBar}
+				{mainContent}
+				<ButtonBar
+					hasChanges={hasChanges}
+					backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+					onCancelClick={this.onCancelClick}
+					onSaveClick={screenComp ? null : this.onSaveClick}
+					onApplyClick={screenComp ? null : this.onApplyClick}
+				/>
+			</div>
+		</div>
 		);
 	}
-}
-
-const mainContent = this.state.searchQuery ? (
-	<div style={containerStyle}>
-		{allSettingComps.length > 0
-			? allSettingComps
-			: <p style={{ ...theme.textStyle, padding: 10 }}>{_('No results')}</p>
-		}
-	</div>
-) : tabComponents;
-
-return (
-	<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
-		<Sidebar
-			selection={this.state.selectedSectionName}
-			onSelectionChange={this.sidebar_selectionChange}
-			sections={sections}
-		/>
-		<div style={rightStyle}>
-			{needRestartComp}
-			{searchBar}
-			{mainContent}
-			<ButtonBar
-				hasChanges={hasChanges}
-				backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
-				onCancelClick={this.onCancelClick}
-				onSaveClick={screenComp ? null : this.onSaveClick}
-				onApplyClick={screenComp ? null : this.onApplyClick}
-			/>
-		</div>
-	</div>
-);
-	}
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state: any) => {
