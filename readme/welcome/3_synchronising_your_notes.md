@@ -23,3 +23,9 @@ OneDrive and WebDAV are also supported as synchronisation services. Please see [
 ## Using End-To-End Encryption
 
 Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the data can read it. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the [End-To-End Encryption Tutorial](https://joplinapp.org/help/apps/sync/e2ee) for more information about this feature and how to enable it.
+
+## Synchronisation on mobile
+
+Because of limitations in the mobile app, synchronisation cannot run when the screen is off or when the Joplin app is in the background.
+
+When performing the initial sync on a new device, make sure Joplin is open and the screen stays on for the entire process. This requires temporarily disabling the screen timeout in your device's system settings. On Android, you may need to enable Developer Options to access this setting.
