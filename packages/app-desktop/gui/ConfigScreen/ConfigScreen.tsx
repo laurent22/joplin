@@ -297,7 +297,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
         const statusComp = !messages.length ? null : (
           <div style={statusStyle} aria-live="polite">
             {messages[0]}
-            {messages.length >= 1 ? <p>{messages[1]}</p> : null}
+            {messages.length >= 2 ? <p>{messages[1]}</p> : null}
           </div>
         );
 
@@ -526,7 +526,7 @@ const sections = shared.settingsSections({
 });
 const allSettingComps: React.ReactNode[] = [];
 if (this.state.searchQuery) {
-  const matchedKeys = filterSettingsByQuery(sections, this.state.searchQuery, AppType.Desktop);
+  const matchedKeys = filterSettingsByQuery(sections , this.state.searchQuery, AppType.Desktop);
   for (const key of matchedKeys) {
     allSettingComps.push(this.settingToComponent(key, settings[key]));
   }
