@@ -76,12 +76,40 @@ const promptForSourcePath = async (module: ImportModule, sourceType: FileSystemI
 	}
 };
 
+const promptForJexImportWarning = async () => {
+	const settingKey = 'import.jexWarningShown';
+
+	if (Setting.value(settingKey)) return true;
+
+	const result = await bridge().showMessageBox(
+		_('Importing is intended for adding or restoring notes. After importing notes, if you enable sync with the same notes already on another device, duplicates will be created. To transfer notes between devices, please use sync instead. Do you want to continue with the import?'),
+		{
+			buttons: [_('Yes'), _('No')],
+			defaultId: 1,
+			cancelId: 1,
+		},
+	);
+
+	const shouldContinue = result === 0;
+
+	if (shouldContinue) {
+		Setting.setValue(settingKey, true);
+	}
+
+	return shouldContinue;
+};
+
 export const runtime = (control: WindowControl): CommandRuntime => {
 	return {
 		// Since this can be run from "go to anything", partialOptions needs to support being null or empty.
 		execute: async (context: CommandContext, options: ImportCommandOptions|undefined) => {
 			const importModule = await findImportModule(options, control);
 			if (!importModule) return null; // E.g. if cancelled
+
+			if (importModule.format === 'jex') {
+				const shouldContinue = await promptForJexImportWarning();
+				if (!shouldContinue) return null;
+			}
 
 			let sourcePath = options?.sourcePath ?? await promptForSourcePath(importModule, options?.sourceType);
 			if (Array.isArray(sourcePath)) {

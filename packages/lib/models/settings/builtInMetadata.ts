@@ -1175,6 +1175,14 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 		},
 
+		'import.jexWarningShown': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.File,
+		},
+
 		startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon'), show: settings => !!settings['showTrayIcon'] },
 
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
