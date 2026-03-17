@@ -20,7 +20,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
-import SearchInput from '../lib/SearchInput/SearchInput';
+import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import filterSettingsByQuery from './filterSettingsByQuery';
 
 
@@ -69,7 +69,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.handleSettingButton = this.handleSettingButton.bind(this);
 	}
 
-	private onSearchChange = (event: any) => {
+	private onSearchChange = (event: OnChangeEvent) => {
 		this.setState({ searchQuery: event.value });
 	};
 
@@ -428,27 +428,27 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			display: 'flex',
 			flex: 1,
 		};
-    
-    const searchBar = (
-    <div style={{ padding: '10px 10px 0 10px' }}>
-		<SearchInput
-			value={this.state.searchQuery}
-			onChange={this.onSearchChange}
-			onSearchButtonClick={this.onSearchClear}
-			searchStarted={!!this.state.searchQuery}
-			placeholder={_('Search settings...')}
-		/>
-	</div>
-);
+
+		const searchBar = (
+			<div style={{ padding: '10px 10px 0 10px' }}>
+				<SearchInput
+					value={this.state.searchQuery}
+					onChange={this.onSearchChange}
+					onSearchButtonClick={this.onSearchClear}
+					searchStarted={!!this.state.searchQuery}
+					placeholder={_('Search settings...')}
+				/>
+			</div>
+		);
 
 		const hasChanges = this.hasChanges();
 
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = !this.state.searchQuery && this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
-		if (screenComp) containerStyle.display = 'none';
+		if (!this.state.searchQuery && screenComp) containerStyle.display = 'none';
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
