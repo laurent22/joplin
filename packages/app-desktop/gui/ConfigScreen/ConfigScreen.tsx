@@ -56,6 +56,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			fonts: [],
 			searchQuery: '',
 			searching: false,
+			expandedAdvancedSections: {} as Record<string, boolean>,
 		};
 
 		this.rowStyle_ = {
@@ -219,7 +220,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				if (!!md.advanced !== advanced) continue;
 				const label = md.label?.() ?? '';
 				const description = md.description?.(AppType.Desktop) ?? '';
-				if (searchActive && !this.matchesSearchQuery([label, description], sectionLabel)) continue;
+				const searchableText = [label, description, sectionLabel, md.key];
+				if (searchActive && !this.matchesSearchQuery(searchableText, sectionLabel)) continue;
 				const settingComp = this.settingToComponent(md.key, settings[md.key]);
 				output.push(settingComp);
 			}
@@ -359,14 +361,26 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const advancedSettingsGroupId = `advanced_settings_${key}`;
 
 		if (advancedSettingComps.length) {
+			const isAdvancedExpanded = searchActive
+				? !!(this.state.expandedAdvancedSections && this.state.expandedAdvancedSections[key])
+				: this.state.showAdvancedSettings;
+			const onAdvancedClick = searchActive
+				? () => this.setState({
+					expandedAdvancedSections: {
+						...(this.state.expandedAdvancedSections || {}),
+						[key]: !isAdvancedExpanded,
+					},
+				})
+				: () => shared.advancedSettingsButton_click(this);
+
 			advancedSettingsButton = (
 				<ToggleAdvancedSettingsButton
-					onClick={() => shared.advancedSettingsButton_click(this)}
-					advancedSettingsVisible={this.state.showAdvancedSettings}
+					onClick={onAdvancedClick}
+					advancedSettingsVisible={isAdvancedExpanded}
 					aria-controls={advancedSettingsGroupId}
 				/>
 			);
-			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
+			advancedSettingsSectionStyle.display = isAdvancedExpanded ? 'block' : 'none';
 		}
 
 		if (searchActive && section.isScreen) {
@@ -386,6 +400,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const sectionTitleComp = searchActive ? (
 			<button
+				type="button"
 				className='config-screen-search-section-link'
 				onClick={() => this.openSectionFromSearch(section.name)}
 			>
@@ -535,6 +550,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						</div>
 						{searchQuery.length > 0 ? (
 							<button
+								type="button"
 								className='config-screen-search-toggle'
 								title={_('Clear search')}
 								aria-label={_('Clear search')}
@@ -545,6 +561,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							</button>
 						) : null}
 						<button
+							type="button"
 							className='config-screen-search-toggle'
 							title={_('Close search')}
 							aria-label={_('Close search')}
@@ -556,6 +573,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				) : (
 					<button
+						type="button"
 						className='config-screen-search-toggle'
 						title={_('Search settings')}
 						aria-label={_('Search settings')}
