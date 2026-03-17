@@ -13,11 +13,11 @@ export default class SettingsScreen {
 	}
 
 	public getTabLocator(tabName: string) {
-		return this.container.getByRole('tab', { name: tabName });
+		return this.container.locator('.settings-sidebar').getByRole('link', { name: tabName });
 	}
 
 	public getLastTab() {
-		return this.container.getByRole('tablist').getByRole('tab').last();
+		return this.container.locator('.settings-sidebar').locator('a[id^="setting-tab-"]').last();
 	}
 
 	public async waitFor() {

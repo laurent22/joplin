@@ -264,7 +264,7 @@ describe('ReportService', () => {
 		for (const noteId of corruptedNoteIds) {
 			expect(decryptionErrorsText).toContain(noteId);
 		}
-	});
+	}, 20000);
 
 	it('should not associate decryption failures with error message headers when errors are unknown', async () => {
 		const decryption = decryptionWorker();

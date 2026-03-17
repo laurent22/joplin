@@ -91,7 +91,7 @@ test.describe('settings', () => {
 
 		// Shift+Tab should focus the sidebar again
 		await mainWindow.keyboard.press('Shift+Tab');
-		await expect(focusedItem).toHaveAttribute('role', 'tab');
+		await expect(focusedItem).toHaveAttribute('aria-current', 'page');
 		await expect(focusedItem).toHaveText('Application');
 	});
 });
