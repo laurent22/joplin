@@ -350,13 +350,7 @@ export default class ShareModel extends BaseModel<Share> {
 							owner_id: newOwnerId,
 						}, { isNew: false });
 					} catch (error) {
-						// Guard against a potential race condition: Handle the case where the item was deleted for all users
-						// during the share update process:
-						if (error instanceof ErrorBadRequest) {
-							logger.warn('handleDeleted: Unable to update owner_id on item', item.id, error);
-						} else {
-							throw error;
-						}
+						logger.warn('handleDeleted: Unable to update owner_id on item', item.id, error);
 					}
 				}
 			}
@@ -458,7 +452,13 @@ export default class ShareModel extends BaseModel<Share> {
 				perfTimer.pop();
 			} else {
 				perfTimer.push(`Load items for ${changes.length} changes`);
-				const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
+				type ItemSlice = { id: Uuid; jop_share_id: string };
+				const items = await this.models()
+					.item()
+					.loadByIds(
+						changes.map(c => c.item_id),
+						{ fields: ['id', 'jop_share_id'] },
+					) as ItemSlice[];
 				perfTimer.pop();
 				const shareIds = unique(items.filter(i => !!i.jop_share_id).map(i => i.jop_share_id));
 
