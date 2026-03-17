@@ -35,7 +35,7 @@ module.exports = async function compileSass(inputPath, outputPath) {
 	// gulp tasks in parallel too).
 	const result = await sass.compileAsync(inputPath, {
 		sourceMap: true,
-		outputStyle: 'compressed',
+		style: 'expanded',
 		sourceMapIncludeSources: true,
 	});
 
