@@ -8,10 +8,7 @@ const useElementHeight = (container: HTMLElement|null) => {
 	useEffect(() => {
 		if (!container) return () => {};
 		const observer = new ResizeObserver(() => {
-			setHeight(previousHeight => {
-				const newHeight = container.clientHeight;
-				return previousHeight === newHeight ? previousHeight : newHeight;
-			});
+			setHeight(container.clientHeight);
 		});
 		observer.observe(container);
 
