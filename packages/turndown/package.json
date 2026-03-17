@@ -10,8 +10,8 @@
   "browser": "lib/turndown.browser.cjs.js",
   "dependencies": {
     "@adobe/css-tools": "4.4.4",
-    "html-entities": "1.4.0",
-    "jsdom": "26.1.0"
+    "@mixmark-io/domino": "2.2.0",
+    "html-entities": "1.4.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "28.0.9",

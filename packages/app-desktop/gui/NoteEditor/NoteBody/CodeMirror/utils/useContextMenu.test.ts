@@ -6,12 +6,18 @@ describe('useContextMenu', () => {
 
 	it('should return type=image when cursor is inside markdown image', () => {
 		const line = `![alt text](:/${resourceId})`;
-		expect(getResourceIdFromMarkup(line, 15)).toEqual({ resourceId, type: 'image' });
+		const result = getResourceIdFromMarkup(line, 15);
+		expect(result.resourceId).toBe(resourceId);
+		expect(result.type).toBe('image');
+		expect(line.substring(result.markupStart, result.markupEnd)).toBe(line);
 	});
 
 	it('should return type=file when cursor is inside markdown link', () => {
 		const line = `[document.pdf](:/${resourceId})`;
-		expect(getResourceIdFromMarkup(line, 15)).toEqual({ resourceId, type: 'file' });
+		const result = getResourceIdFromMarkup(line, 15);
+		expect(result.resourceId).toBe(resourceId);
+		expect(result.type).toBe('file');
+		expect(line.substring(result.markupStart, result.markupEnd)).toBe(line);
 	});
 
 	it('should return null when cursor is outside markup', () => {
@@ -22,8 +28,13 @@ describe('useContextMenu', () => {
 
 	it('should correctly distinguish between image and file on same line', () => {
 		const line = `![image](:/${resourceId}) [file](:/${resourceId2})`;
-		expect(getResourceIdFromMarkup(line, 10)).toEqual({ resourceId, type: 'image' });
-		expect(getResourceIdFromMarkup(line, 48)).toEqual({ resourceId: resourceId2, type: 'file' });
+		const imageResult = getResourceIdFromMarkup(line, 10);
+		expect(imageResult.resourceId).toBe(resourceId);
+		expect(imageResult.type).toBe('image');
+
+		const fileResult = getResourceIdFromMarkup(line, 48);
+		expect(fileResult.resourceId).toBe(resourceId2);
+		expect(fileResult.type).toBe('file');
 	});
 
 	it('should return null for empty line', () => {

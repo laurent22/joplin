@@ -3,12 +3,22 @@ import shim from '../../shim';
 import BaseItem from '../BaseItem';
 import Resource from '../Resource';
 import Setting from '../Setting';
+import { validateUrlProtocol as validateUrlProtocol_ } from '../../urlUtils';
 
 // Should return an error message if there's a problem, and an empty string if not.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type ValidationHandler = (oldValue: any, newValue: any)=> Promise<string>;
 
+const validateUrlProtocol = async (_oldValue: string, newValue: string) => {
+	return validateUrlProtocol_(newValue);
+};
+
 const validations: Record<string, ValidationHandler> = {
+
+	'sync.5.path': validateUrlProtocol,
+	'sync.6.path': validateUrlProtocol,
+	'sync.9.path': validateUrlProtocol,
+	'sync.11.path': validateUrlProtocol,
 
 	'sync.target': async (oldValue: number, newValue: number) => {
 		if (oldValue === 0 || newValue === 0) return '';
@@ -54,7 +64,7 @@ export default async (settingKeys: string[], newValues: Record<string, any>) => 
 		const oldValue = Setting.value(key);
 		const newValue = newValues[key];
 		const message = await validateSetting(key, oldValue, newValue);
-		return message;
+		if (message) return message;
 	}
 	return '';
 };

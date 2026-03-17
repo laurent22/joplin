@@ -197,39 +197,48 @@ export const handleEditorContextMenuFilter = async (context?: EditorContextMenuF
 	return output;
 };
 
-export const buildMenuItems = async (items: ContextMenuItems, options: ContextMenuOptions) => {
+export interface BuildMenuItemsOptions {
+	excludeEditItems?: boolean;
+	excludePluginItems?: boolean;
+}
+
+export const buildMenuItems = async (items: ContextMenuItems, options: ContextMenuOptions, buildOptions?: BuildMenuItemsOptions) => {
+	const editItemKeys = ['cut', 'copy', 'paste', 'pasteAsText', 'separator4'];
 	const activeItems: ContextMenuItem[] = [];
 	for (const itemKey in items) {
+		if (buildOptions?.excludeEditItems && editItemKeys.includes(itemKey)) continue;
 		const item = items[itemKey];
 		if (item.isActive(options.itemType, options)) {
 			activeItems.push(item);
 		}
 	}
 
-	const extraItems = await handleEditorContextMenuFilter({
-		resourceId: options.resourceId,
-		itemType: options.itemType,
-		textToCopy: options.textToCopy,
-	});
-
-	if (extraItems.length) {
-		activeItems.push({
-			isActive: () => true,
-			label: '',
-			onAction: () => {},
-			isSeparator: true,
+	if (!buildOptions?.excludePluginItems) {
+		const extraItems = await handleEditorContextMenuFilter({
+			resourceId: options.resourceId,
+			itemType: options.itemType,
+			textToCopy: options.textToCopy,
 		});
-	}
 
-	for (const [, extraItem] of extraItems.entries()) {
-		activeItems.push({
-			isActive: () => true,
-			label: extraItem.label,
-			onAction: () => {
-				extraItem.click();
-			},
-			isSeparator: extraItem.type === 'separator',
-		});
+		if (extraItems.length) {
+			activeItems.push({
+				isActive: () => true,
+				label: '',
+				onAction: () => {},
+				isSeparator: true,
+			});
+		}
+
+		for (const [, extraItem] of extraItems.entries()) {
+			activeItems.push({
+				isActive: () => true,
+				label: extraItem.label,
+				onAction: () => {
+					extraItem.click();
+				},
+				isSeparator: extraItem.type === 'separator',
+			});
+		}
 	}
 
 	const filteredItems = filterSeparators(activeItems, item => item.isSeparator);
