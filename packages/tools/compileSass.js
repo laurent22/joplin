@@ -31,7 +31,7 @@ const { basename } = require('path');
 module.exports = async function compileSass(inputPath, outputPath) {
 	// The SASS doc claims that compile is twice as fast as compileAsync, so if speed
 	// turns out to be an issue we could use that instead. The advantage of async is
-	// that we can run complation of each file in parallel (and running other async
+	// that we can run compilation of each file in parallel (and running other async
 	// gulp tasks in parallel too).
 	const result = await sass.compileAsync(inputPath, {
 		sourceMap: true,
