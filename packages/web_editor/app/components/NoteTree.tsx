@@ -60,7 +60,15 @@ function renderTree(nodes: TreeNode[], onNoteClick?: () => void, currentNoteId?:
       <TreeItem
         key={node.id}
         itemId={node.id}
-        label={isCurrentNote ? box : <Link href={`/note?note_id=${node.id}`}>{box}</Link>}
+        label={
+          isCurrentNote ? (
+            box
+          ) : (
+            <Link href={`/note?note_id=${node.id}`} prefetch={false}>
+              {box}
+            </Link>
+          )
+        }
         onClick={onNoteClick}
       />
     );
