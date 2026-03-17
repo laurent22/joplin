@@ -181,6 +181,34 @@ describe('models/Folder.sharing', () => {
 		}
 	}));
 
+	it('should successfully clear the share ID of a no-longer-shared item in a readonly share', async () => {
+		const root = await Folder.save({
+			title: 'unshared root',
+			share_id: '',
+		});
+
+		const shareId = 'some-share-id-here';
+		const folder = await Folder.save({
+			title: 'Unshared, but still with an old share ID',
+			share_id: shareId,
+			parent_id: root.id,
+		});
+
+		const reset = simulateReadOnlyShareEnv([shareId]);
+		try {
+			await Folder.updateAllShareIds(
+				resourceService(),
+				Folder.syncShareCache.shares,
+			);
+		} finally {
+			reset();
+		}
+
+		expect(await Folder.load(folder.id)).toMatchObject({
+			share_id: '',
+		});
+	});
+
 	it('updating share IDs should not fail when a read-only resource is linked to a writeable note', async () => {
 		const root = await Folder.save({ title: 'read-only' });
 		let note = await Note.save({ title: 'Test', parent_id: root.id });
