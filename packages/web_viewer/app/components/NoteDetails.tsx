@@ -177,7 +177,7 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
           // 同一サーバ内のリンク（相対パスや / で始まる）の場合は Link に置き換え
           if (href && (href.startsWith('/') || !href.match(/^https?:\/\//))) {
             return (
-              <Link href={href}>
+              <Link href={href} prefetch={false}>
                 <span style={{ color: 'inherit', textDecoration: 'underline' }}>
                   {domToReact(domNode.children as DOMNode[], parseOptions)}
                 </span>

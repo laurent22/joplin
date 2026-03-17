@@ -42,7 +42,7 @@ function renderTree(nodes: TreeNode[], onNoteClick?: () => void) {
         key={node.id}
         itemId={node.id}
         label={
-          <Link href={`/note?note_id=${node.id}`}>
+          <Link href={`/note?note_id=${node.id}`} prefetch={false}>
             <Box
               sx={{
                 display: 'flex',
