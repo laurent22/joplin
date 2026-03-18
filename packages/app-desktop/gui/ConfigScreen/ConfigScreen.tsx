@@ -213,6 +213,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
+		const searchMode = !!shared.normalizeQuery(this.state.searchQuery);
 
 		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
@@ -337,16 +338,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		let advancedSettingsButton = null;
 		const advancedSettingsSectionStyle = { display: 'none' };
 		const advancedSettingsGroupId = `advanced_settings_${key}`;
+		const advancedSettingsVisible = this.state.showAdvancedSettings || searchMode;
 
 		if (advancedSettingComps.length) {
-			advancedSettingsButton = (
-				<ToggleAdvancedSettingsButton
-					onClick={() => shared.advancedSettingsButton_click(this)}
-					advancedSettingsVisible={this.state.showAdvancedSettings}
-					aria-controls={advancedSettingsGroupId}
-				/>
-			);
-			advancedSettingsSectionStyle.display = this.state.showAdvancedSettings ? 'block' : 'none';
+			if (!searchMode) {
+				advancedSettingsButton = (
+					<ToggleAdvancedSettingsButton
+						onClick={() => shared.advancedSettingsButton_click(this)}
+						advancedSettingsVisible={advancedSettingsVisible}
+						aria-controls={advancedSettingsGroupId}
+					/>
+				);
+			}
+			advancedSettingsSectionStyle.display = advancedSettingsVisible ? 'block' : 'none';
 		}
 
 		return (
@@ -372,11 +376,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	};
 
 	private renderSearchHighlightedText = (text: string): React.ReactNode => {
-		const theme = themeStyle(this.props.themeId);
 		return highlightSearchText(text, this.state.searchQuery, {
-			backgroundColor: theme.searchMarkerBackgroundColor,
-			color: theme.searchMarkerColor,
-			padding: 0,
+			backgroundColor: 'rgb(145 108 24 / 0.96)',
+			color: 'rgb(255 255 255)',
 		});
 	};
 
@@ -522,8 +524,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			};
 
 			const markStyle: React.CSSProperties = {
-				backgroundColor: theme.searchMarkerBackgroundColor,
-				color: theme.searchMarkerColor,
+				backgroundColor: 'rgb(145 108 24 / 0.96)',
+				color: 'rgb(255 255 255)',
 				padding: 0,
 			};
 
@@ -550,6 +552,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>
 				);
 			});
+
+			const noResultsMessage = filteredMatchedSections.length === 0 ? (
+				<div style={{ ...theme.textStyle, marginTop: 20, color: theme.colorFaded }}>
+					{_('No matching results')}
+				</div>
+			) : null;
 
 			tabComponents.push(
 				<div
@@ -578,6 +586,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							) : null}
 						</div>
 						{searchContent}
+						{noResultsMessage}
 					</div>
 				</div>,
 			);

@@ -48,7 +48,7 @@ export const StyledListItem = styled.a`
 	transition: 0.1s;
 	text-decoration: none;
 	cursor: default;
-	opacity: ${(props: StyleProps) => props.disabled ? 0.5 : props.selected ? 1 : 0.8};
+	opacity: ${(props: StyleProps) => props.disabled ? 0.3 : props.selected ? 1 : 0.8};
 	padding-left: ${(props: StyleProps) => props.isSubSection ? '35' : props.theme.mainPadding}px;
 	pointer-events: ${(props: StyleProps) => props.disabled ? 'none' : 'auto'};
 
@@ -69,7 +69,7 @@ export const StyledDivider = styled.div`
 	border-bottom: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
 	background-color: ${(props: StyleProps) => props.theme.selectedColor2};
 	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize)}px;
-	opacity: 0.58;
+	opacity: 0.38;
 `;
 
 export const StyledListItemLabel = styled.span`
@@ -87,9 +87,9 @@ export const StyledListItemLabel = styled.span`
 		 * - rgb(66 99 160) blue highlight / white text
 		 * - rgb(162 133 49) yellow highlight / white text
 		 */
-		background-color: ${(props: StyleProps) => props.theme.searchMarkerBackgroundColor};
-		color: ${(props: StyleProps) => props.theme.searchMarkerColor};
-		padding: 0;
+		background-color: rgb(145 108 24 / 0.96);
+		color: rgb(255 255 255);
+		padding: 0px;
 	}
 `;
 
