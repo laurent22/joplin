@@ -136,6 +136,16 @@ describe('routeUtils', () => {
 				'https://example.com',
 				false,
 			],
+			[
+				'http://127.0.0.1:22300',
+				'http://localhost:22300',
+				true,
+			],
+			[
+				'http://localhost:22300',
+				'http://127.0.0.1:22300',
+				true,
+			],
 		];
 
 		for (const testCase of testCases) {

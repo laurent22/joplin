@@ -174,8 +174,24 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 }
 
 export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
-	const host1 = (new URL(requestOrigin)).host;
-	const host2 = (new URL(endPointBaseUrl)).host;
+	const url1 = new URL(requestOrigin);
+	const url2 = new URL(endPointBaseUrl);
+	const host1 = url1.host;
+	const host2 = url2.host;
+	const hostname1 = url1.hostname.toLowerCase();
+	const hostname2 = url2.hostname.toLowerCase();
+	const port1 = url1.port;
+	const port2 = url2.port;
+
+	// For OAuth we sometimes end up with APP_BASE_URL and API_BASE_URL pointing to the
+	// same server, but using different loopback hostnames (e.g. localhost vs 127.0.0.1).
+	// Treat those as equivalent so the confirm page doesn't get rejected by the origin check.
+	const normaliseLoopbackHostname = (h: string) => {
+		if (h === 'localhost') return 'localhost';
+		if (h === '127.0.0.1') return 'localhost';
+		if (h === '::1') return 'localhost';
+		return h;
+	};
 
 	if (routeType === RouteType.UserContent) {
 		// At this point we only check if eg usercontent.com has been accessed
@@ -187,6 +203,9 @@ export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, ro
 		const hostNoPrefix = host1.split('.').slice(1).join('.');
 		return hostNoPrefix === host2;
 	} else {
+		// Hostnames must match, but allow loopback aliases.
+		if (port1 !== port2) return false;
+		if (normaliseLoopbackHostname(hostname1) === normaliseLoopbackHostname(hostname2)) return true;
 		return host1 === host2;
 	}
 }
