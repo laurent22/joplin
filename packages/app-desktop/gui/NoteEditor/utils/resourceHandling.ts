@@ -105,6 +105,8 @@ export async function getResourcesFromPasteEvent(event: any) {
 		const data = clipboard.readBuffer(format);
 		if (!data || data.length === 0) continue;
 
+		if (event) event.preventDefault();
+
 		const fileExt = mimeUtils.toFileExtension(format);
 		const filePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.${fileExt}`;
 
@@ -121,7 +123,6 @@ export async function getResourcesFromPasteEvent(event: any) {
 		}
 
 		if (md) {
-			if (event) event.preventDefault();
 			output.push(md);
 			break;
 		}
