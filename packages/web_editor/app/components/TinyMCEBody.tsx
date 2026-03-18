@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Fab from '@mui/material/Fab';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tooltip from '@mui/material/Tooltip';
@@ -15,7 +16,7 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import tinymce from 'tinymce';
-import { insertToc, setupTocAutoUpdate } from './tocPlugin';
+import { insertToc, setupTocAutoUpdate, updateToc } from './tocPlugin';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 import 'tinymce/plugins/link';
@@ -474,6 +475,7 @@ export default function TinyMCEBody({
   readOnly = true,
   updatedTime,
 }: TinyMCEBodyProps) {
+  const router = useRouter();
   const rootIdRef = useRef<string>(
     `tinymce-web-${Date.now()}-${Math.round(Math.random() * 10000)}`
   );
@@ -505,37 +507,41 @@ export default function TinyMCEBody({
     currentUpdatedTimeRef.current = updatedTime;
   }, [noteId, updatedTime]);
 
-  const handleSave = useCallback(async () => {
-    if (!noteId || !editorRef.current || isSaving) return;
-    setIsSaving(true);
-    try {
-      const content = getEditorContent(editorRef.current);
-      const res = await fetch('/api/note', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: noteId,
-          body: content,
-          updatedTime: currentUpdatedTimeRef.current,
-        }),
-      });
-      const json = await res.json();
-      if (json.success) {
-        currentUpdatedTimeRef.current = json.updatedTime;
-        setIsDirty(false);
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
-      } else if (json.conflict) {
-        setConflictError(true);
-      } else {
-        console.error('Save failed:', json.error);
+  const handleSave = useCallback(
+    async (editor: any) => {
+      updateToc(editor);
+      if (!noteId || !editorRef.current || isSaving) return;
+      setIsSaving(true);
+      try {
+        const content = getEditorContent(editorRef.current);
+        const res = await fetch('/api/note', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: noteId,
+            body: content,
+            updatedTime: currentUpdatedTimeRef.current,
+          }),
+        });
+        const json = await res.json();
+        if (json.success) {
+          currentUpdatedTimeRef.current = json.updatedTime;
+          setIsDirty(false);
+          setSaved(true);
+          setTimeout(() => setSaved(false), 2000);
+        } else if (json.conflict) {
+          setConflictError(true);
+        } else {
+          console.error('Save failed:', json.error);
+        }
+      } catch (err) {
+        console.error('Save error:', err);
+      } finally {
+        setIsSaving(false);
       }
-    } catch (err) {
-      console.error('Save error:', err);
-    } finally {
-      setIsSaving(false);
-    }
-  }, [noteId, isSaving]);
+    },
+    [noteId, isSaving]
+  );
 
   // スタレクロージャを防ぐため、常に最新の handleSave を ref に保持
   const handleSaveRef = useRef(handleSave);
@@ -583,7 +589,11 @@ export default function TinyMCEBody({
   const handleDirtyDialogCancel = useCallback(() => {
     setShowDirtyDialog(false);
     setPendingNote(null);
-  }, []);
+    // URL を元のノートに戻す
+    if (currentNoteIdRef.current) {
+      router.replace(`/note?note_id=${currentNoteIdRef.current}`);
+    }
+  }, [router]);
 
   // TinyMCE エディタの初期化
   useEffect(() => {
@@ -921,8 +931,8 @@ export default function TinyMCEBody({
           editor.addShortcut('meta+3', 'H3', 'change_to_h3');
           editor.addShortcut('meta+shift+u', '箇条書き', 'change_to_ul');
           editor.addShortcut('meta+shift+o', '番号付き箇条書き', 'change_to_ol');
-          editor.addShortcut('meta+s', '保存', () => handleSaveRef.current());
-          editor.addShortcut('ctrl+s', '保存', () => handleSaveRef.current());
+          editor.addShortcut('meta+s', '保存', () => handleSaveRef.current(editor));
+          editor.addShortcut('ctrl+s', '保存', () => handleSaveRef.current(editor));
 
           // ---------- 変更時に目次を自動更新するコールバック (execOnChangeEvent に相当) ----------
           setupTocAutoUpdate(editor);
@@ -960,6 +970,12 @@ export default function TinyMCEBody({
     if (isDirtyRef.current && noteId !== currentNoteIdRef.current) {
       setPendingNote({ noteId, html });
       setShowDirtyDialog(true);
+      return;
+    }
+
+    // キャンセルで元のノートに戻った場合など、同じノートを表示中かつ未保存の変更が
+    // ある場合はエディタ内容を上書きしない
+    if (isDirtyRef.current && noteId === currentNoteIdRef.current) {
       return;
     }
 

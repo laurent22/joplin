@@ -52,7 +52,34 @@ export default function NoteEditor() {
   // TinyMCEBody は常にマウントしておく（isLoading 中にアンマウントすると
   // isDirty などの状態がリセットされ、確認ダイアログが表示されなくなるため）
   return (
-    <div className="w-full h-full" style={{ position: 'relative' }}>
+    <div
+      className="w-full h-full"
+      style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}
+    >
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 20,
+          background: '#fff',
+          borderBottom: '1px solid #e0e0e0',
+          padding: '8px 16px',
+        }}
+      >
+        <h2
+          style={{
+            margin: 0,
+            fontSize: '1.1rem',
+            fontWeight: 600,
+            color: '#333',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {note?.title ?? ''}
+        </h2>
+      </div>
       {isLoading && (
         <div
           className="p-4"
@@ -70,12 +97,14 @@ export default function NoteEditor() {
           <div className="text-sm text-gray-500">Loading note…</div>
         </div>
       )}
-      <TinyMCEBody
-        html={note?.body ?? ''}
-        noteId={noteId}
-        readOnly={false}
-        updatedTime={note?.updated_time}
-      />
+      <div style={{ flex: 1, minHeight: 0 }}>
+        <TinyMCEBody
+          html={note?.body ?? ''}
+          noteId={noteId}
+          readOnly={false}
+          updatedTime={note?.updated_time}
+        />
+      </div>
     </div>
   );
 }

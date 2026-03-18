@@ -79,7 +79,7 @@ export default function SearchResult({ query }: { query: string }) {
       <List>
         {results.map((r) => (
           <ListItem key={r.id} disablePadding>
-            <Link href={`/note?note_id=${r.id}`}>
+            <Link href={`/note?note_id=${r.id}`} prefetch={false}>
               <ListItemButton>
                 <ListItemIcon>
                   <DescriptionIcon />
