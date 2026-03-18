@@ -14,16 +14,15 @@ const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 type CodeMirror5Command = (codeMirror: CodeMirror5Emulation)=> void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type EditorEventCallback = (editor: CodeMirror5Emulation, ...args: any[])=> void;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+type EditorEventCallback = (editor: CodeMirror5Emulation, ...args: unknown[])=> void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 API requires any
 type OptionUpdateCallback = (editor: CodeMirror5Emulation, newVal: any, oldVal: any)=> void;
 
 type OverlayType<State> = StreamParser<State>|{ query: RegExp };
 
 interface CodeMirror5OptionRecord {
 	onUpdate: OptionUpdateCallback;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 API requires any
 	value: any;
 }
 
@@ -65,13 +64,12 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	private _options: Record<string, CodeMirror5OptionRecord> = Object.create(null);
 	private _decorator: Decorator;
 	private _decoratorExtension: Extension;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 API requires any
 	private _userExtensions: Record<string, any> = Object.create(null);
 	private _builtInOptions: CodeMirror5BuiltInOptions;
 
 	// Used by some plugins to store state.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public state: Record<string, any> = Object.create(null);
+	public state: Record<string, unknown> = Object.create(null);
 
 	public Vim = Vim;
 
@@ -181,8 +179,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static signal(target: CodeMirror5Emulation, eventName: string, ...args: any[]) {
+	public static signal(target: CodeMirror5Emulation, eventName: string, ...args: unknown[]) {
 		const listeners = target._events[eventName] ?? [];
 
 		for (const listener of listeners) {
@@ -295,8 +292,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 			handle: lineNumber,
 
 			text: line.text,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			gutterMarkers: [] as any[],
+			gutterMarkers: [] as unknown[],
 			textClass: ['cm-line', ...this._decorator.getLineClasses(lineNumber)],
 			bgClass: '',
 			wrapClass: '',
@@ -321,8 +317,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		pos: DocumentPosition|DocumentPositionRange, margin?: number,
 	): void {
 		const isPosition = (arg: unknown): arg is DocumentPosition => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			return (arg as any).line !== undefined && (arg as any).ch !== undefined;
+			return typeof arg === 'object' && arg !== null && 'line' in arg && 'ch' in arg;
 		};
 
 		if (isPosition(pos)) {
@@ -332,14 +327,14 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 API requires any
 	public defineExtension(name: string, value: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 API requires any
 		(CodeMirror5Emulation.prototype as any)[name] = value;
 		this._userExtensions[name] = value;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 API requires any
 	public defineOption(name: string, defaultValue: any, onUpdate: OptionUpdateCallback) {
 		this._options[name] = {
 			value: defaultValue,
@@ -349,7 +344,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	// Override codemirror-vim's setOption to allow user-defined options
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Must match base class signature
 	public override setOption(name: string, value: any) {
 		if (name in this._options) {
 			const oldValue = this._options[name].value;
@@ -362,7 +357,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Must match base class signature
 	public override getOption(name: string): any {
 		if (name in this._options) {
 			return this._options[name].value;
@@ -505,8 +500,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		return commandName in CodeMirror5Emulation.commands || typeof this._userExtensions[commandName] === 'function';
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public execCommand(name: string, ...args: any[]) {
+	public execCommand(name: string, ...args: unknown[]) {
 		if (!this.commandExists(name)) {
 			this.logMessage(`Unsupported CodeMirror command, ${name}`);
 			return;

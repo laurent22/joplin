@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-import { NoteEntity, SqlQuery } from '../services/database/types';
+import { SqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 import { LoadOptions } from './utils/types';
 
@@ -74,8 +74,7 @@ export default class NoteResource extends BaseModel {
 
 	public static async associatedNoteIds(resourceId: string): Promise<string[]> {
 		const rows = await this.modelSelectAll('SELECT note_id FROM note_resources WHERE resource_id = ? AND is_associated = 1', [resourceId]);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return rows.map((r: any) => r.note_id);
+		return rows.map((r: { note_id: string }) => r.note_id);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -94,7 +93,8 @@ export default class NoteResource extends BaseModel {
 			WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)}) AND is_associated = 1
 		`);
 
-		const output: Record<string, NoteEntity[]> = {};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const output: Record<string, any> = {};
 		for (const row of rows) {
 			if (!output[row.resource_id]) output[row.resource_id] = [];
 			output[row.resource_id].push(row);
@@ -170,8 +170,7 @@ export default class NoteResource extends BaseModel {
 		`,
 			[cutOffTime],
 		);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return output.map((r: any) => r.resource_id);
+		return output.map((r: { resource_id: string }) => r.resource_id);
 	}
 
 	public static async deleteByResource(resourceId: string) {

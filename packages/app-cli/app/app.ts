@@ -21,14 +21,14 @@ const Cache = require('@joplin/lib/Cache');
 
 class Application extends BaseApplication {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command loading system
 	private commands_: Record<string, any> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command metadata
 	private commandMetadata_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command type
 	private activeCommand_: any = null;
 	private allCommandsLoaded_ = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic GUI type with many optional methods
 	private gui_: any = null;
 	private cache_ = new Cache();
 
@@ -40,8 +40,7 @@ class Application extends BaseApplication {
 		return this.gui().stdoutMaxWidth();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async guessTypeAndLoadItem(pattern: string, options: any = null) {
+	public async guessTypeAndLoadItem(pattern: string, options: { parent?: FolderEntity } | null = null) {
 		let type = BaseModel.TYPE_NOTE;
 		if (pattern.indexOf('/') === 0) {
 			type = BaseModel.TYPE_FOLDER;
@@ -50,8 +49,7 @@ class Application extends BaseApplication {
 		return this.loadItem(type, pattern, options);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async loadItem(type: ModelType | 'folderOrNote', pattern: string, options: any = null) {
+	public async loadItem(type: ModelType | 'folderOrNote', pattern: string, options: { parent?: FolderEntity } | null = null) {
 		const output = await this.loadItems(type, pattern, options);
 
 		if (output.length > 1) {
@@ -81,8 +79,7 @@ class Application extends BaseApplication {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async loadItems(type: ModelType | 'folderOrNote', pattern: string, options: any = null): Promise<(FolderEntity | NoteEntity)[]> {
+	public async loadItems(type: ModelType | 'folderOrNote', pattern: string, options: { parent?: FolderEntity } | null = null): Promise<(FolderEntity | NoteEntity)[]> {
 		if (type === 'folderOrNote') {
 			const folders: FolderEntity[] = await this.loadItems(BaseModel.TYPE_FOLDER, pattern, options);
 			if (folders.length) return folders;
@@ -172,7 +169,7 @@ class Application extends BaseApplication {
 		}
 
 		if (uiType !== null) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command type
 			const temp: Record<string, any> = {};
 			for (const n in this.commands_) {
 				if (!this.commands_.hasOwnProperty(n)) continue;
@@ -233,8 +230,7 @@ class Application extends BaseApplication {
 			CommandClass = require(`${__dirname}/command-${name}.js`);
 		} catch (error) {
 			if (error.message && error.message.indexOf('Cannot find module') >= 0) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const e: any = new Error(_('No such command: %s', name));
+				const e: Error & { type?: string } = new Error(_('No such command: %s', name));
 				e.type = 'notFound';
 				throw e;
 			} else {
@@ -253,8 +249,7 @@ class Application extends BaseApplication {
 			isDummy: () => {
 				return true;
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			prompt: (initialText = '', promptString = '', options: any = null) => {
+			prompt: (initialText = '', promptString = '', options: Record<string, unknown> | null = null) => {
 				return cliUtils.prompt(initialText, promptString, options);
 			},
 			showConsole: () => {},
@@ -276,8 +271,7 @@ class Application extends BaseApplication {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async execCommand(argv: string[]): Promise<any> {
+	public async execCommand(argv: string[]): Promise<void> {
 		if (!argv.length) return this.execCommand(['help']);
 		// reg.logger().debug('execCommand()', argv);
 		const commandName = argv[0];
@@ -396,8 +390,7 @@ class Application extends BaseApplication {
 		const keychainEnabled = this.checkIfKeychainEnabled(argv);
 		argv = await super.start(argv, { keychainEnabled });
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		cliUtils.setStdout((object: any) => {
+		cliUtils.setStdout((object: string) => {
 			return this.stdout(object);
 		});
 
@@ -448,7 +441,7 @@ class Application extends BaseApplication {
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux dispatch type requires AnyAction
 			await refreshFolders((action: any) => this.store().dispatch(action), '');
 
 			const tags = await Tag.allWithNotes();

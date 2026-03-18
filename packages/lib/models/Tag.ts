@@ -3,9 +3,10 @@ import { TagEntity, TagsWithNoteCountEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import NoteTag from './NoteTag';
-import Note from './Note';
+import Note, { PreviewsOptions } from './Note';
 import { _ } from '../locale';
 import ActionLogger from '../utils/ActionLogger';
+import { LoadOptions } from './utils/types';
 
 export default class Tag extends BaseItem {
 	public static tableName() {
@@ -30,8 +31,7 @@ export default class Tag extends BaseItem {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async notes(tagId: string, options: any = null) {
+	public static async notes(tagId: string, options: PreviewsOptions = null) {
 		if (options === null) options = {};
 
 		const noteIds = await this.noteIds(tagId);
@@ -145,8 +145,7 @@ export default class Tag extends BaseItem {
 		return this.search(options);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async tagsByNoteId(noteId: string, options: any = null) {
+	public static async tagsByNoteId(noteId: string, options: LoadOptions = null) {
 		options = {
 			...options,
 		};

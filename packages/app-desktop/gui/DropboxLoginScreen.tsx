@@ -63,8 +63,7 @@ class DropboxLoginScreenComponent extends React.Component<any, any> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: { settings: { theme: number } }) => {
 	return {
 		themeId: state.settings.theme,
 	};
