@@ -5,6 +5,13 @@
 	flex-shrink: 1;
 	min-height: 0;
 
+	&.-search-results {
+		display: block;
+		flex-grow: 0;
+		flex-shrink: 0;
+		min-height: auto;
+	}
+
 	&.-hidden {
 		display: none;
 	}

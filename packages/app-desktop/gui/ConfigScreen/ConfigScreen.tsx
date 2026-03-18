@@ -561,7 +561,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				<div
 					key={sectionId}
 					id={sectionId}
-					className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
+					className={`setting-tab-panel ${!visible ? '-hidden' : ''} ${isSearchActive ? '-search-results' : ''}`}
 					hidden={!visible}
 					aria-labelledby={`setting-tab-${section.name}`}
 					tabIndex={0}
