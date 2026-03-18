@@ -511,7 +511,7 @@ class WebDavApi {
 			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
 			const shortResponseText = (`${responseText}`).substr(0, 1024);
-			return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
+			return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText}`);
 		};
 
 		let responseJson_: JsonValue = null;
