@@ -17,6 +17,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import tinymce from 'tinymce';
 import { insertToc, setupTocAutoUpdate, updateToc } from './tocPlugin';
+import { marked } from 'marked';
 import 'tinymce/icons/default';
 import 'tinymce/themes/silver';
 import 'tinymce/plugins/link';
@@ -152,6 +153,56 @@ function updateMermaidDiv(editor: any, txt: string, mermaidRootElement: HTMLElem
 
   root.appendChild(divDialog);
   editor.getDoc().dispatchEvent(new Event('joplin-noteDidUpdate'));
+}
+
+// ---------- ヘルパー: Markdown 挿入ダイアログ ----------
+
+/**
+ * Markdown テキストを HTML に変換する。
+ */
+function convertMarkdownToHtml(markdown: string): string {
+  return marked.parse(markdown) as string;
+}
+
+/**
+ * Markdown 入力ダイアログを TinyMCE の windowManager で開き、
+ * OK 時にカーソル位置へ HTML を挿入する。
+ */
+function openMarkdownInsertDialog(editor: any) {
+  // ダイアログを開く前にカーソル位置を bookmark として保存する
+  const bookmark = editor.selection.getBookmark(2, true);
+
+  editor.windowManager.open({
+    title: 'Insert Markdown',
+    size: 'large',
+    initialData: {
+      markdown: '',
+    },
+    body: {
+      type: 'panel',
+      items: [
+        {
+          type: 'textarea',
+          name: 'markdown',
+          label: 'Markdown',
+        },
+      ],
+    },
+    buttons: [
+      { type: 'cancel', text: 'Cancel' },
+      { type: 'submit', text: 'OK', primary: true },
+    ],
+    onSubmit: function (api: any) {
+      const data = api.getData();
+      if (data.markdown && data.markdown.trim()) {
+        // bookmark を復元してカーソル位置を確定する
+        editor.selection.moveToBookmark(bookmark);
+        const html = convertMarkdownToHtml(data.markdown);
+        editor.execCommand('mceInsertContent', false, html);
+      }
+      api.close();
+    },
+  });
 }
 
 /**
@@ -624,7 +675,7 @@ export default function TinyMCEBody({
               'h1 h2 h3 hr blockquote table |',
               'fontfamily fontsize blocks |',
               'forecolor backcolor removeformat |',
-              'cmd mermaid katexMath toc',
+              'cmd mermaid katexMath toc markdownInsert',
             ].join(' '),
         valid_elements: '*[*]',
         relative_urls: false,
@@ -847,6 +898,13 @@ export default function TinyMCEBody({
             tooltip: 'Insert Table of Contents',
             text: 'ToC',
             onAction: () => insertToc(editor),
+          });
+
+          // markdownInsert: Markdown → HTML 変換して挿入
+          editor.ui.registry.addButton('markdownInsert', {
+            tooltip: 'Insert Markdown',
+            text: 'MD',
+            onAction: () => openMarkdownInsertDialog(editor),
           });
 
           // ---------- カスタムコマンド ----------
