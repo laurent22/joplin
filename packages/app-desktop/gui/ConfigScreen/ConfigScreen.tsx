@@ -20,6 +20,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
+import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 
 
 interface Font {
@@ -64,6 +65,22 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.onSaveClick = this.onSaveClick.bind(this);
 		this.onApplyClick = this.onApplyClick.bind(this);
 		this.handleSettingButton = this.handleSettingButton.bind(this);
+		this.onSearchQueryChange = this.onSearchQueryChange.bind(this);
+		this.onSearchButtonClick = this.onSearchButtonClick.bind(this);
+	}
+
+	private onSearchQueryChange(event: OnChangeEvent) {
+		this.setState({
+			searchQuery: event.value,
+			searchSectionFilter: null,
+		});
+	}
+
+	private onSearchButtonClick() {
+		this.setState({
+			searchQuery: '',
+			searchSectionFilter: null,
+		});
 	}
 
 	private async checkSyncConfig_() {
@@ -399,6 +416,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	public render() {
 		const theme = themeStyle(this.props.themeId);
+		const searchQuery = shared.normalizeQuery(this.state.searchQuery);
+		const searchMode = !!searchQuery;
 
 		const style = {
 			...this.props.style,
@@ -430,6 +449,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (screenComp) containerStyle.display = 'none';
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
+		const searchResultGroups = shared.searchResultGroups({
+			device: AppType.Desktop,
+			settings,
+			query: this.state.searchQuery,
+		});
+		const matchedSections = shared.matchedSearchSections(AppType.Desktop, settings, searchResultGroups);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
@@ -443,32 +468,84 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		delete style.width;
 
 		const tabComponents: React.ReactNode[] = [];
-		for (const section of sections) {
-			const sectionId = `setting-section-${section.name}`;
-			let content = null;
-			const visible = section.name === this.state.selectedSectionName;
-			if (visible) {
-				content = (
-					<>
-						{screenComp}
-						<div style={containerStyle}>{settingComps}</div>
-					</>
+		if (searchMode) {
+			const searchContainerStyle: React.CSSProperties = {
+				...containerStyle,
+				display: 'block',
+			};
+
+			const searchSectionTitleStyle: React.CSSProperties = {
+				...theme.headerStyle,
+				marginTop: 30,
+				marginBottom: 10,
+				padding: 8,
+				display: 'flex',
+				alignItems: 'center',
+				gap: 8,
+			};
+
+			const searchContent = matchedSections.map(({ section }) => {
+				const sectionComp = section.isScreen ? (
+					<div style={{ ...theme.textStyle, marginBottom: 20 }}>
+						{_('This section opens in its own screen and is matched by section title.')}
+					</div>
+				) : this.sectionToComponent(section.name, section, settings, true);
+				if (!sectionComp) return null;
+
+				return (
+					<div key={`search-result-${section.name}`}>
+						<h2 style={searchSectionTitleStyle}>
+							<i
+								className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
+								role='img'
+								aria-hidden='true'
+							/>
+							{Setting.sectionNameToLabel(section.name)}
+						</h2>
+						{sectionComp}
+					</div>
 				);
-			}
+			});
 
 			tabComponents.push(
 				<div
-					key={sectionId}
-					id={sectionId}
-					className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
-					hidden={!visible}
-					aria-labelledby={`setting-tab-${section.name}`}
+					key='setting-section-search-results'
+					id='setting-section-search-results'
+					className='setting-tab-panel'
 					tabIndex={0}
 					role='tabpanel'
 				>
-					{content}
+					<div style={searchContainerStyle}>{searchContent}</div>
 				</div>,
 			);
+		} else {
+			for (const section of sections) {
+				const sectionId = `setting-section-${section.name}`;
+				let content = null;
+				const visible = section.name === this.state.selectedSectionName;
+				if (visible) {
+					content = (
+						<>
+							{screenComp}
+							<div style={containerStyle}>{settingComps}</div>
+						</>
+					);
+				}
+
+				tabComponents.push(
+					<div
+						key={sectionId}
+						id={sectionId}
+						className={`setting-tab-panel ${!visible ? '-hidden' : ''}`}
+						hidden={!visible}
+						aria-labelledby={`setting-tab-${section.name}`}
+						tabIndex={0}
+						role='tabpanel'
+					>
+						{content}
+					</div>,
+				);
+			}
 		}
 
 		return (
@@ -477,6 +554,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
+					searchQuery={this.state.searchQuery}
+					onSearchQueryChange={this.onSearchQueryChange}
+					onSearchButtonClick={this.onSearchButtonClick}
+					searchResultGroups={searchResultGroups}
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}

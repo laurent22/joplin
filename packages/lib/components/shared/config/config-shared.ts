@@ -1,4 +1,4 @@
-import Setting, { AppType, SettingMetadataSection, SettingSectionSource } from '../../../models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 const { _ } = require('../../../locale');
 import { createSelector } from 'reselect';
@@ -17,6 +17,8 @@ interface ConfigScreenState {
 	settings: any;
 	changedSettingKeys: string[];
 	showAdvancedSettings: boolean;
+	searchQuery: string;
+	searchSectionFilter: string|null;
 }
 
 export const defaultScreenState: ConfigScreenState = {
@@ -24,6 +26,136 @@ export const defaultScreenState: ConfigScreenState = {
 	settings: {},
 	changedSettingKeys: [],
 	showAdvancedSettings: false,
+	searchQuery: '',
+	searchSectionFilter: null,
+};
+
+export const normalizeQuery = (query: string): string => {
+	return query.trim().toLowerCase();
+};
+
+export const isMetadataMatched = (
+	query: string,
+	section: SettingMetadataSection,
+	metadata: SettingItem,
+	appType: AppType,
+): boolean => {
+	const normalizedQuery = normalizeQuery(query);
+	if (!normalizedQuery) return true;
+
+	const metadataLabel = metadata.label ? metadata.label() : '';
+	const metadataDescription = metadata.description ? metadata.description(appType) : '';
+	const sectionLabel = Setting.sectionNameToLabel(section.name);
+
+	const normalizedCandidates = [
+		sectionLabel,
+		metadataLabel,
+		metadataDescription,
+	].map(value => normalizeQuery(value || ''));
+
+	return normalizedCandidates.some(value => value.includes(normalizedQuery));
+};
+
+export interface SearchResultGroup {
+	sectionName: string;
+	matchingKeys: string[];
+}
+
+export interface MatchedSearchSection {
+	section: SettingMetadataSection;
+	matchingKeys: string[];
+}
+
+interface SearchResultGroupsState {
+	device: AppType;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	settings: any;
+	query: string;
+}
+
+const searchDeviceSelector = (state: SearchResultGroupsState) => state.device;
+const searchSettingsSelector = (state: SearchResultGroupsState) => state.settings;
+const searchQuerySelector = (state: SearchResultGroupsState) => state.query;
+
+export const searchResultGroups = createSelector(
+	searchDeviceSelector,
+	searchSettingsSelector,
+	searchQuerySelector,
+	(device, settings, query): SearchResultGroup[] => {
+		const normalizedQuery = normalizeQuery(query);
+		if (!normalizedQuery) return [];
+
+		const sections = settingsSections({ device, settings });
+		const output: SearchResultGroup[] = [];
+
+		for (const section of sections) {
+			const sectionTitleMatched = normalizeQuery(Setting.sectionNameToLabel(section.name)).includes(normalizedQuery);
+
+			if (sectionTitleMatched && section.isScreen) {
+				output.push({
+					sectionName: section.name,
+					matchingKeys: [],
+				});
+				continue;
+			}
+
+			const matchingKeys: string[] = [];
+
+			for (const metadata of section.metadatas) {
+				if (!metadata.key) continue;
+
+				if (sectionTitleMatched || isMetadataMatched(normalizedQuery, section, metadata, device)) {
+					matchingKeys.push(metadata.key);
+				}
+			}
+
+			if (!matchingKeys.length) continue;
+
+			output.push({
+				sectionName: section.name,
+				matchingKeys,
+			});
+		}
+
+		return output;
+	},
+);
+
+export const matchedSearchSections = (
+	device: AppType,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	settings: any,
+	groups: SearchResultGroup[],
+): MatchedSearchSection[] => {
+	if (!groups.length) return [];
+
+	const sections = settingsSections({ device, settings });
+	const sectionByName: Record<string, SettingMetadataSection> = {};
+
+	for (const section of sections) {
+		sectionByName[section.name] = section;
+	}
+
+	const output: MatchedSearchSection[] = [];
+
+	for (const group of groups) {
+		const section = sectionByName[group.sectionName];
+		if (!section) continue;
+
+		const matchingKeySet = new Set(group.matchingKeys);
+		const metadatas = section.metadatas.filter(metadata => metadata.key && matchingKeySet.has(metadata.key));
+		if (!metadatas.length && !section.isScreen) continue;
+
+		output.push({
+			section: {
+				...section,
+				metadatas,
+			},
+			matchingKeys: group.matchingKeys,
+		});
+	}
+
+	return output;
 };
 
 interface ConfigScreenComponent {
