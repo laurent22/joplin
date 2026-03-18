@@ -82,7 +82,8 @@ test.describe('settings', () => {
 
 		await expect(focusedItem).toHaveText('Application');
 
-		// Pressing Tab should focus the tab container
+		// Pressing Tab twice: once to skip the search bar, once to focus the tab container
+		await mainWindow.keyboard.press('Tab');
 		await mainWindow.keyboard.press('Tab');
 		await expect(focusedItem).toHaveAttribute('role', 'tabpanel');
 

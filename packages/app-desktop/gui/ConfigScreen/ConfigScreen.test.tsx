@@ -30,7 +30,7 @@ describe('filterSettingsByQuery', () => {
 	});
 
 	test('returns empty array when no settings match', () => {
-		const result = filterSettingsByQuery(mockSections, 'xyzabc123', AppType.Desktop);
+		const result = filterSettingsByQuery(mockSections, 'example', AppType.Desktop);
 		expect(result).toHaveLength(0);
 	});
 
