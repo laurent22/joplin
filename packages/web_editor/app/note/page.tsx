@@ -6,6 +6,9 @@ import NoteTreeWrapper from '../components/NoteTreeWrapper';
 import ReactQueryProvider from '../components/ReactQueryProvider';
 import NoteViewer from '../components/NoteViewer';
 import NoteEditor from '../components/NoteEditor';
+import { Stack, Switch, Typography, Paper } from '@mui/material';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import PreviewIcon from '@mui/icons-material/Preview';
 
 export default function NotePage() {
   const [mode, setMode] = useState<'viewer' | 'editor'>('viewer');
@@ -23,12 +26,53 @@ export default function NotePage() {
             </Panel>
             <Separator className="w-2 bg-gray-300 hover:bg-gray-400 cursor-col-resize" />
             <Panel className="bg-white overflow-hidden relative">
-              <button
-                onClick={() => setMode(mode === 'viewer' ? 'editor' : 'viewer')}
-                className="absolute top-4 right-4 z-50 px-3 py-1 rounded border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100 shadow"
+              <Paper
+                elevation={2}
+                sx={{
+                  position: 'absolute',
+                  top: 12,
+                  right: 12,
+                  zIndex: 50,
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 3,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.5,
+                  bgcolor: 'background.paper',
+                }}
               >
-                {mode === 'viewer' ? 'Editor' : 'Viewer'}
-              </button>
+                <PreviewIcon
+                  sx={{ fontSize: 18, color: mode === 'viewer' ? 'primary.main' : 'text.disabled' }}
+                />
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: mode === 'viewer' ? 'primary.main' : 'text.disabled',
+                    fontWeight: mode === 'viewer' ? 700 : 400,
+                  }}
+                >
+                  Viewer
+                </Typography>
+                <Switch
+                  size="small"
+                  checked={mode === 'editor'}
+                  onChange={() => setMode(mode === 'viewer' ? 'editor' : 'viewer')}
+                  color="primary"
+                />
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: mode === 'editor' ? 'primary.main' : 'text.disabled',
+                    fontWeight: mode === 'editor' ? 700 : 400,
+                  }}
+                >
+                  Editor
+                </Typography>
+                <EditNoteIcon
+                  sx={{ fontSize: 18, color: mode === 'editor' ? 'primary.main' : 'text.disabled' }}
+                />
+              </Paper>
               {mode === 'viewer' ? (
                 <div className="w-full h-full overflow-auto p-4">
                   <NoteViewer />
