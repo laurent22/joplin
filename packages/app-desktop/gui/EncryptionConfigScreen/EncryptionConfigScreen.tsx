@@ -24,6 +24,7 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
+import { ChangeEvent } from '../PasswordInput/types';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -311,8 +312,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required because PasswordInput's ChangeEventHandler type is incorrect
-		const onPasswordInputChange = (event: any) => {
+		const onPasswordInputChange = (event: ChangeEvent) => {
 			setEnableEncryptionPassword(event.target.value);
 		};
 
