@@ -182,7 +182,18 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
-		void this.switchSection(event.section.name);
+		const sectionName = event.section.name;
+		const searchMode = !!shared.normalizeQuery(this.state.searchQuery);
+
+		if (searchMode) {
+			this.setState({
+				selectedSectionName: sectionName,
+				searchSectionFilter: sectionName,
+			});
+			return;
+		}
+
+		void this.switchSection(sectionName);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -418,6 +429,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const theme = themeStyle(this.props.themeId);
 		const searchQuery = shared.normalizeQuery(this.state.searchQuery);
 		const searchMode = !!searchQuery;
+		const sectionFilter = this.state.searchSectionFilter;
 
 		const style = {
 			...this.props.style,
@@ -455,6 +467,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			query: this.state.searchQuery,
 		});
 		const matchedSections = shared.matchedSearchSections(AppType.Desktop, settings, searchResultGroups);
+		const hasValidSectionFilter = !!sectionFilter && matchedSections.some(group => group.section.name === sectionFilter);
+		const filteredMatchedSections = hasValidSectionFilter ? matchedSections.filter(group => group.section.name === sectionFilter) : matchedSections;
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
@@ -474,6 +488,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				display: 'block',
 			};
 
+			const searchFilterControlStyle: React.CSSProperties = {
+				display: 'flex',
+				alignItems: 'center',
+				gap: 8,
+				marginTop: 20,
+				marginBottom: 8,
+				...theme.textStyle,
+			};
+
+			const allResultsLinkStyle: React.CSSProperties = {
+				...theme.urlStyle,
+			};
+
 			const searchSectionTitleStyle: React.CSSProperties = {
 				...theme.headerStyle,
 				marginTop: 30,
@@ -484,7 +511,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				gap: 8,
 			};
 
-			const searchContent = matchedSections.map(({ section }) => {
+			const searchContent = filteredMatchedSections.map(({ section }) => {
 				const sectionComp = section.isScreen ? (
 					<div style={{ ...theme.textStyle, marginBottom: 20 }}>
 						{_('This section opens in its own screen and is matched by section title.')}
@@ -515,7 +542,26 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					tabIndex={0}
 					role='tabpanel'
 				>
-					<div style={searchContainerStyle}>{searchContent}</div>
+					<div style={searchContainerStyle}>
+						<div style={searchFilterControlStyle}>
+							{hasValidSectionFilter ?
+								_('Filtered by section [%s]', Setting.sectionNameToLabel(sectionFilter)) :
+								_('Showing all matching settings')}
+							{hasValidSectionFilter ? (
+								<a
+									href='#'
+									style={allResultsLinkStyle}
+									onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
+										event.preventDefault();
+										this.setState({ searchSectionFilter: null });
+									}}
+								>
+									{_('Show all results')}
+								</a>
+							) : null}
+						</div>
+						{searchContent}
+					</div>
 				</div>,
 			);
 		} else {
