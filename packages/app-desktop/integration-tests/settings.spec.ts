@@ -82,7 +82,8 @@ test.describe('settings', () => {
 
 		await expect(focusedItem).toHaveText('Application');
 
-		// Pressing Tab twice: once to skip the search bar, once to focus the tab container
+		// Pressing Tab three times: skip search input, skip search button, focus tab container
+		await mainWindow.keyboard.press('Tab');
 		await mainWindow.keyboard.press('Tab');
 		await mainWindow.keyboard.press('Tab');
 		await expect(focusedItem).toHaveAttribute('role', 'tabpanel');
@@ -90,7 +91,9 @@ test.describe('settings', () => {
 		// The correct tab should be visible
 		await expect(mainWindow.getByLabel('Show tray icon')).toBeVisible();
 
-		// Shift+Tab should focus the sidebar again
+		// Shift+Tab twice: skip search button, skip search input, focus sidebar again
+		await mainWindow.keyboard.press('Shift+Tab');
+		await mainWindow.keyboard.press('Shift+Tab');
 		await mainWindow.keyboard.press('Shift+Tab');
 		await expect(focusedItem).toHaveAttribute('role', 'tab');
 		await expect(focusedItem).toHaveText('Application');
