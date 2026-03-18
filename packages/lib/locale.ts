@@ -1,4 +1,6 @@
+// cSpell:ignore Avestan Қазақستان ඉලங்கை
 const { sprintf } = require('sprintf-js');
+
 
 interface StringToStringMap {
 	[key: string]: string;
