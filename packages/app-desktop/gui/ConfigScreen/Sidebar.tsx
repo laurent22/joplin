@@ -123,6 +123,8 @@ export default function Sidebar(props: Props) {
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
 		const currentSectionName = event.currentTarget.getAttribute('data-section-name') ?? '';
 		if (isSectionDisabled(currentSectionName)) return;
+		const currentIndex = props.sections.findIndex(section => section.name === currentSectionName);
+		if (currentIndex < 0) return;
 
 		if (event.key === 'Tab' && !event.shiftKey) {
 			const controlledPanelId = event.currentTarget.getAttribute('aria-controls');
@@ -136,8 +138,7 @@ export default function Sidebar(props: Props) {
 			}
 		}
 
-		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
-		let newIndex = selectedIndex;
+		let newIndex = currentIndex;
 		let step = 1;
 
 		if (event.code === 'ArrowUp') {
@@ -148,22 +149,22 @@ export default function Sidebar(props: Props) {
 			step = 1;
 		} else if (event.code === 'Home') {
 			newIndex = nextEnabledIndex(0, 1);
+			if (newIndex < 0) return;
 		} else if (event.code === 'End') {
 			newIndex = nextEnabledIndex(props.sections.length - 1, -1);
+			if (newIndex < 0) return;
 		}
-
-		if (newIndex < 0) return;
 
 		if (newIndex < 0) newIndex += props.sections.length;
 		newIndex %= props.sections.length;
 
-		if (newIndex !== selectedIndex && event.code !== 'Home' && event.code !== 'End') {
+		if (newIndex !== currentIndex && event.code !== 'Home' && event.code !== 'End') {
 			newIndex = nextEnabledIndex(newIndex, step);
 		}
 
 		if (newIndex < 0) return;
 
-		if (newIndex !== selectedIndex) {
+		if (newIndex !== currentIndex) {
 			event.preventDefault();
 			props.onSelectionChange({ section: props.sections[newIndex] });
 
