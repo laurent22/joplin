@@ -2,7 +2,7 @@ import { AppType, MetadataBySection, SettingMetadataSection, SettingSectionSourc
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import HighlightedSearchText from './HighlightedSearchText';
 const styled = require('styled-components').default;
@@ -19,6 +19,7 @@ interface Props {
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
 	header?: React.ReactNode;
+	searching: boolean;
 	searchQuery: string;
 	disabledSectionNames: string[];
 }
@@ -89,7 +90,9 @@ export const StyledListItemIcon = styled.i`
 
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
-	const disabledSectionSet = new Set(props.disabledSectionNames);
+	const disabledSectionSet = useMemo(() => {
+		return new Set(props.disabledSectionNames);
+	}, [props.disabledSectionNames]);
 
 	const isSectionDisabled = useCallback((sectionName: string) => {
 		return disabledSectionSet.has(sectionName);
@@ -135,22 +138,26 @@ export default function Sidebar(props: Props) {
 
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
 		let newIndex = selectedIndex;
+		let step = 1;
 
 		if (event.code === 'ArrowUp') {
 			newIndex --;
+			step = -1;
 		} else if (event.code === 'ArrowDown') {
 			newIndex ++;
+			step = 1;
 		} else if (event.code === 'Home') {
-			newIndex = 0;
+			newIndex = nextEnabledIndex(0, 1);
 		} else if (event.code === 'End') {
-			newIndex = props.sections.length - 1;
+			newIndex = nextEnabledIndex(props.sections.length - 1, -1);
 		}
+
+		if (newIndex < 0) return;
 
 		if (newIndex < 0) newIndex += props.sections.length;
 		newIndex %= props.sections.length;
 
-		if (newIndex !== selectedIndex) {
-			const step = newIndex > selectedIndex ? 1 : -1;
+		if (newIndex !== selectedIndex && event.code !== 'Home' && event.code !== 'End') {
 			newIndex = nextEnabledIndex(newIndex, step);
 		}
 
@@ -182,7 +189,7 @@ export default function Sidebar(props: Props) {
 
 				id={`setting-tab-${section.name}`}
 				data-section-name={section.name}
-				aria-controls={`setting-section-${section.name}`}
+				aria-controls={props.searching ? 'setting-section-search-results' : `setting-section-${section.name}`}
 				aria-disabled={disabled}
 				aria-selected={selected}
 				tabIndex={selected && !disabled ? 0 : -1}

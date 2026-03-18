@@ -30,6 +30,19 @@ interface Font {
 	family: string;
 }
 
+interface ConfigScreenState {
+	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
+	settings: Record<string, unknown>;
+	changedSettingKeys: string[];
+	showAdvancedSettings: boolean;
+	selectedSectionName: string;
+	screenName: string;
+	needRestart: boolean;
+	searchQuery: string;
+	searchSectionFilterName: string;
+	fonts: string[];
+}
+
 declare global {
 	interface Window {
 		queryLocalFonts(): Promise<Font[]>;
@@ -38,7 +51,7 @@ declare global {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-class ConfigScreenComponent extends React.Component<any, any> {
+class ConfigScreenComponent extends React.Component<any, ConfigScreenState> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private rowStyle_: any = null;
@@ -79,7 +92,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private onSearchQueryChange(event: SearchInputChangeEvent) {
-		this.setState((state: any) => {
+		this.setState(state => {
 			const searching = !!event.value.trim();
 			const wasSearching = !!state.searchQuery.trim();
 
@@ -215,7 +228,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (this.searchStarted()) {
 			if (!this.searchMatchedSectionNames_.includes(event.section.name)) return;
 
-			this.setState((state: any) => ({
+			this.setState(state => ({
 				selectedSectionName: event.section.name,
 				screenName: '',
 				searchSectionFilterName: state.searchSectionFilterName === event.section.name ? '' : event.section.name,
@@ -445,6 +458,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 
 		if (searching && section.name === 'sync') {
+			// Duplicate of sync action rendering in the non-search sync block above.
+			// Kept separate to make per-control search matching and filtering explicit.
 			const syncButtonTitle = _('Check synchronisation configuration');
 			addSearchableSettingComponent(
 				<div key="check_sync_config_button_search" style={this.rowStyle_}>
@@ -717,6 +732,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
 					header={searchComp}
+					searching={searching}
 					searchQuery={this.state.searchQuery}
 					disabledSectionNames={searching ? sections.filter(section => !this.searchMatchedSectionNames_.includes(section.name)).map(section => section.name) : []}
 				/>
