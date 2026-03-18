@@ -85,10 +85,6 @@ export async function migrateMasterPassword() {
 	// point so no need to run the migration
 	if (localSyncInfo().ppk) return;
 
-	// If a PPK is defined it means the master password has been set at some
-	// point so no need to run the migration
-	if (localSyncInfo().ppk) return;
-
 	logger.info('Master password is not set - trying to get it from the active master key...');
 
 	const mk = getActiveMasterKey();
@@ -217,7 +213,7 @@ export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterK
 		// downloaded at some point.
 		// https://github.com/laurent22/joplin/issues/5391
 		if (!mk) continue;
-		if (!masterKeyEnabled(mk)) notLoadedMasterKeys.pop();
+		if (!masterKeyEnabled(mk)) notLoadedMasterKeys.splice(i, 1);
 	}
 
 	return !!notLoadedMasterKeys.length;

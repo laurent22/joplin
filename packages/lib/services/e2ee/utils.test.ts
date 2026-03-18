@@ -17,6 +17,27 @@ describe('e2ee/utils', () => {
 		await afterAllCleanUp();
 	});
 
+	it('should correctly handle disabled keys that appear before enabled keys', async () => {
+		// Regression test: using .pop() instead of .splice(i, 1) would remove the
+		// last element of the array (the enabled mk3) when iterating over a disabled
+		// key at an earlier index, causing enabled keys to be silently dropped.
+		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey('111111'));
+		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey('111111'));
+		const mk3 = await MasterKey.save(await encryptionService().generateMasterKey('111111'));
+
+		setMasterKeyEnabled(mk1.id, false);
+		setMasterKeyEnabled(mk2.id, false);
+		// mk3 is enabled (default)
+
+		// Scenario: two disabled keys followed by one enabled key.
+		// .pop() would mistakenly remove mk3 (the only enabled key), returning false.
+		// .splice(i, 1) correctly removes mk1 then mk2, leaving [mk3] → true.
+		expect(showMissingMasterKeyMessage(localSyncInfo(), [mk1.id, mk2.id, mk3.id])).toBe(true);
+
+		// When all keys in the list are disabled, no prompt is needed.
+		expect(showMissingMasterKeyMessage(localSyncInfo(), [mk1.id, mk2.id])).toBe(false);
+	});
+
 	it('should tell if the missing master key message should be shown', async () => {
 		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey('111111'));
 		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey('111111'));

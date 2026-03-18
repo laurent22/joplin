@@ -310,7 +310,21 @@ async function main() {
 
 	await copy(websiteAssetDir, docDir);
 
-	const sponsors = process.env.SKIP_SPONSOR_PROCESSING ? { github: [], orgs: [] } : await loadSponsors();
+	let sponsors: Awaited<ReturnType<typeof loadSponsors>>;
+	if (process.env.SKIP_SPONSOR_PROCESSING) {
+		sponsors = { github: [], orgs: [] };
+	} else {
+		try {
+			sponsors = await loadSponsors();
+		} catch (error) {
+			if (error instanceof Error && error.message.includes('Cannot get Oauth token.')) {
+				console.warn('Skipping sponsor processing because no GitHub OAuth token was found. Set JOPLIN_GITHUB_OAUTH_TOKEN or create github_oauth_token.txt to enable it.');
+				sponsors = { github: [], orgs: [] };
+			} else {
+				throw error;
+			}
+		}
+	}
 	const partials = await loadMustachePartials(partialDir);
 	const assetUrls = await getAssetUrls();
 
