@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useAudioRecorder as useExpoAudioRecorder, AudioModule, RecordingPresets } from 'expo-audio';
+import { useAudioRecorder as useExpoAudioRecorder, AudioModule, RecordingPresets, RecordingOptions, AndroidOutputFormat, AndroidAudioEncoder, IOSAudioQuality, IOSOutputFormat } from 'expo-audio';
 import Logger from '@joplin/utils/Logger';
 import { OnFileSavedCallback, RecorderState } from './types';
 import { Platform } from 'react-native';
@@ -138,7 +138,7 @@ const requestPermissions = useCallback(async () => {
 			void recordingRef.current?.stop();
 			recordingRef.current = null;
 		}
-	}, [permissionResponse, requestPermissions]);
+	}, [permissionResponse, requestPermissions, recording]);
 
 	const onStopRecording = useCallback(async () => {
 		const recording = recordingRef.current;

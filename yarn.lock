@@ -10645,6 +10645,7 @@ __metadata:
     esbuild: "npm:0.26.0"
     events: "npm:3.3.0"
     expo: "npm:54.0.31"
+    expo-audio: "npm:~1.1.1"
     expo-av: "npm:16.0.8"
     expo-camera: "npm:17.0.10"
     expo-image-manipulator: "npm:14.0.8"
@@ -28521,6 +28522,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/7034316d820837c92ac70274be56a8e59181f1513805f8a4c85e16f12e1dd75ac6d6ae0b231bd8a76adbb71be6163c05b31b1d437f15b14745c70cc1f255c8a1
+  languageName: node
+  linkType: hard
+
+"expo-audio@npm:~1.1.1":
+  version: 1.1.1
+  resolution: "expo-audio@npm:1.1.1"
+  peerDependencies:
+    expo: "*"
+    expo-asset: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10/b2013e196eb56d6b31f62d82e3918d81626b8d48bd3b9c3b50d8d97b8329de8ec1cb700cb61cc03b637371213aa2de78fec10208e742e8e2a2019dbf25777814
   languageName: node
   linkType: hard
 
