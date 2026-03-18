@@ -13,6 +13,7 @@ import { reg } from '@joplin/lib/registry';
 import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 import bridge from '../services/bridge';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { rtrimSlashes } from '@joplin/lib/path-utils';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
 const { connect } = require('react-redux');
@@ -26,8 +27,8 @@ interface Props {
 
 const JoplinCloudScreenComponent = (props: Props) => {
 
-	const confirmUrl = (applicationAuthId: string) => `${props.joplinCloudWebsite}/applications/${applicationAuthId}/confirm`;
-	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/application_auth/${applicationAuthId}`;
+	const confirmUrl = (applicationAuthId: string) => `${rtrimSlashes(props.joplinCloudWebsite)}/applications/${applicationAuthId}/confirm`;
+	const applicationAuthUrl = (applicationAuthId: string) => `${rtrimSlashes(props.joplinCloudApi)}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
 	const [state, dispatch] = useReducer(reducer, defaultState);
