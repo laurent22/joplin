@@ -250,7 +250,7 @@ const codeToCountry_: CodeToCountryMap = {
 	CA: ['Canada', 'Canada'],
 	CC: ['Cocos (Keeling) Islands', 'Cocos (Keeling) Islands'],
 	CD: ['Democratic Republic of the Congo (Congo-Kinshasa, former Zaire)', 'République Démocratique du Congo'],
-	CF: ['Centrafrican Republic', 'République centrafricaine, Ködörösêse tî Bêafrîka'],
+	CF: ['Centrafrican Republic', 'République centrafricaine, Ködörösêse tî Bêafrîka'],
 	CG: ['Republic of the Congo (Congo-Brazzaville)', 'République du Congo'],
 	CH: ['Switzerland', 'Schweiz, Suisse, Svizzera, Svizra'],
 	CI: ['Côte d\'Ivoire', 'Côte d\'Ivoire'],
@@ -334,12 +334,12 @@ const codeToCountry_: CodeToCountryMap = {
 	KR: ['South Korea', '대한민국'],
 	KW: ['Kuwait', 'الكويت'],
 	KY: ['Cayman Islands', 'Cayman Islands'],
-	KZ: ['Kazakhstan', 'Қазақстан, Казахстан'],
+	KZ: ['Kazakhstan', 'Қазақستان, Казахстан'],
 	LA: ['Laos', 'ປະຊາຊົນລາວ'],
 	LB: ['Lebanon', 'لبنان, Liban'],
 	LC: ['Saint Lucia', 'Saint Lucia'],
 	LI: ['Liechtenstein', 'Liechtenstein'],
-	LK: ['Sri Lanka', 'ශ්‍රී ලංකා, இலங்கை'],
+	LK: ['Sri Lanka', 'ශ්‍රී ලංකා, ඉලங்கை'],
 	LR: ['Liberia', 'Liberia'],
 	LS: ['Lesotho', 'Lesotho'],
 	LT: ['Lithuania', 'Lietuva'],
@@ -476,12 +476,16 @@ const defaultLocale_ = 'en_GB';
 let currentLocale_ = defaultLocale_;
 
 const iso639LineToObject = (line: Iso639Line) => {
-	// TODO: filter name in English (remove brackets, commas,)
+	let nameEnglish = line[2];
+	nameEnglish = nameEnglish.split(';')[0];
+	nameEnglish = nameEnglish.split(',')[0];
+	nameEnglish = nameEnglish.replace(/\s*\(.*?\)/g, '');
+	nameEnglish = nameEnglish.trim();
 
 	const output: Iso639Item = {
 		alpha3: line[0],
 		alpha2: line[1],
-		nameEnglish: line[2],
+		nameEnglish: nameEnglish,
 		nameNative: line[3] ? line[3] : '',
 	};
 
@@ -716,4 +720,10 @@ const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
 	}
 };
 
-export { _, _n, supportedLocales, languageName, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, stringByLocale, languageCode, countryCodeOnly };
+export {
+	_, _n, supportedLocales, languageName, currentLocale,
+	localesFromLanguageCode, languageCodeOnly, countryDisplayName,
+	localeStrings, setLocale, supportedLocalesToLanguages,
+	defaultLocale, closestSupportedLocale, stringByLocale,
+	languageCode, countryCodeOnly, iso639LineToObject,
+};
