@@ -1,5 +1,5 @@
 import { MenuItemLocation } from '../plugins/api/types';
-import CommandService from '../CommandService';
+import CommandService, { MenuItemRole } from '../CommandService';
 import KeymapService from '../KeymapService';
 import { PluginStates, utils as pluginUtils } from '../plugins/reducer';
 import propsHaveChanged from './propsHaveChanged';
@@ -11,7 +11,7 @@ export interface MenuItem {
 	id?: string;
 	label?: string;
 	click?: ()=> void;
-	role?: string;
+	role?: MenuItemRole;
 	type?: 'normal'|'separator'|'submenu';
 	accelerator?: string;
 	checked?: boolean;
