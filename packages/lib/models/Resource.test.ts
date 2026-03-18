@@ -191,4 +191,122 @@ describe('models/Resource', () => {
 		}
 	});
 
+	it('should query note attachments with search, sorting and pagination', async () => {
+		const testResources: { id: string; title: string; size: number }[] = [
+			{ id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', title: 'Zulu', size: 5 },
+			{ id: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2', title: 'alpha', size: 20 },
+			{ id: 'ccccccccccccccccccccccccccccccc3', title: 'Bravo', size: 10 },
+			{ id: 'ddddddddddddddddddddddddddddddd4', title: 'delta', size: 1 },
+		];
+
+		for (const resource of testResources) {
+			await Resource.save({
+				id: resource.id,
+				title: resource.title,
+				size: resource.size,
+				mime: 'application/octet-stream',
+			}, { isNew: true });
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				searchQuery: '',
+				sortField: 'title',
+				sortDirection: 'asc',
+				limit: 10,
+				offset: 0,
+			});
+
+			expect(result.items.map(r => r.title)).toEqual(['alpha', 'Bravo', 'delta', 'Zulu']);
+			expect(result.hasMore).toBe(false);
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				sortField: 'title',
+				sortDirection: 'asc',
+				limit: 2,
+				offset: 0,
+			});
+
+			expect(result.items.map(r => r.title)).toEqual(['alpha', 'Bravo']);
+			expect(result.hasMore).toBe(true);
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				sortField: 'title',
+				sortDirection: 'desc',
+				limit: 10,
+				offset: 0,
+			});
+
+			expect(result.items.map(r => r.title)).toEqual(['Zulu', 'delta', 'Bravo', 'alpha']);
+			expect(result.hasMore).toBe(false);
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				sortField: 'size',
+				sortDirection: 'asc',
+				limit: 10,
+				offset: 0,
+			});
+
+			expect(result.items.map(r => r.size)).toEqual([1, 5, 10, 20]);
+			expect(result.hasMore).toBe(false);
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				sortField: 'size',
+				sortDirection: 'desc',
+				limit: 5,
+				offset: 0,
+			});
+
+			expect(result.items.map(r => r.size)).toEqual([20, 10, 5, 1]);
+			expect(result.hasMore).toBe(false);
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				searchQuery: 'BRA',
+				sortField: 'title',
+				sortDirection: 'asc',
+				limit: 5,
+				offset: 0,
+			});
+
+			expect(result.items.length).toBe(1);
+			expect(result.items[0].title).toBe('Bravo');
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				searchQuery: 'BBBBBBBB',
+				sortField: 'title',
+				sortDirection: 'asc',
+				limit: 5,
+				offset: 0,
+			});
+
+			expect(result.items.length).toBe(1);
+			expect(result.items[0].id).toBe('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2');
+		}
+
+		{
+			const result = await Resource.noteAttachments({
+				searchQuery: 'ddddd',
+				sortField: 'title',
+				sortDirection: 'asc',
+				limit: 5,
+				offset: 0,
+			});
+
+			expect(result.items.length).toBe(1);
+			expect(result.items[0].id).toBe('ddddddddddddddddddddddddddddddd4');
+		}
+	});
+
 });
