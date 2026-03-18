@@ -6,6 +6,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import { type SearchResultGroup } from '@joplin/lib/components/shared/config/config-shared';
+import highlightSearchText from './searchHighlight';
 const styled = require('styled-components').default;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
@@ -80,6 +81,16 @@ export const StyledListItemLabel = styled.span`
 	flex: 1;
 	align-items: center;
 	user-select: none;
+
+	mark {
+		/* Highlight palette reference:
+		 * - rgb(66 99 160) blue highlight / white text
+		 * - rgb(162 133 49) yellow highlight / white text
+		 */
+		background-color: ${(props: StyleProps) => props.theme.searchMarkerBackgroundColor};
+		color: ${(props: StyleProps) => props.theme.searchMarkerColor};
+		padding: 0;
+	}
 `;
 
 export const StyledListItemIcon = styled.i`
@@ -185,7 +196,7 @@ export default function Sidebar(props: Props) {
 					aria-hidden='true'
 				/>
 				<StyledListItemLabel>
-					{Setting.sectionNameToLabel(section.name)}
+					{highlightSearchText(Setting.sectionNameToLabel(section.name), props.searchQuery)}
 				</StyledListItemLabel>
 			</StyledListItem>
 		);

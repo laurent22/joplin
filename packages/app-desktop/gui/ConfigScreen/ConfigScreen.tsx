@@ -21,6 +21,7 @@ const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
+import highlightSearchText from './searchHighlight';
 
 
 interface Font {
@@ -370,6 +371,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		shared.updateSettingValue(this, key, value);
 	};
 
+	private renderSearchHighlightedText = (text: string): React.ReactNode => {
+		const theme = themeStyle(this.props.themeId);
+		return highlightSearchText(text, this.state.searchQuery, {
+			backgroundColor: theme.searchMarkerBackgroundColor,
+			color: theme.searchMarkerColor,
+			padding: 0,
+		});
+	};
+
 	public settingToComponent<T extends string>(key: T, value: SettingValueType<T>) {
 		return (
 			<SettingComponent
@@ -380,6 +390,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				fonts={this.state.fonts}
 				onUpdateSettingValue={this.onUpdateSettingValue}
 				onSettingButtonClick={this.handleSettingButton}
+				renderSearchText={this.renderSearchHighlightedText}
 			/>
 		);
 	}
@@ -508,7 +519,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				padding: 8,
 				display: 'flex',
 				alignItems: 'center',
-				gap: 8,
+			};
+
+			const markStyle: React.CSSProperties = {
+				backgroundColor: theme.searchMarkerBackgroundColor,
+				color: theme.searchMarkerColor,
+				padding: 0,
 			};
 
 			const searchContent = filteredMatchedSections.map(({ section }) => {
@@ -524,10 +540,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						<h2 style={searchSectionTitleStyle}>
 							<i
 								className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
+								style={{ marginRight: 8 }}
 								role='img'
 								aria-hidden='true'
 							/>
-							{Setting.sectionNameToLabel(section.name)}
+							{highlightSearchText(Setting.sectionNameToLabel(section.name), this.state.searchQuery, markStyle)}
 						</h2>
 						{sectionComp}
 					</div>

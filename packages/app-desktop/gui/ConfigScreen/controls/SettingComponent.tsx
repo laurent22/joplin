@@ -27,6 +27,7 @@ interface Props {
 	fonts: string[];
 	onUpdateSettingValue: (event: UpdateSettingValueEvent)=> void;
 	onSettingButtonClick: (key: string)=> void;
+	renderSearchText?: (text: string)=> React.ReactNode;
 }
 
 const SettingComponent: React.FC<Props> = props => {
@@ -37,6 +38,11 @@ const SettingComponent: React.FC<Props> = props => {
 	const updateSettingValue = useCallback((key: string, value: unknown) => {
 		props.onUpdateSettingValue({ key, value });
 	}, [props.onUpdateSettingValue]);
+
+	const renderText = useCallback((text: string): React.ReactNode => {
+		if (!props.renderSearchText) return text;
+		return props.renderSearchText(text);
+	}, [props.renderSearchText]);
 
 	const rowStyle = {
 		marginBottom: theme.mainPadding * 1.5,
@@ -69,15 +75,15 @@ const SettingComponent: React.FC<Props> = props => {
 	const descriptionText = Setting.keyDescription(key, AppType.Desktop);
 	const inputId = useId();
 	const descriptionId = useId();
-	const descriptionComp = <SettingDescription id={descriptionId} text={descriptionText}/>;
+	const descriptionComp = <SettingDescription id={descriptionId} text={descriptionText} renderText={renderText}/>;
 
 	if (key in settingKeyToControl) {
 		const CustomSettingComponent = settingKeyToControl[key];
-		const label = md.label ? <SettingLabel text={md.label()} htmlFor={null} /> : null;
+		const label = md.label ? <SettingLabel text={md.label()} htmlFor={null} renderText={renderText} /> : null;
 		return (
 			<div style={rowStyle}>
 				{label}
-				<SettingDescription id={descriptionId} text={md.description ? md.description(AppType.Desktop) : null}/>
+				<SettingDescription id={descriptionId} text={md.description ? md.description(AppType.Desktop) : null} renderText={renderText}/>
 				<CustomSettingComponent
 					value={props.value}
 					themeId={props.themeId}
@@ -109,7 +115,7 @@ const SettingComponent: React.FC<Props> = props => {
 
 		return (
 			<div style={rowStyle}>
-				<SettingLabel htmlFor={inputId} text={md.label()}/>
+				<SettingLabel htmlFor={inputId} text={md.label()} renderText={renderText}/>
 				<select
 					value={value}
 					className='setting-select-control'
@@ -149,7 +155,7 @@ const SettingComponent: React.FC<Props> = props => {
 						className='setting-label -for-checkbox'
 						htmlFor={inputId}
 					>
-						{md.label()}
+						{renderText(md.label())}
 					</label>
 				</div>
 				{descriptionComp}
@@ -251,7 +257,7 @@ const SettingComponent: React.FC<Props> = props => {
 			const pathDescriptionId = `setting_path_label_${key}`;
 			return (
 				<div style={rowStyle}>
-					<SettingLabel text={md.label()} htmlFor={inputId}/>
+					<SettingLabel text={md.label()} htmlFor={inputId} renderText={renderText}/>
 					<div style={{ display: 'flex' }}>
 						<div style={{ flex: 1 }}>
 							<div style={{ ...rowStyle, marginBottom: 5 }}>
@@ -292,7 +298,7 @@ const SettingComponent: React.FC<Props> = props => {
 			};
 			return (
 				<div style={rowStyle}>
-					<SettingLabel text={md.label()} htmlFor={inputId}/>
+					<SettingLabel text={md.label()} htmlFor={inputId} renderText={renderText}/>
 					{
 						md.subType === SettingItemSubType.FontFamily || md.subType === SettingItemSubType.MonospaceFontFamily ?
 							<FontSearch
@@ -332,7 +338,7 @@ const SettingComponent: React.FC<Props> = props => {
 
 		return (
 			<div style={rowStyle}>
-				<SettingLabel htmlFor={inputId} text={label.join(' ')}/>
+				<SettingLabel htmlFor={inputId} text={label.join(' ')} renderText={renderText}/>
 				<input
 					type="number"
 					style={textInputBaseStyle}
@@ -350,7 +356,7 @@ const SettingComponent: React.FC<Props> = props => {
 		);
 	} else if (md.type === Setting.TYPE_BUTTON) {
 		const labelComp = md.hideLabel ? null : (
-			<SettingLabel text={md.label()} htmlFor={null} />
+			<SettingLabel text={md.label()} htmlFor={null} renderText={renderText} />
 		);
 
 		return (
