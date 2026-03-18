@@ -24,20 +24,20 @@ interface Props {
 
 // Modified from the Expo default recording options to create
 // .m4a recordings on both Android and iOS (rather than .3gp on Android).
-const recordingOptions = (): RecordingOptions => ({
+const recordingOptions = () => ({
 	isMeteringEnabled: true,
 	android: {
 		extension: '.m4a',
-		outputFormat: AndroidOutputFormat.MPEG_4,
-		audioEncoder: AndroidAudioEncoder.AAC,
+		outputFormat: 'mpeg4' as const,
+		audioEncoder: 'aac' as const,
 		sampleRate: 44100,
 		numberOfChannels: 2,
 		bitRate: 64000,
 	},
 	ios: {
 		extension: '.m4a',
-		audioQuality: IOSAudioQuality.MIN,
-		outputFormat: IOSOutputFormat.MPEG4AAC,
+		audioQuality: 0,
+		outputFormat: 'aac' as const,
 		sampleRate: 44100,
 		numberOfChannels: 2,
 		bitRate: 64000,
