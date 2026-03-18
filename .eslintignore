@@ -209,6 +209,8 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
+packages/app-desktop/gui/ConfigScreen/searchHighlight.integration.test.js
+packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
@@ -1309,6 +1311,7 @@ packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
 packages/lib/components/shared/ShareNoteDialog/useOnShareLinkClick.js
 packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.js
 packages/lib/components/shared/SsoScreenShared.js
+packages/lib/components/shared/config/config-search.test.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
