@@ -355,7 +355,7 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 			<View>
 				<Text variant='bodyMedium'>{_('Check elements to display in the toolbar')}</Text>
 			</View>
-			<ScrollView style={styles.listContainer} keyboardShouldPersistTaps='handled'>
+			<ScrollView style={styles.listContainer}>
 				{enabledItems.map((item, index) => (
 					<EnabledItemRow
 						key={`enabled-${item.commandName}`}
