@@ -46,3 +46,10 @@
 	display: flex;
 	align-items: center;
 }
+
+.config-screen mark.config-search-highlight {
+	background-color: var(--joplin-selected-color2);
+	color: var(--joplin-color);
+	padding: 0 2px;
+	border-radius: 2px;
+}

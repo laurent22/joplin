@@ -9,6 +9,7 @@ import bridge from '../../../../services/bridge';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import getPluginHelpUrl from '@joplin/lib/services/plugins/utils/getPluginHelpUrl';
+import { highlightSearchText } from '../../configScreenUtils';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -30,6 +31,7 @@ interface Props {
 	updateState?: UpdateState;
 	themeId: number;
 	isCompatible: boolean;
+	searchQuery?: string;
 	onToggle?: (event: ItemEvent)=> void;
 	onDelete?: (event: ItemEvent)=> void;
 	onInstall?: (event: ItemEvent)=> void;
@@ -264,7 +266,7 @@ export default function(props: Props) {
 			<CellTop>
 				<StyledNameAndVersion mb={'5px'}>
 					<StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }} id={nameLabelId}>
-						{item.manifest.name} {item.deleted ? _('(%s)', 'Deleted') : ''}
+						{highlightSearchText(item.manifest.name, props.searchQuery || '')} {item.deleted ? _('(%s)', 'Deleted') : ''}
 					</StyledName>
 					<StyledVersion>v{item.manifest.version}</StyledVersion>
 				</StyledNameAndVersion>
@@ -272,7 +274,7 @@ export default function(props: Props) {
 				{renderRecommendedBadge()}
 			</CellTop>
 			<CellContent>
-				<StyledDescription>{item.manifest.description}</StyledDescription>
+				<StyledDescription>{highlightSearchText(item.manifest.description, props.searchQuery || '')}</StyledDescription>
 			</CellContent>
 			{renderFooter()}
 		</CellRoot>

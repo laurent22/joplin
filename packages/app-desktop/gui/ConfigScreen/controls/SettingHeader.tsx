@@ -1,13 +1,15 @@
 import * as React from 'react';
+import { highlightSearchText } from '../configScreenUtils';
 
 interface Props {
 	text: string;
+	searchQuery?: string;
 }
 
 const SettingHeader: React.FC<Props> = props => {
 	return (
 		<div className='setting-header'>
-			<label>{props.text}</label>
+			<label>{highlightSearchText(props.text, props.searchQuery || '')}</label>
 		</div>
 	);
 };

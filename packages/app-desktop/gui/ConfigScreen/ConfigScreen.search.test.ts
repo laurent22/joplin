@@ -16,30 +16,45 @@ describe('ConfigScreen search', () => {
 	test('empty query returns true', () => {
 		const md = makeSetting('Theme', 'Choose dark or light mode');
 
-		expect(settingMatchesSearch(md, '')).toBe(true);
+		expect(settingMatchesSearch(md, { searchQuery: '' })).toBe(true);
 	});
 
 	test('whitespace query returns true', () => {
 		const md = makeSetting('Theme', 'Choose dark or light mode');
 
-		expect(settingMatchesSearch(md, '   ')).toBe(true);
+		expect(settingMatchesSearch(md, { searchQuery: '   ' })).toBe(true);
 	});
 
 	test('matches label text', () => {
 		const md = makeSetting('Language', 'Choose application language');
 
-		expect(settingMatchesSearch(md, 'lang')).toBe(true);
+		expect(settingMatchesSearch(md, { searchQuery: 'lang' })).toBe(true);
 	});
 
 	test('matches description text', () => {
 		const md = makeSetting('Theme', 'Choose dark or light mode');
 
-		expect(settingMatchesSearch(md, 'dark')).toBe(true);
+		expect(settingMatchesSearch(md, { searchQuery: 'dark' })).toBe(true);
+	});
+
+	test('matches section title text', () => {
+		const md = makeSetting('Theme', 'Choose dark or light mode');
+
+		expect(settingMatchesSearch(md, { searchQuery: 'appearance', sectionTitle: 'Appearance' })).toBe(true);
+	});
+
+	test('matches extra texts for plugin settings', () => {
+		const md = makeSetting('Plugins', 'Manage plugins');
+
+		expect(settingMatchesSearch(md, {
+			searchQuery: 'kanban',
+			extraTexts: ['Outline plugin', 'Kanban board plugin'],
+		})).toBe(true);
 	});
 
 	test('returns false for unrelated query', () => {
 		const md = makeSetting('Theme', 'Choose dark or light mode');
 
-		expect(settingMatchesSearch(md, 'sync')).toBe(false);
+		expect(settingMatchesSearch(md, { searchQuery: 'sync' })).toBe(false);
 	});
 });

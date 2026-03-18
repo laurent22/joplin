@@ -4,6 +4,8 @@ import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
+import { highlightSearchText } from './configScreenUtils';
 const styled = require('styled-components').default;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
@@ -17,6 +19,11 @@ interface Props {
 	selection: string;
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
+	searchQuery: string;
+	onSearchQueryChange: (event: OnChangeEvent)=> void;
+	onSearchButtonClick: ()=> void;
+	searchStarted: boolean;
+	isSectionMatch: (sectionName: string)=> boolean;
 }
 
 export const StyledRoot = styled.div`
@@ -35,13 +42,22 @@ export const StyledListItem = styled.a`
 	background: ${(props: StyleProps) => props.selected ? props.theme.selectedColor2 : 'none'};
 	transition: 0.1s;
 	text-decoration: none;
-	cursor: default;
-	opacity: ${(props: StyleProps) => props.selected ? 1 : 0.8};
+	cursor: ${(props: StyleProps) => props.disabled ? 'not-allowed' : 'default'};
+	opacity: ${(props: StyleProps) => props.disabled ? 0.35 : props.selected ? 1 : 0.8};
 	padding-left: ${(props: StyleProps) => props.isSubSection ? '35' : props.theme.mainPadding}px;
 
 	&:hover {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover2};
+		background-color: ${(props: StyleProps) => props.disabled ? 'transparent' : props.theme.backgroundColorHover2};
 	}
+`;
+
+export const StyledSearchContainer = styled.div`
+	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
+	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding / 2}px;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background-color: ${(props: StyleProps) => props.theme.backgroundColor2};
 `;
 
 export const StyledDivider = styled.div`
@@ -78,25 +94,32 @@ export const StyledListItemIcon = styled.i`
 
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
+	const enabledSectionIndices = props.sections
+		.map((section, index) => props.isSectionMatch(section.name) ? index : -1)
+		.filter(index => index >= 0);
 
 	// Making a tabbed region accessible involves supporting keyboard interaction.
 	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
+		if (!enabledSectionIndices.length) return;
+
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
-		let newIndex = selectedIndex;
+		const selectedEnabledIndex = enabledSectionIndices.includes(selectedIndex) ? enabledSectionIndices.indexOf(selectedIndex) : 0;
+		let newEnabledIndex = selectedEnabledIndex;
 
 		if (event.code === 'ArrowUp') {
-			newIndex --;
+			newEnabledIndex --;
 		} else if (event.code === 'ArrowDown') {
-			newIndex ++;
+			newEnabledIndex ++;
 		} else if (event.code === 'Home') {
-			newIndex = 0;
+			newEnabledIndex = 0;
 		} else if (event.code === 'End') {
-			newIndex = props.sections.length - 1;
+			newEnabledIndex = enabledSectionIndices.length - 1;
 		}
 
-		if (newIndex < 0) newIndex += props.sections.length;
-		newIndex %= props.sections.length;
+		if (newEnabledIndex < 0) newEnabledIndex += enabledSectionIndices.length;
+		newEnabledIndex %= enabledSectionIndices.length;
+		const newIndex = enabledSectionIndices[newEnabledIndex];
 
 		if (newIndex !== selectedIndex) {
 			event.preventDefault();
@@ -107,12 +130,13 @@ export default function Sidebar(props: Props) {
 				focus('Sidebar', targetButton);
 			}
 		}
-	}, [props.sections, props.selection, props.onSelectionChange]);
+	}, [enabledSectionIndices, props.sections, props.selection, props.onSelectionChange]);
 
 	const buttons: React.ReactNode[] = [];
 
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
+		const disabled = !props.isSectionMatch(section.name);
 		return (
 			<StyledListItem
 				key={section.name}
@@ -123,11 +147,16 @@ export default function Sidebar(props: Props) {
 				id={`setting-tab-${section.name}`}
 				aria-controls={`setting-section-${section.name}`}
 				aria-selected={selected}
-				tabIndex={selected ? 0 : -1}
+				aria-disabled={disabled}
+				tabIndex={!disabled && selected ? 0 : -1}
 
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
-				onClick={() => { props.onSelectionChange({ section: section }); }}
+				disabled={disabled}
+				onClick={() => {
+					if (disabled) return;
+					props.onSelectionChange({ section: section });
+				}}
 				onKeyDown={onKeyDown}
 			>
 				<StyledListItemIcon
@@ -136,7 +165,7 @@ export default function Sidebar(props: Props) {
 					aria-hidden='true'
 				/>
 				<StyledListItemLabel>
-					{Setting.sectionNameToLabel(section.name)}
+					{highlightSearchText(Setting.sectionNameToLabel(section.name), props.searchQuery)}
 				</StyledListItemLabel>
 			</StyledListItem>
 		);
@@ -165,6 +194,16 @@ export default function Sidebar(props: Props) {
 
 	return (
 		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+			<StyledSearchContainer>
+				<SearchInput
+					value={props.searchQuery}
+					onChange={props.onSearchQueryChange}
+					onSearchButtonClick={props.onSearchButtonClick}
+					searchStarted={props.searchStarted}
+					inputRef={null}
+					placeholder={_('Search settings...')}
+				/>
+			</StyledSearchContainer>
 			{buttons}
 		</StyledRoot>
 	);

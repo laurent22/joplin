@@ -10,6 +10,7 @@ import FontSearch from './FontSearch';
 import * as pathUtils from '@joplin/lib/path-utils';
 import SettingLabel from './SettingLabel';
 import SettingDescription from './SettingDescription';
+import { highlightSearchText } from '../configScreenUtils';
 
 const settingKeyToControl: Record<string, typeof control_PluginsStates> = {
 	'plugins.states': control_PluginsStates,
@@ -25,6 +26,7 @@ interface Props {
 	settingKey: string;
 	value: unknown;
 	fonts: string[];
+	searchQuery: string;
 	onUpdateSettingValue: (event: UpdateSettingValueEvent)=> void;
 	onSettingButtonClick: (key: string)=> void;
 }
@@ -69,18 +71,19 @@ const SettingComponent: React.FC<Props> = props => {
 	const descriptionText = Setting.keyDescription(key, AppType.Desktop);
 	const inputId = useId();
 	const descriptionId = useId();
-	const descriptionComp = <SettingDescription id={descriptionId} text={descriptionText}/>;
+	const descriptionComp = <SettingDescription id={descriptionId} text={descriptionText} searchQuery={props.searchQuery}/>;
 
 	if (key in settingKeyToControl) {
 		const CustomSettingComponent = settingKeyToControl[key];
-		const label = md.label ? <SettingLabel text={md.label()} htmlFor={null} /> : null;
+		const label = md.label ? <SettingLabel text={md.label()} htmlFor={null} searchQuery={props.searchQuery} /> : null;
 		return (
 			<div style={rowStyle}>
 				{label}
-				<SettingDescription id={descriptionId} text={md.description ? md.description(AppType.Desktop) : null}/>
+				<SettingDescription id={descriptionId} text={md.description ? md.description(AppType.Desktop) : null} searchQuery={props.searchQuery}/>
 				<CustomSettingComponent
 					value={props.value}
 					themeId={props.themeId}
+					highlightQuery={props.searchQuery}
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 					onChange={(event: any) => {
 						updateSettingValue(key, event.value);
@@ -109,7 +112,7 @@ const SettingComponent: React.FC<Props> = props => {
 
 		return (
 			<div style={rowStyle}>
-				<SettingLabel htmlFor={inputId} text={md.label()}/>
+				<SettingLabel htmlFor={inputId} text={md.label()} searchQuery={props.searchQuery}/>
 				<select
 					value={value}
 					className='setting-select-control'
@@ -149,7 +152,7 @@ const SettingComponent: React.FC<Props> = props => {
 						className='setting-label -for-checkbox'
 						htmlFor={inputId}
 					>
-						{md.label()}
+						{highlightSearchText(md.label(), props.searchQuery)}
 					</label>
 				</div>
 				{descriptionComp}
@@ -251,7 +254,7 @@ const SettingComponent: React.FC<Props> = props => {
 			const pathDescriptionId = `setting_path_label_${key}`;
 			return (
 				<div style={rowStyle}>
-					<SettingLabel text={md.label()} htmlFor={inputId}/>
+					<SettingLabel text={md.label()} htmlFor={inputId} searchQuery={props.searchQuery}/>
 					<div style={{ display: 'flex' }}>
 						<div style={{ flex: 1 }}>
 							<div style={{ ...rowStyle, marginBottom: 5 }}>
@@ -292,7 +295,7 @@ const SettingComponent: React.FC<Props> = props => {
 			};
 			return (
 				<div style={rowStyle}>
-					<SettingLabel text={md.label()} htmlFor={inputId}/>
+					<SettingLabel text={md.label()} htmlFor={inputId} searchQuery={props.searchQuery}/>
 					{
 						md.subType === SettingItemSubType.FontFamily || md.subType === SettingItemSubType.MonospaceFontFamily ?
 							<FontSearch
@@ -332,7 +335,7 @@ const SettingComponent: React.FC<Props> = props => {
 
 		return (
 			<div style={rowStyle}>
-				<SettingLabel htmlFor={inputId} text={label.join(' ')}/>
+				<SettingLabel htmlFor={inputId} text={label.join(' ')} searchQuery={props.searchQuery}/>
 				<input
 					type="number"
 					style={textInputBaseStyle}
@@ -350,7 +353,7 @@ const SettingComponent: React.FC<Props> = props => {
 		);
 	} else if (md.type === Setting.TYPE_BUTTON) {
 		const labelComp = md.hideLabel ? null : (
-			<SettingLabel text={md.label()} htmlFor={null} />
+			<SettingLabel text={md.label()} htmlFor={null} searchQuery={props.searchQuery} />
 		);
 
 		return (

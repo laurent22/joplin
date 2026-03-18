@@ -51,9 +51,28 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	value: any;
 	themeId: number;
+	highlightQuery?: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onChange: Function;
 }
+
+export const getSearchText = (): string[] => {
+	const pluginService = PluginService.instance();
+	const output: string[] = [
+		_('Manage your plugins'),
+		_('Search for plugins...'),
+		_('Browse all plugins'),
+		_('Install from file'),
+	];
+
+	for (const pluginId in pluginService.plugins) {
+		const plugin = pluginService.plugins[pluginId];
+		output.push(plugin.manifest.name || '');
+		output.push(plugin.manifest.description || '');
+	}
+
+	return output;
+};
 
 let repoApi_: RepositoryApi = null;
 
@@ -260,6 +279,7 @@ export default function(props: Props) {
 				key={item.manifest.id}
 				item={item}
 				themeId={props.themeId}
+				searchQuery={props.highlightQuery}
 				updateState={updateState}
 				isCompatible={PluginService.instance().isCompatible(item.manifest)}
 				onDelete={onDelete}
