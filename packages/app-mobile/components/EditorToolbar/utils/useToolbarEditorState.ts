@@ -1,6 +1,5 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
-import Setting from '@joplin/lib/models/Setting';
 
 export interface ReorderableItem {
 	commandName: string;
@@ -82,24 +81,7 @@ const useToolbarEditorState = (props: UseToolbarEditorStateProps): UseToolbarEdi
 		disabledItems: buildDisabledItems(new Set(initialSelectedCommandNames.filter(n => n !== '-'))),
 	}));
 
-	// Save to settings after enabledItems changes, but skip on initial mount and after
-	// reinitialize — those are state restores, not user edits, and must not overwrite settings.
-	const isInitialMount = useRef(true);
-	const isReinitializing = useRef(false);
-	useEffect(() => {
-		if (isInitialMount.current) {
-			isInitialMount.current = false;
-			return;
-		}
-		if (isReinitializing.current) {
-			isReinitializing.current = false;
-			return;
-		}
-		Setting.setValue('editor.toolbarButtons', enabledItems.map(item => item.commandName));
-	}, [enabledItems]);
-
 	const reinitialize = useCallback((selectedNames: string[]) => {
-		isReinitializing.current = true;
 		setItems({
 			enabledItems: buildEnabledItems(selectedNames),
 			disabledItems: buildDisabledItems(new Set(selectedNames.filter(n => n !== '-'))),

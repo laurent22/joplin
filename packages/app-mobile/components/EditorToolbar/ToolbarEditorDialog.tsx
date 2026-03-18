@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import createRootStyle from '../../utils/createRootStyle';
 import { AccessibilityInfo, View, StyleSheet, ScrollView } from 'react-native';
-import { Divider, IconButton, Text, TouchableRipple } from 'react-native-paper';
+import { Divider, Text, TouchableRipple } from 'react-native-paper';
+import IconButton from '../IconButton';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../global-style';
 import { connect } from 'react-redux';
@@ -18,6 +19,7 @@ import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseC
 import { DeleteButton } from '../buttons';
 import shim from '@joplin/lib/shim';
 import useToolbarEditorState, { ReorderableItem } from './utils/useToolbarEditorState';
+import useSaveToolbarButtons from './utils/useSaveToolbarButtons';
 import focusView from '../../utils/focusView';
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
@@ -66,14 +68,19 @@ const useStyle = (themeId: number) => {
 				padding: 4,
 				paddingTop: theme.itemMarginTop,
 				paddingBottom: theme.itemMarginBottom,
+				minHeight: 44,
 			},
 			arrowButtonsContainer: {
 				flexDirection: 'row',
 				alignItems: 'center',
 			},
-			arrowButton: {
-				margin: 0,
-				padding: 0,
+			arrowIcon: {
+				color: theme.color,
+				fontSize: 20,
+			},
+			arrowIconDisabled: {
+				color: theme.colorFaded,
+				fontSize: 20,
 			},
 			sectionHeader: {
 				paddingVertical: 8,
@@ -102,18 +109,21 @@ interface EnabledItemRowProps {
 	isFirst: boolean;
 	isLast: boolean;
 	styles: Styles;
-	viewRef?: React.RefObject<View>;
+	themeId: number;
+	shouldFocus?: boolean;
+	onFocused?: ()=> void;
 	onToggle: (commandName: string)=> void;
 	onMoveUp: (index: number)=> void;
 	onMoveDown: (index: number)=> void;
 }
 
 const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
-	item, index, isFirst, isLast, styles, viewRef, onToggle, onMoveUp, onMoveDown,
+	item, index, isFirst, isLast, styles, themeId, shouldFocus, onFocused, onToggle, onMoveUp, onMoveDown,
 }) => {
 	const title = item.buttonInfo.title || item.buttonInfo.tooltip;
 
-	// Local refs and state for keeping arrow focus after a move
+	// Local refs for checkbox and arrow focus management
+	const checkboxRef = useRef<View>(null);
 	const upArrowRef = useRef<View>(null);
 	const downArrowRef = useRef<View>(null);
 	const pendingArrowFocusRef = useRef<'up'|'down'|null>(null);
@@ -165,10 +175,28 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 		return () => clearTimeout(timeoutId);
 	}, [index, isFirst, isLast]);
 
+	// When this row is the target of a toggle-focus request, focus the checkbox.
+	// We defer via queueMicrotask rather than calling focusView synchronously:
+	// UIManager.focus (used by focusView on web) silently fails if called during React's
+	// commit phase before the DOM has settled. A microtask fires after the current call
+	// stack clears but before the next frame, making it faster and more deterministic
+	// than a setTimeout while still giving the DOM time to update.
+	useEffect(() => {
+		const ref = checkboxRef.current;
+		const focused = onFocused;
+		let cancelled = false;
+		queueMicrotask(() => {
+			if (cancelled || !shouldFocus || !ref) return;
+			focusView('toolbar-editor', ref);
+			focused?.();
+		});
+		return () => { cancelled = true; };
+	}, [shouldFocus, onFocused]);
+
 	return (
 		<View style={styles.listItem}>
 			<TouchableRipple
-				ref={viewRef}
+				ref={checkboxRef}
 				accessibilityRole='checkbox'
 				accessibilityState={{ checked: true }}
 				aria-checked={true}
@@ -183,22 +211,22 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 			</TouchableRipple>
 			<View style={styles.arrowButtonsContainer}>
 				<IconButton
-					ref={upArrowRef}
-					icon='arrow-up'
-					size={20}
+					pressableRef={upArrowRef}
+					iconName='material arrow-up'
+					iconStyle={isFirst ? styles.arrowIconDisabled : styles.arrowIcon}
 					onPress={handleMoveUp}
 					disabled={isFirst}
-					style={styles.arrowButton}
-					accessibilityLabel={_('Move %s up', title)}
+					description={_('Move %s up', title)}
+					themeId={themeId}
 				/>
 				<IconButton
-					ref={downArrowRef}
-					icon='arrow-down'
-					size={20}
+					pressableRef={downArrowRef}
+					iconName='material arrow-down'
+					iconStyle={isLast ? styles.arrowIconDisabled : styles.arrowIcon}
 					onPress={handleMoveDown}
 					disabled={isLast}
-					style={styles.arrowButton}
-					accessibilityLabel={_('Move %s down', title)}
+					description={_('Move %s down', title)}
+					themeId={themeId}
 				/>
 			</View>
 		</View>
@@ -248,7 +276,7 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 	}, [props.defaultToolbarButtonInfos]);
 
 	const [pendingFocusCommand, setPendingFocusCommand] = useState<string|null>(null);
-	const pendingFocusRef = useRef<View>(null);
+	const isReinitializingRef = useRef(false);
 
 	const {
 		enabledItems,
@@ -256,12 +284,19 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 		handleMoveUp,
 		handleMoveDown,
 		handleToggle: doToggle,
-		reinitialize,
+		reinitialize: baseReinitialize,
 	} = useToolbarEditorState({
 		initialSelectedCommandNames: props.selectedCommandNames,
 		allCommandNames: props.allCommandNames,
 		allButtonInfos,
 	});
+
+	useSaveToolbarButtons(enabledItems, isReinitializingRef);
+
+	const reinitialize = useCallback((selectedNames: string[]) => {
+		isReinitializingRef.current = true;
+		baseReinitialize(selectedNames);
+	}, [baseReinitialize]);
 
 	const handleToggle = useCallback((commandName: string) => {
 		const enabledIndex = enabledItems.findIndex(item => item.commandName === commandName);
@@ -279,16 +314,7 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 		doToggle(commandName);
 	}, [doToggle, enabledItems]);
 
-	// useLayoutEffect fires synchronously after mutations, before TalkBack processes
-	// the re-render's accessibility events — this prevents the brief flash to X.
-	// Clearing pendingFocusCommand after focus is applied removes the ambient state
-	// so stale re-triggers cannot occur.
-	useLayoutEffect(() => {
-		if (pendingFocusCommand && pendingFocusRef.current) {
-			focusView('toolbar-editor', pendingFocusRef.current);
-			setPendingFocusCommand(null);
-		}
-	}, [enabledItems, pendingFocusCommand]);
+	const handleFocused = useCallback(() => setPendingFocusCommand(null), []);
 
 	// Re-sync local state whenever the dialog becomes visible (e.g. after Restore defaults)
 	const prevVisible = useRef(props.visible);
@@ -329,7 +355,7 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 			<View>
 				<Text variant='bodyMedium'>{_('Check elements to display in the toolbar')}</Text>
 			</View>
-			<ScrollView style={styles.listContainer}>
+			<ScrollView style={styles.listContainer} keyboardShouldPersistTaps='handled'>
 				{enabledItems.map((item, index) => (
 					<EnabledItemRow
 						key={`enabled-${item.commandName}`}
@@ -338,7 +364,9 @@ const ToolbarEditorScreen: React.FC<EditorDialogProps> = props => {
 						isFirst={index === 0}
 						isLast={index === enabledItems.length - 1}
 						styles={styles}
-						viewRef={item.commandName === pendingFocusCommand ? pendingFocusRef : undefined}
+						themeId={props.themeId}
+						shouldFocus={item.commandName === pendingFocusCommand}
+						onFocused={handleFocused}
 						onToggle={handleToggle}
 						onMoveUp={handleMoveUp}
 						onMoveDown={handleMoveDown}

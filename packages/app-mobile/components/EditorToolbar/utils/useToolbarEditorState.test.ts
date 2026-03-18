@@ -1,8 +1,7 @@
-import { renderHook, act, waitFor } from '../../../utils/testing/testingLibrary';
+import { renderHook, act } from '../../../utils/testing/testingLibrary';
 import { setupDatabase, switchClient } from '@joplin/lib/testing/test-utils';
 import useToolbarEditorState, { ReorderableItem } from './useToolbarEditorState';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
-import Setting from '@joplin/lib/models/Setting';
 
 const createMockButtonInfo = (name: string, title: string): ToolbarButtonInfo => ({
 	type: 'button',
@@ -19,7 +18,6 @@ describe('useToolbarEditorState', () => {
 	beforeEach(async () => {
 		await setupDatabase(0);
 		await switchClient(0);
-		Setting.setValue('editor.toolbarButtons', []);
 	});
 
 	const defaultAllCommandNames = [
@@ -63,28 +61,25 @@ describe('useToolbarEditorState', () => {
 		expect(toNames(result.current.disabledItems)).not.toContain('-');
 	});
 
-	it('handleMoveUp and handleMoveDown should reorder items and save, with no-op at boundaries', async () => {
+	it('handleMoveUp and handleMoveDown should reorder items, with no-op at boundaries', async () => {
 		const { result } = renderToolbarHook(['textBold', 'textItalic', 'textCode']);
 
 		// Move first item down
 		await act(async () => { result.current.handleMoveDown(0); });
 		expect(toNames(result.current.enabledItems)).toEqual(['textItalic', 'textBold', 'textCode']);
-		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual(['textItalic', 'textBold', 'textCode']);
-		});
 
 		// Move it back up
 		await act(async () => { result.current.handleMoveUp(1); });
 		expect(toNames(result.current.enabledItems)).toEqual(['textBold', 'textItalic', 'textCode']);
 
-		// No-op at boundaries: moving first item up or last item down should not change order
+		// No-op at boundaries
 		const orderBefore = toNames(result.current.enabledItems);
 		await act(async () => { result.current.handleMoveUp(0); });
 		await act(async () => { result.current.handleMoveDown(2); });
 		expect(toNames(result.current.enabledItems)).toEqual(orderBefore);
 	});
 
-	it('handleToggle should move items between enabled and disabled, preserve default order, and save', async () => {
+	it('handleToggle should move items between enabled and disabled, preserving default order', async () => {
 		const { result } = renderToolbarHook(['textCode', 'textBold', 'textItalic']);
 
 		// Toggle an enabled item off
@@ -95,35 +90,24 @@ describe('useToolbarEditorState', () => {
 		const disabled = toNames(result.current.disabledItems);
 		expect(disabled.indexOf('attachFile')).toBeLessThan(disabled.indexOf('textBold'));
 		expect(disabled.indexOf('textBold')).toBeLessThan(disabled.indexOf('textMath'));
-		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual(['textCode', 'textItalic']);
-		});
 
 		// Toggle it back on: should append to end of enabled list
 		await act(async () => { result.current.handleToggle('textBold'); });
 		expect(toNames(result.current.enabledItems)).toEqual(['textCode', 'textItalic', 'textBold']);
-		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual(['textCode', 'textItalic', 'textBold']);
-		});
 	});
 
-	it('reinitialize should reset state without saving to settings', async () => {
+	it('reinitialize should reset state to new selection', async () => {
 		const { result } = renderToolbarHook(['textBold', 'textItalic']);
 
 		// Make a change first
 		await act(async () => { result.current.handleMoveDown(0); });
 		expect(toNames(result.current.enabledItems)).toEqual(['textItalic', 'textBold']);
-		await waitFor(() => {
-			expect(Setting.value('editor.toolbarButtons')).toEqual(['textItalic', 'textBold']);
-		});
 
-		// Reinitialize with a different selection (simulating Restore defaults)
+		// Reinitialize with a different selection
 		await act(async () => { result.current.reinitialize(['textCode', 'textMath']); });
 
 		expect(toNames(result.current.enabledItems)).toEqual(['textCode', 'textMath']);
 		expect(toNames(result.current.disabledItems)).toContain('textBold');
 		expect(toNames(result.current.disabledItems)).toContain('textItalic');
-		// Setting should not have been updated by reinitialize
-		expect(Setting.value('editor.toolbarButtons')).toEqual(['textItalic', 'textBold']);
 	});
 });
