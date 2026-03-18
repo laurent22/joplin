@@ -173,7 +173,7 @@ export default function Sidebar(props: Props) {
 				focus('Sidebar', targetButton);
 			}
 		}
-	}, [props.sections, props.selection, props.onSelectionChange, isSectionDisabled, nextEnabledIndex]);
+	}, [props.sections, props.onSelectionChange, isSectionDisabled, nextEnabledIndex]);
 
 	const buttons: React.ReactNode[] = [];
 
