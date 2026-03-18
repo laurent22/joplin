@@ -480,27 +480,25 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 
 					if (outputFormat === 'md' && note.bodyXml && isHtmlNote(note.bodyXml)) {
 						outputFormat = 'html';
-						}
+					}
 
-						const body: string = outputFormat === 'html'
+					const body: string = outputFormat === 'html'
 						? await enexXmlToHtml(note.bodyXml, note.resources)
 						: await enexXmlToMd(note.bodyXml, note.resources, note.tasks);
-											delete note.bodyXml;
+					delete note.bodyXml;
 
 					// --------------------------------------------------------
 					// Finish setting up the note
 					// --------------------------------------------------------
 
-						note.id = uuid.create();
-						note.markup_language = importOptions.outputFormat === 'html' ?
-							MarkupToHtml.MARKUP_LANGUAGE_HTML :
-							MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
-						note.markup_language = outputFormat === 'html'
+					note.id = uuid.create();
+					note.markup_language =
+						outputFormat === 'html'
 							? MarkupToHtml.MARKUP_LANGUAGE_HTML
 							: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
-						note.parent_id = parentFolderId;
-						note.body = body;
+					note.parent_id = parentFolderId;
+					note.body = body;
 
 					// If the created timestamp was invalid, it would be
 					// set to zero, so set it to the current date here
