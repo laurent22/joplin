@@ -2,7 +2,7 @@ import { AppType, MetadataBySection, SettingMetadataSection, SettingSectionSourc
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import { type SearchResultGroup } from '@joplin/lib/components/shared/config/config-shared';
@@ -47,11 +47,12 @@ export const StyledListItem = styled.a`
 	transition: 0.1s;
 	text-decoration: none;
 	cursor: default;
-	opacity: ${(props: StyleProps) => props.selected ? 1 : 0.8};
+	opacity: ${(props: StyleProps) => props.disabled ? 0.5 : props.selected ? 1 : 0.8};
 	padding-left: ${(props: StyleProps) => props.isSubSection ? '35' : props.theme.mainPadding}px;
+	pointer-events: ${(props: StyleProps) => props.disabled ? 'none' : 'auto'};
 
 	&:hover {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover2};
+		background-color: ${(props: StyleProps) => props.disabled ? 'none' : props.theme.backgroundColorHover2};
 	}
 `;
 
@@ -90,24 +91,52 @@ export const StyledListItemIcon = styled.i`
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
 
+	// Compute which sections have matching results
+	const matchedSectionNames = useMemo(() => {
+		return new Set(props.searchResultGroups.map(group => group.sectionName));
+	}, [props.searchResultGroups]);
+
 	// Making a tabbed region accessible involves supporting keyboard interaction.
 	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
 		let newIndex = selectedIndex;
+		const isSearching = !!props.searchQuery;
 
+		// Determine navigation direction
+		let isMovingUp = false;
 		if (event.code === 'ArrowUp') {
 			newIndex --;
+			isMovingUp = true;
 		} else if (event.code === 'ArrowDown') {
 			newIndex ++;
+			isMovingUp = false;
 		} else if (event.code === 'Home') {
 			newIndex = 0;
+			isMovingUp = false;
 		} else if (event.code === 'End') {
 			newIndex = props.sections.length - 1;
+			isMovingUp = true;
 		}
 
 		if (newIndex < 0) newIndex += props.sections.length;
 		newIndex %= props.sections.length;
+
+		// Skip disabled (no-match) sections during search
+		if (isSearching) {
+			const initialIndex = newIndex;
+			while (!matchedSectionNames.has(props.sections[newIndex].name)) {
+				if (isMovingUp) {
+					newIndex--;
+					if (newIndex < 0) newIndex += props.sections.length;
+				} else {
+					newIndex++;
+					newIndex %= props.sections.length;
+				}
+				// Prevent infinite loop if no matched sections
+				if (newIndex === initialIndex) break;
+			}
+		}
 
 		if (newIndex !== selectedIndex) {
 			event.preventDefault();
@@ -118,28 +147,37 @@ export default function Sidebar(props: Props) {
 				focus('Sidebar', targetButton);
 			}
 		}
-	}, [props.sections, props.selection, props.onSelectionChange]);
+	}, [props.sections, props.selection, props.onSelectionChange, props.searchQuery, matchedSectionNames]);
 
 	const buttons: React.ReactNode[] = [];
 
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
+		const isSearching = !!props.searchQuery;
+		const hasMatch = matchedSectionNames.has(section.name);
+		const isDisabled = isSearching && !hasMatch;
+
 		return (
 			<StyledListItem
 				key={section.name}
-				href='#'
+				href={isDisabled ? undefined : '#'}
 				role='tab'
 				ref={(item: HTMLElement) => { buttonRefs.current[index] = item; }}
 
 				id={`setting-tab-${section.name}`}
 				aria-controls={`setting-section-${section.name}`}
 				aria-selected={selected}
+				aria-disabled={isDisabled}
 				tabIndex={selected ? 0 : -1}
 
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
-				onClick={() => { props.onSelectionChange({ section: section }); }}
-				onKeyDown={onKeyDown}
+				disabled={isDisabled}
+				onClick={() => {
+					if (isDisabled) return;
+					props.onSelectionChange({ section: section });
+				}}
+				onKeyDown={!isDisabled ? onKeyDown : undefined}
 			>
 				<StyledListItemIcon
 					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
