@@ -51,6 +51,69 @@ test.describe('settings', () => {
 		await expect(mainScreen.dialog).toBeVisible();
 	});
 
+	test('search grays out sections with no matches and leaves matching sections active', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+		await mainScreen.openSettings(electronApp);
+
+		const settingsScreen = new SettingsScreen(mainWindow);
+		await settingsScreen.waitFor();
+
+		// "font" is a setting in Appearance, not in Synchronisation.
+		await settingsScreen.searchInput.fill('font');
+
+		const syncTab = settingsScreen.getTabLocator('Synchronisation');
+		const appearanceTab = settingsScreen.getTabLocator('Appearance');
+
+		// Sections with no match should be aria-disabled.
+		await expect(syncTab).toHaveAttribute('aria-disabled', 'true');
+		// Sections with matches should remain interactive (no aria-disabled).
+		await expect(appearanceTab).not.toHaveAttribute('aria-disabled', 'true');
+	});
+
+	test('clicking a section in the sidebar while searching filters results to that section', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+		await mainScreen.openSettings(electronApp);
+
+		const settingsScreen = new SettingsScreen(mainWindow);
+		await settingsScreen.waitFor();
+
+		// Search for something that appears in multiple sections.
+		await settingsScreen.searchInput.fill('language');
+
+		// Click one of the matching sections to filter; that section becomes the active filter.
+		const generalTab = settingsScreen.getTabLocator('General');
+		await generalTab.click();
+
+		// The clicked tab should be marked as selected (filter active).
+		await expect(generalTab).toHaveAttribute('aria-selected', 'true');
+	});
+
+	test('clearing the search restores normal section navigation', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+		await mainScreen.openSettings(electronApp);
+
+		const settingsScreen = new SettingsScreen(mainWindow);
+		await settingsScreen.waitFor();
+
+		await settingsScreen.appearanceTabButton.click();
+		await settingsScreen.searchInput.fill('font');
+
+		// Verify search is active: Synchronisation should be grayed out.
+		await expect(settingsScreen.getTabLocator('Synchronisation')).toHaveAttribute('aria-disabled', 'true');
+
+		// Clear the search.
+		await settingsScreen.searchInput.fill('');
+
+		// Normal mode: no sections should be aria-disabled.
+		await expect(settingsScreen.getTabLocator('Synchronisation')).not.toHaveAttribute('aria-disabled', 'true');
+
+		// The previously selected Appearance tab should still be selected.
+		await expect(settingsScreen.appearanceTabButton).toHaveAttribute('aria-selected', 'true');
+	});
+
 	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow, startupPluginsLoaded }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await startupPluginsLoaded;

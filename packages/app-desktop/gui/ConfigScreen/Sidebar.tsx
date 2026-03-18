@@ -4,6 +4,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { highlightText } from './searchUtils';
 const styled = require('styled-components').default;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
@@ -17,6 +18,11 @@ interface Props {
 	selection: string;
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
+	searchQuery: string;
+	onSearchQueryChange: (query: string)=> void;
+	sectionsWithMatches: Set<string>;
+	searchFilterSection: string|null;
+	onSearchFilterSectionChange: (sectionName: string|null)=> void;
 }
 
 export const StyledRoot = styled.div`
@@ -35,12 +41,13 @@ export const StyledListItem = styled.a`
 	background: ${(props: StyleProps) => props.selected ? props.theme.selectedColor2 : 'none'};
 	transition: 0.1s;
 	text-decoration: none;
-	cursor: default;
-	opacity: ${(props: StyleProps) => props.selected ? 1 : 0.8};
+	cursor: ${(props: StyleProps) => props.dimmed ? 'default' : 'pointer'};
+	opacity: ${(props: StyleProps) => props.dimmed ? 0.35 : (props.selected ? 1 : 0.8)};
+	pointer-events: ${(props: StyleProps) => props.dimmed ? 'none' : 'auto'};
 	padding-left: ${(props: StyleProps) => props.isSubSection ? '35' : props.theme.mainPadding}px;
 
 	&:hover {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover2};
+		background-color: ${(props: StyleProps) => props.dimmed ? 'none' : props.theme.backgroundColorHover2};
 	}
 `;
 
@@ -78,41 +85,73 @@ export const StyledListItemIcon = styled.i`
 
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
+	const searchInputRef = useRef<HTMLInputElement>(null);
 
-	// Making a tabbed region accessible involves supporting keyboard interaction.
-	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
+	const isSearchActive = props.searchQuery.trim().length > 0;
+
+	const navigableSections = isSearchActive
+		? props.sections.filter(s => props.sectionsWithMatches.has(s.name))
+		: props.sections;
+
+	const currentSectionName = isSearchActive ? props.searchFilterSection : props.selection;
+
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
-		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
-		let newIndex = selectedIndex;
+		const selectedIndex = navigableSections.findIndex(section => section.name === currentSectionName);
+		let newIndex = selectedIndex < 0 ? 0 : selectedIndex;
 
 		if (event.code === 'ArrowUp') {
-			newIndex --;
+			newIndex--;
 		} else if (event.code === 'ArrowDown') {
-			newIndex ++;
+			newIndex++;
 		} else if (event.code === 'Home') {
 			newIndex = 0;
 		} else if (event.code === 'End') {
-			newIndex = props.sections.length - 1;
+			newIndex = navigableSections.length - 1;
 		}
 
-		if (newIndex < 0) newIndex += props.sections.length;
-		newIndex %= props.sections.length;
+		if (newIndex < 0) newIndex += navigableSections.length;
+		newIndex %= navigableSections.length;
 
 		if (newIndex !== selectedIndex) {
 			event.preventDefault();
-			props.onSelectionChange({ section: props.sections[newIndex] });
-
-			const targetButton = buttonRefs.current[newIndex];
-			if (targetButton) {
-				focus('Sidebar', targetButton);
+			const targetSection = navigableSections[newIndex];
+			if (isSearchActive) {
+				props.onSearchFilterSectionChange(targetSection.name);
+			} else {
+				props.onSelectionChange({ section: targetSection });
 			}
+
+			const globalIndex = props.sections.findIndex(s => s.name === targetSection.name);
+			const targetButton = buttonRefs.current[globalIndex];
+			if (targetButton) focus('Sidebar', targetButton);
 		}
-	}, [props.sections, props.selection, props.onSelectionChange]);
+	}, [navigableSections, currentSectionName, isSearchActive, props.sections, props.onSelectionChange, props.onSearchFilterSectionChange]);
 
 	const buttons: React.ReactNode[] = [];
 
 	function renderButton(section: SettingMetadataSection, index: number) {
-		const selected = props.selection === section.name;
+		const hasMatch = !isSearchActive || props.sectionsWithMatches.has(section.name);
+		const selected = isSearchActive
+			? props.searchFilterSection === section.name
+			: props.selection === section.name;
+
+		const label = Setting.sectionNameToLabel(section.name);
+		const labelNode = isSearchActive && hasMatch && props.searchQuery
+			? highlightText(label, props.searchQuery)
+			: label;
+
+		const onClick = (e: React.MouseEvent) => {
+			e.preventDefault();
+			if (!hasMatch) return;
+			if (isSearchActive) {
+				props.onSearchFilterSectionChange(
+					props.searchFilterSection === section.name ? null : section.name,
+				);
+			} else {
+				props.onSelectionChange({ section });
+			}
+		};
+
 		return (
 			<StyledListItem
 				key={section.name}
@@ -123,11 +162,13 @@ export default function Sidebar(props: Props) {
 				id={`setting-tab-${section.name}`}
 				aria-controls={`setting-section-${section.name}`}
 				aria-selected={selected}
+				aria-disabled={isSearchActive && !hasMatch}
 				tabIndex={selected ? 0 : -1}
 
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
-				onClick={() => { props.onSelectionChange({ section: section }); }}
+				dimmed={isSearchActive && !hasMatch}
+				onClick={onClick}
 				onKeyDown={onKeyDown}
 			>
 				<StyledListItemIcon
@@ -136,7 +177,7 @@ export default function Sidebar(props: Props) {
 					aria-hidden='true'
 				/>
 				<StyledListItemLabel>
-					{Setting.sectionNameToLabel(section.name)}
+					{labelNode}
 				</StyledListItemLabel>
 			</StyledListItem>
 		);
@@ -160,11 +201,34 @@ export default function Sidebar(props: Props) {
 		}
 
 		buttons.push(renderButton(section, index));
-		index ++;
+		index++;
 	}
 
 	return (
 		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+			<div className='config-sidebar-search'>
+				<span className='config-sidebar-search-icon fa fa-search' aria-hidden='true'/>
+				<input
+					ref={searchInputRef}
+					className='config-sidebar-search-input'
+					type='search'
+					value={props.searchQuery}
+					onChange={(e) => props.onSearchQueryChange(e.target.value)}
+					placeholder={_('Search settings...')}
+					aria-label={_('Search settings')}
+				/>
+				{isSearchActive && (
+					<button
+						type='button'
+						className='config-sidebar-search-clear'
+						title={_('Clear search')}
+						aria-label={_('Clear search')}
+						onClick={() => props.onSearchQueryChange('')}
+					>
+						<span className='fa fa-times' aria-hidden='true'/>
+					</button>
+				)}
+			</div>
 			{buttons}
 		</StyledRoot>
 	);

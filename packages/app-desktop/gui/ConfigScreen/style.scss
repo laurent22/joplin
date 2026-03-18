@@ -47,70 +47,75 @@
 	align-items: center;
 }
 
-.config-screen-search-toolbar {
-	display: flex;
-	justify-content: flex-start;
-}
+// Sidebar search field 	
 
-.config-screen-search-input-wrapper {
+.config-sidebar-search {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	width: min(560px, 100%);
-}
-
-.config-screen-search-field {
-	display: flex;
-	align-items: center;
-	flex: 1;
-	min-width: 0;
-	height: 34px;
-	border-radius: 8px;
+	gap: 4px;
+	margin: 8px 8px 4px;
+	height: 30px;
+	border-radius: 6px;
 	border: 1px solid var(--joplin-border-color4);
 	background: var(--joplin-background-color3);
+	flex-shrink: 0;
 
-	&:has(.config-screen-search-input:focus-visible) {
+	&:focus-within {
 		border-color: var(--joplin-focus-outline-color);
 	}
 }
 
-.config-screen-search-icon {
-	color: var(--joplin-color2);
-	margin-left: 10px;
-	margin-right: 8px;
+.config-sidebar-search-icon {
+	color: var(--joplin-color);
+	font-size: 0.8em;
+	margin-left: 8px;
+	flex-shrink: 0;
 }
 
-.config-screen-search-input {
+.config-sidebar-search-input {
 	flex: 1;
 	min-width: 0;
 	height: 100%;
 	border: 0;
 	outline: 0;
-	padding: 0 10px 0 0;
+	padding: 0 4px;
 	background: transparent;
 	color: var(--joplin-color);
+	font-size: 0.85em;
+
+	&::placeholder {
+		color: var(--joplin-color);
+		opacity: 0.5;
+	}
+
+	// Remove the browser's built-in clear button for type="search"
+	&::-webkit-search-cancel-button {
+		display: none;
+	}
 }
 
-.config-screen-search-toggle {
-	height: 34px;
-	min-width: 34px;
-	padding: 0 10px;
-	border-radius: 8px;
-	border: 1px solid var(--joplin-background-color2);
-	background: var(--joplin-background-color2);
-	color: var(--joplin-color2);
+.config-sidebar-search-clear {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	flex-shrink: 0;
+	margin-right: 4px;
+	border: 0;
+	border-radius: 4px;
+	background: transparent;
+	color: var(--joplin-color);
 	cursor: pointer;
+	font-size: 0.75em;
+	opacity: 0.7;
+
+	&:hover {
+		opacity: 1;
+	}
 }
 
-.config-screen-search-toggle:hover {
-	filter: brightness(1.08);
-}
-
-.config-screen-search-results-title {
-	padding-bottom: 8px;
-	border-bottom: 1px solid var(--joplin-divider-color);
-}
-
+// Search results (right panel)
 .config-screen-search-section-link {
 	background: var(--joplin-background-color2);
 	border: 1px solid var(--joplin-border-color4);
@@ -126,4 +131,13 @@
 	border-top: 1px solid var(--joplin-divider-color);
 	padding-top: 8px;
 	margin-top: 8px;
+}
+
+// Search term highlight
+
+mark.search-highlight {
+	background-color: var(--joplin-search-marker-background-color);
+	color: var(--joplin-search-marker-color);
+	border-radius: 2px;
+	padding: 0 1px;
 }

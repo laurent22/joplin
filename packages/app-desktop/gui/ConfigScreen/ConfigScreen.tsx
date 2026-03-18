@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
@@ -20,8 +20,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
-import CommandService from '@joplin/lib/services/CommandService';
-import { encryptionSearchKeywords, matchesSearchQueryValue } from './searchUtils';
+import { encryptionSearchKeywords, highlightText, matchesSearchQueryValue } from './searchUtils';
 
 
 interface Font {
@@ -55,7 +54,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			needRestart: false,
 			fonts: [],
 			searchQuery: '',
-			searching: false,
+			searchFilterSection: null as string|null,
 			expandedAdvancedSections: {} as Record<string, boolean>,
 		};
 
@@ -169,9 +168,25 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private openSectionFromSearch(name: string) {
-		this.setState({ searching: false, searchQuery: '' }, () => {
+		this.setState({ searchQuery: '', searchFilterSection: null }, () => {
 			void this.switchSection(name);
 		});
+	}
+
+	// Returns true if the section has any settings that match the current search query.
+	private sectionHasMatches(section: SettingMetadataSection): boolean {
+		const sectionLabel = Setting.sectionNameToLabel(section.name);
+		const sectionKeywords = this.sectionSearchKeywords(section.name, this.state.settings);
+
+		if (this.matchesSearchQuery([sectionLabel, ...sectionKeywords], sectionLabel)) return true;
+
+		for (const md of (section.metadatas ?? [])) {
+			const label = md.label?.() ?? '';
+			const description = md.description?.(AppType.Desktop) ?? '';
+			if (this.matchesSearchQuery([label, description, md.key], sectionLabel)) return true;
+		}
+
+		return false;
 	}
 
 	private sectionSearchKeywords(sectionName: string, settings: Record<string, unknown>): string[] {
@@ -208,9 +223,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
 		const searchQuery = (this.state.searchQuery ?? '').trim();
-		const searchActive = this.state.searching && searchQuery.length > 0;
+		const searchActive = searchQuery.length > 0;
 		const sectionLabel = Setting.sectionNameToLabel(section.name);
 		const sectionKeywords = this.sectionSearchKeywords(section.name, settings);
+
+		// When the user has clicked a section to filter results, hide all other sections.
+		if (searchActive && this.state.searchFilterSection && key !== this.state.searchFilterSection) return null;
 
 		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
@@ -404,7 +422,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				className='config-screen-search-section-link'
 				onClick={() => this.openSectionFromSearch(section.name)}
 			>
-				{sectionLabel}
+				{highlightText(sectionLabel, searchQuery)}
 			</button>
 		) : null;
 
@@ -432,6 +450,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	};
 
 	public settingToComponent<T extends string>(key: T, value: SettingValueType<T>) {
+		const searchQuery = (this.state.searchQuery ?? '').trim();
 		return (
 			<SettingComponent
 				themeId={this.props.themeId}
@@ -441,6 +460,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				fonts={this.state.fonts}
 				onUpdateSettingValue={this.onUpdateSettingValue}
 				onSettingButtonClick={this.handleSettingButton}
+				searchQuery={searchQuery || undefined}
 			/>
 		);
 	}
@@ -508,20 +528,26 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		};
 
 		const hasChanges = this.hasChanges();
-		const searchQuery = this.state.searchQuery ?? '';
-
-		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName);
-		const searchResultComps = shared.settingsToComponents2(this, AppType.Desktop, settings, null);
+		const searchQuery = (this.state.searchQuery ?? '').trim();
 
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
-		const searchActive = !screenComp && this.state.searching && searchQuery.trim().length > 0;
+		// Search takes priority: typing in the search field always shows results,
+		// even when a custom sub-screen (Encryption, Keymap…) is open.
+		const searchActive = searchQuery.length > 0;
 
-		if (screenComp) containerStyle.display = 'none';
+		// Hide the regular settings container only when a custom screen is shown
+		// and search is not active.
+		if (screenComp && !searchActive) containerStyle.display = 'none';
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
+
+		// Compute which sections have at least one setting matching the query.
+		const sectionsWithMatches: Set<string> = searchActive
+			? new Set(sections.filter((s: SettingMetadataSection) => this.sectionHasMatches(s)).map((s: SettingMetadataSection) => s.name))
+			: new Set();
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
@@ -533,67 +559,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const rightStyle = { ...style, flex: 1 };
 		delete style.width;
-		const showSearchBar = !screenComp;
-		const configSearchBar = showSearchBar ? (
-			<div className='config-screen-search-toolbar' style={{ padding: theme.configScreenPadding, paddingBottom: theme.configScreenPadding / 2 }}>
-				{this.state.searching ? (
-					<div className='config-screen-search-input-wrapper'>
-						<div className='config-screen-search-field'>
-							<span className={`config-screen-search-icon ${CommandService.instance().iconName('search')}`}/>
-							<input
-								className='config-screen-search-input'
-								value={searchQuery}
-								onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.setState({ searchQuery: event.currentTarget.value })}
-								placeholder={_('Search settings...')}
-								autoFocus={true}
-							/>
-						</div>
-						{searchQuery.length > 0 ? (
-							<button
-								type="button"
-								className='config-screen-search-toggle'
-								title={_('Clear search')}
-								aria-label={_('Clear search')}
-								tabIndex={-1}
-								onClick={() => this.setState({ searchQuery: '' })}
-							>
-								{_('Clear')}
-							</button>
-						) : null}
-						<button
-							type="button"
-							className='config-screen-search-toggle'
-							title={_('Close search')}
-							aria-label={_('Close search')}
-							tabIndex={-1}
-							onClick={() => this.setState({ searching: false, searchQuery: '' })}
-						>
-							<span className='fa fa-times'/>
-						</button>
-					</div>
-				) : (
-					<button
-						type="button"
-						className='config-screen-search-toggle'
-						title={_('Search settings')}
-						aria-label={_('Search settings')}
-						tabIndex={-1}
-						onClick={() => this.setState({ searching: true })}
-					>
-						<span className={CommandService.instance().iconName('search')}/>
-					</button>
-				)}
-			</div>
-		) : null;
+
+		// Compute section/search results components only when needed.
+		const settingComps = !searchActive
+			? shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName)
+			: [];
+		const searchResultComps = searchActive
+			? shared.settingsToComponents2(this, AppType.Desktop, settings, null)
+			: [];
 
 		const visibleSearchResultComps = searchResultComps.filter((c: React.ReactNode) => !!c);
-		const hasSearchResults = visibleSearchResultComps.length > 0;
 		const searchResultsPanel = (
 			<div style={{ ...containerStyle, display: 'block' }}>
-				<div className='config-screen-search-results-title' style={{ ...theme.textStyle, marginBottom: 12, fontWeight: 'bold' }}>
-					{_('Search results')}
-				</div>
-				{hasSearchResults ? visibleSearchResultComps : (
+				{visibleSearchResultComps.length > 0 ? visibleSearchResultComps : (
 					<div style={theme.textStyle}>
 						{_('No settings match your search.')}
 					</div>
@@ -638,9 +616,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
+					searchQuery={this.state.searchQuery ?? ''}
+					onSearchQueryChange={(q) => this.setState({ searchQuery: q, searchFilterSection: null })}
+					sectionsWithMatches={sectionsWithMatches}
+					searchFilterSection={this.state.searchFilterSection}
+					onSearchFilterSectionChange={(name) => this.setState({ searchFilterSection: name })}
 				/>
 				<div style={rightStyle}>
-					{configSearchBar}
 					{needRestartComp}
 					{searchActive ? searchResultsPanel : tabComponents}
 					<ButtonBar
