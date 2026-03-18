@@ -125,11 +125,9 @@ const requestPermissions = useCallback(async () => {
 			}
 
 			
-			setRecordingState(RecorderState.Recording);
 			await recording.prepareToRecordAsync();
-			setDuration(recording.currentTime * 1000);
-		recordingRef.current = recording;
-		recording.record();
+            recordingRef.current = recording;
+			recording.record();
 		} catch (error) {
 			logger.error('Error starting recording:', error);
 			setError(`Recording error: ${error}`);
@@ -141,13 +139,13 @@ const requestPermissions = useCallback(async () => {
 	}, [permissionResponse, requestPermissions, recording]);
 
 	const onStopRecording = useCallback(async () => {
-		const recording = recordingRef.current;
-		recordingRef.current = null;
+    const recording = recordingRef.current;
+    recordingRef.current = null;
 
-		try {
-			setRecordingState(RecorderState.Processing);
-			await recording.stop();
-
+    try {
+        setRecordingState(RecorderState.Processing);
+        if (!recording) return;
+        await recording.stop();
 			const saveEvent = await recordingToSaveData(recording);
 			onFileSaved(saveEvent);
 			onDismiss();
@@ -166,12 +164,13 @@ const requestPermissions = useCallback(async () => {
 		}
 	}, [recordingState, onStartRecording, onStopRecording]);
 
-	useEffect(() => () => {
-    if (recordingRef.current) {
-        void recordingRef.current?.stop();
-        recordingRef.current = null;
-    }
-}, []);
+	useEffect(() => {
+    if (recordingState !== RecorderState.Recording) return;
+    const interval = setInterval(() => {
+        setDuration(recording.currentTime * 1000);
+    }, 500);
+    return () => clearInterval(interval);
+}, [recordingState, recording]);
 
 	return { onStartStopRecording, error, duration, recordingState };
 };
