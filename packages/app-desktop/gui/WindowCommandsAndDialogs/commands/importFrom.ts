@@ -14,6 +14,7 @@ import Logger from '@joplin/utils/Logger';
 const packageInfo: PackageInfo = require('../../../packageInfo.js');
 
 const logger = Logger.create('importFrom');
+let jexImportWarningAcceptedForCurrentSession = false;
 
 export const declaration: CommandDeclaration = {
 	name: 'importFrom',
@@ -76,12 +77,31 @@ const promptForSourcePath = async (module: ImportModule, sourceType: FileSystemI
 	}
 };
 
+const shouldContinueWithImport = async (module: ImportModule) => {
+	if (module.format !== 'jex') return true;
+	if (jexImportWarningAcceptedForCurrentSession) return true;
+
+	const message = _('Importing is intended for adding or restoring notes. If you import and then sync with existing notes on another device, duplicates will be created. To transfer notes, use sync instead. Do you want to continue?');
+	const buttonIndex = await bridge().showMessageBox(message, {
+		buttons: [_('Yes'), _('No')],
+		defaultId: 1,
+		cancelId: 1,
+	});
+
+	if (buttonIndex !== 0) return false;
+
+	jexImportWarningAcceptedForCurrentSession = true;
+	return true;
+};
+
 export const runtime = (control: WindowControl): CommandRuntime => {
 	return {
 		// Since this can be run from "go to anything", partialOptions needs to support being null or empty.
 		execute: async (context: CommandContext, options: ImportCommandOptions|undefined) => {
 			const importModule = await findImportModule(options, control);
 			if (!importModule) return null; // E.g. if cancelled
+
+			if (!await shouldContinueWithImport(importModule)) return null;
 
 			let sourcePath = options?.sourcePath ?? await promptForSourcePath(importModule, options?.sourceType);
 			if (Array.isArray(sourcePath)) {
