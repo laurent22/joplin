@@ -173,7 +173,7 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 	return output;
 }
 
-export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
+function isValidOriginAgainstBaseUrl(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
 	const url1 = new URL(requestOrigin);
 	const url2 = new URL(endPointBaseUrl);
 	const host1 = url1.host;
@@ -208,6 +208,12 @@ export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, ro
 		if (normaliseLoopbackHostname(hostname1) === normaliseLoopbackHostname(hostname2)) return true;
 		return host1 === host2;
 	}
+}
+
+export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType, alternateBaseUrl?: string): boolean {
+	if (isValidOriginAgainstBaseUrl(requestOrigin, endPointBaseUrl, routeType)) return true;
+	if (alternateBaseUrl && isValidOriginAgainstBaseUrl(requestOrigin, alternateBaseUrl, routeType)) return true;
+	return false;
 }
 
 export function userIdFromUserContentUrl(url: string): Uuid {
@@ -253,7 +259,12 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 	if (!match) throw new ErrorNotFound();
 
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
-	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
+	const primaryBaseUrl = baseUrl(endPoint.type);
+	const cfg = config();
+	const alternateBaseUrl = (cfg.baseUrl !== cfg.apiBaseUrl)
+		? (endPoint.type === RouteType.Web ? cfg.apiBaseUrl : cfg.baseUrl)
+		: undefined;
+	if (ctx.URL && !isValidOrigin(ctx.URL.origin, primaryBaseUrl, endPoint.type, alternateBaseUrl)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
 
 	const isPublicRoute = match.route.isPublic(match.subPath.schema);
 
