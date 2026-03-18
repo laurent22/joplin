@@ -61,7 +61,6 @@ export default {
 		const defaultRender: Function = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, env: any, self: any) {
 			return self.renderToken(tokens, idx, options, env, self);
 		};
-
 		const exportButtonMarkup = isDesktop(ruleOptions.platformName) ? exportGraphButton(ruleOptions) : '';
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -111,14 +110,14 @@ const exportGraphButton = (ruleOptions: RuleOptions) => {
 	// OnClick is handled in the renderer script
 	return `
 		<div class="mermaid-export-graph">
-			<button style="${style}" alt="Export mermaid graph">${downloadIcon()}</button>
+			<button type="button" style="${style}" aria-label="Download Mermaid chart" title="Download Mermaid chart">${downloadIcon()}</button>
 		</div>
 	`;
 };
 
 const downloadIcon = () => {
 	// https://www.svgrepo.com/svg/505363/download
-	return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 15V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18L4 15M8 11L12 15M12 15L16 11M12 15V3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>';
+	return '<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M20 15V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18L4 15M8 11L12 15M12 15L16 11M12 15V3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>';
 };
 
 const isDesktop = (platformName?: string) => {

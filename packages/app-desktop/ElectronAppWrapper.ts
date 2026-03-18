@@ -176,6 +176,10 @@ export default class ElectronAppWrapper {
 	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
 		await bridge().captureException(new Error(errorMessage));
 
+		if (this.win_ && this.win_.isDestroyed()) {
+			return;
+		}
+
 		const buttons = [];
 		buttons.push(_('Quit'));
 		const exitIndex = 0;
@@ -199,7 +203,7 @@ export default class ElectronAppWrapper {
 			//
 			// Also only run this if not testing (crashing the renderer breaks automated
 			// tests).
-			if (this.win_ && !this.win_.webContents.isCrashed() && !isTesting) {
+			if (this.win_ && !this.win_.isDestroyed() && !this.win_.webContents.isCrashed() && !isTesting) {
 				this.win_.webContents.forcefullyCrashRenderer();
 			}
 		} else if (response === exitIndex) {

@@ -11,7 +11,9 @@ const KeyboardAvoidingView: React.FC<Props> = ({ enabled, children, ...forwarded
 		// When the floating keyboard is enabled, the KeyboardAvoidingView can have a very small
 		// height. Don't use the KeyboardAvoidingView when the floating keyboard is enabled.
 		// See https://github.com/facebook/react-native/issues/29473
-		!keyboardState.isFloatingKeyboard
+		// Also disable the keyboard avoiding view when the keyboard is not visible, to avoid sizing issues:
+		// https://github.com/laurent22/joplin/issues/14722
+		!keyboardState.isFloatingKeyboard && keyboardState.keyboardVisible
 	);
 
 	return <NativeKeyboardAvoidingView
