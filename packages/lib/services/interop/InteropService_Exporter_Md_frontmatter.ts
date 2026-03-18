@@ -100,8 +100,10 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		case FolderIconType.DataUrl:
 			if (!icon.dataUrl) return null;
 			return { type: 'dataurl', dataurl: icon.dataUrl };
-		default:
-			return null;
+		default: {
+			const exhaustivenessCheck: never = icon.type;
+			throw new Error(`Unknown folder icon type: ${exhaustivenessCheck}`);
+		}
 		}
 	}
 
