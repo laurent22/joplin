@@ -1,4 +1,4 @@
-import { normalizeSearchString, settingMatchesSearch, sectionLabelMatchesSearch } from './searchUtils';
+import { normalizeSearchString, settingMatchesSearch, sectionLabelMatchesSearch, splitSearchMatches } from './searchUtils';
 
 describe('configSearchUtils', () => {
 	test.each([
@@ -40,5 +40,36 @@ describe('configSearchUtils', () => {
 		{ query: '  ', sectionLabel: 'Plugins', expected: false },
 	])('sectionLabelMatchesSearch should match section labels: %p', ({ query, sectionLabel, expected }) => {
 		expect(sectionLabelMatchesSearch(query, sectionLabel)).toBe(expected);
+	});
+
+	test.each([
+		{
+			query: 'con',
+			value: 'Config settings',
+			expected: [
+				{ value: 'Con', isMatch: true },
+				{ value: 'fig settings', isMatch: false },
+			],
+		},
+		{
+			query: 'in',
+			value: 'Plugins in index',
+			expected: [
+				{ value: 'Plug', isMatch: false },
+				{ value: 'in', isMatch: true },
+				{ value: 's ', isMatch: false },
+				{ value: 'in', isMatch: true },
+				{ value: ' ', isMatch: false },
+				{ value: 'in', isMatch: true },
+				{ value: 'dex', isMatch: false },
+			],
+		},
+		{
+			query: '  ',
+			value: 'Plugins',
+			expected: [{ value: 'Plugins', isMatch: false }],
+		},
+	])('splitSearchMatches should split and mark matching text segments: %p', ({ query, value, expected }) => {
+		expect(splitSearchMatches(query, value)).toEqual(expected);
 	});
 });

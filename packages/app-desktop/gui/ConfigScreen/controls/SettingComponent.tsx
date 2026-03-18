@@ -10,6 +10,7 @@ import FontSearch from './FontSearch';
 import * as pathUtils from '@joplin/lib/path-utils';
 import SettingLabel from './SettingLabel';
 import SettingDescription from './SettingDescription';
+import HighlightedSearchText from '../HighlightedSearchText';
 
 const settingKeyToControl: Record<string, typeof control_PluginsStates> = {
 	'plugins.states': control_PluginsStates,
@@ -25,6 +26,7 @@ interface Props {
 	settingKey: string;
 	value: unknown;
 	fonts: string[];
+	searchQuery: string;
 	onUpdateSettingValue: (event: UpdateSettingValueEvent)=> void;
 	onSettingButtonClick: (key: string)=> void;
 }
@@ -69,15 +71,21 @@ const SettingComponent: React.FC<Props> = props => {
 	const descriptionText = Setting.keyDescription(key, AppType.Desktop);
 	const inputId = useId();
 	const descriptionId = useId();
-	const descriptionComp = <SettingDescription id={descriptionId} text={descriptionText}/>;
+
+	const highlightedText = (text: string) => {
+		if (!props.searchQuery) return text;
+		return <HighlightedSearchText text={text} searchQuery={props.searchQuery} />;
+	};
+
+	const descriptionComp = <SettingDescription id={descriptionId} text={highlightedText(descriptionText)}/>;
 
 	if (key in settingKeyToControl) {
 		const CustomSettingComponent = settingKeyToControl[key];
-		const label = md.label ? <SettingLabel text={md.label()} htmlFor={null} /> : null;
+		const label = md.label ? <SettingLabel text={highlightedText(md.label())} htmlFor={null} /> : null;
 		return (
 			<div style={rowStyle}>
 				{label}
-				<SettingDescription id={descriptionId} text={md.description ? md.description(AppType.Desktop) : null}/>
+				<SettingDescription id={descriptionId} text={highlightedText(md.description ? md.description(AppType.Desktop) : '')}/>
 				<CustomSettingComponent
 					value={props.value}
 					themeId={props.themeId}
@@ -109,7 +117,7 @@ const SettingComponent: React.FC<Props> = props => {
 
 		return (
 			<div style={rowStyle}>
-				<SettingLabel htmlFor={inputId} text={md.label()}/>
+				<SettingLabel htmlFor={inputId} text={highlightedText(md.label())}/>
 				<select
 					value={value}
 					className='setting-select-control'
@@ -149,7 +157,7 @@ const SettingComponent: React.FC<Props> = props => {
 						className='setting-label -for-checkbox'
 						htmlFor={inputId}
 					>
-						{md.label()}
+						{highlightedText(md.label())}
 					</label>
 				</div>
 				{descriptionComp}
@@ -251,7 +259,7 @@ const SettingComponent: React.FC<Props> = props => {
 			const pathDescriptionId = `setting_path_label_${key}`;
 			return (
 				<div style={rowStyle}>
-					<SettingLabel text={md.label()} htmlFor={inputId}/>
+					<SettingLabel text={highlightedText(md.label())} htmlFor={inputId}/>
 					<div style={{ display: 'flex' }}>
 						<div style={{ flex: 1 }}>
 							<div style={{ ...rowStyle, marginBottom: 5 }}>
@@ -292,7 +300,7 @@ const SettingComponent: React.FC<Props> = props => {
 			};
 			return (
 				<div style={rowStyle}>
-					<SettingLabel text={md.label()} htmlFor={inputId}/>
+					<SettingLabel text={highlightedText(md.label())} htmlFor={inputId}/>
 					{
 						md.subType === SettingItemSubType.FontFamily || md.subType === SettingItemSubType.MonospaceFontFamily ?
 							<FontSearch
@@ -332,7 +340,7 @@ const SettingComponent: React.FC<Props> = props => {
 
 		return (
 			<div style={rowStyle}>
-				<SettingLabel htmlFor={inputId} text={label.join(' ')}/>
+				<SettingLabel htmlFor={inputId} text={highlightedText(label.join(' '))}/>
 				<input
 					type="number"
 					style={textInputBaseStyle}
@@ -350,7 +358,7 @@ const SettingComponent: React.FC<Props> = props => {
 		);
 	} else if (md.type === Setting.TYPE_BUTTON) {
 		const labelComp = md.hideLabel ? null : (
-			<SettingLabel text={md.label()} htmlFor={null} />
+			<SettingLabel text={highlightedText(md.label())} htmlFor={null} />
 		);
 
 		return (

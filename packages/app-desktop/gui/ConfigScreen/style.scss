@@ -46,3 +46,9 @@
 	display: flex;
 	align-items: center;
 }
+
+.config-search-highlight {
+	background-color: var(--joplin-warning-background-color);
+	color: inherit;
+	padding: 0;
+}

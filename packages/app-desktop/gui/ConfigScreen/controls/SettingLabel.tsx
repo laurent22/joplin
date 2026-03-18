@@ -2,7 +2,7 @@ import * as React from 'react';
 
 interface Props {
 	htmlFor: string|null;
-	text: string;
+	text: React.ReactNode;
 }
 
 const SettingLabel: React.FC<Props> = props => {
