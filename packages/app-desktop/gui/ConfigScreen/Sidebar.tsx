@@ -2,7 +2,7 @@ import { AppType, MetadataBySection, SettingMetadataSection, SettingSectionSourc
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 const styled = require('styled-components').default;
 
@@ -17,6 +17,9 @@ interface Props {
 	selection: string;
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
+	topContent?: React.ReactNode;
+	disabledSectionNames?: string[];
+	searchMode?: boolean;
 }
 
 export const StyledRoot = styled.div`
@@ -36,11 +39,15 @@ export const StyledListItem = styled.a`
 	transition: 0.1s;
 	text-decoration: none;
 	cursor: default;
-	opacity: ${(props: StyleProps) => props.selected ? 1 : 0.8};
+	opacity: ${(props: StyleProps) => {
+		if (props.disabled) return 0.45;
+		return props.selected ? 1 : 0.8;
+	}};
 	padding-left: ${(props: StyleProps) => props.isSubSection ? '35' : props.theme.mainPadding}px;
+	pointer-events: ${(props: StyleProps) => props.disabled ? 'none' : 'auto'};
 
 	&:hover {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover2};
+		background-color: ${(props: StyleProps) => props.disabled ? 'none' : props.theme.backgroundColorHover2};
 	}
 `;
 
@@ -78,25 +85,36 @@ export const StyledListItemIcon = styled.i`
 
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
+	const disabledSectionNames = useMemo(() => props.disabledSectionNames ?? [], [props.disabledSectionNames]);
+	const isSectionDisabled = useCallback((sectionName: string) => {
+		return disabledSectionNames.includes(sectionName);
+	}, [disabledSectionNames]);
 
 	// Making a tabbed region accessible involves supporting keyboard interaction.
 	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
-		let newIndex = selectedIndex;
+		const enabledIndexes = props.sections
+			.map((section, index) => isSectionDisabled(section.name) ? -1 : index)
+			.filter(index => index >= 0);
+		if (!enabledIndexes.length) return;
+
+		let newEnabledIndex = enabledIndexes.indexOf(selectedIndex);
+		if (newEnabledIndex < 0) newEnabledIndex = 0;
 
 		if (event.code === 'ArrowUp') {
-			newIndex --;
+			newEnabledIndex --;
 		} else if (event.code === 'ArrowDown') {
-			newIndex ++;
+			newEnabledIndex ++;
 		} else if (event.code === 'Home') {
-			newIndex = 0;
+			newEnabledIndex = 0;
 		} else if (event.code === 'End') {
-			newIndex = props.sections.length - 1;
+			newEnabledIndex = enabledIndexes.length - 1;
 		}
 
-		if (newIndex < 0) newIndex += props.sections.length;
-		newIndex %= props.sections.length;
+		if (newEnabledIndex < 0) newEnabledIndex += enabledIndexes.length;
+		newEnabledIndex %= enabledIndexes.length;
+		const newIndex = enabledIndexes[newEnabledIndex];
 
 		if (newIndex !== selectedIndex) {
 			event.preventDefault();
@@ -107,12 +125,15 @@ export default function Sidebar(props: Props) {
 				focus('Sidebar', targetButton);
 			}
 		}
-	}, [props.sections, props.selection, props.onSelectionChange]);
+	}, [props.sections, props.selection, props.onSelectionChange, isSectionDisabled]);
 
 	const buttons: React.ReactNode[] = [];
 
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
+		const disabled = isSectionDisabled(section.name);
+		const sectionLabel = section.name === 'all' ? _('All') : Setting.sectionNameToLabel(section.name);
+		const sectionIconName = section.name === 'all' ? 'fas fa-list' : Setting.sectionNameToIcon(section.name, AppType.Desktop);
 		return (
 			<StyledListItem
 				key={section.name}
@@ -123,20 +144,22 @@ export default function Sidebar(props: Props) {
 				id={`setting-tab-${section.name}`}
 				aria-controls={`setting-section-${section.name}`}
 				aria-selected={selected}
-				tabIndex={selected ? 0 : -1}
+				aria-disabled={disabled}
+				tabIndex={selected && !disabled ? 0 : -1}
 
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
+				disabled={disabled}
 				onClick={() => { props.onSelectionChange({ section: section }); }}
 				onKeyDown={onKeyDown}
 			>
 				<StyledListItemIcon
-					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
+					className={sectionIconName}
 					role='img'
 					aria-hidden='true'
 				/>
 				<StyledListItemLabel>
-					{Setting.sectionNameToLabel(section.name)}
+					{sectionLabel}
 				</StyledListItemLabel>
 			</StyledListItem>
 		);
@@ -154,7 +177,7 @@ export default function Sidebar(props: Props) {
 
 	let index = 0;
 	for (const section of props.sections) {
-		if (section.source === SettingSectionSource.Plugin && !pluginDividerAdded) {
+		if (section.source === SettingSectionSource.Plugin && !pluginDividerAdded && section.name !== 'all') {
 			buttons.push(renderDivider('divider-plugins'));
 			pluginDividerAdded = true;
 		}
@@ -165,6 +188,7 @@ export default function Sidebar(props: Props) {
 
 	return (
 		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+			{props.topContent}
 			{buttons}
 		</StyledRoot>
 	);

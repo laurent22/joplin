@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SettingItem, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
@@ -21,7 +21,7 @@ const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import SearchInput, { type OnChangeEvent } from '../lib/SearchInput/SearchInput';
-import matchesSearchQuery from './configScreenUtils';
+import matchesSearchQuery, { highlightSearchMatches } from './configScreenUtils';
 
 
 interface Font {
@@ -55,6 +55,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			needRestart: false,
 			fonts: [],
 			searchQuery: '',
+			searchSectionFilter: 'all',
 		};
 
 		this.rowStyle_ = {
@@ -70,11 +71,18 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private onSearchInputChange(event: OnChangeEvent) {
-		this.setState({ searchQuery: event.value });
+		const query = event.value || '';
+		this.setState((state: { searchQuery: string }) => {
+			const nextState: { searchQuery: string; searchSectionFilter?: string } = { searchQuery: query };
+			const previousQuery = (state.searchQuery || '').trim();
+			const nextQuery = query.trim();
+			if (!nextQuery.length || !previousQuery.length) nextState.searchSectionFilter = 'all';
+			return nextState;
+		});
 	}
 
 	private onSearchButtonClick() {
-		this.setState({ searchQuery: '' });
+		this.setState({ searchQuery: '', searchSectionFilter: 'all' });
 	}
 
 	private async checkSyncConfig_() {
@@ -176,6 +184,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
+		const hasQuery = !!(this.state.searchQuery && this.state.searchQuery.trim().length);
+		if (hasQuery) {
+			this.setState({
+				searchSectionFilter: event.section.name,
+				screenName: '',
+			});
+			return;
+		}
+
 		void this.switchSection(event.section.name);
 	}
 
@@ -363,7 +380,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				padding: `${theme.mainPadding * 0.75}px ${theme.mainPadding}px`,
 				marginBottom: 10,
 			}}>
-				{headerTitle}
+				{highlightSearchMatches(headerTitle, this.state.searchQuery)}
 			</div>
 		) : null;
 
@@ -398,6 +415,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				settingKey={key}
 				value={value}
 				fonts={this.state.fonts}
+				searchQuery={this.state.searchQuery}
 				onUpdateSettingValue={this.onUpdateSettingValue}
 				onSettingButtonClick={this.handleSettingButton}
 			/>
@@ -477,11 +495,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div className='config-screen-content-wrapper' style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 		const searchMode = hasQuery;
+		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
+		const searchSectionFilter = this.state.searchSectionFilter || 'all';
 		const settingComps = !searchMode ? shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName) : null;
 
 		if (screenComp && !searchMode) containerStyle.display = 'none';
-
-		const sections = !searchMode ? shared.settingsSections({ device: AppType.Desktop, settings }) : [];
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
@@ -499,43 +517,36 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		delete rightStyle.height;
 		delete style.width;
 
-		const searchBar = (
-			<div style={{
-				paddingLeft: theme.configScreenPadding,
-				paddingRight: theme.configScreenPadding,
-				paddingTop: Math.round(theme.mainPadding * 0.66),
-				paddingBottom: 0,
-				marginBottom: Math.round(theme.mainPadding * 0.66),
-				display: 'flex',
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'space-between',
-				gap: theme.mainPadding,
-			}}>
-				<div style={{
-					...theme.textStyle,
-					fontWeight: 'bold',
-					fontSize: Math.round(theme.fontSize * 1.1),
-					letterSpacing: '0.05em',
-					textTransform: 'uppercase',
-					whiteSpace: 'nowrap',
-					flexShrink: 0,
-				}}>
-					{_('Configuration')}
-				</div>
-				<div style={{ flex: 1, minWidth: 0 }}>
-					<SearchInput
-						value={this.state.searchQuery}
-						onChange={event => this.onSearchInputChange(event)}
-						onSearchButtonClick={() => this.onSearchButtonClick()}
-						searchStarted={!!(this.state.searchQuery && this.state.searchQuery.trim().length)}
-					/>
-				</div>
+		const sidebarSearchBar = (
+			<div style={{ padding: theme.mainPadding, paddingBottom: Math.round(theme.mainPadding * 0.5) }}>
+				<SearchInput
+					value={this.state.searchQuery}
+					onChange={event => this.onSearchInputChange(event)}
+					onSearchButtonClick={() => this.onSearchButtonClick()}
+					searchStarted={!!(this.state.searchQuery && this.state.searchQuery.trim().length)}
+				/>
 			</div>
 		);
 
 		const tabComponents: React.ReactNode[] = [];
-		const searchResultComps = searchMode ? shared.settingsToComponents2(this, AppType.Desktop, settings) : null;
+		const searchResultsBySection: Record<string, React.ReactNode> = {};
+		if (searchMode) {
+			for (const section of sections) {
+				const sectionComp = this.sectionToComponent(section.name, section, settings, true);
+				if (sectionComp) searchResultsBySection[section.name] = sectionComp;
+			}
+		}
+		const disabledSectionNames = !searchMode ? [] : sections
+			.filter(section => !searchResultsBySection[section.name])
+			.map(section => section.name);
+		const activeSearchSectionFilter = searchMode && searchSectionFilter !== 'all' && disabledSectionNames.includes(searchSectionFilter)
+			? 'all'
+			: searchSectionFilter;
+		const searchResultComps = !searchMode ? null : (
+			activeSearchSectionFilter === 'all'
+				? sections.map(section => searchResultsBySection[section.name]).filter(item => !!item)
+				: (searchResultsBySection[activeSearchSectionFilter] ? [searchResultsBySection[activeSearchSectionFilter]] : [])
+		);
 		if (!searchMode) {
 			for (const section of sections) {
 				const sectionId = `setting-section-${section.name}`;
@@ -566,30 +577,33 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			}
 		}
 
+		const sidebarSections: SettingMetadataSection[] = searchMode
+			? [{ name: 'all', metadatas: [], source: SettingSectionSource.Default }, ...sections]
+			: sections;
+		const sidebarSelection = searchMode ? activeSearchSectionFilter : this.state.selectedSectionName;
+
 		return (
-			<div className='config-screen' role='main' style={{ display: 'flex', flexDirection: 'column', height: this.props.style.height }}>
-				{searchBar}
-				<div style={{ display: 'flex', flexDirection: 'row', flex: 1, minHeight: 0 }}>
+			<div className='config-screen' role='main' style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
+				<Sidebar
+					selection={sidebarSelection}
+					onSelectionChange={this.sidebar_selectionChange}
+					sections={sidebarSections}
+					topContent={sidebarSearchBar}
+					disabledSectionNames={disabledSectionNames}
+					searchMode={searchMode}
+				/>
+				<div style={rightStyle}>
+					{!searchMode ? needRestartComp : null}
+					{searchMode ? <div style={containerStyle}>{searchResultComps}</div> : tabComponents}
 					{!searchMode ? (
-						<Sidebar
-							selection={this.state.selectedSectionName}
-							onSelectionChange={this.sidebar_selectionChange}
-							sections={sections}
+						<ButtonBar
+							hasChanges={hasChanges}
+							backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+							onCancelClick={this.onCancelClick}
+							onSaveClick={screenComp ? null : this.onSaveClick}
+							onApplyClick={screenComp ? null : this.onApplyClick}
 						/>
 					) : null}
-					<div style={rightStyle}>
-						{!searchMode ? needRestartComp : null}
-						{searchMode ? <div style={containerStyle}>{searchResultComps}</div> : tabComponents}
-						{!searchMode ? (
-							<ButtonBar
-								hasChanges={hasChanges}
-								backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
-								onCancelClick={this.onCancelClick}
-								onSaveClick={screenComp ? null : this.onSaveClick}
-								onApplyClick={screenComp ? null : this.onApplyClick}
-							/>
-						) : null}
-					</div>
 				</div>
 			</div>
 		);

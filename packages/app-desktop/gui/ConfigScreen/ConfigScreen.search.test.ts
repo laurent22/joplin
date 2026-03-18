@@ -1,4 +1,5 @@
-import matchesSearchQuery from './configScreenUtils';
+import * as React from 'react';
+import matchesSearchQuery, { highlightSearchMatches } from './configScreenUtils';
 
 describe('ConfigScreen search', () => {
 	test.each([
@@ -11,5 +12,16 @@ describe('ConfigScreen search', () => {
 		['whitespace-only query does not match', '   ', 'General', 'Language', false],
 	])('%s', (_label, query, sectionTitle, relatedText, expected) => {
 		expect(matchesSearchQuery(query, sectionTitle, relatedText)).toBe(expected);
+	});
+
+	test('highlightSearchMatches wraps matched query parts in mark tags', () => {
+		const result = highlightSearchMatches('Choose a dark or light theme', 'dark');
+		expect(Array.isArray(result)).toBe(true);
+		const resultArray = result as React.ReactNode[];
+		const markNodes = resultArray.filter((node: React.ReactNode) => {
+			return React.isValidElement(node) && node.type === 'mark';
+		});
+		expect(markNodes.length).toBe(1);
+		expect((markNodes[0] as React.ReactElement<{ children: React.ReactNode }>).props.children).toBe('dark');
 	});
 });
