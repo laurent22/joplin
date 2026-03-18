@@ -261,7 +261,9 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
 	const primaryBaseUrl = baseUrl(endPoint.type);
 	const cfg = config();
-	const alternateBaseUrl = (cfg.baseUrl !== cfg.apiBaseUrl)
+	// Only allow alternate base URL for Web/API routes (OAuth flow). UserContent
+	// routes require strict origin isolation and must not accept baseUrl/apiBaseUrl.
+	const alternateBaseUrl = (cfg.baseUrl !== cfg.apiBaseUrl) && (endPoint.type !== RouteType.UserContent)
 		? (endPoint.type === RouteType.Web ? cfg.apiBaseUrl : cfg.baseUrl)
 		: undefined;
 	if (ctx.URL && !isValidOrigin(ctx.URL.origin, primaryBaseUrl, endPoint.type, alternateBaseUrl)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
