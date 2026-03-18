@@ -102,18 +102,8 @@
 
 - (NSURL*)copyURLToSharedContainer:(NSURL*)url {
   NSString* name = [url lastPathComponent];
-  // Decode the file name to handle URL-encoded characters (e.g., %23 for #)
-  // This must be done before creating the destination path
-  NSString* decodedName = [name stringByRemovingPercentEncoding];
-  if (decodedName != nil) name = decodedName;
   NSURL* path = [self.sharedContainerURL URLByAppendingPathComponent:name];
-  // Decode the URL path to handle special characters like # that are URL-encoded as %23
-  NSString* sourcePath = [url path];
-  NSString* decodedSourcePath = [sourcePath stringByRemovingPercentEncoding];
-  if (decodedSourcePath != nil) sourcePath = decodedSourcePath;
-  NSError* copyError = nil;
-  [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:[path path] error:&copyError];
-  if (copyError) NSLog(@"Failed to copy shared file: %@", copyError);
+  [[NSFileManager defaultManager] copyItemAtPath:[url path] toPath:[path path] error:nil];
   return path;
 }
 
@@ -125,16 +115,9 @@
 
 - (NSDictionary*)resourceDictionaryForMediaURL:(NSURL*)url {
   NSString* name = [url lastPathComponent];
-  // Decode the file name to handle URL-encoded characters (e.g., %23 for #)
-  NSString* decodedName = [name stringByRemovingPercentEncoding];
-  if (decodedName != nil) name = decodedName;
   NSString* extension = [url pathExtension];
   NSString* mimeType = [self mimeTypeFor:extension];
-  // Build the file path directly from the file system without NSURL re-encoding
-  // This ensures special characters like # are not re-encoded as %23
-  NSString* sharedContainerPath = [[self sharedContainerURL] path];
-  NSString* filePath = [sharedContainerPath stringByAppendingPathComponent:name];
-  return [ShareData resourceDictionaryForURL:filePath withName:name andMimeType:mimeType];
+  return [ShareData resourceDictionaryForURL:[url absoluteString] withName:name andMimeType:mimeType];
 }
 
 - (NSString*)mimeTypeFor:(NSString*)fileExtension{
