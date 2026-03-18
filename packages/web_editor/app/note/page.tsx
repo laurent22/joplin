@@ -25,7 +25,7 @@ export default function NotePage() {
             <Panel className="bg-white overflow-hidden relative">
               <button
                 onClick={() => setMode(mode === 'viewer' ? 'editor' : 'viewer')}
-                className="absolute top-4 right-4 z-10 px-3 py-1 rounded border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100 shadow"
+                className="absolute top-4 right-4 z-50 px-3 py-1 rounded border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-100 shadow"
               >
                 {mode === 'viewer' ? 'Editor' : 'Viewer'}
               </button>

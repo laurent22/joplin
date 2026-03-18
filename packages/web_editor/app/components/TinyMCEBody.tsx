@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Fab from '@mui/material/Fab';
 import CircularProgress from '@mui/material/CircularProgress';
 import Tooltip from '@mui/material/Tooltip';
@@ -474,6 +475,7 @@ export default function TinyMCEBody({
   readOnly = true,
   updatedTime,
 }: TinyMCEBodyProps) {
+  const router = useRouter();
   const rootIdRef = useRef<string>(
     `tinymce-web-${Date.now()}-${Math.round(Math.random() * 10000)}`
   );
@@ -587,7 +589,11 @@ export default function TinyMCEBody({
   const handleDirtyDialogCancel = useCallback(() => {
     setShowDirtyDialog(false);
     setPendingNote(null);
-  }, []);
+    // URL を元のノートに戻す
+    if (currentNoteIdRef.current) {
+      router.replace(`/note?note_id=${currentNoteIdRef.current}`);
+    }
+  }, [router]);
 
   // TinyMCE エディタの初期化
   useEffect(() => {
@@ -964,6 +970,12 @@ export default function TinyMCEBody({
     if (isDirtyRef.current && noteId !== currentNoteIdRef.current) {
       setPendingNote({ noteId, html });
       setShowDirtyDialog(true);
+      return;
+    }
+
+    // キャンセルで元のノートに戻った場合など、同じノートを表示中かつ未保存の変更が
+    // ある場合はエディタ内容を上書きしない
+    if (isDirtyRef.current && noteId === currentNoteIdRef.current) {
       return;
     }
 
