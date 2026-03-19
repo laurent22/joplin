@@ -25,9 +25,6 @@ export const StyledHeader = styled.div`
 	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding / 2}px;
 	display: flex;
 	align-items: center;
-	flex-wrap: nowrap;
-	min-width: 0;
-	width: 100%;
 	user-select: none;
 	text-transform: uppercase;
 	//cursor: pointer;
@@ -42,7 +39,6 @@ export const StyledHeaderIcon = styled.i`
 	font-size: ${(props: StyleProps) => props.theme.toolbarIconSize}px;
 	color: ${(props: StyleProps) => props.theme.color2};
 	margin-right: 8px;
-	flex-shrink: 0;
 `;
 
 export const StyledAllNotesIcon = styled(StyledHeaderIcon)`
@@ -56,17 +52,6 @@ export const StyledHeaderLabel = styled.span`
 	color: ${(props: StyleProps) => props.theme.color2};
 	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize * 1.1)}px;
 	font-weight: bold;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	min-width: 0;
-	display: block;
-`;
-
-export const StyledHeaderButtons = styled.div`
-	display: flex;
-	align-items: center;
-	flex-shrink: 0;
 `;
 
 function listItemTextColor(props: StyleProps) {
