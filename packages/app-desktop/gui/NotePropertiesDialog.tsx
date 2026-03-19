@@ -45,7 +45,7 @@ interface State {
 const uniqueId = (key: string) => `note-properties-dialog-${key}`;
 
 const isPropertyDatetimeRelated = (key: string) => {
-	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time';
+	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time' || key === 'todo_completed';
 };
 
 class NotePropertiesDialog extends React.Component<Props, State> {
