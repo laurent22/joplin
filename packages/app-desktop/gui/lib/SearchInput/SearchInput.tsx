@@ -38,7 +38,7 @@ export const SearchInput = styled(StyledInput)`
 
 	&::placeholder {
 		color: ${(props: StyleProps) => props.theme.color};
-		opacity: 0.75;
+		opacity: 1;
 	}
 
 	&::-webkit-search-cancel-button {
