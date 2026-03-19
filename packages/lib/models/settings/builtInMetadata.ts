@@ -505,6 +505,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		notesParent: { value: '', type: SettingItemType.String, public: false },
 
 		richTextBannerDismissed: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
+		jexImportWarningAccepted: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: false, public: false, appTypes: [AppType.Desktop] },
 		'editor.pluginCompatibilityBannerDismissedFor': {
 			value: [] as string[], // List of plugin IDs
 			type: SettingItemType.Array,

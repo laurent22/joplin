@@ -14,7 +14,7 @@ import Logger from '@joplin/utils/Logger';
 const packageInfo: PackageInfo = require('../../../packageInfo.js');
 
 const logger = Logger.create('importFrom');
-let jexImportWarningAcceptedForCurrentSession = false;
+const jexImportWarningAcceptedSetting = 'jexImportWarningAccepted';
 
 export const declaration: CommandDeclaration = {
 	name: 'importFrom',
@@ -79,9 +79,9 @@ const promptForSourcePath = async (module: ImportModule, sourceType: FileSystemI
 
 const shouldContinueWithImport = async (module: ImportModule) => {
 	if (module.format !== 'jex') return true;
-	if (jexImportWarningAcceptedForCurrentSession) return true;
+	if (Setting.value(jexImportWarningAcceptedSetting)) return true;
 
-	const message = _('Importing is intended for adding or restoring notes. If you import and then sync with existing notes on another device, duplicates will be created. To transfer notes, use sync instead. Do you want to continue?');
+	const message = _('Importing is intended for adding or restoring notes. After importing notes, if you enable sync with the same notes already on another device, duplicates will be created. To transfer notes between devices, please use sync instead. Do you want to continue with the import?');
 	const buttonIndex = await bridge().showMessageBox(message, {
 		buttons: [_('Yes'), _('No')],
 		defaultId: 1,
@@ -90,7 +90,7 @@ const shouldContinueWithImport = async (module: ImportModule) => {
 
 	if (buttonIndex !== 0) return false;
 
-	jexImportWarningAcceptedForCurrentSession = true;
+	Setting.setValue(jexImportWarningAcceptedSetting, true);
 	return true;
 };
 

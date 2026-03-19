@@ -1,5 +1,9 @@
 # Importing and exporting notes
 
+## Importing and sync
+
+Importing is intended for adding or restoring notes. After importing notes, if you enable sync with the same notes already on another device, duplicates will be created. To transfer notes between devices, please use sync instead.
+
 ## Importing from Evernote
 
 Joplin can import complete Evernote notebooks, as well as notes, tags, images, attached files and note metadata (such as author, geo-location, etc.) via ENEX files.
