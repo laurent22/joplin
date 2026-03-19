@@ -72,6 +72,62 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     })();
   }, [note?.body]);
 
+  // video / audio 要素の再生範囲を onplay / ontimeupdate 属性文字列から復元して
+  // ネイティブイベントリスナーとして登録する。
+  // html-react-parser は属性文字列を React props として渡すだけで実行しないため、
+  // DOM レンダリング後にこちらで手動でバインドする。
+  useEffect(() => {
+    if (!note?.body || !contentRef.current) return;
+
+    const mediaElements = contentRef.current.querySelectorAll('video, audio');
+    const cleanups: (() => void)[] = [];
+
+    for (const media of Array.from(mediaElements)) {
+      const el = media as HTMLVideoElement | HTMLAudioElement;
+
+      const onplayAttr = el.getAttribute('onplay') ?? '';
+      const onTimeupdateAttr = el.getAttribute('ontimeupdate') ?? '';
+
+      // onplay: "this.currentTime=N"
+      const onplayMatch = onplayAttr.match(/this\.currentTime\s*=\s*([\d.]+)/);
+      const startTime = onplayMatch ? parseFloat(onplayMatch[1]) : -1;
+
+      // ontimeupdate: "if(this.currentTime>=N){...}"
+      const onTimeupdateMatch = onTimeupdateAttr.match(
+        /if\(this\.currentTime\s*>=\s*([\d.]+)\)\{([^}]*)\}/
+      );
+      const endTime = onTimeupdateMatch ? parseFloat(onTimeupdateMatch[1]) : -1;
+      const loop = onTimeupdateMatch ? !onTimeupdateMatch[2].includes('this.pause()') : false;
+
+      if (startTime < 0 && endTime < 0) continue;
+
+      const handlePlay = () => {
+        if (startTime >= 0) el.currentTime = startTime;
+      };
+
+      const handleTimeUpdate = () => {
+        if (endTime >= 0 && el.currentTime >= endTime) {
+          if (loop) {
+            el.currentTime = startTime >= 0 ? startTime : 0;
+          } else {
+            el.pause();
+            el.currentTime = startTime >= 0 ? startTime : 0;
+          }
+        }
+      };
+
+      el.addEventListener('play', handlePlay);
+      el.addEventListener('timeupdate', handleTimeUpdate);
+
+      cleanups.push(() => {
+        el.removeEventListener('play', handlePlay);
+        el.removeEventListener('timeupdate', handleTimeUpdate);
+      });
+    }
+
+    return () => cleanups.forEach((fn) => fn());
+  }, [note?.body]);
+
   // searchパラメータが変化した時に、該当箇所をハイライトしてスクロール
   useEffect(() => {
     if (!note?.body || !contentRef.current) return;
