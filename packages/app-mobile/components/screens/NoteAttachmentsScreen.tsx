@@ -9,7 +9,7 @@ import { _ } from '@joplin/lib/locale';
 import { AppState } from '../../utils/types';
 import { themeStyle } from '../global-style';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Resource, { NoteAttachmentSortDirection, NoteAttachmentSortField } from '@joplin/lib/models/Resource';
+import Resource, { NoteResourceSortDirection, NoteResourceSortField } from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import shim from '@joplin/lib/shim';
 import showResource from '../../commands/util/showResource';
@@ -27,7 +27,7 @@ interface ResourceListItem {
 
 const PAGE_SIZE = 50;
 
-const sortTypeLabel = (sortField: NoteAttachmentSortField, sortDirection: NoteAttachmentSortDirection) => {
+const sortTypeLabel = (sortField: NoteResourceSortField, sortDirection: NoteResourceSortDirection) => {
 	if (sortField === 'title') return sortDirection === 'asc' ? _('Title (A-Z)') : _('Title (Z-A)');
 	return sortDirection === 'asc' ? _('Size (smallest first)') : _('Size (largest first)');
 };
@@ -45,16 +45,18 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 	const [resources, setResources] = useState<ResourceEntity[]>([]);
-	const [sortField, setSortField] = useState<NoteAttachmentSortField>('title');
-	const [sortDirection, setSortDirection] = useState<NoteAttachmentSortDirection>('asc');
+	const [sortField, setSortField] = useState<NoteResourceSortField>('title');
+	const [sortDirection, setSortDirection] = useState<NoteResourceSortDirection>('asc');
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const [hasMore, setHasMore] = useState(false);
-	const [refreshIndex, setRefreshIndex] = useState(0);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [deletingResourceIds, setDeletingResourceIds] = useState<string[]>([]);
 	const theme = themeStyle(props.themeId);
 	const loadCounter = useRef(0);
+	const invalidateLoadCounter = useCallback(() => {
+		loadCounter.current++;
+	}, []);
 
 	const styles = useMemo(() => {
 		return StyleSheet.create({
@@ -103,10 +105,12 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 			},
 			rowTop: {
 				flexDirection: 'row',
-				alignItems: 'flex-start',
+				alignItems: 'center',
 			},
-			rowHeader: {
-				paddingRight: 8,
+			actionIconsRow: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				marginLeft: 8,
 			},
 			rowPressable: {
 				flex: 1,
@@ -130,29 +134,13 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 			rowTitle: {
 				color: theme.colorFaded,
 				fontSize: theme.fontSize,
+				fontWeight: '700',
 				lineHeight: theme.fontSize * 1.4,
-			},
-			rowFieldLabel: {
-				color: theme.color,
-				fontSize: theme.fontSizeSmaller,
-				fontWeight: '600',
-				marginBottom: 2,
 			},
 			rowMeta: {
 				color: theme.colorFaded,
 				fontSize: theme.fontSizeSmaller,
-				marginBottom: 4,
-			},
-			copyButtonInline: {
-				marginLeft: 8,
-			},
-			actionsRow: {
-				marginTop: 4,
-				flexDirection: 'row',
-				alignItems: 'center',
-			},
-			actionsRowButton: {
-				flex: 1,
+				marginTop: 2,
 			},
 			copyButtonContainer: {
 				minWidth: 44,
@@ -164,6 +152,18 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 			},
 			copyIcon: {
 				color: theme.color,
+				fontSize: theme.fontSizeLarger,
+			},
+			deleteButtonContainer: {
+				minWidth: 44,
+				minHeight: 44,
+				paddingLeft: 10,
+				paddingRight: 10,
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			deleteIcon: {
+				color: theme.colorError,
 				fontSize: theme.fontSizeLarger,
 			},
 			emptyText: {
@@ -189,7 +189,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	}, [searchQuery]);
 
 	const loadPage = useCallback(async (offset: number) => {
-		loadCounter.current++;
+		invalidateLoadCounter();
 		const currentLoad = loadCounter.current;
 		const loadingInitialPage = offset === 0;
 
@@ -201,7 +201,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		}
 
 		try {
-			const result = await Resource.noteAttachments({
+			const result = await Resource.noteResources({
 				searchQuery: debouncedSearchQuery,
 				sortField,
 				sortDirection,
@@ -227,11 +227,14 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				setIsLoadingMore(false);
 			}
 		}
-	}, [debouncedSearchQuery, sortDirection, sortField]);
+	}, [debouncedSearchQuery, invalidateLoadCounter, sortDirection, sortField]);
 
 	useEffect(() => {
 		void loadPage(0);
-	}, [loadPage, refreshIndex]);
+
+		// Make in-flight loadPage() calls stale on dependency change/unmount.
+		return invalidateLoadCounter;
+	}, [invalidateLoadCounter, loadPage]);
 
 	const onDeleteResource = useCallback(async (resource: ResourceEntity) => {
 		if (!resource.id) return;
@@ -242,21 +245,22 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		setDeletingResourceIds(previous => previous.concat(resource.id));
 
 		try {
-			await Resource.delete(resource.id, { sourceDescription: 'NoteAttachmentsScreen' });
-			setRefreshIndex(index => index + 1);
+			await Resource.delete(resource.id, { sourceDescription: 'NoteResourcesScreen' });
+			await loadPage(0);
 		} catch (error) {
 			await shim.showErrorDialog(error.message);
 		} finally {
 			setDeletingResourceIds(previous => previous.filter(id => id !== resource.id));
 		}
-	}, []);
+	}, [loadPage]);
 
 	const onOpenResource = useCallback(async (resource: ResourceEntity) => {
 		try {
 			await showResource(resource);
-		} catch (_error) {
+		} catch (error) {
 			const fullPath = Resource.fullPath(resource);
-			await shim.showErrorDialog(_('This file could not be opened: %s', fullPath));
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			await shim.showErrorDialog(`${_('This file could not be opened: %s', fullPath)}\n\n${errorMessage}`);
 		}
 	}, []);
 
@@ -266,7 +270,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		Clipboard.setString(markdownLink);
 	}, []);
 
-	const onToggleSorting = useCallback((nextSortField: NoteAttachmentSortField) => {
+	const onToggleSorting = useCallback((nextSortField: NoteResourceSortField) => {
 		const nextState = nextSortState(sortField, sortDirection, nextSortField);
 		setSortField(nextState.sortField);
 		setSortDirection(nextState.sortDirection);
@@ -279,7 +283,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 
 	const listEmptyText = useMemo(() => {
 		if (debouncedSearchQuery.trim()) return _('No attachments match your search.');
-		return _('No resources!');
+		return _('No attachments!');
 	}, [debouncedSearchQuery]);
 
 	const loadingFooter = useMemo(() => {
@@ -304,19 +308,13 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 							void onOpenResource(item);
 						}}
 						accessibilityRole='button'
-						accessibilityLabel={_('Attachment: %s. Size: %s. ID: %s', title, size, item.id)}
+						accessibilityLabel={_('Attachment: %s. Size: %s', title, size)}
 						accessibilityHint={_('Opens this attachment')}
 					>
-						<View style={styles.rowHeader}>
-							<Text accessible={false} style={styles.rowFieldLabel}>{_('Title')}</Text>
-						</View>
-						<Text accessible={false} style={styles.rowTitle}>{title}</Text>
-						<Text accessible={false} style={styles.rowFieldLabel}>{_('Size')}</Text>
+						<Text accessible={false} style={styles.rowTitle} numberOfLines={1} ellipsizeMode='tail'>{title}</Text>
 						<Text accessible={false} style={styles.rowMeta}>{size}</Text>
-						<Text accessible={false} style={styles.rowFieldLabel}>{_('ID')}</Text>
-						<Text accessible={false} style={styles.rowMeta}>{item.id}</Text>
 					</TouchableOpacity>
-					<View style={styles.copyButtonInline}>
+					<View style={styles.actionIconsRow}>
 						<IconButton
 							onPress={() => onCopyMarkdownLink(item)}
 							description={_('Copy Markdown link')}
@@ -327,18 +325,24 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 							themeId={props.themeId}
 							accessibilityRole='button'
 						/>
-					</View>
-				</View>
-				<View style={styles.actionsRow}>
-					<View style={styles.actionsRowButton}>
-						<Button title={_('Delete')} disabled={deleting} accessibilityLabel={_('Delete attachment: %s', title)} onPress={() => {
-							void onDeleteResource(item);
-						}} />
+						<IconButton
+							onPress={() => {
+								void onDeleteResource(item);
+							}}
+							description={_('Delete attachment: %s', title)}
+							accessibilityHint={_('Deletes this attachment')}
+							iconName='material delete'
+							iconStyle={styles.deleteIcon}
+							containerStyle={styles.deleteButtonContainer}
+							themeId={props.themeId}
+							accessibilityRole='button'
+							disabled={deleting}
+						/>
 					</View>
 				</View>
 			</View>
 		);
-	}, [deletingResourceIds, onCopyMarkdownLink, onDeleteResource, onOpenResource, props.themeId, styles.actionsRow, styles.actionsRowButton, styles.copyButtonContainer, styles.copyButtonInline, styles.copyIcon, styles.row, styles.rowFieldLabel, styles.rowHeader, styles.rowMeta, styles.rowPressable, styles.rowTitle, styles.rowTop]);
+	}, [deletingResourceIds, onCopyMarkdownLink, onDeleteResource, onOpenResource, props.themeId, styles]);
 
 	return (
 		<View style={styles.root}>
