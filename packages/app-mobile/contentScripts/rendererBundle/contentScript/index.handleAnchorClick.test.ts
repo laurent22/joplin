@@ -28,26 +28,32 @@ describe('index.handleAnchorClick', () => {
 	test('scrollIntoView is called even when the same link is clicked twice', () => {
 		const linkA = document.getElementById('link-a')!;
 
-		linkA.click();
+		linkA.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
 
-		linkA.click();
+		linkA.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(2);
 	});
 
 	test('scrollIntoView is called for each click when different links are clicked alternately', () => {
-		document.getElementById('link-a')!.click();
-		document.getElementById('link-b')!.click();
-		document.getElementById('link-a')!.click();
+		document.getElementById('link-a')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		document.getElementById('link-b')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		document.getElementById('link-a')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
 
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(3);
 	});
 
 	test('does not intercept external links (http://...#hash)', () => {
 		const linkExt = document.getElementById('link-ext')!;
-		linkExt.click();
+
+		const preventNavigation = (e: Event) => e.preventDefault();
+		window.addEventListener('click', preventNavigation);
+
+		linkExt.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
 
 		expect(scrollIntoViewMock).not.toHaveBeenCalled();
+
+		window.removeEventListener('click', preventNavigation);
 	});
 
 	test('works with URL-encoded Japanese anchors', () => {
@@ -55,14 +61,14 @@ describe('index.handleAnchorClick', () => {
             <h2 id="セクション">日本語セクション</h2>
             <a id="link-ja" href="#%E3%82%BB%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3">日本語リンク</a>
         `;
-		document.getElementById('link-ja')!.click();
+		document.getElementById('link-ja')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
 	});
 
 	test('does not throw when clicking a link to a missing anchor', () => {
 		document.body.innerHTML += '<a id="link-dead" href="#missing-section">dead link</a>';
 		expect(() => {
-			document.getElementById('link-dead')!.click();
+			document.getElementById('link-dead')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
 		}).not.toThrow();
 	});
 });
