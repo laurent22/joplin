@@ -546,6 +546,8 @@ function parseMediaAttributes(element: HTMLElement): {
   startTime: number;
   endTime: number;
   loop: boolean;
+  width: string;
+  height: string;
 } {
   const startRaw = element.getAttribute('data-starttime');
   const endRaw = element.getAttribute('data-endtime');
@@ -554,8 +556,14 @@ function parseMediaAttributes(element: HTMLElement): {
   const startTime = startRaw !== null ? parseFloat(startRaw) : -1;
   const endTime = endRaw !== null ? parseFloat(endRaw) : -1;
   const loop = loopRaw === 'true';
+  // audio の width / height は style から読み取る
+  const style = element.getAttribute('style') ?? '';
+  const widthMatch = style.match(/(?:^|;)\s*width\s*:\s*([^;]+)/);
+  const heightMatch = style.match(/(?:^|;)\s*height\s*:\s*([^;]+)/);
+  const width = widthMatch ? widthMatch[1].trim() : '';
+  const height = heightMatch ? heightMatch[1].trim() : '';
 
-  return { startTime, endTime, loop };
+  return { startTime, endTime, loop, width, height };
 }
 
 /**
@@ -568,8 +576,28 @@ function applyMediaAttributes(
   element: HTMLElement,
   startTime: number,
   endTime: number,
-  loop: boolean
+  loop: boolean,
+  width?: string,
+  height?: string
 ): void {
+  // width / height は audio 要素の場合 style で設定する（属性では効かないため）
+  if (width !== undefined || height !== undefined) {
+    const w = width !== undefined ? width.trim() : undefined;
+    const h = height !== undefined ? height.trim() : undefined;
+    // 既存の style から width / height を取り除いてから再設定
+    let currentStyle = element.getAttribute('style') ?? '';
+    currentStyle = currentStyle
+      .replace(/(?:^|;)\s*width\s*:[^;]*/g, '')
+      .replace(/(?:^|;)\s*height\s*:[^;]*/g, '')
+      .replace(/^\s*;+/, '')
+      .trim();
+    const parts: string[] = currentStyle ? [currentStyle] : [];
+    if (w) parts.push(`width: ${w}`);
+    if (h) parts.push(`height: ${h}`);
+    const newStyle = parts.join('; ');
+    editor.dom.setAttrib(element, 'style', newStyle || null);
+  }
+
   // data-* 属性を更新（値が -1 なら削除）
   if (startTime >= 0) {
     editor.dom.setAttrib(element, 'data-starttime', String(startTime));
@@ -606,36 +634,60 @@ function applyMediaAttributes(
  * 再生開始秒・終了秒・ループの設定を行う。
  */
 function openMediaDialog(editor: any, mediaElement: HTMLElement): void {
-  const { startTime, endTime, loop } = parseMediaAttributes(mediaElement);
+  const { startTime, endTime, loop, width, height } = parseMediaAttributes(mediaElement);
   const tagName = mediaElement.tagName.toLowerCase();
-  const title = tagName === 'video' ? '動画設定' : '音声設定';
+  const isAudio = tagName === 'audio';
+  const title = isAudio ? '音声設定' : '動画設定';
+
+  const commonItems = [
+    {
+      type: 'input',
+      name: 'startTime',
+      label: '再生開始(秒)  ※未指定は空欄',
+    },
+    {
+      type: 'input',
+      name: 'endTime',
+      label: '再生終了(秒)  ※未指定は空欄',
+    },
+    {
+      type: 'checkbox',
+      name: 'loop',
+      label: 'ループ再生',
+    },
+  ];
+
+  const audioSizeItems = isAudio
+    ? [
+        {
+          type: 'input',
+          name: 'width',
+          label: '横幅 (width)  ※例: 300 または 100%  未指定は空欄',
+        },
+        {
+          type: 'input',
+          name: 'height',
+          label: '高さ (height)  ※例: 54  未指定は空欄',
+        },
+      ]
+    : [];
+
+  const initialData: Record<string, string | boolean> = {
+    startTime: startTime >= 0 ? String(startTime) : '',
+    endTime: endTime >= 0 ? String(endTime) : '',
+    loop,
+  };
+  if (isAudio) {
+    initialData.width = width;
+    initialData.height = height;
+  }
 
   editor.windowManager.open({
     title,
-    initialData: {
-      startTime: startTime >= 0 ? String(startTime) : '',
-      endTime: endTime >= 0 ? String(endTime) : '',
-      loop,
-    },
+    initialData,
     body: {
       type: 'panel',
-      items: [
-        {
-          type: 'input',
-          name: 'startTime',
-          label: '再生開始(秒)  ※未指定は空欄',
-        },
-        {
-          type: 'input',
-          name: 'endTime',
-          label: '再生終了(秒)  ※未指定は空欄',
-        },
-        {
-          type: 'checkbox',
-          name: 'loop',
-          label: 'ループ再生',
-        },
-      ],
+      items: [...commonItems, ...audioSizeItems],
     },
     buttons: [
       { type: 'cancel', text: 'キャンセル' },
@@ -652,7 +704,9 @@ function openMediaDialog(editor: any, mediaElement: HTMLElement): void {
           ? parseFloat(data.endTime)
           : -1;
       const loopVal = data.loop as boolean;
-      applyMediaAttributes(editor, mediaElement, startVal, endVal, loopVal);
+      const widthVal = isAudio ? (data.width as string) : undefined;
+      const heightVal = isAudio ? (data.height as string) : undefined;
+      applyMediaAttributes(editor, mediaElement, startVal, endVal, loopVal, widthVal, heightVal);
       api.close();
     },
   });
