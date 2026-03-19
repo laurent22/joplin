@@ -30,8 +30,15 @@ export const StyledRoot = styled.div`
 	display: flex;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor2};
 	flex-direction: column;
+	overflow: hidden;
+`;
+
+export const StyledTabList = styled.div`
+	display: flex;
+	flex-direction: column;
 	overflow-x: hidden;
 	overflow-y: auto;
+	flex: 1;
 `;
 
 export const StyledListItem = styled.a`
@@ -54,9 +61,6 @@ export const StyledListItem = styled.a`
 export const StyledSearchContainer = styled.div`
 	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
 	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding / 2}px;
-	position: sticky;
-	top: 0;
-	z-index: 1;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor2};
 `;
 
@@ -173,7 +177,7 @@ export default function Sidebar(props: Props) {
 
 	function renderDivider(key: string) {
 		return (
-			<StyledDivider key={key}>
+			<StyledDivider key={key} role='presentation' aria-hidden='true'>
 				{_('Plugins')}
 			</StyledDivider>
 		);
@@ -193,7 +197,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+		<StyledRoot className='settings-sidebar'>
 			<StyledSearchContainer>
 				<SearchInput
 					value={props.searchQuery}
@@ -204,7 +208,9 @@ export default function Sidebar(props: Props) {
 					placeholder={_('Search settings...')}
 				/>
 			</StyledSearchContainer>
-			{buttons}
+			<StyledTabList className='_scrollbar2' role='tablist' aria-orientation='vertical'>
+				{buttons}
+			</StyledTabList>
 		</StyledRoot>
 	);
 }

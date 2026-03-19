@@ -26,13 +26,20 @@ export const SearchButton = styled.button`
 
 export const SearchButtonIcon = styled.span`
 	font-size: ${(props: StyleProps) => props.theme.toolbarIconSize}px;
-	color: ${(props: StyleProps) => props.theme.color4};
+	color: ${(props: StyleProps) => props.theme.color};
 `;
 
 export const SearchInput = styled(StyledInput)`
 	padding-right: 20px;
 	flex: 1;
 	width: 10px;
+	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
+	color: ${(props: StyleProps) => props.theme.color};
+
+	&::placeholder {
+		color: ${(props: StyleProps) => props.theme.color};
+		opacity: 0.75;
+	}
 
 	&::-webkit-search-cancel-button {
 		display: none;
