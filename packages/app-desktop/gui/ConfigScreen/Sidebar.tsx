@@ -36,6 +36,23 @@ export const StyledHeader = styled.div`
 	box-sizing: border-box;
 	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
 	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding * .75}px;
+
+	input {
+		background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
+		color: ${(props: StyleProps) => props.theme.color};
+	}
+
+	input::placeholder {
+		color: ${(props: StyleProps) => props.theme.color2};
+		opacity: 1;
+	}
+`;
+
+export const StyledTabList = styled.div`
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+	overflow-y: auto;
 `;
 
 export const StyledListItem = styled.a`
@@ -235,9 +252,11 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+		<StyledRoot className='settings-sidebar _scrollbar2'>
 			{props.header ? <StyledHeader>{props.header}</StyledHeader> : null}
-			{buttons}
+			<StyledTabList role='tablist'>
+				{buttons}
+			</StyledTabList>
 		</StyledRoot>
 	);
 }
