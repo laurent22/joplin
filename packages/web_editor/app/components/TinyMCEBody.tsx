@@ -715,6 +715,9 @@ export default function TinyMCEBody({
   );
   const [conflictError, setConflictError] = useState(false);
 
+  // attachAudioSettingsButtons 実行中はダーティ検知を抑制するための ref
+  const suppressDirtyRef = useRef(false);
+
   // isDirty の最新値を副作用外から参照するための ref
   const isDirtyRef = useRef(isDirty);
   useEffect(() => {
@@ -1032,7 +1035,11 @@ export default function TinyMCEBody({
 
           // コンテンツ変更時に audio 設定ボタンを再適用
           editor.on('SetContent', () => {
-            setTimeout(() => attachAudioSettingsButtons(editor), 100);
+            suppressDirtyRef.current = true;
+            setTimeout(() => {
+              attachAudioSettingsButtons(editor);
+              suppressDirtyRef.current = false;
+            }, 100);
           });
 
           // Mermaid / KaTeX / Video / Audio ブロックをダブルクリックしたらダイアログを開く
@@ -1066,7 +1073,9 @@ export default function TinyMCEBody({
           // 編集変更の追跡（ダーティ状態）
           if (!readOnly) {
             editor.on('input change', () => {
-              setIsDirty(true);
+              if (!suppressDirtyRef.current) {
+                setIsDirty(true);
+              }
             });
           }
 
