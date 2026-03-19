@@ -56,6 +56,7 @@ interface Props {
 	placeholder?: string;
 	disabled?: boolean;
 	'aria-controls'?: string;
+	'aria-label'?: string;
 }
 
 export interface OnChangeEvent {
@@ -85,6 +86,7 @@ export default function(props: Props) {
 				spellCheck={false}
 				disabled={props.disabled}
 				aria-controls={props['aria-controls']}
+				aria-label={props['aria-label']}
 			/>
 			<SearchButton
 				aria-label={iconLabel}

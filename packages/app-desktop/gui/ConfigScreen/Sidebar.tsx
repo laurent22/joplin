@@ -110,6 +110,13 @@ export default function Sidebar(props: Props) {
 			newEnabledIndex = 0;
 		} else if (event.code === 'End') {
 			newEnabledIndex = enabledIndexes.length - 1;
+		} else if (event.code === 'Enter' || event.code === 'Space' || event.key === ' ' || event.key === 'Enter') {
+			const selectedSection = props.sections[selectedIndex];
+			if (selectedSection && !isSectionDisabled(selectedSection.name)) {
+				event.preventDefault();
+				props.onSelectionChange({ section: selectedSection });
+			}
+			return;
 		}
 
 		if (newEnabledIndex < 0) newEnabledIndex += enabledIndexes.length;

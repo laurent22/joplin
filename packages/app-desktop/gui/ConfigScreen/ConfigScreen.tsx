@@ -524,6 +524,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					onChange={event => this.onSearchInputChange(event)}
 					onSearchButtonClick={() => this.onSearchButtonClick()}
 					searchStarted={!!(this.state.searchQuery && this.state.searchQuery.trim().length)}
+					aria-label={_('Search settings')}
 				/>
 			</div>
 		);
@@ -547,6 +548,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				? sections.map(section => searchResultsBySection[section.name]).filter(item => !!item)
 				: (searchResultsBySection[activeSearchSectionFilter] ? [searchResultsBySection[activeSearchSectionFilter]] : [])
 		);
+		const matchCount = !searchMode ? 0 : sections.reduce((count, section) => {
+			const sectionTitle = Setting.sectionNameToLabel(section.name);
+			for (const md of section.metadatas) {
+				const relatedText = [
+					md.label ? md.label() : '',
+					md.description ? md.description(AppType.Desktop) : '',
+				];
+				if (matchesSearchQuery(this.state.searchQuery, sectionTitle, relatedText)) count++;
+			}
+			return count;
+		}, 0);
 		if (!searchMode) {
 			for (const section of sections) {
 				const sectionId = `setting-section-${section.name}`;
@@ -588,7 +600,27 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					selection={sidebarSelection}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sidebarSections}
-					topContent={sidebarSearchBar}
+					topContent={
+						<>
+							{sidebarSearchBar}
+							<div
+								aria-live='polite'
+								style={{
+									position: 'absolute',
+									width: 1,
+									height: 1,
+									padding: 0,
+									margin: -1,
+									overflow: 'hidden',
+									clip: 'rect(0, 0, 0, 0)',
+									whiteSpace: 'nowrap',
+									border: 0,
+								}}
+							>
+								{searchMode ? _('%d settings found', matchCount) : ''}
+							</div>
+						</>
+					}
 					disabledSectionNames={disabledSectionNames}
 					searchMode={searchMode}
 				/>
