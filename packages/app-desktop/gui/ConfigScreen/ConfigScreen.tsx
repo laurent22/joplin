@@ -518,7 +518,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		delete style.width;
 
 		const sidebarSearchBar = (
-			<div style={{ padding: theme.mainPadding, paddingBottom: Math.round(theme.mainPadding * 0.5) }}>
+			<div style={{
+				padding: theme.mainPadding,
+				paddingBottom: Math.round(theme.mainPadding * 0.5),
+				backgroundColor: theme.backgroundColor,
+				color: theme.color,
+			}}>
 				<SearchInput
 					value={this.state.searchQuery}
 					onChange={event => this.onSearchInputChange(event)}

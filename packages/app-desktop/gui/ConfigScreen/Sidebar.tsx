@@ -194,9 +194,11 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+		<StyledRoot className='settings-sidebar _scrollbar2'>
 			{props.topContent}
-			{buttons}
+			<div role='tablist'>
+				{buttons}
+			</div>
 		</StyledRoot>
 	);
 }
