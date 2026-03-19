@@ -538,31 +538,27 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const tabComponents: React.ReactNode[] = [];
 		for (const section of sectionsToRender) {
 			const sectionId = `setting-section-${section.name}`;
-			let content = null;
-			const visible = true;
-			if (visible) {
-				const settingComps = this.sectionToComponent(section.name, section, settings, true, {
-					searchQuery: this.state.searchQuery,
-					showSectionHeader: isSearchActive,
-				});
-				content = (
-					<>
-						{screenComp}
-						<div style={containerStyle}>
-							<div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-								{settingComps}
-							</div>
+
+			const settingComps = this.sectionToComponent(section.name, section, settings, true, {
+				searchQuery: this.state.searchQuery,
+				showSectionHeader: isSearchActive,
+			});
+			const content = (
+				<>
+					{screenComp}
+					<div style={containerStyle}>
+						<div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+							{settingComps}
 						</div>
-					</>
-				);
-			}
+					</div>
+				</>
+			);
 
 			tabComponents.push(
 				<div
 					key={sectionId}
 					id={sectionId}
-					className={`setting-tab-panel ${!visible ? '-hidden' : ''} ${isSearchActive ? '-search-results' : ''}`}
-					hidden={!visible}
+					className={`setting-tab-panel ${isSearchActive ? '-search-results' : ''}`}
 					aria-labelledby={`setting-tab-${section.name}`}
 					tabIndex={0}
 					role='tabpanel'
