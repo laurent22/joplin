@@ -852,6 +852,17 @@ export default function TinyMCEBody({
               }, 200);
               // コンテンツ読み込み後に KaTeX 数式をレンダリング
               triggerKatexRender(editor, 600);
+
+              // video 要素のダブルクリックによるブラウザネイティブの全画面化を防ぐ。
+              // dblclick の preventDefault() はネイティブメディアコントローラーには効かないため、
+              // fullscreenchange を監視して video が全画面になったら即座に抜ける。
+              const iframeDoc = editor.getDoc() as Document;
+              iframeDoc.addEventListener('fullscreenchange', () => {
+                const fsEl = iframeDoc.fullscreenElement;
+                if (fsEl && fsEl.tagName?.toLowerCase() === 'video') {
+                  iframeDoc.exitFullscreen().catch(() => {});
+                }
+              });
             }
           });
 
@@ -943,6 +954,7 @@ export default function TinyMCEBody({
               }
               const tagName = target.tagName?.toLowerCase();
               if (tagName === 'video' || tagName === 'audio') {
+                e.preventDefault();
                 openMediaDialog(editor, target);
                 return;
               }
