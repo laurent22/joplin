@@ -861,6 +861,7 @@ packages/app-mobile/components/screens/Note/commands/insertDateTime.js
 packages/app-mobile/components/screens/Note/commands/setTags.js
 packages/app-mobile/components/screens/Note/commands/toggleVisiblePanes.js
 packages/app-mobile/components/screens/Note/types.js
+packages/app-mobile/components/screens/NoteAttachmentsScreen.js
 packages/app-mobile/components/screens/NoteRevisionViewer.test.js
 packages/app-mobile/components/screens/NoteRevisionViewer.js
 packages/app-mobile/components/screens/NoteTagsDialog.js
@@ -884,6 +885,8 @@ packages/app-mobile/components/screens/dropbox-login.js
 packages/app-mobile/components/screens/encryption-config.test.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/folder.js
+packages/app-mobile/components/screens/noteAttachmentsUtils.test.js
+packages/app-mobile/components/screens/noteAttachmentsUtils.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
 packages/app-mobile/components/side-menu-content.js
