@@ -481,7 +481,59 @@ function getEditorContent(editor: any): string {
       .forEach((attr) => el.removeAttribute(attr.name));
   });
 
+  // audio 設定ボタンとラッパーを除去
+  stripAudioSettingsButtons(clone);
+
   return clone.innerHTML;
+}
+
+// ---------- ヘルパー: Audio 設定ボタン ----------
+
+/**
+ * エディタ内の全 <audio> 要素に設定ボタン (⚙) をオーバーレイする。
+ * audio のネイティブコントロールはブラウザの Shadow DOM で描画されるため、
+ * click / dblclick イベントがホスト要素までバブルしない。
+ * そのため、audio 要素を <span> でラップし、その中にクリック可能な
+ * 設定ボタンを配置することでダイアログを開けるようにする。
+ */
+function attachAudioSettingsButtons(editor: any): void {
+  const body = editor.getBody() as HTMLElement;
+  if (!body) return;
+  body.querySelectorAll('audio').forEach((audio) => {
+    // 既にラップ済みなら処理をスキップ
+    if (audio.parentElement?.classList.contains('joplin-audio-wrapper')) return;
+    // <span class="joplin-audio-wrapper"> でラップ
+    const wrapper = editor.getDoc().createElement('span');
+    wrapper.className = 'joplin-audio-wrapper';
+    wrapper.setAttribute('contenteditable', 'false');
+    audio.parentNode?.insertBefore(wrapper, audio);
+    wrapper.appendChild(audio);
+    // 設定ボタンを追加
+    const btn = editor.getDoc().createElement('button');
+    btn.className = 'joplin-audio-settings-btn';
+    btn.setAttribute('title', '音声設定');
+    btn.setAttribute('contenteditable', 'false');
+    btn.textContent = '⚙';
+    wrapper.appendChild(btn);
+  });
+}
+
+/**
+ * 保存前にエディタ内から audio 設定ボタンとラッパーを除去したクリーンな HTML を得る。
+ * getEditorContent の clone に対して呼び出す。
+ */
+function stripAudioSettingsButtons(clone: HTMLElement): void {
+  // 設定ボタンを除去
+  clone.querySelectorAll('.joplin-audio-settings-btn').forEach((btn) => btn.remove());
+  // ラッパー <span> をアンラップ（子要素を親に戻す）
+  clone.querySelectorAll('.joplin-audio-wrapper').forEach((wrapper) => {
+    const parent = wrapper.parentNode;
+    if (!parent) return;
+    while (wrapper.firstChild) {
+      parent.insertBefore(wrapper.firstChild, wrapper);
+    }
+    parent.removeChild(wrapper);
+  });
 }
 
 // ---------- ヘルパー: Video / Audio ダイアログ ----------
@@ -822,6 +874,32 @@ export default function TinyMCEBody({
           a { color: #1a73e8; }
           table { border-collapse: collapse; width: 100%; }
           td, th { border: 1px solid #ccc; padding: 6px 10px; }
+          .joplin-audio-wrapper {
+            position: relative;
+            display: inline-block;
+          }
+          .joplin-audio-settings-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 22px;
+            text-align: center;
+            padding: 0;
+            opacity: 0.7;
+            transition: opacity 0.15s;
+          }
+          .joplin-audio-settings-btn:hover {
+            opacity: 1;
+          }
         `,
         font_family_formats:
           'System UI=-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;' +
@@ -861,6 +939,21 @@ export default function TinyMCEBody({
                 const fsEl = iframeDoc.fullscreenElement;
                 if (fsEl && fsEl.tagName?.toLowerCase() === 'video') {
                   iframeDoc.exitFullscreen().catch(() => {});
+                }
+              });
+
+              // audio 要素に設定ボタン (⚙) をオーバーレイ
+              attachAudioSettingsButtons(editor);
+
+              // audio 設定ボタンのクリックを委譲ハンドラーで処理
+              iframeDoc.addEventListener('click', (e: MouseEvent) => {
+                const target = e.target as HTMLElement;
+                if (target?.classList?.contains('joplin-audio-settings-btn')) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const wrapper = target.closest('.joplin-audio-wrapper');
+                  const audio = wrapper?.querySelector('audio');
+                  if (audio) openMediaDialog(editor, audio);
                 }
               });
             }
@@ -936,6 +1029,11 @@ export default function TinyMCEBody({
 
           // Drag & Drop によるファイルアップロード
           editor.on('drop', (e: DragEvent) => handleEditorDrop(e, editor));
+
+          // コンテンツ変更時に audio 設定ボタンを再適用
+          editor.on('SetContent', () => {
+            setTimeout(() => attachAudioSettingsButtons(editor), 100);
+          });
 
           // Mermaid / KaTeX / Video / Audio ブロックをダブルクリックしたらダイアログを開く
           editor.on('DblClick', (e: any) => {
