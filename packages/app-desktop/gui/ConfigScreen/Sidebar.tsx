@@ -34,6 +34,8 @@ export const StyledRoot = styled.div`
 	overflow-y: auto;
 `;
 
+export const StyledTabList = styled.div``;
+
 export const StyledSearchContainer = styled.div`
 	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
 	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding / 2}px;
@@ -70,7 +72,6 @@ export const StyledDivider = styled.div`
 	border-bottom: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
 	background-color: ${(props: StyleProps) => props.theme.selectedColor2};
 	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize)}px;
-	opacity: 0.38;
 `;
 
 export const StyledListItemLabel = styled.span`
@@ -200,7 +201,7 @@ export default function Sidebar(props: Props) {
 
 	function renderDivider(key: string) {
 		return (
-			<StyledDivider key={key}>
+			<StyledDivider key={key} role='presentation' aria-hidden='true'>
 				{_('Plugins')}
 			</StyledDivider>
 		);
@@ -220,7 +221,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+		<StyledRoot className='settings-sidebar _scrollbar2'>
 			<StyledSearchContainer>
 				<SearchInput
 					inputRef={null}
@@ -231,7 +232,9 @@ export default function Sidebar(props: Props) {
 					placeholder={_('Search settings...')}
 				/>
 			</StyledSearchContainer>
-			{buttons}
+			<StyledTabList role='tablist'>
+				{buttons}
+			</StyledTabList>
 		</StyledRoot>
 	);
 }
