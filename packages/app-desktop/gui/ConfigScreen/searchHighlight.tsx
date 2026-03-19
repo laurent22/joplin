@@ -1,9 +1,12 @@
 import * as React from 'react';
 
+// Escapes special regex tokens in user input before constructing a matcher.
 const escapeRegExp = (value: string): string => {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
 
+// Returns a React node where every case-insensitive match of `query` in `text`
+// is wrapped in a `mark` element.
 const highlightSearchText = (
 	text: string,
 	query: string,

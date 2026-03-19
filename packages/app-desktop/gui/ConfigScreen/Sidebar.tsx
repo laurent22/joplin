@@ -83,13 +83,9 @@ export const StyledListItemLabel = styled.span`
 	user-select: none;
 
 	mark {
-		/* Highlight palette reference:
-		 * - rgb(66 99 160) blue highlight / white text
-		 * - rgb(162 133 49) yellow highlight / white text
-		 */
-		background-color: rgb(145 108 24 / 0.96);
-		color: rgb(255 255 255);
-		padding: 0px;
+		background-color: ${(props: StyleProps) => props.theme.searchMarkerBackgroundColor};
+		color: ${(props: StyleProps) => props.theme.searchMarkerColor};
+		padding: 0;
 	}
 `;
 
@@ -101,8 +97,8 @@ export const StyledListItemIcon = styled.i`
 
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
+	const isSearching = props.searchQuery.trim().length > 0;
 
-	// Compute which sections have matching results
 	const matchedSectionNames = useMemo(() => {
 		return new Set(props.searchResultGroups.map(group => group.sectionName));
 	}, [props.searchResultGroups]);
@@ -112,7 +108,6 @@ export default function Sidebar(props: Props) {
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
 		let newIndex = selectedIndex;
-		const isSearching = !!props.searchQuery;
 
 		// Determine navigation direction
 		let isMovingUp = false;
@@ -158,13 +153,12 @@ export default function Sidebar(props: Props) {
 				focus('Sidebar', targetButton);
 			}
 		}
-	}, [props.sections, props.selection, props.onSelectionChange, props.searchQuery, matchedSectionNames]);
+	}, [props.sections, props.selection, props.onSelectionChange, matchedSectionNames, isSearching]);
 
 	const buttons: React.ReactNode[] = [];
 
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
-		const isSearching = !!props.searchQuery;
 		const hasMatch = matchedSectionNames.has(section.name);
 		const isDisabled = isSearching && !hasMatch;
 
@@ -231,7 +225,7 @@ export default function Sidebar(props: Props) {
 					value={props.searchQuery}
 					onChange={props.onSearchQueryChange}
 					onSearchButtonClick={props.onSearchButtonClick}
-					searchStarted={!!props.searchQuery}
+					searchStarted={isSearching}
 					placeholder={_('Search settings...')}
 				/>
 			</StyledSearchContainer>

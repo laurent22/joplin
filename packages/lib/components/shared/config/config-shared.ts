@@ -30,10 +30,13 @@ export const defaultScreenState: ConfigScreenState = {
 	searchSectionFilter: null,
 };
 
+// Normalizes a search query for case-insensitive matching.
 export const normalizeQuery = (query: string): string => {
 	return query.trim().toLowerCase();
 };
 
+// Checks whether a setting metadata entry matches the query using section title,
+// setting label, or setting description text.
 export const isMetadataMatched = (
 	query: string,
 	section: SettingMetadataSection,
@@ -68,7 +71,7 @@ export interface MatchedSearchSection {
 
 interface SearchResultGroupsState {
 	device: AppType;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic settings object keyed by setting names.
 	settings: any;
 	query: string;
 }
@@ -77,6 +80,8 @@ const searchDeviceSelector = (state: SearchResultGroupsState) => state.device;
 const searchSettingsSelector = (state: SearchResultGroupsState) => state.settings;
 const searchQuerySelector = (state: SearchResultGroupsState) => state.query;
 
+// Computes grouped search hits for the configuration screen, with one group per
+// section and a list of matching setting keys inside each group.
 export const searchResultGroups = createSelector(
 	searchDeviceSelector,
 	searchSettingsSelector,
@@ -121,9 +126,11 @@ export const searchResultGroups = createSelector(
 	},
 );
 
+// Maps grouped search results back to concrete section metadata so the UI can
+// render either all matches or a section-filtered subset.
 export const matchedSearchSections = (
 	device: AppType,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic settings object keyed by setting names.
 	settings: any,
 	groups: SearchResultGroup[],
 ): MatchedSearchSection[] => {

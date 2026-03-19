@@ -377,8 +377,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private renderSearchHighlightedText = (text: string): React.ReactNode => {
 		return highlightSearchText(text, this.state.searchQuery, {
-			backgroundColor: 'rgb(145 108 24 / 0.96)',
-			color: 'rgb(255 255 255)',
+			backgroundColor: themeStyle(this.props.themeId).searchMarkerBackgroundColor,
+			color: themeStyle(this.props.themeId).searchMarkerColor,
 		});
 	};
 
@@ -523,12 +523,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				alignItems: 'center',
 			};
 
-			const markStyle: React.CSSProperties = {
-				backgroundColor: 'rgb(145 108 24 / 0.96)',
-				color: 'rgb(255 255 255)',
-				padding: 0,
-			};
-
 			const searchContent = filteredMatchedSections.map(({ section }) => {
 				const sectionComp = section.isScreen ? (
 					<div style={{ ...theme.textStyle, marginBottom: 20 }}>
@@ -546,7 +540,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								role='img'
 								aria-hidden='true'
 							/>
-							{highlightSearchText(Setting.sectionNameToLabel(section.name), this.state.searchQuery, markStyle)}
+							{this.renderSearchHighlightedText(Setting.sectionNameToLabel(section.name))}
 						</h2>
 						{sectionComp}
 					</div>
