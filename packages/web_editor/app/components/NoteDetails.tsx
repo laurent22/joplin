@@ -72,10 +72,8 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     })();
   }, [note?.body]);
 
-  // video / audio 要素の再生範囲を onplay / ontimeupdate 属性文字列から復元して
-  // ネイティブイベントリスナーとして登録する。
-  // html-react-parser は属性文字列を React props として渡すだけで実行しないため、
-  // DOM レンダリング後にこちらで手動でバインドする。
+  // video / audio 要素の再生範囲を data-starttime / data-endtime / data-loop 属性から
+  // 読み取り、ネイティブイベントリスナーとして登録する。
   useEffect(() => {
     if (!note?.body || !contentRef.current) return;
 
@@ -85,20 +83,13 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     for (const media of Array.from(mediaElements)) {
       const el = media as HTMLVideoElement | HTMLAudioElement;
 
-      const onplayAttr = el.getAttribute('data-onplay') ?? el.getAttribute('onplay') ?? '';
-      const onTimeupdateAttr =
-        el.getAttribute('data-ontimeupdate') ?? el.getAttribute('ontimeupdate') ?? '';
+      const startRaw = el.getAttribute('data-starttime');
+      const endRaw = el.getAttribute('data-endtime');
+      const loopRaw = el.getAttribute('data-loop');
 
-      // onplay: "this.currentTime=N"
-      const onplayMatch = onplayAttr.match(/this\.currentTime\s*=\s*([\d.]+)/);
-      const startTime = onplayMatch ? parseFloat(onplayMatch[1]) : -1;
-
-      // ontimeupdate: "if(this.currentTime>=N){...}"
-      const onTimeupdateMatch = onTimeupdateAttr.match(
-        /if\(this\.currentTime\s*>=\s*([\d.]+)\)\{([^}]*)\}/
-      );
-      const endTime = onTimeupdateMatch ? parseFloat(onTimeupdateMatch[1]) : -1;
-      const loop = onTimeupdateMatch ? !onTimeupdateMatch[2].includes('this.pause()') : false;
+      const startTime = startRaw !== null ? parseFloat(startRaw) : -1;
+      const endTime = endRaw !== null ? parseFloat(endRaw) : -1;
+      const loop = loopRaw === 'true';
 
       if (startTime < 0 && endTime < 0) continue;
 
@@ -228,18 +219,13 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
           return <>{domToReact(domNode.children as DOMNode[], parseOptions)}</>;
         }
 
-        // video / audio: onplay / ontimeupdate はインライン JS 文字列なので
-        // React が無視する。data-* 属性に退避して useEffect で復元する。
+        // video / audio: onplay / ontimeupdate はインライン JS なので React が無視する。
+        // 再生範囲は data-starttime / data-endtime / data-loop で管理するため、
+        // インライン JS 属性は除去してレンダリングする。
         if (domNode.name === 'video' || domNode.name === 'audio') {
           const attribs = { ...domNode.attribs };
-          if (attribs.onplay) {
-            attribs['data-onplay'] = attribs.onplay;
-            delete attribs.onplay;
-          }
-          if (attribs.ontimeupdate) {
-            attribs['data-ontimeupdate'] = attribs.ontimeupdate;
-            delete attribs.ontimeupdate;
-          }
+          delete attribs.onplay;
+          delete attribs.ontimeupdate;
           const Tag = domNode.name as 'video' | 'audio';
           return <Tag {...attribs}>{domToReact(domNode.children as DOMNode[], parseOptions)}</Tag>;
         }

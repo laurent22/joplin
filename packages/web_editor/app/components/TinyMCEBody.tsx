@@ -487,42 +487,29 @@ function getEditorContent(editor: any): string {
 // ---------- ヘルパー: Video / Audio ダイアログ ----------
 
 /**
- * video・audio 要素の onplay / ontimeupdate 属性から
- * 再生開始秒・終了秒・ループフラグを解析する。
+ * video・audio 要素の data-starttime / data-endtime / data-loop 属性から
+ * 再生開始秒・終了秒・ループフラグを取得する。
  */
 function parseMediaAttributes(element: HTMLElement): {
   startTime: number;
   endTime: number;
   loop: boolean;
 } {
-  const onplay = element.getAttribute('onplay') ?? '';
-  const ontimeupdate = element.getAttribute('ontimeupdate') ?? '';
+  const startRaw = element.getAttribute('data-starttime');
+  const endRaw = element.getAttribute('data-endtime');
+  const loopRaw = element.getAttribute('data-loop');
 
-  let startTime = -1;
-  let endTime = -1;
-  let loop = false;
-
-  // onplay: "this.currentTime=N"
-  const onplayMatch = onplay.match(/this\.currentTime\s*=\s*([\d.]+)/);
-  if (onplayMatch) {
-    startTime = parseFloat(onplayMatch[1]);
-  }
-
-  // ontimeupdate: "if(this.currentTime>=N){...}"
-  const onTimeupdateMatch = ontimeupdate.match(
-    /if\(this\.currentTime\s*>=\s*([\d.]+)\)\{([^}]*)\}/
-  );
-  if (onTimeupdateMatch) {
-    endTime = parseFloat(onTimeupdateMatch[1]);
-    loop = !onTimeupdateMatch[2].includes('this.pause()');
-  }
+  const startTime = startRaw !== null ? parseFloat(startRaw) : -1;
+  const endTime = endRaw !== null ? parseFloat(endRaw) : -1;
+  const loop = loopRaw === 'true';
 
   return { startTime, endTime, loop };
 }
 
 /**
- * 解析した設定を video・audio 要素の属性に書き戻す。
- * startTime / endTime が -1 の場合は属性を削除する。
+ * 設定を data-starttime / data-endtime / data-loop 属性に書き込み、
+ * さらに onplay / ontimeupdate も同期する。
+ * startTime / endTime が -1 の場合は対応する属性を削除する。
  */
 function applyMediaAttributes(
   editor: any,
@@ -531,7 +518,20 @@ function applyMediaAttributes(
   endTime: number,
   loop: boolean
 ): void {
-  // 既存属性をリセット
+  // data-* 属性を更新（値が -1 なら削除）
+  if (startTime >= 0) {
+    editor.dom.setAttrib(element, 'data-starttime', String(startTime));
+  } else {
+    editor.dom.setAttrib(element, 'data-starttime', null);
+  }
+  if (endTime >= 0) {
+    editor.dom.setAttrib(element, 'data-endtime', String(endTime));
+  } else {
+    editor.dom.setAttrib(element, 'data-endtime', null);
+  }
+  editor.dom.setAttrib(element, 'data-loop', loop ? 'true' : null);
+
+  // onplay / ontimeupdate も同期して TinyMCE 外（素の HTML コピーなど）でも動くようにする
   editor.dom.setAttrib(element, 'onplay', null);
   editor.dom.setAttrib(element, 'ontimeupdate', null);
 
