@@ -52,6 +52,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	const [hasMore, setHasMore] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [deletingResourceIds, setDeletingResourceIds] = useState<string[]>([]);
+	const [titleTooltipResourceId, setTitleTooltipResourceId] = useState('');
 	const theme = themeStyle(props.themeId);
 	const loadCounter = useRef(0);
 	const invalidateLoadCounter = useCallback(() => {
@@ -102,6 +103,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				paddingBottom: theme.itemMarginBottom,
 				borderBottomWidth: 1,
 				borderBottomColor: theme.dividerColor,
+				position: 'relative',
 			},
 			rowTop: {
 				flexDirection: 'row',
@@ -117,6 +119,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				minHeight: 44,
 				paddingTop: 6,
 				paddingBottom: 8,
+				position: 'relative',
 			},
 			sortBar: {
 				flexDirection: 'row',
@@ -132,10 +135,18 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				marginBottom: 8,
 			},
 			rowTitle: {
-				color: theme.colorFaded,
+				color: theme.color,
 				fontSize: theme.fontSize,
 				fontWeight: '700',
 				lineHeight: theme.fontSize * 1.4,
+			},
+			rowTitleExpandedWrapper: {
+				paddingTop: 2,
+				paddingBottom: 2,
+				paddingLeft: 4,
+				paddingRight: 4,
+				backgroundColor: theme.backgroundColor,
+				borderRadius: 4,
 			},
 			rowMeta: {
 				color: theme.colorFaded,
@@ -151,7 +162,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				alignItems: 'center',
 			},
 			copyIcon: {
-				color: theme.color,
+				color: theme.colorFaded,
 				fontSize: theme.fontSizeLarger,
 			},
 			deleteButtonContainer: {
@@ -163,8 +174,13 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				alignItems: 'center',
 			},
 			deleteIcon: {
-				color: theme.colorError,
+				color: theme.colorFaded,
 				fontSize: theme.fontSizeLarger,
+			},
+			rowMetaHidden: {
+				opacity: 0,
+				height: 0,
+				marginTop: 0,
 			},
 			emptyText: {
 				color: theme.colorFaded,
@@ -296,6 +312,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		const deleting = deletingResourceIds.includes(item.id);
 		const title = displayTitle(item);
 		const size = displaySize(item);
+		const showExpandedTitle = titleTooltipResourceId === item.id;
 
 		return (
 			<View style={styles.row} accessible={false}>
@@ -303,16 +320,25 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 					<TouchableOpacity
 						accessible={true}
 						focusable={true}
+						activeOpacity={1}
 						style={styles.rowPressable}
 						onPress={() => {
 							void onOpenResource(item);
+						}}
+						onLongPress={() => {
+							setTitleTooltipResourceId(item.id);
+						}}
+						onPressOut={() => {
+							setTitleTooltipResourceId(previous => previous === item.id ? '' : previous);
 						}}
 						accessibilityRole='button'
 						accessibilityLabel={_('Attachment: %s. Size: %s', title, size)}
 						accessibilityHint={_('Opens this attachment')}
 					>
-						<Text accessible={false} style={styles.rowTitle} numberOfLines={1} ellipsizeMode='tail'>{title}</Text>
-						<Text accessible={false} style={styles.rowMeta}>{size}</Text>
+						{showExpandedTitle ? <View style={styles.rowTitleExpandedWrapper} pointerEvents='none'>
+							<Text accessible={false} style={styles.rowTitle}>{title}</Text>
+						</View> : <Text accessible={false} style={styles.rowTitle} numberOfLines={1} ellipsizeMode='tail'>{title}</Text>}
+						<Text accessible={false} style={[styles.rowMeta, showExpandedTitle ? styles.rowMetaHidden : null]}>{size}</Text>
 					</TouchableOpacity>
 					<View style={styles.actionIconsRow}>
 						<IconButton
@@ -342,7 +368,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				</View>
 			</View>
 		);
-	}, [deletingResourceIds, onCopyMarkdownLink, onDeleteResource, onOpenResource, props.themeId, styles]);
+	}, [deletingResourceIds, onCopyMarkdownLink, onDeleteResource, onOpenResource, props.themeId, styles, titleTooltipResourceId]);
 
 	return (
 		<View style={styles.root}>
