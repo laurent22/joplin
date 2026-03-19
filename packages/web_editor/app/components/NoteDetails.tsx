@@ -222,12 +222,25 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
         // video / audio: onplay / ontimeupdate はインライン JS なので React が無視する。
         // 再生範囲は data-starttime / data-endtime / data-loop で管理するため、
         // インライン JS 属性は除去してレンダリングする。
+        // style 属性は html-react-parser が文字列のまま渡すため、React スタイルオブジェクトに変換する。
         if (domNode.name === 'video' || domNode.name === 'audio') {
-          const attribs = { ...domNode.attribs };
-          delete attribs.onplay;
-          delete attribs.ontimeupdate;
+          const { onplay, ontimeupdate, style: styleStr, ...attribs } = domNode.attribs;
+          const styleObj: Record<string, string> = {};
+          if (styleStr) {
+            styleStr.split(';').forEach((decl) => {
+              const [prop, ...vals] = decl.split(':');
+              if (prop && vals.length > 0) {
+                const cssProp = prop.trim().replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+                styleObj[cssProp] = vals.join(':').trim();
+              }
+            });
+          }
           const Tag = domNode.name as 'video' | 'audio';
-          return <Tag {...attribs}>{domToReact(domNode.children as DOMNode[], parseOptions)}</Tag>;
+          return (
+            <Tag {...attribs} style={styleObj}>
+              {domToReact(domNode.children as DOMNode[], parseOptions)}
+            </Tag>
+          );
         }
 
         if (domNode.name === 'a') {
