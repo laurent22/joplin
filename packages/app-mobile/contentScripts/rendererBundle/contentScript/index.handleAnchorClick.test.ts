@@ -49,11 +49,12 @@ describe('index.handleAnchorClick', () => {
 		const preventNavigation = (e: Event) => e.preventDefault();
 		window.addEventListener('click', preventNavigation);
 
-		linkExt.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-
-		expect(scrollIntoViewMock).not.toHaveBeenCalled();
-
-		window.removeEventListener('click', preventNavigation);
+		try {
+			linkExt.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+			expect(scrollIntoViewMock).not.toHaveBeenCalled();
+		} finally {
+			window.removeEventListener('click', preventNavigation);
+		}
 	});
 
 	test('works with URL-encoded Japanese anchors', () => {
