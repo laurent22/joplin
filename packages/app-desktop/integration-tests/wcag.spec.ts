@@ -2,6 +2,7 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import AxeBuilder from '@axe-core/playwright';
 import { Page } from '@playwright/test';
+import SettingsScreen from './models/SettingsScreen';
 
 const createScanner = (page: Page) => {
 	return new AxeBuilder({ page })
@@ -38,25 +39,24 @@ const expectNoViolations = async (page: Page) => {
 };
 
 test.describe('wcag', () => {
-	// Disabled due to random failure in CI:
-// for (const tabName of ['General', 'Plugins']) {
-// 	test(`should not detect significant issues in the settings screen ${tabName} tab`, async ({ electronApp, mainWindow }) => {
-// 		const mainScreen = await new MainScreen(mainWindow).setup();
-// 		await mainScreen.waitFor();
-//
-// 		await mainScreen.openSettings(electronApp);
-//
-// 		// Should be on the settings screen
-// 		const settingsScreen = new SettingsScreen(mainWindow);
-// 		await settingsScreen.waitFor();
-//
-// 		const tabLocator = settingsScreen.getTabLocator(tabName);
-// 		await tabLocator.click();
-// 		await expect(tabLocator).toBeFocused();
-//
-// 		await expectNoViolations(mainWindow);
-// 	});
-// }
+	for (const tabName of ['General', 'Plugins']) {
+		test(`should not detect significant issues in the settings screen ${tabName} tab`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.waitFor();
+
+			await mainScreen.openSettings(electronApp);
+
+			// Should be on the settings screen
+			const settingsScreen = new SettingsScreen(mainWindow);
+			await settingsScreen.waitFor();
+
+			const tabLocator = settingsScreen.getTabLocator(tabName);
+			await tabLocator.click();
+			await expect(tabLocator).toBeFocused();
+
+			await expectNoViolations(mainWindow);
+		});
+	}
 
 	test('should not detect significant issues in the main screen with an open note', async ({ mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
