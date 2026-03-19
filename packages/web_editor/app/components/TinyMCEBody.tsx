@@ -484,6 +484,128 @@ function getEditorContent(editor: any): string {
   return clone.innerHTML;
 }
 
+// ---------- ヘルパー: Video / Audio ダイアログ ----------
+
+/**
+ * video・audio 要素の onplay / ontimeupdate 属性から
+ * 再生開始秒・終了秒・ループフラグを解析する。
+ */
+function parseMediaAttributes(element: HTMLElement): {
+  startTime: number;
+  endTime: number;
+  loop: boolean;
+} {
+  const onplay = element.getAttribute('onplay') ?? '';
+  const ontimeupdate = element.getAttribute('ontimeupdate') ?? '';
+
+  let startTime = -1;
+  let endTime = -1;
+  let loop = false;
+
+  // onplay: "this.currentTime=N"
+  const onplayMatch = onplay.match(/this\.currentTime\s*=\s*([\d.]+)/);
+  if (onplayMatch) {
+    startTime = parseFloat(onplayMatch[1]);
+  }
+
+  // ontimeupdate: "if(this.currentTime>=N){...}"
+  const onTimeupdateMatch = ontimeupdate.match(
+    /if\(this\.currentTime\s*>=\s*([\d.]+)\)\{([^}]*)\}/
+  );
+  if (onTimeupdateMatch) {
+    endTime = parseFloat(onTimeupdateMatch[1]);
+    loop = !onTimeupdateMatch[2].includes('this.pause()');
+  }
+
+  return { startTime, endTime, loop };
+}
+
+/**
+ * 解析した設定を video・audio 要素の属性に書き戻す。
+ * startTime / endTime が -1 の場合は属性を削除する。
+ */
+function applyMediaAttributes(
+  editor: any,
+  element: HTMLElement,
+  startTime: number,
+  endTime: number,
+  loop: boolean
+): void {
+  // 既存属性をリセット
+  editor.dom.setAttrib(element, 'onplay', null);
+  editor.dom.setAttrib(element, 'ontimeupdate', null);
+
+  if (startTime >= 0 && endTime >= 0) {
+    const onplay = `this.currentTime=${startTime}`;
+    const ontimeupdate = loop
+      ? `if(this.currentTime>=${endTime}){this.currentTime=${startTime}}`
+      : `if(this.currentTime>=${endTime}){this.pause();this.currentTime=${startTime}}`;
+    editor.dom.setAttrib(element, 'onplay', onplay);
+    editor.dom.setAttrib(element, 'ontimeupdate', ontimeupdate);
+  } else if (startTime >= 0) {
+    editor.dom.setAttrib(element, 'onplay', `this.currentTime=${startTime}`);
+  }
+
+  editor.nodeChanged();
+}
+
+/**
+ * video / audio 要素をダブルクリックしたときに開くダイアログ。
+ * 再生開始秒・終了秒・ループの設定を行う。
+ */
+function openMediaDialog(editor: any, mediaElement: HTMLElement): void {
+  const { startTime, endTime, loop } = parseMediaAttributes(mediaElement);
+  const tagName = mediaElement.tagName.toLowerCase();
+  const title = tagName === 'video' ? '動画設定' : '音声設定';
+
+  editor.windowManager.open({
+    title,
+    initialData: {
+      startTime: startTime >= 0 ? String(startTime) : '',
+      endTime: endTime >= 0 ? String(endTime) : '',
+      loop,
+    },
+    body: {
+      type: 'panel',
+      items: [
+        {
+          type: 'input',
+          name: 'startTime',
+          label: '再生開始(秒)  ※未指定は空欄',
+        },
+        {
+          type: 'input',
+          name: 'endTime',
+          label: '再生終了(秒)  ※未指定は空欄',
+        },
+        {
+          type: 'checkbox',
+          name: 'loop',
+          label: 'ループ再生',
+        },
+      ],
+    },
+    buttons: [
+      { type: 'cancel', text: 'キャンセル' },
+      { type: 'submit', text: 'OK', primary: true },
+    ],
+    onSubmit: function (api: any) {
+      const data = api.getData();
+      const startVal =
+        typeof data.startTime === 'string' && data.startTime.trim() !== ''
+          ? parseFloat(data.startTime)
+          : -1;
+      const endVal =
+        typeof data.endTime === 'string' && data.endTime.trim() !== ''
+          ? parseFloat(data.endTime)
+          : -1;
+      const loopVal = data.loop as boolean;
+      applyMediaAttributes(editor, mediaElement, startVal, endVal, loopVal);
+      api.close();
+    },
+  });
+}
+
 // ---------- ヘルパー: カスタムツールバーボタン登録 ----------
 
 function setupToolbarButtons(editor: any) {
@@ -804,7 +926,7 @@ export default function TinyMCEBody({
           // Drag & Drop によるファイルアップロード
           editor.on('drop', (e: DragEvent) => handleEditorDrop(e, editor));
 
-          // Mermaid / KaTeX ブロックをダブルクリックしたらダイアログを開く
+          // Mermaid / KaTeX / Video / Audio ブロックをダブルクリックしたらダイアログを開く
           editor.on('DblClick', (e: any) => {
             let target = e.target as HTMLElement | null;
             while (target) {
@@ -817,6 +939,11 @@ export default function TinyMCEBody({
                 const katexTxt = target.getAttribute('katexTxt') ?? '';
                 const fontsize = target.getAttribute('katexFontsize') ?? '1.2';
                 openKatexDialog(editor, katexTxt, fontsize, target);
+                return;
+              }
+              const tagName = target.tagName?.toLowerCase();
+              if (tagName === 'video' || tagName === 'audio') {
+                openMediaDialog(editor, target);
                 return;
               }
               target = target.parentElement;
