@@ -5,6 +5,26 @@ describe('index.handleAnchorClick', () => {
 	let document: Document;
 	let scrollIntoViewMock: jest.Mock;
 
+	// Helper function to replace .click() and avoid code duplication.
+	// We dispatch a cancelable event so e.preventDefault() can actually stop the navigation.
+	const simulateClick = (element: HTMLElement) => {
+		element.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+	};
+
+	const preventNavigation = (e: Event) => e.preventDefault();
+
+	beforeAll(() => {
+		// JSDOM intentionally does not support full-page navigation.
+		// When our logic correctly ignores an external link, the click event bubbles up
+		// and triggers the native browser navigation, causing a "Not implemented: navigation" error.
+		// This global listener stops the native navigation attempt for the entire test suite.
+		window.addEventListener('click', preventNavigation);
+	});
+
+	afterAll(() => {
+		window.removeEventListener('click', preventNavigation);
+	});
+
 	beforeEach(() => {
 		document = window.document;
 		document.body.innerHTML = `
@@ -28,17 +48,17 @@ describe('index.handleAnchorClick', () => {
 	test('scrollIntoView is called even when the same link is clicked twice', () => {
 		const linkA = document.getElementById('link-a')!;
 
-		linkA.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		simulateClick(linkA);
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
 
-		linkA.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		simulateClick(linkA);
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(2);
 	});
 
 	test('scrollIntoView is called for each click when different links are clicked alternately', () => {
-		document.getElementById('link-a')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-		document.getElementById('link-b')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-		document.getElementById('link-a')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		simulateClick(document.getElementById('link-a')!);
+		simulateClick(document.getElementById('link-b')!);
+		simulateClick(document.getElementById('link-a')!);
 
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(3);
 	});
@@ -46,15 +66,9 @@ describe('index.handleAnchorClick', () => {
 	test('does not intercept external links (http://...#hash)', () => {
 		const linkExt = document.getElementById('link-ext')!;
 
-		const preventNavigation = (e: Event) => e.preventDefault();
-		window.addEventListener('click', preventNavigation);
+		simulateClick(linkExt);
 
-		try {
-			linkExt.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-			expect(scrollIntoViewMock).not.toHaveBeenCalled();
-		} finally {
-			window.removeEventListener('click', preventNavigation);
-		}
+		expect(scrollIntoViewMock).not.toHaveBeenCalled();
 	});
 
 	test('works with URL-encoded Japanese anchors', () => {
@@ -62,14 +76,14 @@ describe('index.handleAnchorClick', () => {
             <h2 id="セクション">日本語セクション</h2>
             <a id="link-ja" href="#%E3%82%BB%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3">日本語リンク</a>
         `;
-		document.getElementById('link-ja')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		simulateClick(document.getElementById('link-ja')!);
 		expect(scrollIntoViewMock).toHaveBeenCalledTimes(1);
 	});
 
 	test('does not throw when clicking a link to a missing anchor', () => {
 		document.body.innerHTML += '<a id="link-dead" href="#missing-section">dead link</a>';
 		expect(() => {
-			document.getElementById('link-dead')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+			simulateClick(document.getElementById('link-dead')!);
 		}).not.toThrow();
 	});
 });
