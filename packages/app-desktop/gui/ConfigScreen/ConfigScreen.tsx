@@ -448,7 +448,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			width: '100%',
 			padding: '8px 12px',
 			borderRadius: '4px',
-			border: `1px solid ${theme.colorBorder || '#ccc'}`,
+			border: `1px solid ${theme.dividerColor || '#ccc'}`,
 			backgroundColor: theme.backgroundColor,
 			color: theme.color,
 			fontSize: '14px',
@@ -461,7 +461,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					type="text"
 					placeholder={_('Search settings...')}
 					value={this.state.searchTerm}
-					onChange={(e) => this.setState({ searchTerm: e.target.value })}
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ searchTerm: e.target.value })}
 					style={searchBoxStyle}
 					aria-label={_('Search settings')}
 				/>
