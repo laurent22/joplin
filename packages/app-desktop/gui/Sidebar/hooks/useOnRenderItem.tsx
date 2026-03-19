@@ -74,7 +74,13 @@ const focusListItem = (item: HTMLElement|null) => {
 		// If the currently focused element is a tree item inside the same list,
 		// the user is navigating with the keyboard — always allow focus to move
 		// to the newly selected item so arrow-key scrolling is not interrupted.
-		const isKeyboardNavigating = !!activeTreeItem && itemList?.contains(activeTreeItem);
+		// Also treat any focused element that is contained inside the same
+		// sidebar list as keyboard navigation (this handles cases such as
+		// Shift+Tab or when focus is on a nested control that isn't a treeitem).
+		const isKeyboardNavigating = (
+			(!!activeTreeItem && itemList?.contains(activeTreeItem)) ||
+			(activeElement instanceof HTMLElement && itemList?.contains(activeElement))
+		);
 
 		// Avoid disturbing scroll while user is manually scrolling through the list.
 		// However, if focus was lost (activeElement -> <body>), or the user is
