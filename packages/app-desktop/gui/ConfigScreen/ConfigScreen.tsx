@@ -188,7 +188,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (searchMode) {
 			this.setState({
-				selectedSectionName: sectionName,
 				searchSectionFilter: sectionName,
 			});
 			return;
@@ -617,7 +616,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return (
 			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
-					selection={this.state.selectedSectionName}
+					selection={searchMode ? (sectionFilter ?? this.state.selectedSectionName) : this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
 					searchQuery={this.state.searchQuery}

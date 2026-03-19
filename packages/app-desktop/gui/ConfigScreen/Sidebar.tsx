@@ -39,18 +39,19 @@ export const StyledSearchContainer = styled.div`
 	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding / 2}px;
 `;
 
-export const StyledListItem = styled.a`
+export const StyledListItem = styled.button`
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: row;
+	width: 100%;
+	border: none;
 	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
 	background: ${(props: StyleProps) => props.selected ? props.theme.selectedColor2 : 'none'};
 	transition: 0.1s;
-	text-decoration: none;
+	text-align: left;
 	cursor: default;
 	opacity: ${(props: StyleProps) => props.disabled ? 0.3 : props.selected ? 1 : 0.8};
 	padding-left: ${(props: StyleProps) => props.isSubSection ? '35' : props.theme.mainPadding}px;
-	pointer-events: ${(props: StyleProps) => props.disabled ? 'none' : 'auto'};
 
 	&:hover {
 		background-color: ${(props: StyleProps) => props.disabled ? 'none' : props.theme.backgroundColorHover2};
@@ -161,22 +162,23 @@ export default function Sidebar(props: Props) {
 		const selected = props.selection === section.name;
 		const hasMatch = matchedSectionNames.has(section.name);
 		const isDisabled = isSearching && !hasMatch;
+		const isActiveTab = selected && !isDisabled;
 
 		return (
 			<StyledListItem
 				key={section.name}
-				href={isDisabled ? undefined : '#'}
+				type='button'
 				role='tab'
 				ref={(item: HTMLElement) => { buttonRefs.current[index] = item; }}
 
 				id={`setting-tab-${section.name}`}
 				aria-controls={`setting-section-${section.name}`}
-				aria-selected={selected}
+				aria-selected={isActiveTab}
 				aria-disabled={isDisabled}
-				tabIndex={selected ? 0 : -1}
+				tabIndex={isActiveTab ? 0 : -1}
 
 				isSubSection={Setting.isSubSection(section.name)}
-				selected={selected}
+				selected={isActiveTab}
 				disabled={isDisabled}
 				onClick={() => {
 					if (isDisabled) return;
