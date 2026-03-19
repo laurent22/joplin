@@ -45,6 +45,10 @@ describe('HtmlToMd', () => {
 				htmlToMdOptions.preserveColorStyles = true;
 			}
 
+			if (htmlFilename.indexOf('table_with') === 0 || htmlFilename.indexOf('table_default') === 0) {
+				htmlToMdOptions.preserveTableStyles = true;
+			}
+
 			const html = await readFile(htmlPath, 'utf8');
 			let expectedMd = await readFile(mdPath, 'utf8');
 
@@ -94,6 +98,36 @@ describe('HtmlToMd', () => {
 		const htmlToMd = new HtmlToMd();
 		expect(htmlToMd.parse('> 1 _2_ 3.pdf', { disableEscapeContent: true })).toBe('> 1 _2_ 3.pdf');
 		expect(htmlToMd.parse('> 1 _2_ 3.pdf', { disableEscapeContent: false })).toBe('\\> 1 \\_2_ 3.pdf');
+	});
+
+	it('should support tightLists option', async () => {
+		const htmlToMd = new HtmlToMd();
+		const html = '<ul><li><p><strong>Item 1</strong></p></li><li><p><strong>Item 2</strong></p></li><li><p><strong>Item 3</strong></p></li></ul>';
+
+		// Without tightLists, paragraphs inside list items produce extra blank lines
+		const looseResult = htmlToMd.parse(html, { tightLists: false });
+		expect(looseResult).toContain('\n    \n');
+
+		// With tightLists, list items are compact without blank lines
+		const tightResult = htmlToMd.parse(html, { tightLists: true });
+		expect(tightResult).toBe('- **Item 1**\n- **Item 2**\n- **Item 3**');
+	});
+
+	it('should support collapseMultipleBlankLines option', async () => {
+		const htmlToMd = new HtmlToMd();
+		const html = '<p>First</p><br><br><br><p>Second</p>';
+
+		// Without collapseMultipleBlankLines, multiple blank lines are preserved
+		const looseResult = htmlToMd.parse(html, { collapseMultipleBlankLines: false });
+		expect(looseResult).toContain('\n\n  \n');
+
+		// With collapseMultipleBlankLines, multiple blank lines are collapsed into one
+		const collapsedResult = htmlToMd.parse(html, { collapseMultipleBlankLines: true });
+		expect(collapsedResult).not.toContain('\n\n\n');
+		expect(collapsedResult).not.toContain('\n\n  \n');
+
+		// Verify that a single blank line is preserved (not fully removed)
+		expect(collapsedResult).toContain('\n\n');
 	});
 
 });

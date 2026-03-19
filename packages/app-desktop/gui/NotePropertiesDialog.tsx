@@ -7,7 +7,7 @@ import bridge from '../services/bridge';
 import shim from '@joplin/lib/shim';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import { formatDateTimeLocalToMs, formatMsToDateTimeLocal, formatMsToLocal } from '@joplin/utils/time';
 const { clipboard } = require('electron');
 const formatcoords = require('formatcoords');
@@ -45,7 +45,7 @@ interface State {
 const uniqueId = (key: string) => `note-properties-dialog-${key}`;
 
 const isPropertyDatetimeRelated = (key: string) => {
-	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time';
+	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time' || key === 'todo_completed';
 };
 
 class NotePropertiesDialog extends React.Component<Props, State> {

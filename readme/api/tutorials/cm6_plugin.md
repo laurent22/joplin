@@ -57,7 +57,7 @@ To do this, replace the contents of `webpack.config.js` with [the unreleased ver
 
 Now that the plugin has been created, we can create and register a CodeMirror content script.
 
-Start by opening `plugin.config.json`.It should look similar to this:
+Start by opening `plugin.config.json`. It should look similar to this:
 ```json
 {
 	"extraScripts": []

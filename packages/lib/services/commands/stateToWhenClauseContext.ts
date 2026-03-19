@@ -47,6 +47,7 @@ export interface WhenClauseContext {
 	noteTodoCompleted: boolean;
 	oneFolderSelected: boolean;
 	oneNoteSelected: boolean;
+	selectedFolderIsValid: boolean;
 	someNotesSelected: boolean;
 	syncStarted: boolean;
 	hasActivePluginEditor: boolean;
@@ -73,6 +74,14 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 	const settings = state.settings || {};
 
+	// Check whether the window's selected folder actually exists and is not
+	// deleted. This resolves the case where selectedFolderId is stale (e.g.
+	// new profile with no notebooks) or points to a deleted folder.
+	const selectedFolder = windowState.selectedFolderId
+		? BaseModel.byId(state.folders, windowState.selectedFolderId)
+		: null;
+	const selectedFolderIsValid = !!selectedFolder && !selectedFolder.deleted_time;
+
 	return {
 		// Application state
 		notesAreBeingSaved: stateUtils.hasNotesBeingSaved(state),
@@ -98,6 +107,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 
 		// Folder selection
 		oneFolderSelected: selectedFolderIds.length === 1,
+		selectedFolderIsValid,
 
 		// Current note properties
 		noteIsTodo: selectedNote ? !!selectedNote.is_todo : false,

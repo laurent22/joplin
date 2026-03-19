@@ -42,6 +42,7 @@ interface RendererPlugins {
 
 // /!\/!\ Note: the order of rules is important!! /!\/!\
 const rules: RendererRules = {
+	frontmatter: require('./MdToHtml/rules/frontmatter').default,
 	fence: require('./MdToHtml/rules/fence').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 	image: require('./MdToHtml/rules/image').default,
@@ -209,6 +210,8 @@ export interface RuleOptions {
 	allowedFilePrefixes?: string[];
 
 	platformName?: string;
+
+	showNoteLinkIcon?: boolean;
 }
 
 export default class MdToHtml implements MarkupRenderer {

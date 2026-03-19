@@ -247,4 +247,13 @@ describe('import-enex-md-gen', () => {
 		expect(note4.body).toBe('[Note 5](https://joplinapp.org)');
 	});
 
+	it('should remove empty hidden divs from imported notes', async () => {
+		const empty = await enexXmlToMd('<div style="display:none;--en-chs:&quot;metadata&quot;"> </div><div>Test content</div>', [], []);
+		const withContent = await enexXmlToMd('<div style="display:none;">Important data</div><div>Visible text</div>', [], []);
+
+		expect(empty).not.toContain('<div style="display: none;">');
+		expect(empty).toContain('Test content');
+		expect(withContent).toContain('<div style="display: none;">');
+		expect(withContent).toContain('Important data');
+	});
 });

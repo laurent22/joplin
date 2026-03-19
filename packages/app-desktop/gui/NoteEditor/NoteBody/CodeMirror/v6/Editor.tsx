@@ -1,15 +1,11 @@
 import * as React from 'react';
 import { ForwardedRef, RefObject } from 'react';
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { EditorProps, LogMessageCallback, OnEventCallback, ContentScriptData } from '@joplin/editor/types';
+import { EditorProps, LogMessageCallback, OnEventCallback } from '@joplin/editor/types';
 import createEditor from '@joplin/editor/CodeMirror/createEditor';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
-import shim from '@joplin/lib/shim';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
 import setupVim from '@joplin/editor/CodeMirror/utils/setupVim';
-import { dirname } from 'path';
 import useKeymap from './utils/useKeymap';
 import CommandService from '@joplin/lib/services/CommandService';
 import { SearchMarkers } from '../../../utils/useSearchMarkers';
@@ -18,6 +14,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { parseResourceUrl } from '@joplin/lib/urlUtils';
 import { resourceFilename } from '@joplin/lib/models/utils/resourceUtils';
 import getResourceBaseUrl from '../../../utils/getResourceBaseUrl';
+import useContentScriptRegistration from './utils/useContentScriptRegistration';
 
 interface Props extends EditorProps {
 	style: React.CSSProperties;
@@ -64,37 +61,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		return editor;
 	}, [editor]);
 
-	useEffect(() => {
-		if (!editor) {
-			return;
-		}
-
-		const contentScripts: ContentScriptData[] = [];
-		for (const pluginId in props.pluginStates) {
-			const pluginState = props.pluginStates[pluginId];
-			const codeMirrorContentScripts = pluginState.contentScripts[ContentScriptType.CodeMirrorPlugin] ?? [];
-
-			for (const contentScript of codeMirrorContentScripts) {
-				contentScripts.push({
-					pluginId,
-					contentScriptId: contentScript.id,
-					contentScriptJs: () => shim.fsDriver().readFile(contentScript.path),
-					loadCssAsset: (name: string) => {
-						const assetPath = dirname(contentScript.path);
-						const path = shim.fsDriver().resolveRelativePathWithinDir(assetPath, name);
-						return shim.fsDriver().readFile(path, 'utf8');
-					},
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					postMessageHandler: (message: any) => {
-						const plugin = PluginService.instance().pluginById(pluginId);
-						return plugin.emitContentScriptMessage(contentScript.id, message);
-					},
-				});
-			}
-		}
-
-		void editor.setContentScripts(contentScripts);
-	}, [editor, props.pluginStates]);
+	useContentScriptRegistration({ editor, pluginStates: props.pluginStates });
 
 	useEffect(() => {
 		if (!editorContainerRef.current) return () => {};

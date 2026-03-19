@@ -29,7 +29,14 @@ const SettingsButton: FunctionComponent<Props> = props => {
 		<View style={styles.settingContainer}>
 			<View style={{ flex: 1, flexDirection: 'column' }}>
 				<View style={{ flex: 1 }}>
-					<Button title={props.title} onPress={props.clickHandler} disabled={!!props.disabled} />
+					<Button
+						title={props.title}
+						onPress={props.clickHandler}
+						disabled={!!props.disabled}
+						// Workaround for https://github.com/facebook/react-native/issues/54293:
+						// Force the button to reload when the enabled state changes.
+						key={`button-${!!props.disabled}`}
+					/>
 				</View>
 				{props.statusComponent}
 				{descriptionComp}

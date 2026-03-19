@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, powerMonitor } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -16,7 +16,7 @@ const fs = require('fs-extra');
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
-import handleCustomProtocols, { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
+import handleCustomProtocols, { CustomProtocolHandlers } from './utils/customProtocols/handleCustomProtocols';
 import { clearTimeout, setTimeout } from 'timers';
 import { resolve } from 'path';
 import { defaultWindowId } from '@joplin/lib/reducer';
@@ -68,7 +68,7 @@ export default class ElectronAppWrapper {
 
 	private initialCallbackUrl_: string = null;
 	private updaterService_: AutoUpdaterService = null;
-	private customProtocolHandler_: CustomProtocolHandler = null;
+	private customProtocolHandlers_: CustomProtocolHandlers|null = null;
 	private updatePollInterval_: ReturnType<typeof setTimeout>|null = null;
 
 	private profileLocker_: FileLocker|null = null;
@@ -176,6 +176,10 @@ export default class ElectronAppWrapper {
 	public async handleAppFailure(errorMessage: string, canIgnore: boolean, isTesting?: boolean) {
 		await bridge().captureException(new Error(errorMessage));
 
+		if (this.win_ && this.win_.isDestroyed()) {
+			return;
+		}
+
 		const buttons = [];
 		buttons.push(_('Quit'));
 		const exitIndex = 0;
@@ -199,7 +203,7 @@ export default class ElectronAppWrapper {
 			//
 			// Also only run this if not testing (crashing the renderer breaks automated
 			// tests).
-			if (this.win_ && !this.win_.webContents.isCrashed() && !isTesting) {
+			if (this.win_ && !this.win_.isDestroyed() && !this.win_.webContents.isCrashed() && !isTesting) {
 				this.win_.webContents.forcefullyCrashRenderer();
 			}
 		} else if (response === exitIndex) {
@@ -401,6 +405,15 @@ export default class ElectronAppWrapper {
 		};
 		addWindowEventHandlers(this.win_.webContents);
 
+		// BrowserWindow 'focus' fires when the OS gives focus to the application window
+		// (i.e. coming from another app or from the taskbar), not on intra-app focus switches.
+		// We use a dedicated IPC channel so the renderer can trigger an immediate sync on
+		// OS-level focus gain without conflating it with the 'window-focused' channel that
+		// handles Joplin-internal window routing.
+		this.win_.on('focus', () => {
+			this.win_?.webContents.send('main-window-focused');
+		});
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.win_.on('close', (event: any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
@@ -576,6 +589,17 @@ export default class ElectronAppWrapper {
 	public quit() {
 		this.onExit();
 		this.electronApp_.quit();
+	}
+
+	public quitWithSyncCheck(
+		dispatch: (action: { type: string; [key: string]: unknown })=> void,
+		syncPending: boolean,
+	) {
+		if (syncPending) {
+			dispatch({ type: 'QUIT_SYNC_DIALOG_OPEN' });
+		} else {
+			this.quit();
+		}
 	}
 
 	public exit(errorCode = 0) {
@@ -816,8 +840,12 @@ export default class ElectronAppWrapper {
 		}
 	};
 
-	public getCustomProtocolHandler() {
-		return this.customProtocolHandler_;
+	public getContentProtocolHandler() {
+		return this.customProtocolHandlers_.appContent;
+	}
+
+	public getPluginProtocolHandler() {
+		return this.customProtocolHandlers_.pluginContent;
 	}
 
 	private async fixLinuxAccessibility_() {
@@ -857,7 +885,7 @@ export default class ElectronAppWrapper {
 
 		await this.fixLinuxAccessibility_();
 
-		this.customProtocolHandler_ = handleCustomProtocols();
+		this.customProtocolHandlers_ = handleCustomProtocols();
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {
@@ -876,6 +904,11 @@ export default class ElectronAppWrapper {
 		this.electronApp_.on('open-url', (event: any, url: string) => {
 			event.preventDefault();
 			void this.openCallbackUrl(url);
+		});
+
+		// When the OS wakes from sleep, notify the renderer so it can trigger an immediate sync.
+		powerMonitor.on('resume', () => {
+			this.win_?.webContents.send('system-resumed');
 		});
 	}
 

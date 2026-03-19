@@ -35,6 +35,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	private readonly menuOptions_: MenuOptionType[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
+	private readonly logListRef_ = React.createRef<FlatList>();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static navigationOptions(): any {
@@ -65,12 +66,13 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	private refreshLogTimeout: any = null;
 	public override componentDidUpdate(_prevProps: Props, prevState: State) {
 		if ((prevState?.filter ?? '') !== (this.state.filter ?? '')) {
+
 			// We refresh the log only after a brief delay -- this prevents the log from updating
 			// with every keystroke in the filter input.
 			if (this.refreshLogTimeout) {
 				clearTimeout(this.refreshLogTimeout);
 			}
-			setTimeout(() => {
+			this.refreshLogTimeout = setTimeout(() => {
 				this.refreshLogTimeout = null;
 				void this.refreshLogEntries();
 			}, 600);
@@ -165,6 +167,10 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		this.setState({
 			logEntries: logEntries,
 			showErrorsOnly: showErrorsOnly,
+		}, () => {
+			if (this.state.filter !== undefined) {
+				this.logListRef_.current?.scrollToOffset({ offset: 0, animated: false });
+			}
 		});
 	}
 
@@ -218,6 +224,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 					onSearchButtonPress={this.onToggleFilterInput}/>
 				{this.state.filter !== undefined ? filterInput : null}
 				<FlatList
+					ref={this.logListRef_}
 					data={this.state.logEntries}
 					initialNumToRender={100}
 					renderItem={this.onRenderLogRow}

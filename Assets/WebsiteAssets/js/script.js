@@ -124,7 +124,53 @@ async function setupDownloadPage() {
 	}
 }
 
+// Supported locale path prefixes (language code -> URL path)
+// Most languages use their code directly (fr, de), with exceptions mapped here
+const localePathOverrides = {
+	'zh': 'cn',
+};
+
+// List of supported language codes
+const supportedLanguages = ['fr', 'de', 'zh'];
+
+function getLocalePath(langCode) {
+	const pathPrefix = localePathOverrides[langCode] || langCode;
+	return '/' + pathPrefix;
+}
+
+function setupLocaleRedirect() {
+	// Only redirect on the front page (root path or index.html)
+	const path = window.location.pathname;
+	const isRootPage = path === '/' || path === '/index.html' || path === '';
+	if (!isRootPage) return;
+
+	// Check if user has explicitly chosen to stay on current locale
+	const localePreference = (localStorage.getItem('joplin-locale-preference') || '').toLowerCase();
+	if (localePreference === 'en') return;
+
+	// Get user's preferred language from browser
+	const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+
+	// Extract the base language code (e.g., 'fr' from 'fr-ca')
+	const langCode = browserLang.split('-')[0];
+
+	// Check if we support this language
+	if (!supportedLanguages.includes(langCode)) return;
+
+	window.location.href = getLocalePath(langCode) + '/';
+}
+
+// Allow users to switch language and remember their preference
+function setLocalePreference(locale, url) {
+	localStorage.setItem('joplin-locale-preference', locale);
+	window.location.href = url;
+}
+
+// Expose globally for language switcher links
+window.setLocalePreference = setLocalePreference;
+
 $(function () {
 	setupMobileMenu();
+	setupLocaleRedirect();
 	void setupDownloadPage();
 });

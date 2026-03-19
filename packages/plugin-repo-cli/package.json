@@ -21,7 +21,7 @@
     "@joplin/lib": "~3.6",
     "@joplin/tools": "~3.6",
     "@joplin/utils": "~3.6",
-    "fs-extra": "11.3.2",
+    "fs-extra": "11.3.3",
     "gh-release-assets": "2.0.1",
     "node-fetch": "2.6.7",
     "source-map-support": "0.5.21",

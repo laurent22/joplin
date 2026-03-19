@@ -46,7 +46,7 @@ import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
-const WebDavApi = require('../WebDavApi');
+import WebDavApi from '../WebDavApi';
 const DropboxApi = require('../DropboxApi');
 import JoplinServerApi, { Session } from '../JoplinServerApi';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
@@ -1137,34 +1137,6 @@ export const mockMobilePlatform = (platform: MobilePlatform) => {
 	};
 };
 
-// Waits for callback to not throw. Similar to react-native-testing-library's waitFor, but works better
-// with Joplin's mix of real and fake Jest timers.
-const realSetTimeout = setTimeout;
-export const waitFor = async (callback: ()=> Promise<void>) => {
-	const timeout = 10_000;
-	const startTime = performance.now();
-	let passed = false;
-	let lastError: Error|null = null;
-
-	while (!passed && performance.now() - startTime < timeout) {
-		try {
-			await callback();
-			passed = true;
-			lastError = null;
-		} catch (error) {
-			lastError = error;
-
-			await new Promise<void>(resolve => {
-				realSetTimeout(() => resolve(), 10);
-			});
-		}
-	}
-
-	if (lastError) {
-		throw lastError;
-	}
-};
-
 export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 	if (typeof jest === 'undefined') {
 		throw new Error('Fake timers are only supported in jest.');
@@ -1221,20 +1193,34 @@ export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
 };
 
 export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
-	// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
-	// shows how to use .spyOn to hide warnings
-	let warningMock;
-	try {
-		warningMock = jest.spyOn(console, 'warn');
-		warningMock.mockImplementation((message, ...args) => {
+	type MockSlice = { mockRestore(): void };
+	const mocks: MockSlice[] = [];
+
+	const mockConsoleFunction = (key: 'warn'|'error') => {
+		const mock = jest.spyOn(console, key);
+		mocks.push(mock);
+
+		// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
+		// shows how to use .spyOn to hide warnings
+		mock.mockImplementation((message?: unknown, ...args: unknown[]) => {
 			const fullMessage = [message, ...args].join(' ');
 			if (!fullMessage.match(warningRegex)) {
-				console.error(`Unexpected warning: ${message}`, ...args);
+				// Avoid recursively calling the mock:
+				mock.mockRestore();
+
+				console.error(`Unexpected warning: ${message}\nNote: Further warnings will not be silenced.`, ...args);
 			}
 		});
+	};
+
+	try {
+		mockConsoleFunction('warn');
+		mockConsoleFunction('error');
 		return await task();
 	} finally {
-		warningMock.mockRestore();
+		for (const mock of mocks) {
+			mock.mockRestore();
+		}
 	}
 };
 

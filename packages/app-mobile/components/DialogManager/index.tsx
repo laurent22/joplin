@@ -101,10 +101,8 @@ const DialogManager: React.FC<Props> = props => {
 				visible={!!dialogComponents.length}
 				scrollOverflow={true}
 				containerStyle={styles.modalContainer}
-				animationType='fade'
 				backgroundColor={theme.backgroundColorTransparent2}
-				transparent={true}
-				onRequestClose={dialogModels[dialogComponents.length - 1]?.onDismiss}
+				onClose={dialogModels[dialogComponents.length - 1]?.onDismiss}
 			>
 				{dialogComponents}
 			</Modal>

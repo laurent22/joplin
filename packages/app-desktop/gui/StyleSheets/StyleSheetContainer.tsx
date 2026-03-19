@@ -14,7 +14,7 @@ import { useEffect, useMemo, useState } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import { themeStyle } from '@joplin/lib/theme';
-import useDocument from '../hooks/useDocument';
+import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';

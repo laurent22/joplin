@@ -1,10 +1,11 @@
 use color_eyre::eyre::{Result, eyre};
 pub use parser::Parser;
-use sanitize_filename::sanitize;
 use std::{io::Read, panic};
 use wasm_bindgen::{JsError, prelude::wasm_bindgen};
 
 use parser_utils::{FileHandle, fs_driver, log};
+
+use crate::errors::ErrorKind;
 
 mod errors;
 mod notebook;
@@ -90,6 +91,8 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
         .map(|entry| String::from(entry.name()))
         .collect();
 
+    log!("Found {} files in onepkg archive.", file_paths.len());
+
     let build_output_dir = |file_path_in_archive: &str| -> Result<(String, String)> {
         let mut output_path = String::from(output_dir);
 
@@ -100,36 +103,57 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
 
         let path_segments_without_filename = &path_segments[0..path_segments.len() - 1];
         for part in path_segments_without_filename {
-            output_path = fs_driver().join(&output_path, &sanitize(part));
+            output_path = fs_driver().join(&output_path, &fs_driver().sanitize_file_name(part));
             fs_driver().make_dir(&output_path)?;
         }
 
         let file_name = path_segments.last().unwrap_or(&"");
-        Ok((output_path, sanitize(file_name)))
+        Ok((output_path, fs_driver().sanitize_file_name(file_name)))
     };
 
     let mut parser = Parser::new();
-    for file_path in file_paths {
-        log!("File path {file_path}");
+    let results = file_paths
+        .iter()
+        .map(|file_path| -> Result<()> {
+            log!("File path {file_path}");
 
-        if !file_path.ends_with(".one") {
-            log!("Skipping non-section file {file_path}");
-            continue;
+            if !file_path.ends_with(".one") {
+                log!("Skipping non-section file {file_path}");
+                return Ok(());
+            }
+
+            log!("Rendering {file_path}");
+
+            let data = {
+                let mut file_data = cabinet.read_file(&file_path)?;
+                let mut data = Vec::new();
+                file_data.read_to_end(&mut data)?;
+                data
+            };
+
+            let (output_path, file_name) = build_output_dir(&file_path)?;
+            let section = parser.parse_section_from_data(&data, &file_name)?;
+            section::Renderer::new().render(&section, output_path)?;
+            Ok(())
+        })
+        .zip(&file_paths);
+
+    let mut error_messages = vec![];
+    for (result, file_path) in results {
+        if let Err(error) = result {
+            let file_name = fs_driver().get_file_name(file_path).unwrap_or_default();
+            error_messages.push(format!("Error on file {file_name}: {error}"));
         }
-
-        log!("Rendering {file_path}");
-
-        let data = {
-            let mut file_data = cabinet.read_file(&file_path)?;
-            let mut data = Vec::new();
-            file_data.read_to_end(&mut data)?;
-            data
-        };
-
-        let (output_path, file_name) = build_output_dir(&file_path)?;
-        let section = parser.parse_section_from_data(&data, &file_name)?;
-        section::Renderer::new().render(&section, output_path)?;
     }
 
-    Ok(())
+    if error_messages.len() > 0 {
+        Err(ErrorKind::OnePkgImportFailure(format!(
+            "{} section(s) failed to import: {}",
+            error_messages.len(),
+            error_messages.join("\n")
+        ))
+        .into())
+    } else {
+        Ok(())
+    }
 }

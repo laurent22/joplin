@@ -24,7 +24,7 @@ In both cases you can either import a single file or a directory that contains m
 
 - If you import a directory, Joplin will create a notebook per file and import the notes into them.
 
-For a video tutorial on how to export your notebooks from Evernote and import them on Joplin, please click on the thumbnail:
+Watch this short video to learn how to export your notebooks from Evernote and import them on Joplin:
 
 [![Watch the video](https://img.youtube.com/vi/_nSrvfUwORM/hqdefault.jpg)](https://www.youtube.com/watch?v=_nSrvfUwORM)  
 
@@ -53,8 +53,8 @@ This requires Joplin >= v3.5.1 and a OneNote notebook stored on OneDrive. This a
 2. Click on "Show all notebooks". This should open a OneDrive page.
 3. On OneDrive, go to "My Files" and download the folder containing the OneNote notebooks. This should download a ZIP file.
 	- Right-click on the folder, then click "download". (Move the OneNote notebooks to a new folder, if necessary).
-3. Follow the instructions to download the backup. It should be a ZIP file.
-4. Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
+4. Follow the instructions to download the backup. It should be a ZIP file.
+5. Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
 
 #### Importing from the OneNote Windows desktop app
 
@@ -67,7 +67,7 @@ This requires Joplin >=v3.5.5 and the OneNote Windows desktop app. Be aware that
 4. Open the Joplin desktop application.
 5. From the "File" > "Import" menu, select "ZIP - OneNote Notebook". In the file picker, select the just-exported file.
 
-For a video tutorial on how to export your notebooks from Onenote and import them on Joplin, please click on the thumbnail:
+Watch this short video to learn how to export your notebooks from Onenote and import them on Joplin:
 
 [![Watch the video](https://img.youtube.com/vi/xgYcLZsw0IA/hqdefault.jpg)](https://www.youtube.com/watch?v=xgYcLZsw0IA&t=2s)
 

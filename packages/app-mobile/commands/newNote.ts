@@ -13,15 +13,15 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, body = '', todo = false, options: GotoNoteOptions = null) => {
-			const folderId = await Folder.getValidActiveFolder();
-			if (!folderId) {
+			const folder = await Folder.getValidActiveFolder();
+			if (!folder) {
 				logger.warn('Not creating new note -- no active folder ID.');
 				return;
 			}
 
 			const note = await Note.save({
 				body,
-				parent_id: folderId,
+				parent_id: folder.id,
 				is_todo: todo ? 1 : 0,
 			}, { provisional: true });
 

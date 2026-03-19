@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, TextInput, Platform, ScrollView, Text as TextNative } from 'react-native';
+import { View, StyleSheet, TextInput, ScrollView, Text as TextNative } from 'react-native';
 import { AppState } from '../../utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Revision from '@joplin/lib/models/Revision';
@@ -23,6 +23,7 @@ import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/get
 import { DialogContext } from '../DialogManager';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 import { OnScrollCallback } from '../NoteBodyViewer/types';
+import TextWrapCalculator from './Notes/TextWrapCalculator';
 
 interface Props {
 	themeId: number;
@@ -139,6 +140,8 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const [initialScroll, setInitialScroll] = useState(0);
 	const [hasRevisions, setHasRevisions] = useState(false);
 	const [multiline, setMultiline] = useState(false);
+	const [showMultilineToggle, setShowMultilineToggle] = useState<boolean | null>(null);
+	const [titleContainerWidth, setTitleContainerWidth] = useState(0);
 
 	const options = useMemo(() => {
 		const result = [];
@@ -219,7 +222,12 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		>{restoreButtonTitle}</PrimaryButton>
 	);
 
-	const titleToggleButton = Platform.OS === 'web' ? null :
+	const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
+		setShowMultilineToggle(showToggle);
+		setMultiline(enableMultiline);
+	};
+
+	const titleToggleButton = !showMultilineToggle ? null :
 		<IconButton
 			icon={(!multiline && 'menu-down') || (multiline && 'menu-up')}
 			accessibilityLabel={(!multiline && _('Expand title')) || (multiline && _('Collapse title'))}
@@ -229,7 +237,24 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		/>;
 
 	const titleComponent = (
-		<View style={styles.titleViewContainer}>
+		<View
+			style={styles.titleViewContainer}
+			onLayout={(e) => {
+				const width = e.nativeEvent.layout.width;
+				if (width !== titleContainerWidth) {
+					setTitleContainerWidth(width);
+				}
+			}}
+		>
+			<TextWrapCalculator
+				textCompStyle={styles.titleText}
+				textCompContainerWidth={titleContainerWidth}
+				showMultilineToggle={showMultilineToggle}
+				multiline={multiline}
+				text={note?.title ?? ''}
+				updateState={textWrapCalculator_updateState}
+				readOnly={true}
+			/>
 			{
 				multiline ?
 					<ScrollView

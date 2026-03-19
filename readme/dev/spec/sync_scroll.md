@@ -67,7 +67,7 @@ For correct operation, the map should be discarded, when it becomes outdated, su
 
 ### Implementation Details
 
-The implementation details are out of the scope this document and described in the following pull requests.
+The implementation details are out of the scope of this document and described in the following pull requests.
 
 - [Desktop: Fix #5708: Scroll positions are remembered/preserved (Line-Percent-based Sync Scroll) by ken1kob - Pull Request #5826 - laurent22/joplin](https://github.com/laurent22/joplin/pull/5826)
 - [Desktop: Fix #2242: Sync-Scroll for Markdown Editor and Viewer by ken1kob - Pull Request #5512 - laurent22/joplin](https://github.com/laurent22/joplin/pull/5512)

@@ -1,5 +1,10 @@
 name: Build macOS M1
 on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.ref == 'refs/heads/dev' && github.run_id || format('{0}-{1}', github.workflow, github.ref) }}
+  cancel-in-progress: true
+
 jobs:
   Main:
     # We always process desktop release tags, because they also publish the release
@@ -28,7 +33,7 @@ jobs:
       # See github-action-main.yml for explanation
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
 
       - name: Set Publish Flag
         run: |

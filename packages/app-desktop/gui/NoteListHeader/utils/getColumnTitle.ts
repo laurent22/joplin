@@ -2,6 +2,7 @@ import { _ } from '@joplin/lib/locale';
 import { ColumnName } from '@joplin/lib/services/plugins/api/noteListType';
 
 const titles: Record<ColumnName, ()=> string> = {
+	'note.checkboxes': () => _('Checkbox completion'),
 	'note.folder.title': () => _('Notebook: %s', _('Title')),
 	'note.is_todo': () => _('To-do'),
 	'note.latitude': () => _('Latitude'),
@@ -16,6 +17,7 @@ const titles: Record<ColumnName, ()=> string> = {
 };
 
 const titlesForHeader: Partial<Record<ColumnName, ()=> string>> = {
+	'note.checkboxes': () => '◐',
 	'note.is_todo': () => '✓',
 };
 

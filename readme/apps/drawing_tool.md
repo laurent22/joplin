@@ -23,6 +23,7 @@ Clicking "Draw picture" adds a new drawing to the note. When Joplin's note viewe
 ### Video tutorial
 
 Watch this short video to learn how to add a drawing to a note on mobile app:
+
 [![Watch the video](https://img.youtube.com/vi/B21GpLXbGWE/hqdefault.jpg)](https://www.youtube.com/watch?v=B21GpLXbGWE)
 
 ### Editing an existing drawing
@@ -56,7 +57,8 @@ For more ways to edit existing drawings on desktop, see the [Freehand Drawing pl
 
 ### Video tutorial
 
-Watch this short video to learn how to add a drawing to a note on desktop app click on the thumbnail:
+Watch this short video to learn how to add a drawing to a note on the desktop app.
+
 [![Watch the video](https://img.youtube.com/vi/TK1RhTlgAlA/hqdefault.jpg)](https://www.youtube.com/watch?v=TK1RhTlgAlA)
 
 ## The editor
@@ -97,7 +99,7 @@ Most tool menus have a help button (<img alt="help" src="/images/draw/help-icon.
 
 Drawings are saved as Joplin resources using the [SVG image format](https://en.wikipedia.org/wiki/SVG).
 
-This means that it should be possible to view and/or edit and view drawings in other apps that support SVG:
+This means that it should be possible to view and/or edit drawings in other apps that support SVG:
 
 <figure>
   <img src="/images/draw/drawing-opened-in-other-apps.png" alt=""/>

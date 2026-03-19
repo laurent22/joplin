@@ -22,13 +22,31 @@ const extractMiddle = (value: bigint, halfSize: bigint) => {
 	return value;
 };
 
+export interface RandomState {
+	value: bigint|string;
+	step: bigint|string;
+}
+
 export default class SeededRandom {
 	private value_: bigint;
 	private nextStep_: bigint = step;
 	private halfSize_ = BigInt(32);
 
-	public constructor(seed: number|bigint) {
-		this.value_ = typeof seed === 'number' ? BigInt(seed) : seed;
+	public constructor(
+		seed: number|bigint|string,
+	) {
+		this.value_ = typeof seed !== 'bigint' ? BigInt(seed) : seed;
+	}
+
+	public static fromState({ value, step }: RandomState) {
+		const random = new SeededRandom(value);
+		random.nextStep_ = typeof step !== 'bigint' ? BigInt(step) : step;
+		return random;
+	}
+
+	// Returns a state that can be used to save/restore this random number generator.
+	public get state(): RandomState {
+		return { value: this.value_, step: this.nextStep_ };
 	}
 
 	public next() {

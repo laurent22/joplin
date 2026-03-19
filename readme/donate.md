@@ -14,7 +14,7 @@ Patreon | [![Become a patron](https://raw.githubusercontent.com/laurent22/joplin
 Liberapay | [![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/laurent22/donate)
 Bank Transfer | **IBAN:** GB41 REVO 2301 2058 6000 84 <br>**BIC/SWIFT:** REVOGB21
 
-## Other way to support the development
+## Other ways to support the development
 
 Finally, there are other ways to support the development of Joplin:
 

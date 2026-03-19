@@ -210,4 +210,47 @@ describe('CodeMirror5Emulation', () => {
 			{ line: 0, ch: 5 },
 		)).toThrow(/is not an integer/i);
 	});
+
+	it('heightAtLine for a line past the document should be greater than for the last line', () => {
+		const codeMirror = makeCodeMirrorEmulation('line1\nline2\nline3');
+
+		// Mock lineBlockAt to return a block with non-zero height so that the
+		// distinction between top and top+height is observable in the test.
+		const mockLineBlock = { top: 900, bottom: 1000, height: 100, from: 0, to: 0 };
+		jest.spyOn(codeMirror.editor, 'lineBlockAt').mockReturnValue(mockLineBlock as never);
+
+		const lineCount = codeMirror.lineCount();
+
+		const heightAtLastLine = codeMirror.heightAtLine(lineCount - 1, 'local');
+		const heightPastEnd = codeMirror.heightAtLine(lineCount, 'local');
+
+		expect(heightPastEnd).toBeGreaterThan(heightAtLastLine);
+	});
+
+	it('heightAtLine for a line past the document should be greater than for the last line, given one long line', () => {
+		const singleLine = 'Very long line of text. '.repeat(400);
+		const codeMirror = makeCodeMirrorEmulation(`${singleLine}`);
+
+		// Mock lineBlockAt to return a block with non-zero height so that the
+		// distinction between top and top+height is observable in the test.
+		const mockLineBlock = { top: 900, bottom: 1000, height: 100, from: 0, to: 0 };
+		jest.spyOn(codeMirror.editor, 'lineBlockAt').mockReturnValue(mockLineBlock as never);
+
+		const lineCount = codeMirror.lineCount();
+
+		const heightAtLastLine = codeMirror.heightAtLine(lineCount - 1, 'local');
+		const heightPastEnd = codeMirror.heightAtLine(lineCount, 'local');
+
+		expect(heightPastEnd).toBeGreaterThan(heightAtLastLine);
+	});
+
+	it('heightAtLine should return a non-negative value for valid line numbers', () => {
+		const codeMirror = makeCodeMirrorEmulation('first\nsecond\nthird');
+		const lineCount = codeMirror.lineCount();
+
+		// Test all lines from top to bottom of document
+		for (let i = 0; i <= lineCount; i++) {
+			expect(codeMirror.heightAtLine(i, 'local')).toBeGreaterThanOrEqual(0);
+		}
+	});
 });
