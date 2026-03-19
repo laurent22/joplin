@@ -505,7 +505,7 @@ function attachAudioSettingsButtons(editor: any): void {
     // <span class="joplin-audio-wrapper"> でラップ
     const wrapper = editor.getDoc().createElement('span');
     wrapper.className = 'joplin-audio-wrapper';
-    wrapper.setAttribute('contenteditable', 'false');
+    wrapper.setAttribute('contenteditable', 'true');
     audio.parentNode?.insertBefore(wrapper, audio);
     wrapper.appendChild(audio);
     // 設定ボタンを追加
