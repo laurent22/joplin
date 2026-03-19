@@ -464,6 +464,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ searchTerm: e.target.value })}
 					style={searchBoxStyle}
 					aria-label={_('Search settings')}
+					tabIndex={-1} /* ← ADD THIS */
 				/>
 			</div>
 		) : null;
