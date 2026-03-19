@@ -1,13 +1,13 @@
-import Resource, { NoteAttachmentSortDirection, NoteAttachmentSortField } from '@joplin/lib/models/Resource';
+import Resource, { NoteResourceSortDirection, NoteResourceSortField } from '@joplin/lib/models/Resource';
 import markdownUtils from '@joplin/lib/markdownUtils';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 
-interface NoteAttachmentSortState {
-	sortField: NoteAttachmentSortField;
-	sortDirection: NoteAttachmentSortDirection;
+interface NoteResourceSortState {
+	sortField: NoteResourceSortField;
+	sortDirection: NoteResourceSortDirection;
 }
 
-export const nextSortState = (currentField: NoteAttachmentSortField, currentDirection: NoteAttachmentSortDirection, nextField: NoteAttachmentSortField): NoteAttachmentSortState => {
+export const nextSortState = (currentField: NoteResourceSortField, currentDirection: NoteResourceSortDirection, nextField: NoteResourceSortField): NoteResourceSortState => {
 	if (nextField === currentField) {
 		return {
 			sortField: currentField,

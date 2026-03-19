@@ -172,8 +172,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('ProfileSwitcher');
 	};
 
-	private noteAttachmentsButtonPress_ = () => {
-		void NavService.go('NoteAttachments');
+	private noteResourcesButtonPress_ = () => {
+		void NavService.go('NoteResources');
 	};
 
 	private fixSearchEngineIndexButtonPress_ = async () => {
@@ -586,7 +586,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (section.name === 'tools') {
 			addSettingButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_);
-			addSettingButton('note_attachments_button', _('Note attachments'), this.noteAttachmentsButtonPress_);
+			addSettingButton('note_resources_button', _('Note attachments'), this.noteResourcesButtonPress_);
 			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
 			addSettingButton('log_button', _('Log'), this.logButtonPress_);
 			addSettingButton('deletion_log_button', _('Deletion log'), this.deletionLogButtonPress_);

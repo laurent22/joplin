@@ -38,18 +38,18 @@ export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
 	return s[status];
 };
 
-export type NoteAttachmentSortField = 'title' | 'size';
-export type NoteAttachmentSortDirection = 'asc' | 'desc';
+export type NoteResourceSortField = 'title' | 'size';
+export type NoteResourceSortDirection = 'asc' | 'desc';
 
-export interface NoteAttachmentQueryOptions {
+export interface NoteResourceQueryOptions {
 	searchQuery?: string;
-	sortField?: NoteAttachmentSortField;
-	sortDirection?: NoteAttachmentSortDirection;
+	sortField?: NoteResourceSortField;
+	sortDirection?: NoteResourceSortDirection;
 	limit?: number;
 	offset?: number;
 }
 
-export interface NoteAttachmentQueryResult {
+export interface NoteResourceQueryResult {
 	items: ResourceEntity[];
 	hasMore: boolean;
 }
@@ -649,11 +649,11 @@ export default class Resource extends BaseItem {
 		}
 	}
 
-	public static async noteAttachments(options: NoteAttachmentQueryOptions = {}): Promise<NoteAttachmentQueryResult> {
+	public static async noteResources(options: NoteResourceQueryOptions = {}): Promise<NoteResourceQueryResult> {
 		const limit = options.limit ? Math.max(1, options.limit) : 50;
 		const offset = options.offset ? Math.max(0, options.offset) : 0;
-		const sortField: NoteAttachmentSortField = options.sortField === 'size' ? 'size' : 'title';
-		const sortDirection: NoteAttachmentSortDirection = options.sortDirection === 'desc' ? 'desc' : 'asc';
+		const sortField: NoteResourceSortField = options.sortField === 'size' ? 'size' : 'title';
+		const sortDirection: NoteResourceSortDirection = options.sortDirection === 'desc' ? 'desc' : 'asc';
 
 		const whereClauses: string[] = [];
 		const whereParams: string[] = [];

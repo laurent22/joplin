@@ -745,7 +745,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
-			NoteAttachments: { screen: NoteAttachmentsScreen },
+			NoteResources: { screen: NoteAttachmentsScreen },
 			Config: { screen: ConfigScreen },
 			DocumentScanner: { screen: DocumentScanner },
 		};
