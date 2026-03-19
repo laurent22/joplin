@@ -509,10 +509,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				...theme.textStyle,
 			};
 
-			const allResultsLinkStyle: React.CSSProperties = {
-				...theme.urlStyle,
-			};
-
 			const searchSectionTitleStyle: React.CSSProperties = {
 				...theme.headerStyle,
 				marginTop: 30,
@@ -566,16 +562,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								_('Filtered by section [%s]', Setting.sectionNameToLabel(sectionFilter)) :
 								_('Showing all matching settings')}
 							{hasValidSectionFilter ? (
-								<a
-									href='#'
-									style={allResultsLinkStyle}
-									onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
-										event.preventDefault();
+								<button
+									type='button'
+									className='link-button'
+									onClick={() => {
 										this.setState({ searchSectionFilter: null });
 									}}
 								>
 									{_('Show all results')}
-								</a>
+								</button>
 							) : null}
 						</div>
 						{searchContent}
