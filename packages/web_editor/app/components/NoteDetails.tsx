@@ -85,8 +85,9 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     for (const media of Array.from(mediaElements)) {
       const el = media as HTMLVideoElement | HTMLAudioElement;
 
-      const onplayAttr = el.getAttribute('onplay') ?? '';
-      const onTimeupdateAttr = el.getAttribute('ontimeupdate') ?? '';
+      const onplayAttr = el.getAttribute('data-onplay') ?? el.getAttribute('onplay') ?? '';
+      const onTimeupdateAttr =
+        el.getAttribute('data-ontimeupdate') ?? el.getAttribute('ontimeupdate') ?? '';
 
       // onplay: "this.currentTime=N"
       const onplayMatch = onplayAttr.match(/this\.currentTime\s*=\s*([\d.]+)/);
@@ -225,6 +226,22 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
         // html, body, head タグはスキップして子要素だけをレンダリング
         if (domNode.name === 'html' || domNode.name === 'body' || domNode.name === 'head') {
           return <>{domToReact(domNode.children as DOMNode[], parseOptions)}</>;
+        }
+
+        // video / audio: onplay / ontimeupdate はインライン JS 文字列なので
+        // React が無視する。data-* 属性に退避して useEffect で復元する。
+        if (domNode.name === 'video' || domNode.name === 'audio') {
+          const attribs = { ...domNode.attribs };
+          if (attribs.onplay) {
+            attribs['data-onplay'] = attribs.onplay;
+            delete attribs.onplay;
+          }
+          if (attribs.ontimeupdate) {
+            attribs['data-ontimeupdate'] = attribs.ontimeupdate;
+            delete attribs.ontimeupdate;
+          }
+          const Tag = domNode.name as 'video' | 'audio';
+          return <Tag {...attribs}>{domToReact(domNode.children as DOMNode[], parseOptions)}</Tag>;
         }
 
         if (domNode.name === 'a') {
