@@ -16,10 +16,7 @@ const titles: Record<ColumnName, ()=> string> = {
 	'note.user_updated_time': () => _('Updated'),
 };
 
-const titlesForHeader: Partial<Record<ColumnName, ()=> string>> = {
-	'note.checkboxes': () => _('Progress'),
-	'note.is_todo': () => '✓',
-};
+const titlesForHeader: Partial<Record<ColumnName, ()=> string>> = {};
 
 export default (name: ColumnName, forHeader = false) => {
 	let fn: ()=> string = null;
