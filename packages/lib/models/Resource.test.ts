@@ -33,6 +33,36 @@ describe('models/Resource', () => {
 		await switchClient(1);
 	});
 
+	interface NoteResourceFixture {
+		id: string;
+		title: string;
+		size: number;
+	}
+
+	const noteResourceFixtures: NoteResourceFixture[] = [
+		{ id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', title: 'Zulu', size: 5 },
+		{ id: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2', title: 'alpha', size: 20 },
+		{ id: 'ccccccccccccccccccccccccccccccc3', title: 'Bravo', size: 10 },
+		{ id: 'ddddddddddddddddddddddddddddddd4', title: 'delta', size: 1 },
+	];
+
+	const setupNoteResourceFixtures = async () => {
+		for (const resource of noteResourceFixtures) {
+			await Resource.save({
+				id: resource.id,
+				title: resource.title,
+				size: resource.size,
+				mime: 'application/octet-stream',
+			}, { isNew: true });
+		}
+	};
+
+	const extractFieldValues = (items: ResourceEntity[], field: 'title' | 'size' | 'id') => {
+		if (field === 'size') return items.map(r => r.size);
+		if (field === 'id') return items.map(r => r.id);
+		return items.map(r => r.title ? r.title : '');
+	};
+
 	it('should have a "done" fetch_status when created locally', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -191,122 +221,21 @@ describe('models/Resource', () => {
 		}
 	});
 
-	it('should query note attachments with search, sorting and pagination', async () => {
-		const testResources: { id: string; title: string; size: number }[] = [
-			{ id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1', title: 'Zulu', size: 5 },
-			{ id: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2', title: 'alpha', size: 20 },
-			{ id: 'ccccccccccccccccccccccccccccccc3', title: 'Bravo', size: 10 },
-			{ id: 'ddddddddddddddddddddddddddddddd4', title: 'delta', size: 1 },
-		];
+	test.each([
+		['empty search should return all resources sorted by title asc', { searchQuery: '', sortField: 'title', sortDirection: 'asc', limit: 10, offset: 0 }, 'title', ['alpha', 'Bravo', 'delta', 'Zulu'], false],
+		['pagination should report hasMore when limit is lower than total rows', { sortField: 'title', sortDirection: 'asc', limit: 2, offset: 0 }, 'title', ['alpha', 'Bravo'], true],
+		['title sorting desc should return reverse alphabetical order', { sortField: 'title', sortDirection: 'desc', limit: 10, offset: 0 }, 'title', ['Zulu', 'delta', 'Bravo', 'alpha'], false],
+		['size sorting asc should return smallest first', { sortField: 'size', sortDirection: 'asc', limit: 10, offset: 0 }, 'size', [1, 5, 10, 20], false],
+		['size sorting desc should return largest first', { sortField: 'size', sortDirection: 'desc', limit: 5, offset: 0 }, 'size', [20, 10, 5, 1], false],
+		['search should match title case-insensitively', { searchQuery: 'BRA', sortField: 'title', sortDirection: 'asc', limit: 5, offset: 0 }, 'title', ['Bravo'], false],
+		['search should match id case-insensitively', { searchQuery: 'BBBBBBBB', sortField: 'title', sortDirection: 'asc', limit: 5, offset: 0 }, 'id', ['bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2'], false],
+		['search should match id by partial fragment', { searchQuery: 'ddddd', sortField: 'title', sortDirection: 'asc', limit: 5, offset: 0 }, 'id', ['ddddddddddddddddddddddddddddddd4'], false],
+	] as const)('noteResources: %s', async (_name, query, field, expected, expectedHasMore) => {
+		await setupNoteResourceFixtures();
 
-		for (const resource of testResources) {
-			await Resource.save({
-				id: resource.id,
-				title: resource.title,
-				size: resource.size,
-				mime: 'application/octet-stream',
-			}, { isNew: true });
-		}
+		const result = await Resource.noteResources(query);
 
-		{
-			const result = await Resource.noteAttachments({
-				searchQuery: '',
-				sortField: 'title',
-				sortDirection: 'asc',
-				limit: 10,
-				offset: 0,
-			});
-
-			expect(result.items.map(r => r.title)).toEqual(['alpha', 'Bravo', 'delta', 'Zulu']);
-			expect(result.hasMore).toBe(false);
-		}
-
-		{
-			const result = await Resource.noteAttachments({
-				sortField: 'title',
-				sortDirection: 'asc',
-				limit: 2,
-				offset: 0,
-			});
-
-			expect(result.items.map(r => r.title)).toEqual(['alpha', 'Bravo']);
-			expect(result.hasMore).toBe(true);
-		}
-
-		{
-			const result = await Resource.noteAttachments({
-				sortField: 'title',
-				sortDirection: 'desc',
-				limit: 10,
-				offset: 0,
-			});
-
-			expect(result.items.map(r => r.title)).toEqual(['Zulu', 'delta', 'Bravo', 'alpha']);
-			expect(result.hasMore).toBe(false);
-		}
-
-		{
-			const result = await Resource.noteAttachments({
-				sortField: 'size',
-				sortDirection: 'asc',
-				limit: 10,
-				offset: 0,
-			});
-
-			expect(result.items.map(r => r.size)).toEqual([1, 5, 10, 20]);
-			expect(result.hasMore).toBe(false);
-		}
-
-		{
-			const result = await Resource.noteAttachments({
-				sortField: 'size',
-				sortDirection: 'desc',
-				limit: 5,
-				offset: 0,
-			});
-
-			expect(result.items.map(r => r.size)).toEqual([20, 10, 5, 1]);
-			expect(result.hasMore).toBe(false);
-		}
-
-		{
-			const result = await Resource.noteAttachments({
-				searchQuery: 'BRA',
-				sortField: 'title',
-				sortDirection: 'asc',
-				limit: 5,
-				offset: 0,
-			});
-
-			expect(result.items.length).toBe(1);
-			expect(result.items[0].title).toBe('Bravo');
-		}
-
-		{
-			const result = await Resource.noteAttachments({
-				searchQuery: 'BBBBBBBB',
-				sortField: 'title',
-				sortDirection: 'asc',
-				limit: 5,
-				offset: 0,
-			});
-
-			expect(result.items.length).toBe(1);
-			expect(result.items[0].id).toBe('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb2');
-		}
-
-		{
-			const result = await Resource.noteAttachments({
-				searchQuery: 'ddddd',
-				sortField: 'title',
-				sortDirection: 'asc',
-				limit: 5,
-				offset: 0,
-			});
-
-			expect(result.items.length).toBe(1);
-			expect(result.items[0].id).toBe('ddddddddddddddddddddddddddddddd4');
-		}
+		expect(extractFieldValues(result.items, field)).toEqual(expected);
+		expect(result.hasMore).toBe(expectedHasMore);
 	});
-
 });
