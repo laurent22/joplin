@@ -86,6 +86,7 @@ export default (props: Props) => {
 			draggable={true}
 			className={classes.join(' ')}
 			style={style}
+			title={getColumnTitle(column.name, true)}
 			onClick={onClick}
 			onDragStart={props.onDragStart}
 			onDragOver={props.onDragOver}
