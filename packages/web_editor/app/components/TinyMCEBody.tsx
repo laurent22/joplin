@@ -556,9 +556,9 @@ function parseMediaAttributes(element: HTMLElement): {
   const startTime = startRaw !== null ? parseFloat(startRaw) : -1;
   const endTime = endRaw !== null ? parseFloat(endRaw) : -1;
   const loop = loopRaw === 'true';
-  // audio の width / height は inline style から読み取る
-  const width = (element as HTMLElement).style?.width ?? '';
-  const height = (element as HTMLElement).style?.height ?? '';
+  // audio の width / height は属性から読み取る
+  const width = element.getAttribute('width') ?? '';
+  const height = element.getAttribute('height') ?? '';
 
   return { startTime, endTime, loop, width, height };
 }
@@ -577,19 +577,25 @@ function applyMediaAttributes(
   width?: string,
   height?: string
 ): void {
-  // width / height は audio 要素の場合 style で設定する（属性では効かないため）
-  // contenteditable="false" ラッパー内では editor.dom.setStyle が効かないため
-  // element.style を直接操作する。純粋な数値のみの場合は px を自動付与する。
+  // width / height は audio 要素の場合、style と width/height 属性の両方に設定する。
+  // style は実際の表示に使用する。
+  // width/height 属性は NoteDetails で属性から小設な変換なしに style を構築するために使用する。
+  // 純粋な数値のみの場合は px を自動付与する。
   const normalizeCssSize = (val: string): string => {
     const trimmed = val.trim();
     if (!trimmed) return '';
     return /^\d+(\.\d+)?$/.test(trimmed) ? `${trimmed}px` : trimmed;
   };
   if (width !== undefined) {
-    element.style.width = normalizeCssSize(width);
+    const w = normalizeCssSize(width);
+    element.style.width = w;
+    // 属性は元の入力展文字列を保存（NoteDetails で指定値れそのまま参照できるように）
+    editor.dom.setAttrib(element, 'width', w || null);
   }
   if (height !== undefined) {
-    element.style.height = normalizeCssSize(height);
+    const h = normalizeCssSize(height);
+    element.style.height = h;
+    editor.dom.setAttrib(element, 'height', h || null);
   }
 
   // data-* 属性を更新（値が -1 なら削除）
