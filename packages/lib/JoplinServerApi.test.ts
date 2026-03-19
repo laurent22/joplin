@@ -1,5 +1,5 @@
-const JoplinServerApi = require('./JoplinServerApi').default;
-const shim = require('./shim').default;
+import JoplinServerApi from './JoplinServerApi';
+import shim from './shim';
 
 describe('JoplinServerApi', () => {
 	it('should keep user-facing unknown HTTP errors concise while preserving response details', async () => {
@@ -18,13 +18,13 @@ describe('JoplinServerApi', () => {
 			ok: false,
 			status: 502,
 			text: async () => html,
-		});
+		} as any);
 
 		try {
 			await api.exec('GET', 'api/ping');
 			throw new Error('Expected JoplinServerApi.exec to throw');
 		} catch (error) {
-			const joplinError = error;
+			const joplinError = error as any;
 			expect(joplinError.message).toBe('Error 502 Bad Gateway');
 			expect(joplinError.message.includes('<html>')).toBe(false);
 			expect(joplinError.details.includes('<html>')).toBe(true);
