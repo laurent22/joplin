@@ -205,7 +205,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+		<StyledRoot className='settings-sidebar _scrollbar2'>
 			<div className='config-sidebar-search'>
 				<span className='config-sidebar-search-icon fa fa-search' aria-hidden='true'/>
 				<input
@@ -229,7 +229,9 @@ export default function Sidebar(props: Props) {
 					</button>
 				)}
 			</div>
-			{buttons}
+			<div role='tablist'>
+				{buttons}
+			</div>
 		</StyledRoot>
 	);
 }
