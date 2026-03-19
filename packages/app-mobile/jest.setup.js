@@ -65,7 +65,7 @@ jest.doMock('react-native-version-info', () => {
 
 // react-native-webview expects native iOS/Android code so needs to be mocked.
 jest.mock('./components/ExtendedWebView', () => {
-	return require('./components/ExtendedWebView/index.jest.js');
+	return require('./components/ExtendedWebView/index.jest');
 });
 
 jest.mock('./components/CameraView/Camera', () => {
@@ -90,6 +90,14 @@ for (const packageName of emptyMockPackages) {
 	jest.doMock(packageName, () => {
 		return { default: { } };
 	});
+}
+
+// JSDOM does not implement scrollIntoView, which causes some tests to log errors
+// after they have finished. We polyfill it here to prevent those errors.
+if (global.Element) {
+	const noop = () => {};
+	global.Element.prototype.scrollIntoView = noop;
+	if (global.HTMLElement) global.HTMLElement.prototype.scrollIntoView = noop;
 }
 
 jest.mock('react-native-file-viewer', () => {

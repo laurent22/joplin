@@ -16,7 +16,28 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	const dom = useMemo(() => {
 		// Note: Adding `runScripts: 'dangerously'` to allow running inline <script></script>s.
 		// Use with caution -- don't load untrusted WebView HTML while testing.
-		return new JSDOM(props.html, { runScripts: 'dangerously', pretendToBeVisual: true });
+		
+		// Create an empty JSDOM instance first, so we can patch it BEFORE any scripts run.
+		const d = new JSDOM('', { runScripts: 'dangerously', pretendToBeVisual: true });
+
+		// JSDOM does not support scrollIntoView, so we polyfill it to prevent crashes.
+		const polyfillScroll = (win: any) => {
+			if (!win.Element) return;
+			const noop = () => { };
+			win.Element.prototype.scrollIntoView = noop;
+			win.HTMLElement.prototype.scrollIntoView = noop;
+			if (win.SVGElement) win.SVGElement.prototype.scrollIntoView = noop;
+			win.scrollBy = noop;
+			win.scrollTo = noop;
+			win.scroll = noop;
+		};
+
+		polyfillScroll(d.window);
+
+		// Now that it's patched, we can safely load the HTML content.
+		d.window.document.write(props.html);
+
+		return d;
 	}, [props.html]);
 
 	const injectJs = useCallback((js: string) => {
@@ -56,7 +77,10 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		// JSDOM polyfills
 		dom.window.eval(`
-			window.scrollBy = (_amount) => { };
+			Element.prototype.scrollIntoView = () => {};
+			HTMLElement.prototype.scrollIntoView = () => {};
+			window.scrollBy = () => {};
+			window.scrollTo = () => {};
 
 			// JSDOM iframes are missing certain functionality required by Joplin,
 			// including:
@@ -82,15 +106,23 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 						source: contentWindow,
 					}));
 				};
+
+				if (contentWindow.Element) {
+					const noop = () => { };
+					contentWindow.Element.prototype.scrollIntoView = noop;
+					contentWindow.HTMLElement.prototype.scrollIntoView = noop;
+					if (contentWindow.SVGElement) contentWindow.SVGElement.prototype.scrollIntoView = noop;
+				}
 			};
 
 			Object.defineProperty(HTMLIFrameElement.prototype, 'srcdoc', {
 				set(value) {
 					this.src = 'about:blank';
 					setTimeout(() => {
-						this.contentDocument.write(value);
-
+						// We must polyfill BEFORE writing to the document, because document.write
+						// can trigger script execution immediately.
 						polyfillIframeContentWindow(this.contentWindow);
+						this.contentDocument.write(value);
 					}, 0);
 				},
 			});
