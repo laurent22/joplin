@@ -52,6 +52,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			changedSettingKeys: [],
 			needRestart: false,
 			fonts: [],
+			searchTerm: '',
 		};
 
 		this.rowStyle_ = {
@@ -160,7 +161,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			}
 		}
 
-		this.setState({ selectedSectionName: section.name, screenName: screenName });
+		this.setState({ selectedSectionName: section.name, screenName: screenName, searchTerm: '' });
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -187,10 +188,16 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
+			const searchTerm = this.state.searchTerm.toLowerCase();
 
 			for (let i = 0; i < section.metadatas.length; i++) {
 				const md = section.metadatas[i];
 				if (!!md.advanced !== advanced) continue;
+
+				if (searchTerm && !md.key.toLowerCase().includes(searchTerm)) {
+					continue;
+				}
+
 				const settingComp = this.settingToComponent(md.key, settings[md.key]);
 				output.push(settingComp);
 			}
@@ -431,6 +438,36 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
+		const searchInputStyle: React.CSSProperties = {
+			padding: `${theme.configScreenPadding}px`,
+			paddingBottom: '10px',
+			borderBottom: `1px solid ${theme.dividerColor || '#e0e0e0'}`,
+		};
+
+		const searchBoxStyle: React.CSSProperties = {
+			width: '100%',
+			padding: '8px 12px',
+			borderRadius: '4px',
+			border: `1px solid ${theme.colorBorder || '#ccc'}`,
+			backgroundColor: theme.backgroundColor,
+			color: theme.color,
+			fontSize: '14px',
+			fontFamily: 'inherit',
+		};
+
+		const searchInput = !screenComp ? (
+			<div style={searchInputStyle}>
+				<input
+					type="text"
+					placeholder={_('Search settings...')}
+					value={this.state.searchTerm}
+					onChange={(e) => this.setState({ searchTerm: e.target.value })}
+					style={searchBoxStyle}
+					aria-label={_('Search settings')}
+				/>
+			</div>
+		) : null;
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
 			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
@@ -472,22 +509,25 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		}
 
 		return (
-			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
-				<Sidebar
-					selection={this.state.selectedSectionName}
-					onSelectionChange={this.sidebar_selectionChange}
-					sections={sections}
-				/>
-				<div style={rightStyle}>
-					{needRestartComp}
-					{tabComponents}
-					<ButtonBar
-						hasChanges={hasChanges}
-						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
-						onCancelClick={this.onCancelClick}
-						onSaveClick={screenComp ? null : this.onSaveClick}
-						onApplyClick={screenComp ? null : this.onApplyClick}
+			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'column', height: this.props.style.height }}>
+				<div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+					<Sidebar
+						selection={this.state.selectedSectionName}
+						onSelectionChange={this.sidebar_selectionChange}
+						sections={sections}
 					/>
+					<div style={rightStyle}>
+						{needRestartComp}
+						{searchInput}
+						{tabComponents}
+						<ButtonBar
+							hasChanges={hasChanges}
+							backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+							onCancelClick={this.onCancelClick}
+							onSaveClick={screenComp ? null : this.onSaveClick}
+							onApplyClick={screenComp ? null : this.onApplyClick}
+						/>
+					</div>
 				</div>
 			</div>
 		);
@@ -504,4 +544,3 @@ const mapStateToProps = (state: any) => {
 };
 
 export default connect(mapStateToProps)(ConfigScreenComponent);
-
