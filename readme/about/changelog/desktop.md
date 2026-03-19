@@ -1,5 +1,40 @@
 # Joplin Desktop Changelog
 
+## [v3.6.6](https://github.com/laurent22/joplin/releases/tag/v3.6.6) (Pre-release) - 2026-03-17T10:44:55Z
+
+- Improved: Add support for Ctrl/Cmd+Wheel to zoom in and out ([#14684](https://github.com/laurent22/joplin/issues/14684)) ([#7914](https://github.com/laurent22/joplin/issues/7914) by Ashutosh Singh)
+- Improved: Add toggle button to hide/show sync panel ([#14593](https://github.com/laurent22/joplin/issues/14593)) ([#8611](https://github.com/laurent22/joplin/issues/8611) by [@kanishka0411](https://github.com/kanishka0411))
+- Improved: Application crashes when deleting a notebook  ([#14651](https://github.com/laurent22/joplin/issues/14651)) ([#14621](https://github.com/laurent22/joplin/issues/14621) by [@Pixels57](https://github.com/Pixels57))
+- Improved: Fixed scrolling behaviour in long lines for TinyMCE and CodeMirror ([#14669](https://github.com/laurent22/joplin/issues/14669)) ([#14143](https://github.com/laurent22/joplin/issues/14143) by [@Veivel](https://github.com/Veivel))
+- Improved: Make encryption-related strings translatable ([#14752](https://github.com/laurent22/joplin/issues/14752) by [@Avanish-Gupta-CSE](https://github.com/Avanish-Gupta-CSE))
+- Improved: Preserve table customization made on RTE ([#14572](https://github.com/laurent22/joplin/issues/14572)) ([#10562](https://github.com/laurent22/joplin/issues/10562) by [@keshav0479](https://github.com/keshav0479))
+- Improved: Reuse master password dialog when enabling E2EE ([#14664](https://github.com/laurent22/joplin/issues/14664)) ([#14659](https://github.com/laurent22/joplin/issues/14659) by Ashutosh Singh)
+- Improved: Start sync when app opens or resumes ([#14574](https://github.com/laurent22/joplin/issues/14574)) ([#9481](https://github.com/laurent22/joplin/issues/9481) by [@yousef-genedy](https://github.com/yousef-genedy))
+- Improved: Updated packages esbuild (v0.26.0), sass (v1.94.3)
+- Fixed: Add WCAG 2.2 accessibility labels to Mermaid chart button ([#14617](https://github.com/laurent22/joplin/issues/14617)) ([#10795](https://github.com/laurent22/joplin/issues/10795) by ChimzyFire)
+- Fixed: Added validation for Joplin Server URL protocol ([#14612](https://github.com/laurent22/joplin/issues/14612)) ([#14419](https://github.com/laurent22/joplin/issues/14419) by [@Ash092016](https://github.com/Ash092016))
+- Fixed: Always require password confirmation when changing master password after encryption ([#14692](https://github.com/laurent22/joplin/issues/14692)) ([#14658](https://github.com/laurent22/joplin/issues/14658) by [@justin212407](https://github.com/justin212407))
+- Fixed: Cut/copy context menu options don't appear when right clicking joplin resource links in markdown editor ([#14711](https://github.com/laurent22/joplin/issues/14711)) ([#14637](https://github.com/laurent22/joplin/issues/14637))
+- Fixed: ENEX import no longer breaks bullet items with a line break into separate paragraphs ([#14642](https://github.com/laurent22/joplin/issues/14642)) ([#101111](https://github.com/laurent22/joplin/issues/101111) by [@yugalkaushik](https://github.com/yugalkaushik))
+- Fixed: Fix Prevent unclosed frontmatter from breaking Markdown rendering ([#14563](https://github.com/laurent22/joplin/issues/14563)) ([#14542](https://github.com/laurent22/joplin/issues/14542) by [@justin212407](https://github.com/justin212407))
+- Fixed: Fix changes to editor settings not applied until editor reloads ([#14586](https://github.com/laurent22/joplin/issues/14586)) ([#14584](https://github.com/laurent22/joplin/issues/14584) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix context menu missing cut/copy when selecting resource links in markdown editor ([#14638](https://github.com/laurent22/joplin/issues/14638)) ([#14637](https://github.com/laurent22/joplin/issues/14637) by [@Vinayreddy765](https://github.com/Vinayreddy765))
+- Fixed: Fix crash when rapidly closing secondary windows ([#14702](https://github.com/laurent22/joplin/issues/14702)) ([#14663](https://github.com/laurent22/joplin/issues/14663) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix note list losing focus after moving note to trash ([#14650](https://github.com/laurent22/joplin/issues/14650) by [@anuradha1304](https://github.com/anuradha1304))
+- Fixed: Fix search bar remaining empty when navigating back ([#14488](https://github.com/laurent22/joplin/issues/14488)) ([#12394](https://github.com/laurent22/joplin/issues/12394) by [@akshajrawat](https://github.com/akshajrawat))
+- Fixed: Fix search highlights breaking mermaid diagram rendering ([#14516](https://github.com/laurent22/joplin/issues/14516)) ([#14142](https://github.com/laurent22/joplin/issues/14142) by [@divyanshkhurana06](https://github.com/divyanshkhurana06))
+- Fixed: Fixed cancel behavior labels when switching config screens ([#14677](https://github.com/laurent22/joplin/issues/14677)) ([#11823](https://github.com/laurent22/joplin/issues/11823) by [@Davideb18](https://github.com/Davideb18))
+- Fixed: Hide new note/todo buttons when no notebook exists ([#14674](https://github.com/laurent22/joplin/issues/14674)) ([#14661](https://github.com/laurent22/joplin/issues/14661) by [@justin212407](https://github.com/justin212407))
+- Fixed: Html to markdown conversion sometimes converting links to plaintext with &lt;ins&gt; tags ([#14683](https://github.com/laurent22/joplin/issues/14683)) ([#13107](https://github.com/laurent22/joplin/issues/13107) by [@bwat47](https://github.com/bwat47))
+- Fixed: Improve updater error message on rate limit ([#14549](https://github.com/laurent22/joplin/issues/14549)) ([#14079](https://github.com/laurent22/joplin/issues/14079) by Ashutosh Singh)
+- Fixed: Prevent TypeError in handleAppFailure when window is destroyed ([#14689](https://github.com/laurent22/joplin/issues/14689)) ([#14687](https://github.com/laurent22/joplin/issues/14687) by [@Ehtesham-Zahid](https://github.com/Ehtesham-Zahid))
+- Fixed: Skip share consistency check when not using Joplin Server/Cloud ([#14649](https://github.com/laurent22/joplin/issues/14649)) ([#14412](https://github.com/laurent22/joplin/issues/14412) by [@Ahmed-Idani](https://github.com/Ahmed-Idani))
+- Fixed: Sync: Fix notebook sharing can fail due to incorrect read-only share state ([#14770](https://github.com/laurent22/joplin/issues/14770) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Text inputs are disabled after re-encrypt notes dialog journey ([#14691](https://github.com/laurent22/joplin/issues/14691)) ([#14660](https://github.com/laurent22/joplin/issues/14660) by [@ddg22004](https://github.com/ddg22004))
+- Fixed: Toggling checkboxes in the note history viewer opens an open with prompt on Windows ([#14679](https://github.com/laurent22/joplin/issues/14679)) ([#14676](https://github.com/laurent22/joplin/issues/14676) by [@sergio](https://github.com/sergio))
+- Fixed: Underline disappearing from ++insert++ syntax when cursor is on that line ([#14631](https://github.com/laurent22/joplin/issues/14631)) ([#14630](https://github.com/laurent22/joplin/issues/14630) by [@bwat47](https://github.com/bwat47))
+- Fixed: Use resourceUrl() for base64 images in pasteAsMarkdown ([#14632](https://github.com/laurent22/joplin/issues/14632)) ([#14627](https://github.com/laurent22/joplin/issues/14627) by [@manjhss](https://github.com/manjhss))
+
 ## [v3.6.4](https://github.com/laurent22/joplin/releases/tag/v3.6.4) (Pre-release) - 2026-03-07T17:19:55Z
 
 - New: Add "Paste as Markdown" command for Markdown editor ([#14556](https://github.com/laurent22/joplin/issues/14556))

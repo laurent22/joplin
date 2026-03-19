@@ -1,5 +1,32 @@
 # Joplin Android Changelog
 
+## [android-v3.6.14](https://github.com/laurent22/joplin/releases/tag/android-v3.6.14) - 2026-03-16T22:14:47Z
+
+- New: Add ability to set per notebook sorting on mobile (#14562 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Disable auto correct, auto complete and auto capitalize for search fields (#14759 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Password and confirm password fields when enabling encryption auto capitalise first character (#14611) (#14603 by [@Ash092016](https://github.com/Ash092016))
+- Improved: Prevent focus issues and keyboard opening when opening a note in view mode (#14533 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Start sync when app opens or resumes (#14574) (#9481 by [@yousef-genedy](https://github.com/yousef-genedy))
+- Improved: Updated packages esbuild (v0.26.0), react-native-svg (v15.15.1), sass (v1.94.3)
+- Fixed: Added validation for Joplin Server URL protocol (#14612) (#14419 by [@Ash092016](https://github.com/Ash092016))
+- Fixed: Call unmount() in Note.test.tsx tests to suppress act() warnings (#14535) (#14534 by [@yugalkaushik](https://github.com/yugalkaushik))
+- Fixed: Fix ++insert++ syntax rendering fix in markdown (#14547) (#14543 by [@justin212407](https://github.com/justin212407))
+- Fixed: Fix OneDrive auth code double-encoding on mobile (#14776) (#14727 by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Fix font-size inconsistency of code block and inline code  (#14463) (#14152 by [@PragdGn](https://github.com/PragdGn))
+- Fixed: Fix in-page links don't work if clicked in succession (#14538) (#9938 by [@yentropysack](https://github.com/yentropysack))
+- Fixed: Fix incorrect sizing of the tag association screen when opening and dismissing the on-screen keyboard (#14772) (#14722 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix issue where the revision service does not start on the first launch of the app (#14554 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix openFolder x-callback-url link on Android (#14765) (#14286 by [@madhan112007](https://github.com/madhan112007))
+- Fixed: Fix tapping rendered image scrolling to cursor position (#14580) (#14555 by Sriram Varun Kumar)
+- Fixed: Fixed log screen auto-scroll loop during search (#14757) (#13957 by [@KareemAlaa1](https://github.com/KareemAlaa1))
+- Fixed: Implement cursor-aware markup rendering and hide bullet points on task lists (#14573) (#14564 by [@bwat47](https://github.com/bwat47))
+- Fixed: Prevent a failing plugin from blocking other plugins (#14577) (#12793 by Ashutosh Singh)
+- Fixed: Restrict sidebar gestures to notebook list (#14733) (#14685 by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Rich Text Editor: Fix extra blank line above nested lists (#14504 by Sriram Varun Kumar)
+- Fixed: Skip share consistency check when not using Joplin Server/Cloud (#14649) (#14412 by [@Ahmed-Idani](https://github.com/Ahmed-Idani))
+- Fixed: Sync: Fix notebook sharing can fail due to incorrect read-only share state (#14770 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Underline disappearing from ++insert++ syntax when cursor is on that line (#14631) (#14630 by [@bwat47](https://github.com/bwat47))
+
 ## [android-v3.6.13](https://github.com/laurent22/joplin/releases/tag/android-v3.6.13) - 2026-03-02T17:36:26Z
 
 - New: Add an import txt function (#13742 by [@mrjo118](https://github.com/mrjo118))
