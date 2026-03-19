@@ -556,12 +556,9 @@ function parseMediaAttributes(element: HTMLElement): {
   const startTime = startRaw !== null ? parseFloat(startRaw) : -1;
   const endTime = endRaw !== null ? parseFloat(endRaw) : -1;
   const loop = loopRaw === 'true';
-  // audio の width / height は style から読み取る
-  const style = element.getAttribute('style') ?? '';
-  const widthMatch = style.match(/(?:^|;)\s*width\s*:\s*([^;]+)/);
-  const heightMatch = style.match(/(?:^|;)\s*height\s*:\s*([^;]+)/);
-  const width = widthMatch ? widthMatch[1].trim() : '';
-  const height = heightMatch ? heightMatch[1].trim() : '';
+  // audio の width / height は inline style から読み取る
+  const width = (element as HTMLElement).style?.width ?? '';
+  const height = (element as HTMLElement).style?.height ?? '';
 
   return { startTime, endTime, loop, width, height };
 }
@@ -581,21 +578,18 @@ function applyMediaAttributes(
   height?: string
 ): void {
   // width / height は audio 要素の場合 style で設定する（属性では効かないため）
-  if (width !== undefined || height !== undefined) {
-    const w = width !== undefined ? width.trim() : undefined;
-    const h = height !== undefined ? height.trim() : undefined;
-    // 既存の style から width / height を取り除いてから再設定
-    let currentStyle = element.getAttribute('style') ?? '';
-    currentStyle = currentStyle
-      .replace(/(?:^|;)\s*width\s*:[^;]*/g, '')
-      .replace(/(?:^|;)\s*height\s*:[^;]*/g, '')
-      .replace(/^\s*;+/, '')
-      .trim();
-    const parts: string[] = currentStyle ? [currentStyle] : [];
-    if (w) parts.push(`width: ${w}`);
-    if (h) parts.push(`height: ${h}`);
-    const newStyle = parts.join('; ');
-    editor.dom.setAttrib(element, 'style', newStyle || null);
+  // contenteditable="false" ラッパー内では editor.dom.setStyle が効かないため
+  // element.style を直接操作する。純粋な数値のみの場合は px を自動付与する。
+  const normalizeCssSize = (val: string): string => {
+    const trimmed = val.trim();
+    if (!trimmed) return '';
+    return /^\d+(\.\d+)?$/.test(trimmed) ? `${trimmed}px` : trimmed;
+  };
+  if (width !== undefined) {
+    element.style.width = normalizeCssSize(width);
+  }
+  if (height !== undefined) {
+    element.style.height = normalizeCssSize(height);
   }
 
   // data-* 属性を更新（値が -1 なら削除）
