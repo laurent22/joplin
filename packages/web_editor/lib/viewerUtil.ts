@@ -301,7 +301,7 @@ export class ViewerUtil {
       anchor.attribs.href = newHref;
     }
 
-    const imgs = $('img[src^="joplin_resource://"]');
+    const imgs = $('[src^="joplin_resource://"]');
     for (let i = 0; i < imgs.length; i++) {
       const img = imgs[i] as cheerio.TagElement;
       const src = img.attribs.src;
@@ -309,13 +309,6 @@ export class ViewerUtil {
       img.attribs.src = newSrc;
     }
 
-    const videos = $('video[src^="joplin_resource://"]');
-    for (let i = 0; i < videos.length; i++) {
-      const video = videos[i] as cheerio.TagElement;
-      const src = video.attribs.src;
-      const newSrc = src.replace(regex, resourceDir);
-      video.attribs.src = newSrc;
-    }
     return $;
   }
 
