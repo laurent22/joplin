@@ -37,6 +37,11 @@ const createTestMarkupConverters = () => {
 };
 
 describe('resourceHandling', () => {
+	afterEach(() => {
+		mockClipboard.has.mockReset();
+		mockClipboard.readBuffer.mockReset();
+	});
+
 	it('should sanitize pasted HTML', async () => {
 		Setting.setConstant('resourceDir', '/home/.config/joplin/resources');
 
@@ -148,11 +153,6 @@ describe('resourceHandling', () => {
 	// The test environment (non-Electron, no sharp) skips image validation and
 	// just copies the file, so any non-empty buffer works as test data.
 	const testImageBuffer = Buffer.from(minimalPng, 'base64');
-
-	afterEach(() => {
-		mockClipboard.has.mockReset();
-		mockClipboard.readBuffer.mockReset();
-	});
 
 	test.each([
 		{ format: 'image/jpeg', description: 'JPEG (bug #14613)' },
