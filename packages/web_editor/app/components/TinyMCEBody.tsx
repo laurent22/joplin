@@ -481,7 +481,235 @@ function getEditorContent(editor: any): string {
       .forEach((attr) => el.removeAttribute(attr.name));
   });
 
+  // audio 設定ボタンとラッパーを除去
+  stripAudioSettingsButtons(clone);
+
   return clone.innerHTML;
+}
+
+// ---------- ヘルパー: Audio 設定ボタン ----------
+
+/**
+ * エディタ内の全 <audio> 要素に設定ボタン (⚙) をオーバーレイする。
+ * audio のネイティブコントロールはブラウザの Shadow DOM で描画されるため、
+ * click / dblclick イベントがホスト要素までバブルしない。
+ * そのため、audio 要素を <span> でラップし、その中にクリック可能な
+ * 設定ボタンを配置することでダイアログを開けるようにする。
+ */
+function attachAudioSettingsButtons(editor: any): void {
+  const body = editor.getBody() as HTMLElement;
+  if (!body) return;
+  body.querySelectorAll('audio').forEach((audio) => {
+    // 既にラップ済みなら処理をスキップ
+    if (audio.parentElement?.classList.contains('joplin-audio-wrapper')) return;
+    // <span class="joplin-audio-wrapper"> でラップ
+    const wrapper = editor.getDoc().createElement('span');
+    wrapper.className = 'joplin-audio-wrapper';
+    wrapper.setAttribute('contenteditable', 'true');
+    audio.parentNode?.insertBefore(wrapper, audio);
+    wrapper.appendChild(audio);
+    // 設定ボタンを追加
+    const btn = editor.getDoc().createElement('button');
+    btn.className = 'joplin-audio-settings-btn';
+    btn.setAttribute('title', '音声設定');
+    btn.setAttribute('contenteditable', 'false');
+    btn.textContent = '⚙';
+    wrapper.appendChild(btn);
+  });
+}
+
+/**
+ * 保存前にエディタ内から audio 設定ボタンとラッパーを除去したクリーンな HTML を得る。
+ * getEditorContent の clone に対して呼び出す。
+ */
+function stripAudioSettingsButtons(clone: HTMLElement): void {
+  // 設定ボタンを除去
+  clone.querySelectorAll('.joplin-audio-settings-btn').forEach((btn) => btn.remove());
+  // ラッパー <span> をアンラップ（子要素を親に戻す）
+  clone.querySelectorAll('.joplin-audio-wrapper').forEach((wrapper) => {
+    const parent = wrapper.parentNode;
+    if (!parent) return;
+    while (wrapper.firstChild) {
+      parent.insertBefore(wrapper.firstChild, wrapper);
+    }
+    parent.removeChild(wrapper);
+  });
+}
+
+// ---------- ヘルパー: Video / Audio ダイアログ ----------
+
+/**
+ * video・audio 要素の data-starttime / data-endtime / data-loop 属性から
+ * 再生開始秒・終了秒・ループフラグを取得する。
+ */
+function parseMediaAttributes(element: HTMLElement): {
+  startTime: number;
+  endTime: number;
+  loop: boolean;
+  width: string;
+  height: string;
+} {
+  const startRaw = element.getAttribute('data-starttime');
+  const endRaw = element.getAttribute('data-endtime');
+  const loopRaw = element.getAttribute('data-loop');
+
+  const startTime = startRaw !== null ? parseFloat(startRaw) : -1;
+  const endTime = endRaw !== null ? parseFloat(endRaw) : -1;
+  const loop = loopRaw === 'true';
+  // audio の width / height は属性から読み取る
+  const width = element.getAttribute('width') ?? '';
+  const height = element.getAttribute('height') ?? '';
+
+  return { startTime, endTime, loop, width, height };
+}
+
+/**
+ * 設定を data-starttime / data-endtime / data-loop 属性に書き込み、
+ * さらに onplay / ontimeupdate も同期する。
+ * startTime / endTime が -1 の場合は対応する属性を削除する。
+ */
+function applyMediaAttributes(
+  editor: any,
+  element: HTMLElement,
+  startTime: number,
+  endTime: number,
+  loop: boolean,
+  width?: string,
+  height?: string
+): void {
+  // width / height は audio 要素の場合、style と width/height 属性の両方に設定する。
+  // style は実際の表示に使用する。
+  // width/height 属性は NoteDetails で属性から小設な変換なしに style を構築するために使用する。
+  // 純粋な数値のみの場合は px を自動付与する。
+  const normalizeCssSize = (val: string): string => {
+    const trimmed = val.trim();
+    if (!trimmed) return '';
+    return /^\d+(\.\d+)?$/.test(trimmed) ? `${trimmed}px` : trimmed;
+  };
+  if (width !== undefined) {
+    const w = normalizeCssSize(width);
+    element.style.width = w;
+    // 属性は元の入力展文字列を保存（NoteDetails で指定値れそのまま参照できるように）
+    editor.dom.setAttrib(element, 'width', w || null);
+  }
+  if (height !== undefined) {
+    const h = normalizeCssSize(height);
+    element.style.height = h;
+    editor.dom.setAttrib(element, 'height', h || null);
+  }
+
+  // data-* 属性を更新（値が -1 なら削除）
+  if (startTime >= 0) {
+    editor.dom.setAttrib(element, 'data-starttime', String(startTime));
+  } else {
+    editor.dom.setAttrib(element, 'data-starttime', null);
+  }
+  if (endTime >= 0) {
+    editor.dom.setAttrib(element, 'data-endtime', String(endTime));
+  } else {
+    editor.dom.setAttrib(element, 'data-endtime', null);
+  }
+  editor.dom.setAttrib(element, 'data-loop', loop ? 'true' : null);
+
+  // onplay / ontimeupdate も同期して TinyMCE 外（素の HTML コピーなど）でも動くようにする
+  editor.dom.setAttrib(element, 'onplay', null);
+  editor.dom.setAttrib(element, 'ontimeupdate', null);
+
+  if (startTime >= 0 && endTime >= 0) {
+    const onplay = `this.currentTime=${startTime}`;
+    const ontimeupdate = loop
+      ? `if(this.currentTime>=${endTime}){this.currentTime=${startTime}}`
+      : `if(this.currentTime>=${endTime}){this.pause();this.currentTime=${startTime}}`;
+    editor.dom.setAttrib(element, 'onplay', onplay);
+    editor.dom.setAttrib(element, 'ontimeupdate', ontimeupdate);
+  } else if (startTime >= 0) {
+    editor.dom.setAttrib(element, 'onplay', `this.currentTime=${startTime}`);
+  }
+
+  editor.nodeChanged();
+}
+
+/**
+ * video / audio 要素をダブルクリックしたときに開くダイアログ。
+ * 再生開始秒・終了秒・ループの設定を行う。
+ */
+function openMediaDialog(editor: any, mediaElement: HTMLElement): void {
+  const { startTime, endTime, loop, width, height } = parseMediaAttributes(mediaElement);
+  const tagName = mediaElement.tagName.toLowerCase();
+  const isAudio = tagName === 'audio';
+  const title = isAudio ? '音声設定' : '動画設定';
+
+  const commonItems = [
+    {
+      type: 'input',
+      name: 'startTime',
+      label: '再生開始(秒)  ※未指定は空欄',
+    },
+    {
+      type: 'input',
+      name: 'endTime',
+      label: '再生終了(秒)  ※未指定は空欄',
+    },
+    {
+      type: 'checkbox',
+      name: 'loop',
+      label: 'ループ再生',
+    },
+  ];
+
+  const audioSizeItems = isAudio
+    ? [
+        {
+          type: 'input',
+          name: 'width',
+          label: '横幅 (width)  ※例: 300 または 100%  未指定は空欄',
+        },
+        {
+          type: 'input',
+          name: 'height',
+          label: '高さ (height)  ※例: 54  未指定は空欄',
+        },
+      ]
+    : [];
+
+  const initialData: Record<string, string | boolean> = {
+    startTime: startTime >= 0 ? String(startTime) : '',
+    endTime: endTime >= 0 ? String(endTime) : '',
+    loop,
+  };
+  if (isAudio) {
+    initialData.width = width;
+    initialData.height = height;
+  }
+
+  editor.windowManager.open({
+    title,
+    initialData,
+    body: {
+      type: 'panel',
+      items: [...commonItems, ...audioSizeItems],
+    },
+    buttons: [
+      { type: 'cancel', text: 'キャンセル' },
+      { type: 'submit', text: 'OK', primary: true },
+    ],
+    onSubmit: function (api: any) {
+      const data = api.getData();
+      const startVal =
+        typeof data.startTime === 'string' && data.startTime.trim() !== ''
+          ? parseFloat(data.startTime)
+          : -1;
+      const endVal =
+        typeof data.endTime === 'string' && data.endTime.trim() !== ''
+          ? parseFloat(data.endTime)
+          : -1;
+      const loopVal = data.loop as boolean;
+      const widthVal = isAudio ? (data.width as string) : undefined;
+      const heightVal = isAudio ? (data.height as string) : undefined;
+      applyMediaAttributes(editor, mediaElement, startVal, endVal, loopVal, widthVal, heightVal);
+      api.close();
+    },
+  });
 }
 
 // ---------- ヘルパー: カスタムツールバーボタン登録 ----------
@@ -540,6 +768,9 @@ export default function TinyMCEBody({
     null
   );
   const [conflictError, setConflictError] = useState(false);
+
+  // attachAudioSettingsButtons 実行中はダーティ検知を抑制するための ref
+  const suppressDirtyRef = useRef(false);
 
   // isDirty の最新値を副作用外から参照するための ref
   const isDirtyRef = useRef(isDirty);
@@ -700,6 +931,32 @@ export default function TinyMCEBody({
           a { color: #1a73e8; }
           table { border-collapse: collapse; width: 100%; }
           td, th { border: 1px solid #ccc; padding: 6px 10px; }
+          .joplin-audio-wrapper {
+            position: relative;
+            display: inline-block;
+          }
+          .joplin-audio-settings-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 22px;
+            text-align: center;
+            padding: 0;
+            opacity: 0.7;
+            transition: opacity 0.15s;
+          }
+          .joplin-audio-settings-btn:hover {
+            opacity: 1;
+          }
         `,
         font_family_formats:
           'System UI=-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;' +
@@ -730,6 +987,32 @@ export default function TinyMCEBody({
               }, 200);
               // コンテンツ読み込み後に KaTeX 数式をレンダリング
               triggerKatexRender(editor, 600);
+
+              // video 要素のダブルクリックによるブラウザネイティブの全画面化を防ぐ。
+              // dblclick の preventDefault() はネイティブメディアコントローラーには効かないため、
+              // fullscreenchange を監視して video が全画面になったら即座に抜ける。
+              const iframeDoc = editor.getDoc() as Document;
+              iframeDoc.addEventListener('fullscreenchange', () => {
+                const fsEl = iframeDoc.fullscreenElement;
+                if (fsEl && fsEl.tagName?.toLowerCase() === 'video') {
+                  iframeDoc.exitFullscreen().catch(() => {});
+                }
+              });
+
+              // audio 要素に設定ボタン (⚙) をオーバーレイ
+              attachAudioSettingsButtons(editor);
+
+              // audio 設定ボタンのクリックを委譲ハンドラーで処理
+              iframeDoc.addEventListener('click', (e: MouseEvent) => {
+                const target = e.target as HTMLElement;
+                if (target?.classList?.contains('joplin-audio-settings-btn')) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const wrapper = target.closest('.joplin-audio-wrapper');
+                  const audio = wrapper?.querySelector('audio');
+                  if (audio) openMediaDialog(editor, audio);
+                }
+              });
             }
           });
 
@@ -804,7 +1087,16 @@ export default function TinyMCEBody({
           // Drag & Drop によるファイルアップロード
           editor.on('drop', (e: DragEvent) => handleEditorDrop(e, editor));
 
-          // Mermaid / KaTeX ブロックをダブルクリックしたらダイアログを開く
+          // コンテンツ変更時に audio 設定ボタンを再適用
+          editor.on('SetContent', () => {
+            suppressDirtyRef.current = true;
+            setTimeout(() => {
+              attachAudioSettingsButtons(editor);
+              suppressDirtyRef.current = false;
+            }, 100);
+          });
+
+          // Mermaid / KaTeX / Video / Audio ブロックをダブルクリックしたらダイアログを開く
           editor.on('DblClick', (e: any) => {
             let target = e.target as HTMLElement | null;
             while (target) {
@@ -819,6 +1111,12 @@ export default function TinyMCEBody({
                 openKatexDialog(editor, katexTxt, fontsize, target);
                 return;
               }
+              const tagName = target.tagName?.toLowerCase();
+              if (tagName === 'video' || tagName === 'audio') {
+                e.preventDefault();
+                openMediaDialog(editor, target);
+                return;
+              }
               target = target.parentElement;
             }
           });
@@ -829,7 +1127,9 @@ export default function TinyMCEBody({
           // 編集変更の追跡（ダーティ状態）
           if (!readOnly) {
             editor.on('input change', () => {
-              setIsDirty(true);
+              if (!suppressDirtyRef.current) {
+                setIsDirty(true);
+              }
             });
           }
 

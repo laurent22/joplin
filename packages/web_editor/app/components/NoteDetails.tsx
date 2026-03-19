@@ -72,6 +72,54 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
     })();
   }, [note?.body]);
 
+  // video / audio 要素の再生範囲を data-starttime / data-endtime / data-loop 属性から
+  // 読み取り、ネイティブイベントリスナーとして登録する。
+  useEffect(() => {
+    if (!note?.body || !contentRef.current) return;
+
+    const mediaElements = contentRef.current.querySelectorAll('video, audio');
+    const cleanups: (() => void)[] = [];
+
+    for (const media of Array.from(mediaElements)) {
+      const el = media as HTMLVideoElement | HTMLAudioElement;
+
+      const startRaw = el.getAttribute('data-starttime');
+      const endRaw = el.getAttribute('data-endtime');
+      const loopRaw = el.getAttribute('data-loop');
+
+      const startTime = startRaw !== null ? parseFloat(startRaw) : -1;
+      const endTime = endRaw !== null ? parseFloat(endRaw) : -1;
+      const loop = loopRaw === 'true';
+
+      if (startTime < 0 && endTime < 0) continue;
+
+      const handlePlay = () => {
+        if (startTime >= 0) el.currentTime = startTime;
+      };
+
+      const handleTimeUpdate = () => {
+        if (endTime >= 0 && el.currentTime >= endTime) {
+          if (loop) {
+            el.currentTime = startTime >= 0 ? startTime : 0;
+          } else {
+            el.pause();
+            el.currentTime = startTime >= 0 ? startTime : 0;
+          }
+        }
+      };
+
+      el.addEventListener('play', handlePlay);
+      el.addEventListener('timeupdate', handleTimeUpdate);
+
+      cleanups.push(() => {
+        el.removeEventListener('play', handlePlay);
+        el.removeEventListener('timeupdate', handleTimeUpdate);
+      });
+    }
+
+    return () => cleanups.forEach((fn) => fn());
+  }, [note?.body]);
+
   // searchパラメータが変化した時に、該当箇所をハイライトしてスクロール
   useEffect(() => {
     if (!note?.body || !contentRef.current) return;
@@ -169,6 +217,30 @@ export default function NoteDetails({ note }: { note: (NoteEntity & { body?: str
         // html, body, head タグはスキップして子要素だけをレンダリング
         if (domNode.name === 'html' || domNode.name === 'body' || domNode.name === 'head') {
           return <>{domToReact(domNode.children as DOMNode[], parseOptions)}</>;
+        }
+
+        // video / audio: onplay / ontimeupdate はインライン JS なので React が無視する。
+        // 再生範囲は data-starttime / data-endtime / data-loop で管理するため、
+        // インライン JS 属性は除去してレンダリングする。
+        // audio の width / height 属性をそのまま style オブジェクトに変換して渡す。
+        if (domNode.name === 'video' || domNode.name === 'audio') {
+          const {
+            onplay,
+            ontimeupdate,
+            width,
+            height,
+            style: _style,
+            ...attribs
+          } = domNode.attribs;
+          const styleObj: React.CSSProperties = {};
+          if (width) styleObj.width = width;
+          if (height) styleObj.height = height;
+          const Tag = domNode.name as 'video' | 'audio';
+          return (
+            <Tag {...attribs} style={styleObj}>
+              {domToReact(domNode.children as DOMNode[], parseOptions)}
+            </Tag>
+          );
         }
 
         if (domNode.name === 'a') {
