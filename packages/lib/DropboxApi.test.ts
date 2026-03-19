@@ -1,6 +1,17 @@
 import shim from './shim';
 const DropboxApi = require('./DropboxApi');
 
+interface DropboxApiError {
+	message: string;
+	details: string;
+}
+
+function isDropboxError(error: unknown): error is DropboxApiError {
+	if (typeof error !== 'object' || error === null) return false;
+	const e = error as Record<string, unknown>;
+	return typeof e.message === 'string' && typeof e.details === 'string';
+}
+
 describe('DropboxApi', () => {
 	it('should keep user-facing HTTP errors concise while preserving response details', async () => {
 		const api = new DropboxApi({
@@ -9,18 +20,20 @@ describe('DropboxApi', () => {
 		});
 
 		const html = '<!DOCTYPE html><html><body><h1>Maintenance</h1></body></html>';
-
-		const fetchSpy = jest.spyOn(shim, 'fetch').mockResolvedValue({
+		const mockResponse: Partial<Response> = {
 			ok: false,
 			status: 502,
 			text: async () => html,
-		} as any);
+		};
+
+		const fetchSpy = jest.spyOn(shim, 'fetch').mockResolvedValue(mockResponse as Response);
 
 		try {
 			await api.exec('POST', 'files/create_folder_v2', { path: '/test' });
 			throw new Error('Expected DropboxApi.exec to throw');
-		} catch (error) {
-			const dropboxError = error as any;
+		} catch (error: unknown) {
+			if (!isDropboxError(error)) throw error;
+			const dropboxError = error;
 			expect(dropboxError.message).toBe('Error');
 			expect(dropboxError.message.includes('<html>')).toBe(false);
 			expect(dropboxError.details.includes('<html>')).toBe(true);
