@@ -1,36 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matchedSearchSections = exports.searchResultGroups = exports.isMetadataMatched = exports.includesNormalizedQuery = exports.equalsNormalizedQuery = exports.hasNormalizedQuery = exports.normalizeQuery = void 0;
-const Setting_1 = require("../../../models/Setting");
-// Platform-agnostic query normalization for config search.
-const normalizeQuery = (query) => {
-    return query.trim().toLowerCase();
-};
-exports.normalizeQuery = normalizeQuery;
-// Returns true when query has non-whitespace characters after normalization.
-const hasNormalizedQuery = (query) => {
-    return !!(0, exports.normalizeQuery)(query);
-};
-exports.hasNormalizedQuery = hasNormalizedQuery;
-// Normalized string equality check used by cross-platform search UI layers.
-const equalsNormalizedQuery = (query, value) => {
-    const normalizedQuery = (0, exports.normalizeQuery)(query);
-    if (!normalizedQuery)
-        return false;
-    return (0, exports.normalizeQuery)(value) === normalizedQuery;
-};
-exports.equalsNormalizedQuery = equalsNormalizedQuery;
-// Normalized substring check used by cross-platform search UI layers.
-const includesNormalizedQuery = (query, value) => {
-    const normalizedQuery = (0, exports.normalizeQuery)(query);
-    if (!normalizedQuery)
-        return false;
-    return (0, exports.normalizeQuery)(value).includes(normalizedQuery);
-};
-exports.includesNormalizedQuery = includesNormalizedQuery;
-// Matches config metadata text against a normalized query.
+exports.matchedSearchSections = exports.searchResultGroups = void 0;
+const Setting_1 = require("@joplin/lib/models/Setting");
+const config_search_text_1 = require("@joplin/lib/components/shared/config/config-search-text");
 const isMetadataMatched = (query, section, metadata, appType) => {
-    const normalizedQuery = (0, exports.normalizeQuery)(query);
+    const normalizedQuery = (0, config_search_text_1.normalizeQuery)(query);
     if (!normalizedQuery)
         return true;
     const metadataLabel = metadata.label ? metadata.label() : '';
@@ -41,17 +15,15 @@ const isMetadataMatched = (query, section, metadata, appType) => {
         metadataLabel,
         metadataDescription,
     ];
-    return normalizedCandidates.some(value => (0, exports.includesNormalizedQuery)(normalizedQuery, value || ''));
+    return normalizedCandidates.some(value => (0, config_search_text_1.includesNormalizedQuery)(normalizedQuery, value || ''));
 };
-exports.isMetadataMatched = isMetadataMatched;
-// Computes grouped search hits from section metadata.
 const searchResultGroups = (query, sections, appType) => {
-    const normalizedQuery = (0, exports.normalizeQuery)(query);
+    const normalizedQuery = (0, config_search_text_1.normalizeQuery)(query);
     if (!normalizedQuery)
         return [];
     const output = [];
     for (const section of sections) {
-        const sectionTitleMatched = (0, exports.includesNormalizedQuery)(normalizedQuery, Setting_1.default.sectionNameToLabel(section.name));
+        const sectionTitleMatched = (0, config_search_text_1.includesNormalizedQuery)(normalizedQuery, Setting_1.default.sectionNameToLabel(section.name));
         if (sectionTitleMatched && section.isScreen) {
             output.push({
                 sectionName: section.name,
@@ -63,7 +35,7 @@ const searchResultGroups = (query, sections, appType) => {
         for (const metadata of section.metadatas) {
             if (!metadata.key)
                 continue;
-            if (sectionTitleMatched || (0, exports.isMetadataMatched)(normalizedQuery, section, metadata, appType)) {
+            if (sectionTitleMatched || isMetadataMatched(normalizedQuery, section, metadata, appType)) {
                 matchingKeys.push(metadata.key);
             }
         }
@@ -77,7 +49,6 @@ const searchResultGroups = (query, sections, appType) => {
     return output;
 };
 exports.searchResultGroups = searchResultGroups;
-// Maps grouped search hits back to concrete section metadata for rendering.
 const matchedSearchSections = (sections, groups) => {
     if (!groups.length)
         return [];

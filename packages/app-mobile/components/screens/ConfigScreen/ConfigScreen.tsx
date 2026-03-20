@@ -14,6 +14,7 @@ import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
 import * as shared from '@joplin/lib/components/shared/config/config-shared';
+import { shouldShowBySearch } from '@joplin/lib/components/shared/config/config-search-text';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
@@ -394,22 +395,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {
-			let searchThrough;
-			if (Array.isArray(relatedText)) {
-				searchThrough = relatedText.join('\n');
-			} else {
-				searchThrough = relatedText;
-			}
-			searchThrough = searchThrough.toLocaleLowerCase();
-
-			const searchQuery = this.state.searchQuery.toLocaleLowerCase().trim();
-
-			const hasSearchMatches =
-				headerTitle.toLocaleLowerCase() === searchQuery
-				|| searchThrough.includes(searchQuery);
-
-			// Don't show results when the search input is empty
-			return this.state.searchQuery.length > 0 && hasSearchMatches;
+			return shouldShowBySearch(this.state.searchQuery, headerTitle, relatedText);
 		};
 
 		const addSettingComponent = (

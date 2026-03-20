@@ -5,8 +5,8 @@ import { _ } from '@joplin/lib/locale';
 import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
-import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search';
-import { type SearchResultGroup } from '@joplin/lib/components/shared/config/config-search';
+import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text';
+import { type SearchResultGroup } from './configSearch';
 import highlightSearchText from './searchHighlight';
 const styled = require('styled-components').default;
 

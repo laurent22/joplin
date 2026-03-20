@@ -1,33 +1,7 @@
-import Setting, { AppType, SettingItem, SettingMetadataSection } from '../../../models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection } from '@joplin/lib/models/Setting';
+import { includesNormalizedQuery, normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text';
 
-// Platform-agnostic query normalization for config search.
-export const normalizeQuery = (query: string): string => {
-	return query.trim().toLowerCase();
-};
-
-// Returns true when query has non-whitespace characters after normalization.
-export const hasNormalizedQuery = (query: string): boolean => {
-	return !!normalizeQuery(query);
-};
-
-// Normalized string equality check used by cross-platform search UI layers.
-export const equalsNormalizedQuery = (query: string, value: string): boolean => {
-	const normalizedQuery = normalizeQuery(query);
-	if (!normalizedQuery) return false;
-
-	return normalizeQuery(value) === normalizedQuery;
-};
-
-// Normalized substring check used by cross-platform search UI layers.
-export const includesNormalizedQuery = (query: string, value: string): boolean => {
-	const normalizedQuery = normalizeQuery(query);
-	if (!normalizedQuery) return false;
-
-	return normalizeQuery(value).includes(normalizedQuery);
-};
-
-// Matches config metadata text against a normalized query.
-export const isMetadataMatched = (
+const isMetadataMatched = (
 	query: string,
 	section: SettingMetadataSection,
 	metadata: SettingItem,
@@ -59,7 +33,6 @@ export interface MatchedSearchSection {
 	matchingKeys: string[];
 }
 
-// Computes grouped search hits from section metadata.
 export const searchResultGroups = (
 	query: string,
 	sections: SettingMetadataSection[],
@@ -102,7 +75,6 @@ export const searchResultGroups = (
 	return output;
 };
 
-// Maps grouped search hits back to concrete section metadata for rendering.
 export const matchedSearchSections = (
 	sections: SettingMetadataSection[],
 	groups: SearchResultGroup[],
