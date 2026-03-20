@@ -150,10 +150,7 @@ impl DataElementPackage {
         storage_index: &StorageIndex,
         cell_manifest_id: ExGuid,
     ) -> Option<ExGuid> {
-        
-
-        self
-            .find_cell_revision_id(cell_manifest_id)
+        self.find_cell_revision_id(cell_manifest_id)
             .and_then(|revision_id| self.resolve_revision_manifest_id(storage_index, revision_id))
             .or_else(|| self.resolve_revision_manifest_id(storage_index, cell_manifest_id))
     }

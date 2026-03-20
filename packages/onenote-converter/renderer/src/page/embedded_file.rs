@@ -6,8 +6,6 @@ use parser_utils::{fs_driver, log};
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_embedded_file(&mut self, file: &EmbeddedFile) -> Result<String> {
-        
-
         let filename = self
             .section
             .to_unique_safe_filename(&self.output, file.filename())?;

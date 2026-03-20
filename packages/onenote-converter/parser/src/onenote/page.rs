@@ -69,7 +69,8 @@ impl Page {
         self.title
             .as_ref()
             .and_then(|title| title.contents.first())
-            .and_then(Self::outline_text).map(|t| Self::remove_hyperlink(t.to_owned()))
+            .and_then(Self::outline_text)
+            .map(|t| Self::remove_hyperlink(t.to_owned()))
             .or_else(|| {
                 self.contents
                     .iter()

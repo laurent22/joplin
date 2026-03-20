@@ -237,15 +237,17 @@ impl<'a> Renderer<'a> {
         }
 
         if let Some(space) = style.paragraph_space_before()
-            && space != 0.0 {
-                // Space is in half inches:
-                styles.set("margin-top", format!("{}in", space / 2.));
-            }
+            && space != 0.0
+        {
+            // Space is in half inches:
+            styles.set("margin-top", format!("{}in", space / 2.));
+        }
 
         if let Some(space) = style.paragraph_space_after()
-            && space != 0.0 {
-                styles.set("margin-bottom", format!("{}in", space / 2.));
-            }
+            && space != 0.0
+        {
+            styles.set("margin-bottom", format!("{}in", space / 2.));
+        }
 
         if let Some(space) = style.paragraph_line_spacing_exact() {
             if space != 0.0 {

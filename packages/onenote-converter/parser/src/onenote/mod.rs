@@ -49,9 +49,7 @@ impl Parser {
             .iter()
             .map(|name| fs_driver().join(&base_dir, name))
             .filter(|p| !p.contains("OneNote_RecycleBin"))
-            .filter(|p| {
-                fs_driver().exists(p).unwrap_or_default()
-            })
+            .filter(|p| fs_driver().exists(p).unwrap_or_default())
             .map(|p| {
                 let is_dir = fs_driver().is_directory(&p)?;
                 if !is_dir {
