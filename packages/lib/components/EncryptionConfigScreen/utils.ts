@@ -116,7 +116,7 @@ export const useInputMasterPassword = (masterKeys: MasterKeyEntity[], activeMast
 		Setting.setValue('encryption.masterPassword', inputMasterPassword);
 
 		if (!(await masterPasswordIsValid(inputMasterPassword, masterKeys.find(mk => mk.id === activeMasterKeyId)))) {
-			alert('Password is invalid. Please try again.');
+			await shim.showMessageBox(_('Password is invalid. Please try again.'));
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [inputMasterPassword]);
