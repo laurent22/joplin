@@ -715,13 +715,15 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 		let sideMenuContent: ReactNode = null;
 		let menuPosition = SideMenuPosition.Left;
-		let disableSideMenuGestures = this.props.disableSideMenuGestures;
+		let disableSideMenuGestures = true;
 
 		if (this.props.routeName === 'Note') {
 			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
 			menuPosition = SideMenuPosition.Right;
-		} else if (this.props.routeName === 'Config') {
-			disableSideMenuGestures = true;
+			disableSideMenuGestures = this.props.disableSideMenuGestures;
+		} else if (this.props.routeName === 'Notes') {
+			sideMenuContent = <SideMenuContent/>;
+			disableSideMenuGestures = false;
 		} else {
 			sideMenuContent = <SideMenuContent/>;
 		}
