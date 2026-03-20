@@ -81,7 +81,7 @@ const SidebarComponent = (props: Props) => {
 			aria-label={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 			title={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 		>
-			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'up'}`} />
+			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'right'}`} />
 			{(completedTime || props.syncStarted) ? (
 				<span className="timestamp">
 					{props.syncStarted ? _('Last sync: In progress...') : _('Last sync: %s', completedTime)}
