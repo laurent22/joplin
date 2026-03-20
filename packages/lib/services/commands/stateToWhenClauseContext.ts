@@ -66,7 +66,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const selectedNotes = BaseModel.modelsByIds(windowState.notes ?? [], selectedNoteIds);
 
 	const selectedFolderIds = windowState.selectedFolderIds || [];
-	const commandFolderIds = state.notesParentType === 'Folder' ? (options.commandFolderIds || selectedFolderIds) : [];
+	const commandFolderIds = options.commandFolderIds ? options.commandFolderIds : (state.notesParentType === 'Folder' ? selectedFolderIds : []);
 	const commandFolders = commandFolderIds.length ? BaseModel.modelsByIds(state.folders, commandFolderIds) : [];
 	const commandFolder = commandFolders.length ? commandFolders[0] : null;
 
