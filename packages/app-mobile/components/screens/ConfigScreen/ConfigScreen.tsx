@@ -41,6 +41,7 @@ import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { themeStyle } from '../../global-style';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -437,6 +438,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		};
 
 		const styleSheet = this.styles().styleSheet;
+		const theme = themeStyle(this.props.themeId);
 		const addSettingLink = (key: string, title: string, target: string) => {
 			const component = (
 				<View key={key} style={styleSheet.settingContainer}>
@@ -596,8 +598,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			const importSyncWarning = _('Importing is intended for adding or restoring notes. After importing notes, if you enable sync with the same notes already on another device, duplicates will be created. To transfer notes between devices, please use sync instead.');
 			addSettingComponent(
 				<View key='import_sync_warning' style={{
-					...styleSheet.settingContainer,
-					backgroundColor: '#FFCF8D',
+					backgroundColor: theme.warningBackgroundColor,
+					marginLeft: theme.margin,
+					marginRight: theme.margin,
+					marginTop: theme.marginTop,
 				}}>
 					<Text style={styleSheet.settingText}>{importSyncWarning}</Text>
 				</View>,
