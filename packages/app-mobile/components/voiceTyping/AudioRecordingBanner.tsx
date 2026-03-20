@@ -24,7 +24,7 @@ interface Props {
 
 // Modified from the Expo default recording options to create
 // .m4a recordings on both Android and iOS (rather than .3gp on Android).
-const recordingOptions = (): RecordingOptions => ({
+const recordingOptions: RecordingOptions = {
 	extension: '.m4a',
 	isMeteringEnabled: true,
 	sampleRate: 44100,
@@ -53,7 +53,7 @@ const recordingOptions = (): RecordingOptions => ({
 		].find(type => MediaRecorder.isTypeSupported(type)) ?? 'audio/webm',
 		bitsPerSecond: 128000,
 	} : {},
-});
+};
 
 const getRecordingFileName = (extension: string) => {
 	return `recording-${time.formatDateToLocal(new Date())}${extension}`;
@@ -72,7 +72,7 @@ const recordingToSaveData = async (recordingUri: string|null) => {
 		const fetchResult = await fetch(uri);
 		const blob = await fetchResult.blob();
 
-		type = recordingOptions().web.mimeType;
+		type = recordingOptions.web.mimeType;
 		const extension = `.${toFileExtension(type)}`;
 		fileName = getRecordingFileName(extension);
 		const file = new File([blob], fileName);
@@ -81,10 +81,9 @@ const recordingToSaveData = async (recordingUri: string|null) => {
 		await (shim.fsDriver() as FsDriverWeb).createReadOnlyVirtualFile(path, file);
 		uri = path;
 	} else {
-		const options = recordingOptions();
 		const extension = Platform.select({
-			android: options.android.extension,
-			ios: options.ios.extension,
+			android: recordingOptions.android.extension,
+			ios: recordingOptions.ios.extension,
 			default: '',
 		});
 		fileName = getRecordingFileName(extension);
@@ -105,7 +104,7 @@ const resetAudioMode = async () => {
 const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void) => {
 	const [recordingState, setRecordingState] = useState<RecorderState>(RecorderState.Idle);
 	const [error, setError] = useState('');
-	const recorder = useExpoAudioRecorder(recordingOptions());
+	const recorder = useExpoAudioRecorder(recordingOptions);
 	const recorderStatus = useAudioRecorderState(recorder, 100);
 	const isRecordingRef = useRef(false);
 
