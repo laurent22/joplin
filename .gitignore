@@ -1086,6 +1086,7 @@ packages/editor/CodeMirror/utils/formatting/isIndentationEquivalent.js
 packages/editor/CodeMirror/utils/formatting/tabsToSpaces.test.js
 packages/editor/CodeMirror/utils/formatting/tabsToSpaces.js
 packages/editor/CodeMirror/utils/formatting/toggleInlineFormatGlobally.js
+packages/editor/CodeMirror/utils/formatting/toggleInlineMultilineSelectionFormat.js
 packages/editor/CodeMirror/utils/formatting/toggleInlineRegionSurrounded.js
 packages/editor/CodeMirror/utils/formatting/toggleInlineSelectionFormat.js
 packages/editor/CodeMirror/utils/formatting/toggleRegionFormatGlobally.test.js

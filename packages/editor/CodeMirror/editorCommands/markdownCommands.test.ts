@@ -38,6 +38,48 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
+	it('should apply bold per line to multiline list selections', async () => {
+		const initialDocText = '- one\n- two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['BulletList'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('- **one**\n- **two**');
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('- one\n- two');
+	});
+
+	it('should apply italic per line to multiline ordered list selections', async () => {
+		const initialDocText = '1. one\n2. two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['OrderedList'],
+		);
+
+		toggleItalicized(editor);
+		expect(editor.state.doc.toString()).toBe('1. *one*\n2. *two*');
+
+		toggleItalicized(editor);
+		expect(editor.state.doc.toString()).toBe('1. one\n2. two');
+	});
+
+	it('should apply bold to list content while preserving checklist markers', async () => {
+		const initialDocText = '- [ ] one\n- [x] two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['BulletList'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('- [ ] **one**\n- [x] **two**');
+	});
+
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
 		const editor = await createTestEditor(
