@@ -368,7 +368,6 @@ packages/app-desktop/gui/NoteListHeader/NoteListHeaderItem.js
 packages/app-desktop/gui/NoteListHeader/types.js
 packages/app-desktop/gui/NoteListHeader/useDragAndDrop.test.js
 packages/app-desktop/gui/NoteListHeader/useDragAndDrop.js
-packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.test.js
 packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.js
 packages/app-desktop/gui/NoteListHeader/utils/useContextMenu.js
 packages/app-desktop/gui/NoteListHeader/utils/validateColumns.test.js
