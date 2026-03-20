@@ -54,7 +54,7 @@ export default (props: Props) => {
 			classes.push(props.isReverse ? 'fa-chevron-down' : 'fa-chevron-up');
 			chevron = <i className={classes.join(' ')}></i>;
 		}
-		const title = getColumnTitle(column.name, true);
+		const title = getColumnTitle(column.name);
 		let titleElement: React.ReactNode = title;
 
 		if (column.name === 'note.checkboxes') {
@@ -86,7 +86,7 @@ export default (props: Props) => {
 			draggable={true}
 			className={classes.join(' ')}
 			style={style}
-			title={getColumnTitle(column.name, true)}
+			title={getColumnTitle(column.name)}
 			onClick={onClick}
 			onDragStart={props.onDragStart}
 			onDragOver={props.onDragOver}
