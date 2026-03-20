@@ -137,8 +137,8 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 				interruptionMode: 'doNotMix',
 			});
 			await recorder.prepareToRecordAsync();
-			recorder.record();
 			isRecordingRef.current = true;
+			recorder.record();
 			setRecordingState(RecorderState.Recording);
 		} catch (error) {
 			logger.error('Error starting recording:', error);
