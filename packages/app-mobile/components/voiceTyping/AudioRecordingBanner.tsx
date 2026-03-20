@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AudioQuality, getRecordingPermissionsAsync, IOSOutputFormat, requestRecordingPermissionsAsync, setAudioModeAsync, type RecordingOptions, useAudioRecorder as useExpoAudioRecorder, useAudioRecorderState } from 'expo-audio';
 import Logger from '@joplin/utils/Logger';
 import { OnFileSavedCallback, RecorderState } from './types';
@@ -107,6 +107,7 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 	const [error, setError] = useState('');
 	const recorder = useExpoAudioRecorder(recordingOptions());
 	const recorderStatus = useAudioRecorderState(recorder, 100);
+	const isRecordingRef = useRef(false);
 
 	const onStartRecording = useCallback(async () => {
 		try {
@@ -137,13 +138,15 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 			});
 			await recorder.prepareToRecordAsync();
 			recorder.record();
+			isRecordingRef.current = true;
 			setRecordingState(RecorderState.Recording);
 		} catch (error) {
 			logger.error('Error starting recording:', error);
 			setError(`Recording error: ${error}`);
 			setRecordingState(RecorderState.Error);
 
-			if (recorder.isRecording) {
+			if (isRecordingRef.current) {
+				isRecordingRef.current = false;
 				void recorder.stop();
 			}
 		}
@@ -153,6 +156,7 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 		try {
 			setRecordingState(RecorderState.Processing);
 			await recorder.stop();
+			isRecordingRef.current = false;
 			await resetAudioMode();
 
 			const saveEvent = await recordingToSaveData(recorder.uri);
@@ -168,15 +172,26 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 	const onStartStopRecording = useCallback(async () => {
 		if (recordingState === RecorderState.Idle) {
 			await onStartRecording();
-		} else if (recordingState === RecorderState.Recording && recorder.isRecording) {
+		} else if (recordingState === RecorderState.Recording) {
 			await onStopRecording();
 		}
-	}, [recordingState, recorder, onStartRecording, onStopRecording]);
+	}, [recordingState, onStartRecording, onStopRecording]);
 
 	useEffect(() => () => {
-		if (recorder.isRecording) {
-			void recorder.stop();
-			void resetAudioMode();
+		if (isRecordingRef.current) {
+			isRecordingRef.current = false;
+
+			const stopRecorderOnCleanup = async () => {
+				try {
+					await recorder.stop();
+				} catch (error) {
+					logger.warn('Error stopping recorder during cleanup:', error);
+				}
+
+				await resetAudioMode();
+			};
+
+			void stopRecorderOnCleanup();
 		}
 	}, [recorder]);
 
