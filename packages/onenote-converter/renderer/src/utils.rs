@@ -134,6 +134,9 @@ mod test {
     #[test]
     fn should_encode_urls() {
         assert_eq!(url_encode("http://example.com/"), "http://example.com/");
-        assert_eq!(url_encode("http://example.com/\""), "http://example.com/%22");
+        assert_eq!(
+            url_encode("http://example.com/\""),
+            "http://example.com/%22"
+        );
     }
 }

@@ -86,7 +86,10 @@ impl Parser {
         let store = parse_onestore(&mut Reader::new(&data))?;
 
         if store.get_type() != OneStoreType::Section {
-            return Err(ErrorKind::NotASectionFile { file: String::from(path) }.into());
+            return Err(ErrorKind::NotASectionFile {
+                file: String::from(path),
+            }
+            .into());
         }
 
         let filename = fs_driver()

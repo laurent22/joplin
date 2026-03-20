@@ -23,7 +23,11 @@ impl<'a> Renderer<'a> {
         content_html.push_str(&self.parse_content(text)?);
 
         if content_html.starts_with("http://") || content_html.starts_with("https://") {
-            content_html = format!("<a href=\"{}\">{}</a>", url_encode(&content_html), content_html);
+            content_html = format!(
+                "<a href=\"{}\">{}</a>",
+                url_encode(&content_html),
+                content_html
+            );
         }
 
         if style.len() > 0 {
@@ -34,7 +38,11 @@ impl<'a> Renderer<'a> {
             Some(t) if !self.in_list && is_tag(t) => {
                 Ok(format!("<{} {}>{}</{}>", t, attrs, content_html, t))
             }
-            _ if style.len() > 0 => Ok(format!("<span {}>{}</span>", style.to_html_attr(), content_html)),
+            _ if style.len() > 0 => Ok(format!(
+                "<span {}>{}</span>",
+                style.to_html_attr(),
+                content_html
+            )),
             _ => Ok(content_html),
         }
     }

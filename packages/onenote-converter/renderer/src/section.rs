@@ -28,7 +28,9 @@ impl Renderer {
     pub fn render(&mut self, section: &Section, output_dir: String) -> Result<RenderedSection> {
         let section_dir = fs_driver().join(
             output_dir.as_str(),
-            fs_driver().sanitize_file_name(section.display_name()).as_str(),
+            fs_driver()
+                .sanitize_file_name(section.display_name())
+                .as_str(),
         );
         log!(
             "section_dir: {:?} \n output_dir: {:?}",
