@@ -76,6 +76,7 @@ packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
 packages/app-cli/app/command-cat.js
+packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
 packages/app-cli/app/command-cp.js
 packages/app-cli/app/command-done.test.js
