@@ -82,8 +82,6 @@ const emptyMockPackages = [
 	'react-native-image-picker',
 	'@react-native-documents/picker',
 	'@joplin/react-native-saf-x',
-	'expo-av',
-	'expo-av/build/Audio',
 	'expo-image-manipulator',
 ];
 for (const packageName of emptyMockPackages) {

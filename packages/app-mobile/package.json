@@ -49,7 +49,7 @@
     "deprecated-react-native-prop-types": "5.0.0",
     "events": "3.3.0",
     "expo": "54.0.31",
-    "expo-av": "16.0.8",
+    "expo-audio": "1.1.1",
     "expo-camera": "17.0.10",
     "expo-image-manipulator": "14.0.8",
     "expo-local-authentication": "17.0.8",
