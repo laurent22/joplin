@@ -1,7 +1,8 @@
 .sidebar-sync-toggle {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
+	padding-left: 5px;
 	background: none;
 	border: none;
 	color: var(--joplin-color2);
