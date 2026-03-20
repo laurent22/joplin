@@ -30,6 +30,11 @@ import CommandService from '@joplin/lib/services/CommandService';
 
 jest.retryTimes(2);
 
+jest.mock('../../voiceTyping/AudioRecordingBanner', () => {
+	const MockAudioRecordingBanner: React.FC = () => null;
+	return MockAudioRecordingBanner;
+});
+
 interface WrapperProps {
 }
 

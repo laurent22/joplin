@@ -90,35 +90,6 @@ for (const packageName of emptyMockPackages) {
 	});
 }
 
-jest.doMock('expo-audio', () => {
-	const recorder = {
-		isRecording: false,
-		uri: null,
-		prepareToRecordAsync: jest.fn(async () => {}),
-		record: jest.fn(() => {
-			recorder.isRecording = true;
-		}),
-		stop: jest.fn(async () => {
-			recorder.isRecording = false;
-			recorder.uri = 'file:///mock-recording.m4a';
-		}),
-	};
-
-	return {
-		AudioQuality: {
-			MIN: 0,
-		},
-		IOSOutputFormat: {
-			MPEG4AAC: 'aac ',
-		},
-		getRecordingPermissionsAsync: jest.fn(async () => ({ status: 'granted', granted: true, canAskAgain: true, expires: 'never' })),
-		requestRecordingPermissionsAsync: jest.fn(async () => ({ status: 'granted', granted: true, canAskAgain: true, expires: 'never' })),
-		setAudioModeAsync: jest.fn(async () => {}),
-		useAudioRecorder: jest.fn(() => recorder),
-		useAudioRecorderState: jest.fn(() => ({ durationMillis: 0 })),
-	};
-});
-
 jest.mock('react-native-file-viewer', () => {
 	return { default: { } };
 });
