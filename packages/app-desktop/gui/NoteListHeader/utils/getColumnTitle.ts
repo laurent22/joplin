@@ -17,6 +17,5 @@ const titles: Record<ColumnName, ()=> string> = {
 };
 
 export default (name: ColumnName) => {
-	const fn: ()=> string = titles[name];
-	return fn ? fn() : name;
+	return titles[name]();
 };
