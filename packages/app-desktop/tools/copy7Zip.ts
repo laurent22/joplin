@@ -1,5 +1,4 @@
-
-import { copy } from 'fs-extra';
+import { copy, chmod } from 'fs-extra';
 import { dirname, join } from 'path';
 
 const copy7Zip = async () => {
@@ -34,7 +33,15 @@ const copy7Zip = async () => {
 
 	const rootDir = dirname(__dirname);
 	const outputPath = join(rootDir, 'build', '7zip', fileName);
+
 	await copy(pathTo7za, outputPath);
+
+	// Fix: Ensure the 7za binary has executable permissions.
+	// This prevents EACCES errors on macOS when spawning the binary.
+	if (targetPlatform !== 'win32') {
+		await chmod(outputPath, 0o755);
+		// console.log("FIX APPLIED TO:", outputPath)
+	}
 };
 
 export default copy7Zip;
