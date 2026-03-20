@@ -2,6 +2,68 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	max-width: 450px;
+
+	> .update-notification-header {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+		width: 100%;
+
+		> .update-notification-title {
+			font-weight: bold;
+		}
+
+		> .link-button {
+			font-size: 0.9em;
+		}
+	}
+
+	> .update-notification-release-notes {
+		max-height: 200px;
+		overflow-y: auto;
+		width: 100%;
+		margin-top: 8px;
+		padding: 8px;
+		border-radius: 4px;
+		background-color: rgba(0, 0, 0, 0.05);
+		font-size: 0.9em;
+		line-height: 1.4;
+
+		h1, h2, h3, h4, h5, h6 {
+			margin: 4px 0 2px 0;
+			font-size: 1em;
+			font-weight: bold;
+		}
+
+		p {
+			margin: 2px 0;
+		}
+
+		li {
+			margin-left: 16px;
+			list-style-type: disc;
+		}
+
+		hr {
+			border: none;
+			border-top: 1px solid rgba(0, 0, 0, 0.1);
+			margin: 8px 0;
+		}
+
+		code {
+			background-color: rgba(0, 0, 0, 0.08);
+			padding: 1px 4px;
+			border-radius: 3px;
+			font-size: 0.9em;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: underline;
+		}
+	}
 
 	> .buttons {
 		display: flex;

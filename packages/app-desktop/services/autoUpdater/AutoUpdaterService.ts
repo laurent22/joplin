@@ -7,6 +7,12 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { GitHubRelease, GitHubReleaseAsset, handleReleaseResponseError } from '../../utils/checkForUpdatesUtils';
 import * as semver from 'semver';
 
+export interface UpdateDownloadedInfo {
+	version: string;
+	releaseNotes: string;
+	pageUrl: string;
+}
+
 export enum AutoUpdaterEvents {
 	CheckingForUpdate = 'checking-for-update',
 	UpdateAvailable = 'update-available',
@@ -54,6 +60,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private allowDowngrade = false;
 	private isManualCheckInProgress = false;
 	private isUpdateInProgress = false;
+	private latestRelease_: GitHubRelease = null;
 
 	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
@@ -135,6 +142,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 		try {
 			const release: GitHubRelease = await this.fetchLatestRelease(this.includePreReleases_);
+			this.latestRelease_ = release;
 
 			try {
 				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName(), process.arch);
@@ -203,7 +211,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private onUpdateDownloaded = (info: UpdateInfo): void => {
 		this.logger_.info('Update downloaded.');
 		this.isUpdateInProgress = false;
-		void this.promptUserToUpdate(info);
+		void this.promptUserToUpdate(info, this.latestRelease_);
 	};
 
 	private onError = (error: Error): void => {
@@ -211,7 +219,14 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 		this.isUpdateInProgress = false;
 	};
 
-	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {
-		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, info);
+	private promptUserToUpdate = async (info: UpdateInfo, release: GitHubRelease): Promise<void> => {
+		const releaseNotes = release?.body ?? '';
+		const pageUrl = release?.html_url ?? '';
+		const updateInfo: UpdateDownloadedInfo = {
+			version: info.version,
+			releaseNotes,
+			pageUrl,
+		};
+		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, updateInfo);
 	};
 }
