@@ -1,4 +1,4 @@
-import { normalizeQuery, isMetadataMatched, searchResultGroups } from './config-shared';
+import { normalizeQuery, hasNormalizedQuery, equalsNormalizedQuery, includesNormalizedQuery, isMetadataMatched, searchResultGroups } from './config-search';
 import { AppType, SettingItem, SettingItemType, SettingMetadataSection, SettingSectionSource } from '../../../models/Setting';
 
 describe('config-search', () => {
@@ -16,6 +16,17 @@ describe('config-search', () => {
 	it('should normalize query for case-insensitive matching', () => {
 		expect(normalizeQuery('  SyNc  ')).toBe('sync');
 		expect(normalizeQuery('\t\n')).toBe('');
+	});
+
+	it('should provide normalized query matching helpers', () => {
+		expect(hasNormalizedQuery('   ')).toBe(false);
+		expect(hasNormalizedQuery(' sync ')).toBe(true);
+
+		expect(equalsNormalizedQuery(' General ', 'general')).toBe(true);
+		expect(equalsNormalizedQuery(' General ', 'generally')).toBe(false);
+
+		expect(includesNormalizedQuery('sync', 'Synchronization interval')).toBe(true);
+		expect(includesNormalizedQuery('sync', 'General settings')).toBe(false);
 	});
 
 	it('should match query in label, description, and section title', () => {
@@ -40,16 +51,23 @@ describe('config-search', () => {
 	});
 
 	it('should return no groups for empty or whitespace-only query', () => {
-		expect(searchResultGroups({ device: AppType.Desktop, settings: {}, query: '' })).toEqual([]);
-		expect(searchResultGroups({ device: AppType.Desktop, settings: {}, query: '   ' })).toEqual([]);
+		const sections: SettingMetadataSection[] = [];
+		expect(searchResultGroups('', sections, AppType.Desktop)).toEqual([]);
+		expect(searchResultGroups('   ', sections, AppType.Desktop)).toEqual([]);
 	});
 
 	it('should return grouped results with unique section names', () => {
-		const result = searchResultGroups({
-			device: AppType.Desktop,
-			settings: {},
-			query: 'sync',
-		});
+		const sections: SettingMetadataSection[] = [{
+			name: 'synchronisation',
+			isScreen: false,
+			source: SettingSectionSource.Default,
+			metadatas: [{
+				...createMetadata('Synchronization interval'),
+				key: 'sync.interval',
+			}],
+		}];
+
+		const result = searchResultGroups('sync', sections, AppType.Desktop);
 
 		expect(result.length).toBeGreaterThan(0);
 		expect(new Set(result.map(group => group.sectionName)).size).toBe(result.length);

@@ -5,7 +5,8 @@ import { _ } from '@joplin/lib/locale';
 import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
-import { type SearchResultGroup } from '@joplin/lib/components/shared/config/config-shared';
+import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search';
+import { type SearchResultGroup } from '@joplin/lib/components/shared/config/config-search';
 import highlightSearchText from './searchHighlight';
 const styled = require('styled-components').default;
 
@@ -99,7 +100,7 @@ export const StyledListItemIcon = styled.i`
 
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
-	const isSearching = props.searchQuery.trim().length > 0;
+	const isSearching = !!normalizeQuery(props.searchQuery);
 
 	const matchedSectionNames = useMemo(() => {
 		return new Set(props.searchResultGroups.map(group => group.sectionName));

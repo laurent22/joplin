@@ -16,6 +16,7 @@ import restart from '../../services/restart';
 import JoplinCloudConfigScreen from '../JoplinCloudConfigScreen';
 import ToggleAdvancedSettingsButton from './controls/ToggleAdvancedSettingsButton';
 import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/config/shouldShowMissingPasswordWarning';
+import { normalizeQuery, searchResultGroups, matchedSearchSections } from '@joplin/lib/components/shared/config/config-search.js';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
@@ -184,7 +185,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
 		const sectionName = event.section.name;
-		const searchMode = !!shared.normalizeQuery(this.state.searchQuery);
+		const searchMode = !!normalizeQuery(this.state.searchQuery);
 
 		if (searchMode) {
 			this.setState({
@@ -212,7 +213,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
-		const searchMode = !!shared.normalizeQuery(this.state.searchQuery);
+		const searchMode = !!normalizeQuery(this.state.searchQuery);
 
 		const createSettingComponents = (advanced: boolean) => {
 			const output = [];
@@ -439,7 +440,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	public render() {
 		const theme = themeStyle(this.props.themeId);
-		const searchQuery = shared.normalizeQuery(this.state.searchQuery);
+		const searchQuery = normalizeQuery(this.state.searchQuery);
 		const searchMode = !!searchQuery;
 		const sectionFilter = this.state.searchSectionFilter;
 
@@ -473,12 +474,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (screenComp) containerStyle.display = 'none';
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
-		const searchResultGroups = shared.searchResultGroups({
-			device: AppType.Desktop,
-			settings,
-			query: this.state.searchQuery,
-		});
-		const matchedSections = shared.matchedSearchSections(AppType.Desktop, settings, searchResultGroups);
+		const searchResultGroupItems = searchResultGroups(this.state.searchQuery, sections, AppType.Desktop);
+		const matchedSections = matchedSearchSections(sections, searchResultGroupItems);
 		const hasValidSectionFilter = !!sectionFilter && matchedSections.some(group => group.section.name === sectionFilter);
 		const filteredMatchedSections = hasValidSectionFilter ? matchedSections.filter(group => group.section.name === sectionFilter) : matchedSections;
 
@@ -617,7 +614,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					searchQuery={this.state.searchQuery}
 					onSearchQueryChange={this.onSearchQueryChange}
 					onSearchButtonClick={this.onSearchButtonClick}
-					searchResultGroups={searchResultGroups}
+					searchResultGroups={searchResultGroupItems}
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}
