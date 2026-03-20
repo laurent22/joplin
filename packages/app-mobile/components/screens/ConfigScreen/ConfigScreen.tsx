@@ -595,13 +595,19 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'importOrExport') {
+			// Duplicated from desktop import warning in packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts.
 			const importSyncWarning = _('Importing is intended for adding or restoring notes. After importing notes, if you enable sync with the same notes already on another device, duplicates will be created. To transfer notes between devices, please use sync instead.');
 			addSettingComponent(
 				<View key='import_sync_warning' style={{
 					backgroundColor: theme.warningBackgroundColor,
+					paddingTop: 5,
+					paddingBottom: 5,
+					paddingLeft: 10,
+					paddingRight: 10,
 					marginLeft: theme.margin,
 					marginRight: theme.margin,
 					marginTop: theme.marginTop,
+					marginBottom: theme.marginBottom,
 				}}>
 					<Text style={styleSheet.settingText}>{importSyncWarning}</Text>
 				</View>,
