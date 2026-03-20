@@ -1,5 +1,5 @@
 import WebDavApi from './WebDavApi';
-import shim from './shim';
+import { mockFetch } from './testing/test-utils';
 
 interface WebDavApiError {
 	message: string;
@@ -21,13 +21,15 @@ describe('WebDavApi', () => {
 		});
 
 		const html = '<!DOCTYPE html><html><body><h1>Maintenance</h1></body></html>';
-		const mockResponse: Partial<Response> = {
-			ok: false,
+		const mockResponse = {
+			body: html,
 			status: 502,
-			text: async () => html,
+			statusText: 'Bad Gateway',
+			headers: { 'Content-Type': 'text/html' },
 		};
-
-		const fetchSpy = jest.spyOn(shim, 'fetch').mockResolvedValue(mockResponse as Response);
+		const fetchMock = mockFetch(() => {
+			return new Response(mockResponse.body, { status: mockResponse.status, statusText: mockResponse.statusText, headers: mockResponse.headers });
+		});
 
 		try {
 			await api.exec('GET', 'locks');
@@ -39,7 +41,7 @@ describe('WebDavApi', () => {
 			expect(webDavError.message.includes('<html>')).toBe(false);
 			expect(webDavError.details.includes('<html>')).toBe(true);
 		} finally {
-			fetchSpy.mockRestore();
+			fetchMock.reset();
 		}
 	});
 });

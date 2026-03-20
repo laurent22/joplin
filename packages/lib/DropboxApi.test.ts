@@ -1,4 +1,4 @@
-import shim from './shim';
+import { mockFetch } from './testing/test-utils';
 const DropboxApi = require('./DropboxApi');
 
 interface DropboxApiError {
@@ -20,13 +20,15 @@ describe('DropboxApi', () => {
 		});
 
 		const html = '<!DOCTYPE html><html><body><h1>Maintenance</h1></body></html>';
-		const mockResponse: Partial<Response> = {
-			ok: false,
+		const mockResponse = {
+			body: html,
 			status: 502,
-			text: async () => html,
+			statusText: 'Bad Gateway',
+			headers: { 'Content-Type': 'text/html' },
 		};
-
-		const fetchSpy = jest.spyOn(shim, 'fetch').mockResolvedValue(mockResponse as Response);
+		const fetchMock = mockFetch(() => {
+			return new Response(mockResponse.body, { status: mockResponse.status, statusText: mockResponse.statusText, headers: mockResponse.headers });
+		});
 
 		try {
 			await api.exec('POST', 'files/create_folder_v2', { path: '/test' });
@@ -38,7 +40,7 @@ describe('DropboxApi', () => {
 			expect(dropboxError.message.includes('<html>')).toBe(false);
 			expect(dropboxError.details.includes('<html>')).toBe(true);
 		} finally {
-			fetchSpy.mockRestore();
+			fetchMock.reset();
 		}
 	});
 });

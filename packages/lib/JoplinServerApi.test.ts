@@ -1,5 +1,5 @@
 import JoplinServerApi from './JoplinServerApi';
-import shim from './shim';
+import { mockFetch } from './testing/test-utils';
 
 interface JoplinServerApiError {
 	message: string;
@@ -26,13 +26,15 @@ describe('JoplinServerApi', () => {
 		});
 
 		const html = '<!DOCTYPE html><html><body><h1>Joplin Cloud is down for maintenance</h1></body></html>';
-		const mockResponse: Partial<Response> = {
-			ok: false,
+		const mockResponse = {
+			body: html,
 			status: 502,
-			text: async () => html,
+			statusText: 'Bad Gateway',
+			headers: { 'Content-Type': 'text/html' },
 		};
-
-		const fetchSpy = jest.spyOn(shim, 'fetch').mockResolvedValue(mockResponse as Response);
+		const fetchMock = mockFetch(() => {
+			return new Response(mockResponse.body, { status: mockResponse.status, statusText: mockResponse.statusText, headers: mockResponse.headers });
+		});
 
 		try {
 			await api.exec('GET', 'api/ping');
@@ -44,7 +46,7 @@ describe('JoplinServerApi', () => {
 			expect(joplinError.message.includes('<html>')).toBe(false);
 			expect(joplinError.details?.includes('<html>')).toBe(true);
 		} finally {
-			fetchSpy.mockRestore();
+			fetchMock.reset();
 		}
 	});
 });
