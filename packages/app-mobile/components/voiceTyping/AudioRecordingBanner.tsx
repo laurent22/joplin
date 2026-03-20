@@ -3,6 +3,7 @@ import { PrimaryButton, SecondaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Audio, InterruptionModeIOS } from 'expo-av';
+import { AudioQuality, IOSOutputFormat, type RecordingOptions } from 'expo-audio';
 import Logger from '@joplin/utils/Logger';
 import { OnFileSavedCallback, RecorderState } from './types';
 import { Platform } from 'react-native';
@@ -11,7 +12,6 @@ import FsDriverWeb from '../../utils/fs-driver/fs-driver-rn.web';
 import uuid from '@joplin/lib/uuid';
 import RecordingControls from './RecordingControls';
 import { Text } from 'react-native-paper';
-import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio';
 import time from '@joplin/lib/time';
 import { toFileExtension } from '@joplin/lib/mime-utils';
 import { formatMsToDurationCompat, msleep } from '@joplin/utils/time';
@@ -26,22 +26,20 @@ interface Props {
 // Modified from the Expo default recording options to create
 // .m4a recordings on both Android and iOS (rather than .3gp on Android).
 const recordingOptions = (): RecordingOptions => ({
+	extension: '.m4a',
 	isMeteringEnabled: true,
+	sampleRate: 44100,
+	numberOfChannels: 2,
+	bitRate: 64000,
 	android: {
 		extension: '.m4a',
-		outputFormat: AndroidOutputFormat.MPEG_4,
-		audioEncoder: AndroidAudioEncoder.AAC,
-		sampleRate: 44100,
-		numberOfChannels: 2,
-		bitRate: 64000,
+		outputFormat: 'mpeg4',
+		audioEncoder: 'aac',
 	},
 	ios: {
 		extension: '.m4a',
-		audioQuality: IOSAudioQuality.MIN,
+		audioQuality: AudioQuality.MIN,
 		outputFormat: IOSOutputFormat.MPEG4AAC,
-		sampleRate: 44100,
-		numberOfChannels: 2,
-		bitRate: 64000,
 		linearPCMBitDepth: 16,
 		linearPCMIsBigEndian: false,
 		linearPCMIsFloat: false,
