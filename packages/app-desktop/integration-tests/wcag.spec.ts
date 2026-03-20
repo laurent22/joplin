@@ -82,6 +82,17 @@ test.describe('wcag', () => {
 		await expectNoViolations(mainWindow);
 	});
 
+	test('should not detect significant issues in the note properties screen', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test');
+		await mainScreen.goToAnything.runCommand(electronApp, 'showNoteProperties');
+
+		const header = mainScreen.dialog.locator('h1');
+		await expect(header).toBeVisible();
+
+		await expectNoViolations(mainWindow);
+	});
+
 	test('should not detect significant issues in the change app layout screen', async ({ mainWindow, electronApp }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.changeLayoutScreen.open(electronApp);

@@ -332,7 +332,7 @@ export function extraStyles(theme: ThemeAndDerivedColors) {
 			padding: 10,
 			fontSize: baseFontSize,
 		},
-		dialogTitle: { ...h1Style, marginBottom: '1.2em' },
+		dialogTitle: { ...h1Style, marginBottom: '1.2em', marginTop: '0' },
 		dropdownList: { ...inputStyle },
 		colorHover: theme.color,
 		backgroundHover: `${theme.selectedColor2}44`,
