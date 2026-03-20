@@ -5,7 +5,6 @@ import { AppState, AppStateRoute } from '../app.reducer';
 import bridge from '../services/bridge';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { WindowIdContext } from './NewWindowOrIFrame';
-import useCtrlWheelZoom from './hooks/useCtrlWheelZoom';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of code from before rule was applied
 type ScreenProps = any;
@@ -99,7 +98,6 @@ const NavigatorComponent: React.FC<Props> = props => {
 
 	useWindowTitleManager(screenInfo);
 	useWindowRefocusManager(route);
-	useCtrlWheelZoom();
 	const size = useContainerSize(container);
 
 	if (!route) throw new Error('Route must not be null');

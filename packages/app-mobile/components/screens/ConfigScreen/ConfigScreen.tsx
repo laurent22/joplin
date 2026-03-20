@@ -834,6 +834,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				placeholder={_('Search...')}
 				onChangeText={this.onSearchUpdate_}
 				autoFocus={true}
+				autoCapitalize='none'
+				autoComplete='off'
+				autoCorrect={false}
 			/>;
 
 			currentSection = (
