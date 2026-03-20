@@ -1,9 +1,11 @@
-import { Text as DocumentText, EditorSelection, SelectionRange } from '@codemirror/state';
+import { Text, EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 import { RegionSpec } from './RegionSpec';
 import { SelectionUpdate } from './types';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
+import intersectsSyntaxNode from '../isInSyntaxNode';
 
 const listPrefixRegex = /^(\s*(?:[-*]\s\[[ xX]\]\s|[-*]\s|\d+[.)]\s))/;
+const blockquotePrefixRegex = /^(\s*(?:>\s*)+)/;
 
 const applyChangeToText = (text: string, change: { from: number; to?: number; insert: string }) => {
 	const to = change.to ?? change.from;
@@ -25,29 +27,33 @@ const applySelectionUpdateToText = (text: string, update: SelectionUpdate) => {
 const toggleWholeTextRegion = (content: string, spec: RegionSpec) => {
 	if (!content.trim()) return content;
 
-	const doc = DocumentText.of([content]);
+	const doc = Text.of([content]);
 	const update = toggleInlineRegionSurrounded(doc, EditorSelection.range(0, content.length), spec);
 	return applySelectionUpdateToText(content, update);
 };
 
 const toggleListLineContent = (lineText: string, spec: RegionSpec) => {
-	const listPrefix = lineText.match(listPrefixRegex)?.[1];
+	const blockquotePrefix = lineText.match(blockquotePrefixRegex)?.[1] ?? '';
+	const remainingText = lineText.slice(blockquotePrefix.length);
+	const listPrefix = remainingText.match(listPrefixRegex)?.[1];
 	if (!listPrefix) return toggleWholeTextRegion(lineText, spec);
 
-	const content = lineText.slice(listPrefix.length);
+	const content = remainingText.slice(listPrefix.length);
 	if (!content.trim()) return lineText;
 
-	return listPrefix + toggleWholeTextRegion(content, spec);
+	return blockquotePrefix + listPrefix + toggleWholeTextRegion(content, spec);
 };
 
 export const shouldUseMultilineInlineSelectionFormatting = (
-	doc: DocumentText,
+	state: EditorState,
 	sel: SelectionRange,
 	spec: RegionSpec,
 ) => {
 	if (sel.empty) return false;
 	if (spec.nodeName !== 'StrongEmphasis' && spec.nodeName !== 'Emphasis') return false;
+	if (intersectsSyntaxNode(state, sel, 'FencedCode') || intersectsSyntaxNode(state, sel, 'CodeBlock')) return false;
 
+	const doc = state.doc;
 	const startLine = doc.lineAt(sel.from);
 	const endLine = doc.lineAt(sel.to);
 	if (startLine.number === endLine.number) return false;
@@ -57,10 +63,11 @@ export const shouldUseMultilineInlineSelectionFormatting = (
 };
 
 const toggleInlineMultilineSelectionFormat = (
-	doc: DocumentText,
+	state: EditorState,
 	sel: SelectionRange,
 	spec: RegionSpec,
 ): SelectionUpdate => {
+	const doc = state.doc;
 	const selectedText = doc.sliceString(sel.from, sel.to);
 	const transformedText = selectedText
 		.split('\n')

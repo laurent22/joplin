@@ -80,6 +80,42 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('- [ ] **one**\n- [x] **two**');
 	});
 
+	it('should keep fenced code block multiline formatting behavior unchanged', async () => {
+		const initialDocText = '```\none\ntwo\n```';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['FencedCode'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('**```\none\ntwo\n```**');
+	});
+
+	it('should apply bold to blockquote list content without wrapping markers', async () => {
+		const initialDocText = '> - one\n> - two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['Blockquote', 'BulletList'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('> - **one**\n> - **two**');
+	});
+
+	it('should preserve blank lines when bolding multiline list selections', async () => {
+		const initialDocText = '- one\n\n- two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['BulletList'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('- **one**\n\n- **two**');
+	});
+
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
 		const editor = await createTestEditor(

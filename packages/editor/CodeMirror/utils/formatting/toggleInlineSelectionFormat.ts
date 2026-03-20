@@ -11,8 +11,8 @@ import toggleInlineMultilineSelectionFormat, { shouldUseMultilineInlineSelection
 const toggleInlineSelectionFormat = (
 	state: EditorState, spec: RegionSpec, sel: SelectionRange,
 ): SelectionUpdate => {
-	if (shouldUseMultilineInlineSelectionFormatting(state.doc, sel, spec)) {
-		return toggleInlineMultilineSelectionFormat(state.doc, sel, spec);
+	if (shouldUseMultilineInlineSelectionFormatting(state, sel, spec)) {
+		return toggleInlineMultilineSelectionFormat(state, sel, spec);
 	}
 
 	const endMatchLen = findInlineMatch(state.doc, spec, sel, MatchSide.End);
