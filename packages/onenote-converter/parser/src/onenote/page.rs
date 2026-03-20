@@ -76,9 +76,8 @@ impl Page {
                     .iter()
                     .filter_map(|page_content| page_content.outline())
                     .filter_map(|t| {
-                        let v = Self::outline_text(t);
-                        v?;
-                        Some(Self::remove_hyperlink(v.unwrap().to_owned()))
+                        let v = Self::outline_text(t)?;
+                        Some(Self::remove_hyperlink(v.to_owned()))
                     })
                     .next()
             })
