@@ -60,8 +60,10 @@ const getRecordingFileName = (extension: string) => {
 	return `recording-${time.formatDateToLocal(new Date())}${extension}`;
 };
 
-const recordingToSaveData = async (recording: Audio.Recording) => {
-	let uri = recording.getURI();
+const recordingToSaveData = async (recordingUri: string|null) => {
+	if (!recordingUri) throw new Error(_('Unable to access the recording file.'));
+
+	let uri = recordingUri;
 	let type: string|undefined;
 	let fileName;
 
