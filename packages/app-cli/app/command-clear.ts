@@ -1,5 +1,6 @@
 import BaseCommand from './base-command';
 import app from './app';
+import { _ } from '@joplin/lib/locale';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -7,7 +8,7 @@ class Command extends BaseCommand {
 	}
 
 	public override description() {
-		return ('Clears the console output.');
+		return _('Clears the console output.');
 	}
 
 	public override async action() {
