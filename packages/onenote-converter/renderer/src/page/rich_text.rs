@@ -159,7 +159,7 @@ impl<'a> Renderer<'a> {
         if let Some(line_spacing) = text.paragraph_line_spacing_exact() {
             styles.set(
                 "line-height",
-                ((line_spacing as f32) * 50.0).floor().to_string() + "pt",
+                (line_spacing * 50.0).floor().to_string() + "pt",
             );
             // TODO: why not implemented?
             // if line_spacing > 0.0 {
@@ -236,18 +236,16 @@ impl<'a> Renderer<'a> {
             );
         }
 
-        if let Some(space) = style.paragraph_space_before() {
-            if space != 0.0 {
+        if let Some(space) = style.paragraph_space_before()
+            && space != 0.0 {
                 // Space is in half inches:
                 styles.set("margin-top", format!("{}in", space / 2.));
             }
-        }
 
-        if let Some(space) = style.paragraph_space_after() {
-            if space != 0.0 {
+        if let Some(space) = style.paragraph_space_after()
+            && space != 0.0 {
                 styles.set("margin-bottom", format!("{}in", space / 2.));
             }
-        }
 
         if let Some(space) = style.paragraph_line_spacing_exact() {
             if space != 0.0 {

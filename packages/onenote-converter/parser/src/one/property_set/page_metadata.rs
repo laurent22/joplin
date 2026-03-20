@@ -33,7 +33,7 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
     let cached_title = simple::parse_string(PropertyType::CachedTitleString, object)?
         .ok_or_else(|| {
             let guid = simple::parse_guid(PropertyType::NotebookManagementEntityGuid, object);
-            return guid.map(|g| g.unwrap().to_string());
+            guid.map(|g| g.unwrap().to_string())
         })
         .unwrap_or("Untitled Page".to_string());
     let schema_revision_in_order_to_read =

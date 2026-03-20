@@ -27,8 +27,7 @@ impl ObjectReference {
         let id = object
             .props()
             .object_ids()
-            .iter()
-            .nth(index)
+            .get(index)
             .ok_or_else(|| ErrorKind::MalformedOneNoteFileData("object id index corrupt".into()))?;
 
         Ok(Self::resolve_id(index, id, object))

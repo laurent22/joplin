@@ -30,11 +30,7 @@ pub(crate) struct ObjectSpace {
 
 impl onestore::object_space::ObjectSpace for ObjectSpace {
     fn get_object(&self, id: ExGuid) -> Option<std::rc::Rc<onestore::object::Object>> {
-        if let Some(object) = self.objects.get(&id) {
-            Some(object.data.clone())
-        } else {
-            None
-        }
+        self.objects.get(&id).map(|object| object.data.clone())
     }
 
     fn content_root(&self) -> Option<ExGuid> {

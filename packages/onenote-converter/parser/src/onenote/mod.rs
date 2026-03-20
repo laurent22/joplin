@@ -50,11 +50,7 @@ impl Parser {
             .map(|name| fs_driver().join(&base_dir, name))
             .filter(|p| !p.contains("OneNote_RecycleBin"))
             .filter(|p| {
-                let is_file = match fs_driver().exists(p) {
-                    Ok(is_file) => is_file,
-                    Err(_err) => false,
-                };
-                return is_file;
+                fs_driver().exists(p).unwrap_or_default()
             })
             .map(|p| {
                 let is_dir = fs_driver().is_directory(&p)?;
@@ -83,7 +79,7 @@ impl Parser {
     /// The [path] is used to provide debugging information and determine
     /// the name of the section file.
     pub fn parse_section_from_data(&mut self, data: &[u8], path: &str) -> Result<Section> {
-        let store = parse_onestore(&mut Reader::new(&data))?;
+        let store = parse_onestore(&mut Reader::new(data))?;
 
         if store.get_type() != OneStoreType::Section {
             return Err(ErrorKind::NotASectionFile {
@@ -93,7 +89,7 @@ impl Parser {
         }
 
         let filename = fs_driver()
-            .get_file_name(&path)
+            .get_file_name(path)
             .expect("file without file name");
         section::parse_section(store, filename)
     }

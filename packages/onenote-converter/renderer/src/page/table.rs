@@ -22,12 +22,12 @@ impl<'a> Renderer<'a> {
             attributes.set("border", "1".to_string());
         }
 
-        content.push_str(&format!("<table {}>", attributes.to_string()));
+        content.push_str(&format!("<table {}>", attributes));
 
         let locked_cols = calc_locked_cols(table.cols_locked(), table.cols());
 
         let mut col_widths = table.col_widths().to_vec();
-        col_widths.extend(vec![0.0; table.cols() as usize - col_widths.len()].into_iter());
+        col_widths.extend(vec![0.0; table.cols() as usize - col_widths.len()]);
         let col_widths = &*col_widths;
 
         for row in table.contents() {
@@ -85,7 +85,7 @@ impl<'a> Renderer<'a> {
         let mut attrs = AttributeSet::new();
         attrs.set("style", styles.to_string());
 
-        contents.push_str(&format!("<td {}>", attrs.to_string()));
+        contents.push_str(&format!("<td {}>", attrs));
 
         let cell_level = self.table_cell_level(cell.contents());
 
