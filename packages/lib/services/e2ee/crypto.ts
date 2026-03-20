@@ -94,7 +94,7 @@ const crypto: Crypto = {
 		const iv = Buffer.from(data.iv, 'base64');
 
 		const key = await pbkdf2Raw(password, salt, encryptionParameters.iterationCount, encryptionParameters.keyLength, encryptionParameters.digestAlgorithm);
-		const decrypted = decryptRaw(Buffer.from(data.ct, 'base64'), key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
+		const decrypted = await decryptRaw(Buffer.from(data.ct, 'base64'), key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
 
 		return decrypted;
 	},
