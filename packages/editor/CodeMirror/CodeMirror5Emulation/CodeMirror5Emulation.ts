@@ -14,6 +14,14 @@ const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 type CodeMirror5Command = (codeMirror: CodeMirror5Emulation)=> void;
 
+interface ChangeRecord {
+	from: DocumentPosition;
+	to: DocumentPosition;
+	text: string[];
+	removed: string[];
+	transaction: Transaction;
+}
+
 type BuiltInEventArgs = {
 	'paste': [ClipboardEvent];
 	'mousedown': [MouseEvent];
@@ -21,11 +29,17 @@ type BuiltInEventArgs = {
 	'focus': [];
 	'scroll': [];
 	'update': [];
+	'change': [ChangeRecord];
+	'changes': [ChangeRecord[]];
+	'inputRead': [ChangeRecord];
 	'viewportChange': [number, number];
 	'beforeSelectionChange': [];
 };
 // Fall back to `unknown[]` for unknown events (e.g. plugin events)
-type EventArgs<T> = T extends keyof BuiltInEventArgs ? BuiltInEventArgs[T] : unknown[];
+type EventArgs<EventName> =
+	EventName extends keyof BuiltInEventArgs
+		? BuiltInEventArgs[EventName]
+		: unknown[];
 type EventType = (keyof BuiltInEventArgs)|string;
 
 type EditorEventCallback<T extends EventType> = (editor: CodeMirror5Emulation, ...args: EventArgs<T>)=> void;
@@ -198,7 +212,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static signal<T extends EventType>(target: CodeMirror5Emulation, eventName: T, ...args: EventArgs<T>) {
 		const listeners = target._events[eventName] ?? [];
 
@@ -210,13 +223,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	private fireChangeEvents(update: ViewUpdate) {
-		type ChangeRecord = {
-			from: DocumentPosition;
-			to: DocumentPosition;
-			text: string[];
-			removed: string[];
-			transaction: Transaction;
-		};
 		const changes: ChangeRecord[] = [];
 		const origDoc = update.startState.doc;
 
