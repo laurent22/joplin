@@ -83,6 +83,7 @@ const shouldContinueWithImport = async (module: ImportModule) => {
 
 	const message = _('Importing is intended for adding or restoring notes. After importing notes, if you enable sync with the same notes already on another device, duplicates will be created. To transfer notes between devices, please use sync instead. Do you want to continue with the import?');
 	const buttonIndex = await bridge().showMessageBox(message, {
+		title: _('Warning'),
 		buttons: [_('Yes'), _('No')],
 		defaultId: 1,
 		cancelId: 1,
