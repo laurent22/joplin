@@ -411,7 +411,11 @@ export default class ElectronAppWrapper {
 		// OS-level focus gain without conflating it with the 'window-focused' channel that
 		// handles Joplin-internal window routing.
 		this.win_.on('focus', () => {
-			this.win_?.webContents.send('main-window-focused');
+			try {
+				this.win_?.webContents.send('main-window-focused');
+			} catch (_error) {
+				// Renderer may be temporarily disposed after closing secondary windows
+			}
 		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -483,6 +487,9 @@ export default class ElectronAppWrapper {
 			window.webContents.setZoomFactor(this.mainWindow().webContents.getZoomFactor());
 
 			window.once('close', () => {
+				if (this.win_ && !this.win_.isDestroyed() && !this.win_.webContents.isDestroyed()) {
+					this.win_.webContents.send('secondary-window-closing', windowId);
+				}
 				this.secondaryWindows_.delete(windowId);
 
 				const allSecondaryWindowsClosed = this.secondaryWindows_.size === 0;
