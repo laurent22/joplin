@@ -1,7 +1,8 @@
 import Note from '@joplin/lib/models/Note';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import useFormNote, { HookDependencies } from './useFormNote';
+import useFormNote, { HookDependencies, resourceInfosChanged } from './useFormNote';
+import { ResourceInfo, ResourceInfos } from './types';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
 import { join } from 'path';
@@ -139,6 +140,63 @@ describe('useFormNote', () => {
 		});
 
 		formNote.unmount();
+	});
+
+	const makeResourceInfo = (itemOverrides: Partial<ResourceInfo['item']> = {}, localStateOverrides: Partial<ResourceInfo['localState']> = {}): ResourceInfo => ({
+		item: {
+			updated_time: 1000,
+			encryption_applied: 0,
+			is_shared: 0,
+			...itemOverrides,
+		} as ResourceInfo['item'],
+		localState: {
+			fetch_status: 0,
+			...localStateOverrides,
+		},
+	});
+
+	test('should return false for two empty ResourceInfos', () => {
+		expect(resourceInfosChanged({}, {})).toBe(false);
+	});
+
+	test('should return false with different object references but the same metadata properties', () => {
+		const a: ResourceInfos = { 'id1': makeResourceInfo() };
+		const b: ResourceInfos = { 'id1': makeResourceInfo() };
+		expect(resourceInfosChanged(a, b)).toBe(false);
+	});
+
+	test.each([
+		{ label: 'updated_time', itemOverrides: { updated_time: 9999 } },
+		{ label: 'encryption_applied', itemOverrides: { encryption_applied: 1 } },
+		{ label: 'is_shared', itemOverrides: { is_shared: 1 } },
+	])('should return true when $label changes', ({ itemOverrides }) => {
+		const a: ResourceInfos = { 'id1': makeResourceInfo() };
+		const b: ResourceInfos = { 'id1': makeResourceInfo(itemOverrides) };
+		expect(resourceInfosChanged(a, b)).toBe(true);
+	});
+
+	test('should return true when fetch_status changes', () => {
+		const a: ResourceInfos = { 'id1': makeResourceInfo() };
+		const b: ResourceInfos = { 'id1': makeResourceInfo({}, { fetch_status: 2 }) };
+		expect(resourceInfosChanged(a, b)).toBe(true);
+	});
+
+	test('should return true when a resource is added', () => {
+		const a: ResourceInfos = { 'id1': makeResourceInfo() };
+		const b: ResourceInfos = { 'id1': makeResourceInfo(), 'id2': makeResourceInfo() };
+		expect(resourceInfosChanged(a, b)).toBe(true);
+	});
+
+	test('should return true when a resource is removed', () => {
+		const a: ResourceInfos = { 'id1': makeResourceInfo(), 'id2': makeResourceInfo() };
+		const b: ResourceInfos = { 'id1': makeResourceInfo() };
+		expect(resourceInfosChanged(a, b)).toBe(true);
+	});
+
+	test('should return true when resource IDs differ with same count', () => {
+		const a: ResourceInfos = { 'id1': makeResourceInfo() };
+		const b: ResourceInfos = { 'id2': makeResourceInfo() };
+		expect(resourceInfosChanged(a, b)).toBe(true);
 	});
 
 	test('should refresh resource infos when changed outside the editor', async () => {
