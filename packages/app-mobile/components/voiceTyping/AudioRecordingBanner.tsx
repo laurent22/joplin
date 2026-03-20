@@ -3,7 +3,7 @@ import { PrimaryButton, SecondaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Audio, InterruptionModeIOS } from 'expo-av';
-import { AudioQuality, IOSOutputFormat, type RecordingOptions } from 'expo-audio';
+import { AudioQuality, IOSOutputFormat, setAudioModeAsync, type RecordingOptions } from 'expo-audio';
 import Logger from '@joplin/utils/Logger';
 import { OnFileSavedCallback, RecorderState } from './types';
 import { Platform } from 'react-native';
@@ -95,12 +95,11 @@ const recordingToSaveData = async (recordingUri: string|null) => {
 };
 
 const resetAudioMode = async () => {
-	await Audio.setAudioModeAsync({
-		// When enabled, iOS may use the small (phone call) speaker
-		// instead of the default one, so it's disabled when not recording:
-		allowsRecordingIOS: false,
-		playsInSilentModeIOS: false,
-		staysActiveInBackground: false,
+	await setAudioModeAsync({
+		allowsRecording: false,
+		allowsBackgroundRecording: false,
+		playsInSilentMode: false,
+		shouldPlayInBackground: false,
 	});
 };
 
