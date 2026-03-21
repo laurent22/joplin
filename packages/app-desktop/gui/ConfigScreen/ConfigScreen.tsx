@@ -2,7 +2,7 @@ import * as React from 'react';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
@@ -569,11 +569,36 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			: [];
 
 		const visibleSearchResultComps = searchResultComps.filter((c: React.ReactNode) => !!c);
+		const matchingSectionCount = visibleSearchResultComps.length;
+		// Live region summary when settings search results change (WCAG status message pattern).
+		const searchResultsStatusText = matchingSectionCount === 0
+			? _('No settings match your search.')
+			: _n('%d section includes matching settings.', '%d sections include matching settings.', matchingSectionCount, matchingSectionCount);
+
 		const searchResultsPanel = (
 			<div style={{ ...containerStyle, display: 'block' }}>
-				{visibleSearchResultComps.length > 0 ? visibleSearchResultComps : (
-					<div style={theme.textStyle}>
-						{_('No settings match your search.')}
+				{matchingSectionCount > 0 ? (
+					<>
+						<div
+							className='visually-hidden'
+							data-testid='config-search-status'
+							role='status'
+							aria-live='polite'
+							aria-atomic='true'
+						>
+							{searchResultsStatusText}
+						</div>
+						{visibleSearchResultComps}
+					</>
+				) : (
+					<div
+						style={theme.textStyle}
+						data-testid='config-search-status'
+						role='status'
+						aria-live='polite'
+						aria-atomic='true'
+					>
+						{searchResultsStatusText}
 					</div>
 				)}
 			</div>

@@ -71,6 +71,25 @@ test.describe('settings', () => {
 		await expect(appearanceTab).not.toHaveAttribute('aria-disabled', 'true');
 	});
 
+	test('settings search exposes a live status for result summary', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+		await mainScreen.openSettings(electronApp);
+
+		const settingsScreen = new SettingsScreen(mainWindow);
+		await settingsScreen.waitFor();
+
+		const searchStatus = mainWindow.getByTestId('config-search-status');
+
+		// No matches: visible status with polite live region.
+		await settingsScreen.searchInput.fill('apple banana orange');
+		await expect(searchStatus).toHaveText(/No settings match your search/i);
+
+		// At least one matching section: visually hidden status announces section count.
+		await settingsScreen.searchInput.fill('font');
+		await expect(searchStatus).toHaveText(/section.*matching settings/i);
+	});
+
 	test('clicking a section in the sidebar while searching filters results to that section', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
