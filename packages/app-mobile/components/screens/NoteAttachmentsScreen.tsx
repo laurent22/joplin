@@ -11,6 +11,7 @@ import { themeStyle } from '../global-style';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Resource, { NoteResourceSortDirection, NoteResourceSortField } from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import shim from '@joplin/lib/shim';
 import showResource from '../../commands/util/showResource';
 import { bytesToHuman } from '@joplin/utils/bytes';
@@ -52,7 +53,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	const [hasMore, setHasMore] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [deletingResourceIds, setDeletingResourceIds] = useState<string[]>([]);
-	const [titleTooltipResourceId, setTitleTooltipResourceId] = useState('');
+	const [expandedResourceIds, setExpandedResourceIds] = useState<Record<string, boolean>>({});
 	const theme = themeStyle(props.themeId);
 	const loadCounter = useRef(0);
 	const invalidateLoadCounter = useCallback(() => {
@@ -140,14 +141,6 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				fontWeight: '700',
 				lineHeight: theme.fontSize * 1.4,
 			},
-			rowTitleExpandedWrapper: {
-				paddingTop: 2,
-				paddingBottom: 2,
-				paddingLeft: 4,
-				paddingRight: 4,
-				backgroundColor: theme.backgroundColor,
-				borderRadius: 4,
-			},
 			rowMeta: {
 				color: theme.colorFaded,
 				fontSize: theme.fontSizeSmaller,
@@ -177,11 +170,6 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				color: theme.colorFaded,
 				fontSize: theme.fontSizeLarger,
 			},
-			rowMetaHidden: {
-				opacity: 0,
-				height: 0,
-				marginTop: 0,
-			},
 			emptyText: {
 				color: theme.colorFaded,
 				fontSize: theme.fontSize,
@@ -203,6 +191,10 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 			shim.clearTimeout(timeout);
 		};
 	}, [searchQuery]);
+
+	useEffect(() => {
+		setExpandedResourceIds({});
+	}, [debouncedSearchQuery]);
 
 	const loadPage = useCallback(async (offset: number) => {
 		invalidateLoadCounter();
@@ -255,7 +247,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	const onDeleteResource = useCallback(async (resource: ResourceEntity) => {
 		if (!resource.id) return;
 
-		const confirmed = await shim.showConfirmationDialog(_('Delete attachment "%s"?', displayTitle(resource)));
+		const confirmed = await shim.showConfirmationDialog(_('Delete attachment "%s"?', substrWithEllipsis(displayTitle(resource), 0, 50)));
 		if (!confirmed) return;
 
 		setDeletingResourceIds(previous => previous.concat(resource.id));
@@ -286,6 +278,26 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		Clipboard.setString(markdownLink);
 	}, []);
 
+	const onToggleExpandedRow = useCallback((resourceId: string) => {
+		setExpandedResourceIds(previous => ({
+			...previous,
+			[resourceId]: !previous[resourceId],
+		}));
+	}, []);
+
+	useEffect(() => {
+		const resourceIds = new Set(resources.map(resource => resource.id));
+		setExpandedResourceIds(previous => {
+			const nextState: Record<string, boolean> = {};
+			for (const id of Object.keys(previous)) {
+				if (resourceIds.has(id) && previous[id]) {
+					nextState[id] = true;
+				}
+			}
+			return nextState;
+		});
+	}, [resources]);
+
 	const onToggleSorting = useCallback((nextSortField: NoteResourceSortField) => {
 		const nextState = nextSortState(sortField, sortDirection, nextSortField);
 		setSortField(nextState.sortField);
@@ -312,7 +324,11 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		const deleting = deletingResourceIds.includes(item.id);
 		const title = displayTitle(item);
 		const size = displaySize(item);
-		const showExpandedTitle = titleTooltipResourceId === item.id;
+		const isExpanded = !!expandedResourceIds[item.id];
+		const titleLineProps = isExpanded ? {} : {
+			numberOfLines: 1,
+			ellipsizeMode: 'tail' as const,
+		};
 
 		return (
 			<View style={styles.row} accessible={false}>
@@ -326,19 +342,15 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 							void onOpenResource(item);
 						}}
 						onLongPress={() => {
-							setTitleTooltipResourceId(item.id);
-						}}
-						onPressOut={() => {
-							setTitleTooltipResourceId(previous => previous === item.id ? '' : previous);
+							onToggleExpandedRow(item.id);
 						}}
 						accessibilityRole='button'
 						accessibilityLabel={_('Attachment: %s. Size: %s', title, size)}
-						accessibilityHint={_('Opens this attachment')}
+						accessibilityHint={_('Double tap to open this attachment. Long press to expand or collapse details.')}
+						accessibilityState={{ expanded: isExpanded }}
 					>
-						{showExpandedTitle ? <View style={styles.rowTitleExpandedWrapper} pointerEvents='none'>
-							<Text accessible={false} style={styles.rowTitle}>{title}</Text>
-						</View> : <Text accessible={false} style={styles.rowTitle} numberOfLines={1} ellipsizeMode='tail'>{title}</Text>}
-						<Text accessible={false} style={[styles.rowMeta, showExpandedTitle ? styles.rowMetaHidden : null]}>{size}</Text>
+						<Text accessible={false} style={styles.rowTitle} {...titleLineProps}>{title}</Text>
+						<Text accessible={false} style={styles.rowMeta}>{size}</Text>
 					</TouchableOpacity>
 					<View style={styles.actionIconsRow}>
 						<IconButton
@@ -355,7 +367,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 							onPress={() => {
 								void onDeleteResource(item);
 							}}
-							description={_('Delete attachment: %s', title)}
+							description={_('Delete attachment')}
 							accessibilityHint={_('Deletes this attachment')}
 							iconName='material delete'
 							iconStyle={styles.deleteIcon}
@@ -368,7 +380,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 				</View>
 			</View>
 		);
-	}, [deletingResourceIds, onCopyMarkdownLink, onDeleteResource, onOpenResource, props.themeId, styles, titleTooltipResourceId]);
+	}, [deletingResourceIds, expandedResourceIds, onCopyMarkdownLink, onDeleteResource, onOpenResource, onToggleExpandedRow, props.themeId, styles]);
 
 	return (
 		<View style={styles.root}>
