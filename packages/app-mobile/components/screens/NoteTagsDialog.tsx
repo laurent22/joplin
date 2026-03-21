@@ -9,7 +9,7 @@ import TagEditor, { TagEditorMode } from '../TagEditor';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import { ViewStyle } from 'react-native';
+import { BackHandler, ViewStyle } from 'react-native';
 
 interface Props {
 	themeId: number;
@@ -36,6 +36,18 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 	useEffect(() => {
 		if (props.noteId) setNoteId(props.noteId);
 	}, [props.noteId]);
+
+	// Handle Android back button to close the dialog
+	useEffect(() => {
+		const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+			props.onCloseRequested?.();
+			return true;
+		});
+
+		return () => {
+			backHandler.remove();
+		};
+	}, [props.onCloseRequested]);
 
 	const onOkayPress = useCallback(async () => {
 		setSavingTags(true);
