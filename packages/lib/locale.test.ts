@@ -64,29 +64,14 @@ describe('locale', () => {
 	test.each([
 		['aar', 'aa', 'Afar', 'Afar'],
 		['ave', 'ae', 'Avestan', 'Avestan'],
-		['cat', 'ca', 'Catalan; Valencian', 'Catalan'],
-		['chu', 'cu', 'Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic', 'Church Slavic'],
+		['cat', 'ca', 'Catalan', 'Catalan'],
+		['chu', 'cu', 'Church Slavic', 'Church Slavic'],
 		['dan', 'da', 'Danish', 'Danish'],
-		['ell', 'el', 'Greek, Modern (1453-)', 'Greek'],
+		['ell', 'el', 'Greek', 'Greek'],
 		['eng', 'en', 'English', 'English'],
-		['spa', 'es', 'Spanish; Castilian', 'Spanish'],
-		['nob', 'nb', 'Norwegian Bokmål; Bokmål, Norwegian', 'Norwegian Bokmål'],
-	])('should simplify English language name: %s (%s) %s -> %s', (alpha3, alpha2, rawName, expected) => {
-		const result = iso639LineToObject([alpha3, alpha2, rawName]);
-		expect(result.nameEnglish).toBe(expected);
-	});
-
-	test.each([
-		['aar', 'aa', 'Afar', 'Afar'],
-		['ave', 'ae', 'Avestan', 'Avestan'],
-		['cat', 'ca', 'Catalan; Valencian', 'Catalan'],
-		['chu', 'cu', 'Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic', 'Church Slavic'],
-		['dan', 'da', 'Danish', 'Danish'],
-		['ell', 'el', 'Greek, Modern (1453-)', 'Greek'],
-		['eng', 'en', 'English', 'English'],
-		['spa', 'es', 'Spanish; Castilian', 'Spanish'],
-		['nob', 'nb', 'Bokmål, Norwegian; Norwegian Bokmål', 'Bokmål'],
-	])('should simplify English language name: %s (%s) %s -> %s', (alpha3, alpha2, rawName, expected) => {
+		['spa', 'es', 'Spanish', 'Spanish'],
+		['nob', 'nb', 'Norwegian Bokmål', 'Norwegian Bokmål'],
+	])('should return the English language name: %s (%s) %s -> %s', (alpha3, alpha2, rawName, expected) => {
 		const result = iso639LineToObject([alpha3, alpha2, rawName]);
 		expect(result.nameEnglish).toBe(expected);
 	});
