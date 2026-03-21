@@ -768,6 +768,13 @@ export default function TinyMCEBody({
     null
   );
   const [conflictError, setConflictError] = useState(false);
+  const [showDeleteConfirmDialog, setShowDeleteConfirmDialog] = useState(false);
+
+  // TinyMCE setup クロージャから React state を更新するための ref
+  const openDeleteConfirmRef = useRef<() => void>(() => setShowDeleteConfirmDialog(true));
+  useEffect(() => {
+    openDeleteConfirmRef.current = () => setShowDeleteConfirmDialog(true);
+  }, []);
 
   // attachAudioSettingsButtons 実行中はダーティ検知を抑制するための ref
   const suppressDirtyRef = useRef(false);
@@ -1024,7 +1031,7 @@ export default function TinyMCEBody({
             text: '削除',
             icon: 'remove',
             onAction: () => {
-              console.log('hello world');
+              openDeleteConfirmRef.current();
             },
           });
 
@@ -1414,6 +1421,27 @@ export default function TinyMCEBody({
           ノートが他の場所で更新されています。リロードしてから再編集してください。
         </Alert>
       </Snackbar>
+
+      {/* リソース削除確認ダイアログ */}
+      <Dialog open={showDeleteConfirmDialog} onClose={() => setShowDeleteConfirmDialog(false)}>
+        <DialogTitle>削除の確認</DialogTitle>
+        <DialogContent>
+          <DialogContentText>本当に削除しますか？</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDeleteConfirmDialog(false)}>いいえ</Button>
+          <Button
+            onClick={() => {
+              setShowDeleteConfirmDialog(false);
+              console.log('hello world');
+            }}
+            color="error"
+            variant="contained"
+          >
+            はい
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* 未保存変更があるときのノート切り替え確認ダイアログ */}
       <Dialog open={showDirtyDialog} onClose={handleDirtyDialogCancel}>
