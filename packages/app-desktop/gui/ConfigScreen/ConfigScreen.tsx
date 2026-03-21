@@ -377,10 +377,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	};
 
 	private renderSearchHighlightedText = (text: string): React.ReactNode => {
-		return highlightSearchText(text, this.state.searchQuery, {
-			backgroundColor: themeStyle(this.props.themeId).searchMarkerBackgroundColor,
-			color: themeStyle(this.props.themeId).searchMarkerColor,
-		});
+		return highlightSearchText(text, this.state.searchQuery);
 	};
 
 	public settingToComponent<T extends string>(key: T, value: SettingValueType<T>) {
@@ -455,14 +452,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const settings = this.state.settings;
 
-		const containerStyle: React.CSSProperties = {
-			overflow: 'auto',
-			padding: theme.configScreenPadding,
-			paddingTop: 0,
-			display: 'flex',
-			flex: 1,
-		};
-
 		const hasChanges = this.hasChanges();
 
 		const settingComps = shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName);
@@ -472,7 +461,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
-		if (screenComp) containerStyle.display = 'none';
+		const shouldHideSettingsContainer = !!screenComp;
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 		const searchResultGroupItems = searchResultGroups(this.state.searchQuery, sections, AppType.Desktop);
@@ -493,32 +482,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const tabComponents: React.ReactNode[] = [];
 		if (searchMode) {
-			const searchContainerStyle: React.CSSProperties = {
-				...containerStyle,
-				display: 'block',
-			};
-
-			const searchFilterControlStyle: React.CSSProperties = {
-				display: 'flex',
-				alignItems: 'center',
-				gap: 8,
-				marginTop: 20,
-				marginBottom: 8,
-				...theme.textStyle,
-			};
-
-			const searchSectionTitleStyle: React.CSSProperties = {
-				...theme.headerStyle,
-				marginTop: 30,
-				marginBottom: 10,
-				padding: 8,
-				display: 'flex',
-				alignItems: 'center',
-			};
-
 			const searchContent = filteredMatchedSections.map(({ section }) => {
 				const sectionComp = section.isScreen ? (
-					<div style={{ ...theme.textStyle, marginBottom: 20 }}>
+					<div className='search-message'>
 						{_('This section opens in its own screen and is matched by section title.')}
 					</div>
 				) : this.sectionToComponent(section.name, section, settings, true);
@@ -526,10 +492,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 				return (
 					<div key={`search-result-${section.name}`}>
-						<h2 style={searchSectionTitleStyle}>
+						<h2 className='search-section-title'>
 							<i
 								className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
-								style={{ marginRight: 8 }}
 								role='img'
 								aria-hidden='true'
 							/>
@@ -541,7 +506,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			});
 
 			const noResultsMessage = filteredMatchedSections.length === 0 ? (
-				<div style={{ ...theme.textStyle, marginTop: 20, color: theme.colorFaded }}>
+				<div className='search-no-results'>
 					{_('No matching results')}
 				</div>
 			) : null;
@@ -554,8 +519,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					tabIndex={0}
 					role='tabpanel'
 				>
-					<div style={searchContainerStyle}>
-						<div style={searchFilterControlStyle}>
+					<div className='search-results'>
+						<div className='search-filter-control'>
 							{hasValidSectionFilter ?
 								_('Filtered by section [%s]', Setting.sectionNameToLabel(sectionFilter)) :
 								_('Showing all matching settings')}
@@ -585,7 +550,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					content = (
 						<>
 							{screenComp}
-							<div style={containerStyle}>{settingComps}</div>
+							<div className={`config-screen-settings-container ${shouldHideSettingsContainer ? 'hidden' : ''}`}>{settingComps}</div>
 						</>
 					);
 				}

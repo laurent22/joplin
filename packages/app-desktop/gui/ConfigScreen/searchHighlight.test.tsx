@@ -63,11 +63,8 @@ describe('searchHighlight', () => {
 		expect(rendered.container.textContent).toBe(text);
 	});
 
-	it('should support custom mark style', () => {
-		const result = highlightSearchText('Find this', 'find', {
-			backgroundColor: 'rgb(66 99 160)',
-			color: 'white',
-		});
+	it('should render highlighted mark for matches', () => {
+		const result = highlightSearchText('Find this', 'find');
 		const rendered = render(<>{result}</>);
 
 		const marks = rendered.container.querySelectorAll('mark');

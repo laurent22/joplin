@@ -6,7 +6,6 @@ import { escapeRegExp } from '@joplin/lib/string-utils';
 const highlightSearchText = (
 	text: string,
 	query: string,
-	markStyle?: React.CSSProperties,
 ): React.ReactNode => {
 	if (!text) return text;
 
@@ -19,7 +18,7 @@ const highlightSearchText = (
 
 	return parts.map((part, index) => {
 		if (index % 2 === 1) {
-			return <mark key={`highlight-${index}`} style={markStyle}>{part}</mark>;
+			return <mark key={`highlight-${index}`}>{part}</mark>;
 		}
 
 		return <React.Fragment key={`text-${index}`}>{part}</React.Fragment>;
