@@ -70,7 +70,7 @@ describe('locale', () => {
 		['ell', 'el', 'Greek, Modern (1453-)', 'Greek'],
 		['eng', 'en', 'English', 'English'],
 		['spa', 'es', 'Spanish; Castilian', 'Spanish'],
-		['nob', 'nb', 'Bokmål, Norwegian; Norwegian Bokmål', 'Bokmål'],
+		['nob', 'nb', 'Norwegian Bokmål; Bokmål, Norwegian', 'Norwegian Bokmål'],
 	])('should simplify English language name: %s (%s) %s -> %s', (alpha3, alpha2, rawName, expected) => {
 		const result = iso639LineToObject([alpha3, alpha2, rawName]);
 		expect(result.nameEnglish).toBe(expected);
