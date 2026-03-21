@@ -5525,7 +5525,7 @@ msgstr "Ver el registro de cambios"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1384
 msgid "See the pre-release page for more details: %s"
-msgstr "Consulta la página de prelanzamiento para obtener más detalles: %s"
+msgstr "Consulte la página de prelanzamiento para obtener más detalles: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:207
 #: packages/app-mobile/components/NoteItem.tsx:152
@@ -5534,7 +5534,7 @@ msgstr "Seleccione"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:268
 msgid "Select a revision..."
-msgstr "Selecciona una revisión..."
+msgstr "Seleccione una revisión..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:50
 #: packages/app-mobile/components/ScreenHeader/index.tsx:384
@@ -5613,8 +5613,8 @@ msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
 msgstr ""
-"Establece el valor en 0 para que ocupe todo el espacio disponible. El ancho "
-"recomendado es 600."
+"Estableczca el valor en 0 para que ocupe todo el espacio disponible. El "
+"ancho recomendado es 600."
 
 #: packages/app-desktop/gui/MainScreen.tsx:531
 #: packages/app-desktop/gui/MainScreen.tsx:578
@@ -5659,7 +5659,7 @@ msgstr "Compartir una libreta con otras personas"
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
 msgid "Share from %s (%s)"
-msgstr "Compartir desde %s (%s)"
+msgstr "Compartido desde %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
 msgid "Share Notebook"
