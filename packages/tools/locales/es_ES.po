@@ -5659,7 +5659,7 @@ msgstr "Compartir una libreta con otras personas"
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
 msgid "Share from %s (%s)"
-msgstr "Compartir desde %s (%s)"
+msgstr "Compartido por %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
 msgid "Share Notebook"
