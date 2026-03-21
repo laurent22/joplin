@@ -1013,6 +1013,25 @@ export default function TinyMCEBody({
                   if (audio) openMediaDialog(editor, audio);
                 }
               });
+
+              // a / video / audio / img で /api/resource/ を参照している要素の
+              // 右クリック時にカスタムコンテキストメニューを表示する
+              iframeDoc.addEventListener('contextmenu', (e: MouseEvent) => {
+                let el = e.target as HTMLElement | null;
+                while (el) {
+                  const tag = el.tagName?.toLowerCase();
+                  if (['a', 'video', 'audio', 'img'].includes(tag)) {
+                    const src = el.getAttribute('src') ?? '';
+                    const href = el.getAttribute('href') ?? '';
+                    if (src.startsWith('/api/resource/') || href.startsWith('/api/resource/')) {
+                      e.preventDefault();
+                      console.log('hello world');
+                      return;
+                    }
+                  }
+                  el = el.parentElement;
+                }
+              });
             }
           });
 
