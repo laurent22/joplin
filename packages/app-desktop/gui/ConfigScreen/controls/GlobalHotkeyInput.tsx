@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useState, useCallback, KeyboardEvent } from 'react';
+import { useState, useCallback, useEffect, useRef, KeyboardEvent } from 'react';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
 
 const keymapService = KeymapService.instance();
 
@@ -35,6 +36,15 @@ const GlobalHotkeyInput: React.FC<Props> = ({ value, themeId, onChange }) => {
 	const theme = themeStyle(themeId);
 	const [recording, setRecording] = useState(false);
 	const [pendingAccelerator, setPendingAccelerator] = useState<string>('');
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	// Fix: autoFocus on a readOnly input doesn't re-trigger when state changes.
+	// Imperatively focus the input whenever recording mode is activated.
+	useEffect(() => {
+		if (recording && inputRef.current) {
+			focus('GlobalHotkeyInput', inputRef.current);
+		}
+	}, [recording]);
 
 	const startRecording = useCallback(() => {
 		setPendingAccelerator('');
@@ -42,9 +52,12 @@ const GlobalHotkeyInput: React.FC<Props> = ({ value, themeId, onChange }) => {
 	}, []);
 
 	const commitSave = useCallback((accelerator: string) => {
-		onChange({ value: accelerator });
 		setRecording(false);
 		setPendingAccelerator('');
+		// Blur before calling onChange so the Preferences panel detects the
+		// focus change and correctly marks the form as dirty.
+		if (inputRef.current) blur('GlobalHotkeyInput', inputRef.current);
+		onChange({ value: accelerator });
 	}, [onChange]);
 
 	const cancelRecording = useCallback(() => {
@@ -90,8 +103,10 @@ const GlobalHotkeyInput: React.FC<Props> = ({ value, themeId, onChange }) => {
 		fontFamily: theme.fontFamily,
 		fontSize: theme.fontSize,
 		color: theme.color,
-		backgroundColor: recording ? theme.selectedColor2 ?? theme.backgroundColorHover3 : theme.backgroundColor3 ?? theme.backgroundColor,
-		border: `1px solid ${recording ? theme.color4 ?? theme.borderColor4 : theme.borderColor4}`,
+		// Fix: use only guaranteed theme properties to avoid black fallback
+		// when optional theme colours (selectedColor2, backgroundColorHover3) are absent.
+		backgroundColor: theme.backgroundColor,
+		border: `2px solid ${recording ? theme.color4 ?? theme.borderColor4 : theme.borderColor4}`,
 		borderRadius: 4,
 		padding: '5px 10px',
 		minWidth: 200,
@@ -124,6 +139,7 @@ const GlobalHotkeyInput: React.FC<Props> = ({ value, themeId, onChange }) => {
 	return (
 		<div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
 			<input
+				ref={inputRef}
 				readOnly
 				aria-live='polite'
 				aria-label={recording ? _('Recording shortcut') : _('Global shortcut')}
@@ -131,9 +147,7 @@ const GlobalHotkeyInput: React.FC<Props> = ({ value, themeId, onChange }) => {
 				value={displayValue}
 				style={inputStyle}
 				onKeyDown={recording ? handleKeyDown : undefined}
-				// Allow focusing so keyboard events are captured
 				tabIndex={recording ? 0 : -1}
-				autoFocus={recording}
 			/>
 
 			{!recording && (
