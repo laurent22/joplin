@@ -656,7 +656,7 @@ export default class Resource extends BaseItem {
 		const sortDirection: NoteResourceSortDirection = options.sortDirection === 'desc' ? 'desc' : 'asc';
 
 		const whereClauses: string[] = [];
-		const whereParams: string[] = [];
+		const whereParams: (string | number)[] = [];
 		if (options.searchQuery?.trim()) {
 			const searchPattern = `%${options.searchQuery.trim().toLowerCase()}%`;
 			whereClauses.push('(LOWER(COALESCE(id, \'\')) LIKE ? OR LOWER(COALESCE(title, \'\')) LIKE ?)');

@@ -42,6 +42,10 @@ const displaySize = (resource: ResourceEntity) => {
 	return bytesToHuman(resource.size);
 };
 
+const errorToMessage = (error: unknown) => {
+	return error instanceof Error ? error.message : String(error);
+};
+
 const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
@@ -226,9 +230,9 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 			}
 			setHasMore(result.hasMore);
 			setErrorMessage('');
-		} catch (error) {
+		} catch (error: unknown) {
 			if (currentLoad !== loadCounter.current) return;
-			setErrorMessage(error.message);
+			setErrorMessage(errorToMessage(error));
 		} finally {
 			if (currentLoad === loadCounter.current) {
 				setIsLoading(false);
@@ -255,8 +259,8 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		try {
 			await Resource.delete(resource.id, { sourceDescription: 'NoteResourcesScreen' });
 			await loadPage(0);
-		} catch (error) {
-			await shim.showErrorDialog(error.message);
+		} catch (error: unknown) {
+			await shim.showErrorDialog(errorToMessage(error));
 		} finally {
 			setDeletingResourceIds(previous => previous.filter(id => id !== resource.id));
 		}
@@ -265,9 +269,9 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	const onOpenResource = useCallback(async (resource: ResourceEntity) => {
 		try {
 			await showResource(resource);
-		} catch (error) {
+		} catch (error: unknown) {
 			const fullPath = Resource.fullPath(resource);
-			const errorMessage = error instanceof Error ? error.message : String(error);
+			const errorMessage = errorToMessage(error);
 			await shim.showErrorDialog(`${_('This file could not be opened: %s', fullPath)}\n\n${errorMessage}`);
 		}
 	}, []);
