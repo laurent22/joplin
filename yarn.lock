@@ -10675,7 +10675,7 @@ __metadata:
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-nitro-modules: "npm:0.33.2"
     react-native-paper: "npm:5.14.5"
-    react-native-popup-menu: "npm:0.17.0"
+    react-native-popup-menu: "patch:react-native-popup-menu@npm%3A0.19.0#~/.yarn/patches/react-native-popup-menu-npm-0.19.0-c75418add4.patch"
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-base64: "npm:2.2.2"
     react-native-quick-crypto: "npm:0.7.17"
@@ -44310,17 +44310,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-popup-menu@npm:0.17.0":
-  version: 0.17.0
-  resolution: "react-native-popup-menu@npm:0.17.0"
-  checksum: 10/7b78285979c754cfb40ac4b8571c69a42d3b76820b9d814edea6b752307e8b5a3c9cee9cc0ff054f5c820f265761e84f2b49fdfded7b5ff9f8c1f8a675ba6f0a
+"react-native-popup-menu@npm:0.19.0":
+  version: 0.19.0
+  resolution: "react-native-popup-menu@npm:0.19.0"
+  checksum: 10/96e88d60331c40d11bf74f540bcdfef78c89d5f661a8fc5c31982626d8c0c8e3dd28c58761bd8f02dc4f111e6dbcc52e23e025bd56394e6db3fbe7592a3f6182
   languageName: node
   linkType: hard
 
-"react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch::locator=root%40workspace%3A.":
-  version: 0.17.0
-  resolution: "react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch::version=0.17.0&hash=906a51&locator=root%40workspace%3A."
-  checksum: 10/3f7659f14a6291b866669596c3c66ef1a5c27ea1f621fb7be7a4fe61d146066f2bb36f575a1b9e90f3ecf71e1a906659e90e72d9e683c04899b1f9e15224dd34
+"react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.19.0#~/.yarn/patches/react-native-popup-menu-npm-0.19.0-c75418add4.patch":
+  version: 0.19.0
+  resolution: "react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.19.0#~/.yarn/patches/react-native-popup-menu-npm-0.19.0-c75418add4.patch::version=0.19.0&hash=ad7775"
+  checksum: 10/9672038e499ad1f955c36163d74668dcf6ddb75d85f36fe4ecf79d7da1aef13a23ffa513d97ff3738be6f5b9adf6a7d6f524414e8cf91e725c2719ced5207f4d
   languageName: node
   linkType: hard
 

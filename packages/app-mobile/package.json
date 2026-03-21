@@ -70,7 +70,7 @@
     "react-native-modal-datetime-picker": "18.0.0",
     "react-native-nitro-modules": "0.33.2",
     "react-native-paper": "5.14.5",
-    "react-native-popup-menu": "0.17.0",
+    "react-native-popup-menu": "patch:react-native-popup-menu@npm%3A0.19.0#~/.yarn/patches/react-native-popup-menu-npm-0.19.0-c75418add4.patch",
     "react-native-quick-actions": "0.3.13",
     "react-native-quick-base64": "2.2.2",
     "react-native-quick-crypto": "0.7.17",
