@@ -14,8 +14,35 @@ const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 type CodeMirror5Command = (codeMirror: CodeMirror5Emulation)=> void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type EditorEventCallback = (editor: CodeMirror5Emulation, ...args: any[])=> void;
+interface ChangeRecord {
+	from: DocumentPosition;
+	to: DocumentPosition;
+	text: string[];
+	removed: string[];
+	transaction: Transaction;
+}
+
+type BuiltInEventArgs = {
+	'paste': [ClipboardEvent];
+	'mousedown': [MouseEvent];
+	'blur': [];
+	'focus': [];
+	'scroll': [];
+	'update': [];
+	'change': [ChangeRecord];
+	'changes': [ChangeRecord[]];
+	'inputRead': [ChangeRecord];
+	'viewportChange': [number, number];
+	'beforeSelectionChange': [];
+};
+// Fall back to `unknown[]` for unknown events (e.g. plugin events)
+type EventArgs<EventName> =
+	EventName extends keyof BuiltInEventArgs
+		? BuiltInEventArgs[EventName]
+		: unknown[];
+type EventType = (keyof BuiltInEventArgs)|string;
+
+type EditorEventCallback<T extends EventType> = (editor: CodeMirror5Emulation, ...args: EventArgs<T>)=> void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 type OptionUpdateCallback = (editor: CodeMirror5Emulation, newVal: any, oldVal: any)=> void;
 
@@ -60,8 +87,12 @@ const posFromDocumentPosition = (doc: Text, pos: DocumentPosition) => {
 	return result;
 };
 
+type EventMap = {
+	[Key in EventType]?: EditorEventCallback<Key>[]
+};
+
 export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
-	private _events: Record<string, EditorEventCallback[]> = {};
+	private _events: EventMap = {};
 	private _options: Record<string, CodeMirror5OptionRecord> = Object.create(null);
 	private _decorator: Decorator;
 	private _decoratorExtension: Extension;
@@ -163,15 +194,15 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		return ['beforeSelectionChange'].includes(eventName);
 	}
 
-	public on(eventName: string, callback: EditorEventCallback) {
+	public on<T extends EventType>(eventName: T, callback: EditorEventCallback<T>) {
 		if (this.isEventHandledBySuperclass(eventName)) {
 			return super.on(eventName, callback);
 		}
 		this._events[eventName] ??= [];
-		this._events[eventName].push(callback);
+		this._events[eventName].push(callback as EditorEventCallback<EventType>);
 	}
 
-	public off(eventName: string, callback: EditorEventCallback) {
+	public off<T extends EventType>(eventName: T, callback: EditorEventCallback<T>) {
 		if (!(eventName in this._events)) {
 			return;
 		}
@@ -181,8 +212,7 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static signal(target: CodeMirror5Emulation, eventName: string, ...args: any[]) {
+	public static signal<T extends EventType>(target: CodeMirror5Emulation, eventName: T, ...args: EventArgs<T>) {
 		const listeners = target._events[eventName] ?? [];
 
 		for (const listener of listeners) {
@@ -193,13 +223,6 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 	}
 
 	private fireChangeEvents(update: ViewUpdate) {
-		type ChangeRecord = {
-			from: DocumentPosition;
-			to: DocumentPosition;
-			text: string[];
-			removed: string[];
-			transaction: Transaction;
-		};
 		const changes: ChangeRecord[] = [];
 		const origDoc = update.startState.doc;
 

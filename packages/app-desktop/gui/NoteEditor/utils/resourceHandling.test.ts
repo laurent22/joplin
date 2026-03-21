@@ -1,9 +1,23 @@
 import Setting from '@joplin/lib/models/Setting';
-import { processImagesInPastedHtml, processPastedHtml } from './resourceHandling';
+import { processImagesInPastedHtml, processPastedHtml, getResourcesFromPasteEvent } from './resourceHandling';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+
+jest.mock('electron', () => ({
+	clipboard: {
+		has: jest.fn(),
+		readBuffer: jest.fn(),
+	},
+}));
+
+interface ClipboardMock {
+	has: jest.Mock;
+	readBuffer: jest.Mock;
+}
+
+const mockClipboard = (require('electron') as { clipboard: ClipboardMock }).clipboard;
 
 const createTestMarkupConverters = () => {
 	const markupToHtml: MarkupToHtmlHandler = async (markupLanguage, markup, options) => {
@@ -23,6 +37,11 @@ const createTestMarkupConverters = () => {
 };
 
 describe('resourceHandling', () => {
+	afterEach(() => {
+		mockClipboard.has.mockReset();
+		mockClipboard.readBuffer.mockReset();
+	});
+
 	it('should sanitize pasted HTML', async () => {
 		Setting.setConstant('resourceDir', '/home/.config/joplin/resources');
 
@@ -128,5 +147,40 @@ describe('resourceHandling', () => {
 		expect(result).toMatch(expectMatch);
 		expect(result).not.toContain(expectAbsent);
 		expect(result).not.toContain('data:');
+	});
+
+	// Tests for getResourcesFromPasteEvent - clipboard image paste (issue #14613)
+	// The test environment (non-Electron, no sharp) skips image validation and
+	// just copies the file, so any non-empty buffer works as test data.
+	const testImageBuffer = Buffer.from(minimalPng, 'base64');
+
+	test.each([
+		{ format: 'image/jpeg', description: 'JPEG (bug #14613)' },
+		{ format: 'image/jpg', description: 'JPG alias' },
+		{ format: 'image/png', description: 'PNG (regression check)' },
+	])('should paste $description image from clipboard via getResourcesFromPasteEvent', async ({ format }) => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+		mockClipboard.has.mockImplementation((f: string) => f === format);
+		mockClipboard.readBuffer.mockImplementation((f: string) => {
+			return f === format ? testImageBuffer : Buffer.alloc(0);
+		});
+		const mockEvent = { preventDefault: jest.fn() };
+		const result = await getResourcesFromPasteEvent(mockEvent);
+		expect(result.length).toBe(1);
+		expect(result[0]).toContain('](:/');
+		expect(mockEvent.preventDefault).toHaveBeenCalledTimes(1);
+	});
+
+	test.each([
+		{ description: 'clipboard has no image', hasResult: false },
+		{ description: 'buffer is empty despite has() returning true', hasResult: true },
+	])('should return empty when $description', async ({ hasResult }) => {
+		mockClipboard.has.mockReturnValue(hasResult);
+		mockClipboard.readBuffer.mockReturnValue(Buffer.alloc(0));
+		const mockEvent = { preventDefault: jest.fn() };
+		const result = await getResourcesFromPasteEvent(mockEvent);
+		expect(result).toEqual([]);
+		expect(mockEvent.preventDefault).not.toHaveBeenCalled();
 	});
 });
