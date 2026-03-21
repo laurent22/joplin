@@ -417,7 +417,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 			{isLoading ? <View style={styles.listContent}><ActivityIndicator /><Text style={styles.emptyText}>{_('Please wait...')}</Text></View> : null}
 			<FlatList
 				data={resources}
-				keyExtractor={item => item.id}
+				keyExtractor={(item, index) => item.id ? item.id : `resource-${index}`}
 				contentContainerStyle={styles.listContent}
 				ListEmptyComponent={!isLoading && !errorMessage ? <Text style={styles.emptyText}>{listEmptyText}</Text> : null}
 				renderItem={renderItem}
