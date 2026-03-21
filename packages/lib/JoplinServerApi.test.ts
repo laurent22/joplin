@@ -4,6 +4,7 @@ import { mockFetch } from './testing/test-utils';
 interface JoplinServerApiError {
 	message: string;
 	details?: string;
+	code?: number|string;
 }
 
 function isJoplinServerApiError(error: unknown): error is JoplinServerApiError {
@@ -32,7 +33,9 @@ describe('JoplinServerApi', () => {
 			statusText: 'Bad Gateway',
 			headers: { 'Content-Type': 'text/html' },
 		};
-		const fetchMock = mockFetch(() => {
+		let acceptHeader = '';
+		const fetchMock = mockFetch((request: Request) => {
+			acceptHeader = request.headers.get('Accept') || '';
 			return new Response(mockResponse.body, { status: mockResponse.status, statusText: mockResponse.statusText, headers: mockResponse.headers });
 		});
 
@@ -42,9 +45,49 @@ describe('JoplinServerApi', () => {
 		} catch (error: unknown) {
 			if (!isJoplinServerApiError(error)) throw error;
 			const joplinError = error;
+			expect(acceptHeader).toBe('application/json');
 			expect(joplinError.message).toBe('Error 502 Bad Gateway');
 			expect(joplinError.message.includes('<html>')).toBe(false);
 			expect(joplinError.details?.includes('<html>')).toBe(true);
+		} finally {
+			fetchMock.reset();
+		}
+	});
+
+	it('should use error message from JSON body when available', async () => {
+		const api = new JoplinServerApi({
+			baseUrl: () => 'https://example.test',
+			userContentBaseUrl: () => 'https://usercontent.example.test',
+			username: () => '',
+			password: () => '',
+			apiKey: () => '',
+			session: () => ({ id: 'session_1', user_id: 'user_1' }),
+		});
+
+		const responseBody = JSON.stringify({
+			error: 'Joplin Cloud is down for maintenance',
+			code: 'maintenance',
+		});
+
+		let acceptHeader = '';
+		const fetchMock = mockFetch((request: Request) => {
+			acceptHeader = request.headers.get('Accept') || '';
+			return new Response(responseBody, {
+				status: 502,
+				statusText: 'Bad Gateway',
+				headers: { 'Content-Type': 'application/json' },
+			});
+		});
+
+		try {
+			await api.exec('GET', 'api/ping');
+			throw new Error('Expected JoplinServerApi.exec to throw');
+		} catch (error: unknown) {
+			if (!isJoplinServerApiError(error)) throw error;
+			const joplinError = error;
+			expect(acceptHeader).toBe('application/json');
+			expect(joplinError.message).toBe('Joplin Cloud is down for maintenance');
+			expect(joplinError.code).toBe('maintenance');
 		} finally {
 			fetchMock.reset();
 		}

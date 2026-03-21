@@ -1,6 +1,6 @@
-import { findMatchingRoute, isValidOrigin, parseSubPath, splitItemPath, urlMatchesSchema } from './routeUtils';
+import { findMatchingRoute, isValidOrigin, parseSubPath, routeResponseFormat, RouteResponseFormat, splitItemPath, urlMatchesSchema } from './routeUtils';
 import { ItemAddressingType } from '../services/database/types';
-import { RouteType } from './types';
+import { AppContext, RouteType } from './types';
 import { expectThrow } from './testing/testUtils';
 
 describe('routeUtils', () => {
@@ -208,6 +208,54 @@ describe('routeUtils', () => {
 			const actual = urlMatchesSchema(url, schema);
 			expect(actual).toBe(expected);
 		}
+	});
+
+	it('should return JSON response format when request accepts application/json', async () => {
+		const context = {
+			path: '/home',
+			request: {
+				headers: {
+					accept: 'application/json',
+				},
+			},
+		} as unknown as AppContext;
+
+		expect(routeResponseFormat(context)).toBe(RouteResponseFormat.Json);
+	});
+
+	it('should return HTML response format when request accepts text/html and not application/json', async () => {
+		const context = {
+			path: '/home',
+			request: {
+				headers: {
+					accept: 'text/html',
+				},
+			},
+		} as unknown as AppContext;
+
+		expect(routeResponseFormat(context)).toBe(RouteResponseFormat.Html);
+	});
+
+	it('should return JSON response format for API routes even without accept header', async () => {
+		const context = {
+			path: '/api/ping',
+			request: {
+				headers: {},
+			},
+		} as unknown as AppContext;
+
+		expect(routeResponseFormat(context)).toBe(RouteResponseFormat.Json);
+	});
+
+	it('should return HTML response format for non-API routes without application/json accept header', async () => {
+		const context = {
+			path: '/home',
+			request: {
+				headers: {},
+			},
+		} as unknown as AppContext;
+
+		expect(routeResponseFormat(context)).toBe(RouteResponseFormat.Html);
 	});
 
 });
