@@ -1016,22 +1016,99 @@ export default function TinyMCEBody({
 
               // a / video / audio / img で /api/resource/ を参照している要素の
               // 右クリック時にカスタムコンテキストメニューを表示する
-              iframeDoc.addEventListener('contextmenu', (e: MouseEvent) => {
-                let el = e.target as HTMLElement | null;
-                while (el) {
-                  const tag = el.tagName?.toLowerCase();
-                  if (['a', 'video', 'audio', 'img'].includes(tag)) {
-                    const src = el.getAttribute('src') ?? '';
-                    const href = el.getAttribute('href') ?? '';
-                    if (src.startsWith('/api/resource/') || href.startsWith('/api/resource/')) {
-                      e.preventDefault();
+              const RESOURCE_MENU_ID = 'joplin-resource-context-menu';
+
+              const removeResourceMenu = () => {
+                document.getElementById(RESOURCE_MENU_ID)?.remove();
+              };
+
+              // メニュー外クリックで閉じる（親ウィンドウ側）
+              document.addEventListener('mousedown', removeResourceMenu);
+              iframeDoc.addEventListener('mousedown', removeResourceMenu);
+            }
+          });
+
+          // TinyMCE のイベントで contextmenu をキャプチャ
+          editor.on('contextmenu', (e: any) => {
+            const RESOURCE_MENU_ID = 'joplin-resource-context-menu';
+            const removeResourceMenu = () => {
+              document.getElementById(RESOURCE_MENU_ID)?.remove();
+            };
+
+            let el = e.target as HTMLElement | null;
+            while (el) {
+              const tag = el.tagName?.toLowerCase();
+              if (['a', 'video', 'audio', 'img'].includes(tag)) {
+                const src = el.getAttribute('src') ?? '';
+                const href = el.getAttribute('href') ?? '';
+                if (src.startsWith('/api/resource/') || href.startsWith('/api/resource/')) {
+                  e.preventDefault();
+
+                  // 既存メニューを削除
+                  removeResourceMenu();
+
+                  // iframe の位置を取得して親ウィンドウ座標に変換
+                  const iframe = editor
+                    .getContainer()
+                    ?.querySelector('iframe') as HTMLIFrameElement | null;
+                  const iframeRect = iframe?.getBoundingClientRect() ?? { top: 0, left: 0 };
+                  const menuTop = (e.clientY ?? 0) + iframeRect.top;
+                  const menuLeft = (e.clientX ?? 0) + iframeRect.left;
+
+                  // カスタムコンテキストメニューを親ウィンドウに生成
+                  const menu = document.createElement('ul');
+                  menu.id = RESOURCE_MENU_ID;
+                  Object.assign(menu.style, {
+                    position: 'fixed',
+                    top: `${menuTop}px`,
+                    left: `${menuLeft}px`,
+                    margin: '0',
+                    padding: '4px 0',
+                    listStyle: 'none',
+                    background: '#fff',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    boxShadow: '2px 2px 6px rgba(0,0,0,0.2)',
+                    zIndex: '99999',
+                    minWidth: '120px',
+                    fontSize: '13px',
+                    fontFamily: 'sans-serif',
+                  });
+
+                  const createItem = (label: string, onClick: () => void) => {
+                    const li = document.createElement('li');
+                    li.textContent = label;
+                    Object.assign(li.style, {
+                      padding: '6px 16px',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      color: '#333',
+                    });
+                    li.addEventListener('mouseenter', () => {
+                      li.style.background = '#f0f0f0';
+                    });
+                    li.addEventListener('mouseleave', () => {
+                      li.style.background = '';
+                    });
+                    li.addEventListener('mousedown', (ev) => {
+                      ev.stopPropagation();
+                      removeResourceMenu();
+                      onClick();
+                    });
+                    return li;
+                  };
+
+                  menu.appendChild(
+                    createItem('削除', () => {
                       console.log('hello world');
-                      return;
-                    }
-                  }
-                  el = el.parentElement;
+                    })
+                  );
+
+                  document.body.appendChild(menu);
+                  return;
                 }
-              });
+              }
+              el = el.parentElement;
             }
           });
 
