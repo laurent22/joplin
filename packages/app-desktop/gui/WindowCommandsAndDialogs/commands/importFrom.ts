@@ -77,12 +77,12 @@ const promptForSourcePath = async (module: ImportModule, sourceType: FileSystemI
 	}
 };
 
-const shouldContinueWithImport = async (module: ImportModule) => {
+const shouldContinueWithImport = (module: ImportModule) => {
 	if (module.format !== 'jex') return true;
 	if (Setting.value(jexImportWarningAcceptedSetting)) return true;
 
 	const message = _('Importing is intended for adding or restoring notes. After importing notes, if you enable sync with the same notes already on another device, duplicates will be created. To transfer notes between devices, please use sync instead. Do you want to continue with the import?');
-	const buttonIndex = await bridge().showMessageBox(message, {
+	const buttonIndex = bridge().showMessageBox(message, {
 		title: _('Warning'),
 		buttons: [_('Yes'), _('No')],
 		defaultId: 1,
@@ -102,7 +102,7 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 			const importModule = await findImportModule(options, control);
 			if (!importModule) return null; // E.g. if cancelled
 
-			if (!await shouldContinueWithImport(importModule)) return null;
+			if (!shouldContinueWithImport(importModule)) return null;
 
 			let sourcePath = options?.sourcePath ?? await promptForSourcePath(importModule, options?.sourceType);
 			if (Array.isArray(sourcePath)) {
