@@ -26,5 +26,7 @@ export const buildResourceMarkdownLink = (resource: ResourceEntity) => {
 
 	const fallbackTitle = Resource.friendlySafeFilename(resource);
 	const resourceTitle = resource.title ? resource.title : fallbackTitle;
-	return `![${markdownUtils.escapeTitleText(resourceTitle)}](:/${resource.id})`;
+	const escapedTitle = markdownUtils.escapeTitleText(resourceTitle);
+	const prefix = Resource.isSupportedImageMimeType(resource.mime || '') ? '!' : '';
+	return `${prefix}[${escapedTitle}](:/${resource.id})`;
 };
