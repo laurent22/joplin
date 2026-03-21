@@ -839,6 +839,16 @@
 
 			wrapper.querySelectorAll('style').forEach(s => s.remove());
 
+			// Code blocks contain a hidden <pre class="joplin-source"> with the raw Markdown,
+			// used by the Rich Text Editor to recover original source. External editors don't
+			// apply Joplin's CSS (display: none), causing the code to appear twice. Strip them.
+			wrapper.querySelectorAll('.joplin-source').forEach(s => s.remove());
+
+			// The focus dummy is a hidden link ("Note viewer top") used for accessibility.
+			// It leaks into clipboard HTML because its container only hides via overflow.
+			const focusDummy = wrapper.querySelector('#joplin-content-focus-dummy');
+			if (focusDummy && focusDummy.parentElement) focusDummy.parentElement.remove();
+
 			const inlineTags = new Set(['STRONG', 'EM', 'CODE', 'S', 'DEL', 'INS', 'MARK', 'SUP', 'SUB', 'U', 'SPAN', 'A']);
 			let node = range.commonAncestorContainer;
 			if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
