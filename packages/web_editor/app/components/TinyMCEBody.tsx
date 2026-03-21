@@ -897,6 +897,8 @@ export default function TinyMCEBody({
         branding: false,
         readonly: readOnly,
         plugins: 'link lists table codesample',
+        contextmenu: 'joplinResource',
+        contextmenu_never_use_native: false,
         toolbar: readOnly
           ? false
           : [
@@ -1013,26 +1015,35 @@ export default function TinyMCEBody({
                   if (audio) openMediaDialog(editor, audio);
                 }
               });
-
-              // a / video / audio / img で /api/resource/ を参照している要素の
-              // 右クリック時にカスタムコンテキストメニューを表示する
-              iframeDoc.addEventListener('contextmenu', (e: MouseEvent) => {
-                let el = e.target as HTMLElement | null;
-                while (el) {
-                  const tag = el.tagName?.toLowerCase();
-                  if (['a', 'video', 'audio', 'img'].includes(tag)) {
-                    const src = el.getAttribute('src') ?? '';
-                    const href = el.getAttribute('href') ?? '';
-                    if (src.startsWith('/api/resource/') || href.startsWith('/api/resource/')) {
-                      e.preventDefault();
-                      console.log('hello world');
-                      return;
-                    }
-                  }
-                  el = el.parentElement;
-                }
-              });
             }
+          });
+
+          // a / video / audio / img で /api/resource/ を参照している要素の
+          // 右クリック時に「削除」メニューを表示する（TinyMCE 公式 contextmenu API）
+          editor.ui.registry.addMenuItem('joplinResourceDelete', {
+            text: '削除',
+            icon: 'remove',
+            onAction: () => {
+              console.log('hello world');
+            },
+          });
+
+          editor.ui.registry.addContextMenu('joplinResource', {
+            update: (element: Element) => {
+              let el: Element | null = element;
+              while (el) {
+                const tag = el.tagName?.toLowerCase();
+                if (['a', 'video', 'audio', 'img'].includes(tag)) {
+                  const src = el.getAttribute('src') ?? '';
+                  const href = el.getAttribute('href') ?? '';
+                  if (src.startsWith('/api/resource/') || href.startsWith('/api/resource/')) {
+                    return 'joplinResourceDelete';
+                  }
+                }
+                el = el.parentElement;
+              }
+              return '';
+            },
           });
 
           // クリップボードの生 HTML をそのまま挿入してシンタックスハイライトを保持する
