@@ -198,6 +198,8 @@ export function userIdFromUserContentUrl(url: string): Uuid {
 
 export function routeResponseFormat(context: AppContext): RouteResponseFormat {
 	const path = context.path;
+	const acceptHeader = context.request.headers.accept ? `${context.request.headers.accept}` : '';
+	if (acceptHeader.includes('application/json')) return RouteResponseFormat.Json;
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 

@@ -177,6 +177,7 @@ export default class JoplinServerApi {
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
 		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
+        if (!headers['Accept']) headers['Accept'] = 'application/json';
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const fetchOptions: any = {};
