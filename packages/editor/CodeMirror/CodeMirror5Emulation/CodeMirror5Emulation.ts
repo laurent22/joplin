@@ -342,7 +342,8 @@ export default class CodeMirror5Emulation extends BaseCodeMirror5Emulation {
 		pos: DocumentPosition|DocumentPositionRange, margin?: number,
 	): void {
 		const isPosition = (arg: unknown): arg is DocumentPosition => {
-			return typeof arg === 'object' && arg !== null && 'line' in arg && 'ch' in arg;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			return (arg as any).line !== undefined && (arg as any).ch !== undefined;
 		};
 
 		if (isPosition(pos)) {
