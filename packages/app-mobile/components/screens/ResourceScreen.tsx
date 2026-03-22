@@ -16,7 +16,7 @@ import shim from '@joplin/lib/shim';
 import showResource from '../../commands/util/showResource';
 import { bytesToHuman } from '@joplin/utils/bytes';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { buildResourceMarkdownLink, nextSortState } from './noteAttachmentsUtils';
+import { buildResourceMarkdownLink, nextSortState } from './resourceScreenUtils';
 
 interface Props {
 	themeId: number;
@@ -46,7 +46,7 @@ const errorToMessage = (error: unknown) => {
 	return error instanceof Error ? error.message : String(error);
 };
 
-const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
+const ResourceScreenComponent: React.FC<Props> = props => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 	const [resources, setResources] = useState<ResourceEntity[]>([]);
@@ -257,7 +257,7 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 		setDeletingResourceIds(previous => previous.concat(resource.id));
 
 		try {
-			await Resource.delete(resource.id, { sourceDescription: 'NoteResourcesScreen' });
+			await Resource.delete(resource.id, { sourceDescription: 'ResourceScreen' });
 			await loadPage(0);
 		} catch (error: unknown) {
 			await shim.showErrorDialog(errorToMessage(error));
@@ -429,10 +429,10 @@ const NoteAttachmentsScreenComponent: React.FC<Props> = props => {
 	);
 };
 
-const NoteAttachmentsScreen = connect((state: AppState) => {
+const ResourceScreen = connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
-})(NoteAttachmentsScreenComponent);
+})(ResourceScreenComponent);
 
-export default NoteAttachmentsScreen;
+export default ResourceScreen;

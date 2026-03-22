@@ -1,7 +1,7 @@
 import { ResourceEntity } from '@joplin/lib/services/database/types';
-import { buildResourceMarkdownLink, nextSortState } from './noteAttachmentsUtils';
+import { buildResourceMarkdownLink, nextSortState } from './resourceScreenUtils';
 
-describe('noteAttachmentsUtils', () => {
+describe('resourceScreenUtils', () => {
 	test.each([
 		['title', 'asc', 'title', { sortField: 'title', sortDirection: 'desc' }],
 		['size', 'desc', 'size', { sortField: 'size', sortDirection: 'asc' }],
