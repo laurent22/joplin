@@ -759,9 +759,7 @@ class Application extends BaseApplication {
 		});
 
 		addTask('app/set up SpellCheckerService', async () => {
-			const driver = new SpellCheckerServiceDriverNative(Setting.value('profileDir'));
-			await SpellCheckerService.instance().initialize(driver);
-			await driver.loadSavedWords();
+			await SpellCheckerService.instance().initialize(new SpellCheckerServiceDriverNative());
 		});
 
 		addTask('app/listen for resource events', () => {

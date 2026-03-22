@@ -589,7 +589,6 @@ packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
 packages/app-desktop/services/plugins/types.js
 packages/app-desktop/services/restart.js
-packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.test.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/bundleJs.js
 packages/app-desktop/tools/copy7Zip.js
