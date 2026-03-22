@@ -3,9 +3,7 @@ import { RegionSpec } from './RegionSpec';
 import { SelectionUpdate } from './types';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
 import intersectsSyntaxNode from '../isInSyntaxNode';
-
-const listPrefixRegex = /^(\s*(?:[-*]\s\[[ xX]\]\s|[-*]\s|\d+[.)]\s))/;
-const blockquotePrefixRegex = /^(\s*(?:>\s*)+)/;
+import { blockquotePrefixRegex, listPrefixRegex } from './markdownFormatPatterns';
 
 const applyChangeToText = (text: string, change: { from: number; to?: number; insert: string }) => {
 	const to = change.to ?? change.from;
