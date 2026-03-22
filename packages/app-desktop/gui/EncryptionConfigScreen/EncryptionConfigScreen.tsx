@@ -280,8 +280,8 @@ export const EncryptionConfigScreen = (props: Props) => {
 
 		try {
 			await toggleAndSetupEncryption(EncryptionService.instance(), newEnabled, masterKey, newPassword);
-		} catch (error: any) {
-			await dialogs.alert(error.message);
+		} catch (error) {
+		    await dialogs.alert(error.message);
 		}
 	}, [props.dispatch, props.masterPassword, props.masterPasswordDialogOpen]);
 
