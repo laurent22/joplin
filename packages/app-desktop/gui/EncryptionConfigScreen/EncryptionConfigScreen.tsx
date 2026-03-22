@@ -24,7 +24,6 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
-import { ChangeEvent } from '../PasswordInput/types';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -274,16 +273,15 @@ export const EncryptionConfigScreen = (props: Props) => {
 
 		if (hasMasterPassword && newEnabled) {
 			if (!(await masterPasswordIsValid(newPassword))) {
-				await dialogs.alert(_('Invalid password. Please try again. If you have forgotten your password you will need to reset it.'));
+				await dialogs.alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
 				return;
 			}
 		}
 
 		try {
 			await toggleAndSetupEncryption(EncryptionService.instance(), newEnabled, masterKey, newPassword);
-		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
-			await dialogs.alert(message);
+		} catch (error: any) {
+			await dialogs.alert(error.message);
 		}
 	}, [props.dispatch, props.masterPassword, props.masterPasswordDialogOpen]);
 
@@ -312,7 +310,8 @@ export const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
-		const onPasswordInputChange = (event: ChangeEvent) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required because PasswordInput's ChangeEventHandler type is incorrect
+		const onPasswordInputChange = (event: any) => {
 			setEnableEncryptionPassword(event.target.value);
 		};
 
