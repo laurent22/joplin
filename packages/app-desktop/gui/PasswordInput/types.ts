@@ -1,5 +1,5 @@
 export interface ChangeEvent {
-    value: string;
+	value: string;
 }
 
 export type ChangeEventHandler = (event: ChangeEvent)=> void;
