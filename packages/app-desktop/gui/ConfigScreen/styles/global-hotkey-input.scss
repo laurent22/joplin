@@ -1,0 +1,45 @@
+.global-hotkey-input {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 4px;
+
+	> .input {
+		color: var(--joplin-color);
+		font-family: var(--joplin-font-family);
+		font-size: var(--joplin-font-size);
+		background-color: var(--joplin-background-color);
+		border: 1px solid var(--joplin-border-color4);
+		border-radius: 3px;
+		padding: 4px 6px;
+		min-width: 200px;
+		outline: none;
+		letter-spacing: 0.03em;
+		cursor: default;
+
+		&.-recording {
+			border-color: var(--joplin-focus-outline-color);
+			cursor: text;
+		}
+	}
+
+	> .button {
+		color: var(--joplin-color);
+		font-family: var(--joplin-font-family);
+		font-size: var(--joplin-font-size);
+		background-color: var(--joplin-background-color);
+		border: 1px solid var(--joplin-border-color4);
+		border-radius: 3px;
+		padding: 4px 10px;
+		margin-left: 6px;
+		cursor: pointer;
+
+		&:disabled {
+			opacity: 0.4;
+		}
+
+		&.-danger {
+			color: var(--joplin-color-error);
+		}
+	}
+}
