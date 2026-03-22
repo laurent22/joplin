@@ -519,15 +519,12 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await exporter.processItem(Note.modelType(), note1);
 		await exporter.processItem(Note.modelType(), note2);
 
-		const notePaths = exporter.context().notePaths;
-		expect(Object.keys(notePaths).length).toBe(2);
+		expect(Object.keys(exporter.context().notePaths).length).toBe(2);
+		expect(exporter.context().notePaths[note1.id]).toBe('folder_/note1.md');
+		expect(exporter.context().notePaths[note2.id]).toBe('folder_-1/note2.md');
 
-		const dir1 = notePaths[note1.id].split('/')[0];
-		const dir2 = notePaths[note2.id].split('/')[0];
-		expect(dir1).not.toBe(dir2);
-
-		expect(await shim.fsDriver().exists(`${exportDir()}/${notePaths[note1.id]}`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${exportDir()}/${notePaths[note2.id]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note1.id]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note2.id]}`)).toBe(true);
 	}));
 
 	it('should handle folders with banned names that collide after sanitization', (async () => {
@@ -562,15 +559,12 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await exporter.processItem(Note.modelType(), note1);
 		await exporter.processItem(Note.modelType(), note2);
 
-		const notePaths = exporter.context().notePaths;
-		expect(Object.keys(notePaths).length).toBe(2);
+		expect(Object.keys(exporter.context().notePaths).length).toBe(2);
+		expect(exporter.context().notePaths[note1.id]).toBe('___/note1.md');
+		expect(exporter.context().notePaths[note2.id]).toBe('___-1/note2.md');
 
-		const dir1 = notePaths[note1.id].split('/')[0];
-		const dir2 = notePaths[note2.id].split('/')[0];
-		expect(dir1).not.toBe(dir2);
-
-		expect(await shim.fsDriver().exists(`${exportDir()}/${notePaths[note1.id]}`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${exportDir()}/${notePaths[note2.id]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note1.id]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note2.id]}`)).toBe(true);
 	}));
 
 	it('should handle filenames that contain slashes', (async () => {
