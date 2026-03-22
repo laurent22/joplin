@@ -173,25 +173,13 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 	return output;
 }
 
-function isValidOriginAgainstBaseUrl(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
+export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType): boolean {
 	const url1 = new URL(requestOrigin);
 	const url2 = new URL(endPointBaseUrl);
 	const host1 = url1.host;
 	const host2 = url2.host;
-	const hostname1 = url1.hostname.toLowerCase();
-	const hostname2 = url2.hostname.toLowerCase();
 	const port1 = url1.port;
 	const port2 = url2.port;
-
-	// For OAuth we sometimes end up with APP_BASE_URL and API_BASE_URL pointing to the
-	// same server, but using different loopback hostnames (e.g. localhost vs 127.0.0.1).
-	// Treat those as equivalent so the confirm page doesn't get rejected by the origin check.
-	const normaliseLoopbackHostname = (h: string) => {
-		if (h === 'localhost') return 'localhost';
-		if (h === '127.0.0.1') return 'localhost';
-		if (h === '::1') return 'localhost';
-		return h;
-	};
 
 	if (routeType === RouteType.UserContent) {
 		// At this point we only check if eg usercontent.com has been accessed
@@ -203,17 +191,9 @@ function isValidOriginAgainstBaseUrl(requestOrigin: string, endPointBaseUrl: str
 		const hostNoPrefix = host1.split('.').slice(1).join('.');
 		return hostNoPrefix === host2;
 	} else {
-		// Hostnames must match, but allow loopback aliases.
 		if (port1 !== port2) return false;
-		if (normaliseLoopbackHostname(hostname1) === normaliseLoopbackHostname(hostname2)) return true;
 		return host1 === host2;
 	}
-}
-
-export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, routeType: RouteType, alternateBaseUrl?: string): boolean {
-	if (isValidOriginAgainstBaseUrl(requestOrigin, endPointBaseUrl, routeType)) return true;
-	if (alternateBaseUrl && isValidOriginAgainstBaseUrl(requestOrigin, alternateBaseUrl, routeType)) return true;
-	return false;
 }
 
 export function userIdFromUserContentUrl(url: string): Uuid {
@@ -259,14 +239,7 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 	if (!match) throw new ErrorNotFound();
 
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
-	const primaryBaseUrl = baseUrl(endPoint.type);
-	const cfg = config();
-	// Only allow alternate base URL for Web/API routes (OAuth flow). UserContent
-	// routes require strict origin isolation and must not accept baseUrl/apiBaseUrl.
-	const alternateBaseUrl = (cfg.baseUrl !== cfg.apiBaseUrl) && (endPoint.type !== RouteType.UserContent)
-		? (endPoint.type === RouteType.Web ? cfg.apiBaseUrl : cfg.baseUrl)
-		: undefined;
-	if (ctx.URL && !isValidOrigin(ctx.URL.origin, primaryBaseUrl, endPoint.type, alternateBaseUrl)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
+	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
 
 	const isPublicRoute = match.route.isPublic(match.subPath.schema);
 

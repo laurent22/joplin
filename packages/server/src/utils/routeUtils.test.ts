@@ -136,31 +136,12 @@ describe('routeUtils', () => {
 				'https://example.com',
 				false,
 			],
-			[
-				'http://127.0.0.1:22300',
-				'http://localhost:22300',
-				true,
-			],
-			[
-				'http://localhost:22300',
-				'http://127.0.0.1:22300',
-				true,
-			],
 		];
 
 		for (const testCase of testCases) {
 			const [requestOrigin, configBaseUrl, expected] = testCase;
 			expect(isValidOrigin(requestOrigin, configBaseUrl, RouteType.Api)).toBe(expected);
 		}
-	});
-
-	it('should accept request origin when it matches alternate base URL (APP_BASE_URL vs API_BASE_URL)', async () => {
-		// General case: when APP_BASE_URL and API_BASE_URL differ (e.g. localhost vs 127.0.0.1),
-		// requests from either origin must be accepted. Works for any port.
-		expect(isValidOrigin('http://127.0.0.1:22300', 'http://localhost:22300', RouteType.Web, 'http://127.0.0.1:22300')).toBe(true);
-		expect(isValidOrigin('http://localhost:22300', 'http://127.0.0.1:22300', RouteType.Api, 'http://localhost:22300')).toBe(true);
-		// Different port to verify logic is not port-specific
-		expect(isValidOrigin('http://127.0.0.1:8080', 'http://localhost:8080', RouteType.Web, 'http://127.0.0.1:8080')).toBe(true);
 	});
 
 	it('should check the request origin for User Content URLs', async () => {

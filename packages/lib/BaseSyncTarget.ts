@@ -85,6 +85,20 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
+	/** Used by Joplin Cloud and Joplin Server (same Joplin Server API driver). */
+	protected async isAuthenticatedViaJoplinServerCompatibleSession(): Promise<boolean> {
+		try {
+			const fileApi = await this.fileApi();
+			const api = fileApi.driver().api();
+			const sessionId = await api.sessionId();
+			return !!sessionId;
+		} catch (error: unknown) {
+			const code = error && typeof error === 'object' && 'code' in error ? (error as { code?: number }).code : undefined;
+			if (code === 403) return false;
+			throw error;
+		}
+	}
+
 	public authRouteName(): string {
 		return null;
 	}

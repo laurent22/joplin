@@ -6,6 +6,7 @@ const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('../global-style.js');
 import { AppState } from '../../utils/types';
 import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, defaultState } from '@joplin/lib/services/joplinCloudUtils';
+import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Button } from 'react-native-paper';
 import createRootStyle from '../../utils/createRootStyle';
@@ -87,7 +88,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), SyncTargetJoplinCloud.id());
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);

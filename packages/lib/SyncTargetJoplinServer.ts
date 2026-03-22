@@ -65,17 +65,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	public async isAuthenticated(): Promise<boolean> {
-		try {
-			const fileApi = await this.fileApi();
-			const api = fileApi.driver().api();
-			const sessionId = await api.sessionId();
-			return !!sessionId;
-		} catch (error: unknown) {
-			if ((error as { code?: number }).code === 403) {
-				return false;
-			}
-			throw error;
-		}
+		return this.isAuthenticatedViaJoplinServerCompatibleSession();
 	}
 
 	public authRouteName(): string {

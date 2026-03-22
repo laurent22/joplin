@@ -7,7 +7,7 @@ const targetToRequiresPassword: Record<string, boolean> = {
 	'nextcloud': true,
 	'webdav': true,
 	'amazon_s3': true,
-	'joplinServer': true,
+	'joplinServer': false, // OAuth; no password required upfront
 	'joplinCloud': false,
 	'onedrive': false,
 	'dropbox': false,
