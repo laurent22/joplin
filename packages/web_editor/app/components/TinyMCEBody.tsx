@@ -768,6 +768,7 @@ export default function TinyMCEBody({
     null
   );
   const [conflictError, setConflictError] = useState(false);
+  const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' } | null>(null);
   const [showDeleteConfirmDialog, setShowDeleteConfirmDialog] = useState(false);
 
   // TinyMCE setup クロージャから React state を更新するための ref
@@ -844,13 +845,22 @@ export default function TinyMCEBody({
       const resourceUrl = src.startsWith('/api/resource/') ? src : href;
       const filename = resourceUrl.replace('/api/resource/', '');
       try {
-        await fetch(`/api/resource/${filename}`, { method: 'DELETE' });
+        const res = await fetch(`/api/resource/${filename}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (!json.success) {
+          console.error('Resource delete error:', json.error);
+          setSnackbar({ message: 'リソースの削除に失敗しました。', severity: 'error' });
+          return;
+        }
       } catch (err) {
         console.error('Resource delete error:', err);
+        setSnackbar({ message: 'リソースの削除に失敗しました。', severity: 'error' });
+        return;
       }
       editorRef.current.dom.remove(el);
       setIsDirty(true);
       pendingDeleteElementRef.current = null;
+      setSnackbar({ message: 'リソースを削除しました。', severity: 'success' });
     }
   }, []);
 
@@ -1443,6 +1453,18 @@ export default function TinyMCEBody({
       >
         <Alert severity="error" onClose={() => setConflictError(false)} sx={{ width: '100%' }}>
           ノートが他の場所で更新されています。リロードしてから再編集してください。
+        </Alert>
+      </Snackbar>
+
+      {/* リソース操作結果 Snackbar */}
+      <Snackbar
+        open={snackbar !== null}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert severity={snackbar?.severity ?? 'info'} onClose={() => setSnackbar(null)} sx={{ width: '100%' }}>
+          {snackbar?.message}
         </Alert>
       </Snackbar>
 
