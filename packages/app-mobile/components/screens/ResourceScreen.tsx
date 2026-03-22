@@ -9,6 +9,7 @@ import { _ } from '@joplin/lib/locale';
 import { AppState } from '../../utils/types';
 import { themeStyle } from '../global-style';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Resource, { NoteResourceSortDirection, NoteResourceSortField } from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
@@ -59,9 +60,16 @@ const ResourceScreenComponent: React.FC<Props> = props => {
 	const [deletingResourceIds, setDeletingResourceIds] = useState<string[]>([]);
 	const [expandedResourceIds, setExpandedResourceIds] = useState<Record<string, boolean>>({});
 	const theme = themeStyle(props.themeId);
-	const loadCounter = useRef(0);
-	const invalidateLoadCounter = useCallback(() => {
-		loadCounter.current++;
+	const isMountedRef = useRef(true);
+	const activeLoadIdRef = useRef(0);
+	const getNextLoadId = useCallback(() => {
+		activeLoadIdRef.current++;
+		return activeLoadIdRef.current;
+	}, []);
+	const canApplyLoadStateUpdate = useCallback((loadId: number, isCancelled?: ()=> boolean) => {
+		if (!isMountedRef.current) return false;
+		if (isCancelled?.()) return false;
+		return loadId === activeLoadIdRef.current;
 	}, []);
 
 	const styles = useMemo(() => {
@@ -200,9 +208,14 @@ const ResourceScreenComponent: React.FC<Props> = props => {
 		setExpandedResourceIds({});
 	}, [debouncedSearchQuery]);
 
-	const loadPage = useCallback(async (offset: number) => {
-		invalidateLoadCounter();
-		const currentLoad = loadCounter.current;
+	useEffect(() => {
+		return () => {
+			isMountedRef.current = false;
+		};
+	}, []);
+
+	const loadPage = useCallback(async (offset: number, isCancelled?: ()=> boolean) => {
+		const currentLoad = getNextLoadId();
 		const loadingInitialPage = offset === 0;
 
 		if (loadingInitialPage) {
@@ -221,7 +234,7 @@ const ResourceScreenComponent: React.FC<Props> = props => {
 				offset,
 			});
 
-			if (currentLoad !== loadCounter.current) return;
+			if (!canApplyLoadStateUpdate(currentLoad, isCancelled)) return;
 
 			if (loadingInitialPage) {
 				setResources(result.items);
@@ -231,28 +244,26 @@ const ResourceScreenComponent: React.FC<Props> = props => {
 			setHasMore(result.hasMore);
 			setErrorMessage('');
 		} catch (error: unknown) {
-			if (currentLoad !== loadCounter.current) return;
+			if (!canApplyLoadStateUpdate(currentLoad, isCancelled)) return;
 			setErrorMessage(errorToMessage(error));
 		} finally {
-			if (currentLoad === loadCounter.current) {
+			if (canApplyLoadStateUpdate(currentLoad, isCancelled)) {
 				setIsLoading(false);
 				setIsLoadingMore(false);
 			}
 		}
-	}, [debouncedSearchQuery, invalidateLoadCounter, sortDirection, sortField]);
+	}, [canApplyLoadStateUpdate, debouncedSearchQuery, getNextLoadId, sortDirection, sortField]);
 
-	useEffect(() => {
-		void loadPage(0);
-
-		// Make in-flight loadPage() calls stale on dependency change/unmount.
-		return invalidateLoadCounter;
-	}, [invalidateLoadCounter, loadPage]);
+	useAsyncEffect(async (event) => {
+		await loadPage(0, () => event.cancelled);
+	}, [loadPage]);
 
 	const onDeleteResource = useCallback(async (resource: ResourceEntity) => {
 		if (!resource.id) return;
 
 		const confirmed = await shim.showConfirmationDialog(_('Delete attachment "%s"?', substrWithEllipsis(displayTitle(resource), 0, 50)));
 		if (!confirmed) return;
+		if (!isMountedRef.current) return;
 
 		setDeletingResourceIds(previous => previous.concat(resource.id));
 
@@ -260,9 +271,12 @@ const ResourceScreenComponent: React.FC<Props> = props => {
 			await Resource.delete(resource.id, { sourceDescription: 'ResourceScreen' });
 			await loadPage(0);
 		} catch (error: unknown) {
+			if (!isMountedRef.current) return;
 			await shim.showErrorDialog(errorToMessage(error));
 		} finally {
-			setDeletingResourceIds(previous => previous.filter(id => id !== resource.id));
+			if (isMountedRef.current) {
+				setDeletingResourceIds(previous => previous.filter(id => id !== resource.id));
+			}
 		}
 	}, [loadPage]);
 
@@ -270,6 +284,7 @@ const ResourceScreenComponent: React.FC<Props> = props => {
 		try {
 			await showResource(resource);
 		} catch (error: unknown) {
+			if (!isMountedRef.current) return;
 			const fullPath = Resource.fullPath(resource);
 			const errorMessage = errorToMessage(error);
 			await shim.showErrorDialog(`${_('This file could not be opened: %s', fullPath)}\n\n${errorMessage}`);
