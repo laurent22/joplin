@@ -10,7 +10,6 @@ interface Props {
 	themeId: number;
 	style?: React.CSSProperties;
 
-	id?: string;
 	'aria-controls'?: string;
 	'aria-expanded'?: boolean;
 }

@@ -10,7 +10,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 
 interface Props {
-	themeId: string;
+	themeId: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
