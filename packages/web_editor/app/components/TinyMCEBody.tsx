@@ -776,6 +776,9 @@ export default function TinyMCEBody({
     openDeleteConfirmRef.current = () => setShowDeleteConfirmDialog(true);
   }, []);
 
+  // 削除対象のリソース要素を保持する ref
+  const pendingDeleteElementRef = useRef<Element | null>(null);
+
   // attachAudioSettingsButtons 実行中はダーティ検知を抑制するための ref
   const suppressDirtyRef = useRef(false);
 
@@ -831,6 +834,25 @@ export default function TinyMCEBody({
     },
     [noteId, isSaving]
   );
+
+  const handleResourceDelete = useCallback(async () => {
+    setShowDeleteConfirmDialog(false);
+    const el = pendingDeleteElementRef.current;
+    if (el && editorRef.current) {
+      const src = el.getAttribute('src') ?? '';
+      const href = el.getAttribute('href') ?? '';
+      const resourceUrl = src.startsWith('/api/resource/') ? src : href;
+      const filename = resourceUrl.replace('/api/resource/', '');
+      try {
+        await fetch(`/api/resource/${filename}`, { method: 'DELETE' });
+      } catch (err) {
+        console.error('Resource delete error:', err);
+      }
+      editorRef.current.dom.remove(el);
+      setIsDirty(true);
+      pendingDeleteElementRef.current = null;
+    }
+  }, []);
 
   // スタレクロージャを防ぐため、常に最新の handleSave を ref に保持
   const handleSaveRef = useRef(handleSave);
@@ -1044,11 +1066,13 @@ export default function TinyMCEBody({
                   const src = el.getAttribute('src') ?? '';
                   const href = el.getAttribute('href') ?? '';
                   if (src.startsWith('/api/resource/') || href.startsWith('/api/resource/')) {
+                    pendingDeleteElementRef.current = el;
                     return 'joplinResourceDelete';
                   }
                 }
                 el = el.parentElement;
               }
+              pendingDeleteElementRef.current = null;
               return '';
             },
           });
@@ -1431,10 +1455,7 @@ export default function TinyMCEBody({
         <DialogActions>
           <Button onClick={() => setShowDeleteConfirmDialog(false)}>いいえ</Button>
           <Button
-            onClick={() => {
-              setShowDeleteConfirmDialog(false);
-              console.log('hello world');
-            }}
+            onClick={handleResourceDelete}
             color="error"
             variant="contained"
           >
