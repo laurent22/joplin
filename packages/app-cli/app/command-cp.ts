@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
@@ -17,14 +17,14 @@ class Command extends BaseCommand {
 	public override async action(args: any) {
 		let folder = null;
 		if (args['notebook']) {
-			folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
+			folder = await app().loadItem(ModelType.Folder, args['notebook']);
 		} else {
 			folder = app().currentFolder();
 		}
 
 		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 
-		const notes = await app().loadItems(BaseModel.TYPE_NOTE, args['note']);
+		const notes = await app().loadItems(ModelType.Note, args['note']);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', args['note']));
 
 		for (let i = 0; i < notes.length; i++) {

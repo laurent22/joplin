@@ -1,7 +1,7 @@
 import BaseApplication from '@joplin/lib/BaseApplication';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils.js';
 import ResourceService from '@joplin/lib/services/ResourceService';
-import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
@@ -15,6 +15,8 @@ import RevisionService from '@joplin/lib/services/RevisionService';
 import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+
+type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 import initializeCommandService from './utils/initializeCommandService';
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('@joplin/lib/Cache');
@@ -41,15 +43,15 @@ class Application extends BaseApplication {
 	}
 
 	public async guessTypeAndLoadItem(pattern: string, options: { parent?: FolderEntity } | null = null) {
-		let type = BaseModel.TYPE_NOTE;
+		let type: FolderOrNoteType = ModelType.Note;
 		if (pattern.indexOf('/') === 0) {
-			type = BaseModel.TYPE_FOLDER;
+			type = ModelType.Folder;
 			pattern = pattern.substr(1);
 		}
 		return this.loadItem(type, pattern, options);
 	}
 
-	public async loadItem(type: ModelType | 'folderOrNote', pattern: string, options: { parent?: FolderEntity } | null = null) {
+	public async loadItem(type: FolderOrNoteType, pattern: string, options: { parent?: FolderEntity } | null = null) {
 		const output = await this.loadItems(type, pattern, options);
 
 		if (output.length > 1) {
@@ -73,36 +75,36 @@ class Application extends BaseApplication {
 		}
 	}
 
-	public async loadItemOrFail(type: ModelType | 'folderOrNote', pattern: string) {
+	public async loadItemOrFail(type: FolderOrNoteType, pattern: string) {
 		const output = await this.loadItem(type, pattern);
 		if (!output) throw new Error(_('Cannot find "%s".', pattern));
 		return output;
 	}
 
-	public async loadItems(type: ModelType | 'folderOrNote', pattern: string, options: { parent?: FolderEntity } | null = null): Promise<(FolderEntity | NoteEntity)[]> {
+	public async loadItems(type: FolderOrNoteType, pattern: string, options: { parent?: FolderEntity } | null = null): Promise<(FolderEntity | NoteEntity)[]> {
 		if (type === 'folderOrNote') {
-			const folders: FolderEntity[] = await this.loadItems(BaseModel.TYPE_FOLDER, pattern, options);
+			const folders: FolderEntity[] = await this.loadItems(ModelType.Folder, pattern, options);
 			if (folders.length) return folders;
-			return await this.loadItems(BaseModel.TYPE_NOTE, pattern, options);
+			return await this.loadItems(ModelType.Note, pattern, options);
 		}
 
 		pattern = pattern ? pattern.toString() : '';
 
-		if (type === BaseModel.TYPE_FOLDER && (pattern === Folder.conflictFolderTitle() || pattern === Folder.conflictFolderId())) return [Folder.conflictFolder()];
+		if (type === ModelType.Folder && (pattern === Folder.conflictFolderTitle() || pattern === Folder.conflictFolderId())) return [Folder.conflictFolder()];
 
 		if (!options) options = {};
 
 		const parent = options.parent ? options.parent : app().currentFolder();
 		const ItemClass = BaseItem.itemClass(type);
 
-		if (type === BaseModel.TYPE_NOTE && pattern.indexOf('*') >= 0) {
+		if (type === ModelType.Note && pattern.indexOf('*') >= 0) {
 			// Handle it as pattern
 			if (!parent) throw new Error(_('No notebook selected.'));
 			return await Note.previews(parent.id, { titlePattern: pattern });
 		} else {
 			// Single item
 			let item = null;
-			if (type === BaseModel.TYPE_NOTE) {
+			if (type === ModelType.Note) {
 				if (!parent) throw new Error(_('No notebook has been specified.'));
 				item = await (ItemClass as typeof Note).loadFolderNoteByField(parent.id, 'title', pattern);
 			} else {
