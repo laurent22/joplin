@@ -942,7 +942,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 
 		const localFilePath = Platform.select({
-			ios: decodeURI(pickerResponse.uri),
+			ios: decodeURIComponent(pickerResponse.uri),
 			default: pickerResponse.uri,
 		});
 
