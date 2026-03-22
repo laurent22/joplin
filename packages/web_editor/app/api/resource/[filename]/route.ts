@@ -104,3 +104,33 @@ export async function PUT(req: Request, { params }: Props) {
     );
   }
 }
+
+export async function DELETE(_req: Request, { params }: Props) {
+  try {
+    const { filename } = await params;
+    if (!filename) {
+      return NextResponse.json({ success: false, error: 'filename is required' }, { status: 400 });
+    }
+
+    // prevent path traversal
+    const safeName = path.basename(filename);
+    const resourceDir = ViewerUtil.getResourceFolderPath();
+    const filePath = path.join(resourceDir, safeName);
+
+    const stat = await fs.stat(filePath).catch(() => null);
+    if (!stat || !stat.isFile()) {
+      return NextResponse.json({ success: false, error: 'File not found' }, { status: 404 });
+    }
+
+    // ファイル削除・DB クリーンアップを Resource.delete に委譲
+    const resourceId = path.basename(safeName, path.extname(safeName));
+    await Resource.delete(resourceId);
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
+  }
+}
