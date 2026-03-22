@@ -238,25 +238,29 @@ export default class ElectronAppWrapper {
 		// One-time migration: copy existing dictionary words from the old Electron userData location into the new session.
 		const migrationFlagPath = path.join(this.profilePath_, '.spell-checker-session-migration-done');
 		if (!fs.existsSync(migrationFlagPath)) {
-			const wordsToMigrate = new Set<string>();
+			try {
+				const wordsToMigrate = new Set<string>();
 
-			const oldElectronDictPath = path.join(this.electronApp_.getPath('userData'), 'Custom Dictionary.txt');
-			if (fs.existsSync(oldElectronDictPath)) {
-				const content = fs.readFileSync(oldElectronDictPath, 'utf8');
-				const words = content.split('\n')
-					.map((w: string) => w.trim())
-					.filter((w: string) => w.length > 0 && !w.startsWith('checksum_v1'));
+				const oldElectronDictPath = path.join(this.electronApp_.getPath('userData'), 'Custom Dictionary.txt');
+				if (fs.existsSync(oldElectronDictPath)) {
+					const content = fs.readFileSync(oldElectronDictPath, 'utf8');
+					const words = content.split('\n')
+						.map((w: string) => w.trim())
+						.filter((w: string) => w.length > 0 && !/^checksum_v1\s*=/.test(w));
 
-				for (const word of words) {
-					wordsToMigrate.add(word);
+					for (const word of words) {
+						wordsToMigrate.add(word);
+					}
 				}
-			}
 
-			for (const word of wordsToMigrate) {
-				joplinSession.addWordToSpellCheckerDictionary(word);
-			}
+				for (const word of wordsToMigrate) {
+					joplinSession.addWordToSpellCheckerDictionary(word);
+				}
 
-			fs.writeFileSync(migrationFlagPath, '', 'utf8');
+				fs.writeFileSync(migrationFlagPath, '', 'utf8');
+			} catch (error) {
+				console.warn('Failed to migrate spell-check dictionary:', error);
+			}
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
