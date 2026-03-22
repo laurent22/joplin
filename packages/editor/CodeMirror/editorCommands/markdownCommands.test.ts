@@ -38,49 +38,43 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
-	it('should apply bold per line to multiline list selections', async () => {
-		const initialDocText = '- one\n- two';
+	it.each([
+		{
+			name: 'bolding bullet lists line by line',
+			initialDocText: '- one\n- two',
+			syntaxNodes: ['BulletList'],
+			toggleCommand: toggleBolded,
+			expectedAfterFirstToggle: '- **one**\n- **two**',
+		},
+		{
+			name: 'italicizing ordered lists line by line',
+			initialDocText: '1. one\n2. two',
+			syntaxNodes: ['OrderedList'],
+			toggleCommand: toggleItalicized,
+			expectedAfterFirstToggle: '1. *one*\n2. *two*',
+		},
+		{
+			name: 'bolding checklist content while preserving markers',
+			initialDocText: '- [ ] one\n- [x] two',
+			syntaxNodes: ['BulletList'],
+			toggleCommand: toggleBolded,
+			expectedAfterFirstToggle: '- [ ] **one**\n- [x] **two**',
+		},
+	])('should support $name', async ({ initialDocText, syntaxNodes, toggleCommand, expectedAfterFirstToggle }) => {
 		const editor = await createTestEditor(
 			initialDocText,
 			EditorSelection.range(0, initialDocText.length),
-			['BulletList'],
+			syntaxNodes,
 		);
 
-		toggleBolded(editor);
-		expect(editor.state.doc.toString()).toBe('- **one**\n- **two**');
+		toggleCommand(editor);
+		expect(editor.state.doc.toString()).toBe(expectedAfterFirstToggle);
 
-		toggleBolded(editor);
-		expect(editor.state.doc.toString()).toBe('- one\n- two');
+		toggleCommand(editor);
+		expect(editor.state.doc.toString()).toBe(initialDocText);
 	});
 
-	it('should apply italic per line to multiline ordered list selections', async () => {
-		const initialDocText = '1. one\n2. two';
-		const editor = await createTestEditor(
-			initialDocText,
-			EditorSelection.range(0, initialDocText.length),
-			['OrderedList'],
-		);
-
-		toggleItalicized(editor);
-		expect(editor.state.doc.toString()).toBe('1. *one*\n2. *two*');
-
-		toggleItalicized(editor);
-		expect(editor.state.doc.toString()).toBe('1. one\n2. two');
-	});
-
-	it('should apply bold to list content while preserving checklist markers', async () => {
-		const initialDocText = '- [ ] one\n- [x] two';
-		const editor = await createTestEditor(
-			initialDocText,
-			EditorSelection.range(0, initialDocText.length),
-			['BulletList'],
-		);
-
-		toggleBolded(editor);
-		expect(editor.state.doc.toString()).toBe('- [ ] **one**\n- [x] **two**');
-	});
-
-	it('should keep fenced code block multiline formatting behavior unchanged', async () => {
+	it('should wrap fenced code block multiline selections as a whole region', async () => {
 		const initialDocText = '```\none\ntwo\n```';
 		const editor = await createTestEditor(
 			initialDocText,
