@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-import { SqlQuery } from '../services/database/types';
+import { NoteEntity, SqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 import { LoadOptions } from './utils/types';
 
@@ -93,8 +93,7 @@ export default class NoteResource extends BaseModel {
 			WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)}) AND is_associated = 1
 		`);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: Record<string, any> = {};
+		const output: Record<string, NoteEntity[]> = {};
 		for (const row of rows) {
 			if (!output[row.resource_id]) output[row.resource_id] = [];
 			output[row.resource_id].push(row);
