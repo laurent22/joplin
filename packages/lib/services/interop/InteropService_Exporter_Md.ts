@@ -96,8 +96,10 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				const parentId = folder.parent_id || '';
 				if (!namesByParent[parentId]) namesByParent[parentId] = [];
 				const safeName = friendlySafeFilename(folder.title, null);
-				const uniqueName = await shim.fsDriver().findUniqueFilename(safeName, namesByParent[parentId], true);
-				namesByParent[parentId].push(uniqueName);
+				const fullPath = shim.fsDriver().resolve(this.destDir_, safeName);
+				const uniquePath = await shim.fsDriver().findUniqueFilename(fullPath, namesByParent[parentId], true);
+				const uniqueName = basename(uniquePath);
+				namesByParent[parentId].push(uniquePath);
 				this.folderPaths_.set(folder.id, uniqueName);
 			}
 		}

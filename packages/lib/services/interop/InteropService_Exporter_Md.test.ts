@@ -541,7 +541,6 @@ describe('interop/InteropService_Exporter_Md', () => {
 			});
 		};
 
-		// CON and NUL are Windows-banned names, both sanitize to "___"
 		const folder1 = await Folder.save({ title: 'CON' });
 		const folder2 = await Folder.save({ title: 'NUL' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
