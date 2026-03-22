@@ -111,7 +111,8 @@ export default class DecryptionWorker {
 			const s = item.key.split(':');
 			const type_ = Number(s[1]);
 			const id = s[2];
-			const errorDescription = await this.kvStore().value<string>(decryptionErrorKey(type_, id));
+			const storedError = await this.kvStore().value(decryptionErrorKey(type_, id));
+			const errorDescription = typeof storedError === 'string' ? storedError : null;
 			return {
 				type_,
 				id,

@@ -68,10 +68,10 @@ export default class KvStore extends BaseService {
 		throw new Error(`Unknown type: ${type}`);
 	}
 
-	public async value<T extends string | number>(key: string): Promise<T | null> {
+	public async value(key: string): Promise<string | number | null> {
 		const r = await this.db().selectOne('SELECT `value`, `type` FROM key_values WHERE `key` = ?', [key]);
 		if (!r) return null;
-		return this.formatValue_(r.value, r.type) as T;
+		return this.formatValue_(r.value, r.type);
 	}
 
 	public async setValue(key: string, value: string | number) {

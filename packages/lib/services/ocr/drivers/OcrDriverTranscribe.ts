@@ -31,7 +31,8 @@ export default class OcrDriverTranscribe extends OcrDriverBase {
 		logger.info(`${resourceId}: Starting to recognize resource from ${filePath}`);
 
 		const key = `${this.jobIdKeyPrefix_}${resourceId}`;
-		let jobId = await KvStore.instance().value<string>(key);
+		const storedJobId = await KvStore.instance().value(key);
+		let jobId = typeof storedJobId === 'string' ? storedJobId : null;
 
 		try {
 			if (!jobId) {
