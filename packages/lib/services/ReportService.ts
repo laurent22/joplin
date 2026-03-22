@@ -68,14 +68,15 @@ export default class ReportService {
 		return v.toString();
 	}
 
-	public csvCreateLine(row: string[]) {
+	public csvCreateLine(row: (string | number | boolean)[]) {
+		const escaped: string[] = [];
 		for (let i = 0; i < row.length; i++) {
-			row[i] = this.csvEscapeCell(row[i]);
+			escaped.push(this.csvEscapeCell(String(row[i])));
 		}
-		return row.join(',');
+		return escaped.join(',');
 	}
 
-	public csvCreate(rows: string[][]) {
+	public csvCreate(rows: (string | number | boolean)[][]) {
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(this.csvCreateLine(rows[i]));
