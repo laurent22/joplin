@@ -488,6 +488,48 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
 	}));
 
+	it('should handle folders that collide after sanitization', (async () => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(exportDir());
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const itemsToExport: any[] = [];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const queueExportItem = (itemType: number, itemOrId: any) => {
+			itemsToExport.push({
+				type: itemType,
+				itemOrId: itemOrId,
+			});
+		};
+
+		const folder1 = await Folder.save({ title: 'folder:' });
+		const folder2 = await Folder.save({ title: 'folder?' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
+		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
+		queueExportItem(BaseModel.TYPE_NOTE, note1);
+		queueExportItem(BaseModel.TYPE_NOTE, note2);
+
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, itemsToExport);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
+
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+
+		const notePaths = exporter.context().notePaths;
+		expect(Object.keys(notePaths).length).toBe(2);
+
+		const dir1 = notePaths[note1.id].split('/')[0];
+		const dir2 = notePaths[note2.id].split('/')[0];
+		expect(dir1).not.toBe(dir2);
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/${notePaths[note1.id]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${notePaths[note2.id]}`)).toBe(true);
+	}));
+
 	it('should handle filenames that contain slashes', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
 		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
