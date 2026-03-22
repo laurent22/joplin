@@ -13,7 +13,7 @@ const logger = Logger.create('EmailService');
 
 export default class EmailService extends BaseService {
 
-	private transport_: Mail;
+	private transport_: Mail | null = null;
 
 	private async transport(): Promise<Mail> {
 		if (!this.transport_) {
