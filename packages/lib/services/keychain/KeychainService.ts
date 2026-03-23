@@ -110,7 +110,8 @@ export default class KeychainService extends BaseService {
 			try {
 				password = await driver.password(name);
 			} catch (error) {
-				// Sometimes, a keychain service driver can return supported: true, but still fail:
+				// If MacOS prompts a user for keychain access, but the user clicks "Disallow", a password request
+				// can fail.
 				logger.warn(
 					'Failed to read password for entry',
 					{ name, driverId: driver.driverId },
