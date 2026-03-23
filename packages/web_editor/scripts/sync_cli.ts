@@ -142,6 +142,16 @@ async function main() {
   Logger.initializeGlobalLogger(globalLogger);
   reg.setLogger(Logger.create('') as unknown);
 
+  // tsx のモジュール分離により Logger.ts インスタンスが別に存在する場合があるため、
+  // require.cache 上の全 Logger インスタンスにも initializeGlobalLogger を伝播させる。
+  for (const cacheKey of Object.keys(require.cache)) {
+    const cached = require.cache[cacheKey]?.exports?.default;
+    if (!cached || cached === Logger) continue;
+    if (typeof cached.initializeGlobalLogger === 'function') {
+      try { cached.initializeGlobalLogger(globalLogger); } catch (_) { /* ignore */ }
+    }
+  }
+
   // --- 7. shim の初期化（HTTP/fetch などを有効化）---
   let keytar: unknown = null;
   try {
