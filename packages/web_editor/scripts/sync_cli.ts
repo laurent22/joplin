@@ -210,7 +210,6 @@ async function main() {
       `Error: このプロファイルの sync.target (${syncTarget}) は OneDrive (${SyncTargetOneDrive.id()}) ではありません。`
     );
     console.error('OneDrive 以外のターゲットはサポートしていません。');
-    await db.close();
     process.exit(1);
   }
 
@@ -219,7 +218,6 @@ async function main() {
     console.error(
       'Error: OneDrive が未認証です。Joplin Desktop / CLI で一度ログインしてください。'
     );
-    await db.close();
     process.exit(1);
   }
 
@@ -230,7 +228,6 @@ async function main() {
 
   // --- 11. 後処理 ---
   await reg.cancelTimers();
-  await db.close();
   process.exit(0);
 }
 
