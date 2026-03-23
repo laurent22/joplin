@@ -185,6 +185,32 @@ async function main() {
   KeychainService.instance().setLogger(globalLogger);
   Setting.setKeychainService(KeychainService.instance());
   await Setting.load();
+
+  // 自動保存タイマーを無効化（Setting.load/setValue が内部でスケジュールするタイマーが
+  // 非同期処理中に発火して "Accessing database before it has been initialised" でクラッシュするのを防ぐ）
+  // tsx のモジュールインスタンス分離により require.cache 上に複数の Setting/BaseModel が
+  // 存在する場合があるため、キャッシュ上の全インスタンスに対して処理する。
+  for (const cacheKey of Object.keys(require.cache)) {
+    const cached = require.cache[cacheKey]?.exports?.default;
+    if (!cached || typeof cached !== 'function') continue;
+    // Setting クラス: autoSave 無効化 & タイマーキャンセル
+    if (typeof cached.cancelScheduleSave === 'function') {
+      cached.autoSaveEnabled = false;
+      cached.cancelScheduleSave();
+    }
+    if (typeof cached.cancelScheduleChangeEvent === 'function') {
+      cached.cancelScheduleChangeEvent();
+    }
+    // BaseModel 系: db を伝播
+    if (typeof cached.setDb === 'function') {
+      try {
+        cached.setDb(db);
+      } catch (_) {
+        /* 既に設定済みの場合はスキップ */
+      }
+    }
+  }
+
   if (!clientIdSetting) Setting.setValue('clientId', clientId);
   await KeychainService.instance().detectIfKeychainSupported();
 
