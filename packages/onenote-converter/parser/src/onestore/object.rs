@@ -61,7 +61,7 @@ impl Object {
 
     pub(crate) fn fallback() -> Object {
         Self {
-            jc_id: JcId { 0: 0 },
+            jc_id: JcId(0),
             context_id: ExGuid::fallback(),
             file_data: None,
             mapping: mapping_table_fallback(),

@@ -1,4 +1,4 @@
-import MdToHtml from './MdToHtml';
+import MdToHtml, { ExtraRendererRule } from './MdToHtml';
 import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
 import { Options as NoteStyleOptions } from './noteStyle';
@@ -15,8 +15,7 @@ export interface Options {
 	isSafeMode?: boolean;
 	ResourceModel?: OptionsResourceModel;
 	customCss?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	extraRendererRules?: any[];
+	extraRendererRules?: ExtraRendererRule[];
 	resourceBaseUrl?: string;
 	pluginOptions?: PluginOptions; // Not sure if needed
 	tempDir?: string; // Not sure if needed
@@ -59,8 +58,7 @@ export default class MarkupToHtml implements MarkupToHtmlConverter {
 		return this.renderers_[markupLanguage];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: any = null) {
+	public stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: { collapseWhiteSpaces?: boolean } = null) {
 		if (!markup) return '';
 
 		options = { collapseWhiteSpaces: false, ...options };

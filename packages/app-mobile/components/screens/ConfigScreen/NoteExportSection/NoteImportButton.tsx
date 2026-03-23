@@ -62,7 +62,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 		const sourceFileUri = importFiles[0].uri;
 		const sourceFilePath = Platform.select({
 			default: sourceFileUri,
-			ios: decodeURI(sourceFileUri),
+			ios: decodeURIComponent(sourceFileUri),
 		});
 
 		const importTargetPath = join(await makeImportExportCacheDirectory(), importFiles[0].fileName);

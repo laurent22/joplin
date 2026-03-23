@@ -62,8 +62,7 @@ export default class BackOffHandler {
 		return this.backOffIntervals_[effectiveIndex];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async wait(path: string, args: any) {
+	public async wait(path: string, args: unknown) {
 		const interval = this.backOffInterval();
 		if (!interval) return;
 

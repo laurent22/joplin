@@ -101,7 +101,7 @@ export default class ToolbarButtonUtils {
 	// This method ensures that if the provided commandNames and state hasn't changed
 	// the output also won't change. Invididual toolbarButtonInfo also won't changed
 	// if the state they use hasn't changed. This is to avoid useless renders of the toolbars.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- WhenClauseContext can be partial in tests
 	public commandsToToolbarButtons(commandNames: string[], whenClauseContext: any, keymapService: (KeymapService | null) = null): ToolbarItem[] {
 		const output: ToolbarItem[] = [];
 

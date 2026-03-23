@@ -351,12 +351,9 @@ export default class ShareModel extends BaseModel<Share> {
 						}, { isNew: false });
 					} catch (error) {
 						// Guard against a potential race condition: Handle the case where the item was deleted for all users
-						// during the share update process:
-						if (error instanceof ErrorBadRequest) {
-							logger.warn('handleDeleted: Unable to update owner_id on item', item.id, error);
-						} else {
-							throw error;
-						}
+						// during the share update process. Additionally, we should not throw an error here as that would
+						// prevent the sharing service from running at all.
+						logger.warn('handleDeleted: Unable to update owner_id on item', item.id, error);
 					}
 				}
 			}

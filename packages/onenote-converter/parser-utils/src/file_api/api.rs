@@ -1,5 +1,5 @@
+use sanitize_filename::{Options as SanitizeOptions, sanitize_with_options};
 use std::io::{Read, Seek};
-use sanitize_filename::{ sanitize_with_options, Options as SanitizeOptions };
 
 pub type ApiResult<T> = std::result::Result<T, std::io::Error>;
 pub trait FileHandle: Read + Seek {}

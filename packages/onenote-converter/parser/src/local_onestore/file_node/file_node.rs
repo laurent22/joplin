@@ -767,7 +767,10 @@ impl AttachmentInfo {
             .into())
         } else if self.data_ref.starts_with("<invfdo>") {
             // "invalid"
-            log_warn!("Attempted to load an invalid {} file. Importing an empty file.", self.extension);
+            log_warn!(
+                "Attempted to load an invalid {} file. Importing an empty file.",
+                self.extension
+            );
             // Return empty data
             Ok(FileBlob::default())
         } else {

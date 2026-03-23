@@ -119,8 +119,7 @@ export default class HtmlToHtml implements MarkupRenderer {
 				}
 			});
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			html = htmlUtils.processAnchorTags(html, (data: any) => {
+			html = htmlUtils.processAnchorTags(html, (data: { href?: string }) => {
 				if (!data.href) return null;
 
 				const r = linkReplacement(data.href, {
