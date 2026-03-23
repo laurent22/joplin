@@ -414,7 +414,7 @@ export default class ElectronAppWrapper {
 			try {
 				this.win_?.webContents.send('main-window-focused');
 			} catch (_error) {
-				// Renderer may be temporarily disposed after closing secondary windows
+				console.warn('Failed to send IPC to main window — renderer may be temporarily disposed:', _error);
 			}
 		});
 
@@ -487,6 +487,7 @@ export default class ElectronAppWrapper {
 			window.webContents.setZoomFactor(this.mainWindow().webContents.getZoomFactor());
 
 			window.once('close', () => {
+				// Check both: BrowserWindow and webContents can be destroyed independently
 				if (this.win_ && !this.win_.isDestroyed() && !this.win_.webContents.isDestroyed()) {
 					this.win_.webContents.send('secondary-window-closing', windowId);
 				}
