@@ -102,11 +102,22 @@ async function main() {
   BaseItem.loadClass('Revision', Revision);
 
   // --- 3. Setting 定数のセット ---
+  // settings.json があれば先読みして env 等の定数も上書き可能にする
+  const settingsJsonPath = path.join(profileDir, 'settings.json');
+  let earlySettingsJson: Record<string, unknown> = {};
+  if (fs.existsSync(settingsJsonPath)) {
+    try {
+      earlySettingsJson = fs.readJsonSync(settingsJsonPath);
+    } catch (_) {
+      /* ignore */
+    }
+  }
+
   // 後で全モジュールインスタンスへ伝播するためマップとして保持する
   const settingConstants: Record<string, string> = {
     appId: 'net.cozic.joplin-cli',
     appType: 'cli',
-    env: 'prod',
+    env: typeof earlySettingsJson['env'] === 'string' ? earlySettingsJson['env'] : 'prod',
     profileDir: profileDir,
     resourceDirName: 'resources',
     resourceDir: path.join(profileDir, 'resources'),
@@ -148,7 +159,11 @@ async function main() {
     const cached = require.cache[cacheKey]?.exports?.default;
     if (!cached || cached === Logger) continue;
     if (typeof cached.initializeGlobalLogger === 'function') {
-      try { cached.initializeGlobalLogger(globalLogger); } catch (_) { /* ignore */ }
+      try {
+        cached.initializeGlobalLogger(globalLogger);
+      } catch (_) {
+        /* ignore */
+      }
     }
   }
 
@@ -268,9 +283,9 @@ async function main() {
   await KeychainService.instance().detectIfKeychainSupported();
 
   // --- 9.5. profileDir/settings.json から sync 設定を上書き ---
-  const settingsJsonPath = path.join(profileDir, 'settings.json');
-  if (await fs.pathExists(settingsJsonPath)) {
-    const settingsJson = await fs.readJson(settingsJsonPath);
+  // settingsJsonPath と earlySettingsJson は Step 3 で先読み済み
+  if (Object.keys(earlySettingsJson).length > 0) {
+    const settingsJson = earlySettingsJson;
     const overrideKeys = ['sync.target', 'sync.useReverseProxy', 'sync.reverseProxyUrl'];
 
     // まず自分のインスタンスに反映
