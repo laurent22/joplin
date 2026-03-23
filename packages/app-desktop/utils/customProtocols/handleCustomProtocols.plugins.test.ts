@@ -12,13 +12,19 @@ jest.doMock('electron', () => {
 		protocol: {
 			handle: handleProtocolMock,
 		},
+		Session: jest.fn(),
 	};
 });
 
 import handleCustomProtocols from './handleCustomProtocols';
 
 const setUpProtocolHandler = () => {
-	const protocolHandler = handleCustomProtocols();
+	const mockSession = {
+		protocol: {
+			handle: handleProtocolMock,
+		},
+	};
+	const protocolHandler = handleCustomProtocols(mockSession as never);
 
 	expect(handleProtocolMock).toHaveBeenCalled();
 

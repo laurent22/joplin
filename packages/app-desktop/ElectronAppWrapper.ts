@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, powerMonitor, session as electronSession } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, powerMonitor, session as electronSession, Session } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -70,6 +70,7 @@ export default class ElectronAppWrapper {
 	private updaterService_: AutoUpdaterService = null;
 	private customProtocolHandlers_: CustomProtocolHandlers|null = null;
 	private updatePollInterval_: ReturnType<typeof setTimeout>|null = null;
+	private joplinSession_: Session|null = null;
 
 	private profileLocker_: FileLocker|null = null;
 	private ipcServer_: IpcServer|null = null;
@@ -211,29 +212,9 @@ export default class ElectronAppWrapper {
 		}
 	}
 
-	public createWindow() {
-		// Set to true to view errors if the application does not start
-		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
-
-		const windowStateKeeper = require('electron-window-state');
-
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const stateOptions: any = {
-			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
-			defaultHeight: Math.round(0.8 * screen.getPrimaryDisplay().workArea.height),
-			file: `window-state-${this.env_}.json`,
-		};
-
-		if (this.profilePath_) stateOptions.path = this.profilePath_;
-
-		// Load the previous state with fallback to defaults
-		const windowState = windowStateKeeper(stateOptions);
-
-		// Create a persistent session rooted at the profile directory so that
-		// Custom Dictionary.txt is stored there, making it portable.
-		// cache: false prevents large Chromium cache data from polluting the profile directory.
-		const joplinSession = electronSession.fromPath(this.profilePath_, { cache: false });
+	private createJoplinSession_() {
+		const sessionPath = path.join(this.profilePath_, '.spell-session');
+		const joplinSession = electronSession.fromPath(sessionPath, { cache: false });
 
 		// One-time migration: copy existing dictionary words from the old Electron userData location into the new session.
 		const migrationFlagPath = path.join(this.profilePath_, '.spell-checker-session-migration-done');
@@ -262,6 +243,26 @@ export default class ElectronAppWrapper {
 				console.warn('Failed to migrate spell-check dictionary:', error);
 			}
 		}
+		return joplinSession;
+	}
+
+	public createWindow() {
+		// Set to true to view errors if the application does not start
+		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
+
+		const windowStateKeeper = require('electron-window-state');
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		const stateOptions: any = {
+			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
+			defaultHeight: Math.round(0.8 * screen.getPrimaryDisplay().workArea.height),
+			file: `window-state-${this.env_}.json`,
+		};
+
+		if (this.profilePath_) stateOptions.path = this.profilePath_;
+
+		// Load the previous state with fallback to defaults
+		const windowState = windowStateKeeper(stateOptions);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const windowOptions: any = {
@@ -276,7 +277,7 @@ export default class ElectronAppWrapper {
 			// this needs to be a non-transparent color:
 			backgroundColor: nativeTheme.shouldUseDarkColors ? '#333' : '#fff',
 			webPreferences: {
-				session: joplinSession,
+				session: this.joplinSession_,
 				nodeIntegration: true,
 				contextIsolation: false,
 				spellcheck: true,
@@ -919,7 +920,9 @@ export default class ElectronAppWrapper {
 
 		await this.fixLinuxAccessibility_();
 
-		this.customProtocolHandlers_ = handleCustomProtocols();
+		// Session must be created before handleCustomProtocols() so both use the same object.
+		this.joplinSession_ = this.createJoplinSession_();
+		this.customProtocolHandlers_ = handleCustomProtocols(this.joplinSession_);
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {
