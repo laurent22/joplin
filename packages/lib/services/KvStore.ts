@@ -47,15 +47,13 @@ export default class KvStore extends BaseService {
 		return this.db_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private typeFromValue_(value: any) {
+	private typeFromValue_(value: string | number) {
 		if (typeof value === 'string') return ValueType.Text;
 		if (typeof value === 'number') return ValueType.Int;
 		throw new Error(`Unsupported value type: ${typeof value}`);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private formatValues_(kvs: any[]) {
+	private formatValues_(kvs: KvStoreKeyValue[]) {
 		const output = [];
 		for (const kv of kvs) {
 			kv.value = this.formatValue_(kv.value, kv.type);
@@ -64,22 +62,19 @@ export default class KvStore extends BaseService {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private formatValue_(value: any, type: ValueType): string | number {
+	private formatValue_(value: string | number, type: ValueType): string | number {
 		if (type === ValueType.Int) return Number(value);
 		if (type === ValueType.Text) return `${value}`;
 		throw new Error(`Unknown type: ${type}`);
 	}
 
-	public async value<T>(key: string): Promise<T> {
+	public async value(key: string): Promise<string | number | null> {
 		const r = await this.db().selectOne('SELECT `value`, `type` FROM key_values WHERE `key` = ?', [key]);
 		if (!r) return null;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return this.formatValue_(r.value, r.type) as any;
+		return this.formatValue_(r.value, r.type);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async setValue(key: string, value: any) {
+	public async setValue(key: string, value: string | number) {
 		const t = Date.now();
 		await this.db().exec('INSERT OR REPLACE INTO key_values (`key`, `value`, `type`, `updated_time`) VALUES (?, ?, ?, ?)', [key, value, this.typeFromValue_(value), t]);
 	}

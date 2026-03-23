@@ -104,8 +104,7 @@ const useRerenderHandler = (props: Props) => {
 		props.fontSize, props.showNoteLinkIcon,
 	];
 	const previousDeps = usePrevious(effectDependencies, []);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const changedDeps = effectDependencies.reduce((accum: any, dependency: any, index: any) => {
+	const changedDeps = effectDependencies.reduce((accum: Record<number, boolean>, dependency: unknown, index: number) => {
 		if (dependency !== previousDeps[index]) {
 			return { ...accum, [index]: true };
 		}
