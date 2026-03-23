@@ -67,11 +67,11 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const shim = require('@joplin/lib/shim').default;
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('@joplin/lib/SyncTargetOneDrive').default;
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox').default;
-const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem').default;
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud').default;
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV').default;
-const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3').default;
+const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox');
+const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem');
+const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud');
+const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV');
+const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3');
 const SyncTargetJoplinServer = require('@joplin/lib/SyncTargetJoplinServer').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
@@ -160,6 +160,17 @@ async function main() {
 
   reg.setDb(db);
   BaseModel.setDb(db);
+  // tsx がソース .ts ファイルを直接ロードする場合、Setting.ts→BaseModel.ts が
+  // BaseModel.js とは別のモジュールインスタンスになり db_ が共有されないため、
+  // 各モデルクラスにも明示的に setDb を呼ぶ。
+  Setting.setDb(db);
+  Note.setDb(db);
+  Folder.setDb(db);
+  Resource.setDb(db);
+  Tag.setDb(db);
+  NoteTag.setDb(db);
+  MasterKey.setDb(db);
+  Revision.setDb(db);
   KvStore.instance().setDb(db);
 
   // --- 9. キーチェーン＆設定の読み込み（sync.target, 認証情報などを DB から復元）---
