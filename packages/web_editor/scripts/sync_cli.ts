@@ -102,17 +102,23 @@ async function main() {
   BaseItem.loadClass('Revision', Revision);
 
   // --- 3. Setting 定数のセット ---
-  Setting.setConstant('appId', 'net.cozic.joplin-cli');
-  Setting.setConstant('appType', 'cli');
-  Setting.setConstant('env', 'prod');
-  Setting.setConstant('profileDir', profileDir);
-  Setting.setConstant('resourceDirName', 'resources');
-  Setting.setConstant('resourceDir', path.join(profileDir, 'resources'));
-  Setting.setConstant('tempDir', path.join(profileDir, 'tmp'));
-  Setting.setConstant('cacheDir', path.join(profileDir, 'cache'));
-  Setting.setConstant('pluginDataDir', path.join(profileDir, 'plugin-data'));
-  Setting.setConstant('pluginDir', path.join(profileDir, 'plugins'));
-  Setting.setConstant('templateDir', path.join(profileDir, 'templates'));
+  // 後で全モジュールインスタンスへ伝播するためマップとして保持する
+  const settingConstants: Record<string, string> = {
+    appId: 'net.cozic.joplin-cli',
+    appType: 'cli',
+    env: 'prod',
+    profileDir: profileDir,
+    resourceDirName: 'resources',
+    resourceDir: path.join(profileDir, 'resources'),
+    tempDir: path.join(profileDir, 'tmp'),
+    cacheDir: path.join(profileDir, 'cache'),
+    pluginDataDir: path.join(profileDir, 'plugin-data'),
+    pluginDir: path.join(profileDir, 'plugins'),
+    templateDir: path.join(profileDir, 'templates'),
+  };
+  for (const [k, v] of Object.entries(settingConstants)) {
+    Setting.setConstant(k, v);
+  }
 
   // --- 4. 全 SyncTarget を SyncTargetRegistry に登録（Setting.metadata が全ターゲット名を参照するため）---
   SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -193,10 +199,20 @@ async function main() {
   for (const cacheKey of Object.keys(require.cache)) {
     const cached = require.cache[cacheKey]?.exports?.default;
     if (!cached || typeof cached !== 'function') continue;
-    // Setting クラス: autoSave 無効化 & タイマーキャンセル
+    // Setting クラス: autoSave 無効化 & タイマーキャンセル & 定数伝播
     if (typeof cached.cancelScheduleSave === 'function') {
       cached.autoSaveEnabled = false;
       cached.cancelScheduleSave();
+      // setConstant を伝播（env 等が SET_ME のまま残るのを防ぐ）
+      if (typeof cached.setConstant === 'function') {
+        for (const [k, v] of Object.entries(settingConstants)) {
+          try {
+            cached.setConstant(k, v);
+          } catch (_) {
+            /* ignore */
+          }
+        }
+      }
     }
     if (typeof cached.cancelScheduleChangeEvent === 'function') {
       cached.cancelScheduleChangeEvent();
@@ -236,7 +252,11 @@ async function main() {
       if (typeof cached.setValue !== 'function') continue;
       for (const key of overrideKeys) {
         if (key in settingsJson) {
-          try { cached.setValue(key, settingsJson[key]); } catch (_) { /* ignore */ }
+          try {
+            cached.setValue(key, settingsJson[key]);
+          } catch (_) {
+            /* ignore */
+          }
         }
       }
     }
