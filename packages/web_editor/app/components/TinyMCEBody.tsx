@@ -857,7 +857,7 @@ export default function TinyMCEBody({
         setSnackbar({ message: 'リソースの削除に失敗しました。', severity: 'error' });
         return;
       }
-      editorRef.current.dom.remove(el);
+      // editorRef.current.dom.remove(el);
       setIsDirty(true);
       pendingDeleteElementRef.current = null;
       setSnackbar({ message: 'リソースを削除しました。', severity: 'success' });
