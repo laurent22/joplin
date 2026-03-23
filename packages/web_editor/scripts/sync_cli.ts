@@ -219,11 +219,28 @@ async function main() {
   if (await fs.pathExists(settingsJsonPath)) {
     const settingsJson = await fs.readJson(settingsJsonPath);
     const overrideKeys = ['sync.target', 'sync.useReverseProxy', 'sync.reverseProxyUrl'];
+
+    // まず自分のインスタンスに反映
     for (const key of overrideKeys) {
       if (key in settingsJson) {
         Setting.setValue(key, settingsJson[key]);
       }
     }
+
+    // tsx のモジュール分離により registry.ts が Setting.ts（別インスタンス）を
+    // 参照しているため、require.cache 上の全 Setting インスタンスにも伝播させる。
+    for (const cacheKey of Object.keys(require.cache)) {
+      const cached = require.cache[cacheKey]?.exports?.default;
+      if (!cached || typeof cached !== 'function') continue;
+      if (cached === Setting) continue;
+      if (typeof cached.setValue !== 'function') continue;
+      for (const key of overrideKeys) {
+        if (key in settingsJson) {
+          try { cached.setValue(key, settingsJson[key]); } catch (_) { /* ignore */ }
+        }
+      }
+    }
+
     console.log(`Loaded settings overrides from: ${settingsJsonPath}`);
   }
 
