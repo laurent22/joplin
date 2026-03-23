@@ -3,6 +3,29 @@ import { ViewerUtil } from './viewerUtil';
 import fs from 'fs/promises';
 import path from 'path';
 
+/**
+ * packages/lib/BaseModel.ts の ModelType と同一の定義。
+ * web_editor は @joplin/lib に依存しないため、必要な値をローカルで再定義する。
+ */
+export enum ModelType {
+  Note = 1,
+  Folder = 2,
+  Setting = 3,
+  Resource = 4,
+  Tag = 5,
+  NoteTag = 6,
+  Search = 7,
+  Alarm = 8,
+  MasterKey = 9,
+  ItemChange = 10,
+  NoteResource = 11,
+  ResourceLocalState = 12,
+  Revision = 13,
+  Migration = 14,
+  SmartFilter = 15,
+  Command = 16,
+}
+
 export interface ResourceEntity {
   id: string;
   title: string;
@@ -96,8 +119,6 @@ export class Resource {
     // BaseItem.batchDelete の trackDeleted 処理に相当:
     // このリソースを同期済みの各 sync_target に対して deleted_items へエントリを挿入し、
     // 次回同期時にリモート側でも削除されるようにする。
-    // TYPE_RESOURCE = 4 (BaseModel.TYPE_RESOURCE)
-    const TYPE_RESOURCE = 4;
     const now = Date.now();
 
     db.transaction(() => {
@@ -113,7 +134,7 @@ export class Resource {
         'INSERT INTO deleted_items (item_type, item_id, deleted_time, sync_target) VALUES (?, ?, ?, ?)'
       );
       for (const t of syncTargetRows) {
-        insertDeleted.run(TYPE_RESOURCE, id, now, t.sync_target);
+        insertDeleted.run(ModelType.Resource, id, now, t.sync_target);
       }
     })();
   }
