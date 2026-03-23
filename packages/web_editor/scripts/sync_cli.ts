@@ -61,6 +61,7 @@ const NoteTag = require('@joplin/lib/models/NoteTag').default;
 const MasterKey = require('@joplin/lib/models/MasterKey').default;
 const Revision = require('@joplin/lib/models/Revision').default;
 const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
+const RevisionService = require('@joplin/lib/services/RevisionService').default;
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
@@ -168,6 +169,47 @@ async function main() {
     }
   }
 
+  // tsx のモジュール分離により BaseService.ts インスタンスが別に存在する場合がある。
+  // static logger_ フィールドを全インスタンスに伝播させる。
+  const BaseService = require('@joplin/lib/services/BaseService').default;
+  BaseService.logger_ = globalLogger;
+  for (const cacheKey of Object.keys(require.cache)) {
+    const cached = require.cache[cacheKey]?.exports?.default;
+    if (!cached || cached === BaseService) continue;
+    if ('logger_' in cached && cached.logger_ !== undefined) {
+      try {
+        cached.logger_ = globalLogger;
+      } catch (_) {
+        /* ignore */
+      }
+    }
+  }
+
+  // tsx のモジュール分離により BaseItem.ts インスタンスが別に存在する場合がある。
+  // loadClass を全インスタンスに伝播させる（Synchronizer 内で使われる BaseItem が
+  // sync_cli.ts の BaseItem インスタンスと異なるため）。
+  const classMap: Record<string, unknown> = {
+    Note,
+    Folder,
+    Resource,
+    Tag,
+    NoteTag,
+    MasterKey,
+    Revision,
+  };
+  for (const cacheKey of Object.keys(require.cache)) {
+    const cached = require.cache[cacheKey]?.exports?.default;
+    if (!cached || cached === BaseItem) continue;
+    if (typeof cached.loadClass !== 'function') continue;
+    for (const [name, cls] of Object.entries(classMap)) {
+      try {
+        cached.loadClass(name, cls);
+      } catch (_) {
+        /* ignore */
+      }
+    }
+  }
+
   // --- 7. shim の初期化（HTTP/fetch などを有効化）---
   let keytar: unknown = null;
   try {
@@ -205,6 +247,21 @@ async function main() {
   MasterKey.setDb(db);
   Revision.setDb(db);
   KvStore.instance().setDb(db);
+
+  // RevisionService の初期化（Note.save() 内部で参照されるため必須）
+  BaseItem.revisionService_ = RevisionService.instance();
+  // tsx のモジュール分離で別インスタンスの BaseItem が存在する場合にも伝播
+  for (const cacheKey of Object.keys(require.cache)) {
+    const cached = require.cache[cacheKey]?.exports?.default;
+    if (!cached || cached === BaseItem) continue;
+    if ('revisionService_' in cached) {
+      try {
+        cached.revisionService_ = RevisionService.instance();
+      } catch (_) {
+        /* ignore */
+      }
+    }
+  }
 
   // --- 9. キーチェーン＆設定の読み込み（sync.target, 認証情報などを DB から復元）---
   // loadKeychainServiceAndSettings をインライン化。
