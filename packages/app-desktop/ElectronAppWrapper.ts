@@ -471,8 +471,21 @@ export default class ElectronAppWrapper {
 			// Match the main window's zoom:
 			window.webContents.setZoomFactor(this.mainWindow().webContents.getZoomFactor());
 
-			window.once('close', () => {
-				this.secondaryWindows_.delete(windowId);
+			window.once('close', (event) => {
+				if (this.secondaryWindows_.has(windowId)) {
+					this.secondaryWindows_.delete(windowId);
+
+					event.preventDefault();
+
+					// As of March 2026, Electron crashes with "Assertion failed: (Environment::GetCurrent(isolate)) == (env)" if the native 'close'
+					// event is allowed to close a secondary window. As a workaround, briefly hide the window and programmatically close it later.
+					window.hide();
+					setTimeout(() => {
+						if (!window.isDestroyed()) {
+							window.close();
+						}
+					}, 100);
+				}
 
 				const allSecondaryWindowsClosed = this.secondaryWindows_.size === 0;
 				const mainWindowVisuallyClosed = this.mainWindowHidden_;
