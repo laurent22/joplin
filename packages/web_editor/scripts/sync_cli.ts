@@ -45,7 +45,7 @@ const profileDir = path.join(homedir(), '.config', safeProfile);
 // ---------------------------------------------------------------------------
 // @joplin/lib のモジュールを require で読み込む（CommonJS）
 // ---------------------------------------------------------------------------
- 
+
 const Logger = require('@joplin/lib/Logger').default;
 const { TargetType } = require('@joplin/lib/Logger');
 const Setting = require('@joplin/lib/models/Setting').default;
@@ -67,12 +67,18 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const shim = require('@joplin/lib/shim').default;
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('@joplin/lib/SyncTargetOneDrive').default;
+const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox').default;
+const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem').default;
+const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud').default;
+const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV').default;
+const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3').default;
+const SyncTargetJoplinServer = require('@joplin/lib/SyncTargetJoplinServer').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
-const KeychainServiceDriver = require('@joplin/lib/services/keychain/KeychainServiceDriver.node').default;
+const KeychainServiceDriver =
+  require('@joplin/lib/services/keychain/KeychainServiceDriver.node').default;
 const KvStore = require('@joplin/lib/services/KvStore').default;
 const fs = require('fs-extra');
- 
 
 // ---------------------------------------------------------------------------
 // メイン処理
@@ -107,8 +113,14 @@ async function main() {
   Setting.setConstant('pluginDir', path.join(profileDir, 'plugins'));
   Setting.setConstant('templateDir', path.join(profileDir, 'templates'));
 
-  // --- 4. OneDrive のみ SyncTargetRegistry に登録 ---
+  // --- 4. 全 SyncTarget を SyncTargetRegistry に登録（Setting.metadata が全ターゲット名を参照するため）---
   SyncTargetRegistry.addClass(SyncTargetOneDrive);
+  SyncTargetRegistry.addClass(SyncTargetDropbox);
+  SyncTargetRegistry.addClass(SyncTargetFilesystem);
+  SyncTargetRegistry.addClass(SyncTargetNextcloud);
+  SyncTargetRegistry.addClass(SyncTargetWebDAV);
+  SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+  SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 
   // --- 5. 必要なディレクトリを確保 ---
   await fs.mkdirp(profileDir, 0o755);
@@ -159,7 +171,7 @@ async function main() {
 
   if (syncTarget !== SyncTargetOneDrive.id()) {
     console.error(
-      `Error: このプロファイルの sync.target (${syncTarget}) は OneDrive (${SyncTargetOneDrive.id()}) ではありません。`,
+      `Error: このプロファイルの sync.target (${syncTarget}) は OneDrive (${SyncTargetOneDrive.id()}) ではありません。`
     );
     console.error('OneDrive 以外のターゲットはサポートしていません。');
     await db.close();
@@ -168,7 +180,9 @@ async function main() {
 
   const isAuthenticated = await reg.syncTarget().isAuthenticated();
   if (!isAuthenticated) {
-    console.error('Error: OneDrive が未認証です。Joplin Desktop / CLI で一度ログインしてください。');
+    console.error(
+      'Error: OneDrive が未認証です。Joplin Desktop / CLI で一度ログインしてください。'
+    );
     await db.close();
     process.exit(1);
   }
