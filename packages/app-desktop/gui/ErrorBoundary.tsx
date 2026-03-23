@@ -31,8 +31,7 @@ interface State {
 
 interface Props {
 	message?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	children: any;
+	children: React.ReactNode;
 }
 
 interface BannerProps {

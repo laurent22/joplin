@@ -39,6 +39,7 @@ import FolderScreen from './components/screens/folder';
 import LogScreen from './components/screens/LogScreen';
 import StatusScreen from './components/screens/status';
 import SearchScreen from './components/screens/SearchScreen';
+import ResourceScreen from './components/screens/ResourceScreen';
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
@@ -746,6 +747,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
+			NoteResources: { screen: ResourceScreen },
 			Config: { screen: ConfigScreen },
 			DocumentScanner: { screen: DocumentScanner },
 		};

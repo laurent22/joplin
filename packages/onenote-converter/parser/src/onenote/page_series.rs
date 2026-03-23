@@ -20,7 +20,7 @@ pub struct PageSeries {
     errors: Rc<Vec<String>>,
 }
 
-impl<'a> PageSeries {
+impl PageSeries {
     /// The pages contained in this page series.
     pub fn pages(&self) -> &[Page] {
         &self.pages

@@ -1,6 +1,7 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { RefObject } from 'react';
 
 export const declaration: CommandDeclaration = {
 	name: 'focusElementNoteTitle',
@@ -8,8 +9,7 @@ export const declaration: CommandDeclaration = {
 	parentLabel: () => _('Focus'),
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (comp: { titleInputRef: RefObject<HTMLInputElement> }): CommandRuntime => {
 	return {
 		execute: async () => {
 			if (!comp.titleInputRef.current) return;
