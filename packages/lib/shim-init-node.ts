@@ -805,7 +805,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 	const loadPdf = async (path: string) => {
 		const loadingTask = pdfJs.getDocument({
-			url: path,
+			url: pathToFileURL(path).href,
 			// https://github.com/mozilla/pdf.js/issues/4244#issuecomment-1479534301
 			useSystemFonts: true,
 			// IMPORTANT: Set to false to mitigate CVE-2024-4367.
