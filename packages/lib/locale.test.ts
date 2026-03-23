@@ -1,5 +1,5 @@
 // cSpell:ignore Avestan
-import { closestSupportedLocale, setLocale, _n, toIso639Alpha3, languageName, iso639LineToObject } from './locale';
+import { closestSupportedLocale, setLocale, _n, toIso639Alpha3, languageName } from './locale';
 
 
 describe('locale', () => {
@@ -59,21 +59,6 @@ describe('locale', () => {
 	])('should give the language name', (input, expected) => {
 		const actual = languageName(input);
 		expect(actual).toBe(expected);
-	});
-
-	test.each([
-		['aar', 'aa', 'Afar', 'Afar'],
-		['ave', 'ae', 'Avestan', 'Avestan'],
-		['cat', 'ca', 'Catalan', 'Catalan'],
-		['chu', 'cu', 'Church Slavic', 'Church Slavic'],
-		['dan', 'da', 'Danish', 'Danish'],
-		['ell', 'el', 'Greek', 'Greek'],
-		['eng', 'en', 'English', 'English'],
-		['spa', 'es', 'Spanish', 'Spanish'],
-		['nob', 'nb', 'Norwegian Bokmål', 'Norwegian Bokmål'],
-	])('should return the English language name: %s (%s) %s -> %s', (alpha3, alpha2, rawName, expected) => {
-		const result = iso639LineToObject([alpha3, alpha2, rawName]);
-		expect(result.nameEnglish).toBe(expected);
 	});
 
 });

@@ -252,7 +252,7 @@ const codeToCountry_: CodeToCountryMap = {
 	CA: ['Canada', 'Canada'],
 	CC: ['Cocos (Keeling) Islands', 'Cocos (Keeling) Islands'],
 	CD: ['Democratic Republic of the Congo (Congo-Kinshasa, former Zaire)', 'République Démocratique du Congo'],
-	CF: ['Centrafrican Republic', 'République centrafricaine, Ködörösêse tî Bêafrîka'],
+	CF: ['Centrafrican Republic', 'République centrafricaine, Ködörösêse tî Bêafrîka'],
 	CG: ['Republic of the Congo (Congo-Brazzaville)', 'République du Congo'],
 	CH: ['Switzerland', 'Schweiz, Suisse, Svizzera, Svizra'],
 	CI: ['Côte d\'Ivoire', 'Côte d\'Ivoire'],
@@ -721,5 +721,5 @@ export {
 	localesFromLanguageCode, languageCodeOnly, countryDisplayName,
 	localeStrings, setLocale, supportedLocalesToLanguages,
 	defaultLocale, closestSupportedLocale, stringByLocale,
-	languageCode, countryCodeOnly, iso639LineToObject,
+	languageCode, countryCodeOnly,
 };
