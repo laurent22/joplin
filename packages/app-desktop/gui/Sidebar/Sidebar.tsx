@@ -105,7 +105,7 @@ const SidebarComponent = (props: Props) => {
 		<StyledRoot className='sidebar _scrollbar2' role='navigation' aria-label={_('Sidebar')}>
 			<div style={{ flex: 1 }}><FolderAndTagList /></div>
 			<div style={{ flex: 0, padding: theme.mainPadding }}>
-				{toggleButton}
+				{(completedTime || props.syncStarted) ? toggleButton : null}
 				{syncReportComp}
 				{syncButton}
 			</div>
