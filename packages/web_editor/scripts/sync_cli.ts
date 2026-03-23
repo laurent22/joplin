@@ -182,10 +182,24 @@ async function main() {
   KeychainService.instance().initialize(
     new KeychainServiceDriver(Setting.value('appId'), clientId)
   );
+  KeychainService.instance().setLogger(globalLogger);
   Setting.setKeychainService(KeychainService.instance());
   await Setting.load();
   if (!clientIdSetting) Setting.setValue('clientId', clientId);
   await KeychainService.instance().detectIfKeychainSupported();
+
+  // --- 9.5. profileDir/settings.json から sync 設定を上書き ---
+  const settingsJsonPath = path.join(profileDir, 'settings.json');
+  if (await fs.pathExists(settingsJsonPath)) {
+    const settingsJson = await fs.readJson(settingsJsonPath);
+    const overrideKeys = ['sync.target', 'sync.useReverseProxy', 'sync.reverseProxyUrl'];
+    for (const key of overrideKeys) {
+      if (key in settingsJson) {
+        Setting.setValue(key, settingsJson[key]);
+      }
+    }
+    console.log(`Loaded settings overrides from: ${settingsJsonPath}`);
+  }
 
   const syncTarget = Setting.value('sync.target');
   console.log(`Profile  : ${profileDir}`);
