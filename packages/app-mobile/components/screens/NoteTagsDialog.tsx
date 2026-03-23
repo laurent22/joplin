@@ -55,12 +55,10 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		props.onCloseRequested?.();
 	}, [props.onCloseRequested]);
 
-	const hasUnsavedChanges = useMemo(() => {
-		return () => {
-			if (noteTags.length !== originalTags.length) return true;
-			return noteTags.some(tag => !originalTags.includes(tag)) ||
-				originalTags.some(tag => !noteTags.includes(tag));
-		};
+	const hasUnsavedChanges = useCallback(() => {
+		if (noteTags.length !== originalTags.length) return true;
+		return noteTags.some(tag => !originalTags.includes(tag)) ||
+			originalTags.some(tag => !noteTags.includes(tag));
 	}, [noteTags, originalTags]);
 
 	const onModalClose = useCallback(async () => {
