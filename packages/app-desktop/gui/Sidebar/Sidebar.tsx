@@ -72,8 +72,11 @@ const SidebarComponent = (props: Props) => {
 
 	const syncButton = renderSynchronizeButton(props.syncStarted ? 'cancel' : 'sync');
 
+	// Show toggle when there are log lines or a completed timestamp
+	const hasContent = lines.length > 0 || completedTime;
+
 	// Toggle to show/hide sync log output
-	const toggleButton = (
+	const toggleButton = hasContent ? (
 		<button
 			className="sidebar-sync-toggle"
 			onClick={toggleSyncReport}
@@ -81,14 +84,10 @@ const SidebarComponent = (props: Props) => {
 			aria-label={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 			title={syncReportExpanded ? _('Hide sync log') : _('Show sync log')}
 		>
-			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'right'}`} />
-			{(completedTime || props.syncStarted) ? (
-				<span className="timestamp">
-					{props.syncStarted ? _('Last sync: In progress...') : _('Last sync: %s', completedTime)}
-				</span>
-			) : ''}
+			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'up'}`} />
+			{!syncReportExpanded && completedTime ? <span className="timestamp">{_('Last sync: %s', completedTime)}</span> : ''}
 		</button>
-	);
+	) : null;
 
 	// Sync log output, only visible when expanded
 	const syncReportComp = (syncReportExpanded && lines.length > 0) ? (
