@@ -328,6 +328,30 @@ async function main() {
     process.exit(1);
   }
 
+  // --- 9.6. 診断情報のログ出力 ---
+  {
+    const { parameters: getParams } = require('@joplin/lib/parameters.js');
+    const params = getParams();
+    const storedAuth = Setting.value(`sync.${SyncTargetOneDrive.id()}.auth`);
+    console.log(`[Debug] env               : ${Setting.value('env')}`);
+    console.log(`[Debug] OneDrive client_id: ${params?.oneDrive?.id ?? '(not found)'}`);
+    if (storedAuth) {
+      try {
+        const authObj = JSON.parse(storedAuth);
+        // refresh_token の先頭 20 文字だけ表示（秘密情報を保護）
+        const refreshSnippet = authObj.refresh_token
+          ? String(authObj.refresh_token).slice(0, 20) + '...'
+          : '(none)';
+        console.log(`[Debug] Stored auth keys  : ${Object.keys(authObj).join(', ')}`);
+        console.log(`[Debug] refresh_token hint: ${refreshSnippet}`);
+      } catch (_) {
+        console.log(`[Debug] Stored auth (raw) : ${String(storedAuth).slice(0, 60)}...`);
+      }
+    } else {
+      console.log('[Debug] Stored auth       : (empty)');
+    }
+  }
+
   const isAuthenticated = await reg.syncTarget().isAuthenticated();
   if (!isAuthenticated) {
     console.error(
@@ -338,7 +362,20 @@ async function main() {
 
   // --- 10. 同期実行（Sidebar の「同期」ボタンと同じコードパス）---
   console.log('Starting OneDrive sync...');
-  await reg.scheduleSync(0);
+  try {
+    await reg.scheduleSync(0);
+  } catch (syncError: unknown) {
+    const msg = syncError instanceof Error ? syncError.message : String(syncError);
+    console.error(`[Sync Error] ${msg}`);
+    // OneDrive API エラーレスポンスがある場合は詳細を表示
+    if (syncError instanceof Error && (syncError as { responseText?: string }).responseText) {
+      console.error(
+        '[Sync Error] Response:',
+        (syncError as { responseText?: string }).responseText
+      );
+    }
+    throw syncError;
+  }
   console.log('Sync finished.');
 
   // --- 11. 後処理 ---
