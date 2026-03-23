@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import shim from '@joplin/lib/shim';
 
 class Command extends BaseCommand {
@@ -17,7 +17,7 @@ class Command extends BaseCommand {
 	public override async action(args: any) {
 		const title = args['note'];
 
-		const note = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
+		const note = await app().loadItem(ModelType.Note, title, { parent: app().currentFolder() });
 		this.encryptionCheck(note);
 		if (!note) throw new Error(_('Cannot find "%s".', title));
 

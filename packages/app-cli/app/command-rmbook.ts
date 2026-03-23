@@ -2,7 +2,7 @@ import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 class Command extends BaseCommand {
@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 		const pattern = args['notebook'];
 		const force = args.options && args.options.force === true;
 
-		const folder = await app().loadItemOrFail(BaseModel.TYPE_FOLDER, pattern);
+		const folder = await app().loadItemOrFail(ModelType.Folder, pattern);
 
 		const permanent = args.options?.permanent === true || !!folder.deleted_time;
 		const ellipsizedFolderTitle = substrWithEllipsis(folder.title, 0, 32);

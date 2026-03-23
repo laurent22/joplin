@@ -1,7 +1,6 @@
 
 // TODO: copied from string-utils
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function formatCssSize(v: any): string {
+function formatCssSize(v: string | number): string {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
 	}

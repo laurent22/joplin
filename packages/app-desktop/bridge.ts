@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem, BrowserWindowConstructorOptions, FileFilter, SaveDialogOptions } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -25,8 +25,7 @@ interface OpenDialogOptions {
 	properties?: string[];
 	defaultPath?: string;
 	createDirectory?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	filters?: any[];
+	filters?: FileFilter[];
 }
 
 type OnAllowedExtensionsChange = (newExtensions: string[])=> void;
@@ -208,8 +207,7 @@ export class Bridge {
 		this.onAllowedExtensionsChangeListener_ = listener;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async captureException(error: any) {
+	public async captureException(error: unknown) {
 		Sentry.captureException(error);
 		// We wait to give the "beforeSend" event handler time to process the crash dump and write
 		// it to file.
@@ -335,8 +333,7 @@ export class Bridge {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public newBrowserWindow(options: any) {
+	public newBrowserWindow(options: BrowserWindowConstructorOptions) {
 		return new BrowserWindow(options);
 	}
 
@@ -353,8 +350,7 @@ export class Bridge {
 		return this.activeWindow().webContents.closeDevTools();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async showSaveDialog(options: any) {
+	public async showSaveDialog(options: SaveDialogOptions) {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
 		const { filePath } = await dialog.showSaveDialog(this.activeWindow(), options);
@@ -381,8 +377,7 @@ export class Bridge {
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private showMessageBox_(window: any, options: MessageDialogOptions): number {
+	private showMessageBox_(window: BrowserWindow, options: MessageDialogOptions): number {
 		if (!window) window = this.activeWindow();
 		return dialog.showMessageBoxSync(window, { message: '', ...options });
 	}
@@ -428,8 +423,7 @@ export class Bridge {
 		return result;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public showInfoMessageBox(message: string, options: any = {}) {
+	public showInfoMessageBox(message: string, options: MessageDialogOptions = {}) {
 		const result = this.showMessageBox_(this.activeWindow(), { type: 'info',
 			message: message,
 			buttons: [_('OK')], ...options });
