@@ -10,8 +10,12 @@ const replaceUnsupportedCharacters = (text: string) => {
 	// As per the commonmark spec, we replace \x00 with the replacement character.
 	// (see https://spec.commonmark.org/0.31.2/#insecure-characters).
 	//
+	// Directional isolate characters (U+2066-2069) are invisible Unicode formatting
+	// characters that can cause display issues in some contexts (e.g., appearing as
+	// bullets in the markdown editor). We replace them with the replacement character.
+	//
 	// eslint-disable-next-line no-control-regex
-	return text.replace(/\x00/g, '\uFFFD');
+	return text.replace(/\x00/g, '\uFFFD').replace(/[\u2066-\u2069]/g, '\uFFFD');
 };
 
 export default replaceUnsupportedCharacters;
