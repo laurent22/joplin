@@ -74,10 +74,11 @@ const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3');
 const SyncTargetJoplinServer = require('@joplin/lib/SyncTargetJoplinServer').default;
 const { reg } = require('@joplin/lib/registry.js');
-const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
+const KeychainService = require('@joplin/lib/services/keychain/KeychainService').default;
 const KeychainServiceDriver =
   require('@joplin/lib/services/keychain/KeychainServiceDriver.node').default;
 const KvStore = require('@joplin/lib/services/KvStore').default;
+const uuid = require('@joplin/lib/uuid').default;
 const fs = require('fs-extra');
 
 // ---------------------------------------------------------------------------
@@ -174,7 +175,17 @@ async function main() {
   KvStore.instance().setDb(db);
 
   // --- 9. キーチェーン＆設定の読み込み（sync.target, 認証情報などを DB から復元）---
-  await loadKeychainServiceAndSettings(KeychainServiceDriver);
+  // loadKeychainServiceAndSettings をインライン化。
+  // SettingUtils.js 内部の Setting が別モジュールインスタンスになる問題を回避する。
+  const clientIdSetting = await Setting.loadOne('clientId');
+  const clientId = clientIdSetting ? clientIdSetting.value : uuid.create();
+  KeychainService.instance().initialize(
+    new KeychainServiceDriver(Setting.value('appId'), clientId)
+  );
+  Setting.setKeychainService(KeychainService.instance());
+  await Setting.load();
+  if (!clientIdSetting) Setting.setValue('clientId', clientId);
+  await KeychainService.instance().detectIfKeychainSupported();
 
   const syncTarget = Setting.value('sync.target');
   console.log(`Profile  : ${profileDir}`);
