@@ -480,14 +480,30 @@ export default class ElectronAppWrapper {
 			// Match the main window's zoom:
 			window.webContents.setZoomFactor(this.mainWindow().webContents.getZoomFactor());
 
-			window.once('close', () => {
-				this.secondaryWindows_.delete(windowId);
-
+			const onWindowRemoved = () => {
 				const allSecondaryWindowsClosed = this.secondaryWindows_.size === 0;
 				const mainWindowVisuallyClosed = this.mainWindowHidden_;
 				if (allSecondaryWindowsClosed && mainWindowVisuallyClosed && !this.trayShown()) {
 					// Gracefully quit the app if the user has closed all windows
 					this.win_.close();
+				}
+			};
+
+			window.once('close', (event) => {
+				if (this.secondaryWindows_.has(windowId)) {
+					this.secondaryWindows_.delete(windowId);
+					onWindowRemoved();
+
+					// To work around a crash on MacOS with >= Electron 40, hide secondary windows first and schedule a full close later.
+					// An "uncaught illegal access" warning is sometimes observed just before the crash.
+					event.preventDefault();
+					window.hide();
+
+					setTimeout(() => {
+						if (!window.isDestroyed()) {
+							window.close();
+						}
+					}, 2000);
 				}
 			});
 
