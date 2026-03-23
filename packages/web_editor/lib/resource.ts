@@ -70,8 +70,11 @@ export class Resource {
    *   2. resources             — リソースのメタデータ本体
    *   3. note_resources        — ノートとリソースの紐付け
    *   4. resource_local_states — ローカルのフェッチ状態
+   *   5. deleted_items         — 同期ターゲットへの削除伝播用エントリ
+   *                             (BaseItem.batchDelete の trackDeleted 処理に相当)
    *
-   * packages/lib/models/Resource.ts の batchDelete に相当する処理。
+   * packages/lib/models/Resource.ts の batchDelete +
+   * packages/lib/models/BaseItem.ts の batchDelete に相当する処理。
    */
   public static async delete(id: string): Promise<void> {
     const db = getDatabase();
@@ -93,5 +96,25 @@ export class Resource {
     db.prepare('DELETE FROM resources WHERE id = ?').run(id);
     db.prepare('DELETE FROM note_resources WHERE resource_id = ?').run(id);
     db.prepare('DELETE FROM resource_local_states WHERE resource_id = ?').run(id);
+
+    // BaseItem.batchDelete の trackDeleted 処理に相当:
+    // このリソースを同期済みの各 sync_target に対して deleted_items へエントリを挿入し、
+    // 次回同期時にリモート側でも削除されるようにする。
+    // TYPE_RESOURCE = 4 (BaseModel.TYPE_RESOURCE)
+    const TYPE_RESOURCE = 4;
+    const syncTargetRows = db
+      .prepare('SELECT DISTINCT sync_target FROM sync_items WHERE item_id = ?')
+      .all(id) as { sync_target: number }[];
+
+    const now = Date.now();
+    const insertDeleted = db.prepare(
+      'INSERT INTO deleted_items (item_type, item_id, deleted_time, sync_target) VALUES (?, ?, ?, ?)'
+    );
+    const insertMany = db.transaction((targets: { sync_target: number }[]) => {
+      for (const t of targets) {
+        insertDeleted.run(TYPE_RESOURCE, id, now, t.sync_target);
+      }
+    });
+    insertMany(syncTargetRows);
   }
 }
