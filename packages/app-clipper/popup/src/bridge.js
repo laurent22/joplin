@@ -231,10 +231,22 @@ class Bridge {
 	}
 
 	async findClipperServerPort() {
-		this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'searching' });
+		this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'searching', searchStartTime: Date.now() });
+
+		const timeout = 8000; // 8 seconds before showing "app not running" message
+		const startTime = Date.now();
 
 		let state = null;
 		for (let i = 0; i < 10; i++) {
+			const elapsedTime = Date.now() - startTime;
+
+			// If we've exceeded the timeout, show the "app not running" message
+			if (elapsedTime > timeout) {
+				this.clipperServerPortStatus_ = 'app_not_running';
+				this.dispatch({ type: 'CLIPPER_SERVER_SET', foundState: 'app_not_running' });
+				return null;
+			}
+
 			state = randomClipperPort(state, this.env());
 
 			try {
@@ -263,7 +275,7 @@ class Bridge {
 	async clipperServerPort() {
 		return new Promise((resolve, reject) => {
 			const checkStatus = () => {
-				if (this.clipperServerPortStatus_ === 'not_found') {
+				if (this.clipperServerPortStatus_ === 'not_found' || this.clipperServerPortStatus_ === 'app_not_running') {
 					reject(new Error('Could not find clipper service. Please make sure that Joplin is running and that the clipper server is enabled.'));
 					return true;
 				} else if (this.clipperServerPortStatus_ === 'found') {

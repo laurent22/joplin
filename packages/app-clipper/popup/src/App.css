@@ -175,3 +175,8 @@ body {
 .App .StatusBar .ServerStatus .Help {
 	margin-left: 5px;
 }
+
+.App.Startup a.Retry {
+	margin-top: 15px;
+	align-self: center;
+}

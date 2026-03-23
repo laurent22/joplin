@@ -142,6 +142,10 @@ class AppComponent extends Component {
 			bridge().tabsCreate({ url: 'https://joplinapp.org/help/apps/clipper' });
 		};
 
+		this.retry_click = async () => {
+			await bridge().findClipperServerPort();
+		};
+
 		this.folderSelect_change = (event) => {
 			this.props.dispatch({
 				type: 'SELECTED_FOLDER_SET',
@@ -259,6 +263,7 @@ class AppComponent extends Component {
 				// when clicking on the extension button.
 				'searching': 'Connecting to the Joplin application...',
 				'not_found': 'Error: Could not connect to the Joplin application. Please ensure that it is started and that the clipper service is enabled in the configuration.',
+				'app_not_running': 'The Joplin application is not running. Please open Joplin and then click "Retry" below.',
 			},
 			authState: {
 				'starting': 'Starting...',
@@ -271,9 +276,13 @@ class AppComponent extends Component {
 
 		let msg = '';
 		let title = '';
+		let button = null;
 
 		if (messages.serverFoundState[foundState]) {
 			msg = messages.serverFoundState[foundState];
+			if (foundState === 'app_not_running') {
+				button = <a className={'Retry Button'} href="#" onClick={this.retry_click}>Retry</a>;
+			}
 		} else {
 			msg = messages.authState[this.props.authStatus];
 			title = <h1>{'Permission needed'}</h1>;
@@ -285,6 +294,7 @@ class AppComponent extends Component {
 			<div className="App Startup">
 				{title}
 				{msg}
+				{button}
 			</div>
 		);
 	}
@@ -341,6 +351,7 @@ class AppComponent extends Component {
 
 			const stateToString = function(state) {
 				if (state === 'not_found') return 'Not found';
+				if (state === 'app_not_running') return 'Not running';
 				return state.charAt(0).toUpperCase() + state.slice(1);
 			};
 
@@ -356,7 +367,7 @@ class AppComponent extends Component {
 			} else {
 				msg = stateToString(foundState);
 				led = foundState === 'searching' ? led_orange : led_red;
-				if (foundState === 'not_found') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="help">[Help]</a>;
+				if (foundState === 'not_found' || foundState === 'app_not_running') helpLink = <a className="Help" onClick={this.clipperServerHelpLink_click} href="help">[Help]</a>;
 			}
 
 			msg = `Service status: ${msg}`;
