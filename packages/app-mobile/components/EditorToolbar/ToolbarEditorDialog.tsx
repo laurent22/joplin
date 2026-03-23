@@ -70,17 +70,27 @@ const useStyle = (themeId: number) => {
 				paddingBottom: theme.itemMarginBottom,
 				minHeight: 44,
 			},
+			// Like listItem but without vertical padding -- the TouchableRipple inside
+			// carries the padding, so its minHeight drives the row height directly.
+			enabledListItem: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+				gap: theme.margin,
+				paddingLeft: 4,
+				paddingRight: 4,
+			},
 			arrowButtonsContainer: {
 				flexDirection: 'row',
 				alignItems: 'center',
 			},
 			arrowIcon: {
 				color: theme.color,
-				fontSize: 20,
+				fontSize: 24,
 			},
 			arrowIconDisabled: {
 				color: theme.colorFaded,
-				fontSize: 20,
+				fontSize: 24,
 			},
 			sectionHeader: {
 				paddingVertical: 8,
@@ -92,6 +102,9 @@ const useStyle = (themeId: number) => {
 				alignItems: 'center',
 				flex: 1,
 				gap: theme.margin,
+				paddingTop: theme.itemMarginTop,
+				paddingBottom: theme.itemMarginBottom,
+				minHeight: 44,
 			},
 			disabledLabelText: {
 				fontSize: theme.fontSize,
@@ -194,7 +207,7 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 	}, [shouldFocus, onFocused]);
 
 	return (
-		<View style={styles.listItem}>
+		<View style={styles.enabledListItem}>
 			<TouchableRipple
 				ref={checkboxRef}
 				accessibilityRole='checkbox'
