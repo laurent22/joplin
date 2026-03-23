@@ -11,7 +11,7 @@
         "sync_cli",
         "--",
         "--profileName",
-        "joplin-desktop_test2"
+        "joplin_desktop_test2"
       ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
