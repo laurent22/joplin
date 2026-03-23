@@ -117,7 +117,8 @@ async function main() {
   const settingConstants: Record<string, string> = {
     appId: 'net.cozic.joplin-cli',
     appType: 'cli',
-    env: typeof earlySettingsJson['env'] === 'string' ? earlySettingsJson['env'] : 'prod',
+    // env: typeof earlySettingsJson['env'] === 'string' ? earlySettingsJson['env'] : 'prod',
+    env: 'dev',
     profileDir: profileDir,
     resourceDirName: 'resources',
     resourceDir: path.join(profileDir, 'resources'),
