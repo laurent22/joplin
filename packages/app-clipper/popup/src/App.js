@@ -261,7 +261,7 @@ class AppComponent extends Component {
 				// ports and it takes time before failing. So if we don't
 				// display any message, it looks like it's not doing anything
 				// when clicking on the extension button.
-				'searching': 'Connecting to the Joplin application...',
+				'searching': 'Connecting to the Joplin. Please ensure that it is running...',
 				'not_found': 'Error: Could not connect to the Joplin application. Please ensure that it is started and that the clipper service is enabled in the configuration.',
 				'app_not_running': 'The Joplin application is not running. Please open Joplin and then click "Retry" below.',
 			},
