@@ -1,4 +1,30 @@
 import { getDatabase } from './database';
+import { ViewerUtil } from './viewerUtil';
+import fs from 'fs/promises';
+import path from 'path';
+
+/**
+ * packages/lib/BaseModel.ts の ModelType と同一の定義。
+ * web_editor は @joplin/lib に依存しないため、必要な値をローカルで再定義する。
+ */
+export enum ModelType {
+  Note = 1,
+  Folder = 2,
+  Setting = 3,
+  Resource = 4,
+  Tag = 5,
+  NoteTag = 6,
+  Search = 7,
+  Alarm = 8,
+  MasterKey = 9,
+  ItemChange = 10,
+  NoteResource = 11,
+  ResourceLocalState = 12,
+  Revision = 13,
+  Migration = 14,
+  SmartFilter = 15,
+  Command = 16,
+}
 
 export interface ResourceEntity {
   id: string;
@@ -58,5 +84,58 @@ export class Resource {
     }
 
     return entity;
+  }
+
+  /**
+   * リソースを削除する。
+   * 以下を順番にクリーンアップする:
+   *   1. ファイルシステム上のリソースファイル
+   *   2. resources             — リソースのメタデータ本体
+   *   3. note_resources        — ノートとリソースの紐付け
+   *   4. resource_local_states — ローカルのフェッチ状態
+   *   5. deleted_items         — 同期ターゲットへの削除伝播用エントリ
+   *                             (BaseItem.batchDelete の trackDeleted 処理に相当)
+   *
+   * packages/lib/models/Resource.ts の batchDelete +
+   * packages/lib/models/BaseItem.ts の batchDelete に相当する処理。
+   */
+  public static async delete(id: string): Promise<void> {
+    const db = getDatabase();
+
+    // DB からファイル拡張子を取得してファイルパスを構築
+    const row = db.prepare('SELECT file_extension FROM resources WHERE id = ?').get(id) as
+      | { file_extension: string }
+      | undefined;
+
+    if (row) {
+      const ext = row.file_extension ? `.${row.file_extension}` : '';
+      const filename = `${id}${ext}`;
+      const filePath = path.join(ViewerUtil.getResourceFolderPath(), filename);
+      await fs.unlink(filePath).catch(() => {
+        // ファイルが既に存在しない場合は無視する
+      });
+    }
+
+    // BaseItem.batchDelete の trackDeleted 処理に相当:
+    // このリソースを同期済みの各 sync_target に対して deleted_items へエントリを挿入し、
+    // 次回同期時にリモート側でも削除されるようにする。
+    const now = Date.now();
+
+    db.transaction(() => {
+      const syncTargetRows = db
+        .prepare('SELECT DISTINCT sync_target FROM sync_items WHERE item_id = ?')
+        .all(id) as { sync_target: number }[];
+
+      db.prepare('DELETE FROM resources WHERE id = ?').run(id);
+      db.prepare('DELETE FROM note_resources WHERE resource_id = ?').run(id);
+      db.prepare('DELETE FROM resource_local_states WHERE resource_id = ?').run(id);
+
+      const insertDeleted = db.prepare(
+        'INSERT INTO deleted_items (item_type, item_id, deleted_time, sync_target) VALUES (?, ?, ?, ?)'
+      );
+      for (const t of syncTargetRows) {
+        insertDeleted.run(ModelType.Resource, id, now, t.sync_target);
+      }
+    })();
   }
 }

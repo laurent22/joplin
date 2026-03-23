@@ -768,6 +768,17 @@ export default function TinyMCEBody({
     null
   );
   const [conflictError, setConflictError] = useState(false);
+  const [snackbar, setSnackbar] = useState<{ message: string; severity: 'success' | 'error' } | null>(null);
+  const [showDeleteConfirmDialog, setShowDeleteConfirmDialog] = useState(false);
+
+  // TinyMCE setup クロージャから React state を更新するための ref
+  const openDeleteConfirmRef = useRef<() => void>(() => setShowDeleteConfirmDialog(true));
+  useEffect(() => {
+    openDeleteConfirmRef.current = () => setShowDeleteConfirmDialog(true);
+  }, []);
+
+  // 削除対象のリソース要素を保持する ref
+  const pendingDeleteElementRef = useRef<Element | null>(null);
 
   // attachAudioSettingsButtons 実行中はダーティ検知を抑制するための ref
   const suppressDirtyRef = useRef(false);
@@ -824,6 +835,34 @@ export default function TinyMCEBody({
     },
     [noteId, isSaving]
   );
+
+  const handleResourceDelete = useCallback(async () => {
+    setShowDeleteConfirmDialog(false);
+    const el = pendingDeleteElementRef.current;
+    if (el && editorRef.current) {
+      const src = el.getAttribute('src') ?? '';
+      const href = el.getAttribute('href') ?? '';
+      const resourceUrl = src.startsWith('/api/resource/') ? src : href;
+      const filename = resourceUrl.replace('/api/resource/', '');
+      try {
+        const res = await fetch(`/api/resource/${filename}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (!json.success) {
+          console.error('Resource delete error:', json.error);
+          setSnackbar({ message: 'リソースの削除に失敗しました。', severity: 'error' });
+          return;
+        }
+      } catch (err) {
+        console.error('Resource delete error:', err);
+        setSnackbar({ message: 'リソースの削除に失敗しました。', severity: 'error' });
+        return;
+      }
+      // editorRef.current.dom.remove(el);
+      setIsDirty(true);
+      pendingDeleteElementRef.current = null;
+      setSnackbar({ message: 'リソースを削除しました。', severity: 'success' });
+    }
+  }, []);
 
   // スタレクロージャを防ぐため、常に最新の handleSave を ref に保持
   const handleSaveRef = useRef(handleSave);
@@ -897,6 +936,8 @@ export default function TinyMCEBody({
         branding: false,
         readonly: readOnly,
         plugins: 'link lists table codesample',
+        contextmenu: 'joplinResource',
+        contextmenu_never_use_native: false,
         toolbar: readOnly
           ? false
           : [
@@ -1014,6 +1055,36 @@ export default function TinyMCEBody({
                 }
               });
             }
+          });
+
+          // a / video / audio / img で /api/resource/ を参照している要素の
+          // 右クリック時に「削除」メニューを表示する（TinyMCE 公式 contextmenu API）
+          editor.ui.registry.addMenuItem('joplinResourceDelete', {
+            text: '削除',
+            icon: 'remove',
+            onAction: () => {
+              openDeleteConfirmRef.current();
+            },
+          });
+
+          editor.ui.registry.addContextMenu('joplinResource', {
+            update: (element: Element) => {
+              let el: Element | null = element;
+              while (el) {
+                const tag = el.tagName?.toLowerCase();
+                if (['a', 'video', 'audio', 'img'].includes(tag)) {
+                  const src = el.getAttribute('src') ?? '';
+                  const href = el.getAttribute('href') ?? '';
+                  if (src.startsWith('/api/resource/') || href.startsWith('/api/resource/')) {
+                    pendingDeleteElementRef.current = el;
+                    return 'joplinResourceDelete';
+                  }
+                }
+                el = el.parentElement;
+              }
+              pendingDeleteElementRef.current = null;
+              return '';
+            },
           });
 
           // クリップボードの生 HTML をそのまま挿入してシンタックスハイライトを保持する
@@ -1384,6 +1455,36 @@ export default function TinyMCEBody({
           ノートが他の場所で更新されています。リロードしてから再編集してください。
         </Alert>
       </Snackbar>
+
+      {/* リソース操作結果 Snackbar */}
+      <Snackbar
+        open={snackbar !== null}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert severity={snackbar?.severity ?? 'info'} onClose={() => setSnackbar(null)} sx={{ width: '100%' }}>
+          {snackbar?.message}
+        </Alert>
+      </Snackbar>
+
+      {/* リソース削除確認ダイアログ */}
+      <Dialog open={showDeleteConfirmDialog} onClose={() => setShowDeleteConfirmDialog(false)}>
+        <DialogTitle>削除の確認</DialogTitle>
+        <DialogContent>
+          <DialogContentText>本当に削除しますか？</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDeleteConfirmDialog(false)}>いいえ</Button>
+          <Button
+            onClick={handleResourceDelete}
+            color="error"
+            variant="contained"
+          >
+            はい
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* 未保存変更があるときのノート切り替え確認ダイアログ */}
       <Dialog open={showDirtyDialog} onClose={handleDirtyDialogCancel}>
