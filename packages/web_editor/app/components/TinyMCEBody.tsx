@@ -1362,7 +1362,7 @@ export default function TinyMCEBody({
           editor.addShortcut('meta+shift+u', '箇条書き', 'change_to_ul');
           editor.addShortcut('meta+shift+o', '番号付き箇条書き', 'change_to_ol');
           editor.addShortcut('meta+s', '保存', () => handleSaveRef.current(editor));
-          editor.addShortcut('ctrl+s', '保存', () => handleSaveRef.current(editor));
+          // editor.addShortcut('ctrl+s', '保存', () => handleSaveRef.current(editor));
 
           // ---------- 変更時に目次を自動更新するコールバック (execOnChangeEvent に相当) ----------
           setupTocAutoUpdate(editor);
