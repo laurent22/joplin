@@ -48,12 +48,33 @@ export const attributesHtml = (attr: Record<string, string>) => {
 			output.push(`${n}="${htmlentities(attr[n])}"`);
 		}
 	}
-
 	return output.join(' ');
 };
 
 export const isSelfClosingTag = (tagName: string) => {
 	return selfClosingElements.includes(tagName.toLowerCase());
+};
+
+const isHiddenByStyle = (style: string): boolean => {
+	if (!style) return false;
+	const s = style.replace(/\s/g, '').toLowerCase();
+
+	return (
+		s.includes('visibility:hidden') ||
+        s.includes('display:none') ||
+        s.includes('opacity:0') ||
+        s.includes('font-size:0') ||
+        s.includes('color:transparent') ||
+        s.includes('color:rgba(0,0,0,0)') ||
+        // Moves element far off-screen
+        s.includes('text-indent:-9999') ||
+        s.includes('text-indent:-999') ||
+        // Zero dimensions with hidden overflow
+        (s.includes('overflow:hidden') && (s.includes('height:0') || s.includes('width:0') || s.includes('max-height:0'))) ||
+        // Clip path fully hidden
+        s.includes('clip-path:inset(100%)') ||
+        s.includes('transform:scale(0)')
+	);
 };
 
 type ProcessImageResult = {
@@ -139,6 +160,8 @@ class HtmlUtils {
 
 		const tagStack: string[] = [];
 
+		let hiddenDepth = 0;
+
 		const currentTag = () => {
 			if (!tagStack.length) return '';
 			return tagStack[tagStack.length - 1];
@@ -148,17 +171,22 @@ class HtmlUtils {
 
 		const parser = new htmlparser2.Parser({
 
-			onopentag: (name: string) => {
+			onopentag: (name: string, attrs: Record<string, string>) => {
 				tagStack.push(name.toLowerCase());
+				if (isHiddenByStyle(attrs['style'])) {
+					hiddenDepth++;
+				}
 			},
 
 			ontext: (decodedText: string) => {
+				if (hiddenDepth > 0) return;
 				if (disallowedTags.includes(currentTag())) return;
 				output.push(decodedText);
 			},
 
 			onclosetag: (name: string) => {
 				if (currentTag() === name.toLowerCase()) tagStack.pop();
+				if (hiddenDepth > 0) hiddenDepth--;
 			},
 
 		}, { decodeEntities: true });

@@ -86,6 +86,76 @@ describe('htmlUtils', () => {
 		}
 	});
 
+	test('should not count hidden text', () => {
+		const testCases = [
+			// visibility: hidden
+			[
+				'<span style="visibility: hidden">hidden text</span>',
+				'',
+			],
+			// display: none
+			[
+				'<span style="display: none">hidden text</span>',
+				'',
+			],
+			// opacity: 0
+			[
+				'<span style="opacity: 0">hidden text</span>',
+				'',
+			],
+			// font-size: 0
+			[
+				'<span style="font-size: 0">hidden text</span>',
+				'',
+			],
+			// color: transparent
+			[
+				'<span style="color: transparent">hidden text</span>',
+				'',
+			],
+			// text-indent off-screen
+			[
+				'<span style="text-indent: -9999px">hidden text</span>',
+				'',
+			],
+			// overflow hidden with zero height
+			[
+				'<span style="overflow: hidden; height: 0">hidden text</span>',
+				'',
+			],
+			// transform scale 0
+			[
+				'<span style="transform: scale(0)">hidden text</span>',
+				'',
+			],
+			// clip-path fully hidden
+			[
+				'<span style="clip-path: inset(100%)">hidden text</span>',
+				'',
+			],
+			// visible text should still be counted
+			[
+				'Note! <span style="visibility: hidden">hidden text</span>',
+				'Note! ',
+			],
+			// nested hidden — child inside hidden parent should also be excluded
+			[
+				'<div style="display: none"><span>still hidden</span></div>',
+				'',
+			],
+			// whitespace variations in style value
+			[
+				'<span style="visibility:   hidden">hidden text</span>',
+				'',
+			],
+		];
+		for (const t of testCases) {
+			const [input, expected] = t;
+			const actual = htmlUtils.stripHtml(input);
+			expect(actual).toBe(expected);
+		}
+	});
+
 	it.each([
 		['<p>Test</p><div></div>', 'Test'],
 		['<p>Testing</p><p>A test</p>', '<p>Testing</p><p>A test</p>'],
