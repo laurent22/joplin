@@ -211,7 +211,7 @@ export default class ElectronAppWrapper {
 	}
 
 	private createJoplinSession_() {
-		const sessionPath = path.join(this.profilePath_, '.spell-session');
+		const sessionPath = path.join(this.profilePath_, 'electron-session');
 		const joplinSession = electronSession.fromPath(sessionPath, { cache: false });
 
 		// One-time migration: copy existing dictionary words from the old Electron userData location into the new session.
