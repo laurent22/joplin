@@ -105,36 +105,51 @@ export default function Sidebar(props: Props) {
 	// Making a tabbed region accessible involves supporting keyboard interaction.
 	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
+		const isArrowKey = ['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key);
+		if (!isArrowKey) return;
 		if (!enabledSectionIndices.length) return;
+
+		event.preventDefault();
+		event.stopPropagation();
 
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
 		const selectedEnabledIndex = enabledSectionIndices.includes(selectedIndex) ? enabledSectionIndices.indexOf(selectedIndex) : 0;
 		let newEnabledIndex = selectedEnabledIndex;
 
-		if (event.code === 'ArrowUp') {
-			newEnabledIndex --;
-		} else if (event.code === 'ArrowDown') {
-			newEnabledIndex ++;
-		} else if (event.code === 'Home') {
+		if (event.key === 'ArrowUp') {
+			newEnabledIndex--;
+		} else if (event.key === 'ArrowDown') {
+			newEnabledIndex++;
+		} else if (event.key === 'Home') {
 			newEnabledIndex = 0;
-		} else if (event.code === 'End') {
+		} else if (event.key === 'End') {
 			newEnabledIndex = enabledSectionIndices.length - 1;
 		}
 
 		if (newEnabledIndex < 0) newEnabledIndex += enabledSectionIndices.length;
 		newEnabledIndex %= enabledSectionIndices.length;
 		const newIndex = enabledSectionIndices[newEnabledIndex];
+		const targetButton = buttonRefs.current[newIndex];
 
 		if (newIndex !== selectedIndex) {
-			event.preventDefault();
 			props.onSelectionChange({ section: props.sections[newIndex] });
+		}
 
-			const targetButton = buttonRefs.current[newIndex];
-			if (targetButton) {
-				focus('Sidebar', targetButton);
-			}
+		if (targetButton) {
+			focus('Sidebar', targetButton);
 		}
 	}, [enabledSectionIndices, props.sections, props.selection, props.onSelectionChange]);
+
+	const onTabListFocus: React.FocusEventHandler<HTMLDivElement> = useCallback((event) => {
+		if (event.target !== event.currentTarget) return;
+
+		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
+		const enabledSelectedIndex = enabledSectionIndices.includes(selectedIndex) ? selectedIndex : enabledSectionIndices[0];
+		const targetButton = buttonRefs.current[enabledSelectedIndex];
+		if (targetButton) {
+			focus('Sidebar', targetButton);
+		}
+	}, [enabledSectionIndices, props.sections, props.selection]);
 
 	const buttons: React.ReactNode[] = [];
 
@@ -161,7 +176,14 @@ export default function Sidebar(props: Props) {
 					if (disabled) return;
 					props.onSelectionChange({ section: section });
 				}}
-				onKeyDown={onKeyDown}
+				onKeyDown={(e) => {
+					if ([' ', 'Enter'].includes(e.key)) {
+						e.preventDefault();
+						if (!disabled) {
+							props.onSelectionChange({ section: section });
+						}
+					}
+				}}
 			>
 				<StyledListItemIcon
 					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
@@ -208,7 +230,14 @@ export default function Sidebar(props: Props) {
 					placeholder={_('Search settings...')}
 				/>
 			</StyledSearchContainer>
-			<StyledTabList className='_scrollbar2' role='tablist' aria-orientation='vertical'>
+			<StyledTabList
+				className='_scrollbar2'
+				role='tablist'
+				aria-orientation='vertical'
+				tabIndex={0}
+				onKeyDown={onKeyDown}
+				onFocus={onTabListFocus}
+			>
 				{buttons}
 			</StyledTabList>
 		</StyledRoot>

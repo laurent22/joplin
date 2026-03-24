@@ -48,9 +48,15 @@
 }
 
 .config-screen mark.config-search-highlight {
-	background-color: var(--joplin-selected-color2);
-	color: var(--joplin-color);
-	padding: 0;
-	border-radius: 1px;
+	background-color: #FFE033;
+	color: #000000;
+	box-shadow: inset 0 0 0 2px #F5A500;
+	padding: 3px 2px;
+	border-radius: 3px;
 	line-height: inherit;
+	font-weight: 700;
+	text-decoration: underline;
+	text-decoration-color: #F5A500;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 2px;
 }
