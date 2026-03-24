@@ -24,7 +24,7 @@ export default function NotePage() {
               <div className="flex-1 min-h-0 overflow-auto">
                 <NoteTreeWrapper />
               </div>
-              <SyncButton />
+              {mode === 'editor' && <SyncButton />}
             </Panel>
             <Separator className="w-2 bg-gray-300 hover:bg-gray-400 cursor-col-resize" />
             <Panel className="bg-white overflow-hidden relative">
