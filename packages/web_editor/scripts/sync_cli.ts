@@ -390,24 +390,24 @@ async function main() {
   {
     const { parameters: getParams } = require('@joplin/lib/parameters.js');
     const params = getParams();
-    const storedAuth = Setting.value(`sync.${SyncTargetOneDrive.id()}.auth`);
+    // const storedAuth = Setting.value(`sync.${SyncTargetOneDrive.id()}.auth`);
     console.log(`[Debug] env               : ${Setting.value('env')}`);
     console.log(`[Debug] OneDrive client_id: ${params?.oneDrive?.id ?? '(not found)'}`);
-    if (storedAuth) {
-      try {
-        const authObj = JSON.parse(storedAuth);
-        // refresh_token の先頭 20 文字だけ表示（秘密情報を保護）
-        const refreshSnippet = authObj.refresh_token
-          ? String(authObj.refresh_token).slice(0, 20) + '...'
-          : '(none)';
-        console.log(`[Debug] Stored auth keys  : ${Object.keys(authObj).join(', ')}`);
-        console.log(`[Debug] refresh_token hint: ${refreshSnippet}`);
-      } catch (_) {
-        console.log(`[Debug] Stored auth (raw) : ${String(storedAuth).slice(0, 60)}...`);
-      }
-    } else {
-      console.log('[Debug] Stored auth       : (empty)');
-    }
+    // if (storedAuth) {
+    //   try {
+    //     const authObj = JSON.parse(storedAuth);
+    //     // refresh_token の先頭 20 文字だけ表示（秘密情報を保護）
+    //     const refreshSnippet = authObj.refresh_token
+    //       ? String(authObj.refresh_token).slice(0, 20) + '...'
+    //       : '(none)';
+    //     console.log(`[Debug] Stored auth keys  : ${Object.keys(authObj).join(', ')}`);
+    //     console.log(`[Debug] refresh_token hint: ${refreshSnippet}`);
+    //   } catch (_) {
+    //     console.log(`[Debug] Stored auth (raw) : ${String(storedAuth).slice(0, 60)}...`);
+    //   }
+    // } else {
+    //   console.log('[Debug] Stored auth       : (empty)');
+    // }
   }
 
   const isAuthenticated = await reg.syncTarget().isAuthenticated();
