@@ -184,13 +184,13 @@ export async function runSync(profileDir: string): Promise<void> {
   // --- 7. shim の初期化（HTTP/fetch などを有効化）---
   let keytar: unknown = null;
   try {
-    keytar = shim.platformSupportsKeyChain() ? require('keytar') : null;
+    keytar = shim.platformSupportsKeyChain() ? require(/* webpackIgnore: true */ 'keytar') : null;
   } catch (_e) {
     // keytar が利用できない場合はスキップ
   }
   let sharp: unknown = null;
   try {
-    sharp = require('sharp');
+    sharp = require(/* webpackIgnore: true */ 'sharp');
   } catch (_e) {
     // sharp は画像処理用。同期には必須ではないためスキップ可
   }
