@@ -806,7 +806,6 @@ export default function TinyMCEBody({
       if (!noteId || !editorRef.current || isSaving) return;
       setIsSaving(true);
       try {
-        console.log(`Saving note = ${noteId} updatedTime = ${currentUpdatedTimeRef.current}`);
         const content = getEditorContent(editorRef.current);
         const res = await fetch('/api/note', {
           method: 'PUT',

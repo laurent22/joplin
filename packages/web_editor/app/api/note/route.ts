@@ -17,9 +17,6 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
     }
     if (updatedTime !== undefined && Number(existing.updated_time) !== Number(updatedTime)) {
-      console.log(
-        `Conflict detected for note ${id}: client updated_time=${updatedTime}, server updated_time=${existing.updated_time}`
-      );
       return NextResponse.json(
         {
           success: false,
