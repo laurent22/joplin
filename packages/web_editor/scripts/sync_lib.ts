@@ -183,6 +183,7 @@ export async function runSync(profileDir: string): Promise<SyncStats> {
   for (const cacheKey of Object.keys(require.cache)) {
     const cached = require.cache[cacheKey]?.exports?.default;
     if (!cached || cached === BaseService) continue;
+    if (typeof cached !== 'object' && typeof cached !== 'function') continue;
     if ('logger_' in cached && cached.logger_ !== undefined) {
       try {
         cached.logger_ = globalLogger;
@@ -261,6 +262,7 @@ export async function runSync(profileDir: string): Promise<SyncStats> {
   for (const cacheKey of Object.keys(require.cache)) {
     const cached = require.cache[cacheKey]?.exports?.default;
     if (!cached || cached === BaseItem) continue;
+    if (typeof cached !== 'object' && typeof cached !== 'function') continue;
     if ('revisionService_' in cached) {
       try {
         cached.revisionService_ = RevisionService.instance();
