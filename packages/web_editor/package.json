@@ -7,6 +7,7 @@
     "build": "mkdir -p public && cp -R node_modules/tinymce public/tinymce && next build",
     "next_start": "node scripts/start.js",
     "start": "mkdir -p public && rm -rf public/pluginAssets && cp -R ../renderer/assets public/pluginAssets && cp -R node_modules/tinymce public/tinymce && node scripts/start.js",
+    "sync_cli": "tsx scripts/sync_cli.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-pattern public/**",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix --ignore-pattern public/**",
     "format": "prettier --write .",
@@ -51,6 +52,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@joplin/lib": "file:../lib",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.6",

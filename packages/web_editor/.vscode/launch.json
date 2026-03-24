@@ -2,6 +2,34 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "sync_cli (OneDrive)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "args": [
+        "run",
+        "sync_cli",
+        "--",
+        "--profileName",
+        "joplin_desktop_test2"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "outputCapture": "std",
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/../lib/**",
+        "!**/node_modules/**"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/../lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
       "name": "MCP Server Debug",
       "type": "node",
       "request": "launch",
