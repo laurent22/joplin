@@ -6,7 +6,7 @@ import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
+import { makeReducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
@@ -29,7 +29,8 @@ const JoplinCloudScreenComponent = (props: Props) => {
 	const applicationAuthUrl = (applicationAuthId: string) => `${props.joplinCloudApi}/api/application_auth/${applicationAuthId}`;
 
 	const [intervalIdentifier, setIntervalIdentifier] = useState(undefined);
-	const [state, dispatch] = useReducer(reducer, defaultState);
+	const targetName = props.syncTargetId === 10 ? _('Joplin Cloud') : _('Joplin Server');
+	const [state, dispatch] = useReducer(makeReducer(targetName), defaultState);
 
 	const applicationAuthId = useMemo(() => uuidgen(), []);
 
@@ -102,7 +103,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 						</div>
 					</>
 				) : null}
-				<p className={state.className}>{state.message().replace('Joplin Cloud', props.syncTargetId === 10 ? 'Joplin Cloud' : 'Joplin Server')}
+				<p className={state.className}>{state.message()}
 					{state.active === 'ERROR' ? (
 						<span className={state.className}>{state.errorMessage}</span>
 					) : null}

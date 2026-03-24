@@ -67,6 +67,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private async checkSyncConfig_() {
+		const ok = await shared.saveSettings(this);
+		if (!ok) return;
     	const syncTarget = reg.syncTarget();
     	const authRouteName = syncTarget.authRouteName();
     	if (authRouteName) {
@@ -270,11 +272,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer')) {
     				const goToJoplinServerLogin = async () => {
-        				await shared.saveSettings(this);
-        				this.props.dispatch({
-            				type: 'NAV_GO',
-            				routeName: 'JoplinServerLogin',
-        				});
+        				const ok = await shared.saveSettings(this);
+    					if (!ok) return;
+    					this.props.dispatch({
+        					type: 'NAV_GO',
+        					routeName: 'JoplinServerLogin',
+    					});
     				};
     				settingComps.push(
         				<div key='connect_to_joplin_server_button' style={this.rowStyle_}>

@@ -87,7 +87,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), 10);
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);

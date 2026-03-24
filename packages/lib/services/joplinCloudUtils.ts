@@ -60,6 +60,39 @@ export const reducer: Reducer<DefaultState, Action> = (state: DefaultState, acti
 	}
 };
 
+export const makeReducer = (targetName: string): Reducer<DefaultState, Action> => (state: DefaultState, action: Action) => {
+	switch (action.type) {
+	case 'LINK_USED': {
+		return {
+			className: 'text',
+			message: () => _('If you have already authorised, please wait for the application to sync to %s.', targetName),
+			next: 'COMPLETED',
+			active: 'LINK_USED',
+		};
+	}
+	case 'COMPLETED': {
+		return {
+			className: 'bold',
+			message: () => _('You are logged in into %s, you can leave this screen now.', targetName),
+			active: 'COMPLETED',
+			next: 'COMPLETED',
+		};
+	}
+	case 'ERROR': {
+		return {
+			className: 'text',
+			message: () => _('You were unable to connect to %s. Please check your credentials and try again. Error:', targetName),
+			active: 'ERROR',
+			next: 'COMPLETED',
+			errorMessage: action.payload,
+		};
+	}
+	default: {
+		return state;
+	}
+	}
+};
+
 export const getApplicationInformation = async () => {
 	const platformName = await shim.platformName();
 	switch (platformName) {
@@ -101,7 +134,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTar
 
 		const headers: Record<string, string> = {};
 		if (syncTargetId === 10) {
-    		headers['X-JOPLIN-CUSTOM-API-KEY'] = Setting.value('sync.10.apiKey');
+			headers['X-JOPLIN-CUSTOM-API-KEY'] = Setting.value('sync.10.apiKey');
 		}
 
 		const response = await fetch(applicationsUrl, { headers });
@@ -114,6 +147,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTar
 
 		Setting.setValue(`sync.${syncTargetId}.username`, jsonBody.id);
 		Setting.setValue(`sync.${syncTargetId}.password`, jsonBody.password);
+		Setting.setValue('sync.target', syncTargetId);
 
 		const fileApi = await reg.syncTarget().fileApi();
 		await fileApi.driver().api().loadSession();
