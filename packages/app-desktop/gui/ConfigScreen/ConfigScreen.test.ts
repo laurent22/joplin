@@ -32,14 +32,7 @@ function findFirstMark(node: React.ReactNode): React.ReactElement|null {
 		if (node.type === 'mark') return node;
 		const props = node.props as ElementProps;
 		const children = props.children;
-		if (Array.isArray(children)) {
-			for (const c of children) {
-				const found = findFirstMark(c);
-				if (found) return found;
-			}
-		} else {
-			return findFirstMark(children);
-		}
+		return findFirstMark(children);
 	}
 	if (Array.isArray(node)) {
 		for (const c of node) {
