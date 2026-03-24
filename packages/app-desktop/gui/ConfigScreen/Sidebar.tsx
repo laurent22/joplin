@@ -176,7 +176,7 @@ export default function Sidebar(props: Props) {
 					if (disabled) return;
 					props.onSelectionChange({ section: section });
 				}}
-				onKeyDown={(e) => {
+				onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => {
 					if ([' ', 'Enter'].includes(e.key)) {
 						e.preventDefault();
 						if (!disabled) {
