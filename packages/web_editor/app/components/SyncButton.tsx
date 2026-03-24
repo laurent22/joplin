@@ -61,7 +61,7 @@ export default function SyncButton() {
         {syncing ? 'Syncing...' : 'Sync'}
       </Button>
       {syncResult && (
-        <Alert severity={syncResult.success ? 'success' : 'error'} sx={{ py: 0 }}>
+        <Alert severity={syncResult.success ? 'success' : 'error'} sx={{ py: 0 }} onClose={() => setSyncResult(null)}>
           {syncResult.success ? (
             <Box>
               <Typography variant="body2" fontWeight="bold">
