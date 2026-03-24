@@ -482,7 +482,8 @@ export default class ElectronAppWrapper {
 						event.preventDefault();
 
 						// As of March 2026, Electron crashes with "Assertion failed: (Environment::GetCurrent(isolate)) == (env)" if the native 'close'
-						// event is allowed to close a secondary window. As a workaround, briefly hide the window and programmatically close it later.
+						// event is allowed to close a secondary window. As a workaround, briefly hide the window and .close() it later.
+						// See https://github.com/laurent22/joplin/issues/14628.
 						window.hide();
 						setTimeout(() => {
 							if (!window.isDestroyed()) {
