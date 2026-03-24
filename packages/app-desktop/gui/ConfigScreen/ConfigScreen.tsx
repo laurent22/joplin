@@ -219,6 +219,33 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return matchesSearchQueryValue(this.state.searchQuery ?? '', relatedText, sectionTitle);
 	}
 
+	/** Sync section: one row (optional trailing nodes) when the title matches settings search, or when search is off. */
+	private renderSearchFilteredSettingButtonRow(options: {
+		rowKey: string;
+		title: string;
+		level: ButtonLevel;
+		onClick: ()=> void | Promise<void>;
+		disabled?: boolean;
+		trailing?: React.ReactNode;
+		searchActive: boolean;
+		sectionLabel: string;
+	}): React.ReactElement|null {
+		if (options.searchActive && !this.matchesSearchQuery([options.title], options.sectionLabel)) {
+			return null;
+		}
+		return (
+			<div key={options.rowKey} style={this.rowStyle_}>
+				<Button
+					title={options.title}
+					level={options.level}
+					onClick={options.onClick}
+					disabled={options.disabled}
+				/>
+				{options.trailing}
+			</div>
+		);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public sectionToComponent(key: string, section: any, settings: any, selected: boolean) {
 		const theme = themeStyle(this.props.themeId);
@@ -274,8 +301,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			// saved yet).
 			const matchesSavedTarget = settings['sync.target'] === this.props.settings['sync.target'];
 			const missingPasswordText = _('%s: Missing password.', _('Warning'));
-			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings) &&
-				(!searchActive || this.matchesSearchQuery([missingPasswordText, _('Help')], sectionLabel))) {
+			if (matchesSavedTarget && shouldShowMissingPasswordWarning(settings['sync.target'], settings)) {
 				settingComps.push(
 					<p key='missing-password-warning' style={warningStyle}>
 						{missingPasswordText}
@@ -298,28 +324,26 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 
 				const connectToJoplinCloudTitle = _('Connect to Joplin Cloud');
-				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud') &&
-					(!searchActive || this.matchesSearchQuery([connectToJoplinCloudTitle], sectionLabel))) {
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinCloud')) {
 					const goToJoplinCloudLogin = () => {
 						this.props.dispatch({
 							type: 'NAV_GO',
 							routeName: 'JoplinCloudLogin',
 						});
 					};
-					settingComps.push(
-						<div key="connect_to_joplin_cloud_button" style={this.rowStyle_}>
-							<Button
-								title={connectToJoplinCloudTitle}
-								level={ButtonLevel.Primary}
-								onClick={goToJoplinCloudLogin}
-							/>
-						</div>,
-					);
+					const joplinCloudRow = this.renderSearchFilteredSettingButtonRow({
+						rowKey: 'connect_to_joplin_cloud_button',
+						title: connectToJoplinCloudTitle,
+						level: ButtonLevel.Primary,
+						onClick: goToJoplinCloudLogin,
+						searchActive,
+						sectionLabel,
+					});
+					if (joplinCloudRow) settingComps.push(joplinCloudRow);
 				}
 
 				const connectSamlTitle = _('Connect using your organisation account');
-				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml') &&
-					(!searchActive || this.matchesSearchQuery([connectSamlTitle], sectionLabel))) {
+				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
 					const server = settings['sync.11.path'] as string;
 
 					const goToSamlLogin = async () => {
@@ -332,46 +356,31 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						});
 					};
 
-					settingComps.push(
-						<div key="connect_to_joplin_server_saml_button" style={this.rowStyle_}>
-							<Button
-								title={connectSamlTitle}
-								level={ButtonLevel.Primary}
-								onClick={goToSamlLogin}
-								disabled={!server || server?.trim().length === 0}
-							/>
-						</div>,
-					);
+					const samlRow = this.renderSearchFilteredSettingButtonRow({
+						rowKey: 'connect_to_joplin_server_saml_button',
+						title: connectSamlTitle,
+						level: ButtonLevel.Primary,
+						onClick: goToSamlLogin,
+						disabled: !server || server?.trim().length === 0,
+						searchActive,
+						sectionLabel,
+					});
+					if (samlRow) settingComps.push(samlRow);
 				}
 
 				const checkSyncTitle = _('Check synchronisation configuration');
-				if (!searchActive || this.matchesSearchQuery([checkSyncTitle], sectionLabel)) {
-					settingComps.push(
-						<div key="check_sync_config_button" style={this.rowStyle_}>
-							<Button
-								title={checkSyncTitle}
-								level={ButtonLevel.Secondary}
-								disabled={this.state.checkSyncConfigResult === 'checking'}
-								onClick={this.checkSyncConfig_}
-							/>
-							{statusComp}
-						</div>,
-					);
-				}
+				const checkSyncRow = this.renderSearchFilteredSettingButtonRow({
+					rowKey: 'check_sync_config_button',
+					title: checkSyncTitle,
+					level: ButtonLevel.Secondary,
+					onClick: this.checkSyncConfig_,
+					disabled: this.state.checkSyncConfigResult === 'checking',
+					trailing: statusComp,
+					searchActive,
+					sectionLabel,
+				});
+				if (checkSyncRow) settingComps.push(checkSyncRow);
 			}
-		}
-
-		if (searchActive) {
-			const sectionMatches = this.matchesSearchQuery([sectionLabel, ...sectionKeywords], sectionLabel) ||
-				settingComps.length > 0 ||
-				advancedSettingComps.length > 0;
-			if (!sectionMatches) return null;
-			sectionStyle.marginTop = 0;
-			sectionStyle.marginBottom = 12;
-			sectionStyle.padding = '12px 0 12px 14px';
-			sectionStyle.borderLeft = `2px solid ${theme.dividerColor}`;
-		} else if (!selected) {
-			sectionStyle.display = 'none';
 		}
 
 		let advancedSettingsButton = null;
@@ -416,6 +425,20 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			}
 		}
 
+		let shouldRenderSection = true;
+		if (searchActive) {
+			const sectionMatches = this.matchesSearchQuery([sectionLabel, ...sectionKeywords], sectionLabel) ||
+				settingComps.length > 0 ||
+				advancedSettingComps.length > 0;
+			if (!sectionMatches) shouldRenderSection = false;
+			sectionStyle.marginTop = 0;
+			sectionStyle.marginBottom = 12;
+			sectionStyle.padding = '12px 0 12px 14px';
+			sectionStyle.borderLeft = `2px solid ${theme.dividerColor}`;
+		} else if (!selected) {
+			sectionStyle.display = 'none';
+		}
+
 		const sectionTitleComp = searchActive ? (
 			<button
 				type="button"
@@ -425,6 +448,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				{highlightText(sectionLabel, searchQuery)}
 			</button>
 		) : null;
+
+		if (!shouldRenderSection) return null;
 
 		return (
 			<div key={key} style={sectionStyle}>
@@ -546,7 +571,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		// Compute which sections have at least one setting matching the query.
 		const sectionsWithMatches: Set<string> = searchActive
-			? new Set(sections.filter((s: SettingMetadataSection) => this.sectionHasMatches(s)).map((s: SettingMetadataSection) => s.name))
+			? new Set(
+				sections
+					.filter((s: SettingMetadataSection) => this.sectionHasMatches(s))
+					.map((s: SettingMetadataSection) => s.name),
+			)
 			: new Set();
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

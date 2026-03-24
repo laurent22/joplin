@@ -22,14 +22,18 @@ export function highlightText(text: string, query: string): React.ReactNode {
 	let idx = lower.indexOf(q);
 	while (idx !== -1) {
 		if (idx > last) parts.push(text.slice(last, idx));
-		parts.push(React.createElement('mark', { key: `h${idx}`, className: 'search-highlight' }, text.slice(idx, idx + q.length)));
+		parts.push(
+			<mark key={`h${idx}`} className='search-highlight'>
+				{text.slice(idx, idx + q.length)}
+			</mark>,
+		);
 		last = idx + q.length;
 		idx = lower.indexOf(q, last);
 	}
 	if (last < text.length) parts.push(text.slice(last));
 	if (!parts.length) return text;
 	if (parts.length === 1 && typeof parts[0] === 'string') return parts[0];
-	return React.createElement(React.Fragment, null, ...parts);
+	return <React.Fragment>{parts}</React.Fragment>;
 }
 
 export function encryptionSearchKeywords(encryptionEnabled: boolean, translate: (input: string)=> string): string[] {

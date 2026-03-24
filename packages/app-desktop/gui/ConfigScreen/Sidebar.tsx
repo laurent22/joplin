@@ -93,9 +93,19 @@ export default function Sidebar(props: Props) {
 		? props.sections.filter(s => props.sectionsWithMatches.has(s.name))
 		: props.sections;
 
-	const currentSectionName = isSearchActive ? props.searchFilterSection : props.selection;
+	const effectiveKeyboardSectionName = (() => {
+		if (!isSearchActive) return props.selection;
+		if (props.searchFilterSection) return props.searchFilterSection;
+		if (!navigableSections.length) return null;
+		const stillOnSelection = navigableSections.some(s => s.name === props.selection);
+		return stillOnSelection ? props.selection : navigableSections[0].name;
+	})();
+
+	const currentSectionName = effectiveKeyboardSectionName;
 
 	const onKeyDown: React.KeyboardEventHandler<HTMLElement> = useCallback((event) => {
+		if (!navigableSections.length) return;
+
 		const selectedIndex = navigableSections.findIndex(section => section.name === currentSectionName);
 		let newIndex = selectedIndex < 0 ? 0 : selectedIndex;
 
@@ -132,7 +142,9 @@ export default function Sidebar(props: Props) {
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const hasMatch = !isSearchActive || props.sectionsWithMatches.has(section.name);
 		const selected = isSearchActive
-			? props.searchFilterSection === section.name
+			? (props.searchFilterSection
+				? props.searchFilterSection === section.name
+				: effectiveKeyboardSectionName === section.name)
 			: props.selection === section.name;
 
 		const label = Setting.sectionNameToLabel(section.name);
@@ -163,7 +175,7 @@ export default function Sidebar(props: Props) {
 				aria-controls={`setting-section-${section.name}`}
 				aria-selected={selected}
 				aria-disabled={isSearchActive && !hasMatch}
-				tabIndex={selected ? 0 : -1}
+				tabIndex={effectiveKeyboardSectionName === section.name ? 0 : -1}
 
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
