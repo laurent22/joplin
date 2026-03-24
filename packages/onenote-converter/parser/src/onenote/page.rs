@@ -70,17 +70,14 @@ impl Page {
             .as_ref()
             .and_then(|title| title.contents.first())
             .and_then(Self::outline_text)
-            .and_then(|t| Some(Self::remove_hyperlink(t.to_owned())))
+            .map(|t| Self::remove_hyperlink(t.to_owned()))
             .or_else(|| {
                 self.contents
                     .iter()
                     .filter_map(|page_content| page_content.outline())
                     .filter_map(|t| {
-                        let v = Self::outline_text(t);
-                        if v.is_none() {
-                            return None;
-                        }
-                        return Some(Self::remove_hyperlink(v.unwrap().to_owned()));
+                        let v = Self::outline_text(t)?;
+                        Some(Self::remove_hyperlink(v.to_owned()))
                     })
                     .next()
             })
@@ -107,22 +104,18 @@ impl Page {
 
         let mut title_copy = title.clone();
 
-        loop {
-            // Find the first hyperlink mark
-            if let Some(marker_start) = title_copy.find(HYPERLINK_MARKER) {
-                let hyperlink_part = &title_copy[marker_start + HYPERLINK_MARKER.len()..];
+        // Find the first hyperlink mark
+        while let Some(marker_start) = title_copy.find(HYPERLINK_MARKER) {
+            let hyperlink_part = &title_copy[marker_start + HYPERLINK_MARKER.len()..];
 
-                // Find the closing double quote of the hyperlink
-                if let Some(quote_end) = hyperlink_part.find('"') {
-                    let before_hyperlink = &title_copy[..marker_start];
-                    let after_hyperlink = &hyperlink_part[quote_end + 1..];
-                    title_copy = format!("{}{}", before_hyperlink, after_hyperlink);
-                } else {
-                    // Sometimes links are broken, in these cases we only consider what is before the mark
-                    title_copy = title[..marker_start].to_string();
-                }
+            // Find the closing double quote of the hyperlink
+            if let Some(quote_end) = hyperlink_part.find('"') {
+                let before_hyperlink = &title_copy[..marker_start];
+                let after_hyperlink = &hyperlink_part[quote_end + 1..];
+                title_copy = format!("{}{}", before_hyperlink, after_hyperlink);
             } else {
-                break;
+                // Sometimes links are broken, in these cases we only consider what is before the mark
+                title_copy = title[..marker_start].to_string();
             }
         }
 

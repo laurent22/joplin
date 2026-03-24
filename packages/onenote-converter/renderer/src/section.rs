@@ -28,7 +28,9 @@ impl Renderer {
     pub fn render(&mut self, section: &Section, output_dir: String) -> Result<RenderedSection> {
         let section_dir = fs_driver().join(
             output_dir.as_str(),
-            fs_driver().sanitize_file_name(section.display_name()).as_str(),
+            fs_driver()
+                .sanitize_file_name(section.display_name())
+                .as_str(),
         );
         log!(
             "section_dir: {:?} \n output_dir: {:?}",
@@ -131,21 +133,21 @@ impl Renderer {
         errors: &Vec<String>,
         output_dir: &str,
     ) -> Result<TocEntry> {
-        let error_html = templates::errors::render(&errors)?;
-        let errors_path = self.write_html_file(&output_dir, "Errors", &error_html)?;
+        let error_html = templates::errors::render(errors)?;
+        let errors_path = self.write_html_file(output_dir, "Errors", &error_html)?;
         log!("Errors: {}", errors_path);
 
         Ok(TocEntry {
             level: 1,
             is_error: true,
             name: ERRORS_NOTE_NAME.into(),
-            relative_path: fs_driver().remove_prefix(&errors_path, &output_dir).into(),
+            relative_path: fs_driver().remove_prefix(&errors_path, output_dir).into(),
         })
     }
 
     fn write_html_file(&mut self, parent_dir: &str, title: &str, html: &str) -> Result<String> {
         let filename = self.title_to_unique_safe_filename(parent_dir, title, ".html")?;
-        let path = fs_driver().join(&parent_dir, &filename);
+        let path = fs_driver().join(parent_dir, &filename);
         fs_driver().write_file(&path, html.as_bytes())?;
         Ok(path)
     }

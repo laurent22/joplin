@@ -7,8 +7,7 @@ export interface SharedData {
 	resources?: string[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type ShareListener = (event: any)=> void;
+type ShareListener = (event: SharedData)=> void;
 export type UnsubscribeShareListener = ()=> void;
 type ShareExtensionType = {
 	data: ()=> Promise<SharedData>;

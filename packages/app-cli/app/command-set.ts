@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Database from '@joplin/lib/database';
 import Note from '@joplin/lib/models/Note';
 
@@ -29,7 +29,7 @@ class Command extends BaseCommand {
 		let propValue = args['value'];
 		if (!propValue) propValue = '';
 
-		const notes = await app().loadItems(BaseModel.TYPE_NOTE, title);
+		const notes = await app().loadItems(ModelType.Note, title);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', title));
 
 		for (let i = 0; i < notes.length; i++) {

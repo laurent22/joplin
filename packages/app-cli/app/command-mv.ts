@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 
@@ -21,7 +21,7 @@ class Command extends BaseCommand {
 		let folder = null;
 
 		if (destination !== 'root') {
-			folder = await app().loadItem(BaseModel.TYPE_FOLDER, destination);
+			folder = await app().loadItem(ModelType.Folder, destination);
 			if (!folder) throw new Error(_('Cannot find "%s".', destination));
 		}
 
@@ -30,7 +30,7 @@ class Command extends BaseCommand {
 			throw new Error(_('Ambiguous notebook "%s". Please use short notebook id instead - press "ti" to see the short notebook id', destination));
 		}
 
-		const itemFolder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
+		const itemFolder = await app().loadItem(ModelType.Folder, pattern);
 		if (itemFolder) {
 			const sourceDuplicates = await Folder.search({ titlePattern: pattern, limit: 2 });
 			if (sourceDuplicates.length > 1) {
@@ -42,7 +42,7 @@ class Command extends BaseCommand {
 				await Folder.moveToFolder(itemFolder.id, folder.id);
 			}
 		} else {
-			const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+			const notes = await app().loadItems(ModelType.Note, pattern);
 			if (notes.length === 0) throw new Error(_('Cannot find "%s".', pattern));
 			for (let i = 0; i < notes.length; i++) {
 				await Note.moveToFolder(notes[i].id, folder.id);

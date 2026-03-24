@@ -1,7 +1,7 @@
 import { returningSupported } from '../db';
 import { KeyValue } from '../services/database/types';
 import { msleep } from '../utils/time';
-import BaseModel from './BaseModel';
+import BaseModel, { DeleteOptions } from './BaseModel';
 
 export enum ValueType {
 	Integer = 1,
@@ -107,8 +107,7 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 		await this.db(this.tableName).where('key', '=', key).delete();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async delete(_id: string | string[] | number | number[], _options: any = {}): Promise<void> {
+	public async delete(_id: string | string[] | number | number[], _options: DeleteOptions = {}): Promise<void> {
 		throw new Error('Call ::deleteValue()');
 	}
 

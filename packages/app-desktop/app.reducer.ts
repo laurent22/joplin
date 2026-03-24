@@ -11,8 +11,7 @@ const logger = Logger.create('app.reducer');
 export interface AppStateRoute {
 	type: string;
 	routeName: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	props: any;
+	props: Record<string, unknown>;
 }
 
 export enum AppStateDialogName {
@@ -22,8 +21,7 @@ export enum AppStateDialogName {
 
 export interface AppStateDialog {
 	name: AppStateDialogName;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	props: Record<string, any>;
+	props: Record<string, unknown>;
 }
 
 export interface NoteIdToScrollPercent {
