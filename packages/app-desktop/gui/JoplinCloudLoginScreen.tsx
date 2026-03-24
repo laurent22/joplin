@@ -20,6 +20,7 @@ interface Props {
 	dispatch: Dispatch;
 	joplinCloudWebsite: string;
 	joplinCloudApi: string;
+	syncTargetId: number;
 }
 
 const JoplinCloudScreenComponent = (props: Props) => {
@@ -37,7 +38,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 
 		const interval = setInterval(async () => {
 			try {
-				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId));
+				const response = await checkIfLoginWasSuccessful(applicationAuthUrl(applicationAuthId), props.syncTargetId);
 				if (response && response.success) {
 					dispatch({ type: 'COMPLETED' });
 					clearInterval(interval);
@@ -83,7 +84,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 			<div className="page-container">
 				{state.active !== 'COMPLETED' ? (
 					<>
-						<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}</p>
+						<p className="text">{_('To allow Joplin to synchronise with %s, please login using this URL:', props.syncTargetId === 10 ? _('Joplin Cloud') : _('Joplin Server'))}</p>
 						<div className="buttons-container">
 							<Button
 								onClick={onAuthorizeClicked}
@@ -101,24 +102,27 @@ const JoplinCloudScreenComponent = (props: Props) => {
 						</div>
 					</>
 				) : null}
-				<p className={state.className}>{state.message()}
+				<p className={state.className}>{state.message().replace('Joplin Cloud', props.syncTargetId === 10 ? 'Joplin Cloud' : 'Joplin Server')}
 					{state.active === 'ERROR' ? (
 						<span className={state.className}>{state.errorMessage}</span>
 					) : null}
 				</p>
 				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
-				<JoplinCloudSignUpCallToAction />
+				{props.syncTargetId === 10 ? <JoplinCloudSignUpCallToAction /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>
 	);
 };
 
-const mapStateToProps = (state: AppState) => {
-	return {
-		joplinCloudWebsite: state.settings['sync.10.website'],
-		joplinCloudApi: state.settings['sync.10.path'],
-	};
+const mapStateToProps = (state: AppState, ownProps: { syncTargetId?: number }) => {
+    const syncTargetId = ownProps.syncTargetId ?? 10;
+    const isCloud = syncTargetId === 10;
+    return {
+        joplinCloudWebsite: isCloud ? state.settings['sync.10.website'] : state.settings['sync.9.path'],
+        joplinCloudApi: isCloud ? state.settings['sync.10.path'] : state.settings['sync.9.path'],
+        syncTargetId,
+    };
 };
 
 export default connect(mapStateToProps)(JoplinCloudScreenComponent);

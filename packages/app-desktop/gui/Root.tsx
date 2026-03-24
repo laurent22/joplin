@@ -162,6 +162,12 @@ class RootComponent extends React.Component<Props, any> {
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
+			JoplinServerLogin: { 
+    			screen: (props: React.ComponentProps<typeof JoplinCloudLoginScreen>) => (
+        			<JoplinCloudLoginScreen {...props} syncTargetId={9} />
+    			), 
+    			title: () => _('Joplin Server Login') 
+			},
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()), title: () => _('Joplin Server Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },

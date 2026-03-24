@@ -85,6 +85,18 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
+	protected async isAuthenticatedViaJoplinServerCompatibleSession(): Promise<boolean> {
+    	try {
+        	const fileApi = await this.fileApi();
+        	const api = fileApi.driver().api();
+        	const sessionId = await api.sessionId();
+        	return !!sessionId;
+    	} catch (error: any) {
+        	if (error.code === 403) return false;
+        	throw error;
+    	}
+	}
+
 	public authRouteName(): string {
 		return null;
 	}

@@ -66,13 +66,17 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	public async isAuthenticated() {
-		return true;
+		return this.isAuthenticatedViaJoplinServerCompatibleSession();
 	}
 
 	public static requiresPassword() {
-		return true;
+		return false;
 	}
 
+	public authRouteName() {
+    	return 'JoplinServerLogin';
+	}
+	
 	public static override supportsShare(): boolean {
 		return true;
 	}

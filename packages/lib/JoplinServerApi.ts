@@ -107,7 +107,7 @@ export default class JoplinServerApi {
 		}
 	}
 
-	private async sessionId() {
+	public async sessionId() {
 		const session = await this.session();
 		return session ? session.id : '';
 	}
