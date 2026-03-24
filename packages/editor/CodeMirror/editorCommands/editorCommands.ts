@@ -48,7 +48,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleHeading5]: toggleHeaderLevel(5),
 	[EditorCommandType.InsertHorizontalRule]: insertHorizontalRule,
 	[EditorCommandType.InsertTable]: editor => {
-		replaceSelectionCommand(editor, `\n${generateTable(1, 2)}\n`);
+		replaceSelectionCommand(editor, `\n${generateTable(1, 2)}\n\n`);
 	},
 	[EditorCommandType.InsertCodeBlock]: editor => {
 		replaceSelectionCommand(editor, [

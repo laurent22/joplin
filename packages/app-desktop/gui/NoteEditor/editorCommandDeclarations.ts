@@ -184,6 +184,11 @@ const declarations: CommandDeclaration[] = [
 		name: 'viewer.focus',
 	},
 	{
+		name: 'editor.textTable',
+		label: () => _('Insert table'),
+		iconName: 'fas fa-table',
+	},
+	{
 		name: 'editor.tableAddRow',
 		label: () => _('Table: Add row'),
 		iconName: 'fas fa-plus',

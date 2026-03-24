@@ -66,11 +66,7 @@ const mapStateToProps = (state: AppState, connectProps: ConnectProps) => {
 		'textCheckbox',
 		'textHeading',
 		'textHorizontalRule',
-		'-',
-		'editor.tableAddRow',
-		'editor.tableAddColumn',
-		'editor.tableDeleteRow',
-		'editor.tableDeleteColumn',
+		'editor.textTable',
 		'insertDateTime',
 		'toggleEditors',
 	].concat(pluginUtils.commandNamesFromViews(state.pluginService.plugins, 'editorToolbar'));

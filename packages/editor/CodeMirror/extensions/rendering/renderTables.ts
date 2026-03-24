@@ -16,6 +16,7 @@ import {
 	swapRows, swapColumns,
 	Table,
 } from '../../utils/markdown/tableUtils';
+import { getCellContentPosition } from '../../editorCommands/tableCommands';
 
 // Short class name prefix
 const W = 'cm-tw';
@@ -36,13 +37,24 @@ class TableWidget extends WidgetType {
 		return this.tableText === other.tableText;
 	}
 
+	// Dispatch a structural table change (add/delete row/column).
+	// A trailing newline is appended when needed to ensure a blank line
+	// separates the table from subsequent text, preventing the parser
+	// from absorbing later lines as extra table rows.
 	private apply(view: EditorView, newTable: Table | null) {
 		if (!newTable) return;
+		const newText = serializeTable(newTable);
+		const doc = view.state.doc;
+		const afterTable = this.to < doc.length ? doc.sliceString(this.to, Math.min(this.to + 2, doc.length)) : '';
+		const needsBlankLine = !afterTable.startsWith('\n\n');
+		const insert = needsBlankLine ? `${newText}\n` : newText;
 		view.dispatch({
-			changes: { from: this.from, to: this.to, insert: serializeTable(newTable) },
+			changes: { from: this.from, to: this.to, insert },
 		});
 	}
 
+	// Sync a single cell edit back to the markdown document.
+	// Does NOT move the cursor so the user can continue working in the widget.
 	private syncCell(view: EditorView, table: Table, row: number, col: number, text: string) {
 		if (row === 0) {
 			table.header.cells[col].content = text;
@@ -52,8 +64,13 @@ class TableWidget extends WidgetType {
 				table.body[b].cells[col].content = text;
 			}
 		}
+		const newText = serializeTable(table);
+		const doc = view.state.doc;
+		const afterTable = this.to < doc.length ? doc.sliceString(this.to, Math.min(this.to + 2, doc.length)) : '';
+		const needsBlankLine = !afterTable.startsWith('\n\n');
+		const insert = needsBlankLine ? `${newText}\n` : newText;
 		view.dispatch({
-			changes: { from: this.from, to: this.to, insert: serializeTable(table) },
+			changes: { from: this.from, to: this.to, insert },
 		});
 	}
 
@@ -75,55 +92,102 @@ class TableWidget extends WidgetType {
 
 		const tableEl = document.createElement('table');
 
+		// Flag to skip onblur sync when Tab/Enter handles it
+		let skipBlurSync = false;
+
 		// ---- Editable cell ----
 		const mkCell = (text: string, r: number, c: number, isHdr: boolean) => {
 			const el = document.createElement(isHdr ? 'th' : 'td');
 			el.classList.add(CELL);
 			if (isHdr) el.classList.add(HDR);
-			el.textContent = text;
-			el.contentEditable = 'true';
-			el.spellcheck = false;
 
-			el.onblur = () => {
-				// Read only direct text nodes (not button children like "+")
-				const v = Array.from(el.childNodes)
-					.filter(n => n.nodeType === Node.TEXT_NODE)
-					.map(n => n.textContent || '')
-					.join('')
-					.trim();
+			// Editable text lives in its own div — cell itself is NOT editable
+			const textDiv = document.createElement('div');
+			textDiv.classList.add('cm-tw-text');
+			textDiv.contentEditable = 'true';
+			textDiv.spellcheck = false;
+			textDiv.textContent = text;
+
+			// Sync CM cursor to this cell so toolbar commands work
+			textDiv.onfocus = () => {
+				const tableRange = {
+					from: this.from,
+					to: this.to,
+					text: this.tableText,
+				};
+				const cellPos = getCellContentPosition(view.state, tableRange, r, c);
+				if (cellPos !== null) {
+					view.dispatch({
+						selection: { anchor: cellPos, head: cellPos },
+					});
+				}
+			};
+
+			textDiv.onblur = () => {
+				if (skipBlurSync) { skipBlurSync = false; return; }
+				const v = (textDiv.textContent || '').trim();
 				const orig = isHdr
 					? table.header.cells[c]?.content
 					: table.body[r - 1]?.cells[c]?.content;
 				if (v !== orig) this.syncCell(view, table, r, c, v);
 			};
 
-			el.onkeydown = (e) => {
+			textDiv.onkeydown = (e) => {
 				if (e.key === 'Tab') {
 					e.preventDefault();
 					e.stopPropagation();
+
+					// Sync current cell first if content changed
+					const v = (textDiv.textContent || '').trim();
+					const orig = isHdr
+						? table.header.cells[c]?.content
+						: table.body[r - 1]?.cells[c]?.content;
+					const changed = v !== orig;
+					if (changed) {
+						skipBlurSync = true;
+						this.syncCell(view, table, r, c, v);
+					}
+
+					// Compute target cell index
 					const flat = allCells.flat();
 					const i = flat.indexOf(el);
-					if (e.shiftKey) {
-						if (i > 0) focus('TableWidget', flat[i - 1]);
-					} else if (i < flat.length - 1) {
-						focus('TableWidget', flat[i + 1]);
-					} else {
+					const nextIdx = e.shiftKey ? i - 1 : i + 1;
+
+					if (nextIdx >= 0 && nextIdx < flat.length) {
+						if (changed) {
+							// Widget rebuilds after syncCell — find new cell after rebuild
+							requestAnimationFrame(() => {
+								const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
+								if (nextIdx < cells.length) {
+									focus('TableWidget', cells[nextIdx] as HTMLElement);
+								}
+							});
+						} else {
+							const targetText = flat[nextIdx].querySelector('.cm-tw-text') as HTMLElement;
+							if (targetText) focus('TableWidget', targetText);
+						}
+					} else if (!e.shiftKey) {
 						this.apply(view, addRow(table, numBodyRows - 1));
 					}
 				} else if (e.key === 'Enter' && !e.shiftKey) {
 					e.preventDefault();
+					skipBlurSync = true;
+					// Sync current cell
+					const v = (textDiv.textContent || '').trim();
+					const orig = isHdr
+						? table.header.cells[c]?.content
+						: table.body[r - 1]?.cells[c]?.content;
+					if (v !== orig) this.syncCell(view, table, r, c, v);
 					if (r === totalRows - 1 && c === numCols - 1) {
-						blur('TableWidget', el);
 						this.apply(view, addRow(table, numBodyRows - 1));
-					} else {
-						blur('TableWidget', el);
 					}
 				} else if (e.key === 'Escape') {
 					e.preventDefault();
-					blur('TableWidget', el);
+					blur('TableWidget', textDiv);
 				}
 			};
 
+			el.appendChild(textDiv);
 			el.oncontextmenu = (e) => showCtx(e, r, c);
 
 			return el;
@@ -134,31 +198,41 @@ class TableWidget extends WidgetType {
 		// and appear only on hover. No extra columns needed.
 
 		const mkAddColBtn = (afterCol: number, anchorCell: HTMLElement) => {
+			const wrapper = document.createElement('span');
+			wrapper.contentEditable = 'false';
+			wrapper.classList.add('cm-tw-ac-wrap');
 			const btn = document.createElement('button');
 			btn.classList.add('cm-tw-ac');
 			btn.textContent = '+';
 			btn.title = 'Add column to the right';
+			btn.tabIndex = -1;
 			btn.onmousedown = (e) => {
 				if (e.button !== 0) return; // left-click only
 				e.preventDefault();
 				e.stopPropagation();
 				this.apply(view, addColumn(table, afterCol));
 			};
-			anchorCell.appendChild(btn);
+			wrapper.appendChild(btn);
+			anchorCell.appendChild(wrapper);
 		};
 
 		const mkAddRowBtn = (afterBodyIdx: number, anchorCell: HTMLElement) => {
+			const wrapper = document.createElement('span');
+			wrapper.contentEditable = 'false';
+			wrapper.classList.add('cm-tw-ar-wrap');
 			const btn = document.createElement('button');
 			btn.classList.add('cm-tw-ar');
 			btn.textContent = '+';
 			btn.title = 'Add row below';
+			btn.tabIndex = -1;
 			btn.onmousedown = (e) => {
 				if (e.button !== 0) return; // left-click only
 				e.preventDefault();
 				e.stopPropagation();
 				this.apply(view, addRow(table, afterBodyIdx));
 			};
-			anchorCell.appendChild(btn);
+			wrapper.appendChild(btn);
+			anchorCell.appendChild(wrapper);
 		};
 
 		// ---- Build header ----
@@ -195,10 +269,32 @@ class TableWidget extends WidgetType {
 		tableEl.appendChild(tbody);
 		container.appendChild(tableEl);
 
+		// ---- Highlight helpers ----
+		const highlightRow = (rowIdx: number) => {
+			if (rowIdx >= 0 && rowIdx < allCells.length) {
+				for (const cell of allCells[rowIdx]) {
+					cell.classList.add('cm-tw-hl');
+				}
+			}
+		};
+		const highlightCol = (colIdx: number) => {
+			for (const row of allCells) {
+				if (colIdx >= 0 && colIdx < row.length) {
+					row[colIdx].classList.add('cm-tw-hl');
+				}
+			}
+		};
+		const clearHighlight = () => {
+			for (const el of tableEl.querySelectorAll('.cm-tw-hl')) {
+				el.classList.remove('cm-tw-hl');
+			}
+		};
+
 		// ---- Context menu ----
 		const showCtx = (e: MouseEvent, r: number, c: number) => {
 			e.preventDefault();
 			container.querySelector(`.${CTX}`)?.remove();
+			clearHighlight();
 
 			const menu = document.createElement('div');
 			menu.classList.add(CTX);
@@ -206,32 +302,51 @@ class TableWidget extends WidgetType {
 			menu.style.left = `${e.clientX - rect.left}px`;
 			menu.style.top = `${e.clientY - rect.top}px`;
 
-			const items: { label: string; action: ()=> void }[] = [
+			type MenuItem = { label: string; action: ()=> void; hlRow?: number; hlCol?: number };
+			const items: MenuItem[] = [
 				{ label: '+ Insert row above', action: () => this.apply(view, addRow(table, r <= 0 ? -1 : r - 2)) },
 				{ label: '+ Insert row below', action: () => this.apply(view, addRow(table, r === 0 ? -1 : r - 1)) },
 				{ label: '+ Insert column left', action: () => this.apply(view, addColumn(table, c - 1)) },
 				{ label: '+ Insert column right', action: () => this.apply(view, addColumn(table, c)) },
 			];
-			if (r > 1) items.push({ label: '↑ Move row up', action: () => this.apply(view, swapRows(table, r - 1, r - 2)) });
-			if (r > 0 && r < numBodyRows) items.push({ label: '↓ Move row down', action: () => this.apply(view, swapRows(table, r - 1, r)) });
-			if (c > 0) items.push({ label: '← Move column left', action: () => this.apply(view, swapColumns(table, c, c - 1)) });
-			if (c < numCols - 1) items.push({ label: '→ Move column right', action: () => this.apply(view, swapColumns(table, c, c + 1)) });
-			if (r > 0) items.push({ label: '✕ Delete row', action: () => this.apply(view, deleteRow(table, r - 1)) });
-			if (numCols > 1) items.push({ label: '✕ Delete column', action: () => this.apply(view, deleteColumn(table, c)) });
+			if (r > 1) items.push({ label: '↑ Move row up', action: () => this.apply(view, swapRows(table, r - 1, r - 2)), hlRow: r });
+			if (r > 0 && r < numBodyRows) items.push({ label: '↓ Move row down', action: () => this.apply(view, swapRows(table, r - 1, r)), hlRow: r });
+			if (c > 0) items.push({ label: '← Move column left', action: () => this.apply(view, swapColumns(table, c, c - 1)), hlCol: c });
+			if (c < numCols - 1) items.push({ label: '→ Move column right', action: () => this.apply(view, swapColumns(table, c, c + 1)), hlCol: c });
+			// Delete row: for header (r===0) deletes entire table, for body rows deletes that row
+			items.push({
+				label: '✕ Delete row',
+				action: () => {
+					if (r === 0) {
+						view.dispatch({ changes: { from: this.from, to: this.to, insert: '' } });
+					} else {
+						this.apply(view, deleteRow(table, r - 1));
+					}
+				},
+				hlRow: r,
+			});
+			if (numCols > 1) items.push({ label: '✕ Delete column', action: () => this.apply(view, deleteColumn(table, c)), hlCol: c });
 
 			for (const item of items) {
 				const div = document.createElement('div');
 				div.textContent = item.label;
+				div.onmouseenter = () => {
+					clearHighlight();
+					if (item.hlRow !== undefined) highlightRow(item.hlRow);
+					if (item.hlCol !== undefined) highlightCol(item.hlCol);
+				};
+				div.onmouseleave = () => clearHighlight();
 				div.onmousedown = (ev) => {
 					ev.preventDefault();
 					ev.stopPropagation();
+					clearHighlight();
 					menu.remove();
 					item.action();
 				};
 				menu.appendChild(div);
 			}
 			container.appendChild(menu);
-			const close = () => { menu.remove(); document.removeEventListener('mousedown', close); };
+			const close = () => { clearHighlight(); menu.remove(); document.removeEventListener('mousedown', close); };
 			setTimeout(() => document.addEventListener('mousedown', close), 0);
 		};
 
@@ -266,7 +381,24 @@ const tableTheme = EditorView.theme({
 		fontFamily: 'inherit',
 		position: 'relative', // anchor for + buttons
 	},
-	[`& .${CELL}:focus`]: {
+	// Editable text area inside cells
+	['& .cm-tw-text']: {
+		outline: 'none',
+		minHeight: '1.2em',
+		width: '100%',
+		display: 'block',
+		cursor: 'text',
+		margin: '0',
+		padding: '0',
+		boxSizing: 'border-box',
+		whiteSpace: 'pre-wrap',
+		wordBreak: 'break-word',
+	},
+	['& .cm-tw-text:focus']: {
+		outline: 'none',
+	},
+	// Highlight the entire cell when its text div is focused
+	[`& .${CELL}:focus-within`]: {
 		backgroundColor: 'var(--joplin-selected-color, rgba(0,120,255,0.06))',
 		boxShadow: 'inset 0 0 0 2px var(--joplin-color3, #0078ff)',
 	},
@@ -275,43 +407,36 @@ const tableTheme = EditorView.theme({
 		backgroundColor: 'var(--joplin-background-color3, #f0f0f0)',
 	},
 
-	// "+" button on right edge of cell (add column) — sits outside
-	['& .cm-tw-ac']: {
-		display: 'none',
+	// Highlight for row/column on context menu hover
+	['& .cm-tw-hl']: {
+		backgroundColor: 'var(--joplin-selected-color, rgba(0,120,255,0.12)) !important',
+	},
+
+	// Wrapper for "+" buttons — non-editable island inside contentEditable cells
+	['& .cm-tw-ac-wrap']: {
 		position: 'absolute',
 		top: '50%',
 		right: '-12px',
 		transform: 'translateY(-50%)',
-		width: '22px',
-		height: '22px',
-		lineHeight: '20px',
-		fontSize: '16px',
-		fontWeight: 'bold',
-		border: '1px solid var(--joplin-divider-color, #ccc)',
-		borderRadius: '50%',
-		backgroundColor: 'var(--joplin-background-color, #fff)',
-		color: 'var(--joplin-color3, #0078ff)',
-		cursor: 'pointer',
-		padding: '0',
 		zIndex: '30',
-		textAlign: 'center',
-		'&:hover': {
-			backgroundColor: 'var(--joplin-color3, #0078ff)',
-			color: '#fff',
-			borderColor: 'var(--joplin-color3, #0078ff)',
-		},
+		display: 'none',
 	},
-	[`& .${CELL}:hover > .cm-tw-ac`]: {
+	[`& .${CELL}:hover > .cm-tw-ac-wrap`]: {
 		display: 'block',
 	},
-
-	// "+" button on bottom edge of cell (add row) — sits outside
-	['& .cm-tw-ar']: {
-		display: 'none',
+	['& .cm-tw-ar-wrap']: {
 		position: 'absolute',
 		bottom: '-12px',
 		left: '50%',
 		transform: 'translateX(-50%)',
+		zIndex: '30',
+		display: 'none',
+	},
+	[`& .${CELL}:hover > .cm-tw-ar-wrap`]: {
+		display: 'block',
+	},
+	// "+" button styles (shared)
+	['& .cm-tw-ac, & .cm-tw-ar']: {
 		width: '22px',
 		height: '22px',
 		lineHeight: '20px',
@@ -323,16 +448,12 @@ const tableTheme = EditorView.theme({
 		color: 'var(--joplin-color3, #0078ff)',
 		cursor: 'pointer',
 		padding: '0',
-		zIndex: '30',
 		textAlign: 'center',
 		'&:hover': {
 			backgroundColor: 'var(--joplin-color3, #0078ff)',
 			color: '#fff',
 			borderColor: 'var(--joplin-color3, #0078ff)',
 		},
-	},
-	[`& .${CELL}:hover > .cm-tw-ar`]: {
-		display: 'block',
 	},
 
 	// Context menu
@@ -367,6 +488,7 @@ const renderTables = [
 		},
 	}),
 	makeBlockReplaceExtension({
+		hideWhenContainsSelection: false,
 		createDecoration: (node: SyntaxNodeRef, state: EditorState) => {
 			if (node.name !== 'TableHeader') return null;
 			const startLine = state.doc.lineAt(node.from);
