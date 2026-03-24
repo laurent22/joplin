@@ -6,12 +6,29 @@ import NoteTreeWrapper from '../components/NoteTreeWrapper';
 import ReactQueryProvider from '../components/ReactQueryProvider';
 import NoteViewer from '../components/NoteViewer';
 import NoteEditor from '../components/NoteEditor';
-import { Stack, Switch, Typography, Paper } from '@mui/material';
+import { Stack, Switch, Typography, Paper, Button, CircularProgress, Alert } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import PreviewIcon from '@mui/icons-material/Preview';
+import SyncIcon from '@mui/icons-material/Sync';
 
 export default function NotePage() {
   const [mode, setMode] = useState<'viewer' | 'editor'>('viewer');
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<{ success: boolean; error?: string } | null>(null);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    setSyncResult(null);
+    try {
+      const res = await fetch('/api/sync', { method: 'POST' });
+      const json = await res.json();
+      setSyncResult(json);
+    } catch (e: unknown) {
+      setSyncResult({ success: false, error: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   return (
     <ReactQueryProvider>
@@ -23,6 +40,23 @@ export default function NotePage() {
               <div className="flex-1 min-h-0 overflow-auto">
                 <NoteTreeWrapper />
               </div>
+              <Stack spacing={1} sx={{ pt: 1 }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={syncing ? <CircularProgress size={14} /> : <SyncIcon />}
+                  onClick={handleSync}
+                  disabled={syncing}
+                  fullWidth
+                >
+                  {syncing ? 'Syncing...' : 'Sync'}
+                </Button>
+                {syncResult && (
+                  <Alert severity={syncResult.success ? 'success' : 'error'} sx={{ py: 0 }}>
+                    {syncResult.success ? '同期完了' : syncResult.error}
+                  </Alert>
+                )}
+              </Stack>
             </Panel>
             <Separator className="w-2 bg-gray-300 hover:bg-gray-400 cursor-col-resize" />
             <Panel className="bg-white overflow-hidden relative">
