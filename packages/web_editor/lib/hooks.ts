@@ -37,6 +37,25 @@ interface ApiResponse<T = TreeNode[]> {
   message?: string;
 }
 
+export function useGetNote(noteId: string | null) {
+  const {
+    data,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['note', noteId],
+    queryFn: async () => {
+      const res = await fetch(`/api/note?id=${encodeURIComponent(noteId as string)}`);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || 'Failed to fetch note');
+      return json.data as NoteEntity & { body?: string };
+    },
+    enabled: !!noteId,
+    staleTime: 0,
+  });
+  return { data, isLoading, error };
+}
+
 export function useFolderQuery() {
   async function fetchFolders(): Promise<TreeNode[]> {
     const res = await fetch('/api/tree');
