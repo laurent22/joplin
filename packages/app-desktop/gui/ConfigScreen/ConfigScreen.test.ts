@@ -31,8 +31,7 @@ function findFirstMark(node: React.ReactNode): React.ReactElement|null {
 	if (React.isValidElement(node)) {
 		if (node.type === 'mark') return node;
 		const props = node.props as ElementProps;
-		const children = props.children;
-		return findFirstMark(children);
+		return findFirstMark(props.children);
 	}
 	if (Array.isArray(node)) {
 		for (const c of node) {
@@ -59,9 +58,11 @@ describe('ConfigScreen search helpers', () => {
 		expect(matchesSearchQueryValue('sync', 'unrelated content', 'Synchronisation')).toBe(true);
 	});
 
-	test('does not match empty or whitespace-only query', () => {
-		expect(matchesSearchQueryValue('', 'End-to-end encryption', 'Encryption')).toBe(false);
-		expect(matchesSearchQueryValue('   ', 'End-to-end encryption', 'Encryption')).toBe(false);
+	test.each([
+		['empty string', ''],
+		['whitespace only', '   '],
+	])('does not match when query is %s', (_label, query) => {
+		expect(matchesSearchQueryValue(query, 'End-to-end encryption', 'Encryption')).toBe(false);
 	});
 
 	test('does not match when query is a superset of the section title', () => {
@@ -88,9 +89,11 @@ describe('ConfigScreen search helpers', () => {
 		expect(highlightText('Hello World', 'xyz')).toBe('Hello World');
 	});
 
-	test('returns the original string unchanged when query is empty', () => {
-		expect(highlightText('Hello', '')).toBe('Hello');
-		expect(highlightText('Hello', '   ')).toBe('Hello');
+	test.each([
+		['empty string', ''],
+		['whitespace only', '   '],
+	])('returns the original string unchanged when query is %s', (_label, query) => {
+		expect(highlightText('Hello', query)).toBe('Hello');
 	});
 
 	test('wraps the matched portion in a mark element', () => {
@@ -122,13 +125,20 @@ describe('ConfigScreen search helpers', () => {
 
 	// encryptionSearchKeywords
 
-	test('returns "Enable encryption" keyword when encryption is disabled', () => {
-		const keywords = encryptionSearchKeywords(false, (input: string) => input);
-		expect(keywords).toEqual(['End-to-end encryption', 'Enable encryption']);
-	});
+	const identity = (input: string) => input;
 
-	test('returns "Disable encryption" keyword when encryption is enabled', () => {
-		const keywords = encryptionSearchKeywords(true, (input: string) => input);
-		expect(keywords).toEqual(['End-to-end encryption', 'Disable encryption']);
+	test.each([
+		[
+			'disabled',
+			false,
+			['End-to-end encryption', 'Enable encryption'],
+		],
+		[
+			'enabled',
+			true,
+			['End-to-end encryption', 'Disable encryption'],
+		],
+	] as const)('returns expected keywords when encryption is %s', (_label, enabled, expected) => {
+		expect(encryptionSearchKeywords(enabled, identity)).toEqual(expected);
 	});
 });
