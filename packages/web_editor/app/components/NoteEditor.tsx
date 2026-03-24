@@ -2,9 +2,8 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { NoteEntity } from '@/lib/database';
+import { useGetNote } from '@/lib/hooks';
 
 const TinyMCEBody = dynamic(() => import('./TinyMCEBody'), { ssr: false });
 
@@ -12,21 +11,7 @@ export default function NoteEditor() {
   const searchParams = useSearchParams();
   const noteId = searchParams.get('note_id') ?? null;
 
-  const {
-    data: fetched,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['note', noteId],
-    queryFn: async () => {
-      const res = await fetch(`/api/note?id=${encodeURIComponent(noteId as string)}`);
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error || 'Failed to fetch note');
-      return json.data as NoteEntity & { body?: string };
-    },
-    enabled: !!noteId,
-    staleTime: 0,
-  });
+  const { data: fetched, isLoading, error } = useGetNote(noteId);
 
   console.log(`note: id=${noteId}, note_title=${fetched?.title}`);
 

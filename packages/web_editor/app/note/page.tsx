@@ -6,9 +6,10 @@ import NoteTreeWrapper from '../components/NoteTreeWrapper';
 import ReactQueryProvider from '../components/ReactQueryProvider';
 import NoteViewer from '../components/NoteViewer';
 import NoteEditor from '../components/NoteEditor';
-import { Stack, Switch, Typography, Paper } from '@mui/material';
+import { Switch, Typography, Paper } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import PreviewIcon from '@mui/icons-material/Preview';
+import SyncButton from '../components/SyncButton';
 
 export default function NotePage() {
   const [mode, setMode] = useState<'viewer' | 'editor'>('viewer');
@@ -23,6 +24,7 @@ export default function NotePage() {
               <div className="flex-1 min-h-0 overflow-auto">
                 <NoteTreeWrapper />
               </div>
+              {mode === 'editor' && <SyncButton />}
             </Panel>
             <Separator className="w-2 bg-gray-300 hover:bg-gray-400 cursor-col-resize" />
             <Panel className="bg-white overflow-hidden relative">
