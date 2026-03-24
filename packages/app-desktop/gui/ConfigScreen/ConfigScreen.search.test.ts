@@ -54,6 +54,24 @@ describe('ConfigScreen search', () => {
 			expected: true,
 		},
 		{
+			title: 'matches multi-term query regardless of term order in one field',
+			setting: makeSetting('Markdown editor', 'Configure editor behaviour'),
+			options: { searchQuery: 'editor markdown' },
+			expected: true,
+		},
+		{
+			title: 'matches multi-term query when terms are spread across fields',
+			setting: makeSetting('Editor', 'Markdown options and rendering'),
+			options: { searchQuery: 'editor markdown' },
+			expected: true,
+		},
+		{
+			title: 'returns false when one multi-term token is missing',
+			setting: makeSetting('Editor', 'Formatting options'),
+			options: { searchQuery: 'editor markdown' },
+			expected: false,
+		},
+		{
 			title: 'returns false for unrelated query',
 			setting: makeSetting('Theme', 'Choose dark or light mode'),
 			options: { searchQuery: 'sync' },

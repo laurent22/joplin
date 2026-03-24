@@ -19,12 +19,6 @@ const normalizeText = (text: string|undefined): string => {
 	return String(text || '').toLowerCase();
 };
 
-const textMatchesSearch = (text: string|undefined, searchQuery: string): boolean => {
-	const q = normalizedQuery(searchQuery);
-	if (!q) return true;
-	return normalizeText(text).includes(q);
-};
-
 interface SettingMatchesSearchOptions {
 	searchQuery: string;
 	sectionTitle?: string;
@@ -32,22 +26,19 @@ interface SettingMatchesSearchOptions {
 }
 
 export const settingMatchesSearch = (md: Pick<SettingItem, 'label' | 'description'>, options: SettingMatchesSearchOptions): boolean => {
-	const q = normalizedQuery(options.searchQuery);
-	if (!q) return true;
-
-	if (textMatchesSearch(options.sectionTitle, q)) return true;
+	const terms = searchTerms(options.searchQuery);
+	if (!terms.length) return true;
 
 	const labelText = md.label ? md.label() : '';
 	const descriptionText = md.description ? md.description(AppType.Desktop) : '';
+	const searchableTexts = [
+		normalizeText(options.sectionTitle),
+		normalizeText(labelText),
+		normalizeText(descriptionText),
+		...(options.extraTexts || []).map(text => normalizeText(text)),
+	];
 
-	if (textMatchesSearch(labelText, q)) return true;
-	if (textMatchesSearch(descriptionText, q)) return true;
-
-	for (const text of options.extraTexts || []) {
-		if (textMatchesSearch(text, q)) return true;
-	}
-
-	return false;
+	return terms.every(term => searchableTexts.some(text => text.includes(term)));
 };
 
 export const highlightSearchText = (text: string, searchQuery: string): React.ReactNode => {
@@ -88,7 +79,7 @@ export const highlightSearchText = (text: string, searchQuery: string): React.Re
 				className='config-search-highlight'
 			>
 				{source.slice(index, end)}
-			</mark>
+			</mark>,
 		);
 		searchStart = end;
 	}
