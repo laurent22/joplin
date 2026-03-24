@@ -16,7 +16,7 @@ export async function PUT(req: NextRequest) {
     if (!existing) {
       return NextResponse.json({ success: false, error: 'Note not found' }, { status: 404 });
     }
-    if (updatedTime !== undefined && Number(existing.updated_time) !== Number(updatedTime)) {
+    if (updatedTime !== undefined && existing.updated_time !== updatedTime) {
       return NextResponse.json(
         {
           success: false,
