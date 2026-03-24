@@ -23,6 +23,14 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await fs.mkdirp(exportDir());
 	});
 
+	const createExportItems = () => {
+		const items: { type: number; itemOrId: string | NoteEntity }[] = [];
+		const queue = (itemType: number, itemOrId: string | NoteEntity) => {
+			items.push({ type: itemType, itemOrId });
+		};
+		return { items, queue };
+	};
+
 	it('should create resources directory', (async () => {
 		const service = new InteropService_Exporter_Md();
 		await service.init(exportDir());
@@ -488,31 +496,26 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
 	}));
 
-	it('should handle folders that collide after sanitization', (async () => {
+	it.each([
+		{ titles: ['folder:', 'folder?'], expectedPaths: ['folder_/note1.md', 'folder_-1/note2.md'], description: 'special characters' },
+		{ titles: ['CON', 'NUL'], expectedPaths: ['___/note1.md', '___-1/note2.md'], description: 'Windows-banned names' },
+	])('should handle folders that collide after sanitization ($description)', async ({ titles, expectedPaths }) => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items, queue } = createExportItems();
 
-		const folder1 = await Folder.save({ title: 'folder:' });
-		const folder2 = await Folder.save({ title: 'folder?' });
+		const folder1 = await Folder.save({ title: titles[0] });
+		const folder2 = await Folder.save({ title: titles[1] });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
 		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
-		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
-		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
-		queueExportItem(BaseModel.TYPE_NOTE, note1);
-		queueExportItem(BaseModel.TYPE_NOTE, note2);
+		queue(BaseModel.TYPE_FOLDER, folder1.id);
+		queue(BaseModel.TYPE_FOLDER, folder2.id);
+		queue(BaseModel.TYPE_NOTE, note1);
+		queue(BaseModel.TYPE_NOTE, note2);
 
-		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, itemsToExport);
-		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, items);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, items);
 
 		await exporter.processItem(Folder.modelType(), folder1);
 		await exporter.processItem(Folder.modelType(), folder2);
@@ -520,51 +523,12 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await exporter.processItem(Note.modelType(), note2);
 
 		expect(Object.keys(exporter.context().notePaths).length).toBe(2);
-		expect(exporter.context().notePaths[note1.id]).toBe('folder_/note1.md');
-		expect(exporter.context().notePaths[note2.id]).toBe('folder_-1/note2.md');
+		expect(exporter.context().notePaths[note1.id]).toBe(expectedPaths[0]);
+		expect(exporter.context().notePaths[note2.id]).toBe(expectedPaths[1]);
 
-		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note1.id]}`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note2.id]}`)).toBe(true);
-	}));
-
-	it('should handle folders with banned names that collide after sanitization', (async () => {
-		const exporter = new InteropService_Exporter_Md();
-		await exporter.init(exportDir());
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
-
-		const folder1 = await Folder.save({ title: 'CON' });
-		const folder2 = await Folder.save({ title: 'NUL' });
-		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
-		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
-		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
-		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
-		queueExportItem(BaseModel.TYPE_NOTE, note1);
-		queueExportItem(BaseModel.TYPE_NOTE, note2);
-
-		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, itemsToExport);
-		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
-
-		await exporter.processItem(Folder.modelType(), folder1);
-		await exporter.processItem(Folder.modelType(), folder2);
-		await exporter.processItem(Note.modelType(), note1);
-		await exporter.processItem(Note.modelType(), note2);
-
-		expect(Object.keys(exporter.context().notePaths).length).toBe(2);
-		expect(exporter.context().notePaths[note1.id]).toBe('___/note1.md');
-		expect(exporter.context().notePaths[note2.id]).toBe('___-1/note2.md');
-
-		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note1.id]}`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note2.id]}`)).toBe(true);
-	}));
+		expect(await shim.fsDriver().exists(`${exportDir()}/${expectedPaths[0]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${expectedPaths[1]}`)).toBe(true);
+	});
 
 	it('should handle filenames that contain slashes', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
