@@ -65,53 +65,26 @@ export interface SyncStats {
   totalResources?: number;
 }
 
-function parseSyncStats(lines: string[]): SyncStats {
-  const stats: SyncStats = {};
-  for (const line of lines) {
-    // Strip timestamp prefix like "14:51:27: "
-    const stripped = line.replace(/^\d{2}:\d{2}:\d{2}: /, '');
-    const match = stripped.match(/^(.+?):\s*(\d+)\s*$/);
-    if (match) {
-      const key = match[1].trim();
-      const value = parseInt(match[2], 10);
-      switch (key) {
-        case 'fetchingTotal':
-          stats.fetchingTotal = value;
-          break;
-        case 'fetchingProcessed':
-          stats.fetchingProcessed = value;
-          break;
-        case 'createLocal':
-          stats.createLocal = value;
-          break;
-        case 'updateLocal':
-          stats.updateLocal = value;
-          break;
-        case 'deleteLocal':
-          stats.deleteLocal = value;
-          break;
-        case 'createRemote':
-          stats.createRemote = value;
-          break;
-        case 'updateRemote':
-          stats.updateRemote = value;
-          break;
-        case 'deleteRemote':
-          stats.deleteRemote = value;
-          break;
-        case 'Total folders':
-          stats.totalFolders = value;
-          break;
-        case 'Total notes':
-          stats.totalNotes = value;
-          break;
-        case 'Total resources':
-          stats.totalResources = value;
-          break;
-      }
-    }
-  }
-  return stats;
+function reportToStats(
+  report: Record<string, unknown>,
+  totalFolders: number,
+  totalNotes: number,
+  totalResources: number
+): SyncStats {
+  const num = (v: unknown) => (typeof v === 'number' ? v : undefined);
+  return {
+    fetchingTotal: num(report['fetchingTotal']),
+    fetchingProcessed: num(report['fetchingProcessed']),
+    createLocal: num(report['createLocal']),
+    updateLocal: num(report['updateLocal']),
+    deleteLocal: num(report['deleteLocal']),
+    createRemote: num(report['createRemote']),
+    updateRemote: num(report['updateRemote']),
+    deleteRemote: num(report['deleteRemote']),
+    totalFolders,
+    totalNotes,
+    totalResources,
+  };
 }
 
 /**
@@ -436,13 +409,19 @@ export async function runSync(profileDir: string): Promise<SyncStats> {
 
   // --- 10. 同期実行（Sidebar の「同期」ボタンと同じコードパス）---
   console.log('Starting OneDrive sync...');
-  const capturedLines: string[] = [];
-  const originalConsoleLog = console.log;
-  console.log = (...args: unknown[]) => {
-    const line = args.map(String).join(' ');
-    capturedLines.push(line);
-    originalConsoleLog(...args);
+
+  // Synchronizer.dispatch は public なので上書きして SYNC_REPORT_UPDATE を捕捉する
+  let lastReport: Record<string, unknown> = {};
+  const syncTargetId = Setting.value('sync.target');
+  const syncInstance = await reg.syncTarget(syncTargetId).synchronizer();
+  const originalDispatch = syncInstance.dispatch;
+  syncInstance.dispatch = (action: { type: string; report?: Record<string, unknown> }) => {
+    if (action.type === 'SYNC_REPORT_UPDATE' && action.report) {
+      lastReport = action.report;
+    }
+    originalDispatch(action);
   };
+
   try {
     await reg.scheduleSync(0);
   } catch (syncError: unknown) {
@@ -457,11 +436,14 @@ export async function runSync(profileDir: string): Promise<SyncStats> {
     }
     throw syncError;
   } finally {
-    console.log = originalConsoleLog;
+    syncInstance.dispatch = originalDispatch;
   }
   console.log('Sync finished.');
 
-  const stats = parseSyncStats(capturedLines);
+  const totalFolders: number = await Folder.count();
+  const totalNotes: number = await Note.count();
+  const totalResources: number = await Resource.count();
+  const stats = reportToStats(lastReport, totalFolders, totalNotes, totalResources);
 
   // --- 11. 後処理 ---
   await reg.cancelTimers();
