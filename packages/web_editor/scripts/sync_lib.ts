@@ -51,12 +51,75 @@ const fs = require('fs-extra');
 // コア同期処理
 // ---------------------------------------------------------------------------
 
+export interface SyncStats {
+  fetchingTotal?: number;
+  fetchingProcessed?: number;
+  createLocal?: number;
+  updateLocal?: number;
+  deleteLocal?: number;
+  createRemote?: number;
+  updateRemote?: number;
+  deleteRemote?: number;
+  totalFolders?: number;
+  totalNotes?: number;
+  totalResources?: number;
+}
+
+function parseSyncStats(lines: string[]): SyncStats {
+  const stats: SyncStats = {};
+  for (const line of lines) {
+    // Strip timestamp prefix like "14:51:27: "
+    const stripped = line.replace(/^\d{2}:\d{2}:\d{2}: /, '');
+    const match = stripped.match(/^(.+?):\s*(\d+)\s*$/);
+    if (match) {
+      const key = match[1].trim();
+      const value = parseInt(match[2], 10);
+      switch (key) {
+        case 'fetchingTotal':
+          stats.fetchingTotal = value;
+          break;
+        case 'fetchingProcessed':
+          stats.fetchingProcessed = value;
+          break;
+        case 'createLocal':
+          stats.createLocal = value;
+          break;
+        case 'updateLocal':
+          stats.updateLocal = value;
+          break;
+        case 'deleteLocal':
+          stats.deleteLocal = value;
+          break;
+        case 'createRemote':
+          stats.createRemote = value;
+          break;
+        case 'updateRemote':
+          stats.updateRemote = value;
+          break;
+        case 'deleteRemote':
+          stats.deleteRemote = value;
+          break;
+        case 'Total folders':
+          stats.totalFolders = value;
+          break;
+        case 'Total notes':
+          stats.totalNotes = value;
+          break;
+        case 'Total resources':
+          stats.totalResources = value;
+          break;
+      }
+    }
+  }
+  return stats;
+}
+
 /**
  * 指定プロファイルディレクトリを使って OneDrive 同期を実行する。
  *
  * @param profileDir Joplin プロファイルの絶対パス（例: ~/.config/joplin-desktop）
  */
-export async function runSync(profileDir: string): Promise<void> {
+export async function runSync(profileDir: string): Promise<SyncStats> {
   // --- 1. FsDriver のセットアップ（shimInit より前に必要）---
   const fsDriver = new FsDriverNode();
   Logger.fsDriver_ = fsDriver;
@@ -373,6 +436,13 @@ export async function runSync(profileDir: string): Promise<void> {
 
   // --- 10. 同期実行（Sidebar の「同期」ボタンと同じコードパス）---
   console.log('Starting OneDrive sync...');
+  const capturedLines: string[] = [];
+  const originalConsoleLog = console.log;
+  console.log = (...args: unknown[]) => {
+    const line = args.map(String).join(' ');
+    capturedLines.push(line);
+    originalConsoleLog(...args);
+  };
   try {
     await reg.scheduleSync(0);
   } catch (syncError: unknown) {
@@ -386,9 +456,15 @@ export async function runSync(profileDir: string): Promise<void> {
       );
     }
     throw syncError;
+  } finally {
+    console.log = originalConsoleLog;
   }
   console.log('Sync finished.');
 
+  const stats = parseSyncStats(capturedLines);
+
   // --- 11. 後処理 ---
   await reg.cancelTimers();
+
+  return stats;
 }
