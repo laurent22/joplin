@@ -49,10 +49,10 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 	public static override supportsShare(): boolean {
 		return true;
 	}
-
 	public async isAuthenticated() {
-    	return this.isAuthenticatedViaJoplinServerCompatibleSession();
+		return this.isAuthenticatedViaJoplinServerCompatibleSession();
 	}
+
 
 	public authRouteName() {
 		return 'JoplinCloudLogin';

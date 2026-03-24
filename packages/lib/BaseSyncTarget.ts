@@ -86,17 +86,17 @@ export default class BaseSyncTarget {
 	}
 
 	protected async isAuthenticatedViaJoplinServerCompatibleSession(): Promise<boolean> {
-    	try {
-        	const fileApi = await this.fileApi();
-        	const api = fileApi.driver().api();
-        	const sessionId = await api.sessionId();
-        	return !!sessionId;
-    	} catch (error: any) {
-        	if (error.code === 403) return false;
-        	throw error;
-    	}
+		try {
+			const fileApi = await this.fileApi();
+			const api = fileApi.driver().api();
+			const sessionId = await api.sessionId();
+			return !!sessionId;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		} catch (error: any) {
+			if (error.code === 403) return false;
+			throw error;
+		}
 	}
-
 	public authRouteName(): string {
 		return null;
 	}
