@@ -172,9 +172,10 @@ export default function Sidebar(props: Props) {
 				isSubSection={Setting.isSubSection(section.name)}
 				selected={selected}
 				disabled={disabled}
-				onClick={() => {
+				onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
+					event.preventDefault();
 					if (disabled) return;
-					props.onSelectionChange({ section: section });
+					props.onSelectionChange({ section });
 				}}
 				onKeyDown={(e: React.KeyboardEvent<HTMLAnchorElement>) => {
 					if ([' ', 'Enter'].includes(e.key)) {
