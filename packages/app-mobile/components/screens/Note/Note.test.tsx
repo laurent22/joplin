@@ -186,6 +186,17 @@ describe('screens/Note', () => {
 		unmount();
 	});
 
+	it('should render the note viewer when the note body is empty', async () => {
+		await openNewNote({ title: 'Test note (title)', body: '' });
+		render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Test note (title)');
+		expect(titleInput).toBeVisible();
+
+		const renderedNote = await getNoteViewerDom();
+		expect(renderedNote).toBeTruthy();
+	});
+
 	it('changing the note title input should update the note\'s title', async () => {
 		const noteId = await openNewNote({ title: 'Change me!', body: 'Unchanged body' });
 

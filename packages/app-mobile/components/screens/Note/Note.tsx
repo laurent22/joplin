@@ -1672,10 +1672,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			bodyComponent = renderPluginEditor();
 		} else {
 			if (this.state.mode === 'view') {
-				// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
-				// to avoid the HACK_webviewLoadingState related bug.
 				bodyComponent =
-					!note || !note.body.trim() ? null : (
+					!note ? null : (
 						<NoteBodyViewer
 							style={this.styles().noteBodyViewer}
 							// Extra bottom padding to make it possible to scroll past the
