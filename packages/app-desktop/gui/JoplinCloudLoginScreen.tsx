@@ -117,13 +117,13 @@ const JoplinCloudScreenComponent = (props: Props) => {
 };
 
 const mapStateToProps = (state: AppState, ownProps: { syncTargetId?: number }) => {
-    const syncTargetId = ownProps.syncTargetId ?? 10;
-    const isCloud = syncTargetId === 10;
-    return {
-        joplinCloudWebsite: isCloud ? state.settings['sync.10.website'] : state.settings['sync.9.path'],
-        joplinCloudApi: isCloud ? state.settings['sync.10.path'] : state.settings['sync.9.path'],
-        syncTargetId,
-    };
+	const syncTargetId = ownProps.syncTargetId ?? 10;
+	const isCloud = syncTargetId === 10;
+	return {
+		joplinCloudWebsite: isCloud ? state.settings['sync.10.website'] : state.settings['sync.9.path'],
+		joplinCloudApi: isCloud ? state.settings['sync.10.path'] : state.settings['sync.9.path'],
+		syncTargetId,
+	};
 };
 
 export default connect(mapStateToProps)(JoplinCloudScreenComponent);

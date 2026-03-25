@@ -69,18 +69,18 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	private async checkSyncConfig_() {
 		const ok = await shared.saveSettings(this);
 		if (!ok) return;
-    	const syncTarget = reg.syncTarget();
-    	const authRouteName = syncTarget.authRouteName();
-    	if (authRouteName) {
-        	const isAuthenticated = await syncTarget.isAuthenticated();
-        	if (!isAuthenticated) {
-            	return this.props.dispatch({
-                	type: 'NAV_GO',
-                	routeName: authRouteName,
-            	});
-        	}
-    	}
-    	await shared.checkSyncConfig(this, this.state.settings);
+		const syncTarget = reg.syncTarget();
+		const authRouteName = syncTarget.authRouteName();
+		if (authRouteName) {
+			const isAuthenticated = await syncTarget.isAuthenticated();
+			if (!isAuthenticated) {
+				return this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: authRouteName,
+				});
+			}
+		}
+		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
 	public UNSAFE_componentWillMount() {
@@ -271,23 +271,23 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				}
 
 				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer')) {
-    				const goToJoplinServerLogin = async () => {
-        				const ok = await shared.saveSettings(this);
-    					if (!ok) return;
-    					this.props.dispatch({
-        					type: 'NAV_GO',
-        					routeName: 'JoplinServerLogin',
-    					});
-    				};
-    				settingComps.push(
-        				<div key='connect_to_joplin_server_button' style={this.rowStyle_}>
-            				<Button
-                				title={_('Login with Joplin Server')}
-                				level={ButtonLevel.Primary}
-                				onClick={goToJoplinServerLogin}
-            				/>
-        				</div>,
-    				);
+					const goToJoplinServerLogin = async () => {
+						const ok = await shared.saveSettings(this);
+						if (!ok) return;
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'JoplinServerLogin',
+						});
+					};
+					settingComps.push(
+						<div key='connect_to_joplin_server_button' style={this.rowStyle_}>
+							<Button
+								title={_('Login with Joplin Server')}
+								level={ButtonLevel.Primary}
+								onClick={goToJoplinServerLogin}
+							/>
+						</div>,
+					);
 				}
 
 				if (settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml')) {
