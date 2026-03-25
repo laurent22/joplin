@@ -507,7 +507,24 @@ export default async function(request: Request, id: string = null, link: string 
 			allowedProtocolsForDownloadMediaFiles,
 		);
 
-		let note = await Note.save(extracted.note, extracted.saveOptions);
+		let noteToSave = extracted.note;
+		let saveOptions = extracted.saveOptions;
+
+		if (requestNote.target_note_id) {
+			const existingNote = await Note.load(requestNote.target_note_id);
+			if (existingNote) {
+				noteToSave = {
+					...existingNote,
+					body: (existingNote.body ? `${existingNote.body}\n\n` : '') + extracted.note.body,
+				};
+				saveOptions = {
+					...defaultSaveOptions('PUT', existingNote.id),
+					autoTimestamp: true,
+				};
+			}
+		}
+
+		let note = await Note.save(noteToSave, saveOptions);
 
 		if (requestNote.tags) {
 			const tagTitles = requestNote.tags.split(',');

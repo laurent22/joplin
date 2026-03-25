@@ -316,6 +316,10 @@ class Bridge {
 		return this.clipperApiExec('GET', 'folders', { as_tree: 1 });
 	}
 
+	async notes(folderId) {
+		return this.clipperApiExec('GET', 'notes', { parent_id: folderId, fields: 'id,title', order_by: 'title', order_dir: 'ASC', limit: 100 });
+	}
+
 	async storageSet(keys) {
 		return this.browser().storage.local.set(keys);
 	}

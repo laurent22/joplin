@@ -42,10 +42,16 @@ class PreviewComponent extends React.PureComponent {
 	}
 
 	render() {
-		return (
-			<div className="Preview">
+		const titleComp = !this.props.showTitle ? null : (
+			<React.Fragment>
 				<h2>Title:</h2>
 				<input className={'Title'} value={this.props.title} onChange={this.props.onTitleChange}/>
+			</React.Fragment>
+		);
+
+		return (
+			<div className="Preview">
+				{ titleComp }
 				<p><span>Type:</span> {commandUserString(this.props.command)}</p>
 				<a className={'Confirm Button'} href="#" onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
@@ -70,6 +76,7 @@ class AppComponent extends Component {
 			const content = { ...this.props.clippedContent };
 			content.tags = this.state.selectedTags.join(',');
 			content.parent_id = this.props.selectedFolderId;
+			if (this.props.selectedNoteId) content.target_note_id = this.props.selectedNoteId;
 			const response = await bridge().sendContentToJoplin(content);
 			this.setState({ newNoteId: response.id });
 		};
@@ -145,6 +152,13 @@ class AppComponent extends Component {
 		this.folderSelect_change = (event) => {
 			this.props.dispatch({
 				type: 'SELECTED_FOLDER_SET',
+				id: event.target.value,
+			});
+		};
+
+		this.noteSelect_change = (event) => {
+			this.props.dispatch({
+				type: 'SELECTED_NOTE_SET',
 				id: event.target.value,
 			});
 		};
@@ -305,6 +319,8 @@ class AppComponent extends Component {
 		const hasContent = !!this.props.clippedContent;
 		const content = this.props.clippedContent;
 
+		const showNotesComp = hasContent && content.source_command && content.source_command.name === 'selectedHtml';
+
 		let previewComponent = null;
 
 		const operation = this.props.contentUploadOperation;
@@ -334,6 +350,7 @@ class AppComponent extends Component {
 				body_html={content.body_html}
 				onTitleChange={this.contentTitle_change}
 				command={content.source_command}
+				showTitle={!this.props.selectedNoteId}
 			/>;
 		}
 
@@ -386,6 +403,25 @@ class AppComponent extends Component {
 				<div className="Folders">
 					<label>In notebook: </label>
 					<select value={this.props.selectedFolderId || ''} onChange={this.folderSelect_change}>
+						{ optionComps }
+					</select>
+				</div>
+			);
+		};
+
+		const notesComp = () => {
+			const optionComps = [];
+			optionComps.push(<option key="new" value="">--- New Note ---</option>);
+
+			for (let i = 0; i < this.props.notes.length; i++) {
+				const note = this.props.notes[i];
+				optionComps.push(<option key={note.id} value={note.id}>{note.title}</option>);
+			}
+
+			return (
+				<div className="Notes">
+					<label>To note: </label>
+					<select value={this.props.selectedNoteId || ''} onChange={this.noteSelect_change}>
 						{ optionComps }
 					</select>
 				</div>
@@ -460,6 +496,7 @@ class AppComponent extends Component {
 					</ul>
 				</div>
 				{ foldersComp() }
+				{ showNotesComp ? notesComp() : null }
 				<div className="Tags">
 					<label>Tags:</label>
 					{tagsComp()}
@@ -485,7 +522,9 @@ const mapStateToProps = (state) => {
 		clipperServer: state.clipperServer,
 		folders: state.folders,
 		tags: state.tags,
+		notes: state.notes,
 		selectedFolderId: state.selectedFolderId,
+		selectedNoteId: state.selectedNoteId,
 		isProbablyReaderable: state.isProbablyReaderable,
 		authStatus: state.authStatus,
 	};

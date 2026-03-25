@@ -18,7 +18,9 @@ const defaultState = {
 	},
 	folders: [],
 	tags: [],
+	notes: [],
 	selectedFolderId: null,
+	selectedNoteId: null,
 	env: 'prod',
 	isProbablyReaderable: true,
 	authStatus: 'starting',
@@ -28,8 +30,16 @@ const reduxMiddleware = store => next => async (action) => {
 	const result = next(action);
 	const newState = store.getState();
 
-	if (['SELECTED_FOLDER_SET'].indexOf(action.type) >= 0) {
-		bridge().scheduleStateSave(newState);
+	if (['SELECTED_FOLDER_SET', 'FOLDERS_SET'].indexOf(action.type) >= 0) {
+		if (['SELECTED_FOLDER_SET'].indexOf(action.type) >= 0) {
+			bridge().scheduleStateSave(newState);
+		}
+
+		const folderId = action.type === 'SELECTED_FOLDER_SET' ? action.id : newState.selectedFolderId;
+		if (folderId) {
+			const notes = await bridge().notes(folderId);
+			store.dispatch({ type: 'NOTES_SET', notes: notes.items || [] });
+		}
 	}
 
 	return result;
@@ -79,10 +89,21 @@ function reducer(state = defaultState, action) {
 		newState = { ...state };
 		newState.tags = action.tags;
 
+	} else if (action.type === 'NOTES_SET') {
+
+		newState = { ...state };
+		newState.notes = action.notes;
+		newState.selectedNoteId = null;
+
 	} else if (action.type === 'SELECTED_FOLDER_SET') {
 
 		newState = { ...state };
 		newState.selectedFolderId = action.id;
+
+	} else if (action.type === 'SELECTED_NOTE_SET') {
+
+		newState = { ...state };
+		newState.selectedNoteId = action.id;
 
 	} else if (action.type === 'CLIPPER_SERVER_SET') {
 
