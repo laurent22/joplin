@@ -283,6 +283,26 @@ describe('Synchronizer.basics', () => {
 		expect(conflictNote.id).not.toBe(note.id);
 	}));
 
+	it('should revert local changes to read-only folders', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		await synchronizerStart();
+		await Folder.save({
+			id: folder.id,
+			title: 'folder (changed)',
+			share_id: 'some-incorrect-share-id',
+		});
+		synchronizer().testingHooks_ = ['itemIsReadOnly'];
+		await synchronizerStart();
+		synchronizer().testingHooks_ = [];
+
+		const reloadedFolder = await Folder.load(folder.id);
+		expect(reloadedFolder.title).toBe('folder');
+		expect(reloadedFolder.share_id).toBe('');
+
+		// Should not have created a conflict
+		expect(await Folder.all()).toHaveLength(1);
+	}));
+
 	it('should allow duplicate folder titles', (async () => {
 		await Folder.save({ title: 'folder' });
 

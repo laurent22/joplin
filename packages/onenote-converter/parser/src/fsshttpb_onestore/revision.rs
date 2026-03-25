@@ -53,7 +53,7 @@ impl Revision {
 
         if let Some(rev) = revision_cache.get(&CellId(context_id, revision_manifest.rev_id)) {
             roots.extend(rev.roots.iter());
-            objects.extend(rev.objects.clone().into_iter());
+            objects.extend(rev.objects.clone());
 
             return Ok(base_rev);
         }
@@ -63,8 +63,7 @@ impl Revision {
                 .root_declare
                 .iter()
                 .map(|root| Ok((RevisionRole::parse(root.root_id)?, root.object_id)))
-                .collect::<Result<Vec<_>>>()?
-                .into_iter(),
+                .collect::<Result<Vec<_>>>()?,
         );
 
         for group_id in revision_manifest.group_references.iter() {

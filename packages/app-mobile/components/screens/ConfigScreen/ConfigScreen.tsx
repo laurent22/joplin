@@ -172,6 +172,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('ProfileSwitcher');
 	};
 
+	private noteResourcesButtonPress_ = () => {
+		void NavService.go('NoteResources');
+	};
+
 	private fixSearchEngineIndexButtonPress_ = async () => {
 		this.setState({ fixingSearchIndex: true });
 		await SearchEngine.instance().rebuildIndex();
@@ -582,6 +586,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (section.name === 'tools') {
 			addSettingButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_);
+			addSettingButton('note_resources_button', _('Note attachments'), this.noteResourcesButtonPress_);
 			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
 			addSettingButton('log_button', _('Log'), this.logButtonPress_);
 			addSettingButton('deletion_log_button', _('Deletion log'), this.deletionLogButtonPress_);
@@ -834,6 +839,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				placeholder={_('Search...')}
 				onChangeText={this.onSearchUpdate_}
 				autoFocus={true}
+				autoCapitalize='none'
+				autoComplete='off'
+				autoCorrect={false}
 			/>;
 
 			currentSection = (

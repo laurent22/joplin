@@ -277,8 +277,52 @@ export default class PromptDialog extends React.Component<Props, any> {
 				style={styles.dateTimeInput}
 			/>;
 		} else if (this.props.inputType === 'tags') {
+			const uniqueAutocomplete = [];
+			const seenLabels = new Set();
+			const autocompleteOptions = this.props.autocomplete || [];
+			for (const option of autocompleteOptions) {
+				const key = (option.label || '').trim().normalize('NFC').toLowerCase();
+				if (!seenLabels.has(key)) {
+					uniqueAutocomplete.push(option);
+					seenLabels.add(key);
+				}
+			}
+
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			inputComp = <CreatableSelect className="tag-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated() as any} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
+			inputComp = <CreatableSelect
+				className="tag-selector"
+				onMenuOpen={this.select_menuOpen}
+				onMenuClose={this.select_menuClose}
+				styles={styles.select}
+				theme={styles.selectTheme}
+				ref={this.answerInput_}
+				value={this.state.answer}
+				placeholder=""
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				components={makeAnimated() as any}
+				isMulti={true}
+				isClearable={false}
+				backspaceRemovesValue={true}
+				options={uniqueAutocomplete}
+				onChange={onSelectChange}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				onKeyDown={(event: any) => onKeyDown(event)}
+				filterOption={(option, rawInput) => {
+					const input = (rawInput || '').trim().normalize('NFC').toLowerCase();
+					const label = (option.label || '').trim().normalize('NFC').toLowerCase();
+					return label.includes(input);
+				}}
+				isValidNewOption={(inputValue, _selectValue, selectOptions) => {
+					const input = (inputValue || '').trim().normalize('NFC').toLowerCase();
+					if (!input) return false;
+
+					// If it matches an existing option (case-insensitive + normalized), it's not a valid "new" option
+					const exists = selectOptions.some(option => {
+						return (option.label || '').trim().normalize('NFC').toLowerCase() === input;
+					});
+					return !exists;
+				}}
+			/>;
 		} else if (this.props.inputType === 'dropdown') {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated() as any} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;

@@ -47,7 +47,7 @@ impl<'a> Renderer<'a> {
                 attrs.set("style", styles.to_string());
             }
 
-            content.push_str(&format!("<img {} />", attrs.to_string()));
+            content.push_str(&format!("<img {} />", attrs));
         }
 
         Ok(self.render_with_note_tags(image.note_tags(), content))

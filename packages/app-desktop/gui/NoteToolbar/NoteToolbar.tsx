@@ -12,8 +12,7 @@ import { AppState } from '../../app.reducer';
 
 interface NoteToolbarProps {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
+	style: React.CSSProperties;
 	toolbarButtonInfos: ToolbarItem[];
 	disabled: boolean;
 }

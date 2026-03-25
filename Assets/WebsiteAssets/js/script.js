@@ -145,7 +145,7 @@ function setupLocaleRedirect() {
 	if (!isRootPage) return;
 
 	// Check if user has explicitly chosen to stay on current locale
-	const localePreference = localStorage.getItem('joplin-locale-preference');
+	const localePreference = (localStorage.getItem('joplin-locale-preference') || '').toLowerCase();
 	if (localePreference === 'en') return;
 
 	// Get user's preferred language from browser
@@ -160,9 +160,10 @@ function setupLocaleRedirect() {
 	window.location.href = getLocalePath(langCode) + '/';
 }
 
-// Allow users to switch back to English and remember their preference
-function setLocalePreference(locale) {
+// Allow users to switch language and remember their preference
+function setLocalePreference(locale, url) {
 	localStorage.setItem('joplin-locale-preference', locale);
+	window.location.href = url;
 }
 
 // Expose globally for language switcher links

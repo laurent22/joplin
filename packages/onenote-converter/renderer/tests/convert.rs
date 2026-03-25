@@ -93,12 +93,7 @@ fn convert_page_versions() {
     // Should create a table of contents file
     assert!(output_dir.join("Page versions.html").exists());
     // Should convert the input page to an HTML file
-    assert!(
-        output_dir
-            .join("Page versions")
-            .join("Test!.html")
-            .exists()
-    );
+    assert!(output_dir.join("Page versions").join("Test!.html").exists());
 }
 
 #[test]

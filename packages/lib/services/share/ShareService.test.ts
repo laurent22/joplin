@@ -323,6 +323,10 @@ describe('ShareService', () => {
 		// in tests.
 		const previousLogLevel = Logger.globalLogger.setLevel(LogLevel.Error);
 
+		// checkShareConsistency only runs when the sync target supports
+		// sharing (Joplin Server/Cloud).
+		Setting.setValue('sync.target', 9);
+
 		const service = testShareFolderService({
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			'GET api/shares': async (_query: Record<string, any>, _body: any): Promise<any> => {
@@ -338,6 +342,31 @@ describe('ShareService', () => {
 		expect(await Folder.load(folder.id)).toBeFalsy();
 
 		Logger.globalLogger.setLevel(previousLogLevel);
+	});
+
+	it('should skip share consistency check when not using a share-compatible sync target', async () => {
+		// Simulate a non-Joplin Server sync target (e.g. WebDAV = 6).
+		// This reproduces the scenario where a user previously used Joplin
+		// Server (which set share_id on folders), then switched to WebDAV.
+		// checkShareConsistency() should not attempt to call the Joplin
+		// Server API since we are no longer on a share-capable sync target.
+		Setting.setValue('sync.target', 6);
+
+		const service = mockShareService({
+			onExec: async () => {
+				throw new Error('Should not call the API when share is not enabled');
+			},
+		});
+
+		// Create a folder with a stale share_id leftover from Joplin Server
+		const folder = await Folder.save({ share_id: 'stale_share_id' });
+
+		// This should not throw or attempt any API calls
+		await service.checkShareConsistency();
+
+		// The folder should still exist since we cannot verify shares
+		// without a Joplin Server API connection
+		expect(await Folder.load(folder.id)).toBeTruthy();
 	});
 
 	it('should leave a shared folder', async () => {
