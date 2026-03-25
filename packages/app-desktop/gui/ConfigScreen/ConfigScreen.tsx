@@ -508,7 +508,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = !isSearchActive && selectedSection?.isScreen && this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = !isSearchActive && selectedSection?.isScreen && this.state.screenName ? (
+			<div
+				className='config-screen-content-wrapper'
+				style={{ overflow: 'scroll', flex: 1 }}
+			>{this.screenFromName(this.state.screenName)}</div>
+		) : null;
 
 		if (screenComp) containerStyle.display = 'none';
 
@@ -547,7 +552,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				<>
 					{screenComp}
 					<div style={containerStyle}>
-						<div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+						<div className='config-screen-column'>
 							{settingComps}
 						</div>
 					</div>
@@ -570,8 +575,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const noResultsComp = !screenComp && isSearchActive && !filteredSections.length ? (
 			<div style={containerStyle}>
-				<div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-					<div style={{ ...theme.textStyle, maxWidth: 640 }}>
+				<div className='config-screen-column'>
+					<div className='config-screen-no-results-text' style={theme.textStyle}>
 						{_('No settings match your search.')}
 					</div>
 				</div>
