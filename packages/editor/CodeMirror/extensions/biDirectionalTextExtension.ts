@@ -1,8 +1,50 @@
 import { Extension, RangeSetBuilder } from '@codemirror/state';
-import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
+import { Decoration, DecorationSet, Direction, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
 
 const autoTextDirectionDecoration = Decoration.line({
 	attributes: { dir: 'auto' },
+});
+const bidiIsolateOpenerRegex = /[\u2066-\u2068]/g;
+
+const bidiIsolateDirections: Record<number, Direction | null> = {
+	0x2066: Direction.LTR,
+	0x2067: Direction.RTL,
+	0x2068: null,
+};
+
+class BidiIsolatePlugin {
+	public isolatedRanges: DecorationSet;
+
+	public constructor(view: EditorView) {
+		this.isolatedRanges = this.buildRanges(view);
+	}
+
+	public update(update: ViewUpdate) {
+		if (update.docChanged || update.viewportChanged) {
+			this.isolatedRanges = this.buildRanges(update.view);
+		}
+	}
+
+	private buildRanges(view: EditorView): DecorationSet {
+		const builder = new RangeSetBuilder<Decoration>();
+		for (const { from, to } of view.visibleRanges) {
+			const text = view.state.doc.sliceString(from, to);
+			bidiIsolateOpenerRegex.lastIndex = 0;
+			let match;
+			while ((match = bidiIsolateOpenerRegex.exec(text)) !== null) {
+				const pos = from + match.index;
+				const codePoint = match[0].codePointAt(0)!;
+				builder.add(pos, pos + 1, Decoration.mark({ bidiIsolate: bidiIsolateDirections[codePoint] }));
+			}
+		}
+		return builder.finish();
+	}
+}
+
+const bidiIsolatePlugin = ViewPlugin.fromClass(BidiIsolatePlugin, {
+	provide: plugin => EditorView.bidiIsolatedRanges.of(
+		(view: EditorView) => view.plugin(plugin)?.isolatedRanges ?? Decoration.none,
+	),
 });
 
 const biDirectionalTextExtension: Extension = [
@@ -35,6 +77,7 @@ const biDirectionalTextExtension: Extension = [
 			return builder.finish();
 		}
 	}, { decorations: v => v.decorations }),
+	bidiIsolatePlugin,
 ];
 
 export default biDirectionalTextExtension;

@@ -264,7 +264,13 @@ const createEditor = (
 				}),
 				ctrlClickCheckboxExtension(),
 
-				highlightSpecialChars(),
+				// Exclude U+2066, U+2067, U+2069 (bidi isolate controls) from special-char
+				// highlighting — they are handled by biDirectionalTextExtension instead.
+				// This is the CodeMirror default Specials regex minus those three code points.
+				highlightSpecialChars({
+					// eslint-disable-next-line no-control-regex
+					specialChars: /[\u0000-\u0008\u000a-\u001f\u007f-\u009f\u00ad\u061c\u200b\u200e\u200f\u2028\u2029\u202d\u202e\ufeff\ufff9-\ufffc]/g,
+				}),
 				indentOnInput(),
 
 				EditorView.domEventHandlers({
