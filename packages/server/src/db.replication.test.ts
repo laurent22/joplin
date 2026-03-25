@@ -25,7 +25,7 @@ let testIndex = 0;
 const beforeTest = async (envValues: Record<string, string> = null) => {
 	// Use `beforeAllDb` in `beforeEach` to ensure each test has its own database.
 	// To work around file locking issues on Windows, each test needs its own database instance:
-	const databaseKey = `db.migrations.${testIndex ++}`;
+	const databaseKey = `db.replication.${testIndex ++}`;
 	await beforeAllDb(databaseKey, envValues ? { envValues } : null);
 	await beforeEachDb();
 };
