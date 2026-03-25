@@ -56,6 +56,20 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	useEffect(() => {
 		// JSDOM polyfills
 		dom.window.eval(`
+			(function() {
+				const scrollNoop = () => {};
+				window.__joplinJestPolyfillScroll = (win) => {
+					if (!win) return;
+					for (const Ctor of [win.Element, win.HTMLElement, win.SVGElement]) {
+						if (!Ctor || !Ctor.prototype) continue;
+						Ctor.prototype.scrollIntoView = scrollNoop;
+						if (!Ctor.prototype.scrollTo) Ctor.prototype.scrollTo = scrollNoop;
+						if (!Ctor.prototype.scrollBy) Ctor.prototype.scrollBy = scrollNoop;
+					}
+				};
+				window.__joplinJestPolyfillScroll(window);
+			})();
+
 			window.scrollBy = (_amount) => { };
 
 			// JSDOM iframes are missing certain functionality required by Joplin,
@@ -64,6 +78,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			//   Joplin uses this to determine the source of messages in iframe-related IPC.
 			// - iframe.srcdoc: Used by Joplin to create plugin windows.
 			const polyfillIframeContentWindow = (contentWindow) => {
+				window.__joplinJestPolyfillScroll(contentWindow);
 				contentWindow.addEventListener('message', event => {
 					// Work around a missing ".source" property on events.
 					// See https://github.com/jsdom/jsdom/issues/2745#issuecomment-1207414024

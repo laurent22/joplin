@@ -753,6 +753,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	public componentWillUnmount() {
+		if (this.focusUpdateIID_) {
+			shim.clearInterval(this.focusUpdateIID_);
+			this.focusUpdateIID_ = null;
+		}
+
 		BackButtonService.removeHandler(this.backHandler);
 		NavService.removeHandler(this.navHandler);
 
