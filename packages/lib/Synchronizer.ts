@@ -1116,6 +1116,11 @@ export default class Synchronizer {
 									sourceDescription: 'sync: deleteLocal',
 								},
 							);
+
+							// If there's a pending deleted_items entry for this item
+							// (e.g., from the local revision cleaner), remove it since
+							// the remote deletion has already been done by another client.
+							await BaseItem.remoteDeletedItem(syncTargetId, local.id);
 						}
 					}
 
@@ -1168,6 +1173,10 @@ export default class Synchronizer {
 							sourceDescription: 'Sync',
 						};
 						await Folder.delete(folderId, deletionOptions);
+
+						// Clear any pending deleted_items entry, since the
+						// remote deletion has already been done.
+						await BaseItem.remoteDeletedItem(syncTargetId, folderId);
 					}
 				}
 
