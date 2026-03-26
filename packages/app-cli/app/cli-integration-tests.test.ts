@@ -246,6 +246,26 @@ describe('cli-integration-tests', () => {
 		expect(r.indexOf('subl') >= 0).toBe(true);
 	});
 
+
+	it('should support \'use /\' to return to root', async () => {
+		await execCommand(client, 'mkbook nb1');
+		await execCommand(client, 'mknote n1');
+		await execCommand(client, 'mkbook nb2');
+
+		// Switch to nb1 and verify we see its notes
+		await execCommand(client, 'use nb1');
+		const lsInNb1 = await execCommand(client, 'ls');
+		expect(lsInNb1).toContain('n1');
+
+		// Return to root
+		await execCommand(client, 'use /');
+
+		// ls / should list all notebooks
+		const lsRoot = await execCommand(client, 'ls /');
+		expect(lsRoot).toContain('nb1');
+		expect(lsRoot).toContain('nb2');
+	});
+
 	it('should support copying folders with cp', async () => {
 		await execCommand(client, 'mkbook nb2');
 		await execCommand(client, 'mkbook nb1');

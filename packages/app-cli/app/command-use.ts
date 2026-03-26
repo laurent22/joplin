@@ -19,6 +19,11 @@ class Command extends BaseCommand {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
+		if (args['notebook'] === '/') {
+			app().switchCurrentFolder(null);
+			return;
+		}
+
 		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
 		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 

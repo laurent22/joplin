@@ -168,7 +168,7 @@ export default class BaseApplication {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public switchCurrentFolder(folder: any) {
 		if (!this.hasGui()) {
-			this.currentFolder_ = { ...folder };
+			this.currentFolder_ = folder ? { ...folder } : null;
 			Setting.setValue('activeFolderId', folder ? folder.id : '');
 		} else {
 			this.dispatch({
