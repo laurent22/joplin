@@ -6,7 +6,7 @@ import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -39,7 +39,7 @@ class Command extends BaseCommand {
 			const title = args['note'];
 
 			if (!app().currentFolder()) throw new Error(_('No active notebook.'));
-			let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
+			let note = await app().loadItem(ModelType.Note, title);
 
 			this.encryptionCheck(note);
 

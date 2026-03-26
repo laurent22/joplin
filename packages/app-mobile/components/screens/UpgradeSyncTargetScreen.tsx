@@ -6,9 +6,13 @@ import { View, Text, ScrollView, TextStyle } from 'react-native';
 const { connect } = require('react-redux');
 import { themeStyle } from '../global-style';
 import ScreenHeader from '../ScreenHeader';
+import { AppState } from '../../utils/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function UpgradeSyncTargetScreen(props: any) {
+interface Props {
+	themeId: number;
+}
+
+function UpgradeSyncTargetScreen(props: Props) {
 	const upgradeResult = useSyncTargetUpgrade();
 
 	const theme = themeStyle(props.themeId);
@@ -66,8 +70,7 @@ function UpgradeSyncTargetScreen(props: any) {
 	);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default connect((state: any) => {
+export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};

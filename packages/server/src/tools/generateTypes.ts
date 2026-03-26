@@ -54,6 +54,7 @@ const propertyTypes: Record<string, string> = {
 	'events.created_time': 'number',
 	'events.type': 'EventType',
 	'items.content': 'Buffer',
+	'files.content': 'Buffer',
 	'items.jop_updated_time': 'number',
 	'notifications.level': 'NotificationLevel',
 	'share_users.status': 'ShareUserStatus',

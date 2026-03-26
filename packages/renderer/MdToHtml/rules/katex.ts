@@ -290,8 +290,7 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const cache_: any = {};
+const cache_: Record<string, string> = {};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function renderToStringWithCache(latex: string, katexOptions: any) {

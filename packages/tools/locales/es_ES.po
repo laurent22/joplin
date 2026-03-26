@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
@@ -5301,7 +5301,7 @@ msgstr "Restaurar valores predeterminados"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreNote.ts:10
 msgid "Restore note"
-msgstr "Notas Restauradas"
+msgstr "Restaurar nota"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/restoreFolder.ts:9
 msgid "Restore notebook"
@@ -5343,11 +5343,11 @@ msgstr "Mostrar archivo en carpeta"
 #: packages/lib/models/settings/builtInMetadata.ts:825
 #: packages/lib/models/settings/builtInMetadata.ts:906
 msgid "Reverse sort order"
-msgstr "Invertir el orden"
+msgstr "Orden de clasificación inverso"
 
 #: packages/app-cli/app/command-ls.ts:30
 msgid "Reverses the sorting order."
-msgstr "Invierte el orden."
+msgstr "Invierte el orden de clasificación."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:213
 msgid "Revision:"
@@ -5476,7 +5476,7 @@ msgstr "Buscar plugins..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:237
 msgid "Search for..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:191
 msgid "Search hidden"
@@ -5496,7 +5496,7 @@ msgstr "Resultados de la búsqueda"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:191
 msgid "Search shown"
-msgstr "Se muestra la búsqueda"
+msgstr "Búsqueda mostrada"
 
 #: packages/app-mobile/components/screens/tags.tsx:234
 #: packages/app-mobile/components/TagEditor.tsx:289
@@ -5521,11 +5521,11 @@ msgstr "Busca el <patern> dado en todas las notas."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:39
 msgid "See changelog"
-msgstr "Historial de cambios"
+msgstr "Ver el registro de cambios"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1384
 msgid "See the pre-release page for more details: %s"
-msgstr "Ver la página de prelanzamientos para más detalles: %s"
+msgstr "Consulte la página de prelanzamiento para obtener más detalles: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:207
 #: packages/app-mobile/components/NoteItem.tsx:152
@@ -5613,8 +5613,8 @@ msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
 msgstr ""
-"Establézcalo como 0 para que ocupe todo el espacio disponible. El ancho "
-"recomendado es de 600."
+"Estableczca el valor en 0 para que ocupe todo el espacio disponible. El "
+"ancho recomendado es 600."
 
 #: packages/app-desktop/gui/MainScreen.tsx:531
 #: packages/app-desktop/gui/MainScreen.tsx:578
@@ -5654,12 +5654,12 @@ msgstr ""
 
 #: packages/lib/utils/joplinCloud/index.ts:134
 msgid "Share a notebook with others"
-msgstr "Compartir una libreta con otros usuarios"
+msgstr "Compartir una libreta con otras personas"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:82
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:33
 msgid "Share from %s (%s)"
-msgstr "Compartir de %s (%s)"
+msgstr "Compartido por %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
 msgid "Share Notebook"
@@ -5847,11 +5847,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:98
 msgid "Sort \"%s\" in ascending order"
-msgstr "Ordene \"%s\" en orden ascendente"
+msgstr "Ordenar \"%s\" en orden ascendente"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:98
 msgid "Sort \"%s\" in descending order"
-msgstr "Ordene \"%s\" en orden descendente"
+msgstr "Ordenar \"%s\" en orden descendente"
 
 #: packages/lib/models/settings/builtInMetadata.ts:893
 msgid "Sort notebooks by"
@@ -6968,7 +6968,7 @@ msgstr "Alternar edición externa"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.ts:7
 msgid "Toggle menu bar"
-msgstr "Alternar la barra lateral"
+msgstr "Alternar barra de menú"
 
 #: packages/lib/models/Setting.ts:1396
 msgid "Toggle note history, keep notes for"
@@ -6992,7 +6992,7 @@ msgstr "Alternar modo seguro"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.ts:10
 msgid "Toggle sidebar"
-msgstr "Alternar la barra lateral"
+msgstr "Alternar barra lateral"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderField.ts:7
 msgid "Toggle sort order field"

@@ -78,8 +78,7 @@ type StartupTask = { label: string; task: ()=> void|Promise<void> };
 
 class Application extends BaseApplication {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private checkAllPluginStartedIID_: any = null;
+	private checkAllPluginStartedIID_: ReturnType<typeof setInterval> = null;
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
 	private protocolHandler_: CustomContentProtocolHandler;
@@ -733,23 +732,6 @@ class Application extends BaseApplication {
 					});
 				}
 			});
-
-			// Trigger an immediate sync when the main window gains OS-level focus (i.e. the user
-			// switches back to Joplin from another application) or when the system wakes from sleep.
-			// A 30-second cool-down prevents duplicate syncs during rapid focus-in/focus-out cycles.
-			const minResumeSyncIntervalMs = 30_000;
-			let lastFocusSyncTime = 0;
-
-			const scheduleResumeSync = () => {
-				const now = Date.now();
-				if (now - lastFocusSyncTime > minResumeSyncIntervalMs) {
-					lastFocusSyncTime = now;
-					void reg.scheduleSync(0);
-				}
-			};
-
-			ipcRenderer.on('main-window-focused', scheduleResumeSync);
-			ipcRenderer.on('system-resumed', scheduleResumeSync);
 		});
 
 		addTask('app/initPluginService', () => this.initPluginService());

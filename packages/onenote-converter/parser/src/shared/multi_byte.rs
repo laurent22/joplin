@@ -24,7 +24,7 @@ fn decode(input: &[u8]) -> Vec<u64> {
     let mut output = vec![];
 
     // Decode the multi-byte data length
-    let (length, offset) = decode_uint(&input);
+    let (length, offset) = decode_uint(input);
 
     // The length is actually a signed value so we need to remove the sign bit
     // (see also `decode_signed`). This may not be the case for unsigned multi-byte blobs
