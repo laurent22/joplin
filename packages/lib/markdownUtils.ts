@@ -11,7 +11,7 @@ const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)$/;
 export enum MarkdownTableJustify {
 	Left = 'left',
 	Center = 'center',
-	Right = 'right,',
+	Right = 'right',
 }
 
 export interface MarkdownTableHeader {

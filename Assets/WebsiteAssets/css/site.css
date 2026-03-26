@@ -1351,11 +1351,7 @@ footer .bottom-links-row p {
  ENGLISH VERSION
 *****************************************************************/
 
-:lang(en-gb) #made-in-france-section {
-	display: none;
-}
-
-:lang(en-gb) .top-section-img-cn {
+:not(:lang(zh-cn)) .top-section-img-cn {
 	display: none;
 }
 

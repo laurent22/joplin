@@ -1,6 +1,6 @@
 import { notesSortOrderNextField, setNotesSortOrder } from './notesSortOrderUtils';
-import Setting from '@joplin/lib/models/Setting';
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
+import Setting from '../../models/Setting';
+const { shimInit } = require('../../shim-init-node.js');
 
 describe('notesSortOrderUtils', () => {
 

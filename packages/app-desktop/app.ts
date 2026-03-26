@@ -43,7 +43,7 @@ const electronContextMenu = require('./services/electron-context-menu');
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
 
-import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
@@ -78,8 +78,7 @@ type StartupTask = { label: string; task: ()=> void|Promise<void> };
 
 class Application extends BaseApplication {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private checkAllPluginStartedIID_: any = null;
+	private checkAllPluginStartedIID_: ReturnType<typeof setInterval> = null;
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
 	private protocolHandler_: CustomContentProtocolHandler;
@@ -640,16 +639,19 @@ class Application extends BaseApplication {
 				void AlarmService.updateAllNotifications();
 				RevisionService.instance().runInBackground();
 			} else {
-				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-				void reg.scheduleSync(1000).then(() => {
-					// Wait for the first sync before updating the notifications, since synchronisation
-					// might change the notifications.
-					void AlarmService.updateAllNotifications();
+				setTimeout(() => {
+					// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+					void reg.scheduleSync(0).then(() => {
+						// Wait for the first sync before updating the notifications, since synchronisation
+						// might change the notifications.
+						void AlarmService.updateAllNotifications();
 
-					void DecryptionWorker.instance().scheduleStart();
+						void DecryptionWorker.instance().scheduleStart();
 
-					RevisionService.instance().runInBackground();
-				});
+						RevisionService.instance().runInBackground();
+					});
+				}, 1000);
 			}
 
 			this.startRotatingLogMaintenance(Setting.value('profileDir'));

@@ -13,6 +13,7 @@ import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { _ } from '@joplin/lib/locale';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Dialog from '@joplin/lib/components/Dialog';
+import useKeyboardState from '../utils/hooks/useKeyboardState';
 
 type OnClose = ()=> void;
 type OnShow = ()=> void;
@@ -42,8 +43,16 @@ export interface ModalElementProps {
 }
 
 const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {
-	const safeAreaPadding = useSafeAreaPadding();
+	const safeArea = useSafeAreaPadding();
+	const keyboardState = useKeyboardState();
 	return useMemo(() => {
+		const safeAreaPadding = {
+			paddingRight: safeArea.paddingRight,
+			paddingLeft: safeArea.paddingLeft,
+			paddingTop: safeArea.paddingTop,
+			paddingBottom: keyboardState.keyboardVisible ? 0 : safeArea.paddingBottom,
+		};
+
 		// On Android, the top-level container seems to need to be absolutely positioned
 		// to prevent it from being larger than the screen size:
 		const absoluteFill = {
@@ -90,7 +99,7 @@ const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) =>
 				zIndex: -1,
 			},
 		});
-	}, [hasScrollView, safeAreaPadding, backgroundColor]);
+	}, [hasScrollView, safeArea, keyboardState, backgroundColor]);
 };
 
 const useBackgroundTouchListeners = (onRequestClose: OnClose|null, backdropRef: RefObject<View>) => {

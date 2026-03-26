@@ -103,6 +103,7 @@ packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
 packages/app-cli/app/command-cat.js
+packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
 packages/app-cli/app/command-cp.js
 packages/app-cli/app/command-done.test.js
@@ -218,6 +219,8 @@ packages/app-desktop/gui/EditFolderDialog/Dialog.js
 packages/app-desktop/gui/EditFolderDialog/IconSelector.js
 packages/app-desktop/gui/EmojiBox.js
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js
+packages/app-desktop/gui/EncryptionConfigScreen/enableFlow.test.js
+packages/app-desktop/gui/EncryptionConfigScreen/enableFlow.js
 packages/app-desktop/gui/ErrorBoundary.js
 packages/app-desktop/gui/ExtensionBadge.js
 packages/app-desktop/gui/FolderIconBox.js
@@ -271,6 +274,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/Editor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/useEditorCommands.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useContentScriptRegistration.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useEditorSettings.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useKeymap.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useRefocusOnVisiblePaneChange.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useSyncEditorValue.js
@@ -303,6 +307,7 @@ packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.js
 packages/app-desktop/gui/NoteEditor/commands/index.js
+packages/app-desktop/gui/NoteEditor/commands/pasteAsMarkdown.js
 packages/app-desktop/gui/NoteEditor/commands/pasteAsText.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js
@@ -340,9 +345,11 @@ packages/app-desktop/gui/NoteEditor/utils/useWindowCommandHandler.js
 packages/app-desktop/gui/NoteList/NoteList2.js
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
+packages/app-desktop/gui/NoteList/utils/UseAutoScroll.test.js
 packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.js
 packages/app-desktop/gui/NoteList/utils/types.js
 packages/app-desktop/gui/NoteList/utils/useActiveDescendantId.js
+packages/app-desktop/gui/NoteList/utils/useAutoScroll.js
 packages/app-desktop/gui/NoteList/utils/useDragAndDrop.js
 packages/app-desktop/gui/NoteList/utils/useFocusNote.js
 packages/app-desktop/gui/NoteList/utils/useFocusVisible.js
@@ -351,6 +358,8 @@ packages/app-desktop/gui/NoteList/utils/useMoveNote.js
 packages/app-desktop/gui/NoteList/utils/useOnKeyDown.js
 packages/app-desktop/gui/NoteList/utils/useOnNoteClick.js
 packages/app-desktop/gui/NoteList/utils/useOnNoteDoubleClick.js
+packages/app-desktop/gui/NoteList/utils/useRefocusOnDeletion.test.js
+packages/app-desktop/gui/NoteList/utils/useRefocusOnDeletion.js
 packages/app-desktop/gui/NoteList/utils/useScroll.js
 packages/app-desktop/gui/NoteList/utils/useVisibleRange.test.js
 packages/app-desktop/gui/NoteList/utils/useVisibleRange.js
@@ -372,8 +381,8 @@ packages/app-desktop/gui/NoteListItem/utils/getNoteTitleHtml.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.test.js
 packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.js
 packages/app-desktop/gui/NoteListItem/utils/types.js
+packages/app-desktop/gui/NoteListItem/utils/useItemElement.test.js
 packages/app-desktop/gui/NoteListItem/utils/useItemElement.js
-packages/app-desktop/gui/NoteListItem/utils/useItemEventHandlers.js
 packages/app-desktop/gui/NoteListItem/utils/useOnContextMenu.js
 packages/app-desktop/gui/NoteListItem/utils/useRenderedNote.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.test.js
@@ -559,6 +568,7 @@ packages/app-desktop/integration-tests/models/NoteEditorScreen.js
 packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
+packages/app-desktop/integration-tests/multiWindow.spec.js
 packages/app-desktop/integration-tests/noteList.spec.js
 packages/app-desktop/integration-tests/pluginApi.spec.js
 packages/app-desktop/integration-tests/resizableLayout.spec.js
@@ -580,6 +590,7 @@ packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
 packages/app-desktop/integration-tests/util/setSettingValue.js
 packages/app-desktop/integration-tests/util/test.js
 packages/app-desktop/integration-tests/util/waitForNextOpenPath.js
+packages/app-desktop/integration-tests/util/waitForNextWindowMatching.js
 packages/app-desktop/integration-tests/wcag.spec.js
 packages/app-desktop/main-html.js
 packages/app-desktop/main.js
@@ -608,10 +619,6 @@ packages/app-desktop/services/plugins/hooks/useViewIsReady.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
 packages/app-desktop/services/plugins/types.js
 packages/app-desktop/services/restart.js
-packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
-packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
-packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
-packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/bundleJs.js
 packages/app-desktop/tools/copy7Zip.js
@@ -647,6 +654,7 @@ packages/app-mobile/commands/newNote.js
 packages/app-mobile/commands/openItem.js
 packages/app-mobile/commands/openNote.js
 packages/app-mobile/commands/scrollToHash.js
+packages/app-mobile/commands/util/goToFolder.js
 packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BetaChip.js
@@ -864,6 +872,7 @@ packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.js
 packages/app-mobile/components/screens/Notes/Notes.js
 packages/app-mobile/components/screens/Notes/TextWrapCalculator.js
+packages/app-mobile/components/screens/ResourceScreen.js
 packages/app-mobile/components/screens/SearchScreen/SearchBar.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.test.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.js
@@ -880,6 +889,8 @@ packages/app-mobile/components/screens/dropbox-login.js
 packages/app-mobile/components/screens/encryption-config.test.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/folder.js
+packages/app-mobile/components/screens/resourceScreenUtils.test.js
+packages/app-mobile/components/screens/resourceScreenUtils.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
 packages/app-mobile/components/side-menu-content.js
@@ -902,6 +913,7 @@ packages/app-mobile/contentScripts/markdownEditorBundle/useWebViewSetup.js
 packages/app-mobile/contentScripts/markdownEditorBundle/utils/useCodeMirrorPlugins.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.test.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/Renderer.js
+packages/app-mobile/contentScripts/rendererBundle/contentScript/index.handleAnchorClick.test.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/index.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/types.js
 packages/app-mobile/contentScripts/rendererBundle/contentScript/utils/addPluginAssets.js
@@ -1520,6 +1532,7 @@ packages/lib/services/interop/InteropService_Importer_Md.test.js
 packages/lib/services/interop/InteropService_Importer_Md.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
+packages/lib/services/interop/InteropService_Importer_OneNote.postprocessHtml.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.js
 packages/lib/services/interop/InteropService_Importer_Raw.test.js
@@ -1575,6 +1588,7 @@ packages/lib/services/plugins/api/JoplinCommands.js
 packages/lib/services/plugins/api/JoplinContentScripts.js
 packages/lib/services/plugins/api/JoplinData.js
 packages/lib/services/plugins/api/JoplinFilters.js
+packages/lib/services/plugins/api/JoplinFs.js
 packages/lib/services/plugins/api/JoplinImaging.js
 packages/lib/services/plugins/api/JoplinInterop.js
 packages/lib/services/plugins/api/JoplinPlugins.js
@@ -1673,6 +1687,10 @@ packages/lib/services/share/ShareService.test.js
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/invitationRespond.js
 packages/lib/services/share/reducer.js
+packages/lib/services/sortOrder/PerFolderSortOrderService.test.js
+packages/lib/services/sortOrder/PerFolderSortOrderService.js
+packages/lib/services/sortOrder/notesSortOrderUtils.test.js
+packages/lib/services/sortOrder/notesSortOrderUtils.js
 packages/lib/services/spellChecker/SpellCheckerService.js
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.js
 packages/lib/services/style/cssToTheme.test.js

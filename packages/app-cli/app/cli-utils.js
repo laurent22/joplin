@@ -31,9 +31,14 @@ cliUtils.printArray = function(logFunction, rows) {
 		const line = [];
 		for (let col = 0; col < colWidths.length; col++) {
 			const item = rows[row][col];
-			const width = colWidths[col];
-			const dir = colAligns[col] === ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
-			line.push(stringPadding(item, width, ' ', dir));
+			const isLastCol = col === colWidths.length - 1;
+			if (isLastCol) {
+				line.push(item ? item.toString() : '');
+			} else {
+				const width = colWidths[col];
+				const dir = colAligns[col] === ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
+				line.push(stringPadding(item, width, ' ', dir));
+			}
 		}
 		logFunction(line.join(' '));
 	}

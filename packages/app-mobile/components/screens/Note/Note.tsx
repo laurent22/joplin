@@ -942,7 +942,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 
 		const localFilePath = Platform.select({
-			ios: decodeURI(pickerResponse.uri),
+			ios: decodeURIComponent(pickerResponse.uri),
 			default: pickerResponse.uri,
 		});
 
@@ -1810,6 +1810,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					multiline={this.state.multiline}
 					text={note.title}
 					updateState={textWrapCalculator_updateState}
+					readOnly={false}
 				/>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput

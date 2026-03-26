@@ -66,14 +66,15 @@ const frontMatterConfig: MarkdownConfig = {
 				return false;
 			}
 
-			// Store the opening delimiter position
+			// If the document starts with --- always claim it as a frontmatter block,
+			// even when the closing delimiter is absent.
 			const openingMarkerStart = cx.lineStart;
 			const openingMarkerEnd = cx.lineStart + line.text.length;
+			const contentStart = openingMarkerEnd + 1;
 
-			const contentStart = openingMarkerEnd + 1; // Start after the opening --- and newline
 			let foundEnd = false;
 
-			// Consume lines until we find the closing ---
+			// Consume lines until we find the closing --- or reach end of document.
 			while (cx.nextLine()) {
 				if (frontMatterDelimiterRegex.test(line.text)) {
 					foundEnd = true;
@@ -81,37 +82,34 @@ const frontMatterConfig: MarkdownConfig = {
 				}
 			}
 
-			if (!foundEnd) {
-				// No closing delimiter found - not a valid FrontMatter block
-				return false;
-			}
+			// cx.lineStart now points to the closing --- (if found) or end of document (if not).
+			const contentEnd = cx.lineStart;
 
-			// The content is between the two --- delimiters
-			const contentEnd = cx.lineStart; // Start of the closing --- line
-
-			// Closing delimiter positions
-			const closingMarkerStart = cx.lineStart;
-			const closingMarkerEnd = cx.lineStart + line.text.length;
-
-			// Create marker elements for the --- delimiters
 			const openingMarkerElem = cx.elt(frontMatterMarkerTagName, openingMarkerStart, openingMarkerEnd);
-			const closingMarkerElem = cx.elt(frontMatterMarkerTagName, closingMarkerStart, closingMarkerEnd);
-
-			// Create the content element (the YAML content between delimiters)
 			const contentElem = cx.elt(frontMatterContentTagName, contentStart, contentEnd);
 
-			// Create the container element spanning from start of first --- to end of last ---
-			const containerElement = cx.elt(
-				frontMatterTagName,
-				0, // Start at document beginning
-				closingMarkerEnd, // End after closing ---
-				[openingMarkerElem, contentElem, closingMarkerElem],
-			);
+			if (foundEnd) {
+				const closingMarkerStart = cx.lineStart;
+				const closingMarkerEnd = cx.lineStart + line.text.length;
+				const closingMarkerElem = cx.elt(frontMatterMarkerTagName, closingMarkerStart, closingMarkerEnd);
 
-			cx.addElement(containerElement);
-
-			// Move past the closing delimiter
-			cx.nextLine();
+				const containerElement = cx.elt(
+					frontMatterTagName,
+					0,
+					closingMarkerEnd,
+					[openingMarkerElem, contentElem, closingMarkerElem],
+				);
+				cx.addElement(containerElement);
+				cx.nextLine();
+			} else {
+				const containerElement = cx.elt(
+					frontMatterTagName,
+					0,
+					contentEnd,
+					[openingMarkerElem, contentElem],
+				);
+				cx.addElement(containerElement);
+			}
 
 			return true;
 		},

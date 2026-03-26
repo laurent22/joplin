@@ -8,7 +8,7 @@ import BaseModel from '../../BaseModel';
 import InteropService from './InteropService';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { JSDOM } from 'jsdom';
-import { ImportModuleOutputFormat } from './types';
+import { ImportModuleOutputFormat, ImportOptions } from './types';
 import HtmlToMd from '../../HtmlToMd';
 
 const instructionMessage = `
@@ -58,15 +58,18 @@ const notesToMarkdownString = (notes: NoteEntity[]) => {
 // This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
-	async function importNote(path: string) {
+	async function importNote(path: string, options: Partial<ImportOptions> = {}) {
 		const newFolder = await Folder.save({ title: 'folder' });
 		const service = InteropService.instance();
+
 		await service.import({
 			outputFormat: ImportModuleOutputFormat.Markdown,
 			path,
 			destinationFolder: newFolder,
 			destinationFolderId: newFolder.id,
+			...options,
 		});
+
 		const allNotes: NoteEntity[] = await Note.all();
 		return allNotes;
 	}
@@ -347,5 +350,22 @@ describe('InteropService_Importer_OneNote', () => {
 		const notes = await importNote(`${supportDir}/onenote/test.onepkg`);
 
 		expect(notesToMarkdownString(notes)).toMatchSnapshot();
+	});
+
+	it('should report failure, but continue importing other sections', async () => {
+		let errorMessage;
+		const onError = jest.fn((error: unknown) => {
+			errorMessage = String(error);
+		});
+
+		const notes = await withWarningSilenced(
+			/Unexpected end of file/,
+			() => importNote(`${supportDir}/onenote/truncated.zip`, { onError }),
+		);
+		// The truncated section should have failed to import
+		expect(onError).toHaveBeenCalledTimes(1);
+		expect(errorMessage).toMatch(/Unexpected end of file/);
+		// The other section should import successfully
+		expect(notes.map(note => note.title).sort()).toEqual(['Test note', 'Test section']);
 	});
 });

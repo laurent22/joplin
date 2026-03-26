@@ -43,7 +43,7 @@ impl StoreHeader {
 
         let file_identity = prop_set
             .get(PropertyType::FileIdentityGuid)
-            .map(|value| StoreHeader::parse_guid(value))
+            .map(StoreHeader::parse_guid)
             .transpose()?
             .ok_or_else(|| {
                 ErrorKind::MalformedOneStoreData("FileIdentityGuid prop missing".into())
@@ -51,7 +51,7 @@ impl StoreHeader {
 
         let ancestor_identity = prop_set
             .get(PropertyType::FileAncestorIdentityGuid)
-            .map(|value| StoreHeader::parse_guid(value))
+            .map(StoreHeader::parse_guid)
             .transpose()?
             .ok_or_else(|| {
                 ErrorKind::MalformedOneStoreData("FileAncestorIdentityGuid prop missing".into())
@@ -59,12 +59,12 @@ impl StoreHeader {
 
         let last_code_version_that_wrote_to_it = prop_set
             .get(PropertyType::FileLastCodeVersionThatWroteToIt)
-            .map(|value| StoreHeader::parse_u32(value))
+            .map(StoreHeader::parse_u32)
             .transpose()?;
 
         let file_name_crc = prop_set
             .get(PropertyType::FileNameCrc)
-            .map(|value| StoreHeader::parse_u32(value))
+            .map(StoreHeader::parse_u32)
             .transpose()?
             .ok_or_else(|| ErrorKind::MalformedOneStoreData("FileNameCRC prop missing".into()))?;
 

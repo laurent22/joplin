@@ -6,8 +6,6 @@ use parser_utils::{fs_driver, log};
 
 impl<'a> Renderer<'a> {
     pub(crate) fn render_embedded_file(&mut self, file: &EmbeddedFile) -> Result<String> {
-        let content;
-
         let filename = self
             .section
             .to_unique_safe_filename(&self.output, file.filename())?;
@@ -24,7 +22,7 @@ impl<'a> Renderer<'a> {
         }
 
         let file_type = Self::guess_type(file);
-        match file_type {
+        let content = match file_type {
             // TODO: As of 01-06-2026, Joplin has limited or no support for <video> and <audio> elements in HTML notes.
             // For example, <video> elements can only reference web URLs and <audio> elements aren't
             // supported at all.
@@ -37,7 +35,7 @@ impl<'a> Renderer<'a> {
                 styles.set("line-height", "17px".into());
                 let style_attr = styles.to_html_attr();
 
-                content = format!("<p {style_attr}><a href=\"{filename}\">{filename}</a></p>")
+                format!("<p {style_attr}><a href=\"{filename}\">{filename}</a></p>")
             }
         };
 

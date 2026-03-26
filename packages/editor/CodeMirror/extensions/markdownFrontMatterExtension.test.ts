@@ -54,6 +54,17 @@ describe('MarkdownFrontMatterExtension', () => {
 		expect(frontMatterNodes.length).toBe(0);
 	});
 
+	it('should treat the entire document as frontmatter when closing delimiter is missing (issue #14542)', async () => {
+		const documentText = '---\nsome: frontmatter\n--\n\n# Hey';
+		const editor = await createEditorState(documentText, [frontMatterTagName]);
+		const frontMatterNodes = findNodesWithName(editor, frontMatterTagName);
+
+		// Frontmatter block must be recognised and span the entire document
+		expect(frontMatterNodes.length).toBe(1);
+		expect(frontMatterNodes[0].from).toBe(0);
+		expect(frontMatterNodes[0].to).toBe(documentText.length);
+	});
+
 	it('should handle empty FrontMatter block', async () => {
 		const documentText = '---\n---\n\n# Heading';
 		const editor = await createEditorState(documentText, [frontMatterTagName, 'ATXHeading1']);
