@@ -508,9 +508,10 @@ function shimInit(options: ShimInitOptions = null) {
 		} else {
 			if (options.cropRect) throw new Error('Crop rect not supported in Node');
 
-			const imageDataURI = require('image-data-uri');
-			const result = imageDataURI.decode(imageDataUrl);
-			await shim.fsDriver().writeFile(filePath, result.dataBuffer, 'buffer');
+			const parts = imageDataUrl.split(',');
+			const dataBuffer = Buffer.from(parts[1], 'base64');
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			await shim.fsDriver().writeFile(filePath, dataBuffer as any, 'buffer');
 		}
 	};
 
