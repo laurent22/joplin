@@ -118,9 +118,9 @@ const StyledUserWebviewDialogContainer = styled.div`
 const defaultLayout: LayoutItem = {
 	key: 'root',
 	children: [
-		{ key: 'sideBar', width: 250 },
-		{ key: 'noteList', width: 250 },
-		{ key: 'editor' },
+		{ key: 'sideBar', width: 250, minWidth: 180 },
+		{ key: 'noteList', width: 250, minWidth: 150 },
+		{ key: 'editor', minWidth: 200 },
 	],
 };
 
