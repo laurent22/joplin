@@ -33,13 +33,5 @@ describe('MenuProvider', () => {
 		warnMock.mockRestore();
 	});
 
-	it('should accept closeButtonLabel prop without TypeScript errors', () => {
-		const { getByText } = render(
-			<MenuProvider closeButtonLabel='Close menu'>
-				<Text>Content</Text>
-			</MenuProvider>,
-		);
 
-		expect(getByText('Content')).toBeTruthy();
-	});
 });

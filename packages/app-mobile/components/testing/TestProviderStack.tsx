@@ -6,6 +6,7 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import FocusControl from '../accessibility/FocusControl/FocusControl';
 import { SafeAreaProvider, Metrics } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
 interface Props {
 	store: Store<AppState>;
@@ -32,7 +33,7 @@ const TestProviderStack: React.FC<Props> = props => {
 			initialMetrics={safeAreaMetrics}
 		>
 			<FocusControl.Provider>
-				<MenuProvider closeButtonLabel='Dismiss'>
+				<MenuProvider closeButtonLabel='Dismiss' SafeAreaComponent={View}>
 					<PaperProvider>
 						{props.children}
 					</PaperProvider>

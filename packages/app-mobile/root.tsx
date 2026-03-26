@@ -806,6 +806,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 				<MenuProvider
 					style={{ flex: 1 }}
 					closeButtonLabel={_('Dismiss')}
+					SafeAreaComponent={View}
 				>
 					<PaperProvider theme={{
 						...paperTheme,
