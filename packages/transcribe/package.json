@@ -17,7 +17,7 @@
     "@joplin/utils": "~3.6",
     "@koa/cors": "3.4.3",
     "dotenv": "17.2.3",
-    "file-type": "16.5.4",
+    "file-type": "patch:file-type@npm%3A16.5.4#~/.yarn/patches/file-type-npm-16.5.4-36faadc4ae.patch",
     "fs-extra": "11.3.3",
     "knex": "3.1.0",
     "koa": "2.16.3",

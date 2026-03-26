@@ -47,7 +47,7 @@
     "aws-sdk": "2.1340.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
-    "file-type": "16.5.4",
+    "file-type": "patch:file-type@npm%3A16.5.4#~/.yarn/patches/file-type-npm-16.5.4-36faadc4ae.patch",
     "fs-extra": "11.3.3",
     "html-entities": "1.4.0",
     "keytar": "7.9.0",
