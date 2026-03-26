@@ -6,6 +6,8 @@ import time from '@joplin/lib/time';
 import { Platform } from 'react-native';
 import Modal from './Modal';
 import { formatMsToLocal } from '@joplin/utils/time';
+import { RecurrenceInterval, recurrenceLabel, allRecurrenceIntervals } from '@joplin/lib/utils/recurrence';
+import { Picker } from '@react-native-picker/picker';
 const DateTimePickerModal = require('react-native-modal-datetime-picker').default;
 
 const styles = StyleSheet.create({
@@ -63,6 +65,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 			date: null,
 			mode: 'date',
 			showPicker: false,
+			recurrence: props.initialRecurrence || RecurrenceInterval.None,
 		};
 
 		this.onReject = this.onReject.bind(this);
@@ -76,10 +79,13 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });
 		}
+		if (newProps.initialRecurrence !== undefined && newProps.initialRecurrence !== this.state.recurrence) {
+			this.setState({ recurrence: newProps.initialRecurrence });
+		}
 	}
 
 	public onAccept() {
-		if (this.props.onAccept) this.props.onAccept(this.state.date);
+		if (this.props.onAccept) this.props.onAccept(this.state.date, this.state.recurrence);
 	}
 
 	public onReject() {
@@ -87,7 +93,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 	public onClear() {
-		if (this.props.onAccept) this.props.onAccept(null);
+		if (this.props.onAccept) this.props.onAccept(null, RecurrenceInterval.None);
 	}
 
 	public onPickerConfirm(selectedDate: Date) {
@@ -107,6 +113,42 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.setState({ date: new Date(event.target.value) });
 	};
 
+	public renderRecurrencePicker() {
+		const theme = themeStyle(this.props.themeId);
+		const intervals = allRecurrenceIntervals();
+
+		if (Platform.OS === 'web') {
+			return (
+				<View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+					<Text style={{ color: theme.color, marginRight: 10, fontWeight: 'bold' }}>{_('Repeat:')}</Text>
+					<select
+						value={this.state.recurrence}
+						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => this.setState({ recurrence: e.target.value })}
+					>
+						{intervals.map(interval => (
+							<option key={interval} value={interval}>{recurrenceLabel(interval)}</option>
+						))}
+					</select>
+				</View>
+			);
+		}
+
+		return (
+			<View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, width: '100%', paddingHorizontal: 20 }}>
+				<Text style={{ color: theme.color, marginRight: 10, fontWeight: 'bold' }}>{_('Repeat:')}</Text>
+				<Picker
+					selectedValue={this.state.recurrence}
+					onValueChange={(itemValue: string) => this.setState({ recurrence: itemValue })}
+					style={{ flex: 1, color: theme.color }}
+				>
+					{intervals.map(interval => (
+						<Picker.Item key={interval} label={recurrenceLabel(interval)} value={interval} />
+					))}
+				</Picker>
+			</View>
+		);
+	}
+
 	public renderContent() {
 		const theme = themeStyle(this.props.themeId);
 
@@ -115,11 +157,14 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 			// See https://developer.mozilla.org/en-US/docs/Web/HTML/Date_and_time_formats#local_date_and_time_strings
 			// for the expected date input format:
 			const dateString = this.state.date ? formatMsToLocal(this.state.date.getTime(), 'YYYY-MM-DD[T]HH:mm:ss') : '';
-			return <input
-				type="datetime-local"
-				value={dateString}
-				onChange={this.onInputChange}
-			></input>;
+			return <View>
+				<input
+					type="datetime-local"
+					value={dateString}
+					onChange={this.onInputChange}
+				></input>
+				{this.renderRecurrencePicker()}
+			</View>;
 		}
 
 		return (
@@ -136,6 +181,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 					onConfirm={this.onPickerConfirm}
 					onCancel={this.onPickerCancel}
 				/>
+				{this.renderRecurrencePicker()}
 			</View>
 		);
 	}
@@ -177,3 +223,4 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 	}
 
 }
+

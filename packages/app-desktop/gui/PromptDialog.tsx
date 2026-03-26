@@ -9,6 +9,7 @@ import Dialog from '@joplin/lib/components/Dialog';
 import { ChangeEvent } from 'react';
 import { formatDateTimeLocalToMs, isValidDate } from '@joplin/utils/time';
 import lightTheme from '@joplin/lib/themes/light';
+import { RecurrenceConfig } from './WindowCommandsAndDialogs/types';
 
 interface Props {
 	themeId: number;
@@ -26,6 +27,7 @@ interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	autocomplete: any;
 	label: string;
+	recurrence?: RecurrenceConfig;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -52,6 +54,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		this.setState({
 			visible: false,
 			answer: this.props.defaultValue ? this.props.defaultValue : '',
+			recurrenceValue: this.props.recurrence ? this.props.recurrence.value : '',
 		});
 		this.focusInput_ = true;
 		this.menuIsOpened_ = false;
@@ -65,6 +68,10 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		if ('defaultValue' in newProps && newProps.defaultValue !== this.props.defaultValue) {
 			this.setState({ answer: newProps.defaultValue });
+		}
+
+		if (newProps.recurrence && newProps.recurrence.value !== (this.props.recurrence ? this.props.recurrence.value : '')) {
+			this.setState({ recurrenceValue: newProps.recurrence.value });
 		}
 	}
 
@@ -216,9 +223,9 @@ export default class PromptDialog extends React.Component<Props, any> {
 				if (this.props.inputType === 'datetime') {
 					outputAnswer = isValidDate(outputAnswer) ? formatDateTimeLocalToMs(outputAnswer) : null;
 				}
-				this.props.onClose(accept ? outputAnswer : null, buttonType);
+				this.props.onClose(accept ? outputAnswer : null, buttonType, this.state.recurrenceValue || '');
 			}
-			this.setState({ visible: false, answer: '' });
+			this.setState({ visible: false, answer: '', recurrenceValue: '' });
 		};
 
 		const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -269,13 +276,31 @@ export default class PromptDialog extends React.Component<Props, any> {
 		let inputComp = null;
 
 		if (this.props.inputType === 'datetime') {
-			inputComp = <input
-				defaultValue={this.state.answer}
-				onChange={onChange}
-				type="datetime-local"
-				className='datetime-picker'
-				style={styles.dateTimeInput}
-			/>;
+			const recurrenceComp = this.props.recurrence ? (
+				<div style={{ marginTop: 10, display: 'flex', alignItems: 'center' }}>
+					<label style={{ ...styles.label, marginRight: 10 }}>{this.props.recurrence.label}</label>
+					<select
+						value={this.state.recurrenceValue}
+						onChange={(e) => this.setState({ recurrenceValue: e.target.value })}
+						style={styles.input}
+					>
+						{this.props.recurrence.options.map((opt: { value: string; label: string }) => (
+							<option key={opt.value} value={opt.value}>{opt.label}</option>
+						))}
+					</select>
+				</div>
+			) : null;
+
+			inputComp = <>
+				<input
+					defaultValue={this.state.answer}
+					onChange={onChange}
+					type="datetime-local"
+					className='datetime-picker'
+					style={styles.dateTimeInput}
+				/>
+				{recurrenceComp}
+			</>;
 		} else if (this.props.inputType === 'tags') {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			inputComp = <CreatableSelect className="tag-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated() as any} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;

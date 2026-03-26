@@ -23,8 +23,31 @@ export default class Alarm extends BaseModel {
 	}
 
 	public static async deleteExpiredAlarms() {
-		return this.db().exec('DELETE FROM alarms WHERE trigger_time <= ?', [Date.now()]);
+		// Only delete expired alarms for notes that do NOT have a recurrence set.
+		// Recurring alarms will be rescheduled instead.
+		return this.db().exec(
+			'DELETE FROM alarms WHERE trigger_time <= ? AND note_id NOT IN (SELECT id FROM notes WHERE todo_due_recurrence != \'\')',
+			[Date.now()],
+		);
 	}
+
+	/**
+	 * Returns expired alarms that belong to notes with a recurrence set.
+	 * These alarms should be rescheduled, not deleted.
+	 */
+	public static async expiredAlarmsWithRecurrence() {
+		return this.db().selectAll(
+			`SELECT alarms.*, notes.todo_due_recurrence, notes.todo_due
+			FROM alarms
+			INNER JOIN notes ON alarms.note_id = notes.id
+			WHERE alarms.trigger_time <= ?
+			AND notes.todo_due_recurrence != ''
+			AND notes.todo_completed = 0
+			AND notes.is_conflict = 0`,
+			[Date.now()],
+		);
+	}
+
 
 	public static async alarmIdsWithoutNotes() {
 		// https://stackoverflow.com/a/4967229/561309

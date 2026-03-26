@@ -6,6 +6,7 @@ import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
 import { formatMsToDateTimeLocal } from '@joplin/utils/time';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { RecurrenceInterval, recurrenceLabel, allRecurrenceIntervals } from '@joplin/lib/utils/recurrence';
 
 export const declaration: CommandDeclaration = {
 	name: 'editAlarm',
@@ -25,25 +26,37 @@ export const runtime = (comp: any): CommandRuntime => {
 			defaultDate.setMinutes(0);
 			defaultDate.setSeconds(0);
 
+			const recurrenceOptions = allRecurrenceIntervals().map((interval) => ({
+				value: interval,
+				label: recurrenceLabel(interval),
+			}));
+
 			comp.setState({
 				promptOptions: {
 					label: _('Set alarm:'),
 					inputType: 'datetime',
 					buttons: ['ok', 'cancel', 'clear'],
 					value: note.todo_due ? formatMsToDateTimeLocal(note.todo_due) : formatMsToDateTimeLocal(defaultDate.getTime()),
+					recurrence: {
+						label: _('Repeat:'),
+						options: recurrenceOptions,
+						value: note.todo_due_recurrence || RecurrenceInterval.None,
+					},
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					onClose: async (answer: any, buttonType: string) => {
+					onClose: async (answer: any, buttonType: string, recurrenceValue?: string) => {
 						let newNote: NoteEntity = null;
 
 						if (buttonType === 'clear') {
 							newNote = {
 								id: note.id,
 								todo_due: 0,
+								todo_due_recurrence: '',
 							};
 						} else if (answer !== null) {
 							newNote = {
 								id: note.id,
 								todo_due: answer,
+								todo_due_recurrence: recurrenceValue || '',
 							};
 						}
 
@@ -67,3 +80,4 @@ export const runtime = (comp: any): CommandRuntime => {
 		},
 	};
 };
+

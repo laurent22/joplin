@@ -1175,7 +1175,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 	}
 
-	public async onAlarmDialogAccept(date: Date) {
+	public async onAlarmDialogAccept(date: Date, recurrence?: string) {
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
@@ -1194,8 +1194,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const newNote = { ...this.state.note };
 		newNote.todo_due = date ? date.getTime() : 0;
+		newNote.todo_due_recurrence = date ? (recurrence || '') : '';
 
 		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
+		await this.saveOneProperty('todo_due_recurrence', date ? (recurrence || '') : '');
 
 		this.setState({ alarmDialogShown: false });
 	}
@@ -1883,7 +1885,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				{bodyComponent}
 				{renderVoiceTypingDialogs()}
 
-				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} initialRecurrence={this.state.note.todo_due_recurrence || ''} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
 				{noteTagDialog}
 				<ShareNoteDialog

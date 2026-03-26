@@ -1,5 +1,11 @@
 import { MarkupLanguage } from '@joplin/renderer';
 
+export interface RecurrenceConfig {
+	label: string;
+	options: { value: string; label: string }[];
+	value: string;
+}
+
 export interface DialogState {
 	noteContentPropertiesDialogOptions: {
 		visible: boolean;
@@ -27,6 +33,7 @@ export interface DialogState {
 		label?: string;
 		value?: string;
 		autocomplete?: unknown;
-		onClose?: (answer: unknown, buttonType: unknown)=> void;
+		recurrence?: RecurrenceConfig;
+		onClose?: (answer: unknown, buttonType: unknown, recurrenceValue?: string)=> void;
 	}|null;
 }

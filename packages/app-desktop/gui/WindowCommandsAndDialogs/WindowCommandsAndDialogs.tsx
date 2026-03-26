@@ -107,8 +107,8 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 		return result;
 	}, []);
 
-	const promptOnClose = useCallback((answer: unknown, buttonType: unknown) => {
-		dialogState.promptOptions.onClose(answer, buttonType);
+	const promptOnClose = useCallback((answer: unknown, buttonType: unknown, recurrenceValue?: string) => {
+		dialogState.promptOptions.onClose(answer, buttonType, recurrenceValue);
 	}, [dialogState.promptOptions]);
 
 	const dialogInfo = PluginManager.instance().pluginDialogToShow(props.pluginsLegacy);
@@ -175,6 +175,7 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 			visible={!!promptOptions}
 			buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null}
 			inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null}
+			recurrence={promptOptions && 'recurrence' in promptOptions ? promptOptions.recurrence : undefined}
 		/>
 
 		<PopupNotificationList/>

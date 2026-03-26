@@ -247,6 +247,7 @@ export interface NoteEntity {
   'title'?: string;
   'todo_completed'?: number;
   'todo_due'?: number;
+  'todo_due_recurrence'?: string;
   'updated_time'?: number;
   'user_created_time'?: number;
   'user_data'?: string;
@@ -265,6 +266,7 @@ export interface NotesNormalizedEntity {
   'title'?: string;
   'todo_completed'?: number;
   'todo_due'?: number;
+  'todo_due_recurrence'?: string;
   'user_created_time'?: number;
   'user_updated_time'?: number;
   'type_'?: number;
@@ -588,6 +590,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		todo_completed: { type: 'number' },
 		todo_due: { type: 'number' },
+		todo_due_recurrence: { type: 'string' },
 		updated_time: { type: 'number' },
 		user_created_time: { type: 'number' },
 		user_data: { type: 'string' },
@@ -606,6 +609,7 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		todo_completed: { type: 'number' },
 		todo_due: { type: 'number' },
+		todo_due_recurrence: { type: 'string' },
 		user_created_time: { type: 'number' },
 		user_updated_time: { type: 'number' },
 		type_: { type: 'number' },

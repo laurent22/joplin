@@ -663,6 +663,7 @@ export default class Note extends BaseItem {
 		const output = { ...note };
 		output.is_todo = newIsTodo;
 		output.todo_due = 0;
+		output.todo_due_recurrence = '';
 		output.todo_completed = 0;
 
 		return output;
@@ -877,7 +878,7 @@ export default class Note extends BaseItem {
 			});
 		}
 
-		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o) {
+		if ('todo_due' in o || 'todo_completed' in o || 'is_todo' in o || 'is_conflict' in o || 'todo_due_recurrence' in o) {
 			this.dispatch({
 				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
 				id: savedNote.id,
@@ -972,7 +973,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static dueNotes() {
-		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?', [time.unixMs()]);
+		return this.modelSelectAll('SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict, todo_due_recurrence FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?', [time.unixMs()]);
 	}
 
 	public static needAlarm(note: NoteEntity) {
