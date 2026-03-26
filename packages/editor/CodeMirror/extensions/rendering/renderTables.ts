@@ -37,12 +37,26 @@ class TableWidget extends WidgetType {
 		return this.tableText === other.tableText;
 	}
 
+	// Save the horizontal scroll position of this widget's container before
+	// a dispatch that will rebuild the widget, then restore it after rebuild.
+	private saveAndRestoreScroll(view: EditorView) {
+		const container = view.dom.querySelector(`.${W}`) as HTMLElement | null;
+		const scrollLeft = container ? container.scrollLeft : 0;
+		if (scrollLeft > 0) {
+			requestAnimationFrame(() => {
+				const newContainer = view.dom.querySelector(`.${W}`) as HTMLElement | null;
+				if (newContainer) newContainer.scrollLeft = scrollLeft;
+			});
+		}
+	}
+
 	// Dispatch a structural table change (add/delete row/column).
 	// A trailing newline is appended when needed to ensure a blank line
 	// separates the table from subsequent text, preventing the parser
 	// from absorbing later lines as extra table rows.
 	private apply(view: EditorView, newTable: Table | null) {
 		if (!newTable) return;
+		this.saveAndRestoreScroll(view);
 		const newText = serializeTable(newTable);
 		const doc = view.state.doc;
 		const afterTable = this.to < doc.length ? doc.sliceString(this.to, Math.min(this.to + 2, doc.length)) : '';
@@ -56,6 +70,8 @@ class TableWidget extends WidgetType {
 	// Sync a single cell edit back to the markdown document.
 	// Does NOT move the cursor so the user can continue working in the widget.
 	private syncCell(view: EditorView, table: Table, row: number, col: number, text: string) {
+		// Sanitise: newlines are illegal in markdown table cells; pipes must be escaped
+		text = text.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 		if (row === 0) {
 			table.header.cells[col].content = text;
 		} else {
@@ -64,6 +80,7 @@ class TableWidget extends WidgetType {
 				table.body[b].cells[col].content = text;
 			}
 		}
+		this.saveAndRestoreScroll(view);
 		const newText = serializeTable(table);
 		const doc = view.state.doc;
 		const afterTable = this.to < doc.length ? doc.sliceString(this.to, Math.min(this.to + 2, doc.length)) : '';
@@ -94,6 +111,27 @@ class TableWidget extends WidgetType {
 
 		// Flag to skip onblur sync when Tab/Enter handles it
 		let skipBlurSync = false;
+
+		// Sync all dirty cells back to the table model (without dispatching).
+		// Must be called before any structural apply() so edits are not lost.
+		const syncDirtyCells = () => {
+			for (let ri = 0; ri < allCells.length; ri++) {
+				for (let ci = 0; ci < allCells[ri].length; ci++) {
+					const td = allCells[ri][ci].querySelector('.cm-tw-text') as HTMLElement;
+					if (!td) continue;
+					// Sanitise: newlines → <br>, pipes → escaped
+					const v = (td.textContent || '').trim().replace(/\n/g, '<br>').replace(/\|/g, '\\|');
+					const isH = ri === 0;
+					const orig = isH
+						? table.header.cells[ci]?.content
+						: table.body[ri - 1]?.cells[ci]?.content;
+					if (v !== orig) {
+						if (isH) table.header.cells[ci].content = v;
+						else if (ri - 1 < table.body.length) table.body[ri - 1].cells[ci].content = v;
+					}
+				}
+			}
+		};
 
 		// ---- Editable cell ----
 		const mkCell = (text: string, r: number, c: number, isHdr: boolean) => {
@@ -133,6 +171,11 @@ class TableWidget extends WidgetType {
 			};
 
 			textDiv.onkeydown = (e) => {
+				// Block newlines — not allowed in markdown table cells
+				if (e.key === 'Enter' && e.shiftKey) {
+					e.preventDefault();
+					return;
+				}
 				if (e.key === 'Tab') {
 					e.preventDefault();
 					e.stopPropagation();
@@ -167,7 +210,25 @@ class TableWidget extends WidgetType {
 							if (targetText) focus('TableWidget', targetText);
 						}
 					} else if (!e.shiftKey) {
+						// Past last cell — add new row and focus its first cell
+						skipBlurSync = true;
+						const cv = (textDiv.textContent || '').trim();
+						const co = isHdr
+							? table.header.cells[c]?.content
+							: table.body[r - 1]?.cells[c]?.content;
+						if (cv !== co) {
+							if (isHdr) table.header.cells[c].content = cv;
+							else table.body[r - 1].cells[c].content = cv;
+						}
+						syncDirtyCells();
 						this.apply(view, addRow(table, numBodyRows - 1));
+						const newRowIdx = totalRows * numCols;
+						requestAnimationFrame(() => {
+							const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
+							if (newRowIdx < cells.length) {
+								focus('TableWidget', cells[newRowIdx] as HTMLElement);
+							}
+						});
 					}
 				} else if (e.key === 'Enter' && !e.shiftKey) {
 					e.preventDefault();
@@ -210,7 +271,16 @@ class TableWidget extends WidgetType {
 				if (e.button !== 0) return; // left-click only
 				e.preventDefault();
 				e.stopPropagation();
+				syncDirtyCells();
 				this.apply(view, addColumn(table, afterCol));
+				// Focus the new column's header cell after rebuild
+				requestAnimationFrame(() => {
+					const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
+					const targetIdx = afterCol + 1;
+					if (targetIdx < cells.length) {
+						focus('TableWidget', cells[targetIdx] as HTMLElement);
+					}
+				});
 			};
 			wrapper.appendChild(btn);
 			anchorCell.appendChild(wrapper);
@@ -229,7 +299,17 @@ class TableWidget extends WidgetType {
 				if (e.button !== 0) return; // left-click only
 				e.preventDefault();
 				e.stopPropagation();
+				syncDirtyCells();
 				this.apply(view, addRow(table, afterBodyIdx));
+				// Focus the first cell of the new row after rebuild
+				const newNumCols = numCols;
+				const targetIdx = (afterBodyIdx + 2) * newNumCols;
+				requestAnimationFrame(() => {
+					const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
+					if (targetIdx < cells.length) {
+						focus('TableWidget', cells[targetIdx] as HTMLElement);
+					}
+				});
 			};
 			wrapper.appendChild(btn);
 			anchorCell.appendChild(wrapper);
@@ -298,25 +378,26 @@ class TableWidget extends WidgetType {
 
 			const menu = document.createElement('div');
 			menu.classList.add(CTX);
-			const rect = container.getBoundingClientRect();
-			menu.style.left = `${e.clientX - rect.left}px`;
-			menu.style.top = `${e.clientY - rect.top}px`;
+			// Use viewport coordinates since the menu is position:fixed
+			menu.style.left = `${e.clientX}px`;
+			menu.style.top = `${e.clientY}px`;
 
 			type MenuItem = { label: string; action: ()=> void; hlRow?: number; hlCol?: number };
 			const items: MenuItem[] = [
-				{ label: '+ Insert row above', action: () => this.apply(view, addRow(table, r <= 0 ? -1 : r - 2)) },
-				{ label: '+ Insert row below', action: () => this.apply(view, addRow(table, r === 0 ? -1 : r - 1)) },
-				{ label: '+ Insert column left', action: () => this.apply(view, addColumn(table, c - 1)) },
-				{ label: '+ Insert column right', action: () => this.apply(view, addColumn(table, c)) },
+				{ label: '+ Insert row above', action: () => { syncDirtyCells(); this.apply(view, addRow(table, r <= 0 ? -1 : r - 2)); } },
+				{ label: '+ Insert row below', action: () => { syncDirtyCells(); this.apply(view, addRow(table, r === 0 ? -1 : r - 1)); } },
+				{ label: '+ Insert column left', action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c - 1)); } },
+				{ label: '+ Insert column right', action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c)); } },
 			];
-			if (r > 1) items.push({ label: '↑ Move row up', action: () => this.apply(view, swapRows(table, r - 1, r - 2)), hlRow: r });
-			if (r > 0 && r < numBodyRows) items.push({ label: '↓ Move row down', action: () => this.apply(view, swapRows(table, r - 1, r)), hlRow: r });
-			if (c > 0) items.push({ label: '← Move column left', action: () => this.apply(view, swapColumns(table, c, c - 1)), hlCol: c });
-			if (c < numCols - 1) items.push({ label: '→ Move column right', action: () => this.apply(view, swapColumns(table, c, c + 1)), hlCol: c });
+			if (r > 1) items.push({ label: '↑ Move row up', action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r - 2)); }, hlRow: r });
+			if (r > 0 && r < numBodyRows) items.push({ label: '↓ Move row down', action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r)); }, hlRow: r });
+			if (c > 0) items.push({ label: '← Move column left', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c - 1)); }, hlCol: c });
+			if (c < numCols - 1) items.push({ label: '→ Move column right', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c + 1)); }, hlCol: c });
 			// Delete row: for header (r===0) deletes entire table, for body rows deletes that row
 			items.push({
 				label: '✕ Delete row',
 				action: () => {
+					syncDirtyCells();
 					if (r === 0) {
 						view.dispatch({ changes: { from: this.from, to: this.to, insert: '' } });
 					} else {
@@ -325,7 +406,7 @@ class TableWidget extends WidgetType {
 				},
 				hlRow: r,
 			});
-			if (numCols > 1) items.push({ label: '✕ Delete column', action: () => this.apply(view, deleteColumn(table, c)), hlCol: c });
+			if (numCols > 1) items.push({ label: '✕ Delete column', action: () => { syncDirtyCells(); this.apply(view, deleteColumn(table, c)); }, hlCol: c });
 
 			for (const item of items) {
 				const div = document.createElement('div');
@@ -363,6 +444,9 @@ const tableTheme = EditorView.theme({
 		margin: '4px 0',
 		position: 'relative',
 		outline: 'none',
+		maxWidth: '100%',
+		overflowX: 'auto',
+		padding: '14px',
 	},
 	[`& .${W} table`]: {
 		borderCollapse: 'collapse',
@@ -458,7 +542,7 @@ const tableTheme = EditorView.theme({
 
 	// Context menu
 	[`& .${CTX}`]: {
-		position: 'absolute',
+		position: 'fixed',
 		backgroundColor: 'var(--joplin-background-color, #fff)',
 		border: '1px solid var(--joplin-divider-color, #ccc)',
 		borderRadius: '6px',
