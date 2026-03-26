@@ -508,9 +508,13 @@ function shimInit(options: ShimInitOptions = null) {
 		} else {
 			if (options.cropRect) throw new Error('Crop rect not supported in Node');
 
+			const headerPart = imageDataUrl.split(',')[0];
+			if (!headerPart.includes(';base64')) {
+				throw new Error('Only base64-encoded data URLs are supported');
+			}
 			const parts = imageDataUrl.split(',');
 			const dataBuffer = Buffer.from(parts[1], 'base64');
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			// eslint-disable-next-line `@typescript-eslint/no-explicit-any`
 			await shim.fsDriver().writeFile(filePath, dataBuffer as any, 'buffer');
 		}
 	};
