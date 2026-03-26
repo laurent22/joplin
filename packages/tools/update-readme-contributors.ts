@@ -12,9 +12,23 @@ const readmePath = `${rootDir}/README.md`;
 const { insertContentIntoFile } = require('./tool-utils.js');
 
 async function gitHubContributors(page: number): Promise<Contributor[]> {
-	const response = await fetch(`https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`, {
-		headers: { 'User-Agent': 'Joplin Readme Updater' },
-	});
+async function gitHubContributors(page: number): Promise<Contributor[]> {
+	const controller = new AbortController();
+	const timeoutId = setTimeout(() => controller.abort(), 15000);
+	
+	try {
+		const response = await fetch(`https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`, {
+			headers: { 'User-Agent': 'Joplin Readme Updater' },
+			signal: controller.signal,
+		});
+		if (!response.ok) {
+			throw new Error(`Error HTTP ${response.status}`);
+		}
+		return response.json();
+	} finally {
+		clearTimeout(timeoutId);
+	}
+}
 	if (!response.ok) {
 		throw new Error(`Error HTTP ${response.status}`);
 	}
