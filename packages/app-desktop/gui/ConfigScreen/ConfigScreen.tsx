@@ -546,5 +546,4 @@ const mapStateToProps = (state: any) => {
 	};
 };
 
-export default connect(mapStateToProps)(ConfigScreenComponent);
-
+export { ConfigScreenComponent };
