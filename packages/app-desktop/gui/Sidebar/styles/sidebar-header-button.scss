@@ -13,12 +13,12 @@
 	font-size: var(--joplin-toolbar-icon-size);
 	color: var(--joplin-color2);
 
-	&:hover {
+	&:hover:not(:disabled) {
 		color: var(--joplin-color-hover2);
 		background: none;
 	}
 
-	&:active {
+	&:active:not(:disabled) {
 		color: var(--joplin-color-active2);
 		background: none;
 	}
