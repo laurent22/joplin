@@ -97,7 +97,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private matchesSearchQuery(relatedText: string): boolean {
 		if (!this.state.searchQuery) return true;
-		return relatedText.toLowerCase().includes(this.state.searchQuery.toLowerCase());
+		if (!relatedText) return false;
+		return String(relatedText).toLowerCase().includes(this.state.searchQuery.toLowerCase());
 	}
 
 	private getFilteredSections(sections: any[]): Set<string> {
