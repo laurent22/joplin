@@ -38,7 +38,7 @@ class ConfigScreenComponent extends React.Component {
             shared.updateSettingValue(this, key, value);
         };
         shared.init(registry_1.reg);
-        this.state = Object.assign(Object.assign({}, shared.defaultScreenState), { selectedSectionName: 'general', screenName: '', changedSettingKeys: [], needRestart: false, fonts: [], searchQuery: '', searching: false, filteredSections: new Set() });
+        this.state = Object.assign(Object.assign({}, shared.defaultScreenState), { selectedSectionName: 'general', screenName: '', changedSettingKeys: [], needRestart: false, fonts: [], searchQuery: '', searching: false });
         this.rowStyle_ = {
             marginBottom: 10,
         };
@@ -64,34 +64,35 @@ class ConfigScreenComponent extends React.Component {
         await shared.checkSyncConfig(this, this.state.settings);
     }
     setSearchQuery(query) {
-        this.setState({ searchQuery: query, searching: query.length > 0 }, () => {
-            const sections = shared.buildSections(this.props.settings, this.state, this.props.themeId, this.props.appType);
-            this.setState({ filteredSections: this.getFilteredSections(sections) });
-        });
+        this.setState({ searchQuery: query, searching: query.length > 0 });
     }
     clearSearch() {
-        this.setState({ searchQuery: '', searching: false, filteredSections: new Set() });
+        this.setState({ searchQuery: '', searching: false });
     }
     matchesSearchQuery(relatedText) {
         if (!this.state.searchQuery)
             return true;
-        return relatedText.toLowerCase().includes(this.state.searchQuery.toLowerCase());
+        if (!relatedText)
+            return false;
+        return String(relatedText).toLowerCase().includes(this.state.searchQuery.toLowerCase());
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Used in filter and forEach loop
     getFilteredSections(sections) {
-        const filtered = new Set();
-        for (const section of sections) {
-            if (this.matchesSearchQuery(section.name)) {
-                filtered.add(section.name);
-                continue;
-            }
+        if (!this.state.searchQuery) {
+            return sections;
+        }
+        return sections.filter(section => {
+            // Check if section name matches
+            if (this.matchesSearchQuery(section.name))
+                return true;
+            // Check if any metadata (label or description) matches
             for (const md of section.metadatas) {
                 if (this.matchesSearchQuery(md.label) || this.matchesSearchQuery(md.description)) {
-                    filtered.add(section.name);
-                    break;
+                    return true;
                 }
             }
-        }
-        return filtered;
+            return false;
+        });
     }
     UNSAFE_componentWillMount() {
         this.setState({ settings: this.props.settings });
@@ -337,6 +338,8 @@ class ConfigScreenComponent extends React.Component {
         if (screenComp)
             containerStyle.display = 'none';
         const sections = shared.settingsSections({ device: Setting_1.AppType.Desktop, settings });
+        // Filter sections based on search query
+        const filteredSections = this.getFilteredSections(sections);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
         const needRestartComp = this.state.needRestart ? (React.createElement("div", { style: Object.assign(Object.assign({}, theme.textStyle), { padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }) },
             this.restartMessage(),
@@ -344,7 +347,7 @@ class ConfigScreenComponent extends React.Component {
         const rightStyle = Object.assign(Object.assign({}, style), { flex: 1 });
         delete style.width;
         const tabComponents = [];
-        for (const section of sections) {
+        for (const section of filteredSections) {
             const sectionId = `setting-section-${section.name}`;
             let content = null;
             const visible = section.name === this.state.selectedSectionName;
@@ -356,7 +359,7 @@ class ConfigScreenComponent extends React.Component {
             tabComponents.push(React.createElement("div", { key: sectionId, id: sectionId, className: `setting-tab-panel ${!visible ? '-hidden' : ''}`, hidden: !visible, "aria-labelledby": `setting-tab-${section.name}`, tabIndex: 0, role: 'tabpanel' }, content));
         }
         return (React.createElement("div", { className: "config-screen", role: "main", style: { display: 'flex', flexDirection: 'row', height: this.props.style.height } },
-            React.createElement(Sidebar_1.default, { selection: this.state.selectedSectionName, onSelectionChange: this.sidebar_selectionChange, sections: sections, searchQuery: this.state.searchQuery, onSearchQueryChange: this.setSearchQuery, onClearSearch: this.clearSearch, filteredSections: this.state.filteredSections }),
+            React.createElement(Sidebar_1.default, { selection: this.state.selectedSectionName, onSelectionChange: this.sidebar_selectionChange, sections: filteredSections, searchQuery: this.state.searchQuery, onSearchQueryChange: this.setSearchQuery, onClearSearch: this.clearSearch }),
             React.createElement("div", { style: rightStyle },
                 needRestartComp,
                 tabComponents,

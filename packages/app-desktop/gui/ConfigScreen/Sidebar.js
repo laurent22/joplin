@@ -140,14 +140,7 @@ function Sidebar(props) {
     const buttons = [];
     function renderButton(section, index) {
         const selected = props.selection === section.name;
-        const isFiltered = props.filteredSections && !props.filteredSections.has(section.name);
-        const hasMatches = !props.filteredSections || props.filteredSections.has(section.name) || !props.searchQuery;
-        const buttonStyle = {
-            opacity: !hasMatches ? 0.4 : undefined,
-            cursor: !hasMatches ? 'not-allowed' : undefined,
-            pointerEvents: !hasMatches ? 'none' : undefined,
-        };
-        return (React.createElement(exports.StyledListItem, { key: section.name, href: '#', role: 'tab', ref: (item) => { buttonRefs.current[index] = item; }, id: `setting-tab-${section.name}`, "aria-controls": `setting-section-${section.name}`, "aria-selected": selected, tabIndex: selected ? 0 : -1, isSubSection: Setting_2.default.isSubSection(section.name), selected: selected, onClick: () => { props.onSelectionChange({ section: section }); }, onKeyDown: onKeyDown, style: buttonStyle },
+        return (React.createElement(exports.StyledListItem, { key: section.name, href: '#', role: 'tab', ref: (item) => { buttonRefs.current[index] = item; }, id: `setting-tab-${section.name}`, "aria-controls": `setting-section-${section.name}`, "aria-selected": selected, tabIndex: selected ? 0 : -1, isSubSection: Setting_2.default.isSubSection(section.name), selected: selected, onClick: () => { props.onSelectionChange({ section: section }); }, onKeyDown: onKeyDown },
             React.createElement(exports.StyledListItemIcon, { className: Setting_2.default.sectionNameToIcon(section.name, Setting_1.AppType.Desktop), role: 'img', "aria-hidden": 'true' }),
             React.createElement(exports.StyledListItemLabel, null, props.searchQuery ? (React.createElement(HighlightedText_1.default, { text: Setting_2.default.sectionNameToLabel(section.name), highlight: props.searchQuery })) : (Setting_2.default.sectionNameToLabel(section.name)))));
     }

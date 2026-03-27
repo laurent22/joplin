@@ -19,8 +19,8 @@ interface Props {
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
 	searchQuery?: string;
-	onSearchQueryChange?: (query: string) => void;
-	onClearSearch?: () => void;
+	onSearchQueryChange?: (query: string)=> void;
+	onClearSearch?: ()=> void;
 }
 
 export const StyledRoot = styled.div`
@@ -229,7 +229,7 @@ export default function Sidebar(props: Props) {
 						type='text'
 						placeholder={_('Search settings...')}
 						value={props.searchQuery || ''}
-						onChange={(e) => {
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 							if (props.onSearchQueryChange) {
 								props.onSearchQueryChange(e.target.value);
 							}
