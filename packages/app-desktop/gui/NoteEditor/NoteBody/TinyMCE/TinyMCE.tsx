@@ -1493,6 +1493,23 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			}
 		}
 
+		const clearInheritedCheckedStateOnChecklistEnter = () => {
+			const currentNode = editor.selection.getStart();
+			const currentListItem = editor.dom.getParent(currentNode, 'li') as HTMLLIElement;
+			if (!currentListItem) return;
+
+			const parentChecklist = editor.dom.getParent(currentListItem, 'ul.joplin-checklist');
+			if (!parentChecklist) return;
+
+			if (!currentListItem.classList.contains('checked')) return;
+
+			const textContent = (currentListItem.textContent ?? '').replace(/\u200B/g, '').trim();
+			if (textContent !== '') return;
+
+			currentListItem.classList.remove('checked');
+			onChangeHandler();
+		};
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onKeyDown(event: any) {
 			// It seems "paste as text" is handled automatically on Windows and Linux,
@@ -1507,6 +1524,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 				event.preventDefault();
 				pasteAsPlainText(null);
+			}
+
+			if (event.key === 'Enter' && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.isComposing) {
+				shim.setTimeout(() => {
+					if (!editor || !editor.getDoc()) return;
+					clearInheritedCheckedStateOnChecklistEnter();
+				}, 0);
 			}
 		}
 

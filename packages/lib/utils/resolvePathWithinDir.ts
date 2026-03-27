@@ -12,13 +12,8 @@ const resolvePathWithinDir = (
 	baseDir: string, relativePath: string,
 
 	// For testing
-	forceWin32Paths?: boolean,
+	pathModule = path,
 ) => {
-	let pathModule = path;
-	if (forceWin32Paths === true) {
-		pathModule = path.win32;
-	}
-
 	let resolvedBaseDir = pathModule.resolve(baseDir);
 	const resolvedPath = pathModule.resolve(baseDir, relativePath);
 
