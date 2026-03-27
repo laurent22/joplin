@@ -97,6 +97,24 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return String(relatedText).toLowerCase().includes(this.state.searchQuery.toLowerCase());
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Used in filter and forEach loop
+	private getFilteredSections(sections: any[]): any[] {
+		if (!this.state.searchQuery) {
+			return sections;
+		}
+		return sections.filter(section => {
+			// Check if section name matches
+			if (this.matchesSearchQuery(section.name)) return true;
+			// Check if any metadata (label or description) matches
+			for (const md of section.metadatas) {
+				if (this.matchesSearchQuery(md.label) || this.matchesSearchQuery(md.description)) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
+
 	public UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
@@ -451,20 +469,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
 		// Filter sections based on search query
-		let filteredSections = sections;
-		if (this.state.searchQuery) {
-			filteredSections = sections.filter(section => {
-				// Check if section name matches
-				if (this.matchesSearchQuery(section.name)) return true;
-				// Check if any metadata (label or description) matches
-				for (const md of section.metadatas) {
-					if (this.matchesSearchQuery(md.label) || this.matchesSearchQuery(md.description)) {
-						return true;
-					}
-				}
-				return false;
-			});
-		}
+		const filteredSections = this.getFilteredSections(sections);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
@@ -511,7 +516,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				<Sidebar
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
-				sections={filteredSections}
+					sections={filteredSections}
 					searchQuery={this.state.searchQuery}
 					onSearchQueryChange={this.setSearchQuery}
 					onClearSearch={this.clearSearch}
