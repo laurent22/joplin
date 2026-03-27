@@ -45,6 +45,7 @@ import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import QuitSyncDialog from './QuitSyncDialog';
+import { reg } from '@joplin/lib/registry';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -277,10 +278,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 		// If a note is being saved, we wait till it is saved and then call
 		// "appCloseReply" again.
 		ipcRenderer.on('appClose', async () => {
+			reg.logger().info('[appClose] Received appClose event - hasNotesBeingSaved:', this.props.hasNotesBeingSaved);
 			if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
 			this.waitForNotesSavedIID_ = null;
 
 			const sendCanClose = async (canClose: boolean) => {
+				reg.logger().info('[appClose] Sending appCloseReply - canClose:', canClose);
 				if (canClose) {
 					Setting.setValue('wasClosedSuccessfully', true);
 					await Setting.saveAll();
@@ -291,8 +294,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 			await sendCanClose(!this.props.hasNotesBeingSaved);
 
 			if (this.props.hasNotesBeingSaved) {
+				reg.logger().info('[appClose] Notes are being saved, waiting...');
 				this.waitForNotesSavedIID_ = shim.setInterval(() => {
 					if (!this.props.hasNotesBeingSaved) {
+						reg.logger().info('[appClose] Notes saved, now sending canClose: true');
 						shim.clearInterval(this.waitForNotesSavedIID_);
 						this.waitForNotesSavedIID_ = null;
 						void sendCanClose(true);

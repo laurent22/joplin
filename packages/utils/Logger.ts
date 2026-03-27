@@ -135,16 +135,17 @@ class Logger {
 		return this.globalLogger_;
 	}
 
-	public static create(prefix: string): LoggerWrapper {
+	public static create(prefix: string, logger: Logger|null = null): LoggerWrapper {
+		const targetLogger = logger ?? this.globalLogger;
 		return {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			debug: (...object: any[]) => this.globalLogger.log(LogLevel.Debug, prefix, ...object),
+			debug: (...object: any[]) => targetLogger.log(LogLevel.Debug, prefix, ...object),
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			info: (...object: any[]) => this.globalLogger.log(LogLevel.Info, prefix, ...object),
+			info: (...object: any[]) => targetLogger.log(LogLevel.Info, prefix, ...object),
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			warn: (...object: any[]) => this.globalLogger.log(LogLevel.Warn, prefix, ...object),
+			warn: (...object: any[]) => targetLogger.log(LogLevel.Warn, prefix, ...object),
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			error: (...object: any[]) => this.globalLogger.log(LogLevel.Error, prefix, ...object),
+			error: (...object: any[]) => targetLogger.log(LogLevel.Error, prefix, ...object),
 		};
 	}
 
