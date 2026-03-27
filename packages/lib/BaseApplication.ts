@@ -627,6 +627,12 @@ export default class BaseApplication {
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
 		ShareService.instance().initialize(this.store(), EncryptionService.instance());
+
+		const cached = parseShareCache(Setting.value('sync.shareCache'));
+		if (cached.shares.length) {
+			this.store().dispatch({ type: 'SHARE_SET', shares: cached.shares });
+		}
+
 	}
 
 	public deinitRedux() {
