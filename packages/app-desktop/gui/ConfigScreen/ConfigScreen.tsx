@@ -450,6 +450,22 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
+		// Filter sections based on search query
+		let filteredSections = sections;
+		if (this.state.searchQuery) {
+			filteredSections = sections.filter(section => {
+				// Check if section name matches
+				if (this.matchesSearchQuery(section.name)) return true;
+				// Check if any metadata (label or description) matches
+				for (const md of section.metadatas) {
+					if (this.matchesSearchQuery(md.label) || this.matchesSearchQuery(md.description)) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const needRestartComp: any = this.state.needRestart ? (
 			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
@@ -462,7 +478,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		delete style.width;
 
 		const tabComponents: React.ReactNode[] = [];
-		for (const section of sections) {
+		for (const section of filteredSections) {
 			const sectionId = `setting-section-${section.name}`;
 			let content = null;
 			const visible = section.name === this.state.selectedSectionName;
@@ -495,7 +511,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				<Sidebar
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
-					sections={sections}
+				sections={filteredSections}
 					searchQuery={this.state.searchQuery}
 					onSearchQueryChange={this.setSearchQuery}
 					onClearSearch={this.clearSearch}
