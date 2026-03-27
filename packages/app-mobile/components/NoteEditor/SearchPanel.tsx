@@ -33,8 +33,7 @@ export interface SearchPanelProps {
 }
 
 interface ActionButtonProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	styles: any;
+	styles: ReturnType<typeof useStyles>;
 	themeId: number;
 	iconName: string;
 	title: string;
@@ -55,8 +54,7 @@ const ActionButton = (props: ActionButtonProps) => {
 };
 
 interface ToggleButtonProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	styles: any;
+	styles: ReturnType<typeof useStyles>;
 	themeId: number;
 	iconName: string;
 	title: string;

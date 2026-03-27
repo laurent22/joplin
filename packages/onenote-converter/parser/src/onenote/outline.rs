@@ -307,7 +307,7 @@ fn parse_outline_item(item_id: ExGuid, space: ObjectSpaceRef) -> Result<OutlineI
             return Err(ErrorKind::MalformedOneNoteData(
                 format!("invalid outline item type: {:?}", id).into(),
             )
-            .into())
+            .into());
         }
     };
 

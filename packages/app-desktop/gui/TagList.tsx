@@ -7,12 +7,15 @@ import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getColl
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 
+interface TagData {
+	id: string;
+	title: string;
+}
+
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	items: any[];
+	style: React.CSSProperties;
+	items: TagData[];
 }
 
 function TagList(props: Props) {
@@ -34,8 +37,7 @@ function TagList(props: Props) {
 	const tags = useMemo(() => {
 		const output = props.items.slice();
 		const collator = getCollator(collatorLocale);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		output.sort((a: any, b: any) => {
+		output.sort((a: TagData, b: TagData) => {
 			return collator.compare(a.title, b.title);
 		});
 

@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function propsHaveChanged(previous: any, next: any): boolean {
+export default function propsHaveChanged(previous: Record<string, unknown> | null | undefined, next: Record<string, unknown> | null | undefined): boolean {
 	if (!previous && next) return true;
 	if (previous && !next) return true;
 	if (!previous && !next) return false;
