@@ -317,7 +317,7 @@ class Bridge {
 	}
 
 	async notes(folderId) {
-		return this.clipperApiExec('GET', 'notes', { parent_id: folderId, fields: 'id,title', order_by: 'updated_time', order_dir: 'DESC', limit: 200 });
+		return this.clipperApiExec('GET', 'notes', { parent_id: folderId, fields: 'id,title', order_by: 'updated_time', order_dir: 'DESC', limit: 100 });
 	}
 
 	async storageSet(keys) {
