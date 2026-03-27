@@ -514,7 +514,8 @@ function shimInit(options: ShimInitOptions = null) {
 			}
 			const parts = imageDataUrl.split(',');
 			const dataBuffer = Buffer.from(parts[1], 'base64');
-			// eslint-disable-next-line `@typescript-eslint/no-explicit-any`
+			// eslint-disable-next-line `@typescript-eslint/no-explicit-any` -- Old code before rule was applied
+			await shim.fsDriver().writeFile(filePath, dataBuffer as any, 'buffer');
 			await shim.fsDriver().writeFile(filePath, dataBuffer as any, 'buffer');
 		}
 	};
