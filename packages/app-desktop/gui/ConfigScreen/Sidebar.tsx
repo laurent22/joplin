@@ -31,6 +31,14 @@ export const StyledRoot = styled.div`
 	overflow-y: auto;
 `;
 
+export const StyledTabListContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+	overflow-y: auto;
+	flex: 1;
+`;
+
 export const StyledListItem = styled.a`
 	box-sizing: border-box;
 	display: flex;
@@ -222,7 +230,7 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+		<StyledRoot className='settings-sidebar _scrollbar2'>
 			{(props.searchQuery !== undefined || props.onSearchQueryChange) && (
 				<StyledSearchContainer>
 					<StyledSearchInput
@@ -242,7 +250,9 @@ export default function Sidebar(props: Props) {
 					)}
 				</StyledSearchContainer>
 			)}
-			{buttons}
+			<StyledTabListContainer role='tablist'>
+				{buttons}
+			</StyledTabListContainer>
 		</StyledRoot>
 	);
 }
