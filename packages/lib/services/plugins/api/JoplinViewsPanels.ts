@@ -132,15 +132,11 @@ export default class JoplinViewsPanels {
 	}
 
 	/**
-	 * This method is not relevant for panels and will throw an error.
-	 * Use the `visible()` method instead to check whether a panel is
-	 * shown or hidden.
-	 *
-	 * `isActive` is only meaningful for editor views, where "active"
-	 * indicates that the editor supports editing the current note.
+	 * @deprecated For panels, this method always returns true and is functionally deprecated.
+	 * Plugin authors should use `isVisible(handle)` instead to determine panel state.
 	 */
 	public async isActive(_handle: ViewHandle): Promise<boolean> {
-		throw new Error('isActive() is not supported for panels. Use visible() to check whether the panel is shown or hidden.');
+		return true;
 	}
 
 }

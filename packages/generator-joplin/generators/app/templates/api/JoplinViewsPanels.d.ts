@@ -81,8 +81,8 @@ export default class JoplinViewsPanels {
      */
     visible(handle: ViewHandle): Promise<boolean>;
     /**
-     * Assuming that the current panel is an editor plugin view, returns
-     * whether the editor plugin view supports editing the current note.
+     * @deprecated For panels, this method always returns true and is functionally deprecated.
+     * Plugin authors should use `isVisible(handle)` instead to determine panel state.
      */
     isActive(handle: ViewHandle): Promise<boolean>;
 }
