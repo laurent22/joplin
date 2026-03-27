@@ -1556,6 +1556,7 @@ packages/lib/services/plugins/api/JoplinViewsEditor.js
 packages/lib/services/plugins/api/JoplinViewsMenuItems.js
 packages/lib/services/plugins/api/JoplinViewsMenus.js
 packages/lib/services/plugins/api/JoplinViewsNoteList.js
+packages/lib/services/plugins/api/JoplinViewsPanels.test.js
 packages/lib/services/plugins/api/JoplinViewsPanels.js
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.js
 packages/lib/services/plugins/api/JoplinWindow.js
