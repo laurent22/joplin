@@ -54,7 +54,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			fonts: [],
 			searchQuery: '',
 			searching: false,
-			filteredSections: new Set<string>(),
 		};
 
 		this.rowStyle_ = {
@@ -85,37 +84,17 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	private setSearchQuery(query: string) {
-		this.setState({ searchQuery: query, searching: query.length > 0 }, () => {
-			const sections = shared.buildSections(this.props.settings, this.state, this.props.themeId, this.props.appType);
-			this.setState({ filteredSections: this.getFilteredSections(sections) });
-		});
+		this.setState({ searchQuery: query, searching: query.length > 0 });
 	}
 
 	private clearSearch() {
-		this.setState({ searchQuery: '', searching: false, filteredSections: new Set<string>() });
+		this.setState({ searchQuery: '', searching: false });
 	}
 
 	private matchesSearchQuery(relatedText: string): boolean {
 		if (!this.state.searchQuery) return true;
 		if (!relatedText) return false;
 		return String(relatedText).toLowerCase().includes(this.state.searchQuery.toLowerCase());
-	}
-
-	private getFilteredSections(sections: any[]): Set<string> {
-		const filtered = new Set<string>();
-		for (const section of sections) {
-			if (this.matchesSearchQuery(section.name)) {
-				filtered.add(section.name);
-				continue;
-			}
-			for (const md of section.metadatas) {
-				if (this.matchesSearchQuery(md.label) || this.matchesSearchQuery(md.description)) {
-					filtered.add(section.name);
-					break;
-				}
-			}
-		}
-		return filtered;
 	}
 
 	public UNSAFE_componentWillMount() {
@@ -520,7 +499,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					searchQuery={this.state.searchQuery}
 					onSearchQueryChange={this.setSearchQuery}
 					onClearSearch={this.clearSearch}
-					filteredSections={this.state.filteredSections}
+
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}

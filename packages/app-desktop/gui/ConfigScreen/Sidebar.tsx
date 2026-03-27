@@ -21,7 +21,6 @@ interface Props {
 	searchQuery?: string;
 	onSearchQueryChange?: (query: string) => void;
 	onClearSearch?: () => void;
-	filteredSections?: Set<string>;
 }
 
 export const StyledRoot = styled.div`
@@ -165,14 +164,6 @@ export default function Sidebar(props: Props) {
 
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
-		const isFiltered = props.filteredSections && !props.filteredSections.has(section.name);
-		const hasMatches = !props.filteredSections || props.filteredSections.has(section.name) || !props.searchQuery;
-		const buttonStyle: any = {
-			opacity: !hasMatches ? 0.4 : undefined,
-			cursor: !hasMatches ? 'not-allowed' : undefined,
-			pointerEvents: !hasMatches ? 'none' : undefined,
-		};
-
 		return (
 			<StyledListItem
 				key={section.name}
@@ -189,7 +180,6 @@ export default function Sidebar(props: Props) {
 				selected={selected}
 				onClick={() => { props.onSelectionChange({ section: section }); }}
 				onKeyDown={onKeyDown}
-				style={buttonStyle}
 			>
 				<StyledListItemIcon
 					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}

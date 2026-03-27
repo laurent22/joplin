@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StyledListItemIcon = exports.StyledListItemLabel = exports.StyledClearButton = exports.StyledSearchInput = exports.StyledSearchContainer = exports.StyledDivider = exports.StyledListItem = exports.StyledRoot = void 0;
+exports.StyledClearButton = exports.StyledSearchInput = exports.StyledSearchContainer = exports.StyledListItemIcon = exports.StyledListItemLabel = exports.StyledDivider = exports.StyledListItem = exports.StyledRoot = void 0;
 exports.default = Sidebar;
 const Setting_1 = require("@joplin/lib/models/Setting");
 const React = require("react");
@@ -47,51 +47,6 @@ exports.StyledDivider = styled.div `
 	font-size: ${(props) => Math.round(props.theme.fontSize)}px;
 	opacity: 0.58;
 `;
-exports.StyledSearchContainer = styled.div `
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: row;
-	padding: ${(props) => props.theme.mainPadding}px;
-	gap: ${(props) => props.theme.mainPadding * 0.5}px;
-	border-bottom: 1px solid ${(props) => props.theme.dividerColor};
-`;
-exports.StyledSearchInput = styled.input `
-	flex: 1;
-	padding: ${(props) => props.theme.mainPadding * 0.5}px;
-	border: 1px solid ${(props) => props.theme.dividerColor};
-	border-radius: 4px;
-	font-size: ${(props) => Math.round(props.theme.fontSize)}px;
-	background-color: ${(props) => props.theme.backgroundColor};
-	color: ${(props) => props.theme.color};
-	box-sizing: border-box;
-
-	&:focus {
-		outline: none;
-		border-color: ${(props) => props.theme.colorFocus};
-	}
-`;
-exports.StyledClearButton = styled.button `
-	padding: ${(props) => props.theme.mainPadding * 0.5}px;
-	border: 1px solid ${(props) => props.theme.dividerColor};
-	border-radius: 4px;
-	background-color: ${(props) => props.theme.backgroundColor};
-	color: ${(props) => props.theme.color};
-	font-size: ${(props) => Math.round(props.theme.fontSize)}px;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-width: ${(props) => props.theme.mainPadding * 2.5}px;
-
-	&:hover {
-		background-color: ${(props) => props.theme.backgroundColorHover2};
-	}
-
-	&:focus {
-		outline: none;
-		border-color: ${(props) => props.theme.colorFocus};
-	}
-`;
 exports.StyledListItemLabel = styled.span `
 	font-size: ${(props) => Math.round(props.theme.fontSize * 1.2)}px;
 	font-weight: 500;
@@ -106,6 +61,50 @@ exports.StyledListItemIcon = styled.i `
 	font-size: ${(props) => Math.round(props.theme.fontSize * 1.4)}px;
 	color: ${(props) => props.theme.color2};
 	margin-right: ${(props) => props.theme.mainPadding / 1.5}px;
+`;
+exports.StyledSearchContainer = styled.div `
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: ${(props) => props.theme.mainPadding}px;
+	border-bottom: 1px solid ${(props) => props.theme.dividerColor};
+	background-color: ${(props) => props.theme.backgroundColor2};
+`;
+exports.StyledSearchInput = styled.input `
+	flex: 1;
+	padding: 8px;
+	border: 1px solid ${(props) => props.theme.dividerColor};
+	border-radius: 4px;
+	background-color: ${(props) => props.theme.backgroundColor};
+	color: ${(props) => props.theme.color2};
+	font-size: ${(props) => Math.round(props.theme.fontSize)}px;
+
+	&:focus {
+		outline: none;
+		border-color: ${(props) => props.theme.colorFaded};
+	}
+
+	&::placeholder {
+		color: ${(props) => props.theme.colorFaded};
+	}
+`;
+exports.StyledClearButton = styled.button `
+	margin-left: 8px;
+	padding: 6px 12px;
+	border: none;
+	background-color: ${(props) => props.theme.backgroundColor3};
+	color: ${(props) => props.theme.color2};
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: ${(props) => Math.round(props.theme.fontSize)}px;
+
+	&:hover {
+		background-color: ${(props) => props.theme.backgroundColorHover2};
+	}
+
+	&:active {
+		opacity: 0.7;
+	}
 `;
 function Sidebar(props) {
     const buttonRefs = (0, react_1.useRef)([]);
@@ -141,14 +140,16 @@ function Sidebar(props) {
     const buttons = [];
     function renderButton(section, index) {
         const selected = props.selection === section.name;
-        const hasMatches = !props.filteredSections || props.filteredSections.has(section.name);
-        const isSearching = props.searchQuery && props.searchQuery.length > 0;
-        const disabled = isSearching && !hasMatches;
-        return (React.createElement(exports.StyledListItem, { key: section.name, href: '#', role: 'tab', ref: (item) => { buttonRefs.current[index] = item; }, id: `setting-tab-${section.name}`, "aria-controls": `setting-section-${section.name}`, "aria-selected": selected, tabIndex: selected ? 0 : -1, isSubSection: Setting_2.default.isSubSection(section.name), selected: selected, onClick: () => { if (!disabled)
-                props.onSelectionChange({ section: section }); }, onKeyDown: onKeyDown, style: { opacity: disabled ? 0.4 : 0.8, cursor: disabled ? 'not-allowed' : 'default', pointerEvents: disabled ? 'none' : 'auto' } },
+        const isFiltered = props.filteredSections && !props.filteredSections.has(section.name);
+        const hasMatches = !props.filteredSections || props.filteredSections.has(section.name) || !props.searchQuery;
+        const buttonStyle = {
+            opacity: !hasMatches ? 0.4 : undefined,
+            cursor: !hasMatches ? 'not-allowed' : undefined,
+            pointerEvents: !hasMatches ? 'none' : undefined,
+        };
+        return (React.createElement(exports.StyledListItem, { key: section.name, href: '#', role: 'tab', ref: (item) => { buttonRefs.current[index] = item; }, id: `setting-tab-${section.name}`, "aria-controls": `setting-section-${section.name}`, "aria-selected": selected, tabIndex: selected ? 0 : -1, isSubSection: Setting_2.default.isSubSection(section.name), selected: selected, onClick: () => { props.onSelectionChange({ section: section }); }, onKeyDown: onKeyDown, style: buttonStyle },
             React.createElement(exports.StyledListItemIcon, { className: Setting_2.default.sectionNameToIcon(section.name, Setting_1.AppType.Desktop), role: 'img', "aria-hidden": 'true' }),
-            React.createElement(exports.StyledListItemLabel, null,
-                React.createElement(HighlightedText_1.default, { text: Setting_2.default.sectionNameToLabel(section.name), searchQuery: props.searchQuery }))));
+            React.createElement(exports.StyledListItemLabel, null, props.searchQuery ? (React.createElement(HighlightedText_1.default, { text: Setting_2.default.sectionNameToLabel(section.name), highlight: props.searchQuery })) : (Setting_2.default.sectionNameToLabel(section.name)))));
     }
     function renderDivider(key) {
         return (React.createElement(exports.StyledDivider, { key: key }, (0, locale_1._)('Plugins')));
@@ -163,11 +164,14 @@ function Sidebar(props) {
         buttons.push(renderButton(section, index));
         index++;
     }
-    const searchContent = props.searchQuery !== undefined ? (React.createElement(exports.StyledSearchContainer, null,
-        React.createElement(exports.StyledSearchInput, { type: 'text', placeholder: (0, locale_1._)('Search...'), value: props.searchQuery, onChange: (e) => { var _a; return (_a = props.onSearchQueryChange) === null || _a === void 0 ? void 0 : _a.call(props, e.target.value); }, "aria-label": (0, locale_1._)('Search settings') }),
-        props.searchQuery && (React.createElement(exports.StyledClearButton, { onClick: () => { var _a; return (_a = props.onClearSearch) === null || _a === void 0 ? void 0 : _a.call(props); }, "aria-label": (0, locale_1._)('Clear search'), title: (0, locale_1._)('Clear search') }, "\u2715")))) : null;
     return (React.createElement(exports.StyledRoot, { className: 'settings-sidebar _scrollbar2', role: 'tablist' },
-        searchContent,
+        (props.searchQuery !== undefined || props.onSearchQueryChange) && (React.createElement(exports.StyledSearchContainer, null,
+            React.createElement(exports.StyledSearchInput, { type: 'text', placeholder: (0, locale_1._)('Search settings...'), value: props.searchQuery || '', onChange: (e) => {
+                    if (props.onSearchQueryChange) {
+                        props.onSearchQueryChange(e.target.value);
+                    }
+                } }),
+            props.searchQuery && props.onClearSearch && (React.createElement(exports.StyledClearButton, { onClick: props.onClearSearch }, (0, locale_1._)('Clear'))))),
         buttons));
 }
 //# sourceMappingURL=Sidebar.js.map

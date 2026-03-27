@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConfigScreenComponent = void 0;
 const React = require("react");
 const Sidebar_1 = require("./Sidebar");
 const ButtonBar_1 = require("./ButtonBar");
@@ -37,7 +38,7 @@ class ConfigScreenComponent extends React.Component {
             shared.updateSettingValue(this, key, value);
         };
         shared.init(registry_1.reg);
-        this.state = Object.assign(Object.assign({}, shared.defaultScreenState), { selectedSectionName: 'general', screenName: '', changedSettingKeys: [], needRestart: false, fonts: [], searchQuery: '', searching: false });
+        this.state = Object.assign(Object.assign({}, shared.defaultScreenState), { selectedSectionName: 'general', screenName: '', changedSettingKeys: [], needRestart: false, fonts: [], searchQuery: '', searching: false, filteredSections: new Set() });
         this.rowStyle_ = {
             marginBottom: 10,
         };
@@ -61,6 +62,36 @@ class ConfigScreenComponent extends React.Component {
             }
         }
         await shared.checkSyncConfig(this, this.state.settings);
+    }
+    setSearchQuery(query) {
+        this.setState({ searchQuery: query, searching: query.length > 0 }, () => {
+            const sections = shared.buildSections(this.props.settings, this.state, this.props.themeId, this.props.appType);
+            this.setState({ filteredSections: this.getFilteredSections(sections) });
+        });
+    }
+    clearSearch() {
+        this.setState({ searchQuery: '', searching: false, filteredSections: new Set() });
+    }
+    matchesSearchQuery(relatedText) {
+        if (!this.state.searchQuery)
+            return true;
+        return relatedText.toLowerCase().includes(this.state.searchQuery.toLowerCase());
+    }
+    getFilteredSections(sections) {
+        const filtered = new Set();
+        for (const section of sections) {
+            if (this.matchesSearchQuery(section.name)) {
+                filtered.add(section.name);
+                continue;
+            }
+            for (const md of section.metadatas) {
+                if (this.matchesSearchQuery(md.label) || this.matchesSearchQuery(md.description)) {
+                    filtered.add(section.name);
+                    break;
+                }
+            }
+        }
+        return filtered;
     }
     UNSAFE_componentWillMount() {
         this.setState({ settings: this.props.settings });
@@ -148,59 +179,6 @@ class ConfigScreenComponent extends React.Component {
     sidebar_selectionChange(event) {
         void this.switchSection(event.section.name);
     }
-    setSearchQuery(newQuery) {
-        this.setState({ searchQuery: newQuery });
-    }
-    clearSearch() {
-        this.setState({ searchQuery: '', searching: false });
-    }
-    matchesSearchQuery(relatedText) {
-        let searchThrough;
-        if (Array.isArray(relatedText)) {
-            searchThrough = relatedText.join('\n');
-        }
-        else {
-            searchThrough = relatedText;
-        }
-        searchThrough = searchThrough.toLocaleLowerCase();
-        const searchQuery = this.state.searchQuery.toLocaleLowerCase().trim();
-        // Don't show results when the search input is empty
-        if (this.state.searchQuery.length === 0) {
-            return true;
-        }
-        return searchThrough.includes(searchQuery);
-    }
-    getFilteredSections(sections) {
-        const filteredSections = new Set();
-        if (this.state.searchQuery.length === 0) {
-            // All sections are visible when no search query
-            sections.forEach(section => filteredSections.add(section.name));
-            return filteredSections;
-        }
-        for (const section of sections) {
-            const sectionLabel = Setting_1.default.sectionNameToLabel(section.name);
-            // Check if section title matches
-            if (this.matchesSearchQuery(sectionLabel)) {
-                filteredSections.add(section.name);
-                continue;
-            }
-            // Check if any setting in this section matches
-            let hasMatchingSetting = false;
-            for (const metadata of section.metadatas) {
-                const settingLabel = metadata.label ? metadata.label() : '';
-                const settingDescription = metadata.description ? metadata.description(Setting_1.AppType.Desktop) : '';
-                const searchTexts = [settingLabel, settingDescription];
-                if (this.matchesSearchQuery(searchTexts)) {
-                    hasMatchingSetting = true;
-                    break;
-                }
-            }
-            if (hasMatchingSetting) {
-                filteredSections.add(section.name);
-            }
-        }
-        return filteredSections;
-    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
     renderSectionDescription(section) {
         const description = Setting_1.default.sectionDescription(section.name, Setting_1.AppType.Desktop);
@@ -218,15 +196,8 @@ class ConfigScreenComponent extends React.Component {
                 const md = section.metadatas[i];
                 if (!!md.advanced !== advanced)
                     continue;
-                // Filter by search query
-                if (this.state.searchQuery.length > 0) {
-                    const settingLabel = md.label ? md.label() : '';
-                    const settingDescription = md.description ? md.description(Setting_1.AppType.Desktop) : '';
-                    const searchTexts = [settingLabel, settingDescription];
-                    if (!this.matchesSearchQuery(searchTexts)) {
-                        continue;
-                    }
-                }
+                if (!this.matchesSearchQuery(md.label) && !this.matchesSearchQuery(md.description))
+                    continue;
                 const settingComp = this.settingToComponent(md.key, settings[md.key]);
                 output.push(settingComp);
             }
@@ -385,13 +356,14 @@ class ConfigScreenComponent extends React.Component {
             tabComponents.push(React.createElement("div", { key: sectionId, id: sectionId, className: `setting-tab-panel ${!visible ? '-hidden' : ''}`, hidden: !visible, "aria-labelledby": `setting-tab-${section.name}`, tabIndex: 0, role: 'tabpanel' }, content));
         }
         return (React.createElement("div", { className: "config-screen", role: "main", style: { display: 'flex', flexDirection: 'row', height: this.props.style.height } },
-            React.createElement(Sidebar_1.default, { selection: this.state.selectedSectionName, onSelectionChange: this.sidebar_selectionChange, sections: sections, searchQuery: this.state.searchQuery, onSearchQueryChange: this.setSearchQuery, onClearSearch: this.clearSearch, filteredSections: this.getFilteredSections(sections) }),
+            React.createElement(Sidebar_1.default, { selection: this.state.selectedSectionName, onSelectionChange: this.sidebar_selectionChange, sections: sections, searchQuery: this.state.searchQuery, onSearchQueryChange: this.setSearchQuery, onClearSearch: this.clearSearch, filteredSections: this.state.filteredSections }),
             React.createElement("div", { style: rightStyle },
                 needRestartComp,
                 tabComponents,
                 React.createElement(ButtonBar_1.default, { hasChanges: hasChanges, backButtonTitle: hasChanges && !screenComp ? (0, locale_1._)('Cancel') : (0, locale_1._)('Back'), onCancelClick: this.onCancelClick, onSaveClick: screenComp ? null : this.onSaveClick, onApplyClick: screenComp ? null : this.onApplyClick }))));
     }
 }
+exports.ConfigScreenComponent = ConfigScreenComponent;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 const mapStateToProps = (state) => {
     return {

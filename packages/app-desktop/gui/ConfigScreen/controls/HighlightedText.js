@@ -1,43 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = HighlightedText;
 const React = require("react");
-const HighlightedText = props => {
-    if (!props.searchQuery || props.searchQuery.length === 0) {
-        return React.createElement(React.Fragment, null, props.text);
+function HighlightedText(props) {
+    const { text, highlight } = props;
+    if (!highlight) {
+        return React.createElement(React.Fragment, null, text);
     }
-    const query = props.searchQuery.toLowerCase();
-    const lowerText = props.text.toLowerCase();
     const parts = [];
-    let lastIndex = 0;
-    // Find all occurrences of the search query
-    let index = 0;
-    while ((index = lowerText.indexOf(query, lastIndex)) !== -1) {
-        // Add text before match
-        if (index > lastIndex) {
+    const query = highlight.toLowerCase();
+    let currentIndex = 0;
+    let matchIndex = text.toLowerCase().indexOf(query);
+    while (matchIndex !== -1) {
+        if (matchIndex > currentIndex) {
             parts.push({
-                text: props.text.substring(lastIndex, index),
+                text: text.substring(currentIndex, matchIndex),
                 highlighted: false,
             });
         }
-        // Add matched text
         parts.push({
-            text: props.text.substring(index, index + query.length),
+            text: text.substring(matchIndex, matchIndex + query.length),
             highlighted: true,
         });
-        lastIndex = index + query.length;
+        currentIndex = matchIndex + query.length;
+        matchIndex = text.toLowerCase().indexOf(query, currentIndex);
     }
-    // Add remaining text
-    if (lastIndex < props.text.length) {
+    if (currentIndex < text.length) {
         parts.push({
-            text: props.text.substring(lastIndex),
+            text: text.substring(currentIndex),
             highlighted: false,
         });
     }
-    // If no matches were found, just return the original text
-    if (parts.length === 0) {
-        return React.createElement(React.Fragment, null, props.text);
-    }
-    return (React.createElement(React.Fragment, null, parts.map((part, index) => (part.highlighted ? (React.createElement("mark", { key: index, style: { backgroundColor: '#ffeb3b', padding: '0 2px' } }, part.text)) : (React.createElement("span", { key: index }, part.text))))));
-};
-exports.default = HighlightedText;
+    return (React.createElement(React.Fragment, null, parts.map((part, index) => part.highlighted ? (React.createElement("span", { key: index, style: {
+            backgroundColor: '#ffeb3b',
+            padding: '2px',
+        } }, part.text)) : (React.createElement("span", { key: index }, part.text)))));
+}
 //# sourceMappingURL=HighlightedText.js.map
