@@ -215,7 +215,7 @@ export default class ElectronAppWrapper {
 		const joplinSession = electronSession.fromPath(sessionPath, { cache: false });
 
 		// One-time migration: copy existing dictionary words from the old Electron userData location into the new session.
-		const migrationFlagPath = path.join(this.profilePath_, '.spell-checker-migration-done');
+		const migrationFlagPath = path.join(this.profilePath_, 'spell-checker-migration-done');
 		if (!fs.existsSync(migrationFlagPath)) {
 			try {
 				const wordsToMigrate = new Set<string>();
