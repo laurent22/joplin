@@ -12,7 +12,7 @@ export default function HighlightedText(props: Props) {
 		return <>{text}</>;
 	}
 
-	const parts: Array<{ text: string; highlighted: boolean }> = [];
+	const parts: { text: string; highlighted: boolean }[] = [];
 	const query = highlight.toLowerCase();
 	let currentIndex = 0;
 	let matchIndex = text.toLowerCase().indexOf(query);
@@ -54,7 +54,7 @@ export default function HighlightedText(props: Props) {
 					</span>
 				) : (
 					<span key={index}>{part.text}</span>
-				)
+				),
 			)}
 		</>
 	);
