@@ -148,6 +148,31 @@ describe('htmlUtils', () => {
 				'<span style="visibility:   hidden">hidden text</span>',
 				'',
 			],
+			// nested hidden — multiple children inside hidden parent should all be excluded
+			[
+				'<div style="display: none"><span>still hidden</span><p>also hidden</p></div>',
+				'',
+			],
+			// opacity: 0.5 should NOT be treated as hidden
+			[
+				'<span style="opacity: 0.5">visible text</span>',
+				'visible text',
+			],
+			// height: 0.5px should NOT be treated as hidden
+			[
+				'<span style="overflow: hidden; height: 0.5px">visible text</span>',
+				'visible text',
+			],
+			// text-indent: -99999px should NOT match -9999 rule
+			[
+				'<span style="text-indent: -99999px">visible text</span>',
+				'visible text',
+			],
+			// font-size: 0.5 should NOT be treated as hidden
+			[
+				'<span style="font-size: 0.5em">visible text</span>',
+				'visible text',
+			],
 		];
 		for (const t of testCases) {
 			const [input, expected] = t;

@@ -60,30 +60,36 @@ const isHiddenByStyle = (style: string): boolean => {
 	const s = style.replace(/\s/g, '').toLowerCase();
 
 	return (
-		s.includes('visibility:hidden') ||
-        s.includes('display:none') ||
-        s.includes('opacity:0') ||
-        s.includes('font-size:0') ||
-        s.includes('color:transparent') ||
-        s.includes('color:rgba(0,0,0,0)') ||
-        // Moves element far off-screen
-        s.includes('text-indent:-9999') ||
-        s.includes('text-indent:-999') ||
-        // Zero dimensions with hidden overflow
-        (s.includes('overflow:hidden') && (s.includes('height:0') || s.includes('width:0') || s.includes('max-height:0'))) ||
-        // Clip path fully hidden
-        s.includes('clip-path:inset(100%)') ||
-        s.includes('transform:scale(0)')
+		/visibility:hidden(?:;|$)/.test(s) ||
+		/display:none(?:;|$)/.test(s) ||
+		/opacity:0(?:;|$)/.test(s) ||
+		/font-size:0(?:px|em|rem|%)?(?:;|$)/.test(s) ||
+		/color:transparent(?:;|$)/.test(s) ||
+		/color:rgba\(0,0,0,0\)(?:;|$)/.test(s) ||
+		// Moves element far off-screen
+		/text-indent:-9999(?:px)?(?:;|$)/.test(s) ||
+		/text-indent:-999(?:px)?(?:;|$)/.test(s) ||
+		// Zero dimensions with hidden overflow
+		(
+			/overflow:hidden(?:;|$)/.test(s) && (
+				/(?:^|;)height:0(?:px|em|rem|%)?(?:;|$)/.test(s) ||
+				/(?:^|;)width:0(?:px|em|rem|%)?(?:;|$)/.test(s) ||
+				/(?:^|;)max-height:0(?:px|em|rem|%)?(?:;|$)/.test(s)
+			)
+		) ||
+		// Clip path fully hidden
+		/clip-path:inset\(100%\)(?:;|$)/.test(s) ||
+		/transform:scale\(0\)(?:;|$)/.test(s)
 	);
 };
 
 type ProcessImageResult = {
 	type: 'replaceElement';
 	html: string;
-}|{
+} | {
 	type: 'replaceSource';
 	src: string;
-}|{
+} | {
 	type: 'setAttributes';
 	attrs: Record<string, string>;
 };
@@ -161,6 +167,7 @@ class HtmlUtils {
 		const tagStack: string[] = [];
 
 		let hiddenDepth = 0;
+		const hiddenTagStack: boolean[] = [];
 
 		const currentTag = () => {
 			if (!tagStack.length) return '';
@@ -173,9 +180,9 @@ class HtmlUtils {
 
 			onopentag: (name: string, attrs: Record<string, string>) => {
 				tagStack.push(name.toLowerCase());
-				if (isHiddenByStyle(attrs['style'])) {
-					hiddenDepth++;
-				}
+				const isHidden = isHiddenByStyle(attrs['style']);
+				hiddenTagStack.push(isHidden);
+				if (isHidden) hiddenDepth++;
 			},
 
 			ontext: (decodedText: string) => {
@@ -185,8 +192,11 @@ class HtmlUtils {
 			},
 
 			onclosetag: (name: string) => {
-				if (currentTag() === name.toLowerCase()) tagStack.pop();
-				if (hiddenDepth > 0) hiddenDepth--;
+				if (currentTag() === name.toLowerCase()) {
+					tagStack.pop();
+					const wasHidden = hiddenTagStack.pop() ?? false;
+					if (wasHidden) hiddenDepth--;
+				}
 			},
 
 		}, { decodeEntities: true });
