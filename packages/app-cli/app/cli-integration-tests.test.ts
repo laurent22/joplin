@@ -249,21 +249,29 @@ describe('cli-integration-tests', () => {
 
 	it('should support \'use /\' to return to root', async () => {
 		await execCommand(client, 'mkbook nb1');
-		await execCommand(client, 'mknote n1');
 		await execCommand(client, 'mkbook nb2');
 
-		// Switch to nb1 and verify we see its notes
+		// Switch to nb1 and create a note
 		await execCommand(client, 'use nb1');
-		const lsInNb1 = await execCommand(client, 'ls');
-		expect(lsInNb1).toContain('n1');
+		await execCommand(client, 'mknote n1');
 
-		// Return to root
+		const nb1 = await Folder.loadByTitle('nb1');
+		let nb1Notes = await Note.previews(nb1.id);
+		expect(nb1Notes.length).toBe(1);
+
+		// Return to root, then switch to nb2
 		await execCommand(client, 'use /');
+		await execCommand(client, 'use nb2');
+		await execCommand(client, 'mknote n2');
 
-		// ls / should list all notebooks
-		const lsRoot = await execCommand(client, 'ls /');
-		expect(lsRoot).toContain('nb1');
-		expect(lsRoot).toContain('nb2');
+		// n1 should still be the only note in nb1
+		nb1Notes = await Note.previews(nb1.id);
+		expect(nb1Notes.length).toBe(1);
+
+		// n2 should be in nb2
+		const nb2 = await Folder.loadByTitle('nb2');
+		const nb2Notes = await Note.previews(nb2.id);
+		expect(nb2Notes.length).toBe(1);
 	});
 
 	it('should support copying folders with cp', async () => {
