@@ -629,10 +629,15 @@ export default class BaseApplication {
 		ShareService.instance().initialize(this.store(), EncryptionService.instance());
 
 		const cached = parseShareCache(Setting.value('sync.shareCache'));
-		if (cached.shares.length) {
-			this.store().dispatch({ type: 'SHARE_SET', shares: cached.shares });
+		const hasCachedShareData = cached.shares.length || Object.keys(cached.shareUsers).length || cached.shareInvitations.length;
+		if (hasCachedShareData) {
+			this.store().dispatch({
+				type: 'SHARE_CACHE_RESTORE',
+				shares: cached.shares,
+				shareUsers: cached.shareUsers,
+				shareInvitations: cached.shareInvitations,
+			});
 		}
-
 	}
 
 	public deinitRedux() {
