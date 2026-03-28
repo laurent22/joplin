@@ -45,6 +45,8 @@ import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import QuitSyncDialog from './QuitSyncDialog';
+import StandardPanelHeader from './StandardPanelHeader';
+import setLayoutItemProps from './ResizableLayout/utils/setLayoutItemProps';
 
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -168,6 +170,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.window_resize = this.window_resize.bind(this);
 		this.rowHeight = this.rowHeight.bind(this);
 		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
+		this.onStandardPanelClose = this.onStandardPanelClose.bind(this);
+		this.onStandardPanelRestore = this.onStandardPanelRestore.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
 
@@ -309,10 +313,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 		});
 	}
 
-	public updateRootLayoutSize() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.updateMainLayout(produce(this.props.mainLayout, (draft: any) => {
-			const s = this.rootLayoutSize();
+	public updateRootLayoutSize(layout: LayoutItem = null) {
+		const l = layout || this.props.mainLayout;
+		if (!l) return;
+		this.updateMainLayout(produce(l, (draft: any) => {
+			const s = this.rootLayoutSize(l);
 			draft.width = s.width;
 			draft.height = s.height;
 		}));
@@ -361,6 +366,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	public componentDidMount() {
+		window.addEventListener('resize', this.window_resize);
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
 	}
 
@@ -369,9 +375,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
 	}
 
-	public rootLayoutSize() {
+	public rootLayoutSize(layout: LayoutItem = null) {
+		const ribbonWidth = this.getRibbonWidth(layout);
 		return {
-			width: window.innerWidth,
+			width: window.innerWidth - ribbonWidth,
 			height: this.rowHeight(),
 		};
 	}
@@ -638,6 +645,89 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.updateMainLayout(newLayout);
 	}
 
+
+	private getRibbonWidth(layout: LayoutItem = null) {
+		const l = layout || this.props.mainLayout;
+		if (!l) return 0;
+
+		const hiddenInfos = pluginUtils.viewInfosByType(this.props.plugins, 'webview')
+			.filter(info => {
+				if (info.view.containerType !== ContainerType.Panel) return false;
+				const item = findItemByKey(l, info.view.id);
+				return item && item.visible === false;
+			});
+		return hiddenInfos.length > 0 ? 30 : 0;
+	}
+
+	private onStandardPanelClose(key: string) {
+		const newLayout = setLayoutItemProps(this.props.mainLayout, key, { visible: false });
+		this.updateRootLayoutSize(newLayout);
+	}
+
+	private onStandardPanelRestore(key: string) {
+		const newLayout = setLayoutItemProps(this.props.mainLayout, key, { visible: true });
+		this.updateRootLayoutSize(newLayout);
+	}
+
+	private renderPluginRibbon() {
+		const theme = themeStyle(this.props.themeId);
+		const ribbonWidth = this.getRibbonWidth();
+
+		if (ribbonWidth === 0) return null;
+
+		const hiddenInfos = pluginUtils.viewInfosByType(this.props.plugins, 'webview')
+			.filter(info => {
+				if (info.view.containerType !== ContainerType.Panel) return false;
+				const item = findItemByKey(this.props.mainLayout, info.view.id);
+				return item && item.visible === false;
+			});
+
+		const ribbonStyle: React.CSSProperties = {
+			display: 'flex',
+			flexDirection: 'column',
+			width: `${ribbonWidth}px`,
+			backgroundColor: theme.backgroundColor3,
+			borderLeft: `1px solid ${theme.dividerColor}`,
+			paddingTop: '5px',
+			paddingBottom: '5px',
+			alignItems: 'center',
+			zIndex: 1001,
+		};
+
+		return (
+			<div className="plugin-ribbon" style={ribbonStyle}>
+				{hiddenInfos.map(info => (
+					<button
+						key={info.view.id}
+						className="ribbon-button"
+						style={{
+							background: 'none',
+							border: 'none',
+							color: theme.color2,
+							padding: '10px 0',
+							width: '100%',
+							cursor: 'pointer',
+							opacity: 0.6,
+							transition: 'opacity 0.2s, background-color 0.2s',
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.opacity = '1';
+							e.currentTarget.style.backgroundColor = theme.backgroundColorHover3;
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.opacity = '0.6';
+							e.currentTarget.style.backgroundColor = 'transparent';
+						}}
+						onClick={() => this.onStandardPanelRestore(info.view.id)}
+						title={PluginService.instance().safePluginNameById(info.plugin.id)}
+					>
+						<i className="fas fa-plug" style={{ fontSize: '14px' }} />
+					</button>
+				))}
+			</div>
+		);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resizableLayout_renderItem(key: string, event: any) {
 		// Key should never be undefined but somehow it can happen, also not
@@ -706,17 +796,31 @@ class MainScreenComponent extends React.Component<Props, State> {
 			} else {
 				const { view, plugin } = viewInfo;
 				const html = this.props.pluginHtmlContents[plugin.id]?.[view.id] ?? '';
+				const title = PluginService.instance().safePluginNameById(plugin.id);
 
-				return <UserWebview
-					key={view.id}
-					viewId={view.id}
-					themeId={this.props.themeId}
-					html={html}
-					scripts={view.scripts}
-					pluginId={plugin.id}
-					borderBottom={true}
-					fitToContent={false}
-				/>;
+				const webviewComp = (
+					<UserWebview
+						key={view.id}
+						viewId={view.id}
+						themeId={this.props.themeId}
+						html={html}
+						scripts={view.scripts}
+						pluginId={plugin.id}
+						borderBottom={true}
+						fitToContent={false}
+					/>
+				);
+
+				return (
+					<div key={view.id} style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', overflow: 'hidden' }}>
+						<StandardPanelHeader
+							title={title}
+							themeId={this.props.themeId}
+							onClose={() => this.onStandardPanelClose(view.id)}
+						/>
+						{webviewComp}
+					</div>
+				);
 			}
 		} else {
 			throw new Error(`Invalid layout component: ${key}`);
@@ -796,6 +900,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			/>
 		) : null;
 
+		const ribbonComp = this.renderPluginRibbon();
+
 		return (
 			<div style={style}>
 				<TrashNotification
@@ -812,7 +918,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				/>
 				<QuitSyncDialog themeId={this.props.themeId} />
 				{messageComp}
-				{layoutComp}
+				<div style={{ display: 'flex', flexDirection: 'row', height: styles.rowHeight, width: style.width, overflow: 'hidden', position: 'relative' }}>
+					<div style={{ flex: 1, height: '100%', overflow: 'hidden', position: 'relative' }}>
+						{layoutComp}
+					</div>
+					{ribbonComp}
+				</div>
 			</div>
 		);
 	}
