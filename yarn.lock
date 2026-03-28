@@ -10671,7 +10671,7 @@ __metadata:
     react-native-file-viewer: "npm:2.1.5"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
-    react-native-localize: "npm:3.6.0"
+    react-native-localize: "npm:3.6.1"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-nitro-modules: "npm:0.33.2"
     react-native-paper: "npm:5.14.5"
@@ -44256,9 +44256,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.6.0":
-  version: 3.6.0
-  resolution: "react-native-localize@npm:3.6.0"
+"react-native-localize@npm:3.6.1":
+  version: 3.6.1
+  resolution: "react-native-localize@npm:3.6.1"
   peerDependencies:
     "@expo/config-plugins": "*"
     react: "*"
@@ -44269,7 +44269,7 @@ __metadata:
       optional: true
     react-native-macos:
       optional: true
-  checksum: 10/1a443a77f3431ad638c577c1fc1b2f0b6234c61fd66dcf1ca095303b23dea47fb8bd0d40b18abc2917b874c9df75fe638c40bec6745fce995ad01ccef69d250e
+  checksum: 10/1f693ad3fa16c83014cf1164f269624599c6c7236219999aa4cfab0b277e8267ffb9f06943b3bdfdb9e44d705343c2d6296464170282a615cb9d47f60afa2b3b
   languageName: node
   linkType: hard
 
