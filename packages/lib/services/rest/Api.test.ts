@@ -12,6 +12,9 @@ import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../search/SearchEngine';
 const { MarkupToHtml } = require('@joplin/renderer');
 import { NoteEntity, ResourceEntity } from '../database/types';
+import { toFileProtocolPath } from '@joplin/utils/path';
+import { join } from 'path';
+import { htmlentities } from '@joplin/utils/html';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -512,10 +515,11 @@ describe('services/rest/Api', () => {
 		let response = null;
 		const f = await Folder.save({ title: 'pdf test1' });
 
+		const url = toFileProtocolPath(join(supportDir, 'welcome.pdf'));
 		response = await api.route(RequestMethod.POST, 'notes', null, JSON.stringify({
 			title: 'testing PDF embeds',
 			parent_id: f.id,
-			body_html: `<div> <embed src="file://${supportDir}/welcome.pdf" type="application/pdf" /> </div>`,
+			body_html: `<div> <embed src="${htmlentities(url)}" type="application/pdf" /> </div>`,
 		}));
 
 		const resources = await Resource.all();

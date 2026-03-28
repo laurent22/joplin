@@ -29,7 +29,7 @@ pub struct Revision {
     root_objects: HashMap<RootRole, ExGuid>,
 }
 
-// See [MS-ONE 2.1.8](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-one/037e31c0-4484-4a14-819a-0ddece2cacbc) 
+// See [MS-ONE 2.1.8](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-one/037e31c0-4484-4a14-819a-0ddece2cacbc)
 #[derive(Eq, PartialEq, Hash, Debug)]
 pub enum RootRole {
     DefaultContent,

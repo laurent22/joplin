@@ -125,13 +125,13 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
             log!("Rendering {file_path}");
 
             let data = {
-                let mut file_data = cabinet.read_file(&file_path)?;
+                let mut file_data = cabinet.read_file(file_path)?;
                 let mut data = Vec::new();
                 file_data.read_to_end(&mut data)?;
                 data
             };
 
-            let (output_path, file_name) = build_output_dir(&file_path)?;
+            let (output_path, file_name) = build_output_dir(file_path)?;
             let section = parser.parse_section_from_data(&data, &file_name)?;
             section::Renderer::new().render(&section, output_path)?;
             Ok(())
@@ -146,7 +146,7 @@ fn convert_onepkg(file_data: Box<dyn FileHandle>, output_dir: &str) -> Result<()
         }
     }
 
-    if error_messages.len() > 0 {
+    if !error_messages.is_empty() {
         Err(ErrorKind::OnePkgImportFailure(format!(
             "{} section(s) failed to import: {}",
             error_messages.len(),

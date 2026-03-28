@@ -15,8 +15,8 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import { showLinkEditor } from '../utils/handleLinkEditRequests';
 import jumpToHash from './jumpToHash';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> void|any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Commands have varying argument types
+export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> any;
 
 const replaceSelectionCommand = (editor: EditorView, toInsert: string) => {
 	editor.dispatch(editor.state.replaceSelection(toInsert));

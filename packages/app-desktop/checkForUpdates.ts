@@ -49,8 +49,8 @@ function truncateText(text: string, length: number) {
 }
 
 async function getSkippedVersions(): Promise<string[]> {
-	const r = await KvStore.instance().value<string>('updateCheck::skippedVersions');
-	return r ? JSON.parse(r) : [];
+	const r = await KvStore.instance().value('updateCheck::skippedVersions');
+	return r && typeof r === 'string' ? JSON.parse(r) : [];
 }
 
 async function isSkippedVersion(v: string): Promise<boolean> {

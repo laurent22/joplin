@@ -1,6 +1,6 @@
 import BaseCommand from './base-command';
 import InteropService from '@joplin/lib/services/interop/InteropService';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 const { cliUtils } = require('./cli-utils.js');
 import app from './app';
 import { _ } from '@joplin/lib/locale';
@@ -33,7 +33,7 @@ class Command extends BaseCommand {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public override async action(args: any) {
-		let destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
+		let destinationFolder = await app().loadItem(ModelType.Folder, args.notebook);
 
 		if (args.notebook && !destinationFolder) throw new Error(_('Cannot find "%s".', args.notebook));
 

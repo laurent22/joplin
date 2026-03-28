@@ -14,8 +14,7 @@ import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 import { ReportType } from './reports/types';
 
 export interface RenderOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	partials?: any;
+	partials?: Record<string, string>;
 	cssFiles?: string[];
 	jsFiles?: string[];
 }
@@ -63,8 +62,7 @@ interface GlobalParams {
 	appShortName?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function isView(o: any): boolean {
+export function isView(o: unknown): boolean {
 	if (typeof o !== 'object' || !o) return false;
 	return 'path' in o && 'name' in o;
 }
