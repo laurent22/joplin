@@ -18,6 +18,13 @@ import shareFile from '../../utils/shareFile';
 
 const logger = Logger.create('LogScreen');
 
+interface LogEntry {
+	id: number;
+	timestamp: number;
+	level: number;
+	message: string;
+}
+
 interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -25,16 +32,14 @@ interface Props {
 }
 
 interface State {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	logEntries: any[];
+	logEntries: LogEntry[];
 	showErrorsOnly: boolean;
 	filter: string|undefined;
 }
 
 class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	private readonly menuOptions_: MenuOptionType[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private styles_: any;
+	private styles_: Record<number, ReturnType<typeof StyleSheet.create>>;
 	private readonly logListRef_ = React.createRef<FlatList>();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -62,8 +67,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private refreshLogTimeout: any = null;
+	private refreshLogTimeout: ReturnType<typeof setTimeout> | null = null;
 	public override componentDidUpdate(_prevProps: Props, prevState: State) {
 		if ((prevState?.filter ?? '') !== (this.state.filter ?? '')) {
 
@@ -87,14 +91,13 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		}
 	}
 
-	private async getLogEntries(showErrorsOnly: boolean, limit: number|null = null) {
+	private async getLogEntries(showErrorsOnly: boolean, limit: number|null = null): Promise<LogEntry[]> {
 		const levels = this.getLogLevels(showErrorsOnly);
-		return await reg.logger().lastEntries(limit, { levels, filter: this.state.filter });
+		return await reg.logger().lastEntries(limit, { levels, filter: this.state.filter }) as LogEntry[];
 	}
 
 	private async onSharePress() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const allEntries: any[] = await this.getLogEntries(this.state.showErrorsOnly);
+		const allEntries = await this.getLogEntries(this.state.showErrorsOnly);
 		const logData = allEntries.map(entry => this.formatLogEntry(entry)).join('\n');
 
 		let fileToShare;
@@ -178,13 +181,11 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 		void this.refreshLogEntries(!this.state.showErrorsOnly);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private formatLogEntry(item: any) {
+	private formatLogEntry(item: LogEntry) {
 		return `${time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss')}: ${item.message}`;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private onRenderLogRow = ({ item }: any) => {
+	private onRenderLogRow = ({ item }: { item: LogEntry }) => {
 		let textStyle = this.styles().rowText;
 		if (item.level === Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
 		if (item.level === Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;

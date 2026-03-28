@@ -955,13 +955,16 @@ export default class ItemModel extends BaseModel<Item> {
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids, { recordChanges: !options.deleteChanges });
 			await this.models().itemResource().deleteByItemIds(ids);
-			await storageDriver.delete(ids, { models: this.models() });
-			if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
-
 			await super.delete(ids, options);
-
 			if (options.deleteChanges) await this.models().change().deleteByItemIds(ids);
 		}, 'ItemModel::delete');
+
+		// Storage operations are done outside the transaction to avoid holding database locks
+		// during potentially slow I/O operations (e.g., S3). If storage delete fails, the database
+		// records are already gone, which is acceptable - orphaned storage files can be cleaned up
+		// separately.
+		await storageDriver.delete(ids, { models: this.models() });
+		if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
 	}
 
 	public async deleteForUser(userId: Uuid, item: Item, options: DeleteOptions = {}): Promise<void> {

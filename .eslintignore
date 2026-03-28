@@ -103,6 +103,7 @@ packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
 packages/app-cli/app/command-cat.js
+packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
 packages/app-cli/app/command-cp.js
 packages/app-cli/app/command-done.test.js
@@ -535,8 +536,6 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useSyncDialogState.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowCommands.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.js
 packages/app-desktop/gui/dialogs.js
-packages/app-desktop/gui/hooks/useCtrlWheelZoom.test.js
-packages/app-desktop/gui/hooks/useCtrlWheelZoom.js
 packages/app-desktop/gui/hooks/useEffectDebugger.js
 packages/app-desktop/gui/hooks/useElementHeight.js
 packages/app-desktop/gui/hooks/useImperativeHandlerDebugger.js
@@ -873,6 +872,7 @@ packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.js
 packages/app-mobile/components/screens/Notes/Notes.js
 packages/app-mobile/components/screens/Notes/TextWrapCalculator.js
+packages/app-mobile/components/screens/ResourceScreen.js
 packages/app-mobile/components/screens/SearchScreen/SearchBar.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.test.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.js
@@ -889,6 +889,8 @@ packages/app-mobile/components/screens/dropbox-login.js
 packages/app-mobile/components/screens/encryption-config.test.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/folder.js
+packages/app-mobile/components/screens/resourceScreenUtils.test.js
+packages/app-mobile/components/screens/resourceScreenUtils.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
 packages/app-mobile/components/side-menu-content.js

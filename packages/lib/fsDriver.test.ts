@@ -9,7 +9,7 @@ const windowsPartitionLetter = __filename[0];
 // /tmp/file.txt to {partition}:\tmp\file.txt
 function platformPath(path: string) {
 	if (shim.isWindows()) {
-		return `${windowsPartitionLetter}:${path.replace(/\//g, '\\')}`;
+		return `${windowsPartitionLetter.toLowerCase()}:${path.replace(/\//g, '\\')}`;
 	} else {
 		return path;
 	}

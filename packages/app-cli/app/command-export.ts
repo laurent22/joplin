@@ -1,6 +1,6 @@
 import BaseCommand from './base-command';
 import InteropService from '@joplin/lib/services/interop/InteropService';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import { ExportOptions } from '@joplin/lib/services/interop/types';
@@ -34,12 +34,12 @@ class Command extends BaseCommand {
 		if (exportOptions.format === 'html') throw new Error('HTML export is not supported. Please use the desktop application.');
 
 		if (args.options.note) {
-			const notes = await app().loadItems(BaseModel.TYPE_NOTE, args.options.note, { parent: app().currentFolder() });
+			const notes = await app().loadItems(ModelType.Note, args.options.note, { parent: app().currentFolder() });
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.options.note));
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			exportOptions.sourceNoteIds = notes.map((n: any) => n.id);
 		} else if (args.options.notebook) {
-			const folders = await app().loadItems(BaseModel.TYPE_FOLDER, args.options.notebook);
+			const folders = await app().loadItems(ModelType.Folder, args.options.notebook);
 			if (!folders.length) throw new Error(_('Cannot find "%s".', args.options.notebook));
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			exportOptions.sourceFolderIds = folders.map((n: any) => n.id);

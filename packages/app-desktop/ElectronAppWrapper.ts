@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, powerMonitor } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, Menu } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -30,8 +30,7 @@ interface RendererProcessQuitReply {
 }
 
 interface PluginWindows {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	[key: string]: any;
+	[key: string]: BrowserWindow;
 }
 
 type SecondaryWindowId = string;
@@ -61,8 +60,7 @@ export default class ElectronAppWrapper {
 	private secondaryWindows_: Map<SecondaryWindowId, SecondaryWindowData> = new Map();
 
 	private willQuitApp_ = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private tray_: any = null;
+	private tray_: Tray = null;
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 
@@ -411,11 +409,7 @@ export default class ElectronAppWrapper {
 		// OS-level focus gain without conflating it with the 'window-focused' channel that
 		// handles Joplin-internal window routing.
 		this.win_.on('focus', () => {
-			try {
-				this.win_?.webContents.send('main-window-focused');
-			} catch (_error) {
-				console.warn('Failed to send IPC to main window — renderer may be temporarily disposed:', _error);
-			}
+			this.win_?.webContents.send('main-window-focused');
 		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -487,10 +481,6 @@ export default class ElectronAppWrapper {
 			window.webContents.setZoomFactor(this.mainWindow().webContents.getZoomFactor());
 
 			window.once('close', () => {
-				// Check both: BrowserWindow and webContents can be destroyed independently
-				if (this.win_ && !this.win_.isDestroyed() && !this.win_.webContents.isDestroyed()) {
-					this.win_.webContents.send('secondary-window-closing', windowId);
-				}
 				this.secondaryWindows_.delete(windowId);
 
 				const allSecondaryWindowsClosed = this.secondaryWindows_.size === 0;
@@ -565,8 +555,7 @@ export default class ElectronAppWrapper {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public registerPluginWindow(pluginId: string, window: any) {
+	public registerPluginWindow(pluginId: string, window: BrowserWindow) {
 		this.pluginWindows_[pluginId] = window;
 	}
 
@@ -652,8 +641,7 @@ export default class ElectronAppWrapper {
 	}
 
 	// Note: this must be called only after the "ready" event of the app has been dispatched
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public createTray(contextMenu: any) {
+	public createTray(contextMenu: Menu) {
 		try {
 			this.tray_ = new Tray(`${this.buildDir()}/icons/${this.trayIconFilename_()}`);
 			this.tray_.setToolTip(this.electronApp_.name);
@@ -912,11 +900,6 @@ export default class ElectronAppWrapper {
 		this.electronApp_.on('open-url', (event: any, url: string) => {
 			event.preventDefault();
 			void this.openCallbackUrl(url);
-		});
-
-		// When the OS wakes from sleep, notify the renderer so it can trigger an immediate sync.
-		powerMonitor.on('resume', () => {
-			this.win_?.webContents.send('system-resumed');
 		});
 	}
 

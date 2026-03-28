@@ -78,8 +78,7 @@ type StartupTask = { label: string; task: ()=> void|Promise<void> };
 
 class Application extends BaseApplication {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private checkAllPluginStartedIID_: any = null;
+	private checkAllPluginStartedIID_: ReturnType<typeof setInterval> = null;
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
 	private protocolHandler_: CustomContentProtocolHandler;
@@ -750,9 +749,6 @@ class Application extends BaseApplication {
 
 			ipcRenderer.on('main-window-focused', scheduleResumeSync);
 			ipcRenderer.on('system-resumed', scheduleResumeSync);
-			ipcRenderer.on('secondary-window-closing', (_event, windowId: string) => {
-				this.dispatch({ type: 'WINDOW_CLOSE', windowId });
-			});
 		});
 
 		addTask('app/initPluginService', () => this.initPluginService());
