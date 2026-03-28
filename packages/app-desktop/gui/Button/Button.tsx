@@ -81,14 +81,12 @@ const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor5};
 
-	${(props: StyleProps) => props.disabled} {
-		&:hover {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
-		}
+	&:not(:disabled):hover {
+		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
+	}
 
-		&:active {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorActive5};
-		}
+	&:not(:disabled):active {
+		background-color: ${(props: StyleProps) => props.theme.backgroundColorActive5};
 	}
 
 	${StyledIcon} {
@@ -104,14 +102,12 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
 
-	${(props: StyleProps) => props.disabled} {
-		&:hover {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
-		}
+	&:not(:disabled):hover {
+		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
+	}
 
-		&:active {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorActive4};
-		}
+	&:not(:disabled):active {
+		background-color: ${(props: StyleProps) => props.theme.backgroundColorActive4};
 	}
 
 	${StyledIcon} {
@@ -127,11 +123,11 @@ const StyledButtonTertiary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.color3};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor3};
 
-	&:hover {
+	&:not(:disabled):hover {
 		background-color: ${(props: StyleProps) => props.theme.backgroundColorHoverDim3};
 	}
 
-	&:active {
+	&:not(:disabled):active {
 		background-color: ${(props: StyleProps) => props.theme.backgroundColorActive3};
 	}
 
@@ -164,7 +160,7 @@ const StyledButtonSidebarSecondary = styled(StyledButtonBase)`
 	border-color: ${(props: StyleProps) => props.theme.color2};
 	color: ${(props: StyleProps) => props.theme.color2};
 
-	&:hover {
+	&:not(:disabled):hover {
 		color: ${(props: StyleProps) => props.theme.colorHover2};
 		border-color: ${(props: StyleProps) => props.theme.colorHover2};
 		background: none;
@@ -178,7 +174,7 @@ const StyledButtonSidebarSecondary = styled(StyledButtonBase)`
 		}
 	}
 
-	&:active {
+	&:not(:disabled):active {
 		color: ${(props: StyleProps) => props.theme.colorActive2};
 		border-color: ${(props: StyleProps) => props.theme.colorActive2};
 		background: none;
@@ -215,7 +211,7 @@ const Button = React.forwardRef(({
 }: Props, ref: any) => {
 	const iconOnly = iconName && !title;
 
-	const StyledButton = buttonClass(level);
+	const StyledButton = buttonClass(level ?? ButtonLevel.Secondary);
 
 	function renderIcon() {
 		if (!iconName) return null;
@@ -237,6 +233,7 @@ const Button = React.forwardRef(({
 
 	function onClick() {
 		if (disabled) return;
+		if (!propsOnClick) return;
 		propsOnClick();
 	}
 
