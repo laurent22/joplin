@@ -614,4 +614,71 @@ describe('services/SearchEngine', () => {
 			expect(rows.length).toBe(resourcesFound);
 		});
 
+	it('should return empty results for empty search string', (async () => {
+		await Note.save({ title: 'hello world' });
+		await engine.syncTables();
+
+		const rows = await engine.search('');
+		expect(rows.length).toBe(0);
+	}));
+
+	it('should return empty results for whitespace-only search string', (async () => {
+		await Note.save({ title: 'hello world' });
+		await engine.syncTables();
+
+		// '   ' is truthy so it passes the !searchString guard,
+		// but produces zero parsed terms
+		const rows = await engine.search('   ');
+		expect(rows.length).toBe(0);
+	}));
+
+	it('should remove wildcard-only terms from parsed query', (async () => {
+		// SQLite FTS doesn't allow '*' queries
+		const mixed = await engine.parseQuery('hello *');
+		expect(mixed.termCount).toBe(1);
+
+		const starOnly = await engine.parseQuery('*');
+		expect(starOnly.termCount).toBe(0);
+	}));
+
+	it('should convert query terms to regex correctly', (() => {
+		expect(engine.queryTermToRegex('hello')).toBe('hello');
+		expect(engine.queryTermToRegex('hello.world')).toBe('hello\\.world');
+
+		// Leading wildcards should be stripped
+		expect(engine.queryTermToRegex('***hello')).toBe('hello');
+
+		// Trailing wildcard should produce a character class match
+		const result = engine.queryTermToRegex('hello*');
+		expect(result).toMatch(/^hello/);
+		expect(result).not.toBe('hello\\*');
+		expect(result.length).toBeGreaterThan(5);
+	}));
+
+	it('should aggregate all parsed query terms across columns', (async () => {
+		const parsedQuery = await engine.parseQuery('hello title:world');
+		const allTerms = engine.allParsedQueryTerms(parsedQuery);
+		expect(allTerms.length).toBe(2);
+	}));
+
+	it('should return empty array from allParsedQueryTerms for null input', (() => {
+		expect(engine.allParsedQueryTerms(null)).toEqual([]);
+	}));
+
+	it('should search notes containing mixed CJK and Latin text', (async () => {
+		await Note.save({
+			title: 'Meeting notes 会議の記録',
+			body: 'Discuss project プロジェクトについて',
+		});
+		await engine.syncTables();
+
+		// Latin - uses FTS
+		expect((await engine.search('Meeting')).length).toBe(1);
+		expect((await engine.search('project')).length).toBe(1);
+		// CJK - uses NONLATIN_SCRIPT (LIKE)
+		expect((await engine.search('会議')).length).toBe(1);
+		expect((await engine.search('プロジェクト')).length).toBe(1);
+	}));
+
+
 });

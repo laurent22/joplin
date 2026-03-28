@@ -168,4 +168,42 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"hello"', false, true));
 		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"you"', false, true));
 	});
+
+	it('id filter', () => {
+		const searchString = 'id:abcd1234';
+		expect(filterParser(searchString)).toContainEqual(makeTerm('id', 'abcd1234', false));
+	});
+
+	it('negated id filter', () => {
+		const searchString = '-id:abcd1234';
+		expect(filterParser(searchString)).toContainEqual(makeTerm('id', 'abcd1234', true));
+	});
+
+	it('due filter', () => {
+		const searchString = 'due:20210427';
+		expect(filterParser(searchString)).toContainEqual(makeTerm('due', '20210427', false));
+	});
+
+	it('negated due filter', () => {
+		const searchString = '-due:20210427';
+		expect(filterParser(searchString)).toContainEqual(makeTerm('due', '20210427', true));
+	});
+
+	it('empty query string', () => {
+		expect(filterParser('')).toEqual([]);
+	});
+
+	it('wildcard in text search term', () => {
+		const searchString = 'hello*';
+		expect(filterParser(searchString)).toContainEqual(
+			makeTerm('text', '"hello*"', false, false, true),
+		);
+	});
+
+	it('sourceurl with port number (multiple colons)', () => {
+		const searchString = 'sourceurl:https://example.com:8080/path';
+		expect(filterParser(searchString)).toContainEqual(
+			makeTerm('sourceurl', 'https://example.com:8080/path', false),
+		);
+	});
 });
