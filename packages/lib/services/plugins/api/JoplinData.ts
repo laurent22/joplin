@@ -97,7 +97,7 @@ export default class JoplinData {
 		return this.api_.route('DELETE', this.pathToString(path), query);
 	}
 
-	public async itemType(itemId: string): Promise<ModelType> {
+	public async itemType(itemId: string): Promise<ModelType | null> {
 		const item = await BaseItem.loadItemById(itemId);
 		if (!item) return null;
 		return item.type_;
