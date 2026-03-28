@@ -75,4 +75,36 @@ describe('persist', () => {
 		expect(loaded.children[1].direction).toBe(LayoutItemDirection.Column);
 	});
 
+	test('should backfill min-width from defaultLayout for existing layouts', () => {
+		const persistedLayout: LayoutItem = {
+			key: 'root',
+			children: [
+				{
+					key: 'sideBar', width: 170,
+				},
+				{
+					key: 'noteList', width: 140,
+				},
+				{
+					key: 'editor', width: 180,
+				},
+			],
+		};
+
+		const defaultLayout: LayoutItem = {
+			key: 'root',
+			children: [
+				{ key: 'sideBar', minWidth: 180 },
+				{ key: 'noteList', minWidth: 150 },
+				{ key: 'editor', minWidth: 200 },
+			],
+		};
+
+		const result = loadLayout(persistedLayout, defaultLayout, { width: 100, height: 300 });
+
+		expect(result.key).toBe('root');
+		expect(result.children[0].minWidth).toBe(180);
+		expect(result.children[1].minWidth).toBe(150);
+		expect(result.children[2].minWidth).toBe(200);
+	});
 });
