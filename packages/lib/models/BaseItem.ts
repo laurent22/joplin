@@ -160,7 +160,7 @@ export default class BaseItem extends BaseModel {
 		// that the returned number might be inaccurate (for example if a sync operation was cancelled)
 		const sql = 'SELECT count(*) as total FROM sync_items WHERE sync_target = ? AND item_type = ?';
 		const r = await this.db().selectOne(sql, [syncTarget, itemType]);
-		return r.total;
+		return r ? r.total : 0;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -381,7 +381,7 @@ export default class BaseItem extends BaseModel {
 
 	public static async deletedItemCount(syncTarget: number) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM deleted_items WHERE sync_target = ?', [syncTarget]);
-		return r['total'];
+		return r ? r.total : 0;
 	}
 
 	public static async allItemsInTrash() {

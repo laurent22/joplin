@@ -191,4 +191,16 @@ three line \\n no escape`)).toBe(0);
 		const note = await Note.save({ id }, { isNew: true });
 		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
 	});
+
+	it('syncedCount should return 0 when no sync items exist for the given sync target', async () => {
+		// Use a sync target that has never been used so the sync_items table has no matching rows
+		const result = await Note.syncedCount(999);
+		expect(result).toBe(0);
+	});
+
+	it('deletedItemCount should return 0 when no deleted items exist for the given sync target', async () => {
+		// Use a sync target that has never been used so the deleted_items table has no matching rows
+		const result = await Note.deletedItemCount(999);
+		expect(result).toBe(0);
+	});
 });
