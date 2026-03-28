@@ -1591,6 +1591,29 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// editor in their clean up function will get an invalid reference.
 	// -----------------------------------------------------------------------------------------
 
+	// Pre-populate the RTE search dialog with the global search query (WCAG SC 3.3.7)
+	// Search-entry pre-population is currently only done in the Markdown editor.
+	useEffect(() => {
+		if (!editor) return;
+		if (!props.searchMarkers) return;
+
+		const keywords = props.searchMarkers.keywords;
+		if (!keywords || keywords.length === 0) {
+			if (editor.plugins?.searchreplace) {
+				editor.plugins.searchreplace.done(false);
+			}
+			return;
+		}
+
+		const searchTerm = keywords[0]?.value ?? '';
+		if (!searchTerm) return;
+
+		if (editor.plugins?.searchreplace) {
+			editor.plugins.searchreplace.find(searchTerm, false, false, true);
+		}
+	}, [editor, props.searchMarkers]);
+
+
 	useEffect(() => {
 		return () => {
 			if (!editorRef.current) return;
