@@ -72,6 +72,7 @@
     "@crowdin/cli": "4",
     "@joplin/utils": "~2.12",
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
+    "@types/zxcvbn": "^4",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
     "cspell": "5.21.2",
@@ -97,7 +98,8 @@
     "eslint-plugin-github": "4.10.2",
     "http-server": "14.1.1",
     "node-gyp": "11.5.0",
-    "nodemon": "3.1.11"
+    "nodemon": "3.1.11",
+    "zxcvbn": "^4.4.2"
   },
   "packageManager": "yarn@4.9.2",
   "resolutions": {

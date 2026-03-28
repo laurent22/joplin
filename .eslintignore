@@ -1423,6 +1423,7 @@ packages/lib/net-utils.js
 packages/lib/ntp.js
 packages/lib/onedrive-api.test.js
 packages/lib/onedrive-api.js
+packages/lib/passwordStrength.js
 packages/lib/path-utils.js
 packages/lib/reducer.test.js
 packages/lib/reducer.js
