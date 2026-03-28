@@ -1559,6 +1559,7 @@ packages/lib/services/plugins/api/Joplin.js
 packages/lib/services/plugins/api/JoplinClipboard.js
 packages/lib/services/plugins/api/JoplinCommands.js
 packages/lib/services/plugins/api/JoplinContentScripts.js
+packages/lib/services/plugins/api/JoplinData.test.js
 packages/lib/services/plugins/api/JoplinData.js
 packages/lib/services/plugins/api/JoplinFilters.js
 packages/lib/services/plugins/api/JoplinFs.js
