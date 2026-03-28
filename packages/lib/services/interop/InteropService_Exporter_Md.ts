@@ -87,6 +87,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			const namesByParent: Record<string, string[]> = {};
+			// Pre-compute unique folder names grouped by parent, so that folders whose titles sanitise to the same name get distinct export paths
 			for (let i = 0; i < itemsToExport.length; i++) {
 				if (itemsToExport[i].type !== itemType) continue;
 				const itemOrId = itemsToExport[i].itemOrId;
