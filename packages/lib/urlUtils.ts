@@ -72,8 +72,8 @@ export const parseResourceUrl = (url: string) => {
 	};
 };
 
-export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string) => {
-	let resourceDirUrl = toFileProtocolPath(resourceDir);
+export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string, os: string|null = null) => {
+	let resourceDirUrl = toFileProtocolPath(resourceDir, os);
 	if (!resourceDirUrl.endsWith('/')) {
 		resourceDirUrl += '/';
 	}
