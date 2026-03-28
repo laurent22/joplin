@@ -61,11 +61,9 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 				window.__joplinJestPolyfillScroll = (win) => {
 					if (!win) return;
 					for (const Ctor of [win.Element, win.HTMLElement, win.SVGElement]) {
-						if (!Ctor || !Ctor.prototype) continue;
-						// Only polyfill when the method is missing, so we don't clobber test spies/mocks.
-						if (typeof Ctor.prototype.scrollIntoView !== 'function') Ctor.prototype.scrollIntoView = scrollNoop;
-						if (typeof Ctor.prototype.scrollTo !== 'function') Ctor.prototype.scrollTo = scrollNoop;
-						if (typeof Ctor.prototype.scrollBy !== 'function') Ctor.prototype.scrollBy = scrollNoop;
+						Ctor.prototype.scrollIntoView ??= scrollNoop;
+						Ctor.prototype.scrollTo ??= scrollNoop;
+						Ctor.prototype.scrollBy ??= scrollNoop;
 					}
 				};
 				window.__joplinJestPolyfillScroll(window);
