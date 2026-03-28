@@ -1409,7 +1409,7 @@
 	"Import from JEX": [
 		""
 	],
-	"Import notes from a JEX (Joplin Export) file.": [
+	"Import notes from a JEX (Joplin Export) file as new notes.": [
 		""
 	],
 	"Imported successfully!": [
@@ -1535,8 +1535,8 @@
 	"Joplin Export Directory": [
 		"Joplin Export Directory"
 	],
-	"Joplin Export File": [
-		"Joplin Export File"
+	"Joplin Export File (as new notes)": [
+		"Joplin Export File (as new notes)"
 	],
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
 		"Joplin đã nhiều lần giải mã thất bại những mục này, có thể bởi vì chúng bị hỏng hoặc quá nặng. Những mục này sẽ được duy trì ở trên thiết bị nhưng Joplin sẽ không giải mã chúng nữa."

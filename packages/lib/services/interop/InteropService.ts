@@ -63,7 +63,7 @@ export default class InteropService {
 					format: 'jex',
 					fileExtensions: ['jex'],
 					sources: [FileSystemItem.File],
-					description: _('Joplin Export File'),
+					description: _('Joplin Export File (as new notes)'),
 				}, () => new InteropService_Importer_Jex()),
 
 				makeImportModule({

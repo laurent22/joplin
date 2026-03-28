@@ -3189,7 +3189,7 @@ msgid "Import from JEX"
 msgstr "Importa da JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
-msgid "Import notes from a JEX (Joplin Export) file."
+msgid "Import notes from a JEX (Joplin Export) file as new notes."
 msgstr "Importa note da un file JEX (Joplin Export)."
 
 #: packages/lib/models/Setting.ts:1398
@@ -3485,7 +3485,7 @@ msgstr "Cartella di esportazione di Joplin"
 
 #: packages/lib/services/interop/InteropService.ts:162
 #: packages/lib/services/interop/InteropService.ts:66
-msgid "Joplin Export File"
+msgid "Joplin Export File (as new notes)"
 msgstr "Esporta file di Joplin"
 
 #: packages/lib/services/ReportService.ts:254

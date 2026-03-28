@@ -3183,7 +3183,7 @@ msgid "Import from JEX"
 msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
-msgid "Import notes from a JEX (Joplin Export) file."
+msgid "Import notes from a JEX (Joplin Export) file as new notes."
 msgstr ""
 
 #: packages/lib/models/Setting.ts:1398
@@ -3463,7 +3463,7 @@ msgstr "ไดเรกทอรี่ส่งออก Joplin"
 
 #: packages/lib/services/interop/InteropService.ts:162
 #: packages/lib/services/interop/InteropService.ts:66
-msgid "Joplin Export File"
+msgid "Joplin Export File (as new notes)"
 msgstr "ไฟล์ส่งออก Joplin"
 
 #: packages/lib/services/ReportService.ts:254

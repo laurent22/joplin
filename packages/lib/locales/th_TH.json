@@ -1232,7 +1232,7 @@
 	"Import from JEX": [
 		""
 	],
-	"Import notes from a JEX (Joplin Export) file.": [
+	"Import notes from a JEX (Joplin Export) file as new notes.": [
 		""
 	],
 	"Imported successfully!": [
@@ -1349,7 +1349,7 @@
 	"Joplin Export Directory": [
 		"ไดเรกทอรี่ส่งออก Joplin"
 	],
-	"Joplin Export File": [
+	"Joplin Export File (as new notes)": [
 		"ไฟล์ส่งออก Joplin"
 	],
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [

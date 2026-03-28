@@ -1709,7 +1709,7 @@
 	"Import from JEX": [
 		"Імпорт з JEX"
 	],
-	"Import notes from a JEX (Joplin Export) file.": [
+	"Import notes from a JEX (Joplin Export) file as new notes.": [
 		"Імпортуйте ноти з файлу JEX (Joplin Export)."
 	],
 	"Import or export your data": [
@@ -1865,8 +1865,8 @@
 	"Joplin Export Directory": [
 		"Joplin Export Directory"
 	],
-	"Joplin Export File": [
-		"Joplin Export File"
+	"Joplin Export File (as new notes)": [
+		"Joplin Export File (as new notes)"
 	],
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
 		"Joplin не зміг розшифрувати ці елементи кілька разів, можливо, тому, що вони пошкоджені або занадто великі. Ці елементи залишаться на пристрої, але Joplin більше не намагатиметься їх розшифрувати."

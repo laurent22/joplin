@@ -3119,7 +3119,7 @@ msgid "Import from JEX"
 msgstr "Importovať z JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
-msgid "Import notes from a JEX (Joplin Export) file."
+msgid "Import notes from a JEX (Joplin Export) file as new notes."
 msgstr "Importovať poznámky zo súboru JEX (Joplin Export)."
 
 #: packages/lib/models/Setting.ts:1398
@@ -3409,7 +3409,7 @@ msgstr "Priečinok exportu Joplin"
 
 #: packages/lib/services/interop/InteropService.ts:162
 #: packages/lib/services/interop/InteropService.ts:66
-msgid "Joplin Export File"
+msgid "Joplin Export File (as new notes)"
 msgstr "Exportný súbor Joplin"
 
 #: packages/lib/services/ReportService.ts:254

@@ -1838,7 +1838,7 @@
 	"Import from JEX": [
 		"从 JEX 导入"
 	],
-	"Import notes from a JEX (Joplin Export) file.": [
+	"Import notes from a JEX (Joplin Export) file as new notes.": [
 		"从 JEX（Joplin Export）文件导入笔记。"
 	],
 	"Import or export your data": [
@@ -2000,7 +2000,7 @@
 	"Joplin Export Directory": [
 		"Joplin 导出目录"
 	],
-	"Joplin Export File": [
+	"Joplin Export File (as new notes)": [
 		"Joplin 导出文件"
 	],
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [

@@ -603,7 +603,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				[exportButtonDefaultTitle(), exportButtonDescription()],
 			);
 			const importJexLabel = () => _('Import from JEX');
-			const importJexDescription = () => _('Import notes from a JEX (Joplin Export) file.');
+			const importJexDescription = () => _('Import notes from a JEX (Joplin Export) file as new notes.');
 			addSettingComponent(
 				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' />,
 				[importJexLabel(), importJexDescription()],

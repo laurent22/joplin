@@ -1651,7 +1651,7 @@
 	"Import from JEX": [
 		"Importa da JEX"
 	],
-	"Import notes from a JEX (Joplin Export) file.": [
+	"Import notes from a JEX (Joplin Export) file as new notes.": [
 		"Importa note da un file JEX (Joplin Export)."
 	],
 	"Import or export your data": [
@@ -1798,7 +1798,7 @@
 	"Joplin Export Directory": [
 		"Cartella di esportazione di Joplin"
 	],
-	"Joplin Export File": [
+	"Joplin Export File (as new notes)": [
 		"Esporta file di Joplin"
 	],
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
