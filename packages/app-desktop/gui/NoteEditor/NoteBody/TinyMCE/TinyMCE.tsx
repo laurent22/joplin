@@ -1598,18 +1598,17 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		if (!props.searchMarkers) return;
 
 		const keywords = props.searchMarkers.keywords;
-		if (!keywords || keywords.length === 0) {
+		const searchTerm = (keywords && keywords.length > 0) ? (keywords[0]?.value ?? '') : '';
+
+		if (!searchTerm) {
 			if (editor.plugins?.searchreplace) {
 				editor.plugins.searchreplace.done(false);
 			}
 			return;
 		}
 
-		const searchTerm = keywords[0]?.value ?? '';
-		if (!searchTerm) return;
-
 		if (editor.plugins?.searchreplace) {
-			editor.plugins.searchreplace.find(searchTerm, false, false, true);
+			editor.plugins.searchreplace.find(searchTerm, false, false, false);
 		}
 	}, [editor, props.searchMarkers]);
 
