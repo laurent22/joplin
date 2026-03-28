@@ -1610,7 +1610,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		if (editor.plugins?.searchreplace) {
 			editor.plugins.searchreplace.find(searchTerm, false, false, false);
 		}
-	}, [editor, props.searchMarkers]);
+	}, [editor, props.searchMarkers, props.noteId]);
 
 
 	useEffect(() => {
