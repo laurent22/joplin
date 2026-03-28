@@ -1,9 +1,9 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
-import JoplinData from './JoplinData';
-import Note from '../../../models/Note';
-import Folder from '../../../models/Folder';
-import { ModelType } from '../../../BaseModel';
-import Plugin from '../Plugin';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import JoplinData from './api/JoplinData';
+import Note from '../../models/Note';
+import Folder from '../../models/Folder';
+import { ModelType } from '../../BaseModel';
+import Plugin from './Plugin';
 
 const newJoplinData = () => {
 	// JoplinData only uses plugin.id for userDataGet/Set/Delete, not for itemType
