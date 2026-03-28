@@ -409,7 +409,12 @@ export default class ElectronAppWrapper {
 		// OS-level focus gain without conflating it with the 'window-focused' channel that
 		// handles Joplin-internal window routing.
 		this.win_.on('focus', () => {
-			this.win_?.webContents.send('main-window-focused');
+			try {
+				this.win_?.webContents.send('main-window-focused');
+			} catch (error) {
+				// Can fail if the render frame is temporarily disposed during window teardown.
+				console.warn('Failed to send main-window-focused:', error);
+			}
 		});
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
