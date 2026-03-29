@@ -14,6 +14,19 @@ const sqlite3 = require('sqlite3');
 const React = require('react');
 require('../../jest.base-setup.js')();
 
+// Silence the SafeAreaView deprecation warning emitted by
+// react-native-popup-menu 0.17.0 during test runs. Uses require('console')
+// rather than the global console because Jest replaces the global with its
+// own wrapper — the real Node.js console is what warnOnce.js writes to.
+const nodeConsole = require('console');
+const originalWarn = nodeConsole.warn;
+nodeConsole.warn = (...args) => {
+	if (typeof args[0] === 'string' && args[0].includes('SafeAreaView has been deprecated')) {
+		return;
+	}
+	originalWarn.apply(nodeConsole, args);
+};
+
 import { setImmediate } from 'timers';
 
 // Required by some libraries (setImmediate is not supported in most browsers,
