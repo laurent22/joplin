@@ -108,6 +108,12 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 	try {
 		switch (action.type) {
 
+		case 'SHARE_STATE_SET':
+			draft.shares = action.shares || [];
+			draft.shareUsers = action.shareUsers || {};
+			draft.shareInvitations = action.shareInvitations || [];
+			break;
+
 		case 'SHARE_SET':
 
 			draft.shares = action.shares;

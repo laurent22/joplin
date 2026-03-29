@@ -270,6 +270,12 @@ const buildStartupTasks = (
 
 		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
 
+		if (BaseItem.syncShareCache) {
+			dispatch({
+				type: 'SHARE_STATE_SET',
+				...BaseItem.syncShareCache,
+			});
+		}
 		if (Setting.value('firstStart')) {
 			const detectedLocale = shim.detectAndSetLocale(Setting);
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);

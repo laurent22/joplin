@@ -24,6 +24,7 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import appReducer, { createAppDefaultState } from './app.reducer';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
+import BaseItem from '@joplin/lib/models/BaseItem';
 import { reg } from '@joplin/lib/registry';
 const packageInfo: PackageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
@@ -500,6 +501,12 @@ class Application extends BaseApplication {
 
 			this.initRedux();
 
+			if (BaseItem.syncShareCache) {
+				this.dispatch({
+					type: 'SHARE_STATE_SET',
+					...BaseItem.syncShareCache,
+				});
+			}
 			initializeCommandService(this.store(), Setting.value('env') === 'dev');
 
 			const keymapService = KeymapService.instance();
