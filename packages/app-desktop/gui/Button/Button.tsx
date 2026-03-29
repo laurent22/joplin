@@ -1,5 +1,6 @@
 import * as React from 'react';
 const styled = require('styled-components').default;
+const { css } = require('styled-components');
 const { space } = require('styled-system');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
@@ -77,19 +78,27 @@ const StyledIcon = styled(styled.span(space))`
 	${(props: StyleProps) => props.animation ? `animation: ${props.animation}` : ''};
 `;
 
+const interactiveStates = (hoverStyles: string, activeStyles: string) => css`
+	&:enabled:hover {
+		${hoverStyles}
+	}
+
+	&:enabled:active {
+		${activeStyles}
+	}
+`;
+
 const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor5};
 
-	${(props: StyleProps) => props.disabled} {
-		&:hover {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
-		}
+	${interactiveStates(
+		'background-color: var(--button-hover-background-color);',
+		'background-color: var(--button-active-background-color);',
+	)}
 
-		&:active {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorActive5};
-		}
-	}
+	--button-hover-background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
+	--button-active-background-color: ${(props: StyleProps) => props.theme.backgroundColorActive5};
 
 	${StyledIcon} {
 		color: ${(props: StyleProps) => props.theme.color5};
@@ -104,15 +113,13 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
 
-	${(props: StyleProps) => props.disabled} {
-		&:hover {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
-		}
+	${interactiveStates(
+		'background-color: var(--button-hover-background-color);',
+		'background-color: var(--button-active-background-color);',
+	)}
 
-		&:active {
-			background-color: ${(props: StyleProps) => props.theme.backgroundColorActive4};
-		}
-	}
+	--button-hover-background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
+	--button-active-background-color: ${(props: StyleProps) => props.theme.backgroundColorActive4};
 
 	${StyledIcon} {
 		color: ${(props: StyleProps) => props.theme.color4};
@@ -127,13 +134,13 @@ const StyledButtonTertiary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.color3};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor3};
 
-	&:hover {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorHoverDim3};
-	}
+	${interactiveStates(
+		'background-color: var(--button-hover-background-color);',
+		'background-color: var(--button-active-background-color);',
+	)}
 
-	&:active {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorActive3};
-	}
+	--button-hover-background-color: ${(props: StyleProps) => props.theme.backgroundColorHoverDim3};
+	--button-active-background-color: ${(props: StyleProps) => props.theme.backgroundColorActive3};
 
 	${StyledIcon} {
 		color: ${(props: StyleProps) => props.theme.color};
@@ -164,7 +171,7 @@ const StyledButtonSidebarSecondary = styled(StyledButtonBase)`
 	border-color: ${(props: StyleProps) => props.theme.color2};
 	color: ${(props: StyleProps) => props.theme.color2};
 
-	&:hover {
+	&:enabled:hover {
 		color: ${(props: StyleProps) => props.theme.colorHover2};
 		border-color: ${(props: StyleProps) => props.theme.colorHover2};
 		background: none;
@@ -178,7 +185,7 @@ const StyledButtonSidebarSecondary = styled(StyledButtonBase)`
 		}
 	}
 
-	&:active {
+	&:enabled:active {
 		color: ${(props: StyleProps) => props.theme.colorActive2};
 		border-color: ${(props: StyleProps) => props.theme.colorActive2};
 		background: none;
