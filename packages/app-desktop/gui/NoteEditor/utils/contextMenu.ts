@@ -2,9 +2,8 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
-import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions } from './contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions, buildMenuItems, ContextMenuItem } from './contextMenuUtils';
 const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
 import Resource, { resourceOcrStatusToString } from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
@@ -82,6 +81,15 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 export function menuItems(dispatch: Function): ContextMenuItems {
+	const makeSeparator = (): ContextMenuItem => {
+		return {
+			isActive: () => { return true; },
+			label: '',
+			onAction: () => {},
+			isSeparator: true,
+		};
+	};
+
 	return {
 		open: {
 			label: _('Open...'),
@@ -95,9 +103,16 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => (
-				(!options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource))
+				(!options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource || itemType === ContextMenuItemType.NoteLink))
 				|| (!!options.linkToOpen && itemType === ContextMenuItemType.Link)
 			),
+		},
+		openNoteInNewWindow: {
+			label: _('Open in new window'),
+			onAction: async (options: ContextMenuOptions) => {
+				await CommandService.instance().execute('openNoteInNewWindow', options.resourceId);
+			},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.NoteLink,
 		},
 		saveAs: {
 			label: _('Save as...'),
@@ -138,6 +153,16 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy && itemType === ContextMenuItemType.Image && options.mime?.startsWith('image/svg'),
 		},
+		separator1: makeSeparator(),
+		revealInFolder: {
+			label: _('Reveal file in folder'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resourcePath } = await resourceInfo(options);
+				bridge().showItemInFolder(resourcePath);
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
+		},
+		separator2: makeSeparator(),
 		recognizeHandwrittenImage: {
 			label: _('Recognize handwritten image'),
 			onAction: async (options: ContextMenuOptions) => {
@@ -172,14 +197,6 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
 			},
 		},
-		revealInFolder: {
-			label: _('Reveal file in folder'),
-			onAction: async (options: ContextMenuOptions) => {
-				const { resourcePath } = await resourceInfo(options);
-				bridge().showItemInFolder(resourcePath);
-			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
-		},
 		copyOcrText: {
 			label: _('View OCR text'),
 			onAction: async (options: ContextMenuOptions) => {
@@ -197,6 +214,17 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
 			},
 		},
+		createAccessibleDocument: {
+			label: _('Create accessible document'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resource } = await resourceInfo(options);
+				await CommandService.instance().execute('createAccessibleDocument', resource.id);
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+			},
+		},
+		separator3: makeSeparator(),
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
 			onAction: async (options: ContextMenuOptions) => {
@@ -221,6 +249,14 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && itemType === ContextMenuItemType.Image,
 		},
+		copyLinkUrl: {
+			label: _('Copy Link Address'),
+			onAction: async (options: ContextMenuOptions) => {
+				clipboard.writeText(options.linkToCopy !== null ? options.linkToCopy : options.textToCopy);
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Link || !!options.linkToCopy,
+		},
+		separator4: makeSeparator(),
 		cut: {
 			label: _('Cut'),
 			onAction: async (options: ContextMenuOptions) => {
@@ -250,13 +286,6 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			},
 			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!clipboard.readText() || !!clipboard.readHTML()),
 		},
-		copyLinkUrl: {
-			label: _('Copy Link Address'),
-			onAction: async (options: ContextMenuOptions) => {
-				clipboard.writeText(options.linkToCopy !== null ? options.linkToCopy : options.textToCopy);
-			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Link || !!options.linkToCopy,
-		},
 	};
 }
 
@@ -264,20 +293,12 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
 	const menu = new Menu();
 
-	const items = menuItems(dispatch);
-
 	if (!('readyOnly' in options)) options.isReadOnly = true;
-	for (const itemKey in items) {
-		const item = items[itemKey];
 
-		if (!item.isActive(options.itemType, options)) continue;
+	const items = await buildMenuItems(menuItems(dispatch), options);
 
-		menu.append(new MenuItem({
-			label: item.label,
-			click: () => {
-				item.onAction(options);
-			},
-		}));
+	for (const item of items) {
+		menu.append(item);
 	}
 
 	return menu;

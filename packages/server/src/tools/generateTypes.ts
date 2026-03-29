@@ -54,6 +54,7 @@ const propertyTypes: Record<string, string> = {
 	'events.created_time': 'number',
 	'events.type': 'EventType',
 	'items.content': 'Buffer',
+	'files.content': 'Buffer',
 	'items.jop_updated_time': 'number',
 	'notifications.level': 'NotificationLevel',
 	'share_users.status': 'ShareUserStatus',
@@ -71,6 +72,7 @@ const propertyTypes: Record<string, string> = {
 	'users.max_item_size': 'number | null',
 	'users.max_total_item_size': 'number | null',
 	'users.total_item_size': 'number',
+	'users.sso_auth_code_expire_at': 'number',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

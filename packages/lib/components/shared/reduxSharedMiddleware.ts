@@ -10,6 +10,7 @@ import BaseItem from '../../models/BaseItem';
 import shim from '../../shim';
 import { Dispatch } from 'redux';
 import { State } from '../../reducer';
+import { onRevisionServiceSettingsChanged } from '../../services/synchronizer/syncInfoUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let sortNoteListTimeout: any = null;
@@ -29,6 +30,10 @@ export default async (store: any, _next: any, action: any, dispatch: Dispatch) =
 
 	if (action.type === 'SETTING_UPDATE_ONE' && !!action.key.match(/^sync\.\d+\.path$/)) {
 		reg.resetSyncTarget();
+	}
+
+	if (action.type === 'SETTING_UPDATE_ONE') {
+		onRevisionServiceSettingsChanged(action.key, action.value);
 	}
 
 	let mustAutoAddResources = false;

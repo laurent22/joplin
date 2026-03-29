@@ -30,6 +30,8 @@ import useFocusVisible from './utils/useFocusVisible';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import useOnNoteDoubleClick from './utils/useOnNoteDoubleClick';
+import useAutoScroll from './utils/useAutoScroll';
+import useRefocusOnDeletion from './utils/useRefocusOnDeletion';
 
 const commands = {
 	focusElementNoteList,
@@ -73,6 +75,7 @@ const NoteList = (props: Props) => {
 
 	const { activeNoteId, setActiveNoteId } = useActiveDescendantId(props.selectedFolderId, props.selectedNoteIds);
 	const focusNote = useFocusNote(listRef, props.notes, makeItemIndexVisible, setActiveNoteId);
+	useRefocusOnDeletion(props.notes.length, props.selectedNoteIds, props.focusedField, props.selectedFolderId, focusNote);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,
@@ -130,6 +133,10 @@ const NoteList = (props: Props) => {
 			CommandService.instance().unregisterRuntime(commands.focusElementNoteList.declaration.name);
 		};
 	}, [focusNote]);
+
+	const selectedNoteId = props.selectedNoteIds.length === 1 ? props.selectedNoteIds[0] : '';
+	const targetIndex = props.notes.findIndex(note => note.id === selectedNoteId);
+	useAutoScroll(selectedNoteId, props.selectedFolderId, targetIndex, makeItemIndexVisible);
 
 	const onItemContextMenu = useOnContextMenu(
 		props.selectedNoteIds,
@@ -217,7 +224,7 @@ const NoteList = (props: Props) => {
 	const renderNotes = () => {
 		if (!props.notes.length) return [];
 
-		const output: JSX.Element[] = [];
+		const output: React.ReactNode[] = [];
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];

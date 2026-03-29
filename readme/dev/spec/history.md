@@ -18,7 +18,7 @@ Every time an object is changed in Joplin, some metadata is added to the changed
 
 2. The note was recently modified, but before that it hadn't had a revision for more than 7 days
 
-Condition 1 saves the current state of the note (i.e. **after** the edit). Condition 2 saves the state has it was **before** the edit.
+Condition 1 saves the current state of the note (i.e. **after** the edit). Condition 2 saves the state as it was **before** the edit.
 
 The reason for that is that we save revisions every 10 minutes, but if you make many changes within a few minutes and then stop modifying the note, the final revision will not contain the current content of the note. Basically at one point (let's say at t1) the service will see there's a revision from less than 10 minutes, and will not save a new one.
 

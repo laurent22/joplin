@@ -43,7 +43,7 @@ const electronContextMenu = require('./services/electron-context-menu');
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
 
-import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
@@ -58,7 +58,7 @@ import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesser
 import OcrDriverTranscribe from '@joplin/lib/services/ocr/drivers/OcrDriverTranscribe';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
-import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
+import { CustomContentProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
 import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
@@ -78,11 +78,10 @@ type StartupTask = { label: string; task: ()=> void|Promise<void> };
 
 class Application extends BaseApplication {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private checkAllPluginStartedIID_: any = null;
+	private checkAllPluginStartedIID_: ReturnType<typeof setInterval> = null;
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
-	private protocolHandler_: CustomProtocolHandler;
+	private protocolHandler_: CustomContentProtocolHandler;
 
 	public constructor() {
 		super();
@@ -130,7 +129,7 @@ class Application extends BaseApplication {
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'renderer.fileUrls' || action.type === 'SETTING_UPDATE_ALL') {
-			bridge().electronApp().getCustomProtocolHandler().setMediaAccessEnabled(
+			bridge().electronApp().getContentProtocolHandler().setMediaAccessEnabled(
 				Setting.value('renderer.fileUrls'),
 			);
 		}
@@ -212,7 +211,12 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().name), click: () => { app.mainWindow().show(); } },
 				{ type: 'separator' },
-				{ label: _('Quit'), click: () => { void app.quit(); } },
+				{ label: _('Quit'), click: () => {
+					app.quitWithSyncCheck(
+						(action: { type: string; [key: string]: unknown }) => this.store().dispatch(action),
+						this.store().getState().syncPending,
+					);
+				} },
 			]);
 			app.createTray(contextMenu);
 		}
@@ -477,7 +481,7 @@ class Application extends BaseApplication {
 		}
 
 		addTask('app/set up custom protocol handler', async () => {
-			this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
+			this.protocolHandler_ = bridge().electronApp().getContentProtocolHandler();
 			this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
 			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
 			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('resourceDir'));
@@ -633,18 +637,23 @@ class Application extends BaseApplication {
 
 			if (Setting.value('env') === 'dev') {
 				void AlarmService.updateAllNotifications();
+				RevisionService.instance().runInBackground();
 			} else {
-				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-				void reg.scheduleSync(1000).then(() => {
-					// Wait for the first sync before updating the notifications, since synchronisation
-					// might change the notifications.
-					void AlarmService.updateAllNotifications();
+				setTimeout(() => {
+					// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+					void reg.scheduleSync(0).then(() => {
+						// Wait for the first sync before updating the notifications, since synchronisation
+						// might change the notifications.
+						void AlarmService.updateAllNotifications();
 
-					void DecryptionWorker.instance().scheduleStart();
-				});
+						void DecryptionWorker.instance().scheduleStart();
+
+						RevisionService.instance().runInBackground();
+					});
+				}, 1000);
 			}
 
-			RevisionService.instance().runInBackground();
 			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		});
 
@@ -723,6 +732,23 @@ class Application extends BaseApplication {
 					});
 				}
 			});
+
+			// Trigger an immediate sync when the main window gains OS-level focus (i.e. the user
+			// switches back to Joplin from another application) or when the system wakes from sleep.
+			// A 30-second cool-down prevents duplicate syncs during rapid focus-in/focus-out cycles.
+			const minResumeSyncIntervalMs = 30_000;
+			let lastFocusSyncTime = 0;
+
+			const scheduleResumeSync = () => {
+				const now = Date.now();
+				if (now - lastFocusSyncTime > minResumeSyncIntervalMs) {
+					lastFocusSyncTime = now;
+					void reg.scheduleSync(0);
+				}
+			};
+
+			ipcRenderer.on('main-window-focused', scheduleResumeSync);
+			ipcRenderer.on('system-resumed', scheduleResumeSync);
 		});
 
 		addTask('app/initPluginService', () => this.initPluginService());

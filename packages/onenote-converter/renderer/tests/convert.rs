@@ -93,10 +93,30 @@ fn convert_page_versions() {
     // Should create a table of contents file
     assert!(output_dir.join("Page versions.html").exists());
     // Should convert the input page to an HTML file
-    assert!(
-        output_dir
-            .join("Page versions")
-            .join("Test!.html")
-            .exists()
-    );
+    assert!(output_dir.join("Page versions").join("Test!.html").exists());
+}
+
+#[test]
+fn convert_ink() {
+    let TestResources {
+        output_dir,
+        test_data_dir,
+    } = setup("ink");
+
+    convert(
+        &test_data_dir.join("ink.one").to_string_lossy(),
+        &output_dir.to_string_lossy(),
+        &test_data_dir.to_string_lossy(),
+    )
+    .unwrap();
+
+    // Should create a table of contents file
+    assert!(output_dir.join("ink.html").exists());
+    // Should convert the input page to an HTML file
+    let content_file = output_dir.join("ink").join("Testing….html");
+    assert!(content_file.exists());
+
+    // Should render at least one SVG
+    let rendered_file = fs::read_to_string(content_file).expect("should read the content file");
+    assert!(rendered_file.contains("<svg style"));
 }

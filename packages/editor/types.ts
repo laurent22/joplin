@@ -81,15 +81,39 @@ export enum EditorCommandType {
 	JumpToHash = 'jumpToHash',
 }
 
+export interface ContentScriptLoadOptions {
+	// The startJs/endJs options are responsible for setting up the content script
+	// environment and, among other things, should:
+	// - Set up `joplin.require`.
+	// - Forward `module.exports` to the editor.
+	// - Notify the editor when the content script has finished loading.
+	//
+	// The content script should be built similar to the following:
+	//
+	//    const scriptContent = `${contentScriptStartJs}${content}${contentScriptEndJs}`;
+	//
+	contentScriptStartJs: string;
+	contentScriptEndJs: string;
+}
+
+type ContentScriptUriSource = {
+	sourceJs?: undefined;
+	uri: string;
+};
+type ContentScriptInlineSource = {
+	sourceJs: string;
+	uri?: undefined;
+};
+type ContentScriptJs = ContentScriptUriSource|ContentScriptInlineSource;
+
 // Because the editor package can run in a WebView, plugin content scripts
 // need to be provided as text, rather than as file paths.
 export interface ContentScriptData {
 	pluginId: string;
 	contentScriptId: string;
-	contentScriptJs: ()=> Promise<string>;
+	contentScriptJs: (context: ContentScriptLoadOptions)=> Promise<ContentScriptJs>;
 	loadCssAsset: (name: string)=> Promise<string>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	postMessageHandler: (message: any)=> any;
+	postMessageHandler: (message: unknown)=> unknown;
 }
 
 // Intended to correspond with https://codemirror.net/docs/ref/#state.Transaction%5EuserEvent
@@ -104,7 +128,7 @@ export interface UpdateBodyOptions {
 
 export interface EditorControl {
 	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Commands have varying argument types
 	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;
@@ -184,6 +208,7 @@ export interface EditorSettings {
 	tabMovesFocus: boolean;
 
 	markdownMarkEnabled: boolean;
+	markdownInsertEnabled: boolean;
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
 	inlineRenderingEnabled: boolean;

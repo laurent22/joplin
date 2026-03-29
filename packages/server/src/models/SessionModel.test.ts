@@ -21,12 +21,14 @@ describe('SessionModel', () => {
 		const t0 = new Date('2020-01-01T00:00:00').getTime();
 		jest.setSystemTime(t0);
 
+		const mfaCode = '';
+
 		const { user, password } = await createUserAndSession(1);
-		await models().session().authenticate(user.email, password);
+		await models().session().authenticate(user.email, password, mfaCode);
 
 		jest.setSystemTime(new Date(t0 + defaultSessionTtl + 10));
 
-		const lastSession = await models().session().authenticate(user.email, password);
+		const lastSession = await models().session().authenticate(user.email, password, mfaCode);
 
 		expect(await models().session().count()).toBe(3);
 
@@ -35,7 +37,7 @@ describe('SessionModel', () => {
 		expect(await models().session().count()).toBe(1);
 		expect((await models().session().all())[0].id).toBe(lastSession.id);
 
-		await models().session().authenticate(user.email, password);
+		await models().session().authenticate(user.email, password, mfaCode);
 		await models().session().deleteExpiredSessions();
 
 		expect(await models().session().count()).toBe(2);

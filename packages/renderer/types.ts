@@ -81,8 +81,7 @@ export interface RenderOptions {
 	vendorDir?: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
 	allowedFilePrefixes?: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settingValue?: (pluginId: string, key: string)=> any;
+	settingValue?: (pluginId: string, key: string)=> unknown;
 
 	resources?: ResourceInfos;
 
@@ -91,6 +90,8 @@ export interface RenderOptions {
 	destroyEditPopupSyntax?: string;
 
 	platformName?: string;
+
+	showNoteLinkIcon?: boolean;
 
 	// HtmlToHtml only
 	whiteBackgroundNoteRendering?: boolean;

@@ -42,8 +42,6 @@ const defaultEnvValues: EnvVariables = {
 	MAX_TIME_DRIFT: 2000,
 	NTP_SERVER: 'pool.ntp.org:123',
 
-	DELTA_INCLUDES_ITEMS: true,
-
 	// Whether or not to allow users logging in with a username/password combo.
 	// If this is disabled, a SAML-based login flow must be configured.
 	LOCAL_AUTH_ENABLED: true,
@@ -56,6 +54,8 @@ const defaultEnvValues: EnvVariables = {
 	USER_CONTENT_BASE_URL: '',
 	API_BASE_URL: '',
 	JOPLINAPP_BASE_URL: 'https://joplinapp.org',
+	TERMS_URL: '',
+	PRIVACY_URL: '',
 
 	// ==================================================
 	// Database config
@@ -131,6 +131,13 @@ const defaultEnvValues: EnvVariables = {
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: 90,
 
 	// ==================================================
+	// ==================================================
+	// MFA - 32+ bytes hex string
+	// ==================================================
+	MFA_ENCRYPTION_KEY: '',
+	MFA_ENABLED: 0,
+
+	// ==================================================
 	// Events deletion
 	// ==================================================
 
@@ -197,7 +204,6 @@ export interface EnvVariables {
 
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
-	DELTA_INCLUDES_ITEMS: boolean;
 	IS_ADMIN_INSTANCE: boolean;
 	INSTANCE_NAME: string;
 
@@ -205,6 +211,8 @@ export interface EnvVariables {
 	USER_CONTENT_BASE_URL: string;
 	API_BASE_URL: string;
 	JOPLINAPP_BASE_URL: string;
+	TERMS_URL: string;
+	PRIVACY_URL: string;
 
 	DB_CLIENT: string;
 	DB_SLOW_QUERY_LOG_ENABLED: boolean;
@@ -252,6 +260,9 @@ export interface EnvVariables {
 
 	USER_DATA_AUTO_DELETE_ENABLED: boolean;
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
+
+	MFA_ENCRYPTION_KEY: string;
+	MFA_ENABLED: number;
 
 	EVENTS_AUTO_DELETE_ENABLED: boolean;
 	EVENTS_AUTO_DELETE_AFTER_DAYS: number;

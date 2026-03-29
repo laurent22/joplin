@@ -27,7 +27,11 @@ import Logger from '@joplin/utils/Logger';
 import config from '../config';
 import { TreeItem } from '../models/ItemResourceModel';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
+import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
+import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainServiceDriver.dummy';
+import BaseService from '@joplin/lib/services/BaseService';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import FsDriverNode from '@joplin/lib/fs-driver-node';
 
 const logger = Logger.create('JoplinUtils');
 
@@ -88,6 +92,18 @@ export async function initializeJoplinUtils(config: Config, models: Models, must
 	BaseItem.loadClass('NoteTag', NoteTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
+
+	const fsDriver = new FsDriverNode();
+	Resource.fsDriver_ = fsDriver;
+
+	BaseService.logger_ = new Logger();
+
+	Setting.allowFileStorage = false;
+	Setting.setConstant('appId', 'net.cozic.joplin-desktop');
+	Setting.setConstant('tempDir', config.tempDir);
+	Setting.setConstant('resourceDir', config.resourceDir);
+	await loadKeychainServiceAndSettings([KeychainServiceDriverDummy]);
+
 }
 
 export function linkedResourceIds(body: string): string[] {
@@ -160,7 +176,7 @@ async function getResourceInfos(linkedItemInfos: LinkedItemInfos): Promise<Resou
 	return output;
 }
 
-async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, noteBody: string): Promise<LinkedItemInfos> {
+export async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, noteBody: string): Promise<LinkedItemInfos> {
 	const jopIds = await Note.linkedItemIds(noteBody);
 	const output: LinkedItemInfos = {};
 

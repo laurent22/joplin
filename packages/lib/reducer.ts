@@ -146,6 +146,8 @@ export interface State extends WindowState {
 	screens: any;
 	historyCanGoBack: boolean;
 	syncStarted: boolean;
+	syncPending: boolean;
+	showQuitSyncDialog: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	syncReport: any;
 	searchResults: ProcessResultsRow[];
@@ -200,6 +202,8 @@ export const defaultState: State = {
 	screens: {},
 	historyCanGoBack: false,
 	syncStarted: false,
+	syncPending: false,
+	showQuitSyncDialog: false,
 	syncReport: {},
 	searchQuery: '',
 	searchResults: [],
@@ -1124,6 +1128,12 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				const newSettings = { ...draft.settings };
 				newSettings[action.key] = action.value;
 				draft.settings = newSettings;
+
+				// Reset the sync pending status when the user updates the sync target, because if the sync target has changed then the "dirty"
+				// state is no longer relevant
+				if (action.key === 'sync.target') {
+					draft.syncPending = false;
+				}
 			}
 			break;
 
@@ -1168,7 +1178,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const handleWindowState = (windowDraft: Draft<WindowState>) => {
+				const handleWindowState = (windowDraft: Draft<WindowState>, isActiveWindow: boolean) => {
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
@@ -1229,7 +1239,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// a new note should be selected.
 					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
-					if (noteFolderHasChanged && !preserveSelection) {
+					if (noteFolderHasChanged && !preserveSelection && isActiveWindow) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 						if (!newNotes.length) newIndex = -1;
@@ -1254,9 +1264,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					}
 				};
 
-				handleWindowState(draft);
+				handleWindowState(draft, true);
 				for (const backgroundWindow of Object.values(draft.backgroundWindows)) {
-					handleWindowState(backgroundWindow);
+					handleWindowState(backgroundWindow, false);
 				}
 			}
 			break;
@@ -1424,6 +1434,18 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SYNC_COMPLETED':
 			draft.syncStarted = false;
+			break;
+
+		case 'SYNC_PENDING_UPDATE':
+			draft.syncPending = action.value;
+			break;
+
+		case 'QUIT_SYNC_DIALOG_OPEN':
+			draft.showQuitSyncDialog = true;
+			break;
+
+		case 'QUIT_SYNC_DIALOG_CLOSE':
+			draft.showQuitSyncDialog = false;
 			break;
 
 		case 'SYNC_REPORT_UPDATE':

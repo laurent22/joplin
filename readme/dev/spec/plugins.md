@@ -203,7 +203,7 @@ flowchart
 
 ##### Second: Send all queued messages
 
-After both messengers are ready, we wend all queued messages. In this case, that's the `setCss` message:
+After both messengers are ready, we send all queued messages. In this case, that's the `setCss` message:
 ```typescript
 {
 	kind: MessageType.InvokeMethod,

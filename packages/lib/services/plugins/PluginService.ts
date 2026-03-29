@@ -519,7 +519,19 @@ export default class PluginService extends BaseService {
 		return isCompatible(this.appVersion_, this.appType_, manifest);
 	}
 
+	private validateManifest(manifest: unknown): void {
+		manifestFromObject(manifest);
+	}
+
 	public describeIncompatibility(manifest: PluginManifest) {
+
+		try {
+			this.validateManifest(manifest);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return _('Invalid plugin manifest: %s', message);
+		}
+
 		if (this.isCompatible(manifest)) return null;
 
 		const minVersion = minVersionForPlatform(this.appType_, manifest);
@@ -570,7 +582,17 @@ export default class PluginService extends BaseService {
 
 		plugin.running = true;
 		const pluginApi = new Global(this.platformImplementation_, plugin, this.store_);
-		return this.runner_.run(plugin, pluginApi);
+		try {
+			await this.runner_.run(plugin, pluginApi);
+		} catch (error) {
+			logger.error(`Plugin "${plugin.id}" failed to start:`, error);
+			// Mark as started so this failed plugin doesn't block
+			// allPluginsStarted and prevent other plugins from working.
+			// See: https://github.com/laurent22/joplin/issues/12793
+			this.startedPlugins_[plugin.id] = true;
+			plugin.off('started', onStarted);
+			plugin.running = false;
+		}
 	}
 
 	public async installPluginFromRepo(repoApi: RepositoryApi, pluginId: string): Promise<Plugin> {

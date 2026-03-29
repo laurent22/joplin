@@ -33,6 +33,25 @@ Joplin is available in multiple languages thanks to the help of its users. You c
 
 If you want to start contributing to the project's code, please follow these guidelines before creating a pull request: 
 
+### Contribution scope
+
+We accept pull requests that solve **a concrete, agreed-upon problem** for the project.
+
+Pull requests whose primary goal is to create a contribution — rather than to address a real, prioritised issue — are likely to be closed.
+
+A pull request is expected to follow this flow:
+
+1. A problem is identified.
+2. The problem is discussed and accepted by maintainers.
+3. The issue is triaged (labelled or otherwise marked as accepted).
+4. The pull request addresses the agreed solution.
+
+Pull requests that do not follow this flow may be closed without detailed review. This reflects project priorities and review capacity, not contributor ability.
+
+Please do not ask maintainers to triage or accept your issue, and do not `@mention` them to request attention. Issues are reviewed as time allows, and important issues will be triaged by maintainers without prompting.
+
+### Contribution guidelines
+
 - The top post of the pull request should contain a full, self-contained explanation of the feature: what it does, how it does it, with examples of usage and screenshots. Also explain why you want to add this - what problem does it solve. Do not simply add a text `Implement feature #4345` or link to forum posts, because the information there will most likely be outdated or confusing (multiple discussions and opinions). The pull request needs to be self-contained.
 - Bug fixes are always welcome. Start by reviewing the [list of bugs](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 - A good way to easily start contributing is to pick and work on a [good first issue](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). We try to make these issues as clear as possible and provide basic info on how the code should be changed, and if something is unclear feel free to ask for more information on the issue.
@@ -92,7 +111,7 @@ To add a test, simply create a new file with an extension `.test.ts` in the same
 
 #### Setting the testing environment
 
-Many utility functions are available under the package `@joplin/lib/testing/test-utils`. Have a look for example at [Note.test.ts](https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Note.test.ts) to see how to setup test units with database support and synchroniser support. Note that this is not needed for all tests - if you just have a simple functions to test you won't need that extra setup.
+Many utility functions are available under the package `@joplin/lib/testing/test-utils`. Have a look for example at [Note.test.ts](https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Note.test.ts) to see how to set up unit tests with database support and synchroniser support. Note that this is not needed for all tests - if you just have simple functions to test you won't need that extra setup.
 
 #### Testing React Hooks
 

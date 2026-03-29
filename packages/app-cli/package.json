@@ -35,20 +35,20 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "3.5.1",
+  "version": "3.6.0",
   "bin": "./main.js",
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@joplin/lib": "~3.5",
-    "@joplin/renderer": "~3.5",
-    "@joplin/utils": "~3.5",
+    "@joplin/lib": "~3.6",
+    "@joplin/renderer": "~3.6",
+    "@joplin/utils": "~3.6",
     "aws-sdk": "2.1340.0",
     "chalk": "4.1.2",
     "compare-version": "0.1.2",
     "file-type": "16.5.4",
-    "fs-extra": "11.3.2",
+    "fs-extra": "11.3.3",
     "html-entities": "1.4.0",
     "keytar": "7.9.0",
     "md5": "2.3.0",
@@ -57,7 +57,7 @@
     "proper-lockfile": "4.1.2",
     "redux": "4.2.1",
     "server-destroy": "1.0.1",
-    "sharp": "0.34.4",
+    "sharp": "0.34.5",
     "sprintf-js": "1.1.3",
     "sqlite3": "5.1.6",
     "string-padding": "1.0.2",
@@ -70,7 +70,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@joplin/tools": "~3.5",
+    "@joplin/tools": "~3.6",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/node": "18.19.130",

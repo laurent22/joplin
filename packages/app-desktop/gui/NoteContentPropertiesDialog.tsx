@@ -5,7 +5,7 @@ import DialogButtonRow from './DialogButtonRow';
 const { themeStyle } = require('@joplin/lib/theme');
 const Countable = require('@joplin/lib/countable/Countable');
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 
 interface NoteContentPropertiesDialogProps {
 	themeId: number;
@@ -22,18 +22,21 @@ interface KeyToLabelMap {
 	[key: string]: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let markupToHtml_: any = null;
+let markupToHtml_: ReturnType<typeof markupLanguageUtils.newMarkupToHtml> = null;
 function markupToHtml() {
 	if (markupToHtml_) return markupToHtml_;
 	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 	return markupToHtml_;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function countElements(text: string, wordSetter: Function, characterSetter: Function, characterNoSpaceSetter: Function, cjkCharacterSetter: React.Dispatch<React.SetStateAction<number>>, lineSetter: Function) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	Countable.count(text, (counter: any) => {
+interface CounterResult {
+	words: number;
+	all: number;
+	characters: number;
+}
+
+function countElements(text: string, wordSetter: React.Dispatch<React.SetStateAction<number>>, characterSetter: React.Dispatch<React.SetStateAction<number>>, characterNoSpaceSetter: React.Dispatch<React.SetStateAction<number>>, cjkCharacterSetter: React.Dispatch<React.SetStateAction<number>>, lineSetter: React.Dispatch<React.SetStateAction<number>>) {
+	Countable.count(text, (counter: CounterResult) => {
 		wordSetter(counter.words);
 		characterSetter(counter.all);
 		characterNoSpaceSetter(counter.characters);
@@ -53,8 +56,7 @@ function formatReadTime(readTimeMinutes: number) {
 
 export default function NoteContentPropertiesDialog(props: NoteContentPropertiesDialogProps) {
 	const theme = themeStyle(props.themeId);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const tableBodyComps: any[] = [];
+	const tableBodyComps: React.JSX.Element[] = [];
 	// For the source Markdown
 	const [lines, setLines] = useState<number>(0);
 	const [words, setWords] = useState<number>(0);

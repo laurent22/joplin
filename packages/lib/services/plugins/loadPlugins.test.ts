@@ -1,12 +1,13 @@
 import Setting from '../../models/Setting';
 import PluginService from '../../services/plugins/PluginService';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import loadPlugins, { Props as LoadPluginsProps } from './loadPlugins';
 import MockPluginRunner from './testing/MockPluginRunner';
 import reducer, { State, defaultState } from '../../reducer';
 import { Action, createStore } from 'redux';
 import MockPlatformImplementation from './testing/MockPlatformImplementation';
 import createTestPlugin from '../../testing/plugins/createTestPlugin';
+import Plugin from './Plugin';
 
 const createMockReduxStore = () => {
 	return createStore((state: State = defaultState, action: Action<string>) => {
@@ -133,5 +134,55 @@ describe('loadPlugins', () => {
 		// if not enabled previously.
 		expect(pluginRunner.stopCalledTimes).toBe(disabledCount + enabledCount);
 		expect([...pluginRunner.runningPluginIds].sort()).toMatchObject(expectedRunningIds);
+	});
+
+	test('should not block allPluginsStarted when a plugin fails to start', async () => {
+		// This tests the fix for https://github.com/laurent22/joplin/issues/12793
+		// When a plugin crashes before calling register(), it should not block
+		// other plugins from working.
+
+		const goodPluginId = 'joplin.test.good.plugin';
+		await createTestPlugin({
+			...defaultManifestProperties,
+			id: goodPluginId,
+			name: 'Good Plugin',
+		});
+
+		const badPluginId = 'joplin.test.bad.plugin';
+		await createTestPlugin({
+			...defaultManifestProperties,
+			id: badPluginId,
+			name: 'Bad Plugin',
+		});
+
+		// Create a mock runner that throws for the bad plugin
+		// and emits 'started' for good plugins (matching real behavior).
+		const failingPluginRunner = new MockPluginRunner();
+		const originalRun = failingPluginRunner.run.bind(failingPluginRunner);
+		failingPluginRunner.run = async (plugin: Plugin) => {
+			if (plugin.manifest.id === badPluginId) {
+				throw new Error('Simulated plugin crash before register()');
+			}
+			await originalRun(plugin);
+			// Simulate what JoplinPlugins.register() does after onStart()
+			plugin.emit('started');
+		};
+
+		const store = createMockReduxStore();
+		const service = PluginService.instance();
+		service.initialize('2.3.4', platformImplementation, failingPluginRunner, store);
+
+		await withWarningSilenced(/Plugin "joplin.test.bad.plugin" failed to start: Error: Simulated plugin crash/, async () => {
+			await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		});
+
+		// The bad plugin failed, but allPluginsStarted should still be true
+		// because the fix marks failed plugins as "started".
+		expect(service.allPluginsStarted).toBe(true);
+
+		// The good plugin should still be running
+		expect(failingPluginRunner.runningPluginIds).toContain(goodPluginId);
+		// The bad plugin should not be running
+		expect(failingPluginRunner.runningPluginIds).not.toContain(badPluginId);
 	});
 });

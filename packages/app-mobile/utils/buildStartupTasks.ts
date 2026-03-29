@@ -1,6 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
-import Logger, { TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -92,6 +92,7 @@ import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -200,11 +201,8 @@ const buildStartupTasks = (
 		const mainLogger = new Logger();
 		mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 		mainLogger.setLevel(Logger.LEVEL_INFO);
-
-		if (Setting.value('env') === 'dev') {
-			mainLogger.addTarget(TargetType.Console);
-			mainLogger.setLevel(Logger.LEVEL_DEBUG);
-		}
+		mainLogger.addTarget(TargetType.Console);
+		mainLogger.setLevel(Setting.value('env') === 'dev' ? LogLevel.Debug : LogLevel.Info);
 
 		Logger.initializeGlobalLogger(mainLogger);
 		initLib(mainLogger);
@@ -260,13 +258,8 @@ const buildStartupTasks = (
 		AlarmService.setDriver(new AlarmServiceDriver(reg.logger()));
 	});
 	addTask('buildStartupTasks/openDatabase', async () => {
-		if (Setting.value('env') === 'prod') {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
-		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
-
-			// await db.clearForTesting();
-		}
+		await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+		// if (Setting.value('env') === 'dev') await db.clearForTesting();
 	});
 	addTask('buildStartupTasks/setUpSettings', async () => {
 		await loadKeychainServiceAndSettings([]);
@@ -375,6 +368,19 @@ const buildStartupTasks = (
 			ids: Setting.value('collapsedFolderIds'),
 		});
 	});
+	addTask('buildStartupTasks/initialize note visible panes', async () => {
+		const panes = Setting.value('noteVisiblePanes') || ['viewer'];
+
+		dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: panes,
+		});
+
+		dispatch({
+			type: 'NOTE_EDITOR_VISIBLE_CHANGE',
+			visible: panes.includes('editor'),
+		});
+	});
 	addTask('buildStartupTasks/load tags', async () => {
 		const tags = await Tag.allWithNotes();
 
@@ -384,6 +390,9 @@ const buildStartupTasks = (
 		});
 	});
 	addTask('buildStartupTasks/clear shared files cache', clearSharedFilesCache);
+	addTask('buildStartupTasks/initialize PerFolderSortOrderService', async () => {
+		PerFolderSortOrderService.initialize();
+	});
 	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 
@@ -425,24 +434,27 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
 
-		// Collect revisions more frequently on mobile because it doesn't auto-save
-		// and it cannot collect anything when the app is not active.
-		RevisionService.instance().runInBackground(1000 * 30);
-
 		reg.setupRecurrentSync();
 
 		// When the app starts we want the full sync to
 		// start almost immediately to get the latest data.
 		// doWifiConnectionCheck set to true so initial sync
 		// doesn't happen on mobile data
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		void reg.scheduleSync(100, null, true).then(() => {
-			// Wait for the first sync before updating the notifications, since synchronisation
-			// might change the notifications.
-			void AlarmService.updateAllNotifications();
+		setTimeout(() => {
+			// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+			void reg.scheduleSync(0, null, true).then(() => {
+				// Wait for the first sync before updating the notifications, since synchronisation
+				// might change the notifications.
+				void AlarmService.updateAllNotifications();
 
-			void DecryptionWorker.instance().scheduleStart();
-		});
+				void DecryptionWorker.instance().scheduleStart();
+
+				// Collect revisions more frequently on mobile because it doesn't auto-save
+				// and it cannot collect anything when the app is not active.
+				RevisionService.instance().runInBackground(1000 * 30);
+			});
+		}, 100);
 	});
 	addTask('buildStartupTasks/set up welcome utils', async () => {
 		await WelcomeUtils.install(Setting.value('locale'), dispatch);

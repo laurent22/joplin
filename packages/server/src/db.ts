@@ -158,6 +158,12 @@ export const isSqlite = (db: DbConnection) => {
 	return clientType(db) === DatabaseConfigClient.SQLite;
 };
 
+export const getEmptyIp = (db: DbConnection): string | null => {
+	// PostgreSQL uses inet type which doesn't accept empty strings, only null or valid IPs
+	// SQLite uses string type with NOT NULL constraint, so we use empty strings
+	return isPostgres(db) ? null : '';
+};
+
 export const setCollateC = async (db: DbConnection, tableName: string, columnName: string): Promise<void> => {
 	if (!isPostgres(db)) return;
 	await db.raw(`ALTER TABLE ${tableName} ALTER COLUMN ${columnName} SET DATA TYPE character varying(32) COLLATE "C"`);
@@ -306,7 +312,11 @@ export const sqliteSyncSlave = async (master: DbConnection, slave: DbConnection)
 // Incorrectly named migrations may end up being applied in the wrong order.
 const fixMigrationNames = async (db: DbConnection) => {
 	try {
+		// By default, Knex logs 'no such table' errors, even if caught by the try/catch block.
+		// See https://github.com/laurent22/joplin/pull/14401 for details.
+		const context: QueryContext = { noSuchTableErrorLoggingDisabled: true };
 		await db('knex_migrations')
+			.queryContext(context)
 			.update({ name: '20250404091200_user_auth_code.js' })
 			.where('name', '=', '202504040912000_user_auth_code.js');
 	} catch (error) {

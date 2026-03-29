@@ -6,6 +6,7 @@ import PostMessageService from '@joplin/lib/services/PostMessageService';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../../../services/bridge';
+import { resolveContextMenuItemType } from './contextMenuUtils';
 
 export default function useMessageHandler(
 	scrollWhenReadyRef: RefObject<ScrollOptions|null>,
@@ -46,9 +47,11 @@ export default function useMessageHandler(
 			if (s.length < 2) throw new Error(`Invalid message: ${msg}`);
 			void ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'contextMenu') {
+			const resourceId = arg0.resourceId;
+			const itemType = await resolveContextMenuItemType(arg0 && arg0.type, resourceId);
 			const menu = await contextMenu({
-				itemType: arg0 && arg0.type,
-				resourceId: arg0.resourceId,
+				itemType,
+				resourceId: resourceId,
 				filename: arg0.filename,
 				mime: arg0.mime,
 				linkToOpen: null,

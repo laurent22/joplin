@@ -1,11 +1,12 @@
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
-import { useEffect, useMemo, useState } from 'react';
-import { View, Dimensions, Alert, Button } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Alert, Button, ViewStyle } from 'react-native';
 import { SensorInfo } from './sensorInfo';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import biometricAuthenticate from './biometricAuthenticate';
+import SafeAreaView from '../SafeAreaView';
 
 const logger = Logger.create('BiometricPopup');
 
@@ -96,13 +97,6 @@ export default (props: Props) => {
 		);
 	}, [initialPromptDone, display, props.dispatch]);
 
-	const windowSize = useMemo(() => {
-		return {
-			width: Dimensions.get('window').width,
-			height: Dimensions.get('window').height,
-		};
-	}, []);
-
 	useEffect(() => {
 		logger.info('effect 1: start');
 
@@ -124,8 +118,20 @@ export default (props: Props) => {
 	};
 
 	return (
-		<View style={{ display: display ? 'flex' : 'none', position: 'absolute', zIndex: 99999, backgroundColor: '#000000', width: windowSize.width, height: windowSize.height }}>
-			{renderTryAgainButton()}
+		<View style={[rootStyle, { display: display ? 'flex' : 'none' }]}>
+			<SafeAreaView>
+				{renderTryAgainButton()}
+			</SafeAreaView>
 		</View>
 	);
+};
+
+const rootStyle: ViewStyle = {
+	position: 'absolute',
+	zIndex: 99999,
+	backgroundColor: '#000000',
+	top: 0,
+	bottom: 0,
+	left: 0,
+	right: 0,
 };

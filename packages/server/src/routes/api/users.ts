@@ -24,7 +24,7 @@ async function postedUserFromContext(ctx: AppContext): Promise<User> {
 router.get('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	const user = await fetchUser(path, ctx);
 	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
-	return user;
+	return ctx.joplin.models.user().toApiOutput(user);
 });
 
 router.publicSchemas.push('api/users/:id/public_key');
@@ -52,8 +52,8 @@ router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
 	user.password = uuidgen();
 	user.must_set_password = 1;
 	user.email_confirmed = 0;
-	const output = await ctx.joplin.models.user().save(user);
-	return ctx.joplin.models.user().toApiOutput(output);
+	const createdUser = await ctx.joplin.models.user().save(user);
+	return ctx.joplin.models.user().toApiOutput(await ctx.joplin.models.user().load(createdUser.id));
 });
 
 router.get('api/users', async (_path: SubPath, ctx: AppContext) => {

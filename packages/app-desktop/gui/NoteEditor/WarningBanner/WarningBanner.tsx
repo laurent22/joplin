@@ -6,13 +6,17 @@ import BannerContent from './BannerContent';
 import { _ } from '@joplin/lib/locale';
 import onRichTextReadMoreLinkClick from '@joplin/lib/components/shared/NoteEditor/WarningBanner/onRichTextReadMoreLinkClick';
 import onRichTextDismissLinkClick from '@joplin/lib/components/shared/NoteEditor/WarningBanner/onRichTextDismissLinkClick';
+import useEditorTypeMigrationBanner from '@joplin/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner';
 import { useMemo } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { NoteBodyEditorType } from '../utils/types';
 
 interface Props {
-	bodyEditor: string;
+	bodyEditor: NoteBodyEditorType;
+	editorMigrationVersion: number;
 	richTextBannerDismissed: boolean;
+	inEditorRenderingEnabled: boolean;
 	pluginCompatibilityBannerDismissedFor: string[];
 	plugins: PluginStates;
 }
@@ -35,6 +39,22 @@ const incompatiblePluginIds = [
 ];
 
 const WarningBanner: React.FC<Props> = props => {
+
+	const editorMigrationMessage = useEditorTypeMigrationBanner({
+		markdownEditorEnabled: props.bodyEditor === 'CodeMirror6',
+		editorMigrationVersion: props.editorMigrationVersion,
+		inEditorRenderingEnabled: props.inEditorRenderingEnabled,
+	});
+	const editorMigrationBanner = (
+		<BannerContent
+			visible={editorMigrationMessage.enabled}
+			acceptMessage={editorMigrationMessage.keepEnabled.label}
+			onAccept={editorMigrationMessage.keepEnabled.onPress}
+			onDismiss={editorMigrationMessage.disable.onPress}
+			dismissMessage={editorMigrationMessage.disable.label}
+		>{editorMigrationMessage.label}</BannerContent>
+	);
+
 	const wysiwygBanner = (
 		<BannerContent
 			acceptMessage={_('Read more about it')}
@@ -83,6 +103,7 @@ const WarningBanner: React.FC<Props> = props => {
 	return <>
 		{wysiwygBanner}
 		{markdownPluginBanner}
+		{editorMigrationBanner}
 	</>;
 };
 
@@ -91,5 +112,7 @@ export default connect((state: AppState) => {
 		richTextBannerDismissed: state.settings.richTextBannerDismissed,
 		pluginCompatibilityBannerDismissedFor: state.settings['editor.pluginCompatibilityBannerDismissedFor'],
 		plugins: state.pluginService.plugins,
+		editorMigrationVersion: state.settings['editor.migration'],
+		inEditorRenderingEnabled: state.settings['editor.inlineRendering'],
 	};
 })(WarningBanner);

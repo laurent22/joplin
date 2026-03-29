@@ -9,7 +9,7 @@ import { canMove, MoveDirection } from './utils/movements';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootMessage } from './utils/style';
 import type { ResizeCallback, ResizeStartCallback } from 're-resizable';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import EventEmitter = require('events');
 import LayoutItemContainer from './LayoutItemContainer';
 

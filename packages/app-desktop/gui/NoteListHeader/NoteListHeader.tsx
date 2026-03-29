@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { NoteListColumns, OnClickHandler } from '@joplin/lib/services/plugins/api/noteListType';
-import { CSSProperties } from 'styled-components';
 import NoteListHeaderItem from './NoteListHeaderItem';
 import { OnItemClickHander } from './types';
 import useDragAndDrop, { DataType } from './useDragAndDrop';
@@ -53,7 +52,7 @@ export default (props: Props) => {
 	const itemHeight = props.height ? props.height : defaultHeight;
 
 	const style = useMemo(() => {
-		return { height: itemHeight } as CSSProperties;
+		return { height: itemHeight };
 	}, [itemHeight]);
 
 	return (

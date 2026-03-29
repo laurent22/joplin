@@ -1,5 +1,6 @@
 import { rtrimSlashes, toFileProtocolPath } from './path-utils';
 import { urlDecode } from './string-utils';
+import { _ } from './locale';
 
 export const hash = (url: string) => {
 	const s = url.split('#');
@@ -71,8 +72,8 @@ export const parseResourceUrl = (url: string) => {
 	};
 };
 
-export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string) => {
-	let resourceDirUrl = toFileProtocolPath(resourceDir);
+export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string, os: string|null = null) => {
+	let resourceDirUrl = toFileProtocolPath(resourceDir, os);
 	if (!resourceDirUrl.endsWith('/')) {
 		resourceDirUrl += '/';
 	}
@@ -94,13 +95,20 @@ export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string) => {
 };
 
 export const extractResourceUrls = (text: string) => {
-	const markdownLinksRE = /\]\((.*?)\)/g;
+	const markdownLinkRegexes = [
+		// Standard [link](...)-style links
+		/\]\((.*?)\)/g,
+		// Reference links
+		/\]:(.*?)(?:[\n]|$)/g,
+	];
 	const output = [];
 	let result = null;
 
-	while ((result = markdownLinksRE.exec(text)) !== null) {
-		const resourceUrlInfo = parseResourceUrl(result[1]);
-		if (resourceUrlInfo) output.push(resourceUrlInfo);
+	for (const regex of markdownLinkRegexes) {
+		while ((result = regex.exec(text)) !== null) {
+			const resourceUrlInfo = parseResourceUrl(result[1].trim());
+			if (resourceUrlInfo) output.push(resourceUrlInfo);
+		}
 	}
 
 	const htmlRegexes = [
@@ -131,5 +139,12 @@ export const objectToQueryString = (query: Record<string, string>) => {
 	queryString = s.join('&');
 
 	return queryString;
+};
+
+export const validateUrlProtocol = (url: string) => {
+	if (!url || !/^https?:\/\//i.test(url)) {
+		return _('The URL must include the protocol prefix (http:// or https://).');
+	}
+	return '';
 };
 

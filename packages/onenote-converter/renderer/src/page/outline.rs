@@ -81,7 +81,7 @@ impl<'a> Renderer<'a> {
         attrs.set("class", "outline-element".into());
 
         let mut styles = StyleSet::new();
-        styles.set("margin-left", px(indent_width as f32));
+        styles.set("margin-left", px(indent_width));
         attrs.set("style", styles.to_string());
 
         if is_list {
@@ -92,14 +92,7 @@ impl<'a> Renderer<'a> {
 
         self.in_list = is_list;
 
-        contents.extend(
-            element
-                .contents()
-                .iter()
-                .map(|content| self.render_content(content))
-                .collect::<Result<Vec<_>, _>>()?
-                .into_iter(),
-        );
+        contents.push_str(&self.render_contents(element.contents())?);
 
         self.in_list = false;
 

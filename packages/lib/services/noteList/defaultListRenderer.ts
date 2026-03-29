@@ -1,6 +1,14 @@
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
+import checkboxPieCss from './checkboxPieCss';
+
+interface CheckboxStats {
+	total: number;
+	checked: number;
+	percent: number;
+	isComplete: boolean;
+}
 
 interface Props {
 	note: {
@@ -8,6 +16,7 @@ interface Props {
 		title: string;
 		is_todo: number;
 		todo_completed: number;
+		checkboxes: CheckboxStats | null;
 	};
 	item: {
 		// index: number;
@@ -34,6 +43,7 @@ const renderer: ListRenderer = {
 		// 'item.index',
 		'item.selected',
 		'item.size.height',
+		'note.checkboxes',
 		'note.id',
 		'note.is_shared',
 		'note.is_todo',
@@ -96,7 +106,16 @@ const renderer: ListRenderer = {
 					color: var(--joplin-color);
 				}
 			}
+
+			> .checkbox-pie {
+				display: flex;
+				align-items: center;
+				padding-right: 12px;
+				padding-left: 8px;
+			}
 		}
+
+		${checkboxPieCss}
 
 		> .content.-shared {
 			> .title {
@@ -147,11 +166,24 @@ const renderer: ListRenderer = {
 				<i class="watchedicon fa fa-share-square"></i>
 				<span>{{note.title}}</span>
 			</div>
+			{{#checkboxStats}}
+				<div class="checkbox-pie" title="{{checked}}/{{total}}">
+					{{#isComplete}}
+						<div class="pie -complete">✓</div>
+					{{/isComplete}}
+					{{^isComplete}}
+						<div class="pie" style="--percent: {{percent}};"></div>
+					{{/isComplete}}
+				</div>
+			{{/checkboxStats}}
 		</div>
 	`,
 
 	onRenderNote: async (props: Props) => {
-		return props;
+		return {
+			...props,
+			checkboxStats: props.note.checkboxes,
+		};
 	},
 };
 

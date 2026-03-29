@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
-import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
+import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease, handleReleaseResponseError } from './utils/checkForUpdatesUtils';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { compareVersions } from 'compare-versions';
 const packageInfo: PackageInfo = require('./packageInfo.js');
@@ -29,7 +29,8 @@ async function fetchLatestReleases() {
 
 	if (!response.ok) {
 		const responseText = await response.text();
-		throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
+		logger.error(`Cannot get latest release info (${response.status}): ${responseText.substr(0, 500)}`);
+		handleReleaseResponseError(response.status, responseText);
 	}
 
 	return (await response.json()) as GitHubRelease[];
@@ -48,8 +49,8 @@ function truncateText(text: string, length: number) {
 }
 
 async function getSkippedVersions(): Promise<string[]> {
-	const r = await KvStore.instance().value<string>('updateCheck::skippedVersions');
-	return r ? JSON.parse(r) : [];
+	const r = await KvStore.instance().value('updateCheck::skippedVersions');
+	return r && typeof r === 'string' ? JSON.parse(r) : [];
 }
 
 async function isSkippedVersion(v: string): Promise<boolean> {

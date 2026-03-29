@@ -1,5 +1,5 @@
 import { BaseItemEntity, defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
-import BaseModel, { DeleteOptions } from '../BaseModel';
+import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import { FolderLoadOptions } from './utils/types';
 import time from '../time';
 import { _ } from '../locale';
@@ -19,12 +19,18 @@ import getConflictFolderId from './utils/getConflictFolderId';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { getCollator } from './utils/getCollator';
 import Setting from './Setting';
+import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
+import ItemChange from './ItemChange';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
 
 export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
+}
+
+export interface SortFolderOptions {
+	includeDeleted?: boolean;
 }
 
 export default class Folder extends BaseItem {
@@ -542,7 +548,12 @@ export default class Folder extends BaseItem {
 				share_id: '',
 				updated_time: Date.now(),
 				parent_id: item.parent_id,
-			}, { autoTimestamp: false });
+			}, {
+				autoTimestamp: false,
+				// Required, to handle the case where the item's share_id points
+				// to a read-only share:
+				disableReadOnlyCheck: true,
+			});
 		}
 
 		logger.debug('updateFolderShareIds:', report);
@@ -593,6 +604,16 @@ export default class Folder extends BaseItem {
 		// resume the process from the start (thus the loop) so that we deal
 		// with the right note/resource associations.
 
+		const isReadOnly = (type: ModelType, item: NoteEntity|ResourceEntity) => {
+			return itemIsReadOnlySync(
+				type,
+				ItemChange.SOURCE_UNSPECIFIED,
+				item as ItemSlice,
+				Setting.value('sync.userId'),
+				BaseItem.syncShareCache,
+			);
+		};
+
 		interface Row {
 			id: string;
 			share_id: string;
@@ -639,12 +660,21 @@ export default class Folder extends BaseItem {
 			// one note. If it is not, we create duplicate resources so that
 			// each note has its own separate resource.
 
+			// Order unshared items first: This makes conflicts less likely, since shared
+			// items are more likely to be duplicated by multiple users.
+			const orderingSql = 'ORDER BY is_shared ASC';
+
 			const noteResourceAssociations = await this.db().selectAll(`
-				SELECT resource_id, note_id, notes.share_id
+				SELECT
+					resource_id,
+					note_id,
+					notes.share_id,
+					(notes.share_id != '') AS is_shared
 				FROM note_resources
 				LEFT JOIN notes ON notes.id = note_resources.note_id
 				WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)})
 				AND is_associated = 1
+				${orderingSql}
 			`) as NoteResourceRow[];
 
 			const resourceIdToNotes: Record<string, NoteResourceRow[]> = {};
@@ -663,7 +693,20 @@ export default class Folder extends BaseItem {
 					const row = rows[i];
 					const note: NoteEntity = await Note.load(row.note_id);
 					if (!note) continue; // probably got deleted in the meantime?
-					const newResource = await Resource.duplicateResource(resourceId);
+					// Don't update read-only notes:
+					if (isReadOnly(ModelType.Note, note)) continue;
+
+					const newResource = await Resource.duplicateResource(resourceId, {
+						// Ensure that the resource starts with the correct share_id and is_shared.
+						// This reduces the number of resources to be processed in the next loop iteration
+						// and seems to fix an issue related to resources not syncing with read-only shares.
+						//
+						// These properties are set directly in the "duplicateResource" call to prevent
+						// race conditions.
+						is_shared: note.is_shared,
+						share_id: note.share_id,
+					});
+
 					logger.info(`updateResourceShareIds: Automatically created resource "${newResource.id}" to replace resource "${resourceId}" because it is shared and duplicate across notes:`, row);
 					const regex = new RegExp(resourceId, 'gi');
 					const newBody = note.body.replace(regex, newResource.id);
@@ -712,7 +755,9 @@ export default class Folder extends BaseItem {
 						resource.blob_updated_time = now;
 					}
 
-					await Resource.save(resource, { autoTimestamp: false });
+					if (!isReadOnly(ModelType.Resource, resource)) {
+						await Resource.save(resource, { autoTimestamp: false });
+					}
 				}
 				return;
 			}
@@ -888,11 +933,13 @@ export default class Folder extends BaseItem {
 		return rootFolders;
 	}
 
-	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null) {
-		const output = folders ? folders : await this.allAsTree();
+	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null, options: SortFolderOptions = null) {
+		let output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
 			const collator = getCollator();
+			if (options && options.includeDeleted === false) folders = folders.filter(folder => !folder.deleted_time);
+
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
 					return collator.compare(a.title, b.title);
@@ -913,7 +960,7 @@ export default class Folder extends BaseItem {
 			return folders;
 		};
 
-		sortFolders(sortFoldersAlphabetically(output));
+		output = sortFolders(sortFoldersAlphabetically(output));
 		return output;
 	}
 
@@ -1090,14 +1137,15 @@ export default class Folder extends BaseItem {
 		const folderId = Setting.value('activeFolderId');
 		if (!folderId) return null;
 
-		const folder = await Folder.load(folderId);
+		// Use super.load because the local load function returns folders which do not actually exist in the db, such as the trash
+		const folder = await super.load(folderId);
 		if (!folder || !!folder.deleted_time) {
 			const defaultFolder = await Folder.defaultFolder();
 			if (!defaultFolder) return null;
-			return defaultFolder.id;
+			return defaultFolder;
 		}
 
-		return folderId;
+		return folder;
 	}
 
 }

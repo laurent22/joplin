@@ -1,47 +1,10 @@
-import type Client from './Client';
+import type Client from './ipc/Client';
 import type FolderRecord from './model/FolderRecord';
+import { NoteData, FolderData, ItemId, ResourceData, DetailedFolderData, TreeItem } from './model/types';
 
-export type Json = string|number|Json[]|{ [key: string]: Json };
+export type Json = string|boolean|number|Json[]|{ [key: string]: Json };
 
 export type HttpMethod = 'GET'|'POST'|'DELETE'|'PUT'|'PATCH';
-
-export type ItemId = string;
-export interface NoteData {
-	parentId: ItemId;
-	id: ItemId;
-	title: string;
-	body: string;
-	published: boolean;
-}
-export interface DetailedNoteData extends NoteData {
-	isShared: boolean;
-}
-export interface FolderData {
-	parentId: ItemId;
-	id: ItemId;
-	title: string;
-}
-export interface DetailedFolderData extends FolderData {
-	isShared: boolean;
-}
-
-export type TreeItem = NoteData|FolderRecord;
-
-export const isFolder = (item: TreeItem): item is FolderRecord => {
-	return 'childIds' in item;
-};
-
-// Typescript type assertions require type definitions on the left for arrow functions.
-// See https://github.com/microsoft/TypeScript/issues/53450.
-export const assertIsFolder: (item: TreeItem)=> asserts item is FolderRecord = item => {
-	if (!item) {
-		throw new Error(`Item ${item} is not a folder`);
-	}
-
-	if (!isFolder(item)) {
-		throw new Error(`Expected item with ID ${item?.id} to be a folder.`);
-	}
-};
 
 export interface FuzzContext {
 	serverUrl: string;
@@ -50,10 +13,14 @@ export interface FuzzContext {
 	enableE2ee: boolean;
 	baseDir: string;
 
-	execApi: (method: HttpMethod, route: string, debugAction: Json)=> Promise<Json>;
+	currentStep(): number;
+
 	randInt: (low: number, high: number)=> number;
 	randomString: (targetLength: number)=> string;
-	randomFrom: <T> (data: T[])=> T;
+	randomId: ()=> string;
+	randomFrom: <T> (data: T[], weights?: number[])=> T;
+
+	execApi(method: HttpMethod, route: string, body: Json|undefined): Promise<Json>;
 }
 
 export interface RandomFolderOptions {
@@ -63,6 +30,7 @@ export interface RandomFolderOptions {
 
 export interface RandomNoteOptions {
 	includeReadOnly: boolean;
+	filter?: (note: NoteData)=> boolean;
 }
 
 export interface ShareOptions {
@@ -78,6 +46,8 @@ export interface ActionableClient {
 	deleteNote(id: ItemId): Promise<void>;
 	createNote(data: NoteData): Promise<void>;
 	updateNote(data: NoteData): Promise<void>;
+	attachResource(note: NoteData, resource: ResourceData): Promise<NoteData>;
+	createResource(resource: ResourceData): Promise<void>;
 	moveItem(itemId: ItemId, newParentId: ItemId): Promise<void>;
 	publishNote(id: ItemId): Promise<void>;
 	unpublishNote(id: ItemId): Promise<void>;
@@ -85,9 +55,12 @@ export interface ActionableClient {
 
 	listNotes(): Promise<NoteData[]>;
 	listFolders(): Promise<DetailedFolderData[]>;
+	listResources(): Promise<ResourceData[]>;
 	allFolderDescendants(parentId: ItemId): Promise<ItemId[]>;
 	randomFolder(options: RandomFolderOptions): Promise<FolderRecord>;
 	randomNote(options: RandomNoteOptions): Promise<NoteData>;
+	itemById(id: ItemId): TreeItem;
+	itemExists(id: ItemId): boolean;
 }
 
 export interface UserData {

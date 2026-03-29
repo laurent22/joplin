@@ -1,16 +1,32 @@
 import Resource from '@joplin/lib/models/Resource';
 import Logger from '@joplin/utils/Logger';
+import bridge from '../../../services/bridge';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
+import { ContextMenuItemType, EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/types';
+import eventManager from '@joplin/lib/eventManager';
+import CommandService from '@joplin/lib/services/CommandService';
+import { type MenuItem as MenuItemType } from 'electron';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { ModelType } from '@joplin/lib/BaseModel';
 
+const MenuItem = bridge().MenuItem;
 const logger = Logger.create('contextMenuUtils');
 
-export enum ContextMenuItemType {
-	None = '',
-	Image = 'image',
-	Resource = 'resource',
-	Text = 'text',
-	Link = 'link',
-}
+// Re-export for backward compatibility
+export { ContextMenuItemType };
+
+// Resolves whether a resource-type item is actually a note link.
+// Falls back to Resource on error or if the item is not found.
+export const resolveContextMenuItemType = async (itemType: ContextMenuItemType, resourceId: string): Promise<ContextMenuItemType> => {
+	if (itemType !== ContextMenuItemType.Resource || !resourceId) return itemType;
+	try {
+		const item = await BaseItem.loadItemById(resourceId);
+		if (item?.type_ === ModelType.Note) return ContextMenuItemType.NoteLink;
+	} catch (error) {
+		logger.warn('resolveContextMenuItemType: failed to load item, defaulting to Resource', error);
+	}
+	return ContextMenuItemType.Resource;
+};
 
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType;
@@ -36,6 +52,7 @@ export interface ContextMenuItem {
 	onAction: Function;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	isActive: Function;
+	isSeparator?: boolean;
 }
 
 export interface ContextMenuItems {
@@ -126,4 +143,111 @@ export const svgUriToPng = (document: Document, svg: string, width: number, heig
 		};
 		img.src = svg;
 	});
+};
+
+// Filter out leading, trailing, and consecutive separators from a list
+const filterSeparators = <T>(items: T[], isSeparator: (item: T)=> boolean): T[] => {
+	const filtered: T[] = [];
+	let lastWasSeparator = true;
+	for (const item of items) {
+		if (isSeparator(item)) {
+			if (lastWasSeparator) continue;
+			lastWasSeparator = true;
+		} else {
+			lastWasSeparator = false;
+		}
+		filtered.push(item);
+	}
+
+	while (filtered.length > 0 && isSeparator(filtered[filtered.length - 1])) {
+		filtered.pop();
+	}
+
+	return filtered;
+};
+
+export interface EditorContextMenuFilterContext {
+	resourceId?: string;
+	itemType?: ContextMenuItemType;
+	textToCopy?: string;
+}
+
+export const handleEditorContextMenuFilter = async (context?: EditorContextMenuFilterContext) => {
+	let filterObject: EditContextMenuFilterObject = {
+		items: [],
+		context,
+	};
+
+	filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
+
+	const filteredItems = filterSeparators(filterObject.items, item => item.type === 'separator');
+
+	const output: MenuItemType[] = [];
+	for (const item of filteredItems) {
+		output.push(new MenuItem({
+			label: item.label,
+			click: async () => {
+				const args = item.commandArgs || [];
+				void CommandService.instance().execute(item.commandName, ...args);
+			},
+			type: item.type,
+		}));
+	}
+
+	return output;
+};
+
+export interface BuildMenuItemsOptions {
+	excludeEditItems?: boolean;
+	excludePluginItems?: boolean;
+}
+
+export const buildMenuItems = async (items: ContextMenuItems, options: ContextMenuOptions, buildOptions?: BuildMenuItemsOptions) => {
+	const editItemKeys = ['cut', 'copy', 'paste', 'pasteAsText', 'separator4'];
+	const activeItems: ContextMenuItem[] = [];
+	for (const itemKey in items) {
+		if (buildOptions?.excludeEditItems && editItemKeys.includes(itemKey)) continue;
+		const item = items[itemKey];
+		if (item.isActive(options.itemType, options)) {
+			activeItems.push(item);
+		}
+	}
+
+	if (!buildOptions?.excludePluginItems) {
+		const extraItems = await handleEditorContextMenuFilter({
+			resourceId: options.resourceId,
+			itemType: options.itemType,
+			textToCopy: options.textToCopy,
+		});
+
+		if (extraItems.length) {
+			activeItems.push({
+				isActive: () => true,
+				label: '',
+				onAction: () => {},
+				isSeparator: true,
+			});
+		}
+
+		for (const [, extraItem] of extraItems.entries()) {
+			activeItems.push({
+				isActive: () => true,
+				label: extraItem.label,
+				onAction: () => {
+					extraItem.click();
+				},
+				isSeparator: extraItem.type === 'separator',
+			});
+		}
+	}
+
+	const filteredItems = filterSeparators(activeItems, item => item.isSeparator);
+
+	return filteredItems.map(item => new MenuItem({
+		label: item.label,
+		click: () => {
+			item.onAction(options);
+		},
+		type: item.isSeparator ? 'separator' : 'normal',
+	}));
 };

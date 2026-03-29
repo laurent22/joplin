@@ -35,6 +35,7 @@ interface Props {
 	customCss: string;
 	scrollbarSize: ScrollbarSize;
 	fontFamily: string;
+	showNoteLinkIcon: boolean;
 }
 
 const useNoteContent = (
@@ -45,6 +46,7 @@ const useNoteContent = (
 	customCss: string,
 	scrollbarSize: ScrollbarSize,
 	fontFamily: string,
+	showNoteLinkIcon: boolean,
 ) => {
 	const [note, setNote] = useState<NoteEntity>(null);
 
@@ -75,17 +77,18 @@ const useNoteContent = (
 			resources: await shared.attachedResources(noteBody),
 			whiteBackgroundNoteRendering: markupLanguage === MarkupLanguage.Html,
 			globalSettings: getGlobalSettings(Setting),
+			showNoteLinkIcon,
 		});
 
 		viewerRef.current.setHtml(result.html, {
 			pluginAssets: result.pluginAssets,
 		});
-	}, [note, viewerRef]);
+	}, [note, viewerRef, markupToHtml, showNoteLinkIcon]);
 
 	return note;
 };
 
-const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack, customCss, scrollbarSize, fontFamily }) => {
+const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack, customCss, scrollbarSize, fontFamily, showNoteLinkIcon }) => {
 	const helpButton_onClick = useCallback(() => {}, []);
 	const viewerRef = useRef<NoteViewerControl|null>(null);
 	const revisionListRef = useRef<HTMLSelectElement|null>(null);
@@ -96,7 +99,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	const [deleting, setDeleting] = useState(false);
 
 	const note = useNoteContent(
-		viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize, fontFamily,
+		viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize, fontFamily, showNoteLinkIcon,
 	);
 
 	const viewer_domReady = useCallback(async () => {
@@ -154,7 +157,10 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
 
 		try {
-			if (msg.indexOf('joplin://') === 0) {
+			if (msg.indexOf('checkboxclick:') === 0) {
+				// Revision previews are read-only. Ignore checkbox toggle IPC messages so they
+				// don't fall through to URL handling (`checkboxclick:` looks like a protocol).
+			} else if (msg.indexOf('joplin://') === 0) {
 				throw new Error(_('Unsupported link or message: %s', msg));
 			} else if (urlUtils.urlProtocol(msg)) {
 				await bridge().openExternal(msg);
@@ -229,6 +235,7 @@ const mapStateToProps = (state: AppState) => {
 		themeId: state.settings.theme,
 		scrollbarSize: state.settings['style.scrollbarSize'],
 		fontFamily: state.settings['style.viewer.fontFamily'],
+		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 	};
 };
 

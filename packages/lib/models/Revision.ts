@@ -10,8 +10,7 @@ const { sprintf } = require('sprintf-js');
 const dmp = new DiffMatchPatch();
 
 export interface ObjectPatch {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	new: Record<string, any>;
+	new: Record<string, unknown>;
 	deleted: string[];
 }
 
@@ -85,8 +84,7 @@ export default class Revision extends BaseItem {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static createObjectPatch(oldObject: any, newObject: any) {
+	public static createObjectPatch(oldObject: Record<string, unknown>, newObject: Record<string, unknown>) {
 		if (!oldObject) oldObject = {};
 
 		const output: ObjectPatch = {
@@ -114,8 +112,7 @@ export default class Revision extends BaseItem {
 		return patch.replace(/[\n\r]/g, '');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static applyObjectPatch(object: any, patch: string) {
+	public static applyObjectPatch(object: Record<string, unknown>, patch: string) {
 		const parsedPatch: ObjectPatch = JSON.parse(this.sanitizeObjectPatch(patch));
 		const output = { ...object };
 
@@ -261,10 +258,14 @@ export default class Revision extends BaseItem {
 			revs = revs.slice();
 		}
 
-		// Handle rare case where two revisions have been created at exactly the same millisecond
-		// Also handle even rarer case where a rev and its parent have been created at the
-		// same milliseconds. All code below expects target revision to be on top.
-		revs = this.moveRevisionToTop(revision, revs);
+		if (revs.find(item => item.id === revision.id) !== undefined) {
+			// Handle rare case where two revisions have been created at exactly the same millisecond
+			// Also handle even rarer case where a rev and its parent have been created at the
+			// same milliseconds. All code below expects target revision to be on top.
+			revs = this.moveRevisionToTop(revision, revs);
+		} else {
+			revs.push(revision);
+		}
 
 		const output = {
 			title: '',
@@ -299,6 +300,23 @@ export default class Revision extends BaseItem {
 		return output;
 	}
 
+	private static async findAllRevisionsToKeep(itemType: ModelType, itemId: string, cutOffDate: number) {
+		return this.modelSelectAll(`
+				SELECT child.*
+				FROM revisions AS child
+				JOIN revisions AS parent
+				ON child.parent_id = parent.id
+				WHERE child.item_type = ?
+				AND child.item_id = ?
+				AND child.item_updated_time >= ?
+				AND parent.item_type = ?
+				AND parent.item_id = ?
+				AND parent.item_updated_time < ?
+				ORDER BY child.item_updated_time ASC`,
+		[itemType, itemId, cutOffDate, itemType, itemId, cutOffDate],
+		);
+	}
+
 	public static async deleteOldRevisions(ttl: number) {
 		// When deleting old revisions, we need to make sure that the oldest surviving revision
 		// is a "merged" one (as opposed to a diff from a now deleted revision). So every time
@@ -307,7 +325,7 @@ export default class Revision extends BaseItem {
 
 		const cutOffDate = Date.now() - ttl;
 		const allOldRevisions: RevisionEntity[] = await this.modelSelectAll(
-			'SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time DESC',
+			'SELECT * FROM revisions WHERE item_updated_time < ? ORDER BY item_updated_time ASC',
 			[cutOffDate],
 		);
 
@@ -321,12 +339,12 @@ export default class Revision extends BaseItem {
 		}
 
 		const deleteOldRevisionsForItem = async (itemType: ModelType, itemId: string, oldRevisions: RevisionEntity[]) => {
-			const keptRev = await this.modelSelectOne(
+			const firstKeptRev = await this.modelSelectOne(
 				'SELECT * FROM revisions WHERE item_updated_time >= ? AND item_type = ? AND item_id = ? ORDER BY item_updated_time ASC LIMIT 1',
 				[cutOffDate, itemType, itemId],
 			);
 			const queries: StringOrSqlQuery[] = [];
-			if (!keptRev) {
+			if (!firstKeptRev) {
 				const hasEncrypted = await this.modelSelectOne(
 					'SELECT * FROM revisions WHERE encryption_applied = 1 AND item_updated_time < ? AND item_id = ?',
 					[cutOffDate, itemId],
@@ -335,18 +353,22 @@ export default class Revision extends BaseItem {
 					throw new JoplinError('One of the revision to be deleted is encrypted', 'revision_encrypted');
 				}
 			} else {
-				// Note: we don't need to check for encrypted rev here because
-				// mergeDiff will already throw the revision_encrypted exception
-				// if a rev is encrypted.
-				const merged = await this.mergeDiffs(keptRev);
+				const revsToMerge = await this.findAllRevisionsToKeep(itemType, itemId, cutOffDate);
 
-				const titleDiff = this.createTextPatch('', merged.title);
-				const bodyDiff = this.createTextPatch('', merged.body);
-				const metadataDiff = this.createObjectPatch({}, merged.metadata);
-				queries.push({
-					sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ? WHERE id = ?',
-					params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), keptRev.id],
-				});
+				for (const keptRev of revsToMerge) {
+					// Note: we don't need to check for encrypted rev here because
+					// mergeDiff will already throw the revision_encrypted exception
+					// if a rev is encrypted.
+					const merged = await this.mergeDiffs(keptRev, oldRevisions);
+
+					const titleDiff = this.createTextPatch('', merged.title);
+					const bodyDiff = this.createTextPatch('', merged.body);
+					const metadataDiff = this.createObjectPatch({}, merged.metadata);
+					queries.push({
+						sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ? WHERE id = ?',
+						params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), keptRev.id],
+					});
+				}
 			}
 
 			await this.batchDelete(oldRevisions.map(item => item.id), { sourceDescription: 'Revision.deleteOldRevisions' });

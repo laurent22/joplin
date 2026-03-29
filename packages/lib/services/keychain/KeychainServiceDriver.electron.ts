@@ -50,8 +50,8 @@ export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 		let result: string|null = null;
 
 		if (canUseSafeStorage()) {
-			const data = await KvStore.instance().value<string>(`${kvStorePrefix}${name}`);
-			if (data !== null) {
+			const data = await KvStore.instance().value(`${kvStorePrefix}${name}`);
+			if (data !== null && typeof data === 'string') {
 				try {
 					result = await shim.electronBridge().safeStorage.decryptString(data);
 				} catch (e) {

@@ -27,15 +27,32 @@ import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
 
 export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
-	const s = {
+	const s: Record<ResourceOcrStatus, string> = {
 		[ResourceOcrStatus.Todo]: _('Idle'),
 		[ResourceOcrStatus.Processing]: _('Processing'),
 		[ResourceOcrStatus.Error]: _('Error'),
 		[ResourceOcrStatus.Done]: _('Done'),
+		[ResourceOcrStatus.TodoAccessible]: _('Idle'),
 	};
 
 	return s[status];
 };
+
+export type NoteResourceSortField = 'title' | 'size';
+export type NoteResourceSortDirection = 'asc' | 'desc';
+
+export interface NoteResourceQueryOptions {
+	searchQuery?: string;
+	sortField?: NoteResourceSortField;
+	sortDirection?: NoteResourceSortDirection;
+	limit?: number;
+	offset?: number;
+}
+
+export interface NoteResourceQueryResult {
+	items: ResourceEntity[];
+	hasMore: boolean;
+}
 
 export default class Resource extends BaseItem {
 
@@ -444,7 +461,11 @@ export default class Resource extends BaseItem {
 		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
 	}
 
-	public static async duplicateResource(resourceId: string): Promise<ResourceEntity> {
+	public static async duplicateResource(
+		resourceId: string,
+		// Overrides property values in the duplicate resource.
+		propertyOverrides: ResourceEntity = {},
+	): Promise<ResourceEntity> {
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 
@@ -452,7 +473,10 @@ export default class Resource extends BaseItem {
 		delete newResource.id;
 		delete newResource.is_shared;
 		delete newResource.share_id;
-		newResource = await Resource.save(newResource);
+		newResource = await Resource.save({
+			...newResource,
+			...propertyOverrides,
+		});
 
 		const newLocalState = { ...localState };
 		newLocalState.resource_id = newResource.id;
@@ -518,13 +542,14 @@ export default class Resource extends BaseItem {
 				SELECT ${selectSql}
 				FROM resources
 				WHERE
-					(ocr_status = ? or ocr_status = ?) AND
+					(ocr_status = ? OR ocr_status = ? OR ocr_status = ?) AND
 					encryption_applied = 0 AND
 					mime IN ('${supportedMimeTypes.join('\',\'')}')
 			`,
 			params: [
 				ResourceOcrStatus.Todo,
 				ResourceOcrStatus.Processing,
+				ResourceOcrStatus.TodoAccessible,
 			],
 		};
 	}
@@ -622,6 +647,38 @@ export default class Resource extends BaseItem {
 				throw error;
 			}
 		}
+	}
+
+	public static async noteResources(options: NoteResourceQueryOptions = {}): Promise<NoteResourceQueryResult> {
+		const limit = options.limit ? Math.max(1, options.limit) : 50;
+		const offset = options.offset ? Math.max(0, options.offset) : 0;
+		const sortField: NoteResourceSortField = options.sortField === 'size' ? 'size' : 'title';
+		const sortDirection: NoteResourceSortDirection = options.sortDirection === 'desc' ? 'desc' : 'asc';
+
+		const whereClauses: string[] = [];
+		const whereParams: (string | number)[] = [];
+		if (options.searchQuery?.trim()) {
+			const searchPattern = `%${options.searchQuery.trim().toLowerCase()}%`;
+			whereClauses.push('(LOWER(COALESCE(id, \'\')) LIKE ? OR LOWER(COALESCE(title, \'\')) LIKE ?)');
+			whereParams.push(searchPattern, searchPattern);
+		}
+
+		const orderBy = sortField === 'size' ? 'size' : 'LOWER(COALESCE(title, \'\'))';
+		const orderDirection = sortDirection.toUpperCase();
+		const whereSql = whereClauses.length ? `WHERE ${whereClauses.join(' AND ')}` : '';
+		const sql = `
+			SELECT id, title, size, file_extension, mime
+			FROM resources
+			${whereSql}
+			ORDER BY ${orderBy} ${orderDirection}, id ASC
+			LIMIT ? OFFSET ?
+		`;
+
+		const rows = await this.modelSelectAll<ResourceEntity>(sql, [...whereParams, limit + 1, offset]);
+		const hasMore = rows.length > limit;
+		const items = hasMore ? rows.slice(0, limit) : rows;
+
+		return { items, hasMore };
 	}
 
 	public static async save(o: ResourceEntity, options: SaveOptions = null): Promise<ResourceEntity> {

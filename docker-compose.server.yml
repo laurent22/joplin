@@ -84,8 +84,8 @@ services:
         profiles:
             - full
         volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
             - ${HTR_CLI_IMAGES_FOLDER}:/app/packages/transcribe/images
+            - ${HTR_CLI_MODELS_FOLDER}:/opt/models:ro
         depends_on:
             - transcribe-db
         ports:
@@ -94,6 +94,16 @@ services:
             - transcribe-network
             - shared-network
         restart: unless-stopped
+        # Security: limit resources to prevent runaway processes
+        deploy:
+            resources:
+                limits:
+                    memory: 16G
+                    cpus: '4'
+        # Security: read-only root filesystem with only images folder writable
+        read_only: true
+        tmpfs:
+            - /tmp
         environment:
             - APP_PORT=4567
             - DB_CLIENT=pg
@@ -103,5 +113,6 @@ services:
             - QUEUE_DATABASE_PORT=${QUEUE_DATABASE_PORT}
             - QUEUE_DATABASE_HOST=transcribe-db
             - API_KEY=${TRANSCRIBE_API_KEY}
-            - HTR_CLI_IMAGES_FOLDER=${HTR_CLI_IMAGES_FOLDER}
+            - HTR_CLI_IMAGES_FOLDER=/app/packages/transcribe/images
+            - HTR_CLI_MODELS_FOLDER=/opt/models
 

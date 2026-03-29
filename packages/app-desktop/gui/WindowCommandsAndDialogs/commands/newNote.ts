@@ -3,7 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 
-export const newNoteEnabledConditions = 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
+export const newNoteEnabledConditions = 'oneFolderSelected && selectedFolderIsValid && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
 
 export const declaration: CommandDeclaration = {
 	name: 'newNote',
@@ -14,12 +14,12 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, body = '', isTodo = false) => {
-			const folderId = await Folder.getValidActiveFolder();
-			if (!folderId) return;
+			const folder = await Folder.getValidActiveFolder();
+			if (!folder) return;
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
-			let newNote = { ...defaultValues, parent_id: folderId,
+			let newNote = { ...defaultValues, parent_id: folder.id,
 				is_todo: isTodo ? 1 : 0,
 				body: body };
 

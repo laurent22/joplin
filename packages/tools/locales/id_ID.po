@@ -8,6 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Liffindra Angga Zaaldian <lzaaldian@gmail.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id\n"
@@ -15,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 48.0\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -324,7 +326,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "Notasi musik ABC: Pilihan"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -797,7 +799,7 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Blok kode"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -915,9 +917,8 @@ msgid "Cannot change encrypted item"
 msgstr "Tidak dapat mengubah benda yang terenkripsi"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Tidak dapat membuat catatan baru: %s"
+msgstr "Tidak dapat mengubah benda hanya-baca: \"%s\""
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1077,7 +1078,7 @@ msgstr "Sedang memeriksa… Mohon tunggu."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "Karakter China/Jepang/Korea"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1245,7 +1246,7 @@ msgstr "Perintah"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "PERINTAH"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1309,9 +1310,8 @@ msgid "Configuration"
 msgstr "Pengaturan"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
-msgstr "Pintasan-pintasan Papan Ketik"
+msgstr "Pintasan papan ketik yang diatur:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1296
 msgid "Configures the size of scrollbars used in the app."
@@ -1385,9 +1385,8 @@ msgid "Convert it"
 msgstr "Ubah"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
-msgstr "Ubah catatan ke Markdown"
+msgstr "Ubah ke Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1350
 msgid "Convert to note"
@@ -1492,7 +1491,6 @@ msgid "Could not connect to plugin repository."
 msgstr "Tidak dapat terhubung ke repositori plugin."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
 msgstr "Tidak dapat mengubah catatan ke Markdown: %s"
 
@@ -1806,12 +1804,13 @@ msgid "Delete profile \"%s\""
 msgstr "Hapus profil \"%s\"?"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
+"Hapus profil \"%\"?\n"
+"\n"
 "Semua data, termasuk catatan, buku catatan dan label akan dihapus selamanya."
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
@@ -1829,6 +1828,10 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"Hapus label \"%s\"?\n"
+"\n"
+"Semua catatan yang terkait dengan label ini akan tetap ada, tetapi label "
+"akan dihapus dari semua catatan tersebut."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -2013,7 +2016,7 @@ msgstr "Menampilkan informasi lengkap tentang catatan."
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "Tampilkan pintasan papan ketik yang telah diatur."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2234,9 +2237,8 @@ msgid "Edit profile configuration..."
 msgstr "Sunting pengaturan profil..."
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "Sunting catatan."
+msgstr "Sunting label"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2346,9 +2348,8 @@ msgid "Enable abbreviation syntax"
 msgstr "Nyalakan sintaksis singkatan"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "Nyalakan dukungan sintaksis Fountain"
+msgstr "Nyalakan dukungan musikal ABC"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3127,9 +3128,8 @@ msgid "Import or export your data"
 msgstr "Impor atau ekspor data Anda"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
-msgstr "Mengimpor..."
+msgstr "Impor..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3527,7 +3527,7 @@ msgstr "Rantai kunci yang Didukung: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "TOMBOL"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
@@ -3754,6 +3754,8 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Kelola profil Anda. Anda dapat mengubah nama atau menghapus profil. Profil "
+"yang sedang aktif tidak dapat dihapus."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3914,14 +3916,13 @@ msgid_plural "Move %d notes to notebook \"%s\"?"
 msgstr[0] "Pindahkan %d catatan ke buku catatan \"%s\"?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"Pindahkan buku catatan \"%s\" ke tempat sampah?\n"
+"Pindahkan %d buku catatan ke tempat sampah?\n"
 "\n"
 "Semua catatan dan sub-buku catatan dalam buku catatan ini juga akan "
 "dipindahkan ke tempat sampah."
@@ -4167,7 +4168,7 @@ msgstr "Tidak ada pembaruan tersedia"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "Tidak ada URL untuk otentikasi SAML yang ditetapkan."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4514,7 +4515,7 @@ msgstr "Buka Pemandu Penyelarasan…"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "Lisensi sumber terbuka"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4553,6 +4554,8 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"Pilihan yang sebaiknya digunakan ketika menampilkan kode ABC. Harus "
+"merupakan obyek JSON5. Daftar lengkap dari pilihan tersedia di: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4919,9 +4922,8 @@ msgid "Profile name"
 msgstr "Nama profil"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "Konfirmasi kata sandi tidak boleh kosong"
+msgstr "Nama profil tidak boleh kosong"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -5114,11 +5116,8 @@ msgid "Remove"
 msgstr "Hapus"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
-msgstr ""
-"Hapus model dan unduh ulang?\n"
-"Ini tidak dapat dikembalikan."
+msgstr "Hapus %d label dari semua catatan? Ini tidak dapat dikembalikan."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5536,7 +5535,7 @@ msgstr "Pilih buku catatan induk"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "Pilih jenis berkas yang akan diimpor:"
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -5864,7 +5863,7 @@ msgstr "Sumber: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "SPASI"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
@@ -6175,18 +6174,16 @@ msgid "Tab moves focus"
 msgstr "Tab memindahkan fokus"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "Nyalakan"
+msgstr "Tabel"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "Penggunaan: %s"
+msgstr "Label: %s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6408,7 +6405,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -6990,7 +6986,7 @@ msgstr "Coba sekarang"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "JENIS"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""

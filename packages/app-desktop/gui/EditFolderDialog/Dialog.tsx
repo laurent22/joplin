@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useState, useRef, useEffect, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from '../DialogTitle';
 import StyledInput from '../style/StyledInput';
 import { IconSelector, ChangeEvent } from './IconSelector';
@@ -47,10 +47,13 @@ export default function(props: Props) {
 	}, [props.dispatch]);
 
 	useEffect(() => {
+		if (!titleInputRef.current) return;
 		focus('Dialog::titleInputRef', titleInputRef.current);
 
 		setTimeout(() => {
-			titleInputRef.current.select();
+			if (titleInputRef.current) {
+				titleInputRef.current.select();
+			}
 		}, 100);
 	}, []);
 
@@ -145,6 +148,7 @@ export default function(props: Props) {
 								title={_('Select emoji...')}
 								icon={folderIcon}
 								onChange={onFolderIconChange}
+								themeId={props.themeId}
 							/>
 							<Button ml={1} title={_('Select file...')} onClick={onBrowseClick}/>
 							{ folderIcon && <Button ml={1} title={_('Clear')} onClick={onClearClick}/> }
