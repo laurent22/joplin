@@ -791,7 +791,7 @@ const getContextFromHistory = (ctx: any) => {
 		result.selectedFolderIds = [result.selectedFolderId];
 	} else if (result.notesParentType === 'Tag') {
 		result.selectedTagId = ctx.selectedTagId;
-		result.selectedTagIds = [result.selectedTagIds];
+		result.selectedTagIds = result.selectedTagId ? [result.selectedTagId] : [];
 	} else if (result.notesParentType === 'Search') {
 		result.selectedSearchId = ctx.selectedSearchId;
 		result.searches = ctx.searches;
