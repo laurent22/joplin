@@ -9,7 +9,7 @@ import TagEditor, { TagEditorMode } from '../TagEditor';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-import { ViewStyle } from 'react-native';
+import { ViewStyle, BackHandler } from 'react-native';
 
 interface Props {
 	themeId: number;
@@ -37,6 +37,7 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		if (props.noteId) setNoteId(props.noteId);
 	}, [props.noteId]);
 
+
 	const onOkayPress = useCallback(async () => {
 		setSavingTags(true);
 
@@ -52,6 +53,20 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 	const onCancelPress = useCallback(() => {
 		props.onCloseRequested?.();
 	}, [props.onCloseRequested]);
+
+	useEffect(() => {
+		const backAction = () => {
+			onCancelPress(); // same as Cancel button
+			return true; // stop default behavior
+		};
+
+		const subscription = BackHandler.addEventListener(
+			'hardwareBackPress',
+			backAction,
+		);
+
+		return () => subscription.remove();
+	}, [onCancelPress]);
 
 	useAsyncEffect(async (event) => {
 		const tags = await Tag.tagsByNoteId(noteId);
