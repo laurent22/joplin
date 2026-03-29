@@ -187,18 +187,33 @@ utils.setPackagePrivateField = async function(filePath, value) {
 
 utils.insertContentIntoFile = async (filePath, marker, contentToInsert, createIfNotExist = false) => {
 	const fs = require('fs-extra');
+
+	const normalizeEol = content => {
+		return content.replace(/\r\n/g, '\n');
+	};
+
 	const fileExists = await fs.pathExists(filePath);
+	const insertedBlock = `${marker}\n${contentToInsert}\n${marker}`;
 
 	if (!fileExists) {
 		if (!createIfNotExist) throw new Error(`File not found: ${filePath}`);
-		await fs.writeFile(filePath, `${marker}\n${contentToInsert}\n${marker}`);
-	} else {
-		let content = await fs.readFile(filePath, 'utf-8');
-		// [^]* matches any character including new lines
-		const regex = new RegExp(`${marker}[^]*?${marker}`);
-		content = content.replace(regex, `${marker}\n${contentToInsert}\n${marker}`);
-		await fs.writeFile(filePath, content);
+
+		const newContent = normalizeEol(`${insertedBlock}\n`);
+		await fs.writeFile(filePath, newContent, 'utf8');
+		return;
 	}
+
+	const existingContent = await fs.readFile(filePath, 'utf8');
+
+	const regex = new RegExp(`${marker}[^]*?${marker}`);
+	const replacedContent = existingContent.replace(regex, insertedBlock);
+
+	const normalizedExistingContent = normalizeEol(existingContent).replace(/\n?$/, '\n');
+	const normalizedNewContent = normalizeEol(replacedContent).replace(/\n?$/, '\n');
+
+	if (normalizedExistingContent === normalizedNewContent) return;
+
+	await fs.writeFile(filePath, normalizedNewContent, 'utf8');
 };
 
 utils.getFilename = (path) => {
