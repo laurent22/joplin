@@ -391,6 +391,26 @@ describe('reducer', () => {
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
 
+	it('should remove note from list when tag is removed', (async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(3, folders[0]);
+		const tags = await createNTestTags(1);
+
+		// Current view is the tag we're about to remove from a note
+		let state = initTestState(folders, 0, notes, [0], tags, 0);
+
+		expect(state.notes.length).toBe(3);
+		expect(state.notesParentType).toBe('Tag');
+		expect(state.selectedTagId).toBe(tags[0].id);
+
+		// Remove tag from the first note
+		state = reducer(state, { type: 'NOTE_TAG_REMOVE', item: tags[0], noteId: notes[0].id });
+
+		// Expect the note to be removed from state.notes
+		expect(state.notes.length).toBe(2);
+		expect(state.notes.map(n => n.id)).not.toContain(notes[0].id);
+	}));
+
 	it.each([false, true])('should select multiple folders (extend:%j)', async (extendSelection) => {
 		const folders = await createNTestFolders(3);
 		let state = initTestState(folders, 0, [], []);
