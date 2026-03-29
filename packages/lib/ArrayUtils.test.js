@@ -54,36 +54,48 @@ describe('ArrayUtils', () => {
 		const testCases = [
 			[
 				[],
+				0,
 				[],
 			],
 			[
 				[[0, 50]],
+				1,
 				[[0, 50]],
 			],
 			[
 				[[0, 20], [20, 30]],
+				2,
 				[[0, 30]],
 			],
 			[
 				[[0, 10], [10, 50], [15, 30], [20, 80], [80, 95]],
+				5,
 				[[0, 95]],
 			],
 			[
 				[[0, 5], [0, 10], [25, 35], [30, 60], [50, 60], [85, 100]],
+				6,
 				[[0, 10], [25, 60], [85, 100]],
 			],
 			[
 				[[0, 5], [10, 40], [35, 50], [35, 75], [50, 60], [80, 85], [80, 90]],
+				7,
 				[[0, 5], [10, 75], [80, 90]],
+			],
+			[
+				[[0, 10], [20, 30], [25, 40]],
+				2,
+				[[0, 10], [20, 40]],
 			],
 		];
 
 		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		testCases.forEach((t, i) => {
 			const intervals = t[0];
-			const expected = t[1];
+			const limit = t[1];
+			const expected = t[2];
 
-			const actual = ArrayUtils.mergeOverlappingIntervals(intervals, intervals.length);
+			const actual = ArrayUtils.mergeOverlappingIntervals(intervals, limit);
 			expect(actual).toEqual(expected, `Test case ${i}`);
 		});
 	}));

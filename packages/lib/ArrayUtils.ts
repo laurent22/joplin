@@ -64,10 +64,12 @@ export const mergeOverlappingIntervals = function(intervals: any[], limit: numbe
 	const stack: any[] = [];
 	if (intervals.length) {
 		stack.push(intervals[0]);
-		for (let i = 1; i < intervals.length && stack.length < limit; i++) {
+		for (let i = 1; i < intervals.length; i++) {
 			const top = stack[stack.length - 1];
 			if (top[1] < intervals[i][0]) {
-				stack.push(intervals[i]);
+				if (stack.length < limit) {
+					stack.push(intervals[i]);
+				}
 			} else if (top[1] < intervals[i][1]) {
 				top[1] = intervals[i][1];
 				stack.pop();
