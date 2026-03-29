@@ -42,7 +42,7 @@ function backfillMinWidth(persisted: LayoutItem, defaultLayout: LayoutItem): Lay
 	if (Array.isArray(result.children) && Array.isArray(defaultLayout.children)) {
 		result.children = result.children.map((child: LayoutItem) => {
 			const matchingDefault = defaultLayout.children.find(
-				(d: LayoutItem) => d.key === child.key,
+				(d: LayoutItem) => d.key === child?.key,
 			);
 			return matchingDefault ? backfillMinWidth(child, matchingDefault) : child;
 		});
