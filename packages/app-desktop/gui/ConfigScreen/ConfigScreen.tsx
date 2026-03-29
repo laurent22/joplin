@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { AppType, SettingItem, SettingMetadataSection, SettingSectionSource, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SettingItem, SettingMetadataSection, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
@@ -55,7 +55,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			needRestart: false,
 			fonts: [],
 			searchQuery: '',
-			searchSectionFilter: 'all',
+			searchSectionFilter: '',
 		};
 
 		this.rowStyle_ = {
@@ -76,13 +76,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			const nextState: { searchQuery: string; searchSectionFilter?: string } = { searchQuery: query };
 			const previousQuery = (state.searchQuery || '').trim();
 			const nextQuery = query.trim();
-			if (!nextQuery.length || !previousQuery.length) nextState.searchSectionFilter = 'all';
+			if (!nextQuery.length || !previousQuery.length) nextState.searchSectionFilter = '';
 			return nextState;
 		});
 	}
 
 	private onSearchButtonClick() {
-		this.setState({ searchQuery: '', searchSectionFilter: 'all' });
+		this.setState({ searchQuery: '', searchSectionFilter: '' });
 	}
 
 	private async checkSyncConfig_() {
@@ -496,7 +496,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const screenComp = this.state.screenName ? <div className='config-screen-content-wrapper' style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 		const searchMode = hasQuery;
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
-		const searchSectionFilter = this.state.searchSectionFilter || 'all';
+		const searchSectionFilter = this.state.searchSectionFilter || '';
 		const settingComps = !searchMode ? shared.settingsToComponents2(this, AppType.Desktop, settings, this.state.selectedSectionName) : null;
 
 		if (screenComp && !searchMode) containerStyle.display = 'none';
@@ -545,11 +545,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const disabledSectionNames = !searchMode ? [] : sections
 			.filter(section => !searchResultsBySection[section.name])
 			.map(section => section.name);
-		const activeSearchSectionFilter = searchMode && searchSectionFilter !== 'all' && disabledSectionNames.includes(searchSectionFilter)
-			? 'all'
+		const activeSearchSectionFilter = searchMode && searchSectionFilter && disabledSectionNames.includes(searchSectionFilter)
+			? ''
 			: searchSectionFilter;
 		const searchResultComps = !searchMode ? null : (
-			activeSearchSectionFilter === 'all'
+			!activeSearchSectionFilter
 				? sections.map(section => searchResultsBySection[section.name]).filter(item => !!item)
 				: (searchResultsBySection[activeSearchSectionFilter] ? [searchResultsBySection[activeSearchSectionFilter]] : [])
 		);
@@ -594,10 +594,29 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			}
 		}
 
-		const sidebarSections: SettingMetadataSection[] = searchMode
-			? [{ name: 'all', metadatas: [], source: SettingSectionSource.Default }, ...sections]
-			: sections;
+		const sidebarSections: SettingMetadataSection[] = sections;
 		const sidebarSelection = searchMode ? activeSearchSectionFilter : this.state.selectedSectionName;
+		const searchFilterSectionName = activeSearchSectionFilter ? Setting.sectionNameToLabel(activeSearchSectionFilter) : '';
+		const searchStatusComp = !searchMode ? null : (
+			<div className='search-status-banner'>
+				{!activeSearchSectionFilter ? (
+					'Showing All Matching results'
+				) : (
+					<>
+						{`Filtered by section ${searchFilterSectionName}. `}
+						<a
+							href='#'
+							onClick={(event: React.MouseEvent) => {
+								event.preventDefault();
+								this.setState({ searchSectionFilter: '' });
+							}}
+						>
+							<span className='search-status-banner__link'>Show All Results.</span>
+						</a>
+					</>
+				)}
+			</div>
+		);
 
 		return (
 			<div className='config-screen' role='main' style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
@@ -628,10 +647,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					}
 					disabledSectionNames={disabledSectionNames}
 					searchMode={searchMode}
+					searchQuery={this.state.searchQuery}
 				/>
 				<div style={rightStyle}>
 					{!searchMode ? needRestartComp : null}
-					{searchMode ? <div style={containerStyle}>{searchResultComps}</div> : tabComponents}
+					{searchMode ? <div style={containerStyle}>{searchStatusComp}{searchResultComps}</div> : tabComponents}
 					{!searchMode ? (
 						<ButtonBar
 							hasChanges={hasChanges}

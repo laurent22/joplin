@@ -4,6 +4,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { highlightSearchMatches } from './configScreenUtils';
 const styled = require('styled-components').default;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
@@ -20,6 +21,7 @@ interface Props {
 	topContent?: React.ReactNode;
 	disabledSectionNames?: string[];
 	searchMode?: boolean;
+	searchQuery?: string;
 }
 
 export const StyledRoot = styled.div`
@@ -139,8 +141,9 @@ export default function Sidebar(props: Props) {
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
 		const disabled = isSectionDisabled(section.name);
-		const sectionLabel = section.name === 'all' ? _('All') : Setting.sectionNameToLabel(section.name);
-		const sectionIconName = section.name === 'all' ? 'fas fa-list' : Setting.sectionNameToIcon(section.name, AppType.Desktop);
+		const sectionLabel = Setting.sectionNameToLabel(section.name);
+		const sectionIconName = Setting.sectionNameToIcon(section.name, AppType.Desktop);
+		const hasQuery = !!(props.searchQuery && props.searchQuery.trim().length);
 		return (
 			<StyledListItem
 				key={section.name}
@@ -166,7 +169,7 @@ export default function Sidebar(props: Props) {
 					aria-hidden='true'
 				/>
 				<StyledListItemLabel>
-					{sectionLabel}
+					{hasQuery ? highlightSearchMatches(sectionLabel, props.searchQuery || '') : sectionLabel}
 				</StyledListItemLabel>
 			</StyledListItem>
 		);
@@ -184,7 +187,7 @@ export default function Sidebar(props: Props) {
 
 	let index = 0;
 	for (const section of props.sections) {
-		if (section.source === SettingSectionSource.Plugin && !pluginDividerAdded && section.name !== 'all') {
+		if (section.source === SettingSectionSource.Plugin && !pluginDividerAdded) {
 			buttons.push(renderDivider('divider-plugins'));
 			pluginDividerAdded = true;
 		}

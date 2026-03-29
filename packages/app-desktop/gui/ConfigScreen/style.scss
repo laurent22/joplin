@@ -6,6 +6,16 @@
 	background-color: var(--joplin-background-color3);
 }
 
+.search-status-banner {
+	color: var(--joplin-color);
+	padding: var(--joplin-main-padding) var(--joplin-main-padding) 0 0;
+	margin-bottom: 10px;
+}
+
+.search-status-banner__link {
+	color: var(--joplin-url-color);
+}
+
 .config-screen-content > .section {
 	padding-bottom: 20px;
 	border-bottom: 1px solid var(--joplin-divider-color);
