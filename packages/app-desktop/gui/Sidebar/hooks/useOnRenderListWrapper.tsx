@@ -7,6 +7,7 @@ interface Props {
 	selectedIndex: number;
 	onKeyDown: React.KeyboardEventHandler;
 	allFoldersCollapsed: boolean;
+	hasCollapsableFolders: boolean;
 }
 
 const onAddFolderButtonClick = () => {
@@ -19,6 +20,7 @@ const onToggleAllFolders = (allFoldersCollapsed: boolean) => {
 
 interface CollapseExpandAllButtonProps {
 	allFoldersCollapsed: boolean;
+	disabled: boolean;
 }
 
 const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
@@ -26,8 +28,9 @@ const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
 	// is not included in the portion of the list with role='tree'.
 	const icon = props.allFoldersCollapsed ? 'far fa-caret-square-right' : 'far fa-caret-square-down';
 	const label = props.allFoldersCollapsed ? _('Expand all notebooks') : _('Collapse all notebooks');
+	const className = `sidebar-header-button -collapseall${props.disabled ? ' disabled' : ''}`;
 
-	return <button onClick={() => onToggleAllFolders(props.allFoldersCollapsed)} className='sidebar-header-button -collapseall' title={label}>
+	return <button disabled={props.disabled} onClick={() => onToggleAllFolders(props.allFoldersCollapsed)} className={className} title={label}>
 		<i
 			aria-label={label}
 			role='img'
@@ -55,7 +58,7 @@ const useOnRenderListWrapper = (props: Props) => {
 		const listHasValidSelection = props.selectedIndex >= 0;
 		const allowContainerFocus = !listHasValidSelection;
 		return <>
-			<CollapseExpandAllButton allFoldersCollapsed={props.allFoldersCollapsed}/>
+			<CollapseExpandAllButton disabled={!props.hasCollapsableFolders} allFoldersCollapsed={props.allFoldersCollapsed}/>
 			<NewFolderButton/>
 			<div
 				role='tree'
@@ -66,7 +69,7 @@ const useOnRenderListWrapper = (props: Props) => {
 				{...listItems}
 			</div>
 		</>;
-	}, [props.selectedIndex, props.onKeyDown, props.allFoldersCollapsed]);
+	}, [props.selectedIndex, props.onKeyDown, props.allFoldersCollapsed, props.hasCollapsableFolders]);
 };
 
 export default useOnRenderListWrapper;
