@@ -229,7 +229,7 @@ const markdownUtils = {
 
 		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
 		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
-		const filterRegex = /^[# \n\t*`-]*/;
+		const filterRegex = /^[#\s\n\t*`_\-~]+|[*_~`]+$/g;
 		return title
 			.replace(filterRegex, '')
 			.replace(mdLinkRegex, '$1')
