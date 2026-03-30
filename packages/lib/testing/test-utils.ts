@@ -503,6 +503,8 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	resourceFetchers_[id] = new ResourceFetcher(() => { return synchronizers_[id].api(); });
 	kvStores_[id] = new KvStore();
 
+	BaseItem.revisionService_ = revisionServices_[id];
+
 	setRSA(RSA);
 
 	await fileApi().initialize();
