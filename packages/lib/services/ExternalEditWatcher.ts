@@ -57,6 +57,7 @@ export default class ExternalEditWatcher {
 		// To avoid this, we use an AsyncActionQueue to delay processing change events received
 		// from Chokidar.
 		// The timeout must be at least the throttling delay used internally by chokidar.
+		// With Chokidar 3.6.0, this throttling delay is 50ms.
 		// https://github.com/laurent22/joplin/issues/14954
 		const timeout = 55;
 		this.changeEventQueue_ = new AsyncActionQueue<ChangeEventContext>(timeout);
