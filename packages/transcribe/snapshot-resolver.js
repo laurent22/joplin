@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
 	resolveSnapshotPath: (testPath, snapshotExtension) => {
 		const srcPath = testPath
-			.replace(/dist\/src\//, 'src/')
+			.replace(/dist[/\\]src[/\\]/, 'src/')
 			.replace(/\.js$/, '');
 
 		const snapshotPath = path.join(
@@ -28,5 +28,6 @@ module.exports = {
 		return testPath;
 	},
 
-	testPathForConsistencyCheck: '/dist/src/example.test.js',
+	// Normalize to prevent assertion failures on Windows:
+	testPathForConsistencyCheck: path.normalize('/dist/src/example.test.js'),
 };

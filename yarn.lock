@@ -10630,7 +10630,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.171"
+    "@types/serviceworker": "npm:0.0.172"
     "@types/tar-stream": "npm:3.1.4"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -10671,7 +10671,7 @@ __metadata:
     react-native-file-viewer: "npm:2.1.5"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
-    react-native-localize: "npm:3.6.0"
+    react-native-localize: "npm:3.6.1"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-nitro-modules: "npm:0.33.2"
     react-native-paper: "npm:5.14.5"
@@ -11132,7 +11132,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
-    ldapts: "npm:8.0.33"
+    ldapts: "npm:8.0.36"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -17257,10 +17257,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.171":
-  version: 0.0.171
-  resolution: "@types/serviceworker@npm:0.0.171"
-  checksum: 10/d7acb58fe472438529991b776f18e34004b7c4670ddd0fe6bd287636b7bd60d97aa4f7fc1059ffcf2d700187c0caa13bf519060a52aa03acd924a4555bbacf0e
+"@types/serviceworker@npm:0.0.172":
+  version: 0.0.172
+  resolution: "@types/serviceworker@npm:0.0.172"
+  checksum: 10/7a1ff19c478020ae7bf2eea423cd30ad214ae3999b23a85f73780b9b251a462fb9fc86341d02008915835e5f5c676fa8fe543e1e2ef836eb356eee3527d48671
   languageName: node
   linkType: hard
 
@@ -36185,16 +36185,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:8.0.33":
-  version: 8.0.33
-  resolution: "ldapts@npm:8.0.33"
+"ldapts@npm:8.0.36":
+  version: 8.0.36
+  resolution: "ldapts@npm:8.0.36"
   dependencies:
     "@types/asn1": "npm:>=0.2.4"
     asn1: "npm:0.2.6"
     debug: "npm:4.4.3"
     strict-event-emitter-types: "npm:2.0.0"
     whatwg-url: "npm:15.1.0"
-  checksum: 10/f61f4196b98f784a724204f7ae34ba71b4bd037294874a9170395eee8b14daba78c7a7d175669d504425639f95a0a575b315e8dce1742e1985bf5a7d1bfeaa12
+  checksum: 10/812c290c47e5c5e3e4016fc1c044250c7d1c8dd44d36c4aca6bd1e5cbe75cc697f064fbccdbb6f76c713cb95417d8d33f81c4de8e6ac84be3f7c7783b0d00301
   languageName: node
   linkType: hard
 
@@ -44256,9 +44256,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-localize@npm:3.6.0":
-  version: 3.6.0
-  resolution: "react-native-localize@npm:3.6.0"
+"react-native-localize@npm:3.6.1":
+  version: 3.6.1
+  resolution: "react-native-localize@npm:3.6.1"
   peerDependencies:
     "@expo/config-plugins": "*"
     react: "*"
@@ -44269,7 +44269,7 @@ __metadata:
       optional: true
     react-native-macos:
       optional: true
-  checksum: 10/1a443a77f3431ad638c577c1fc1b2f0b6234c61fd66dcf1ca095303b23dea47fb8bd0d40b18abc2917b874c9df75fe638c40bec6745fce995ad01ccef69d250e
+  checksum: 10/1f693ad3fa16c83014cf1164f269624599c6c7236219999aa4cfab0b277e8267ffb9f06943b3bdfdb9e44d705343c2d6296464170282a615cb9d47f60afa2b3b
   languageName: node
   linkType: hard
 
