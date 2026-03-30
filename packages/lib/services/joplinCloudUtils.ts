@@ -149,7 +149,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string, syncTar
 		Setting.setValue(`sync.${syncTargetId}.password`, jsonBody.password);
 		Setting.setValue('sync.target', syncTargetId);
 
-		const fileApi = await reg.syncTarget().fileApi();
+		const fileApi = await reg.syncTarget(syncTargetId).fileApi();
 		await fileApi.driver().api().loadSession();
 		eventManager.emit(EventName.SessionEstablished);
 
