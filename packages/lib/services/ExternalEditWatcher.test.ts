@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer } from '../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import ExternalEditWatcher from './ExternalEditWatcher';
 import { appendFile } from 'fs/promises';
 import Note from '../models/Note';
@@ -44,6 +44,7 @@ const createAndWatchNote = async (note: NoteEntity) => {
 describe('ExternalEditWatcher', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
 		jest.useRealTimers();
 	});
 
