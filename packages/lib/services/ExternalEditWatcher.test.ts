@@ -4,44 +4,74 @@ import { appendFile } from 'fs/promises';
 import Note from '../models/Note';
 import { msleep } from '@joplin/utils/time';
 import waitFor from '../testing/waitFor';
+import { NoteEntity } from './database/types';
+
+const createAndWatchNote = async (note: NoteEntity) => {
+	const watcher = new ExternalEditWatcher();
+	const openedItems: string[] = [];
+	watcher.initialize(jest.fn(() => ({
+		openItem: (filePath: string)=>{
+			openedItems.push(filePath);
+		},
+	})), jest.fn());
+
+	note = await Note.save(note);
+	await watcher.openAndWatch(note);
+
+	const filePath = openedItems[0];
+	expect(filePath).toBeTruthy();
+
+	return { note, watcher, filePath };
+};
 
 describe('ExternalEditWatcher', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
-		ExternalEditWatcher
-			.instance()
-			.initialize(jest.fn(), jest.fn());
 		jest.useRealTimers();
 	});
 
 	test('should handle rapid changes to a file', async () => {
-		const watcher = new ExternalEditWatcher();
-		const openedItems: string[] = [];
-		watcher.initialize(jest.fn(() => ({
-			openItem: (filePath: string)=>{
-				openedItems.push(filePath);
-			},
-		})), jest.fn());
+		const { filePath, watcher, note } = await createAndWatchNote({
+			title: 'Testing',
+			body: 'test',
+		});
 
-		const note = await Note.save({ title: 'Testing', body: 'test' });
-		await watcher.openAndWatch(note);
+		try {
+			await appendFile(filePath, '1');
+			// Change the note several times, with a brief delay between each:
+			await msleep(10);
+			await appendFile(filePath, '2');
+			await msleep(10);
+			await appendFile(filePath, '3');
+			await msleep(10);
+			await appendFile(filePath, '4');
 
-		const filePath = openedItems[0];
-		expect(filePath).toBeTruthy();
+			// Should detect both changes
+			await waitFor(async () => {
+				expect(await Note.load(note.id)).toMatchObject({
+					title: 'Testing',
+					body: 'test1234',
+				});
+			});
+		} finally {
+			await watcher.stopWatchingAll();
+		}
+	});
 
-		await appendFile(filePath, '...');
-		// After a brief delay, change the note again.
-		await msleep(20);
-		await appendFile(filePath, '...');
+	test('should detect a change made just before watching stops', async () => {
+		const { filePath, watcher, note } = await createAndWatchNote({
+			title: 'Testing', body: 'Test',
+		});
 
-		// Should detect both changes
+		await appendFile(filePath, '!');
+		await appendFile(filePath, '!!');
+		await watcher.stopWatchingAll();
+
 		await waitFor(async () => {
 			expect(await Note.load(note.id)).toMatchObject({
 				title: 'Testing',
-				body: 'test......',
+				body: 'Test!!!',
 			});
 		});
-
-		await watcher.stopWatchingAll();
 	});
 });
