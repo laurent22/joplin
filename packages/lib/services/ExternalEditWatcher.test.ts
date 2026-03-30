@@ -6,22 +6,39 @@ import { msleep } from '@joplin/utils/time';
 import waitFor from '../testing/waitFor';
 import { NoteEntity } from './database/types';
 
-const createAndWatchNote = async (note: NoteEntity) => {
+const createAndWatchNotes = async (notes: NoteEntity[]) => {
 	const watcher = new ExternalEditWatcher();
-	const openedItems: string[] = [];
+	const openedPaths: string[] = [];
 	watcher.initialize(jest.fn(() => ({
 		openItem: (filePath: string)=>{
-			openedItems.push(filePath);
+			openedPaths.push(filePath);
 		},
 	})), jest.fn());
 
-	note = await Note.save(note);
-	await watcher.openAndWatch(note);
+	const savedNotes = [];
+	for (const note of notes) {
+		const savedNote = await Note.save(note);
+		await watcher.openAndWatch(savedNote);
+		savedNotes.push(savedNote);
+	}
 
-	const filePath = openedItems[0];
-	expect(filePath).toBeTruthy();
+	expect(openedPaths).toHaveLength(savedNotes.length);
 
-	return { note, watcher, filePath };
+	return {
+		notes: savedNotes,
+		filePaths: openedPaths,
+		watcher,
+	};
+};
+
+const createAndWatchNote = async (note: NoteEntity) => {
+	const { notes, filePaths, watcher } = await createAndWatchNotes([note]);
+
+	return {
+		note: notes[0],
+		filePath: filePaths[0],
+		watcher,
+	};
 };
 
 describe('ExternalEditWatcher', () => {
@@ -73,5 +90,30 @@ describe('ExternalEditWatcher', () => {
 				body: 'Test!!!',
 			});
 		});
+	});
+
+	test('should detect changes made to different files', async () => {
+		const { filePaths, watcher, notes } = await createAndWatchNotes([
+			{ title: 'Test 1', body: 'Test' },
+			{ title: 'Test 2', body: 'Test' },
+		]);
+
+		try {
+			await appendFile(filePaths[0], ' (updated 1)');
+			await appendFile(filePaths[1], ' (updated 2)');
+
+			await waitFor(async () => {
+				expect(await Note.load(notes[0].id)).toMatchObject({
+					title: 'Test 1',
+					body: 'Test (updated 1)',
+				});
+				expect(await Note.load(notes[1].id)).toMatchObject({
+					title: 'Test 2',
+					body: 'Test (updated 2)',
+				});
+			});
+		} finally {
+			await watcher.stopWatchingAll();
+		}
 	});
 });
