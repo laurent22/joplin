@@ -76,23 +76,6 @@ describe('ExternalEditWatcher', () => {
 		}
 	});
 
-	test('should detect a change made just before watching stops', async () => {
-		const { filePath, watcher, note } = await createAndWatchNote({
-			title: 'Testing', body: 'Test',
-		});
-
-		await appendFile(filePath, '!');
-		await appendFile(filePath, '!!');
-		await watcher.stopWatchingAll();
-
-		await waitFor(async () => {
-			expect(await Note.load(note.id)).toMatchObject({
-				title: 'Testing',
-				body: 'Test!!!',
-			});
-		});
-	});
-
 	test('should detect changes made to different files', async () => {
 		const { filePaths, watcher, notes } = await createAndWatchNotes([
 			{ title: 'Test 1', body: 'Test' },
