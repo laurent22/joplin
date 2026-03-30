@@ -351,7 +351,7 @@ export default class ElectronAppWrapper {
 			const joplinId = this.windowIdFromWebContents(focusedWebContents);
 
 			if (joplinId !== null) {
-				this.win_.webContents.send('window-focused', joplinId);
+				this.activeWindow().webContents.send('window-focused', joplinId);
 			}
 		};
 
