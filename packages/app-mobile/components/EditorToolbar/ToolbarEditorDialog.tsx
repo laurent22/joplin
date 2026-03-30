@@ -91,6 +91,7 @@ const useStyle = (themeId: number) => {
 			arrowIconDisabled: {
 				color: theme.colorFaded,
 				fontSize: 24,
+				opacity: 0.38,
 			},
 			sectionHeader: {
 				paddingVertical: 8,
@@ -130,6 +131,68 @@ interface EnabledItemRowProps {
 	onMoveDown: (index: number)=> void;
 }
 
+// After a move re-render, focus the arrow that was pressed.
+// If we hit a boundary (now first or last), swap to the opposite arrow.
+// index/isFirst/isLast reflect the new position after the parent re-renders.
+//
+// We delay the focusView call: when an item moves DOWN, TalkBack re-evaluates
+// focus after the accessibility tree update (content changed ahead of the focused
+// element), jumping to X. The delay lets TalkBack settle so our call wins.
+// Refs are captured before the timeout to avoid stale closures.
+// useEffect (not useLayoutEffect) is correct here since the 100ms delay
+// already negates any synchronous-paint timing advantage.
+const useArrowFocusAfterMove = (
+	upArrowRef: React.RefObject<View>,
+	downArrowRef: React.RefObject<View>,
+	pendingArrowFocusRef: React.MutableRefObject<'up'|'down'|null>,
+	index: number,
+	isFirst: boolean,
+	isLast: boolean,
+) => {
+	useEffect(() => {
+		const direction = pendingArrowFocusRef.current;
+		pendingArrowFocusRef.current = null;
+
+		const upRef = upArrowRef.current;
+		const downRef = downArrowRef.current;
+		const atFirst = isFirst;
+		const atLast = isLast;
+
+		const timeoutId = setTimeout(() => {
+			if (!direction) return;
+			const target = direction === 'up'
+				? (atFirst ? downRef : upRef)
+				: (atLast ? upRef : downRef);
+			if (target) focusView('toolbar-editor-arrow', target);
+		}, 100);
+
+		return () => clearTimeout(timeoutId);
+	}, [index, isFirst, isLast, upArrowRef, downArrowRef, pendingArrowFocusRef]);
+};
+
+// When a row becomes the pending-focus target (e.g. after being added), focus its checkbox.
+// We defer via queueMicrotask: UIManager.focus (used by focusView on web) silently fails if
+// called during React's commit phase before the DOM has settled. A microtask fires after the
+// current call stack clears but before the next frame, making it faster and more deterministic
+// than a setTimeout while still giving the DOM time to update.
+const useCheckboxFocusOnAdd = (
+	shouldFocus: boolean|undefined,
+	onFocused: (()=> void)|undefined,
+	checkboxRef: React.RefObject<View>,
+) => {
+	useEffect(() => {
+		const ref = checkboxRef.current;
+		const focused = onFocused;
+		let cancelled = false;
+		queueMicrotask(() => {
+			if (cancelled || !shouldFocus || !ref) return;
+			focusView('toolbar-editor', ref);
+			focused?.();
+		});
+		return () => { cancelled = true; };
+	}, [shouldFocus, onFocused, checkboxRef]);
+};
+
 const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 	item, index, isFirst, isLast, styles, themeId, shouldFocus, onFocused, onToggle, onMoveUp, onMoveDown,
 }) => {
@@ -158,53 +221,8 @@ const EnabledItemRow: React.FC<EnabledItemRowProps> = ({
 		AccessibilityInfo.announceForAccessibility(_('%s moved down', title));
 	}, [onMoveDown, index, title]);
 
-	// After a move re-render, focus the arrow that was pressed.
-	// If we hit a boundary (now first or last), swap to the opposite arrow.
-	// index/isFirst/isLast reflect the new position after the parent re-renders.
-	//
-	// We delay the focusView call: when an item moves DOWN, TalkBack re-evaluates
-	// focus after the accessibility tree update (content changed ahead of the focused
-	// element), jumping to X. The delay lets TalkBack settle so our call wins.
-	// Refs are captured before the timeout to avoid stale closures.
-	// useEffect (not useLayoutEffect) is correct here since the 100ms delay
-	// already negates any synchronous-paint timing advantage.
-	useEffect(() => {
-		const direction = pendingArrowFocusRef.current;
-		pendingArrowFocusRef.current = null;
-
-		const upRef = upArrowRef.current;
-		const downRef = downArrowRef.current;
-		const atFirst = isFirst;
-		const atLast = isLast;
-
-		const timeoutId = setTimeout(() => {
-			if (!direction) return;
-			const target = direction === 'up'
-				? (atFirst ? downRef : upRef)
-				: (atLast ? upRef : downRef);
-			if (target) focusView('toolbar-editor-arrow', target);
-		}, 100);
-
-		return () => clearTimeout(timeoutId);
-	}, [index, isFirst, isLast]);
-
-	// When this row is the target of a toggle-focus request, focus the checkbox.
-	// We defer via queueMicrotask rather than calling focusView synchronously:
-	// UIManager.focus (used by focusView on web) silently fails if called during React's
-	// commit phase before the DOM has settled. A microtask fires after the current call
-	// stack clears but before the next frame, making it faster and more deterministic
-	// than a setTimeout while still giving the DOM time to update.
-	useEffect(() => {
-		const ref = checkboxRef.current;
-		const focused = onFocused;
-		let cancelled = false;
-		queueMicrotask(() => {
-			if (cancelled || !shouldFocus || !ref) return;
-			focusView('toolbar-editor', ref);
-			focused?.();
-		});
-		return () => { cancelled = true; };
-	}, [shouldFocus, onFocused]);
+	useArrowFocusAfterMove(upArrowRef, downArrowRef, pendingArrowFocusRef, index, isFirst, isLast);
+	useCheckboxFocusOnAdd(shouldFocus, onFocused, checkboxRef);
 
 	return (
 		<View style={styles.enabledListItem}>
