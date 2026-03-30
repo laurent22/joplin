@@ -1,6 +1,6 @@
 import Setting from '../../models/Setting';
 import PluginService from '../../services/plugins/PluginService';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import loadPlugins, { Props as LoadPluginsProps } from './loadPlugins';
 import MockPluginRunner from './testing/MockPluginRunner';
 import reducer, { State, defaultState } from '../../reducer';
@@ -172,7 +172,9 @@ describe('loadPlugins', () => {
 		const service = PluginService.instance();
 		service.initialize('2.3.4', platformImplementation, failingPluginRunner, store);
 
-		await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		await withWarningSilenced(/Plugin "joplin.test.bad.plugin" failed to start: Error: Simulated plugin crash/, async () => {
+			await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		});
 
 		// The bad plugin failed, but allPluginsStarted should still be true
 		// because the fix marks failed plugins as "started".

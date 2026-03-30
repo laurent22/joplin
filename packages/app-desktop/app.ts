@@ -749,6 +749,9 @@ class Application extends BaseApplication {
 
 			ipcRenderer.on('main-window-focused', scheduleResumeSync);
 			ipcRenderer.on('system-resumed', scheduleResumeSync);
+			ipcRenderer.on('secondary-window-closing', (_event, windowId: string) => {
+				this.dispatch({ type: 'WINDOW_CLOSE', windowId });
+			});
 		});
 
 		addTask('app/initPluginService', () => this.initPluginService());
