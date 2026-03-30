@@ -132,7 +132,13 @@ export default class ExternalEditWatcher {
 					// See: https://github.com/laurent22/joplin/issues/710#issuecomment-420997167
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
-					this.changeEventQueue_.push(() => this.onNoteChange_(path), { path });
+					const id = this.noteFilePathToId_(path);
+					if (!this.skipNextChangeEvent_[id]) {
+						this.changeEventQueue_.push(() => this.onNoteChange_(path), { path });
+					} else {
+						this.logger().debug('ExternalEditWatcher: Skipping this event.');
+					}
+					this.skipNextChangeEvent_ = {};
 				} else if (event === 'error') {
 					this.logger().error('ExternalEditWatcher: error');
 				}
@@ -146,54 +152,47 @@ export default class ExternalEditWatcher {
 
 	private async onNoteChange_(path: string) {
 		const id = this.noteFilePathToId_(path);
+		const note = await Note.load(id);
 
-		if (!this.skipNextChangeEvent_[id]) {
-			const note = await Note.load(id);
-
-			if (!note) {
-				this.logger().warn(`ExternalEditWatcher: Watched note has been deleted: ${id}`);
-				void this.stopWatching(id);
-				return;
-			}
-
-			let noteContent = await shim.fsDriver().readFile(path, 'utf-8');
-
-			// In some very rare cases, the "change" event is going to be emitted but the file will be empty.
-			// This is likely to be the editor that first clears the file, then writes the content to it, so if
-			// the file content is read very quickly after the change event, we'll get empty content.
-			// Usually, re-reading the content again will fix the issue and give back the file content.
-			// To replicate on Windows: associate Typora as external editor, and leave Ctrl+S pressed -
-			// it will keep on saving very fast and the bug should happen at some point.
-			// Below we re-read the file multiple times until we get the content, but in my tests it always
-			// work in the first try anyway. The loop is just for extra safety.
-			// https://github.com/laurent22/joplin/issues/1854
-			if (!noteContent) {
-				this.logger().warn(`ExternalEditWatcher: Watched note is empty - this is likely to be a bug and re-reading the note should fix it. Trying again... ${id}`);
-
-				for (let i = 0; i < 10; i++) {
-					noteContent = await shim.fsDriver().readFile(path, 'utf-8');
-					if (noteContent) {
-						this.logger().info(`ExternalEditWatcher: Note is now readable: ${id}`);
-						break;
-					}
-					await time.msleep(100);
-				}
-
-				if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
-			}
-
-			this.logger().debug('ExternalEditWatcher: Updating note object.');
-
-			const updatedNote = await Note.unserializeForEdit(noteContent);
-			updatedNote.id = id;
-			updatedNote.parent_id = note.parent_id;
-			await Note.save(updatedNote);
-			this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
-		} else {
-			this.logger().debug('ExternalEditWatcher: Skipping this event.');
+		if (!note) {
+			this.logger().warn(`ExternalEditWatcher: Watched note has been deleted: ${id}`);
+			void this.stopWatching(id);
+			return;
 		}
 
-		this.skipNextChangeEvent_ = {};
+		let noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+
+		// In some very rare cases, the "change" event is going to be emitted but the file will be empty.
+		// This is likely to be the editor that first clears the file, then writes the content to it, so if
+		// the file content is read very quickly after the change event, we'll get empty content.
+		// Usually, re-reading the content again will fix the issue and give back the file content.
+		// To replicate on Windows: associate Typora as external editor, and leave Ctrl+S pressed -
+		// it will keep on saving very fast and the bug should happen at some point.
+		// Below we re-read the file multiple times until we get the content, but in my tests it always
+		// work in the first try anyway. The loop is just for extra safety.
+		// https://github.com/laurent22/joplin/issues/1854
+		if (!noteContent) {
+			this.logger().warn(`ExternalEditWatcher: Watched note is empty - this is likely to be a bug and re-reading the note should fix it. Trying again... ${id}`);
+
+			for (let i = 0; i < 10; i++) {
+				noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+				if (noteContent) {
+					this.logger().info(`ExternalEditWatcher: Note is now readable: ${id}`);
+					break;
+				}
+				await time.msleep(100);
+			}
+
+			if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
+		}
+
+		this.logger().debug('ExternalEditWatcher: Updating note object.');
+
+		const updatedNote = await Note.unserializeForEdit(noteContent);
+		updatedNote.id = id;
+		updatedNote.parent_id = note.parent_id;
+		await Note.save(updatedNote);
+		this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
 	}
 
 	private noteIdToFilePath_(noteId: string) {
