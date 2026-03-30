@@ -34,17 +34,32 @@ class TableWidget extends WidgetType {
 	}
 
 	public eq(other: TableWidget) {
-		return this.tableText === other.tableText;
+		return this.tableText === other.tableText
+			&& this.from === other.from
+			&& this.to === other.to;
+	}
+
+	// Find this widget's container after a rebuild by matching the document position.
+	private findContainer(view: EditorView): HTMLElement | null {
+		const containers = view.dom.querySelectorAll(`.${W}`);
+		for (const c of containers) {
+			try {
+				const pos = view.posAtDOM(c);
+				if (Math.abs(pos - this.from) < 3) return c as HTMLElement;
+			} catch (_) { /* ignore */ }
+		}
+		// Fallback: return first container if only one table exists
+		return containers.length === 1 ? containers[0] as HTMLElement : null;
 	}
 
 	// Save the horizontal scroll position of this widget's container before
 	// a dispatch that will rebuild the widget, then restore it after rebuild.
 	private saveAndRestoreScroll(view: EditorView) {
-		const container = view.dom.querySelector(`.${W}`) as HTMLElement | null;
+		const container = this.findContainer(view);
 		const scrollLeft = container ? container.scrollLeft : 0;
 		if (scrollLeft > 0) {
 			requestAnimationFrame(() => {
-				const newContainer = view.dom.querySelector(`.${W}`) as HTMLElement | null;
+				const newContainer = this.findContainer(view);
 				if (newContainer) newContainer.scrollLeft = scrollLeft;
 			});
 		}
@@ -144,7 +159,8 @@ class TableWidget extends WidgetType {
 			textDiv.classList.add('cm-tw-text');
 			textDiv.contentEditable = 'true';
 			textDiv.spellcheck = false;
-			textDiv.textContent = text;
+			// Display unescaped text — escaped pipes (\|) are shown as plain |
+			textDiv.textContent = text.replace(/\\\|/g, '|');
 
 			// Sync CM cursor to this cell so toolbar commands work
 			textDiv.onfocus = () => {
@@ -163,11 +179,28 @@ class TableWidget extends WidgetType {
 
 			textDiv.onblur = () => {
 				if (skipBlurSync) { skipBlurSync = false; return; }
-				const v = (textDiv.textContent || '').trim();
-				const orig = isHdr
-					? table.header.cells[c]?.content
-					: table.body[r - 1]?.cells[c]?.content;
-				if (v !== orig) this.syncCell(view, table, r, c, v);
+				// Defer sync so that a click on another cell in the same
+				// table can register before the widget rebuilds.
+				setTimeout(() => {
+					const v = (textDiv.textContent || '').trim();
+					const orig = isHdr
+						? table.header.cells[c]?.content
+						: table.body[r - 1]?.cells[c]?.content;
+					if (v === orig) return;
+					// If focus moved to another cell in this table, just
+					// update the in-memory model — no dispatch/rebuild.
+					// The markdown will sync on next structural edit or
+					// when focus leaves the table entirely.
+					if (container.contains(document.activeElement)) {
+						const sanitised = v.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
+						if (isHdr) table.header.cells[c].content = sanitised;
+						else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = sanitised;
+					} else {
+						// Focus left the table — sync all dirty cells to markdown
+						syncDirtyCells();
+						this.apply(view, table);
+					}
+				}, 80);
 			};
 
 			textDiv.onkeydown = (e) => {
@@ -200,8 +233,9 @@ class TableWidget extends WidgetType {
 						if (changed) {
 							// Widget rebuilds after syncCell — find new cell after rebuild
 							requestAnimationFrame(() => {
-								const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
-								if (nextIdx < cells.length) {
+								const newC = this.findContainer(view);
+								const cells = newC?.querySelectorAll('.cm-tw-text');
+								if (cells && nextIdx < cells.length) {
 									focus('TableWidget', cells[nextIdx] as HTMLElement);
 								}
 							});
@@ -224,8 +258,9 @@ class TableWidget extends WidgetType {
 						this.apply(view, addRow(table, numBodyRows - 1));
 						const newRowIdx = totalRows * numCols;
 						requestAnimationFrame(() => {
-							const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
-							if (newRowIdx < cells.length) {
+							const newC = this.findContainer(view);
+							const cells = newC?.querySelectorAll('.cm-tw-text');
+							if (cells && newRowIdx < cells.length) {
 								focus('TableWidget', cells[newRowIdx] as HTMLElement);
 							}
 						});
@@ -249,6 +284,14 @@ class TableWidget extends WidgetType {
 			};
 
 			el.appendChild(textDiv);
+			// Clicking anywhere in the cell (including empty space in tall rows)
+			// should activate the text editor
+			el.onmousedown = (e) => {
+				if (e.target === el) {
+					e.preventDefault();
+					focus('TableWidget', textDiv);
+				}
+			};
 			el.oncontextmenu = (e) => showCtx(e, r, c);
 
 			return el;
@@ -275,9 +318,10 @@ class TableWidget extends WidgetType {
 				this.apply(view, addColumn(table, afterCol));
 				// Focus the new column's header cell after rebuild
 				requestAnimationFrame(() => {
-					const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
+					const newC = this.findContainer(view);
+					const cells = newC?.querySelectorAll('.cm-tw-text');
 					const targetIdx = afterCol + 1;
-					if (targetIdx < cells.length) {
+					if (cells && targetIdx < cells.length) {
 						focus('TableWidget', cells[targetIdx] as HTMLElement);
 					}
 				});
@@ -305,8 +349,9 @@ class TableWidget extends WidgetType {
 				const newNumCols = numCols;
 				const targetIdx = (afterBodyIdx + 2) * newNumCols;
 				requestAnimationFrame(() => {
-					const cells = view.dom.querySelectorAll(`.${W} .cm-tw-text`);
-					if (targetIdx < cells.length) {
+					const newC = this.findContainer(view);
+					const cells = newC?.querySelectorAll('.cm-tw-text');
+					if (cells && targetIdx < cells.length) {
 						focus('TableWidget', cells[targetIdx] as HTMLElement);
 					}
 				});
@@ -393,20 +438,30 @@ class TableWidget extends WidgetType {
 			if (r > 0 && r < numBodyRows) items.push({ label: '↓ Move row down', action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r)); }, hlRow: r });
 			if (c > 0) items.push({ label: '← Move column left', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c - 1)); }, hlCol: c });
 			if (c < numCols - 1) items.push({ label: '→ Move column right', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c + 1)); }, hlCol: c });
-			// Delete row: for header (r===0) deletes entire table, for body rows deletes that row
+			// Delete row: only for body rows (header row cannot be removed)
+			if (r > 0) {
+				items.push({
+					label: '✕ Delete row',
+					action: () => {
+						syncDirtyCells();
+						this.apply(view, deleteRow(table, r - 1));
+					},
+					hlRow: r,
+				});
+			}
+			// Delete column: last column → delete entire table, otherwise delete that column
 			items.push({
-				label: '✕ Delete row',
+				label: '✕ Delete column',
 				action: () => {
 					syncDirtyCells();
-					if (r === 0) {
+					if (numCols <= 1) {
 						view.dispatch({ changes: { from: this.from, to: this.to, insert: '' } });
 					} else {
-						this.apply(view, deleteRow(table, r - 1));
+						this.apply(view, deleteColumn(table, c));
 					}
 				},
-				hlRow: r,
+				hlCol: c,
 			});
-			if (numCols > 1) items.push({ label: '✕ Delete column', action: () => { syncDirtyCells(); this.apply(view, deleteColumn(table, c)); }, hlCol: c });
 
 			for (const item of items) {
 				const div = document.createElement('div');
@@ -427,8 +482,17 @@ class TableWidget extends WidgetType {
 				menu.appendChild(div);
 			}
 			container.appendChild(menu);
-			const close = () => { clearHighlight(); menu.remove(); document.removeEventListener('mousedown', close); };
-			setTimeout(() => document.addEventListener('mousedown', close), 0);
+			const close = () => {
+				clearHighlight();
+				menu.remove();
+				document.removeEventListener('mousedown', close);
+				window.removeEventListener('scroll', close, true);
+			};
+			setTimeout(() => {
+				document.addEventListener('mousedown', close);
+				// Close menu on any scroll (capture phase catches scrollable parents)
+				window.addEventListener('scroll', close, true);
+			}, 0);
 		};
 
 		return container;
@@ -469,6 +533,7 @@ const tableTheme = EditorView.theme({
 	['& .cm-tw-text']: {
 		outline: 'none',
 		minHeight: '1.2em',
+		height: '100%',
 		width: '100%',
 		display: 'block',
 		cursor: 'text',
