@@ -125,7 +125,7 @@ export default function (props: Props) {
 	}, []);
 
 	// ✅ UPDATED HANDLER
-	const onPasswordChange1 = useCallback(async (event: any) => {
+	const onPasswordChange1 = useCallback(async (event: ChangeEvent) => {
 		const value = event.target.value;
 		setPassword1(value);
 
