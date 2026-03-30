@@ -58,7 +58,7 @@ export default class ExternalEditWatcher {
 		// from Chokidar.
 		// The timeout must be at least the throttling delay used internally by chokidar.
 		// https://github.com/laurent22/joplin/issues/14954
-		const timeout = 50;
+		const timeout = 55;
 		this.changeEventQueue_ = new AsyncActionQueue<ChangeEventContext>(timeout);
 		this.changeEventQueue_.setCanSkipTaskHandler((task1, task2) => {
 			// Only skip change events for the same path
