@@ -6,6 +6,7 @@ const baseContext: Record<string, any> = {
 	modalDialogVisible: false,
 	gotoAnythingVisible: false,
 	markdownEditorPaneVisible: true,
+	markdownViewerPaneVisible: false,
 	oneNoteSelected: true,
 	noteIsMarkdown: true,
 	noteIsReadOnly: false,
@@ -98,9 +99,38 @@ describe('editorCommandDeclarations', () => {
 			{
 				textBold: false,
 				textPaste: false,
-
-				// TODO: textCopy should be enabled in read-only notes:
-				// textCopy: false,
+				textCopy: true,
+				textSelectAll: true,
+			},
+		],
+		[
+			// Viewer-only mode (no editor pane visible, only the rendered viewer)
+			{
+				markdownEditorPaneVisible: false,
+				richTextEditorVisible: false,
+				markdownViewerPaneVisible: true,
+			},
+			{
+				textCopy: true,
+				textSelectAll: true,
+				textCut: false,
+				textPaste: false,
+				textBold: false,
+			},
+		],
+		[
+			// Viewer-only mode with a read-only note
+			{
+				markdownEditorPaneVisible: false,
+				richTextEditorVisible: false,
+				markdownViewerPaneVisible: true,
+				noteIsReadOnly: true,
+			},
+			{
+				textCopy: true,
+				textSelectAll: true,
+				textCut: false,
+				textPaste: false,
 			},
 		],
 	])('should correctly determine whether command is enabled (case %#)', (context, expectedStates) => {
