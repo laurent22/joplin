@@ -133,11 +133,13 @@ export default class ExternalEditWatcher {
 					// this.watcher_.unwatch(path);
 				} else if (event === 'change') {
 					const id = this.noteFilePathToId_(path);
+
 					if (!this.skipNextChangeEvent_[id]) {
 						this.changeEventQueue_.push(() => this.onNoteChange_(path), { path });
 					} else {
 						this.logger().debug('ExternalEditWatcher: Skipping this event.');
 					}
+
 					this.skipNextChangeEvent_ = {};
 				} else if (event === 'error') {
 					this.logger().error('ExternalEditWatcher: error');
