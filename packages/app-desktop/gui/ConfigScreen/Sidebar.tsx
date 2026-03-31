@@ -118,7 +118,11 @@ export default function Sidebar(props: Props) {
 			if (currentEnabledIndex < 0) currentEnabledIndex = 0;
 			currentEnabledIndex --;
 			if (currentEnabledIndex < 0) currentEnabledIndex += enabledIndexes.length;
-			const targetButton = buttonRefs.current[enabledIndexes[currentEnabledIndex]];
+			const targetIndex = enabledIndexes[currentEnabledIndex];
+			if (targetIndex !== selectedIndex) {
+				props.onSelectionChange({ section: props.sections[targetIndex] });
+			}
+			const targetButton = buttonRefs.current[targetIndex];
 			if (targetButton) focus('Sidebar', targetButton);
 			return;
 		} else if (event.code === 'ArrowDown') {
@@ -129,7 +133,11 @@ export default function Sidebar(props: Props) {
 			if (currentEnabledIndex < 0) currentEnabledIndex = 0;
 			currentEnabledIndex ++;
 			currentEnabledIndex %= enabledIndexes.length;
-			const targetButton = buttonRefs.current[enabledIndexes[currentEnabledIndex]];
+			const targetIndex = enabledIndexes[currentEnabledIndex];
+			if (targetIndex !== selectedIndex) {
+				props.onSelectionChange({ section: props.sections[targetIndex] });
+			}
+			const targetButton = buttonRefs.current[targetIndex];
 			if (targetButton) focus('Sidebar', targetButton);
 			return;
 		} else if (event.code === 'Home') {
