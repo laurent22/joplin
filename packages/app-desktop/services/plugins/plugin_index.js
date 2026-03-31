@@ -113,11 +113,14 @@
 		}
 
 		if (message.pluginCallbackId) {
-			const promise = callbackPromises[message.pluginCallbackId];
+			const callbackId = message.pluginCallbackId;
+			const promise = callbackPromises[callbackId];
 			if (!promise) {
 				console.error('Got a callback without matching promise: ', message);
 				return;
 			}
+
+			delete callbackPromises[callbackId];
 
 			if (message.error) {
 				promise.reject(message.error);
