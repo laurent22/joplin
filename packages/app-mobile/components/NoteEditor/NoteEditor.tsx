@@ -38,6 +38,7 @@ import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
 import { Second } from '@joplin/utils/time';
 import useDebounced from '../../utils/hooks/useDebounced';
+import { useKeepAwake } from 'expo-keep-awake';
 
 const logger = Logger.create('NoteEditor');
 
@@ -66,6 +67,7 @@ interface Props {
 	noteResources: ResourceInfos;
 	editorImageRendering: boolean;
 	editorInlineRendering: boolean;
+	keepScreenAwakeWhileEditing: boolean;
 
 	onScroll: OnScroll;
 	onChange: OnChange;
@@ -319,6 +321,11 @@ const useHasSpaceForToolbar = () => {
 	return { hasSpaceForToolbar: debouncedHasSpaceForToolbar, onContainerLayout };
 };
 
+const KeepAwakeWhileMounted = (): React.JSX.Element => {
+	useKeepAwake('joplin-note-editor');
+	return null;
+};
+
 function NoteEditor(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
@@ -449,6 +456,7 @@ function NoteEditor(props: Props) {
 	const { hasSpaceForToolbar, onContainerLayout } = useHasSpaceForToolbar();
 	const toolbarEnabled = props.toolbarEnabled && hasSpaceForToolbar;
 	const toolbar = <EditorToolbar editorState={toolbarEditorState} />;
+	const shouldKeepAwake = props.keepScreenAwakeWhileEditing && !props.readOnly;
 
 	const EditorComponent = props.mode === EditorType.Markdown ? MarkdownEditor : RichTextEditor;
 
@@ -461,6 +469,7 @@ function NoteEditor(props: Props) {
 				flexDirection: 'column',
 			}}
 		>
+			{shouldKeepAwake ? <KeepAwakeWhileMounted /> : null}
 			<EditLinkDialog
 				visible={linkDialogVisible}
 				themeId={props.themeId}
@@ -513,5 +522,6 @@ export default connect((state: AppState) => {
 		themeId: state.settings.theme,
 		editorInlineRendering: state.settings['editor.inlineRendering'],
 		editorImageRendering: state.settings['editor.imageRendering'],
+		keepScreenAwakeWhileEditing: state.settings['editor.mobile.keepScreenAwake'],
 	};
 }, null, null, { forwardRef: true })(NoteEditor);

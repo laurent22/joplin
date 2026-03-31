@@ -384,6 +384,31 @@ export default class Synchronizer {
 		}
 	}
 
+	private async activateKeepAwakeDuringSync(tag: string): Promise<boolean> {
+		if (this.appType_ !== AppType.Mobile) return false;
+		if (!Setting.value('sync.mobileKeepScreenAwake')) return false;
+
+		try {
+			const keepAwake = require('expo-keep-awake');
+			await keepAwake.activateKeepAwakeAsync(tag);
+			return true;
+		} catch (error) {
+			logger.warn('Could not activate keep-awake during sync:', error);
+			return false;
+		}
+	}
+
+	private async deactivateKeepAwakeDuringSync(tag: string) {
+		if (this.appType_ !== AppType.Mobile) return;
+
+		try {
+			const keepAwake = require('expo-keep-awake');
+			await keepAwake.deactivateKeepAwake(tag);
+		} catch (error) {
+			logger.warn('Could not deactivate keep-awake during sync:', error);
+		}
+	}
+
 	// Synchronisation is done in three major steps:
 	//
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
@@ -418,6 +443,8 @@ export default class Synchronizer {
 		this.cancelling_ = false;
 
 		const synchronizationId = time.unixMs().toString();
+		const keepAwakeTag = 'joplin-sync';
+		const keepAwakeActivated = await this.activateKeepAwakeDuringSync(keepAwakeTag);
 
 		const outputContext = { ...lastContext };
 
@@ -1256,6 +1283,8 @@ export default class Synchronizer {
 		this.progressReport_ = {};
 
 		this.dispatch({ type: 'SYNC_COMPLETED', isFullSync: this.isFullSync(syncSteps) });
+
+		if (keepAwakeActivated) await this.deactivateKeepAwakeDuringSync(keepAwakeTag);
 
 		this.state_ = 'idle';
 
