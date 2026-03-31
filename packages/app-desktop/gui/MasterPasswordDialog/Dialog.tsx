@@ -103,9 +103,8 @@ export default function(props: Props) {
 	}, []);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	/**
-	 * Handles password input change and updates strength score using zxcvbn.
-	 */
+	// Handles password input change
+	const onPasswordChange1 = useCallback((event: any) => {
 	const onPasswordChange1 = useCallback((event: any) => {
 		setPassword1(event.target.value);
 	}, []);
