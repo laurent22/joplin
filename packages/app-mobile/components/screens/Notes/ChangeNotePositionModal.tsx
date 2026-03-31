@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Modal from '../../Modal';
 import { themeStyle } from '../../global-style';
@@ -8,6 +8,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import Note from '@joplin/lib/models/Note';
 import { PrimaryButton } from '../../buttons';
 import { Button } from 'react-native-paper';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 interface Props {
 	visible: boolean;
@@ -21,11 +22,6 @@ interface Props {
 
 const MOVE_TO_TOP_VALUE = '__MOVE_TO_TOP__';
 const MAX_NOTE_TITLE_LENGTH = 30;
-
-const truncateTitle = (title: string, maxLength: number): string => {
-	if (title.length <= maxLength) return title;
-	return `${title.substring(0, maxLength - 3)}...`;
-};
 
 const isUncompletedTodo = (note: NoteEntity): boolean => {
 	return !!note.is_todo && !note.todo_completed;
@@ -174,7 +170,7 @@ const ChangeNotePositionModal: React.FC<Props> = (props) => {
 	}, [selectedNote, notes, uncompletedTodosOnTop]);
 
 	// Reset selection when modal opens - select first valid option
-	React.useEffect(() => {
+	useEffect(() => {
 		if (visible) {
 			const firstValidItem = listItems.find(item => !item.isDisabled);
 			setSelectedTargetValue(firstValidItem ? firstValidItem.id : null);
@@ -192,7 +188,7 @@ const ChangeNotePositionModal: React.FC<Props> = (props) => {
 	if (!selectedNote) return null;
 
 	const noteTitle = Note.displayTitle(selectedNote);
-	const truncatedTitle = truncateTitle(noteTitle, MAX_NOTE_TITLE_LENGTH);
+	const truncatedTitle = substrWithEllipsis(noteTitle, 0, MAX_NOTE_TITLE_LENGTH);
 	const hasValidTarget = !!selectedTargetValue && listItems.some(item => item.id === selectedTargetValue && !item.isDisabled);
 
 	return (
