@@ -103,6 +103,9 @@ export default function(props: Props) {
 	}, []);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	/**
+	 * Handles password input change and updates strength score using zxcvbn.
+	 */
 	const onPasswordChange1 = useCallback((event: any) => {
 		setPassword1(event.target.value);
 	}, []);
@@ -138,7 +141,10 @@ export default function(props: Props) {
 		if (event.cancelled) return;
 		setCurrentPasswordIsValid(isValid);
 	}, [currentPassword]);
-
+	
+	/**
+	 * Renders the master password input form including strength indicator.
+	 */
 	function renderPasswordForm() {
 		const passwordsMatch = password1 === password2;
 		const renderCurrentPassword = () => {
@@ -209,7 +215,9 @@ export default function(props: Props) {
 			);
 		}
 	}
-
+	/**
+	 * Renders dialog content depending on current mode.
+	 */
 	function renderContent() {
 		if (mode === Mode.Reset) {
 			return (
@@ -233,7 +241,9 @@ export default function(props: Props) {
 
 	const dialogTitle = mode === Mode.Set ? _('Manage master password') : `⚠️ ${_('Reset master password')} ⚠️`;
 	const okButtonLabel = mode === Mode.Set ? _('Save') : `⚠️ ${_('Reset master password')} ⚠️`;
-
+	/**
+	 * Wraps dialog UI including title, content, and actions.
+	 */
 	function renderDialogWrapper() {
 		return (
 			<div className="dialog-root">
