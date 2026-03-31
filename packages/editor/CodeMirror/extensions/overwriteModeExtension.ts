@@ -1,5 +1,6 @@
 import { EditorView, keymap } from '@codemirror/view';
 import { StateField, Facet, StateEffect } from '@codemirror/state';
+import { _ } from '@joplin/lib/locale';
 import keyUpHandlerExtension from './keyUpHandlerExtension';
 
 const overwriteModeFacet = Facet.define({
@@ -72,8 +73,7 @@ const setOverwriteModeEnabled = (enabled: boolean, view: EditorView) => {
 		effects: [
 			toggleOverwrite.of(enabled),
 			EditorView.announce.of(
-				// TODO: Localize:
-				enabled ? 'Overwrite mode enabled' : 'Overwrite mode disabled',
+				enabled ? _('Overwrite mode enabled') : _('Overwrite mode disabled'),
 			),
 		],
 	});
