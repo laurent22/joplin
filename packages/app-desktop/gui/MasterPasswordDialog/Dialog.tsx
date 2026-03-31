@@ -212,9 +212,8 @@ export default function(props: Props) {
 			);
 		}
 	}
-	/**
-	 * Renders dialog content depending on current mode.
-	 */
+	// Renders dialog content depending on current mode
+	function renderContent() {
 	function renderContent() {
 		if (mode === Mode.Reset) {
 			return (
