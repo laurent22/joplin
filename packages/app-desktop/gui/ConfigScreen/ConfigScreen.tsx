@@ -188,7 +188,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		if (hasQuery) {
 			this.setState({
 				searchSectionFilter: event.section.name,
-				screenName: '',
 			});
 			return;
 		}
@@ -600,10 +599,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const searchStatusComp = !searchMode ? null : (
 			<div className='search-status-banner'>
 				{!activeSearchSectionFilter ? (
-					'Showing All Matching results'
+					_('Showing All Matching results')
 				) : (
 					<>
-						{`Filtered by section ${searchFilterSectionName}. `}
+						{_('Filtered by section %s.', searchFilterSectionName)}
+						{' '}
 						<a
 							href='#'
 							onClick={(event: React.MouseEvent) => {
@@ -611,7 +611,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								this.setState({ searchSectionFilter: '' });
 							}}
 						>
-							<span className='search-status-banner__link'>Show All Results.</span>
+							<span className='search-status-banner__link'>{_('Show All Results.')}</span>
 						</a>
 					</>
 				)}
