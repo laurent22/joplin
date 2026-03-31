@@ -141,9 +141,7 @@ export default function(props: Props) {
 		setCurrentPasswordIsValid(isValid);
 	}, [currentPassword]);
 	
-	/**
-	 * Renders the master password input form including strength indicator.
-	 */
+	// Renders the master password input form
 	function renderPasswordForm() {
 		const passwordsMatch = password1 === password2;
 		const renderCurrentPassword = () => {
