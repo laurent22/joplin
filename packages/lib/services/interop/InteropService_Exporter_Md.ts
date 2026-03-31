@@ -10,7 +10,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
-	private destDir_: string;
+	protected destDir_: string;
 	private resourceDir_: string;
 	private createdDirs_: string[];
 
@@ -24,7 +24,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
+	protected async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
