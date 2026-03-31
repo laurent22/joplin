@@ -1604,7 +1604,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	}, [props.searchMarkers]);
 
 	useEffect(() => {
-		if (!editor) return;
+		if (!editor) return () => {};
 
 		const onKeyDown = (e: KeyboardEvent) => {
 			const isCtrlF = (e.ctrlKey || e.metaKey) && e.key === 'f';
