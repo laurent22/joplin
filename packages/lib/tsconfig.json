@@ -1,11 +1,14 @@
 {
 	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"types": ["jest", "node"]
+	},
 	"include": [
 		"**/*.ts",
 		"**/*.tsx"
 	],
 	"exclude": [
 		"**/node_modules",
-		"**/plugin_types",
-	],
+		"**/plugin_types"
+	]
 }
