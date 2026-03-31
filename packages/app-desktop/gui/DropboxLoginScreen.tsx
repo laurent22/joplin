@@ -8,7 +8,7 @@ const { themeStyle } = require('@joplin/lib/theme');
 const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 
 interface Props {
-	themeId: string;
+	themeId: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -63,8 +63,7 @@ class DropboxLoginScreenComponent extends React.Component<any, any> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: { settings: { theme: number } }) => {
 	return {
 		themeId: state.settings.theme,
 	};

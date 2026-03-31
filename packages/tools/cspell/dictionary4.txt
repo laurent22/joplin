@@ -260,3 +260,4 @@ payant
 llamacpp
 bgcolor
 bordercolor
+togglefullscreen

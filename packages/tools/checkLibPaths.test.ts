@@ -29,7 +29,7 @@ describe('checkLibPaths', () => {
 		for (const testCase of testCases) {
 			const [expected, input] = testCase;
 			const actual = findInvalidImportPaths(__dirname, input.split('\n').map(l => l.trim()).join('\n'));
-			expect(actual.length).toBe(expected);
+			expect(actual).toHaveLength(expected);
 		}
 	});
 

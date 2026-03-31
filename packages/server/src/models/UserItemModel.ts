@@ -238,7 +238,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			}
 
 			await this.db(this.tableName).whereIn('id', userItems.map(ui => ui.id)).delete();
-		}, 'ItemModel::delete');
+		}, 'UserItemModel::delete');
 	}
 
 }

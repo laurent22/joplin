@@ -23,7 +23,11 @@ impl<'a> Renderer<'a> {
         content_html.push_str(&self.parse_content(text)?);
 
         if content_html.starts_with("http://") || content_html.starts_with("https://") {
-            content_html = format!("<a href=\"{}\">{}</a>", url_encode(&content_html), content_html);
+            content_html = format!(
+                "<a href=\"{}\">{}</a>",
+                url_encode(&content_html),
+                content_html
+            );
         }
 
         if style.len() > 0 {
@@ -34,7 +38,11 @@ impl<'a> Renderer<'a> {
             Some(t) if !self.in_list && is_tag(t) => {
                 Ok(format!("<{} {}>{}</{}>", t, attrs, content_html, t))
             }
-            _ if style.len() > 0 => Ok(format!("<span {}>{}</span>", style.to_html_attr(), content_html)),
+            _ if style.len() > 0 => Ok(format!(
+                "<span {}>{}</span>",
+                style.to_html_attr(),
+                content_html
+            )),
             _ => Ok(content_html),
         }
     }
@@ -151,7 +159,7 @@ impl<'a> Renderer<'a> {
         if let Some(line_spacing) = text.paragraph_line_spacing_exact() {
             styles.set(
                 "line-height",
-                ((line_spacing as f32) * 50.0).floor().to_string() + "pt",
+                (line_spacing * 50.0).floor().to_string() + "pt",
             );
             // TODO: why not implemented?
             // if line_spacing > 0.0 {
@@ -228,17 +236,17 @@ impl<'a> Renderer<'a> {
             );
         }
 
-        if let Some(space) = style.paragraph_space_before() {
-            if space != 0.0 {
-                // Space is in half inches:
-                styles.set("margin-top", format!("{}in", space / 2.));
-            }
+        if let Some(space) = style.paragraph_space_before()
+            && space != 0.0
+        {
+            // Space is in half inches:
+            styles.set("margin-top", format!("{}in", space / 2.));
         }
 
-        if let Some(space) = style.paragraph_space_after() {
-            if space != 0.0 {
-                styles.set("margin-bottom", format!("{}in", space / 2.));
-            }
+        if let Some(space) = style.paragraph_space_after()
+            && space != 0.0
+        {
+            styles.set("margin-bottom", format!("{}in", space / 2.));
         }
 
         if let Some(space) = style.paragraph_line_spacing_exact() {

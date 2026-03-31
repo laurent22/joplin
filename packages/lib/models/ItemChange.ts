@@ -2,7 +2,7 @@ import BaseModel, { ModelType } from '../BaseModel';
 import shim from '../shim';
 import eventManager, { EventName } from '../eventManager';
 import { ItemChangeEntity, SqlQuery } from '../services/database/types';
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 export interface ChangeSinceIdOptions {
 	limit?: number;
@@ -24,10 +24,8 @@ interface AddMultiOptions extends BaseAddOptions {
 
 export default class ItemChange extends BaseModel {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static addChangeMutex_: any = new Mutex();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static saveCalls_: any[] = [];
+	private static addChangeMutex_: Mutex = new Mutex();
+	private static saveCalls_: boolean[] = [];
 
 	public static TYPE_CREATE = 1;
 	public static TYPE_UPDATE = 2;

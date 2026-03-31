@@ -45,7 +45,7 @@ impl ColorRef {
                 return Err(ErrorKind::MalformedOneNoteFileData(
                     format!("invalid color ref: 0x{:08X}", value).into(),
                 )
-                .into())
+                .into());
             }
         };
 

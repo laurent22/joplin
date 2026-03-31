@@ -155,12 +155,15 @@ export default class PluginRunner extends BasePluginRunner {
 			if (message.pluginId !== plugin.id) return;
 
 			if (message.mainWindowCallbackId) {
-				const promise = callbackPromises[message.mainWindowCallbackId];
+				const callbackId = message.mainWindowCallbackId;
+				const promise = callbackPromises[callbackId];
 
 				if (!promise) {
 					console.error('Got a callback without matching promise: ', message);
 					return;
 				}
+
+				delete callbackPromises[callbackId];
 
 				if (message.error) {
 					promise.reject(message.error);

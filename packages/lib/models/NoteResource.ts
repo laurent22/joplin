@@ -74,8 +74,7 @@ export default class NoteResource extends BaseModel {
 
 	public static async associatedNoteIds(resourceId: string): Promise<string[]> {
 		const rows = await this.modelSelectAll('SELECT note_id FROM note_resources WHERE resource_id = ? AND is_associated = 1', [resourceId]);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return rows.map((r: any) => r.note_id);
+		return rows.map((r: { note_id: string }) => r.note_id);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -170,8 +169,7 @@ export default class NoteResource extends BaseModel {
 		`,
 			[cutOffTime],
 		);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return output.map((r: any) => r.resource_id);
+		return output.map((r: { resource_id: string }) => r.resource_id);
 	}
 
 	public static async deleteByResource(resourceId: string) {
