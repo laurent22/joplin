@@ -15,10 +15,9 @@ const perfLogger = PerformanceLogger.create();
 
 interface DecryptionResult {
 	skippedItemCount?: number;
-	decryptedItemCounts?: number;
+	decryptedItemCounts?: Record<number, number>;
 	decryptedItemCount?: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	error: any;
+	error: Error | null;
 }
 
 // Key for use with the KvStore.
@@ -39,10 +38,8 @@ export default class DecryptionWorker {
 	private logger_: Logger;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function = () => {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleId_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter_: any;
+	private scheduleId_: ReturnType<typeof setTimeout> | null = null;
+	private eventEmitter_: InstanceType<typeof EventEmitter>;
 	private kvStore_: KvStore = null;
 	private maxDecryptionAttempts_ = 2;
 	private taskQueue_: AsyncActionQueue = new AsyncActionQueue();
@@ -78,8 +75,7 @@ export default class DecryptionWorker {
 		return DecryptionWorker.instance_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setEncryptionService(v: any) {
+	public setEncryptionService(v: EncryptionService) {
 		this.encryptionService_ = v;
 	}
 
@@ -115,7 +111,8 @@ export default class DecryptionWorker {
 			const s = item.key.split(':');
 			const type_ = Number(s[1]);
 			const id = s[2];
-			const errorDescription = await this.kvStore().value<string>(decryptionErrorKey(type_, id));
+			const storedError = await this.kvStore().value(decryptionErrorKey(type_, id));
+			const errorDescription = typeof storedError === 'string' ? storedError : null;
 			return {
 				type_,
 				id,
@@ -187,8 +184,7 @@ export default class DecryptionWorker {
 		this.state_ = 'started';
 
 		const excludedIds = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const decryptedItemCounts: any = {};
+		const decryptedItemCounts: Record<number, number> = {};
 		let skippedItemCount = 0;
 
 		this.dispatch({ type: 'ENCRYPTION_HAS_DISABLED_ITEMS', value: false });
@@ -349,6 +345,15 @@ export default class DecryptionWorker {
 		if (lastError) {
 			throw lastError;
 		}
+
+		// If this task was skipped due to a concurrent start() call, return an empty
+		// DecryptionResult instead of null. AsyncActionQueue drops earlier tasks when
+		// multiple are queued, but start() guarantees Promise<DecryptionResult> and
+		// must not resolve null.
+		if (!output) {
+			return { error: null, decryptedItemCount: 0, skippedItemCount: 0 };
+		}
+
 		return output;
 	}
 

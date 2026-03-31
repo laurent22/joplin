@@ -1,6 +1,14 @@
 # Transcribe Changelog
 
-## [transcribe-v3.6.2](https://github.com/laurent22/joplin/releases/tag/transcribe-v3.6.2) - 2026-02-19T17:02:49Z
+## [transcribe-v3.6.6](https://github.com/laurent22/joplin/releases/tag/transcribe-v3.6.6) - 2026-02-26T21:08:33Z
+
+- Improved: Upgraded image to node: 24-bookworm to fix build issue (513341f)
+
+## [transcribe-v3.6.5](https://github.com/laurent22/joplin/releases/tag/transcribe-v3.6.5) - 2026-02-26T15:06:49Z
+
+- Fixed: Fixed location of llamacpp library (df10bbd)
+
+## [transcribe-v3.6.3](https://github.com/laurent22/joplin/releases/tag/transcribe-v3.6.3) - 2026-02-25T21:20:08ZZ
 
 - Improved: #12883: Disable JobProcessor tests by default (#12955) (#12883 by pedr)
 - Improved: Add log statement signalling that the startup has finished (#12876) (#12862 by pedr)

@@ -255,3 +255,9 @@ mtmd
 gguf
 armor
 clearsign
+ligne
+payant
+llamacpp
+bgcolor
+bordercolor
+togglefullscreen

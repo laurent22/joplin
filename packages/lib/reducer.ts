@@ -1178,7 +1178,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const handleWindowState = (windowDraft: Draft<WindowState>) => {
+				const handleWindowState = (windowDraft: Draft<WindowState>, isActiveWindow: boolean) => {
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
@@ -1239,7 +1239,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// a new note should be selected.
 					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
-					if (noteFolderHasChanged && !preserveSelection) {
+					if (noteFolderHasChanged && !preserveSelection && isActiveWindow) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 						if (!newNotes.length) newIndex = -1;
@@ -1264,9 +1264,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					}
 				};
 
-				handleWindowState(draft);
+				handleWindowState(draft, true);
 				for (const backgroundWindow of Object.values(draft.backgroundWindows)) {
-					handleWindowState(backgroundWindow);
+					handleWindowState(backgroundWindow, false);
 				}
 			}
 			break;
@@ -1366,8 +1366,13 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				updateOneItem(draft, action, 'tags');
 				const tagRemoved = action.item;
+				const noteId = action.noteId;
 				for (const windowStateDraft of stateUtils.allWindowStates(draft)) {
 					windowStateDraft.selectedNoteTags = removeItemFromArray(windowStateDraft.selectedNoteTags, 'id', tagRemoved.id);
+
+					if (windowStateDraft.notesParentType === 'Tag' && windowStateDraft.selectedTagId === tagRemoved.id) {
+						windowStateDraft.notes = windowStateDraft.notes.filter(note => note.id !== noteId);
+					}
 				}
 			}
 			break;

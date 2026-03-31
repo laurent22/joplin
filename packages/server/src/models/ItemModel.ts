@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
+import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode, ErrorBadRequest } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
@@ -955,13 +955,16 @@ export default class ItemModel extends BaseModel<Item> {
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids, { recordChanges: !options.deleteChanges });
 			await this.models().itemResource().deleteByItemIds(ids);
-			await storageDriver.delete(ids, { models: this.models() });
-			if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
-
 			await super.delete(ids, options);
-
 			if (options.deleteChanges) await this.models().change().deleteByItemIds(ids);
 		}, 'ItemModel::delete');
+
+		// Storage operations are done outside the transaction to avoid holding database locks
+		// during potentially slow I/O operations (e.g., S3). If storage delete fails, the database
+		// records are already gone, which is acceptable - orphaned storage files can be cleaned up
+		// separately.
+		await storageDriver.delete(ids, { models: this.models() });
+		if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
 	}
 
 	public async deleteForUser(userId: Uuid, item: Item, options: DeleteOptions = {}): Promise<void> {
@@ -1065,6 +1068,8 @@ export default class ItemModel extends BaseModel<Item> {
 			if (!item.owner_id) item.owner_id = userId;
 		} else {
 			const beforeSaveItem = await this.load(item.id, { fields: ['name', 'jop_share_id'] });
+			if (!beforeSaveItem) throw new ErrorBadRequest('Item does not exist');
+
 			previousName = beforeSaveItem.name;
 			previousItem = {
 				jop_share_id: beforeSaveItem.jop_share_id,

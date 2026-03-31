@@ -22,3 +22,16 @@ lazy_static! {
 pub fn fs_driver() -> Arc<dyn FileApiDriver> {
     FS_DRIVER.clone()
 }
+
+#[cfg(test)]
+mod test {
+    use super::fs_driver;
+
+    #[test]
+    fn sanitize_simple() {
+        assert_eq!(fs_driver().sanitize_file_name("a.txt"), "a.txt");
+        assert_eq!(fs_driver().sanitize_file_name("a/b.txt"), "ab.txt");
+        assert_eq!(fs_driver().sanitize_file_name("a\0a/b.txt"), "aab.txt");
+        assert_eq!(fs_driver().sanitize_file_name("a\\b\\.txt "), "ab.txt");
+    }
+}

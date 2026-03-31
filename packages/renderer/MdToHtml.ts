@@ -173,8 +173,7 @@ export interface RuleOptions {
 	checkboxDisabled?: boolean;
 
 	// Used by the keyword highlighting plugin (mobile only)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	highlightedKeywords?: any[];
+	highlightedKeywords?: unknown[];
 
 	// Use by resource-rendering logic to signify that it should be rendered
 	// as a plain HTML string without any attached JavaScript. Used for example
@@ -210,28 +209,26 @@ export interface RuleOptions {
 	allowedFilePrefixes?: string[];
 
 	platformName?: string;
+
+	showNoteLinkIcon?: boolean;
 }
 
 export default class MdToHtml implements MarkupRenderer {
 
 	private resourceBaseUrl_: string;
 	private ResourceModel_: OptionsResourceModel;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private contextCache_: any;
+	private contextCache_: InMemoryCache;
 	private fsDriver_: FsDriver;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cachedOutputs_: any = {};
+	private cachedOutputs_: Record<string, RenderResult> = {};
 	private lastCodeHighlightCacheKey_: string = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cachedHighlightedCode_: any = {};
+	private cachedHighlightedCode_: Record<string, string> = {};
 
 	// Markdown-It plugin options (not Joplin plugin options)
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private pluginOptions_: any = {};
 	private extraRendererRules_: RendererRules = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private allProcessedAssets_: any = {};
+	private allProcessedAssets_: Record<string, RenderResult> = {};
 	private customCss_ = '';
 
 	public constructor(options: Options = null) {

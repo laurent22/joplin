@@ -16,7 +16,7 @@ import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import { MarkupLanguage } from '@joplin/renderer';
-import { EditorType } from './types';
+import { EditorControl, EditorType } from './types';
 
 let store: Store<AppState>;
 let registeredRuntime: RegisteredRuntime;
@@ -63,6 +63,27 @@ describe('NoteEditor', () => {
 
 	afterEach(() => {
 		registeredRuntime.deregister();
+	});
+
+	it('should provide an editor ref', () => {
+		let editorRef: EditorControl;
+		const onSetEditorRef = (ref: EditorControl) => {
+			editorRef = ref;
+		};
+
+		const wrappedNoteEditor = render(
+			<TestProviderStack store={store}>
+				<NoteEditor
+					ref={onSetEditorRef}
+					{...defaultEditorProps}
+					mode={EditorType.RichText}
+				/>
+			</TestProviderStack>,
+		);
+
+		expect(editorRef).toBeTruthy();
+
+		wrappedNoteEditor.unmount();
 	});
 
 	it('should hide the markdown toolbar when the window is small', async () => {

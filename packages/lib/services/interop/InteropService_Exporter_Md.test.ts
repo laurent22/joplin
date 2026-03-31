@@ -23,6 +23,14 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await fs.mkdirp(exportDir());
 	});
 
+	const createExportItems = () => {
+		const items: { type: number; itemOrId: string | NoteEntity }[] = [];
+		const queue = (itemType: number, itemOrId: string | NoteEntity) => {
+			items.push({ type: itemType, itemOrId });
+		};
+		return { items, queue };
+	};
+
 	it('should create resources directory', (async () => {
 		const service = new InteropService_Exporter_Md();
 		await service.init(exportDir());
@@ -487,6 +495,40 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const note_body = await shim.fsDriver().readFile(`${exportDir()}/testing/mynote.md`);
 		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
 	}));
+
+	it.each([
+		{ titles: ['folder:', 'folder?'], expectedPaths: ['folder_/note1.md', 'folder_-1/note2.md'], description: 'special characters' },
+		{ titles: ['CON', 'NUL'], expectedPaths: ['___/note1.md', '___-1/note2.md'], description: 'Windows-banned names' },
+	])('should handle folders that collide after sanitization ($description)', async ({ titles, expectedPaths }) => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(exportDir());
+
+		const { items, queue } = createExportItems();
+
+		const folder1 = await Folder.save({ title: titles[0] });
+		const folder2 = await Folder.save({ title: titles[1] });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queue(BaseModel.TYPE_FOLDER, folder1.id);
+		queue(BaseModel.TYPE_FOLDER, folder2.id);
+		queue(BaseModel.TYPE_NOTE, note1);
+		queue(BaseModel.TYPE_NOTE, note2);
+
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, items);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, items);
+
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+
+		expect(Object.keys(exporter.context().notePaths).length).toBe(2);
+		expect(exporter.context().notePaths[note1.id]).toBe(expectedPaths[0]);
+		expect(exporter.context().notePaths[note2.id]).toBe(expectedPaths[1]);
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/${expectedPaths[0]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${expectedPaths[1]}`)).toBe(true);
+	});
 
 	it('should handle filenames that contain slashes', (async () => {
 		const folder = await Folder.save({ title: 'testing' });

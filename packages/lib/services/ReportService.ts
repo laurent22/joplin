@@ -68,15 +68,15 @@ export default class ReportService {
 		return v.toString();
 	}
 
-	public csvCreateLine(row: string[]) {
+	public csvCreateLine(row: (string | number | boolean)[]) {
+		const escaped: string[] = [];
 		for (let i = 0; i < row.length; i++) {
-			row[i] = this.csvEscapeCell(row[i]);
+			escaped.push(this.csvEscapeCell(String(row[i])));
 		}
-		return row.join(',');
+		return escaped.join(',');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public csvCreate(rows: any[]) {
+	public csvCreate(rows: (string | number | boolean)[][]) {
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(this.csvCreateLine(rows[i]));
@@ -84,8 +84,7 @@ export default class ReportService {
 		return output.join('\n');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async basicItemList(option: any = null) {
+	public async basicItemList(option: { format?: 'array' | 'csv' } | null = null) {
 		if (!option) option = {};
 		if (!option.format) option.format = 'array';
 
@@ -109,10 +108,14 @@ export default class ReportService {
 	}
 
 	public async syncStatus(syncTarget: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {
+		const output: {
+			items: Record<string, { total: number; synced: number }>;
+			total: { total: number; synced: number };
+			toDelete?: { total: number };
+			conflicted?: { total: number };
+		} = {
 			items: {},
-			total: {},
+			total: { total: 0, synced: 0 },
 		};
 
 		let itemCount = 0;
@@ -152,8 +155,7 @@ export default class ReportService {
 	}
 
 	private addRetryAllHandler(section: ReportSection): ReportSection {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		const retryHandlers: Function[] = [];
+		const retryHandlers: RetryHandler[] = [];
 
 		for (let i = 0; i < section.body.length; i++) {
 			const item: ReportItemOrString = section.body[i];

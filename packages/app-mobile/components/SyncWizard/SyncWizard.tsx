@@ -8,9 +8,10 @@ import { Icon, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import JoplinCloudIcon from './JoplinCloudIcon';
 import NavService from '@joplin/lib/services/NavService';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import CardButton from '../buttons/CardButton';
 import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
 
 interface Props {
 	dispatch: Dispatch;
@@ -46,6 +47,16 @@ const styles = StyleSheet.create({
 		verticalAlign: 'middle',
 	},
 });
+
+const isAppJoplinCloud = () => {
+	return Platform.OS === 'web' && location.origin === 'https://app.joplincloud.com';
+};
+
+const useShouldShowOtherButton = () => {
+	// Don't show "other" when hosted on Joplin Cloud (other sync
+	// targets can still be selected from settings).
+	return !isAppJoplinCloud();
+};
 
 interface SyncProviderProps {
 	title: string;
@@ -94,13 +105,23 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 
 	const onSelectJoplinCloud = useCallback(async () => {
 		onDismiss();
-		await NavService.go('JoplinCloudLogin');
+		if (Platform.OS === 'web' && !isAppJoplinCloud()) {
+			if (await shim.showConfirmationDialog(
+				_('Self-hosted instances of the Joplin web app cannot sync with Joplin Cloud. Open the official web app?'),
+			)) {
+				await shim.openUrl('https://app.joplincloud.com/');
+			}
+		} else {
+			await NavService.go('JoplinCloudLogin');
+		}
 	}, [onDismiss]);
 
 	const onSelectOtherTarget = useCallback(async () => {
 		onDismiss();
 		await NavService.go('Config', { sectionName: 'sync' });
 	}, [onDismiss]);
+
+	const showOther = useShouldShowOtherButton();
 
 	return <DismissibleDialog
 		themeId={themeId}
@@ -126,14 +147,14 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 				onPress={onSelectJoplinCloud}
 				disabled={false}
 			/>
-			<SyncProvider
+			{showOther && <SyncProvider
 				title={_('Other')}
 				description={_('Select one of the other supported sync targets.')}
 				icon={() => <Icon size={iconSize} source='dots-horizontal-circle'/>}
 				featuresList={[]}
 				onPress={onSelectOtherTarget}
 				disabled={false}
-			/>
+			/>}
 		</View>
 	</DismissibleDialog>;
 };

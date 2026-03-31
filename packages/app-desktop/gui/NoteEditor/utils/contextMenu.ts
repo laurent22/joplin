@@ -103,9 +103,16 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => (
-				(!options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource))
+				(!options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource || itemType === ContextMenuItemType.NoteLink))
 				|| (!!options.linkToOpen && itemType === ContextMenuItemType.Link)
 			),
+		},
+		openNoteInNewWindow: {
+			label: _('Open in new window'),
+			onAction: async (options: ContextMenuOptions) => {
+				await CommandService.instance().execute('openNoteInNewWindow', options.resourceId);
+			},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.NoteLink,
 		},
 		saveAs: {
 			label: _('Save as...'),

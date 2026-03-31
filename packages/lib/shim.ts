@@ -34,7 +34,7 @@ export interface Keytar {
 	deletePassword(key: string, client: string): Promise<void>;
 }
 
-interface FetchOptions {
+export interface FetchOptions {
 	method?: string;
 	headers?: Record<string, string>;
 	body?: string;

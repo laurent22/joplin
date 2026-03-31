@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useMemo } from 'react';
 import { ButtonSpec, DialogResult } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import WebviewController from '@joplin/lib/services/plugins/WebviewController';
@@ -76,8 +76,16 @@ export default function UserWebviewDialog(props: Props) {
 		if (webviewRef.current) focus('UserWebviewDialog', webviewRef.current);
 	}, []);
 
+	// When the iframe is isolated (security setting enabled), keyboard events
+	// like Escape don't reach the iframe content. We let the native <dialog>
+	// handle Escape by passing onCancel, but only when there's a dismiss button.
+	// https://github.com/laurent22/joplin/issues/13718
+	const onCancel = useMemo(() => {
+		return findDismissButton(buttons) ? onDismiss : undefined;
+	}, [buttons, onDismiss]);
+
 	return (
-		<Dialog className={`user-webview-dialog ${props.fitToContent ? '-fit' : ''}`}>
+		<Dialog className={`user-webview-dialog ${props.fitToContent ? '-fit' : ''}`} onCancel={onCancel}>
 			<div className='user-dialog-wrapper'>
 				<UserWebview
 					ref={webviewRef}

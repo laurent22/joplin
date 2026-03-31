@@ -155,12 +155,15 @@ export default class PluginRunner extends BasePluginRunner {
 			if (message.pluginId !== plugin.id) return;
 
 			if (message.mainWindowCallbackId) {
-				const promise = callbackPromises[message.mainWindowCallbackId];
+				const callbackId = message.mainWindowCallbackId;
+				const promise = callbackPromises[callbackId];
 
 				if (!promise) {
 					console.error('Got a callback without matching promise: ', message);
 					return;
 				}
+
+				delete callbackPromises[callbackId];
 
 				if (message.error) {
 					promise.reject(message.error);
@@ -168,6 +171,16 @@ export default class PluginRunner extends BasePluginRunner {
 					promise.resolve(message.result);
 				}
 			} else {
+				// Handle notification that a plugin failed to start before
+				// calling register(). Emit 'started' so allPluginsStarted
+				// is not blocked. See: https://github.com/laurent22/joplin/issues/12793
+				if (message.path === '__pluginFailedToStart__') {
+					logger.error(`Plugin "${plugin.id}" failed to start:`, message.args?.[0]);
+					plugin.running = false;
+					plugin.emit('started');
+					return;
+				}
+
 				const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
 				const fullPath = `joplin.${message.path}`;
 

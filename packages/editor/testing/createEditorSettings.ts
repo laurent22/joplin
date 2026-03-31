@@ -5,6 +5,7 @@ const createEditorSettings = (themeId: number) => {
 	const themeData = { themeId, ...themeStyle(themeId) };
 	const editorSettings: EditorSettings = {
 		markdownMarkEnabled: true,
+		markdownInsertEnabled: true,
 		katexEnabled: true,
 		spellcheckEnabled: true,
 		useExternalSearch: true,

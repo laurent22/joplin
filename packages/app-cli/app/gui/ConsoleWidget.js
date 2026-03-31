@@ -34,6 +34,12 @@ class ConsoleWidget extends TextWidget {
 		super.onBlur();
 	}
 
+	clear() {
+		this.lines_ = [];
+		this.updateText_ = true;
+		this.invalidate();
+	}
+
 	render() {
 		if (this.updateText_) {
 			if (this.lines_.length > this.maxLines_) {

@@ -95,12 +95,18 @@ const useConnectToEditorPlugin = ({
 	}, [activeEditorView, editorPluginHandler]);
 
 	const formNoteBody = formNote.body;
+	const formNoteId = formNote.id;
 	useEffect(() => {
+		// Don't emit updates when formNote hasn't loaded the current note yet.
+		// This can happen during note navigation when effectiveNoteId updates
+		// immediately but formNote still contains the previous note's data.
+		if (formNoteId !== effectiveNoteId) return;
+
 		editorPluginHandler.emitUpdate({
 			noteId: effectiveNoteId,
 			newBody: formNoteBody,
 		}, shownEditorViewIds);
-	}, [effectiveNoteId, formNoteBody, editorPluginHandler, shownEditorViewIds]);
+	}, [effectiveNoteId, formNoteId, formNoteBody, editorPluginHandler, shownEditorViewIds]);
 };
 
 export default useConnectToEditorPlugin;

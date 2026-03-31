@@ -21,12 +21,13 @@ const useStyles = (themeId: number, hasContent: boolean) => {
 		return StyleSheet.create({
 			root: {
 				flexDirection: 'row',
-				justifyContent: 'center',
+				justifyContent: 'flex-start',
 				alignItems: 'center',
 			},
 			inputStyle: {
 				fontSize: theme.fontSize,
-				flexGrow: 1,
+				flex: 1,
+				minWidth: 0,
 				borderWidth: 0,
 				borderBlockColor: 'transparent',
 				paddingLeft: 0,

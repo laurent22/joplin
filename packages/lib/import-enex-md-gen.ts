@@ -233,6 +233,10 @@ const isListItem = function(line: string) {
 	return line && line.trim().indexOf('- ') === 0;
 };
 
+const isListContinuation = function(line: string) {
+	return line && line.startsWith('  ') && !isListItem(line);
+};
+
 const isCodeLine = function(line: string) {
 	return line && line.indexOf('\t') === 0;
 };
@@ -262,7 +266,7 @@ function formatMdLayout(lines: string[]) {
 		const line = lines[i];
 
 		// Add a new line at the end of a list of items
-		if (isListItem(previous) && line && !isListItem(line)) {
+		if (isListItem(previous) && line && !isListItem(line) && !isListContinuation(line)) {
 			newLines.push('');
 
 			// Add a new line at the beginning of a list of items
@@ -897,7 +901,13 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 				section.lines.push(BLOCK_OPEN);
 				state.inPre = true;
 			} else if (n === 'br') {
-				section.lines.push(NEWLINE);
+				if (state.lists.length) {
+					const indent = '    '.repeat(state.lists.length - 1);
+					section.lines.push(NEWLINE);
+					section.lines.push(`${indent}  `);
+				} else {
+					section.lines.push(NEWLINE);
+				}
 			} else if (n === 'en-media') {
 				const hash = nodeAttributes.hash;
 
@@ -1435,8 +1445,12 @@ function renderLine(line: any) {
 		// ENEX notes sometimes have hidden tags. We could strip off these
 		// sections but in the spirit of preserving all data we wrap them in
 		// a hidden tag too.
+		const rendered = renderLines(line.lines);
+		const content = rendered.join('').replace(/\[\[NEWLINE\]\]|\[\[BLOCK_OPEN\]\]|\[\[BLOCK_CLOSE\]\]|\[\[SPACE\]\]|\[\[MERGED\]\]/g, '').replace(/\s+/g, '');
+		if (!content) return [];
+
 		let hiddenLines = ['<div style="display: none;">'];
-		hiddenLines = hiddenLines.concat(renderLines(line.lines));
+		hiddenLines = hiddenLines.concat(rendered);
 		hiddenLines.push('</div>');
 
 		// We need to add two new lines after the HTML block, or the Markdown

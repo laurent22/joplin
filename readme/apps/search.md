@@ -57,3 +57,9 @@ Notes are sorted by "relevance". Currently it means the notes that contain the r
 In the desktop application, press <kbd>Ctrl+P</kbd> or <kbd>Cmd+P</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.
 
 The Goto Anything dialog can also be opened from the "Go" section of the application menubar.
+
+## Video tutorial
+
+Watch this short video to learn how to quickly locate your notes, to-dos, and attachments:
+
+[![Watch the video](https://img.youtube.com/vi/P8-qCi3dcnA/hqdefault.jpg)](https://www.youtube.com/watch?v=P8-qCi3dcnA)

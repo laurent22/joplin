@@ -97,19 +97,19 @@ class ActionTracker extends Serializable<typeof schema> {
 	}
 
 	public getActionLog(id: ItemId) {
-		return [...(this.idToActionLog_.get(id) ?? [])];
+		const logData = this.idToActionLog_.get(id) ?? [];
+		return logData
+			.map(item => `${item.source}: ${item.action}`)
+			.join('\n');
 	}
 
 	public printActionLog(id: ItemId) {
-		const logEntries = this.getActionLog(id);
-		if (logEntries.length === 0) {
+		const log = this.getActionLog(id);
+		if (log.length === 0) {
 			process.stdout.write('N/A\n');
 			return;
 		}
 
-		const log = logEntries
-			.map(item => `in:${item.source}: ${item.action}`)
-			.join('\n');
 		process.stdout.write(`${log}\n`);
 	}
 
@@ -122,6 +122,12 @@ class ActionTracker extends Serializable<typeof schema> {
 
 		const log = this.idToActionLog_.get(itemId) ?? [];
 		this.idToActionLog_.set(itemId, log);
+
+		// Prepend the step at which the action took place. This allows comparing action logs
+		// for two different items:
+		const step = this.context_.currentStep();
+		const stepString = String(step);
+		source = `(step ${stepString.padStart(2, '0')}) ${source}`;
 
 		log.push({ action, source });
 	}

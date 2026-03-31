@@ -206,6 +206,13 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
+		if (arg.startsWith('--lang=')) {
+			// Electron-specific flag - ignore it
+			// Allows the user to specify a custom initial locale
+			argv.splice(0, 1);
+			continue;
+		}
+
 		if (arg === '--running-tests') {
 			// Used by the desktop app to indicate that the app is running end-to-end tests.
 			argv.splice(0, 1);

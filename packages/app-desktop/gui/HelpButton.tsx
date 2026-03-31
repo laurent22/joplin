@@ -6,14 +6,12 @@ import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	tip: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClick: Function;
+	onClick: ()=> void;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
+	style?: React.CSSProperties;
 
 	'aria-controls'?: string;
-	'aria-expanded'?: string;
+	'aria-expanded'?: boolean;
 }
 
 class HelpButtonComponent extends React.Component<Props> {
@@ -31,8 +29,7 @@ class HelpButtonComponent extends React.Component<Props> {
 		const theme = themeStyle(this.props.themeId);
 		const style = { ...this.props.style, color: theme.color, textDecoration: 'none' };
 		const helpIconStyle = { flex: 0, width: 16, height: 16, marginLeft: 10 };
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const extraProps: any = {};
+		const extraProps: Record<string, string> = {};
 		if (this.props.tip) {
 			extraProps['data-tip'] = this.props.tip;
 			extraProps['aria-description'] = this.props.tip;

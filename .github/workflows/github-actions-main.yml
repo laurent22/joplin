@@ -1,5 +1,6 @@
 name: Joplin Continuous Integration
 on: [push, pull_request]
+
 jobs:
   Main:
     # We always process server or desktop release tags, because they also publish the release

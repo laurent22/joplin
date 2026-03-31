@@ -21,8 +21,12 @@ const event2 = {
 	id: eventId2,
 };
 
+let testIndex = 0;
 const beforeTest = async (envValues: Record<string, string> = null) => {
-	await beforeAllDb('db.replication', envValues ? { envValues } : null);
+	// Use `beforeAllDb` in `beforeEach` to ensure each test has its own database.
+	// To work around file locking issues on Windows, each test needs its own database instance:
+	const databaseKey = `db.replication.${testIndex ++}`;
+	await beforeAllDb(databaseKey, envValues ? { envValues } : null);
 	await beforeEachDb();
 };
 
@@ -31,6 +35,10 @@ const afterTest = async () => {
 };
 
 describe('db.replication', () => {
+
+	afterEach(async () => {
+		await afterTest();
+	});
 
 	it('should reconnect a database', async () => {
 		if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) return;
@@ -57,12 +65,12 @@ describe('db.replication', () => {
 			expect(results.length).toBe(2);
 			expect([results[0].id, results[1].id].sort()).toEqual([eventId1, eventId2]);
 		}
-
-		await afterTest();
 	});
 
 	it('should manually sync an SQLite slave instance', async () => {
 		if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) return;
+
+		await beforeTest();
 
 		const masterConfig: DatabaseConfig = {
 			client: DatabaseConfigClient.SQLite,
@@ -139,8 +147,6 @@ describe('db.replication', () => {
 
 		expect(result.items.length).toBe(1);
 		expect(result.items[0].type).toBe(ChangeType.Update);
-
-		await afterTest();
 	});
 
 });
