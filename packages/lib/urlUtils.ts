@@ -1,5 +1,6 @@
 import { rtrimSlashes, toFileProtocolPath } from './path-utils';
 import { urlDecode } from './string-utils';
+import { _ } from './locale';
 
 export const hash = (url: string) => {
 	const s = url.split('#');
@@ -71,8 +72,8 @@ export const parseResourceUrl = (url: string) => {
 	};
 };
 
-export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string) => {
-	let resourceDirUrl = toFileProtocolPath(resourceDir);
+export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string, os: string|null = null) => {
+	let resourceDirUrl = toFileProtocolPath(resourceDir, os);
 	if (!resourceDirUrl.endsWith('/')) {
 		resourceDirUrl += '/';
 	}
@@ -138,5 +139,12 @@ export const objectToQueryString = (query: Record<string, string>) => {
 	queryString = s.join('&');
 
 	return queryString;
+};
+
+export const validateUrlProtocol = (url: string) => {
+	if (!url || !/^https?:\/\//i.test(url)) {
+		return _('The URL must include the protocol prefix (http:// or https://).');
+	}
+	return '';
 };
 

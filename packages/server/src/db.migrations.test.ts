@@ -10,8 +10,12 @@ async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
 
 describe('db.migrations', () => {
 
+	let testIndex = 0;
 	beforeEach(async () => {
-		await beforeAllDb('db.migrations', { autoMigrate: false });
+		// Use `beforeAllDb` in `beforeEach` to ensure each test has its own database.
+		// To work around file locking issues on Windows, each test needs its own database instance:
+		const databaseKey = `db.migrations.${testIndex ++}`;
+		await beforeAllDb(databaseKey, { autoMigrate: false });
 		await beforeEachDb();
 	});
 

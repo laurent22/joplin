@@ -4,6 +4,7 @@ import { _ } from './locale.js';
 import JoplinServerApi, { Session } from './JoplinServerApi';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { FileApiOptions } from './SyncTargetJoplinServer';
+import { validateUrlProtocol } from './urlUtils';
 import Logger from '@joplin/utils/Logger';
 
 export async function newFileApi(id: number, options: FileApiOptions) {
@@ -87,8 +88,17 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 
 	public static override async checkConfig(fileApi: FileApiOptions) {
 		try {
+			const path = fileApi.path();
+			const protocolErrorMessage = validateUrlProtocol(path);
+			if (protocolErrorMessage) {
+				return {
+					ok: false,
+					errorMessage: protocolErrorMessage,
+				};
+			}
+
 			// Simulate a login request
-			const result = await fetch(`${fileApi.path()}/api/saml`);
+			const result = await fetch(`${path}/api/saml`);
 
 			if (result.status === 200) { // The server successfully responded, SAML is enabled
 				return {

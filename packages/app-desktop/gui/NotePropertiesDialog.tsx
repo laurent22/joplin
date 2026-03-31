@@ -45,7 +45,7 @@ interface State {
 const uniqueId = (key: string) => `note-properties-dialog-${key}`;
 
 const isPropertyDatetimeRelated = (key: string) => {
-	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time';
+	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time' || key === 'todo_completed';
 };
 
 class NotePropertiesDialog extends React.Component<Props, State> {
@@ -317,7 +317,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		const styles = this.styles(this.props.themeId);
 		const theme = themeStyle(this.props.themeId);
 		const labelText = this.formatLabel(key);
-		const labelComp = <label htmlFor={uniqueId(key)} role='rowheader' style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{labelText}</label>;
+		const labelComp = <label htmlFor={uniqueId(key)} style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{labelText}</label>;
 		let controlComp = null;
 		let editComp = null;
 		let editCompHandler = null;
@@ -422,11 +422,11 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					textOverflow: 'ellipsis',
 					display: 'inline-block',
 				};
-				controlComp = (
+				controlComp = displayedValue ? (
 					<a href="#" onClick={() => bridge().openExternal(url)} style={urlStyle}>
 						{displayedValue}
 					</a>
-				);
+				) : null;
 			} else if (key === 'revisionsLink') {
 				controlComp = (
 					<a href="#" onClick={this.revisionsLink_click} style={theme.urlStyle}>
@@ -468,10 +468,10 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 
 		return (
-			<div role='row' key={key} style={theme.controlBox} className="note-property-box">
-				{labelComp}
-				<span role='cell'>{controlComp} {editComp}</span>
-			</div>
+			<tr key={key} style={theme.controlBox} className="note-property-box">
+				<th>{labelComp}</th>
+				<td>{controlComp} {editComp}</td>
+			</tr>
 		);
 	}
 
@@ -497,10 +497,12 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 
 		return (
 			<Dialog onCancel={this.props.onClose}>
-				<div style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</div>
-				<div role='table' aria-labelledby='note-properties-dialog-title'>
-					{noteComps}
-				</div>
+				<h1 style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</h1>
+				<table aria-labelledby='note-properties-dialog-title'>
+					<tbody>
+						{noteComps}
+					</tbody>
+				</table>
 				<DialogButtonRow
 					themeId={this.props.themeId}
 					okButtonShow={!this.isReadOnly()}

@@ -67,14 +67,14 @@ const useSearchResults = ({
 	const collatorLocale = getCollatorLocale();
 	const results = useMemo(() => {
 		const collator = getCollator(collatorLocale);
-		const lowerSearch = search?.toLowerCase();
+		const lowerSearch = (search || '').trim().normalize('NFC').toLowerCase();
 		return options
-			.filter(option => option.title.toLowerCase().includes(lowerSearch))
+			.filter(option => (option.title || '').trim().normalize('NFC').toLowerCase().includes(lowerSearch))
 			.sort((a, b) => {
 				if (a.title === b.title) return 0;
 				// Full matches should go first
-				if (a.title.toLowerCase() === lowerSearch) return -1;
-				if (b.title.toLowerCase() === lowerSearch) return 1;
+				if ((a.title || '').trim().normalize('NFC').toLowerCase() === lowerSearch) return -1;
+				if ((b.title || '').trim().normalize('NFC').toLowerCase() === lowerSearch) return 1;
 				return collator.compare(a.title, b.title);
 			});
 	}, [search, options, collatorLocale]);

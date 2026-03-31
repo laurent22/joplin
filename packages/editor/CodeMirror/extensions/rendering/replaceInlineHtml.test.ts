@@ -3,14 +3,18 @@ import createTestEditor from '../../testing/createTestEditor';
 import replaceInlineHtml from './replaceInlineHtml';
 import waitFor from '@joplin/lib/testing/waitFor';
 
-const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['HTMLTag']) => {
+const createEditorWithCursor = async (initialMarkdown: string, cursorIndex: number, expectedTags: string[] = ['HTMLTag']) => {
 	const editor = await createTestEditor(
 		initialMarkdown,
-		EditorSelection.cursor(0),
+		EditorSelection.cursor(cursorIndex),
 		expectedTags,
 		[replaceInlineHtml],
 	);
 	return editor;
+};
+
+const createEditor = async (initialMarkdown: string, expectedTags: string[] = ['HTMLTag']) => {
+	return createEditorWithCursor(initialMarkdown, 0, expectedTags);
 };
 
 describe('replaceInlineHtml', () => {
@@ -33,6 +37,44 @@ describe('replaceInlineHtml', () => {
 		// Retry on failure to handle the case where the syntax tree is slow:
 		await waitFor(() => {
 			expect(editor.contentDOM.querySelector(expectedTagsQuery)).toBeTruthy();
+		});
+	});
+
+	test('should keep other inline HTML rendered when cursor is on same line, but not touching tags', async () => {
+		const markdown = 'A <sub>one</sub> B <sub>two</sub>';
+		const editor = await createEditorWithCursor(markdown, markdown.indexOf('A'));
+
+		await waitFor(() => {
+			expect(editor.contentDOM.querySelectorAll('sub')).toHaveLength(2);
+		});
+	});
+
+	test('should reveal only the inline HTML touched by the cursor', async () => {
+		const markdown = 'A <sub>one</sub> B <sub>two</sub>';
+		const cursorAtFirstSubContent = markdown.indexOf('one') + 1;
+		const editor = await createEditorWithCursor(markdown, cursorAtFirstSubContent);
+
+		await waitFor(() => {
+			expect(editor.contentDOM.querySelectorAll('sub')).toHaveLength(1);
+		});
+	});
+
+	test('should not hide incomplete inline HTML tags', async () => {
+		const markdown = '<sup>x';
+		const editor = await createEditorWithCursor(markdown, markdown.length);
+
+		await waitFor(() => {
+			expect(editor.contentDOM.textContent).toContain('<sup>x');
+		});
+	});
+
+	test('should not style incomplete inline HTML tags', async () => {
+		const markdown = '<strike>';
+		const editor = await createEditorWithCursor(markdown, markdown.length, []);
+
+		await waitFor(() => {
+			expect(editor.contentDOM.querySelector('strike')).toBeFalsy();
+			expect(editor.contentDOM.textContent).toContain('<strike>');
 		});
 	});
 });

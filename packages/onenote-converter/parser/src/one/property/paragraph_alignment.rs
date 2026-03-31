@@ -8,9 +8,10 @@ use parser_utils::errors::{ErrorKind, Result};
 ///
 /// [\[MS-ONE\] 2.3.94]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/36edb135-5e8e-400f-9394-82853d662d90
 #[allow(missing_docs)]
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Default)]
 pub enum ParagraphAlignment {
     Unknown,
+    #[default]
     Left,
     Center,
     Right,
@@ -34,11 +35,5 @@ impl ParagraphAlignment {
             2 => ParagraphAlignment::Right,
             _ => ParagraphAlignment::Unknown,
         }))
-    }
-}
-
-impl Default for ParagraphAlignment {
-    fn default() -> Self {
-        ParagraphAlignment::Left
     }
 }

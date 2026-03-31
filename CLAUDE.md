@@ -10,6 +10,7 @@
 - When creating Jest tests, there should be only one `describe()` statement in the file.
 - Focus on testing essential behaviour and edge cases — avoid adding tests for every minor detail.
 - Avoid duplicating code in tests; when testing the same logic with different inputs, use `test.each` or shared helpers instead of repeating similar test blocks.
+- Do not make white space changes - do not add unnecessary new lines, or spaces to existing code, or wrap existing code.
 
 ## Full Documentation
 

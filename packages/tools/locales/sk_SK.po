@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin v3.5.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: Jozef Gaal <preklady@mayday.sk>\n"
+"PO-Revision-Date: 2026-03-22 14:25+0100\n"
+"Last-Translator: Jozef Riha <jose1711@gmail.com>\n"
 "Language-Team: Jozef Gaal <preklady@mayday.sk>\n"
 "Language: sk_SK\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Úložisko: umožňuje pripájanie súborov k poznámkam a umožňuje "
+"- Úložisko: umožňuje pripájanie súborov k poznámkam a "
 "synchronizáciu súborového systému."
 
 #: packages/lib/services/KeymapService.ts:333
@@ -192,7 +192,7 @@ msgstr "%s (%s) sa nepodarilo nahrať: %s"
 #: packages/app-desktop/gui/MainScreen.tsx:563
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
 msgid "%s (%s) would like to share a notebook with you."
-msgstr "%s (%s) by s vami rád zdieľal zápisník."
+msgstr "%s (%s) by s vami rád(a) zdieľal(a) zápisník."
 
 #: packages/lib/services/ReportService.ts:340
 msgid "%s (%s): %s"
@@ -774,7 +774,7 @@ msgstr "Automaticky kontrolovať aktualizácie"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2020
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr "Automatické odstraňovanie poznámok v koši po určitom počte dní"
+msgstr "Automaticky odstraňovať poznámky v koši po určitom počte dní"
 
 #: packages/lib/models/settings/builtInMetadata.ts:654
 msgid "Automatically switch theme to match system theme"
@@ -3026,7 +3026,7 @@ msgstr "Domov"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 msgid "Horizontal Rule"
-msgstr "Horizontálne pravidlo"
+msgstr "Vodorovná čiara"
 
 #: packages/lib/services/interop/InteropService.ts:195
 msgid "HTML Directory"
@@ -3124,7 +3124,7 @@ msgstr "Importovať poznámky zo súboru JEX (Joplin Export)."
 
 #: packages/lib/models/Setting.ts:1398
 msgid "Import or export your data"
-msgstr "Importujte alebo exportujte svoje údaje"
+msgstr "Importujte alebo exportujte vaše údaje"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
 msgid "Import..."
@@ -3525,11 +3525,11 @@ msgstr "Podporovaný zväzok kľúčov: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "KĽÚČE"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
-msgstr "Kľúče, ktoré si vyžadujú aktualizáciu"
+msgstr "Kľúče, ktoré je potrebné aktualizovať"
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:265
 msgid "Label"
@@ -5856,7 +5856,7 @@ msgstr "Zdroj: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "MEDZERA"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
@@ -6997,7 +6997,7 @@ msgstr "Skúste to teraz"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "TYP"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""

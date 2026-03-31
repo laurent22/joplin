@@ -1,9 +1,14 @@
 import InteropService_Exporter_Md from './InteropService_Exporter_Md';
-import BaseModel from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
 import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
-import { NoteEntity } from '../database/types';
+import shim from '../../shim';
+import { FolderIcon, FolderIconType, NoteEntity } from '../database/types';
 import { serialize } from '../../utils/frontMatter';
+import Logger from '@joplin/utils/Logger';
+import * as yaml from 'js-yaml';
+
+const logger = Logger.create('InteropService_Exporter_Md_frontmatter');
 
 interface NoteTagContext {
 	noteTags: Record<string, string[]>;
@@ -60,6 +65,45 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			}
 
 			this.updateContext(context);
+		}
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches parent class signature
+	public async processItem(itemType: number, item: any) {
+		await super.processItem(itemType, item);
+
+		// Write _folder.yml with folder icon when processing a folder
+		if (item.type_ === ModelType.Folder && item.icon) {
+			try {
+				const icon: FolderIcon = JSON.parse(item.icon);
+				const dirPath = `${this.destDir_}/${await this.makeDirPath_(item)}`;
+				const iconObj = this.serializeFolderIcon(icon);
+				if (iconObj) {
+					const metadataPath = `${dirPath}_folder.yml`;
+					const yamlContent = yaml.dump({ icon: iconObj }, { noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA });
+					await shim.fsDriver().writeFile(metadataPath, yamlContent, 'utf-8');
+				}
+			} catch (e) {
+				logger.warn(`Failed to export folder icon for folder ${item.id}:`, e);
+			}
+		}
+	}
+
+	private serializeFolderIcon(icon: FolderIcon): Record<string, string> | null {
+		switch (icon.type) {
+		case FolderIconType.Emoji:
+			if (!icon.emoji) return null;
+			return { type: 'emoji', emoji: icon.emoji };
+		case FolderIconType.FontAwesome:
+			if (!icon.name) return null;
+			return { type: 'fontawesome', name: icon.name };
+		case FolderIconType.DataUrl:
+			if (!icon.dataUrl) return null;
+			return { type: 'dataurl', dataurl: icon.dataUrl };
+		default: {
+			const exhaustivenessCheck: never = icon.type;
+			throw new Error(`Unknown folder icon type: ${exhaustivenessCheck}`);
+		}
 		}
 	}
 
