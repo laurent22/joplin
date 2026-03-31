@@ -1,6 +1,5 @@
-// @ts-nocheck
-/* eslint-disable spaced-comment, @typescript-eslint/triple-slash-reference */
-/// <reference types="jest" />
+/* eslint-disable @typescript-eslint/no-explicit-any */
+declare const describe: any, it: any, expect: any;
 
 import JoplinViewsPanels from './JoplinViewsPanels';
 
