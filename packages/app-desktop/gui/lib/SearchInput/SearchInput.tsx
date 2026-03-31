@@ -4,7 +4,6 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 
 import StyledInput from '../../style/StyledInput';
-import './style.scss';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
