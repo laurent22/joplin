@@ -70,7 +70,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 	}
 
 	public static requiresPassword() {
-    	return false;
+		return false;
 	}
 
 	public authRouteName() {
