@@ -1,3 +1,6 @@
+/* eslint-disable spaced-comment, @typescript-eslint/triple-slash-reference */
+/// <reference types="jest" />
+
 import JoplinViewsPanels from './JoplinViewsPanels';
 
 describe('JoplinViewsPanels', () => {
