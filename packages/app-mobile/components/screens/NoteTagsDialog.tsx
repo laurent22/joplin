@@ -68,7 +68,11 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		buttonBarEnabled={!savingTags}
 		okTitle={_('Apply')}
 		cancelTitle={_('Cancel')}
-		modalProps={modalPropOverrides}
+		modalProps={{
+			...modalPropOverrides,
+			// Ensure that the Android back button / Escape key can dismiss this dialog:
+			onClose: onCancelPress,
+		}}
 	>
 		<TagEditor
 			themeId={props.themeId}
