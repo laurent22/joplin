@@ -1593,25 +1593,63 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 	// Pre-populate the RTE search dialog with the global search query (WCAG SC 3.3.7)
 	// Search-entry pre-population is currently only done in the Markdown editor.
+	const globalSearchTermRef = useRef<string>('');
+
+	useEffect(() => {
+		if (!props.searchMarkers) return;
+		const keywords = props.searchMarkers.keywords;
+		globalSearchTermRef.current = (keywords && keywords.length > 0)
+			? (keywords[0]?.value ?? '')
+			: '';
+	}, [props.searchMarkers]);
+
 	useEffect(() => {
 		if (!editor) return;
-		if (!props.searchMarkers) return;
 
-		const keywords = props.searchMarkers.keywords;
-		const searchTerm = (keywords && keywords.length > 0) ? (keywords[0]?.value ?? '') : '';
+		const onKeyDown = (e: KeyboardEvent) => {
+			const isCtrlF = (e.ctrlKey || e.metaKey) && e.key === 'f';
+			if (!isCtrlF) return;
 
-		if (!searchTerm) {
-			if (editor.plugins?.searchreplace) {
-				editor.plugins.searchreplace.done(false);
-			}
-			return;
-		}
+			const searchTerm = globalSearchTermRef.current;
+			if (!searchTerm) return;
 
-		if (editor.plugins?.searchreplace) {
-			editor.plugins.searchreplace.find(searchTerm, false, false, false);
-		}
-	}, [editor, props.searchMarkers, props.noteId]);
+			const maxAttempts = 20;
+			let attempts = 0;
 
+			const tryFill = () => {
+				const input = document.querySelector<HTMLInputElement>(
+					'.tox-textfield[placeholder="Find"]',
+				);
+
+				if (!input) {
+					attempts++;
+					if (attempts < maxAttempts) {
+						shim.setTimeout(tryFill, 50);
+					}
+					return;
+				}
+				shim.setTimeout(() => {
+					const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+						window.HTMLInputElement.prototype, 'value',
+					)?.set;
+					nativeInputValueSetter?.call(input, searchTerm);
+					input.dispatchEvent(new Event('input', { bubbles: true }));
+					input.dispatchEvent(new Event('change', { bubbles: true }));
+					focus('TinyMCE::searchDialog', input);
+				}, 50);
+			};
+
+			shim.setTimeout(tryFill, 50);
+		};
+
+		document.addEventListener('keydown', onKeyDown);
+		editor.getDoc()?.addEventListener('keydown', onKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', onKeyDown);
+			editor.getDoc()?.removeEventListener('keydown', onKeyDown);
+		};
+	}, [editor]);
 
 	useEffect(() => {
 		return () => {
