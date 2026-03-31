@@ -55,6 +55,7 @@ export default function(props: Props) {
 				onKeyDown={props.onKeyDown}
 				spellCheck={false}
 				disabled={props.disabled}
+				aria-label={props.placeholder || _('Search...')}
 				aria-controls={props['aria-controls']}
 			/>
 			<button
