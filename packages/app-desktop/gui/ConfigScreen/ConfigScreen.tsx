@@ -167,7 +167,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
-		this.setState({ searchQuery: '' });
 		void this.switchSection(event.section.name);
 	}
 
@@ -463,7 +462,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			};
 			if (matchingSections.length === 0) {
 				searchResultsPanel = (
-					<div style={searchContainerStyle}>
+					<div style={searchContainerStyle} role="tabpanel">
 						<p style={theme.textStyle}>{_('No results')}</p>
 					</div>
 				);
@@ -479,7 +478,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						items.push(this.settingToComponent(md.key!, settings[md.key!]));
 					}
 				}
-				searchResultsPanel = <div style={searchContainerStyle}>{items}</div>;
+				searchResultsPanel = <div style={searchContainerStyle} role="tabpanel">{items}</div>;
 			}
 		}
 
