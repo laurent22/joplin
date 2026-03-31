@@ -6,6 +6,8 @@
 	],
 	"exclude": [
 		"**/node_modules",
-		"**/plugin_types"
+		"**/plugin_types",
+		"**/*.test.ts",
+		"**/*.test.tsx"
 	]
 }
