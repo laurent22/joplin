@@ -827,8 +827,7 @@
 		}));
 
 		// By default, Chromium inlines body styles (e.g. theme background color) into the clipboard HTML.
-		// Intercept the copy event and write only the selected content with inlined light-theme styles
-		// to bypass this behaviour.
+		// Intercept the copy event and write only the selected content with inlined light-theme styles to bypass this behaviour.
 		const clipboardCssProps = [
 			'font-family', 'font-size', 'font-weight', 'font-style',
 			'text-decoration-line', 'line-height', 'color',
@@ -842,7 +841,6 @@
 			'opacity',
 		];
 
-		// Values from packages/lib/themes/light.ts
 		const lightThemeOverrideCss = [
 			'body, #joplin-container-content, #rendered-md { background-color: transparent !important; color: #32373F !important; }',
 			'html *, html *::before, html *::after { background-color: transparent !important; }',
