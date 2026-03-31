@@ -8,4 +8,7 @@
 		"**/node_modules",
 		"**/plugin_types",
 	],
+	"compilerOptions": {
+		"ignoreDeprecations": "6.0"
+	}
 }

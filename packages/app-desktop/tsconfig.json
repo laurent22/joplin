@@ -11,5 +11,8 @@
 		// Exclude gulpfile.ts to prevent Gulp from trying to build from
 		// gulpfile.js.
 		"gulpfile.ts"
-	]
+	],
+	"compilerOptions": {
+		"ignoreDeprecations": "6.0"
+	}
 }

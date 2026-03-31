@@ -4,6 +4,7 @@ import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import StyledInput from '../style/StyledInput';
 const styled = require('styled-components').default;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
@@ -17,6 +18,8 @@ interface Props {
 	selection: string;
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
+	searchQuery: string;
+	onSearchQueryChange: (query: string)=> void;
 }
 
 export const StyledRoot = styled.div`
@@ -68,6 +71,16 @@ export const StyledListItemLabel = styled.span`
 	flex: 1;
 	align-items: center;
 	user-select: none;
+`;
+
+export const StyledSearchContainer = styled.div`
+	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
+	border-bottom: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
+`;
+
+export const StyledSearchInput = styled(StyledInput)`
+	width: 100%;
+	box-sizing: border-box;
 `;
 
 export const StyledListItemIcon = styled.i`
@@ -163,8 +176,21 @@ export default function Sidebar(props: Props) {
 		index ++;
 	}
 
+	const onSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+		props.onSearchQueryChange(event.currentTarget.value);
+	}, [props.onSearchQueryChange]);
+
 	return (
 		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
+			<StyledSearchContainer>
+				<StyledSearchInput
+					type='search'
+					placeholder={_('Search settings...')}
+					value={props.searchQuery}
+					onChange={onSearchChange}
+					aria-label={_('Search settings')}
+				/>
+			</StyledSearchContainer>
 			{buttons}
 		</StyledRoot>
 	);

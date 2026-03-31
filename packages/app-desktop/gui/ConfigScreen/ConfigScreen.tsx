@@ -20,6 +20,7 @@ import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
+import filterSettingsBySearchQuery from './utils/filterSettingsBySearchQuery';
 
 
 interface Font {
@@ -52,6 +53,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			changedSettingKeys: [],
 			needRestart: false,
 			fonts: [],
+			searchQuery: '',
 		};
 
 		this.rowStyle_ = {
@@ -165,6 +167,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private sidebar_selectionChange(event: any) {
+		this.setState({ searchQuery: '' });
 		void this.switchSection(event.section.name);
 	}
 
@@ -334,6 +337,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
+	private onSearchQueryChange = (query: string) => {
+		this.setState({ searchQuery: query });
+	};
+
 	private onUpdateSettingValue = ({ key, value }: UpdateSettingValueEvent) => {
 		const md = Setting.settingMetadata(key);
 		if (md.needRestart) {
@@ -427,7 +434,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
-		if (screenComp) containerStyle.display = 'none';
+		const isSearching = !!this.state.searchQuery.trim();
+
+		// When searching, keep the containerStyle visible so search results are shown.
+		if (screenComp && !isSearching) containerStyle.display = 'none';
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 
@@ -441,6 +451,37 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const rightStyle = { ...style, flex: 1 };
 		delete style.width;
+
+		// When searching, render a flat list of all matching settings grouped by section.
+		let searchResultsPanel: React.ReactNode = null;
+		if (isSearching) {
+			const matchingSections = filterSettingsBySearchQuery(sections, this.state.searchQuery, AppType.Desktop);
+			const searchContainerStyle: React.CSSProperties = {
+				overflow: 'auto',
+				padding: theme.configScreenPadding,
+				flex: 1,
+			};
+			if (matchingSections.length === 0) {
+				searchResultsPanel = (
+					<div style={searchContainerStyle}>
+						<p style={theme.textStyle}>{_('No results')}</p>
+					</div>
+				);
+			} else {
+				const items: React.ReactNode[] = [];
+				for (const section of matchingSections) {
+					items.push(
+						<div key={`search-header-${section.name}`} style={{ ...theme.textStyle, fontWeight: 'bold', marginTop: 15, marginBottom: 5 }}>
+							{Setting.sectionNameToLabel(section.name)}
+						</div>,
+					);
+					for (const md of section.metadatas) {
+						items.push(this.settingToComponent(md.key!, settings[md.key!]));
+					}
+				}
+				searchResultsPanel = <div style={searchContainerStyle}>{items}</div>;
+			}
+		}
 
 		const tabComponents: React.ReactNode[] = [];
 		for (const section of sections) {
@@ -471,22 +512,27 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			);
 		}
 
+		// When searching, treat screenComp as null for button bar purposes so save/apply remain available.
+		const effectiveScreenComp = isSearching ? null : screenComp;
+
 		return (
 			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
+					searchQuery={this.state.searchQuery}
+					onSearchQueryChange={this.onSearchQueryChange}
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}
-					{tabComponents}
+					{isSearching ? searchResultsPanel : tabComponents}
 					<ButtonBar
 						hasChanges={hasChanges}
-						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+						backButtonTitle={hasChanges && !effectiveScreenComp ? _('Cancel') : _('Back')}
 						onCancelClick={this.onCancelClick}
-						onSaveClick={screenComp ? null : this.onSaveClick}
-						onApplyClick={screenComp ? null : this.onApplyClick}
+						onSaveClick={effectiveScreenComp ? null : this.onSaveClick}
+						onApplyClick={effectiveScreenComp ? null : this.onApplyClick}
 					/>
 				</div>
 			</div>
