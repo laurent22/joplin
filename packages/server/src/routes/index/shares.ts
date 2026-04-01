@@ -3,7 +3,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
-import { Item, Share, ShareType } from '../../services/database/types';
+import { Item, Share } from '../../services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
@@ -40,13 +40,9 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	if (!user.enabled) throw new ErrorForbidden('This account has been disabled');
 
 	if (ctx.query.note_id && !share.recursive) {
-		const noteItem = await ctx.joplin.models.item().loadByJopId(share.owner_id, ctx.query.note_id as string);
-		if (!noteItem) throw new ErrorForbidden('This linked note has not been published');
-
-		const noteShare = await shareModel.itemShare(ShareType.Note, noteItem.id);
-		if (!noteShare) throw new ErrorForbidden('This linked note has not been published');
-
-		return redirect(ctx, shareModel.shareUrl(noteShare.owner_id, noteShare.id));
+		const redirectUrl = await shareModel.linkedNoteShareUrl(share, ctx.query.note_id as string);
+		if (redirectUrl) return redirect(ctx, redirectUrl);
+		throw new ErrorForbidden('This linked note has not been published');
 	}
 
 	const itemModel = ctx.joplin.models.item();
