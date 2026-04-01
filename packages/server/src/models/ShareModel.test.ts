@@ -402,8 +402,8 @@ describe('ShareModel', () => {
 
 		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
 		// note 2 is shared via ShareType.Note, making P=1 for it
-		await models().share().shareNote(user1, '00000000000000000000000000000002', '', false);
+		const note2Share = await models().share().shareNote(user1, '00000000000000000000000000000002', '', false);
 		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000002');
-		expect(url).not.toBeNull();
+		expect(url).toContain(`/shares/${note2Share.id}`);
 	});
 });
