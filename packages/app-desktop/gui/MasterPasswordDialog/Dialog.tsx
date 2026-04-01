@@ -104,7 +104,7 @@ export default function(props: Props) {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	// Handles password input change
-	const onPasswordChange1 = useCallback((event: any) => {
+	
 	const onPasswordChange1 = useCallback((event: any) => {
 		setPassword1(event.target.value);
 	}, []);
@@ -214,7 +214,6 @@ export default function(props: Props) {
 	}
 	// Renders dialog content depending on current mode
 	function renderContent() {
-	function renderContent() {
 		if (mode === Mode.Reset) {
 			return (
 				<div className="dialog-content">
@@ -238,7 +237,7 @@ export default function(props: Props) {
 	const dialogTitle = mode === Mode.Set ? _('Manage master password') : `⚠️ ${_('Reset master password')} ⚠️`;
 	const okButtonLabel = mode === Mode.Set ? _('Save') : `⚠️ ${_('Reset master password')} ⚠️`;
 	// Wraps dialog UI including title, content, and actions
-	function renderDialogWrapper() {
+	
 	function renderDialogWrapper() {
 		return (
 			<div className="dialog-root">
