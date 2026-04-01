@@ -86,13 +86,14 @@ const isHiddenByStyle = (style: string): boolean => {
 type ProcessImageResult = {
 	type: 'replaceElement';
 	html: string;
-} | {
+}|{
 	type: 'replaceSource';
 	src: string;
-} | {
+}|{
 	type: 'setAttributes';
 	attrs: Record<string, string>;
 };
+
 interface ProcessImageEvent {
 	src: string;
 	before: string;
