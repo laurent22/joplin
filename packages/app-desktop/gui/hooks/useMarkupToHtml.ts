@@ -24,10 +24,11 @@ interface HookDependencies {
 	whiteBackgroundNoteRendering: boolean;
 	scrollbarSize: ScrollbarSize;
 	baseFontFamily: string;
+	baseFontSize: number;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
-	const { themeId, customCss, plugins, whiteBackgroundNoteRendering, scrollbarSize, baseFontFamily } = deps;
+	const { themeId, customCss, plugins, whiteBackgroundNoteRendering, scrollbarSize, baseFontFamily, baseFontSize } = deps;
 
 	const resourceBaseUrl = useMemo(() => {
 		return `joplin-content://note-viewer/${Setting.value('resourceDir')}/`;
@@ -72,6 +73,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			whiteBackgroundNoteRendering,
 			scrollbarSize: scrollbarSize,
 			baseFontFamily,
+			baseFontSize,
 			itemIdToUrl: (id: string, urlParameters = '') => {
 				if (!(id in resources) || !resources[id]) {
 					return null;
@@ -86,5 +88,5 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 		});
 
 		return result;
-	}, [themeId, markupToHtml, baseFontFamily, whiteBackgroundNoteRendering, scrollbarSize, resourceBaseUrl]);
+	}, [themeId, markupToHtml, baseFontFamily, baseFontSize, whiteBackgroundNoteRendering, scrollbarSize, resourceBaseUrl]);
 }

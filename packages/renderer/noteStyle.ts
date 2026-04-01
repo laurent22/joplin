@@ -13,6 +13,7 @@ export interface Options {
 	contentWrapperSelector?: string;
 	scrollbarSize?: number;
 	baseFontFamily?: string;
+	baseFontSize?: number;
 	themeId?: number;
 	whiteBackgroundNoteRendering?: boolean;
 }
@@ -84,6 +85,7 @@ export default function(theme: any, options: Options = null) {
 	theme = theme ? theme : {};
 
 	const fontFamily = options.baseFontFamily || '\'Avenir Next\', \'Avenir\', \'Arial\', sans-serif';
+	const fontSize = options.baseFontSize ? `${options.baseFontSize}px` : null;
 
 	const contentWrapperTarget = options.contentWrapperSelector ?? '#rendered-md';
 	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : contentWrapperTarget;
@@ -104,7 +106,7 @@ export default function(theme: any, options: Options = null) {
 		b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 
 		body {
-			font-size: ${formatCssSize(theme.noteViewerFontSize)};
+			font-size: ${fontSize ?? formatCssSize(theme.noteViewerFontSize)};
 			color: ${theme.color};
 			word-wrap: break-word;
 			line-height: ${theme.lineHeight};

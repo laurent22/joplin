@@ -55,6 +55,7 @@ export interface RenderOptions {
 	contentMaxWidth?: number;
 	scrollbarSize?: number;
 	baseFontFamily?: string;
+	baseFontSize?: number;
 	bodyOnly?: boolean;
 	splitted?: boolean;
 	enableLongPress?: boolean;
