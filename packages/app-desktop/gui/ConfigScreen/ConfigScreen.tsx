@@ -518,8 +518,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					className='setting-tab-panel'
 					tabIndex={0}
 					role='tabpanel'
+					aria-label={_('Search results')}
 				>
 					<div className='search-results'>
+						<div aria-live='polite' aria-atomic='true' style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
+							{filteredMatchedSections.length === 0 ? _('No matching results') : _('%d sections found', filteredMatchedSections.length)}
+						</div>
 						<div className='search-filter-control'>
 							{hasValidSectionFilter ?
 								_('Filtered by section [%s]', Setting.sectionNameToLabel(sectionFilter)) :
@@ -574,7 +578,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		return (
 			<div className="config-screen" role="main" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
-					selection={searchMode ? (sectionFilter ?? this.state.selectedSectionName) : this.state.selectedSectionName}
+					selection={searchMode ? (sectionFilter ?? matchedSections[0]?.section.name ?? this.state.selectedSectionName) : this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
 					sections={sections}
 					searchQuery={this.state.searchQuery}

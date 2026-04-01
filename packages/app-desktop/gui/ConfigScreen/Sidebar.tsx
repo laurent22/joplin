@@ -158,6 +158,7 @@ export default function Sidebar(props: Props) {
 					onSearchButtonClick={props.onSearchButtonClick}
 					searchStarted={isSearching}
 					placeholder={_('Search settings...')}
+					aria-controls={isSearching ? 'setting-section-search-results' : undefined}
 				/>
 			</div>
 			<div role='tablist' className='tablist'>
