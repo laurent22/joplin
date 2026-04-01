@@ -17,7 +17,7 @@ import shim from '@joplin/lib/shim';
 
 const logger = Logger.create('RichTextEditor');
 
-function useCss(themeId: number, editorCss: string): string {
+function useCss(themeId: number, editorCss: string, fontFamily: string, fontSize: number, fontSizeUnits: string): string {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		const themeVariableCss = themeToCss(theme);
@@ -27,7 +27,7 @@ function useCss(themeId: number, editorCss: string): string {
 
 			:root {
 				background-color: ${theme.backgroundColor};
-				font-size: 13pt;
+				font-size: ${fontSize}${fontSizeUnits};
 			}
 
 			body {
@@ -42,7 +42,7 @@ function useCss(themeId: number, editorCss: string): string {
 				padding-bottom: 1px;
 				padding-top: 10px;
 
-				font-family: ${JSON.stringify(theme.fontFamily)}, sans-serif;
+				font-family: ${fontFamily};
 			}
 
 			.RichTextEditor {
@@ -52,13 +52,10 @@ function useCss(themeId: number, editorCss: string): string {
 				position: relative;
 			}
 		`;
-	}, [themeId, editorCss]);
+	}, [themeId, editorCss, fontFamily, fontSize, fontSizeUnits]);
 }
 
-function useHtml(initialCss: string): string {
-	const cssRef = useRef(initialCss);
-	cssRef.current = initialCss;
-
+function useHtml(): string {
 	return useMemo(() => `
 		<!DOCTYPE html>
 		<html>
@@ -127,8 +124,14 @@ const RichTextEditor: React.FC<EditorProps> = props => {
 		true;
 	`;
 
-	const css = useCss(props.themeId, editorWebViewSetup.pageSetup.css);
-	const html = useHtml(css);
+	const css = useCss(
+		props.themeId,
+		editorWebViewSetup.pageSetup.css,
+		props.editorSettings.themeData.fontFamily,
+		props.editorSettings.themeData.fontSize,
+		props.editorSettings.themeData.fontSizeUnits || 'px',
+	);
+	const html = useHtml();
 
 	const onMessage = useCallback((event: OnMessageEvent) => {
 		const data = event.nativeEvent.data;

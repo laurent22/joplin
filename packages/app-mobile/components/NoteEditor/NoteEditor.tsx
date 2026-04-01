@@ -78,7 +78,7 @@ interface Props {
 
 function fontFamilyFromSettings() {
 	const font = editorFont(Setting.value('style.editor.fontFamily') as number);
-	return font ? `${font}, sans-serif` : 'sans-serif';
+	return font ? `${JSON.stringify(font)}, sans-serif` : 'sans-serif';
 }
 
 function editorTheme(themeId: number) {

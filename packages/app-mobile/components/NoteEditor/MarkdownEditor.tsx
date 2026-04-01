@@ -15,7 +15,7 @@ import useWebViewSetup from '../../contentScripts/markdownEditorBundle/useWebVie
 
 const logger = Logger.create('MarkdownEditor');
 
-function useCss(themeId: number): string {
+function useCss(themeId: number, fontFamily: string, fontSize: number, fontSizeUnits: string): string {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		const themeVariableCss = themeToCss(theme);
@@ -24,6 +24,7 @@ function useCss(themeId: number): string {
 
 			:root {
 				background-color: ${theme.backgroundColor};
+				font-size: ${fontSize}${fontSizeUnits};
 			}
 
 			body {
@@ -37,8 +38,7 @@ function useCss(themeId: number): string {
 				padding-right: 1px;
 				padding-bottom: 1px;
 				padding-top: 10px;
-
-				font-size: 13pt;
+				font-family: ${fontFamily};
 			}
 
 			* {
@@ -79,7 +79,7 @@ function useCss(themeId: number): string {
 				}
 			}
 		`;
-	}, [themeId]);
+	}, [themeId, fontFamily, fontSize, fontSizeUnits]);
 }
 
 function useHtml(): string {
@@ -149,7 +149,12 @@ const MarkdownEditor: React.FC<EditorProps> = props => {
 		true;
 	`;
 
-	const css = useCss(props.themeId);
+	const css = useCss(
+		props.themeId,
+		props.editorSettings.themeData.fontFamily,
+		props.editorSettings.themeData.fontSize,
+		props.editorSettings.themeData.fontSizeUnits || 'px',
+	);
 	const html = useHtml();
 
 	const onMessage = useCallback((event: OnMessageEvent) => {
