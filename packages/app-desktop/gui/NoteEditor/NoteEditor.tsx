@@ -161,6 +161,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		plugins: props.plugins,
 		scrollbarSize: props.scrollbarSize,
 		baseFontFamily: props.viewerFontFamily,
+		viewerFontSize: props.viewerFontSize,
 	});
 
 	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null) => {
@@ -169,7 +170,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			...options,
 		};
 
-		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
+		const theme = { ...themeStyle(options.themeId ? options.themeId : props.themeId), noteViewerFontSize: props.viewerFontSize };
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml(props.plugins, {
 			resourceBaseUrl: getResourceBaseUrl(),
@@ -183,7 +184,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			baseFontFamily: props.viewerFontFamily,
 			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
 		});
-	}, [props.plugins, props.themeId, props.scrollbarSize, props.viewerFontFamily, props.customCss, props.contentMaxWidth]);
+	}, [props.plugins, props.themeId, props.scrollbarSize, props.viewerFontFamily, props.viewerFontSize, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -760,6 +761,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		scrollbarSize: state.settings['style.scrollbarSize'],
 		viewerFontFamily: state.settings['style.viewer.fontFamily'],
+		viewerFontSize: state.settings['style.desktopViewer.fontSize'],
 		tabMovesFocus: state.settings['editor.tabMovesFocus'],
 		isSafeMode: state.settings.isSafeMode,
 		useCustomPdfViewer: false,
