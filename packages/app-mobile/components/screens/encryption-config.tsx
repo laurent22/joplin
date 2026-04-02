@@ -9,8 +9,8 @@ import time from '@joplin/lib/time';
 import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
-import { masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { localSyncInfo, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { getDefaultMasterKey, masterPasswordIsValid, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
@@ -104,6 +104,14 @@ const EncryptionConfigScreen = (props: Props) => {
 		};
 
 		const renderPasswordInput = (masterKeyId: string) => {
+			const onSave = async () => {
+				if (!props.masterPassword && !(await masterPasswordIsValid(password, mk))) {
+					alert(_('Password is invalid. Please try again.'));
+				} else {
+					onSavePasswordClick(mk, inputPasswords);
+				}
+			};
+
 			if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
 				return (
 					<Text style={{ ...styles.normalText, color: theme.colorFaded, fontStyle: 'italic' }}>({_('Master password')})</Text>
@@ -128,7 +136,7 @@ const EncryptionConfigScreen = (props: Props) => {
 							accessibilityRole='image'
 							accessibilityLabel={passwordOk ? _('Valid') : _('Invalid password')}
 						>{passwordOkIcon}</Text>
-						<Button title={_('Save')} onPress={() => onSavePasswordClick(mk, inputPasswords)}></Button>
+						<Button title={_('Save')} onPress={onSave}></Button>
 					</View>
 				);
 			}
@@ -153,14 +161,23 @@ const EncryptionConfigScreen = (props: Props) => {
 		const theme = themeStyle(props.themeId);
 		const masterKey = getDefaultMasterKey();
 		const hasMasterPassword = !!props.masterPassword;
+		const ppk = localSyncInfo().ppk;
+		// When the master key has not yet been synced, the master password can still be changed, so validation does not apply when re-enabling encryption
+		const shouldCreatePassword = !props.masterKeys.length || !ppk;
 
 		const onEnableClick = async () => {
 			try {
 				const password = passwordPromptAnswer;
 				if (!password) throw new Error(_('Password cannot be empty'));
-				const password2 = passwordPromptConfirmAnswer;
-				if (!password2) throw new Error(_('Confirm password cannot be empty'));
-				if (password !== password2) throw new Error(_('Passwords do not match!'));
+
+				if (shouldCreatePassword) {
+					const password2 = passwordPromptConfirmAnswer;
+					if (!password2) throw new Error(_('Confirm password cannot be empty'));
+					if (password !== password2) throw new Error(_('Passwords do not match!'));
+				} else if (!(await masterPasswordIsValid(password, props.masterKeys.find(mk => mk.id === props.activeMasterKeyId)))) {
+					throw new Error(_('Invalid password. Please try again. If you have forgotten your password you will need to reset it.'));
+				}
+
 				await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, password);
 				// await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
 				setPasswordPromptShow(false);
@@ -197,22 +214,27 @@ const EncryptionConfigScreen = (props: Props) => {
 					}}
 				></TextInput>
 
-				<Text nativeID={confirmPasswordLabelId} style={styles.normalText}>{_('Confirm password:')}</Text>
-				<TextInput
-					accessibilityLabelledBy={confirmPasswordLabelId}
-					selectionColor={theme.textSelectionColor}
-					keyboardAppearance={theme.keyboardAppearance}
-					style={styles.normalTextInput}
-					secureTextEntry={true}
-					autoCapitalize='none'
-					autoCorrect={false}
-					textContentType='newPassword'
-					importantForAutofill='yes'
-					value={passwordPromptConfirmAnswer}
-					onChangeText={(text: string) => {
-						setPasswordPromptConfirmAnswer(text);
-					}}
-				></TextInput>
+				{shouldCreatePassword && (
+					<>
+						<Text nativeID={confirmPasswordLabelId} style={styles.normalText}>{_('Confirm password:')}</Text>
+						<TextInput
+							accessibilityLabelledBy={confirmPasswordLabelId}
+							selectionColor={theme.textSelectionColor}
+							keyboardAppearance={theme.keyboardAppearance}
+							style={styles.normalTextInput}
+							secureTextEntry={true}
+							autoCapitalize='none'
+							autoCorrect={false}
+							textContentType='newPassword'
+							importantForAutofill='yes'
+							value={passwordPromptConfirmAnswer}
+							onChangeText={(text: string) => {
+								setPasswordPromptConfirmAnswer(text);
+							}}
+						></TextInput>
+					</>
+				)}
+
 				<View style={{ flexDirection: 'row' }}>
 					<View style={{ flex: 1, marginRight: 10 }}>
 						<Button
