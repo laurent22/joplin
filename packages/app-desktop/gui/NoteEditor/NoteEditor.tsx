@@ -762,7 +762,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		scrollbarSize: state.settings['style.scrollbarSize'],
 		viewerFontFamily: state.settings['style.viewer.fontFamily'],
-		viewerFontSize: state.settings['style.viewer.fontSize'] as number,
+		viewerFontSize: state.settings['style.viewer.fontSizeDesktop'] as number,
 		tabMovesFocus: state.settings['editor.tabMovesFocus'],
 		isSafeMode: state.settings.isSafeMode,
 		useCustomPdfViewer: false,

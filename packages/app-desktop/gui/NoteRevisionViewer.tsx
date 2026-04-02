@@ -238,7 +238,7 @@ const mapStateToProps = (state: AppState) => {
 		themeId: state.settings.theme,
 		scrollbarSize: state.settings['style.scrollbarSize'],
 		fontFamily: state.settings['style.viewer.fontFamily'],
-		fontSize: state.settings['style.viewer.fontSize'] as number,
+		fontSize: state.settings['style.viewer.fontSizeDesktop'] as number,
 		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 	};
 };

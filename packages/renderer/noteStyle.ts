@@ -85,7 +85,9 @@ export default function(theme: any, options: Options = null) {
 	theme = theme ? theme : {};
 
 	const fontFamily = options.baseFontFamily || '\'Avenir Next\', \'Avenir\', \'Arial\', sans-serif';
-	const fontSize = options.baseFontSize ? `${options.baseFontSize}px` : null;
+	const resolvedFontSize = (options.baseFontSize !== null && options.baseFontSize !== undefined && Number.isFinite(options.baseFontSize))
+		? formatCssSize(options.baseFontSize)
+		: formatCssSize(theme.noteViewerFontSize);
 
 	const contentWrapperTarget = options.contentWrapperSelector ?? '#rendered-md';
 	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : contentWrapperTarget;
@@ -106,7 +108,7 @@ export default function(theme: any, options: Options = null) {
 		b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 
 		body {
-			font-size: ${fontSize ?? formatCssSize(theme.noteViewerFontSize)};
+			font-size: ${resolvedFontSize};
 			color: ${theme.color};
 			word-wrap: break-word;
 			line-height: ${theme.lineHeight};
@@ -327,7 +329,7 @@ export default function(theme: any, options: Options = null) {
 		table td, th {
 			text-align: left;
 			padding: .5em 1em .5em 1em;
-			font-size: ${theme.noteViewerFontSize};
+			font-size: ${resolvedFontSize};
 			color: ${theme.color};
 			font-family: ${fontFamily};
 		}
