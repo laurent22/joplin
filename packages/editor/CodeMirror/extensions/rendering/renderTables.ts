@@ -82,30 +82,6 @@ class TableWidget extends WidgetType {
 		});
 	}
 
-	// Sync a single cell edit back to the markdown document.
-	// Does NOT move the cursor so the user can continue working in the widget.
-	private syncCell(view: EditorView, table: Table, row: number, col: number, text: string) {
-		// Sanitise: newlines are illegal in markdown table cells; pipes must be escaped
-		text = text.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
-		if (row === 0) {
-			table.header.cells[col].content = text;
-		} else {
-			const b = row - 1;
-			if (b < table.body.length && col < table.body[b].cells.length) {
-				table.body[b].cells[col].content = text;
-			}
-		}
-		this.saveAndRestoreScroll(view);
-		const newText = serializeTable(table);
-		const doc = view.state.doc;
-		const afterTable = this.to < doc.length ? doc.sliceString(this.to, Math.min(this.to + 2, doc.length)) : '';
-		const needsBlankLine = !afterTable.startsWith('\n\n');
-		const insert = needsBlankLine ? `${newText}\n` : newText;
-		view.dispatch({
-			changes: { from: this.from, to: this.to, insert },
-		});
-	}
-
 	public toDOM(view: EditorView) {
 		const table = parseTable(this.tableText);
 		if (!table) {
@@ -182,6 +158,10 @@ class TableWidget extends WidgetType {
 				// Defer sync so that a click on another cell in the same
 				// table can register before the widget rebuilds.
 				setTimeout(() => {
+					// If the widget was rebuilt (e.g. by a "+" button or
+					// context menu action), the old container is detached.
+					// Do nothing — the rebuild already has the latest data.
+					if (!container.isConnected) return;
 					const v = (textDiv.textContent || '').trim();
 					const orig = isHdr
 						? table.header.cells[c]?.content
@@ -213,16 +193,14 @@ class TableWidget extends WidgetType {
 					e.preventDefault();
 					e.stopPropagation();
 
-					// Sync current cell first if content changed
-					const v = (textDiv.textContent || '').trim();
-					const orig = isHdr
-						? table.header.cells[c]?.content
-						: table.body[r - 1]?.cells[c]?.content;
-					const changed = v !== orig;
-					if (changed) {
-						skipBlurSync = true;
-						this.syncCell(view, table, r, c, v);
-					}
+					skipBlurSync = true;
+
+					// Sync all dirty cells into the table model first
+					syncDirtyCells();
+
+					// Check if any cell content actually changed
+					const newText = serializeTable(table);
+					const isDirty = newText !== this.tableText;
 
 					// Compute target cell index
 					const flat = allCells.flat();
@@ -230,8 +208,9 @@ class TableWidget extends WidgetType {
 					const nextIdx = e.shiftKey ? i - 1 : i + 1;
 
 					if (nextIdx >= 0 && nextIdx < flat.length) {
-						if (changed) {
-							// Widget rebuilds after syncCell — find new cell after rebuild
+						if (isDirty) {
+							// Content changed — apply and refocus after rebuild
+							this.apply(view, table);
 							requestAnimationFrame(() => {
 								const newC = this.findContainer(view);
 								const cells = newC?.querySelectorAll('.cm-tw-text');
@@ -240,22 +219,14 @@ class TableWidget extends WidgetType {
 								}
 							});
 						} else {
+							// No changes — just move focus, no rebuild needed
 							const targetText = flat[nextIdx].querySelector('.cm-tw-text') as HTMLElement;
 							if (targetText) focus('TableWidget', targetText);
 						}
 					} else if (!e.shiftKey) {
 						// Past last cell — add new row and focus its first cell
-						skipBlurSync = true;
-						const cv = (textDiv.textContent || '').trim();
-						const co = isHdr
-							? table.header.cells[c]?.content
-							: table.body[r - 1]?.cells[c]?.content;
-						if (cv !== co) {
-							if (isHdr) table.header.cells[c].content = cv;
-							else table.body[r - 1].cells[c].content = cv;
-						}
-						syncDirtyCells();
-						this.apply(view, addRow(table, numBodyRows - 1));
+						const newTable = addRow(table, numBodyRows - 1);
+						this.apply(view, newTable);
 						const newRowIdx = totalRows * numCols;
 						requestAnimationFrame(() => {
 							const newC = this.findContainer(view);
@@ -268,14 +239,15 @@ class TableWidget extends WidgetType {
 				} else if (e.key === 'Enter' && !e.shiftKey) {
 					e.preventDefault();
 					skipBlurSync = true;
-					// Sync current cell
-					const v = (textDiv.textContent || '').trim();
-					const orig = isHdr
-						? table.header.cells[c]?.content
-						: table.body[r - 1]?.cells[c]?.content;
-					if (v !== orig) this.syncCell(view, table, r, c, v);
+					syncDirtyCells();
 					if (r === totalRows - 1 && c === numCols - 1) {
 						this.apply(view, addRow(table, numBodyRows - 1));
+					} else {
+						// Only apply if content actually changed
+						const enterText = serializeTable(table);
+						if (enterText !== this.tableText) {
+							this.apply(view, table);
+						}
 					}
 				} else if (e.key === 'Escape') {
 					e.preventDefault();
@@ -482,6 +454,12 @@ class TableWidget extends WidgetType {
 				menu.appendChild(div);
 			}
 			container.appendChild(menu);
+			// Clamp menu position so it stays within the viewport
+			const menuRect = menu.getBoundingClientRect();
+			const vw = window.innerWidth;
+			const vh = window.innerHeight;
+			if (menuRect.right > vw) menu.style.left = `${vw - menuRect.width - 4}px`;
+			if (menuRect.bottom > vh) menu.style.top = `${vh - menuRect.height - 4}px`;
 			const close = () => {
 				clearHighlight();
 				menu.remove();
