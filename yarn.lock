@@ -7328,17 +7328,17 @@ __metadata:
   linkType: hard
 
 "@crowdin/cli@npm:4":
-  version: 4.11.0
-  resolution: "@crowdin/cli@npm:4.11.0"
+  version: 4.14.1
+  resolution: "@crowdin/cli@npm:4.14.1"
   dependencies:
     command-exists-promise: "npm:^2.0.2"
     node-fetch: "npm:2.7.0"
-    shelljs: "npm:^0.8.5"
-    tar: "npm:^7.4.3"
+    shelljs: "npm:^0.10.0"
+    tar: "npm:^7.5.2"
     yauzl: "npm:^3.2.0"
   bin:
     crowdin: jdeploy-bundle/jdeploy.js
-  checksum: 10/e5e53a07d9f397bcb195ccd51d02aa322c5d63ff7a5b42411423186be0969c72004907593481d5510090c5edf8090dae729b19d3defbef34bcb60dbdf82f4b40
+  checksum: 10/ea45a7e6c7668cb4d8d3a08bfcba7988cccb2b52f815838f913c4ca50c0d2b9834a8e2ebaf476489c3e4e4731d8f7eb3f7f880b2452817b5126ae31013a86775
   languageName: node
   linkType: hard
 
@@ -47576,6 +47576,16 @@ __metadata:
   version: 1.8.3
   resolution: "shell-quote@npm:1.8.3"
   checksum: 10/5473e354637c2bd698911224129c9a8961697486cff1fb221f234d71c153fc377674029b0223d1d3c953a68d451d79366abfe53d1a0b46ee1f28eb9ade928f4c
+  languageName: node
+  linkType: hard
+
+"shelljs@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "shelljs@npm:0.10.0"
+  dependencies:
+    execa: "npm:^5.1.1"
+    fast-glob: "npm:^3.3.2"
+  checksum: 10/5e7836699db2d06e1f28184b9c12f9b0d862e51a670929e5aadb085cfd10fb477a31716dc0147f8248c0a7490ec64e18fc9259488dc02ceac67af67a80fa552d
   languageName: node
   linkType: hard
 
