@@ -105,7 +105,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 		const renderPasswordInput = (masterKeyId: string) => {
 			const onSave = async () => {
-				if (!props.masterPassword && !(await masterPasswordIsValid(password, mk))) {
+				if (!props.masterPassword && password && !(await masterPasswordIsValid(password, mk))) {
 					alert(_('Password is invalid. Please try again.'));
 				} else {
 					onSavePasswordClick(mk, inputPasswords);
