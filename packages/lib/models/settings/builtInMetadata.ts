@@ -1303,6 +1303,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			section: 'appearance',
 			label: () => _('Viewer and Rich Text Editor font size'),
+			description: () => _('Controls the font size for the note viewer and the Rich Text Editor'),
 			minimum: 4,
 			maximum: 50,
 			step: 1,
