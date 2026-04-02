@@ -41,6 +41,10 @@ function useCss(themeId: number, fontFamily: string, fontSize: number, fontSizeU
 				font-family: ${fontFamily};
 			}
 
+			.cm-editor, .cm-editor * {
+				font-family: ${fontFamily} !important;
+			}
+
 			* {
 				scrollbar-width: thin;
 				scrollbar-color: rgba(100, 100, 100, 0.7) rgba(0, 0, 0, 0.1);

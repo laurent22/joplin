@@ -3,7 +3,7 @@ import themeToCss from '@joplin/lib/services/style/themeToCss';
 import ExtendedWebView from '../ExtendedWebView';
 
 import * as React from 'react';
-import { useMemo, useCallback, useRef } from 'react';
+import { useMemo, useCallback } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 
 import { EditorProps } from './types';
@@ -43,6 +43,10 @@ function useCss(themeId: number, editorCss: string, fontFamily: string, fontSize
 				padding-top: 10px;
 
 				font-family: ${fontFamily};
+			}
+
+			.prosemirror-editor, .prosemirror-editor *, .ProseMirror, .ProseMirror *, .RichTextEditor, .RichTextEditor * {
+				font-family: ${fontFamily} !important;
 			}
 
 			.RichTextEditor {
