@@ -1,4 +1,5 @@
 import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib';
+import { PDFBool, PDFName } from 'pdf-lib';
 import { PdfOcrDetails, RecognizeResultLine } from './types';
 
 // The PDF OCR images are created at 2x scale by pdfToImages()
@@ -106,6 +107,14 @@ const createAccessiblePdf = async (
 		// Add invisible text layer on top
 		addInvisibleTextLayer(page, pageOcr.lines, font, pageWidth, pageHeight);
 	}
+
+	// Mark the PDF as tagged for accessibility (PDF/UA compliance)
+	// This adds MarkInfo and ViewerPreferences to the catalog,
+	// enabling screen readers to recognize this as a tagged document.
+	const markInfo = pdfDoc.context.obj({ Marked: PDFBool.True });
+	pdfDoc.catalog.set(PDFName.of('MarkInfo'), markInfo);
+	const viewerPrefs = pdfDoc.context.obj({ DisplayDocTitle: PDFBool.True });
+	pdfDoc.catalog.set(PDFName.of('ViewerPreferences'), viewerPrefs);
 
 	return pdfDoc.save();
 };
