@@ -1419,6 +1419,7 @@ packages/lib/services/CommandService.test.js
 packages/lib/services/CommandService.js
 packages/lib/services/DecryptionWorker.test.js
 packages/lib/services/DecryptionWorker.js
+packages/lib/services/ExternalEditWatcher.test.js
 packages/lib/services/ExternalEditWatcher.js
 packages/lib/services/ExternalEditWatcher/utils.js
 packages/lib/services/ItemChangeUtils.js

@@ -114,6 +114,7 @@ export default class Tag extends BaseItem {
 		this.dispatch({
 			type: 'NOTE_TAG_REMOVE',
 			item: tag,
+			noteId: noteId,
 		});
 	}
 

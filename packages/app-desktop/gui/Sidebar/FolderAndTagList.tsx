@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AppState } from '../../app.reducer';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import areAllFoldersCollapsed from '@joplin/lib/models/utils/areAllFoldersCollapsed';
+import getCanBeCollapsedFolderIds from '@joplin/lib/models/utils/getCanBeCollapsedFolderIds';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -48,6 +49,11 @@ const FolderAndTagList: React.FC<Props> = props => {
 		return areAllFoldersCollapsed(props.folders, props.collapsedFolderIds);
 	}, [props.collapsedFolderIds, props.folders]);
 
+	const hasSubFolders = useMemo(() => {
+		return getCanBeCollapsedFolderIds(props.folders).length > 0;
+	}, [props.folders]);
+
+
 	const listContainerRef = useRef<HTMLDivElement|null>(null);
 	const onRenderItem = useOnRenderItem({
 		...props,
@@ -76,7 +82,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 
-	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler });
+	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler, hasSubFolders });
 
 	return (
 		<div

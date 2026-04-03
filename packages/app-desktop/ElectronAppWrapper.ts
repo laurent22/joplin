@@ -395,20 +395,6 @@ export default class ElectronAppWrapper {
 		};
 		addWindowEventHandlers(this.win_.webContents);
 
-		// BrowserWindow 'focus' fires when the OS gives focus to the application window
-		// (i.e. coming from another app or from the taskbar), not on intra-app focus switches.
-		// We use a dedicated IPC channel so the renderer can trigger an immediate sync on
-		// OS-level focus gain without conflating it with the 'window-focused' channel that
-		// handles Joplin-internal window routing.
-		this.win_.on('focus', () => {
-			try {
-				this.win_?.webContents.send('main-window-focused');
-			} catch (error) {
-				// Can fail if the render frame is temporarily disposed during window teardown.
-				console.warn('Failed to send main-window-focused:', error);
-			}
-		});
-
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		this.win_.on('close', (event: any) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)

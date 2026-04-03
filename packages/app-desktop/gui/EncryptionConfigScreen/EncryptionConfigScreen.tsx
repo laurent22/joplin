@@ -20,6 +20,10 @@ import ToggleAdvancedSettingsButton from '../ConfigScreen/controls/ToggleAdvance
 import MacOSMissingPasswordHelpLink from '../ConfigScreen/controls/MissingPasswordHelpLink';
 import { Dispatch } from 'redux';
 import { shouldCancelPendingEnableAfterMasterPasswordDialog, shouldOpenMasterPasswordDialogForEnable, shouldResumeEnableAfterMasterPasswordDialog } from './enableFlow';
+import Dialog from '@joplin/lib/components/Dialog';
+import DialogButtonRow from '../DialogButtonRow';
+import DialogTitle from '../DialogTitle';
+import PasswordInput from '../PasswordInput/PasswordInput';
 
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -39,6 +43,10 @@ interface Props {
 export const EncryptionConfigScreen = (props: Props) => {
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
 	const [pendingEnableEncryption, setPendingEnableEncryption] = useState(false);
+	const [enableEncryptionPromptVisible, setEnableEncryptionPromptVisible] = useState(false);
+	const [enableEncryptionPassword, setEnableEncryptionPassword] = useState('');
+	const promptPromiseRef = useRef<(password: string | null)=> void>(null);
+
 	const wasMasterPasswordDialogOpen = useRef(props.masterPasswordDialogOpen);
 
 	const theme = useMemo(() => {
@@ -235,7 +243,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 		const newEnabled = !isEnabled;
 		const masterKey = getDefaultMasterKey();
 		const hasMasterPassword = !!props.masterPassword;
-		let newPassword = '';
+		let newPassword: string | null = '';
 
 		if (isEnabled) {
 			const answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
@@ -253,8 +261,14 @@ export const EncryptionConfigScreen = (props: Props) => {
 				return;
 			}
 
-			const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
-			newPassword = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
+			// Wait for the custom React Dialog to resolve
+			setEnableEncryptionPassword('');
+			setEnableEncryptionPromptVisible(true);
+			newPassword = await new Promise<string | null>((resolve) => {
+				promptPromiseRef.current = resolve;
+			});
+
+			if (newPassword === null) return; // User cancelled
 		}
 
 		if (hasMasterPassword && newEnabled) {
@@ -270,6 +284,63 @@ export const EncryptionConfigScreen = (props: Props) => {
 			await dialogs.alert(error.message);
 		}
 	}, [props.dispatch, props.masterPassword, props.masterPasswordDialogOpen]);
+
+	const renderEnableEncryptionDialog = () => {
+		if (!enableEncryptionPromptVisible) return null;
+
+		const masterKey = getDefaultMasterKey();
+		const hasMasterPassword = !!props.masterPassword;
+
+		const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
+		const messageComps = msg.map((m, index) => <p key={index} style={theme.textStyle}>{m}</p>);
+
+		const onClose = () => {
+			setEnableEncryptionPromptVisible(false);
+			if (promptPromiseRef.current) promptPromiseRef.current(null);
+		};
+
+		const onDialogButtonRowClick = (event: { buttonName: string }) => {
+			if (event.buttonName === 'cancel') {
+				onClose();
+				return;
+			}
+			if (event.buttonName === 'ok') {
+				setEnableEncryptionPromptVisible(false);
+				if (promptPromiseRef.current) promptPromiseRef.current(enableEncryptionPassword);
+			}
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required because PasswordInput's ChangeEventHandler type is incorrect
+		const onPasswordInputChange = (event: any) => {
+			setEnableEncryptionPassword(event.target.value);
+		};
+
+		return (
+			<Dialog onCancel={onClose} className="enable-encryption-dialog">
+				<div className="dialog-root">
+					<DialogTitle title={_('Enable encryption')}/>
+					<div className="dialog-content">
+						<div style={{ marginBottom: 16 }}>
+							{messageComps}
+						</div>
+						<div style={{ marginBottom: 16 }}>
+							<label style={{ ...theme.textStyle, marginBottom: 5, display: 'block' }} htmlFor="enable-encryption-password">{_('Password:')}</label>
+							<PasswordInput
+								inputId="enable-encryption-password"
+								value={enableEncryptionPassword}
+								onChange={onPasswordInputChange}
+							/>
+						</div>
+					</div>
+					<DialogButtonRow
+						themeId={props.themeId}
+						onClick={onDialogButtonRowClick}
+						okButtonDisabled={!enableEncryptionPassword}
+					/>
+				</div>
+			</Dialog>
+		);
+	};
 
 	const renderEncryptionSection = () => {
 		const decryptedItemsInfo = <p>{decryptedStatText(stats)}</p>;
@@ -451,6 +522,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			{renderMasterKeySection(props.masterKeys.filter(mk => !masterKeyEnabled(mk)), false)}
 			{renderNonExistingMasterKeysSection()}
 			{renderAdvancedSection()}
+			{renderEnableEncryptionDialog()}
 		</div>
 	);
 };

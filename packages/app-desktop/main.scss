@@ -286,18 +286,18 @@ Component-specific classes
 	padding-bottom: 20px;
 }
 
-.master-password-dialog .dialog-root {
+.master-password-dialog .dialog-root, .enable-encryption-dialog .dialog-root {
 	min-width: 500px;
 	max-width: 600px;
 }
 
-.master-password-dialog .dialog-content {
+.master-password-dialog .dialog-content, .enable-encryption-dialog .dialog-content {
 	background-color: var(--joplin-background-color3);
 	padding: 1em;
 	padding-bottom: 1px;
 }
 
-.master-password-dialog .current-password-wrapper {
+.master-password-dialog .current-password-wrapper, .enable-encryption-dialog .current-password-wrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

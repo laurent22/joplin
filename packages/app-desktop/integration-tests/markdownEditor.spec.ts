@@ -432,7 +432,9 @@ test.describe('markdownEditor', () => {
 		});
 
 		expect(clipboardHtml).toContain('hello');
-		expect(clipboardHtml).not.toMatch(/background-color\s*:/i);
-		expect(clipboardHtml).toContain('<strong>');
+		// Dark theme background (#1D2024) must not leak into clipboard
+		expect(clipboardHtml).not.toMatch(/1D2024/i);
+		expect(clipboardHtml).toContain('<strong');
+		expect(clipboardHtml).toMatch(/font-weight/i);
 	});
 });

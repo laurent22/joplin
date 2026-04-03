@@ -2041,7 +2041,7 @@ PODS:
     - React-Core
   - RNFileViewer (2.1.5):
     - React-Core
-  - RNLocalize (3.6.0):
+  - RNLocalize (3.6.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2630,7 +2630,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 19ffa303c4524ec0a2dfdee2658198451c16b7f1
   RNDeviceInfo: bcce8752b5043a623fe3c26789679b473f705d3c
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
-  RNLocalize: 83a242b38886bf7e84073410c101e9ea39a1c1a5
+  RNLocalize: 44b09911588826d01c5b949e8e3f9ed5fae16b32
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
   RNShare: 0e600372fb35783fe30d413efd28d11de2bf6cf0
