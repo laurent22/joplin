@@ -40,10 +40,12 @@ const toggleInlineRegionSurrounded = (
 		// E.g. selecting "word " and bolding should produce "**word** ", not "**word **".
 		// This mirrors the identical guard already present in the CodeMirror v5 wrapSelections helper.
 		const rawContent = doc.sliceString(sel.from, sel.to);
-		const leadingWS = rawContent.length - rawContent.trimStart().length;
-		const trailingWS = rawContent.length - rawContent.trimEnd().length;
-		const effectiveStart = sel.from + leadingWS;
-		const effectiveEnd = sel.to - trailingWS;
+		let effectiveStart = sel.from;
+		let effectiveEnd = sel.to;
+		if (rawContent.trim().length > 0) {
+			effectiveStart = sel.from + (rawContent.length - rawContent.trimStart().length);
+			effectiveEnd = sel.to - (rawContent.length - rawContent.trimEnd().length);
+		}
 
 		changes.push({
 			from: effectiveStart,

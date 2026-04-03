@@ -75,6 +75,15 @@ describe('markdownCommands', () => {
 		expect(editor4.state.doc.toString()).toBe(' **word** ');
 	});
 
+	it('should gracefully handle applying formatting to whitespace-only selections', async () => {
+		const onlySpaces = '   ';
+		const editorSpace = await createTestEditor(
+			onlySpaces, EditorSelection.range(0, onlySpaces.length), [],
+		);
+		expect(() => toggleBolded(editorSpace)).not.toThrow();
+		expect(editorSpace.state.doc.toString()).toBe('**   **');
+	});
+
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
 		const editor = await createTestEditor(
