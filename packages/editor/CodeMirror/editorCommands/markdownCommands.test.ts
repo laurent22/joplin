@@ -38,6 +38,82 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
+	test.each([
+		{
+			title: 'bulleted list',
+			command: toggleBolded,
+			input: '- one\n- two',
+			expected: '- **one**\n- **two**',
+		},
+		{
+			title: 'ordered list',
+			command: toggleItalicized,
+			input: '1. one\n2. two',
+			expected: '1. *one*\n2. *two*',
+		},
+		{
+			title: 'check list',
+			command: toggleBolded,
+			input: '- [ ] one\n- [x] two',
+			expected: '- [ ] **one**\n- [x] **two**',
+		},
+		{
+			title: 'blockquote list',
+			command: toggleBolded,
+			input: '> - one\n> - two',
+			expected: '> - **one**\n> - **two**',
+		},
+		{
+			title: 'blank lines',
+			command: toggleBolded,
+			input: '- one\n\n- two',
+			expected: '- **one**\n\n- **two**',
+		},
+		{
+			title: 'mixed content',
+			command: toggleBolded,
+			input: 'text\n- list\nmore',
+			expected: '**text**\n- **list**\n**more**',
+		},
+	])('should format multiline selections line-by-line for $title', async ({ command, input, expected }) => {
+		const editor = await createTestEditor(
+			input,
+			EditorSelection.range(0, input.length),
+			[],
+		);
+
+		command(editor);
+		expect(editor.state.doc.toString()).toBe(expected);
+	});
+
+	it('should toggle multiline list formatting off when applying bold twice', async () => {
+		const initialDocText = '- one\n- two';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			[],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.selection.main.from).toBe(0);
+		expect(editor.state.selection.main.to).toBe(editor.state.doc.length);
+		toggleBolded(editor);
+
+		expect(editor.state.doc.toString()).toBe(initialDocText);
+	});
+
+	it('should keep fenced code multiline behavior when applying bold', async () => {
+		const initialDocText = '```\none\ntwo\n```';
+		const editor = await createTestEditor(
+			initialDocText,
+			EditorSelection.range(0, initialDocText.length),
+			['FencedCode'],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('**```\none\ntwo\n```**');
+	});
+
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
 		const editor = await createTestEditor(
