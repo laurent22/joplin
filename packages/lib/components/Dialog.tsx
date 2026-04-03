@@ -139,13 +139,10 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 		const dialog = containerDocument.createElement('dialog');
 		dialog.classList.add('dialog-modal-layer');
 		dialog.addEventListener('cancel', event => {
-			const canCancel = !!onCancelRef.current;
-			if (!canCancel) {
-				// Prevents [Escape] from closing the dialog. In many places, this is handled
-				// by external logic.
-				// See https://stackoverflow.com/a/61021326
-				event.preventDefault();
-			}
+			// Prevent the native dialog element from auto-closing so the app can
+			// decide whether to close (for example, to confirm unsaved changes).
+			event.preventDefault();
+			onCancelRef.current?.();
 		});
 
 		const removedReturnValue = 'removed-from-dom';

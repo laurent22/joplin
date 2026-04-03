@@ -51,32 +51,36 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 		props.onCloseRequested?.();
 	}, [props.onCloseRequested, noteId, noteTags]);
 
-	const onCancelPress = useCallback(() => {
-		props.onCloseRequested?.();
-	}, [props.onCloseRequested]);
-
 	const hasUnsavedChanges = useCallback(() => {
 		if (noteTags.length !== originalTags.length) return true;
 		return noteTags.some(tag => !originalTags.includes(tag)) ||
 			originalTags.some(tag => !noteTags.includes(tag));
 	}, [noteTags, originalTags]);
 
-	const onModalClose = useCallback(async () => {
+	const canClose = useCallback(async () => {
 		if (hasUnsavedChanges()) {
 			const shouldDiscard = await shim.showConfirmationDialog(
 				_('You have unsaved tag changes. Discard them?'),
 			);
-			if (!shouldDiscard) return;
+			if (!shouldDiscard) return false;
 		}
-		onCancelPress();
-	}, [onCancelPress, hasUnsavedChanges]);
+
+		return true;
+	}, [hasUnsavedChanges]);
+
+	const onCloseRequest = useCallback(() => {
+		void (async () => {
+			if (!await canClose()) return;
+			props.onCloseRequested?.();
+		})();
+	}, [canClose, props.onCloseRequested]);
 
 	const modalProps = useMemo(() => {
 		return {
 			...modalPropOverrides,
-			onClose: onModalClose,
+			onClose: onCloseRequest,
 		};
-	}, [onModalClose]);
+	}, [onCloseRequest]);
 
 	useAsyncEffect(async (event) => {
 		const tags = await Tag.tagsByNoteId(noteId);
@@ -90,7 +94,7 @@ const NoteTagsDialogComponent: React.FC<Props> = props => {
 	return <ModalDialog
 		themeId={props.themeId}
 		onOkPress={onOkayPress}
-		onCancelPress={onCancelPress}
+		onCancelPress={onCloseRequest}
 		buttonBarEnabled={!savingTags}
 		okTitle={_('Apply')}
 		cancelTitle={_('Cancel')}
