@@ -38,6 +38,43 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
+	it('should not wrap trailing or leading whitespace inside bold/italic markers (issue #14990)', async () => {
+		// Selecting "word " (with a trailing space) and bolding should produce "**word** "
+		const trailingSpace = 'word ';
+		const editor1 = await createTestEditor(
+			trailingSpace, EditorSelection.range(0, trailingSpace.length), [],
+		);
+		toggleBolded(editor1);
+		expect(editor1.state.doc.toString()).toBe('**word** ');
+
+		// Toggling again should restore the original text
+		toggleBolded(editor1);
+		expect(editor1.state.doc.toString()).toBe('word ');
+
+		// Same check for italic
+		const editor2 = await createTestEditor(
+			trailingSpace, EditorSelection.range(0, trailingSpace.length), [],
+		);
+		toggleItalicized(editor2);
+		expect(editor2.state.doc.toString()).toBe('*word* ');
+
+		// Leading whitespace should also stay outside the markers
+		const leadingSpace = ' word';
+		const editor3 = await createTestEditor(
+			leadingSpace, EditorSelection.range(0, leadingSpace.length), [],
+		);
+		toggleBolded(editor3);
+		expect(editor3.state.doc.toString()).toBe(' **word**');
+
+		// Both leading and trailing whitespace
+		const bothSpaces = ' word ';
+		const editor4 = await createTestEditor(
+			bothSpaces, EditorSelection.range(0, bothSpaces.length), [],
+		);
+		toggleBolded(editor4);
+		expect(editor4.state.doc.toString()).toBe(' **word** ');
+	});
+
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
 		const editor = await createTestEditor(

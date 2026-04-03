@@ -36,23 +36,33 @@ const toggleInlineRegionSurrounded = (
 			insert: content,
 		});
 	} else {
+		// Trim leading/trailing whitespace so that formatting markers don't wrap spaces.
+		// E.g. selecting "word " and bolding should produce "**word** ", not "**word **".
+		// This mirrors the identical guard already present in the CodeMirror v5 wrapSelections helper.
+		const rawContent = doc.sliceString(sel.from, sel.to);
+		const leadingWS = rawContent.length - rawContent.trimStart().length;
+		const trailingWS = rawContent.length - rawContent.trimEnd().length;
+		const effectiveStart = sel.from + leadingWS;
+		const effectiveEnd = sel.to - trailingWS;
+
 		changes.push({
-			from: sel.from,
+			from: effectiveStart,
 			insert: spec.template.start,
 		});
 
 		changes.push({
-			from: sel.to,
+			from: effectiveEnd,
 			insert: spec.template.end,
 		});
 
 		// If not a caret,
 		if (!sel.empty) {
-			// Select the surrounding chars.
-			finalSelEnd += spec.template.start.length + spec.template.end.length;
+			// Select the surrounding chars (from start-marker to end-marker, inclusive).
+			finalSelStart = effectiveStart;
+			finalSelEnd = effectiveEnd + spec.template.start.length + spec.template.end.length;
 		} else {
 			// Position the caret within the added content.
-			finalSelStart = sel.from + spec.template.start.length;
+			finalSelStart = effectiveStart + spec.template.start.length;
 			finalSelEnd = finalSelStart;
 		}
 	}
