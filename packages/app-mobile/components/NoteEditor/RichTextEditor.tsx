@@ -19,11 +19,11 @@ import shim from '@joplin/lib/shim';
 
 const logger = Logger.create('RichTextEditor');
 
-function useCss(themeId: number, editorCss: string): string {
+function useCss(themeId: number, editorCss: string, fontFamilyId: number): string {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		const themeVariableCss = themeToCss(theme);
-		const font = editorFont(Setting.value('style.editor.fontFamily') as number);
+		const font = editorFont(fontFamilyId);
 		const fontFamily = font ? `${JSON.stringify(font)}, sans-serif` : 'sans-serif';
 		return `
 			${themeVariableCss}
@@ -56,7 +56,7 @@ function useCss(themeId: number, editorCss: string): string {
 				position: relative;
 			}
 		`;
-	}, [themeId, editorCss]);
+	}, [themeId, editorCss, fontFamilyId]);
 }
 
 function useHtml(initialCss: string): string {
@@ -131,7 +131,7 @@ const RichTextEditor: React.FC<EditorProps> = props => {
 		true;
 	`;
 
-	const css = useCss(props.themeId, editorWebViewSetup.pageSetup.css);
+	const css = useCss(props.themeId, editorWebViewSetup.pageSetup.css, Setting.value('style.editor.fontFamily') as number);
 	const html = useHtml(css);
 
 	const onMessage = useCallback((event: OnMessageEvent) => {
