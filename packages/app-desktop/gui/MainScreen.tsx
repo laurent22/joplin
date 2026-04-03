@@ -146,6 +146,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private styleKey_: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private styles_: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private ipcAsyncMessageHandler_: ((_event: any, message: string, args: any)=> void) | null = null;
+	private appCloseHandler_: (()=> Promise<void>) | null = null;
 
 	public constructor(props: Props) {
 		super(props);
@@ -163,23 +166,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		this.updateMainLayout(this.buildLayout(props.plugins));
 
-		this.setupAppCloseHandling();
-
 		this.resizableLayout_resize = this.resizableLayout_resize.bind(this);
 		this.resizableLayout_renderItem = this.resizableLayout_renderItem.bind(this);
 		this.resizableLayout_moveButtonClick = this.resizableLayout_moveButtonClick.bind(this);
 		this.window_resize = this.window_resize.bind(this);
 		this.rowHeight = this.rowHeight.bind(this);
 		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
-
-		window.addEventListener('resize', this.window_resize);
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
-			if (message === 'openCallbackUrl') {
-				this.openCallbackUrl(args.url);
-			}
-		});
 
 		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
 		if (initialCallbackUrl) {
@@ -279,7 +271,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		// For example, it cannot be closed right away if a note is being saved.
 		// If a note is being saved, we wait till it is saved and then call
 		// "appCloseReply" again.
-		ipcRenderer.on('appClose', async () => {
+		this.appCloseHandler_ = async () => {
 			logger.info('[appClose] Received appClose event - hasNotesBeingSaved:', this.props.hasNotesBeingSaved);
 			if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
 			this.waitForNotesSavedIID_ = null;
@@ -306,7 +298,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 					}
 				}, 50);
 			}
-		});
+		};
+		ipcRenderer.on('appClose', this.appCloseHandler_);
 	}
 
 	public updateMainLayout(layout: LayoutItem) {
@@ -368,12 +361,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	public componentDidMount() {
+		window.addEventListener('resize', this.window_resize);
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		this.ipcAsyncMessageHandler_ = (_event: any, message: string, args: any) => {
+			if (message === 'openCallbackUrl') {
+				this.openCallbackUrl(args.url);
+			}
+		};
+		ipcRenderer.on('asynchronous-message', this.ipcAsyncMessageHandler_);
+		this.setupAppCloseHandling();
 	}
 
 	public componentWillUnmount() {
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
+		if (this.ipcAsyncMessageHandler_) ipcRenderer.removeListener('asynchronous-message', this.ipcAsyncMessageHandler_);
+		if (this.appCloseHandler_) ipcRenderer.removeListener('appClose', this.appCloseHandler_);
 	}
 
 	public rootLayoutSize() {
