@@ -119,15 +119,20 @@ export const useInputMasterPassword = (masterKeys: MasterKeyEntity[], activeMast
 		if (!(await masterPasswordIsValid(inputMasterPassword, masterKeys.find(mk => mk.id === activeMasterKeyId)))) {
 			alert('Password is invalid. Please try again.');
 		} else {
-			for (const mk of masterKeys) {
-				EncryptionService.instance().unloadMasterKey(mk);
+			try {
+				for (const mk of masterKeys) {
+					EncryptionService.instance().unloadMasterKey(mk);
+				}
+				await loadMasterKeysFromSettings(EncryptionService.instance());
+				await DecryptionWorker.instance().clearDisabledItems();
+				void DecryptionWorker.instance().scheduleStart();
+			} catch (error) {
+				reg.logger().error('Failed to reload master keys after password change:', error);
+				await loadMasterKeysFromSettings(EncryptionService.instance());
 			}
-			await loadMasterKeysFromSettings(EncryptionService.instance());
-			await DecryptionWorker.instance().clearDisabledItems();
-			void DecryptionWorker.instance().scheduleStart();
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [inputMasterPassword]);
+	}, [inputMasterPassword, masterKeys, activeMasterKeyId]);
 
 	const onMasterPasswordChange = useCallback((password: string) => {
 		setInputMasterPassword(password);
