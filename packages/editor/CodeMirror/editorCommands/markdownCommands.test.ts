@@ -38,6 +38,32 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
+	it.each([
+		{
+			initial: 'x ABC y',
+			selection: EditorSelection.range(1, 6),
+			afterToggle: 'x **ABC** y',
+			selFrom: 2,
+			selTo: 9,
+		},
+		{
+			initial: 'x **ABC** y',
+			selection: EditorSelection.range(1, 10),
+			afterToggle: 'x ABC y',
+			selFrom: 2,
+			selTo: 5,
+		},
+	])('toggleBolded keeps selection-edge whitespace outside markers %#', async ({ initial, selection, afterToggle, selFrom, selTo }) => {
+		const editor = await createTestEditor(initial, selection, []);
+
+		toggleBolded(editor);
+
+		const mainSel = editor.state.selection.main;
+		expect(editor.state.doc.toString()).toBe(afterToggle);
+		expect(mainSel.from).toBe(selFrom);
+		expect(mainSel.to).toBe(selTo);
+	});
+
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
 		const editor = await createTestEditor(

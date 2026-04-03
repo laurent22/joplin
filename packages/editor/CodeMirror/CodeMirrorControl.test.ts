@@ -195,6 +195,14 @@ describe('CodeMirrorControl', () => {
 			typeText: 'cursor',
 			expected: 'This [cursor]\ntest[cursor]',
 		},
+		{
+			initialText: 'x ABC y',
+			selection: EditorSelection.range(1, 6),
+			left: '[',
+			right: '](test)',
+			typeText: null,
+			expected: 'x [ABC](test) y',
+		},
 	])('wrapSelections should surround all selections with the given text (case %#)', ({ initialText, selection, typeText, left, right, expected }) => {
 		const control = createEditorControl(initialText);
 		control.editor.dispatch({
