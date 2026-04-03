@@ -1,6 +1,8 @@
 import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import ExtendedWebView from '../ExtendedWebView';
+import Setting from '@joplin/lib/models/Setting';
+import { editorFont } from '../global-style';
 
 import * as React from 'react';
 import { useMemo, useCallback, useRef } from 'react';
@@ -21,6 +23,8 @@ function useCss(themeId: number, editorCss: string): string {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		const themeVariableCss = themeToCss(theme);
+		const font = editorFont(Setting.value('style.editor.fontFamily') as number);
+		const fontFamily = font ? `${JSON.stringify(font)}, sans-serif` : 'sans-serif';
 		return `
 			${themeVariableCss}
 			${editorCss}
@@ -42,7 +46,7 @@ function useCss(themeId: number, editorCss: string): string {
 				padding-bottom: 1px;
 				padding-top: 10px;
 
-				font-family: ${JSON.stringify(theme.fontFamily)}, sans-serif;
+				font-family: ${fontFamily} !important;
 			}
 
 			.RichTextEditor {
