@@ -119,6 +119,7 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 
 	const onCancelRef = useRef(onCancel);
 	onCancelRef.current = onCancel;
+	const skipCloseCancelRef = useRef(false);
 
 	const [clickedOutsideContent, setClickedOutsideContent] = useClickedOutsideContent(dialogElement);
 
@@ -126,6 +127,7 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 		if (clickedOutsideContent) {
 			const onCancel = onCancelRef.current;
 			if (onCancel) {
+				skipCloseCancelRef.current = true;
 				onCancel();
 			} else {
 				setClickedOutsideContent(false);
@@ -142,15 +144,18 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 			// Prevent the native dialog element from auto-closing so the app can
 			// decide whether to close (for example, to confirm unsaved changes).
 			event.preventDefault();
+			skipCloseCancelRef.current = true;
 			onCancelRef.current?.();
 		});
 
 		const removedReturnValue = 'removed-from-dom';
 		dialog.addEventListener('close', () => {
 			const closedByCancel = dialog.returnValue !== removedReturnValue;
-			if (closedByCancel) {
+			if (closedByCancel && !skipCloseCancelRef.current) {
 				onCancelRef.current?.();
 			}
+
+			skipCloseCancelRef.current = false;
 
 			// Work around what seems to be an Electron bug -- if an input or contenteditable region is refocused after
 			// dismissing a dialog, it won't be editable.
