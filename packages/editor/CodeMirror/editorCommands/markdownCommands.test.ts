@@ -38,6 +38,36 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
+	it('should place formatting markers inside trailing whitespace', async () => {
+		const initialDocText = 'ABC  ';
+		const editor = await createTestEditor(
+			initialDocText, EditorSelection.range(0, initialDocText.length), [],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('**ABC**  ');
+	});
+
+	it('should place formatting markers inside leading whitespace', async () => {
+		const initialDocText = '  ABC';
+		const editor = await createTestEditor(
+			initialDocText, EditorSelection.range(0, initialDocText.length), [],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('  **ABC**');
+	});
+
+	it('should place formatting markers inside both leading and trailing whitespace', async () => {
+		const initialDocText = '  ABC  ';
+		const editor = await createTestEditor(
+			initialDocText, EditorSelection.range(0, initialDocText.length), [],
+		);
+
+		toggleBolded(editor);
+		expect(editor.state.doc.toString()).toBe('  **ABC**  ');
+	});
+
 	it('for a cursor, bolding, then italicizing, should produce a bold-italic region', async () => {
 		const initialDocText = '';
 		const editor = await createTestEditor(
