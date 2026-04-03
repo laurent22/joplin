@@ -25,7 +25,10 @@ const toggleInlineRegionSurrounded = (
 		const coreFrom = sel.from + leadLen;
 		const coreTo = sel.to - trailLen;
 		if (coreFrom >= coreTo) {
-			return { range: sel };
+			return {
+				range: sel,
+				didChange: false,
+			};
 		}
 		workSel = EditorSelection.range(coreFrom, coreTo);
 	}
@@ -78,6 +81,7 @@ const toggleInlineRegionSurrounded = (
 	return {
 		changes,
 		range: EditorSelection.range(finalSelStart, finalSelEnd),
+		didChange: true,
 	};
 };
 

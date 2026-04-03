@@ -203,6 +203,14 @@ describe('CodeMirrorControl', () => {
 			typeText: null,
 			expected: 'x [ABC](test) y',
 		},
+		{
+			initialText: 'x    y',
+			selection: EditorSelection.range(1, 5),
+			left: '[',
+			right: '](test)',
+			typeText: null,
+			expected: 'x    y',
+		},
 	])('wrapSelections should surround all selections with the given text (case %#)', ({ initialText, selection, typeText, left, right, expected }) => {
 		const control = createEditorControl(initialText);
 		control.editor.dispatch({

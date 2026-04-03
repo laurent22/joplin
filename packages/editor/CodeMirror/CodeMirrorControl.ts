@@ -119,7 +119,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		this.editor.dispatch(
 			this.editor.state.changeByRange(range => {
 				const update = toggleInlineSelectionFormat(this.editor.state, regionSpec, range);
-				if (!update.range.empty) {
+				if (update.didChange !== false && !update.range.empty) {
 					// Deselect the start and end characters (roughly preserve the original
 					// selection).
 					update.range = EditorSelection.range(
