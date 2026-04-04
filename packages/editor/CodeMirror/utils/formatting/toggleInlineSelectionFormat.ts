@@ -6,7 +6,42 @@ import findInlineMatch, { MatchSide } from './findInlineMatch';
 import growSelectionToNode from '../growSelectionToNode';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
 
-const listMarkerRegex = /^(?:>\s*)*\s*(?:[-*+]\s+(?:\[[ xX]\]\s+)?|\d+[.)]\s+)/;
+const blockQuotePrefixRegex = /^(?:>\s*)+/;
+const headingPrefixRegex = /^#{1,6}\s+/;
+const unorderedListPrefixRegex = /^[-*+]\s+/;
+const orderedListPrefixRegex = /^\d+[.)]\s+/;
+const taskListCheckboxPrefixRegex = /^\[[ xX]\]\s+/;
+
+const formattingPrefixLength = (lineText: string) => {
+	let prefixLength = 0;
+
+	const blockQuotePrefixMatch = lineText.match(blockQuotePrefixRegex);
+	if (blockQuotePrefixMatch) {
+		prefixLength += blockQuotePrefixMatch[0].length;
+	}
+
+	let content = lineText.substring(prefixLength);
+
+	const headingPrefixMatch = content.match(headingPrefixRegex);
+	if (headingPrefixMatch) {
+		return prefixLength + headingPrefixMatch[0].length;
+	}
+
+	const listPrefixMatch = content.match(unorderedListPrefixRegex) || content.match(orderedListPrefixRegex);
+	if (!listPrefixMatch) {
+		return prefixLength;
+	}
+
+	prefixLength += listPrefixMatch[0].length;
+	content = lineText.substring(prefixLength);
+
+	const checkboxPrefixMatch = content.match(taskListCheckboxPrefixRegex);
+	if (checkboxPrefixMatch) {
+		prefixLength += checkboxPrefixMatch[0].length;
+	}
+
+	return prefixLength;
+};
 
 const selectionInsideFencedCode = (state: EditorState, sel: SelectionRange) => {
 	let isInside = false;
@@ -59,8 +94,7 @@ const toggleInlineFormatLineByLine = (
 			continue;
 		}
 
-		const listMarkerMatch = line.text.match(listMarkerRegex);
-		const contentFrom = listMarkerMatch ? line.from + listMarkerMatch[0].length : line.from;
+		const contentFrom = line.from + formattingPrefixLength(line.text);
 		const contentTo = line.to;
 
 		if (contentFrom >= contentTo) {
@@ -119,7 +153,7 @@ const toggleInlineSelectionFormat = (
 	}
 
 	// Grow the selection to encompass the entire node.
-	const newRange = growSelectionToNode(state, sel, spec.nodeName);
+	const newRange = growSelectionToNode(state, sel, spec.nodeName ?? null);
 
 	return toggleInlineRegionSurrounded(state.doc, newRange, spec);
 };
