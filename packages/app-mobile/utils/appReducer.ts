@@ -1,6 +1,6 @@
 import reducer from '@joplin/lib/reducer';
 import { AppState } from './types';
-import appDefaultState from './appDefaultState';
+import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
 
@@ -74,8 +74,12 @@ const appReducer = (state = appDefaultState, action: any) => {
 					// Avoid multiple consecutive duplicate screens in the navigation history -- these can make
 					// pressing "back" seem to have no effect.
 					if (currentRoute.isDeleted) {
-						// Do not add the item to the history, and remove the last item in the history if that is now the selected item
+						// The current route's folder was deleted. Instead of skipping history entirely,
+						// push DEFAULT_ROUTE (All Notes) so the back button can return to a valid screen.
 						removeLatestFolderIfSelected(navHistory, action);
+						if (!navHistory.length || navHistory[navHistory.length - 1].routeName !== DEFAULT_ROUTE.routeName || navHistory[navHistory.length - 1].smartFilterId !== DEFAULT_ROUTE.smartFilterId) {
+							navHistory.push(DEFAULT_ROUTE);
+						}
 					} else if (isDifferentRoute) {
 						navHistory.push(currentRoute);
 					}
