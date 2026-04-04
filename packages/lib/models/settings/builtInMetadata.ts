@@ -1177,6 +1177,26 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon'), show: settings => !!settings['showTrayIcon'] },
 
+		'globalHotkey': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'application',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Global shortcut to show/hide Joplin'),
+			description: () => _('A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+			autoSave: true,
+			// Wayland does not support Electron's globalShortcut API.
+			// Hide this setting on Wayland unless a value was already configured (e.g. on X11).
+			show: (settings) => {
+				if (platform !== 'linux') return true;
+				const isWayland = !!process.env.WAYLAND_DISPLAY;
+				return !isWayland || !!settings['globalHotkey'];
+			},
+		},
+
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
 		'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },

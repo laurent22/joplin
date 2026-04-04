@@ -1,0 +1,39 @@
+.global-hotkey-input {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	> .shortcut-display {
+		font-family: var(--joplin-font-family);
+		font-size: var(--joplin-font-size);
+		color: var(--joplin-color);
+		background-color: var(--joplin-background-color);
+		border: 1px solid var(--joplin-border-color4);
+		border-radius: 3px;
+		padding: 4px 10px;
+		min-width: 180px;
+		min-height: 1.6em;
+		outline: none;
+
+		&.-recording {
+			border-color: var(--joplin-color2);
+			box-shadow: 0 0 3px var(--joplin-color2);
+		}
+	}
+
+	> .record-btn,
+	> .clear-btn {
+		font-family: var(--joplin-font-family);
+		font-size: calc(var(--joplin-font-size) * 0.9);
+		color: var(--joplin-color);
+		background-color: var(--joplin-background-color);
+		border: 1px solid var(--joplin-border-color4);
+		border-radius: 4px;
+		padding: 4px 10px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--joplin-background-color-hover3);
+		}
+	}
+}
