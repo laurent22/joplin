@@ -202,6 +202,7 @@ describe('CodeMirrorControl', () => {
 			right: '](test)',
 			typeText: null,
 			expected: 'x [ABC](test) y',
+			expectMainSel: { from: 3, to: 6 },
 		},
 		{
 			initialText: 'x    y',
@@ -210,8 +211,9 @@ describe('CodeMirrorControl', () => {
 			right: '](test)',
 			typeText: null,
 			expected: 'x    y',
+			expectMainSel: { from: 1, to: 5 },
 		},
-	])('wrapSelections should surround all selections with the given text (case %#)', ({ initialText, selection, typeText, left, right, expected }) => {
+	])('wrapSelections should surround all selections with the given text (case %#)', ({ initialText, selection, typeText, left, right, expected, expectMainSel }) => {
 		const control = createEditorControl(initialText);
 		control.editor.dispatch({
 			selection,
@@ -223,6 +225,11 @@ describe('CodeMirrorControl', () => {
 		}
 
 		expect(control.editor.state.doc.toString()).toBe(expected);
+		if (expectMainSel) {
+			const main = control.editor.state.selection.main;
+			expect(main.from).toBe(expectMainSel.from);
+			expect(main.to).toBe(expectMainSel.to);
+		}
 	});
 
 	it('updateBody should update the note ID facet and dispatch changes', () => {

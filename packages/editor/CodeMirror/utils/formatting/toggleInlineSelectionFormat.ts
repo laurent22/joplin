@@ -22,6 +22,7 @@ const toggleInlineSelectionFormat = (
 
 		return {
 			range: EditorSelection.cursor(newCursorPos),
+			didChange: false,
 		};
 	}
 
