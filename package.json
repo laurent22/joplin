@@ -72,6 +72,7 @@
     "@crowdin/cli": "4",
     "@joplin/utils": "~2.12",
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
+    "@types/jest": "29.5.14",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
     "cspell": "5.21.2",

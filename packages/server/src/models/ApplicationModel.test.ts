@@ -16,7 +16,7 @@ describe('ApplicationModel', () => {
 	});
 
 	test('should throw if applicationAuthId is not an uuid', async () => {
-		expect(models().application().createAppPassword('not-uuid')).rejects.toThrow('Application not authorized yet.');
+		await expect(models().application().createAppPassword('not-uuid')).rejects.toThrow('Application not authorized yet.');
 	});
 
 	test('should generate a notification after an application is authorized', async () => {

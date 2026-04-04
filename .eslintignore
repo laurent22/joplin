@@ -698,6 +698,10 @@ packages/app-mobile/components/EditorToolbar/utils/isSelected.js
 packages/app-mobile/components/EditorToolbar/utils/selectedCommandNamesFromState.js
 packages/app-mobile/components/EditorToolbar/utils/toolbarButtonsFromState.js
 packages/app-mobile/components/EditorToolbar/utils/useButtonSize.js
+packages/app-mobile/components/EditorToolbar/utils/useSaveToolbarButtons.test.js
+packages/app-mobile/components/EditorToolbar/utils/useSaveToolbarButtons.js
+packages/app-mobile/components/EditorToolbar/utils/useToolbarEditorState.test.js
+packages/app-mobile/components/EditorToolbar/utils/useToolbarEditorState.js
 packages/app-mobile/components/ExtendedWebView/index.jest.js
 packages/app-mobile/components/ExtendedWebView/index.js
 packages/app-mobile/components/ExtendedWebView/index.web.js

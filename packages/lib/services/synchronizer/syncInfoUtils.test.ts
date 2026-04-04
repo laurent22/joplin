@@ -342,12 +342,12 @@ describe('syncInfoUtils', () => {
 		Setting.setValue('sync.wipeOutFailSafe', true);
 		const syncInfo = new SyncInfo();
 		await fileApi().put('info.json', syncInfo.serialize());
-		expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
+		await expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
 	}));
 
 	it('should succeed when info.json does not exist and failsafe is disabled for checkSyncTargetIsValid', (async () => {
 		Setting.setValue('sync.wipeOutFailSafe', false);
-		expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
+		await expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
 	}));
 
 	it('should fail with failsafe error when info.json does not exist for checkSyncTargetIsValid', (async () => {
@@ -398,7 +398,7 @@ describe('syncInfoUtils', () => {
 
 	it('should succeed when info.json and .sync/version.txt does not exist when sync items are not present for fetchSyncInfo', (async () => {
 		Setting.setValue('sync.wipeOutFailSafe', true);
-		expect(fetchSyncInfo(fileApi())).resolves.not.toThrow();
+		await expect(fetchSyncInfo(fileApi())).resolves.not.toThrow();
 	}));
 
 	it('should merge revision service settings based on timestamps', () => {
