@@ -128,13 +128,15 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 		if (clickedOutsideContent) {
 			const onCancel = onCancelRef.current;
 			if (onCancel) {
-				skipCloseCancelRef.current = true;
+				if (preventAutoCloseOnCancel) {
+					skipCloseCancelRef.current = true;
+				}
 				onCancel();
 			} else {
 				setClickedOutsideContent(false);
 			}
 		}
-	}, [clickedOutsideContent, setClickedOutsideContent]);
+	}, [clickedOutsideContent, setClickedOutsideContent, preventAutoCloseOnCancel]);
 
 	useEffect(() => {
 		if (!containerDocument) return () => {};
@@ -147,15 +149,26 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 				// decide whether to close (for example, to confirm unsaved changes).
 				event.preventDefault();
 				skipCloseCancelRef.current = true;
+				onCancelRef.current?.();
+				return;
 			}
-			onCancelRef.current?.();
+
+			const canCancel = !!onCancelRef.current;
+			if (!canCancel) {
+				// Prevents [Escape] from closing the dialog. In many places, this is handled
+				// by external logic.
+				// See https://stackoverflow.com/a/61021326
+				event.preventDefault();
+			}
 		});
 
 		const removedReturnValue = 'removed-from-dom';
 		dialog.addEventListener('close', () => {
 			const closedByCancel = dialog.returnValue !== removedReturnValue;
-			if (closedByCancel && !skipCloseCancelRef.current) {
-				onCancelRef.current?.();
+			if (closedByCancel) {
+				if (!preventAutoCloseOnCancel || !skipCloseCancelRef.current) {
+					onCancelRef.current?.();
+				}
 			}
 
 			skipCloseCancelRef.current = false;
