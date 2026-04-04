@@ -826,7 +826,6 @@ packages/app-mobile/components/screens/ConfigScreen/plugins/utils/usePluginItem.
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useRepoApi.js
 packages/app-mobile/components/screens/ConfigScreen/plugins/utils/useUpdateState.js
 packages/app-mobile/components/screens/ConfigScreen/types.js
-packages/app-mobile/components/screens/ConflictResolution/ConflictResolutionScreen.js
 packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.js
 packages/app-mobile/components/screens/DocumentScanner/NotePreview.js
 packages/app-mobile/components/screens/JoplinCloudLoginScreen.js
