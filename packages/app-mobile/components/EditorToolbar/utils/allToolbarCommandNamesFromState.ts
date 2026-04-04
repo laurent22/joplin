@@ -37,6 +37,9 @@ const builtInCommandNames = [
 	'setTags',
 	EditorCommandType.ToggleSearch,
 	'hideKeyboard',
+	'-',
+	`editor.${EditorCommandType.GoDocStart}`,
+	`editor.${EditorCommandType.GoDocEnd}`,
 ];
 
 

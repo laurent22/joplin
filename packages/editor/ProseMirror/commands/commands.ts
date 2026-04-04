@@ -1,4 +1,4 @@
-import { Command, EditorState, Transaction } from 'prosemirror-state';
+import { Command, EditorState, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorCommandType } from '../../types';
 import { redo, undo } from 'prosemirror-history';
 import { autoJoin, selectAll, setBlockType, toggleMark } from 'prosemirror-commands';
@@ -247,8 +247,14 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.InsertNewlineAndIndent]: null,
 	[EditorCommandType.SwapLineUp]: null,
 	[EditorCommandType.SwapLineDown]: null,
-	[EditorCommandType.GoDocEnd]: null,
-	[EditorCommandType.GoDocStart]: null,
+	[EditorCommandType.GoDocEnd]: (state, dispatch) => {
+		dispatch(state.tr.setSelection(TextSelection.atEnd(state.doc)).scrollIntoView());
+		return true;
+	},
+	[EditorCommandType.GoDocStart]: (state, dispatch) => {
+		dispatch(state.tr.setSelection(TextSelection.atStart(state.doc)).scrollIntoView());
+		return true;
+	},
 	[EditorCommandType.GoLineStart]: null,
 	[EditorCommandType.GoLineEnd]: null,
 	[EditorCommandType.GoLineUp]: null,
