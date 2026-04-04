@@ -6,6 +6,7 @@ import findInlineMatch, { MatchSide } from './findInlineMatch';
 import growSelectionToNode from '../growSelectionToNode';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
 
+const leadingWhitespacePrefixRegex = /^\s*/;
 const blockQuotePrefixRegex = /^(?:>\s*)+/;
 const headingPrefixRegex = /^#{1,6}\s+/;
 const unorderedListPrefixRegex = /^[-*+]\s+/;
@@ -13,14 +14,15 @@ const orderedListPrefixRegex = /^\d+[.)]\s+/;
 const taskListCheckboxPrefixRegex = /^\[[ xX]\]\s+/;
 
 const formattingPrefixLength = (lineText: string) => {
-	let prefixLength = 0;
+	let prefixLength = lineText.match(leadingWhitespacePrefixRegex)?.[0].length ?? 0;
+	let content = lineText.substring(prefixLength);
 
-	const blockQuotePrefixMatch = lineText.match(blockQuotePrefixRegex);
+	const blockQuotePrefixMatch = content.match(blockQuotePrefixRegex);
 	if (blockQuotePrefixMatch) {
 		prefixLength += blockQuotePrefixMatch[0].length;
 	}
 
-	let content = lineText.substring(prefixLength);
+	content = lineText.substring(prefixLength);
 
 	const headingPrefixMatch = content.match(headingPrefixRegex);
 	if (headingPrefixMatch) {
