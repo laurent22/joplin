@@ -15,6 +15,7 @@ interface Props {
 	onShow?: OnShowListener;
 	contentStyle?: CSSProperties;
 	open?: boolean;
+	preventAutoCloseOnCancel?: boolean;
 	contentFillsScreen?: boolean;
 	children: ReactNode;
 }
@@ -32,7 +33,7 @@ const Dialog: FC<Props> = props => {
 	// Because useEffect cleanup can happen after an element is removed from the HTML DOM, the dialog is managed
 	// using native HTML APIs. This allows us to call .close() while the dialog is still attached to the DOM, which
 	// allows the browser to restore the focus from before the dialog was opened.
-	const dialogElement = useDialogElement(containerDocument, props.onCancel);
+	const dialogElement = useDialogElement(containerDocument, props.onCancel, props.preventAutoCloseOnCancel ?? false);
 	useDialogClassNames(dialogElement, props.className);
 
 	const [contentRendered, setContentRendered] = useState(false);
@@ -114,7 +115,7 @@ const useClickedOutsideContent = (dialogElement: HTMLDialogElement|null) => {
 	return [clickedOutsideContent, setClickedOutsideContent] as const;
 };
 
-const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCancelListener) => {
+const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCancelListener, preventAutoCloseOnCancel: boolean) => {
 	const [dialogElement, setDialogElement] = useState<HTMLDialogElement|null>(null);
 
 	const onCancelRef = useRef(onCancel);
@@ -141,10 +142,12 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 		const dialog = containerDocument.createElement('dialog');
 		dialog.classList.add('dialog-modal-layer');
 		dialog.addEventListener('cancel', event => {
-			// Prevent the native dialog element from auto-closing so the app can
-			// decide whether to close (for example, to confirm unsaved changes).
-			event.preventDefault();
-			skipCloseCancelRef.current = true;
+			if (preventAutoCloseOnCancel) {
+				// Prevent the native dialog element from auto-closing so the app can
+				// decide whether to close (for example, to confirm unsaved changes).
+				event.preventDefault();
+				skipCloseCancelRef.current = true;
+			}
 			onCancelRef.current?.();
 		});
 
@@ -178,7 +181,7 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 			}
 			dialog.remove();
 		};
-	}, [containerDocument]);
+	}, [containerDocument, preventAutoCloseOnCancel]);
 
 	return dialogElement;
 };

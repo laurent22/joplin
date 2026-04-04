@@ -233,6 +233,7 @@ const ModalComponent = Platform.OS === 'web' ? (props: ModalElementProps) => {
 		open={props.visible}
 		onCancel={props.onClose}
 		onShow={props.onShow}
+		preventAutoCloseOnCancel={true}
 	>
 		{props.children}
 	</Dialog>;
