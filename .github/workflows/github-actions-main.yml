@@ -1,10 +1,6 @@
 name: Joplin Continuous Integration
 on: [push, pull_request]
 
-concurrency:
-  group: ${{ github.ref == 'refs/heads/dev' && github.run_id || format('{0}-{1}', github.workflow, github.ref) }}
-  cancel-in-progress: true
-
 jobs:
   Main:
     # We always process server or desktop release tags, because they also publish the release

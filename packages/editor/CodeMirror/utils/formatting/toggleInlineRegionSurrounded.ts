@@ -36,17 +36,34 @@ const toggleInlineRegionSurrounded = (
 			insert: content,
 		});
 	} else {
+		// When the selection is non-empty, trim leading/trailing whitespace so that
+		// formatting markers are placed adjacent to the text content.
+		let insertFrom = sel.from;
+		let insertTo = sel.to;
+
+		if (!sel.empty) {
+			const leadingWhitespace = content.match(/^\s*/)?.[0] ?? '';
+			const trailingWhitespace = content.match(/\s*$/)?.[0] ?? '';
+			insertFrom += leadingWhitespace.length;
+			insertTo -= trailingWhitespace.length;
+
+			// If the entire selection is whitespace, fall back to the original range.
+			if (insertFrom >= insertTo) {
+				insertFrom = sel.from;
+				insertTo = sel.to;
+			}
+		}
+
 		changes.push({
-			from: sel.from,
+			from: insertFrom,
 			insert: spec.template.start,
 		});
 
 		changes.push({
-			from: sel.to,
+			from: insertTo,
 			insert: spec.template.end,
 		});
 
-		// If not a caret,
 		if (!sel.empty) {
 			// Select the surrounding chars.
 			finalSelEnd += spec.template.start.length + spec.template.end.length;

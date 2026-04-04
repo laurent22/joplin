@@ -1,3 +1,4 @@
+import { posix, win32 } from 'node:path';
 import resolvePathWithinDir from './resolvePathWithinDir';
 
 describe('resolvePathWithinDir', () => {
@@ -23,16 +24,16 @@ describe('resolvePathWithinDir', () => {
 		];
 
 		for (const testCase of testCases) {
-			expect(resolvePathWithinDir(testCase.baseDir, testCase.path, false)).toBe(testCase.expected);
+			expect(resolvePathWithinDir(testCase.baseDir, testCase.path, posix)).toBe(testCase.expected);
 		}
 	});
 
 	test('should return correct values for Windows-style paths', () => {
-		expect(resolvePathWithinDir('C:\\a\\test\\path', 'C:\\a\\test\\path\\2', true)).toBe('C:\\a\\test\\path\\2');
-		expect(resolvePathWithinDir('C:\\\\a\\test\\path', '.\\path\\2', true)).toBe('C:\\a\\test\\path\\path\\2');
-		expect(resolvePathWithinDir('C:\\a\\test\\path', '..\\path\\2', true)).toBe('C:\\a\\test\\path\\2');
-		expect(resolvePathWithinDir('C:\\a\\test\\path', '..\\2', true)).toBe(null);
-		expect(resolvePathWithinDir('D:\\a\\test\\path', 'C:\\a\\test\\path\\2', true)).toBe(null);
-		expect(resolvePathWithinDir('\\a\\test\\path', 'D:\\a\\test\\path\\2', true)).toBe(null);
+		expect(resolvePathWithinDir('C:\\a\\test\\path', 'C:\\a\\test\\path\\2', win32)).toBe('C:\\a\\test\\path\\2');
+		expect(resolvePathWithinDir('C:\\\\a\\test\\path', '.\\path\\2', win32)).toBe('C:\\a\\test\\path\\path\\2');
+		expect(resolvePathWithinDir('C:\\a\\test\\path', '..\\path\\2', win32)).toBe('C:\\a\\test\\path\\2');
+		expect(resolvePathWithinDir('C:\\a\\test\\path', '..\\2', win32)).toBe(null);
+		expect(resolvePathWithinDir('D:\\a\\test\\path', 'C:\\a\\test\\path\\2', win32)).toBe(null);
+		expect(resolvePathWithinDir('\\a\\test\\path', 'D:\\a\\test\\path\\2', win32)).toBe(null);
 	});
 });

@@ -24,8 +24,8 @@ async function main() {
 	// We need to force the ABI because Electron Builder or node-abi picks the
 	// wrong one. However it means it will have to be manually upgraded for each
 	// new Electron release. Some ABI map there:
-	// https://github.com/electron/node-abi/tree/master/test
-	const forceAbiArgs = '--force-abi 142';
+	// https://github.com/electron/node-abi/blob/main/abi_registry.json
+	const forceAbiArgs = '--force-abi 143';
 
 	if (isWindows()) {
 		// Cannot run this in parallel, or the 64-bit version might end up

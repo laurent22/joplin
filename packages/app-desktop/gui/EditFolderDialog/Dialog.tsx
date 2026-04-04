@@ -47,10 +47,13 @@ export default function(props: Props) {
 	}, [props.dispatch]);
 
 	useEffect(() => {
+		if (!titleInputRef.current) return;
 		focus('Dialog::titleInputRef', titleInputRef.current);
 
 		setTimeout(() => {
-			titleInputRef.current.select();
+			if (titleInputRef.current) {
+				titleInputRef.current.select();
+			}
 		}, 100);
 	}, []);
 

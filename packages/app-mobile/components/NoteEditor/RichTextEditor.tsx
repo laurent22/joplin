@@ -1,6 +1,8 @@
 import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import ExtendedWebView from '../ExtendedWebView';
+import Setting from '@joplin/lib/models/Setting';
+import { editorFont } from '../global-style';
 
 import * as React from 'react';
 import { useMemo, useCallback, useRef } from 'react';
@@ -17,10 +19,12 @@ import shim from '@joplin/lib/shim';
 
 const logger = Logger.create('RichTextEditor');
 
-function useCss(themeId: number, editorCss: string): string {
+function useCss(themeId: number, editorCss: string, fontFamilyId: number): string {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		const themeVariableCss = themeToCss(theme);
+		const font = editorFont(fontFamilyId);
+		const fontFamily = font ? `${JSON.stringify(font)}, sans-serif` : 'sans-serif';
 		return `
 			${themeVariableCss}
 			${editorCss}
@@ -42,7 +46,7 @@ function useCss(themeId: number, editorCss: string): string {
 				padding-bottom: 1px;
 				padding-top: 10px;
 
-				font-family: ${JSON.stringify(theme.fontFamily)}, sans-serif;
+				font-family: ${fontFamily} !important;
 			}
 
 			.RichTextEditor {
@@ -52,7 +56,7 @@ function useCss(themeId: number, editorCss: string): string {
 				position: relative;
 			}
 		`;
-	}, [themeId, editorCss]);
+	}, [themeId, editorCss, fontFamilyId]);
 }
 
 function useHtml(initialCss: string): string {
@@ -127,7 +131,7 @@ const RichTextEditor: React.FC<EditorProps> = props => {
 		true;
 	`;
 
-	const css = useCss(props.themeId, editorWebViewSetup.pageSetup.css);
+	const css = useCss(props.themeId, editorWebViewSetup.pageSetup.css, Setting.value('style.editor.fontFamily') as number);
 	const html = useHtml(css);
 
 	const onMessage = useCallback((event: OnMessageEvent) => {

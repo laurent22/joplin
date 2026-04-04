@@ -57,20 +57,33 @@ describe('urlUtils', () => {
 		[
 			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.md',
 			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			'posix',
 			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: '' },
 		],
 		[
 			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.md5#foo',
 			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			'posix',
 			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: 'foo' },
 		],
 		[
 			'file:///home/builder/.config/joplindev-desktop/profile-owmhbsat/resources/4a12670298dd46abbb140ffc8a10b583.png?t=12345',
 			'/home/builder/.config/joplindev-desktop/profile-owmhbsat/resources',
+			'posix',
 			{ itemId: '4a12670298dd46abbb140ffc8a10b583', hash: '' },
 		],
-	])('should detect resource file URLs', (url, resourceDir, expected) => {
-		expect(urlUtils.parseResourceUrl(urlUtils.fileUrlToResourceUrl(url, resourceDir))).toMatchObject(expected);
+		[
+			'file:///C:/Users/Test/.config/joplin-desktop/profile-owmhbsat/resources/a1234567890123456789012345678901.png?t=12345',
+			'C:\\Users\\Test\\.config\\joplin-desktop\\profile-owmhbsat\\resources',
+			'win32',
+			{ itemId: 'a1234567890123456789012345678901', hash: '' },
+		],
+	])('should detect resource file URLs (case %#)', (url, resourceDir, os, expected) => {
+		expect(
+			urlUtils.parseResourceUrl(
+				urlUtils.fileUrlToResourceUrl(url, resourceDir, os),
+			),
+		).toMatchObject(expected);
 	});
 
 	it('should extract resource URLs', (async () => {
