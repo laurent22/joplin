@@ -108,6 +108,18 @@ export default class ShareModel extends BaseModel<Share> {
 		return setQueryParameters(`${this.personalizedUserContentBaseUrl(shareOwnerId)}/shares/${id}`, query);
 	}
 
+	public async linkedNoteShareUrl(share: Share, linkedNoteJopId: string): Promise<string | null> {
+		if (share.recursive) return null;
+
+		const noteItem = await this.models().item().loadByJopId(share.owner_id, linkedNoteJopId);
+		if (!noteItem) return null;
+
+		const noteShare = await this.itemShare(ShareType.Note, noteItem.id);
+		if (!noteShare) return null;
+
+		return this.shareUrl(noteShare.owner_id, noteShare.id);
+	}
+
 	public async byItemId(itemId: Uuid): Promise<Share | null> {
 		const r = await this.byItemIds([itemId]);
 		return r.length ? r[0] : null;

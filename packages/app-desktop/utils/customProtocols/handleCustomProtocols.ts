@@ -1,4 +1,4 @@
-import { net, protocol } from 'electron';
+import { net, Session } from 'electron';
 import { dirname, resolve, normalize } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { contentProtocolName, pluginProtocolName } from './constants';
@@ -154,7 +154,7 @@ type LoggerSlice = {
 	debug: (...message: unknown[])=> void;
 };
 
-const handleContentProtocol = (logger: LoggerSlice) => {
+const handleContentProtocol = (logger: LoggerSlice, session: Session) => {
 	// Allow-listed files/directories for joplin-content://note-viewer/
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
@@ -164,7 +164,7 @@ const handleContentProtocol = (logger: LoggerSlice) => {
 	const appBundleDirectory = dirname(dirname(__dirname));
 
 	// Serves main app content (e.g. the note viewer)
-	protocol.handle(contentProtocolName, async request => {
+	session.protocol.handle(contentProtocolName, async request => {
 		const url = new URL(request.url);
 		const host = url.host;
 
@@ -312,9 +312,9 @@ const handleContentProtocol = (logger: LoggerSlice) => {
 	return result;
 };
 
-const handlePluginProtocol = (logger: LoggerSlice) => {
+const handlePluginProtocol = (logger: LoggerSlice, session: Session) => {
 	const hostedContentScriptJs = new Map<string, string>(); // Maps from content script IDs to content script data
-	protocol.handle(pluginProtocolName, async request => {
+	session.protocol.handle(pluginProtocolName, async request => {
 		const url = new URL(request.url);
 		const host = url.host;
 
@@ -381,14 +381,14 @@ const handlePluginProtocol = (logger: LoggerSlice) => {
 //
 // See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
 //
-const handleCustomProtocols = (): CustomProtocolHandlers => {
+const handleCustomProtocols = (session: Session): CustomProtocolHandlers => {
 	const logger = {
 		// Disabled for now
 		debug: (..._message: unknown[]) => {},
 	};
 
-	const appContent = handleContentProtocol(logger);
-	const pluginContent = handlePluginProtocol(logger);
+	const appContent = handleContentProtocol(logger, session);
+	const pluginContent = handlePluginProtocol(logger, session);
 	return { appContent, pluginContent };
 };
 
