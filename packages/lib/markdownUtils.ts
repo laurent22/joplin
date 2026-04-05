@@ -236,7 +236,7 @@ const markdownUtils = {
 		}
 
 		title = title.replace(/<\/?(ins|del|mark|sub|sup)>/g, ' ');
-		title = title.replace(/!?\[([^\]]*)\]\(([^)]*)\)/g, (_match, text, url) => {
+		title = title.replace(/!?\[([^\]]*)\]\((.+?)\)/g, (_match, text, url) => {
 			return text || url;
 		});
 		const formattingPatterns = [
@@ -256,8 +256,8 @@ const markdownUtils = {
 			}
 		} while (title !== prev);
 
+		title = title.replace(/^(\s*([-*+]|\d+[.)])\s+(\[[ xX]\]\s+)?)/, '');
 		title = title.replace(/^(~{2,}|={2,})$/, '');
-		title = title.replace(/[*_=`^]+/g, '');
 		title = title.replace(/^[#>\-*`\s=]+/, '');
 		title = title.replace(/[#>\-*`\s=]+$/, '');
 		title = title.trim();
