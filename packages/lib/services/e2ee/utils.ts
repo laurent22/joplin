@@ -377,7 +377,12 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 
 	const ppk = localSyncInfo().ppk;
 	if (ppk) {
-		if (await ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword)) return true;
+		// If an active master key is supplied, fall back to master key validation if ppk validation fails
+		if (await ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword)) {
+			return true;
+		} else if (!activeMasterKey) {
+			return false;
+		}
 	}
 
 	const masterKey = activeMasterKey ? activeMasterKey : getDefaultMasterKey();
