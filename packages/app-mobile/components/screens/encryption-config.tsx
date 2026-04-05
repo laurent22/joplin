@@ -9,7 +9,7 @@ import time from '@joplin/lib/time';
 import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
-import { localSyncInfo, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, masterPasswordIsValid, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
@@ -161,16 +161,13 @@ const EncryptionConfigScreen = (props: Props) => {
 		const theme = themeStyle(props.themeId);
 		const masterKey = getDefaultMasterKey();
 		const hasMasterPassword = !!props.masterPassword;
-		const ppk = localSyncInfo().ppk;
-		// When the master key has not yet been synced, the master password can still be changed, so validation does not apply when re-enabling encryption
-		const shouldCreatePassword = !props.masterKeys.length || !ppk;
 
 		const onEnableClick = async () => {
 			try {
 				const password = passwordPromptAnswer;
 				if (!password) throw new Error(_('Password cannot be empty'));
 
-				if (shouldCreatePassword) {
+				if (!props.masterKeys.length) {
 					const password2 = passwordPromptConfirmAnswer;
 					if (!password2) throw new Error(_('Confirm password cannot be empty'));
 					if (password !== password2) throw new Error(_('Passwords do not match!'));
@@ -214,7 +211,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					}}
 				></TextInput>
 
-				{shouldCreatePassword && (
+				{!props.masterKeys.length && (
 					<>
 						<Text nativeID={confirmPasswordLabelId} style={styles.normalText}>{_('Confirm password:')}</Text>
 						<TextInput

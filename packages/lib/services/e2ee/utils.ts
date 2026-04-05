@@ -377,7 +377,8 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 
 	const ppk = localSyncInfo().ppk;
 	if (ppk) {
-		return ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword);
+		// This check will not work on web, so fall back to other method if it fails
+		if (ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword)) return true;
 	}
 
 	const masterKey = activeMasterKey ? activeMasterKey : getDefaultMasterKey();
