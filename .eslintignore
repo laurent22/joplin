@@ -230,6 +230,7 @@ packages/app-desktop/gui/JoplinCloudConfigScreen.js
 packages/app-desktop/gui/JoplinCloudLoginScreen.js
 packages/app-desktop/gui/JoplinCloudSignUpCallToAction.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
+packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.test.js
 packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js
 packages/app-desktop/gui/KeymapConfig/styles/index.js
 packages/app-desktop/gui/KeymapConfig/utils/getLabel.js

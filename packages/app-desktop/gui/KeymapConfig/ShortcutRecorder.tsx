@@ -24,21 +24,38 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 	const [saveAllowed, setSaveAllowed] = useState(true);
 
 	useEffect(() => {
-		try {
-			// Only perform validations if there's an accelerator provided
-			// Otherwise performing a save means that it's going to be disabled
-			if (accelerator) {
-				keymapService.validateAccelerator(accelerator);
-				keymapService.validateKeymap({ accelerator, command: commandName });
-			}
-
-			// Discard previous errors
+		// Only perform validations if there's an accelerator provided.
+		// An empty accelerator means "disable this shortcut", which is always valid.
+		if (!accelerator) {
 			onError({ recorderError: null });
 			setSaveAllowed(true);
-		} catch (recorderError) {
-			onError({ recorderError });
-			setSaveAllowed(false);
+			return;
 		}
+
+		// Step 1 — Structural validation: is the accelerator string itself well-formed?
+		// A malformed accelerator (e.g. "Ctrl+0+Z") must block save entirely.
+		try {
+			keymapService.validateAccelerator(accelerator);
+		} catch (structuralError) {
+			onError({ recorderError: structuralError });
+			setSaveAllowed(false);
+			return;
+		}
+
+		// Step 2 — Conflict validation: does this accelerator clash with another command?
+		// A conflict is shown as a warning in the UI (the ⚠ icon) but must NOT block save.
+		// Pre-existing conflicts from plugin-registered shortcuts should never lock the
+		// entire editor — the user must be able to save their own (valid) changes regardless.
+		// See: https://github.com/laurent22/joplin/issues/11670
+		try {
+			keymapService.validateKeymap({ accelerator, command: commandName });
+			// No conflict — clear any previous warning
+			onError({ recorderError: null });
+		} catch (conflictError) {
+			// Surface the conflict as a warning, but keep save enabled
+			onError({ recorderError: conflictError });
+		}
+		setSaveAllowed(true);
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [accelerator]);
 
