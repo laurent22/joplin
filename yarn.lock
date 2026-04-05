@@ -11073,7 +11073,7 @@ __metadata:
     "@types/node-rsa": "npm:1.1.4"
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
-    "@types/uuid": "npm:10.0.0"
+    "@types/uuid": "npm:11.0.0"
     adm-zip: "npm:0.5.16"
     async-mutex: "npm:0.5.0"
     base-64: "npm:1.0.0"
@@ -11297,7 +11297,7 @@ __metadata:
     "@types/node-os-utils": "npm:1.3.4"
     "@types/nodemailer": "npm:6.4.21"
     "@types/qrcode": "npm:1.5.6"
-    "@types/uuid": "npm:10.0.0"
+    "@types/uuid": "npm:11.0.0"
     "@types/yargs": "npm:17.0.35"
     "@types/zxcvbn": "npm:4.4.5"
     bcryptjs: "npm:2.4.3"
@@ -11404,7 +11404,7 @@ __metadata:
     "@types/jest-expect-message": "npm:1.1.0"
     "@types/koa": "npm:2.15.0"
     "@types/sharp": "npm:0.32.0"
-    "@types/uuid": "npm:10.0.0"
+    "@types/uuid": "npm:11.0.0"
     dotenv: "npm:17.2.3"
     file-type: "npm:16.5.4"
     fs-extra: "npm:11.3.3"
@@ -17546,10 +17546,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:10.0.0":
-  version: 10.0.0
-  resolution: "@types/uuid@npm:10.0.0"
-  checksum: 10/e3958f8b0fe551c86c14431f5940c3470127293280830684154b91dc7eb3514aeb79fe3216968833cf79d4d1c67f580f054b5be2cd562bebf4f728913e73e944
+"@types/uuid@npm:11.0.0":
+  version: 11.0.0
+  resolution: "@types/uuid@npm:11.0.0"
+  dependencies:
+    uuid: "npm:*"
+  checksum: 10/9f94bd34e5d220c53cc58ea9f48a0061d3bc343e29bc33a17edc705f5e21fedda21553318151f2bc227c2b2b03727bbb536da2b82a61f84d2e1ca38abc5e5c3f
   languageName: node
   linkType: hard
 
@@ -52877,6 +52879,15 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 10/5d6949693d58cb2e636a84f3ee1c6e7b2f9c16cb1d42d0ecb386d8c025c69e327205aa1c69e2868cc06a01e5e20681fbba55a4e0ed0cce913d60334024eae798
+  languageName: node
+  linkType: hard
+
+"uuid@npm:*":
+  version: 13.0.0
+  resolution: "uuid@npm:13.0.0"
+  bin:
+    uuid: dist-node/bin/uuid
+  checksum: 10/2742b24d1e00257e60612572e4d28679423469998cafbaf1fe9f1482e3edf9c40754b31bfdb3d08d71b29239f227a304588f75210b3b48f2609f0673f1feccef
   languageName: node
   linkType: hard
 
