@@ -239,7 +239,6 @@ const markdownUtils = {
 		title = title.replace(/!?\[([^\]]*)\]\(([^)]*)\)/g, (_match, text, url) => {
 			return text || url;
 		});
-		
 		const formattingPatterns = [
 			/(\*\*\*|___)(.*?)\1/g,
 			/(\*\*|__)(.*?)\1/g,
