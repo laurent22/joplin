@@ -236,7 +236,7 @@ const markdownUtils = {
 		}
 
 		title = title.replace(/<\/?(ins|del|mark|sub|sup)>/g, ' ');
-		title = title.replace(/!?\[([^\]]*)\]\(([^\)]*)\)/g, (_match, text, url) => {
+		title = title.replace(/!?\[([^\]]*)\]\(([^)]*)\)/g, (_match, text, url) => {
 			return text || url;
 		});
 		
