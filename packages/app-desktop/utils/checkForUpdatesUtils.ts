@@ -37,6 +37,19 @@ function getMajorMinorTagName(tagName: string) {
 	return s.join('.');
 }
 
+// Cleans up a single line of release notes by stripping GitHub-specific noise:
+// - Issue numbers and author names: (#3157 by [@user](https://github.com/user))
+// - Commit hashes: (a6caa35)
+// - Bare issue numbers: (#4727)
+export const cleanReleaseNoteLine = (line: string): string => {
+	return line
+		.replace(/\(#.* by .*\)/g, '')
+		.replace(/\([0-9a-z]{7}\)/g, '')
+		.replace(/\(#[0-9]+\)/g, '')
+		.replace(/ {2}/g, ' ')
+		.trim();
+};
+
 export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform, arch: Architecture, portable: boolean, options: CheckForUpdateOptions) => {
 	options = { includePreReleases: false, ...options };
 
@@ -117,14 +130,7 @@ export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform
 		const lines = releaseNotes.join('\n\n* * *\n\n').split('\n');
 		const output = [];
 		for (const line of lines) {
-			const r = line
-				.replace(/\(#.* by .*\)/g, '') // Removes issue numbers and names - (#3157 by [@user](https://github.com/user))
-				.replace(/\([0-9a-z]{7}\)/g, '') // Removes commits - "sync state or data (a6caa35)"
-				.replace(/\(#[0-9]+\)/g, '') // Removes issue numbers - "(#4727)"
-				.replace(/ {2}/g, ' ')
-				.trim();
-
-			output.push(r);
+			output.push(cleanReleaseNoteLine(line));
 		}
 		return output.join('\n');
 	}

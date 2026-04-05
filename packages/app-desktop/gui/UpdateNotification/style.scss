@@ -1,11 +1,108 @@
+// Widen the popup content area when it contains our notification
+.popup-notification-item > .content:has(.update-notification) {
+	max-width: min(360px, 80vw);
+}
+
 .update-notification {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
+	gap: 8px;
+
+	> .update-notification-header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 2px 8px;
+
+		> .update-notification-title {
+			font-weight: 600;
+		}
+
+		> .link-button {
+			font-size: 0.85em;
+			opacity: 0.7;
+			background: none;
+			border: none;
+			padding: 0;
+			color: inherit;
+			cursor: pointer;
+			text-decoration: underline;
+			text-decoration-color: transparent;
+			transition: opacity 0.2s ease, text-decoration-color 0.2s ease;
+
+			&:hover {
+				opacity: 1;
+				text-decoration-color: currentColor;
+			}
+		}
+	}
+
+	// Release notes flow as natural content, with a subtle left accent
+	> .update-notification-release-notes {
+		max-height: 200px;
+		overflow-y: auto;
+		overflow-x: hidden;
+		scrollbar-gutter: stable;
+		word-break: break-word;
+		font-size: 0.9em;
+		line-height: 1.5;
+		padding: 4px 6px 4px 10px;
+		border-left: 2px solid var(--joplin-divider-color);
+		opacity: 0.9;
+
+		&:focus {
+			outline: 2px solid var(--joplin-color4);
+			outline-offset: 2px;
+			border-radius: 2px;
+		}
+
+		h1, h2, h3, h4, h5, h6 {
+			font-size: 0.9em;
+			font-weight: 600;
+			margin: 8px 0 2px 0;
+
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+
+		p {
+			margin: 1px 0;
+		}
+
+		ul {
+			margin: 2px 0;
+			padding-left: 14px;
+		}
+
+		li {
+			list-style-type: disc;
+			margin: 1px 0;
+		}
+
+		hr {
+			border: none;
+			border-top: 1px solid var(--joplin-divider-color);
+			margin: 6px 0;
+		}
+	}
 
 	> .buttons {
 		display: flex;
-		gap: 10px;
-		margin-top: 8px;
+		gap: 8px;
+
+		button {
+			transition: filter 0.15s ease, transform 0.1s ease;
+			cursor: pointer;
+
+			&:hover {
+				filter: brightness(1.15);
+			}
+
+			&:active {
+				transform: scale(0.97);
+				filter: brightness(0.95);
+			}
+		}
 	}
 }

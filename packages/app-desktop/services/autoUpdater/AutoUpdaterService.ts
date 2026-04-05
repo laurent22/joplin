@@ -7,6 +7,13 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { GitHubRelease, GitHubReleaseAsset, handleReleaseResponseError } from '../../utils/checkForUpdatesUtils';
 import * as semver from 'semver';
 
+export interface UpdateDownloadedInfo {
+	version: string;
+	releaseNotes: string;
+	pageUrl: string;
+	prerelease: boolean;
+}
+
 export enum AutoUpdaterEvents {
 	CheckingForUpdate = 'checking-for-update',
 	UpdateAvailable = 'update-available',
@@ -54,6 +61,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	private allowDowngrade = false;
 	private isManualCheckInProgress = false;
 	private isUpdateInProgress = false;
+	private latestRelease_: GitHubRelease = null;
 
 	public constructor(mainWindow: BrowserWindow, logger: LoggerWrapper, devMode: boolean, includePreReleases: boolean) {
 		this.window_ = mainWindow;
@@ -135,6 +143,7 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 
 		try {
 			const release: GitHubRelease = await this.fetchLatestRelease(this.includePreReleases_);
+			this.latestRelease_ = release;
 
 			try {
 				let assetUrl = this.getDownloadUrlForPlatform(release, shim.platformName(), process.arch);
@@ -212,6 +221,12 @@ export default class AutoUpdaterService implements AutoUpdaterServiceInterface {
 	};
 
 	private promptUserToUpdate = async (info: UpdateInfo): Promise<void> => {
-		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, info);
+		const updateInfo: UpdateDownloadedInfo = {
+			version: info.version,
+			releaseNotes: this.latestRelease_?.body ?? '',
+			pageUrl: this.latestRelease_?.html_url ?? '',
+			prerelease: this.latestRelease_?.prerelease ?? false,
+		};
+		this.window_.webContents.send(AutoUpdaterEvents.UpdateDownloaded, updateInfo);
 	};
 }
