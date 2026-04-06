@@ -26,7 +26,7 @@ describe('htmlpack/index', () => {
     </head>
     <body>
         <h1>Test</h1>
-        <a href="data:text/plain;base64,UmVzb3VyY2Uu" download="resource.txt">Test link.</a>
+        <a href="./resource.txt">Test link.</a>
         <img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSItOTUgLTk2IDIwOCAyMDgiIHdpZHRoPSIyMDgiIGhlaWdodD0iMjA4IiB2ZXJzaW9uPSIxLjEiIGJhc2VQcm9maWxlPSJmdWxsIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0ZXh0IHN0eWxlPSJmb250LXNpemU6IDY0cHg7IGZpbGw6IHJlZDsiPlRlc3Q8L3RleHQ+PC9zdmc+" alt="test image"/>
         <p>Test paragraph</p>
     </body>

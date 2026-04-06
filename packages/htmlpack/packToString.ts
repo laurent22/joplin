@@ -1,6 +1,6 @@
 const Entities = require('html-entities').AllHtmlEntities;
 import { CssTypes, parse as cssParse, stringify as cssStringify } from '@adobe/css-tools';
-import { dirname, basename } from 'path';
+import { dirname } from 'path';
 import parseHtmlAsync, { HtmlAttrs } from './utils/parseHtmlAsync';
 
 const selfClosingElements = [
@@ -166,19 +166,6 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 		return `<img src="${await readFileDataUriSafe(filePath)}" ${attributesHtml(modAttrs)}/>`;
 	};
 
-	const processAnchorTag = async (_name: string, attrs: HtmlAttrs) => {
-		const href = attrValue(attrs, 'href');
-		if (!href) return null;
-
-		const filePath = `${baseDir}/${href}`;
-		if (!await fs.exists(filePath)) return null;
-
-		const modAttrs = { ...attrs };
-		modAttrs.href = await readFileDataUriSafe(filePath);
-		modAttrs.download = basename(href);
-		return `<a ${attributesHtml(modAttrs)}>`;
-	};
-
 	const output: string[] = [];
 
 	interface Tag {
@@ -208,10 +195,6 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 
 			if (name === 'img') {
 				processedResult = await processImgTag(name, attrs);
-			}
-
-			if (name === 'a') {
-				processedResult = await processAnchorTag(name, attrs);
 			}
 
 			tagStack.push({ name });
