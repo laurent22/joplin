@@ -47,8 +47,10 @@
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
-      "sign": "./sign.js",
-      "rfc3161TimeStampServer": "http://timestamp.digicert.com",
+      "signtoolOptions": {
+        "sign": "./sign.js",
+        "rfc3161TimeStampServer": "http://timestamp.digicert.com"
+      },
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
         {
@@ -124,9 +126,11 @@
       "icon": "../../Assets/LinuxIcons",
       "category": "Office",
       "desktop": {
-        "Icon": "joplin",
-        "MimeType": "x-scheme-handler/joplin;",
-        "StartupWMClass": "@joplin/app-desktop"
+        "entry": {
+          "Icon": "joplin",
+          "MimeType": "x-scheme-handler/joplin;",
+          "StartupWMClass": "@joplin/app-desktop"
+        }
       },
       "target": [
         "AppImage",
@@ -169,7 +173,7 @@
     "compare-versions": "6.1.1",
     "debounce": "1.2.1",
     "electron": "40.8.3",
-    "electron-builder": "24.13.3",
+    "electron-builder": "26.8.1",
     "electron-updater": "6.6.8",
     "electron-window-state": "5.0.3",
     "esbuild": "^0.27.0",
