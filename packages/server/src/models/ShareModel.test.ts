@@ -341,4 +341,69 @@ describe('ShareModel', () => {
 		const updatedNote = await models().item().load(note.id);
 		expect(updatedNote.owner_id).toBe(session2.user_id);
 	});
+
+	// linkedNoteShareUrl: R=0, I=0, P=ε → O=N
+	test('should return null from linkedNoteShareUrl when the linked note does not exist', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000099');
+		expect(url).toBeNull();
+	});
+
+	// linkedNoteShareUrl: R=0, I=1, P=0 → O=N
+	test('should return null from linkedNoteShareUrl when the linked note has no note share', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
+		// note 2 exists but is not shared via ShareType.Note
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000002');
+		expect(url).toBeNull();
+	});
+
+	// linkedNoteShareUrl: R=1, I=ε, P=ε → O=N
+	test('should return null from linkedNoteShareUrl when the share is recursive', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', true);
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000001');
+		expect(url).toBeNull();
+	});
+
+	// linkedNoteShareUrl: R=0, I=1, P=1 → O=U
+	test('should return a URL from linkedNoteShareUrl when the linked note is shared', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
+		// note 2 is shared via ShareType.Note, making P=1 for it
+		const note2Share = await models().share().shareNote(user1, '00000000000000000000000000000002', '', false);
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000002');
+		expect(url).toContain(`/shares/${note2Share.id}`);
+	});
 });

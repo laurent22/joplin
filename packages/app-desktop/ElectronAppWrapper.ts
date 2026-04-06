@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, Menu } from 'electron';
+import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, Menu, session as electronSession, Session } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -67,6 +67,7 @@ export default class ElectronAppWrapper {
 	private updaterService_: AutoUpdaterService = null;
 	private customProtocolHandlers_: CustomProtocolHandlers|null = null;
 	private updatePollInterval_: ReturnType<typeof setTimeout>|null = null;
+	private joplinSession_: Session|null = null;
 
 	private profileLocker_: FileLocker|null = null;
 	private ipcServer_: IpcServer|null = null;
@@ -201,12 +202,45 @@ export default class ElectronAppWrapper {
 		}
 	}
 
+	private createJoplinSession_() {
+		const sessionPath = path.join(this.profilePath_, 'internal');
+		const joplinSession = electronSession.fromPath(sessionPath, { cache: false });
+
+		// One-time migration: copy existing dictionary words from the old Electron userData location into the new session.
+		const migrationFlagPath = path.join(this.profilePath_, 'spell-checker-migration-done');
+		if (!fs.existsSync(migrationFlagPath)) {
+			try {
+				const wordsToMigrate = new Set<string>();
+
+				const oldElectronDictPath = path.join(this.electronApp_.getPath('userData'), 'Custom Dictionary.txt');
+				if (fs.existsSync(oldElectronDictPath)) {
+					const content = fs.readFileSync(oldElectronDictPath, 'utf8');
+					const words = content.split('\n')
+						.map((w: string) => w.trim())
+						.filter((w: string) => w.length > 0 && !/^checksum_v1\s*=/.test(w));
+
+					for (const word of words) {
+						wordsToMigrate.add(word);
+					}
+				}
+
+				for (const word of wordsToMigrate) {
+					joplinSession.addWordToSpellCheckerDictionary(word);
+				}
+
+				fs.writeFileSync(migrationFlagPath, '', 'utf8');
+			} catch (error) {
+				console.warn('Failed to migrate spell-check dictionary:', error);
+			}
+		}
+		return joplinSession;
+	}
+
 	public createWindow() {
 		// Set to true to view errors if the application does not start
 		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
 
 		const windowStateKeeper = require('electron-window-state');
-
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const stateOptions: any = {
@@ -233,6 +267,7 @@ export default class ElectronAppWrapper {
 			// this needs to be a non-transparent color:
 			backgroundColor: nativeTheme.shouldUseDarkColors ? '#333' : '#fff',
 			webPreferences: {
+				session: this.joplinSession_,
 				nodeIntegration: true,
 				contextIsolation: false,
 				spellcheck: true,
@@ -896,7 +931,9 @@ export default class ElectronAppWrapper {
 
 		await this.fixLinuxAccessibility_();
 
-		this.customProtocolHandlers_ = handleCustomProtocols();
+		// Session must be created before handleCustomProtocols() so both use the same object.
+		this.joplinSession_ = this.createJoplinSession_();
+		this.customProtocolHandlers_ = handleCustomProtocols(this.joplinSession_);
 		this.createWindow();
 
 		this.electronApp_.on('before-quit', () => {

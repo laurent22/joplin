@@ -24,7 +24,7 @@ function useCss(themeId: number, editorCss: string, fontFamilyId: number): strin
 		const theme = themeStyle(themeId);
 		const themeVariableCss = themeToCss(theme);
 		const font = editorFont(fontFamilyId);
-		const fontFamily = font ? `${JSON.stringify(font)}, sans-serif` : 'sans-serif';
+		const fontFamily = font ? `${font === 'monospace' ? font : JSON.stringify(font)}, sans-serif` : 'sans-serif';
 		return `
 			${themeVariableCss}
 			${editorCss}

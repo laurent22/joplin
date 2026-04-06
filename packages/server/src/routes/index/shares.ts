@@ -1,4 +1,4 @@
-import { SubPath, ResponseType, Response } from '../../utils/routeUtils';
+import { SubPath, ResponseType, Response, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
@@ -38,6 +38,12 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const user = await ctx.joplin.models.user().load(share.owner_id);
 	if (!user.enabled) throw new ErrorForbidden('This account has been disabled');
+
+	if (ctx.query.note_id && !share.recursive) {
+		const redirectUrl = await shareModel.linkedNoteShareUrl(share, ctx.query.note_id as string);
+		if (redirectUrl) return redirect(ctx, redirectUrl);
+		throw new ErrorForbidden('This linked note has not been published');
+	}
 
 	const itemModel = ctx.joplin.models.item();
 
