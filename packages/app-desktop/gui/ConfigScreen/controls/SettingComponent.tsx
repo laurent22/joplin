@@ -12,7 +12,7 @@ import * as pathUtils from '@joplin/lib/path-utils';
 import SettingLabel from './SettingLabel';
 import SettingDescription from './SettingDescription';
 
-const settingKeyToControl: Record<string, typeof control_PluginsStates> = {
+const settingKeyToControl: Record<string, React.FC<any>> = {
 	'plugins.states': control_PluginsStates,
 	'globalHotkey': control_GlobalHotkeyInput,
 };

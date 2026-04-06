@@ -1188,12 +1188,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 			isGlobal: true,
 			autoSave: true,
-			// Wayland does not support Electron's globalShortcut API.
-			// Hide this setting on Wayland unless a value was already configured (e.g. on X11).
-			show: (settings) => {
+			// Electron's globalShortcut API does not yet work under Wayland,
+			// so we hide this option when running on a Wayland session.
+			show: () => {
 				if (platform !== 'linux') return true;
-				const isWayland = !!process.env.WAYLAND_DISPLAY;
-				return !isWayland || !!settings['globalHotkey'];
+				const sessionType = typeof process !== 'undefined' && process.env ? process.env.XDG_SESSION_TYPE : '';
+				const waylandDisplay = typeof process !== 'undefined' && process.env ? process.env.WAYLAND_DISPLAY : '';
+				return sessionType !== 'wayland' && !waylandDisplay;
 			},
 		},
 
