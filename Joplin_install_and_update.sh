@@ -174,17 +174,18 @@ fi
 #-----------------------------------------------------
 print "Checking dependencies..."
 ## Check if libfuse2 is present.
-if [[ $(command -v ldconfig) ]]; then
-  LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
-fi
-if [[ $LIBFUSE == "" ]]; then
-  LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
-fi
-if [[ $LIBFUSE == "" ]]; then
-  print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
-  print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
-  exit 1
-fi
+if [[ $(compareVersions "$RELEASE_VERSION" "3.6.8") -le 0 ]] # AppImage no longer requires libfuse2
+  if [[ $(command -v ldconfig) ]]; then
+    LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
+  fi
+  if [[ $LIBFUSE == "" ]]; then
+    LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
+  fi
+  if [[ $LIBFUSE == "" ]]; then
+    print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
+    print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
+    exit 1
+  fi
 
 #-----------------------------------------------------
 # Download Joplin

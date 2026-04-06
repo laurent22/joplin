@@ -139,6 +139,9 @@
       "executableName": "joplin",
       "maintainer": "Joplin Team <no-reply@joplinapp.org>",
       "artifactName": "Joplin-${version}.${ext}"
+    },
+    "toolsets": {
+      "appimage": "1.0.2"
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
