@@ -186,6 +186,7 @@ if [[ $(compareVersions "$RELEASE_VERSION" "3.6.8") -le 0 ]] # AppImage no longe
     print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
     exit 1
   fi
+fi
 
 #-----------------------------------------------------
 # Download Joplin
