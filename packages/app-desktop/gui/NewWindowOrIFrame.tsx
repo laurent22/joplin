@@ -94,10 +94,6 @@ const useDocumentSetup = (doc: Document|null, setLoaded: OnSetLoaded) => {
 	useEffect(() => {
 		if (!doc) return;
 
-		doc.open();
-		doc.write('<!DOCTYPE html><html><head></head><body></body></html>');
-		doc.close();
-
 		const cssUrls = [
 			'style.min.css',
 		];
