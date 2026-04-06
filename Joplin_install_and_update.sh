@@ -171,6 +171,13 @@ elif [[ $ARCHITECTURE =~ .*i386.*|.*i686.* ]]; then
   exit 1
 fi
 
+# Get the latest version to download
+if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
+else
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+fi
+
 #-----------------------------------------------------
 print "Checking dependencies..."
 ## Check if libfuse2 is present.
@@ -192,14 +199,7 @@ fi
 # Download Joplin
 #-----------------------------------------------------
 
-# Get the latest version to download
-if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
-  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
-else
-  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
-fi
-
-# Check if it's in the latest version
+# Check the locally installed version against the latest version
 if [[ -e "${INSTALL_DIR}/VERSION" ]]; then
   CURRENT_VERSION=$(< "${INSTALL_DIR}/VERSION")
   VERSION_COMPARISON=$(compareVersions "$CURRENT_VERSION" "$RELEASE_VERSION")
