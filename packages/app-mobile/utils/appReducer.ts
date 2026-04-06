@@ -1,6 +1,6 @@
 import reducer from '@joplin/lib/reducer';
 import { AppState } from './types';
-import appDefaultState from './appDefaultState';
+import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
 
@@ -76,6 +76,10 @@ const appReducer = (state = appDefaultState, action: any) => {
 					if (currentRoute.isDeleted) {
 						// Do not add the item to the history, and remove the last item in the history if that is now the selected item
 						removeLatestFolderIfSelected(navHistory, action);
+						// Push DEFAULT_ROUTE so there's always a valid back target after deletion
+						if (!navHistory.length) {
+							navHistory.push(DEFAULT_ROUTE);
+						}
 					} else if (isDifferentRoute) {
 						navHistory.push(currentRoute);
 					}
