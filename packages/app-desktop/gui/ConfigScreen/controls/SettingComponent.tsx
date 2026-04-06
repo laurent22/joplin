@@ -12,7 +12,7 @@ import * as pathUtils from '@joplin/lib/path-utils';
 import SettingLabel from './SettingLabel';
 import SettingDescription from './SettingDescription';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each control component has different prop types
 const settingKeyToControl: Record<string, React.FC<any>> = {
 	'plugins.states': control_PluginsStates,
 	'globalHotkey': control_GlobalHotkeyInput,

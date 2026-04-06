@@ -150,7 +150,7 @@ class Application extends BaseApplication {
 			bridge().extraAllowedOpenExtensions = Setting.value('linking.extraAllowedExtensions');
 		}
 
-		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'globalHotkey' || action.type === 'SETTING_UPDATE_ALL') {
+		if ((action.type === 'SETTING_UPDATE_ONE' && action.key === 'globalHotkey') || action.type === 'SETTING_UPDATE_ALL') {
 			bridge().updateGlobalHotkey(Setting.value('globalHotkey'));
 		}
 

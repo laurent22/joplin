@@ -1192,9 +1192,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			// so we hide this option when running on a Wayland session.
 			show: () => {
 				if (platform !== 'linux') return true;
-				const sessionType = typeof process !== 'undefined' && process.env ? process.env.XDG_SESSION_TYPE : '';
-				const waylandDisplay = typeof process !== 'undefined' && process.env ? process.env.WAYLAND_DISPLAY : '';
-				return sessionType !== 'wayland' && !waylandDisplay;
+				return process.env.XDG_SESSION_TYPE !== 'wayland' && !process.env.WAYLAND_DISPLAY;
 			},
 		},
 

@@ -15,9 +15,12 @@ export interface ShortcutRecorderProps {
 	initialAccelerator: string;
 	commandName: string;
 	themeId: number;
+	// When true, skip keymap conflict validation (useful for global hotkeys
+	// that aren't part of the internal command keymap).
+	skipKeymapValidation?: boolean;
 }
 
-export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAccelerator, commandName, themeId }: ShortcutRecorderProps) => {
+export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAccelerator, commandName, themeId, skipKeymapValidation }: ShortcutRecorderProps) => {
 	const styles = styles_(themeId);
 
 	const [accelerator, setAccelerator] = useState(initialAccelerator);
@@ -29,7 +32,9 @@ export const ShortcutRecorder = ({ onSave, onReset, onCancel, onError, initialAc
 			// Otherwise performing a save means that it's going to be disabled
 			if (accelerator) {
 				keymapService.validateAccelerator(accelerator);
-				keymapService.validateKeymap({ accelerator, command: commandName });
+				if (!skipKeymapValidation) {
+					keymapService.validateKeymap({ accelerator, command: commandName });
+				}
 			}
 
 			// Discard previous errors

@@ -54,6 +54,7 @@ export default function GlobalHotkeyInput(props: Props) {
 				initialAccelerator={value}
 				commandName="globalHotkey"
 				themeId={props.themeId}
+				skipKeymapValidation
 			/>
 		);
 	}
