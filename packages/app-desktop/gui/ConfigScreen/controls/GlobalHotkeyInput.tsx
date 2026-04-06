@@ -10,7 +10,7 @@ interface OnChangeEvent {
 interface Props {
 	value: string;
 	themeId: number;
-	onChange: (event: OnChangeEvent) => void;
+	onChange: (event: OnChangeEvent)=> void;
 }
 
 // A thin wrapper around ShortcutRecorder for the global hotkey setting.
