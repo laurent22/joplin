@@ -1,9 +1,10 @@
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { ContentScriptData, EditorCommandType, EditorControl, EditorProps, EditorSettings, SearchState, UpdateBodyOptions, UserEventSource } from '../types';
-import { EditorState, TextSelection, Transaction } from 'prosemirror-state';
+import { EditorState, NodeSelection, Selection, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { DOMParser as ProseMirrorDomParser } from 'prosemirror-model';
 import { history } from 'prosemirror-history';
+import { dropPoint } from 'prosemirror-transform';
 import commands from './commands/commands';
 import schema from './schema';
 import { gapCursor } from 'prosemirror-gapcursor';
@@ -29,10 +30,22 @@ import postprocessEditorOutput from './utils/postprocessEditorOutput';
 import detailsPlugin from './plugins/detailsPlugin';
 import tablePlugin from './plugins/tablePlugin';
 import clampPointToDocument from './utils/clampPointToDocument';
+import adjustListItemDropInsertPos from './utils/adjustListItemDropInsertPos';
 
 interface ProseMirrorControl extends EditorControl {
 	getSettings(): EditorSettings;
 }
+
+interface DraggingState {
+	move: boolean;
+	node?: NodeSelection;
+}
+
+const eventCoords = (event: MouseEvent) => ({ left: event.clientX, top: event.clientY });
+
+const getDraggingState = (view: EditorView): DraggingState | null => {
+	return (view as EditorView & { dragging: DraggingState | null }).dragging;
+};
 
 
 const createEditor = async (
@@ -147,6 +160,48 @@ const createEditor = async (
 
 	const view = new EditorView(parentElement, {
 		state: await createInitialState(props.initialText),
+		handleDrop: (view, event, slice, moved) => {
+			if (!moved) return false;
+
+			const dragging = getDraggingState(view);
+			if (!dragging?.node) return false;
+
+			const eventPos = view.posAtCoords(eventCoords(event));
+			if (!eventPos) return false;
+
+			let insertPos = dropPoint(view.state.doc, eventPos.pos, slice) ?? eventPos.pos;
+			const initialAdjustedInsertPos = adjustListItemDropInsertPos(view.state.doc, insertPos, slice);
+
+			// If no adjustment is required, use ProseMirror's default drop handling.
+			if (initialAdjustedInsertPos === insertPos) {
+				return false;
+			}
+
+			const tr = view.state.tr;
+			dragging.node.replace(tr);
+
+			insertPos = tr.mapping.map(insertPos);
+			insertPos = adjustListItemDropInsertPos(tr.doc, insertPos, slice);
+
+			const beforeInsert = tr.doc;
+			const isNodeSlice = slice.openStart === 0 && slice.openEnd === 0 && slice.content.childCount === 1;
+			if (isNodeSlice) {
+				tr.replaceRangeWith(insertPos, insertPos, slice.content.firstChild);
+			} else {
+				tr.replaceRange(insertPos, insertPos, slice);
+			}
+
+			if (!tr.doc.eq(beforeInsert)) {
+				const mappedPos = tr.mapping.map(insertPos, 1);
+				const clampedPos = Math.min(mappedPos, tr.doc.content.size);
+				tr.setSelection(Selection.near(tr.doc.resolve(clampedPos), -1));
+				focus('createEditor', view);
+				view.dispatch(tr.setMeta('uiEvent', 'drop'));
+			}
+
+			event.preventDefault();
+			return true;
+		},
 		dispatchTransaction: transaction => {
 			const newState = view.state.apply(transaction);
 

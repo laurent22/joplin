@@ -1156,6 +1156,8 @@ packages/editor/ProseMirror/testing/mockEditorApi.js
 packages/editor/ProseMirror/types.js
 packages/editor/ProseMirror/utils/SelectableNodeView.js
 packages/editor/ProseMirror/utils/UndoStackSynchronizer.js
+packages/editor/ProseMirror/utils/adjustListItemDropInsertPos.test.js
+packages/editor/ProseMirror/utils/adjustListItemDropInsertPos.js
 packages/editor/ProseMirror/utils/canReplaceSelectionWith.js
 packages/editor/ProseMirror/utils/clampPointToDocument.js
 packages/editor/ProseMirror/utils/computeSelectionFormatting.js
