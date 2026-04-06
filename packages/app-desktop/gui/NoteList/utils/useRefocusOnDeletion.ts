@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
 const useRefocusOnDeletion = (
 	noteCount: number,
@@ -8,13 +8,18 @@ const useRefocusOnDeletion = (
 	focusNote: (noteId: string)=> void,
 ) => {
 	const previousNoteCount = usePrevious(noteCount, 0);
-	const previousFolderId = usePrevious(selectedFolderId, '');
+	const lastFolderIdRef = useRef(selectedFolderId);
+
 	useEffect(() => {
 		const noteWasRemoved = noteCount < previousNoteCount;
-		const folderDidNotChange = selectedFolderId === previousFolderId;
+		const folderDidNotChange = selectedFolderId === lastFolderIdRef.current;
 		if (noteWasRemoved && folderDidNotChange && selectedNoteIds.length === 1 && !focusedField) {
 			focusNote(selectedNoteIds[0]);
 		}
-	}, [noteCount, previousNoteCount, selectedNoteIds, focusedField, selectedFolderId, previousFolderId, focusNote]);
+
+		if (noteCount !== previousNoteCount) {
+			lastFolderIdRef.current = selectedFolderId;
+		}
+	}, [noteCount, previousNoteCount, selectedNoteIds, focusedField, selectedFolderId, focusNote]);
 };
 export default useRefocusOnDeletion;

@@ -28,13 +28,14 @@ describe('useRefocusOnDeletion', () => {
 		expect(focusNote).not.toHaveBeenCalled();
 	});
 
-	it('should not refocus when switching to a folder with fewer notes', () => {
+	it('should not refocus when switching to a folder with fewer notes across two rerenders', () => {
 		const focusNote = jest.fn();
 		const { rerender } = renderHook(
 			({ noteCount, folderId }: { noteCount: number; folderId: string }) =>
 				useRefocusOnDeletion(noteCount, ['note-1'], '', folderId, focusNote),
 			{ initialProps: { noteCount: 3, folderId: 'folder-1' } },
 		);
+		rerender({ noteCount: 3, folderId: 'folder-2' });
 		rerender({ noteCount: 2, folderId: 'folder-2' });
 		expect(focusNote).not.toHaveBeenCalled();
 	});
