@@ -516,8 +516,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					key='setting-section-search-results'
 					id='setting-section-search-results'
 					className='setting-tab-panel'
-					tabIndex={0}
-					role='tabpanel'
+					role='region'
 					aria-label={_('Search results')}
 				>
 					<div className='search-results'>

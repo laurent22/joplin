@@ -163,6 +163,7 @@ export default function Sidebar(props: Props) {
 					searchStarted={isSearching}
 					placeholder={_('Search settings...')}
 					aria-controls={isSearching ? 'setting-section-search-results' : undefined}
+					iconButtonTabIndex={-1}
 				/>
 			</div>
 			<div role='tablist' className='tablist'>

@@ -23,6 +23,7 @@ interface Props {
 	disabled?: boolean;
 	inputClassName?: string;
 	'aria-controls'?: string;
+	iconButtonTabIndex?: number;
 }
 
 export interface OnChangeEvent {
@@ -63,6 +64,7 @@ export default function(props: Props) {
 				className='button'
 				aria-label={iconLabel}
 				disabled={props.disabled}
+				tabIndex={props.iconButtonTabIndex}
 				onClick={props.onSearchButtonClick}
 			>
 				<span className={`icon ${iconName}`}/>
