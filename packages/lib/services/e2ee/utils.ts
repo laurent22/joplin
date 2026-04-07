@@ -323,12 +323,11 @@ export async function resetMasterPassword(encryptionService: EncryptionService, 
 		await MasterKey.save(mk);
 	}
 
-	saveLocalSyncInfo(syncInfo);
-
-	if (syncInfo.ppk) {
-		await kvStore.setValue(`oldppk::${Date.now()}`, JSON.stringify(syncInfo.ppk));
-		syncInfo.ppk = await generateKeyPair(encryptionService, newPassword);
-		saveLocalSyncInfo(syncInfo);
+	const latestSyncInfo = localSyncInfo();
+	if (latestSyncInfo.ppk) {
+		await kvStore.setValue(`oldppk::${Date.now()}`, JSON.stringify(latestSyncInfo.ppk));
+		latestSyncInfo.ppk = await generateKeyPair(encryptionService, newPassword);
+		saveLocalSyncInfo(latestSyncInfo);
 	}
 
 	Setting.setValue('encryption.masterPassword', newPassword);

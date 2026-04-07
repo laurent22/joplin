@@ -101,7 +101,11 @@ export default function Sidebar(props: Props) {
 				key={section.name}
 				type='button'
 				role='tab'
-				ref={(item: HTMLElement) => { buttonRefs.current[index] = item; }}
+				ref={(item: HTMLElement | null) => {
+					if (item) {
+						buttonRefs.current[index] = item;
+					}
+				}}
 				className={classNames.join(' ')}
 				id={`setting-tab-${section.name}`}
 				aria-controls={`setting-section-${section.name}`}

@@ -593,8 +593,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						hasChanges={hasChanges}
 						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
 						onCancelClick={this.onCancelClick}
-						onSaveClick={screenComp ? null : this.onSaveClick}
-						onApplyClick={screenComp ? null : this.onApplyClick}
+						onSaveClick={screenComp ? undefined : this.onSaveClick}
+						onApplyClick={screenComp ? undefined : this.onApplyClick}
 					/>
 				</div>
 			</div>
