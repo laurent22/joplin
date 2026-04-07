@@ -181,7 +181,7 @@ fi
 
 #-----------------------------------------------------
 print "Checking dependencies..."
-## Check for libfuse2 for Joplin versions below 3.6.8, which transitioned to a new AppImage runtime without libfuse2 dependency
+## Check for libfuse2 for Joplin versions lesser than 3.6.9, which transitioned to a new AppImage runtime without libfuse2 dependency
 if [[ $(compareVersions "$RELEASE_VERSION" "3.6.8") -le 0 ]]; then
   if [[ $(command -v ldconfig) ]]; then
     LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
