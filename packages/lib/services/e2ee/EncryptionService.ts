@@ -13,6 +13,7 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
+const base64 = require('base-64');
 export const mkTestText = 'mk-test'; // This must never change, otherwise it will break validation of master keys with cipherText set
 
 function hexPad(s: string, length: number) {
@@ -318,7 +319,7 @@ export default class EncryptionService {
 		model.updated_time = now;
 		model.source_application = Setting.value('appId');
 		model.hasBeenUsed = false;
-		model.testCipher = await this.encrypt(this.defaultEncryptionMethod_, model.content, mkTestText);
+		model.testCipher = base64.encode(await this.encrypt(this.defaultEncryptionMethod_, model.content, mkTestText));
 
 		return model;
 	}
@@ -351,7 +352,8 @@ export default class EncryptionService {
 			// Newly created master keys will have this set, while for pre-existing keys, the testCipher is populated the first time an encrypted item is
 			// successfully decrypted using the master key
 			if (model.testCipher) {
-				const decryptedMkTestText = await this.decrypt(this.defaultEncryptionMethod(), decryptedKey, model.testCipher);
+				const testCipher = base64.decode(model.testCipher);
+				const decryptedMkTestText = await this.decrypt(this.defaultEncryptionMethod(), decryptedKey, testCipher);
 				if (decryptedMkTestText !== mkTestText) return false;
 			}
 		} catch (error) {

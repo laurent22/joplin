@@ -13,6 +13,7 @@ import { masterKeyById } from './synchronizer/syncInfoUtils';
 
 const EventEmitter = require('events');
 const perfLogger = PerformanceLogger.create();
+const base64 = require('base-64');
 
 interface DecryptionResult {
 	skippedItemCount?: number;
@@ -264,7 +265,7 @@ export default class DecryptionWorker {
 							const mk = masterKeyById(header.masterKeyId);
 
 							if (mk && !mk.testCipher) {
-								mk.testCipher = await this.encryptionService().encrypt(header.encryptionMethod, mk.content, mkTestText);
+								mk.testCipher = base64.encode(await this.encryptionService().encrypt(header.encryptionMethod, mk.content, mkTestText));
 							}
 						}
 					} catch (error) {
