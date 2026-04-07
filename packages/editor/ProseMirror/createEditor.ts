@@ -197,10 +197,11 @@ const createEditor = async (
 				tr.setSelection(Selection.near(tr.doc.resolve(clampedPos), -1));
 				focus('createEditor', view);
 				view.dispatch(tr.setMeta('uiEvent', 'drop'));
+				event.preventDefault();
+				return true;
 			}
 
-			event.preventDefault();
-			return true;
+			return false;
 		},
 		dispatchTransaction: transaction => {
 			const newState = view.state.apply(transaction);

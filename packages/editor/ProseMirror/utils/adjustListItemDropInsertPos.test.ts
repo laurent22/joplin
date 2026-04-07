@@ -65,11 +65,12 @@ const moveSecondItemAboveFirst = (state: EditorState, useAdjustedInsertPos: bool
 
 const listItemTexts = (listNode: ProseMirrorNode) => {
 	const result: string[] = [];
-	listNode.forEach(node => {
+	for (let i = 0; i < listNode.childCount; i++) {
+		const node = listNode.child(i);
 		if (node.type === schema.nodes.list_item) {
 			result.push(node.textContent);
 		}
-	});
+	}
 	return result;
 };
 
