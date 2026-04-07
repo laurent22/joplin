@@ -64,6 +64,21 @@ class CheckboxWidget extends WidgetType {
 const completedTaskClassName = 'cm-md-completed-item';
 const completedListItemDecoration = Decoration.line({ class: completedTaskClassName, isFullLine: true });
 
+const getTaskListMarker = (node: SyntaxNodeRef) => {
+	if (node.name !== 'TaskMarker') return null;
+
+	const taskNode = node.node.parent;
+	if (!taskNode || taskNode.name !== 'Task') return null;
+
+	const listContainer = taskNode.parent;
+	if (!listContainer) return null;
+
+	const listMarker = listContainer.getChild('ListMark');
+	if (!listMarker) return null;
+
+	return listMarker;
+};
+
 const replaceCheckboxes = [
 	EditorView.theme({
 		[`& .${checkboxClassName}`]: {
@@ -94,12 +109,12 @@ const replaceCheckboxes = [
 	makeReplaceExtension({
 		getRevealStrategy: (node, state) => {
 			if (node.name === 'TaskMarker') {
-				const container = node.node.parent?.parent;
-				const listMarker = container?.getChild('ListMark');
+				const listMarker = getTaskListMarker(node);
+				if (!listMarker) return false;
 
 				// Intersection check logic similar to nodeIntersectsSelection but with custom range
 				const selection = state.selection.main;
-				const rangeFrom = listMarker ? listMarker.from : node.from;
+				const rangeFrom = listMarker.from;
 				const rangeTo = node.to;
 
 				const rangeContains = (point: number) => point >= rangeFrom && point <= rangeTo;
@@ -118,6 +133,8 @@ const replaceCheckboxes = [
 			};
 
 			if (node.name === 'TaskMarker') {
+				if (!getTaskListMarker(node)) return null;
+
 				const containerLine = state.doc.lineAt(node.from);
 				const labelText = state.doc.sliceString(node.to, containerLine.to);
 
@@ -132,11 +149,8 @@ const replaceCheckboxes = [
 		},
 		getDecorationRange: (node, state) => {
 			if (node.name === 'TaskMarker') {
-				const container = node.node.parent?.parent;
-				const listMarker = container?.getChild('ListMark');
-				if (!listMarker) {
-					return null;
-				}
+				const listMarker = getTaskListMarker(node);
+				if (!listMarker) return [node.from, node.to];
 
 				return [listMarker.from, node.to];
 			} else if (node.name === 'Task') {

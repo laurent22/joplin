@@ -1,4 +1,4 @@
-import { extractUrls } from './markdown';
+import { extractUrls, normalizeHeadingTextForHash } from './markdown';
 import { Link } from './types';
 
 describe('markdown', () => {
@@ -50,6 +50,16 @@ describe('markdown', () => {
 	])('should extract URLs', (md: string, expected: Link[]) => {
 		const actual = extractUrls(md);
 		expect(actual).toEqual(expected);
+	});
+
+	test.each([
+		['[ ] title', 'title'],
+		['[x] title', 'title'],
+		['[X] title', 'title'],
+		['[x]title', '[x]title'],
+		['title [x] suffix', 'title [x] suffix'],
+	])('should normalize heading text for hash generation', (input: string, expected: string) => {
+		expect(normalizeHeadingTextForHash(input)).toBe(expected);
 	});
 
 });

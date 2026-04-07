@@ -38,4 +38,19 @@ describe('jumpToHash', () => {
 		expect(jumpToHash(editor, 'line-2')).toBe(true);
 		expect(editor.state.selection.main.anchor).toBe(editor.state.doc.length);
 	});
+
+	test.each([
+		'## [ ] Line 2',
+		'## [x] Line 2',
+		'## [X] Line 2',
+	])('should jump to checkbox-prefixed Markdown headers (%s)', async (heading: string) => {
+		const editor = await createTestEditor(
+			`Line 1\n${heading}`,
+			EditorSelection.cursor(0),
+			['ATXHeading2'],
+		);
+
+		expect(jumpToHash(editor, 'line-2')).toBe(true);
+		expect(editor.state.selection.main.anchor).toBe(editor.state.doc.length);
+	});
 });

@@ -6,6 +6,7 @@ import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset, ResourceInfos } from './types';
 import hljs from './highlight';
+import { normalizeHeadingTextForHash } from '@joplin/utils/markdown';
 // Use a require() to support bundling on mobile:
 import MarkdownIt = require('markdown-it');
 
@@ -81,7 +82,7 @@ const plugins: RendererPlugins = {
 const defaultNoteStyle = require('./defaultNoteStyle');
 
 function slugify(s: string): string {
-	return uslug(s);
+	return uslug(normalizeHeadingTextForHash(s));
 }
 
 // Share across all instances of MdToHtml

@@ -1,4 +1,5 @@
 import uslug from '@joplin/fork-uslug/lib/uslug';
+import { normalizeHeadingTextForHash } from '@joplin/utils/markdown';
 import { Node } from 'prosemirror-model';
 
 type OnHeading = (node: Node, hash: string, pos: number)=> boolean|void;
@@ -8,7 +9,7 @@ const forEachHeading = (doc: Node, callback: OnHeading) => {
 	const seenHashes = new Set<string>();
 	doc.descendants((node, pos) => {
 		if (node.type.name === 'heading') {
-			const originalHash = uslug(node.textContent);
+			const originalHash = uslug(normalizeHeadingTextForHash(node.textContent));
 
 			let hash = originalHash;
 			let counter = 1;

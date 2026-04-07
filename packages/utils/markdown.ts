@@ -3,6 +3,12 @@
 import * as MarkdownIt from 'markdown-it';
 import { Link } from './types';
 
+const headingTaskMarkerPattern = /^\[(?: |x|X)\]\s+/;
+
+export const normalizeHeadingTextForHash = (text: string): string => {
+	return text.replace(headingTaskMarkerPattern, '');
+};
+
 // enable file link URLs in MarkdownIt. Keeps other URL restrictions of
 // MarkdownIt untouched. Format [link name](file://...)
 const validateLinks = (url: string) => {

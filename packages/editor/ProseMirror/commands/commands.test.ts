@@ -83,6 +83,20 @@ describe('ProseMirror/commands', () => {
 		expect(editor.state.selection.$anchor.parent.textContent).toBe('Test heading 2');
 	});
 
+	test('jumpToHash should ignore leading task markers in heading hashes', () => {
+		const editor = createTestEditor({ html: '<h1>[ ] Test heading 1</h1><h2>[x] Test heading 2</h2>' });
+
+		const jumpToHash = (hash: string) => {
+			return commands[EditorCommandType.JumpToHash](editor.state, editor.dispatch, editor, [hash]);
+		};
+
+		expect(jumpToHash('test-heading-1')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[ ] Test heading 1');
+
+		expect(jumpToHash('test-heading-2')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[x] Test heading 2');
+	});
+
 	test('textTable should insert a table', () => {
 		const editor = createTestEditor({ html: '<p></p>' });
 
