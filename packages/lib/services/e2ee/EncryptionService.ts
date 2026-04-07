@@ -13,6 +13,7 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
+export const mkTestText = 'mk-test'; // This must never change, otherwise it will break validation of master keys with cipherText set
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -317,6 +318,7 @@ export default class EncryptionService {
 		model.updated_time = now;
 		model.source_application = Setting.value('appId');
 		model.hasBeenUsed = false;
+		model.testCipher = await this.encrypt(this.defaultEncryptionMethod_, model.content, mkTestText);
 
 		return model;
 	}
@@ -341,7 +343,17 @@ export default class EncryptionService {
 	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
 		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
-			await this.decryptMasterKeyContent(model, password);
+			const decryptedKey = await this.decryptMasterKeyContent(model, password);
+
+			// On the mobile platform (but not on web), decrypting the master key with an incorrect password does not throw an exception, so to validate the
+			// master password is correct, the decrypted key is used to decrypt a previously stored cipher of a known value, to verify the key decrypts the
+			// correct value. If testCipher is not populated, further validation is skipped because there is no other way to verify the key is correct.
+			// Newly created master keys will have this set, while for pre-existing keys, the testCipher is populated the first time an encrypted item is
+			// successfully decrypted using the master key
+			if (model.testCipher) {
+				const decryptedMkTestText = await this.decrypt(this.defaultEncryptionMethod(), decryptedKey, model.testCipher);
+				if (decryptedMkTestText !== mkTestText) return false;
+			}
 		} catch (error) {
 			return false;
 		} finally {

@@ -6,9 +6,10 @@ import ResourceService from './ResourceService';
 import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import KvStore from './KvStore';
-import EncryptionService from './e2ee/EncryptionService';
+import EncryptionService, { mkTestText } from './e2ee/EncryptionService';
 import PerformanceLogger from '../PerformanceLogger';
 import AsyncActionQueue from '../AsyncActionQueue';
+import { masterKeyById } from './synchronizer/syncInfoUtils';
 
 const EventEmitter = require('events');
 const perfLogger = PerformanceLogger.create();
@@ -197,6 +198,7 @@ export default class DecryptionWorker {
 			while (true) {
 				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
 				const items = result.items;
+				let lastMasterKeyId;
 
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
@@ -230,6 +232,7 @@ export default class DecryptionWorker {
 							continue;
 						}
 
+						const header = await this.encryptionService().decodeHeaderString(item.encryption_cipher_text);
 						const decryptedItem = await ItemClass.decrypt(item);
 
 						await clearDecryptionCounter();
@@ -251,6 +254,18 @@ export default class DecryptionWorker {
 
 						if (decryptedItem.type_ === Resource.modelType() && !decryptedItem.encryption_applied && !!decryptedItem.encryption_blob_encrypted) {
 							this.eventEmitter_.emit('resourceMetadataButNotBlobDecrypted', { id: decryptedItem.id });
+						}
+
+						// If ItemClass.decrypt did not error, the item was successfully serialised after decryption, which means the master password is correct,
+						// and therefore this key can be used to create a test cipher if the key does not have one, because it was pre-existing before test cipher
+						// was added
+						if (!lastMasterKeyId || header.masterKeyId !== lastMasterKeyId) {
+							lastMasterKeyId = header.masterKeyId;
+							const mk = masterKeyById(header.masterKeyId);
+
+							if (mk && !mk.testCipher) {
+								mk.testCipher = await this.encryptionService().encrypt(header.encryptionMethod, mk.content, mkTestText);
+							}
 						}
 					} catch (error) {
 						excludedIds.push(item.id);
