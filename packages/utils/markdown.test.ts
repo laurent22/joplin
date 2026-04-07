@@ -1,4 +1,4 @@
-import { extractUrls, normalizeHeadingTextForHash } from './markdown';
+import { extractUrls, headingHashesForText, normalizeHeadingTextForHash } from './markdown';
 import { Link } from './types';
 
 describe('markdown', () => {
@@ -60,6 +60,15 @@ describe('markdown', () => {
 		['title [x] suffix', 'title [x] suffix'],
 	])('should normalize heading text for hash generation', (input: string, expected: string) => {
 		expect(normalizeHeadingTextForHash(input)).toBe(expected);
+	});
+
+	test.each([
+		['[x] title', { canonicalHash: 'title', legacyHash: 'x-title' }],
+		['[ ] title', { canonicalHash: 'title', legacyHash: 'title' }],
+		['title', { canonicalHash: 'title', legacyHash: 'title' }],
+	])('should return canonical and legacy hashes for headings', (input: string, expected: { canonicalHash: string; legacyHash: string }) => {
+		const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+		expect(headingHashesForText(input, slugify)).toEqual(expected);
 	});
 
 });

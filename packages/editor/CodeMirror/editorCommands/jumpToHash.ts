@@ -2,7 +2,7 @@ import { ensureSyntaxTree } from '@codemirror/language';
 import { EditorSelection } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import uslug from '@joplin/fork-uslug/lib/uslug';
-import { normalizeHeadingTextForHash } from '@joplin/utils/markdown';
+import { headingHashesForText } from '@joplin/utils/markdown';
 import { SyntaxNodeRef } from '@lezer/common';
 import htmlNodeInfo from '../utils/htmlNodeInfo';
 
@@ -24,7 +24,9 @@ const jumpToHash = (view: EditorView, hash: string) => {
 			const nodeText = nodeToText(node)
 				.replace(/^#+\s/, '') // Leading #s in headers
 				.replace(/\n-+$/, ''); // Trailing --s in headers
-			matches = hash === uslug(normalizeHeadingTextForHash(nodeText));
+
+			const { canonicalHash, legacyHash } = headingHashesForText(nodeText, uslug);
+			matches = hash === canonicalHash || hash === legacyHash;
 		} else if (node.name === 'HTMLBlock') {
 			// CodeMirror adds HTML information to Markdown documents using overlays attached
 			// to HTMLTag and HTMLBlock nodes.

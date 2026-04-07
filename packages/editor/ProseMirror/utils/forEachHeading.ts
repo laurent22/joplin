@@ -1,25 +1,33 @@
 import uslug from '@joplin/fork-uslug/lib/uslug';
-import { normalizeHeadingTextForHash } from '@joplin/utils/markdown';
+import { headingHashesForText } from '@joplin/utils/markdown';
 import { Node } from 'prosemirror-model';
 
-type OnHeading = (node: Node, hash: string, pos: number)=> boolean|void;
+type OnHeading = (node: Node, hashes: string[], pos: number)=> boolean|void;
+
+const makeUniqueHash = (baseHash: string, seenHashes: Set<string>) => {
+	let hash = baseHash;
+	let counter = 1;
+	while (seenHashes.has(hash)) {
+		counter++;
+		hash = `${baseHash}-${counter}`;
+	}
+
+	seenHashes.add(hash);
+	return hash;
+};
 
 const forEachHeading = (doc: Node, callback: OnHeading) => {
 	let done = false;
-	const seenHashes = new Set<string>();
+	const seenCanonicalHashes = new Set<string>();
+	const seenLegacyHashes = new Set<string>();
 	doc.descendants((node, pos) => {
 		if (node.type.name === 'heading') {
-			const originalHash = uslug(normalizeHeadingTextForHash(node.textContent));
+			const { canonicalHash, legacyHash } = headingHashesForText(node.textContent, uslug);
+			const uniqueCanonicalHash = makeUniqueHash(canonicalHash, seenCanonicalHashes);
+			const uniqueLegacyHash = makeUniqueHash(legacyHash, seenLegacyHashes);
+			const hashes = uniqueCanonicalHash === uniqueLegacyHash ? [uniqueCanonicalHash] : [uniqueCanonicalHash, uniqueLegacyHash];
 
-			let hash = originalHash;
-			let counter = 1;
-			while (seenHashes.has(hash)) {
-				counter++;
-				hash = `${originalHash}-${counter}`;
-			}
-			seenHashes.add(hash);
-
-			done = !!callback(node, hash, pos);
+			done = !!callback(node, hashes, pos);
 		}
 		return !done;
 	});

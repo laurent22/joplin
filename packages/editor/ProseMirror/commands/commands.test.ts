@@ -95,6 +95,9 @@ describe('ProseMirror/commands', () => {
 
 		expect(jumpToHash('test-heading-2')).toBe(true);
 		expect(editor.state.selection.$anchor.parent.textContent).toBe('[x] Test heading 2');
+
+		expect(jumpToHash('x-test-heading-2')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[x] Test heading 2');
 	});
 
 	test('textTable should insert a table', () => {

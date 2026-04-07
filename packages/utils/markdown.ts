@@ -9,6 +9,16 @@ export const normalizeHeadingTextForHash = (text: string): string => {
 	return text.replace(headingTaskMarkerPattern, '');
 };
 
+export const headingHashesForText = (text: string, slugify: (text: string)=> string) => {
+	const canonicalHash = slugify(normalizeHeadingTextForHash(text));
+	const legacyHash = slugify(text);
+
+	return {
+		canonicalHash,
+		legacyHash,
+	};
+};
+
 // enable file link URLs in MarkdownIt. Keeps other URL restrictions of
 // MarkdownIt untouched. Format [link name](file://...)
 const validateLinks = (url: string) => {

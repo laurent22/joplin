@@ -8,8 +8,8 @@ const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 	}
 
 	let targetHeaderPos: number|null = null;
-	forEachHeading(view.state.doc, (node, hash, pos) => {
-		if (hash === targetHash) {
+	forEachHeading(view.state.doc, (node, hashes, pos) => {
+		if (hashes.includes(targetHash)) {
 			// Subtract one to move the selection to the end of
 			// the node:
 			targetHeaderPos = pos + node.nodeSize - 1;

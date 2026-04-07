@@ -6,7 +6,7 @@ import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset, ResourceInfos } from './types';
 import hljs from './highlight';
-import { normalizeHeadingTextForHash } from '@joplin/utils/markdown';
+import { headingHashesForText, normalizeHeadingTextForHash } from '@joplin/utils/markdown';
 // Use a require() to support bundling on mobile:
 import MarkdownIt = require('markdown-it');
 
@@ -84,6 +84,19 @@ const defaultNoteStyle = require('./defaultNoteStyle');
 function slugify(s: string): string {
 	return uslug(normalizeHeadingTextForHash(s));
 }
+
+const makeUniqueHash = (baseHash: string, seenHashes: Set<string>) => {
+	let hash = baseHash;
+	let counter = 1;
+
+	while (seenHashes.has(hash)) {
+		counter++;
+		hash = `${baseHash}-${counter}`;
+	}
+
+	seenHashes.add(hash);
+	return hash;
+};
 
 // Share across all instances of MdToHtml
 const inMemoryCache = new InMemoryCache(20);
@@ -632,7 +645,36 @@ export default class MdToHtml implements MarkupRenderer {
 			});
 		}
 
-		loadPlugin(markdownItAnchor, { slugify: slugify });
+		const defaultHeadingOpenRenderer = markdownIt.renderer.rules.heading_open;
+		markdownIt.renderer.rules.heading_open = (tokens, index, options, environment, self) => {
+			const rendered = defaultHeadingOpenRenderer
+				? defaultHeadingOpenRenderer(tokens, index, options, environment, self)
+				: self.renderToken(tokens, index, options);
+
+			const legacyHeadingId = tokens[index].meta?.legacyHeadingId;
+			if (!legacyHeadingId) {
+				return rendered;
+			}
+
+			const escapedLegacyId = htmlentities(legacyHeadingId);
+			return `${rendered}<a class="joplin-legacy-header-anchor" id="${escapedLegacyId}" aria-hidden="true"></a>`;
+		};
+
+		const seenLegacyHashes = new Set<string>();
+
+		loadPlugin(markdownItAnchor, {
+			slugify: slugify,
+			callback: (token: MarkdownIt.Token, headingInfo: { title: string; slug: string }) => {
+				const { legacyHash } = headingHashesForText(headingInfo.title, uslug);
+				const uniqueLegacyHash = makeUniqueHash(legacyHash, seenLegacyHashes);
+				if (uniqueLegacyHash === headingInfo.slug) return;
+
+				token.meta = {
+					...token.meta,
+					legacyHeadingId: uniqueLegacyHash,
+				};
+			},
+		});
 
 		for (const key in plugins) {
 			if (this.pluginEnabled(key)) {
