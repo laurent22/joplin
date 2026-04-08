@@ -79,6 +79,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		await shared.checkSyncConfig(this, this.state.settings);
 	}
 
+	private isWebDavOidcTarget_(settings: Record<string, unknown>) {
+		const syncTargetId = settings['sync.target'] as number;
+		if (![SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav')].includes(syncTargetId)) return false;
+		return settings[`sync.${syncTargetId}.authMethod`] === 'oidc';
+	}
+
 	public UNSAFE_componentWillMount() {
 		this.setState({ settings: this.props.settings });
 	}
@@ -286,6 +292,33 @@ class ConfigScreenComponent extends React.Component<any, any> {
 								level={ButtonLevel.Primary}
 								onClick={goToSamlLogin}
 								disabled={!server || server?.trim().length === 0}
+							/>
+						</div>,
+					);
+				}
+
+				if (this.isWebDavOidcTarget_(settings)) {
+					const syncTargetId = settings['sync.target'] as number;
+					const oidcIssuer = (settings[`sync.${syncTargetId}.oidcIssuer`] as string || '').trim();
+					const oidcClientId = (settings[`sync.${syncTargetId}.oidcClientId`] as string || '').trim();
+
+					const goToWebDavOidcLogin = async () => {
+						const done = await shared.saveSettings(this);
+						if (!done) return;
+
+						this.props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'WebDavOidcLogin',
+						});
+					};
+
+					settingComps.push(
+						<div key="connect_to_webdav_oidc_button" style={this.rowStyle_}>
+							<Button
+								title={_('Connect using OpenID Connect')}
+								level={ButtonLevel.Primary}
+								onClick={goToWebDavOidcLogin}
+								disabled={!oidcIssuer || !oidcClientId}
 							/>
 						</div>,
 					);
@@ -504,4 +537,3 @@ const mapStateToProps = (state: any) => {
 };
 
 export default connect(mapStateToProps)(ConfigScreenComponent);
-

@@ -56,6 +56,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 	}
 
 	const emptyDirWarning = _('Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s', 'https://joplinapp.org/help/faq');
+	const syncTargetSettingVisible = (targetName: string, settings: Record<string, unknown>, authMethod: string|null = null) => {
+		try {
+			const targetId = SyncTargetRegistry.nameToId(targetName);
+			if (settings['sync.target'] !== targetId) return false;
+			if (!authMethod) return true;
+
+			return (settings[`sync.${targetId}.authMethod`] || 'password') === authMethod;
+		} catch (error) {
+			return false;
+		}
+	};
 
 	// A "public" setting means that it will show up in the various config screens (or config command for the CLI tool), however
 	// if if private a setting might still be handled and modified by the app. For instance, the settings related to sorting notes are not
@@ -179,11 +190,31 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
+				return syncTargetSettingVisible('nextcloud', settings);
 			},
 			public: true,
 			label: () => _('Nextcloud WebDAV URL'),
 			description: () => emptyDirWarning,
+			storage: SettingStorage.File,
+		},
+		'sync.5.authMethod': {
+			value: 'password',
+			type: SettingItemType.String,
+			section: 'sync',
+			isEnum: true,
+			appTypes: [AppType.Desktop],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('nextcloud', settings);
+			},
+			public: true,
+			label: () => _('Authentication method'),
+			options: () => {
+				return {
+					password: _('Password'),
+					oidc: _('OpenID Connect (OIDC)'),
+				};
+			},
 			storage: SettingStorage.File,
 		},
 		'sync.5.username': {
@@ -192,7 +223,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
+				return syncTargetSettingVisible('nextcloud', settings, 'password');
 			},
 			public: true,
 			label: () => _('Nextcloud username'),
@@ -204,11 +235,65 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
+				return syncTargetSettingVisible('nextcloud', settings, 'password');
 			},
 			public: true,
 			label: () => _('Nextcloud password'),
 			secure: true,
+		},
+		'sync.5.oidcIssuer': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('nextcloud', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('Nextcloud OIDC issuer or discovery URL'),
+			storage: SettingStorage.File,
+		},
+		'sync.5.oidcClientId': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('nextcloud', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('Nextcloud OIDC client ID'),
+			storage: SettingStorage.File,
+		},
+		'sync.5.oidcClientSecret': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			advanced: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('nextcloud', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('Nextcloud OIDC client secret'),
+			secure: true,
+		},
+		'sync.5.oidcScope': {
+			value: 'openid profile email offline_access',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			advanced: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('nextcloud', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('Nextcloud OIDC scope'),
+			storage: SettingStorage.File,
 		},
 
 		'sync.6.path': {
@@ -217,11 +302,31 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
+				return syncTargetSettingVisible('webdav', settings);
 			},
 			public: true,
 			label: () => _('WebDAV URL'),
 			description: () => emptyDirWarning,
+			storage: SettingStorage.File,
+		},
+		'sync.6.authMethod': {
+			value: 'password',
+			type: SettingItemType.String,
+			section: 'sync',
+			isEnum: true,
+			appTypes: [AppType.Desktop],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('webdav', settings);
+			},
+			public: true,
+			label: () => _('Authentication method'),
+			options: () => {
+				return {
+					password: _('Password'),
+					oidc: _('OpenID Connect (OIDC)'),
+				};
+			},
 			storage: SettingStorage.File,
 		},
 		'sync.6.username': {
@@ -230,7 +335,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
+				return syncTargetSettingVisible('webdav', settings, 'password');
 			},
 			public: true,
 			label: () => _('WebDAV username'),
@@ -242,11 +347,65 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			show: (settings: any) => {
-				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
+				return syncTargetSettingVisible('webdav', settings, 'password');
 			},
 			public: true,
 			label: () => _('WebDAV password'),
 			secure: true,
+		},
+		'sync.6.oidcIssuer': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('webdav', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('WebDAV OIDC issuer or discovery URL'),
+			storage: SettingStorage.File,
+		},
+		'sync.6.oidcClientId': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('webdav', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('WebDAV OIDC client ID'),
+			storage: SettingStorage.File,
+		},
+		'sync.6.oidcClientSecret': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			advanced: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('webdav', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('WebDAV OIDC client secret'),
+			secure: true,
+		},
+		'sync.6.oidcScope': {
+			value: 'openid profile email offline_access',
+			type: SettingItemType.String,
+			section: 'sync',
+			appTypes: [AppType.Desktop],
+			advanced: true,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			show: (settings: any) => {
+				return syncTargetSettingVisible('webdav', settings, 'oidc');
+			},
+			public: true,
+			label: () => _('WebDAV OIDC scope'),
+			storage: SettingStorage.File,
 		},
 
 		'sync.8.path': {
@@ -480,6 +639,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		'sync.3.auth': { value: '', type: SettingItemType.String, public: false },
 		'sync.4.auth': { value: '', type: SettingItemType.String, public: false },
+		'sync.5.auth': { value: '', type: SettingItemType.String, public: false },
+		'sync.6.auth': { value: '', type: SettingItemType.String, public: false },
 		'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
 		'sync.9.auth': { value: '', type: SettingItemType.String, public: false },
 		'sync.10.auth': { value: '', type: SettingItemType.String, public: false },

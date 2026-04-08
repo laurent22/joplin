@@ -16,7 +16,9 @@ const validateUrlProtocol = async (_oldValue: string, newValue: string) => {
 const validations: Record<string, ValidationHandler> = {
 
 	'sync.5.path': validateUrlProtocol,
+	'sync.5.oidcIssuer': validateUrlProtocol,
 	'sync.6.path': validateUrlProtocol,
+	'sync.6.oidcIssuer': validateUrlProtocol,
 	'sync.9.path': validateUrlProtocol,
 	'sync.11.path': validateUrlProtocol,
 

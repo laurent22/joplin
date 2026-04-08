@@ -38,7 +38,7 @@ export default class BaseSyncTarget {
 
 	// Returns true if the sync target expects a non-empty sync.{id}.password
 	// setting.
-	public static requiresPassword() {
+	public static requiresPassword(_settings: Record<string, unknown>|null = null) {
 		return false;
 	}
 

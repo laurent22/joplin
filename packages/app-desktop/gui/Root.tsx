@@ -6,6 +6,7 @@ import ConfigScreen from './ConfigScreen/ConfigScreen';
 import StatusScreen from './StatusScreen/StatusScreen';
 import OneDriveLoginScreen from './OneDriveLoginScreen';
 import DropboxLoginScreen from './DropboxLoginScreen';
+import WebDavOidcLoginScreen from './WebDavOidcLoginScreen';
 import ErrorBoundary from './ErrorBoundary';
 import { themeStyle } from '@joplin/lib/theme';
 import MenuBar from './MenuBar';
@@ -161,6 +162,7 @@ class RootComponent extends React.Component<Props, any> {
 			Main: { screen: MainScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
+			WebDavOidcLogin: { screen: WebDavOidcLoginScreen, title: () => _('OpenID Connect Login') },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()), title: () => _('Joplin Server Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },

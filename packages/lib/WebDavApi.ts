@@ -19,6 +19,9 @@ interface WebDavApiOptions {
 	baseUrl(): string;
 	username(): string;
 	password(): string;
+	authMethod?(): 'basic'|'bearer';
+	accessToken?(): Promise<string | null>|string | null;
+	onAuthError?(): Promise<boolean>;
 	ignoreTlsErrors?(): boolean;
 }
 
@@ -39,6 +42,7 @@ interface ExecOptions {
 	target?: 'string' | 'file';
 	source?: 'file';
 	path?: string;
+	retryAuth?: boolean;
 }
 
 // detection state, whether invalid If-None-Match header is accepted by server
@@ -107,7 +111,7 @@ class WebDavApi {
 		return this.logger_;
 	}
 
-	private authToken(): string | null {
+	private basicAuthToken_(): string | null {
 		if (!this.options_.username() || !this.options_.password()) return null;
 		try {
 			// Note: Non-ASCII passwords will throw an error about Latin1 characters - https://github.com/laurent22/joplin/issues/246
@@ -118,6 +122,18 @@ class WebDavApi {
 			(error as Error).message = `Cannot encode username/password: ${(error as Error).message}`;
 			throw error;
 		}
+	}
+
+	private async authorizationHeader_(): Promise<string | null> {
+		const authMethod = this.options_.authMethod ? this.options_.authMethod() : 'basic';
+		if (authMethod === 'bearer') {
+			if (!this.options_.accessToken) return null;
+			const accessToken = await this.options_.accessToken();
+			return accessToken ? `Bearer ${accessToken}` : null;
+		}
+
+		const authToken = this.basicAuthToken_();
+		return authToken ? `Basic ${authToken}` : null;
 	}
 
 	public baseUrl(): string {
@@ -427,10 +443,11 @@ class WebDavApi {
 
 		if (!options.responseFormat) options.responseFormat = 'json';
 		if (!options.target) options.target = 'string';
+		if (options.retryAuth === undefined) options.retryAuth = true;
 
-		const authToken = this.authToken();
+		const authorizationHeader = await this.authorizationHeader_();
 
-		if (authToken) headers['Authorization'] = `Basic ${authToken}`;
+		if (authorizationHeader) headers['Authorization'] = authorizationHeader;
 
 		// That should not be needed, but it is required for React Native 0.63+
 		// https://github.com/facebook/react-native/issues/30176
@@ -525,6 +542,19 @@ class WebDavApi {
 		};
 
 		if (!response.ok) {
+			if (options.retryAuth && this.options_.onAuthError && ['401', '403'].includes(`${response.status}`)) {
+				try {
+					const didRefreshAuth = await this.options_.onAuthError();
+					if (didRefreshAuth) {
+						const retryHeaders = { ...headers };
+						delete retryHeaders['Authorization'];
+						return this.exec(method, path, body, retryHeaders, { ...options, retryAuth: false });
+					}
+				} catch (error) {
+					// Keep the original server error below.
+				}
+			}
+
 			// When using fetchBlob we only get a string (not xml or json) back
 			if (options.target === 'file') throw newError('fetchBlob error', response.status);
 
@@ -544,8 +574,10 @@ class WebDavApi {
 			let message = 'Unknown error 2';
 			if (response.status === 401 || response.status === 403) {
 				// No auth token means an empty username or password
-				if (!authToken) {
+				if (!authorizationHeader) {
 					message = _('Access denied: Please re-enter your password and/or username');
+				} else if (authorizationHeader.startsWith('Bearer ')) {
+					message = _('Access denied: Please reconnect to your account');
 				} else {
 					message = _('Access denied: Please check your username and password');
 				}

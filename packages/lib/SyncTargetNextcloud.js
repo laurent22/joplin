@@ -30,22 +30,38 @@ class SyncTargetNextcloud extends BaseSyncTarget {
 	}
 
 	async isAuthenticated() {
+		if (SyncTargetWebDAV.isOidcAuthMethod_(SyncTargetNextcloud.id())) {
+			return !!Setting.value('sync.5.auth');
+		}
+
 		return true;
 	}
 
-	static requiresPassword() {
-		return true;
+	authRouteName() {
+		if (Setting.value('appType') !== 'desktop') return null;
+		if (!SyncTargetWebDAV.isOidcAuthMethod_(SyncTargetNextcloud.id())) return null;
+		return 'WebDavOidcLogin';
+	}
+
+	static requiresPassword(settings = null) {
+		return !SyncTargetWebDAV.isOidcAuthMethod_(SyncTargetNextcloud.id(), settings);
 	}
 
 	static async checkConfig(options) {
-		return SyncTargetWebDAV.checkConfig(options);
+		return SyncTargetWebDAV.checkConfig(options, SyncTargetNextcloud.id());
 	}
 
 	async initFileApi() {
 		const fileApi = await SyncTargetWebDAV.newFileApi_(SyncTargetNextcloud.id(), {
 			path: () => Setting.value('sync.5.path'),
+			authMethod: () => Setting.value('sync.5.authMethod'),
 			username: () => Setting.value('sync.5.username'),
 			password: () => Setting.value('sync.5.password'),
+			auth: () => Setting.value('sync.5.auth'),
+			oidcIssuer: () => Setting.value('sync.5.oidcIssuer'),
+			oidcClientId: () => Setting.value('sync.5.oidcClientId'),
+			oidcClientSecret: () => Setting.value('sync.5.oidcClientSecret'),
+			oidcScope: () => Setting.value('sync.5.oidcScope'),
 			ignoreTlsErrors: () => Setting.value('net.ignoreTlsErrors'),
 		});
 
