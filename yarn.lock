@@ -10733,7 +10733,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
-    "@types/react-redux": "npm:7.1.33"
+    "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.36"
     async-mutex: "npm:0.5.0"
     axios: "npm:^1.7.7"
@@ -10835,7 +10835,7 @@ __metadata:
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.1.10"
-    "@types/react-redux": "npm:7.1.33"
+    "@types/react-redux": "npm:7.1.34"
     "@types/serviceworker": "npm:0.0.173"
     "@types/tar-stream": "npm:3.1.4"
     assert-browserify: "npm:2.0.0"
@@ -10984,7 +10984,7 @@ __metadata:
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.1.10"
-    "@types/react-redux": "npm:7.1.33"
+    "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
     dompurify: "npm:3.3.1"
     jest: "npm:29.7.0"
@@ -17270,15 +17270,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:7.1.33":
-  version: 7.1.33
-  resolution: "@types/react-redux@npm:7.1.33"
+"@types/react-redux@npm:7.1.34":
+  version: 7.1.34
+  resolution: "@types/react-redux@npm:7.1.34"
   dependencies:
     "@types/hoist-non-react-statics": "npm:^3.3.0"
     "@types/react": "npm:*"
     hoist-non-react-statics: "npm:^3.3.0"
     redux: "npm:^4.0.0"
-  checksum: 10/65f4e0a3f0e532bbbe44ae6522d1fce91bfcb3bacc90904c35d3f819e77932cc489b6945988acb4a2320f6e78c57dd1c149556aa241a68efc51de15a2cd73fc0
+  checksum: 10/febcd1db0c83c5002c6bee0fdda9e70da0653454ffbb72d6c37cbf2f5c005e06fb5271cff344d7164c385c944526565282de9a95ff379e040476b71d27fc2512
   languageName: node
   linkType: hard
 
