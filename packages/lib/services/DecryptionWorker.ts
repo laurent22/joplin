@@ -265,7 +265,7 @@ export default class DecryptionWorker {
 							const mk = masterKeyById(header.masterKeyId);
 
 							if (mk && !mk.testCipher) {
-								mk.testCipher = base64.encode(await this.encryptionService().encrypt(header.encryptionMethod, mk.content, mkTestText));
+								mk.testCipher = base64.encode(await this.encryptionService().encryptString(mkTestText, { masterKeyId: mk.id, masterKeyContent: mk.content }));
 								mk.updated_time = Date.now();
 								await MasterKey.save(mk);
 							}

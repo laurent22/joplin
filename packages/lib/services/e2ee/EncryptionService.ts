@@ -7,6 +7,7 @@ import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
 import PerformanceLogger from '../../PerformanceLogger';
+import uuid from '../../uuid';
 const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
@@ -57,6 +58,7 @@ export interface EncryptOptions {
 	onProgress?: Function;
 	encryptionHandler?: EncryptionCustomHandler;
 	masterKeyId?: string;
+	masterKeyContent?: string;
 }
 
 type GetPasswordCallback = ()=> string|Promise<string>;
@@ -319,7 +321,9 @@ export default class EncryptionService {
 		model.updated_time = now;
 		model.source_application = Setting.value('appId');
 		model.hasBeenUsed = false;
-		model.testCipher = base64.encode(await this.encrypt(this.defaultEncryptionMethod_, model.content, mkTestText));
+		model.id = uuid.create();
+		model.created_time = Date.now();
+		model.testCipher = base64.encode(await this.encryptString(mkTestText, { masterKeyId: model.id, masterKeyContent: model.content }));
 
 		return model;
 	}
@@ -352,9 +356,8 @@ export default class EncryptionService {
 			// Newly created master keys will have this set, while for pre-existing keys, the testCipher is populated the first time an encrypted item is
 			// successfully decrypted using the master key
 			if (performTestCipherCheck && model.testCipher) {
-				const testCipher = base64.decode(model.testCipher);
-				const decryptedMkTestText = await this.decrypt(this.defaultEncryptionMethod_, decryptedKey, testCipher);
-				if (decryptedMkTestText !== mkTestText) return false;
+				const decryptedMkTest = await this.decryptString(base64.decode(model.testCipher), { masterKeyId: model.id, masterKeyContent: decryptedKey });
+				if (decryptedMkTest !== mkTestText) return false;
 			}
 		} catch (error) {
 			return false;
@@ -602,7 +605,7 @@ export default class EncryptionService {
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
-		const masterKeyPlainText = (await this.loadedMasterKey(masterKeyId)).plainText;
+		const masterKeyPlainText = options.masterKeyContent ? options.masterKeyContent : (await this.loadedMasterKey(masterKeyId)).plainText;
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
 
@@ -640,7 +643,7 @@ export default class EncryptionService {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const header: any = await this.decodeHeaderSource_(source);
-		const masterKeyPlainText = (await this.loadedMasterKey(header.masterKeyId)).plainText;
+		const masterKeyPlainText = options.masterKeyContent ? options.masterKeyContent : (await this.loadedMasterKey(header.masterKeyId)).plainText;
 
 		let doneSize = 0;
 
