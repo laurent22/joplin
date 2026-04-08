@@ -114,11 +114,11 @@ export const useInputMasterPassword = (masterKeys: MasterKeyEntity[], activeMast
 	const [inputMasterPassword, setInputMasterPassword] = useState<string>('');
 
 	const onMasterPasswordSave = useCallback(async () => {
-		Setting.setValue('encryption.masterPassword', inputMasterPassword);
-
 		if (!(await masterPasswordIsValid(inputMasterPassword, masterKeys.find(mk => mk.id === activeMasterKeyId)))) {
 			alert('Password is invalid. Please try again.');
 		} else {
+			Setting.setValue('encryption.masterPassword', inputMasterPassword);
+
 			try {
 				for (const mk of masterKeys) {
 					EncryptionService.instance().unloadMasterKey(mk);

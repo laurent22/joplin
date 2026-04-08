@@ -171,7 +171,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					const password2 = passwordPromptConfirmAnswer;
 					if (!password2) throw new Error(_('Confirm password cannot be empty'));
 					if (password !== password2) throw new Error(_('Passwords do not match!'));
-				} else if (!(await masterPasswordIsValid(password, props.masterKeys.find(mk => mk.id === props.activeMasterKeyId)))) {
+				} else if (!(await masterPasswordIsValid(password, masterKey))) {
 					throw new Error(_('Invalid password. Please try again. If you have forgotten your password you will need to reset it.'));
 				}
 

@@ -353,7 +353,7 @@ export default class EncryptionService {
 			// successfully decrypted using the master key
 			if (performTestCipherCheck && model.testCipher) {
 				const testCipher = base64.decode(model.testCipher);
-				const decryptedMkTestText = await this.decrypt(this.defaultEncryptionMethod(), decryptedKey, testCipher);
+				const decryptedMkTestText = await this.decrypt(this.defaultEncryptionMethod_, decryptedKey, testCipher);
 				if (decryptedMkTestText !== mkTestText) return false;
 			}
 		} catch (error) {

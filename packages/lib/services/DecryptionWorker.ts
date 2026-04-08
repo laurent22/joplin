@@ -266,6 +266,7 @@ export default class DecryptionWorker {
 
 							if (mk && !mk.testCipher) {
 								mk.testCipher = base64.encode(await this.encryptionService().encrypt(header.encryptionMethod, mk.content, mkTestText));
+								await MasterKey.save(mk);
 							}
 						}
 					} catch (error) {
