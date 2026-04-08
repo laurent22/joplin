@@ -169,15 +169,24 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi,
 		return `<img src="${await readFileDataUriSafe(filePath)}" ${attributesHtml(modAttrs)}/>`;
 	};
 
+	const isLocalHref = (href: string) => {
+		if (href.startsWith('#')) return false;
+		try { new URL(href); return false; } catch { return true; }
+	};
+
 	const processAnchorTag = async (_name: string, attrs: HtmlAttrs) => {
 		const href = attrValue(attrs, 'href');
-		if (!href) return null;
+		if (!href || !isLocalHref(href)) return null;
 
 		const filePath = `${baseDir}/${href}`;
-		if (!await fs.exists(filePath)) return null;
-
 		const modAttrs = { ...attrs };
 		modAttrs.download = basename(href);
+
+		if (!await fs.exists(filePath)) {
+			modAttrs.href = '';
+			await write(`<a ${attributesHtml(modAttrs)}>`);
+			return '';
+		}
 
 		delete modAttrs.href;
 		await write('<a href="');
