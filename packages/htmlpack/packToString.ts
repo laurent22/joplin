@@ -1,6 +1,6 @@
 const Entities = require('html-entities').AllHtmlEntities;
 import { CssTypes, parse as cssParse, stringify as cssStringify } from '@adobe/css-tools';
-import { dirname } from 'path';
+import { dirname, basename } from 'path';
 import parseHtmlAsync, { HtmlAttrs } from './utils/parseHtmlAsync';
 
 const selfClosingElements = [
@@ -50,14 +50,17 @@ const isSelfClosingTag = (tagName: string) => {
 	return selfClosingElements.includes(tagName.toLowerCase());
 };
 
+export type FileApiChunkCallback = (chunk: string)=> void | Promise<void>;
+
 export type FileApi = {
 	exists(path: string): Promise<boolean>;
 	readFileText(path: string): Promise<string>;
 	readFileDataUri(path: string): Promise<string>;
+	streamFileDataUri?(path: string, onChunk: FileApiChunkCallback): Promise<void>;
 };
 
 // packToString should be able to run in React Native -- don't use fs-extra.
-const packToString = async (baseDir: string, inputFileText: string, fs: FileApi) => {
+const packToString = async (baseDir: string, inputFileText: string, fs: FileApi, write: FileApiChunkCallback) => {
 	const readFileDataUriSafe = async (path: string) => {
 		try {
 			return await fs.readFileDataUri(path);
@@ -166,7 +169,26 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 		return `<img src="${await readFileDataUriSafe(filePath)}" ${attributesHtml(modAttrs)}/>`;
 	};
 
-	const output: string[] = [];
+	const processAnchorTag = async (_name: string, attrs: HtmlAttrs) => {
+		const href = attrValue(attrs, 'href');
+		if (!href) return null;
+
+		const filePath = `${baseDir}/${href}`;
+		if (!await fs.exists(filePath)) return null;
+
+		const modAttrs = { ...attrs };
+		modAttrs.download = basename(href);
+
+		delete modAttrs.href;
+		await write('<a href="');
+		if (fs.streamFileDataUri) {
+			await fs.streamFileDataUri(filePath, async (chunk) => { await write(chunk); });
+		} else {
+			await write(await readFileDataUriSafe(filePath));
+		}
+		await write(`" ${attributesHtml(modAttrs)}>`);
+		return '';
+	};
 
 	interface Tag {
 		name: string;
@@ -183,7 +205,7 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 		onopentag: async (name: string, attrs: HtmlAttrs) => {
 			name = name.toLowerCase();
 
-			let processedResult = '';
+			let processedResult: string | null = null;
 
 			if (name === 'link') {
 				processedResult = await processLinkTag(name, attrs);
@@ -197,15 +219,20 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 				processedResult = await processImgTag(name, attrs);
 			}
 
+			if (name === 'a') {
+				processedResult = await processAnchorTag(name, attrs);
+			}
+
 			tagStack.push({ name });
 
-			if (processedResult) {
-				output.push(processedResult);
-			} else {
+			if (processedResult === null) {
 				let attrHtml = attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
-				output.push(`<${name}${attrHtml}${closingSign}`);
+				await write(`<${name}${attrHtml}${closingSign}`);
+
+			} else if (processedResult !== '') {
+				await write(processedResult);
 			}
 		},
 
@@ -214,9 +241,9 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 				// For CSS, we have to put the style as-is inside the tag because if we html-entities encode
 				// it, it's not going to work. But it's ok because JavaScript won't run within the style tag.
 				// Ideally CSS should be loaded from an external file.
-				output.push(decodedText);
+				await write(decodedText);
 			} else {
-				output.push(htmlentities(decodedText));
+				await write(htmlentities(decodedText));
 			}
 		},
 
@@ -226,13 +253,10 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi)
 			if (current.name === name.toLowerCase()) tagStack.pop();
 
 			if (isSelfClosingTag(name)) return;
-			output.push(`</${name}>`);
+			await write(`</${name}>`);
 		},
 
 	});
-
-	return output.join('');
 };
 
 export default packToString;
-

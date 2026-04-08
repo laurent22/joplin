@@ -202,13 +202,20 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 					return shim.fsDriver().resolve(this.destDir_, path);
 				}
 			};
-			const packedHtml = await packToString(
+			// Chunk size must be divisible by 3 so base64 encoding does not add padding in the middle of the stream.
+			const chunkBytes = 3 * 1024 * 1024;
+			await shim.fsDriver().writeFile(this.filePath_, '', 'utf8');
+
+			await packToString(
 				this.destDir_,
 				mainHtml,
 				{
-					exists: (path) => {
+					exists: async (path) => {
 						path = resolveToAllowedDir(path);
-						return shim.fsDriver().exists(path);
+						const isFound = await shim.fsDriver().exists(path);
+						if (!isFound) return false;
+						const isDir = await shim.fsDriver().isDirectory(path);
+						return !isDir;
 					},
 					readFileDataUri: async (path) => {
 						path = resolveToAllowedDir(path);
@@ -220,9 +227,26 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 						path = resolveToAllowedDir(path);
 						return shim.fsDriver().readFile(path, 'utf8');
 					},
+					streamFileDataUri: async (path, onChunk) => {
+						path = resolveToAllowedDir(path);
+						const handle = await shim.fsDriver().open(path, 'r');
+						try {
+							const mimeType = fromFilename(path);
+							await onChunk(`data:${mimeType};base64,`);
+							while (true) {
+								const chunk = await shim.fsDriver().readFileChunk(handle, chunkBytes, 'base64');
+								if (!chunk) break;
+								await onChunk(chunk);
+							}
+						} finally {
+							await shim.fsDriver().close(handle);
+						}
+					},
+				},
+				async (chunk) => {
+					await shim.fsDriver().appendFile(this.filePath_, chunk, 'utf8');
 				},
 			);
-			await shim.fsDriver().writeFile(this.filePath_, packedHtml, 'utf8');
 
 			for (const d of this.createdDirs_) {
 				await shim.fsDriver().remove(d);
