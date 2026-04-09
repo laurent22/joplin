@@ -20,6 +20,7 @@ import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
 import { cpus } from 'os';
 import { pathToFileURL } from 'url';
+import * as tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 const { _ } = require('./locale');
 const http = require('http');
@@ -529,7 +530,7 @@ function shimInit(options: ShimInitOptions = null) {
 			throw new Error(`Not a valid URL: ${url}`);
 		}
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
+		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : shim.httpAgent(url);
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options);
 		}, options);
@@ -584,7 +585,7 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : null;
+		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : shim.httpAgent(url.href);
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
@@ -701,12 +702,24 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.httpAgent_ = null;
 
+	// X25519MLKEM768 is a post-quantum cryptography key exchange, details:
+	// https://developers.cloudflare.com/ssl/post-quantum-cryptography/
+	// Not supported on by all SSL stacks and versions, detect support at runtime.
+	let tlsEcdhCurve: string;
+	try {
+		tls.createSecureContext({ ecdhCurve: 'X25519MLKEM768:X25519:P-256:P-384' });
+		tlsEcdhCurve = 'X25519MLKEM768:X25519:P-256:P-384';
+	} catch {
+		tlsEcdhCurve = 'auto';
+	}
+
 	shim.httpAgent = url => {
 		if (!shim.httpAgent_) {
 			const AgentSettings = {
 				keepAlive: true,
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
+				ecdhCurve: tlsEcdhCurve,
 			};
 			shim.httpAgent_ = {
 				http: new http.Agent(AgentSettings),
@@ -723,6 +736,7 @@ function shimInit(options: ShimInitOptions = null) {
 			keepAliveMsecs: 5000,
 			proxy: proxyUrl,
 			timeout: proxySettings.proxyTimeout * 1000,
+			ecdhCurve: tlsEcdhCurve,
 		};
 
 		// Based on https://github.com/delvedor/hpagent#usage
