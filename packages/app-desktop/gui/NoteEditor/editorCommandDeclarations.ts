@@ -22,10 +22,10 @@ export const enabledCondition = (commandName: string) => {
 	const allowInViewerAndReadOnlyMode = worksInViewerAndReadOnlyMode.includes(commandName);
 
 	const editorPaneCondition = markdownEditorOnly
-		? 'markdownEditorPaneVisible'
+		? '(markdownEditorPaneVisible || hasActivePluginEditor)'
 		: allowInViewerAndReadOnlyMode
-			? '(markdownEditorPaneVisible || richTextEditorVisible || markdownViewerPaneVisible)'
-			: '(markdownEditorPaneVisible || richTextEditorVisible)';
+			? '(markdownEditorPaneVisible || richTextEditorVisible || markdownViewerPaneVisible || hasActivePluginEditor)'
+			: '(markdownEditorPaneVisible || richTextEditorVisible || hasActivePluginEditor)';
 
 	const output = [
 		// gotoAnythingVisible: Enable if the command palette (which is a modal dialog) is visible

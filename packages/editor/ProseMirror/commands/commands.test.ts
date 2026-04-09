@@ -144,4 +144,21 @@ describe('ProseMirror/commands', () => {
 			}],
 		});
 	});
+
+	test('goDocEnd should move the cursor to the end of the document', () => {
+		const editor = createTestEditor({ html: '<p>First</p><p>Last</p>' });
+
+		commands[EditorCommandType.GoDocEnd](editor.state, editor.dispatch, editor);
+
+		expect(editor.state.selection.from).toBe(editor.state.doc.content.size - 1);
+	});
+
+	test('goDocStart should move the cursor to the start of the document', () => {
+		const editor = createTestEditor({ html: '<p>First</p><p>Last</p>' });
+
+		moveCursorToEnd(editor);
+		commands[EditorCommandType.GoDocStart](editor.state, editor.dispatch, editor);
+
+		expect(editor.state.selection.from).toBe(1);
+	});
 });

@@ -939,6 +939,7 @@ packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
 packages/app-mobile/utils/appDefaultState.js
+packages/app-mobile/utils/appReducer.test.js
 packages/app-mobile/utils/appReducer.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/buildStartupTasks.js

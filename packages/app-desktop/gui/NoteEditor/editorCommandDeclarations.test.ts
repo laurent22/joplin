@@ -11,6 +11,7 @@ const baseContext: Record<string, any> = {
 	noteIsMarkdown: true,
 	noteIsReadOnly: false,
 	richTextEditorVisible: false,
+	hasActivePluginEditor: false,
 };
 
 describe('editorCommandDeclarations', () => {

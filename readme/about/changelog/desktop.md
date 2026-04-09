@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v3.6.8](https://github.com/laurent22/joplin/releases/tag/v3.6.8) (Pre-release) - 2026-04-07T07:28:36Z
+
+- Desktop: Fixed regression that prevented images from being pasted in editor ([#14750](https://github.com/laurent22/joplin/issues/14750))
+
 ## [v3.6.7](https://github.com/laurent22/joplin/releases/tag/v3.6.7) (Pre-release) - 2026-04-05T15:21:11Z
 
 - Improved: Added fullscreen shortcut (Ctrl + Cmd + F) ([#14926](https://github.com/laurent22/joplin/issues/14926)) ([#9637](https://github.com/laurent22/joplin/issues/9637) by [@DevrG03](https://github.com/DevrG03))

@@ -1,13 +1,13 @@
 .sidebar-sync-toggle {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
+	padding: 4px 5px 4px 5px;
 	background: none;
 	border: none;
 	color: var(--joplin-color2);
 	opacity: 0.5;
 	cursor: pointer;
-	padding: 4px 0;
 	width: 100%;
 	font-size: calc(var(--joplin-font-size) * 1.6);
 	transition: opacity 0.2s;
@@ -16,8 +16,16 @@
 		opacity: 1;
 	}
 
+	i {
+		width: 16px;
+		display: inline-flex;
+		justify-content: center;
+		font-size: calc(var(--joplin-toolbar-icon-size) * 0.8);
+	}
+
 	>.timestamp {
 		font-size: 0.6em;
-		margin-left: 6px;
+		margin-left: 4px;
 	}
 }
+

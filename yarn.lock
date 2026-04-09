@@ -6929,7 +6929,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:6.20.0, @codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.3.2, @codemirror/autocomplete@npm:^6.7.1":
+"@codemirror/autocomplete@npm:6.20.1":
+  version: 6.20.1
+  resolution: "@codemirror/autocomplete@npm:6.20.1"
+  dependencies:
+    "@codemirror/language": "npm:^6.0.0"
+    "@codemirror/state": "npm:^6.0.0"
+    "@codemirror/view": "npm:^6.17.0"
+    "@lezer/common": "npm:^1.0.0"
+  checksum: 10/e57d78bb468d615a1448170370fce4ac04268527ef27dd464fac25b5b8d6d21b997f4dc8744d1d3782c568da32c78c9bbf59c425b248baae2f4f8454ce4b0eea
+  languageName: node
+  linkType: hard
+
+"@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.3.2, @codemirror/autocomplete@npm:^6.7.1":
   version: 6.20.0
   resolution: "@codemirror/autocomplete@npm:6.20.0"
   dependencies:
@@ -6941,15 +6953,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/commands@npm:6.10.1":
-  version: 6.10.1
-  resolution: "@codemirror/commands@npm:6.10.1"
+"@codemirror/commands@npm:6.10.3":
+  version: 6.10.3
+  resolution: "@codemirror/commands@npm:6.10.3"
   dependencies:
     "@codemirror/language": "npm:^6.0.0"
-    "@codemirror/state": "npm:^6.4.0"
+    "@codemirror/state": "npm:^6.6.0"
     "@codemirror/view": "npm:^6.27.0"
     "@lezer/common": "npm:^1.1.0"
-  checksum: 10/9e305263dc457635fa1c7e5b47756958be5367e38f5bb07a3abfd5966591e2eafd57ea0c5c738b28bb3ab5de64c07a5302ebd49b129ff7e48b225841f66e647f
+  checksum: 10/2740c95cc7165c445cce530f1ad2677e0a80af11b2dd94a20729a198c2342783c04fbfda1364be9ab9cee3042a6906bb11619821dfc7bae154436c82d37e1b24
   languageName: node
   linkType: hard
 
@@ -7217,17 +7229,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:6.10.4, @codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0, @codemirror/language@npm:^6.8.0":
-  version: 6.10.4
-  resolution: "@codemirror/language@npm:6.10.4"
+"@codemirror/language@npm:6.12.3":
+  version: 6.12.3
+  resolution: "@codemirror/language@npm:6.12.3"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.23.0"
-    "@lezer/common": "npm:^1.1.0"
+    "@lezer/common": "npm:^1.5.0"
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.0.0"
     style-mod: "npm:^4.0.0"
-  checksum: 10/73b7404adc54ae7881b082ef10a678442b2f9d5a6d7077039ae86897beee7ca3dd748614e0360e5de4795a71d7c20b03ac967a20878c3b3266dc3ade560b4856
+  checksum: 10/d33f2736138e549e1db268b6539c13bd082c3f96e24384a492db939942ca11ac1da546ef7553e6ea4ee13dcaa6593f64f42b5e5a413d00eba3e996ffe50fe8e7
   languageName: node
   linkType: hard
 
@@ -7240,7 +7252,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lint@npm:6.9.2, @codemirror/lint@npm:^6.0.0":
+"@codemirror/lint@npm:6.9.5":
+  version: 6.9.5
+  resolution: "@codemirror/lint@npm:6.9.5"
+  dependencies:
+    "@codemirror/state": "npm:^6.0.0"
+    "@codemirror/view": "npm:^6.35.0"
+    crelt: "npm:^1.0.5"
+  checksum: 10/f859b4c82ebc476d1986d2a674f8be0614c14fe65f456b4cd9267b7b103701633af7eba765c072ad60857a28752670c74eb53c434118c975bb45ce078fce058d
+  languageName: node
+  linkType: hard
+
+"@codemirror/lint@npm:^6.0.0":
   version: 6.9.2
   resolution: "@codemirror/lint@npm:6.9.2"
   dependencies:
@@ -7251,34 +7274,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/search@npm:6.5.8":
-  version: 6.5.8
-  resolution: "@codemirror/search@npm:6.5.8"
+"@codemirror/search@npm:6.6.0":
+  version: 6.6.0
+  resolution: "@codemirror/search@npm:6.6.0"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.0.0"
+    "@codemirror/view": "npm:^6.37.0"
     crelt: "npm:^1.0.5"
-  checksum: 10/1389fa4e05da72b621ae10ff00d4ef0d23b08a3a7ac48f6e0b867429da7b80036bd7a6feef1a54f5b4c4af9fc4277f754a313a858fbfc12ccdfa48e9bf300cef
+  checksum: 10/2947341cf06bde4a682250c245007f70854b7660f7aa29cec2c5cd177fa70deacaadf37c4aa323f669379d32f9912cb958448c93da3dc90b8af5c466ea1cddaf
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.5.4, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.4.0":
-  version: 6.5.4
-  resolution: "@codemirror/state@npm:6.5.4"
+"@codemirror/state@npm:6.6.0":
+  version: 6.6.0
+  resolution: "@codemirror/state@npm:6.6.0"
   dependencies:
     "@marijn/find-cluster-break": "npm:^1.0.0"
-  checksum: 10/0e1b073282f2ba246692ad0238def660d201a886fcdb8de28360db8d7c9ec34fe904b9187709d70ede4fe4e7cf9a2e1700d26fccf22ce8d8bca68e6cdf456b08
+  checksum: 10/5d624f3c8832b287d76ebb5f57c01327641875c12c58ada2a97f958dc4df8c3bb0a1ad08ed370300a4a929ee8d5c7f14a397449a0d075ac3129d60d85f077441
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.35.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.35.0":
-  version: 6.35.0
-  resolution: "@codemirror/view@npm:6.35.0"
+"@codemirror/view@npm:6.41.0":
+  version: 6.41.0
+  resolution: "@codemirror/view@npm:6.41.0"
   dependencies:
-    "@codemirror/state": "npm:^6.4.0"
+    "@codemirror/state": "npm:^6.6.0"
+    crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10/edf9cb81cf2c5d80cc852f924d2d86299bf30aa009cf36afb370a8e2b4b0d03ceeda2de9a809c06aa8c06fcf1c8ba0d857c3d5292813808742446435d2ed533c
+  checksum: 10/8251e981b7ee95891b0957855154a2e2eb07fed1e122e4d8a1bff6629faa4fc820285e821436b16ee087538323afaa6e942b8455d9e60485f09ad1587e1a7ced
   languageName: node
   linkType: hard
 
@@ -10812,7 +10836,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.33"
-    "@types/serviceworker": "npm:0.0.172"
+    "@types/serviceworker": "npm:0.0.173"
     "@types/tar-stream": "npm:3.1.4"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -10827,7 +10851,7 @@ __metadata:
     esbuild: "npm:0.27.2"
     events: "npm:3.3.0"
     expo: "npm:54.0.31"
-    expo-av: "npm:16.0.8"
+    expo-audio: "npm:1.1.1"
     expo-camera: "npm:17.0.10"
     expo-image-manipulator: "npm:14.0.8"
     expo-local-authentication: "npm:17.0.8"
@@ -10864,7 +10888,7 @@ __metadata:
     react-native-rsa-native: "npm:2.0.5"
     react-native-safe-area-context: "npm:5.6.2"
     react-native-securerandom: "npm:1.0.1"
-    react-native-share: "npm:12.2.1"
+    react-native-share: "npm:12.2.2"
     react-native-sqlite-storage: "npm:6.0.1"
     react-native-svg: "npm:15.15.1"
     react-native-url-polyfill: "npm:2.0.0"
@@ -10938,17 +10962,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/editor@workspace:packages/editor"
   dependencies:
-    "@codemirror/autocomplete": "npm:6.20.0"
-    "@codemirror/commands": "npm:6.10.1"
+    "@codemirror/autocomplete": "npm:6.20.1"
+    "@codemirror/commands": "npm:6.10.3"
     "@codemirror/lang-html": "npm:6.4.11"
     "@codemirror/lang-markdown": "npm:6.5.0"
-    "@codemirror/language": "npm:6.10.4"
+    "@codemirror/language": "npm:6.12.3"
     "@codemirror/language-data": "npm:6.3.1"
     "@codemirror/legacy-modes": "npm:6.5.2"
-    "@codemirror/lint": "npm:6.9.2"
-    "@codemirror/search": "npm:6.5.8"
-    "@codemirror/state": "npm:6.5.4"
-    "@codemirror/view": "npm:6.35.0"
+    "@codemirror/lint": "npm:6.9.5"
+    "@codemirror/search": "npm:6.6.0"
+    "@codemirror/state": "npm:6.6.0"
+    "@codemirror/view": "npm:6.41.0"
     "@joplin/fork-uslug": "npm:^2.0.0"
     "@joplin/lib": "npm:~3.6"
     "@joplin/utils": "npm:~3.6"
@@ -11380,7 +11404,7 @@ __metadata:
     relative: "npm:3.0.2"
     request: "npm:2.88.2"
     rss: "npm:1.2.2"
-    sass: "npm:1.94.3"
+    sass: "npm:1.95.1"
     sharp: "npm:0.34.5"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
@@ -17439,10 +17463,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.172":
-  version: 0.0.172
-  resolution: "@types/serviceworker@npm:0.0.172"
-  checksum: 10/7a1ff19c478020ae7bf2eea423cd30ad214ae3999b23a85f73780b9b251a462fb9fc86341d02008915835e5f5c676fa8fe543e1e2ef836eb356eee3527d48671
+"@types/serviceworker@npm:0.0.173":
+  version: 0.0.173
+  resolution: "@types/serviceworker@npm:0.0.173"
+  checksum: 10/923669146623e767c0d2dda21699ef422e6ee7d3a737b83134ca8c6236b8bf9466a3c57e4db358f4cd11c54d1094a602a8dd5d3910fab8b400f8f14b987d38cd
   languageName: node
   linkType: hard
 
@@ -22570,12 +22594,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "chokidar@npm:5.0.0"
+"chokidar@npm:^4.0.0":
+  version: 4.0.3
+  resolution: "chokidar@npm:4.0.3"
   dependencies:
-    readdirp: "npm:^5.0.0"
-  checksum: 10/a1c2a4ee6ee81ba6409712c295a47be055fb9de1186dfbab33c1e82f28619de962ba02fc5f9d433daaedc96c35747460d8b2079ac2907de2c95e3f7cce913113
+    readdirp: "npm:^4.0.1"
+  checksum: 10/bf2a575ea5596000e88f5db95461a9d59ad2047e939d5a4aac59dd472d126be8f1c1ff3c7654b477cf532d18f42a97279ef80ee847972fd2a25410bf00b80b59
   languageName: node
   linkType: hard
 
@@ -24139,7 +24163,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crelt@npm:^1.0.0":
+"crelt@npm:^1.0.0, crelt@npm:^1.0.6":
   version: 1.0.6
   resolution: "crelt@npm:1.0.6"
   checksum: 10/5ed326ca6bd243b1dba6b943f665b21c2c04be03271824bc48f20dba324b0f8233e221f8c67312526d24af2b1243c023dc05a41bd8bd05d1a479fd2c72fb39c3
@@ -28797,18 +28821,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-av@npm:16.0.8":
-  version: 16.0.8
-  resolution: "expo-av@npm:16.0.8"
+"expo-audio@npm:1.1.1":
+  version: 1.1.1
+  resolution: "expo-audio@npm:1.1.1"
   peerDependencies:
     expo: "*"
+    expo-asset: "*"
     react: "*"
     react-native: "*"
-    react-native-web: "*"
-  peerDependenciesMeta:
-    react-native-web:
-      optional: true
-  checksum: 10/c274ae6b98e30b673d2dd03119da703a379c01367466022fa1d2dc1b17ce9475711488132d2c7271a88ecda3800c5d03697371761fa8330e40ca0c02f9b951fa
+  checksum: 10/b2013e196eb56d6b31f62d82e3918d81626b8d48bd3b9c3b50d8d97b8329de8ec1cb700cb61cc03b637371213aa2de78fec10208e742e8e2a2019dbf25777814
   languageName: node
   linkType: hard
 
@@ -44655,10 +44676,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-share@npm:12.2.1":
-  version: 12.2.1
-  resolution: "react-native-share@npm:12.2.1"
-  checksum: 10/56ad7c86ef79e2d204bb44c3417045b09d74c86d250f4d98d26f8d06649309d41cb59699c8e22f8a9da86d602fabe2ceda3ca9e45a814107bbfcff0c2db71045
+"react-native-share@npm:12.2.2":
+  version: 12.2.2
+  resolution: "react-native-share@npm:12.2.2"
+  checksum: 10/792417d71c07862e4f471b0dfe1e45f79150cbe64791ec8f755c75c46bfd5006f35cd3caa05d09e00671e5551c8f05627bcfe50348edd187d2f5e11d1ff236bf
   languageName: node
   linkType: hard
 
@@ -45384,10 +45405,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readdirp@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "readdirp@npm:5.0.0"
-  checksum: 10/a17a591b51d8b912083660df159e8bd17305dc1a9ef27c869c818bd95ff59e3a6496f97e91e724ef433e789d559d24e39496ea1698822eb5719606dc9c1a923d
+"readdirp@npm:^4.0.1":
+  version: 4.1.2
+  resolution: "readdirp@npm:4.1.2"
+  checksum: 10/7b817c265940dba90bb9c94d82920d76c3a35ea2d67f9f9d8bd936adcfe02d50c802b14be3dd2e725e002dddbe2cc1c7a0edfb1bc3a365c9dfd5a61e612eea1e
   languageName: node
   linkType: hard
 
@@ -46894,12 +46915,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.94.3":
-  version: 1.94.3
-  resolution: "sass@npm:1.94.3"
+"sass@npm:1.95.1":
+  version: 1.95.1
+  resolution: "sass@npm:1.95.1"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
-    chokidar: "npm:^5.0.0"
+    chokidar: "npm:^4.0.0"
     immutable: "npm:^5.0.2"
     source-map-js: "npm:>=0.6.2 <2.0.0"
   dependenciesMeta:
@@ -46907,7 +46928,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/5b641fcf7db4354a9af42b322ab112e7f60dd1bfc98960e5714931e5aca3bee669938df08110a75ae2df373efca7c247433e7271c6f1571e9680d12df3946700
+  checksum: 10/548520f8e341d45cde8bcdce5bbe442a874ec4daef658f8caf6fb3ca62f6aacba61411e76b8a26efb25b6d48cfa23af10684bde11010780f68adff43594851f8
   languageName: node
   linkType: hard
 
