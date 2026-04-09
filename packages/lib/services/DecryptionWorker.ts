@@ -246,23 +246,21 @@ export default class DecryptionWorker {
 							// but that will result in an infinite loop if the blob simply has not been downloaded yet.
 							// So skip the ID for now, and the service will try to decrypt the blob again the next time.
 							excludedIds.push(decryptedItem.id);
-						} else {
+						} else if (header?.masterKeyId && (!lastMasterKeyId || header.masterKeyId !== lastMasterKeyId)) {
 							// If ItemClass.decrypt did not error, the item was successfully deserialized after decryption, which means the master password
 							// is correct, and therefore this key can be used to create a testCipher if the key does not have one, because it was pre-existing
 							// before testCipher was added
-							if (header?.masterKeyId && (!lastMasterKeyId || header.masterKeyId !== lastMasterKeyId)) {
-								lastMasterKeyId = header.masterKeyId;
-								const mk = masterKeyById(header.masterKeyId);
+							lastMasterKeyId = header.masterKeyId;
+							const mk = masterKeyById(header.masterKeyId);
 
-								if (mk && !mk.testCipher) {
-									try {
-										mk.testCipher = await this.encryptionService().encryptString(mkTestText, { masterKeyId: mk.id });
-										mk.updated_time = Date.now();
-										await MasterKey.save(mk);
-										this.logger().info(`DecryptionWorker: Updated missing testCipher for master key with id ${header.masterKeyId}`);
-									} catch (exception) {
-										this.logger().info(`DecryptionWorker: Error populating testCipher for master key with id ${header.masterKeyId}`, exception);
-									}
+							if (mk && !mk.testCipher) {
+								try {
+									mk.testCipher = await this.encryptionService().encryptString(mkTestText, { masterKeyId: mk.id });
+									mk.updated_time = Date.now();
+									await MasterKey.save(mk);
+									this.logger().info(`DecryptionWorker: Updated missing testCipher for master key with id ${header.masterKeyId}`);
+								} catch (exception) {
+									this.logger().info(`DecryptionWorker: Error populating testCipher for master key with id ${header.masterKeyId}`, exception);
 								}
 							}
 						}
