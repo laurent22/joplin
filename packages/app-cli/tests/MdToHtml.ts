@@ -338,7 +338,7 @@ describe('MdToHtml', () => {
 		for (const [tex, input] of tests) {
 			const html = await mdToHtml.render(input, null, { bodyOnly: true });
 
-			const opening = '<pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">';
+			const opening = '<pre class="joplin-source" hidden data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">';
 			const closing = '</pre>';
 
 			// Remove any single leading and trailing newlines, those are included in data-joplin-source-open
