@@ -9,7 +9,6 @@ export interface MasterKeyEntity {
 	type_?: number;
 	enabled?: number;
 	hasBeenUsed?: boolean;
-	testCipher?: string;
 }
 
 export type KeyPairAndSize<KeyPair> = { keyPair: KeyPair; keySize: number };
