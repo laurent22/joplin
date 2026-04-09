@@ -373,7 +373,7 @@
 		ipc.focus = (event) => {
 			const dummyID = 'joplin-content-focus-dummy';
 			if (! document.getElementById(dummyID)) {
-				const focusDummy = '<div style="width: 0; height: 0; overflow: hidden"><a id="' + dummyID + '" href="#">Note viewer top</a></div>';
+				const focusDummy = '<div style="width: 0; height: 0; overflow: hidden"><a id="' + dummyID + '" href="#" aria-label="Note viewer top"></a></div>';
 				contentElement.insertAdjacentHTML("afterbegin", focusDummy);
 			}
 			const scrollTop = contentElement.scrollTop;
@@ -839,19 +839,7 @@
 
 			wrapper.querySelectorAll('style').forEach(s => s.remove());
 
-			// Code blocks contain a hidden <pre class="joplin-source"> with the raw Markdown.
-			// External editors don't apply Joplin's CSS (display: none), causing the code
-			// to appear twice when pasted. Remove them from the clipboard copy.
-			//
-			// This does NOT affect pasting into Joplin's Rich Text Editor — TinyMCE's
-			// onPaste handler converts pasted HTML to Markdown and back (via processPastedHtml),
-			// so it never reads .joplin-source from clipboard HTML.
-			wrapper.querySelectorAll('.joplin-source').forEach(s => s.remove());
 
-			// The focus dummy is a hidden link ("Note viewer top") used for accessibility.
-			// It leaks into clipboard HTML because its container only hides via overflow.
-			const focusDummy = wrapper.querySelector('#joplin-content-focus-dummy');
-			if (focusDummy && focusDummy.parentElement) focusDummy.parentElement.remove();
 
 			const inlineTags = new Set(['STRONG', 'EM', 'CODE', 'S', 'DEL', 'INS', 'MARK', 'SUP', 'SUB', 'U', 'SPAN', 'A']);
 			let node = range.commonAncestorContainer;
