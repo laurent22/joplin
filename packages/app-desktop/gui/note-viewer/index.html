@@ -837,8 +837,17 @@
 			const wrapper = document.createElement('div');
 			wrapper.appendChild(range.cloneContents());
 
+
 			wrapper.querySelectorAll('style').forEach(s => s.remove());
 
+			// The hidden attribute on .joplin-source helps some apps, but many
+			// external editors (Word, Google Docs) ignore hidden/display:none
+			// when pasting clipboard HTML. Remove them explicitly as a fallback.
+			wrapper.querySelectorAll('.joplin-source').forEach(s => s.remove());
+
+			// Remove the accessibility focus dummy link container.
+			const focusDummy = wrapper.querySelector('#joplin-content-focus-dummy');
+			if (focusDummy && focusDummy.parentElement) focusDummy.parentElement.remove();
 
 
 			const inlineTags = new Set(['STRONG', 'EM', 'CODE', 'S', 'DEL', 'INS', 'MARK', 'SUP', 'SUB', 'U', 'SPAN', 'A']);
