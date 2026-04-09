@@ -338,16 +338,10 @@ export default class EncryptionService {
 		return plainText;
 	}
 
-	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string, performFormatCheck = false) {
+	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
 		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
-			// Reselect the key to ensure it is in encrypted form where performFormatCheck is true
-			const mk = performFormatCheck ? await MasterKey.load(model.id) : model;
-			const decryptedKey = await this.decryptMasterKeyContent(mk, password);
-
-			if (performFormatCheck) {
-				if (!/^[0-9a-f]{512}$/i.test(decryptedKey)) return false;
-			}
+			await this.decryptMasterKeyContent(model, password);
 		} catch (error) {
 			return false;
 		} finally {
