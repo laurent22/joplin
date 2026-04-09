@@ -9,6 +9,7 @@ import loadLanguages from './testing/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
 import createEditorSettings from '../testing/createEditorSettings';
+import { EditorEventType } from '../events';
 import { ContentScriptLoadOptions } from '../types';
 
 const getMockContentScriptSource = (context: ContentScriptLoadOptions) => {
@@ -72,6 +73,47 @@ describe('createEditor', () => {
 
 		// Cleanup
 		editor.remove();
+	});
+
+	it('should follow links when ctrl-clicking [x] in a link label', async () => {
+		const link = ':/131d7ddac2e94ec7a86e90631f47fbae#x-title';
+		const initialText = `[My note#[x] title](${link})`;
+		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
+		const onEvent = jest.fn();
+
+		await loadLanguages();
+		const editor = createEditor(document.body, {
+			initialText,
+			initialNoteId: '',
+			settings: editorSettings,
+			onEvent,
+			onLogMessage: _message => {},
+			onLocalize: input => input,
+			onPasteFile: null,
+			resolveImageSrc: src => Promise.resolve(src),
+		});
+
+		forceParsing(editor.editor);
+
+		const markerPos = initialText.indexOf('[x]') + 1;
+		const posAtCoordsSpy = jest.spyOn(editor.editor, 'posAtCoords').mockReturnValue(markerPos);
+
+		try {
+			editor.editor.contentDOM.dispatchEvent(new MouseEvent('mousedown', {
+				bubbles: true,
+				ctrlKey: true,
+				clientX: 0,
+				clientY: 0,
+			}));
+
+			expect(onEvent.mock.calls).toContainEqual([{
+				kind: EditorEventType.FollowLink,
+				link,
+			}]);
+		} finally {
+			posAtCoordsSpy.mockRestore();
+			editor.remove();
+		}
 	});
 
 	it('should support loading plugins', async () => {

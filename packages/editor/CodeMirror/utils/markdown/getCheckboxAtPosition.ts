@@ -5,6 +5,16 @@ const getCheckboxAtPosition = (pos: number, tree: Tree) => {
 
 	while (true) {
 		if (iterator.node.name === 'TaskMarker') {
+			let parentIterator = iterator.next;
+
+			while (parentIterator) {
+				if (parentIterator.node.name === 'Link') {
+					return null;
+				}
+
+				parentIterator = parentIterator.next;
+			}
+
 			return iterator.node;
 		}
 
