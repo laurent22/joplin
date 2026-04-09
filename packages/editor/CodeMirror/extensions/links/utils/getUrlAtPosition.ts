@@ -13,6 +13,14 @@ type MatchedUrl = {
 	label?: string;
 };
 
+const fallbackBlockedByNodeName = new Set([
+	'InlineCode',
+	'FencedCode',
+	'CodeBlock',
+	'InlineMath',
+	'BlockMath',
+]);
+
 const urlFromInlineLinkLabelAtPosition = (pos: number, state: EditorState) => {
 	const line = state.doc.lineAt(pos);
 	const lineText = line.text;
@@ -79,8 +87,13 @@ const getUrlAtPosition = (pos: number, tree: Tree, state: EditorState): MatchedU
 	};
 
 	let iterator = tree.resolveStack(pos);
+	let hasFallbackBlockingContext = false;
 
 	while (true) {
+		if (fallbackBlockedByNodeName.has(iterator.node.name)) {
+			hasFallbackBlockingContext = true;
+		}
+
 		if (iterator.node.name === 'Link') {
 			const urlNode = iterator.node.getChild('URL');
 			if (urlNode) {
@@ -112,12 +125,14 @@ const getUrlAtPosition = (pos: number, tree: Tree, state: EditorState): MatchedU
 		}
 	}
 
-	const fallbackInlineUrl = urlFromInlineLinkLabelAtPosition(pos, state);
-	if (fallbackInlineUrl) {
-		return {
-			type: MatchedUrlType.Link,
-			url: fallbackInlineUrl,
-		};
+	if (!hasFallbackBlockingContext) {
+		const fallbackInlineUrl = urlFromInlineLinkLabelAtPosition(pos, state);
+		if (fallbackInlineUrl) {
+			return {
+				type: MatchedUrlType.Link,
+				url: fallbackInlineUrl,
+			};
+		}
 	}
 
 	return null;

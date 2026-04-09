@@ -17,4 +17,16 @@ describe('getUrlAtPosition', () => {
 
 		expect(url?.url).toBe(link);
 	});
+
+	test.each([
+		['inline code', 'Before `[x](https://example.com)` after', ['InlineCode']],
+		['fenced code', '```\n[x](https://example.com)\n```', ['FencedCode']],
+	])('should not extract a fallback URL from %s', async (_label, doc, expectedTags) => {
+		const editor = await createTestEditor(doc, EditorSelection.cursor(0), expectedTags);
+		const pos = doc.indexOf('[x]') + 1;
+
+		const url = getUrlAtPosition(pos, syntaxTree(editor.state), editor.state);
+
+		expect(url).toBeNull();
+	});
 });
