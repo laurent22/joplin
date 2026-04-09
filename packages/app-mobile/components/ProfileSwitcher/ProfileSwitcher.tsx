@@ -42,6 +42,12 @@ const useStyle = (themeId: number) => {
 				paddingLeft: theme.margin,
 				paddingRight: theme.margin,
 			},
+			flatList: {
+				flex: 1,
+			},
+			flatListContent: {
+				paddingBottom: 80,
+			},
 		});
 	}, [themeId]);
 };
@@ -206,15 +212,15 @@ export default (props: Props) => {
 	return (
 		<View style={style.root}>
 			<ScreenHeader title={_('Profiles')} showSaveButton={false} showSideMenuButton={false} showSearchButton={false} />
-			<View>
-				<FlatList
-					data={profiles}
-					renderItem={renderProfileItem}
-					keyExtractor={profile => profile.id}
-					// Needed so that the list rerenders when its dependencies change:
-					extraData={extraListItemData}
-				/>
-			</View>
+			<FlatList
+				style={style.flatList}
+				contentContainerStyle={style.flatListContent}
+				data={profiles}
+				renderItem={renderProfileItem}
+				keyExtractor={profile => profile.id}
+				// Needed so that the list rerenders when its dependencies change:
+				extraData={extraListItemData}
+			/>
 			<FAB
 				icon="plus"
 				accessibilityLabel={_('New profile')}
