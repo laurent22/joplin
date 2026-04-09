@@ -13,7 +13,6 @@ import { masterKeyById } from './synchronizer/syncInfoUtils';
 
 const EventEmitter = require('events');
 const perfLogger = PerformanceLogger.create();
-const base64 = require('base-64');
 
 interface DecryptionResult {
 	skippedItemCount?: number;
@@ -260,14 +259,19 @@ export default class DecryptionWorker {
 						// If ItemClass.decrypt did not error, the item was successfully serialised after decryption, which means the master password is correct,
 						// and therefore this key can be used to create a test cipher if the key does not have one, because it was pre-existing before test cipher
 						// was added
-						if (!lastMasterKeyId || header.masterKeyId !== lastMasterKeyId) {
+						if (header?.masterKeyId && (!lastMasterKeyId || header.masterKeyId !== lastMasterKeyId)) {
 							lastMasterKeyId = header.masterKeyId;
 							const mk = masterKeyById(header.masterKeyId);
 
 							if (mk && !mk.testCipher) {
-								mk.testCipher = base64.encode(await this.encryptionService().encryptString(mkTestText, { masterKeyId: mk.id, masterKeyContent: mk.content }));
-								mk.updated_time = Date.now();
-								await MasterKey.save(mk);
+								try {
+									mk.testCipher = await this.encryptionService().encryptString(mkTestText, { masterKeyId: mk.id });
+									mk.updated_time = Date.now();
+									await MasterKey.save(mk);
+									this.logger().info(`DecryptionWorker: Updated missing testCipher for master key with id ${header.masterKeyId}`);
+								} catch (exception) {
+									this.logger().info(`DecryptionWorker: Error populating testCipher for master key with id ${header.masterKeyId}`, exception);
+								}
 							}
 						}
 					} catch (error) {
