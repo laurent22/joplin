@@ -346,19 +346,16 @@ export default class EncryptionService {
 	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string, performTestCipherCheck = false) {
 		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
-			// On the mobile platform (but not on web), decrypting the master key with an incorrect password (or double decrypting it) does not throw an
-			// exception, so to validate the master password is correct, the decrypted key is used to decrypt a previously stored cipher of a known value,
-			// to verify the key decrypts the correct value. If testCipher is not populated, further validation is skipped because there is no other way
-			// to verify the key is correct. Newly created master keys will have this set, while for pre-existing keys, the testCipher is populated the
-			// first time an encrypted item is successfully decrypted using the master key
+			const decryptedKey = await this.decryptMasterKeyContent(model, password);
+
+			// On the mobile platform (but not on web), decrypting the master key with an incorrect password does not throw an exception, so to validate
+			// the master password is correct, the decrypted key is used to decrypt a previously stored cipher of a known value, to verify the key decrypts
+			// the correct value. If testCipher is not populated, further validation is skipped because there is no other way to verify the key is correct.
+			// Newly created master keys will have this set, while for pre-existing keys, the testCipher is populated the first time an encrypted item is
+			// successfully decrypted using the master key
 			if (performTestCipherCheck && model.testCipher) {
-				// Reselect the key to ensure it is in encrypted form
-				const mk = await MasterKey.load(model.id);
-				const decryptedKey = await this.decryptMasterKeyContent(mk, password);
 				const decryptedMkTest = await this.decryptString(base64.decode(model.testCipher), { masterKeyId: model.id, masterKeyContent: decryptedKey });
 				if (decryptedMkTest !== mkTestText) return false;
-			} else {
-				await this.decryptMasterKeyContent(model, password);
 			}
 		} catch (error) {
 			return false;
