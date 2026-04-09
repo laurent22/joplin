@@ -7,12 +7,15 @@ import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
 import PerformanceLogger from '../../PerformanceLogger';
+import uuid from '../../uuid';
 const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
+const base64 = require('base-64');
+export const mkTestText = 'mk-test'; // This must never change, otherwise it will break validation of master keys with cipherText set
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -55,6 +58,7 @@ export interface EncryptOptions {
 	onProgress?: Function;
 	encryptionHandler?: EncryptionCustomHandler;
 	masterKeyId?: string;
+	masterKeyContent?: string;
 }
 
 type GetPasswordCallback = ()=> string|Promise<string>;
@@ -317,6 +321,9 @@ export default class EncryptionService {
 		model.updated_time = now;
 		model.source_application = Setting.value('appId');
 		model.hasBeenUsed = false;
+		model.id = uuid.create();
+		model.created_time = Date.now();
+		model.testCipher = base64.encode(await this.encryptString(mkTestText, { masterKeyId: model.id, masterKeyContent: model.content }));
 
 		return model;
 	}
@@ -338,10 +345,23 @@ export default class EncryptionService {
 		return plainText;
 	}
 
-	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
+	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string, performTestCipherCheck = false) {
 		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
-			await this.decryptMasterKeyContent(model, password);
+			// On the mobile platform (but not on web), decrypting the master key with an incorrect password (or double decrypting it) does not throw an
+			// exception, so to validate the master password is correct, the decrypted key is used to decrypt a previously stored cipher of a known value,
+			// to verify the key decrypts the correct value. If testCipher is not populated, further validation is skipped because there is no other way
+			// to verify the key is correct. Newly created master keys will have this set, while for pre-existing keys, the testCipher is populated the
+			// first time an encrypted item is successfully decrypted using the master key
+			if (performTestCipherCheck && model.testCipher) {
+				// Reselect the key to ensure it is in encrypted form
+				const mk = await MasterKey.load(model.id);
+				const decryptedKey = await this.decryptMasterKeyContent(mk, password);
+				const decryptedMkTest = await this.decryptString(base64.decode(model.testCipher), { masterKeyId: model.id, masterKeyContent: decryptedKey });
+				if (decryptedMkTest !== mkTestText) return false;
+			} else {
+				await this.decryptMasterKeyContent(model, password);
+			}
 		} catch (error) {
 			return false;
 		} finally {
@@ -588,7 +608,7 @@ export default class EncryptionService {
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
-		const masterKeyPlainText = (await this.loadedMasterKey(masterKeyId)).plainText;
+		const masterKeyPlainText = options.masterKeyContent ? options.masterKeyContent : (await this.loadedMasterKey(masterKeyId)).plainText;
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
 
@@ -626,7 +646,7 @@ export default class EncryptionService {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const header: any = await this.decodeHeaderSource_(source);
-		const masterKeyPlainText = (await this.loadedMasterKey(header.masterKeyId)).plainText;
+		const masterKeyPlainText = options.masterKeyContent ? options.masterKeyContent : (await this.loadedMasterKey(header.masterKeyId)).plainText;
 
 		let doneSize = 0;
 
