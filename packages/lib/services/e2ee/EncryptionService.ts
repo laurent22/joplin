@@ -14,7 +14,7 @@ const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
-export const mkTestText = 'mk-test'; // This must never change, otherwise it will break validation of master keys with cipherText set
+export const mkTestText = 'mk-test';
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
