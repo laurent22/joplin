@@ -303,18 +303,16 @@ export default class EncryptionService {
 		}
 	}
 
-	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
-		options = { encryptionMethod: this.defaultMasterKeyEncryptionMethod_, ...options };
-
+	private async generateMasterKeyContent_() {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const bytes: any[] = await shim.randomBytes(256);
-		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
-
-		return this.encryptMasterKeyContent(options.encryptionMethod, hexaBytes, password, options);
+		return bytes.map(a => hexPad(a.toString(16), 2)).join('');
 	}
 
 	public async generateMasterKey(password: string, options: EncryptOptions = null) {
-		const model = await this.generateMasterKeyContent_(password, options);
+		options = { encryptionMethod: this.defaultMasterKeyEncryptionMethod_, ...options };
+		const hexaBytes = await this.generateMasterKeyContent_();
+		const model = await this.encryptMasterKeyContent(options.encryptionMethod, hexaBytes, password, options);
 
 		const now = Date.now();
 		model.created_time = now;
@@ -323,7 +321,7 @@ export default class EncryptionService {
 		model.hasBeenUsed = false;
 		model.id = uuid.create();
 		model.created_time = Date.now();
-		model.testCipher = base64.encode(await this.encryptString(mkTestText, { masterKeyId: model.id, masterKeyContent: model.content }));
+		model.testCipher = base64.encode(await this.encryptString(mkTestText, { masterKeyId: model.id, masterKeyContent: hexaBytes }));
 
 		return model;
 	}
