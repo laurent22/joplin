@@ -232,7 +232,7 @@ export default class DecryptionWorker {
 							continue;
 						}
 
-						const header = await this.encryptionService().decodeHeaderString(item.encryption_cipher_text);
+						const header = item.encryption_cipher_text ? await this.encryptionService().decodeHeaderString(item.encryption_cipher_text) : undefined;
 						const decryptedItem = await ItemClass.decrypt(item);
 
 						await clearDecryptionCounter();
