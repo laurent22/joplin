@@ -84,7 +84,7 @@ const SidebarComponent = (props: Props) => {
 			<i className={`fas fa-caret-${syncReportExpanded ? 'down' : 'right'}`} />
 			{(completedTime || props.syncStarted) ? (
 				<span className="timestamp">
-					{props.syncStarted ? _('Last sync: In progress...') : _('Last sync: %s', completedTime)}
+					{props.syncStarted ? _('Last sync: In progress...') : (syncReportExpanded && completedTime ? _('Last sync:') : _('Last sync: %s', completedTime))}
 				</span>
 			) : ''}
 		</button>
