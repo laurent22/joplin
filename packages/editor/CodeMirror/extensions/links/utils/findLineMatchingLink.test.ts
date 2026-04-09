@@ -9,6 +9,10 @@ describe('findLineMatchingLink', () => {
 		['# Heading', '#heading', 1],
 		['## Heading', '#heading', 1],
 		['### Heading', '#heading', 1],
+		['## [ ] title', '#title', 1],
+		['## [x] title', '#title', 1],
+		['## [X] title', '#title', 1],
+		['## [x] title', '#x-title', 1],
 		// Should match headings not on the first line
 		['\n### Heading', '#heading', 2],
 		['# Test\n\n### Heading', '#heading', 3],

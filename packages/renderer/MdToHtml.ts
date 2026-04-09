@@ -81,7 +81,11 @@ const plugins: RendererPlugins = {
 const defaultNoteStyle = require('./defaultNoteStyle');
 
 function slugify(s: string): string {
-	return uslug(s);
+	return uslug(normalizeHeadingForHash(s));
+}
+
+function normalizeHeadingForHash(headingText: string): string {
+	return headingText.replace(/^\[(?: |x|X)\]\s+/, '');
 }
 
 // Share across all instances of MdToHtml
@@ -632,6 +636,31 @@ export default class MdToHtml implements MarkupRenderer {
 		}
 
 		loadPlugin(markdownItAnchor, { slugify: slugify });
+
+		const defaultHeadingOpenRenderer = markdownIt.renderer.rules.heading_open;
+		markdownIt.renderer.rules.heading_open = (tokens, idx, options, env, self) => {
+			const output = defaultHeadingOpenRenderer
+				? defaultHeadingOpenRenderer(tokens, idx, options, env, self)
+				: self.renderToken(tokens, idx, options);
+
+			const headingToken = tokens[idx];
+			const canonicalHeadingId = headingToken.attrGet('id');
+			if (!canonicalHeadingId) {
+				return output;
+			}
+
+			const headingTextToken = tokens[idx + 1];
+			if (!headingTextToken || headingTextToken.type !== 'inline') {
+				return output;
+			}
+
+			const legacyHeadingId = uslug(headingTextToken.content);
+			if (!legacyHeadingId || legacyHeadingId === canonicalHeadingId) {
+				return output;
+			}
+
+			return `${output}<a id="${legacyHeadingId}" class="joplin-heading-legacy-anchor"></a>`;
+		};
 
 		for (const key in plugins) {
 			if (this.pluginEnabled(key)) {

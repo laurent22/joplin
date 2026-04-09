@@ -4,6 +4,7 @@ import { EditorView } from '@codemirror/view';
 import uslug from '@joplin/fork-uslug/lib/uslug';
 import { SyntaxNodeRef } from '@lezer/common';
 import htmlNodeInfo from '../utils/htmlNodeInfo';
+import normalizeHeadingForHash from '../../utils/normalizeHeadingForHash';
 
 const jumpToHash = (view: EditorView, hash: string) => {
 	const state = view.state;
@@ -23,7 +24,10 @@ const jumpToHash = (view: EditorView, hash: string) => {
 			const nodeText = nodeToText(node)
 				.replace(/^#+\s/, '') // Leading #s in headers
 				.replace(/\n-+$/, ''); // Trailing --s in headers
-			matches = hash === uslug(nodeText);
+
+			const canonicalHash = uslug(normalizeHeadingForHash(nodeText));
+			const legacyHash = uslug(nodeText);
+			matches = hash === canonicalHash || hash === legacyHash;
 		} else if (node.name === 'HTMLBlock') {
 			// CodeMirror adds HTML information to Markdown documents using overlays attached
 			// to HTMLTag and HTMLBlock nodes.

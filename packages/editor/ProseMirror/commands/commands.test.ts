@@ -83,6 +83,29 @@ describe('ProseMirror/commands', () => {
 		expect(editor.state.selection.$anchor.parent.textContent).toBe('Test heading 2');
 	});
 
+	test('jumpToHash should resolve canonical and legacy hashes for task-marker headings', () => {
+		const editor = createTestEditor({ html: '<h2>[ ] title</h2><h2>[x] checked title</h2><h2>[X] done title</h2>' });
+
+		const jumpToHash = (hash: string) => {
+			return commands[EditorCommandType.JumpToHash](editor.state, editor.dispatch, editor, [hash]);
+		};
+
+		expect(jumpToHash('title')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[ ] title');
+
+		expect(jumpToHash('checked-title')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[x] checked title');
+
+		expect(jumpToHash('x-checked-title')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[x] checked title');
+
+		expect(jumpToHash('done-title')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[X] done title');
+
+		expect(jumpToHash('x-done-title')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[X] done title');
+	});
+
 	test('textTable should insert a table', () => {
 		const editor = createTestEditor({ html: '<p></p>' });
 

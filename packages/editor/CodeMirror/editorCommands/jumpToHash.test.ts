@@ -38,4 +38,20 @@ describe('jumpToHash', () => {
 		expect(jumpToHash(editor, 'line-2')).toBe(true);
 		expect(editor.state.selection.main.anchor).toBe(editor.state.doc.length);
 	});
+
+	test.each([
+		['## [ ] title', 'title'],
+		['## [x] title', 'title'],
+		['## [X] title', 'title'],
+		['## [x] title', 'x-title'],
+	])('should jump to task-marker headings by canonical and legacy hashes (doc: %j, hash: %j)', async (docText, hash) => {
+		const editor = await createTestEditor(
+			docText,
+			EditorSelection.cursor(0),
+			['ATXHeading2'],
+		);
+
+		expect(jumpToHash(editor, hash)).toBe(true);
+		expect(editor.state.selection.main.anchor).toBe(editor.state.doc.length);
+	});
 });
