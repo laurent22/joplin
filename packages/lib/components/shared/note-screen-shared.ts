@@ -340,7 +340,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 shared.initState = async function(comp: BaseNoteScreenComponent) {
 	const note = await shared.reloadNote(comp);
 
-	if (comp.props.sharedData) {
+	if (comp.props.sharedData && note) {
 		// Use the note returned by reloadNote directly to avoid a race condition where
 		// comp.state.note is still the initial empty note (Note.new() with parent_id='')
 		// because React hasn't flushed reloadNote's setState yet. Without this, the
