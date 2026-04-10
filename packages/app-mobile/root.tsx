@@ -591,7 +591,13 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 				logger.info('Sharing: handleShareData: Processing...');
 				await handleShared(sharedData, activeFolder.id, this.props.dispatch);
 			} else {
-				reg.logger().info('Cannot handle share - no valid active folder found');
+				reg.logger().warn('Cannot handle share - no valid active folder found');
+				void this.dropdownAlert_({
+					type: 'error',
+					title: _('Cannot share'),
+					message: _('No valid notebook is available. Please create or select a notebook and try again.'),
+				});
+				ShareExtension.close();
 			}
 		} else {
 			logger.info('Sharing: received empty share data.');
