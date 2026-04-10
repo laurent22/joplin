@@ -404,6 +404,29 @@ describe('screens/Note', () => {
 		unmount();
 	});
 
+	it('should set title, body, and parent_id correctly when a note is created via share', async () => {
+		const folder = await Folder.save({ title: 'Share target folder', parent_id: '' });
+		const note = await Note.save({ parent_id: folder.id }, { provisional: true });
+
+		store.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Note',
+			noteId: note.id,
+			sharedData: { title: 'Shared title', text: 'https://example.com' },
+		});
+		store.dispatch({ type: 'NOTE_UPDATE_ONE', note: { ...note }, provisional: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await waitForNoteToMatch(note.id, {
+			title: 'Shared title',
+			body: 'https://example.com',
+			parent_id: folder.id,
+		});
+
+		unmount();
+	});
+
 	it('should always start in edit mode for provisional notes regardless of noteVisiblePanes', async () => {
 		store.dispatch({
 			type: 'NOTE_VISIBLE_PANES_SET',
