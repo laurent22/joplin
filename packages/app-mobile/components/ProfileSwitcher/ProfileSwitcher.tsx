@@ -203,29 +203,25 @@ export default (props: Props) => {
 		/>;
 	};
 
-	return (
-		<View style={style.root}>
-			<ScreenHeader title={_('Profiles')} showSaveButton={false} showSideMenuButton={false} showSearchButton={false} />
-			<View>
-				<FlatList
-					data={profiles}
-					renderItem={renderProfileItem}
-					keyExtractor={profile => profile.id}
-					// Needed so that the list rerenders when its dependencies change:
-					extraData={extraListItemData}
-				/>
-			</View>
-			<FAB
-				icon="plus"
-				accessibilityLabel={_('New profile')}
-				style={style.fab}
-				onPress={() => {
-					props.dispatch({
-						type: 'NAV_GO',
-						routeName: 'ProfileEditor',
-					});
-				}}
-			/>
-		</View>
-	);
-};
+return (
+	<View style={{ flex: 1 }}>
+		<FlatList
+			data={profiles}
+			renderItem={renderProfileItem}
+			keyExtractor={profile => profile.id}
+			extraData={extraListItemData}
+		/>
+
+		<FAB
+			icon="plus"
+			accessibilityLabel={_('New profile')}
+			style={style.fab}
+			onPress={() => {
+				props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'ProfileEditor',
+				});
+			}}
+		/>
+	</View>
+);
