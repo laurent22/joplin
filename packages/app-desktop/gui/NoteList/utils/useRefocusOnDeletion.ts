@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
 const useRefocusOnDeletion = (
 	noteCount: number,
 	selectedNoteIds: string[],
 	focusedField: string,
 	selectedFolderId: string,
+	listRef: RefObject<HTMLDivElement>,
 	focusNote: (noteId: string)=> void,
 ) => {
 	const previousNoteCount = usePrevious(noteCount, 0);
@@ -20,11 +21,12 @@ const useRefocusOnDeletion = (
 
 	useEffect(() => {
 		const noteWasRemoved = noteCount < previousNoteCount;
+		const noteListHasFocus = !!listRef.current && listRef.current.contains(document.activeElement);
 		// Only refocus if folder hasn't changed since last noteCount snapshot.
 		// This prevents false refocus when navigating to a folder with fewer notes.
 		const folderDidNotChange = !folderChangedSinceLastNoteCountRef.current;
 
-		if (noteWasRemoved && folderDidNotChange && selectedNoteIds.length === 1 && !focusedField) {
+		if (noteWasRemoved && folderDidNotChange && selectedNoteIds.length === 1 && !focusedField && noteListHasFocus) {
 			focusNote(selectedNoteIds[0]);
 		}
 
@@ -33,6 +35,6 @@ const useRefocusOnDeletion = (
 			lastNoteCountFolderRef.current = selectedFolderId;
 			folderChangedSinceLastNoteCountRef.current = false;
 		}
-	}, [noteCount, previousNoteCount, selectedNoteIds, focusedField, selectedFolderId, focusNote]);
+	}, [noteCount, previousNoteCount, selectedNoteIds, focusedField, selectedFolderId, listRef, focusNote]);
 };
 export default useRefocusOnDeletion;
