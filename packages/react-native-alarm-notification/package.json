@@ -14,7 +14,7 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "react": "19.1.5",
+    "react": "19.2.3",
     "react-native": "0.70.6"
   }
 }

@@ -10731,7 +10731,7 @@ __metadata:
     "@types/jest": "npm:29.5.14"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
-    "@types/react": "npm:19.1.10"
+    "@types/react": "npm:19.2.7"
     "@types/react-dom": "npm:19.1.7"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.36"
@@ -10768,7 +10768,7 @@ __metadata:
     pdfjs-dist: "npm:3.11.174"
     pretty-bytes: "npm:5.6.0"
     re-resizable: "npm:6.11.2"
-    react: "npm:19.1.5"
+    react: "npm:19.2.3"
     react-dom: "npm:19.1.5"
     react-redux: "npm:8.1.3"
     react-select: "npm:5.10.2"
@@ -10834,7 +10834,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.130"
-    "@types/react": "npm:19.1.10"
+    "@types/react": "npm:19.2.7"
     "@types/react-redux": "npm:7.1.34"
     "@types/serviceworker": "npm:0.0.175"
     "@types/tar-stream": "npm:3.1.4"
@@ -10869,7 +10869,7 @@ __metadata:
     path-browserify: "npm:1.0.1"
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
-    react: "npm:19.1.4"
+    react: "npm:19.2.3"
     react-dom: "npm:19.1.4"
     react-native: "npm:0.81.6"
     react-native-device-info: "npm:14.1.1"
@@ -10983,7 +10983,7 @@ __metadata:
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:18.19.130"
-    "@types/react": "npm:19.1.10"
+    "@types/react": "npm:19.2.7"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
     dompurify: "npm:3.3.1"
@@ -11095,7 +11095,7 @@ __metadata:
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
     "@types/node-rsa": "npm:1.1.4"
-    "@types/react": "npm:19.1.10"
+    "@types/react": "npm:19.2.7"
     "@types/react-dom": "npm:19.1.7"
     "@types/uuid": "npm:11.0.0"
     adm-zip: "npm:0.5.16"
@@ -11137,7 +11137,7 @@ __metadata:
     pdfjs-dist: "npm:3.11.174"
     query-string: "npm:7.1.3"
     re-reselect: "npm:4.0.1"
-    react: "npm:19.1.5"
+    react: "npm:19.2.3"
     react-dom: "npm:19.1.5"
     redux: "npm:4.2.1"
     relative: "npm:3.0.2"
@@ -11179,7 +11179,7 @@ __metadata:
     "@joplin/lib": "npm:~3.6"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
-    "@types/react": "npm:19.1.10"
+    "@types/react": "npm:19.2.7"
     "@types/react-dom": "npm:19.1.7"
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
@@ -11188,7 +11188,7 @@ __metadata:
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     pdfjs-dist: "npm:2.16.105"
-    react: "npm:19.1.5"
+    react: "npm:19.2.3"
     react-dom: "npm:19.1.5"
     style-loader: "npm:3.3.4"
     styled-components: "npm:5.3.11"
@@ -11235,7 +11235,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/react-native-alarm-notification@workspace:packages/react-native-alarm-notification"
   dependencies:
-    react: "npm:19.1.5"
+    react: "npm:19.2.3"
     react-native: "npm:0.70.6"
   languageName: unknown
   linkType: soft
@@ -11245,7 +11245,7 @@ __metadata:
   resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
   dependencies:
     "@babel/core": "npm:7.16.0"
-    react: "npm:19.1.5"
+    react: "npm:19.2.3"
     react-native: "npm:0.81.6"
     typescript: "npm:5.8.3"
   peerDependencies:
@@ -11519,9 +11519,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing"
   dependencies:
-    "@types/react": "npm:19.1.10"
+    "@types/react": "npm:19.2.7"
     nitrogen: "npm:0.33.2"
-    react: "npm:19.1.5"
+    react: "npm:19.2.3"
     react-native: "npm:0.81.6"
     react-native-nitro-modules: "npm:0.33.2"
     typescript: "npm:5.8.3"
@@ -17323,12 +17323,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:19.1.10":
+"@types/react@npm:*":
   version: 19.1.10
   resolution: "@types/react@npm:19.1.10"
   dependencies:
     csstype: "npm:^3.0.2"
   checksum: 10/2c2f98e4a36144cddc9300483d0b14a0721dbb3b2fc2242e3841391589570dd344cde0c901eb291dba597a8efdb70543b0dbbae6cc2bef2061eb185c4ca55522
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:19.2.7":
+  version: 19.2.7
+  resolution: "@types/react@npm:19.2.7"
+  dependencies:
+    csstype: "npm:^3.2.2"
+  checksum: 10/dc0b756eee2c9782d282ae47eaa8d537b2a569eb889a6808c4b172d70fb690b2b1d8fe6239db451aa1c90d2a947cc21c9b537ce177ba9e6121468e403e4079c5
   languageName: node
   linkType: hard
 
@@ -45089,17 +45098,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.1.4":
-  version: 19.1.4
-  resolution: "react@npm:19.1.4"
-  checksum: 10/db697ac47534653ad712ba556517d4c7b5a664d5c03d3f88d80b5e39f742cd552cdcfbfd6dc2498586e830315232ba9f93c8f2522bb91264bdbc9766bd7a1a73
-  languageName: node
-  linkType: hard
-
-"react@npm:19.1.5":
-  version: 19.1.5
-  resolution: "react@npm:19.1.5"
-  checksum: 10/922b630d0bc8d705094541902ef5df84dce674ad1efcadf1694f8fdbba580a9e71bf9cff3c4a6f4d18b2950a2e25d966c786e4d73e8e1b931c17d514ac782d4f
+"react@npm:19.2.3":
+  version: 19.2.3
+  resolution: "react@npm:19.2.3"
+  checksum: 10/d16b7f35c0d35a56f63d9d1693819762e4abc479c57dd6310298920bed3820fcec7e17a99d44983416d8f5049143ea45b8005d3ab8324bae8973224400502b08
   languageName: node
   linkType: hard
 
