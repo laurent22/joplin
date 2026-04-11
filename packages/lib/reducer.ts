@@ -1366,8 +1366,13 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				updateOneItem(draft, action, 'tags');
 				const tagRemoved = action.item;
+				const noteId = action.noteId;
 				for (const windowStateDraft of stateUtils.allWindowStates(draft)) {
 					windowStateDraft.selectedNoteTags = removeItemFromArray(windowStateDraft.selectedNoteTags, 'id', tagRemoved.id);
+
+					if (windowStateDraft.notesParentType === 'Tag' && windowStateDraft.selectedTagId === tagRemoved.id) {
+						windowStateDraft.notes = windowStateDraft.notes.filter(note => note.id !== noteId);
+					}
 				}
 			}
 			break;

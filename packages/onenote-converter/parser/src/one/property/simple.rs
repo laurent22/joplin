@@ -90,11 +90,8 @@ pub(crate) fn parse_vec(prop_type: PropertyType, object: &Object) -> Result<Opti
 }
 
 pub(crate) fn parse_vec_u16(prop_type: PropertyType, object: &Object) -> Result<Option<Vec<u16>>> {
-    let data = match object.props().get(prop_type) {
-        Some(value) => value.to_vec().ok_or_else(|| {
-            ErrorKind::MalformedOneNoteFileData("vec u16 value is not a vec".into())
-        })?,
-        None => return Ok(None),
+    let Some(data) = parse_vec(prop_type, object)? else {
+        return Ok(None);
     };
 
     let vec = data
@@ -106,16 +103,26 @@ pub(crate) fn parse_vec_u16(prop_type: PropertyType, object: &Object) -> Result<
 }
 
 pub(crate) fn parse_vec_u32(prop_type: PropertyType, object: &Object) -> Result<Option<Vec<u32>>> {
-    let data = match object.props().get(prop_type) {
-        Some(value) => value
-            .to_vec()
-            .ok_or_else(|| ErrorKind::MalformedOneNoteFileData("vec value is not a vec".into()))?,
-        None => return Ok(None),
+    let Some(data) = parse_vec(prop_type, object)? else {
+        return Ok(None);
     };
 
     let vec = data
         .chunks_exact(4)
         .map(|v| u32::from_le_bytes([v[0], v[1], v[2], v[3]]))
+        .collect();
+
+    Ok(Some(vec))
+}
+
+pub(crate) fn parse_vec_i32(prop_type: PropertyType, object: &Object) -> Result<Option<Vec<i32>>> {
+    let Some(data) = parse_vec(prop_type, object)? else {
+        return Ok(None);
+    };
+
+    let vec = data
+        .chunks_exact(4)
+        .map(|v| i32::from_le_bytes([v[0], v[1], v[2], v[3]]))
         .collect();
 
     Ok(Some(vec))

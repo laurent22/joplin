@@ -732,6 +732,10 @@ class Application extends BaseApplication {
 					});
 				}
 			});
+
+			ipcRenderer.on('secondary-window-closing', (_event, windowId: string) => {
+				this.dispatch({ type: 'WINDOW_CLOSE', windowId });
+			});
 		});
 
 		addTask('app/initPluginService', () => this.initPluginService());

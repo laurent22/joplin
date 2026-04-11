@@ -351,7 +351,7 @@ export const postHandlers: PostHandlers = {
 				const { sub, stripeSub } = await getSubscriptionInfo(event, ctx);
 				const newAccountType = priceIdToAccountType(stripeSub.items.data[0].price.id);
 				const user = await models.user().load(sub.user_id, { fields: ['id'] });
-				if (!user) throw new Error(`No such user: ${user.id}`);
+				if (!user) throw new Error(`No such user: ${sub.user_id}`);
 
 				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
 				await models.user().save({ id: user.id, account_type: newAccountType });

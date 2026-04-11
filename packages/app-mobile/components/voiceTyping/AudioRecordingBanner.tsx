@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Audio, InterruptionModeIOS } from 'expo-av';
+import { AudioQuality, getRecordingPermissionsAsync, IOSOutputFormat, requestRecordingPermissionsAsync, setAudioModeAsync, type RecordingOptions, useAudioRecorder as useExpoAudioRecorder, useAudioRecorderState } from 'expo-audio';
 import Logger from '@joplin/utils/Logger';
 import { OnFileSavedCallback, RecorderState } from './types';
 import { Platform } from 'react-native';
@@ -11,7 +11,6 @@ import FsDriverWeb from '../../utils/fs-driver/fs-driver-rn.web';
 import uuid from '@joplin/lib/uuid';
 import RecordingControls from './RecordingControls';
 import { Text } from 'react-native-paper';
-import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio';
 import time from '@joplin/lib/time';
 import { toFileExtension } from '@joplin/lib/mime-utils';
 import { formatMsToDurationCompat, msleep } from '@joplin/utils/time';
@@ -25,23 +24,21 @@ interface Props {
 
 // Modified from the Expo default recording options to create
 // .m4a recordings on both Android and iOS (rather than .3gp on Android).
-const recordingOptions = (): RecordingOptions => ({
+const recordingOptions: RecordingOptions = {
+	extension: '.m4a',
 	isMeteringEnabled: true,
+	sampleRate: 44100,
+	numberOfChannels: 2,
+	bitRate: 64000,
 	android: {
 		extension: '.m4a',
-		outputFormat: AndroidOutputFormat.MPEG_4,
-		audioEncoder: AndroidAudioEncoder.AAC,
-		sampleRate: 44100,
-		numberOfChannels: 2,
-		bitRate: 64000,
+		outputFormat: 'mpeg4',
+		audioEncoder: 'aac',
 	},
 	ios: {
 		extension: '.m4a',
-		audioQuality: IOSAudioQuality.MIN,
+		audioQuality: AudioQuality.MIN,
 		outputFormat: IOSOutputFormat.MPEG4AAC,
-		sampleRate: 44100,
-		numberOfChannels: 2,
-		bitRate: 64000,
 		linearPCMBitDepth: 16,
 		linearPCMIsBigEndian: false,
 		linearPCMIsFloat: false,
@@ -56,14 +53,16 @@ const recordingOptions = (): RecordingOptions => ({
 		].find(type => MediaRecorder.isTypeSupported(type)) ?? 'audio/webm',
 		bitsPerSecond: 128000,
 	} : {},
-});
+};
 
 const getRecordingFileName = (extension: string) => {
 	return `recording-${time.formatDateToLocal(new Date())}${extension}`;
 };
 
-const recordingToSaveData = async (recording: Audio.Recording) => {
-	let uri = recording.getURI();
+const recordingToSaveData = async (recordingUri: string|null) => {
+	if (!recordingUri) throw new Error(_('Unable to access the recording file.'));
+
+	let uri = recordingUri;
 	let type: string|undefined;
 	let fileName;
 
@@ -73,7 +72,7 @@ const recordingToSaveData = async (recording: Audio.Recording) => {
 		const fetchResult = await fetch(uri);
 		const blob = await fetchResult.blob();
 
-		type = recordingOptions().web.mimeType;
+		type = recordingOptions.web.mimeType;
 		const extension = `.${toFileExtension(type)}`;
 		fileName = getRecordingFileName(extension);
 		const file = new File([blob], fileName);
@@ -82,10 +81,9 @@ const recordingToSaveData = async (recording: Audio.Recording) => {
 		await (shim.fsDriver() as FsDriverWeb).createReadOnlyVirtualFile(path, file);
 		uri = path;
 	} else {
-		const options = recordingOptions();
 		const extension = Platform.select({
-			android: options.android.extension,
-			ios: options.ios.extension,
+			android: recordingOptions.android.extension,
+			ios: recordingOptions.ios.extension,
 			default: '',
 		});
 		fileName = getRecordingFileName(extension);
@@ -95,75 +93,72 @@ const recordingToSaveData = async (recording: Audio.Recording) => {
 };
 
 const resetAudioMode = async () => {
-	await Audio.setAudioModeAsync({
-		// When enabled, iOS may use the small (phone call) speaker
-		// instead of the default one, so it's disabled when not recording:
-		allowsRecordingIOS: false,
-		playsInSilentModeIOS: false,
-		staysActiveInBackground: false,
+	await setAudioModeAsync({
+		allowsRecording: false,
+		allowsBackgroundRecording: false,
+		playsInSilentMode: false,
+		shouldPlayInBackground: false,
 	});
 };
 
 const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void) => {
-	const [permissionResponse, requestPermissions] = Audio.usePermissions();
 	const [recordingState, setRecordingState] = useState<RecorderState>(RecorderState.Idle);
 	const [error, setError] = useState('');
-	const [duration, setDuration] = useState(0);
+	const recorder = useExpoAudioRecorder(recordingOptions);
+	const recorderStatus = useAudioRecorderState(recorder, 100);
+	const isRecordingRef = useRef(false);
 
-	const recordingRef = useRef<Audio.Recording|null>(null);
 	const onStartRecording = useCallback(async () => {
 		try {
 			setRecordingState(RecorderState.Loading);
+			setError('');
 
-			if (permissionResponse?.status !== 'granted') {
-				const response = await requestPermissions();
+			const permissionResponse = await getRecordingPermissionsAsync();
+			if (permissionResponse.status !== 'granted') {
+				const response = await requestRecordingPermissionsAsync();
 				if (!response.granted) {
 					throw new Error(_('Missing permission to record audio.'));
 				}
 
 				// Work around "This experience is currently in the background, so the audio session could not be activated"
 				// See https://github.com/expo/expo/issues/21782
-				// May be resolved by migrating to expo-audio.
 				await msleep(500);
 			}
 
-			await Audio.setAudioModeAsync({
-				allowsRecordingIOS: true,
-				playsInSilentModeIOS: true,
-				staysActiveInBackground: true,
+			await setAudioModeAsync({
+				allowsRecording: true,
+				allowsBackgroundRecording: true,
+				playsInSilentMode: true,
+				shouldPlayInBackground: true,
 				// Fixes an issue where opening a recording in the iOS audio player
 				// breaks creating new recordings.
 				// See https://github.com/expo/expo/issues/31152#issuecomment-2341811087
-				interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+				interruptionMode: 'doNotMix',
 			});
+			await recorder.prepareToRecordAsync();
+			isRecordingRef.current = true;
+			recorder.record();
 			setRecordingState(RecorderState.Recording);
-			const recording = new Audio.Recording();
-			await recording.prepareToRecordAsync(recordingOptions());
-			recording.setOnRecordingStatusUpdate(status => {
-				setDuration(status.durationMillis);
-			});
-			recordingRef.current = recording;
-			await recording.startAsync();
 		} catch (error) {
 			logger.error('Error starting recording:', error);
 			setError(`Recording error: ${error}`);
 			setRecordingState(RecorderState.Error);
 
-			void recordingRef.current?.stopAndUnloadAsync();
-			recordingRef.current = null;
+			if (isRecordingRef.current) {
+				isRecordingRef.current = false;
+				void recorder.stop();
+			}
 		}
-	}, [permissionResponse, requestPermissions]);
+	}, [recorder]);
 
 	const onStopRecording = useCallback(async () => {
-		const recording = recordingRef.current;
-		recordingRef.current = null;
-
 		try {
 			setRecordingState(RecorderState.Processing);
-			await recording.stopAndUnloadAsync();
+			await recorder.stop();
+			isRecordingRef.current = false;
 			await resetAudioMode();
 
-			const saveEvent = await recordingToSaveData(recording);
+			const saveEvent = await recordingToSaveData(recorder.uri);
 			onFileSaved(saveEvent);
 			onDismiss();
 		} catch (error) {
@@ -171,25 +166,35 @@ const useAudioRecorder = (onFileSaved: OnFileSavedCallback, onDismiss: ()=> void
 			setError(`Save error: ${error}`);
 			setRecordingState(RecorderState.Error);
 		}
-	}, [onFileSaved, onDismiss]);
+	}, [onFileSaved, onDismiss, recorder]);
 
 	const onStartStopRecording = useCallback(async () => {
 		if (recordingState === RecorderState.Idle) {
 			await onStartRecording();
-		} else if (recordingState === RecorderState.Recording && recordingRef.current) {
+		} else if (recordingState === RecorderState.Recording) {
 			await onStopRecording();
 		}
 	}, [recordingState, onStartRecording, onStopRecording]);
 
 	useEffect(() => () => {
-		if (recordingRef.current) {
-			void recordingRef.current?.stopAndUnloadAsync();
-			recordingRef.current = null;
-			void resetAudioMode();
-		}
-	}, []);
+		if (isRecordingRef.current) {
+			isRecordingRef.current = false;
 
-	return { onStartStopRecording, error, duration, recordingState };
+			const stopRecorderOnCleanup = async () => {
+				try {
+					await recorder.stop();
+				} catch (error) {
+					logger.warn('Error stopping recorder during cleanup:', error);
+				}
+
+				await resetAudioMode();
+			};
+
+			void stopRecorderOnCleanup();
+		}
+	}, [recorder]);
+
+	return { onStartStopRecording, error, duration: recorderStatus.durationMillis, recordingState };
 };
 
 const AudioRecordingBanner: React.FC<Props> = props => {

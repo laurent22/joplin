@@ -15,6 +15,7 @@ interface Props {
 	onShow?: OnShowListener;
 	contentStyle?: CSSProperties;
 	open?: boolean;
+	preventAutoCloseOnCancel?: boolean;
 	contentFillsScreen?: boolean;
 	children: ReactNode;
 }
@@ -32,7 +33,7 @@ const Dialog: FC<Props> = props => {
 	// Because useEffect cleanup can happen after an element is removed from the HTML DOM, the dialog is managed
 	// using native HTML APIs. This allows us to call .close() while the dialog is still attached to the DOM, which
 	// allows the browser to restore the focus from before the dialog was opened.
-	const dialogElement = useDialogElement(containerDocument, props.onCancel);
+	const dialogElement = useDialogElement(containerDocument, props.onCancel, props.preventAutoCloseOnCancel ?? false);
 	useDialogClassNames(dialogElement, props.className);
 
 	const [contentRendered, setContentRendered] = useState(false);
@@ -114,11 +115,12 @@ const useClickedOutsideContent = (dialogElement: HTMLDialogElement|null) => {
 	return [clickedOutsideContent, setClickedOutsideContent] as const;
 };
 
-const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCancelListener) => {
+const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCancelListener, preventAutoCloseOnCancel: boolean) => {
 	const [dialogElement, setDialogElement] = useState<HTMLDialogElement|null>(null);
 
 	const onCancelRef = useRef(onCancel);
 	onCancelRef.current = onCancel;
+	const skipCloseCancelRef = useRef(false);
 
 	const [clickedOutsideContent, setClickedOutsideContent] = useClickedOutsideContent(dialogElement);
 
@@ -126,12 +128,15 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 		if (clickedOutsideContent) {
 			const onCancel = onCancelRef.current;
 			if (onCancel) {
+				if (preventAutoCloseOnCancel) {
+					skipCloseCancelRef.current = true;
+				}
 				onCancel();
 			} else {
 				setClickedOutsideContent(false);
 			}
 		}
-	}, [clickedOutsideContent, setClickedOutsideContent]);
+	}, [clickedOutsideContent, setClickedOutsideContent, preventAutoCloseOnCancel]);
 
 	useEffect(() => {
 		if (!containerDocument) return () => {};
@@ -139,6 +144,15 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 		const dialog = containerDocument.createElement('dialog');
 		dialog.classList.add('dialog-modal-layer');
 		dialog.addEventListener('cancel', event => {
+			if (preventAutoCloseOnCancel) {
+				// Prevent the native dialog element from auto-closing so the app can
+				// decide whether to close (for example, to confirm unsaved changes).
+				event.preventDefault();
+				skipCloseCancelRef.current = true;
+				onCancelRef.current?.();
+				return;
+			}
+
 			const canCancel = !!onCancelRef.current;
 			if (!canCancel) {
 				// Prevents [Escape] from closing the dialog. In many places, this is handled
@@ -152,8 +166,12 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 		dialog.addEventListener('close', () => {
 			const closedByCancel = dialog.returnValue !== removedReturnValue;
 			if (closedByCancel) {
-				onCancelRef.current?.();
+				if (!preventAutoCloseOnCancel || !skipCloseCancelRef.current) {
+					onCancelRef.current?.();
+				}
 			}
+
+			skipCloseCancelRef.current = false;
 
 			// Work around what seems to be an Electron bug -- if an input or contenteditable region is refocused after
 			// dismissing a dialog, it won't be editable.
@@ -176,7 +194,7 @@ const useDialogElement = (containerDocument: Document, onCancel: undefined|OnCan
 			}
 			dialog.remove();
 		};
-	}, [containerDocument]);
+	}, [containerDocument, preventAutoCloseOnCancel]);
 
 	return dialogElement;
 };

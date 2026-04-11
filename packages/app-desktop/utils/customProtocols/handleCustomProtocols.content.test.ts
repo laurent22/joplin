@@ -16,6 +16,7 @@ jest.doMock('electron', () => {
 		protocol: {
 			handle: handleProtocolMock,
 		},
+		Session: jest.fn(),
 	};
 });
 
@@ -26,7 +27,12 @@ import { stat } from 'fs-extra';
 import { toForwardSlashes } from '@joplin/utils/path';
 
 const setUpProtocolHandler = () => {
-	const protocolHandler = handleCustomProtocols();
+	const mockSession = {
+		protocol: {
+			handle: handleProtocolMock,
+		},
+	};
+	const protocolHandler = handleCustomProtocols(mockSession as never);
 
 	expect(handleProtocolMock).toHaveBeenCalled();
 

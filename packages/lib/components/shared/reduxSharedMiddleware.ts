@@ -130,7 +130,7 @@ export default async (store: any, _next: any, action: any, dispatch: Dispatch) =
 		}
 	}
 
-	if (action.type.startsWith('SHARE_')) {
+	if (action.type.startsWith('SHARE_') && action.type !== 'SHARE_CACHE_RESTORE') {
 		const serialized = JSON.stringify(newState.shareService);
 		Setting.setValue('sync.shareCache', serialized);
 		BaseItem.syncShareCache = JSON.parse(serialized);

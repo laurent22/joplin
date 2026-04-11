@@ -9,6 +9,7 @@ import Logger from '@joplin/utils/Logger';
 import { Props, WebViewControl } from './types';
 import { JSDOM } from 'jsdom';
 import useCss from './utils/useCss';
+import polyfillScrollFunctions from './utils/polyfillScrollFunctions';
 
 const logger = Logger.create('ExtendedWebView');
 
@@ -55,9 +56,9 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 	useEffect(() => {
 		// JSDOM polyfills
-		dom.window.eval(`
-			window.scrollBy = (_amount) => { };
+		dom.window.eval(polyfillScrollFunctions);
 
+		dom.window.eval(`
 			// JSDOM iframes are missing certain functionality required by Joplin,
 			// including:
 			// - MessageEvent.source: Should point to the window that created a message.

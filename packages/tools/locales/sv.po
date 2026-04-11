@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -59,7 +59,7 @@ msgstr "(Ingen)"
 
 #: packages/app-cli/app/command-share.ts:141
 msgid "(Read-only)"
-msgstr "(skrivskyddad)"
+msgstr "(Skrivskyddad)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:54
 #: packages/lib/models/settings/builtInMetadata.ts:55
@@ -346,18 +346,18 @@ msgstr "Om Joplin"
 #: packages/lib/services/KeymapService.ts:339
 #: packages/lib/services/KeymapService.ts:344
 msgid "accelerator"
-msgstr "accelerator"
+msgstr "kortkommando"
 
 #: packages/lib/services/KeymapService.ts:396
 msgid "Accelerator \"%s\" is not valid."
-msgstr "Acceleratorn \"%s\" är inte giltig."
+msgstr "Kortkommandot \"%s\" är inte giltigt."
 
 #: packages/lib/services/KeymapService.ts:365
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
-"Acceleratorn \"%s\" används för \"%s\" och \"%s\" kommandon. Detta kan leda "
+"Kortkommandot \"%s\" används för \"%s\" och \"%s\" kommandon. Detta kan leda "
 "till oväntat beteende."
 
 #: packages/app-desktop/gui/MainScreen.tsx:564
@@ -610,7 +610,7 @@ msgid ""
 msgstr ""
 "Alla e-postmeddelanden som skickas till den här adressen kommer att "
 "omvandlas till en anteckning och läggas till i din samling. Anteckningen "
-"kommer att sparas anteckningsboken Inbox"
+"kommer att sparas i anteckningsboken Inbox"
 
 #: packages/lib/models/Setting.ts:1354
 msgid "Appearance"
@@ -761,7 +761,7 @@ msgstr "Formatera Markdown automatiskt i Avancerad textredigerare"
 
 #: packages/lib/models/settings/builtInMetadata.ts:743
 msgid "Auto-pair braces, parentheses, quotations, etc."
-msgstr "Para automatiskt hakparenteser, paranteser, situationstecken, etc."
+msgstr "Para ihop klamrar, parenteser, citattecken etc. automatiskt."
 
 #: packages/lib/models/settings/builtInMetadata.ts:754
 msgid "Autocomplete Markdown and HTML"
@@ -1404,7 +1404,7 @@ msgstr "Konvertera till att-göra"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:161
 msgid "Converting speech to text..."
-msgstr "Konverterar tal till text..."
+msgstr "Omvandlar tal till text..."
 
 #: packages/app-desktop/gui/MenuBar.tsx:550
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:35
@@ -1527,7 +1527,7 @@ msgstr "Det gick inte att byta profil: %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:224
 msgid "Could not upgrade master key: %s"
-msgstr "Lyckades inte uppgradera huvudnyckel: %s"
+msgstr "Det gick inte att uppgradera huvudnyckel: %s"
 
 #: packages/lib/commands/leaveSharedFolder.ts:33
 msgid ""
@@ -1901,7 +1901,7 @@ msgstr "Tar bort anteckningarna utan att be om bekräftelse."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:579
 msgid "Deletion log"
-msgstr "Borttagningslogg"
+msgstr "Raderingslogg"
 
 #: packages/app-mobile/components/NoteItem.tsx:152
 msgid "Deselect"
@@ -2084,8 +2084,8 @@ msgid ""
 "Don't allow the share recipient to write to the shared notebook. Valid only "
 "for the `add` subcommand."
 msgstr ""
-"Tillåt inte delningsmottagaren att skriva till den delade anteckningsboken. "
-"Gäller endast för underkommandot `add`."
+"Tillåt inte mottagaren av delningen att skriva till den delade "
+"anteckningsboken. Gäller endast för underkommandot `add`."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:668
 msgid "Don't show this message again"
@@ -2451,7 +2451,7 @@ msgstr "Aktivera stavningskontroll i textredigeraren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1100
 msgid "Enable table of contents extension"
-msgstr "Aktivera innehållsförteckningen"
+msgstr "Aktivera tillägget för innehållsförteckning"
 
 #: packages/lib/models/settings/builtInMetadata.ts:939
 msgid "Enable the Markdown toolbar"
@@ -2482,8 +2482,8 @@ msgid ""
 "Enables Markdown list continuation, auto-closing HTML tags, and other markup "
 "autocompletions."
 msgstr ""
-"Aktiverar Markdown-listfortsättning, automatisk stängning av HTML-taggar och "
-"andra märkspråksautokompletteringar."
+"Aktiverar fortsättning av Markdown-listor, automatisk stängning av HTML-"
+"taggar och annan autokomplettering för märkning."
 
 #: packages/lib/models/settings/builtInMetadata.ts:787
 msgid ""
@@ -4505,7 +4505,7 @@ msgstr "Öppna inställningar"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
 msgid "Open Source"
-msgstr "Öppna källa"
+msgstr "Öppen källkod"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:557
 #: packages/lib/models/settings/builtInMetadata.ts:108
@@ -4902,7 +4902,7 @@ msgstr "Bearbeta raderingar av användare"
 
 #: packages/lib/models/Resource.ts:32
 msgid "Processing"
-msgstr "Bearbetning"
+msgstr "Bearbetar"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:111
 msgid "Processing photo..."
@@ -5301,12 +5301,12 @@ msgstr "Försök igen"
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:86
 #: packages/app-mobile/components/screens/status.tsx:191
 msgid "Retry All"
-msgstr "Försök igen alla"
+msgstr "Försök igen med alla"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:176
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.ts:8
 msgid "Reveal file in folder"
-msgstr "Visa filen i mappen"
+msgstr "Visa fil i mapp"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderReverse.ts:8
 #: packages/lib/models/settings/builtInMetadata.ts:825
@@ -5581,13 +5581,13 @@ msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
 msgstr ""
-"Ställ in det till 0 för att få det att ta det kompletta lediga utrymmet. "
+"Sätt den till 0 för att den ska ta upp hela det tillgängliga utrymmet. "
 "Rekommenderad bredd är 600."
 
 #: packages/app-desktop/gui/MainScreen.tsx:531
 #: packages/app-desktop/gui/MainScreen.tsx:578
 msgid "Set the password"
-msgstr "Ställ in lösenord"
+msgstr "Välj lösenord"
 
 #: packages/app-cli/app/command-set.ts:22
 msgid ""
@@ -5751,7 +5751,7 @@ msgstr "Storlek"
 
 #: packages/app-desktop/checkForUpdates.ts:109
 msgid "Skip this version"
-msgstr "Hoppa över denna versionen"
+msgstr "Hoppa över den här versionen"
 
 #: packages/app-cli/app/command-e2ee.ts:67
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
@@ -5859,7 +5859,7 @@ msgstr "BLANKSTEG"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
-msgstr "Spacer"
+msgstr "Mellanrum"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1680
 msgid ""
@@ -5878,7 +5878,7 @@ msgstr "Stavningskontroll"
 #: packages/lib/models/settings/builtInMetadata.ts:708
 #: packages/lib/models/settings/builtInMetadata.ts:709
 msgid "Split View"
-msgstr "Dela vy"
+msgstr "Delad vy"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1148
 msgid "Start application minimised in the tray icon"
@@ -6801,8 +6801,8 @@ msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
 msgstr ""
-"För att tillåta Joplin att synkronisera med Joplin Cloud, logga in "
-"med denna URL:"
+"För att tillåta Joplin att synkronisera med Joplin Cloud, logga in med denna "
+"URL:"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
@@ -6936,7 +6936,7 @@ msgstr "Växla egen sorteringsordning"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:468
 msgid "Toggle plugin editor"
-msgstr "Växla tilläggsredigeraren"
+msgstr "Växla insticksmodulredigeraren"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"

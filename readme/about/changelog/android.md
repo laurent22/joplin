@@ -1,5 +1,19 @@
 # Joplin Android Changelog
 
+## [android-v3.6.15](https://github.com/laurent22/joplin/releases/tag/android-v3.6.15) - 2026-04-05T13:00:51Z
+
+- New: Add toolbar button reordering with up/down arrows (#14485 by [@Vpatel1093](https://github.com/Vpatel1093))
+- Improved: Disable auto correct, auto complete and auto capitalize for setting search field (#14810 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Implement note attachments management screen (#14818) (#14789 by [@yousef-genedy](https://github.com/yousef-genedy))
+- Improved: Revert: Start sync when app opens or resumes (#14889)
+- Improved: Updated packages esbuild (v0.27.2), fs-extra (v11.3.3), glob (v11.1.0), react-native-localize (v3.6.1)
+- Fixed: Fix editor font setting being ignored in the Rich Text Editor (#14995) (#14974 by Sriram Varun Kumar)
+- Fixed: Fix encrypted notes not decrypting after updating master password (#14996) (#14984 by Sriram Varun Kumar)
+- Fixed: Prevent Note Tags dialog from closing before discard confirmation on web (#14998) (#14771 by [@zainAwan9175](https://github.com/zainAwan9175))
+- Fixed: Prevent duplicate tags caused by Unicode normalization (#14599) (#14540 by [@itisrohit](https://github.com/itisrohit))
+- Fixed: Show confirmation dialog before closing tags dialog with unsaved changes (#14777) (#14771 by [@zainAwan9175](https://github.com/zainAwan9175))
+- Fixed: Tag's note list fails to update after removing the tag from a note (#14944) (#11122 by [@Fardin96](https://github.com/Fardin96))
+
 ## [android-v3.6.14](https://github.com/laurent22/joplin/releases/tag/android-v3.6.14) - 2026-03-16T22:14:47Z
 
 - New: Add ability to set per notebook sorting on mobile (#14562 by [@mrjo118](https://github.com/mrjo118))

@@ -224,17 +224,44 @@ const markdownUtils = {
 		if (!body) return '';
 		const spaceEntities = /&nbsp;/g;
 		body = body.replace(spaceEntities, ' ');
-		const lines = body.trim().split('\n');
-		const title = lines[0].trim();
+		const lines = body.split('\n');
+		let title = '';
 
-		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
-		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
-		const filterRegex = /^[# \n\t*`-]*/;
-		return title
-			.replace(filterRegex, '')
-			.replace(mdLinkRegex, '$1')
-			.replace(emptyMdLinkRegex, '$1')
-			.substring(0, 80);
+		for (const line of lines) {
+			const trimmed = line.trim();
+			if (trimmed) {
+				title = trimmed;
+				break;
+			}
+		}
+
+		title = title.replace(/<\/?(ins|del|mark|sub|sup)>/g, '');
+		title = title.replace(/!?\[([^\]]*)\]\(([^()\n]+(?:\([^()\n]*\)[^()\n]*)*)\)/g, (_match, text, url) => {
+			return text || url;
+		});
+		const formattingPatterns = [
+			/(\*\*\*|___)(.*?)\1/g,
+			/(\*\*|__)(.*?)\1/g,
+			/(\*|_)(.*?)\1/g,
+			/(~~)(.*?)\1/g,
+			/(==)(.*?)\1/g,
+			/(\^)(.*?)\1/g,
+		];
+
+		let prev;
+		do {
+			prev = title;
+			for (const pattern of formattingPatterns) {
+				title = title.replace(pattern, '$2');
+			}
+		} while (title !== prev);
+
+		title = title.replace(/^\s*([-*+]|\d+[.)])\s+(\[[ xX]\]\s+)?/, '');
+		title = title.replace(/^(~{2,}|={2,})$/, '');
+		title = title.replace(/^[#>\-*`\s=]+/, '');
+		title = title.replace(/[#>\-*`\s=]+$/, '');
+		title = title.trim();
+		return title.substring(0, 80);
 	},
 };
 

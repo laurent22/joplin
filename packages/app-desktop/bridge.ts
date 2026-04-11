@@ -553,7 +553,7 @@ export class Bridge {
 			});
 
 			if (buttonIndex === 1) {
-				void this.openItem(this.electronApp().ipcLoggerFilePath());
+				void this.openItem(this.electronApp().mainProcessLogFilePath());
 			}
 		}
 	}

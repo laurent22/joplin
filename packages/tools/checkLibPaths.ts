@@ -4,6 +4,7 @@ import { readFile } from 'fs-extra';
 import { normalize } from 'path';
 import yargs = require('yargs');
 import { dirname } from './tool-utils';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 export const findInvalidImportPaths = (baseDir: string, fileContent: string): string[] => {
 	const output: string[] = [];
@@ -26,7 +27,7 @@ export const findInvalidImportPaths = (baseDir: string, fileContent: string): st
 			const matches = regex.exec(fileContent);
 			if (!matches) break;
 			const [line, packagePath] = matches;
-			const fullPath = normalize(`${baseDir}/${packagePath}`);
+			const fullPath = toForwardSlashes(normalize(`${baseDir}/${packagePath}`));
 			if (fullPath.includes('packages/lib/') || fullPath.includes('packages/renderer/')) output.push(line);
 		}
 

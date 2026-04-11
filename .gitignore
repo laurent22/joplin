@@ -671,10 +671,15 @@ packages/app-mobile/components/EditorToolbar/utils/isSelected.js
 packages/app-mobile/components/EditorToolbar/utils/selectedCommandNamesFromState.js
 packages/app-mobile/components/EditorToolbar/utils/toolbarButtonsFromState.js
 packages/app-mobile/components/EditorToolbar/utils/useButtonSize.js
+packages/app-mobile/components/EditorToolbar/utils/useSaveToolbarButtons.test.js
+packages/app-mobile/components/EditorToolbar/utils/useSaveToolbarButtons.js
+packages/app-mobile/components/EditorToolbar/utils/useToolbarEditorState.test.js
+packages/app-mobile/components/EditorToolbar/utils/useToolbarEditorState.js
 packages/app-mobile/components/ExtendedWebView/index.jest.js
 packages/app-mobile/components/ExtendedWebView/index.js
 packages/app-mobile/components/ExtendedWebView/index.web.js
 packages/app-mobile/components/ExtendedWebView/types.js
+packages/app-mobile/components/ExtendedWebView/utils/polyfillScrollFunctions.js
 packages/app-mobile/components/ExtendedWebView/utils/useCss.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
@@ -934,6 +939,7 @@ packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
 packages/app-mobile/utils/appDefaultState.js
+packages/app-mobile/utils/appReducer.test.js
 packages/app-mobile/utils/appReducer.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/buildStartupTasks.js
@@ -1420,6 +1426,7 @@ packages/lib/services/CommandService.test.js
 packages/lib/services/CommandService.js
 packages/lib/services/DecryptionWorker.test.js
 packages/lib/services/DecryptionWorker.js
+packages/lib/services/ExternalEditWatcher.test.js
 packages/lib/services/ExternalEditWatcher.js
 packages/lib/services/ExternalEditWatcher/utils.js
 packages/lib/services/ItemChangeUtils.js
