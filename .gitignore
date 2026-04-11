@@ -1973,3 +1973,4 @@ packages/tools/website/utils/types.js
 packages/whisper-voice-typing/src/index.js
 packages/whisper-voice-typing/src/specs/Whisper.nitro.js
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+packages/app-mobile/android/app/build.gradle

@@ -18,12 +18,19 @@ import { _, setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
-import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from 'react-native';
-import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
+import {
+	Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions,
+	StyleSheet, TouchableWithoutFeedback,
+} from 'react-native';
+import {
+	AppState as RNAppState, EmitterSubscription, View, Text, Linking,
+	NativeEventSubscription, Appearance, ActivityIndicator,
+} from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 import SafeAreaView from './components/SafeAreaView';
+import { SafeAreaView as RNSafeAreaView } from 'react-native-safe-area-context';
 const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
@@ -39,7 +46,6 @@ import FolderScreen from './components/screens/folder';
 import LogScreen from './components/screens/LogScreen';
 import StatusScreen from './components/screens/status';
 import SearchScreen from './components/screens/SearchScreen';
-import ResourceScreen from './components/screens/ResourceScreen';
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
@@ -62,10 +68,16 @@ import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
-
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
-
+// ─── react-native-gesture-handler ─────────────────────────────────────────────
+import {
+	GestureHandlerRootView,
+	GestureDetector,
+	Gesture,
+} from 'react-native-gesture-handler';
+import { useRef, useEffect, useCallback } from 'react';
+// ──────────────────────────────────────────────────────────────────────────────
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -260,6 +272,263 @@ async function initialize(dispatch: Dispatch) {
 	logger.info('Application initialized');
 }
 
+// ════════════════════════════════ ════════════════════ ═════════════════════════
+// PhysicalLeftSideMenu
+//
+// Left side menu with physical “push” behavior — like in Gmail / Obsidian:
+//
+//   PUSH mode:
+//   • The menu slides out from the left, SHIFTING the main content to the right (does not overlap)
+//   • Both elements move synchronously: menu translateX + content translateX
+//   • No scrim — content simply slides to the right
+//   • Light shadow on the right edge of the menu to separate layers
+//
+//   Gestures:
+//   • Finger tracking: the finger literally drags the menu and content simultaneously
+//   • Spring animation on release (Material Design parameters)
+//   • Available on all screens including Note (note editing)
+//   • The Back button on the Note screen works as usual (NAV_BACK, does not close the menu)
+//
+//   Technical details:
+//   • menuX: Animated.Value from -menuWidth (closed) to 0 (open)
+//   • contentX: interpolate(menuX) → from 0 to menuWidth
+//   • Both use useNativeDriver: true via Animated.spring / setValue
+// ════════════════ ═════════════════════════════════ ════════════════════════════
+
+// Spring settings (Material Design / Android-like)
+const SPRING_CONFIG = {
+	useNativeDriver: true,
+	damping: 32,
+	stiffness: 300,
+	mass: 1,
+	overshootClamping: true,
+	restDisplacementThreshold: 1,
+	restSpeedThreshold: 1,
+};
+
+// Maximum transparency of the shadow on the right edge of the menu
+const MENU_SHADOW_MAX_OPACITY = 0.3;
+
+interface PhysicalLeftSideMenuProps {
+	menu: ReactNode;
+	menuWidth: number;
+	backgroundColor: string;
+	/** Width of the area at the left edge for swipe detection (px) */
+	swipeEdgeWidth: number;
+	/** Minimum speed for snap (px/s) */
+	velocityThreshold: number;
+	/** Minimum distance as an alternative to velocity (px) */
+	distanceThreshold: number;
+	isOpen: boolean;
+	gesturesDisabled: boolean;
+	onChange: (isOpen: boolean)=> void;
+	children: ReactNode;
+}
+
+const PhysicalLeftSideMenu: React.FC<PhysicalLeftSideMenuProps> = ({
+	menu,
+	menuWidth,
+	backgroundColor,
+	swipeEdgeWidth,
+	velocityThreshold,
+	distanceThreshold,
+	isOpen,
+	gesturesDisabled,
+	onChange,
+	children,
+}) => {
+	// menuX: from -menuWidth (hidden) to 0 (open)
+	const menuX = useRef(new Animated.Value(isOpen ? 0 : -menuWidth)).current;
+
+	const touchStartX = useRef(0);
+	const gestureStartMenuX = useRef(isOpen ? 0 : -menuWidth);
+	const gestureValid = useRef(false);
+	const currentMenuX = useRef(isOpen ? 0 : -menuWidth);
+
+	// Synchronization with external isOpen (toolbar button, Android back button)
+	useEffect(() => {
+		const targetX = isOpen ? 0 : -menuWidth;
+		currentMenuX.current = targetX;
+		gestureStartMenuX.current = targetX;
+		Animated.spring(menuX, { toValue: targetX, ...SPRING_CONFIG }).start();
+		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps
+	}, [isOpen, menuWidth, menuX]);
+
+	const snapOpen = useCallback(() => {
+		currentMenuX.current = 0;
+		gestureStartMenuX.current = 0;
+		Animated.spring(menuX, { toValue: 0, ...SPRING_CONFIG }).start();
+		onChange(true);
+	}, [menuX, onChange]);
+
+	const snapClose = useCallback(() => {
+		currentMenuX.current = -menuWidth;
+		gestureStartMenuX.current = -menuWidth;
+		Animated.spring(menuX, { toValue: -menuWidth, ...SPRING_CONFIG }).start();
+		onChange(false);
+	}, [menuX, menuWidth, onChange]);
+
+	const panGesture = Gesture.Pan()
+		.onBegin((e) => {
+			touchStartX.current = e.x;
+			gestureValid.current = false;
+		})
+
+		.onStart(() => {
+			if (gesturesDisabled) {
+				gestureValid.current = false;
+				return;
+			}
+			const fromEdge = !isOpen && touchStartX.current <= swipeEdgeWidth;
+			const canClose = isOpen;
+			gestureValid.current = fromEdge || canClose;
+			gestureStartMenuX.current = currentMenuX.current;
+		})
+
+		.onUpdate((e) => {
+			if (!gestureValid.current) return;
+
+			const absX = Math.abs(e.translationX);
+			const absY = Math.abs(e.translationY);
+
+			// Vertical scrolling is active → cancel the gesture
+			if (absY > absX * 1.8 && absX < distanceThreshold * 0.3) {
+				gestureValid.current = false;
+				const target = isOpen ? 0 : -menuWidth;
+				menuX.setValue(target);
+				currentMenuX.current = target;
+				return;
+			}
+
+			const rawX = gestureStartMenuX.current + e.translationX;
+			const clampedX = Math.max(-menuWidth, Math.min(0, rawX));
+
+			// Live refresh — the menu and content follow your finger
+			menuX.setValue(clampedX);
+			currentMenuX.current = clampedX;
+		})
+
+		.onEnd((e) => {
+			if (!gestureValid.current) {
+				if (isOpen) {
+					snapOpen();
+				} else {
+					snapClose();
+				}
+				return;
+			}
+
+			const vx = e.velocityX;
+			const dx = currentMenuX.current - gestureStartMenuX.current;
+			const isFastEnough = Math.abs(vx) >= velocityThreshold;
+			const isFarEnough = Math.abs(dx) >= distanceThreshold;
+
+			if ((vx > velocityThreshold) || (!isFastEnough && isFarEnough && dx > 0)) {
+				snapOpen();
+			} else if ((vx < -velocityThreshold) || (!isFastEnough && isFarEnough && dx < 0)) {
+				snapClose();
+			} else {
+			// Snap to the nearest position
+				if (currentMenuX.current >= -menuWidth / 2) { snapOpen(); } else { snapClose(); }
+			}
+		})
+
+		// Avoid conflicts with Android's system gestures and ScrollView
+		.activeOffsetX([-15, 15])
+		.failOffsetY([-22, 22])
+		.minPointers(1)
+		.maxPointers(1);
+
+	// ── Push: the content shifts to the right by the same amount that the menu slides out ──
+	// menuX moves from -menuWidth → 0
+	// contentX moves from      0 → menuWidth
+	const contentTranslateX = menuX.interpolate({
+		inputRange: [-menuWidth, 0],
+		outputRange: [0, menuWidth],
+		extrapolate: 'clamp',
+	});
+
+	// Shadow on the right edge of the menu (layer separator)
+	const menuShadowOpacity = menuX.interpolate({
+		inputRange: [-menuWidth, -menuWidth * 0.1, 0],
+		outputRange: [0, 0.05, MENU_SHADOW_MAX_OPACITY],
+		extrapolate: 'clamp',
+	});
+
+	// Slightly dim the content when the menu is open (optional, but adds depth)
+	const contentDimOpacity = menuX.interpolate({
+		inputRange: [-menuWidth, 0],
+		outputRange: [0, 0.15],
+		extrapolate: 'clamp',
+	});
+
+	return (
+		<GestureHandlerRootView style={{ flex: 1, overflow: 'hidden' }}>
+			<GestureDetector gesture={panGesture}>
+				{/* overflow: hidden cuts off content when it extends to the right */}
+				<View style={{ flex: 1, overflow: 'hidden' }}>
+
+					{/* ── Menu: slides in from the left ─────────────────────────────── */}
+					<Animated.View
+						style={{
+							position: 'absolute',
+							top: 0,
+							bottom: 0,
+							left: 0,
+							width: menuWidth,
+							backgroundColor,
+							transform: [{ translateX: menuX }],
+							// Shadow on the right edge of the menu
+							shadowColor: '#000',
+							shadowOffset: { width: 6, height: 0 },
+							shadowOpacity: menuShadowOpacity,
+							shadowRadius: 10,
+							elevation: 16,
+							zIndex: 10,
+						}}
+					>
+						<RNSafeAreaView style={{ flex: 1 }} edges={['top']}>
+							{menu}
+						</RNSafeAreaView>
+					</Animated.View>
+
+					{/* ── Content: shifts to the right along with the menu ────────── */}
+					<Animated.View
+						style={{
+							position: 'absolute',
+							top: 0,
+							bottom: 0,
+							left: 0,
+							right: 0,
+							transform: [{ translateX: contentTranslateX }],
+							zIndex: 5,
+						}}
+					>
+						{children}
+
+						{/* A slight darkening over the content when the menu is open.
+                            Tapping it closes the menu. */}
+						<Animated.View
+							pointerEvents={isOpen ? 'auto' : 'none'}
+							style={[
+								StyleSheet.absoluteFillObject,
+								{ backgroundColor: '#000', opacity: contentDimOpacity, zIndex: 20 },
+							]}
+						>
+							<TouchableWithoutFeedback onPress={snapClose}>
+								<View style={StyleSheet.absoluteFillObject} />
+							</TouchableWithoutFeedback>
+						</Animated.View>
+					</Animated.View>
+
+				</View>
+			</GestureDetector>
+		</GestureHandlerRootView>
+	);
+};
+
+// ═════════════════════════════════════════════════════════════════════════════
+
 interface AppComponentProps {
 	dispatch: Dispatch;
 	themeId: number;
@@ -272,6 +541,15 @@ interface AppComponentProps {
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
 	noteSelectionEnabled: boolean;
+	// ── Side Menu Gesture Settings ──────────────────────────────────────
+	/** Width of the area at the left edge (px). Default: 80 */
+	sideMenuSwipeEdgeWidth: number;
+	/** Minimum swipe speed (px/s). Default: 500 */
+	sideMenuSwipeVelocityThreshold: number;
+	/** Minimum swipe distance (px). Default: 60 */
+	sideMenuSwipeDistanceThreshold: number;
+	/** Disable the right-click gesture (Note screen). Default: false */
+	disableRightSideMenuGestures: boolean;
 }
 
 interface AppComponentState {
@@ -565,11 +843,13 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			return true;
 		}
 
+		// If the left menu is open, close it (this takes precedence over the back navigation)
 		if (this.props.showSideMenu) {
 			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 			return true;
 		}
 
+		// On the screen, “Note: back” returns you to the list of notes as usual
 		if (this.props.historyCanGoBack) {
 			this.props.dispatch({ type: 'NAV_BACK' });
 			return true;
@@ -657,10 +937,17 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 	}
 
-	private sideMenu_change = (isOpen: boolean) => {
-		// Make sure showSideMenu property of state is updated
-		// when the menu is open/closed.
-		// Avoid dispatching unnecessarily. See https://github.com/laurent22/joplin/issues/12427
+	// Right-hand menu on the “Notes” screen (SideMenu)
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	private sideMenu_change = (_isOpen: boolean) => {
+	// The right-hand Note menu uses a separate dispatch—we don’t want to interfere with the left-hand one
+		// We’re intentionally not dispatching SIDE_MENU_OPEN/CLOSE here—the right-hand menu
+		// is managed internally by the SideMenu component itself.
+		// If synchronization is needed, you can add a separate action.
+	};
+
+	// Left menu (PhysicalLeftSideMenu)
+	private handleLeftMenuChange_ = (isOpen: boolean) => {
 		if (isOpen !== this.props.showSideMenu) {
 			this.props.dispatch({
 				type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
@@ -669,15 +956,13 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	};
 
 	private getSideMenuWidth = () => {
-		const sideMenuWidth = getResponsiveValue({
+		return getResponsiveValue({
 			sm: 250,
 			md: 260,
 			lg: 270,
 			xl: 280,
 			xxl: 290,
 		});
-
-		return sideMenuWidth;
 	};
 
 	public render() {
@@ -685,8 +970,6 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			if (this.props.appState === 'error') {
 				return <Text>Startup error.</Text>;
 			}
-
-			// Loading can take a particularly long time for the first time on web -- show progress.
 			if (Platform.OS === 'web') {
 				return <View style={{ marginLeft: 'auto', marginRight: 'auto', paddingTop: 20 }}>
 					<ActivityIndicator accessibilityLabel={_('Loading...')} />
@@ -697,20 +980,17 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 		const theme: Theme = themeStyle(this.props.themeId);
 
-		let sideMenuContent: ReactNode = null;
-		let menuPosition = SideMenuPosition.Left;
-		let disableSideMenuGestures = true;
+		// ── Defining the content of the right-hand menu (for the Note screen only) ────────
+		// The left-hand menu (folders/notes) is now accessible from all screens.
+		const isNoteScreen = this.props.routeName === 'Note';
+		const isConfigScreen = this.props.routeName === 'Config';
 
-		if (this.props.routeName === 'Note') {
-			sideMenuContent = <SideMenuContentNote options={this.props.noteSideMenuOptions}/>;
-			menuPosition = SideMenuPosition.Right;
-			disableSideMenuGestures = this.props.disableSideMenuGestures;
-		} else if (this.props.routeName === 'Notes') {
-			sideMenuContent = <SideMenuContent/>;
-			disableSideMenuGestures = false;
-		} else {
-			sideMenuContent = <SideMenuContent/>;
-		}
+		// Gestures are completely disabled on the Config screen
+		const leftGesturesDisabled = this.props.disableSideMenuGestures || isConfigScreen;
+
+		// Right-hand menu: only on the Note screen; can be disabled in the settings
+		const rightMenuGesturesDisabled = this.props.disableSideMenuGestures || this.props.disableRightSideMenuGestures;
+		const rightMenuEdgeHitWidth = this.props.disableRightSideMenuGestures ? 0 : 20;
 
 		const appNavInit = {
 			Notes: { screen: NotesScreen },
@@ -730,62 +1010,74 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			Log: { screen: LogScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
-			NoteResources: { screen: ResourceScreen },
 			Config: { screen: ConfigScreen },
 			DocumentScanner: { screen: DocumentScanner },
 		};
-
-
-		// const statusBarStyle = theme.appearance === 'light-content';
-		const statusBarStyle = 'light-content';
 
 		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
 		logger.info('root.biometrics: biometricsDone', this.props.biometricsDone);
 		logger.info('root.biometrics: biometricsEnabled', biometricsEnabled(this.state.sensorInfo));
 		logger.info('root.biometrics: shouldShowMainContent', shouldShowMainContent);
-		logger.info('root.biometrics: this.state.sensorInfo', this.state.sensorInfo);
 
-		// The right sidemenu can be difficult to close due to a bug in the sidemenu
-		// library (right sidemenus can't be swiped closed).
-		//
-		// Additionally, it can interfere with scrolling in the note viewer, so we use
-		// a smaller edge hit width.
-		const menuEdgeHitWidth = menuPosition === 'right' ? 20 : 30;
+		const paperTheme = theme.appearance === ThemeAppearance.Dark ? MD3DarkTheme : MD3LightTheme;
 
+		// ── Main app content ──────────────────────────────────────
+		const appContent = (
+			<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+				<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+					{shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} />}
+				</View>
+				{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
+				<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
+				<SyncWizard/>
+			</SafeAreaView>
+		);
+
+		// ── Right-side menu (only on the Note screen) ─────────────────────────────
+		// Wrap appContent in the right-side SideMenu only when necessary.
+		// The left-side menu remains visible and accessible from any screen.
+		const innerContent = isNoteScreen ? (
+			<SideMenu
+				menu={<SideMenuContentNote options={this.props.noteSideMenuOptions}/>}
+				edgeHitWidth={rightMenuEdgeHitWidth}
+				toleranceX={4}
+				toleranceY={20}
+				openMenuOffset={this.state.sideMenuWidth}
+				menuPosition={SideMenuPosition.Right}
+				onChange={this.sideMenu_change}
+				isOpen={false}
+				disableGestures={rightMenuGesturesDisabled}
+			>
+				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
+					{appContent}
+				</View>
+			</SideMenu>
+		) : appContent;
+
+		// ── Left menu: wraps around everything, accessible from all screens ───────────
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-				<SideMenu
-					menu={sideMenuContent}
-					edgeHitWidth={menuEdgeHitWidth}
-					toleranceX={4}
-					toleranceY={20}
-					openMenuOffset={this.state.sideMenuWidth}
-					menuPosition={menuPosition}
-					onChange={this.sideMenu_change}
+				<PhysicalLeftSideMenu
+					menu={<SideMenuContent/>}
+					menuWidth={this.state.sideMenuWidth}
+					backgroundColor={theme.backgroundColor}
+					swipeEdgeWidth={this.props.sideMenuSwipeEdgeWidth}
+					velocityThreshold={this.props.sideMenuSwipeVelocityThreshold}
+					distanceThreshold={this.props.sideMenuSwipeDistanceThreshold}
 					isOpen={this.props.showSideMenu}
-					disableGestures={disableSideMenuGestures}
+					gesturesDisabled={leftGesturesDisabled}
+					onChange={this.handleLeftMenuChange_}
 				>
-					<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-						<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
-							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
-							</View>
-							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
-							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
-							<SyncWizard/>
-						</SafeAreaView>
+					<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+						{innerContent}
 					</View>
-				</SideMenu>
+				</PhysicalLeftSideMenu>
 				<PluginRunnerWebView />
 				<PluginNotification/>
 			</View>
 		);
 
-
-		const paperTheme = theme.appearance === ThemeAppearance.Dark ? MD3DarkTheme : MD3LightTheme;
-
-		// Wrap everything in a PaperProvider -- this allows using components from react-native-paper
 		return (
 			<FocusControl.Provider>
 				<MenuProvider
@@ -827,7 +1119,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 						},
 					}}>
 						<DialogManager themeId={this.props.themeId}>
-							<StatusBar barStyle={statusBarStyle} />
+							<StatusBar barStyle={'light-content'} />
 							<SafeAreaProvider>
 								<FocusControl.MainAppContent style={{ flex: 1 }}>
 									{shouldShowMainContent ? mainContent : (
@@ -861,6 +1153,10 @@ const mapStateToProps = (state: AppState) => {
 		disableSideMenuGestures: state.disableSideMenuGestures,
 		biometricsDone: state.biometricsDone,
 		biometricsEnabled: state.settings['security.biometricsEnabled'],
+		sideMenuSwipeEdgeWidth: state.settings['ui.sideMenuSwipeWidth'] ?? 80,
+		sideMenuSwipeVelocityThreshold: state.settings['ui.sideMenuSwipeVelocityThreshold'] ?? 500,
+		sideMenuSwipeDistanceThreshold: state.settings['ui.sideMenuSwipeDistanceThreshold'] ?? 60,
+		disableRightSideMenuGestures: state.settings['ui.disableRightSideMenuGestures'] ?? false,
 	};
 };
 

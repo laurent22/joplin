@@ -10,7 +10,7 @@ import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from './global-style';
 import { buildFolderTree, isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
-import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon, FolderIconType, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
@@ -44,6 +44,9 @@ interface Props {
 	profileConfig: ProfileConfig;
 	inboxJopId: string;
 	selectedFolderIds: string[];
+	// ── Obsidian-style: notes from the current folder in the sidebar ───────────────────
+	notes: NoteEntity[];
+	selectedNoteId: string | null;
 }
 
 const syncIconRotationValue = new Animated.Value(0);
@@ -296,6 +299,77 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	);
 };
 
+// ── NoteItem ─────────────────────────────────────────────────────────────────
+// Note item in the side menu — Obsidian-style.
+// Displays the + icon and the title, and highlights the active note.
+
+interface NoteItemProps {
+	note: NoteEntity;
+	selected: boolean;
+	themeId: number;
+	onPress: (note: NoteEntity)=> void;
+}
+
+const NoteItem: React.FC<NoteItemProps> = ({ note, selected, themeId, onPress }) => {
+	const theme = themeStyle(themeId);
+
+	const rowStyle: ViewStyle = {
+		flexDirection: 'row',
+		alignItems: 'center',
+		height: 36,
+		// Indentation slightly greater than that of folders — a visual hierarchy similar to Obsidian
+		paddingLeft: theme.marginLeft + 16,
+		paddingRight: theme.marginRight,
+		backgroundColor: selected ? theme.selectedColor : undefined,
+	};
+
+	const iconStyle: TextStyle = {
+		fontSize: 16,
+		color: selected ? theme.color : theme.colorFaded,
+		width: 20,
+		textAlign: 'center',
+	};
+
+	const titleStyle: TextStyle = {
+		flex: 1,
+		paddingLeft: 8,
+		color: selected ? theme.color : theme.colorFaded,
+		fontSize: theme.fontSize,
+	};
+
+	const handlePress = useCallback(() => onPress(note), [note, onPress]);
+
+	const iconName = note.is_todo ? 'ionicon checkbox-outline' : 'ionicon document-text-outline';
+
+	return (
+		<TouchableRipple
+			onPress={handlePress}
+			accessibilityRole="button"
+			accessibilityState={{ selected }}
+			aria-current={selected}
+			accessibilityLabel={note.title || _('Untitled')}
+			accessibilityHint={_('Opens note')}
+		>
+			<View style={rowStyle}>
+				<Icon name={iconName} style={iconStyle} accessibilityLabel={null} />
+				<Text numberOfLines={1} style={titleStyle}>
+					{note.title || _('Untitled')}
+				</Text>
+				{/* Checkmark for a completed task */}
+				{!!note.is_todo && !!note.todo_completed && (
+					<Icon
+						name="ionicon checkmark-done"
+						style={{ ...iconStyle, marginLeft: 4, color: theme.colorFaded }}
+						accessibilityLabel={null}
+					/>
+				)}
+			</View>
+		</TouchableRipple>
+	);
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 const SideMenuContentComponent = (props: Props) => {
 	const alwaysShowFolderIcons = useMemo(() => Folder.shouldShowFolderIcons(props.folders), [props.folders]);
 	const styles_ = useStyles(props.themeId);
@@ -320,15 +394,25 @@ const SideMenuContentComponent = (props: Props) => {
 
 	const dialogs = useContext(DialogContext);
 
+	// ── Clicking on a folder: display its notes in the sidebar; do NOT close the menu.
+	// Behavior similar to Obsidian — the folder expands, and the list of notes is refreshed.
 	const folder_press = (folder: FolderEntity) => {
-		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
 		props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Notes',
 			folderId: folder.id,
 		});
 	};
+
+	// ── Tapping a note: opens it, while the menu remains open (push mode).
+	// The user can switch between notes without closing the sidebar.
+	const note_press = useCallback((note: NoteEntity) => {
+		props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Note',
+			noteId: note.id,
+		});
+	}, [props.dispatch]);
 
 	const folder_longPress = async (folderOrAll: FolderEntity | string) => {
 		if (folderOrAll === 'all') return;
@@ -370,27 +454,6 @@ const SideMenuContentComponent = (props: Props) => {
 				style: 'destructive',
 			});
 
-			// Alert.alert(
-			// 	'',
-			// 	_('Notebook: %s', folder.title),
-			// 	[
-			// 		{
-			// 			text: _('Restore'),
-			// 			onPress: async () => {
-			// 				await restoreItems(ModelType.Folder, [folder.id]);
-			// 			},
-			// 			style: 'destructive',
-			// 		},
-			// 		{
-			// 			text: _('Cancel'),
-			// 			onPress: () => {},
-			// 			style: 'cancel',
-			// 		},
-			// 	],
-			// 	{
-			// 		cancelable: false,
-			// 	},
-			// );
 		} else {
 			const generateFolderDeletion = () => {
 				const folderDeletion = (message: string) => {
@@ -481,8 +544,7 @@ const SideMenuContentComponent = (props: Props) => {
 	};
 
 	const allNotesButton_press = () => {
-		props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-
+	// Don't close the menu—the notes will appear in the list below
 		props.dispatch({
 			type: 'NAV_GO',
 			routeName: 'Notes',
@@ -707,6 +769,31 @@ const SideMenuContentComponent = (props: Props) => {
 		items = items.concat(folderItems);
 	}
 
+	// ── Obsidian-style: list of notes in the current folder / filter ───────────────
+	// Displays below the folder tree and updates automatically when you switch folders.
+	// Tapping a note opens it, and the menu remains open (push mode).
+	if (props.notes && props.notes.length > 0) {
+		items.push(makeDivider('divider_notes'));
+
+		items.push(renderSidebarButton('notes_header', _('Notes'), 'document-text', {
+			isHeader: true,
+		}));
+
+		for (const note of props.notes) {
+			items.push(
+				<NoteItem
+					key={`note-item-${note.id}`}
+					note={note}
+					selected={note.id === props.selectedNoteId}
+					themeId={props.themeId}
+					onPress={note_press}
+				/>,
+			);
+		}
+
+		items.push(<View style={{ height: 8 }} key="notes_bottom_padding" />);
+	}
+
 	const style = {
 		flex: 1,
 		borderRightWidth: 1,
@@ -742,5 +829,10 @@ export default connect((state: AppState) => {
 		syncOnlyOverWifi: state.settings['sync.mobileWifiOnly'],
 		profileConfig: state.profileConfig,
 		inboxJopId: state.settings['sync.10.inboxId'],
+		// ── Obsidian-style notes ──────────────────────────────────────────────
+		// state.notes — notes for the current folder/filter, the same as in the main list.
+		// Updated automatically when changing folders via Redux.
+		notes: state.notes,
+		selectedNoteId: state.selectedNoteIds?.length ? state.selectedNoteIds[0] : null,
 	};
 })(SideMenuContentComponent);
