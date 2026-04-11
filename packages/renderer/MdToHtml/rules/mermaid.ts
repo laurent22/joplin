@@ -86,7 +86,7 @@ export default {
 			// See PR #4670 https://github.com/laurent22/joplin/pull/4670
 			return `
 				<div class="joplin-editable">
-					<pre class="joplin-source" data-joplin-language="mermaid" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
+					<pre class="joplin-source" hidden data-joplin-language="mermaid" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
 					${exportButtonMarkup}
 					<pre class="${cssClasses.join(' ')}">${contentHtml}</pre>
 				</div>
