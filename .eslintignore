@@ -1066,6 +1066,7 @@ packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.js
 packages/editor/CodeMirror/extensions/links/referenceLinksStateField.js
 packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.test.js
 packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.js
+packages/editor/CodeMirror/extensions/links/utils/getUrlAtPosition.test.js
 packages/editor/CodeMirror/extensions/links/utils/getUrlAtPosition.js
 packages/editor/CodeMirror/extensions/links/utils/openLink.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.test.js
@@ -1136,6 +1137,7 @@ packages/editor/CodeMirror/utils/isInSyntaxNode.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/allLanguages.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/defaultLanguage.js
 packages/editor/CodeMirror/utils/markdown/codeBlockLanguages/lookUpLanguage.js
+packages/editor/CodeMirror/utils/markdown/getCheckboxAtPosition.test.js
 packages/editor/CodeMirror/utils/markdown/getCheckboxAtPosition.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.test.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.js
