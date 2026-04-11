@@ -30,4 +30,14 @@ describe('MdToHtml heading hashes', () => {
 
 		expect(result.html).not.toContain('joplin-heading-legacy-anchor');
 	});
+
+	test('should de-duplicate legacy alias anchors against canonical heading ids', async () => {
+		const renderer = new MdToHtml();
+		const result = await renderer.render('## [x] title\n## x title', null, { bodyOnly: true });
+
+		expect(result.html).toContain('id="title"');
+		expect(result.html).toContain('id="x-title"');
+		expect(result.html).toContain('id="x-title-2" class="joplin-heading-legacy-anchor"');
+		expect((result.html.match(/id="x-title"/g) ?? []).length).toBe(1);
+	});
 });

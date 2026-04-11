@@ -88,6 +88,18 @@ function normalizeHeadingForHash(headingText: string): string {
 	return headingText.replace(/^\[(?: |x|X)\]\s+/, '');
 }
 
+function uniqueHash(baseHash: string, seenHashes: Set<string>): string {
+	let hash = baseHash;
+	let counter = 1;
+	while (seenHashes.has(hash)) {
+		counter++;
+		hash = `${baseHash}-${counter}`;
+	}
+	seenHashes.add(hash);
+
+	return hash;
+}
+
 // Share across all instances of MdToHtml
 const inMemoryCache = new InMemoryCache(20);
 
@@ -638,6 +650,22 @@ export default class MdToHtml implements MarkupRenderer {
 		loadPlugin(markdownItAnchor, { slugify: slugify });
 
 		const defaultHeadingOpenRenderer = markdownIt.renderer.rules.heading_open;
+		let seenHeadingHashes: Set<string>|null = null;
+		const initializeSeenHeadingHashes = (tokens: Array<{ type: string; attrGet: (attrName: string)=> string|null }>) => {
+			if (seenHeadingHashes) return seenHeadingHashes;
+
+			seenHeadingHashes = new Set<string>();
+			for (const token of tokens) {
+				if (token.type !== 'heading_open') continue;
+				const headingId = token.attrGet('id');
+				if (headingId) {
+					seenHeadingHashes.add(headingId);
+				}
+			}
+
+			return seenHeadingHashes;
+		};
+
 		markdownIt.renderer.rules.heading_open = (tokens, idx, options, env, self) => {
 			const output = defaultHeadingOpenRenderer
 				? defaultHeadingOpenRenderer(tokens, idx, options, env, self)
@@ -654,8 +682,14 @@ export default class MdToHtml implements MarkupRenderer {
 				return output;
 			}
 
-			const legacyHeadingId = uslug(headingTextToken.content);
-			if (!legacyHeadingId || legacyHeadingId === canonicalHeadingId) {
+			const canonicalBaseHeadingId = uslug(normalizeHeadingForHash(headingTextToken.content));
+			const legacyBaseHeadingId = uslug(headingTextToken.content);
+			if (!legacyBaseHeadingId || legacyBaseHeadingId === canonicalBaseHeadingId) {
+				return output;
+			}
+
+			const legacyHeadingId = uniqueHash(legacyBaseHeadingId, initializeSeenHeadingHashes(tokens));
+			if (legacyHeadingId === canonicalHeadingId) {
 				return output;
 			}
 

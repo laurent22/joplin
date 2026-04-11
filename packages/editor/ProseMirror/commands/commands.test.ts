@@ -106,6 +106,20 @@ describe('ProseMirror/commands', () => {
 		expect(editor.state.selection.$anchor.parent.textContent).toBe('[X] done title');
 	});
 
+	test('jumpToHash should de-duplicate legacy hashes against canonical hashes', () => {
+		const editor = createTestEditor({ html: '<h2>[x] title</h2><h2>x title</h2>' });
+
+		const jumpToHash = (hash: string) => {
+			return commands[EditorCommandType.JumpToHash](editor.state, editor.dispatch, editor, [hash]);
+		};
+
+		expect(jumpToHash('x-title')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('x title');
+
+		expect(jumpToHash('x-title-2')).toBe(true);
+		expect(editor.state.selection.$anchor.parent.textContent).toBe('[x] title');
+	});
+
 	test('textTable should insert a table', () => {
 		const editor = createTestEditor({ html: '<p></p>' });
 
