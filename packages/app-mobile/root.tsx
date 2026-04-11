@@ -103,13 +103,24 @@ import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import NoteRevisionViewer from './components/screens/NoteRevisionViewer';
 import DocumentScanner from './components/screens/DocumentScanner/DocumentScanner';
 import buildStartupTasks from './utils/buildStartupTasks';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import appReducer from './utils/appReducer';
 import SyncWizard from './components/SyncWizard/SyncWizard';
 import Synchronizer from '@joplin/lib/Synchronizer';
 
 const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DropdownAlert is untyped
+const SafeDropdownAlert = ({ alert }: { alert: (func: any)=> void }) => {
+	const insets = useSafeAreaInsets();
+	// On Android 15+ the app runs edge-to-edge, so DropdownAlert's built-in translucent path
+	// (which uses StatusBar.currentHeight) may not account for the full safe area top inset.
+	// We pass the actual inset as marginTop on the inner alert view to ensure it's fully visible.
+	const topInset = insets.top || StatusBar.currentHeight || 0;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: topInset }} />;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let storeDispatch: any = function(_action: any) {};
@@ -771,10 +782,10 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
-							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
-							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
 							<SyncWizard/>
 						</SafeAreaView>
+						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
+						<SafeDropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
 					</View>
 				</SideMenu>
 				<PluginRunnerWebView />
