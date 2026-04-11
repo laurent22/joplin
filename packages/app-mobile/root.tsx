@@ -784,8 +784,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							</View>
 							<SyncWizard/>
 						</SafeAreaView>
-						{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- DropdownAlert is untyped */}
-						<SafeDropdownAlert alert={(func: any) => { this.dropdownAlert_ = func; }} />
+						<SafeDropdownAlert alert={(func) => { this.dropdownAlert_ = func; }} />
 					</View>
 				</SideMenu>
 				<PluginRunnerWebView />
