@@ -780,7 +780,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							</View>
 							<SyncWizard/>
 						</SafeAreaView>
-						<SafeDropdownAlert alert={(func) => { this.dropdownAlert_ = func as typeof this.dropdownAlert_; }} />					
+						<SafeDropdownAlert alert={(func) => { this.dropdownAlert_ = func as typeof this.dropdownAlert_; }} />
 					</View>
 				</SideMenu>
 				<PluginRunnerWebView />
