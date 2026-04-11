@@ -651,7 +651,7 @@ export default class MdToHtml implements MarkupRenderer {
 
 		const defaultHeadingOpenRenderer = markdownIt.renderer.rules.heading_open;
 		let seenHeadingHashes: Set<string>|null = null;
-		const initializeSeenHeadingHashes = (tokens: Array<{ type: string; attrGet: (attrName: string)=> string|null }>) => {
+		const initializeSeenHeadingHashes = (tokens: { type: string; attrGet: (attrName: string)=> string|null }[]) => {
 			if (seenHeadingHashes) return seenHeadingHashes;
 
 			seenHeadingHashes = new Set<string>();
