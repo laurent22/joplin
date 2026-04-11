@@ -115,11 +115,7 @@ type DropdownAlertSetter = (func: unknown)=> void;
 
 const SafeDropdownAlert = ({ alert }: { alert: DropdownAlertSetter }) => {
 	const insets = useSafeAreaInsets();
-	// On Android 15+ the app runs edge-to-edge, so DropdownAlert's built-in translucent path
-	// (which uses StatusBar.currentHeight) may not account for the full safe area top inset.
-	// We pass the actual inset as marginTop on the inner alert view to ensure it's fully visible.
-	const topInset = insets.top || StatusBar.currentHeight || 0;
-	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: topInset }} />;
+	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: insets.top }} />;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -784,7 +780,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							</View>
 							<SyncWizard/>
 						</SafeAreaView>
-						<SafeDropdownAlert alert={(func) => { this.dropdownAlert_ = func; }} />
+						<SafeDropdownAlert alert={(func) => { this.dropdownAlert_ = func as typeof this.dropdownAlert_; }} />					
 					</View>
 				</SideMenu>
 				<PluginRunnerWebView />
