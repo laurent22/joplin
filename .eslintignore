@@ -1221,6 +1221,7 @@ packages/editor/testing/createEditorSettings.js
 packages/editor/testing/setUpLogger.js
 packages/editor/types.js
 packages/editor/utils/getFileFromPasteEvent.js
+packages/editor/utils/normalizeHeadingForHash.js
 packages/fork-htmlparser2/src/CollectingHandler.js
 packages/fork-htmlparser2/src/FeedHandler.spec.js
 packages/fork-htmlparser2/src/FeedHandler.js
@@ -1850,6 +1851,7 @@ packages/renderer/HtmlToHtml.test.js
 packages/renderer/HtmlToHtml.js
 packages/renderer/InMemoryCache.js
 packages/renderer/MarkupToHtml.js
+packages/renderer/MdToHtml.test.js
 packages/renderer/MdToHtml.js
 packages/renderer/MdToHtml/createEventHandlingAttrs.test.js
 packages/renderer/MdToHtml/createEventHandlingAttrs.js
