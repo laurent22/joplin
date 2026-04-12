@@ -111,9 +111,11 @@ import Synchronizer from '@joplin/lib/Synchronizer';
 const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();
 
-type DropdownAlertSetter = (func: unknown)=> void;
+interface DropdownAlertWrapperProps {
+	alert: (func: unknown)=> void;
+}
 
-const SafeDropdownAlert = ({ alert }: { alert: DropdownAlertSetter }) => {
+const DropdownAlertWrapper = ({ alert }: DropdownAlertWrapperProps) => {
 	const insets = useSafeAreaInsets();
 	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: insets.top }} />;
 };
@@ -780,7 +782,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							</View>
 							<SyncWizard/>
 						</SafeAreaView>
-						<SafeDropdownAlert alert={(func) => { this.dropdownAlert_ = func as typeof this.dropdownAlert_; }} />
+						<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func as typeof this.dropdownAlert_; }} />
 					</View>
 				</SideMenu>
 				<PluginRunnerWebView />
