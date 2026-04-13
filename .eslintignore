@@ -358,8 +358,6 @@ packages/app-desktop/gui/NoteList/utils/useMoveNote.js
 packages/app-desktop/gui/NoteList/utils/useOnKeyDown.js
 packages/app-desktop/gui/NoteList/utils/useOnNoteClick.js
 packages/app-desktop/gui/NoteList/utils/useOnNoteDoubleClick.js
-packages/app-desktop/gui/NoteList/utils/useRefocusOnDeletion.test.js
-packages/app-desktop/gui/NoteList/utils/useRefocusOnDeletion.js
 packages/app-desktop/gui/NoteList/utils/useScroll.js
 packages/app-desktop/gui/NoteList/utils/useVisibleRange.test.js
 packages/app-desktop/gui/NoteList/utils/useVisibleRange.js
