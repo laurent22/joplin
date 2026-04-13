@@ -595,6 +595,8 @@ class Application extends BaseApplication {
 
 		addTask('app/updateTray', () => this.updateTray());
 
+		addTask('app/deleteOrphanedTempCache', async () => await Resource.emptyTempEncryptionCache());
+
 		addTask('app/set main window state', () => {
 			if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
 				bridge().mainWindow().hide();

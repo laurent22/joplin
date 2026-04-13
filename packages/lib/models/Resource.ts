@@ -224,14 +224,55 @@ export default class Resource extends BaseItem {
 				// at all. It can happen for example when there's a crash between the moment the data
 				// is decrypted and the resource item is updated.
 				this.logger().warn(`Found a resource that was most likely already decrypted but was marked as encrypted. Marked it as decrypted: ${item.id}`);
-				this.fsDriver().move(encryptedPath, plainTextPath);
+				await this.fsDriver().move(encryptedPath, plainTextPath);
 			} else {
 				throw error;
 			}
 		}
 
+		// We do this outside the main decrypt Try/Catch block
+		// If this fails it does NOT throw an error and only logs a warning, letting the db transaction occur below
+		try {
+			if (await this.fsDriver().exists(encryptedPath)) {
+				// The file was successfully decrypted into plaintext.
+				// We must delete the leftover .crypted file from the main resource directory immediately.
+				await this.fsDriver().remove(encryptedPath);
+			}
+		} catch (cleanupError) {
+			this.logger().warn(`Could not remove leftover .crypted file ${encryptedPath}:`, cleanupError);
+		}
+
 		decryptedItem.encryption_blob_encrypted = 0;
 		return super.save(decryptedItem, { autoTimestamp: false });
+	}
+
+	public static async tempCryptedPath(resourceId: string): Promise<string> {
+		const tempDir = Setting.value('tempDir');
+		const tempCacheDir = `${tempDir}/temp_cache`;
+
+		// quick check to ensure our folder exists
+		if (!(await this.fsDriver().exists(tempCacheDir))) {
+			await this.fsDriver().mkdir(tempCacheDir);
+		}
+
+		return `${tempCacheDir}/${resourceId}.crypted`;
+	}
+
+	public static async emptyTempEncryptionCache() {
+		const tempDir = Setting.value('tempDir');
+		const tempCacheDir = `${tempDir}/temp_cache`;
+
+		if (await this.fsDriver().exists(tempCacheDir)) {
+			try {
+				await this.fsDriver().remove(tempCacheDir);
+				// create the temp_cache dir again so it is ready for a fresh start
+				await this.fsDriver().mkdir(tempCacheDir);
+
+				this.logger().info('Cleared temporary encryption cache.');
+			} catch (error) {
+				this.logger().info('Could not clear temporary encryption cache.');
+			}
+		}
 	}
 
 	// Prepare the resource by encrypting it if needed.
@@ -251,8 +292,14 @@ export default class Resource extends BaseItem {
 			return { path: plainTextPath, resource: resource };
 		}
 
-		const encryptedPath = this.fullPath(resource, true);
-		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
+		// if the resource is already encrypted return the current path of the resource
+		if (resource.encryption_blob_encrypted) {
+			const encryptedPath = this.fullPath(resource, true);
+			return { path: encryptedPath, resource: resource };
+		}
+
+		// updated the dir path so that the resource goes to the new temp directory
+		const encryptedPath = await this.tempCryptedPath(resource.id);
 
 		try {
 			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {

@@ -18,6 +18,7 @@ import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 
 type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 import initializeCommandService from './utils/initializeCommandService';
+import Resource from '@joplin/lib/models/Resource';
 const { cliUtils } = require('./cli-utils.js');
 const Cache = require('@joplin/lib/Cache');
 
@@ -406,6 +407,13 @@ class Application extends BaseApplication {
 		if (!shim.sharpEnabled()) this.logger().warn('Sharp is disabled - certain image-related features will not be available');
 
 		initializeCommandService(this.store(), Setting.value('env') === Env.Dev);
+
+		// remove temp cache file
+		try {
+			await Resource.emptyTempEncryptionCache();
+		} catch (error) {
+			this.logger().warn('Failed to empty temp encryption cache during startup:', error);
+		}
 
 		// If we have some arguments left at this point, it's a command
 		// so execute it.

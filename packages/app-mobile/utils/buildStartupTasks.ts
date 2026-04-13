@@ -517,6 +517,15 @@ const buildStartupTasks = (
 		}
 	});
 
+	// remove temp cache file
+	addTask('buildStartupTasks/empty temp encryption cache', async () => {
+		try {
+			await Resource.emptyTempEncryptionCache();
+		} catch (error) {
+			logger.warn('Failed to empty temp encryption cache during startup:', error);
+		}
+	});
+
 	return startupTasks;
 };
 
