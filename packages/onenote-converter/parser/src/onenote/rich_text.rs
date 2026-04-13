@@ -410,11 +410,14 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
     // Parse the embedded objects
     let objects = text_run_data
         .into_iter()
-        .zip(&styles_data)
-        .flat_map(|(object_data, style_data)| {
-            style_data
-                .text_run_is_embedded_object
-                .then_some((style_data.text_run_object_type, object_data))
+        .zip(
+            styles_data.iter()
+                .map(|style_data| (style_data.text_run_is_embedded_object, style_data.text_run_object_type))
+                .chain(std::iter::repeat((false, None)))
+        )
+        .flat_map(|(object_data, (text_run_is_embedded_object, text_run_object_type))| {
+            text_run_is_embedded_object
+                .then_some((text_run_object_type, object_data))
         })
         .collect_vec();
 
@@ -423,32 +426,47 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
     let embedded_objects: Vec<_> = objects
         .into_iter()
         .enumerate()
-        .map(|(i, (object_type, embedded_data))| match object_type {
-            Some(INK_END_OF_LINE_BLOB) => {
-                objects_without_ref += 1;
-                Ok(Some(EmbeddedObject::InkLineBreak))
-            }
-            Some(INK_SPACE_BLOB) => {
-                objects_without_ref += 1;
-                parse_embedded_ink_space(embedded_data)
-                    .map(|space| Some(EmbeddedObject::InkSpace(space)))
-            }
-            None => {
-                if !data.text_run_data_object.is_empty() {
-                    return parse_embedded_ink_data(
-                        data.text_run_data_object[i - objects_without_ref],
-                        space.clone(),
-                        embedded_data,
-                    )
-                    .map(|container| Some(EmbeddedObject::Ink(container)));
-                }
+        .map(|(i, (object_type, embedded_data))| {
+            let i = i - objects_without_ref;
 
-                Ok(None)
+            let object_ref = data.text_run_data_object.get(i);
+            let is_invalid_ref = object_ref
+                .map(|object_ref| space.get_object(*object_ref).is_none())
+                .unwrap_or(false);
+
+            match object_type {
+                Some(INK_END_OF_LINE_BLOB) => {
+                    // Spaces and EOL blobs sometimes are represented with an invalid object and sometimes
+                    // have no object:
+                    if !is_invalid_ref {
+                        objects_without_ref += 1;
+                    }
+                    Ok(Some(EmbeddedObject::InkLineBreak))
+                }
+                Some(INK_SPACE_BLOB) => {
+                    if !is_invalid_ref {
+                        objects_without_ref += 1;
+                    }
+                    parse_embedded_ink_space(embedded_data)
+                        .map(|space| Some(EmbeddedObject::InkSpace(space)))
+                }
+                None => {
+                    if let Some(object_ref) = object_ref {
+                        return parse_embedded_ink_data(
+                            *object_ref,
+                            space.clone(),
+                            embedded_data,
+                        )
+                        .map(|container| Some(EmbeddedObject::Ink(container)));
+                    }
+
+                    Ok(None)
+                }
+                Some(v) => Err(ErrorKind::MalformedOneNoteFileData(
+                    format!("unknown embedded object type: {:x}", v).into(),
+                )
+                .into()),
             }
-            Some(v) => Err(ErrorKind::MalformedOneNoteFileData(
-                format!("unknown embedded object type: {:x}", v).into(),
-            )
-            .into()),
         })
         .collect::<Result<Vec<_>>>()?
         .into_iter()
