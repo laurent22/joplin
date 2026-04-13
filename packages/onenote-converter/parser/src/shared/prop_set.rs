@@ -54,7 +54,6 @@ impl Debug for PropertySet {
         let mut debug_map = f.debug_map();
         for (key, (_, value)) in &self.values {
             let formatted_key = format!("{:#0x}", key);
-
             let formatted_value = format_value(value);
 
             debug_map.entry(&formatted_key, &DebugOutput::from(formatted_value.as_str()));
