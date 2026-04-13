@@ -1,5 +1,5 @@
 import Setting from '../../models/Setting';
-import PluginService from '../../services/plugins/PluginService';
+import PluginService, { defaultPluginSetting } from '../../services/plugins/PluginService';
 import { setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import loadPlugins, { Props as LoadPluginsProps } from './loadPlugins';
 import MockPluginRunner from './testing/MockPluginRunner';
@@ -8,6 +8,7 @@ import { Action, createStore } from 'redux';
 import MockPlatformImplementation from './testing/MockPlatformImplementation';
 import createTestPlugin from '../../testing/plugins/createTestPlugin';
 import Plugin from './Plugin';
+import shim from '../../shim';
 
 const createMockReduxStore = () => {
 	return createStore((state: State = defaultState, action: Action<string>) => {
@@ -23,6 +24,44 @@ const defaultManifestProperties = {
 };
 
 const platformImplementation = new MockPlatformImplementation();
+
+const createTestPluginPackage = async (pluginId: string) => {
+	const tempPluginDir = `${Setting.value('tempDir')}/plugin-package-${pluginId}`;
+	const manifest = {
+		...defaultManifestProperties,
+		id: pluginId,
+		name: pluginId,
+	};
+
+	await shim.fsDriver().remove(tempPluginDir);
+	await shim.fsDriver().mkdir(tempPluginDir);
+	await shim.fsDriver().writeFile(`${tempPluginDir}/manifest.json`, JSON.stringify(manifest, null, '\t'), 'utf8');
+	await shim.fsDriver().writeFile(`${tempPluginDir}/index.js`, 'joplin.plugins.register({ onStart: async () => {} });', 'utf8');
+
+	const packageName = `${pluginId}.jpl`;
+	const pluginPackagePath = `${Setting.value('pluginDir')}/${packageName}`;
+
+	await shim.fsDriver().tarCreate({
+		strict: true,
+		portable: true,
+		file: pluginPackagePath,
+		cwd: tempPluginDir,
+	}, ['manifest.json', 'index.js']);
+
+	await shim.fsDriver().remove(tempPluginDir);
+
+	const updatedPluginStates = {
+		...Setting.value('plugins.states'),
+		[pluginId]: {
+			...defaultPluginSetting(),
+			enabled: true,
+		},
+	};
+
+	Setting.setValue('plugins.states', updatedPluginStates);
+
+	return pluginPackagePath;
+};
 
 describe('loadPlugins', () => {
 	beforeEach(async () => {
@@ -184,5 +223,34 @@ describe('loadPlugins', () => {
 		expect(failingPluginRunner.runningPluginIds).toContain(goodPluginId);
 		// The bad plugin should not be running
 		expect(failingPluginRunner.runningPluginIds).not.toContain(badPluginId);
+	});
+
+	test('should skip md5 hashing unchanged .jpl plugins on subsequent loads', async () => {
+		const pluginId = 'joplin.test.plugin.jpl.cache';
+		await createTestPluginPackage(pluginId);
+
+		const pluginRunner = new MockPluginRunner();
+		const store = createMockReduxStore();
+		const loadPluginsOptions: LoadPluginsProps = {
+			pluginRunner,
+			pluginSettings: Setting.value('plugins.states'),
+			platformImplementation,
+			store,
+			reloadAll: false,
+			cancelEvent: { cancelled: false },
+		};
+
+		const md5Spy = jest.spyOn(shim.fsDriver(), 'md5File');
+
+		await loadPlugins(loadPluginsOptions);
+		await pluginRunner.waitForAllToBeRunning([pluginId]);
+		expect(md5Spy).toHaveBeenCalled();
+
+		md5Spy.mockClear();
+
+		await loadPlugins(loadPluginsOptions);
+		expect(md5Spy).not.toHaveBeenCalled();
+
+		md5Spy.mockRestore();
 	});
 });

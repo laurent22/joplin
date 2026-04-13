@@ -291,15 +291,41 @@ export default class PluginService extends BaseService {
 		baseDir = rtrimSlashes(baseDir);
 
 		const fname = filename(path);
-		const hash = await shim.fsDriver().md5File(path);
+		const packageStat = await shim.fsDriver().stat(path);
+		if (!packageStat) throw new Error(`Could not load plugin package metadata: ${path}`);
+
+		const packageMtime = packageStat.mtime ? new Date(packageStat.mtime).getTime() : 0;
+		const packageSize = packageStat.size;
 
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let manifest: any = await this.loadManifestToObject(manifestFilePath);
+		let hash = '';
+		let shouldExtract = !manifest;
+		let shouldWriteManifest = false;
 
-		if (!manifest || manifest._package_hash !== hash) {
+		if (manifest) {
+			const hasPackageStat = typeof manifest._package_mtime === 'number' && typeof manifest._package_size === 'number';
+
+			if (hasPackageStat) {
+				if (manifest._package_mtime !== packageMtime || manifest._package_size !== packageSize) {
+					hash = await shim.fsDriver().md5File(path);
+					shouldExtract = manifest._package_hash !== hash;
+					shouldWriteManifest = !shouldExtract;
+				}
+			} else {
+				// Legacy cache entry - compare hash once, then migrate to stat-based checks.
+				hash = await shim.fsDriver().md5File(path);
+				shouldExtract = manifest._package_hash !== hash;
+				shouldWriteManifest = !shouldExtract;
+			}
+		}
+
+		if (shouldExtract) {
+			if (!hash) hash = await shim.fsDriver().md5File(path);
+
 			await shim.fsDriver().remove(unpackDir);
 			await shim.fsDriver().mkdir(unpackDir);
 
@@ -312,8 +338,13 @@ export default class PluginService extends BaseService {
 
 			manifest = await this.loadManifestToObject(manifestFilePath);
 			if (!manifest) throw new Error(`Missing manifest file at: ${manifestFilePath}`);
+			shouldWriteManifest = true;
+		}
 
-			manifest._package_hash = hash;
+		if (shouldWriteManifest) {
+			if (hash) manifest._package_hash = hash;
+			manifest._package_mtime = packageMtime;
+			manifest._package_size = packageSize;
 
 			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest, null, '\t'), 'utf8');
 		}
