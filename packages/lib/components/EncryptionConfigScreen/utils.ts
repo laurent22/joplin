@@ -109,13 +109,17 @@ export const onToggleEnabledClick = (mk: MasterKeyEntity) => {
 	setMasterKeyEnabled(mk.id, !masterKeyEnabled(mk));
 };
 
-export const onSavePasswordClick = (mk: MasterKeyEntity, passwords: Record<string, string>) => {
+export const onSavePasswordClick = async (mk: MasterKeyEntity, passwords: Record<string, string>) => {
 	const password = passwords[mk.id];
 	if (!password) {
 		Setting.deleteObjectValue('encryption.passwordCache', mk.id);
-	} else {
-		Setting.setObjectValue('encryption.passwordCache', mk.id, password);
+		return;
+	} else if (!await masterPasswordIsValid(password, mk)) {
+		await shim.showMessageBox(_('Password is invalid. Please try again.'), { type: MessageBoxType.Error });
+		return;
 	}
+
+	Setting.setObjectValue('encryption.passwordCache', mk.id, password);
 
 	// When setting a master key password, if the master password is not set, we
 	// assume that this password is the master password. If it turns out it's

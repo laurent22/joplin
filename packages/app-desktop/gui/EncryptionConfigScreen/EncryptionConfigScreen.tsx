@@ -174,7 +174,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 							onChange={event => onInputPasswordChange(mk, event.target.value)}
 						/>
 						{' '}
-						<button style={theme.buttonStyle} onClick={() => onSavePasswordClick(mk, { ...props.passwords, ...inputPasswords })}>
+						<button style={theme.buttonStyle} onClick={async () => onSavePasswordClick(mk, { ...props.passwords, ...inputPasswords })}>
 							{_('Save')}
 						</button>
 					</td>

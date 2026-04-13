@@ -104,14 +104,6 @@ const EncryptionConfigScreen = (props: Props) => {
 		};
 
 		const renderPasswordInput = (masterKeyId: string) => {
-			const onSave = async () => {
-				if (password && !(await masterPasswordIsValid(password, mk))) {
-					alert(_('Password is invalid. Please try again.'));
-				} else {
-					onSavePasswordClick(mk, inputPasswords);
-				}
-			};
-
 			if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
 				return (
 					<Text style={{ ...styles.normalText, color: theme.colorFaded, fontStyle: 'italic' }}>({_('Master password')})</Text>
@@ -136,7 +128,7 @@ const EncryptionConfigScreen = (props: Props) => {
 							accessibilityRole='image'
 							accessibilityLabel={passwordOk ? _('Valid') : _('Invalid password')}
 						>{passwordOkIcon}</Text>
-						<Button title={_('Save')} onPress={onSave}></Button>
+						<Button title={_('Save')} onPress={async () => onSavePasswordClick(mk, inputPasswords)}></Button>
 					</View>
 				);
 			}
