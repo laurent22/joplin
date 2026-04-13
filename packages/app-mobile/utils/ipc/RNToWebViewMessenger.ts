@@ -5,6 +5,9 @@ import { WebViewControl } from '../../components/ExtendedWebView/types';
 import { RefObject } from 'react';
 import { OnMessageEvent } from '../../components/ExtendedWebView/types';
 import { Platform } from 'react-native';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('RNToWebViewMessenger');
 
 const canUseOptimizedPostMessage = Platform.OS === 'web';
 
@@ -41,10 +44,11 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 
 	public onWebViewMessage = (event: OnMessageEvent) => {
 		if (!this.hasBeenClosed()) {
-			if (canUseOptimizedPostMessage) {
-				void this.onMessage(event.nativeEvent.data);
+			const data = canUseOptimizedPostMessage ? event.nativeEvent.data : JSON.parse(event.nativeEvent.data);
+			if (typeof data === 'object' && data !== null && typeof data.kind === 'string') {
+				void this.onMessage(data);
 			} else {
-				void this.onMessage(JSON.parse(event.nativeEvent.data));
+				logger.info('Unknown message format:', event.nativeEvent.data);
 			}
 		}
 	};
