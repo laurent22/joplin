@@ -1,0 +1,34 @@
+diff --git a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.kt b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.kt
+index 3bc9143d7ed7923c11e5d73853a285f648e9745e..eb69fdc38be63bcf887cec5294e68b3128255083 100644
+--- a/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.kt
++++ b/ReactAndroid/src/main/java/com/facebook/react/animated/NativeAnimatedModule.kt
+@@ -7,6 +7,7 @@
+ 
+ package com.facebook.react.animated
+ 
++import android.os.Build
+ import androidx.annotation.AnyThread
+ import androidx.annotation.UiThread
+ import com.facebook.common.logging.FLog
+@@ -34,6 +35,7 @@ import com.facebook.react.uimanager.common.ViewUtil
+ import java.util.ArrayList
+ import java.util.Queue
+ import java.util.concurrent.ConcurrentLinkedQueue
++import java.util.concurrent.LinkedBlockingQueue
+ import java.util.concurrent.atomic.AtomicReference
+ import kotlin.concurrent.Volatile
+ 
+@@ -130,7 +132,12 @@ public class NativeAnimatedModule(reactContext: ReactApplicationContext) :
+   }
+ 
+   private inner class ConcurrentOperationQueue {
+-    private val queue: Queue<UIThreadOperation> = ConcurrentLinkedQueue()
++    // Patch: Use LinkedBlockingQueue instead of ConcurrentLinkedQueue on Android 12.
++    // In some versions of Android, ConcurrentLinkedQueue is known to drop
++    // items, causing crashes. See https://github.com/laurent22/joplin/issues/8425
++    private val queue: Queue<UIThreadOperation> = if (
++      Build.VERSION.SDK_INT == 31 || Build.VERSION.SDK_INT == 32
++    ) LinkedBlockingQueue() else ConcurrentLinkedQueue()
+     private var peekedOperation: UIThreadOperation? = null
+ 
+     @get:AnyThread
