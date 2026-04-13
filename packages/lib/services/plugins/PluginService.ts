@@ -332,6 +332,8 @@ export default class PluginService extends BaseService {
 			&& await shim.fsDriver().exists(manifestFilePath);
 
 		if (!extractionValid) {
+			logger.info(`Extracting plugin: ${fname}`);
+
 			await shim.fsDriver().remove(unpackDir);
 			await shim.fsDriver().mkdir(unpackDir);
 
@@ -350,6 +352,8 @@ export default class PluginService extends BaseService {
 				timestamp: stat.mtime.getTime(),
 			};
 			await this.saveExtractionStates(extractionStates);
+		} else {
+			logger.info(`Using already extracted plugin: ${fname}`);
 		}
 
 		return this.loadPluginFromPath(unpackDir);

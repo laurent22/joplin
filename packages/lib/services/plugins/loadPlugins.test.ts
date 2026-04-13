@@ -8,6 +8,7 @@ import { Action, createStore } from 'redux';
 import MockPlatformImplementation from './testing/MockPlatformImplementation';
 import createTestPlugin from '../../testing/plugins/createTestPlugin';
 import Plugin from './Plugin';
+import shim from '../../shim';
 
 const createMockReduxStore = () => {
 	return createStore((state: State = defaultState, action: Action<string>) => {
@@ -134,6 +135,44 @@ describe('loadPlugins', () => {
 		// if not enabled previously.
 		expect(pluginRunner.stopCalledTimes).toBe(disabledCount + enabledCount);
 		expect([...pluginRunner.runningPluginIds].sort()).toMatchObject(expectedRunningIds);
+	});
+
+	test('should skip extraction when jpl has not changed', async () => {
+		const pluginId = 'joplin.test.plugin.packed';
+		await createTestPlugin({
+			...defaultManifestProperties,
+			id: pluginId,
+			name: 'Test JPL Plugin',
+		}, { format: 'jpl' });
+
+		const pluginRunner = new MockPluginRunner();
+		const store = createMockReduxStore();
+		const service = PluginService.instance();
+		service.initialize('2.3.4', platformImplementation, pluginRunner, store);
+
+		const tarExtractSpy = jest.spyOn(shim.fsDriver(), 'tarExtract');
+
+		// First load should extract
+		await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		expect(tarExtractSpy).toHaveBeenCalledTimes(1);
+
+		// Second load with same file should skip extraction
+		await service.unloadPlugin(pluginId);
+		await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		expect(tarExtractSpy).toHaveBeenCalledTimes(1);
+
+		// Recreating the jpl (different mtime/size) should trigger re-extraction
+		await service.unloadPlugin(pluginId);
+		await createTestPlugin({
+			...defaultManifestProperties,
+			id: pluginId,
+			name: 'Test JPL Plugin',
+		}, { format: 'jpl', onStart: '/* changed */' });
+
+		await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		expect(tarExtractSpy).toHaveBeenCalledTimes(2);
+
+		tarExtractSpy.mockRestore();
 	});
 
 	test('should not block allPluginsStarted when a plugin fails to start', async () => {
