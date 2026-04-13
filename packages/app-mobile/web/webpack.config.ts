@@ -74,7 +74,6 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'react-native-quick-actions': emptyLibraryMock,
 				'uglifycss': emptyLibraryMock,
 				'react-native-share': emptyLibraryMock,
-				'react-native-camera': emptyLibraryMock,
 				'react-native-zip-archive': emptyLibraryMock,
 				'@react-native-documents/picker': emptyLibraryMock,
 				'react-native-exit-app': emptyLibraryMock,
