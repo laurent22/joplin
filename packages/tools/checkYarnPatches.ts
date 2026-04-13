@@ -24,17 +24,26 @@ const main = async () => {
 			.replace(/#.*$/, '')
 			.replace(/%3A/g, ':');
 
-		// Extract package name and version from the patch target
-		const match = patchTarget.match(/^(.+)@npm:(.+)$/);
-		if (!match) continue;
+		// Extract package name and version from the patch target.
+		// Supports both "pkg@npm:version" and "pkg@version" formats.
+		const match = patchTarget.match(/^(.+)@(?:npm:)?(.+)$/);
+		if (!match) {
+			errors.push(
+				`Invalid patch format for "${key}": "${patchTarget}" does not match ` +
+				'expected pattern "packageName@npm:version" or "packageName@version".',
+			);
+			continue;
+		}
 
 		const [, packageName, patchVersion] = match;
+		const hasNpmPrefix = patchTarget.includes('@npm:');
 
 		// Check that yarn.lock contains a resolved entry for this exact
 		// patch. The lockfile entry looks like:
-		//   "pkg@patch:pkg@npm%3Aversion#path::..."
-		//     resolution: "pkg@patch:..."
-		const patchPattern = `"${packageName}@patch:${packageName}@npm%3A${patchVersion}#`;
+		//   "pkg@patch:pkg@npm%3Aversion#path::..."  (with npm prefix)
+		//   "pkg@patch:pkg@version#path::..."         (without npm prefix)
+		const versionPart = hasNpmPrefix ? `@npm%3A${patchVersion}` : `@${patchVersion}`;
+		const patchPattern = `"${packageName}@patch:${packageName}${versionPart}#`;
 		if (!yarnLock.includes(patchPattern)) {
 			errors.push(
 				`Resolution "${key}" patches ${packageName}@${patchVersion}, ` +
