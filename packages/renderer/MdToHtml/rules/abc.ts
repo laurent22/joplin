@@ -73,7 +73,7 @@ const plugin = (markdownIt: MarkdownIt, ruleOptions: any) => {
 
 			return `
 				<div class="joplin-editable joplin-abc-notation">
-					<pre class="joplin-source" data-abc-options="${optionsHtml}" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${sourceContentHtml}</pre>
+					<pre class="joplin-source" hidden data-abc-options="${optionsHtml}" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${sourceContentHtml}</pre>
 					<pre class="joplin-rendered joplin-abc-notation-rendered">${contentHtml}</pre>
 				</div>
 			`;

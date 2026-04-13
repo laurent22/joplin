@@ -535,7 +535,7 @@ export default class MdToHtml implements MarkupRenderer {
 				// The strings includes the last \n that is part of the fence,
 				// so we remove it because we need the exact code in the source block
 				const trimmedStr = this.removeLastNewLine(str);
-				const sourceBlockHtml = `<pre class="joplin-source" data-joplin-language="${htmlentities(lang)}" data-joplin-source-open="\`\`\`${htmlentities(lang)}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
+				const sourceBlockHtml = `<pre class="joplin-source" hidden data-joplin-language="${htmlentities(lang)}" data-joplin-source-open="\`\`\`${htmlentities(lang)}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
 
 				if (this.shouldSkipHighlighting(trimmedStr, lang)) {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
