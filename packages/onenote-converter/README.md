@@ -95,13 +95,15 @@ Suppose that the importer's Rust code is failing to parse a specific `example.on
 The `inspect` binary target of the `parser` crate allows inspecting `.one` file data.
 
 For example, to inspect lower-level OneStore data:
-```
-bash$ cargo run -- ./test-data/ink.one --onestore
+```console
+bash$ cd parser/
+bash$ cargo run -- ../test-data/ink.one --onestore
 ```
 
 To inspect higher-level (parsed) section data:
-```
-bash$ cargo run -- ./test-data/ink.one --section
+```console
+bash$ cd parser/
+bash$ cargo run -- ../test-data/ink.one --section
 ```
 
 **Note**: `inspect`'s output is unstable and should not be relied upon by scripts.
