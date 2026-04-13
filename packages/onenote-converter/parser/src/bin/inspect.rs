@@ -53,7 +53,7 @@ fn handle_parse_error(config: &Config, error: Error) -> ! {
 fn print_help_text(program_name: &str, error: &str) {
     let error_info = if error.is_empty() { "" } else { error };
 
-    eprintln!("Usage: {program_name} <input_file> [--section]");
+    eprintln!("Usage: {program_name} <input_file> [--section|--onestore]");
     eprintln!("Description: Prints debug information about the given <input_file>");
     eprintln!("{error_info}");
 }
