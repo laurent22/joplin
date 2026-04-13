@@ -63,8 +63,9 @@ export const enableEncryptionConfirmationMessages = (_masterKey: MasterKeyEntity
 };
 
 export const reencryptData = async () => {
+	const password = Setting.value('encryption.masterPassword');
 	const mk = getActiveMasterKey();
-	const mkIsDecrypted = await EncryptionService.instance().checkMasterKeyPassword(mk, Setting.value('encryption.masterPassword'), true);
+	const mkIsDecrypted = password && await masterPasswordIsValid(password, mk);
 	if (!mkIsDecrypted) {
 		await shim.showMessageBox(_('Cannot re-encrypt data, as the master password is not set correctly'), { type: MessageBoxType.Error });
 		return;
