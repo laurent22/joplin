@@ -51,11 +51,12 @@ test.describe('sidebar', () => {
 
 		// Build the folder hierarchy
 		const folderAHeader = await sidebar.createNewFolder('Folder A');
+		await mainScreen.createNewNote('Test');
 		await expect(folderAHeader).toBeVisible();
 		const folderBHeader = await sidebar.createNewFolder('Folder B');
-		await mainScreen.createNewNote('Test');
-		const folderCHeader = await sidebar.createNewFolder('Folder C');
 		await mainScreen.createNewNote('Test 2');
+		await mainScreen.createNewNote('Test 3');
+		const folderCHeader = await sidebar.createNewFolder('Folder C');
 		const folderDHeader = await sidebar.createNewFolder('Folder D');
 
 		await folderBHeader.dragTo(folderAHeader);
