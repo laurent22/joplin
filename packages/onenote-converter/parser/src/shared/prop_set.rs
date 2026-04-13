@@ -38,10 +38,15 @@ impl Debug for PropertySet {
                         .utf16_to_string()
                         .unwrap_or("".to_string());
 
-                    if s.is_empty() {
-                        format!("{:?}", vec)
-                    } else {
+                    // Heuristic: If the text contains at least one ASCII letter/space character, it's probably a string.
+                    // This will miss some non-ASCII strings and incorrectly print some non-string vecs.
+                    let is_probably_string = !s.is_empty()
+                        && s.chars()
+                            .any(|c| c.is_ascii_whitespace() || c.is_ascii_alphanumeric());
+                    if is_probably_string {
                         format!("{:?} ({:?})", s, vec)
+                    } else {
+                        format!("{:?}", vec)
                     }
                 }
                 // Use the default compact representation of the value.
