@@ -1,5 +1,6 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
+import { Second } from '@joplin/utils/time';
 
 test.describe('sidebar', () => {
 	test('should be able to create new folders', async ({ mainWindow }) => {
@@ -42,6 +43,51 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText(/NOTEBOOKS/i);
 		await mainWindow.keyboard.press('ArrowDown');
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
+	});
+
+	test('should remain focused when navigating with the arrow keys', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		const sidebar = mainScreen.sidebar;
+
+		// Build the folder hierarchy
+		const folderAHeader = await sidebar.createNewFolder('Folder A');
+		await expect(folderAHeader).toBeVisible();
+		const folderBHeader = await sidebar.createNewFolder('Folder B');
+		await mainScreen.createNewNote('Test');
+		const folderCHeader = await sidebar.createNewFolder('Folder C');
+		await mainScreen.createNewNote('Test 2');
+		const folderDHeader = await sidebar.createNewFolder('Folder D');
+
+		await folderBHeader.dragTo(folderAHeader);
+		await folderCHeader.dragTo(folderAHeader);
+
+		// Should have the correct initial state
+		await sidebar.forceUpdateSorting(electronApp);
+		await sidebar.expectToHaveDepths([
+			[folderAHeader, 2],
+			[folderBHeader, 3],
+			[folderCHeader, 3],
+			[folderDHeader, 2],
+		]);
+
+		const assertFocused = async (title: RegExp) => {
+			await expect(mainWindow.locator(':focus')).toHaveText(title);
+			// Pause to help check that focus is stable. This is present to help this test more reliably detect
+			// timing-related issues.
+			await mainWindow.waitForTimeout(Second);
+			await expect(mainWindow.locator(':focus')).toHaveText(title);
+		};
+
+		await folderDHeader.click();
+		await mainWindow.keyboard.press('ArrowUp');
+		// Use a regular expression to ignore note counts
+		await assertFocused(/^Folder C/);
+
+		await mainWindow.keyboard.press('ArrowUp');
+		await assertFocused(/^Folder B/);
+
+		await mainWindow.keyboard.press('ArrowUp');
+		await assertFocused(/^Folder A/);
 	});
 
 	test('should allow changing the focused folder by pressing the first character of the title', async ({ electronApp, mainWindow }) => {
