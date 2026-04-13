@@ -1896,6 +1896,7 @@ packages/tools/buildServerDocker.js
 packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js
+packages/tools/checkYarnPatches.js
 packages/tools/convertThemesToCss.js
 packages/tools/fuzzer/ActionRunner.js
 packages/tools/fuzzer/Fuzzer.js

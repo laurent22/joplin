@@ -172,6 +172,12 @@ if [ "$RUN_TESTS" == "1" ]; then
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
 	fi
+
+	yarn checkYarnPatches
+	testResult=$?
+	if [ $testResult -ne 0 ]; then
+		exit $testResult
+	fi
 fi
 
 # =============================================================================
