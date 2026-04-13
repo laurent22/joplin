@@ -464,7 +464,10 @@ export default class PluginService extends BaseService {
 				let plugin = await this.loadPluginFromPath(pluginPath, true);
 				const enabled = this.pluginEnabled(settings, plugin.id);
 				if (enabled) {
+					logger.info(`Loading full plugin: ${plugin.id}`);
 					plugin = await this.loadPluginFromPath(pluginPath, false);
+				} else {
+					logger.info(`Loading manifest only for disabled plugin: ${plugin.id}`);
 				}
 
 				const existingPlugin = this.plugins_[plugin.id];
