@@ -388,7 +388,7 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 	const masterKey = activeMasterKey ? activeMasterKey : getDefaultMasterKey();
 	if (masterKey) {
 		try {
-			return await EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword, true);
+			return await EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);
 		} catch (exception) {
 			return false;
 		}

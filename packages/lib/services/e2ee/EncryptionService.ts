@@ -342,7 +342,7 @@ export default class EncryptionService {
 		return plainText;
 	}
 
-	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string, performTestCipherCheck = false) {
+	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
 		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
 			const decryptedKey = await this.decryptMasterKeyContent(model, password);
@@ -352,7 +352,7 @@ export default class EncryptionService {
 			// the correct value. If testCipher is not populated, further validation is skipped because there is no other way to verify the key is correct.
 			// Newly created master keys will have this set, while for pre-existing keys, the testCipher is populated the first time an encrypted item is
 			// successfully decrypted using the master key
-			if (performTestCipherCheck && model.testCipher) {
+			if (model.testCipher) {
 				const decryptedMkTest = await this.decryptString(model.testCipher, { masterKeyId: model.id, masterKeyContent: decryptedKey });
 				if (decryptedMkTest !== mkTestText) return false;
 			}
