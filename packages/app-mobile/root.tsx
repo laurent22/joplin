@@ -22,7 +22,7 @@ import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
-const DropdownAlert = require('react-native-dropdownalert').default;
+import DropdownAlert, { DropdownAlertData } from 'react-native-dropdownalert';
 import SafeAreaView from './components/SafeAreaView';
 const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
@@ -112,7 +112,7 @@ const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();
 
 interface DropdownAlertWrapperProps {
-	alert: (func: unknown)=> void;
+	alert: (func: (data?: DropdownAlertData)=> Promise<DropdownAlertData>)=> void;
 }
 
 const DropdownAlertWrapper = ({ alert }: DropdownAlertWrapperProps) => {
@@ -296,8 +296,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private themeChangeListener_: NativeEventSubscription|null = null;
 	private keyboardShowListener_: EmitterSubscription|null = null;
 	private keyboardHideListener_: EmitterSubscription|null = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
+	private dropdownAlert_: (data?: DropdownAlertData)=> Promise<DropdownAlertData> = (_data?: DropdownAlertData) => new Promise<DropdownAlertData>(res => res);
 	private callbackUrl: string|null = null;
 
 	private lastSyncStarted_ = false;
@@ -782,7 +781,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							</View>
 							<SyncWizard/>
 						</SafeAreaView>
-						<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func as typeof this.dropdownAlert_; }} />
+						<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func; }} />
 					</View>
 				</SideMenu>
 				<PluginRunnerWebView />
