@@ -198,7 +198,7 @@ export default class DecryptionWorker {
 			while (true) {
 				const result: ItemsThatNeedDecryptionResult = await BaseItem.itemsThatNeedDecryption(excludedIds);
 				const items = result.items;
-				let lastMasterKeyId;
+				const processedMasterKeyIds = new Set();
 
 				for (let i = 0; i < items.length; i++) {
 					const item = items[i];
@@ -246,11 +246,11 @@ export default class DecryptionWorker {
 							// but that will result in an infinite loop if the blob simply has not been downloaded yet.
 							// So skip the ID for now, and the service will try to decrypt the blob again the next time.
 							excludedIds.push(decryptedItem.id);
-						} else if (header?.masterKeyId && (!lastMasterKeyId || header.masterKeyId !== lastMasterKeyId)) {
+						} else if (header?.masterKeyId && !processedMasterKeyIds.has(header.masterKeyId)) {
 							// If ItemClass.decrypt did not error, the item was successfully deserialized after decryption, which means the master password
 							// is correct, and therefore this key can be used to create a testCipher if the key does not have one, because it was pre-existing
 							// before testCipher was added
-							lastMasterKeyId = header.masterKeyId;
+							processedMasterKeyIds.add(header.masterKeyId);
 							const mk = masterKeyById(header.masterKeyId);
 
 							if (mk && !mk.testCipher) {
