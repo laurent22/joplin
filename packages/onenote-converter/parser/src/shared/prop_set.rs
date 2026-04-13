@@ -44,7 +44,9 @@ impl Debug for PropertySet {
                         format!("{:?} ({:?})", s, vec)
                     }
                 }
-                // Use the default **compact** representation of the value
+                // Use the default compact representation of the value.
+                // This keeps potentially-long property values on a single line when producing
+                // multi-line debug output, which is usually more readable.
                 _ => format!("{:?}", value),
             }
         }
