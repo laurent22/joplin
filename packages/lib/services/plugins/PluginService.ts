@@ -110,6 +110,7 @@ export default class PluginService extends BaseService {
 	private startedPlugins_: Record<string, boolean> = {};
 	private isSafeMode_ = false;
 	private pluginsChangeListeners_: LoadedPluginsChangeListener[] = [];
+	private extractionStates_: Record<string, PluginExtractionState> = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
@@ -207,16 +208,20 @@ export default class PluginService extends BaseService {
 	}
 
 	private async loadExtractionStates(): Promise<Record<string, PluginExtractionState>> {
-		try {
-			const text = await shim.fsDriver().readFile(this.extractionStatePath(), 'utf8');
-			return JSON.parse(text);
-		} catch {
-			return {};
+		if (!this.extractionStates_) {
+			try {
+				const text = await shim.fsDriver().readFile(this.extractionStatePath(), 'utf8');
+				this.extractionStates_ = JSON.parse(text);
+			} catch {
+				this.extractionStates_ = {};
+			}
 		}
+		return this.extractionStates_;
 	}
 
-	private async saveExtractionStates(index: Record<string, PluginExtractionState>): Promise<void> {
-		await shim.fsDriver().writeFile(this.extractionStatePath(), JSON.stringify(index), 'utf8');
+	private async saveExtractionStates(states: Record<string, PluginExtractionState>): Promise<void> {
+		this.extractionStates_ = states;
+		await shim.fsDriver().writeFile(this.extractionStatePath(), JSON.stringify(states), 'utf8');
 	}
 
 	public pluginById(id: string): Plugin {
@@ -524,6 +529,7 @@ export default class PluginService extends BaseService {
 				logger.error(`Could not load plugin: ${pluginPath}`, error);
 			}
 		}
+
 	}
 
 	public async loadAndRunDevPlugins(settings: PluginSettings) {
