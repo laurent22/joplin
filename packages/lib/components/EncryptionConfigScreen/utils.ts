@@ -4,8 +4,8 @@ import BaseItem, { EncryptedItemsStats } from '../../models/BaseItem';
 import useAsyncEffect, { AsyncEffectEvent } from '../../hooks/useAsyncEffect';
 import { MasterKeyEntity } from '../../services/e2ee/types';
 import { findMasterKeyPassword, getMasterPasswordStatus, loadMasterKeysFromSettings, masterPasswordIsValid, MasterPasswordStatus } from '../../services/e2ee/utils';
-import EncryptionService from '../../services/e2ee/EncryptionService';
-import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
+import EncryptionService, { mkTestText } from '../../services/e2ee/EncryptionService';
+import { getActiveMasterKey, masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
 import MasterKey from '../../models/MasterKey';
 import { reg } from '../../registry';
 import Setting from '../../models/Setting';
@@ -63,8 +63,26 @@ export const enableEncryptionConfirmationMessages = (_masterKey: MasterKeyEntity
 };
 
 export const reencryptData = async () => {
+	const mk = getActiveMasterKey();
+	const mkIsDecrypted = await EncryptionService.instance().checkMasterKeyPassword(mk, Setting.value('encryption.masterPassword'), true);
+	if (!mkIsDecrypted) {
+		await shim.showMessageBox(_('Cannot re-encrypt data, as the master password is not set correctly'), { type: MessageBoxType.Error });
+		return;
+	}
+
 	const ok = await shim.showConfirmationDialog(_('Please confirm that you would like to re-encrypt your complete database.'));
 	if (!ok) return;
+
+	// In order to avoid potentially weakening security in future if a stronger encryption algorithm is required, re-encrypting data should
+	// also re-encrypt the testCipher using the current default encryption method
+	try {
+		mk.testCipher = await EncryptionService.instance().encryptString(mkTestText, { masterKeyId: mk.id });
+		mk.updated_time = Date.now();
+		await MasterKey.save(mk);
+	} catch (exception) {
+		await shim.showMessageBox(_('Cannot re-encrypt data, as the master key verification failed'), { type: MessageBoxType.Error });
+		return;
+	}
 
 	await BaseItem.forceSyncAll();
 	void reg.waitForSyncFinishedThenSync();
