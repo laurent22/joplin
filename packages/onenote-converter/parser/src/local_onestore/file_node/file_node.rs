@@ -539,7 +539,7 @@ pub struct RootObjectReference3FND {
 pub struct RevisionRoleDeclarationFND {
     pub rid: ExGuid,
     /// "should be 0x01"
-    revision_role: u32,
+    pub revision_role: u32,
 }
 
 #[derive(Debug, Clone, Parse)]
