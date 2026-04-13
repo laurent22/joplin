@@ -109,7 +109,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 		extensions.push(Prec.low(keymap.of(defaultKeymap)));
 	}
 
-	if (settings.inlineRenderingEnabled) {
+	if (settings.inlineRenderingEnabled && settings.language === EditorLanguageType.Markdown) {
 		extensions.push(renderingExtension());
 	}
 
