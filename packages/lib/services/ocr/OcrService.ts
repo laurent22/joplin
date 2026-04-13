@@ -1,4 +1,4 @@
-import { toIso639Alpha3 } from '../../locale';
+import { countryCodeOnly, languageCodeOnly, toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
@@ -22,6 +22,24 @@ export const supportedMimeTypes = [
 	'image/webp',
 	'image/x-portable-bitmap',
 ];
+
+// Tesseract uses its own language codes that don't always match ISO 639-3.
+// For example, the ISO 639-3 code for Chinese is "zho" but Tesseract uses
+// "chi_sim" (Simplified) and "chi_tra" (Traditional), and Norwegian Bokmål
+// is "nob" in ISO 639-3 but "nor" in Tesseract.
+const iso639ToTesseractOverrides: Record<string, string> = {
+	'nob': 'nor',
+};
+
+const localeToTesseractLanguage = (locale: string): string => {
+	const lang = languageCodeOnly(locale);
+	if (lang === 'zh') {
+		const country = countryCodeOnly(locale).toUpperCase();
+		return country === 'TW' ? 'chi_tra' : 'chi_sim';
+	}
+	const alpha3 = toIso639Alpha3(locale);
+	return iso639ToTesseractOverrides[alpha3] || alpha3;
+};
 
 const resourceInfo = (resource: ResourceEntity) => {
 	return `${resource.id} (type ${resource.mime})`;
@@ -213,7 +231,7 @@ export default class OcrService {
 		};
 
 		try {
-			const language = toIso639Alpha3(Setting.value('locale'));
+			const language = localeToTesseractLanguage(Setting.value('locale'));
 			const processedResourceIds: string[] = [];
 
 			// Queue all resources for processing
