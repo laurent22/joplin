@@ -45,11 +45,14 @@ test.describe('sidebar', () => {
 		await expect(mainWindow.locator(':focus')).toHaveText('All notes');
 	});
 
+	// Regression test for https://github.com/laurent22/joplin/issues/15029
 	test('should remain focused when navigating with the arrow keys', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;
 
-		// Build the folder hierarchy
+		// Build the folder hierarchy: Navigating upwards through the list
+		// should transition from a notebook with more notes to a notebook with
+		// fewer notes.
 		const folderAHeader = await sidebar.createNewFolder('Folder A');
 		await mainScreen.createNewNote('Test');
 		await expect(folderAHeader).toBeVisible();
@@ -80,13 +83,12 @@ test.describe('sidebar', () => {
 		};
 
 		await folderDHeader.click();
-		await mainWindow.keyboard.press('ArrowUp');
-		// Use a regular expression to ignore note counts
-		await assertFocused(/^Folder C/);
 
+		// Focus should remain on the correct folder header while navigating
+		await mainWindow.keyboard.press('ArrowUp');
+		await assertFocused(/^Folder C/);
 		await mainWindow.keyboard.press('ArrowUp');
 		await assertFocused(/^Folder B/);
-
 		await mainWindow.keyboard.press('ArrowUp');
 		await assertFocused(/^Folder A/);
 	});
