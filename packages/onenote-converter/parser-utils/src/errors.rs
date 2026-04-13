@@ -43,6 +43,12 @@ impl From<widestring::error::MissingNulTerminator> for Error {
     }
 }
 
+impl From<widestring::error::Utf16Error> for Error {
+    fn from(err: widestring::error::Utf16Error) -> Self {
+        ErrorKind::from(err).into()
+    }
+}
+
 impl From<uuid::Error> for Error {
     fn from(err: uuid::Error) -> Self {
         ErrorKind::from(err).into()
@@ -126,6 +132,13 @@ pub enum ErrorKind {
     Utf16Error {
         #[from]
         err: string::FromUtf16Error,
+    },
+
+    /// A different type of malformed UTF-16 string was encountered during parsing.
+    #[error("Malformed UTF-16 string: {err}")]
+    Utf16LibError {
+        #[from]
+        err: widestring::error::Utf16Error,
     },
 
     /// A UTF-16 string without a null terminator was encountered during parsing.

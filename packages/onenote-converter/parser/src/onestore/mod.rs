@@ -21,7 +21,7 @@ pub mod mapping_table;
 pub mod object;
 pub mod object_space;
 
-pub trait OneStore {
+pub trait OneStore: std::fmt::Debug {
     fn get_type(&self) -> OneStoreType;
     fn data_root(&self) -> ObjectSpaceRef;
     /// Fetches the object space that is parent to the object identified by the

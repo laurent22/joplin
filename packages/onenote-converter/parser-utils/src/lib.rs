@@ -7,6 +7,7 @@ mod file_api;
 pub mod log;
 pub mod parse;
 pub mod reader;
+pub mod debug;
 
 pub use errors::Result;
 pub use file_api::FileHandle;
@@ -26,6 +27,8 @@ impl Utf16ToString for &[u8] {
             .collect();
 
         let value = U16CString::from_vec_truncate(data);
-        Ok(value.to_string().unwrap())
+        value
+            .to_string()
+            .map_err(|err| err.into())
     }
 }
