@@ -10881,7 +10881,7 @@ __metadata:
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-nitro-modules: "npm:0.33.2"
     react-native-paper: "npm:5.14.5"
-    react-native-popup-menu: "npm:0.17.0"
+    react-native-popup-menu: "npm:0.18.0"
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-base64: "npm:2.2.2"
     react-native-quick-crypto: "npm:0.7.17"
@@ -44844,17 +44844,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-popup-menu@npm:0.17.0":
-  version: 0.17.0
-  resolution: "react-native-popup-menu@npm:0.17.0"
-  checksum: 10/7b78285979c754cfb40ac4b8571c69a42d3b76820b9d814edea6b752307e8b5a3c9cee9cc0ff054f5c820f265761e84f2b49fdfded7b5ff9f8c1f8a675ba6f0a
-  languageName: node
-  linkType: hard
-
-"react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch::locator=root%40workspace%3A.":
-  version: 0.17.0
-  resolution: "react-native-popup-menu@patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch::version=0.17.0&hash=906a51&locator=root%40workspace%3A."
-  checksum: 10/3f7659f14a6291b866669596c3c66ef1a5c27ea1f621fb7be7a4fe61d146066f2bb36f575a1b9e90f3ecf71e1a906659e90e72d9e683c04899b1f9e15224dd34
+"react-native-popup-menu@npm:0.18.0":
+  version: 0.18.0
+  resolution: "react-native-popup-menu@npm:0.18.0"
+  checksum: 10/262c27450826a882a37ecb3c777271deb29ed6d822a8fbb604102b6c0bb36429d5dfa13ae2b3cdb5bb1b7e60d49cd7f2d9b18942cd7cdf743a07ce6b32ba6306
   languageName: node
   linkType: hard
 
