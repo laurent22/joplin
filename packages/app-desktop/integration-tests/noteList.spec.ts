@@ -101,7 +101,7 @@ test.describe('noteList', () => {
 		await expect(testNoteItem).toBeVisible();
 	});
 
-	test('note list should remain focused after deleting a note to the trash', async ({ electronApp, mainWindow }) => {
+	test('should remain focused after deleting a note to the trash', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('test note 1');
 		await mainScreen.createNewNote('test note 2');
