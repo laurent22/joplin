@@ -101,7 +101,6 @@ bash$ cargo run -- ./test-data/ink.one --onestore
 
 To inspect higher-level (parsed) section data:
 ```
-bash$ cd parser/
 bash$ cargo run -- ./test-data/ink.one --section
 ```
 
