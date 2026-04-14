@@ -26,12 +26,20 @@ export const stopPlugin = async (pluginId: string) => {
 	delete loadedPlugins[pluginId];
 };
 
-export const runPlugin = (
-	pluginBackgroundScript: string, pluginScript: string, messageChannelId: string, pluginId: string,
+export const runPlugin = async (
+	pluginBackgroundScript: string, scriptFilePath: string, messageChannelId: string, pluginId: string, scriptText = '',
 ) => {
 	if (loadedPlugins[pluginId]) {
 		console.warn(`Plugin already running ${pluginId}`);
 		return;
+	}
+
+	// When scriptText is provided (web), use it directly. Otherwise load
+	// the plugin script from the filesystem (native mobile).
+	let pluginScript = scriptText;
+	if (!pluginScript) {
+		const response = await fetch(`file://${scriptFilePath}`);
+		pluginScript = await response.text();
 	}
 
 	const bodyHtml = '';

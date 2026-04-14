@@ -350,8 +350,10 @@ export default class PluginService extends BaseService {
 
 			logger.info(`Loading plugin from ${path}`);
 
-			const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
 			const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
+			// On mobile, plugin scripts are loaded directly by the WebView
+			// from the filesystem, so we don't need to read them here.
+			const scriptText = shim.mobilePlatform() ? '' : await fsDriver.readFile(`${distPath}/index.js`);
 			const pluginId = makePluginId(filename(path));
 
 			return this.loadPlugin(distPath, manifestText, scriptText, pluginId);
