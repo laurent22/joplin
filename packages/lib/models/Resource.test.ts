@@ -221,6 +221,25 @@ describe('models/Resource', () => {
 		}
 	});
 
+	it('should clean up orphaned .crypted files in the temp_cache directory', async () => {
+		// Get the path using the model's own method and extract the directory path from the file path
+		const fakeOrphanPath = await Resource.tempCryptedPath('test_orphan');
+		const tempCacheDir = fakeOrphanPath.substring(0, fakeOrphanPath.lastIndexOf('/'));
+
+		// tempCryptedPath already ensures the dir exists, but we write the file
+		await shim.fsDriver().writeFile(fakeOrphanPath, 'fake encrypted garbage', 'utf8');
+
+		// Verify it was created successfully
+		expect(await pathExists(fakeOrphanPath)).toBe(true);
+
+		// Call for new sweep function
+		await Resource.emptyTempEncryptionCache();
+
+		// Prove the file was deleted, but the folder remains ready for use
+		expect(await pathExists(fakeOrphanPath)).toBe(false);
+		expect(await pathExists(tempCacheDir)).toBe(true);
+	});
+
 	test.each([
 		['empty search should return all resources sorted by title asc', { searchQuery: '', sortField: 'title', sortDirection: 'asc', limit: 10, offset: 0 }, 'title', ['alpha', 'Bravo', 'delta', 'Zulu'], false],
 		['pagination should report hasMore when limit is lower than total rows', { sortField: 'title', sortDirection: 'asc', limit: 2, offset: 0 }, 'title', ['alpha', 'Bravo'], true],
