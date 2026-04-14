@@ -244,9 +244,9 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 								await shim.fsDriver().close(handle);
 							}
 						},
-					},
-					async (chunk) => {
-						await shim.fsDriver().appendFile(tempFilePath, chunk, 'utf8');
+						async write(chunk) {
+							await shim.fsDriver().appendFile(tempFilePath, chunk, 'utf8');
+						},
 					},
 				);
 

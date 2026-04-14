@@ -57,10 +57,11 @@ export type FileApi = {
 	readFileText(path: string): Promise<string>;
 	readFileDataUri(path: string): Promise<string>;
 	streamFileDataUri?(path: string, onChunk: FileApiChunkCallback): Promise<void>;
+	write(chunk: string): void | Promise<void>;
 };
 
 // packToString should be able to run in React Native -- don't use fs-extra.
-const packToString = async (baseDir: string, inputFileText: string, fs: FileApi, write: FileApiChunkCallback) => {
+const packToString = async (baseDir: string, inputFileText: string, fs: FileApi) => {
 	const readFileDataUriSafe = async (path: string) => {
 		try {
 			return await fs.readFileDataUri(path);
@@ -184,18 +185,18 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi,
 
 		if (!await fs.exists(filePath)) {
 			modAttrs.href = '';
-			await write(`<a ${attributesHtml(modAttrs)}>`);
+			await fs.write(`<a ${attributesHtml(modAttrs)}>`);
 			return '';
 		}
 
 		delete modAttrs.href;
-		await write('<a href="');
+		await fs.write('<a href="');
 		if (fs.streamFileDataUri) {
-			await fs.streamFileDataUri(filePath, async (chunk) => { await write(chunk); });
+			await fs.streamFileDataUri(filePath, async (chunk) => { await fs.write(chunk); });
 		} else {
-			await write(await readFileDataUriSafe(filePath));
+			await fs.write(await readFileDataUriSafe(filePath));
 		}
-		await write(`" ${attributesHtml(modAttrs)}>`);
+		await fs.write(`" ${attributesHtml(modAttrs)}>`);
 		return '';
 	};
 
@@ -238,10 +239,10 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi,
 				let attrHtml = attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
-				await write(`<${name}${attrHtml}${closingSign}`);
+				await fs.write(`<${name}${attrHtml}${closingSign}`);
 
 			} else if (processedResult !== '') {
-				await write(processedResult);
+				await fs.write(processedResult);
 			}
 		},
 
@@ -250,9 +251,9 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi,
 				// For CSS, we have to put the style as-is inside the tag because if we html-entities encode
 				// it, it's not going to work. But it's ok because JavaScript won't run within the style tag.
 				// Ideally CSS should be loaded from an external file.
-				await write(decodedText);
+				await fs.write(decodedText);
 			} else {
-				await write(htmlentities(decodedText));
+				await fs.write(htmlentities(decodedText));
 			}
 		},
 
@@ -262,7 +263,7 @@ const packToString = async (baseDir: string, inputFileText: string, fs: FileApi,
 			if (current.name === name.toLowerCase()) tagStack.pop();
 
 			if (isSelfClosingTag(name)) return;
-			await write(`</${name}>`);
+			await fs.write(`</${name}>`);
 		},
 
 	});

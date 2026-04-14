@@ -26,7 +26,10 @@ export default async function htmlpack(inputFile: string, outputFile: string): P
 		async streamFileDataUri(path: string, onChunk: FileApiChunkCallback) {
 			await onChunk(dataUriEncode(path));
 		},
-	}, (chunk) => { chunks.push(chunk); });
+		write(chunk: string) {
+			chunks.push(chunk);
+		},
+	});
 
 	await fs.writeFile(outputFile, chunks.join(''), 'utf8');
 }
