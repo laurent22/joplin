@@ -386,7 +386,7 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 		// If an active master key is supplied, fall back to master key validation if ppk validation fails
 		if (await ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword)) {
 			return true;
-		} else if (!activeMasterKey || activeMasterKey.id !== defaultKey.id) {
+		} else if (!activeMasterKey || activeMasterKey.id !== defaultKey?.id) {
 			return false;
 		}
 	}
