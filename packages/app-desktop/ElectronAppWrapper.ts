@@ -556,42 +556,7 @@ export default class ElectronAppWrapper {
 		// which prevents the library's 'closed' handler from firing — so the
 		// state may never be written to disk. We supplement with a longer
 		// debounced save that ensures the snapped position is always persisted.
-		{
-			let snapSaveTimer: ReturnType<typeof setTimeout> | null = null;
-			const snapSaveDelay = 1000; // ms — long enough for snap animation to settle
-
-			const debouncedStateSave = () => {
-				if (snapSaveTimer) clearTimeout(snapSaveTimer);
-				snapSaveTimer = setTimeout(() => {
-					snapSaveTimer = null;
-					try {
-						if (this.win_ && !this.win_.isDestroyed()) {
-							windowState.saveState(this.win_);
-						}
-					} catch (_e) {
-						// Window may have been destroyed between the check and the call
-					}
-				}, snapSaveDelay);
-			};
-
-			this.win_.on('resize', debouncedStateSave);
-			this.win_.on('move', debouncedStateSave);
-
-			this.win_.on('close', () => {
-				// Cancel any pending debounced save and do a final immediate save
-				if (snapSaveTimer) {
-					clearTimeout(snapSaveTimer);
-					snapSaveTimer = null;
-				}
-				try {
-					if (this.win_ && !this.win_.isDestroyed()) {
-						windowState.saveState(this.win_);
-					}
-				} catch (_e) {
-					// Window may have been destroyed
-				}
-			});
-		}
+		
 
 		// HACK: Ensure the window is hidden, as `windowState.manage` may make the window
 		// visible with isMaximized set to true in window-state-${this.env_}.json.
