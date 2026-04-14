@@ -22,7 +22,8 @@ import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
-import DropdownAlert, { DropdownAlertData } from 'react-native-dropdownalert';
+const DropdownAlert = require('react-native-dropdownalert').default;
+import type { DropdownAlertData } from 'react-native-dropdownalert';
 import SafeAreaView from './components/SafeAreaView';
 const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
