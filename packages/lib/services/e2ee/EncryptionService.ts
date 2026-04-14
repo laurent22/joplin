@@ -319,7 +319,7 @@ export default class EncryptionService {
 		model.source_application = Setting.value('appId');
 		model.hasBeenUsed = false;
 		model.id = uuid.create();
-		model.created_time = Date.now();
+		model.created_time = now;
 		model.testCipher = await this.encryptString(mkTestText, { masterKeyId: model.id, masterKeyContent: hexaBytes });
 
 		return model;
