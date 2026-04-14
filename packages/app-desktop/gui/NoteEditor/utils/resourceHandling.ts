@@ -95,9 +95,12 @@ const clipboardImageToResource = async (image: any, mime: string) => {
 	const fileExt = mimeUtils.toFileExtension(mime);
 	const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
 	await shim.writeImageToFile(image, mime, filePath);
-	const md = await commandAttachFileToBody('', [filePath]);
-	await shim.fsDriver().remove(filePath);
-	return md;
+	try {
+		const md = await commandAttachFileToBody('', [filePath]);
+		return md;
+	} finally {
+		await shim.fsDriver().remove(filePath);
+	}
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
