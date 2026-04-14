@@ -10,6 +10,7 @@ import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, shouldUpdat
 import KvStore from '../KvStore';
 import Folder from '../../models/Folder';
 import ShareService from '../share/ShareService';
+import { _ } from '../../locale';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -284,8 +285,12 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 			syncInfo.ppk = reencryptedPpk;
 			saveLocalSyncInfo(syncInfo);
 		}
-	} else {
-		if (!currentPassword && !(await masterPasswordIsValid(newPassword))) throw new Error('Master password is not valid. Please try again.');
+	} else if (!currentPassword) {
+		if (localSyncInfo().masterKeys.length && !getDefaultMasterKey()) {
+			throw new Error(_('Encryption was setup previously, but all keys have been disabled. Please enable a key to continue.'));
+		} else if (!(await masterPasswordIsValid(newPassword))) {
+			throw new Error('Master password is not valid. Please try again.');
+		}
 	}
 
 	Setting.setValue('encryption.masterPassword', newPassword);
