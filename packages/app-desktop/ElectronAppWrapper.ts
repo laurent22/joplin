@@ -556,7 +556,7 @@ export default class ElectronAppWrapper {
 		// which prevents the library's 'closed' handler from firing — so the
 		// state may never be written to disk. We supplement with a longer
 		// debounced save that ensures the snapped position is always persisted.
-		
+
 
 		// HACK: Ensure the window is hidden, as `windowState.manage` may make the window
 		// visible with isMaximized set to true in window-state-${this.env_}.json.
@@ -605,10 +605,10 @@ export default class ElectronAppWrapper {
 		syncPending: boolean,
 	) {
 		if (syncPending) {
-			dispatch({ type: 'QUIT_SYNC_DIALOG_OPEN' });
-		} else {
-			this.quit();
-		}
+	        dispatch({ type: 'QUIT_SYNC_DIALOG_OPEN' });
+        } else {
+	        this.quit();
+        }
 	}
 
 	public exit(errorCode = 0) {
