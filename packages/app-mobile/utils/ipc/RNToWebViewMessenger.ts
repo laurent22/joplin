@@ -44,7 +44,18 @@ export default class RNToWebViewMessenger<LocalInterface, RemoteInterface> exten
 
 	public onWebViewMessage = (event: OnMessageEvent) => {
 		if (!this.hasBeenClosed()) {
-			const data = canUseOptimizedPostMessage ? event.nativeEvent.data : JSON.parse(event.nativeEvent.data);
+			let data;
+			if (canUseOptimizedPostMessage) {
+				data = event.nativeEvent.data;
+			} else {
+				try {
+					data = JSON.parse(event.nativeEvent.data);
+				} catch {
+					logger.warn('Failed to parse message:', event.nativeEvent.data);
+					return;
+				}
+			}
+
 			if (typeof data === 'object' && data !== null && typeof data.kind === 'string') {
 				void this.onMessage(data);
 			} else {
