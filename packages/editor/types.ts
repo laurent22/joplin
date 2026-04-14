@@ -218,6 +218,7 @@ export interface EditorSettings {
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
 	inlineRenderingEnabled: boolean;
+	tableEditingEnabled: boolean;
 	imageRenderingEnabled: boolean;
 	readOnly: boolean;
 	highlightActiveLine: boolean;

@@ -112,7 +112,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	// Only enable in-editor rendering for Markdown notes. In-editor rendering can result in
 	// confusing output in HTML notes (e.g. some, but not most, tags hidden).
 	if (settings.inlineRenderingEnabled && settings.language === EditorLanguageType.Markdown) {
-		extensions.push(renderingExtension());
+		extensions.push(renderingExtension(settings.tableEditingEnabled));
 	}
 
 	if (settings.imageRenderingEnabled) {
