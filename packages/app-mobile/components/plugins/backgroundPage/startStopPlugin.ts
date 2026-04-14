@@ -35,11 +35,18 @@ export const runPlugin = async (
 	}
 
 	// When scriptText is provided (web), use it directly. Otherwise load
-	// the plugin script from the filesystem (native mobile).
+	// the plugin script from the filesystem (native mobile). We use
+	// XMLHttpRequest because fetch() doesn't support file:// URLs on
+	// Android WebView.
 	let pluginScript = scriptText;
 	if (!pluginScript) {
-		const response = await fetch(`file://${scriptFilePath}`);
-		pluginScript = await response.text();
+		pluginScript = await new Promise<string>((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.open('GET', `file://${scriptFilePath}`, true);
+			xhr.onload = () => resolve(xhr.responseText);
+			xhr.onerror = () => reject(new Error(`Failed to load plugin script: ${scriptFilePath}`));
+			xhr.send();
+		});
 	}
 
 	const bodyHtml = '';
