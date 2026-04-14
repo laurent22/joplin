@@ -265,9 +265,6 @@ export default class Resource extends BaseItem {
 		if (await this.fsDriver().exists(tempCacheDir)) {
 			try {
 				await this.fsDriver().remove(tempCacheDir);
-				// create the temp_cache dir again so it is ready for a fresh start
-				await this.fsDriver().mkdir(tempCacheDir);
-
 				this.logger().info('Cleared temporary encryption cache.');
 			} catch (error) {
 				this.logger().info('Could not clear temporary encryption cache.');
