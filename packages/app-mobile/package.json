@@ -146,7 +146,7 @@
     "url-loader": "4.1.1",
     "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "5.2.2"
+    "webpack-dev-server": "5.2.3"
   },
   "engines": {
     "node": ">=20"
