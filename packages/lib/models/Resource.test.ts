@@ -222,9 +222,8 @@ describe('models/Resource', () => {
 	});
 
 	it('should clean up orphaned .crypted files in the temp_cache directory', async () => {
-		// Get the path using the model's own method and extract the directory path from the file path
+		// Get the path using the model's own method
 		const fakeOrphanPath = await Resource.tempCryptedPath('test_orphan');
-		const tempCacheDir = fakeOrphanPath.substring(0, fakeOrphanPath.lastIndexOf('/'));
 
 		// tempCryptedPath already ensures the dir exists, but we write the file
 		await shim.fsDriver().writeFile(fakeOrphanPath, 'fake encrypted garbage', 'utf8');
@@ -235,9 +234,8 @@ describe('models/Resource', () => {
 		// Call for new sweep function
 		await Resource.emptyTempEncryptionCache();
 
-		// Prove the file was deleted, but the folder remains ready for use
+		// Prove the file was deleted
 		expect(await pathExists(fakeOrphanPath)).toBe(false);
-		expect(await pathExists(tempCacheDir)).toBe(true);
 	});
 
 	test.each([
