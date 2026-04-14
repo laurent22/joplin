@@ -586,14 +586,18 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		if (sharedData) {
 			reg.logger().info('Received shared data');
 
-			// selectedFolderId can be null if no screens other than "All notes"
-			// have been opened.
-			const targetFolder = this.props.selectedFolderId ?? (await Folder.defaultFolder())?.id;
-			if (targetFolder) {
+			const activeFolder = await Folder.getValidActiveFolder();
+			if (activeFolder) {
 				logger.info('Sharing: handleShareData: Processing...');
-				await handleShared(sharedData, targetFolder, this.props.dispatch);
+				await handleShared(sharedData, activeFolder.id, this.props.dispatch);
 			} else {
-				reg.logger().info('Cannot handle share - default folder id is not set');
+				reg.logger().warn('Cannot handle share - no valid active folder found');
+				void this.dropdownAlert_({
+					type: 'error',
+					title: _('Cannot share'),
+					message: _('No valid notebook is available. Please create or select a notebook and try again.'),
+				});
+				ShareExtension.close();
 			}
 		} else {
 			logger.info('Sharing: received empty share data.');

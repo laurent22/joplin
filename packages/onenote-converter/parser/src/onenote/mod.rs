@@ -1,6 +1,8 @@
+use std::rc::Rc;
+
 use crate::onenote::notebook::Notebook;
 use crate::onenote::section::{Section, SectionEntry, SectionGroup};
-use crate::onestore::{OneStoreType, parse_onestore};
+use crate::onestore::{OneStore, OneStoreType, parse_onestore};
 use parser_utils::errors::{ErrorKind, Result};
 use parser_utils::{fs_driver, log, reader::Reader};
 
@@ -71,6 +73,11 @@ impl Parser {
         log!("Parsing section: {:?}", path);
         let data = fs_driver().read_file(path.as_str())?;
         self.parse_section_from_data(&data, &path)
+    }
+
+    /// Parses low-level OneStore data
+    pub fn parse_onestore_raw(&mut self, data: &[u8]) -> Result<Rc<dyn OneStore>> {
+        parse_onestore(&mut Reader::new(data))
     }
 
     /// Parse a OneNote section file from a byte array.

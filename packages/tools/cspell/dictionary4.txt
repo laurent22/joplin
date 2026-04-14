@@ -261,3 +261,5 @@ llamacpp
 bgcolor
 bordercolor
 togglefullscreen
+onestore
+pdate

@@ -162,7 +162,17 @@ export default class ExternalEditWatcher {
 			return;
 		}
 
-		let noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+		let noteContent: string;
+		try {
+			noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+		} catch (error) {
+			if (error.code === 'ENOENT') {
+				this.logger().warn(`ExternalEditWatcher: Watched file no longer exists: ${path}`);
+				void this.stopWatching(id);
+				return;
+			}
+			throw error;
+		}
 
 		// In some very rare cases, the "change" event is going to be emitted but the file will be empty.
 		// This is likely to be the editor that first clears the file, then writes the content to it, so if
