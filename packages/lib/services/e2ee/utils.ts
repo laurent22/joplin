@@ -380,17 +380,18 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 
 	if (!masterPassword) throw new Error('Password is empty');
 
+	const defaultKey = getDefaultMasterKey();
 	const ppk = localSyncInfo().ppk;
 	if (ppk) {
 		// If an active master key is supplied, fall back to master key validation if ppk validation fails
 		if (await ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword)) {
 			return true;
-		} else if (!activeMasterKey) {
+		} else if (!activeMasterKey || activeMasterKey.id !== defaultKey.id) {
 			return false;
 		}
 	}
 
-	const masterKey = activeMasterKey ? activeMasterKey : getDefaultMasterKey();
+	const masterKey = activeMasterKey ? activeMasterKey : defaultKey;
 	if (masterKey) {
 		try {
 			return await EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);

@@ -3,9 +3,9 @@ import { _ } from '../../locale';
 import BaseItem, { EncryptedItemsStats } from '../../models/BaseItem';
 import useAsyncEffect, { AsyncEffectEvent } from '../../hooks/useAsyncEffect';
 import { MasterKeyEntity } from '../../services/e2ee/types';
-import { findMasterKeyPassword, getMasterPasswordStatus, loadMasterKeysFromSettings, masterPasswordIsValid, MasterPasswordStatus } from '../../services/e2ee/utils';
+import { findMasterKeyPassword, getDefaultMasterKey, getMasterPasswordStatus, loadMasterKeysFromSettings, masterPasswordIsValid, MasterPasswordStatus } from '../../services/e2ee/utils';
 import EncryptionService, { mkTestText } from '../../services/e2ee/EncryptionService';
-import { getActiveMasterKey, masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
+import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
 import MasterKey from '../../models/MasterKey';
 import { reg } from '../../registry';
 import Setting from '../../models/Setting';
@@ -64,7 +64,7 @@ export const enableEncryptionConfirmationMessages = (_masterKey: MasterKeyEntity
 
 export const reencryptData = async () => {
 	const password = Setting.value('encryption.masterPassword');
-	const mk = getActiveMasterKey();
+	const mk = getDefaultMasterKey();
 	const mkIsDecrypted = password && await masterPasswordIsValid(password, mk);
 	if (!mkIsDecrypted) {
 		await shim.showMessageBox(_('Cannot re-encrypt data, as the master password is not set correctly'), { type: MessageBoxType.Error });
@@ -114,7 +114,7 @@ export const onSavePasswordClick = async (mk: MasterKeyEntity, passwords: Record
 	if (!password) {
 		Setting.deleteObjectValue('encryption.passwordCache', mk.id);
 		return;
-	} else if (!await masterPasswordIsValid(password, mk)) {
+	} else if (!await EncryptionService.instance().checkMasterKeyPassword(mk, password)) {
 		await shim.showMessageBox(_('Password is invalid. Please try again.'), { type: MessageBoxType.Error });
 		return;
 	}
