@@ -330,10 +330,12 @@ export default class PluginService extends BaseService {
 		const stat = await shim.fsDriver().stat(path);
 		const extractionStates = await this.loadExtractionStates();
 		const extractionState = extractionStates[fname];
+		const scriptFilePath = `${unpackDir}/index.js`;
 		const extractionValid = extractionState
 			&& extractionState.size === stat.size
 			&& extractionState.timestamp === stat.mtime.getTime()
-			&& await shim.fsDriver().exists(manifestFilePath);
+			&& await shim.fsDriver().exists(manifestFilePath)
+			&& await shim.fsDriver().exists(scriptFilePath);
 
 		if (!extractionValid) {
 			logger.info(`Extracting plugin: ${fname}`);
