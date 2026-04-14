@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 const Datauri = require('datauri/sync');
 import { dirname } from 'path';
-import packToString, { type FileApiChunkCallback } from './packToString';
+import packToWriter, { type FileApiChunkCallback } from './packToWriter';
 
 const dataUriEncode = (filePath: string): string => {
 	const result = Datauri(filePath);
@@ -13,7 +13,7 @@ export default async function htmlpack(inputFile: string, outputFile: string): P
 	const baseDir = dirname(inputFile);
 
 	const chunks: string[] = [];
-	await packToString(baseDir, inputHtml, {
+	await packToWriter(baseDir, inputHtml, {
 		exists(path: string) {
 			return fs.exists(path);
 		},
@@ -26,7 +26,7 @@ export default async function htmlpack(inputFile: string, outputFile: string): P
 		async streamFileDataUri(path: string, onChunk: FileApiChunkCallback) {
 			await onChunk(dataUriEncode(path));
 		},
-		write(chunk: string) {
+		writeChunk(chunk: string) {
 			chunks.push(chunk);
 		},
 	});

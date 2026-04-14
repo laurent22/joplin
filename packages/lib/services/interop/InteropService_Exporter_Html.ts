@@ -9,7 +9,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { NoteEntity, ResourceEntity, ResourceLocalStateEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
-import packToString from '@joplin/htmlpack/packToString';
+import packToWriter from '@joplin/htmlpack/packToWriter';
 const { themeStyle } = require('../../theme');
 const { escapeHtml } = require('../../string-utils.js');
 import { assetsToHeaders } from '@joplin/renderer';
@@ -208,7 +208,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			await shim.fsDriver().writeFile(tempFilePath, '', 'utf8');
 
 			try {
-				await packToString(
+				await packToWriter(
 					this.destDir_,
 					mainHtml,
 					{
@@ -244,7 +244,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 								await shim.fsDriver().close(handle);
 							}
 						},
-						async write(chunk) {
+						async writeChunk(chunk) {
 							await shim.fsDriver().appendFile(tempFilePath, chunk, 'utf8');
 						},
 					},
