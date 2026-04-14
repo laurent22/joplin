@@ -162,6 +162,9 @@ const EncryptionConfigScreen = (props: Props) => {
 					const password2 = passwordPromptConfirmAnswer;
 					if (!password2) throw new Error(_('Confirm password cannot be empty'));
 					if (password !== password2) throw new Error(_('Passwords do not match!'));
+				} else if (!masterKey) {
+					// If a different master password is entered in this scenario, it would be accepted, but would create a new key which won't be able to be decrypted
+					throw new Error(_('Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.'));
 				}
 				await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, password);
 				// await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
