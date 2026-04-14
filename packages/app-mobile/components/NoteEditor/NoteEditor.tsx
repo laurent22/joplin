@@ -283,6 +283,7 @@ const useEditorSettings = (props: Props) => {
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 		inlineRenderingEnabled,
+		tableEditingEnabled: true,
 		imageRenderingEnabled: props.editorImageRendering,
 		language: props.markupLanguage === MarkupLanguage.Html ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 		useExternalSearch: true,
