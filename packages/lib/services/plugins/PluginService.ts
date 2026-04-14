@@ -221,7 +221,11 @@ export default class PluginService extends BaseService {
 
 	private async saveExtractionStates(states: Record<string, PluginExtractionState>): Promise<void> {
 		this.extractionStates_ = states;
-		await shim.fsDriver().writeFile(this.extractionStatePath(), JSON.stringify(states), 'utf8');
+		try {
+			await shim.fsDriver().writeFile(this.extractionStatePath(), JSON.stringify(states), 'utf8');
+		} catch (error) {
+			logger.error('Failed to save extraction states:', error);
+		}
 	}
 
 	public pluginById(id: string): Plugin {
