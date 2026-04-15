@@ -83,7 +83,7 @@ let markupToHtml_ = new MarkupToHtml();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function stripMarkup(markupLanguage: number, markup: string, options: any = null) {
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
-	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
+	return markupToHtml_.stripMarkup(markupLanguage, markup, options);
 }
 
 interface LastOnChangeEventInfo {
@@ -97,9 +97,9 @@ let dispatchDidUpdateIID_: any = null;
 let changeId_ = 1;
 
 const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
-	const [editorContainer, setEditorContainer] = useState<HTMLDivElement|null>(null);
+	const [editorContainer, setEditorContainer] = useState<HTMLDivElement | null>(null);
 	const editorContainerDom = useDocument(editorContainer);
-	const [editor, setEditor] = useState<Editor|null>(null);
+	const [editor, setEditor] = useState<Editor | null>(null);
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [editorReady, setEditorReady] = useState(false);
 	const [draggingStarted, setDraggingStarted] = useState(false);
@@ -107,7 +107,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const props_onMessage = useRef(null);
 	props_onMessage.current = props.onMessage;
 
-	const props_onDrop = useRef<DropHandler|null>(null);
+	const props_onDrop = useRef<DropHandler | null>(null);
 	props_onDrop.current = props.onDrop;
 
 	const markupToHtml = useRef(null);
@@ -364,7 +364,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// };
 
 	useEffect(() => {
-		if (!editorContainerDom) return () => {};
+		if (!editorContainerDom) return () => { };
 
 		let cancelled = false;
 
@@ -412,7 +412,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const { resetModifiedTitles: resetLinkTooltips } = useLinkTooltips(editor);
 
 	useEffect(() => {
-		if (!editorContainerDom) return () => {};
+		if (!editorContainerDom) return () => { };
 		const theme = themeStyle(props.themeId);
 		const backgroundColor = props.whiteBackgroundNoteRendering ? lightTheme.backgroundColor : theme.backgroundColor;
 
@@ -1094,11 +1094,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const noteChangeTimeRef = useRef(Date.now());
 	const lastNoteIdRef = useRef(props.noteId);
 	useEffect(() => {
-		if (!editor) return () => {};
+		if (!editor) return () => { };
 
 		if (resourcesStatus(props.resourceInfos) !== 'ready') {
 			editor.setContent('');
-			return () => {};
+			return () => { };
 		}
 
 		let cancelled = false;
@@ -1201,7 +1201,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	}, [editor, props.noteId, props.themeId, props.markupToHtml, props.allAssets, props.content, props.resourceInfos, props.contentKey, props.contentMarkupLanguage, props.whiteBackgroundNoteRendering]);
 
 	useEffect(() => {
-		if (!editor) return () => {};
+		if (!editor) return () => { };
 
 		editor.getDoc().addEventListener('click', onEditorContentClick);
 		return () => {
@@ -1213,7 +1213,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// overlay over the editor, which makes it a valid drop target. This in
 	// turn makes NoteEditor get the drop event and dispatch it.
 	useEffect(() => {
-		if (!editor) return () => {};
+		if (!editor) return () => { };
 
 		function onDragStart() {
 			setDraggingStarted(true);
@@ -1295,7 +1295,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const onChangeHandlerTimeoutRef = useRef<any>(null);
 
 	useEffect(() => {
-		if (!editor) return () => {};
+		if (!editor) return () => { };
 
 		function onChangeHandler() {
 			// First this component notifies the parent that a change is going to happen.
@@ -1454,12 +1454,19 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					if (pastedHtml) { // Handles HTML
 						logger.info('onPaste: pasting as HTML');
 
+						const inTable = !!editor.dom.getParent(editor.selection.getNode(), 'table');
+
 						const modifiedHtml = await processPastedHtml(
 							pastedHtml,
-							prop_htmlToMarkdownRef.current,
-							markupToHtml.current,
+							inTable ? null : prop_htmlToMarkdownRef.current,
+							inTable ? null : markupToHtml.current,
 						);
-						editor.insertContent(modifiedHtml);
+
+						if (inTable && pastedHtml.toLowerCase().indexOf('<table') >= 0) {
+							editor.execCommand('mceInsertClipboardContent', false, { html: modifiedHtml });
+						} else {
+							editor.insertContent(modifiedHtml);
+						}
 					} else { // Handles plain text
 						logger.info('onPaste: pasting as text');
 						pasteAsPlainText(pastedText);
@@ -1470,6 +1477,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCopy(event: any) {
+			const selectedCells = editor.dom.select('td[data-mce-selected="1"], th[data-mce-selected="1"]');
+			if (selectedCells.length > 1 || editor.dom.select('tr[data-mce-selected="1"]').length > 0) {
+				setTimeout(() => {
+					const clipboardHtml = clipboard.readHTML();
+					if (clipboardHtml) copyHtmlToClipboard(clipboardHtml);
+				}, 50);
+				return;
+			}
+
 			const copiedContent = editor.selection.getContent();
 			if (!copiedContent) return;
 			copyHtmlToClipboard(copiedContent);
@@ -1478,6 +1494,16 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCut(event: any) {
+			const selectedCells = editor.dom.select('td[data-mce-selected="1"], th[data-mce-selected="1"]');
+			if (selectedCells.length > 1 || editor.dom.select('tr[data-mce-selected="1"]').length > 0) {
+				setTimeout(() => {
+					const clipboardHtml = clipboard.readHTML();
+					if (clipboardHtml) copyHtmlToClipboard(clipboardHtml);
+					onChangeHandler();
+				}, 50);
+				return;
+			}
+
 			event.preventDefault();
 			const selectedContent = editor.selection.getContent();
 			if (!selectedContent) return;
@@ -1683,7 +1709,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			{renderDisabledOverlay()}
 			{renderLeftExtraToolbarButtons()}
 			{renderRightExtraToolbarButtons()}
-			<div style={{ width: '100%', height: '100%' }} id={containerId} ref={setEditorContainer}/>
+			<div style={{ width: '100%', height: '100%' }} id={containerId} ref={setEditorContainer} />
 		</div>
 	);
 };

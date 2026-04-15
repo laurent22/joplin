@@ -69,13 +69,26 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 				linkToCopy: linkUrl,
 				linkToOpen: linkUrl,
 				textToCopy: null,
-				htmlToCopy: editor.selection ? editor.selection.getContent() : '',
+				htmlToCopy: (() => {
+					if (!editor.selection) return '';
+					const selectedCells = editor.dom.select('td[data-mce-selected="1"], th[data-mce-selected="1"]');
+					if (selectedCells.length > 1 || editor.dom.select('tr[data-mce-selected="1"]').length > 0) {
+						return 'table-selected';
+					}
+					return editor.selection.getContent();
+				})(),
 				insertContent: (content: string) => {
 					editor.insertContent(content);
 				},
 				isReadOnly: false,
-				fireEditorEvent: (event: TinyMceEditorEvents) => {
-					editor.fire(event);
+				fireEditorEvent: (event: TinyMceEditorEvents|string) => {
+					if (event === 'execCommandCopy') {
+						editor.getDoc().execCommand('copy');
+					} else if (event === 'execCommandCut') {
+						editor.getDoc().execCommand('cut');
+					} else {
+						editor.fire(event as TinyMceEditorEvents);
+					}
 				},
 				htmlToMd,
 				mdToHtml,

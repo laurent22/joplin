@@ -260,15 +260,23 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 		cut: {
 			label: _('Cut'),
 			onAction: async (options: ContextMenuOptions) => {
-				handleCopyToClipboard(options);
-				options.insertContent('');
+				if (options.htmlToCopy === 'table-selected') {
+					options.fireEditorEvent('execCommandCut');
+				} else {
+					handleCopyToClipboard(options);
+					options.insertContent('');
+				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
 		},
 		copy: {
 			label: _('Copy'),
 			onAction: async (options: ContextMenuOptions) => {
-				handleCopyToClipboard(options);
+				if (options.htmlToCopy === 'table-selected') {
+					options.fireEditorEvent('execCommandCopy');
+				} else {
+					handleCopyToClipboard(options);
+				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType !== ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
 		},
