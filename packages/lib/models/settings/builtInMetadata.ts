@@ -445,6 +445,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			secure: true,
 		},
 
+		'sync.10.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
+
 		'sync.10.inboxEmail': { value: '', type: SettingItemType.String, public: false },
 
 		'sync.10.inboxId': { value: '', type: SettingItemType.String, public: false },
