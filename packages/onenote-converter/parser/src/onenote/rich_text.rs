@@ -410,21 +410,12 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
     // Parse the embedded objects
     let objects = text_run_data
         .into_iter()
-        .zip(
-            styles_data
-                .iter()
-                .map(|style_data| {
-                    (
-                        style_data.text_run_is_embedded_object,
-                        style_data.text_run_object_type,
-                    )
-                })
-        )
-        .flat_map(
-            |(object_data, (text_run_is_embedded_object, text_run_object_type))| {
-                text_run_is_embedded_object.then_some((text_run_object_type, object_data))
-            },
-        )
+        .zip(&styles_data)
+        .flat_map(|(object_data, style_data)| {
+            style_data
+                .text_run_is_embedded_object
+                .then_some((style_data.text_run_object_type, object_data))
+        })
         .collect_vec();
 
     let mut objects_without_ref = 0;
