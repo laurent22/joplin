@@ -939,6 +939,7 @@ export default class ElectronAppWrapper {
 		this.electronApp_.on('before-quit', () => {
 			this.appLogger_.info('[appClose] before-quit event fired, setting willQuitApp_ = true');
 			this.willQuitApp_ = true;
+			bridge().unregisterGlobalHotkey();
 		});
 
 		this.electronApp_.on('window-all-closed', () => {

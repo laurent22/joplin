@@ -2066,7 +2066,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (12.2.1):
+  - RNShare (12.2.2):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2133,7 +2133,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - SDWebImage/Core (5.21.7)
+  - SDWebImage/Core (5.21.5)
   - SDWebImageWebPCoder (0.15.0):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
@@ -2632,9 +2632,9 @@ SPEC CHECKSUMS:
   RNLocalize: 44b09911588826d01c5b949e8e3f9ed5fae16b32
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
-  RNShare: 0e600372fb35783fe30d413efd28d11de2bf6cf0
+  RNShare: a075abc351f03fd89517bbee912593f299eb8a64
   RNSVG: cf9ae78f2edf2988242c71a6392d15ff7dd62522
-  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
+  SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   WhisperVoiceTyping: 343ea840cbde2a5f3508f8b016ebcf1c089179ea
   Yoga: 786fa7d9d2ff6060b4e688062243fa69c323d140

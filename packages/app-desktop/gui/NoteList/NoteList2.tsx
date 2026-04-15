@@ -31,7 +31,6 @@ import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import useOnNoteDoubleClick from './utils/useOnNoteDoubleClick';
 import useAutoScroll from './utils/useAutoScroll';
-import useRefocusOnDeletion from './utils/useRefocusOnDeletion';
 
 const commands = {
 	focusElementNoteList,
@@ -75,7 +74,6 @@ const NoteList = (props: Props) => {
 
 	const { activeNoteId, setActiveNoteId } = useActiveDescendantId(props.selectedFolderId, props.selectedNoteIds);
 	const focusNote = useFocusNote(listRef, props.notes, makeItemIndexVisible, setActiveNoteId);
-	useRefocusOnDeletion(props.notes.length, props.selectedNoteIds, props.focusedField, props.selectedFolderId, focusNote);
 
 	const moveNote = useMoveNote(
 		props.notesParentType,

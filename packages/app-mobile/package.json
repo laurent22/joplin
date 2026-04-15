@@ -7,6 +7,7 @@
   "scripts": {
     "start": "BROWSERSLIST_IGNORE_OLD_DATA=true react-native start --reset-cache",
     "android": "react-native run-android",
+    "android-log": "adb logcat 'ReactNative:V' 'ReactNativeJS:V' 'chromium:V' '*:S'",
     "build": "NO_FLIPPER=1 gulp build",
     "web": "webpack --mode production --config ./web/webpack.config.ts --progress && cp -r ./web/public/* ./web/dist/",
     "serve-web-hot-reload": "yarn serve-web --env HOT_RELOAD",
@@ -116,7 +117,7 @@
     "@types/node": "18.19.130",
     "@types/react": "19.1.10",
     "@types/react-redux": "7.1.34",
-    "@types/serviceworker": "0.0.175",
+    "@types/serviceworker": "0.0.176",
     "@types/tar-stream": "3.1.4",
     "babel-jest": "29.7.0",
     "babel-loader": "9.1.3",
@@ -146,7 +147,7 @@
     "url-loader": "4.1.1",
     "webpack": "5.97.1",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "5.2.2"
+    "webpack-dev-server": "5.2.3"
   },
   "engines": {
     "node": ">=20"

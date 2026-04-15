@@ -1,5 +1,15 @@
 # Joplin Android Changelog
 
+## [android-v3.6.16](https://github.com/laurent22/joplin/releases/tag/android-v3.6.16) - 2026-04-14T15:38:56Z
+
+- New: Add 'Go to start/end of note' toolbar buttons (#15015 by [@Vpatel1093](https://github.com/Vpatel1093))
+- Improved: Updated packages react-native-share (v12.2.2), sass (v1.95.1)
+- Fixed: Fix Android markdown editor text replacement (characters disappearing during typing) (#15007) (#13134 by Sriram Varun Kumar)
+- Fixed: Fix back button disabled after navigating away from a deleted notebook (#15028) (#15004 by Sriram Varun Kumar)
+- Fixed: Fix profile list not scrollable to last item on Manage Profiles screen (#15074) (#15061 by Sriram Varun Kumar)
+- Fixed: Fix shared note not persisted to active notebook (#15064) (#15060 by Sriram Varun Kumar)
+- Fixed: Migrate expo-av to expo-audio (#14847) (#14804 by [@gherardi](https://github.com/gherardi))
+
 ## [android-v3.6.15](https://github.com/laurent22/joplin/releases/tag/android-v3.6.15) - 2026-04-05T13:00:51Z
 
 - New: Add toolbar button reordering with up/down arrows (#14485 by [@Vpatel1093](https://github.com/Vpatel1093))

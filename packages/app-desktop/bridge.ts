@@ -1,7 +1,7 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem, BrowserWindowConstructorOptions, FileFilter, SaveDialogOptions } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem, BrowserWindowConstructorOptions, FileFilter, SaveDialogOptions, globalShortcut } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -46,6 +46,7 @@ export class Bridge {
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
+	private registeredGlobalHotkey_ = '';
 
 	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 		this.electronWrapper_ = electronWrapper;
@@ -205,6 +206,54 @@ export class Bridge {
 
 	public setOnAllowedExtensionsChangeListener(listener: OnAllowedExtensionsChange) {
 		this.onAllowedExtensionsChangeListener_ = listener;
+	}
+
+	public updateGlobalHotkey(accelerator: string) {
+		// Skip if the accelerator hasn't changed
+		if (accelerator === this.registeredGlobalHotkey_) return;
+
+		// Unregister the previous shortcut (only Joplin's own)
+		this.unregisterGlobalHotkey();
+
+		if (!accelerator) return;
+
+		try {
+			const registered = globalShortcut.register(accelerator, () => {
+				const win = this.mainWindow();
+				if (!win) return;
+
+				if (win.isVisible() && win.isFocused()) {
+					win.hide();
+				} else {
+					if (win.isMinimized()) win.restore();
+					win.show();
+					// eslint-disable-next-line no-restricted-properties
+					win.focus();
+				}
+			});
+
+			if (registered) {
+				this.registeredGlobalHotkey_ = accelerator;
+			} else {
+				// eslint-disable-next-line no-console
+				console.warn(`Bridge: Failed to register global shortcut: ${accelerator}`);
+			}
+		} catch (error) {
+			// eslint-disable-next-line no-console
+			console.error(`Bridge: Error registering global shortcut "${accelerator}":`, error);
+		}
+	}
+
+	public unregisterGlobalHotkey() {
+		if (this.registeredGlobalHotkey_) {
+			try {
+				globalShortcut.unregister(this.registeredGlobalHotkey_);
+			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.warn('Bridge: Error removing global shortcut:', error);
+			}
+			this.registeredGlobalHotkey_ = '';
+		}
 	}
 
 	public async captureException(error: unknown) {
