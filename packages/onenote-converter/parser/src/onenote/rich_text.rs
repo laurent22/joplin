@@ -437,26 +437,28 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
             let i = i - objects_without_ref;
 
             let object_ref = data.text_run_data_object.get(i);
-            let is_invalid_ref = object_ref
-                .map(|object_ref| space.get_object(*object_ref).is_none())
-                .unwrap_or(false);
+            let is_valid_ref = object_ref
+                .map(|object_ref| space.get_object(*object_ref).is_some())
+                .unwrap_or(true);
+
+            // Based on sample .one files, spaces and EOL blobs either:
+            // - Have an invalid associated object reference (is_valid_ref = false)
+            // - Have no associated object reference (is_valid_ref = true)
+            //
+            // In the first case, the object reference will be skipped automatically.
+            // In the second, we need to adjust so that the references for subsequent
+            // objects aren't skipped.
+            if let Some(object_type) = object_type
+                && is_valid_ref
+                && (object_type == INK_END_OF_LINE_BLOB || object_type == INK_SPACE_BLOB)
+            {
+                objects_without_ref += 1;
+            }
 
             match object_type {
-                Some(INK_END_OF_LINE_BLOB) => {
-                    // Spaces and EOL blobs sometimes are represented with an invalid object and sometimes
-                    // have no object:
-                    if !is_invalid_ref {
-                        objects_without_ref += 1;
-                    }
-                    Ok(Some(EmbeddedObject::InkLineBreak))
-                }
-                Some(INK_SPACE_BLOB) => {
-                    if !is_invalid_ref {
-                        objects_without_ref += 1;
-                    }
-                    parse_embedded_ink_space(embedded_data)
-                        .map(|space| Some(EmbeddedObject::InkSpace(space)))
-                }
+                Some(INK_END_OF_LINE_BLOB) => Ok(Some(EmbeddedObject::InkLineBreak)),
+                Some(INK_SPACE_BLOB) => parse_embedded_ink_space(embedded_data)
+                    .map(|space| Some(EmbeddedObject::InkSpace(space))),
                 None => {
                     if let Some(object_ref) = object_ref {
                         return parse_embedded_ink_data(*object_ref, space.clone(), embedded_data)
