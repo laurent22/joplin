@@ -205,7 +205,8 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 				</View>
 			) : null;
 
-			const isFailedDecryptionErrorHeader = item.sectionName === 'failedDecryption' && text?.startsWith('Items with error:');
+			const localizedItemsWithErrorPrefix = _('Items with error: %s', '');
+			const isFailedDecryptionErrorHeader = item.sectionName === 'failedDecryption' && text?.startsWith(localizedItemsWithErrorPrefix);
 			const textComponent = text ? <Text style={style} role={textRole} numberOfLines={isFailedDecryptionErrorHeader ? 2 : undefined} ellipsizeMode={isFailedDecryptionErrorHeader ? 'tail' : undefined}>{text}</Text> : null;
 			if (item.isDivider) {
 				return <View style={styles.divider} role='separator' key={item.key} />;
