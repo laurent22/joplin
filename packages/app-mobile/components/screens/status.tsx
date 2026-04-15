@@ -25,6 +25,7 @@ interface State {
 interface ProcessedLine {
 	key: string;
 	text?: string;
+	sectionName?: string;
 	isSection?: boolean;
 	isDivider?: boolean;
 	retryAllHandler?: ()=> void;
@@ -45,9 +46,9 @@ const processReport = (report: ReportSection[], refreshScreen: OnRefreshScreen, 
 		let style: TextStyle = { ...baseStyle };
 		style.fontWeight = 'bold';
 		if (i > 0) style.paddingTop = 20;
-		lines.push({ key: `section_${i}`, isSection: true, text: section.title });
+		lines.push({ key: `section_${i}`, isSection: true, text: section.title, sectionName: section.name });
 		if (section.canRetryAll) {
-			lines.push({ key: `retry_all_${i}`, text: '', retryAllHandler: section.retryAllHandler });
+			lines.push({ key: `retry_all_${i}`, text: '', retryAllHandler: section.retryAllHandler, sectionName: section.name });
 		}
 
 		for (const n in section.body) {
@@ -76,7 +77,7 @@ const processReport = (report: ReportSection[], refreshScreen: OnRefreshScreen, 
 				if (item.type === ReportItemType.OpenList) {
 					currentList = [];
 				} else if (item.type === ReportItemType.CloseList) {
-					lines.push({ key: `list_${i}_${n}`, listItems: currentList });
+					lines.push({ key: `list_${i}_${n}`, listItems: currentList, sectionName: section.name });
 					currentList = null;
 				}
 				text = item.text;
@@ -84,7 +85,7 @@ const processReport = (report: ReportSection[], refreshScreen: OnRefreshScreen, 
 				text = item;
 			}
 
-			const line = { key: `item_${i}_${n}`, text: text, retryHandler, ignoreHandler };
+			const line = { key: `item_${i}_${n}`, text: text, retryHandler, ignoreHandler, sectionName: section.name };
 			if (currentList) {
 				// The OpenList item, for example, might be empty and should be skipped:
 				const hasContent = line.text || retryHandler || ignoreHandler;
@@ -96,7 +97,7 @@ const processReport = (report: ReportSection[], refreshScreen: OnRefreshScreen, 
 			}
 		}
 
-		lines.push({ key: `divider2_${i}`, isDivider: true });
+		lines.push({ key: `divider2_${i}`, isDivider: true, sectionName: section.name });
 	}
 
 	return lines;
@@ -204,7 +205,8 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 				</View>
 			) : null;
 
-			const textComponent = text ? <Text style={style} role={textRole}>{text}</Text> : null;
+			const isFailedDecryptionErrorHeader = item.sectionName === 'failedDecryption' && text?.startsWith('Items with error:');
+			const textComponent = text ? <Text style={style} role={textRole} numberOfLines={isFailedDecryptionErrorHeader ? 2 : undefined} ellipsizeMode={isFailedDecryptionErrorHeader ? 'tail' : undefined}>{text}</Text> : null;
 			if (item.isDivider) {
 				return <View style={styles.divider} role='separator' key={item.key} />;
 			} else if (item.listItems) {
