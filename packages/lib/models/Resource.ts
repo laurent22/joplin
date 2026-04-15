@@ -267,7 +267,7 @@ export default class Resource extends BaseItem {
 				await this.fsDriver().remove(tempCacheDir);
 				this.logger().info('Cleared temporary encryption cache.');
 			} catch (error) {
-				this.logger().info('Could not clear temporary encryption cache.');
+				this.logger().warn('Could not clear temporary encryption cache:', error);
 			}
 		}
 	}

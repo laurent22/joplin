@@ -599,7 +599,13 @@ class Application extends BaseApplication {
 
 		addTask('app/updateTray', () => this.updateTray());
 
-		addTask('app/deleteOrphanedTempCache', async () => await Resource.emptyTempEncryptionCache());
+		addTask('app/deleteOrphanedTempCache', async () =>{
+			try {
+				await Resource.emptyTempEncryptionCache();
+			} catch (error) {
+				this.logger().warn('Failed to empty temp encryption cache during startup:', error);
+			}
+		});
 
 		addTask('app/set main window state', () => {
 			if (Setting.value('startMinimized') && Setting.value('showTrayIcon')) {
