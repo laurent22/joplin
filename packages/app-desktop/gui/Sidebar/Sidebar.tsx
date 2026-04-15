@@ -79,7 +79,7 @@ const SidebarComponent = (props: Props) => {
 	const hasSyncReport = syncReportText.length > 0;
 
 	const syncReportComp = !hasSyncReport || !props.syncReportIsVisible ? null : (
-		<StyledSyncReport key="sync_report">
+		<StyledSyncReport key="sync_report" id="sync-report">
 			{syncReportText}
 		</StyledSyncReport>
 	);
@@ -89,8 +89,9 @@ const SidebarComponent = (props: Props) => {
 			className="sync-report-toggle"
 			style={{ color: theme.color2 }}
 			onClick={() => Setting.toggle('syncReportIsVisible')}
-			aria-label={props.syncReportIsVisible ? _('Hide sync report') : _('Show sync report')}
-			aria-pressed={props.syncReportIsVisible}
+			aria-label={_('Sync report')}
+			aria-expanded={props.syncReportIsVisible}
+			aria-controls="sync-report"
 		>
 			<i className={`fas fa-chevron-${props.syncReportIsVisible ? 'down' : 'up'}`}/>
 		</button>
