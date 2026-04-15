@@ -419,7 +419,6 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
                         style_data.text_run_object_type,
                     )
                 })
-                .chain(std::iter::repeat((false, None))),
         )
         .flat_map(
             |(object_data, (text_run_is_embedded_object, text_run_object_type))| {
