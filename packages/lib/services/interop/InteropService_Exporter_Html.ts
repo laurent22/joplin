@@ -20,6 +20,7 @@ import { parseRenderedNoteMetadata } from './utils';
 import ResourceLocalState from '../../models/ResourceLocalState';
 import { getGlobalSettings, ResourceInfos } from '@joplin/renderer/types';
 import { fromFilename } from '../../mime-utils';
+const { isImageMimeType } = require('../../resourceUtils');
 
 const logger = Logger.create('InteropService_Exporter_Html');
 
@@ -35,6 +36,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private style_: any;
 	private packIntoSingleFile_ = false;
+	private shouldEmbedOnlyImages_ = false;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async init(path: string, options: any = {}) {
@@ -44,6 +46,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			this.destDir_ = dirname(path);
 			this.filePath_ = path;
 			this.packIntoSingleFile_ = 'packIntoSingleFile' in options ? options.packIntoSingleFile : true;
+			this.shouldEmbedOnlyImages_ = !!options.shouldEmbedOnlyImages;
 		} else {
 			this.destDir_ = path;
 			this.filePath_ = null;
@@ -231,6 +234,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 						},
 						streamFileDataUri: async (path, onChunk) => {
 							path = resolveToAllowedDir(path);
+							if (this.shouldEmbedOnlyImages_ && !isImageMimeType(fromFilename(path))) return;
 							const handle = await shim.fsDriver().open(path, 'r');
 							try {
 								const mimeType = fromFilename(path);

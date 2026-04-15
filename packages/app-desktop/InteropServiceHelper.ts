@@ -58,7 +58,7 @@ export default class InteropServiceHelper {
 			const exportOptions = {
 				customCss: options.customCss ? options.customCss : '',
 				plugins: options.plugins,
-				packIntoSingleFile: false,
+				shouldEmbedOnlyImages: true,
 			};
 
 			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
