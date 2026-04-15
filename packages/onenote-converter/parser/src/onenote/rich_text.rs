@@ -5,7 +5,7 @@ use crate::one::property::color_ref::ColorRef;
 use crate::one::property::layout_alignment::LayoutAlignment;
 use crate::one::property::paragraph_alignment::ParagraphAlignment;
 use crate::one::property_set::{embedded_ink_container, paragraph_style_object, rich_text_node};
-use crate::onenote::ink::{Ink, InkBoundingBox, parse_ink_data};
+use crate::onenote::ink::{Ink, InkBoundingBox, InkContent, parse_ink_data};
 use crate::onenote::note_tag::{NoteTag, parse_note_tags};
 use crate::onenote::text_region::TextRegion;
 use crate::onestore::object::Object;
@@ -411,14 +411,21 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
     let objects = text_run_data
         .into_iter()
         .zip(
-            styles_data.iter()
-                .map(|style_data| (style_data.text_run_is_embedded_object, style_data.text_run_object_type))
-                .chain(std::iter::repeat((false, None)))
+            styles_data
+                .iter()
+                .map(|style_data| {
+                    (
+                        style_data.text_run_is_embedded_object,
+                        style_data.text_run_object_type,
+                    )
+                })
+                .chain(std::iter::repeat((false, None))),
         )
-        .flat_map(|(object_data, (text_run_is_embedded_object, text_run_object_type))| {
-            text_run_is_embedded_object
-                .then_some((text_run_object_type, object_data))
-        })
+        .flat_map(
+            |(object_data, (text_run_is_embedded_object, text_run_object_type))| {
+                text_run_is_embedded_object.then_some((text_run_object_type, object_data))
+            },
+        )
         .collect_vec();
 
     let mut objects_without_ref = 0;
@@ -452,12 +459,8 @@ pub(crate) fn parse_rich_text(content_id: ExGuid, space: ObjectSpaceRef) -> Resu
                 }
                 None => {
                     if let Some(object_ref) = object_ref {
-                        return parse_embedded_ink_data(
-                            *object_ref,
-                            space.clone(),
-                            embedded_data,
-                        )
-                        .map(|container| Some(EmbeddedObject::Ink(container)));
+                        return parse_embedded_ink_data(*object_ref, space.clone(), embedded_data)
+                            .map(|container| Some(EmbeddedObject::Ink(container)));
                     }
 
                     Ok(None)
@@ -531,7 +534,7 @@ fn parse_embedded_ink_data(
 
     let data = EmbeddedInkContainer {
         ink: Ink {
-            ink_strokes: strokes,
+            content: InkContent::Strokes(strokes),
             bounding_box: bb,
             offset_horizontal: data.offset_horiz,
             offset_vertical: data.offset_vert,
