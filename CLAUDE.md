@@ -13,6 +13,7 @@
 - Do not make white space changes - do not add unnecessary new lines, or spaces to existing code, or wrap existing code.
 - If you add a new TypeScript file, run `yarn updateIgnored` from the root.
 - When an unknown word is detected by cSpell, handle is as per the specification in `readme/dev/spellcheck.md`
+- To compile TypeScript, use `yarn tsc`. To type-check without emitting files, use `yarn tsc --noEmit`.
 
 ## Full Documentation
 
