@@ -85,13 +85,15 @@ const SidebarComponent = (props: Props) => {
 	);
 
 	const syncReportToggle = (
-		<div
+		<button
 			className="sync-report-toggle"
 			style={{ color: theme.color2 }}
 			onClick={() => Setting.toggle('syncReportIsVisible')}
+			aria-label={props.syncReportIsVisible ? _('Hide sync report') : _('Show sync report')}
+			aria-pressed={props.syncReportIsVisible}
 		>
 			<i className={`fas fa-chevron-${props.syncReportIsVisible ? 'down' : 'up'}`}/>
-		</div>
+		</button>
 	);
 
 	return (
