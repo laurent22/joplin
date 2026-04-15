@@ -37,7 +37,7 @@ impl Display for AttributeSet {
             self.0
                 .iter()
                 .sorted_by(|(a, _), (b, _)| Ord::cmp(a, b))
-                .map(|(attr, value)| attr.to_string() + "=\"" + value + "\"")
+                .map(|(attr, value)| attr.to_string() + "=\"" + &html_entities(value) + "\"")
                 .join(" ")
         )
     }
