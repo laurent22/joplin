@@ -374,7 +374,8 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(
 			notes
 				.filter(note => note.title === 'Ink Missing - only one example missing part')
-				.map(note => normalizeNoteForSnapshot(note.body)).sort(),
+				.map(note => normalizeNoteForSnapshot(note.body))
+				.sort(),
 		).toMatchSnapshot();
 	});
 });
