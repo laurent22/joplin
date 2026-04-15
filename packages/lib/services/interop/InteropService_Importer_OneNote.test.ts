@@ -368,4 +368,13 @@ describe('InteropService_Importer_OneNote', () => {
 		// The other section should import successfully
 		expect(notes.map(note => note.title).sort()).toEqual(['Test note', 'Test section']);
 	});
+
+	it('should import nested ink', async () => {
+		const notes = await importNote(`${supportDir}/onenote/desktop_missing_ink.one`);
+		expect(
+			notes
+				.filter(note => note.title === 'Ink Missing - only one example missing part')
+				.map(note => normalizeNoteForSnapshot(note.body)).sort(),
+		).toMatchSnapshot();
+	});
 });
