@@ -632,9 +632,8 @@ export default class EncryptionService {
 
 			// Wait for a frame so that the app remains responsive in mobile.
 			// https://corbt.com/posts/2015/12/22/breaking-up-heavy-processing-in-react-native.html
-			await shim.waitForFrame();
+			const [, encrypted] = await Promise.all([shim.waitForFrame(), this.encrypt(method, masterKeyPlainText, block)]);
 
-			const encrypted = await this.encrypt(method, masterKeyPlainText, block);
 			await crypto.increaseNonce(this.encryptionNonce_);
 
 			const output = padLeft(encrypted.length.toString(16), 6, '0') + encrypted;
@@ -661,9 +660,7 @@ export default class EncryptionService {
 			doneSize += length;
 			if (options.onProgress) options.onProgress({ doneSize: doneSize });
 
-			await shim.waitForFrame();
-
-			const block = await source.read(length);
+			const [, block] = await Promise.all([shim.waitForFrame(), source.read(length)]);
 
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			await destination.append(plainText);
