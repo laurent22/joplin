@@ -9,6 +9,7 @@ import { onRequestComplete, onRequestStart } from '../utils/metrics';
 import { uuidgen } from '@joplin/lib/uuid';
 import { ApiError, ErrorTooManyRequests } from '../utils/errors';
 import { formatBytesSimple } from '../utils/bytes';
+import { msleep } from '../utils/time';
 
 const logRequestInfo = (ctx: AppContext, requestStartTime: number, error: Error | string | null) => {
 	try {
@@ -51,6 +52,8 @@ export default async function(ctx: AppContext) {
 
 	try {
 		const { response: responseObject, path } = await execRequest(ctx.joplin.routes, ctx);
+
+		await msleep(1000);
 
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;
