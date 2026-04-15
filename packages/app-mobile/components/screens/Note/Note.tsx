@@ -1678,9 +1678,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					!note || !note.body.trim() ? null : (
 						<NoteBodyViewer
 							style={this.styles().noteBodyViewer}
-							// Extra bottom padding to make it possible to scroll past the
-							// action button (so that it doesn't overlap the text)
-							paddingBottom={150}
+							paddingBottom={0}
 							noteBody={note.body}
 							noteMarkupLanguage={note.markup_language}
 							noteResources={this.state.noteResources}
