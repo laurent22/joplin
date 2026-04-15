@@ -27,14 +27,14 @@ impl Ink {
     pub fn ink_strokes(&self) -> &[InkStroke] {
         match &self.content {
             InkContent::InkGroup(_ink) => &[],
-            InkContent::Strokes(strokes) => &strokes,
+            InkContent::Strokes(strokes) => strokes,
         }
     }
 
     /// Groups contained within this group
     pub fn child_groups(&self) -> &[Ink] {
         match &self.content {
-            InkContent::InkGroup(ink) => &ink,
+            InkContent::InkGroup(ink) => ink,
             InkContent::Strokes(_strokes) => &[],
         }
     }
@@ -183,7 +183,7 @@ impl InkBoundingBox {
 
     fn union(&self, other: Option<InkBoundingBox>) -> InkBoundingBox {
         let Some(other) = other else {
-            return self.clone();
+            return *self;
         };
 
         let x = self.x.min(other.x);
