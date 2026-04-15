@@ -117,7 +117,7 @@ pub(crate) fn url_encode(url: &str) -> String {
 
 #[cfg(test)]
 mod test {
-    use crate::utils::url_encode;
+    use crate::utils::{AttributeSet, url_encode};
 
     use super::html_entities;
 
@@ -137,6 +137,16 @@ mod test {
         assert_eq!(
             url_encode("http://example.com/\""),
             "http://example.com/%22"
+        );
+    }
+
+    #[test]
+    fn should_build_html_attributes() {
+        let mut attrs = AttributeSet::new();
+        attrs.set("style", "font-family: \"Multi-word font\";".to_string());
+        assert_eq!(
+            format!("{}", attrs),
+            "style=\"font-family: &quot;Multi-word font&quot;;\""
         );
     }
 }
