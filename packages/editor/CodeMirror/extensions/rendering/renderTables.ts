@@ -24,6 +24,10 @@ const CELL = 'cm-tw-c';
 const HDR = 'cm-tw-h';
 const CTX = 'cm-tw-ctx';
 
+// Cache for rendered table widget heights so CodeMirror can estimate
+// heights correctly for scroll position and coordinate mapping.
+const tableHeightCache = new Map<string, number>();
+
 class TableWidget extends WidgetType {
 	public constructor(
 		private tableText: string,
@@ -31,12 +35,19 @@ class TableWidget extends WidgetType {
 		private to: number,
 	) {
 		super();
+		this.cacheKey_ = `table_${from}_${to}_${tableText.length}`;
 	}
+
+	private cacheKey_: string;
 
 	public eq(other: TableWidget) {
 		return this.tableText === other.tableText
 			&& this.from === other.from
 			&& this.to === other.to;
+	}
+
+	public get estimatedHeight() {
+		return tableHeightCache.get(this.cacheKey_) ?? -1;
 	}
 
 	// Find this widget's container after a rebuild by matching the document position.
@@ -472,6 +483,14 @@ class TableWidget extends WidgetType {
 				window.addEventListener('scroll', close, true);
 			}, 0);
 		};
+
+		// Measure and cache the rendered height so CodeMirror can correctly
+		// calculate scroll positions and coordinate mapping.
+		requestAnimationFrame(() => {
+			if (container.isConnected) {
+				tableHeightCache.set(this.cacheKey_, container.offsetHeight);
+			}
+		});
 
 		return container;
 	}

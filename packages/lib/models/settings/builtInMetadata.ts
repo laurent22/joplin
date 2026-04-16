@@ -1556,7 +1556,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: true,
 			type: SettingItemType.Bool,
 			public: true,
-			appTypes: [AppType.Desktop],
+			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Interactive table editing'),
 			description: () => _('When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.'),
 			section: 'editor',
