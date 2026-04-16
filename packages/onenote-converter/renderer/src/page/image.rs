@@ -57,12 +57,16 @@ impl<'a> Renderer<'a> {
         if let Some(name) = image.image_filename() {
             // Workaround: PDF printout pages are PNG images, but have an image_filename with extension .PDF.
             // Add a PNG extension to these files so that they are imported properly:
-            let name =
-                if fs_driver().get_file_extension(name) == ".pdf" && detect_png(initial_bytes) {
+            let name = {
+                let is_pdf = fs_driver()
+                    .get_file_extension(name)
+                    .eq_ignore_ascii_case(".pdf");
+                if is_pdf && detect_png(initial_bytes) {
                     format!("{name}.png")
                 } else {
                     name.to_string()
-                };
+                }
+            };
 
             let filename = self.section.to_unique_safe_filename(&self.output, &name)?;
             return Ok(filename);
