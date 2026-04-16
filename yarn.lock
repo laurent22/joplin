@@ -13171,7 +13171,7 @@ __metadata:
     "@types/styled-components": "npm:5.1.32"
     async-mutex: "npm:0.5.0"
     babel-jest: "npm:29.7.0"
-    css-loader: "npm:6.11.0"
+    css-loader: "npm:7.1.2"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     pdfjs-dist: "npm:2.16.105"
@@ -27103,7 +27103,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:6.11.0, css-loader@npm:^6.11.0":
+"css-loader@npm:7.1.2":
+  version: 7.1.2
+  resolution: "css-loader@npm:7.1.2"
+  dependencies:
+    icss-utils: "npm:^5.1.0"
+    postcss: "npm:^8.4.33"
+    postcss-modules-extract-imports: "npm:^3.1.0"
+    postcss-modules-local-by-default: "npm:^4.0.5"
+    postcss-modules-scope: "npm:^3.2.0"
+    postcss-modules-values: "npm:^4.0.0"
+    postcss-value-parser: "npm:^4.2.0"
+    semver: "npm:^7.5.4"
+  peerDependencies:
+    "@rspack/core": 0.x || 1.x
+    webpack: ^5.27.0
+  peerDependenciesMeta:
+    "@rspack/core":
+      optional: true
+    webpack:
+      optional: true
+  checksum: 10/ddde22fb103888320f60a1414a6a04638d2e9760a532a52d03c45e6e2830b32dd76c734aeef426f78dd95b2d15f77eeec3854ac53061aff02569732dc6e6801c
+  languageName: node
+  linkType: hard
+
+"css-loader@npm:^6.11.0":
   version: 6.11.0
   resolution: "css-loader@npm:6.11.0"
   dependencies:
