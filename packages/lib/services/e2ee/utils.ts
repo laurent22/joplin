@@ -304,27 +304,24 @@ const unshareEncryptedFolders = async (shareService: ShareService, masterKeyId: 
 };
 
 export async function resetMasterPassword(encryptionService: EncryptionService, kvStore: KvStore, shareService: ShareService, newPassword: string) {
-	const syncInfo = localSyncInfo();
-
 	// First thing we do is to unshare all shared folders. If that fails, which
 	// may happen in particular if no connection is available, then we don't
 	// proceed. `unshareEncryptedFolders` will throw if something cannot be
 	// done.
 	if (shareService) {
-		for (const mk of syncInfo.masterKeys) {
+		for (const mk of localSyncInfo().masterKeys) {
 			if (!masterKeyEnabled(mk)) continue;
 			await unshareEncryptedFolders(shareService, mk.id);
 		}
 	}
 
-	for (const mk of syncInfo.masterKeys) {
+	for (const mk of localSyncInfo().masterKeys) {
 		if (!masterKeyEnabled(mk)) continue;
 		mk.enabled = 0;
 		await MasterKey.save(mk);
 	}
 
-	saveLocalSyncInfo(syncInfo);
-
+	const syncInfo = localSyncInfo();
 	if (syncInfo.ppk) {
 		await kvStore.setValue(`oldppk::${Date.now()}`, JSON.stringify(syncInfo.ppk));
 		syncInfo.ppk = await generateKeyPair(encryptionService, newPassword);
