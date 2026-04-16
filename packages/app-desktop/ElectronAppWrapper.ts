@@ -59,6 +59,7 @@ export default class ElectronAppWrapper {
 	private secondaryWindows_: Map<SecondaryWindowId, SecondaryWindowData> = new Map();
 
 	private willQuitApp_ = false;
+	private enableUnresponsiveCheck_ = true;
 	private tray_: Tray = null;
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
@@ -307,6 +308,8 @@ export default class ElectronAppWrapper {
 		let unresponsiveTimeout: ReturnType<typeof setTimeout>|null = null;
 
 		this.win_.webContents.on('unresponsive', () => {
+			if (!this.enableUnresponsiveCheck_) return;
+
 			// Don't show the "unresponsive" dialog immediately -- the "unresponsive" event
 			// can be fired when showing a dialog or modal (e.g. the update dialog).
 			//
@@ -894,6 +897,10 @@ export default class ElectronAppWrapper {
 
 	public getPluginProtocolHandler() {
 		return this.customProtocolHandlers_.pluginContent;
+	}
+
+	public setEnableUnresponsiveCheck(enabled: boolean) {
+		this.enableUnresponsiveCheck_ = enabled;
 	}
 
 	private async fixLinuxAccessibility_() {
