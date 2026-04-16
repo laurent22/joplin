@@ -29,7 +29,7 @@ const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 				// scrollIntoView with block:'start' so the heading appears at the top
 				// of the viewport, consistent with view mode behavior.
 				const headingDom = view.nodeDOM(targetHeadingNodePos);
-				if (headingDom instanceof Element) {
+				if (headingDom instanceof Element && headingDom.scrollIntoView) {
 					headingDom.scrollIntoView({ block: 'start' });
 				}
 				focus('jumpToHash', view);
