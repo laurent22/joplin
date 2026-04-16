@@ -74,6 +74,24 @@ describe('markdownCommands', () => {
 		expect(editor.state.doc.toString()).toBe(initialDocText);
 	});
 
+	it.each([
+		['trailing', 'ABC  ', '**ABC**  '],
+		['leading', '  ABC', '  **ABC**'],
+		['both leading and trailing', '  ABC  ', '  **ABC**  '],
+	])('should place formatting markers inside %s whitespace', async (_label, input, expected) => {
+		const editor = await createTestEditor(
+			input, EditorSelection.range(0, input.length), [],
+		);
+
+		toggleBolded(editor);
+
+		expect(editor.state.doc.toString()).toBe(expected);
+		expect(editor.state.selection.main).toMatchObject({
+			from: 0,
+			to: expected.length,
+		});
+	});
+
 	it('should wrap fenced code block multiline selections as a whole region', async () => {
 		const initialDocText = '```\none\ntwo\n```';
 		const editor = await createTestEditor(
