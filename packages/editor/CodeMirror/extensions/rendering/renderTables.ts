@@ -502,12 +502,11 @@ class TableWidget extends WidgetType {
 const tableTheme = EditorView.theme({
 	// Root — no border, no background, just positioning context
 	[`& .${W}`]: {
-		margin: '4px 0',
 		position: 'relative',
 		outline: 'none',
 		maxWidth: '100%',
 		overflowX: 'auto',
-		padding: '14px',
+		padding: '18px 14px',
 	},
 	[`& .${W} table`]: {
 		borderCollapse: 'collapse',
