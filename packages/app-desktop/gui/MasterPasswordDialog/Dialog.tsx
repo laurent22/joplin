@@ -78,7 +78,7 @@ export default function(props: Props) {
 				} else {
 					throw new Error(`Unknown mode: ${mode}`);
 				}
-				void reg.waitForSyncFinishedThenSync();
+				void reg.scheduleSync();
 				onClose();
 			} catch (error) {
 				void shim.showErrorDialog(error.message);
