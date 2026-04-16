@@ -945,6 +945,40 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
 </body></html>"
 `;
 
+exports[`InteropService_Importer_OneNote should import nested ink 1`] = `
+[
+  "<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Ink Missing - only one example missing part</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 753px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Ink Missing - only one example missing part</span></div>
+</div><div class="container-outline" style="width: 753px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Mittwoch, 1. April 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">04:25</span></div>
+</div></div><div class="container-outline" style="left: 277px; position: absolute; top: 485px; width: 474px;"><div class="outline-element" style="margin-left: 0px;"><p><span style="height: 54px; width: 90px;" class="ink-text"><img style="height: 54px; left: 22.9px; pointer-events: none; position: absolute; top: -2.61px; width: 90px;" src=":/id-here"></span><span class="ink-space" style="padding-left: 25px; padding-top: 77px;"></span><span style="height: 86px; width: 283px;" class="ink-text"><img style="height: 86px; left: -2.61px; pointer-events: none; position: absolute; top: 5.78px; width: 283px;" src=":/id-here"></span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p><span style="height: 70px; width: 190px;" class="ink-text"><img style="height: 70px; left: -2.61px; pointer-events: none; position: absolute; top: -10.05px; width: 190px;" src=":/id-here"></span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p><span style="height: 68px; width: 344px;" class="ink-text"><img style="height: 68px; left: 34.28px; pointer-events: none; position: absolute; top: 7.56px; width: 344px;" src=":/id-here"></span></p></div>
+</div><div class="container-outline" style="left: 262px; position: absolute; top: 130px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 285px; position: absolute; top: 243px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 560px; position: absolute; top: 195px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>",
+]
+`;
+
 exports[`InteropService_Importer_OneNote should import vertically-scaled ink 1`] = `
 "<!DOCTYPE HTML>
 <html><head>
