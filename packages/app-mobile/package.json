@@ -35,7 +35,7 @@
     "@react-native-community/datetimepicker": "8.5.1",
     "@react-native-community/geolocation": "3.4.0",
     "@react-native-community/netinfo": "11.4.1",
-    "@react-native-community/push-notification-ios": "1.11.0",
+    "@react-native-community/push-notification-ios": "1.12.0",
     "@react-native-documents/picker": "10.1.7",
     "@react-native-vector-icons/fontawesome5": "patch:@react-native-vector-icons/fontawesome5@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-fontawesome5-npm-12.3.0-a1ca46610f.patch",
     "@react-native-vector-icons/get-image": "12.3.0",

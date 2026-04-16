@@ -12806,7 +12806,7 @@ __metadata:
     "@react-native-community/datetimepicker": "npm:8.5.1"
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:11.4.1"
-    "@react-native-community/push-notification-ios": "npm:1.11.0"
+    "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:10.1.7"
     "@react-native-vector-icons/fontawesome5": "patch:@react-native-vector-icons/fontawesome5@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-fontawesome5-npm-12.3.0-a1ca46610f.patch"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
@@ -16176,15 +16176,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/push-notification-ios@npm:1.11.0":
-  version: 1.11.0
-  resolution: "@react-native-community/push-notification-ios@npm:1.11.0"
+"@react-native-community/push-notification-ios@npm:1.12.0":
+  version: 1.12.0
+  resolution: "@react-native-community/push-notification-ios@npm:1.12.0"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
     react: ">=16.6.3"
     react-native: ">=0.58.4"
-  checksum: 10/5a43b69cb75090ff771acc44c9a081f2000f5e2c91484eed1e2f8749f98f7d37a7ce6e63d60caadf372ad204c9a1b3dc5d99cec576f5e751a45a89cdde0a6b96
+  checksum: 10/c1eb786cf548fd559f779d3af75ab47eee62d74b3f8affeb4032a9891ba5f0f53df280299d0506623a04b375a2c6c4903e1ed5b55377c0a478e2e3af4248f02c
   languageName: node
   linkType: hard
 
