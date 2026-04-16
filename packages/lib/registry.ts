@@ -97,7 +97,7 @@ class Registry {
 	// This can be used when some data has been modified and we want to make
 	// sure it gets synced. So we wait for the current sync operation to
 	// finish (if one is running), then we trigger a sync just after.
-	public waitForSyncFinishedThenSync = async (delay = 0) => {
+	public waitForSyncFinishedThenSync = async (delay: number | null = 0) => {
 		if (!Setting.value('sync.target')) {
 			this.logger().info('waitForSyncFinishedThenSync - cancelling because no sync target is selected.');
 			return;
