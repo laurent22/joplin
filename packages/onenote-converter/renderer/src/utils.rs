@@ -117,11 +117,14 @@ pub(crate) fn url_encode(url: &str) -> String {
 
 pub(crate) fn detect_png(header: &[u8]) -> bool {
     // PNGs start with a specific set of bytes. See https://en.wikipedia.org/wiki/PNG
-    return header.len() > 4
+    return header.len() > 6
         && header[0] == 0x89
         && header[1] == 0x50 // 'P'
         && header[2] == 0x4E // 'N'
-        && header[3] == 0x47; // 'G'
+        && header[3] == 0x47 // 'G'
+        && header[4] == 0x0D // \r
+        && header[5] == 0x0A // \n
+        && header[6] == 0x1A;
 }
 
 #[cfg(test)]
