@@ -8,11 +8,13 @@ const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 	}
 
 	let targetHeaderPos: number|null = null;
+	let targetHeadingNodePos: number|null = null;
 	forEachHeading(view.state.doc, (node, hash, pos) => {
 		if (hash === targetHash) {
 			// Subtract one to move the selection to the end of
 			// the node:
 			targetHeaderPos = pos + node.nodeSize - 1;
+			targetHeadingNodePos = pos;
 		}
 
 		return targetHeaderPos !== null;
@@ -21,11 +23,15 @@ const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 	if (targetHeaderPos !== null) {
 		const newSelection = TextSelection.create(state.doc, targetHeaderPos);
 		if (dispatch) {
-			dispatch(
-				state.tr.setSelection(newSelection)
-					.scrollIntoView(),
-			);
+			dispatch(state.tr.setSelection(newSelection));
 			if (view) {
+				// Use nodeDOM to get the heading element directly, then call native
+				// scrollIntoView with block:'start' so the heading appears at the top
+				// of the viewport, consistent with view mode behavior.
+				const headingDom = view.nodeDOM(targetHeadingNodePos);
+				if (headingDom instanceof Element) {
+					headingDom.scrollIntoView({ block: 'start' });
+				}
 				focus('jumpToHash', view);
 			}
 		}
