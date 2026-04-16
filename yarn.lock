@@ -12717,7 +12717,7 @@ __metadata:
     "@testing-library/react": "npm:16.3.2"
     "@types/jest": "npm:29.5.14"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
     "@types/react-redux": "npm:7.1.34"
@@ -12820,7 +12820,7 @@ __metadata:
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/serviceworker": "npm:0.0.176"
@@ -12969,7 +12969,7 @@ __metadata:
     "@replit/codemirror-vim": "npm:6.2.1"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
@@ -13001,7 +13001,7 @@ __metadata:
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@typescript-eslint/eslint-plugin": "npm:6.21.0"
     "@typescript-eslint/parser": "npm:6.21.0"
     coveralls: "npm:3.1.1"
@@ -13031,7 +13031,7 @@ __metadata:
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     jest: "npm:29.7.0"
     node-emoji: "npm:1.11.0"
     typescript: "npm:5.8.3"
@@ -13080,7 +13080,7 @@ __metadata:
     "@types/jsdom": "npm:21.1.7"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@types/node-rsa": "npm:1.1.4"
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
@@ -13196,7 +13196,7 @@ __metadata:
     "@joplin/utils": "npm:~3.6"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     fs-extra: "npm:11.3.3"
     gh-release-assets: "npm:2.0.1"
     jest: "npm:29.7.0"
@@ -13251,7 +13251,7 @@ __metadata:
     "@types/jest": "npm:29.5.14"
     "@types/json5": "npm:2.2.0"
     "@types/markdown-it": "npm:13.0.9"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     abcjs: "npm:6.5.2"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.3.3"
@@ -13304,7 +13304,7 @@ __metadata:
     "@types/koa": "npm:2.15.0"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@types/node-os-utils": "npm:1.3.4"
     "@types/nodemailer": "npm:6.4.21"
     "@types/qrcode": "npm:1.5.6"
@@ -13368,7 +13368,7 @@ __metadata:
     "@types/js-yaml": "npm:4.0.9"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@types/node-fetch": "npm:2.6.13"
     "@types/yargs": "npm:17.0.35"
     compare-versions: "npm:6.1.1"
@@ -19454,12 +19454,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.130":
-  version: 18.19.130
-  resolution: "@types/node@npm:18.19.130"
+"@types/node@npm:24.5.2":
+  version: 24.5.2
+  resolution: "@types/node@npm:24.5.2"
   dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10/ebb85c6edcec78df926de27d828ecbeb1b3d77c165ceef95bfc26e171edbc1924245db4eb2d7d6230206fe6b1a1f7665714fe1c70739e9f5980d8ce31af6ef82
+    undici-types: "npm:~7.12.0"
+  checksum: 10/a497aea88a12131b03382d933690b71c131ee890232596b8d5b73f0a20c90874001800b2bfc267bd37df8285bef911729b4773426be7d2dc13ef4c760904e47d
   languageName: node
   linkType: hard
 
@@ -38866,7 +38866,7 @@ __metadata:
     "@joplin/utils": "npm:~3.6"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:24.5.2"
     "@types/proper-lockfile": "npm:^4.1.2"
     aws-sdk: "npm:2.1340.0"
     chalk: "npm:4.1.2"
@@ -57838,10 +57838,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~5.26.4":
-  version: 5.26.5
-  resolution: "undici-types@npm:5.26.5"
-  checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
+"undici-types@npm:~7.12.0":
+  version: 7.12.0
+  resolution: "undici-types@npm:7.12.0"
+  checksum: 10/4a0f927c98828f76fb0d64f356e36e5ac6e074ae4c7bec08d6de8bc36b7cf08ae27a3518fa8eb703f51c1a675241e2d07359bbce63f5575299148a270cea7e43
   languageName: node
   linkType: hard
 
