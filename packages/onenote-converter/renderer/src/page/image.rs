@@ -55,7 +55,8 @@ impl<'a> Renderer<'a> {
 
     fn determine_image_filename(&mut self, image: &Image, initial_bytes: &[u8]) -> Result<String> {
         if let Some(name) = image.image_filename() {
-            // Workaround: image_filename can incorrectly identify PNG files as PDFs for printouts.
+            // Workaround: PDF printout pages are PNG images, but have an image_filename with extension .PDF.
+            // Add a PNG extension to these files so that they are imported properly:
             let name =
                 if fs_driver().get_file_extension(name) == ".pdf" && detect_png(initial_bytes) {
                     format!("{name}.png")
