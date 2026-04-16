@@ -115,6 +115,15 @@ pub(crate) fn url_encode(url: &str) -> String {
     utf8_percent_encode(url, ENCODED_CHARS).to_string()
 }
 
+pub(crate) fn detect_png(header: &[u8]) -> bool {
+    // See https://en.wikipedia.org/wiki/PNG
+    return header.len() > 4
+        && header[0] == 0x89
+        && header[1] == 0x50
+        && header[2] == 0x4E
+        && header[3] == 0x47;
+}
+
 #[cfg(test)]
 mod test {
     use crate::utils::{AttributeSet, url_encode};

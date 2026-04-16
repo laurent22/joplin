@@ -1,5 +1,5 @@
 use crate::page::Renderer;
-use crate::utils::{AttributeSet, StyleSet, px};
+use crate::utils::{AttributeSet, StyleSet, detect_png, px};
 use color_eyre::Result;
 use parser::contents::Image;
 use parser_utils::{fs_driver, log, log_warn};
@@ -9,7 +9,7 @@ impl<'a> Renderer<'a> {
         let mut content = String::new();
 
         if let Some(data) = image.data()? {
-            let filename = self.determine_image_filename(image)?;
+            let filename = self.determine_image_filename(image, &data)?;
             let path = fs_driver().join(&self.output, &filename);
             log!("Rendering image: {:?}", path);
             fs_driver().write_file(&path, &data[..])?;
@@ -53,9 +53,17 @@ impl<'a> Renderer<'a> {
         Ok(self.render_with_note_tags(image.note_tags(), content))
     }
 
-    fn determine_image_filename(&mut self, image: &Image) -> Result<String> {
+    fn determine_image_filename(&mut self, image: &Image, initial_bytes: &[u8]) -> Result<String> {
         if let Some(name) = image.image_filename() {
-            let filename = self.section.to_unique_safe_filename(&self.output, name)?;
+            // Workaround: image_filename can incorrectly identify PNG files as PDFs for printouts.
+            let name =
+                if fs_driver().get_file_extension(name) == ".pdf" && detect_png(initial_bytes) {
+                    format!("{name}.png")
+                } else {
+                    name.to_string()
+                };
+
+            let filename = self.section.to_unique_safe_filename(&self.output, &name)?;
             return Ok(filename);
         }
 

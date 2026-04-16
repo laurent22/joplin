@@ -143,6 +143,12 @@ fn convert_printout() {
 
     let rendered_file = fs::read_to_string(content_file).expect("should read the content file");
     // Should correctly detect the file extension:
-    assert!(!rendered_file.contains("<img src=\"test4_1.pdf\""), "should not use the PDF extension for printout pages");
-    assert!(rendered_file.contains("<img src=\"test4_1.png\""), "should import as a PNG");
+    assert!(
+        !rendered_file.contains("<img src=\"test4_1.pdf\""),
+        "should not use the PDF extension for printout pages"
+    );
+    assert!(
+        rendered_file.contains("<img src=\"test4_1.pdf.png\""),
+        "should import as a PNG"
+    );
 }
