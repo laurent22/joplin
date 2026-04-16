@@ -11,7 +11,7 @@ use parser_utils::errors::{ErrorKind, Result};
 /// See [\[MS-ONE\] 2.2.32].
 ///
 /// [\[MS-ONE\] 2.2.32]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/a665b5ad-ff40-4c0c-9e42-4b707254dc3f
-#[derive(Clone, PartialEq, PartialOrd, Debug)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct EmbeddedFile {
     pub(crate) filename: String,
     pub(crate) file_type: FileType,
@@ -46,8 +46,8 @@ impl EmbeddedFile {
     }
 
     /// The file's binary data.
-    pub fn data(&self) -> &[u8] {
-        self.data.as_ref()
+    pub fn data(&self) -> Result<Vec<u8>> {
+        self.data.load()
     }
 
     /// The max width of the embedded file's icon in half-inch increments.

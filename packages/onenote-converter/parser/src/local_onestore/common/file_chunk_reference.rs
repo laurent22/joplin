@@ -1,3 +1,5 @@
+use std::io::{Seek, SeekFrom};
+
 use parser_utils::{errors::ErrorKind, errors::Result, parse::Parse};
 
 /// See [\[MS-ONESTORE\] 2.2.4](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-onestore/0d86b13d-d58c-44e8-b931-4728b9d39a4b)
@@ -7,10 +9,7 @@ pub trait FileChunkReference {
     fn data_location(&self) -> usize;
     fn data_size(&self) -> usize;
 
-    fn resolve_to_reader<'a>(
-        &self,
-        original_reader: &parser_utils::reader::Reader<'a>,
-    ) -> Result<parser_utils::reader::Reader<'a>> {
+    fn seek_reader_to(&self, reader: &mut parser_utils::reader::Reader) -> Result<()> {
         if self.is_fcr_nil() {
             return Err(ErrorKind::ResolutionFailed(
                 "Failed to resolve node reference -- is nil".into(),
@@ -18,10 +17,8 @@ pub trait FileChunkReference {
             .into());
         }
 
-        original_reader.with_updated_bounds(
-            self.data_location(),
-            self.data_location() + self.data_size(),
-        )
+        reader.seek(SeekFrom::Start(self.data_location() as u64))?;
+        Ok(())
     }
 }
 

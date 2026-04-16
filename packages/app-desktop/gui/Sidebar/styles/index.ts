@@ -105,7 +105,7 @@ export const StyledSyncReport = styled.div`
 	opacity: 0.5;
 	display: flex;
 	flex-direction: column;
-	margin-left: 25px;
+	margin-left: 5px;
 	margin-right: 5px;
 	margin-bottom: 10px;
 	word-wrap: break-word;

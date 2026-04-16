@@ -8,7 +8,7 @@ impl<'a> Renderer<'a> {
     pub(crate) fn render_image(&mut self, image: &Image) -> Result<String> {
         let mut content = String::new();
 
-        if let Some(data) = image.data() {
+        if let Some(data) = image.data()? {
             let filename = self.determine_image_filename(image)?;
             let path = fs_driver().join(&self.output, &filename);
             log!("Rendering image: {:?}", path);
@@ -20,7 +20,7 @@ impl<'a> Renderer<'a> {
             attrs.set("src", filename);
 
             if let Some(text) = image.alt_text() {
-                attrs.set("alt", text.to_string().replace('"', "&quot;"));
+                attrs.set("alt", text.to_string());
             }
 
             if let Some(width) = image.layout_max_width() {

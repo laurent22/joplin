@@ -11,7 +11,6 @@ mod one;
 mod onenote;
 mod onestore;
 mod shared;
-mod utils;
 
 pub use onenote::Parser;
 
