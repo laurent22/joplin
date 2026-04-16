@@ -503,9 +503,12 @@ const tableTheme = EditorView.theme({
 	// Root — no border, no background, just positioning context
 	[`& .${W}`]: {
 		position: 'relative',
-		outline: 'none',
+		display: 'block',
+		width: '100%',
 		maxWidth: '100%',
 		overflowX: 'auto',
+		contain: 'inline-size',
+		outline: 'none',
 		padding: '18px 14px',
 	},
 	[`& .${W} table`]: {
