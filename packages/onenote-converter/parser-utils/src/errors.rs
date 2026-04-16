@@ -1,6 +1,7 @@
 //! OneNote parsing error handling.
 
 use std::borrow::Cow;
+use std::num::TryFromIntError;
 use std::{io, string};
 use thiserror::Error;
 
@@ -27,7 +28,11 @@ impl From<ErrorKind> for Error {
 
 impl From<std::io::Error> for Error {
     fn from(err: std::io::Error) -> Self {
-        ErrorKind::from(err).into()
+        if err.kind() == std::io::ErrorKind::UnexpectedEof {
+            ErrorKind::UnexpectedEof(err.to_string().into()).into()
+        } else {
+            ErrorKind::from(err).into()
+        }
     }
 }
 
@@ -45,6 +50,12 @@ impl From<widestring::error::MissingNulTerminator> for Error {
 
 impl From<widestring::error::Utf16Error> for Error {
     fn from(err: widestring::error::Utf16Error) -> Self {
+        ErrorKind::from(err).into()
+    }
+}
+
+impl From<TryFromIntError> for Error {
+    fn from(err: TryFromIntError) -> Self {
         ErrorKind::from(err).into()
     }
 }
@@ -112,6 +123,12 @@ pub enum ErrorKind {
 
     #[error("Failed to resolve: {0}")]
     ResolutionFailed(Cow<'static, str>),
+
+    #[error("Type conversion failed: {err}")]
+    TypeConversionFailed {
+        #[from]
+        err: TryFromIntError,
+    },
 
     /// A malformed UUID was encountered
     #[error("Invalid UUID: {err}")]

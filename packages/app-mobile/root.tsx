@@ -23,6 +23,15 @@ import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, Nativ
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
+
+// Mirrors the DropdownAlertData type from react-native-dropdownalert
+interface DropdownAlertData {
+	type?: string;
+	title?: string;
+	message?: string;
+	interval?: number;
+	resolve?: (_value: DropdownAlertData)=> void;
+}
 import SafeAreaView from './components/SafeAreaView';
 const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
@@ -103,13 +112,22 @@ import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import NoteRevisionViewer from './components/screens/NoteRevisionViewer';
 import DocumentScanner from './components/screens/DocumentScanner/DocumentScanner';
 import buildStartupTasks from './utils/buildStartupTasks';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import appReducer from './utils/appReducer';
 import SyncWizard from './components/SyncWizard/SyncWizard';
 import Synchronizer from '@joplin/lib/Synchronizer';
 
 const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();
+
+interface DropdownAlertWrapperProps {
+	alert: (func: (data?: DropdownAlertData)=> Promise<DropdownAlertData>)=> void;
+}
+
+const DropdownAlertWrapper = ({ alert }: DropdownAlertWrapperProps) => {
+	const insets = useSafeAreaInsets();
+	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: insets.top }} />;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 let storeDispatch: any = function(_action: any) {};
@@ -287,8 +305,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private themeChangeListener_: NativeEventSubscription|null = null;
 	private keyboardShowListener_: EmitterSubscription|null = null;
 	private keyboardHideListener_: EmitterSubscription|null = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private dropdownAlert_ = (_data: any) => new Promise<any>(res => res);
+	private dropdownAlert_: (data?: DropdownAlertData)=> Promise<DropdownAlertData> = (_data?: DropdownAlertData) => new Promise<DropdownAlertData>(res => res);
 	private callbackUrl: string|null = null;
 
 	private lastSyncStarted_ = false;
@@ -775,10 +792,9 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
-							{/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied */}
-							<DropdownAlert alert={(func: any) => (this.dropdownAlert_ = func)} />
 							<SyncWizard/>
 						</SafeAreaView>
+						<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func; }} />
 					</View>
 				</SideMenu>
 				<PluginRunnerWebView />

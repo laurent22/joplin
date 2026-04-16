@@ -4,9 +4,11 @@ reviews:
   high_level_summary: false
   estimate_code_review_effort: false
   poem: false
+  review_status: false
+  review_details: false
   auto_review:
     enabled: true
-    drafts: false
+    drafts: true
     ignore_usernames:
       - "renovate[bot]"
   auto_apply_labels: true
@@ -86,21 +88,21 @@ reviews:
     - label: "windows"
       instructions: "Apply when the PR is mainly about changes specific to Windows"
 
-  pre_merge_checks:
-    description:
-      mode: "warning"
-    custom_checks:
-      - name: "PR Description Must Follow Guidelines"
-        mode: "error"
-        instructions: |
-          Fail if the pull request description does not include clear sections for:
-          - Problem or user-impact description
-          - A high-level Solution explanation
-          - Any Test Plan or verification steps
-
-          The description should align with our PR guidelines
-          at https://github.com/joplin/gsoc/blob/master/pull_request_guidelines.md
-          and should not just restate the diff or implementation details.
+#  pre_merge_checks:
+#    description:
+#      mode: "warning"
+#    custom_checks:
+#      - name: "PR Description Must Follow Guidelines"
+#        mode: "error"
+#        instructions: |
+#          Fail if the pull request description does not include clear sections for:
+#          - Problem or user-impact description
+#          - A high-level Solution explanation
+#          - Any Test Plan or verification steps
+#
+#          The description should align with our PR guidelines
+#          at https://github.com/joplin/gsoc/blob/master/pull_request_guidelines.md
+#          and should not just restate the diff or implementation details.
 knowledge_base:
   code_guidelines:
     enabled: true

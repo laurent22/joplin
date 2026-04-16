@@ -174,6 +174,19 @@ const searchExtension = (onEvent: OnEventCallback, settings: EditorSettings): Ex
 			},
 		} : undefined),
 
+		// On mobile, scrolling is handled externally (page-level native scroll), so
+		// .cm-scroller has no internal scroll. A @codemirror/view upgrade (6.35→6.41)
+		// added rect-clipping after each failed scroll attempt, which prevents the
+		// fallback window.scrollBy from firing. Use native element.scrollIntoView to
+		// fix findNext/findPrevious and GoDocEnd.
+		settings.useExternalSearch ? EditorView.scrollHandler.of((view, range) => {
+			const { node } = view.domAtPos(range.head);
+			const el = node.nodeType === Node.ELEMENT_NODE ? node as Element : node.parentElement;
+			if (!el) return false;
+			el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+			return true;
+		}) : [],
+
 		autoScrollToMatchPlugin,
 
 		EditorState.transactionExtender.of((tr) => {
