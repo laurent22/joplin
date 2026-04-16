@@ -299,6 +299,14 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(normalizeNoteForSnapshot(note2Content)).toMatchSnapshot();
 	});
 
+	it('should import vertically-scaled ink', async () => {
+		const notes = await importNote(`${supportDir}/onenote/scaled_ink.one`);
+
+		const note = notes.find(n => n.title === 'Scaled');
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
+
 	it('should support directly importing .one files', async () => {
 		const notes = await importNote(`${supportDir}/onenote/onenote_desktop.one`);
 

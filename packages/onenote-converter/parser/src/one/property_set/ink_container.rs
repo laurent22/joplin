@@ -27,7 +27,7 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
     let offset_from_parent_vert = simple::parse_f32(PropertyType::OffsetFromParentVert, object)?;
     let ink_data = ObjectReference::parse(PropertyType::InkData, object)?;
     let ink_scaling_x = simple::parse_f32(PropertyType::InkScalingX, object)?;
-    let ink_scaling_y = simple::parse_f32(PropertyType::InkScalingX, object)?;
+    let ink_scaling_y = simple::parse_f32(PropertyType::InkScalingY, object)?;
 
     let data = Data {
         offset_from_parent_horiz,

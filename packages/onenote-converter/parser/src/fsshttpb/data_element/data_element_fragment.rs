@@ -42,7 +42,7 @@ impl DataElement {
         let offset = CompactU64::parse(reader)?.value();
         let length = CompactU64::parse(reader)?.value();
 
-        let data = reader.read(size as usize)?.to_vec();
+        let data = reader.read(size as usize)?;
 
         let chunk_reference = DataElementFragmentChunkReference { offset, length };
         let fragment = DataElementFragment {
