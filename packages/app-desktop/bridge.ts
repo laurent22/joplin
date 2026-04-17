@@ -440,6 +440,10 @@ export class Bridge {
 		setLocale(locale);
 	}
 
+	public setEnableUnresponsiveCheck(enabled: boolean) {
+		this.electronWrapper_.setEnableUnresponsiveCheck(enabled);
+	}
+
 	public get Menu() {
 		return Menu;
 	}
