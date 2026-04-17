@@ -94,9 +94,14 @@ class TableWidget extends WidgetType {
 	}
 
 	public toDOM(view: EditorView) {
+		// Use the owning document/window instead of globals so that
+		// the widget works correctly in separate Electron windows.
+		const doc = view.dom.ownerDocument;
+		const win = doc.defaultView!;
+
 		const table = parseTable(this.tableText);
 		if (!table) {
-			const pre = document.createElement('pre');
+			const pre = doc.createElement('pre');
 			pre.textContent = this.tableText;
 			return pre;
 		}
@@ -106,10 +111,10 @@ class TableWidget extends WidgetType {
 		const totalRows = numBodyRows + 1;
 		const allCells: HTMLElement[][] = [];
 
-		const container = document.createElement('div');
+		const container = doc.createElement('div');
 		container.classList.add(W);
 
-		const tableEl = document.createElement('table');
+		const tableEl = doc.createElement('table');
 
 		// Flag to skip onblur sync when Tab/Enter handles it
 		let skipBlurSync = false;
@@ -141,12 +146,12 @@ class TableWidget extends WidgetType {
 
 		// ---- Editable cell ----
 		const mkCell = (text: string, r: number, c: number, isHdr: boolean) => {
-			const el = document.createElement(isHdr ? 'th' : 'td');
+			const el = doc.createElement(isHdr ? 'th' : 'td');
 			el.classList.add(CELL);
 			if (isHdr) el.classList.add(HDR);
 
 			// Editable text lives in its own div — cell itself is NOT editable
-			const textDiv = document.createElement('div');
+			const textDiv = doc.createElement('div');
 			textDiv.classList.add('cm-tw-text');
 			textDiv.contentEditable = 'true';
 			textDiv.spellcheck = false;
@@ -187,7 +192,7 @@ class TableWidget extends WidgetType {
 					// update the in-memory model — no dispatch/rebuild.
 					// The markdown will sync on next structural edit or
 					// when focus leaves the table entirely.
-					if (scrollbarDragging || container.contains(document.activeElement)) {
+					if (scrollbarDragging || container.contains(doc.activeElement)) {
 						const sanitised = v.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 						if (isHdr) table.header.cells[c].content = sanitised;
 						else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = sanitised;
@@ -290,10 +295,10 @@ class TableWidget extends WidgetType {
 		// and appear only on hover. No extra columns needed.
 
 		const mkAddColBtn = (afterCol: number, anchorCell: HTMLElement) => {
-			const wrapper = document.createElement('span');
+			const wrapper = doc.createElement('span');
 			wrapper.contentEditable = 'false';
 			wrapper.classList.add('cm-tw-ac-wrap');
-			const btn = document.createElement('button');
+			const btn = doc.createElement('button');
 			btn.classList.add('cm-tw-ac');
 			btn.textContent = '+';
 			btn.title = 'Add column to the right';
@@ -319,10 +324,10 @@ class TableWidget extends WidgetType {
 		};
 
 		const mkAddRowBtn = (afterBodyIdx: number, anchorCell: HTMLElement) => {
-			const wrapper = document.createElement('span');
+			const wrapper = doc.createElement('span');
 			wrapper.contentEditable = 'false';
 			wrapper.classList.add('cm-tw-ar-wrap');
-			const btn = document.createElement('button');
+			const btn = doc.createElement('button');
 			btn.classList.add('cm-tw-ar');
 			btn.textContent = '+';
 			btn.title = 'Add row below';
@@ -349,8 +354,8 @@ class TableWidget extends WidgetType {
 		};
 
 		// ---- Build header ----
-		const thead = document.createElement('thead');
-		const headerTr = document.createElement('tr');
+		const thead = doc.createElement('thead');
+		const headerTr = doc.createElement('tr');
 		allCells[0] = [];
 		for (let c = 0; c < numCols; c++) {
 			const cell = mkCell(table.header.cells[c].content, 0, c, true);
@@ -365,9 +370,9 @@ class TableWidget extends WidgetType {
 		tableEl.appendChild(thead);
 
 		// ---- Build body ----
-		const tbody = document.createElement('tbody');
+		const tbody = doc.createElement('tbody');
 		for (let r = 0; r < numBodyRows; r++) {
-			const tr = document.createElement('tr');
+			const tr = doc.createElement('tr');
 			allCells[r + 1] = [];
 			for (let c = 0; c < numCols; c++) {
 				const content = c < table.body[r].cells.length ? table.body[r].cells[c].content : '';
@@ -409,7 +414,7 @@ class TableWidget extends WidgetType {
 			container.querySelector(`.${CTX}`)?.remove();
 			clearHighlight();
 
-			const menu = document.createElement('div');
+			const menu = doc.createElement('div');
 			menu.classList.add(CTX);
 			// Use viewport coordinates since the menu is position:fixed
 			menu.style.left = `${e.clientX}px`;
@@ -452,7 +457,7 @@ class TableWidget extends WidgetType {
 			});
 
 			for (const item of items) {
-				const div = document.createElement('div');
+				const div = doc.createElement('div');
 				div.textContent = item.label;
 				div.onmouseenter = () => {
 					clearHighlight();
@@ -472,20 +477,20 @@ class TableWidget extends WidgetType {
 			container.appendChild(menu);
 			// Clamp menu position so it stays within the viewport
 			const menuRect = menu.getBoundingClientRect();
-			const vw = window.innerWidth;
-			const vh = window.innerHeight;
+			const vw = win.innerWidth;
+			const vh = win.innerHeight;
 			if (menuRect.right > vw) menu.style.left = `${vw - menuRect.width - 4}px`;
 			if (menuRect.bottom > vh) menu.style.top = `${vh - menuRect.height - 4}px`;
 			const close = () => {
 				clearHighlight();
 				menu.remove();
-				document.removeEventListener('mousedown', close);
-				window.removeEventListener('scroll', close, true);
+				doc.removeEventListener('mousedown', close);
+				win.removeEventListener('scroll', close, true);
 			};
 			setTimeout(() => {
-				document.addEventListener('mousedown', close);
+				doc.addEventListener('mousedown', close);
 				// Close menu on any scroll (capture phase catches scrollable parents)
-				window.addEventListener('scroll', close, true);
+				win.addEventListener('scroll', close, true);
 			}, 0);
 		};
 
@@ -505,14 +510,14 @@ class TableWidget extends WidgetType {
 				scrollbarDragging = true;
 				const onUp = () => {
 					scrollbarDragging = false;
-					document.removeEventListener('mouseup', onUp);
+					doc.removeEventListener('mouseup', onUp);
 					// If blur fired despite preventDefault, re-focus the cell
 					if (lastFocusedTextDiv && container.isConnected &&
-						document.activeElement !== lastFocusedTextDiv) {
+						doc.activeElement !== lastFocusedTextDiv) {
 						focus('TableWidget', lastFocusedTextDiv);
 					}
 				};
-				document.addEventListener('mouseup', onUp);
+				doc.addEventListener('mouseup', onUp);
 			}
 		});
 
