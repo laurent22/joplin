@@ -723,55 +723,50 @@ export default class ItemModel extends BaseModel<Item> {
 
 				const itemToSave = { ...o.item };
 
+				const content = itemToSave.content;
+				delete itemToSave.content;
+
+				itemToSave.content_storage_id = (await this.storageDriver()).storageId;
+
+				itemToSave.content_size = content ? content.byteLength : 0;
+
+				// Here we save the item row and content, and we want to
+				// make sure that either both are saved or none of them.
+				// The savepoint wraps the entire operation so that any
+				// error (including unique constraint violations) is
+				// rolled back cleanly without aborting the outer
+				// transaction.
+
+				// TODO: When an item is uploaded multiple times
+				// simultaneously there could be a race condition, where the
+				// content would not match the db row (for example, the
+				// content_size would differ).
+				//
+				// Possible solutions:
+				//
+				// - Row-level lock on items.id, and release once the
+				//   content is saved.
+				// - Or external lock - eg. Redis.
+
+				const savePoint = await this.setSavePoint();
+
 				try {
-					const content = itemToSave.content;
-					delete itemToSave.content;
-
-					itemToSave.content_storage_id = (await this.storageDriver()).storageId;
-
-					itemToSave.content_size = content ? content.byteLength : 0;
-
-					// Here we save the item row and content, and we want to
-					// make sure that either both are saved or none of them.
-					// This is done by setting up a save point before saving the
-					// row, and rollbacking if the content cannot be saved.
-					//
-					// Normally, since we are in a transaction, throwing an
-					// error should work, but since we catch all errors within
-					// this block it doesn't work.
-
-					// TODO: When an item is uploaded multiple times
-					// simultaneously there could be a race condition, where the
-					// content would not match the db row (for example, the
-					// content_size would differ).
-					//
-					// Possible solutions:
-					//
-					// - Row-level lock on items.id, and release once the
-					//   content is saved.
-					// - Or external lock - eg. Redis.
-
-					const savePoint = await this.setSavePoint();
 					const savedItem = await this.saveForUser(user.id, itemToSave);
-
-					try {
-						await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
-						await this.releaseSavePoint(savePoint);
-					} catch (error) {
-						await this.rollbackSavePoint(savePoint);
-						throw error;
-					}
+					await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
 
 					if (o.isNote) {
 						await this.models().itemResource().deleteByItemId(savedItem.id);
 						await this.models().itemResource().addResourceIds(savedItem.id, o.resourceIds);
 					}
 
+					await this.releaseSavePoint(savePoint);
+
 					output[name] = {
 						item: savedItem,
 						error: null,
 					};
 				} catch (error) {
+					await this.rollbackSavePoint(savePoint);
 					output[name] = {
 						item: null,
 						error: error,
