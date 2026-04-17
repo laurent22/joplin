@@ -494,29 +494,29 @@ See also:
 
 **Bad:**
 ```yml
-	- name: Check PR title
-	run: |
-		PULL_REQUEST_TITLE="${{ github.event.pull_request.title }}"
-		if [[ "$PULL_REQUEST_TITLE" == 'bad title' ]]; then
-			echo 'title check failed'
-			exit 1
-		else
-			exit 0
-		fi
+    - name: Check PR title
+    run: |
+        PULL_REQUEST_TITLE="${{ github.event.pull_request.title }}"
+        if [[ "$PULL_REQUEST_TITLE" == 'bad title' ]]; then
+            echo 'title check failed'
+            exit 1
+        else
+            exit 0
+        fi
 ```
 
 **Good:**
 ```yml
-	- name: Check PR title
-	env:
-		PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
-	run: |
-		if [[ "$PULL_REQUEST_TITLE" == 'bad title' ]]; then
-			echo 'title check failed'
-			exit 1
-		else
-			exit 0
-		fi
+    - name: Check PR title
+    env:
+        PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+    run: |
+        if [[ "$PULL_REQUEST_TITLE" == 'bad title' ]]; then
+            echo 'title check failed'
+            exit 1
+        else
+            exit 0
+        fi
 ```
 
 ## See also
