@@ -488,6 +488,7 @@ const rows = await service.fetchAll();
 When used incorrectly, `${{ }}` within `run` blocks can allow script injection within GitHub actions. To make actions easier to audit, prefer passing arguments to `run` blocks as environment variables.
 
 See also:
+- [`GHSA-8v8w-v8xg-79rf`: A related security advisory in another project](https://github.com/advisories/GHSA-8v8w-v8xg-79rf)
 - [GitHub Actions: Script injection](https://docs.github.com/en/actions/concepts/security/script-injections).
 - [GitHub Security Lab: Handling untrusted input](https://securitylab.github.com/resources/github-actions-untrusted-input/#remediation)
 
