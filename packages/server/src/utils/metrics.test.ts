@@ -19,6 +19,8 @@ describe('metrics', () => {
 		onRequestStart(requestId3);
 		onRequestComplete(requestId2);
 
+		jest.advanceTimersByTime(Second);
+
 		const regex = /Cpu: (.*?)%; Mem: (.*?) \/ (.*?) MB \((.*?)%\); Req: 3 \/ min; Active req: 2/;
 
 		const message = heartbeatMessage();
@@ -45,12 +47,14 @@ describe('metrics', () => {
 		jest.advanceTimersByTime(Minute * 15);
 		expect(heartbeatMessage()).toMatch(/Req: 0 \/ min/);
 		mockRequest();
+		jest.advanceTimersByTime(Second);
 		expect(heartbeatMessage()).toMatch(/Req: 1 \/ min/);
 
 		jest.advanceTimersByTime(Minute * 2);
 		mockRequest();
 		jest.advanceTimersByTime(Second * 10);
 		mockRequest();
+		jest.advanceTimersByTime(Second);
 		expect(heartbeatMessage()).toMatch(/Req: 2 \/ min/);
 	});
 
