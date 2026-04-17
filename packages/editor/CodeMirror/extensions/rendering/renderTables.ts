@@ -114,6 +114,10 @@ class TableWidget extends WidgetType {
 		// Flag to skip onblur sync when Tab/Enter handles it
 		let skipBlurSync = false;
 
+		// Track scrollbar interaction to prevent widget rebuild during drag
+		let scrollbarDragging = false;
+		let lastFocusedTextDiv: HTMLElement | null = null;
+
 		// Sync all dirty cells back to the table model (without dispatching).
 		// Must be called before any structural apply() so edits are not lost.
 		const syncDirtyCells = () => {
@@ -151,6 +155,7 @@ class TableWidget extends WidgetType {
 
 			// Sync CM cursor to this cell so toolbar commands work
 			textDiv.onfocus = () => {
+				lastFocusedTextDiv = textDiv;
 				const tableRange = {
 					from: this.from,
 					to: this.to,
@@ -182,7 +187,7 @@ class TableWidget extends WidgetType {
 					// update the in-memory model — no dispatch/rebuild.
 					// The markdown will sync on next structural edit or
 					// when focus leaves the table entirely.
-					if (container.contains(document.activeElement)) {
+					if (scrollbarDragging || container.contains(document.activeElement)) {
 						const sanitised = v.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 						if (isHdr) table.header.cells[c].content = sanitised;
 						else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = sanitised;
@@ -489,6 +494,25 @@ class TableWidget extends WidgetType {
 		requestAnimationFrame(() => {
 			if (container.isConnected) {
 				tableHeightCache.set(this.cacheKey_, container.offsetHeight);
+			}
+		});
+
+		// Detect scrollbar/container clicks — prevent cell blur so the
+		// widget is not rebuilt mid-scroll and the cell editor stays open.
+		container.addEventListener('mousedown', (e) => {
+			if (e.target === container) {
+				e.preventDefault();
+				scrollbarDragging = true;
+				const onUp = () => {
+					scrollbarDragging = false;
+					document.removeEventListener('mouseup', onUp);
+					// If blur fired despite preventDefault, re-focus the cell
+					if (lastFocusedTextDiv && container.isConnected &&
+						document.activeElement !== lastFocusedTextDiv) {
+						focus('TableWidget', lastFocusedTextDiv);
+					}
+				};
+				document.addEventListener('mouseup', onUp);
 			}
 		});
 
