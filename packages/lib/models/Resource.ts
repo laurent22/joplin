@@ -248,23 +248,24 @@ export default class Resource extends BaseItem {
 
 	public static async tempCryptedPath(resourceId: string): Promise<string> {
 		const tempDir = Setting.value('tempDir');
-		const tempCacheDir = `${tempDir}/temp_cache`;
+		const encryptionCache = `${tempDir}/encryptionCache`;
 
 		// quick check to ensure our folder exists
-		if (!(await this.fsDriver().exists(tempCacheDir))) {
-			await this.fsDriver().mkdir(tempCacheDir);
+		if (!(await this.fsDriver().exists(encryptionCache))) {
+			await this.fsDriver().mkdir(encryptionCache);
 		}
 
-		return `${tempCacheDir}/${resourceId}.crypted`;
+		return `${encryptionCache}/${resourceId}.crypted`;
 	}
 
 	public static async emptyTempEncryptionCache() {
 		const tempDir = Setting.value('tempDir');
-		const tempCacheDir = `${tempDir}/temp_cache`;
+		const encryptionCache = `${tempDir}/encryptionCache`;
 
-		if (await this.fsDriver().exists(tempCacheDir)) {
+		if (await this.fsDriver().exists(encryptionCache)) {
 			try {
-				await this.fsDriver().remove(tempCacheDir);
+				this.logger().info('Clearing encryption cache...');
+				await this.fsDriver().remove(encryptionCache);
 				this.logger().info('Cleared temporary encryption cache.');
 			} catch (error) {
 				this.logger().warn('Could not clear temporary encryption cache:', error);

@@ -221,7 +221,7 @@ describe('models/Resource', () => {
 		}
 	});
 
-	it('should clean up orphaned .crypted files in the temp_cache directory', async () => {
+	it('should clean up orphaned .crypted files in the encryptionCache directory', async () => {
 		// Get the path using the model's own method
 		const fakeOrphanPath = await Resource.tempCryptedPath('test_orphan');
 
