@@ -8,9 +8,11 @@ import { Config, Env } from './types';
 import { Day } from './time';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
-	// Use a separate DB connection pool for task state management so that it
-	// is not affected by failed transactions in the main connection pool.
-	const taskStateDb = await connectDb({ ...config.database, maxConnections: 1 });
+	// In production, use a separate DB connection pool for task state
+	// management so that it is not affected by failed transactions in the
+	// main connection pool. In dev/test, we reuse the main connection to
+	// avoid exhausting Postgres connection slots in CI.
+	const taskStateDb = env === Env.Prod ? await connectDb({ ...config.database, maxConnections: 1 }) : null;
 	const taskService = new TaskService(env, models, config, services, taskStateDb);
 
 	let tasks: Task[] = [
