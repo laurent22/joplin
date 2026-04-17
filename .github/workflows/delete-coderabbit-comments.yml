@@ -17,5 +17,6 @@ jobs:
       - name: Delete CodeRabbit comment
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_URL: ${{ github.event.comment.url }}
         run: |
-          gh api -X DELETE "${{ github.event.comment.url }}"
+          gh api -X DELETE "$COMMENT_URL"
