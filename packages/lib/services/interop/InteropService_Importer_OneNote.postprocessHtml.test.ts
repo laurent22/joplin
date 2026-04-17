@@ -5,22 +5,29 @@ import Setting from '../../models/Setting';
 import shim from '../../shim';
 
 describe('InteropService_Importer_OneNote.postprocessHtml', () => {
-	it('should skip high-complexity HTML without reporting an import error', async () => {
-		const testImportDirectory = Setting.value('tempDir');
-		const onErrorCalls: string[] = [];
+	type ImporterInternals = {
+		postprocessGeneratedHtmlInFolder_: (baseFolder: string)=> Promise<void>;
+		getValidHtmlFiles_: (baseFolder: string)=> Promise<{ path: string }[]>;
+		buildIdMap_: (baseFolder: string)=> Promise<{ get: (id: string|null)=> { path: string }|null }>;
+	};
 
+	const setupImporterTest = async (testImportDirectory: string, onError?: (error: string|Error)=> void) => {
 		const importer = new InteropService_Importer_OneNote();
 		await importer.init(testImportDirectory, {
 			domParser: new DOMParser(),
 			xmlSerializer: new XMLSerializer(),
-			onError: (error: string|Error) => onErrorCalls.push(String(error)),
+			...(onError && { onError }),
 		});
 
-		const importerWithInternals = importer as unknown as {
-			postprocessGeneratedHtmlInFolder_: (baseFolder: string)=> Promise<void>;
-			getValidHtmlFiles_: (baseFolder: string)=> Promise<{ path: string }[]>;
-			buildIdMap_: (baseFolder: string)=> Promise<{ get: (id: string|null)=> { path: string }|null }>;
-		};
+		const importerWithInternals = importer as unknown as ImporterInternals;
+		return { importer, importerWithInternals };
+	};
+
+	it('should skip high-complexity HTML without reporting an import error', async () => {
+		const testImportDirectory = Setting.value('tempDir');
+		const onErrorCalls: string[] = [];
+
+		const { importer, importerWithInternals } = await setupImporterTest(testImportDirectory, (error: string|Error) => onErrorCalls.push(String(error)));
 
 		const getValidHtmlFilesSpy = jest.spyOn(importerWithInternals, 'getValidHtmlFiles_').mockResolvedValue([{ path: 'high-complexity.html' }]);
 		const buildIdMapSpy = jest.spyOn(importerWithInternals, 'buildIdMap_').mockResolvedValue({ get: () => null });
@@ -40,18 +47,9 @@ describe('InteropService_Importer_OneNote.postprocessHtml', () => {
 
 	it('should still extract svgs for high-complexity HTML when skipping remaining postprocessing', async () => {
 		const testImportDirectory = Setting.value('tempDir');
+		const onErrorCalls: string[] = [];
 
-		const importer = new InteropService_Importer_OneNote();
-		await importer.init(testImportDirectory, {
-			domParser: new DOMParser(),
-			xmlSerializer: new XMLSerializer(),
-		});
-
-		const importerWithInternals = importer as unknown as {
-			postprocessGeneratedHtmlInFolder_: (baseFolder: string)=> Promise<void>;
-			getValidHtmlFiles_: (baseFolder: string)=> Promise<{ path: string }[]>;
-			buildIdMap_: (baseFolder: string)=> Promise<{ get: (id: string|null)=> { path: string }|null }>;
-		};
+		const { importer, importerWithInternals } = await setupImporterTest(testImportDirectory, (error: string|Error) => onErrorCalls.push(String(error)));
 
 		const svgMarkup = '<svg><path d="M0 0 L10 10" /></svg>'.repeat(20);
 		const htmlWithManySvgs = `<html><body>${svgMarkup}</body></html>`;
@@ -64,6 +62,7 @@ describe('InteropService_Importer_OneNote.postprocessHtml', () => {
 
 		await importerWithInternals.postprocessGeneratedHtmlInFolder_(testImportDirectory);
 
+		expect(onErrorCalls).toEqual([]);
 		expect(postprocessGeneratedHtmlSpy).not.toHaveBeenCalled();
 
 		const svgWriteCalls = writeFileSpy.mock.calls.filter(call => String(call[0]).endsWith('.svg'));
