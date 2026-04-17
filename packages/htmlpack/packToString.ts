@@ -2,7 +2,7 @@ import packToWriter, { type FileApi as WriterFileApi } from './packToWriter';
 
 export type FileApi = Pick<WriterFileApi, 'exists' | 'readFileText' | 'readFileDataUri' | 'streamFileDataUri'>;
 
-// Legacy
+// @deprecated Use `packToWriter` which provide better performance and avoid memory issues when dealing with large files.
 const packToString = async (baseDir: string, inputFileText: string, fs: FileApi) => {
 	const chunks: string[] = [];
 
