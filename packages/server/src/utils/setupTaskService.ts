@@ -1,4 +1,5 @@
-import { Models } from '../models/factory';
+import newModelFactory, { Models } from '../models/factory';
+import { connectDb } from '../db';
 import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
@@ -7,7 +8,11 @@ import { Config, Env } from './types';
 import { Day } from './time';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
-	const taskService = new TaskService(env, models, config, services);
+	// Use a separate DB connection pool for task state management so that it
+	// is not affected by failed transactions in the main connection pool.
+	const taskStateDb = await connectDb(config.database);
+	const taskStateModels = newModelFactory(taskStateDb, taskStateDb, config);
+	const taskService = new TaskService(env, models, config, services, taskStateModels);
 
 	let tasks: Task[] = [
 		{

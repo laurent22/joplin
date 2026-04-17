@@ -12,7 +12,7 @@ const newService = () => {
 		mustache: null,
 		tasks: null,
 		userDeletion: null,
-	});
+	}, models());
 };
 
 const createDemoTasks = (): Task[] => {
