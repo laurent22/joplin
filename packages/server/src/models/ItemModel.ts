@@ -1026,10 +1026,16 @@ export default class ItemModel extends BaseModel<Item> {
 	// but it would be nice to get to the bottom of this bug.
 	public processOrphanedItems = async () => {
 		await this.withTransaction(async () => {
+			// Find items that have no corresponding entry in user_items.
+			// NOT EXISTS is used instead of LEFT JOIN for performance as it
+			// allows Postgres to short-circuit on the first match per item.
 			const orphanedItems: Item[] = await this.db(this.tableName)
 				.select(['items.id', 'items.owner_id'])
-				.leftJoin('user_items', 'user_items.item_id', 'items.id')
-				.whereNull('user_items.user_id');
+				.whereNotExists(
+					this.db('user_items')
+						.select(this.db.raw('1'))
+						.whereRaw('user_items.item_id = items.id'),
+				);
 
 			const userIds: string[] = orphanedItems.map(i => i.owner_id);
 			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
