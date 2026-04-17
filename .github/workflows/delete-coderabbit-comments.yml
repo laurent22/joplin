@@ -1,0 +1,21 @@
+name: Delete CodeRabbit PR Comments
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  delete-comment:
+    if: >
+      github.event.issue.pull_request &&
+      (github.event.comment.user.login == 'coderabbitai' || github.event.comment.user.login == 'coderabbitai[bot]')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Delete CodeRabbit comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X DELETE "${{ github.event.comment.url }}"
