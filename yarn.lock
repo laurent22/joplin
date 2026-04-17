@@ -13305,7 +13305,6 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
-    "@types/node-os-utils": "npm:1.3.4"
     "@types/nodemailer": "npm:6.4.21"
     "@types/qrcode": "npm:1.5.6"
     "@types/uuid": "npm:11.0.0"
@@ -13330,7 +13329,6 @@ __metadata:
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
     node-mocks-http: "npm:1.17.2"
-    node-os-utils: "npm:1.3.7"
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.11"
     otplib: "npm:12.0.1"
@@ -19428,13 +19426,6 @@ __metadata:
     "@types/node": "npm:*"
     form-data: "npm:^4.0.4"
   checksum: 10/944d52214791ebba482ca1393a4f0d62b0dbac5f7343ff42c128b75d5356d8bcefd4df77771b55c1acd19d118e16e9bd5d2792819c51bc13402d1c87c0975435
-  languageName: node
-  linkType: hard
-
-"@types/node-os-utils@npm:1.3.4":
-  version: 1.3.4
-  resolution: "@types/node-os-utils@npm:1.3.4"
-  checksum: 10/e0adbb62b9503b86a16c5a09058104ec81975ad58c6c28594986de0602378f4c87d0b46d1f5445a778607e42df1b318cdea91e2ac54994572904490dc1a086af
   languageName: node
   linkType: hard
 
@@ -44289,13 +44280,6 @@ __metadata:
     uuid: "npm:^8.3.2"
     which: "npm:^2.0.2"
   checksum: 10/b238ffe16fd3b14df4c021e7d2a64483a3ac549b22d93e3c0bcfd9557a12d1c370ce6d8889308bc9c31c7464d99b224e7056dbd8cf4fb37b0f6296185972774a
-  languageName: node
-  linkType: hard
-
-"node-os-utils@npm:1.3.7":
-  version: 1.3.7
-  resolution: "node-os-utils@npm:1.3.7"
-  checksum: 10/728aa20051f6502158ed5c58de4c4073a5715285151dc99a311bf9968a163019ca0b96d4432c244758d5545c896137f1e0be00a54f7d6f88cac4ac0dc07c2ad2
   languageName: node
   linkType: hard
 
