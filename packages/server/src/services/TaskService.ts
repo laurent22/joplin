@@ -1,5 +1,6 @@
 import Logger from '@joplin/utils/Logger';
-import { Models } from '../models/factory';
+import newModelFactory, { Models } from '../models/factory';
+import { DbConnection, disconnectDb } from '../db';
 import { Config, Env } from '../utils/types';
 import BaseService from './BaseService';
 import { Event, EventType, TaskId, TaskState } from './database/types';
@@ -68,11 +69,22 @@ export default class TaskService extends BaseService {
 	private tasks_: Tasks = {};
 	private services_: Services;
 	private taskStateModels_: Models;
+	private taskStateDb_: DbConnection;
 
-	public constructor(env: Env, models: Models, config: Config, services: Services, taskStateModels: Models) {
+	public constructor(env: Env, models: Models, config: Config, services: Services, taskStateDb: DbConnection = null) {
 		super(env, models, config);
 		this.services_ = services;
-		this.taskStateModels_ = taskStateModels;
+		this.taskStateDb_ = taskStateDb;
+		this.taskStateModels_ = taskStateDb ? newModelFactory(taskStateDb, taskStateDb, config) : models;
+	}
+
+	public async destroy() {
+		await super.destroy();
+		if (this.taskStateDb_) {
+			await disconnectDb(this.taskStateDb_);
+			this.taskStateDb_ = null;
+			this.taskStateModels_ = null;
+		}
 	}
 
 	public async registerTask(task: Task) {

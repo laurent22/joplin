@@ -1,4 +1,4 @@
-import newModelFactory, { Models } from '../models/factory';
+import { Models } from '../models/factory';
 import { connectDb } from '../db';
 import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
@@ -11,8 +11,7 @@ export default async function(env: Env, models: Models, config: Config, services
 	// Use a separate DB connection pool for task state management so that it
 	// is not affected by failed transactions in the main connection pool.
 	const taskStateDb = await connectDb({ ...config.database, maxConnections: 1 });
-	const taskStateModels = newModelFactory(taskStateDb, taskStateDb, config);
-	const taskService = new TaskService(env, models, config, services, taskStateModels);
+	const taskService = new TaskService(env, models, config, services, taskStateDb);
 
 	let tasks: Task[] = [
 		{
