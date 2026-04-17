@@ -2,8 +2,42 @@ import '../../testing/test-utils';
 import '../../testing/dom-test-environment';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import Setting from '../../models/Setting';
+import shim from '../../shim';
 
 describe('InteropService_Importer_OneNote.postprocessHtml', () => {
+	it('should skip high-complexity HTML without reporting an import error', async () => {
+		const testImportDirectory = Setting.value('tempDir');
+		const onErrorCalls: string[] = [];
+
+		const importer = new InteropService_Importer_OneNote();
+		await importer.init(testImportDirectory, {
+			domParser: new DOMParser(),
+			xmlSerializer: new XMLSerializer(),
+			onError: (error: string|Error) => onErrorCalls.push(String(error)),
+		});
+
+		const importerWithInternals = importer as unknown as {
+			postprocessGeneratedHtmlInFolder_: (baseFolder: string)=> Promise<void>;
+			getValidHtmlFiles_: (baseFolder: string)=> Promise<{ path: string }[]>;
+			buildIdMap_: (baseFolder: string)=> Promise<{ get: (id: string|null)=> { path: string }|null }>;
+		};
+
+		const getValidHtmlFilesSpy = jest.spyOn(importerWithInternals, 'getValidHtmlFiles_').mockResolvedValue([{ path: 'high-complexity.html' }]);
+		const buildIdMapSpy = jest.spyOn(importerWithInternals, 'buildIdMap_').mockResolvedValue({ get: () => null });
+		const postprocessGeneratedHtmlSpy = jest.spyOn(importer, 'postprocessGeneratedHtml_');
+		const readFileSpy = jest.spyOn(shim.fsDriver(), 'readFile').mockResolvedValue('x'.repeat(360000));
+
+		await importerWithInternals.postprocessGeneratedHtmlInFolder_(testImportDirectory);
+
+		expect(onErrorCalls).toEqual([]);
+		expect(postprocessGeneratedHtmlSpy).not.toHaveBeenCalled();
+
+		readFileSpy.mockRestore();
+		postprocessGeneratedHtmlSpy.mockRestore();
+		buildIdMapSpy.mockRestore();
+		getValidHtmlFilesSpy.mockRestore();
+	});
+
 	it.each([
 		{
 			label: 'when links are in an invalid/unsupported format',

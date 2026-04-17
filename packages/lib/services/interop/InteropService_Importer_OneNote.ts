@@ -35,10 +35,27 @@ const getOneNoteConverter = (): NativeOneNoteConverter => {
 	}
 };
 
-const setEnableUnresponsiveCheck = (enabled: boolean) => {
-	if (shim.isElectron()) {
-		shim.electronBridge().setEnableUnresponsiveCheck(enabled);
-	}
+type HtmlComplexity = {
+	charLength: number;
+	svgCount: number;
+};
+
+const getHtmlComplexity = (html: string): HtmlComplexity => {
+	return {
+		charLength: html.length,
+		svgCount: (html.match(/<svg\b/ig) || []).length,
+	};
+};
+
+// Some pages exported from OneNote contain very large HTML payloads (often due to embedded ink SVG).
+// Parsing these in Electron's renderer can crash the renderer process on some systems.
+// If a payload looks risky, skip postprocessing so import can continue.
+const shouldSkipPostprocess = (complexity: HtmlComplexity) => {
+	if (complexity.charLength >= 350000) return true;
+	if (complexity.svgCount >= 20) return true;
+	if (complexity.charLength >= 200000 && complexity.svgCount >= 10) return true;
+
+	return false;
 };
 
 // See onenote-converter README.md for more information
@@ -125,11 +142,6 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			}
 
 			try {
-				// HACK: The OneNote importer currently runs in the renderer process on desktop.
-				// If importing a large file takes a long time, the "unresponsive" dialog can be
-				// shown. Work around this by temporarily disabling the dialog:
-				setEnableUnresponsiveCheck(false);
-
 				await oneNoteConverter(notebookFilePath, resolve(outputDirectory2), notebookBaseDir);
 			} catch (error) {
 				// Forward only the error message. Usually the stack trace points to bytes in the WASM file.
@@ -137,8 +149,6 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 				// length for auto-creating a forum post:
 				this.options_.onError?.(error.message ?? error);
 				console.error(error);
-			} finally {
-				setEnableUnresponsiveCheck(true);
 			}
 		}
 
@@ -211,6 +221,15 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		for (const file of htmlFiles) {
 			const fileLocation = join(baseFolder, file.path);
 			const originalHtml = await shim.fsDriver().readFile(fileLocation);
+			const complexity = getHtmlComplexity(originalHtml);
+
+			logger.info('Postprocessing OneNote HTML file:', file.path, `(size=${complexity.charLength}, svg=${complexity.svgCount})`);
+
+			if (shouldSkipPostprocess(complexity)) {
+				logger.warn('Skipping postprocessing for risky HTML payload to avoid renderer crash:', fileLocation, `(size=${complexity.charLength}, svg=${complexity.svgCount})`);
+				continue;
+			}
+
 			const { changed, html } = await this.postprocessGeneratedHtml_(originalHtml, dirname(fileLocation), idMap);
 
 			if (changed) {
