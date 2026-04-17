@@ -510,6 +510,7 @@ const tableTheme = EditorView.theme({
 		contain: 'inline-size',
 		outline: 'none',
 		padding: '18px 14px',
+		boxSizing: 'border-box',
 	},
 	[`& .${W} table`]: {
 		borderCollapse: 'collapse',
