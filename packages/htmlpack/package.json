@@ -9,6 +9,10 @@
       "types": "./index.ts",
       "default": "./dist/index.js"
     },
+    "./packToString": {
+      "types": "./packToString.ts",
+      "default": "./dist/packToString.js"
+    },
     "./packToWriter": {
       "types": "./packToWriter.ts",
       "default": "./dist/packToWriter.js"
