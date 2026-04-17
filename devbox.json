@@ -14,7 +14,7 @@
     "python": "3.14.0",
     "bat":    "latest",
     "electron": {
-      "version":            "latest",
+      "version":            "37.5.1",
       "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
     "git":    "2.51.2",
