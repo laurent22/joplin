@@ -11,72 +11,89 @@ describe('InteropService_Importer_OneNote.postprocessHtml', () => {
 		buildIdMap_: (baseFolder: string)=> Promise<{ get: (id: string|null)=> { path: string }|null }>;
 	};
 
-	const setupImporterTest = async (testImportDirectory: string, onError?: (error: string|Error)=> void) => {
+	type RiskyHtmlTestContext = {
+		testImportDirectory: string;
+		onErrorCalls: string[];
+		importerWithInternals: ImporterInternals;
+		postprocessGeneratedHtmlSpy: jest.SpyInstance;
+		parseFromStringSpy: jest.SpyInstance;
+		readFileSpy: jest.SpyInstance;
+		writeFileSpy: jest.SpyInstance;
+		cleanup: ()=> void;
+	};
+
+	const setupRiskyHtmlTest = async (filePath: string, html: string): Promise<RiskyHtmlTestContext> => {
+		const testImportDirectory = Setting.value('tempDir');
+		const onErrorCalls: string[] = [];
+		const domParser = new DOMParser();
+		const parseFromStringSpy = jest.spyOn(domParser, 'parseFromString');
+
 		const importer = new InteropService_Importer_OneNote();
 		await importer.init(testImportDirectory, {
-			domParser: new DOMParser(),
+			domParser,
 			xmlSerializer: new XMLSerializer(),
-			...(onError && { onError }),
+			onError: (error: string|Error) => onErrorCalls.push(String(error)),
 		});
 
 		const importerWithInternals = importer as unknown as ImporterInternals;
-		return { importer, importerWithInternals };
+		const getValidHtmlFilesSpy = jest.spyOn(importerWithInternals, 'getValidHtmlFiles_').mockResolvedValue([{ path: filePath }]);
+		const buildIdMapSpy = jest.spyOn(importerWithInternals, 'buildIdMap_').mockResolvedValue({ get: () => null });
+		const postprocessGeneratedHtmlSpy = jest.spyOn(importer, 'postprocessGeneratedHtml_');
+		const readFileSpy = jest.spyOn(shim.fsDriver(), 'readFile').mockResolvedValue(html);
+		const writeFileSpy = jest.spyOn(shim.fsDriver(), 'writeFile').mockResolvedValue();
+
+		const cleanup = () => {
+			writeFileSpy.mockRestore();
+			readFileSpy.mockRestore();
+			postprocessGeneratedHtmlSpy.mockRestore();
+			buildIdMapSpy.mockRestore();
+			getValidHtmlFilesSpy.mockRestore();
+			parseFromStringSpy.mockRestore();
+		};
+
+		return {
+			testImportDirectory,
+			onErrorCalls,
+			importerWithInternals,
+			postprocessGeneratedHtmlSpy,
+			parseFromStringSpy,
+			readFileSpy,
+			writeFileSpy,
+			cleanup,
+		};
 	};
 
 	it('should skip high-complexity HTML without reporting an import error', async () => {
-		const testImportDirectory = Setting.value('tempDir');
-		const onErrorCalls: string[] = [];
+		const context = await setupRiskyHtmlTest('high-complexity.html', 'x'.repeat(360000));
 
-		const { importer, importerWithInternals } = await setupImporterTest(testImportDirectory, (error: string|Error) => onErrorCalls.push(String(error)));
+		await context.importerWithInternals.postprocessGeneratedHtmlInFolder_(context.testImportDirectory);
 
-		const getValidHtmlFilesSpy = jest.spyOn(importerWithInternals, 'getValidHtmlFiles_').mockResolvedValue([{ path: 'high-complexity.html' }]);
-		const buildIdMapSpy = jest.spyOn(importerWithInternals, 'buildIdMap_').mockResolvedValue({ get: () => null });
-		const postprocessGeneratedHtmlSpy = jest.spyOn(importer, 'postprocessGeneratedHtml_');
-		const readFileSpy = jest.spyOn(shim.fsDriver(), 'readFile').mockResolvedValue('x'.repeat(360000));
+		expect(context.onErrorCalls).toEqual([]);
+		expect(context.postprocessGeneratedHtmlSpy).not.toHaveBeenCalled();
+		expect(context.parseFromStringSpy).not.toHaveBeenCalled();
 
-		await importerWithInternals.postprocessGeneratedHtmlInFolder_(testImportDirectory);
-
-		expect(onErrorCalls).toEqual([]);
-		expect(postprocessGeneratedHtmlSpy).not.toHaveBeenCalled();
-
-		readFileSpy.mockRestore();
-		postprocessGeneratedHtmlSpy.mockRestore();
-		buildIdMapSpy.mockRestore();
-		getValidHtmlFilesSpy.mockRestore();
+		context.cleanup();
 	});
 
 	it('should still extract svgs for high-complexity HTML when skipping remaining postprocessing', async () => {
-		const testImportDirectory = Setting.value('tempDir');
-		const onErrorCalls: string[] = [];
-
-		const { importer, importerWithInternals } = await setupImporterTest(testImportDirectory, (error: string|Error) => onErrorCalls.push(String(error)));
-
 		const svgMarkup = '<svg><path d="M0 0 L10 10" /></svg>'.repeat(20);
 		const htmlWithManySvgs = `<html><body>${svgMarkup}</body></html>`;
+		const context = await setupRiskyHtmlTest('high-complexity-ink.html', htmlWithManySvgs);
 
-		const getValidHtmlFilesSpy = jest.spyOn(importerWithInternals, 'getValidHtmlFiles_').mockResolvedValue([{ path: 'high-complexity-ink.html' }]);
-		const buildIdMapSpy = jest.spyOn(importerWithInternals, 'buildIdMap_').mockResolvedValue({ get: () => null });
-		const postprocessGeneratedHtmlSpy = jest.spyOn(importer, 'postprocessGeneratedHtml_');
-		const readFileSpy = jest.spyOn(shim.fsDriver(), 'readFile').mockResolvedValue(htmlWithManySvgs);
-		const writeFileSpy = jest.spyOn(shim.fsDriver(), 'writeFile').mockResolvedValue();
+		await context.importerWithInternals.postprocessGeneratedHtmlInFolder_(context.testImportDirectory);
 
-		await importerWithInternals.postprocessGeneratedHtmlInFolder_(testImportDirectory);
+		expect(context.onErrorCalls).toEqual([]);
+		expect(context.postprocessGeneratedHtmlSpy).not.toHaveBeenCalled();
+		expect(context.parseFromStringSpy).not.toHaveBeenCalled();
 
-		expect(onErrorCalls).toEqual([]);
-		expect(postprocessGeneratedHtmlSpy).not.toHaveBeenCalled();
-
-		const svgWriteCalls = writeFileSpy.mock.calls.filter(call => String(call[0]).endsWith('.svg'));
+		const svgWriteCalls = context.writeFileSpy.mock.calls.filter(call => String(call[0]).endsWith('.svg'));
 		expect(svgWriteCalls.length).toBe(20);
 
-		const htmlWriteCalls = writeFileSpy.mock.calls.filter(call => String(call[0]).endsWith('high-complexity-ink.html'));
+		const htmlWriteCalls = context.writeFileSpy.mock.calls.filter(call => String(call[0]).endsWith('high-complexity-ink.html'));
 		expect(htmlWriteCalls.length).toBe(1);
 		expect(String(htmlWriteCalls[0][1])).toContain('<img src="./');
 
-		writeFileSpy.mockRestore();
-		readFileSpy.mockRestore();
-		postprocessGeneratedHtmlSpy.mockRestore();
-		buildIdMapSpy.mockRestore();
-		getValidHtmlFilesSpy.mockRestore();
+		context.cleanup();
 	});
 
 	it.each([

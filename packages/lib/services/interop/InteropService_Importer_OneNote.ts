@@ -222,24 +222,26 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const fileLocation = join(baseFolder, file.path);
 			const originalHtml = await shim.fsDriver().readFile(fileLocation);
 			const complexity = getHtmlComplexity(originalHtml);
+			const shouldSkip = shouldSkipPostprocess(complexity);
 
 			logger.info('Postprocessing OneNote HTML file:', file.path, `(size=${complexity.charLength}, svg=${complexity.svgCount})`);
 
-			const dom = this.domParser.parseFromString(originalHtml, 'text/html');
-			const shouldSkip = shouldSkipPostprocess(complexity);
-
-			// Always extract SVGs first, even for risky HTML payloads.
-			// This ensures drawings are properly converted to images even when we skip other postprocessing steps.
-			let changed = await this.extractSvgsToFiles_(dom, dirname(fileLocation));
-
 			if (shouldSkip) {
+				// Don't parse risky HTML payloads with DOMParser.
+				// Instead, extract SVGs directly from the raw HTML so ink remains renderable
+				// while avoiding renderer hangs/crashes caused by full DOM parsing.
+				const { changed, html } = await this.extractSvgsFromHtmlToFiles_(originalHtml, dirname(fileLocation));
 				logger.warn('Skipping full postprocessing for risky HTML payload to avoid renderer crash:', fileLocation, `(size=${complexity.charLength}, svg=${complexity.svgCount})`);
 				if (changed) {
-					const html = this.getHtmlFromDom_(dom);
 					await shim.fsDriver().writeFile(fileLocation, html, 'utf-8');
 				}
 				continue;
 			}
+
+			const dom = this.domParser.parseFromString(originalHtml, 'text/html');
+
+			// Always extract SVGs first, then continue with the remaining postprocessing.
+			let changed = await this.extractSvgsToFiles_(dom, dirname(fileLocation));
 
 			// Continue with remaining postprocessing steps (link conversion, simplification)
 			const otherChanged = await this.postprocessRemainingSteps_(dom, dirname(fileLocation), idMap);
@@ -347,6 +349,54 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		return changed;
+	}
+
+	private escapeHtmlAttribute_(input: string): string {
+		return input
+			.replace(/&/g, '&amp;')
+			.replace(/"/g, '&quot;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
+	}
+
+	private getAttributeValue_(tagSource: string, name: string): string {
+		const regexp = new RegExp(`\\s${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, 'i');
+		const match = tagSource.match(regexp);
+		return match?.[2] ?? '';
+	}
+
+	private svgToImageTag_(svgSource: string, title: string): string {
+		const svgOpenTagMatch = svgSource.match(/^<svg\b[^>]*>/i);
+		const svgOpenTag = svgOpenTagMatch?.[0] ?? '';
+		const className = this.getAttributeValue_(svgOpenTag, 'class');
+		const style = this.getAttributeValue_(svgOpenTag, 'style');
+
+		const titleMatch = svgSource.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i);
+		const rawAlt = titleMatch?.[1]?.replace(/<[^>]+>/g, '').trim() ?? '';
+
+		const attributes: string[] = [];
+		if (className) attributes.push(`class="${this.escapeHtmlAttribute_(className)}"`);
+		if (style) attributes.push(`style="${this.escapeHtmlAttribute_(style)}"`);
+		if (rawAlt) attributes.push(`alt="${this.escapeHtmlAttribute_(rawAlt)}"`);
+		attributes.push(`src="./${title}"`);
+
+		return `<img ${attributes.join(' ')}>`;
+	}
+
+	private async extractSvgsFromHtmlToFiles_(html: string, svgBaseFolder: string): Promise<{ changed: boolean; html: string }> {
+		const svgMatches = html.match(/<svg\b[\s\S]*?<\/svg>/ig);
+		if (!svgMatches?.length) return { changed: false, html };
+
+		let updatedHtml = html;
+		for (const svgSource of svgMatches) {
+			const title = `${uuidgen(10)}.svg`;
+			const imgTag = this.svgToImageTag_(svgSource, title);
+
+			await shim.fsDriver().writeFile(join(svgBaseFolder, title), svgSource, 'utf8');
+			updatedHtml = updatedHtml.replace(svgSource, imgTag);
+		}
+
+		return { changed: true, html: updatedHtml };
 	}
 
 	// Public to allow testing:
