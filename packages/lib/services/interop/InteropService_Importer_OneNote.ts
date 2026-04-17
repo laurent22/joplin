@@ -49,7 +49,7 @@ const getHtmlComplexity = (html: string): HtmlComplexity => {
 
 // Some pages exported from OneNote contain very large HTML payloads (often due to embedded ink SVG).
 // Parsing these in Electron's renderer can crash the renderer process on some systems.
-// If a payload looks risky, skip postprocessing so import can continue.
+// For risky payloads we still extract SVGs (so ink is preserved), but skip the remaining DOM postprocessing.
 const shouldSkipPostprocess = (complexity: HtmlComplexity) => {
 	if (complexity.charLength >= 350000) return true;
 	if (complexity.svgCount >= 20) return true;
@@ -225,27 +225,43 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 
 			logger.info('Postprocessing OneNote HTML file:', file.path, `(size=${complexity.charLength}, svg=${complexity.svgCount})`);
 
-			if (shouldSkipPostprocess(complexity)) {
-				logger.warn('Skipping postprocessing for risky HTML payload to avoid renderer crash:', fileLocation, `(size=${complexity.charLength}, svg=${complexity.svgCount})`);
+			const dom = this.domParser.parseFromString(originalHtml, 'text/html');
+			const shouldSkip = shouldSkipPostprocess(complexity);
+
+			// Always extract SVGs first, even for risky HTML payloads.
+			// This ensures drawings are properly converted to images even when we skip other postprocessing steps.
+			let changed = await this.extractSvgsToFiles_(dom, dirname(fileLocation));
+
+			if (shouldSkip) {
+				logger.warn('Skipping full postprocessing for risky HTML payload to avoid renderer crash:', fileLocation, `(size=${complexity.charLength}, svg=${complexity.svgCount})`);
+				if (changed) {
+					const html = this.getHtmlFromDom_(dom);
+					await shim.fsDriver().writeFile(fileLocation, html, 'utf-8');
+				}
 				continue;
 			}
 
-			const { changed, html } = await this.postprocessGeneratedHtml_(originalHtml, dirname(fileLocation), idMap);
+			// Continue with remaining postprocessing steps (link conversion, simplification)
+			const otherChanged = await this.postprocessRemainingSteps_(dom, dirname(fileLocation), idMap);
+			changed ||= otherChanged;
 
 			if (changed) {
+				const html = this.getHtmlFromDom_(dom);
 				await shim.fsDriver().writeFile(fileLocation, html, 'utf-8');
 			}
 		}
 	}
 
-	// Public to allow testing
-	public async postprocessGeneratedHtml_(html: string, baseFolder: string, idMap: PageIdMap) {
+	private getHtmlFromDom_(dom: Document): string {
+		// Don't use xmlSerializer here: It breaks <style> blocks.
+		return `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`;
+	}
+
+	private async postprocessRemainingSteps_(dom: Document, baseFolder: string, idMap: PageIdMap): Promise<boolean> {
 		const pipeline = [
-			(dom: Document, currentFolder: string) => this.extractSvgsToFiles_(dom, currentFolder),
 			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder, idMap),
 			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
 		];
-		const dom = this.domParser.parseFromString(html, 'text/html');
 
 		let changed = false;
 		for (const task of pipeline) {
@@ -253,9 +269,19 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			changed ||= result;
 		}
 
+		return changed;
+	}
+
+	// Public to allow testing
+	public async postprocessGeneratedHtml_(html: string, baseFolder: string, idMap: PageIdMap) {
+		const dom = this.domParser.parseFromString(html, 'text/html');
+
+		let changed = await this.extractSvgsToFiles_(dom, baseFolder);
+		const otherChanged = await this.postprocessRemainingSteps_(dom, baseFolder, idMap);
+		changed ||= otherChanged;
+
 		if (changed) {
-			// Don't use xmlSerializer here: It breaks <style> blocks.
-			html = `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`;
+			html = this.getHtmlFromDom_(dom);
 		}
 
 		return { changed, html };

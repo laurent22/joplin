@@ -38,6 +38,48 @@ describe('InteropService_Importer_OneNote.postprocessHtml', () => {
 		getValidHtmlFilesSpy.mockRestore();
 	});
 
+	it('should still extract svgs for high-complexity HTML when skipping remaining postprocessing', async () => {
+		const testImportDirectory = Setting.value('tempDir');
+
+		const importer = new InteropService_Importer_OneNote();
+		await importer.init(testImportDirectory, {
+			domParser: new DOMParser(),
+			xmlSerializer: new XMLSerializer(),
+		});
+
+		const importerWithInternals = importer as unknown as {
+			postprocessGeneratedHtmlInFolder_: (baseFolder: string)=> Promise<void>;
+			getValidHtmlFiles_: (baseFolder: string)=> Promise<{ path: string }[]>;
+			buildIdMap_: (baseFolder: string)=> Promise<{ get: (id: string|null)=> { path: string }|null }>;
+		};
+
+		const svgMarkup = '<svg><path d="M0 0 L10 10" /></svg>'.repeat(20);
+		const htmlWithManySvgs = `<html><body>${svgMarkup}</body></html>`;
+
+		const getValidHtmlFilesSpy = jest.spyOn(importerWithInternals, 'getValidHtmlFiles_').mockResolvedValue([{ path: 'high-complexity-ink.html' }]);
+		const buildIdMapSpy = jest.spyOn(importerWithInternals, 'buildIdMap_').mockResolvedValue({ get: () => null });
+		const postprocessGeneratedHtmlSpy = jest.spyOn(importer, 'postprocessGeneratedHtml_');
+		const readFileSpy = jest.spyOn(shim.fsDriver(), 'readFile').mockResolvedValue(htmlWithManySvgs);
+		const writeFileSpy = jest.spyOn(shim.fsDriver(), 'writeFile').mockResolvedValue();
+
+		await importerWithInternals.postprocessGeneratedHtmlInFolder_(testImportDirectory);
+
+		expect(postprocessGeneratedHtmlSpy).not.toHaveBeenCalled();
+
+		const svgWriteCalls = writeFileSpy.mock.calls.filter(call => String(call[0]).endsWith('.svg'));
+		expect(svgWriteCalls.length).toBe(20);
+
+		const htmlWriteCalls = writeFileSpy.mock.calls.filter(call => String(call[0]).endsWith('high-complexity-ink.html'));
+		expect(htmlWriteCalls.length).toBe(1);
+		expect(String(htmlWriteCalls[0][1])).toContain('<img src="./');
+
+		writeFileSpy.mockRestore();
+		readFileSpy.mockRestore();
+		postprocessGeneratedHtmlSpy.mockRestore();
+		buildIdMapSpy.mockRestore();
+		getValidHtmlFilesSpy.mockRestore();
+	});
+
 	it.each([
 		{
 			label: 'when links are in an invalid/unsupported format',
