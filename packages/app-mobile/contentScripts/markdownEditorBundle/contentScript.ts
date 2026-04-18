@@ -124,6 +124,14 @@ export const createMainEditor = (props: EditorProps) => {
 		}
 	});
 
+	// Joplin uses WebView-level (external) scrolling, so cm-scroller.scrollTop is always 0
+	// and CodeMirror never updates its rendered viewport past the first screenful.
+	// Setting viewState.printing = true makes CodeMirror always use fullPixelRange,
+	// rendering the full document height instead of a virtualised viewport.
+	// viewState is the same object across normal dispatches (not recreated), so this persists.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	(control.editor as any).viewState.printing = true;
+
 	mainEditor = control;
 	return control;
 };
