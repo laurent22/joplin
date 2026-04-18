@@ -2944,7 +2944,7 @@ msgid ""
 "current configuration."
 msgstr ""
 "Ricevi o imposta un valore di configurazione. Se [value] non è impostato, "
-"verrà mostrato il valore del [name]. Se né [name] né [valore] sono "
+"verrà mostrato il valore del [name]. Se né [name] né [value] sono "
 "impostati, verrà mostrata la configurazione corrente."
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
