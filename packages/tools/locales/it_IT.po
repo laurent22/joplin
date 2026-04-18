@@ -1278,8 +1278,7 @@ msgstr "Comandi..."
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 msgstr ""
-"Comandi:`aggiungi`, `rimuovi`, `elenco`, `cancella`, `accetta`, "
-"`abbandona`,e `rifiuta`."
+"Comandi: `add`, `remove`, `list`, `delete`, `accept`, `leave`, e `reject`."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
