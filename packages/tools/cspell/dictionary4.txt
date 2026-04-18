@@ -264,3 +264,4 @@ togglefullscreen
 onestore
 macshot
 pdate
+coderabbitai

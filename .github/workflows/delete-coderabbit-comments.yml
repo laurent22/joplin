@@ -3,12 +3,15 @@ name: Delete CodeRabbit PR Comments
 on:
   issue_comment:
     types: [created]
+  pull_request_review:
+    types: [submitted]
 
 jobs:
-  delete-comment:
+  delete-issue-comment:
     if: >
+      github.event_name == 'issue_comment' &&
       github.event.issue.pull_request &&
-      github.event.comment.user.login == 'coderabbitai'
+      (github.event.comment.user.login == 'coderabbitai' || github.event.comment.user.login == 'coderabbitai[bot]')
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -20,3 +23,27 @@ jobs:
           COMMENT_URL: ${{ github.event.comment.url }}
         run: |
           gh api -X DELETE "$COMMENT_URL"
+
+  hide-review-summary:
+    if: >
+      github.event_name == 'pull_request_review' &&
+      (github.event.review.user.login == 'coderabbitai' || github.event.review.user.login == 'coderabbitai[bot]')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Minimize CodeRabbit review comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ID: ${{ github.event.review.node_id }}
+        run: |
+          # Hide the review summary using GraphQL minimizeComment mutation
+          gh api graphql -f query='
+            mutation {
+              minimizeComment(input: {subjectId: "'"${NODE_ID}"'", classifier: OFF_TOPIC}) {
+                minimizedComment {
+                  isMinimized
+                }
+              }
+            }
+          '
