@@ -180,7 +180,6 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 					}
 				} catch (error) {
 					logger.error('Error deleting directory: ', fullPath, error);
-					bridge().showErrorMessageBox(error.message);
 				}
 			}
 
@@ -194,7 +193,6 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 					}
 				} catch (error) {
 					logger.error('Error deleting file: ', fullPath, error);
-					bridge().showErrorMessageBox(error.message);
 				}
 			}
 
