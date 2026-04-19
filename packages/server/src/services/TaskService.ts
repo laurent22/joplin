@@ -70,6 +70,8 @@ export default class TaskService extends BaseService {
 	private services_: Services;
 	private taskStateModels_: Models;
 	private taskStateDb_: DbConnection;
+	private scheduledHandles_: (ReturnType<typeof setInterval> | { stop: ()=> void })[] = [];
+	private taskServiceDestroyed_ = false;
 
 	public constructor(env: Env, models: Models, config: Config, services: Services, taskStateDb: DbConnection = null) {
 		super(env, models, config);
@@ -79,6 +81,15 @@ export default class TaskService extends BaseService {
 	}
 
 	public async destroy() {
+		this.taskServiceDestroyed_ = true;
+		for (const handle of this.scheduledHandles_) {
+			if (typeof handle === 'object' && 'stop' in handle) {
+				handle.stop();
+			} else {
+				clearInterval(handle);
+			}
+		}
+		this.scheduledHandles_ = [];
 		await super.destroy();
 		if (this.taskStateDb_) {
 			await disconnectDb(this.taskStateDb_);
@@ -106,6 +117,7 @@ export default class TaskService extends BaseService {
 	}
 
 	public async taskStates(ids: TaskId[]): Promise<TaskState[]> {
+		if (this.taskServiceDestroyed_) return [];
 		return this.taskStateModels_.taskState().loadByTaskIds(ids);
 	}
 
@@ -116,6 +128,7 @@ export default class TaskService extends BaseService {
 	}
 
 	public async taskLastEvents(id: TaskId): Promise<TaskEvents> {
+		if (this.taskServiceDestroyed_) return { taskStarted: null, taskCompleted: null };
 		return {
 			taskStarted: await this.taskStateModels_.event().lastEventByTypeAndName(EventType.TaskStarted, id.toString()),
 			taskCompleted: await this.taskStateModels_.event().lastEventByTypeAndName(EventType.TaskCompleted, id.toString()),
@@ -123,6 +136,7 @@ export default class TaskService extends BaseService {
 	}
 
 	public async resetInterruptedTasks() {
+		if (this.taskServiceDestroyed_) return;
 		const taskStates = await this.taskStateModels_.taskState().all();
 		for (const taskState of taskStates) {
 			if (taskState.running) {
@@ -143,6 +157,7 @@ export default class TaskService extends BaseService {
 	}
 
 	public async runTask(id: TaskId, runType: RunType) {
+		if (this.taskServiceDestroyed_) return;
 		const displayString = this.taskDisplayString(id);
 		const taskState = await this.taskStateModels_.taskState().loadByTaskId(id);
 		if (!taskState) throw new Error(`Invalid task: ${id}: ${runType}`);
@@ -172,6 +187,7 @@ export default class TaskService extends BaseService {
 	}
 
 	public async enableTask(taskId: TaskId, enabled = true) {
+		if (this.taskServiceDestroyed_) return;
 		await this.taskStateModels_.taskState().enable(taskId, enabled);
 	}
 
@@ -205,13 +221,15 @@ export default class TaskService extends BaseService {
 			};
 
 			if (interval !== null) {
-				setInterval(async () => {
+				const handle = setInterval(async () => {
 					await runTaskWithErrorChecking(Number(taskId));
 				}, interval);
+				this.scheduledHandles_.push(handle);
 			} else {
-				cron.schedule(task.schedule, async () => {
+				const handle = cron.schedule(task.schedule, async () => {
 					await runTaskWithErrorChecking(Number(taskId));
 				});
+				this.scheduledHandles_.push(handle);
 			}
 		}
 	}
