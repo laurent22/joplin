@@ -65,6 +65,7 @@ export interface NoteEditorProps {
 	contentMaxWidth: number;
 	scrollbarSize: ScrollbarSize;
 	viewerFontFamily: string;
+	viewerFontSize: number;
 	isSafeMode: boolean;
 	useCustomPdfViewer: boolean;
 	shareCacheSetting: string;

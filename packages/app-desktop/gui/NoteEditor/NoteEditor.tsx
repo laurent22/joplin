@@ -176,14 +176,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 			customCss: props.customCss,
 		});
 
-		return markupToHtml.allAssets(markupLanguage, theme, {
+		return markupToHtml.allAssets(markupLanguage, { ...theme, noteViewerFontSize: props.viewerFontSize }, {
 			contentMaxWidth: props.contentMaxWidth,
 			contentMaxWidthTarget: options.contentMaxWidthTarget,
 			scrollbarSize: props.scrollbarSize,
 			baseFontFamily: props.viewerFontFamily,
 			whiteBackgroundNoteRendering: options.whiteBackgroundNoteRendering,
 		});
-	}, [props.plugins, props.themeId, props.scrollbarSize, props.viewerFontFamily, props.customCss, props.contentMaxWidth]);
+	}, [props.plugins, props.themeId, props.scrollbarSize, props.viewerFontFamily, props.viewerFontSize, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -760,6 +760,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 		scrollbarSize: state.settings['style.scrollbarSize'],
 		viewerFontFamily: state.settings['style.viewer.fontFamily'],
+		viewerFontSize: state.settings['style.viewer.fontSize'],
 		tabMovesFocus: state.settings['editor.tabMovesFocus'],
 		isSafeMode: state.settings.isSafeMode,
 		useCustomPdfViewer: false,

@@ -1,4 +1,5 @@
 import Setting, { SettingItemType, SettingSectionSource, SettingStorage } from '../models/Setting';
+import { AppType } from './settings/types';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import { readFile, stat, mkdirp, writeFile, pathExists, readdir } from 'fs-extra';
 import Logger from '@joplin/utils/Logger';
@@ -581,4 +582,16 @@ describe('models/Setting', () => {
 		expect(Setting.value('editor.imageRendering')).toBe(true);
 		expect(Setting.value(testSettingId)).toBe(false);
 	});
+
+	it('should expose style.viewer.fontSize on desktop and mobile', (async () => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+
+		const md = Setting.settingMetadata('style.viewer.fontSize');
+		expect(md.appTypes).toContain(AppType.Desktop);
+		expect(md.appTypes).toContain(AppType.Mobile);
+		expect(md.value).toBe(16);
+		expect(md.minimum).toBe(4);
+		expect(md.maximum).toBe(50);
+	}));
 });
