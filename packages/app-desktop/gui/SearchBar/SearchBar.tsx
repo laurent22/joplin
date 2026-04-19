@@ -132,6 +132,10 @@ function SearchBar(props: Props) {
 		if (props.isFocused || searchStarted) {
 			void onExitSearch();
 		} else {
+			if (!query || query.trim().length === 0) {
+				focus('SearchBar::onSearchButtonClick', props.inputRef.current);
+				return;
+			}
 			setSearchStarted(true);
 			focus('SearchBar::onSearchButtonClick', props.inputRef.current);
 			props.dispatch({
@@ -140,7 +144,7 @@ function SearchBar(props: Props) {
 			});
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [onExitSearch, props.isFocused, searchStarted]);
+	}, [onExitSearch, props.isFocused, searchStarted, query]);
 
 	useEffect(() => {
 		if (props.notesParentType !== 'Search') {
