@@ -211,7 +211,7 @@ export default class BaseApplication {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async refreshNotes(state: any, useSelectedNoteId = false, noteHash = '') {
+	public async refreshNotes(state: any, useSelectedNoteId = false, noteHash = '', windowId: string = null) {
 		let parentType = state.notesParentType;
 		let parentId = null;
 
@@ -279,12 +279,12 @@ export default class BaseApplication {
 			notes: notes,
 			notesSource: source,
 		});
-
 		if (useSelectedNoteId) {
 			this.store().dispatch({
 				type: 'NOTE_SELECT',
 				id: state.selectedNoteIds && state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				hash: noteHash,
+				windowId: windowId,
 			});
 		} else {
 			const lastSelectedNoteIds = stateUtils.lastSelectedNoteIds(state);
@@ -311,9 +311,11 @@ export default class BaseApplication {
 			this.store().dispatch({
 				type: 'NOTE_SELECT',
 				id: selectedNoteId,
+				windowId: windowId,
 			});
 		}
 	}
+
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private resourceFetcher_downloadComplete(event: any) {
@@ -545,10 +547,10 @@ export default class BaseApplication {
 				refreshNotes = true;
 			}
 		}
-
 		if (refreshNotes) {
-			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash);
+			await this.refreshNotes(newState, refreshNotesUseSelectedNoteId, refreshNotesHash, action.windowId ?? null);
 		}
+
 
 		if (action.type === 'NOTE_UPDATE_ONE') {
 			if (!action.changedFields.length ||
