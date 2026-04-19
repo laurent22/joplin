@@ -168,7 +168,7 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 			await saveNewProfileConfig(() => deleteProfileById(profileConfig, profile.id));
 		} else {
 			const dirsToDelete = ['cache', 'JoplinBackup', 'resources', 'tmp'];
-			const filesToDelete = ['database.sqlite', 'log.txt', 'settings.json'];
+			const filesToDelete = ['database.sqlite', 'log.txt', 'settings.json', 'keymap-desktop.json'];
 
 			// Delete directories
 			for (const dir of dirsToDelete) {
