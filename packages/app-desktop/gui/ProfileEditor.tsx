@@ -198,7 +198,7 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 				}
 			}
 
-			bridge().showErrorMessageBox(_('The default profile has been reset.'));
+			bridge().showMessageBox(_('The default profile has been reset.'));
 		}
 	};
 
