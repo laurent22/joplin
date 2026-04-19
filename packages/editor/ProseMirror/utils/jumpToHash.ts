@@ -23,14 +23,18 @@ const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 	if (targetHeaderPos !== null) {
 		const newSelection = TextSelection.create(state.doc, targetHeaderPos);
 		if (dispatch) {
-			dispatch(state.tr.setSelection(newSelection));
+			dispatch(
+				state.tr.setSelection(newSelection)
+					.scrollIntoView(),
+			);
 			if (view) {
-				// Use nodeDOM to get the heading element directly, then call native
-				// scrollIntoView with block:'start' so the heading appears at the top
-				// of the viewport, consistent with view mode behavior.
+				// Scroll the heading to the top of the viewport, consistent with view
+				// mode behavior. Uses window.scrollTo to avoid relying on scrollIntoView
+				// option support across WebView versions.
 				const headingDom = view.nodeDOM(targetHeadingNodePos);
-				if (headingDom instanceof Element && headingDom.scrollIntoView) {
-					headingDom.scrollIntoView({ block: 'start' });
+				if (headingDom instanceof Element) {
+					const rect = headingDom.getBoundingClientRect();
+					window.scrollTo(0, window.scrollY + rect.top);
 				}
 				focus('jumpToHash', view);
 			}
