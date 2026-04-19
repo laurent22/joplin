@@ -175,7 +175,7 @@
     "esbuild": "^0.27.0",
     "formatcoords": "1.1.3",
     "glob": "11.1.0",
-    "gulp": "4.0.2",
+    "gulp": "5.0.1",
     "highlight.js": "11.11.1",
     "immer": "9.0.21",
     "is-apple-silicon": "1.1.2",
