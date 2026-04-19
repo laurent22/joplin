@@ -132,7 +132,7 @@ function SearchBar(props: Props) {
 		if (props.isFocused || searchStarted) {
 			void onExitSearch();
 		} else {
-			if (!query || query.trim().length === 0) {
+			if (!query.trim()) {
 				focus('SearchBar::onSearchButtonClick', props.inputRef.current);
 				return;
 			}
