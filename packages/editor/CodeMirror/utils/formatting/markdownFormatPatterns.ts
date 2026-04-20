@@ -33,4 +33,4 @@ export const singleBlockquoteMarkerLength = '> '.length;
 // Captures the entire prefix including leading whitespace.
 // PRIMARY USE: toggleInlineMultilineSelectionFormat - extract list prefix to preserve markers
 // Example: "  - [ ] item" extracts "  - [ ] "
-export const listPrefixRegex = /^(\s*(?:[-*]\s\[[ xX]\]\s|[-*]\s|\d+[.)]\s))/;
+export const listPrefixRegex = /^(\s*(?:[-*+]\s\[[ xX]\]\s|[-*+]\s|\d+[.)]\s))/;

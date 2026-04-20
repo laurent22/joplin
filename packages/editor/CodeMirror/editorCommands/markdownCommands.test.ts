@@ -47,6 +47,13 @@ describe('markdownCommands', () => {
 			expectedAfterFirstToggle: '- **one**\n- **two**',
 		},
 		{
+			name: 'bolding bullet lists (alternate format, with indentation) line by line',
+			initialDocText: '+ one\n\t+ two',
+			syntaxNodes: ['BulletList'],
+			toggleCommand: toggleBolded,
+			expectedAfterFirstToggle: '+ **one**\n\t+ **two**',
+		},
+		{
 			name: 'italicizing ordered lists line by line',
 			initialDocText: '1. one\n2. two',
 			syntaxNodes: ['OrderedList'],
