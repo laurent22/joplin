@@ -168,7 +168,17 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 			await saveNewProfileConfig(() => deleteProfileById(profileConfig, profile.id));
 		} else {
 			const dirsToDelete = ['cache', 'JoplinBackup', 'resources', 'tmp'];
-			const filesToDelete = ['database.sqlite', 'log.txt', 'settings.json', 'keymap-desktop.json'];
+			const filesToDelete = ['database.sqlite', 'log.txt', 'keymap-desktop.json'];
+
+			// Reset settings for the default profile, but retain global settings
+			try {
+				await Setting.resetDefaultProfileSettings();
+			} catch (error) {
+				// If the first stage fails, nothing has happened, so throw an error. But if there is a failure in later steps, ignore errors but log them
+				logger.error('Error deleting the default profile: ', error);
+				bridge().showErrorMessageBox(error.message);
+				return;
+			}
 
 			// Delete directories
 			for (const dir of dirsToDelete) {
