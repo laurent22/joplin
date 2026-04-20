@@ -10,7 +10,7 @@ import markdownHighlightExtension, { markdownInsertExtension } from './extension
 import markdownFrontMatterExtension from './extensions/markdownFrontMatterExtension';
 import lookUpLanguage from './utils/markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
-import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
+import { defaultKeymap, emacsStyleKeymap, cursorGroupLeft, cursorGroupRight } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
 import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
@@ -28,6 +28,16 @@ const closingFencedBlock = StateField.define<boolean>({
 		return backticksBefore >= 2;
 	},
 });
+
+const isMac =
+	typeof navigator !== 'undefined'
+		? /Mac|iPhone|iPad/.test(navigator.platform)
+		: process.platform === 'darwin';
+
+const macWordNavigationKeymap = isMac ? Prec.high(keymap.of([
+	{ key: 'Alt-ArrowRight', run: cursorGroupRight },
+	{ key: 'Alt-ArrowLeft', run: cursorGroupLeft },
+])) : null;
 
 const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
@@ -81,6 +91,7 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	})();
 
 	const extensions = [
+		...(macWordNavigationKeymap ? [macWordNavigationKeymap] : []),
 		languageExtension,
 		closingFencedBlock,
 		createTheme(settings.themeData),
