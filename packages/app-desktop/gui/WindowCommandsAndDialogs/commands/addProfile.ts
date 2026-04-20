@@ -30,7 +30,7 @@ export const runtime = (comp: any): CommandRuntime => {
 							// Inherit the plugin enabled/disabled state from the source profile.
 							// The plugin binaries live in a shared `${rootProfileDir}/plugins`
 							// directory, so without seeding `plugins.states` the new profile would
-							// default every installed plugin to enabled. See issue #15156.
+							// default every installed plugin to enabled.
 							try {
 								const pluginStates = Setting.value('plugins.states');
 								const newProfileDir = `${Setting.value('rootProfileDir')}/profile-${newProfile.id}`;
