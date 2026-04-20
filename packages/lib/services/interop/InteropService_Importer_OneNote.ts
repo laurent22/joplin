@@ -226,9 +226,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder, idMap),
 			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
 		];
-		// Workaround: \u00d8 seems to cause parseFromString to hang.
+		// Workaround: HTML read directly from the filesystem can cause parseFromString to hang.
+		// Force creation of a new string.
 		// See https://github.com/laurent22/joplin/issues/15132
-		html = html.replace(/\u{00d8}/ug, '&oslash;');
+		html = `${html} `.substring(0, html.length);
 		const dom = this.domParser.parseFromString(html, 'text/html');
 
 		let changed = false;
