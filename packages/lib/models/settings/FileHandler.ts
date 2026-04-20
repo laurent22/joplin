@@ -80,10 +80,7 @@ export default class FileHandler {
 
 		if (overwrite) {
 			// Prevent pre-existing settings from being re-instated by subsequent saving of settings
-			this.parsedJsonCache_ = {
-				'$schema': Setting.schemaUrl,
-				...values,
-			};
+			this.parsedJsonCache_ = values;
 		}
 	}
 
