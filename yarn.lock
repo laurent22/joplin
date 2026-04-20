@@ -11574,12 +11574,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/core@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "@floating-ui/core@npm:1.7.5"
+  dependencies:
+    "@floating-ui/utils": "npm:^0.2.11"
+  checksum: 10/fecdc9b3ce93f02bf78a6114b93730a4cb9fa8234c62f9a949016186297a039c9f9cd3c5c81ff74b93ebddf0b32048c4af7a528afe7904b75423ed2e7491b888
+  languageName: node
+  linkType: hard
+
 "@floating-ui/dom@npm:^1.0.1":
   version: 1.0.4
   resolution: "@floating-ui/dom@npm:1.0.4"
   dependencies:
     "@floating-ui/core": "npm:^1.0.1"
   checksum: 10/3024bd0cc27128595160f8d2eeed940f4dd4d3a7b2ab0f6eadaabc11e2a5eeb31cf8627e3777edb87a9fc534a6da11d4adcdbf998453da7e8e008298e41d33f1
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:^1.6.1":
+  version: 1.7.6
+  resolution: "@floating-ui/dom@npm:1.7.6"
+  dependencies:
+    "@floating-ui/core": "npm:^1.7.5"
+    "@floating-ui/utils": "npm:^0.2.11"
+  checksum: 10/84dff2ffdf85c8b92d7edafc543c55869abbeaeb3007fa983159467e050153b507a0f5fe8e84f88c3f28c35a82de9df9c20a6eef5560cbba3afae19141444ff2
+  languageName: node
+  linkType: hard
+
+"@floating-ui/utils@npm:^0.2.11":
+  version: 0.2.11
+  resolution: "@floating-ui/utils@npm:0.2.11"
+  checksum: 10/72150138ba1c274d757a1da85233202fa9fdfd2272ec1fb0883eb0ffdf138863af81573049ed2c20b98adb4b7ae2236065541ce14037fe328955089831a678d5
   languageName: node
   linkType: hard
 
@@ -12736,7 +12762,7 @@ __metadata:
     react-redux: "npm:8.1.3"
     react-select: "npm:5.10.2"
     react-toggle-button: "npm:2.2.0"
-    react-tooltip: "npm:4.5.1"
+    react-tooltip: "npm:5.29.1"
     redux: "npm:4.2.1"
     reselect: "npm:4.1.8"
     roboto-fontface: "npm:0.10.0"
@@ -25245,6 +25271,13 @@ __metadata:
     isobject: "npm:^3.0.0"
     static-extend: "npm:^0.1.1"
   checksum: 10/b236d9deb6594828966e45c5f48abac9a77453ee0dbdb89c635ce876f59755d7952309d554852b6f7d909198256c335a4bd51b09c1d238b36b92152eb2b9d47a
+  languageName: node
+  linkType: hard
+
+"classnames@npm:^2.3.0":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: 10/58eb394e8817021b153bb6e7d782cfb667e4ab390cb2e9dac2fc7c6b979d1cc2b2a733093955fc5c94aa79ef5c8c89f11ab77780894509be6afbb91dddd79d15
   languageName: node
   linkType: hard
 
@@ -50249,16 +50282,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:4.5.1":
-  version: 4.5.1
-  resolution: "react-tooltip@npm:4.5.1"
+"react-tooltip@npm:5.29.1":
+  version: 5.29.1
+  resolution: "react-tooltip@npm:5.29.1"
   dependencies:
-    prop-types: "npm:^15.8.1"
-    uuid: "npm:^7.0.3"
+    "@floating-ui/dom": "npm:^1.6.1"
+    classnames: "npm:^2.3.0"
   peerDependencies:
-    react: ">=16.0.0"
-    react-dom: ">=16.0.0"
-  checksum: 10/a2031d6a9903f18046bb3374a1a23f739fb5ebd272c049772dec9108d5da141f4cf98354970e824d70a83f06aed48cf7e96ab69616ecc0d4e6e8c73cef4b6823
+    react: ">=16.14.0"
+    react-dom: ">=16.14.0"
+  checksum: 10/8e2085a6de6d80362b30dcc8a7ede13db767416389f992f55f7efe10286df1ea6aa317fba90ed4971c75e779224361ffa64c419ebfbf6f43b54836cdbcea6c94
   languageName: node
   linkType: hard
 
