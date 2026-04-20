@@ -1,33 +1,21 @@
-import { Text, EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
+import { Text, EditorSelection, EditorState, SelectionRange, ChangeSet } from '@codemirror/state';
 import { RegionSpec } from './RegionSpec';
 import { SelectionUpdate } from './types';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
 import intersectsSyntaxNode from '../isInSyntaxNode';
 import { blockquotePrefixRegex, listPrefixRegex } from './markdownFormatPatterns';
 
-const applyChangeToText = (text: string, change: { from: number; to?: number; insert: string }) => {
-	const to = change.to ?? change.from;
-	return text.slice(0, change.from) + change.insert + text.slice(to);
-};
-
-const applySelectionUpdateToText = (text: string, update: SelectionUpdate) => {
-	const changes = Array.isArray(update.changes) ? [...update.changes] : [];
-	changes.sort((a, b) => b.from - a.from);
-
-	let result = text;
-	for (const change of changes) {
-		result = applyChangeToText(result, change);
-	}
-
-	return result;
-};
-
 const toggleWholeTextRegion = (content: string, spec: RegionSpec) => {
 	if (!content.trim()) return content;
 
-	const doc = Text.of([content]);
+	let doc = Text.of(content.split('\n'));
 	const update = toggleInlineRegionSurrounded(doc, EditorSelection.range(0, content.length), spec);
-	return applySelectionUpdateToText(content, update);
+
+	if (update.changes) {
+		const change = ChangeSet.of(update.changes, doc.length);
+		doc = change.apply(doc);
+	}
+	return doc.toString();
 };
 
 const toggleListLineContent = (lineText: string, spec: RegionSpec) => {
