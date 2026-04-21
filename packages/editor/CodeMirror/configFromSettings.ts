@@ -29,7 +29,6 @@ const closingFencedBlock = StateField.define<boolean>({
 	},
 });
 
-
 const configFromSettings = (settings: EditorSettings, context: RenderedContentContext) => {
 	const languageExtension = (() => {
 		const openingBrackets = '`([{\'"‘“（《「『【〔〖〘〚'.split('');
