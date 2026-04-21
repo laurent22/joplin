@@ -7475,10 +7475,7 @@ msgid ""
 msgstr ""
 "När detta är aktiverat begärs att bilderna i anteckningen transkriberas med "
 "en serverbaserad transkriberingstjänst av högre kvalitet. Kräver "
-"synkronisering med en kopia från skrivbordsappen.\n"
-"När den är aktiverad begärs att bilderna i anteckningen transkriberas med en "
-"transkriberingstjänst av högre kvalitet på servern. Kräver synkronisering "
-"med en kopia av skrivbordsappen."
+"synkronisering med en kopia från skrivbordsappen."
 
 #: packages/lib/models/settings/builtInMetadata.ts:577
 msgid ""
