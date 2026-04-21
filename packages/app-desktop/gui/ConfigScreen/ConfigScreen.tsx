@@ -463,7 +463,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// When screenComp is null, it means we are viewing the regular settings.
 		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
-		const shouldHideSettingsContainer = !!screenComp;
+		const shouldHideSettingsContainer = !!screenComp && !searchMode;
 
 		const sections = shared.settingsSections({ device: AppType.Desktop, settings });
 		const searchResultGroupItems = searchResultGroups(this.state.searchQuery, sections, AppType.Desktop);
@@ -592,10 +592,10 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					{tabComponents}
 					<ButtonBar
 						hasChanges={hasChanges}
-						backButtonTitle={hasChanges && !screenComp ? _('Cancel') : _('Back')}
+						backButtonTitle={hasChanges && (!screenComp || searchMode) ? _('Cancel') : _('Back')}
 						onCancelClick={this.onCancelClick}
-						onSaveClick={screenComp ? undefined : this.onSaveClick}
-						onApplyClick={screenComp ? undefined : this.onApplyClick}
+						onSaveClick={screenComp && !searchMode ? undefined : this.onSaveClick}
+						onApplyClick={screenComp && !searchMode ? undefined : this.onApplyClick}
 					/>
 				</div>
 			</div>

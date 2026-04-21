@@ -2,14 +2,11 @@ import Setting, { AppType, SettingItem, SettingMetadataSection } from '@joplin/l
 import { includesNormalizedQuery, normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text';
 
 const isMetadataMatched = (
-	query: string,
+	normalizedQuery: string,
 	section: SettingMetadataSection,
 	metadata: SettingItem,
 	appType: AppType,
 ): boolean => {
-	const normalizedQuery = normalizeQuery(query);
-	if (!normalizedQuery) return true;
-
 	const metadataLabel = metadata.label ? metadata.label() : '';
 	const metadataDescription = metadata.description ? metadata.description(appType) : '';
 	const sectionLabel = Setting.sectionNameToLabel(section.name);

@@ -3,6 +3,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
 import { useCallback, useId } from 'react';
 import control_PluginsStates from './plugins/PluginsStates';
+import control_GlobalHotkeyInput from './GlobalHotkeyInput';
 import bridge from '../../../services/bridge';
 import { _ } from '@joplin/lib/locale';
 import Button, { ButtonLevel, ButtonSize } from '../../Button/Button';
@@ -11,8 +12,10 @@ import * as pathUtils from '@joplin/lib/path-utils';
 import SettingLabel from './SettingLabel';
 import SettingDescription from './SettingDescription';
 
-const settingKeyToControl: Record<string, typeof control_PluginsStates> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each control component has different prop types
+const settingKeyToControl: Record<string, React.FC<any>> = {
 	'plugins.states': control_PluginsStates,
+	'globalHotkey': control_GlobalHotkeyInput,
 };
 
 export interface UpdateSettingValueEvent {
