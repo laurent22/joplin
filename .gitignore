@@ -1214,6 +1214,7 @@ packages/generator-joplin/tools/updateCategories.js
 packages/htmlpack/index.test.js
 packages/htmlpack/index.js
 packages/htmlpack/packToString.js
+packages/htmlpack/packToWriter.test.js
 packages/htmlpack/packToWriter.js
 packages/htmlpack/utils/parseHtmlAsync.js
 packages/lib/ArrayUtils.js
