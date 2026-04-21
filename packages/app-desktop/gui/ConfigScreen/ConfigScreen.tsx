@@ -56,6 +56,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			changedSettingKeys: [],
 			needRestart: false,
 			fonts: [],
+			searchQuery: '',
+			searchSectionFilter: null,
 		};
 
 		this.rowStyle_ = {

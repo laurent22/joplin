@@ -36,7 +36,7 @@ export const shouldShowBySearch = (
 	if (!hasNormalizedQuery(query)) return false;
 
 	return (
-		equalsNormalizedQuery(query, sectionTitle)
+		includesNormalizedQuery(query, sectionTitle)
 		|| includesNormalizedQuery(query, toSearchText(relatedText))
 	);
 };

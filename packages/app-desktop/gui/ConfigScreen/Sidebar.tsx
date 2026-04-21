@@ -70,6 +70,8 @@ export default function Sidebar(props: Props) {
 				// Prevent infinite loop if no matched sections
 				if (newIndex === initialIndex) break;
 			}
+
+			if (!matchedSectionNames.has(props.sections[newIndex].name)) return;
 		}
 
 		if (newIndex !== selectedIndex) {
@@ -108,7 +110,7 @@ export default function Sidebar(props: Props) {
 				}}
 				className={classNames.join(' ')}
 				id={`setting-tab-${section.name}`}
-				aria-controls={`setting-section-${section.name}`}
+				aria-controls={isSearching ? (isDisabled ? undefined : 'setting-section-search-results') : `setting-section-${section.name}`}
 				aria-selected={isActiveTab}
 				aria-disabled={isDisabled}
 				tabIndex={isActiveTab ? 0 : -1}

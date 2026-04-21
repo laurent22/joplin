@@ -21,6 +21,7 @@ describe('config-search', () => {
 		expect(toSearchText('alpha')).toBe('alpha');
 		expect(toSearchText(['alpha', 'beta'])).toBe('alpha\nbeta');
 		expect(toSearchText(null)).toBe('');
+		expect(toSearchText(undefined)).toBe('');
 	});
 
 	it('should apply shared visibility predicate', () => {
@@ -28,5 +29,6 @@ describe('config-search', () => {
 		expect(shouldShowBySearch('sync', 'General', 'Synchronization interval')).toBe(true);
 		expect(shouldShowBySearch('   ', 'General', 'Synchronization interval')).toBe(false);
 		expect(shouldShowBySearch('sync', 'General', 'No match here')).toBe(false);
+		expect(shouldShowBySearch('sync', 'General', ['Synchronization', 'other'])).toBe(true);
 	});
 });
