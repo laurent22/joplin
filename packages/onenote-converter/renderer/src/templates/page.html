@@ -41,8 +41,20 @@
     .tagged-list { list-style: none; padding-left: 0; }
     {# Select both SVGs and IMGs: Joplin post-processes the converter's output, converting SVGs to IMGs. #}
     .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+    .icon-secondary > svg, .icon-secondary > img, .icon-secondary > .content {
+        position: absolute;
+        fill: black;
+        color: black;
+        filter: drop-shadow(0 0 2px white);
+        height: 12px;
+        top: -1px;
+        right: 1px;
+    }
+    .icon-secondary > .content {
+        height: auto;
+        user-select: none;
+        font-size: 10px;
+    }
     /*** End default CSS ***/
 
     {% for entry in global_styles -%}
