@@ -390,6 +390,7 @@ describe('InteropService_Importer_OneNote', () => {
 	it('should import inline tags', async () => {
 		const notes = await importNote(`${supportDir}/onenote/tagged-lines.one`);
 		const note = notes.find(note => note.title === 'Checklists');
+		expect(notesToMarkdownString([note])).toMatchSnapshot();
 		expect(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
 	});
 });

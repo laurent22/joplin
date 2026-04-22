@@ -946,6 +946,43 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
 `;
 
 exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
+"# Note: Checklists
+
+ Checklists 
+
+Checklists
+
+Wednesday, April 22, 2026
+
+1:45 PM
+
+## Tagged list
+
+This note includes a tagged list:
+
+&nbsp;
+
+- ❗Exclamation point
+- ❓Question mark
+-  [ ] Checkbox with exclamation point
+-  [x] Checkbox (complete)
+    -  [ ] Sub-checkbox (incomplete)
+    -  [x]  [x] Sub-checkbox, with arrow (complete)
+- ⭐Star
+- 🖊️Pen
+- 💡Lightbulb
+- 🔒Padlock
+- 📨Paper airplane
+- 📖Book
+- 🎵Music note
+- ■Red
+- 🏠House
+- 📞Phone
+- 🔗Link
+- 🎞️Film"
+`;
+
+exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 "<!DOCTYPE HTML>
 <html><head>
     <meta charset="UTF-8">
@@ -961,7 +998,7 @@ exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
     .icon-2 > svg, .icon-2 > img { fill: #4673b7; }
     .icon-3 > svg, .icon-3 > img { fill: #4673b7; }
     .icon-4 > svg, .icon-4 > img { fill: #4673b7; }
-    .icon-5 > svg, .icon-5 > img { fill: #ffd678; }
+    .icon-5 > svg, .icon-5 > img { color: #ffd678; }
     .icon-6 > svg, .icon-6 > img { fill: #db5b4d; }
     
     </style>
@@ -985,7 +1022,7 @@ exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
 <span class="icon-secondary">→</span></span><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
 <span class="icon-secondary">→</span></span>Sub-checkbox, with arrow (complete)</span></li>
 </ul></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal -text">🟊</span>Star</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal -text">⭐</span>Star</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🖊️</span>Pen</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">💡</span>Lightbulb</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🔒</span>Padlock</span></li>
