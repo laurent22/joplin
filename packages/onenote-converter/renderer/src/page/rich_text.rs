@@ -205,7 +205,7 @@ impl<'a> Renderer<'a> {
         }
 
         if let Some(font) = style.font() {
-            styles.set("font-family", font.to_string());
+            styles.set("font-family", font_with_fallback(font));
         }
 
         if let Some(size) = style.font_size() {
@@ -289,4 +289,12 @@ fn fix_newlines(text: &str) -> String {
             "<br>".to_string() + &"&nbsp;".repeat(captures[1].len())
         })
         .to_string()
+}
+
+fn font_with_fallback(font: &str) -> String {
+    if font == "Calibri" || font == "Calibri Light" {
+        format!("\"{}\", sans-serif", font)
+    } else {
+        font.to_string()
+    }
 }
