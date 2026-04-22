@@ -75,6 +75,10 @@ impl From<(Cow<'static, str>, IconSize, StyleSet)> for NoteTagIcon {
     }
 }
 
+fn is_icon_html(icon: &str) -> bool {
+    icon.contains("<svg") || icon.contains("<span")
+}
+
 impl<'a> Renderer<'a> {
     pub(crate) fn render_with_note_tags(
         &mut self,
@@ -118,7 +122,7 @@ impl<'a> Renderer<'a> {
             icon_classes.push("-normal".into());
         }
 
-        if !icon.html.contains("</") {
+        if !is_icon_html(&icon.html) {
             icon_classes.push("-text".into());
         }
 
@@ -385,6 +389,14 @@ impl<'a> Renderer<'a> {
         } else {
             ICON_CHECKBOX_EMPTY
         });
+
+        // The secondary icon's styles expect a content element to allow the
+        // icon to be overlayed
+        let secondary_icon = if !is_icon_html(secondary_icon) {
+            format!("<span class=\"content\">{secondary_icon}</span>")
+        } else {
+            secondary_icon.to_string()
+        };
 
         content.push_str(&format!(
             "<span class=\"icon-secondary\">{}</span>",
