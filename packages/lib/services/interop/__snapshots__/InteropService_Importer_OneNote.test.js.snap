@@ -975,7 +975,7 @@ This note includes a tagged list:
 - 📨Paper airplane
 - 📖Book
 - 🎵Music note
-- ■Red
+- ⯀Red
 - 🏠House
 - 📞Phone
 - 🔗Link
@@ -999,7 +999,7 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
     .icon-3 > svg, .icon-3 > img { fill: #4673b7; }
     .icon-4 > svg, .icon-4 > img { fill: #4673b7; }
     .icon-5 > svg, .icon-5 > img { color: #ffd678; }
-    .icon-6 > svg, .icon-6 > img { fill: #db5b4d; }
+    .icon-6 > svg, .icon-6 > img { color: #db5b4d; }
     
     </style>
 </head>
@@ -1029,7 +1029,7 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📨</span>Paper airplane</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📖</span>Book</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🎵</span>Music note</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-6 -large -text">■</span>Red</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-6 -large -text">⯀</span>Red</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🏠</span>House</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📞</span>Phone</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🔗</span>Link</span></li>

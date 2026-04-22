@@ -20,9 +20,9 @@ const ICON_BUBBLE: &str = include_str!("../../assets/icons/chat-4-line.svg");
 const ICON_CHECKBOX_COMPLETE: &str = include_str!("../../assets/icons/checkbox-fill.svg");
 const ICON_CHECKBOX_EMPTY: &str = include_str!("../../assets/icons/checkbox-blank-line.svg");
 const ICON_CHECK_MARK: &str = include_str!("../../assets/icons/check-line.svg");
-const ICON_CIRCLE: &str = include_str!("../../assets/icons/checkbox-blank-circle-fill.svg");
+const ICON_CIRCLE: &str = "●";
 const ICON_CONTACT: &str = include_str!("../../assets/icons/contacts-line.svg");
-const ICON_EMAIL: &str = "📨";
+const ICON_EMAIL: &str = "📨"; // Note: Displayed as a paper airplane in OneNote
 const ICON_ERROR: &str = "❗";
 const ICON_FILM: &str = "🎞️";
 const ICON_FLAG: &str = "🚩";
@@ -36,7 +36,7 @@ const ICON_PEN: &str = "🖊️";
 const ICON_PERSON: &str = include_str!("../../assets/icons/user-line.svg");
 const ICON_PHONE: &str = "📞";
 const ICON_QUESTION_MARK: &str = "❓";
-const ICON_SQUARE: &str = "■";
+const ICON_SQUARE: &str = "⯀";
 const ICON_STAR: &str = "🟊";
 const ICON_YELLOW_STAR: &str = "⭐";
 
@@ -76,6 +76,7 @@ impl From<(Cow<'static, str>, IconSize, StyleSet)> for NoteTagIcon {
 }
 
 fn is_icon_html(icon: &str) -> bool {
+    // Use a hueristic to guess whether an icon is HTML (e.g. an SVG) or not
     icon.contains("<svg") || icon.contains("<span")
 }
 
@@ -196,7 +197,9 @@ impl<'a> Renderer<'a> {
             NoteTagShape::YellowCheckBox => self.icon_checkbox(status, COLOR_YELLOW),
             NoteTagShape::BlueCheckBox => self.icon_checkbox(status, COLOR_BLUE),
             NoteTagShape::GreenStarCheckBox => self.icon_checkbox_with_star(status, COLOR_GREEN),
-            NoteTagShape::YellowStarCheckBox => self.icon_checkbox_with(status, COLOR_YELLOW, ICON_YELLOW_STAR),
+            NoteTagShape::YellowStarCheckBox => {
+                self.icon_checkbox_with(status, COLOR_YELLOW, ICON_YELLOW_STAR)
+            }
             NoteTagShape::BlueStarCheckBox => self.icon_checkbox_with_star(status, COLOR_BLUE),
             NoteTagShape::GreenExclamationCheckBox => {
                 self.icon_checkbox_with_exclamation(status, COLOR_GREEN)
@@ -425,14 +428,14 @@ impl<'a> Renderer<'a> {
 
     fn icon_circle(&self, color: &'static str) -> NoteTagIcon {
         let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
+        style.set("color", color.to_string());
 
         (Cow::from(ICON_CIRCLE), IconSize::Normal, style).into()
     }
 
     fn icon_square(&self, color: &'static str) -> NoteTagIcon {
         let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
+        style.set("color", color.to_string());
 
         (Cow::from(ICON_SQUARE), IconSize::Large, style).into()
     }
