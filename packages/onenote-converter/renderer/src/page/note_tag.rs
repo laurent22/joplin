@@ -22,7 +22,7 @@ const ICON_CHECKBOX_EMPTY: &str = include_str!("../../assets/icons/checkbox-blan
 const ICON_CHECK_MARK: &str = include_str!("../../assets/icons/check-line.svg");
 const ICON_CIRCLE: &str = include_str!("../../assets/icons/checkbox-blank-circle-fill.svg");
 const ICON_CONTACT: &str = include_str!("../../assets/icons/contacts-line.svg");
-const ICON_EMAIL: &str = include_str!("../../assets/icons/send-plane-2-line.svg");
+const ICON_EMAIL: &str = "📨";
 const ICON_ERROR: &str = "❗";
 const ICON_FILM: &str = "🎞️";
 const ICON_FLAG: &str = "🚩";
@@ -31,13 +31,13 @@ const ICON_LIGHT_BULB: &str = "💡";
 const ICON_LINK: &str = "🔗";
 const ICON_LOCK: &str = "🔒";
 const ICON_MUSIC: &str = "🎵";
-const ICON_PAPER: &str = include_str!("../../assets/icons/file-list-2-line.svg");
+const ICON_PAPER: &str = "📄";
 const ICON_PEN: &str = "🖊️";
 const ICON_PERSON: &str = include_str!("../../assets/icons/user-line.svg");
-const ICON_PHONE: &str = include_str!("../../assets/icons/phone-line.svg");
+const ICON_PHONE: &str = "📞";
 const ICON_QUESTION_MARK: &str = "❓";
-const ICON_SQUARE: &str = include_str!("../../assets/icons/checkbox-blank-fill.svg");
-const ICON_STAR: &str = "⭐";
+const ICON_SQUARE: &str = "■";
+const ICON_STAR: &str = "🟊";
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 enum IconSize {
