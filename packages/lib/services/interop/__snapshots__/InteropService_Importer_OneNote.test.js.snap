@@ -992,8 +992,7 @@ exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><img src=":/id-here">
 </span>Paper airplane</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📖</span>Book</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><img src=":/id-here">
-</span>Music note</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🎵</span>Music note</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-6 -large"><img alt="Checked" src=":/id-here">
 </span>Red</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🏠</span>House</span></li>
