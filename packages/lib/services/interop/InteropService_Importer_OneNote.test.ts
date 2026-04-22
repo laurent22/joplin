@@ -386,4 +386,10 @@ describe('InteropService_Importer_OneNote', () => {
 				.sort(),
 		).toMatchSnapshot();
 	});
+
+	it('should import inline tags', async () => {
+		const notes = await importNote(`${supportDir}/onenote/tagged-lines.one`);
+		const note = notes.find(note => note.title === 'Checklists');
+		expect(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
 });
