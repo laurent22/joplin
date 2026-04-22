@@ -17,10 +17,10 @@ const ICON_ARROW_RIGHT: &str = "→";
 const ICON_AWARD: &str = include_str!("../../assets/icons/award-line.svg");
 const ICON_BOOK: &str = "📖";
 const ICON_BUBBLE: &str = include_str!("../../assets/icons/chat-4-line.svg");
-const ICON_CHECKBOX_COMPLETE: &str = "☑️";
-const ICON_CHECKBOX_EMPTY: &str = "◻️";
-const ICON_CHECK_MARK: &str = "✔️";
-const ICON_CIRCLE: &str = "●";
+const ICON_CHECKBOX_COMPLETE: &str = include_str!("../../assets/icons/checkbox-fill.svg");
+const ICON_CHECKBOX_EMPTY: &str = include_str!("../../assets/icons/checkbox-blank-line.svg");
+const ICON_CHECK_MARK: &str = include_str!("../../assets/icons/check-line.svg");
+const ICON_CIRCLE: &str = include_str!("../../assets/icons/checkbox-blank-circle-fill.svg");
 const ICON_CONTACT: &str = include_str!("../../assets/icons/contacts-line.svg");
 const ICON_EMAIL: &str = include_str!("../../assets/icons/send-plane-2-line.svg");
 const ICON_ERROR: &str = "❗";
@@ -36,7 +36,7 @@ const ICON_PEN: &str = "🖊️";
 const ICON_PERSON: &str = include_str!("../../assets/icons/user-line.svg");
 const ICON_PHONE: &str = include_str!("../../assets/icons/phone-line.svg");
 const ICON_QUESTION_MARK: &str = "❓";
-const ICON_SQUARE: &str = "◻️";
+const ICON_SQUARE: &str = include_str!("../../assets/icons/checkbox-blank-fill.svg");
 const ICON_STAR: &str = "⭐";
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -117,7 +117,7 @@ impl<'a> Renderer<'a> {
             icon_classes.push("-normal".into());
         }
 
-        if !icon.html.starts_with("<svg") {
+        if !icon.html.contains("</") {
             icon_classes.push("-text".into());
         }
 
