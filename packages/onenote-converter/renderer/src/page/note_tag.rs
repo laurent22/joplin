@@ -38,6 +38,7 @@ const ICON_PHONE: &str = "📞";
 const ICON_QUESTION_MARK: &str = "❓";
 const ICON_SQUARE: &str = "■";
 const ICON_STAR: &str = "🟊";
+const ICON_YELLOW_STAR: &str = "⭐";
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 enum IconSize {
@@ -191,7 +192,7 @@ impl<'a> Renderer<'a> {
             NoteTagShape::YellowCheckBox => self.icon_checkbox(status, COLOR_YELLOW),
             NoteTagShape::BlueCheckBox => self.icon_checkbox(status, COLOR_BLUE),
             NoteTagShape::GreenStarCheckBox => self.icon_checkbox_with_star(status, COLOR_GREEN),
-            NoteTagShape::YellowStarCheckBox => self.icon_checkbox_with_star(status, COLOR_YELLOW),
+            NoteTagShape::YellowStarCheckBox => self.icon_checkbox_with(status, COLOR_YELLOW, ICON_YELLOW_STAR),
             NoteTagShape::BlueStarCheckBox => self.icon_checkbox_with_star(status, COLOR_BLUE),
             NoteTagShape::GreenExclamationCheckBox => {
                 self.icon_checkbox_with_exclamation(status, COLOR_GREEN)
@@ -213,9 +214,9 @@ impl<'a> Renderer<'a> {
             }
             NoteTagShape::YellowStar => {
                 let mut style = StyleSet::new();
-                style.set("fill", COLOR_YELLOW.to_string());
+                style.set("color", COLOR_YELLOW.to_string());
 
-                (Cow::from(ICON_STAR), IconSize::Normal, style).into()
+                (Cow::from(ICON_YELLOW_STAR), IconSize::Normal, style).into()
             }
 
             NoteTagShape::QuestionMark => (Cow::from(ICON_QUESTION_MARK), IconSize::Normal).into(),
