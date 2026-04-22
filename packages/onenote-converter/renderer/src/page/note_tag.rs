@@ -13,31 +13,31 @@ const COLOR_PINK: &str = "#f78b9d";
 const COLOR_RED: &str = "#db5b4d";
 const COLOR_YELLOW: &str = "#ffd678";
 
-const ICON_ARROW_RIGHT: &str = include_str!("../../assets/icons/arrow-right-line.svg");
+const ICON_ARROW_RIGHT: &str = "→";
 const ICON_AWARD: &str = include_str!("../../assets/icons/award-line.svg");
-const ICON_BOOK: &str = include_str!("../../assets/icons/book-open-line.svg");
+const ICON_BOOK: &str = "📖";
 const ICON_BUBBLE: &str = include_str!("../../assets/icons/chat-4-line.svg");
-const ICON_CHECKBOX_COMPLETE: &str = include_str!("../../assets/icons/checkbox-fill.svg");
-const ICON_CHECKBOX_EMPTY: &str = include_str!("../../assets/icons/checkbox-blank-line.svg");
-const ICON_CHECK_MARK: &str = include_str!("../../assets/icons/check-line.svg");
-const ICON_CIRCLE: &str = include_str!("../../assets/icons/checkbox-blank-circle-fill.svg");
+const ICON_CHECKBOX_COMPLETE: &str = "☑️";
+const ICON_CHECKBOX_EMPTY: &str = "◻️";
+const ICON_CHECK_MARK: &str = "✔️";
+const ICON_CIRCLE: &str = "●";
 const ICON_CONTACT: &str = include_str!("../../assets/icons/contacts-line.svg");
 const ICON_EMAIL: &str = include_str!("../../assets/icons/send-plane-2-line.svg");
-const ICON_ERROR: &str = include_str!("../../assets/icons/error-warning-line.svg");
+const ICON_ERROR: &str = "❗";
 const ICON_FILM: &str = include_str!("../../assets/icons/film-line.svg");
-const ICON_FLAG: &str = include_str!("../../assets/icons/flag-fill.svg");
-const ICON_HOME: &str = include_str!("../../assets/icons/home-4-line.svg");
-const ICON_LIGHT_BULB: &str = include_str!("../../assets/icons/lightbulb-line.svg");
-const ICON_LINK: &str = include_str!("../../assets/icons/link.svg");
-const ICON_LOCK: &str = include_str!("../../assets/icons/lock-line.svg");
+const ICON_FLAG: &str = "🚩";
+const ICON_HOME: &str = "🏠";
+const ICON_LIGHT_BULB: &str = "💡";
+const ICON_LINK: &str = "🔗";
+const ICON_LOCK: &str = "🔒";
 const ICON_MUSIC: &str = include_str!("../../assets/icons/music-fill.svg");
 const ICON_PAPER: &str = include_str!("../../assets/icons/file-list-2-line.svg");
-const ICON_PEN: &str = include_str!("../../assets/icons/mark-pen-line.svg");
+const ICON_PEN: &str = "🖊️";
 const ICON_PERSON: &str = include_str!("../../assets/icons/user-line.svg");
 const ICON_PHONE: &str = include_str!("../../assets/icons/phone-line.svg");
-const ICON_QUESTION_MARK: &str = include_str!("../../assets/icons/question-mark.svg");
-const ICON_SQUARE: &str = include_str!("../../assets/icons/checkbox-blank-fill.svg");
-const ICON_STAR: &str = include_str!("../../assets/icons/star-fill.svg");
+const ICON_QUESTION_MARK: &str = "❓";
+const ICON_SQUARE: &str = "◻️";
+const ICON_STAR: &str = "⭐";
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 enum IconSize {
@@ -115,6 +115,10 @@ impl<'a> Renderer<'a> {
             icon_classes.push("-large".into());
         } else if icon.size == IconSize::Normal {
             icon_classes.push("-normal".into());
+        }
+
+        if !icon.html.starts_with("<svg") {
+            icon_classes.push("-text".into());
         }
 
         icon_classes
