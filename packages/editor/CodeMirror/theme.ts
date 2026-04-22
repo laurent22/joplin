@@ -174,10 +174,32 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 
 		// Allows editor content to be left-aligned with the toolbar on desktop.
 		// See https://github.com/laurent22/joplin/issues/11279
-		[`${editorNoGuttersSelector} .cm-line`]: theme.isDesktop ? {
-			// Note: This cannot be zero:
-			paddingLeft: '1px',
-		} : undefined,
+		[`${editorNoGuttersSelector} .cm-line:not(.cm-codeBlock)`]:
+			theme.isDesktop
+				? {
+					// Note: This cannot be zero:
+					paddingLeft: '1px',
+				}
+				: undefined,
+
+		// Better CodeBlocks style: Round corners, Padding, etc
+		'& .cm-line.cm-codeBlock': {
+			marginRight: '10px',
+			paddingLeft: '10px',
+			paddingRight: '10px',
+		},
+		'& .cm-line.cm-codeBlock.cm-regionFirstLine': {
+			marginTop: '6px',
+			paddingTop: '4px',
+			borderTopLeftRadius: '6px',
+			borderTopRightRadius: '6px',
+		},
+		'& .cm-line.cm-codeBlock.cm-regionLastLine': {
+			marginBottom: '6px',
+			paddingBottom: '4px',
+			borderBottomLeftRadius: '6px',
+			borderBottomRightRadius: '6px',
+		},
 
 		// Override the default URL style when the URL is within a link
 		'& .tok-url.tok-link, & .tok-link.tok-meta, & .tok-link.tok-string': {

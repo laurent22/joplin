@@ -458,8 +458,12 @@ export default function(theme: any, options: Options = null) {
 
 		/* To make code blocks horizontally scrollable */
 		/* https://github.com/laurent22/joplin/issues/5740 */
+		/* And better CodeBlocks Style */
 		pre.hljs {
 			overflow-x: auto;
+			padding: 8px 10px;
+			margin: 10px 6px 18px 6px;
+			border-radius: 6px;
 		}
 
 		.joplin-table-wrapper{
