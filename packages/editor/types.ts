@@ -113,8 +113,7 @@ export interface ContentScriptData {
 	contentScriptId: string;
 	contentScriptJs: (context: ContentScriptLoadOptions)=> Promise<ContentScriptJs>;
 	loadCssAsset: (name: string)=> Promise<string>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	postMessageHandler: (message: any)=> any;
+	postMessageHandler: (message: unknown)=> unknown;
 }
 
 // Intended to correspond with https://codemirror.net/docs/ref/#state.Transaction%5EuserEvent
@@ -129,7 +128,7 @@ export interface UpdateBodyOptions {
 
 export interface EditorControl {
 	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Commands have varying argument types
 	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;

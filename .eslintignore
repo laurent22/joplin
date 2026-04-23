@@ -103,6 +103,7 @@ packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
 packages/app-cli/app/command-cat.js
+packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
 packages/app-cli/app/command-cp.js
 packages/app-cli/app/command-done.test.js
@@ -362,8 +363,6 @@ packages/app-desktop/gui/NoteList/utils/useMoveNote.js
 packages/app-desktop/gui/NoteList/utils/useOnKeyDown.js
 packages/app-desktop/gui/NoteList/utils/useOnNoteClick.js
 packages/app-desktop/gui/NoteList/utils/useOnNoteDoubleClick.js
-packages/app-desktop/gui/NoteList/utils/useRefocusOnDeletion.test.js
-packages/app-desktop/gui/NoteList/utils/useRefocusOnDeletion.js
 packages/app-desktop/gui/NoteList/utils/useScroll.js
 packages/app-desktop/gui/NoteList/utils/useVisibleRange.test.js
 packages/app-desktop/gui/NoteList/utils/useVisibleRange.js
@@ -702,10 +701,15 @@ packages/app-mobile/components/EditorToolbar/utils/isSelected.js
 packages/app-mobile/components/EditorToolbar/utils/selectedCommandNamesFromState.js
 packages/app-mobile/components/EditorToolbar/utils/toolbarButtonsFromState.js
 packages/app-mobile/components/EditorToolbar/utils/useButtonSize.js
+packages/app-mobile/components/EditorToolbar/utils/useSaveToolbarButtons.test.js
+packages/app-mobile/components/EditorToolbar/utils/useSaveToolbarButtons.js
+packages/app-mobile/components/EditorToolbar/utils/useToolbarEditorState.test.js
+packages/app-mobile/components/EditorToolbar/utils/useToolbarEditorState.js
 packages/app-mobile/components/ExtendedWebView/index.jest.js
 packages/app-mobile/components/ExtendedWebView/index.js
 packages/app-mobile/components/ExtendedWebView/index.web.js
 packages/app-mobile/components/ExtendedWebView/types.js
+packages/app-mobile/components/ExtendedWebView/utils/polyfillScrollFunctions.js
 packages/app-mobile/components/ExtendedWebView/utils/useCss.js
 packages/app-mobile/components/FolderPicker.js
 packages/app-mobile/components/Icon.js
@@ -876,6 +880,7 @@ packages/app-mobile/components/screens/Notes/NewNoteButton.test.js
 packages/app-mobile/components/screens/Notes/NewNoteButton.js
 packages/app-mobile/components/screens/Notes/Notes.js
 packages/app-mobile/components/screens/Notes/TextWrapCalculator.js
+packages/app-mobile/components/screens/ResourceScreen.js
 packages/app-mobile/components/screens/SearchScreen/SearchBar.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.test.js
 packages/app-mobile/components/screens/SearchScreen/SearchResults.js
@@ -892,6 +897,8 @@ packages/app-mobile/components/screens/dropbox-login.js
 packages/app-mobile/components/screens/encryption-config.test.js
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/folder.js
+packages/app-mobile/components/screens/resourceScreenUtils.test.js
+packages/app-mobile/components/screens/resourceScreenUtils.js
 packages/app-mobile/components/screens/status.js
 packages/app-mobile/components/screens/tags.js
 packages/app-mobile/components/side-menu-content.js
@@ -962,6 +969,7 @@ packages/app-mobile/utils/ShareUtils.test.js
 packages/app-mobile/utils/ShareUtils.js
 packages/app-mobile/utils/TlsUtils.js
 packages/app-mobile/utils/appDefaultState.js
+packages/app-mobile/utils/appReducer.test.js
 packages/app-mobile/utils/appReducer.js
 packages/app-mobile/utils/autodetectTheme.js
 packages/app-mobile/utils/buildStartupTasks.js
@@ -1118,9 +1126,11 @@ packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.js
 packages/editor/CodeMirror/utils/formatting/findInlineMatch.test.js
 packages/editor/CodeMirror/utils/formatting/findInlineMatch.js
 packages/editor/CodeMirror/utils/formatting/isIndentationEquivalent.js
+packages/editor/CodeMirror/utils/formatting/markdownFormatPatterns.js
 packages/editor/CodeMirror/utils/formatting/tabsToSpaces.test.js
 packages/editor/CodeMirror/utils/formatting/tabsToSpaces.js
 packages/editor/CodeMirror/utils/formatting/toggleInlineFormatGlobally.js
+packages/editor/CodeMirror/utils/formatting/toggleInlineMultilineSelectionFormat.js
 packages/editor/CodeMirror/utils/formatting/toggleInlineRegionSurrounded.js
 packages/editor/CodeMirror/utils/formatting/toggleInlineSelectionFormat.js
 packages/editor/CodeMirror/utils/formatting/toggleRegionFormatGlobally.test.js
@@ -1448,6 +1458,7 @@ packages/lib/services/CommandService.test.js
 packages/lib/services/CommandService.js
 packages/lib/services/DecryptionWorker.test.js
 packages/lib/services/DecryptionWorker.js
+packages/lib/services/ExternalEditWatcher.test.js
 packages/lib/services/ExternalEditWatcher.js
 packages/lib/services/ExternalEditWatcher/utils.js
 packages/lib/services/ItemChangeUtils.js

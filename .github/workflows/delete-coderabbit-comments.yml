@@ -1,0 +1,53 @@
+name: Delete CodeRabbit PR Comments
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  delete-coderabbit-comments:
+    if: >
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       (github.event.comment.user.login == 'coderabbitai' || github.event.comment.user.login == 'coderabbitai[bot]'))
+      ||
+      (github.event_name == 'pull_request_review' &&
+       (github.event.review.user.login == 'coderabbitai' || github.event.review.user.login == 'coderabbitai[bot]'))
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Delete CodeRabbit issue comment
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_URL: ${{ github.event.comment.url }}
+        run: |
+          gh api -X DELETE "$COMMENT_URL"
+
+      - name: Minimize CodeRabbit review summary
+        if: github.event_name == 'pull_request_review'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # The review summary appears as an issue comment on the PR.
+          # Find recent comments by coderabbitai and minimize them.
+          COMMENT_NODE_IDS=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments?per_page=10&sort=created&direction=desc" \
+            --jq '[.[] | select(.user.login == "coderabbitai[bot]") | .node_id] | .[]')
+
+          for NODE_ID in $COMMENT_NODE_IDS; do
+            gh api graphql -f query='
+              mutation {
+                minimizeComment(input: {subjectId: "'"${NODE_ID}"'", classifier: OFF_TOPIC}) {
+                  minimizedComment {
+                    isMinimized
+                  }
+                }
+              }
+            '
+          done

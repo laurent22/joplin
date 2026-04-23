@@ -11,6 +11,9 @@
 - Focus on testing essential behaviour and edge cases — avoid adding tests for every minor detail.
 - Avoid duplicating code in tests; when testing the same logic with different inputs, use `test.each` or shared helpers instead of repeating similar test blocks.
 - Do not make white space changes - do not add unnecessary new lines, or spaces to existing code, or wrap existing code.
+- If you add a new TypeScript file, run `yarn updateIgnored` from the root.
+- When an unknown word is detected by cSpell, handle it as per the specification in `readme/dev/spellcheck.md`
+- To compile TypeScript, use `yarn tsc`. To type-check without emitting files, use `yarn tsc --noEmit`.
 
 ## Full Documentation
 

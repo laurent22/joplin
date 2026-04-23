@@ -320,7 +320,7 @@ export async function createResourcesFromPaths(mediaFiles: DownloadedMediaFile[]
 			const resource = await shim.createResourceFromPath(mediaFile.path);
 			return { ...mediaFile, resource };
 		} catch (error) {
-			logger.warn(`Cannot create resource for ${mediaFile.originalUrl}`, error);
+			logger.info(`Cannot create resource for ${mediaFile.originalUrl}`, error);
 			return { ...mediaFile, resource: null };
 		}
 	};

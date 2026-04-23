@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 use crate::one::property::layout_alignment::LayoutAlignment;
 use crate::one::property_set::{image_node, picture_container};
 use crate::onenote::iframe::{IFrame, parse_iframe};
@@ -14,7 +12,7 @@ use parser_utils::errors::{ErrorKind, Result};
 /// See [\[MS-ONE\] 2.2.24].
 ///
 /// [\[MS-ONE\] 2.2.24]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/b7bb4d1a-2a57-4819-9eb4-5a2ce8cf210f
-#[derive(Clone, PartialEq, PartialOrd, Debug)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct Image {
     pub(crate) data: Option<FileBlob>,
     pub(crate) extension: Option<String>,
@@ -54,8 +52,8 @@ impl Image {
     /// The image's binary data.
     ///
     /// If `None` this means that the image data hasn't been uploaded yet.
-    pub fn data(&self) -> Option<Rc<Vec<u8>>> {
-        self.data.as_ref().map(|data| data.0.clone())
+    pub fn data(&self) -> Result<Option<Vec<u8>>> {
+        self.data.as_ref().map(|data| data.load()).transpose()
     }
 
     /// The image's file extension.
@@ -235,16 +233,16 @@ pub(crate) fn parse_image(image_id: ExGuid, space: ObjectSpaceRef) -> Result<Ima
         extension,
         layout_max_width: node.layout_max_width,
         layout_max_height: node.layout_max_height,
-        alt_text: node.alt_text.map(String::from),
+        alt_text: node.alt_text,
         layout_alignment_in_parent: node.layout_alignment_in_parent,
         layout_alignment_self: node.layout_alignment_self,
         image_filename: node.image_filename,
         displayed_page_number: node.displayed_page_number,
-        text: node.text.map(String::from),
+        text: node.text,
         text_language_code: node.text_language_code,
         picture_width: node.picture_width,
         picture_height: node.picture_height,
-        hyperlink_url: node.hyperlink_url.map(String::from),
+        hyperlink_url: node.hyperlink_url,
         offset_horizontal: node.offset_from_parent_horiz,
         offset_vertical: node.offset_from_parent_vert,
         is_background: node.is_background,

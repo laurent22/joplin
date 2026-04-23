@@ -74,6 +74,8 @@ components/**/*.bundle.js.md5
 components/**/*.bundle.min.js
 web/public/pluginAssets/*
 
+/pluginAssets/
+
 utils/fs-driver-android.js
 android/app/build-*
 

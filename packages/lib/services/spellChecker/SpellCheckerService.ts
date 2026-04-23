@@ -29,8 +29,8 @@ export default class SpellCheckerService {
 	}
 
 	private async loadLatestSelectedLanguages(): Promise<string[]> {
-		const result = await KvStore.instance().value<string>('spellCheckerService.latestSelectedLanguages');
-		if (!result) return [];
+		const result = await KvStore.instance().value('spellCheckerService.latestSelectedLanguages');
+		if (!result || typeof result !== 'string') return [];
 		return JSON.parse(result);
 	}
 

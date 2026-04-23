@@ -20,9 +20,9 @@ impl FileNodeList {
         let mut next_fragment_ref =
             builder.add_fragment(FileNodeListFragment::parse(reader, context, size)?)?;
         while !next_fragment_ref.is_fcr_nil() && !next_fragment_ref.is_fcr_zero() {
-            let mut reader = next_fragment_ref.resolve_to_reader(reader)?;
+            next_fragment_ref.seek_reader_to(reader)?;
             let fragment =
-                FileNodeListFragment::parse(&mut reader, context, next_fragment_ref.cb as usize)?;
+                FileNodeListFragment::parse(reader, context, next_fragment_ref.cb as usize)?;
             next_fragment_ref = builder.add_fragment(fragment)?;
         }
         Ok(Self {

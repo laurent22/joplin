@@ -45,8 +45,8 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 			return () => {};
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const pasteEventHandler = (_editor: any, event: Event) => {
+		const pasteEventHandler = (_editor: unknown, ...args: unknown[]) => {
+			const event = args[0] as Event;
 			props.onEditorPaste(event);
 		};
 

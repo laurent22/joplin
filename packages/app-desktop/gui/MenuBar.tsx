@@ -200,6 +200,11 @@ function menuItemSetEnabled(id: string, enabled: boolean) {
 	const menu = Menu.getApplicationMenu();
 	const menuItem = menu.getMenuItemById(id);
 	if (!menuItem) return;
+	// Don't disable menu items that have a role (e.g. copy, paste, cut,
+	// selectAll). Since Electron 40, disabling a role-based menu item also
+	// prevents the native role behaviour, which breaks clipboard operations
+	// in non-editor input fields such as the Settings screen.
+	if (!enabled && menuItem.role) return;
 	menuItem.enabled = enabled;
 }
 
@@ -823,6 +828,12 @@ function useMenu(props: Props) {
 								Setting.incValue('windowContentZoomFactor', -10);
 							},
 							accelerator: 'CommandOrControl+-',
+						}, {
+							type: 'separator',
+							visible: shim.isMac(),
+						}, {
+							role: 'togglefullscreen',
+							visible: shim.isMac(),
 						}],
 				},
 				go: {

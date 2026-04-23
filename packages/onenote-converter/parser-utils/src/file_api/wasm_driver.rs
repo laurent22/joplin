@@ -48,12 +48,12 @@ extern "C" {
     #[wasm_bindgen(structural, method, catch)]
     fn read(
         this: &JsFileHandle,
-        offset: usize,
-        size: usize,
+        offset: u64,
+        size: u64,
     ) -> std::result::Result<Uint8Array, JsValue>;
 
     #[wasm_bindgen(structural, method)]
-    fn size(this: &JsFileHandle) -> usize;
+    fn size(this: &JsFileHandle) -> u64;
 
     #[wasm_bindgen(structural, method, catch)]
     fn close(this: &JsFileHandle) -> std::result::Result<(), JsValue>;
@@ -181,7 +181,7 @@ impl FileApiDriver for FileApiDriverImpl {
 
 struct SeekableFileHandle {
     handle: JsFileHandle,
-    offset: usize,
+    offset: u64,
 }
 
 impl Read for SeekableFileHandle {
@@ -193,12 +193,12 @@ impl Read for SeekableFileHandle {
             0
         };
 
-        let maximum_read_size = bytes_remaining.min(out.len());
+        let maximum_read_size = bytes_remaining.min(out.len() as u64);
         match self.handle.read(self.offset, maximum_read_size) {
             Ok(data) => {
                 let data = data.to_vec();
                 let size = data.len();
-                self.offset += size;
+                self.offset += size as u64;
 
                 // Verify that handle.read respected the maximum length:
                 if size > out.len() {
@@ -228,25 +228,25 @@ impl Seek for SeekableFileHandle {
     fn seek(&mut self, pos: SeekFrom) -> std::io::Result<u64> {
         match pos {
             SeekFrom::Start(pos) => {
-                self.offset = pos as usize;
+                self.offset = pos;
             }
             SeekFrom::Current(offset) => {
                 // Disallow seeking to a negative position
-                if offset < 0 && (-offset) as usize > self.offset {
+                if offset < 0 && offset.unsigned_abs() > self.offset {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
                         "Attempted to seek before the beginning of the file.",
                     ));
                 }
 
-                self.offset = (self.offset as i64 + offset) as usize;
+                self.offset = (self.offset as i64 + offset) as u64;
             }
             SeekFrom::End(offset) => {
                 self.offset = self.handle.size();
                 self.seek(SeekFrom::Current(offset))?;
             }
         }
-        Ok(self.offset as u64)
+        Ok(self.offset)
     }
 }
 
@@ -261,4 +261,8 @@ impl Drop for SeekableFileHandle {
     }
 }
 
-impl FileHandle for BufReader<SeekableFileHandle> {}
+impl FileHandle for BufReader<SeekableFileHandle> {
+    fn byte_length(&self) -> u64 {
+        self.get_ref().handle.size()
+    }
+}

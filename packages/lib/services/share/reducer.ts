@@ -136,6 +136,13 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 			draft.shareInvitations = action.shareInvitations;
 			break;
 
+		case 'SHARE_CACHE_RESTORE':
+
+			draft.shares = action.shares;
+			draft.shareUsers = action.shareUsers;
+			draft.shareInvitations = action.shareInvitations;
+			break;
+
 		case 'SHARE_INVITATION_RESPONSE_PROCESSING':
 
 			draft.processingShareInvitationResponse = action.value;

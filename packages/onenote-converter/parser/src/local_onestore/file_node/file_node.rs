@@ -56,8 +56,15 @@ impl FileNode {
             )?),
             2 => FileNodeDataRef::ElementList({
                 let list_ref = FileNodeChunkReference::parse(reader, stp_format, cb_format)?;
-                let mut resolved_reader = list_ref.resolve_to_reader(reader)?;
-                FileNodeList::parse(&mut resolved_reader, context, list_ref.data_size())
+
+                let reader_offset = reader.save_position();
+                let result = {
+                    list_ref.seek_reader_to(reader)?;
+                    FileNodeList::parse(reader, context, list_ref.data_size())
+                };
+                reader.restore_position(reader_offset)?;
+
+                result
             }?),
             _ => FileNodeDataRef::InvalidData,
         };
@@ -162,7 +169,7 @@ impl FileNode {
             0 => FileNodeData::Null,
             other => {
                 log_warn!("Unknown node type: {:#0x}, size {}", other, size);
-                let size_used = remaining_0 - remaining_1;
+                let size_used = (remaining_0 - remaining_1) as usize;
                 assert!(size_used <= size);
                 let remaining_size = size - size_used;
                 FileNodeData::UnknownNode(UnknownNode::parse(reader, remaining_size)?)
@@ -170,7 +177,7 @@ impl FileNode {
         };
 
         let remaining_2 = reader.remaining();
-        let actual_size = remaining_0 - remaining_2;
+        let actual_size = (remaining_0 - remaining_2) as usize;
 
         let node = Self {
             node_type_id: node_id,
@@ -452,9 +459,14 @@ impl<RefSize: Parse> ParseWithRef for ObjectDeclarationWithSizedRefCount<RefSize
 fn read_property_set(reader: Reader, property_set_ref: &FileNodeDataRef) -> Result<ObjectPropSet> {
     match property_set_ref {
         FileNodeDataRef::SingleElement(data_ref) => {
-            let mut prop_set_reader = data_ref.resolve_to_reader(reader)?;
-            let prop_set = ObjectPropSet::parse(&mut prop_set_reader)?;
-            Ok(prop_set)
+            let reader_offset = reader.save_position();
+            let prop_set = {
+                data_ref.seek_reader_to(reader)?;
+                ObjectPropSet::parse(reader)
+            };
+            reader.restore_position(reader_offset)?;
+
+            prop_set
         }
         FileNodeDataRef::ElementList(_) => Err(ErrorKind::MalformedOneStoreData(
             "Expected a single element (reading PropertySet)".into(),
@@ -539,7 +551,7 @@ pub struct RootObjectReference3FND {
 pub struct RevisionRoleDeclarationFND {
     pub rid: ExGuid,
     /// "should be 0x01"
-    revision_role: u32,
+    pub revision_role: u32,
 }
 
 #[derive(Debug, Clone, Parse)]
@@ -564,7 +576,7 @@ impl Parse for StringInStorageBuffer {
         let characer_count = reader.get_u32()? as usize;
         let string_size = characer_count * 2; // 2 bytes per character
         let data = reader.read(string_size)?;
-        let data = data.utf16_to_string()?;
+        let data = (&data as &[u8]).utf16_to_string()?;
         Ok(Self {
             cch: characer_count,
             data,
@@ -654,10 +666,14 @@ impl ParseWithRef for ObjectInfoDependencyOverridesFND {
     fn parse(reader: parser_utils::Reader, obj_ref: &FileNodeDataRef) -> Result<Self> {
         if let FileNodeDataRef::SingleElement(obj_ref) = obj_ref {
             if !obj_ref.is_fcr_nil() {
-                let data = ObjectInfoDependencyOverrideData::parse(
-                    &mut obj_ref.resolve_to_reader(reader)?,
-                )?;
-                Ok(Self { data })
+                let reader_offset = reader.save_position();
+                let data = {
+                    obj_ref.seek_reader_to(reader)?;
+                    ObjectInfoDependencyOverrideData::parse(reader)
+                };
+                reader.restore_position(reader_offset)?;
+
+                Ok(Self { data: data? })
             } else {
                 Ok(Self {
                     data: ObjectInfoDependencyOverrideData::parse(reader)?,
@@ -705,14 +721,15 @@ pub struct FileData(pub FileBlob);
 
 impl Debug for FileData {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "FileData(size={:} KiB)", self.0.as_ref().len() / 1024)
+        write!(f, "FileData(size={:} KiB)", self.0.len() / 1024)
     }
 }
 
 impl ParseWithCount for FileData {
     fn parse(reader: parser_utils::Reader, size: usize) -> Result<Self> {
-        let data = reader.read(size)?.to_vec();
-        Ok(FileData(data.into()))
+        let data_ref = FileBlob::new(Box::new(reader.as_data_ref(size)?), size);
+        reader.advance(size as u64)?;
+        Ok(FileData(data_ref))
     }
 }
 
@@ -727,9 +744,15 @@ impl ParseWithRef for FileDataStoreObjectReferenceFND {
     fn parse(reader: parser_utils::Reader, data_ref: &FileNodeDataRef) -> Result<Self> {
         let guid = Guid::parse(reader)?;
         if let FileNodeDataRef::SingleElement(data_ref) = data_ref {
-            let mut reader = data_ref.resolve_to_reader(reader)?;
+            let reader_offset = reader.save_position();
+            let target = {
+                data_ref.seek_reader_to(reader)?;
+                FileDataStoreObject::parse(reader)
+            };
+            reader.restore_position(reader_offset)?;
+
             Ok(Self {
-                target: FileDataStoreObject::parse(&mut reader)?,
+                target: target?,
                 guid,
             })
         } else {
@@ -767,7 +790,10 @@ impl AttachmentInfo {
             .into())
         } else if self.data_ref.starts_with("<invfdo>") {
             // "invalid"
-            log_warn!("Attempted to load an invalid {} file. Importing an empty file.", self.extension);
+            log_warn!(
+                "Attempted to load an invalid {} file. Importing an empty file.",
+                self.extension
+            );
             // Return empty data
             Ok(FileBlob::default())
         } else {
@@ -942,7 +968,7 @@ pub struct UnknownNode {}
 
 impl ParseWithCount for UnknownNode {
     fn parse(reader: Reader, size: usize) -> Result<Self> {
-        reader.advance(size)?;
+        reader.advance(size as u64)?;
         Ok(UnknownNode {})
     }
 }

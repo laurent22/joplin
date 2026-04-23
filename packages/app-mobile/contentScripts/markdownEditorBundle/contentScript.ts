@@ -105,7 +105,8 @@ export const createMainEditor = (props: EditorProps) => {
 	// to CodeMirror.
 	//
 	// TODO: Remove this workaround when the issue has been fixed upstream.
-	control.on('paste', (_editor, event: ClipboardEvent) => {
+	control.on('paste', (_editor, ...args: unknown[]) => {
+		const event = args[0] as ClipboardEvent;
 		const clipboardData = event.clipboardData;
 		if (clipboardData.types.length === 1 && clipboardData.types[0] === 'text/uri-list') {
 			event.preventDefault();

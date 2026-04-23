@@ -10,18 +10,31 @@ const workWithHtmlNotes = [
 	'textSelectAll',
 ];
 
+// Commands that should remain enabled in viewer mode and when the note is read-only.
+const worksInViewerAndReadOnlyMode = [
+	'textCopy',
+	'textSelectAll',
+];
+
 export const enabledCondition = (commandName: string) => {
 	const markdownEditorOnly = !Object.keys(joplinCommandToTinyMceCommands).includes(commandName);
 	const noteMustBeMarkdown = !workWithHtmlNotes.includes(commandName);
+	const allowInViewerAndReadOnlyMode = worksInViewerAndReadOnlyMode.includes(commandName);
+
+	const editorPaneCondition = markdownEditorOnly
+		? '(markdownEditorPaneVisible || hasActivePluginEditor)'
+		: allowInViewerAndReadOnlyMode
+			? '(markdownEditorPaneVisible || richTextEditorVisible || markdownViewerPaneVisible || hasActivePluginEditor)'
+			: '(markdownEditorPaneVisible || richTextEditorVisible || hasActivePluginEditor)';
 
 	const output = [
 		// gotoAnythingVisible: Enable if the command palette (which is a modal dialog) is visible
 		'(!modalDialogVisible || gotoAnythingVisible)',
 
-		markdownEditorOnly ? 'markdownEditorPaneVisible' : '(markdownEditorPaneVisible || richTextEditorVisible)',
+		editorPaneCondition,
 		'oneNoteSelected',
 		noteMustBeMarkdown ? 'noteIsMarkdown' : '',
-		'!noteIsReadOnly',
+		allowInViewerAndReadOnlyMode ? '' : '!noteIsReadOnly',
 	];
 
 	return output.filter(c => !!c).join(' && ');

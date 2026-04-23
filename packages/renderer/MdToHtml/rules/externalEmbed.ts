@@ -68,7 +68,7 @@ const plugin = (markdownIt: MarkdownIt) => {
 
 			return `
 				<div class="joplin-editable">
-					<span class="joplin-source" data-joplin-source-open="" data-joplin-source-close="">${escapedUrl}</span>
+					<span class="joplin-source" hidden data-joplin-source-open="" data-joplin-source-close="">${escapedUrl}</span>
 					<div class="joplin-youtube-player-rendered">
 						<iframe src="${embedUrl}" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
 					</div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
+import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
@@ -27,8 +27,9 @@ const queryToolbarButton = (label: string) => {
 };
 
 const openSettings = async () => {
-	const settingButton = screen.getByRole('button', { name: 'Settings' });
-	fireEvent.press(settingButton);
+	await act(async () => {
+		fireEvent.press(screen.getByRole('button', { name: 'Settings' }));
+	});
 
 	// Settings should be open:
 	const settingsHeader = await screen.findByRole('heading', { name: 'Manage toolbar options' });
@@ -50,13 +51,19 @@ const toggleSettingsItem = async (props: ToggleSettingItemProps) => {
 	} else {
 		expect(itemCheckbox).not.toBeChecked();
 	}
-	fireEvent.press(itemCheckbox);
+	await act(async () => {
+		fireEvent.press(itemCheckbox);
+	});
 
+	// Re-query after the press: the item may be re-mounted with a new key when
+	// it moves between the enabled and disabled sections.
 	await waitFor(() => {
+		const updatedCheckbox = screen.queryByRole('checkbox', { name: props.name });
+		expect(updatedCheckbox).not.toBeNull();
 		if (finalChecked) {
-			expect(itemCheckbox).toBeChecked();
+			expect(updatedCheckbox).toBeChecked();
 		} else {
-			expect(itemCheckbox).not.toBeChecked();
+			expect(updatedCheckbox).not.toBeChecked();
 		}
 	});
 };

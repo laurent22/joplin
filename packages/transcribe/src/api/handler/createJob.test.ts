@@ -62,7 +62,7 @@ describe('createJob', () => {
 			imagesFolder: './images',
 		};
 
-		expect(async () => createJob(requirements)).rejects.toThrow();
+		await expect(createJob(requirements)).rejects.toThrow();
 
 		const job = await queue.fetch();
 		expect(job).toBeNull();

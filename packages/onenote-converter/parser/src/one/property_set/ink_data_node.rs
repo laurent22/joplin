@@ -8,7 +8,7 @@ use parser_utils::errors::{ErrorKind, Result};
 /// An ink data container.
 pub(crate) struct Data {
     pub(crate) strokes: Vec<ExGuid>,
-    pub(crate) bounding_box: Option<[u32; 4]>,
+    pub(crate) bounding_box: Option<[i32; 4]>,
 }
 
 pub(crate) fn parse(object: &Object) -> Result<Data> {
@@ -20,7 +20,7 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
         ObjectReference::parse_vec(PropertyType::InkStrokes, object)?.ok_or_else(|| {
             ErrorKind::MalformedOneNoteFileData("ink data node has no strokes".into())
         })?;
-    let bounding_box = simple::parse_vec_u32(PropertyType::InkBoundingBox, object)?
+    let bounding_box = simple::parse_vec_i32(PropertyType::InkBoundingBox, object)?
         .filter(|values| values.len() == 4)
         .map(|values| [values[0], values[1], values[2], values[3]]);
 

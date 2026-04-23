@@ -168,6 +168,16 @@ const declarations: CommandDeclaration[] = [
 		label: () => _('Link'),
 		iconName: 'material link',
 	},
+	{
+		name: `editor.${EditorCommandType.GoDocStart}`,
+		label: () => _('Go to start of note'),
+		iconName: 'material page-first',
+	},
+	{
+		name: `editor.${EditorCommandType.GoDocEnd}`,
+		label: () => _('Go to end of note'),
+		iconName: 'material page-last',
+	},
 ];
 
 export default declarations;

@@ -2,6 +2,7 @@ use super::ApiResult;
 use super::FileApiDriver;
 use super::FileHandle;
 use std::fs;
+use std::io::BufReader;
 use std::path;
 use std::path::Path;
 
@@ -38,7 +39,7 @@ impl FileApiDriver for FileApiDriverImpl {
     }
 
     fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>> {
-        Ok(Box::new(fs::File::open(path)?))
+        Ok(Box::new(BufReader::new(fs::File::open(path)?)))
     }
 
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()> {
@@ -87,7 +88,11 @@ impl FileApiDriver for FileApiDriverImpl {
     }
 }
 
-impl FileHandle for fs::File {}
+impl FileHandle for BufReader<fs::File> {
+    fn byte_length(&self) -> u64 {
+        self.get_ref().metadata().map(|m| m.len()).unwrap_or(0)
+    }
+}
 
 #[cfg(test)]
 mod test {

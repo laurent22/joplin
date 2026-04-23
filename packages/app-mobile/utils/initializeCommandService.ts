@@ -1,7 +1,7 @@
 import Setting from '@joplin/lib/models/Setting';
 import CommandService, { CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import { AppState } from './types';
-import { Store } from 'redux';
+import { AnyAction, Store } from 'redux';
 import editorCommandDeclarations from '../components/NoteEditor/commandDeclarations';
 import noteCommands from '../components/screens/Note/commands';
 import globalCommands from '../commands';
@@ -20,8 +20,7 @@ const registerCommands = (commands: CommandSpecification[]) => {
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const initializeCommandService = (store: Store<AppState, any>) => {
+const initializeCommandService = (store: Store<AppState, AnyAction>) => {
 	CommandService.instance().initialize(store, Setting.value('env') === 'dev', stateToWhenClauseContext);
 	for (const declaration of editorCommandDeclarations) {
 		CommandService.instance().registerDeclaration(declaration);

@@ -1,6 +1,8 @@
+use std::rc::Rc;
+
 use crate::onenote::notebook::Notebook;
 use crate::onenote::section::{Section, SectionEntry, SectionGroup};
-use crate::onestore::{OneStoreType, parse_onestore};
+use crate::onestore::{OneStore, OneStoreType, parse_onestore};
 use parser_utils::errors::{ErrorKind, Result};
 use parser_utils::{fs_driver, log, reader::Reader};
 
@@ -37,8 +39,8 @@ impl Parser {
     /// sections from the folder that the table of contents file is in.
     pub fn parse_notebook(&mut self, path: String) -> Result<Notebook> {
         log!("Parsing notebook: {:?}", path);
-        let data = fs_driver().read_file(&path)?;
-        let store = parse_onestore(&mut Reader::new(&data))?;
+        let data = fs_driver().open_file(&path)?;
+        let store = parse_onestore(&mut Reader::try_from(data)?)?;
 
         if store.get_type() != OneStoreType::TableOfContents {
             return Err(ErrorKind::NotATocFile { file: path }.into());
@@ -49,17 +51,11 @@ impl Parser {
             .iter()
             .map(|name| fs_driver().join(&base_dir, name))
             .filter(|p| !p.contains("OneNote_RecycleBin"))
-            .filter(|p| {
-                let is_file = match fs_driver().exists(p) {
-                    Ok(is_file) => is_file,
-                    Err(_err) => false,
-                };
-                return is_file;
-            })
+            .filter(|p| fs_driver().exists(p).unwrap_or(false))
             .map(|p| {
                 let is_dir = fs_driver().is_directory(&p)?;
                 if !is_dir {
-                    self.parse_section(p).map(SectionEntry::Section)
+                    self.parse_section(&p).map(SectionEntry::Section)
                 } else {
                     self.parse_section_group(p).map(SectionEntry::SectionGroup)
                 }
@@ -73,24 +69,38 @@ impl Parser {
     ///
     /// The `path` argument must point to a `.one` file that contains a
     /// OneNote section.
-    pub fn parse_section(&mut self, path: String) -> Result<Section> {
+    pub fn parse_section(&mut self, path: &str) -> Result<Section> {
         log!("Parsing section: {:?}", path);
-        let data = fs_driver().read_file(path.as_str())?;
-        self.parse_section_from_data(&data, &path)
+        let file = fs_driver().open_file(path)?;
+        self.parse_section_from_reader(Reader::try_from(file)?, path)
+    }
+
+    /// Parses low-level OneStore data. Exported for debugging purposes.
+    pub fn parse_onestore_raw(&mut self, path: &str) -> Result<Rc<dyn OneStore>> {
+        log!("Parsing OneStore: {:?}", path);
+        let file = fs_driver().open_file(path)?;
+        parse_onestore(&mut Reader::try_from(file)?)
     }
 
     /// Parse a OneNote section file from a byte array.
     /// The [path] is used to provide debugging information and determine
     /// the name of the section file.
     pub fn parse_section_from_data(&mut self, data: &[u8], path: &str) -> Result<Section> {
-        let store = parse_onestore(&mut Reader::new(&data))?;
+        self.parse_section_from_reader(Reader::from(data), path)
+    }
+
+    fn parse_section_from_reader(&mut self, mut reader: Reader, path: &str) -> Result<Section> {
+        let store = parse_onestore(&mut reader)?;
 
         if store.get_type() != OneStoreType::Section {
-            return Err(ErrorKind::NotASectionFile { file: String::from(path) }.into());
+            return Err(ErrorKind::NotASectionFile {
+                file: String::from(path),
+            }
+            .into());
         }
 
         let filename = fs_driver()
-            .get_file_name(&path)
+            .get_file_name(path)
             .expect("file without file name");
         section::parse_section(store, filename)
     }

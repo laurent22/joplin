@@ -9,17 +9,34 @@ use parser_utils::log_warn;
 /// An ink object.
 #[derive(Clone, Debug)]
 pub struct Ink {
-    pub(crate) ink_strokes: Vec<InkStroke>,
+    pub(crate) content: InkContent,
     pub(crate) bounding_box: Option<InkBoundingBox>,
 
     pub(crate) offset_horizontal: Option<f32>,
     pub(crate) offset_vertical: Option<f32>,
 }
 
+#[derive(Clone, Debug)]
+pub enum InkContent {
+    InkGroup(Vec<Ink>),
+    Strokes(Vec<InkStroke>),
+}
+
 impl Ink {
     /// The ink strokes contained in this ink object.
     pub fn ink_strokes(&self) -> &[InkStroke] {
-        &self.ink_strokes
+        match &self.content {
+            InkContent::InkGroup(_ink) => &[],
+            InkContent::Strokes(strokes) => strokes,
+        }
+    }
+
+    /// Groups contained within this group
+    pub fn child_groups(&self) -> &[Ink] {
+        match &self.content {
+            InkContent::InkGroup(ink) => ink,
+            InkContent::Strokes(_strokes) => &[],
+        }
     }
 
     /// The ink object's bounding box.
@@ -163,24 +180,62 @@ impl InkBoundingBox {
             width: self.width * factor,
         }
     }
+
+    fn union(&self, other: Option<InkBoundingBox>) -> InkBoundingBox {
+        let Some(other) = other else {
+            return *self;
+        };
+
+        let x = self.x.min(other.x);
+        let y = self.y.min(other.y);
+        let x2 = (self.x + self.width).max(other.x + other.width);
+        let y2 = (self.y + self.height).max(other.y + other.height);
+
+        InkBoundingBox {
+            x,
+            y,
+            height: y2 - y,
+            width: x2 - x,
+        }
+    }
 }
 
 pub(crate) fn parse_ink(ink_container_id: ExGuid, space: ObjectSpaceRef) -> Result<Ink> {
+    parse_ink_rec(ink_container_id, space, 0)
+}
+
+fn parse_ink_rec(ink_container_id: ExGuid, space: ObjectSpaceRef, depth: u32) -> Result<Ink> {
+    // Cut maximum recursion depth at 16 to guard against cycles (e.g. if an ink node is declared
+    // to recursively contain itself). An explicit error should be easier to debug than the
+    // stack overflow that would otherwise occur.
+    if depth > 16 {
+        return Err(
+            parser_error!(MalformedOneStoreData, "Maximum ink nesting depth exceeded").into(),
+        );
+    }
+
     let container_object = space
         .get_object(ink_container_id)
         .ok_or_else(|| ErrorKind::MalformedOneNoteData("ink container is missing".into()))?;
     let container = ink_container::parse(&container_object)?;
 
-    let ink_data_id = match container.ink_data {
-        Some(id) => id,
-        None => {
+    let Some(ink_data_id) = container.ink_data else {
+        let Some(children) = container.children else {
             return Ok(Ink {
-                ink_strokes: vec![],
+                content: InkContent::Strokes(vec![]),
                 bounding_box: None,
-                offset_horizontal: container.offset_from_parent_horiz,
-                offset_vertical: container.offset_from_parent_vert,
-            })
-        }
+                offset_horizontal: None,
+                offset_vertical: None,
+            });
+        };
+
+        let (bbox, content) = parse_ink_group(children, space, depth)?;
+        return Ok(Ink {
+            bounding_box: bbox,
+            offset_horizontal: container.offset_from_parent_horiz,
+            offset_vertical: container.offset_from_parent_vert,
+            content,
+        });
     };
 
     let (ink_strokes, bounding_box) = parse_ink_data(
@@ -191,11 +246,34 @@ pub(crate) fn parse_ink(ink_container_id: ExGuid, space: ObjectSpaceRef) -> Resu
     )?;
 
     Ok(Ink {
-        ink_strokes,
+        content: InkContent::Strokes(ink_strokes),
         bounding_box,
         offset_horizontal: container.offset_from_parent_horiz,
         offset_vertical: container.offset_from_parent_vert,
     })
+}
+
+fn parse_ink_group(
+    children: Vec<ExGuid>,
+    space: ObjectSpaceRef,
+    recursion_depth: u32,
+) -> Result<(Option<InkBoundingBox>, InkContent)> {
+    let mut ink_contents = vec![];
+
+    let children = children
+        .into_iter()
+        .map(|group_id| parse_ink_rec(group_id, space.clone(), recursion_depth + 1));
+    let mut bbox = None;
+    for child in children {
+        let child = child?;
+        if let Some(child_bbox) = &child.bounding_box {
+            bbox = Some(child_bbox.union(bbox));
+        }
+
+        ink_contents.push(child);
+    }
+
+    Ok((bbox, InkContent::InkGroup(ink_contents)))
 }
 
 pub(crate) fn parse_ink_data(

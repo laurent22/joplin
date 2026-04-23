@@ -5,7 +5,7 @@ import codeMirrorRequire from './codeMirrorRequire';
 let pluginScriptIdCounter = 0;
 let pluginLoaderCounter = 0;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin exports have dynamic structure
 type OnScriptLoadCallback = (exports: any)=> void;
 type OnPluginRemovedCallback = ()=> void;
 

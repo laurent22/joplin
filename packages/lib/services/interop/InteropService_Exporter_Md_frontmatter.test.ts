@@ -151,4 +151,53 @@ describe('interop/InteropService_Exporter_Md_frontmatter', () => {
 		const content = await exportAndLoad(`${exportDir()}/folder1/- title with dash.md`);
 		expect(content).toContain('title: \'- title with dash\'');
 	}));
+
+	test('should export _folder.yml with emoji icon', (async () => {
+		const icon = JSON.stringify({ type: 1, emoji: 'notebook', name: '', dataUrl: '' });
+		const folder1 = await Folder.save({ title: 'folder1', icon });
+		await Note.save({ title: 'IconNote', body: '**my note**', parent_id: folder1.id });
+
+		await exportAndLoad(`${exportDir()}/folder1/IconNote.md`);
+
+		const metadataPath = `${exportDir()}/folder1/_folder.yml`;
+		expect(await fs.pathExists(metadataPath)).toBe(true);
+
+		const metadataContent = await fs.readFile(metadataPath, 'utf8');
+		expect(metadataContent).toContain('type: emoji');
+		expect(metadataContent).toContain('emoji: notebook');
+	}));
+
+	test('should export _folder.yml with FontAwesome icon', (async () => {
+		const icon = JSON.stringify({ type: 3, emoji: '', name: 'fas fa-music', dataUrl: '' });
+		const folder1 = await Folder.save({ title: 'folder1', icon });
+		await Note.save({ title: 'FANote', body: '**my note**', parent_id: folder1.id });
+
+		await exportAndLoad(`${exportDir()}/folder1/FANote.md`);
+
+		const metadataPath = `${exportDir()}/folder1/_folder.yml`;
+		expect(await fs.pathExists(metadataPath)).toBe(true);
+
+		const metadataContent = await fs.readFile(metadataPath, 'utf8');
+		expect(metadataContent).toContain('type: fontawesome');
+		expect(metadataContent).toContain('name: fas fa-music');
+	}));
+
+	test('should not export _folder.yml when folder has no icon', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: 'NoIcon', body: '**my note**', parent_id: folder1.id });
+
+		await exportAndLoad(`${exportDir()}/folder1/NoIcon.md`);
+
+		const metadataPath = `${exportDir()}/folder1/_folder.yml`;
+		expect(await fs.pathExists(metadataPath)).toBe(false);
+	}));
+
+	test('should not include folder_icon in note frontmatter', (async () => {
+		const icon = JSON.stringify({ type: 1, emoji: 'notebook', name: '', dataUrl: '' });
+		const folder1 = await Folder.save({ title: 'folder1', icon });
+		await Note.save({ title: 'TestNote', body: '**my note**', parent_id: folder1.id });
+
+		const content = await exportAndLoad(`${exportDir()}/folder1/TestNote.md`);
+		expect(content).not.toContain('folder_icon');
+	}));
 });

@@ -7,23 +7,40 @@ import activateMainMenuItem from './util/activateMainMenuItem';
 import setSettingValue from './util/setSettingValue';
 import { toForwardSlashes } from '@joplin/utils/path';
 import mockClipboard from './util/mockClipboard';
+import { ElectronApplication, Page } from '@playwright/test';
 
+const importAndOpenHtmlExport = async (mainWindow: Page, electronApp: ElectronApplication, noteTitle: string) => {
+	const mainScreen = await new MainScreen(mainWindow).setup();
+	await mainScreen.waitFor();
 
-test.describe('markdownEditor', () => {
-	test('preview pane should render images in HTML notes', async ({ mainWindow, electronApp }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.waitFor();
+	await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
+	const importedFolder = mainScreen.sidebar.container.getByText('html-import');
+	await importedFolder.waitFor();
 
-		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
-		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
-		await expect(importedFolder).toBeVisible();
+	// Retry -- focusing the imported-folder may fail in some cases
+	await expect(async () => {
 		await importedFolder.click();
 
 		await mainScreen.noteList.focusContent(electronApp);
 
-		const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
-		await expect.poll(async () => importedHtmlFileItem.count(), { timeout: 60_000 }).toBeGreaterThan(0);
-		await importedHtmlFileItem.click();
+		const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle(noteTitle);
+		await importedHtmlFileItem.click({ timeout: 300 });
+	}).toPass();
+
+	return { mainScreen };
+};
+
+test.describe('markdownEditor', () => {
+	test('editor should render the full content of HTML notes', async ({ mainWindow, electronApp }) => {
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-spans');
+
+		const editor = mainScreen.noteEditor.codeMirrorEditor;
+		// Regression test: The <span> should not be hidden by inline Markdown rendering (since this is an HTML note):
+		await expect(editor).toHaveText('<p><span style="margin-left: 100px;">test</span></p>');
+	});
+
+	test('preview pane should render images in HTML notes', async ({ mainWindow, electronApp }) => {
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-image');
 
 		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
 		// Should render headers
@@ -429,7 +446,9 @@ test.describe('markdownEditor', () => {
 		});
 
 		expect(clipboardHtml).toContain('hello');
-		expect(clipboardHtml).not.toMatch(/background-color\s*:/i);
-		expect(clipboardHtml).toContain('<strong>');
+		// Dark theme background (#1D2024) must not leak into clipboard
+		expect(clipboardHtml).not.toMatch(/1D2024/i);
+		expect(clipboardHtml).toContain('<strong');
+		expect(clipboardHtml).toMatch(/font-weight/i);
 	});
 });

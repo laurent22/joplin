@@ -1177,6 +1177,25 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 
 		startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon'), show: settings => !!settings['showTrayIcon'] },
 
+		'globalHotkey': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'application',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Global shortcut to show/hide Joplin'),
+			description: () => _('A system-wide keyboard shortcut that toggles the Joplin window. Works even when Joplin is not focused. Example: CommandOrControl+Shift+J. Leave empty to disable.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+			autoSave: true,
+			// Electron's globalShortcut API does not yet work under Wayland,
+			// so we hide this option when running on a Wayland session.
+			show: () => {
+				if (platform !== 'linux') return true;
+				return process.env.XDG_SESSION_TYPE !== 'wayland' && !process.env.WAYLAND_DISPLAY;
+			},
+		},
+
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
 		'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },
@@ -1460,7 +1479,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 		tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
-		syncReportLogExpanded: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
+		syncReportIsVisible: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Cli, AppType.Desktop], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 		'export.pdfPageSize': { value: 'A4', type: SettingItemType.String, advanced: true, storage: SettingStorage.File, isGlobal: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page size for PDF export'), options: () => {
 			return {

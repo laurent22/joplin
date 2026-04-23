@@ -11,13 +11,13 @@
     },
     "nodejs":     "24.11.1",
     "pkg-config": "latest",
-    "python": "3.13.3",
+    "python": "3.14.0",
     "bat":    "latest",
     "electron": {
       "version":            "latest",
       "excluded_platforms": ["aarch64-darwin", "x86_64-darwin"],
     },
-    "git":    "2.51.0",
+    "git":    "2.51.2",
   },
   "shell": {
     "init_hook": [

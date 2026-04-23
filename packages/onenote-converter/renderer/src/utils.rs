@@ -37,7 +37,7 @@ impl Display for AttributeSet {
             self.0
                 .iter()
                 .sorted_by(|(a, _), (b, _)| Ord::cmp(a, b))
-                .map(|(attr, value)| attr.to_string() + "=\"" + &value + "\"")
+                .map(|(attr, value)| attr.to_string() + "=\"" + &html_entities(value) + "\"")
                 .join(" ")
         )
     }
@@ -56,7 +56,7 @@ impl StyleSet {
     }
 
     pub(crate) fn extend(&mut self, other: Self) {
-        self.0.extend(other.0.into_iter())
+        self.0.extend(other.0)
     }
 
     pub(crate) fn len(&self) -> usize {
@@ -77,7 +77,7 @@ impl Display for StyleSet {
             self.0
                 .iter()
                 .sorted_by(|(a, _), (b, _)| Ord::cmp(a, b))
-                .map(|(attr, value)| attr.to_string() + ": " + &value + ";")
+                .map(|(attr, value)| attr.to_string() + ": " + value + ";")
                 .join(" ")
         )
     }
@@ -115,9 +115,21 @@ pub(crate) fn url_encode(url: &str) -> String {
     utf8_percent_encode(url, ENCODED_CHARS).to_string()
 }
 
+pub(crate) fn detect_png(header: &[u8]) -> bool {
+    // PNGs start with a specific set of bytes. See https://en.wikipedia.org/wiki/PNG
+    header.len() > 6
+        && header[0] == 0x89
+        && header[1] == 0x50 // 'P'
+        && header[2] == 0x4E // 'N'
+        && header[3] == 0x47 // 'G'
+        && header[4] == 0x0D // \r
+        && header[5] == 0x0A // \n
+        && header[6] == 0x1A
+}
+
 #[cfg(test)]
 mod test {
-    use crate::utils::url_encode;
+    use crate::utils::{AttributeSet, url_encode};
 
     use super::html_entities;
 
@@ -134,6 +146,19 @@ mod test {
     #[test]
     fn should_encode_urls() {
         assert_eq!(url_encode("http://example.com/"), "http://example.com/");
-        assert_eq!(url_encode("http://example.com/\""), "http://example.com/%22");
+        assert_eq!(
+            url_encode("http://example.com/\""),
+            "http://example.com/%22"
+        );
+    }
+
+    #[test]
+    fn should_build_html_attributes() {
+        let mut attrs = AttributeSet::new();
+        attrs.set("style", "font-family: \"Multi-word font\";".to_string());
+        assert_eq!(
+            format!("{}", attrs),
+            "style=\"font-family: &quot;Multi-word font&quot;;\""
+        );
     }
 }
