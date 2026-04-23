@@ -123,10 +123,6 @@ impl<'a> Renderer<'a> {
             icon_classes.push("-normal".into());
         }
 
-        if !is_icon_html(&icon.html) {
-            icon_classes.push("-text".into());
-        }
-
         icon_classes
     }
 
@@ -174,8 +170,13 @@ impl<'a> Renderer<'a> {
                     let icon_classes = self.build_note_tag_class_names(&icon);
                     let attrs =
                         self.get_note_tag_attrs(&icon, note_tag.item_status(), &icon_classes);
+                    let content_html = if is_icon_html(&icon.html) {
+                        icon.html.to_string()
+                    } else {
+                        format!("<span class=\"text\">{}</span>", icon.html)
+                    };
 
-                    markup.push_str(&format!("<span {}>{}</span>", attrs, icon.html,));
+                    markup.push_str(&format!("<span {}>{}</span>", attrs, content_html));
                 }
             }
         }
