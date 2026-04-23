@@ -959,6 +959,106 @@ Thursday, April 23, 2026
 **Bold** and *italic* and **bold italic**."
 `;
 
+exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
+"# Note: Checklists
+
+ Checklists 
+
+Checklists
+
+Wednesday, April 22, 2026
+
+1:45 PM
+
+## Tagged list
+
+This note includes a **tagged list**:
+
+&nbsp;
+
+- ❗Exclamation point
+- ❓Question mark
+- [ ] Checkbox with exclamation point
+- [x] Checkbox (complete)
+    - [ ] Sub-checkbox (incomplete)
+    - [x] [x] Sub-checkbox, with arrow (complete)
+- ⭐Star
+    - 🗨️Sub-item
+- 🖊️Pen
+- 💡Lightbulb
+- 🔒Padlock
+- 📨Paper airplane
+- 📖Book
+- 🎵Music note
+- 🟥Red
+- [x] Checkmark
+- 🏠House
+- 📞Phone
+- 🔗Link
+- 🎞️Film
+- 👥Large text
+
+- 💡💡More large text"
+`;
+
+exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Checklists</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    .icon-0 > .text { color: #ffd678; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #ffd678; }
+    .icon-6 > .text { color: #4673b7; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Checklists</span></div>
+</div><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">Wednesday, April 22, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">1:45 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt;">Tagged list</h2></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">This note includes a <strong style="font-weight: bold;">tagged list</strong>:</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❗</span></span>Exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❓</span></span>Question mark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><span class="text">☐<span class="icon-secondary"><span class="content">!</span></span></span></span>Checkbox with exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Checkbox (complete)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Sub-checkbox (incomplete)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span>Sub-checkbox, with arrow (complete)</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal"><span class="text">⭐</span></span>Star</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🗨️</span></span>Sub-item</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🖊️</span></span>Pen</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">💡</span></span>Lightbulb</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔒</span></span>Padlock</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📨</span></span>Paper airplane</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📖</span></span>Book</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎵</span></span>Music note</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🟥</span></span>Red</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><span class="text">✓</span></span>Checkmark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🏠</span></span>House</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📞</span></span>Phone</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔗</span></span>Link</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎞️</span></span>Film</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 16pt;"><span class="note-tag-icon -normal"><span class="text">👥</span></span>Large text</span></li>
+</ul></div><div class="container-outline" style="left: 72px; position: absolute; top: 595px; width: 624px;"><ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="color: rgb(30,78,121); font-family: Calibri; font-size: 16pt; line-height: 25px;"><span class="note-tag-icon -normal"><span class="text">💡</span></span><span class="note-tag-icon -normal"><span class="text">💡</span></span>More large text</span></li>
+</ul></div>
+
+
+
+</body></html>"
+`;
+
 exports[`InteropService_Importer_OneNote should import nested ink 1`] = `
 [
   "<!DOCTYPE HTML>
