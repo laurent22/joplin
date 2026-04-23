@@ -108,7 +108,7 @@ impl<'a> Renderer<'a> {
             self.global_styles
                 // Select both `svg` and `img`: `svg`s may be replaced with `img` later in the import process:
                 .insert(
-                    format!(".{} > svg, .{} > img", class, class),
+                    format!(".{} > svg, .{} > img, .{} > .text", class, class, class),
                     icon.styles.clone(),
                 );
         }
