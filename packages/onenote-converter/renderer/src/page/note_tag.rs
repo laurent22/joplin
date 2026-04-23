@@ -17,9 +17,9 @@ const ICON_ARROW_RIGHT: &str = "→";
 const ICON_AWARD: &str = "🎖️";
 const ICON_BOOK: &str = "📖";
 const ICON_BUBBLE: &str = "🗨️";
-const ICON_CHECKBOX_COMPLETE: &str = include_str!("../../assets/icons/checkbox-fill.svg");
-const ICON_CHECKBOX_EMPTY: &str = include_str!("../../assets/icons/checkbox-blank-line.svg");
-const ICON_CHECK_MARK: &str = include_str!("../../assets/icons/check-line.svg");
+const ICON_CHECKBOX_COMPLETE: &str = "☑";
+const ICON_CHECKBOX_EMPTY: &str = "☐";
+const ICON_CHECK_MARK: &str = "🗸";
 const ICON_CIRCLE: &str = "●";
 const ICON_CONTACT: &str = "👥";
 const ICON_EMAIL: &str = "📨";
@@ -47,7 +47,7 @@ enum IconSize {
 }
 
 struct NoteTagIcon {
-    html: Cow<'static, str>,
+    emoji_html: Cow<'static, str>,
     size: IconSize,
     styles: StyleSet,
     is_checkbox: bool,
@@ -56,7 +56,7 @@ struct NoteTagIcon {
 impl From<(Cow<'static, str>, IconSize)> for NoteTagIcon {
     fn from((html, size): (Cow<'static, str>, IconSize)) -> Self {
         Self {
-            html,
+            emoji_html: html,
             size,
             styles: StyleSet::new(),
             is_checkbox: false,
@@ -67,17 +67,12 @@ impl From<(Cow<'static, str>, IconSize)> for NoteTagIcon {
 impl From<(Cow<'static, str>, IconSize, StyleSet)> for NoteTagIcon {
     fn from((html, size, styles): (Cow<'static, str>, IconSize, StyleSet)) -> Self {
         Self {
-            html,
+            emoji_html: html,
             size,
             styles,
             is_checkbox: false,
         }
     }
-}
-
-fn is_icon_html(icon: &str) -> bool {
-    // Use a hueristic to guess whether an icon is HTML (e.g. an SVG) or not
-    icon.contains("<svg") || icon.contains("<span")
 }
 
 impl<'a> Renderer<'a> {
@@ -106,11 +101,7 @@ impl<'a> Renderer<'a> {
             icon_classes.push(class.to_string());
 
             self.global_styles
-                // Select both `svg` and `img`: `svg`s may be replaced with `img` later in the import process:
-                .insert(
-                    format!(".{} > svg, .{} > img, .{} > .text", class, class, class),
-                    icon.styles.clone(),
-                );
+                .insert(format!(".{} > .text", class), icon.styles.clone());
         }
 
         if icon.is_checkbox {
@@ -170,13 +161,11 @@ impl<'a> Renderer<'a> {
                     let icon_classes = self.build_note_tag_class_names(&icon);
                     let attrs =
                         self.get_note_tag_attrs(&icon, note_tag.item_status(), &icon_classes);
-                    let content_html = if is_icon_html(&icon.html) {
-                        icon.html.to_string()
-                    } else {
-                        format!("<span class=\"text\">{}</span>", icon.html)
-                    };
 
-                    markup.push_str(&format!("<span {}>{}</span>", attrs, content_html));
+                    markup.push_str(&format!(
+                        "<span {}><span class=\"text\">{}</span></span>",
+                        attrs, icon.emoji_html
+                    ));
                 }
             }
         }
@@ -310,7 +299,7 @@ impl<'a> Renderer<'a> {
 
     fn icon_checkbox(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
         let mut styles = StyleSet::new();
-        styles.set("fill", color.to_string());
+        styles.set("color", color.to_string());
 
         let html = if status.completed() {
             Cow::from(ICON_CHECKBOX_COMPLETE)
@@ -319,7 +308,7 @@ impl<'a> Renderer<'a> {
         };
 
         NoteTagIcon {
-            html,
+            emoji_html: html,
             size: IconSize::Large,
             styles,
             is_checkbox: true,
@@ -385,7 +374,7 @@ impl<'a> Renderer<'a> {
         secondary_icon: &'static str,
     ) -> NoteTagIcon {
         let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
+        style.set("color", color.to_string());
 
         let mut content = String::new();
         content.push_str(if status.completed() {
@@ -396,11 +385,7 @@ impl<'a> Renderer<'a> {
 
         // The secondary icon's styles expect a content element to allow the
         // icon to be overlayed
-        let secondary_icon = if !is_icon_html(secondary_icon) {
-            format!("<span class=\"content\">{secondary_icon}</span>")
-        } else {
-            secondary_icon.to_string()
-        };
+        let secondary_icon = format!("<span class=\"content\">{secondary_icon}</span>");
 
         content.push_str(&format!(
             "<span class=\"icon-secondary\">{}</span>",
@@ -408,7 +393,7 @@ impl<'a> Renderer<'a> {
         ));
 
         NoteTagIcon {
-            html: Cow::from(content),
+            emoji_html: Cow::from(content),
             size: IconSize::Large,
             styles: style,
             is_checkbox: true,
@@ -417,11 +402,11 @@ impl<'a> Renderer<'a> {
 
     fn icon_checkmark(&self, color: &'static str) -> NoteTagIcon {
         let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
+        style.set("color", color.to_string());
 
         NoteTagIcon {
             is_checkbox: true,
-            html: Cow::from(ICON_CHECK_MARK),
+            emoji_html: Cow::from(ICON_CHECK_MARK),
             size: IconSize::Large,
             styles: style,
         }

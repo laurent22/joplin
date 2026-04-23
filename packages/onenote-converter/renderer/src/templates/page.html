@@ -19,24 +19,20 @@
     .note-tag-icon {
         position: relative;
         --note-tag-left: -23px;
-        --note-tag-width: 16px;
-        --note-tag-height: 16px;
+        --note-tag-font-size: 16px;
     }
     .note-tag-icon.-large {
         --note-tag-left: -25px;
-        --note-tag-width: 20px;
-        --note-tag-height: 20px;
+        --note-tag-font-size: 20px;
     }
     .note-tag-icon > .text {
         position: absolute;
+        bottom: -0.1em;
         left: var(--note-tag-left);
-        font-size: var(--note-tag-width);
+        font-size: var(--note-tag-font-size);
     }
-    .note-tag-icon > img, .note-tag-icon > svg {
-        position: absolute;
-        width: var(--note-tag-width);
-        height: var(--note-tag-height);
-        left: var(--note-tag-left);
+    .note-tag-icon.-checkbox {
+        bottom: -0.2em;
     }
 
     .tagged-list { list-style: none; padding-left: 0; }
