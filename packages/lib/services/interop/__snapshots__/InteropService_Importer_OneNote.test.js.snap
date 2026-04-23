@@ -972,7 +972,7 @@ This note includes a tagged list:
 - 🖊️Pen
 - 💡Lightbulb
 - 🔒Padlock
-- 📨Paper airplane
+-  ![Send email](:/id-here)Paper airplane
 - 📖Book
 - 🎵Music note
 - ⯀Red
@@ -1026,7 +1026,8 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🖊️</span>Pen</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">💡</span>Lightbulb</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🔒</span>Padlock</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📨</span>Paper airplane</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><img alt="Send email" src=":/id-here">
+</span>Paper airplane</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📖</span>Book</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🎵</span>Music note</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-6 -large -text">⯀</span>Red</span></li>
