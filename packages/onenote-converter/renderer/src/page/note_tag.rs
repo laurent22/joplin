@@ -348,15 +348,15 @@ impl<'a> Renderer<'a> {
     }
 
     fn icon_checkbox_with_1(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">1</span>")
+        self.icon_checkbox_with(status, color, "1")
     }
 
     fn icon_checkbox_with_2(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">2</span>")
+        self.icon_checkbox_with(status, color, "2")
     }
 
     fn icon_checkbox_with_3(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">3</span>")
+        self.icon_checkbox_with(status, color, "3")
     }
 
     fn icon_checkbox_with_exclamation(
@@ -364,7 +364,7 @@ impl<'a> Renderer<'a> {
         status: ActionItemStatus,
         color: &'static str,
     ) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">!</span>")
+        self.icon_checkbox_with(status, color, "!")
     }
 
     fn icon_checkbox_with(
