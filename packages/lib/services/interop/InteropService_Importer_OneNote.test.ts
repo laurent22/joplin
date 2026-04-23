@@ -393,4 +393,10 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(notesToMarkdownString([note])).toMatchSnapshot();
 		expect(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
 	});
+
+	it('should import bold and italic in a way that can be converted to Markdown', async () => {
+		const notes = await importNote(`${supportDir}/onenote/bold_and_italic.one`);
+		const matchingNotes = notes.filter(n => n.title === 'Bold & italic');
+		expect(notesToMarkdownString(matchingNotes)).toMatchSnapshot();
+	});
 });
