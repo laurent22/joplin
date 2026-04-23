@@ -276,6 +276,7 @@ impl<'a> Renderer<'a> {
             NoteTagShape::BlueSquare => self.normal_icon(ICON_SQUARE_BLUE),
             NoteTagShape::GreenSquare => self.normal_icon(ICON_SQUARE_GREEN),
             NoteTagShape::OrangeSquare => self.normal_icon(ICON_SQUARE_ORANGE),
+            // The pink square is labelled "pink" in OneNote, but displays purple:
             NoteTagShape::PinkSquare => self.normal_icon(ICON_SQUARE_PURPLE),
             NoteTagShape::EMailMessage => (Cow::from(ICON_EMAIL), IconSize::Normal).into(),
 
