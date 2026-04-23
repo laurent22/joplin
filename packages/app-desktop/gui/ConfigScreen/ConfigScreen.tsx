@@ -7,6 +7,7 @@ import bridge from '../../services/bridge';
 import Setting, { AppType, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
+import CommandService from '@joplin/lib/services/CommandService';
 const { connect } = require('react-redux');
 import { themeStyle } from '@joplin/lib/theme';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
@@ -300,6 +301,27 @@ class ConfigScreenComponent extends React.Component<any, any> {
 							onClick={this.checkSyncConfig_}
 						/>
 						{statusComp}
+					</div>,
+				);
+			}
+
+			if (settings['sync.target'] === SyncTargetRegistry.nameToId('dropbox')
+				|| settings['sync.target'] === SyncTargetRegistry.nameToId('onedrive')) {
+				const syncTargetLabel = SyncTargetRegistry.idToMetadata(settings['sync.target']).label;
+				settingComps.push(
+					<div key="auth_oauth_description" style={{ ...theme.textStyle, marginBottom: 10 }}>
+						{_('After selecting %s, click "Sign in" to authenticate.', syncTargetLabel)}
+					</div>,
+				);
+				settingComps.push(
+					<div key="auth_oauth_button" style={this.rowStyle_}>
+						<Button
+							title={_('Sign in')}
+							level={ButtonLevel.Primary}
+							onClick={() => {
+								void CommandService.instance().execute('synchronize');
+							}}
+						/>
 					</div>,
 				);
 			}
