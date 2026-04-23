@@ -979,6 +979,7 @@ packages/app-mobile/utils/ipc/WebViewToRNMessenger.js
 packages/app-mobile/utils/lockToSingleInstance.js
 packages/app-mobile/utils/makeShowMessageBox.test.js
 packages/app-mobile/utils/makeShowMessageBox.js
+packages/app-mobile/utils/performSync.js
 packages/app-mobile/utils/pickDocument.js
 packages/app-mobile/utils/polyfills/bufferPolyfill.js
 packages/app-mobile/utils/polyfills/crypto-polyfill/index.js
