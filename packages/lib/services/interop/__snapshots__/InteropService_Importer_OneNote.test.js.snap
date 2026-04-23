@@ -1013,20 +1013,26 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
 <ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">❗</span>Exclamation point</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">❓</span>Question mark</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img class="checkbox-icon" alt="Unchecked" src=":/id-here">
 <span class="icon-secondary"><span class="content">!</span></span></span>Checkbox with exclamation point</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Checkbox (complete)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img alt="Checked" src=":/id-here">
+</span>Checkbox (complete)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img class="checkbox-icon" alt="Unchecked" src=":/id-here">
 </span>Sub-checkbox (incomplete)</span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-<span class="icon-secondary"><span class="content">→</span></span></span><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img alt="Checked" src=":/id-here">
+<span class="icon-secondary"><span class="content">→</span></span></span><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img alt="Checked" src=":/id-here">
 <span class="icon-secondary"><span class="content">→</span></span></span>Sub-checkbox, with arrow (complete)</span></li>
 </ul></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal -text">⭐</span>Star</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🖊️</span>Pen</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">💡</span>Lightbulb</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🔒</span>Padlock</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><img alt="Send email" src=":/id-here">
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><!-- Joplin modification: Added title, width and height -->
+<img alt="Send email" src=":/id-here">
 </span>Paper airplane</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📖</span>Book</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🎵</span>Music note</span></li>
@@ -1522,20 +1528,27 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 </div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">jeudi 23 octobre 2025</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">09:24</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt; line-height: 22px;">Todo HBA</h2></div>
-<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img alt="Checked" src=":/id-here">
 </span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+</span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img alt="Checked" src=":/id-here">
 </span>Exporter le carnet en *.onepkg (case cochée)</span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img class="checkbox-icon" alt="Unchecked" src=":/id-here">
 </span>Exporter des page en *.one (case non cochée)</span></li>
 </ul></li>
 </ul><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 <div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt; line-height: 22px;">Todo Team appli</h2></div>
-<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img class="checkbox-icon" alt="Unchecked" src=":/id-here">
 </span>Rédiger compte-rendu réunion de service</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img class="checkbox-icon" alt="Unchecked" src=":/id-here">
+</span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
+<img alt="Checked" src=":/id-here">
 </span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</span></li>
 </ul></li>
 </ul></div>
