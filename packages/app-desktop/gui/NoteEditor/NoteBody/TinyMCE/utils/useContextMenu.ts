@@ -19,6 +19,9 @@ import { _ } from '@joplin/lib/locale';
 import type { MenuItem as MenuItemType } from 'electron';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('useContextMenu');
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -162,8 +165,13 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 
 		return () => {
 			editor.off('contextmenu', onBrowserContextMenu);
-			if (!targetWindow.isDestroyed() && targetWindow?.webContents?.off) {
-				targetWindow.webContents.off('context-menu', onElectronContextMenu);
+
+			try {
+				if (!targetWindow.isDestroyed() && targetWindow?.webContents?.off) {
+					targetWindow.webContents.off('context-menu', onElectronContextMenu);
+				}
+			} catch (error) {
+				logger.warn('Error removing context menu listener', error);
 			}
 		};
 	}, [editor, plugins, dispatch, htmlToMd, mdToHtml, editDialog, windowId]);

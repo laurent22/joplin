@@ -412,6 +412,7 @@ export default class ElectronAppWrapper {
 						action: 'allow',
 						overrideBrowserWindowOptions: {
 							webPreferences: {
+								nodeIntegration: false,
 								preload: resolve(__dirname, './utils/window/secondaryWindowPreload.js'),
 							},
 						},
