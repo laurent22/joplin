@@ -160,7 +160,11 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			}
 		};
 
-		targetWindow.webContents.prependListener('context-menu', onElectronContextMenu);
+		try {
+			targetWindow.webContents.prependListener('context-menu', onElectronContextMenu);
+		} catch (error) {
+			logger.error('Failed to register context menu', error);
+		}
 		editor.on('contextmenu', onBrowserContextMenu);
 
 		return () => {
@@ -171,7 +175,9 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 					targetWindow.webContents.off('context-menu', onElectronContextMenu);
 				}
 			} catch (error) {
-				logger.warn('Error removing context menu listener', error);
+				// This can happen if the window closes after the isDestroyed check, but before webContents.off
+				// finishes running.
+				logger.error('Error removing context menu listener', error);
 			}
 		};
 	}, [editor, plugins, dispatch, htmlToMd, mdToHtml, editDialog, windowId]);

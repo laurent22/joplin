@@ -370,6 +370,8 @@ const useContextMenu = (props: ContextMenuProps) => {
 					targetWindow.webContents.off('context-menu', onContextMenu);
 				}
 			} catch (error) {
+				// This can happen if the window closes after the isDestroyed check, but before webContents.off
+				// finishes running.
 				logger.warn('Error removing menu listener', error);
 			}
 		};
