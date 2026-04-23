@@ -345,4 +345,24 @@ describe('services_KeymapService', () => {
 		keymapService.registerCommandAccelerator('some-command', null);
 		expect(keymapService.getAriaKeyShortcuts('some-command')).toBe(undefined);
 	});
+
+	describe('validateKeymap', () => {
+		beforeEach(() => keymapService.initialize([], 'linux'));
+
+		it('should throw when proposed accelerator conflicts with an existing command', () => {
+			// Ctrl+N is the default for newNote
+			expect(() => keymapService.validateKeymap({ accelerator: 'Ctrl+N', command: 'synchronize' })).toThrow();
+		});
+
+		it('should not throw when proposed accelerator is unique', () => {
+			expect(() => keymapService.validateKeymap({ accelerator: 'Ctrl+Shift+Alt+F12', command: 'synchronize' })).not.toThrow();
+		});
+
+		it('should not throw for pre-existing conflicts when checking an unrelated command', () => {
+			// Force a duplicate in the keymap directly, simulating a pre-existing conflict
+			keymapService.setAccelerator('newTodo', 'Ctrl+N'); // newNote also has Ctrl+N
+			// The pre-existing newNote/newTodo conflict should not block saving an unrelated shortcut
+			expect(() => keymapService.validateKeymap({ accelerator: 'Ctrl+Shift+Alt+F12', command: 'synchronize' })).not.toThrow();
+		});
+	});
 });

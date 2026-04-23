@@ -350,25 +350,38 @@ export default class KeymapService extends BaseService {
 	}
 
 	public validateKeymap(proposedKeymapItem: KeymapItem = null) {
-		const usedAccelerators = new Set();
+		if (proposedKeymapItem) {
+			// When checking a proposed change, only throw if the proposed accelerator
+			// conflicts with another command. Pre-existing conflicts between other commands
+			// should not block the user from saving an unrelated shortcut change.
+			for (const item of Object.values(this.keymap)) {
+				if (item.command === proposedKeymapItem.command) continue;
+				if (item.accelerator === proposedKeymapItem.accelerator) {
+					throw new Error(_(
+						'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
+						proposedKeymapItem.accelerator,
+						item.command,
+						proposedKeymapItem.command,
+					));
+				}
+			}
+			return;
+		}
 
-		// Validate as if the proposed change is already present in the current keymap
-		// Helpful for detecting any errors that'll occur, when the proposed change is performed on the keymap
-		if (proposedKeymapItem) usedAccelerators.add(proposedKeymapItem.accelerator);
+		// Validate the entire keymap for duplicates
+		const usedAccelerators = new Set();
 
 		for (const item of Object.values(this.keymap)) {
 			const [itemAccelerator, itemCommand] = [item.accelerator, item.command];
-			if (proposedKeymapItem && itemCommand === proposedKeymapItem.command) continue; // Ignore the original accelerator
 
 			if (usedAccelerators.has(itemAccelerator)) {
-				const originalItem = (proposedKeymapItem && proposedKeymapItem.accelerator === itemAccelerator)
-					? proposedKeymapItem
-					: Object.values(this.keymap).find(_item => _item.accelerator === itemAccelerator);
+				const originalItem = Object.values(this.keymap).find(_item => _item.accelerator === itemAccelerator);
 
 				throw new Error(_(
 					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
 					itemAccelerator,
-					originalItem.command,
+					// originalItem must exist here — its accelerator was added to usedAccelerators in a prior iteration
+					originalItem!.command,
 					itemCommand,
 				));
 			} else if (itemAccelerator) {
