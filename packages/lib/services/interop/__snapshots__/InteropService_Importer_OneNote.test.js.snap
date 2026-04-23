@@ -997,13 +997,13 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 /* (For testing: Removed default CSS) */
 
 
-    .icon-0 > svg, .icon-0 > img, .icon-0 > .text { color: #ffd678; }
-    .icon-1 > svg, .icon-1 > img, .icon-1 > .text { color: #4673b7; }
-    .icon-2 > svg, .icon-2 > img, .icon-2 > .text { color: #4673b7; }
-    .icon-3 > svg, .icon-3 > img, .icon-3 > .text { color: #4673b7; }
-    .icon-4 > svg, .icon-4 > img, .icon-4 > .text { color: #4673b7; }
-    .icon-5 > svg, .icon-5 > img, .icon-5 > .text { color: #ffd678; }
-    .icon-6 > svg, .icon-6 > img, .icon-6 > .text { color: #db5b4d; }
+    .icon-0 > .text { color: #ffd678; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #ffd678; }
+    .icon-6 > .text { color: #db5b4d; }
     
     </style>
 </head>
@@ -1507,13 +1507,13 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 /* (For testing: Removed default CSS) */
 
 
-    .icon-0 > svg, .icon-0 > img, .icon-0 > .text { color: #4673b7; }
-    .icon-1 > svg, .icon-1 > img, .icon-1 > .text { color: #4673b7; }
-    .icon-2 > svg, .icon-2 > img, .icon-2 > .text { color: #4673b7; }
-    .icon-3 > svg, .icon-3 > img, .icon-3 > .text { color: #4673b7; }
-    .icon-4 > svg, .icon-4 > img, .icon-4 > .text { color: #4673b7; }
-    .icon-5 > svg, .icon-5 > img, .icon-5 > .text { color: #4673b7; }
-    .icon-6 > svg, .icon-6 > img, .icon-6 > .text { color: #4673b7; }
+    .icon-0 > .text { color: #4673b7; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #4673b7; }
+    .icon-6 > .text { color: #4673b7; }
     
     </style>
 </head>
