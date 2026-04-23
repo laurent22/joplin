@@ -956,14 +956,7 @@ Thursday, April 23, 2026
 
 9:58 AM
 
-**Bold** and *italic* and **bold italic**.
-
-
-# Note: bold_and_italic
-
- bold_and_italic 
-
-- [Bold & italic](%5Cbold_and_italic%5CBold%20%26%20italic.html "Bold & italic")"
+**Bold** and *italic* and **bold italic**."
 `;
 
 exports[`InteropService_Importer_OneNote should import nested ink 1`] = `
