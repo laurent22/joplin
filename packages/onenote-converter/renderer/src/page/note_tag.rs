@@ -8,8 +8,6 @@ use std::borrow::Cow;
 
 const COLOR_BLUE: &str = "#4673b7";
 const COLOR_GREEN: &str = "#369950";
-const COLOR_ORANGE: &str = "#dba24d";
-const COLOR_PINK: &str = "#f78b9d";
 const COLOR_RED: &str = "#db5b4d";
 const COLOR_YELLOW: &str = "#ffd678";
 
@@ -36,7 +34,12 @@ const ICON_PEN: &str = "🖊️";
 const ICON_PERSON: &str = "👤";
 const ICON_PHONE: &str = "📞";
 const ICON_QUESTION_MARK: &str = "❓";
-const ICON_SQUARE: &str = "⯀";
+const ICON_SQUARE_RED: &str = "🟥";
+const ICON_SQUARE_YELLOW: &str = "🟨";
+const ICON_SQUARE_ORANGE: &str = "🟧";
+const ICON_SQUARE_GREEN: &str = "🟩";
+const ICON_SQUARE_BLUE: &str = "🟦";
+const ICON_SQUARE_PURPLE: &str = "🟪";
 const ICON_STAR: &str = "🟊";
 const ICON_YELLOW_STAR: &str = "⭐";
 
@@ -265,12 +268,12 @@ impl<'a> Renderer<'a> {
             NoteTagShape::BlueFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_BLUE),
             NoteTagShape::RedFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_RED),
             NoteTagShape::GreenFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_GREEN),
-            NoteTagShape::RedSquare => self.icon_square(COLOR_RED),
-            NoteTagShape::YellowSquare => self.icon_square(COLOR_YELLOW),
-            NoteTagShape::BlueSquare => self.icon_square(COLOR_BLUE),
-            NoteTagShape::GreenSquare => self.icon_square(COLOR_GREEN),
-            NoteTagShape::OrangeSquare => self.icon_square(COLOR_ORANGE),
-            NoteTagShape::PinkSquare => self.icon_square(COLOR_PINK),
+            NoteTagShape::RedSquare => self.large_icon(ICON_SQUARE_RED),
+            NoteTagShape::YellowSquare => self.large_icon(ICON_SQUARE_YELLOW),
+            NoteTagShape::BlueSquare => self.large_icon(ICON_SQUARE_BLUE),
+            NoteTagShape::GreenSquare => self.large_icon(ICON_SQUARE_GREEN),
+            NoteTagShape::OrangeSquare => self.large_icon(ICON_SQUARE_ORANGE),
+            NoteTagShape::PinkSquare => self.large_icon(ICON_SQUARE_PURPLE),
             NoteTagShape::EMailMessage => (Cow::from(ICON_EMAIL), IconSize::Normal).into(),
 
             NoteTagShape::Contact => (Cow::from(ICON_CONTACT), IconSize::Normal).into(),
@@ -419,10 +422,7 @@ impl<'a> Renderer<'a> {
         (Cow::from(ICON_CIRCLE), IconSize::Normal, style).into()
     }
 
-    fn icon_square(&self, color: &'static str) -> NoteTagIcon {
-        let mut style = StyleSet::new();
-        style.set("color", color.to_string());
-
-        (Cow::from(ICON_SQUARE), IconSize::Large, style).into()
+    fn large_icon(&self, icon_html: &'static str) -> NoteTagIcon {
+        (Cow::from(icon_html), IconSize::Large).into()
     }
 }

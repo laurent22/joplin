@@ -976,7 +976,7 @@ This note includes a tagged list:
 - 📨Paper airplane
 - 📖Book
 - 🎵Music note
-- ⯀Red
+- 🟥Red
 - 🏠House
 - 📞Phone
 - 🔗Link
@@ -1003,7 +1003,6 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
     .icon-3 > .text { color: #4673b7; }
     .icon-4 > .text { color: #4673b7; }
     .icon-5 > .text { color: #ffd678; }
-    .icon-6 > .text { color: #db5b4d; }
     
     </style>
 </head>
@@ -1029,7 +1028,7 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📨</span></span>Paper airplane</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📖</span></span>Book</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎵</span></span>Music note</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-6 -large"><span class="text">⯀</span></span>Red</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -large"><span class="text">🟥</span></span>Red</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🏠</span></span>House</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📞</span></span>Phone</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔗</span></span>Link</span></li>
