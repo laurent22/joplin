@@ -969,6 +969,7 @@ This note includes a tagged list:
     -  [ ] Sub-checkbox (incomplete)
     -  [x]  [x] Sub-checkbox, with arrow (complete)
 - ⭐Star
+    - 🗨️Sub-item
 - 🖊️Pen
 - 💡Lightbulb
 - 🔒Padlock
@@ -1005,14 +1006,14 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">Checklists</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">Wednesday, April 22, 2026</span></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">Checklists</span></div>
+</div><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">Wednesday, April 22, 2026</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">1:45 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt;">Tagged list</h2></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt;">Tagged list</h2></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">This note includes a <span style="font-weight: bold;">tagged list</span>:</p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
-<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">❗</span>Exclamation point</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">❓</span>Question mark</span></li>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❗</span></span>Exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❓</span></span>Question mark</span></li>
 <li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><!-- Joplin modification: Added title, width, height: -->
 <img class="checkbox-icon" alt="Unchecked" src=":/id-here">
 <span class="icon-secondary"><span class="content">!</span></span></span>Checkbox with exclamation point</span></li>
@@ -1027,18 +1028,19 @@ exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
 <img alt="Checked" src=":/id-here">
 <span class="icon-secondary"><span class="content">→</span></span></span>Sub-checkbox, with arrow (complete)</span></li>
 </ul></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal -text">⭐</span>Star</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🖊️</span>Pen</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">💡</span>Lightbulb</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🔒</span>Padlock</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📨</span>Paper airplane</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📖</span>Book</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🎵</span>Music note</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-6 -large -text">⯀</span>Red</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🏠</span>House</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">📞</span>Phone</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🔗</span>Link</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal -text">🎞️</span>Film</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal"><span class="text">⭐</span></span>Star</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🗨️</span></span>Sub-item</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🖊️</span></span>Pen</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">💡</span></span>Lightbulb</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔒</span></span>Padlock</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📨</span></span>Paper airplane</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📖</span></span>Book</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎵</span></span>Music note</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon icon-6 -large"><span class="text">⯀</span></span>Red</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🏠</span></span>House</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📞</span></span>Phone</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔗</span></span>Link</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎞️</span></span>Film</span></li>
 </ul></div>
 
 
