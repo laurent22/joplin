@@ -20,34 +20,30 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - name: Delete CodeRabbit issue comment
-        if: github.event_name == 'issue_comment'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_URL: ${{ github.event.comment.url }}
-        run: |
-          gh api -X DELETE "$COMMENT_URL"
-
-      - name: Minimize CodeRabbit review summary
-        if: github.event_name == 'pull_request_review'
+      - name: Minimize all CodeRabbit reviews and comments
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
         run: |
-          # The review summary appears as an issue comment on the PR.
-          # Find recent comments by coderabbitai and minimize them.
-          COMMENT_NODE_IDS=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments?per_page=10&sort=created&direction=desc" \
+          # Minimize all CodeRabbit reviews on this PR
+          REVIEW_NODE_IDS=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/reviews" \
             --jq '[.[] | select(.user.login == "coderabbitai[bot]") | .node_id] | .[]')
 
-          for NODE_ID in $COMMENT_NODE_IDS; do
+          for NODE_ID in $REVIEW_NODE_IDS; do
             gh api graphql -f query='
               mutation {
                 minimizeComment(input: {subjectId: "'"${NODE_ID}"'", classifier: OFF_TOPIC}) {
-                  minimizedComment {
-                    isMinimized
-                  }
+                  minimizedComment { isMinimized }
                 }
               }
-            '
+            ' 2>/dev/null || true
+          done
+
+          # Delete all CodeRabbit issue comments on this PR
+          COMMENT_URLS=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments?per_page=100" \
+            --jq '[.[] | select(.user.login == "coderabbitai[bot]") | .url] | .[]')
+
+          for URL in $COMMENT_URLS; do
+            gh api -X DELETE "$URL" 2>/dev/null || true
           done

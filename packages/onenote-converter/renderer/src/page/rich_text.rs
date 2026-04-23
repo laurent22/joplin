@@ -113,7 +113,15 @@ impl<'a> Renderer<'a> {
                     let text_html = html_entities(part.text());
                     if style.len() > 0 {
                         let style_attr = style.to_html_attr();
-                        Ok(format!("<span {style_attr}>{text_html}</span>"))
+                        let tag = if style.is_bold() {
+                            "strong"
+                        } else if style.is_italic() {
+                            "em"
+                        } else {
+                            "span"
+                        };
+
+                        Ok(format!("<{tag} {style_attr}>{text_html}</{tag}>"))
                     } else {
                         Ok(text_html)
                     }
