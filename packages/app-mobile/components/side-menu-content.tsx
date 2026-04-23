@@ -6,14 +6,13 @@ import { connect } from 'react-redux';
 import Icon from './Icon';
 import Folder from '@joplin/lib/models/Folder';
 import Synchronizer from '@joplin/lib/Synchronizer';
+import performSync from '../utils/performSync';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from './global-style';
 import { buildFolderTree, isFolderSelected, renderFolders } from '@joplin/lib/components/shared/side-menu-shared';
 import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
-import Setting from '@joplin/lib/models/Setting';
-import { reg } from '@joplin/lib/registry';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { getTrashFolderIcon, getTrashFolderId } from '@joplin/lib/services/trash';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
@@ -513,62 +512,14 @@ const SideMenuContentComponent = (props: Props) => {
 		});
 	};
 
-	const performSync = useCallback(async () => {
-		const action = props.syncStarted ? 'cancel' : 'start';
-
-		if (!Setting.value('sync.target')) {
-			props.dispatch({
-				type: 'SIDE_MENU_CLOSE',
-			});
-
-			props.dispatch({
-				type: 'SYNC_WIZARD_VISIBLE_CHANGE',
-				visible: true,
-			});
-
-			return 'init';
-		}
-
-		if (!(await reg.syncTarget().isAuthenticated())) {
-			if (reg.syncTarget().authRouteName()) {
-				props.dispatch({
-					type: 'NAV_GO',
-					routeName: reg.syncTarget().authRouteName(),
-				});
-				return 'auth';
-			}
-
-			reg.logger().error('Not authenticated with sync target - please check your credentials.');
-			return 'error';
-		}
-
-		let sync = null;
-		try {
-			sync = await reg.syncTarget().synchronizer();
-		} catch (error) {
-			reg.logger().error('Could not initialise synchroniser: ');
-			reg.logger().error(error);
-			error.message = `Could not initialise synchroniser: ${error.message}`;
-			props.dispatch({
-				type: 'SYNC_REPORT_UPDATE',
-				report: { errors: [error] },
-			});
-			return 'error';
-		}
-
-		if (action === 'cancel') {
-			void sync.cancel();
-			return 'cancel';
-		} else {
-			void reg.scheduleSync(0);
-			return 'sync';
-		}
+	const performSyncCallback = useCallback(async () => {
+		return performSync(props.syncStarted, props.dispatch);
 	}, [props.syncStarted, props.dispatch]);
 
 	const synchronize_press = useCallback(async () => {
-		const actionDone = await performSync();
+		const actionDone = await performSyncCallback();
 		if (actionDone === 'auth') props.dispatch({ type: 'SIDE_MENU_CLOSE' });
-	}, [performSync, props.dispatch]);
+	}, [performSyncCallback, props.dispatch]);
 
 
 	const renderFolderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {

@@ -41,6 +41,7 @@ import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import performSync from '../../../utils/performSync';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -138,6 +139,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			type: 'SYNC_WIZARD_VISIBLE_CHANGE',
 			visible: true,
 		});
+	};
+
+	private onAuthenticateOAuth_ = async () => {
+		// Save any unsaved settings first (e.g. the sync target selection itself)
+		await this.saveButton_press();
+		await performSync(false, this.props.dispatch);
 	};
 
 	private saveButton_press = async () => {
@@ -568,6 +575,18 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		if (section.name === 'sync') {
 			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
+
+			const currentSyncTargetId = settings['sync.target'];
+			if (currentSyncTargetId === SyncTargetRegistry.nameToId('dropbox')
+				|| currentSyncTargetId === SyncTargetRegistry.nameToId('onedrive')) {
+				const syncTargetLabel = SyncTargetRegistry.idToMetadata(currentSyncTargetId).label;
+				addSettingButton(
+					'auth_oauth_button',
+					_('Sign in'),
+					this.onAuthenticateOAuth_,
+					{ description: _('After selecting %s, tap "Sign in" to authenticate.', syncTargetLabel) },
+				);
+			}
 		}
 
 		if (section.name === 'joplinCloud') {
