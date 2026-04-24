@@ -280,7 +280,7 @@ pub struct ReaderFilePointer {
 impl Read for ReaderFilePointer {
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
         let offset = self.start_offset;
-        if offset > self.end_offset {
+        if offset >= self.end_offset {
             return Ok(0);
         }
 
