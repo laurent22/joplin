@@ -275,6 +275,11 @@ impl Read for ReaderFilePointer {
             return Ok(0);
         }
 
+        // Don't read past the end of the region:
+        let remaining = self.end_offset - offset;
+        let maximum_buf_len = buf.len().min(remaining as usize);
+        let buf = &mut buf[0..maximum_buf_len];
+
         let mut file = self.file.borrow_mut();
         let original_offset = file.seek(SeekFrom::Current(0))?;
         let read_result = (|| {
