@@ -12,10 +12,13 @@ pub trait FileApiDriver: Send + Sync {
     fn read_dir(&self, path: &str) -> ApiResult<Vec<String>>;
     fn read_file(&self, path: &str) -> ApiResult<Vec<u8>>;
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()>;
-    fn stream_to_file(&self, path: &str, data: &mut dyn Read) -> ApiResult<()>;
     fn make_dir(&self, path: &str) -> ApiResult<()>;
     fn exists(&self, path: &str) -> ApiResult<bool>;
     fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>>;
+
+    /// Writes data from `stream` to the file at `path`.
+    /// Note: If `stream.read` fails, the file may be left in a partially-written state.
+    fn stream_to_file(&self, path: &str, stream: &mut dyn Read) -> ApiResult<()>;
 
     // These functions correspond to the similarly-named
     // NodeJS path functions and should behave like the NodeJS
