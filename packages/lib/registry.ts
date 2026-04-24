@@ -32,7 +32,7 @@ export interface BackgroundService {
 
 	stop(): Promise<void>;
 
-	isRunning(): Promise<boolean>;
+	isRunning(): boolean;
 }
 
 class Registry {
@@ -292,28 +292,28 @@ class Registry {
 			return result;
 		}
 
-		const running = bg.isRunning ? await bg.isRunning() : false;
-
-		if (running) {
-			return;
+		try {
+			return await bg.start(async () => {
+				try {
+					return await sync.start(options);
+				} finally {
+					// Ensure any notification is removed when sync completes
+					await bg.stop();
+				}
+			}, {
+				taskName: 'Sync',
+				taskTitle: 'Syncing data',
+				taskDesc: 'Sync in progress...',
+				taskIcon: {
+					name: 'ic_launcher',
+					type: 'mipmap',
+				},
+				foregroundServiceType: ['dataSync'],
+			});
+		} catch (e) {
+			this.logger().warn('Foreground service failed, running sync directly', e);
+			return sync.start(options);
 		}
-
-		return await bg.start(async () => {
-			try {
-				return await sync.start(options);
-			} finally {
-				await bg.stop();
-			}
-		}, {
-			taskName: 'Sync',
-			taskTitle: 'Syncing data',
-			taskDesc: 'Sync in progress...',
-			taskIcon: {
-				name: 'ic_launcher',
-				type: 'mipmap',
-			},
-			foregroundServiceType: ['dataSync'],
-		});
 	}
 
 	public setupRecurrentSync() {

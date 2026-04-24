@@ -121,8 +121,10 @@
 		</activity>
 
 		<service 
-          android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask"
-          android:foregroundServiceType="dataSync"
+			android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask"
+			android:exported="false"
+			android:foregroundServiceType="dataSync"
+			android:stopWithTask="true"
         />
 
 	</application>

@@ -25,7 +25,7 @@ initializeRegistry({
 		stop: async () => {
 			return BackgroundService.stop();
 		},
-		isRunning: async () => {
+		isRunning: () => {
 			return BackgroundService.isRunning();
 		},
 	},
