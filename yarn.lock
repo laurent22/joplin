@@ -12848,6 +12848,7 @@ __metadata:
     react-native-device-info: "npm:14.1.1"
     react-native-dropdownalert: "npm:5.2.0"
     react-native-file-viewer: "npm:2.1.5"
+    react-native-foreground-service-turbo: "github:paulkiren/react-native-foreground-service-turbo"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
     react-native-localize: "npm:3.6.1"
@@ -49711,6 +49712,16 @@ __metadata:
   peerDependencies:
     react-native: ">=0.47"
   checksum: 10/0a99496d193dedf51e3773a0703a79b7517b5266df49bcf994dafaf845705112ed8e11a1ffde2e923d3fbea6afbda559c057b81e9711fe4116ff09eac1f30f23
+  languageName: node
+  linkType: hard
+
+"react-native-foreground-service-turbo@github:paulkiren/react-native-foreground-service-turbo":
+  version: 0.1.0
+  resolution: "react-native-foreground-service-turbo@https://github.com/paulkiren/react-native-foreground-service-turbo.git#commit=70cdd21d4a71790b8fc93c39a0b4062f00dce500"
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.68.0"
+  checksum: 10/3bd71a2ae31ed176de1454ffda5b3fb42e87c3aa3e09abfcc0d963dbaec9e524a581ef8474fb9ae8bab5da178828250616eec8e821bd86832ea571ecd803a77e
   languageName: node
   linkType: hard
 

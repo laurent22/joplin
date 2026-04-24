@@ -65,6 +65,7 @@
     "react-native-device-info": "14.1.1",
     "react-native-dropdownalert": "5.2.0",
     "react-native-file-viewer": "2.1.5",
+    "react-native-foreground-service-turbo": "github:paulkiren/react-native-foreground-service-turbo",
     "react-native-get-random-values": "1.11.0",
     "react-native-image-picker": "8.2.1",
     "react-native-localize": "3.6.1",

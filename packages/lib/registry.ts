@@ -5,6 +5,34 @@ import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
 
+export interface StartServiceConfig {
+	id: number;
+	title?: string;
+	message?: string;
+	serviceType?: string;
+	button?: {
+		text: string;
+		onPressEvent: string;
+	};
+	progress?: {
+		max: number;
+		curr: number;
+	};
+}
+
+export interface TaskOptions {
+	delay?: number;
+	onLoop?: boolean;
+	taskId?: string;
+}
+
+export interface ForegroundService {
+	start(options: StartServiceConfig): Promise<void>;
+	stop(): Promise<void>;
+	add_task(task: () => Promise<void>, options: TaskOptions): void;
+	remove_task(id: string): void;
+}
+
 class Registry {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -24,6 +52,11 @@ class Registry {
 	private db_: any;
 	private isOnMobileData_ = false;
 	private dispatch_: Dispatch = (() => {}) as Dispatch;
+	private foregroundService_: ForegroundService | null = null;
+
+	public setForegroundService(service: ForegroundService) {
+		this.foregroundService_ = service;
+	}
 
 	public logger() {
 		if (!this.logger_) {
@@ -209,7 +242,7 @@ class Registry {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
 							}
-							newContext = await sync.start(options);
+							newContext = await this.startSync(sync, options);
 							Setting.setValue(contextKey, JSON.stringify(newContext));
 						} catch (error) {
 							if (error.code === 'alreadyStarted') {
@@ -248,6 +281,45 @@ class Registry {
 			this.schedSyncCalls_.pop();
 		}
 	};
+
+	private async startSync(sync: any, options: any) {
+		let resolveDone: (value: any) => void;
+
+		const donePromise = new Promise(resolve => {
+			resolveDone = resolve;
+		});
+
+		const fg = this.foregroundService_;
+
+		if (!fg) {
+			// fallback: run without foreground service
+			const result = await sync.start(options);
+			return result;
+		}
+
+		await fg.start({
+			id: 1,
+			title: 'Synchronising data',
+			message: 'Synchronising...',
+			serviceType: 'dataSync',
+			button: { text: 'Cancel', onPressEvent: 'cancel' },
+		});
+
+		fg.add_task(
+			async () => {
+				const result = await sync.start(options);
+			
+				if (result) {
+					fg.remove_task('synchronise');
+					await fg.stop();
+					resolveDone(result);
+				}
+			},
+			{ delay: 0, onLoop: true, taskId: 'synchronise' }
+		);
+
+		return donePromise;
+	}
 
 	public setupRecurrentSync() {
 		this.setupRecurrentCalls_.push(true);
@@ -321,3 +393,11 @@ const reg = new Registry();
 
 // eslint-disable-next-line import/prefer-default-export
 export { reg };
+
+export function initializeRegistry(deps: {
+	foregroundService?: ForegroundService;
+}) {
+	if (deps.foregroundService) {
+		reg.setForegroundService(deps.foregroundService);
+	}
+}
