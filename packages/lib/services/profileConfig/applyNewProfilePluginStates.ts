@@ -32,8 +32,8 @@ export default async (profileDir: string) => {
 		try {
 			await shim.fsDriver().remove(seedPath);
 		} catch {
-			// Ignore removal errors; missing-file is harmless and any other failure
-			// will be retried on the next firstStart if one happens.
+			// Ignore removal errors; a stale seed file is harmless as `firstStart`
+			// is flipped to false right after, so it will never be read again.
 		}
 	}
 };
