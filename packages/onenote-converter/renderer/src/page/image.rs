@@ -11,8 +11,14 @@ impl<'a> Renderer<'a> {
         let mut content = String::new();
 
         if let Some(mut reader) = image.read()? {
-            let mut initial_bytes = vec![0; 1024];
-            reader.read(&mut initial_bytes)?;
+            // Read up to the first kilobyte so that determine_image_filename can do
+            // file type detection
+            let initial_bytes = {
+                let mut bytes = vec![0; 1024];
+                let read_length = reader.read(&mut bytes)?;
+                bytes.resize(read_length, 0);
+                bytes
+            };
 
             let filename = self.determine_image_filename(image, &initial_bytes)?;
             let path = fs_driver().join(&self.output, &filename);
