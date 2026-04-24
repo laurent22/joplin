@@ -1,5 +1,17 @@
 # Joplin Android Changelog
 
+## [android-v3.6.17](https://github.com/laurent22/joplin/releases/tag/android-v3.6.17) - 2026-04-24T15:22:08Z
+
+- Improved: Accessibility: View/edit toggle: Improve screen reader accessibility (#15167 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Apply Markdown formatting commands per-line (#15164) (#14854 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove confirm password field when a key already exists, and prevent invalid key creation scenario (#15122 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Remove unnecessary padding at bottom of note in view mode (#15108 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Accessibility: Fix tab ordering in the note viewer screen (#15166) (#14548 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix E2EE password validation: Upgrade react-native-quick-crypto to v1.0.19 (#15103) (#14975 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix conflicts notebook has low contrast when selected (#15168) (#13437 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix markdown editor not scrolling to search results (#15119) (#15116 by Sriram Varun Kumar)
+- Fixed: Fix share error toast cut off on Android 15+ (#15072) (#15071 by Sriram Varun Kumar)
+
 ## [android-v3.6.16](https://github.com/laurent22/joplin/releases/tag/android-v3.6.16) - 2026-04-14T15:38:56Z
 
 - New: Add 'Go to start/end of note' toolbar buttons (#15015 by [@Vpatel1093](https://github.com/Vpatel1093))
