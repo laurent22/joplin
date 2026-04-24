@@ -19,6 +19,8 @@ struct InkPart {
 
 pub(crate) struct InkBuilder {
     parts: Vec<InkPart>,
+
+    offset: Vec2,
     embedded: bool,
 }
 
@@ -28,12 +30,14 @@ impl InkBuilder {
     pub(crate) fn new(embedded: bool) -> Self {
         Self {
             parts: vec![],
+            offset: (0.0, 0.0),
             embedded,
         }
     }
 
     fn reset(&mut self) {
         self.parts.clear();
+        self.offset = (0.0, 0.0);
     }
 
     pub(crate) fn push(&mut self, ink: &Ink, display_bounding_box: Option<&InkBoundingBox>) {
@@ -89,8 +93,8 @@ impl InkBuilder {
         let display_y_min = display_bounding_box.map(|bb| bb.y()).unwrap_or_default();
         let display_x_min = display_bounding_box.map(|bb| bb.x()).unwrap_or_default();
 
-        let top_px = (y_min - display_y_min) / Self::SVG_SCALING_FACTOR + offset_vertical * 48.0;
-        let left_px = (x_min - display_x_min) / Self::SVG_SCALING_FACTOR + offset_horizontal * 48.0;
+        let top_px = (y_min - display_y_min) / Self::SVG_SCALING_FACTOR + offset_vertical * 48.0 + self.offset.1;
+        let left_px = (x_min - display_x_min) / Self::SVG_SCALING_FACTOR + offset_horizontal * 48.0 + self.offset.0;
 
         let translate = (
             left_px * Self::SVG_SCALING_FACTOR - x_min,
@@ -103,7 +107,12 @@ impl InkBuilder {
             content_size_px: (width_px, height_px),
             display_size_px,
             offset_px: (left_px, top_px),
-        })
+        });
+
+        // The size of previous embedded ink determines the position of the next
+        if self.embedded {
+            self.offset = (self.offset.0 + width_px, self.offset.1);
+        }
     }
 
     pub(crate) fn finish(&mut self) -> String {
