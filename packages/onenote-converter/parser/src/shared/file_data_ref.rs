@@ -31,7 +31,7 @@ impl FileDataLoader for Vec<u8> {
 
 impl FileDataLoader for ReaderDataRef {
     fn read(&self) -> Result<Box<dyn Read>> {
-        ReaderDataRef::read(self)
+        Ok(ReaderDataRef::read(self))
     }
 }
 

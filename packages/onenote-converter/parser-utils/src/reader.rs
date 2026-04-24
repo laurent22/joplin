@@ -262,10 +262,10 @@ pub enum ReaderDataRef {
 }
 
 impl ReaderDataRef {
-    pub fn read(&self) -> Result<Box<dyn Read>> {
+    pub fn read(&self) -> Box<dyn Read> {
         match self {
-            ReaderDataRef::Vec(slice) => Ok(Box::new(Cursor::new(slice.to_vec()))),
-            ReaderDataRef::FilePointer(ptr) => Ok(Box::new(ptr.clone())),
+            ReaderDataRef::Vec(slice) => Box::new(Cursor::new(slice.to_vec())),
+            ReaderDataRef::FilePointer(ptr) => Box::new(ptr.clone()),
         }
     }
 }
@@ -332,6 +332,25 @@ mod test {
         reader.seek_relative(-2).unwrap();
         assert_eq!(reader.get_u8().unwrap(), 2);
         assert_eq!(reader.get_u8().unwrap(), 3);
+        assert_eq!(reader.get_u8().unwrap(), 4);
+    }
+
+    #[test]
+    fn should_read_from_offset() {
+        let data: [u8; 8] = [1, 2, 3, 4, 5, 6, 7, 8];
+        let mut reader = Reader::from(&data as &[u8]);
+
+        reader.advance(1).unwrap();
+        let mut data_ref = reader.as_data_ref(4).unwrap().read();
+
+        reader.advance(2).unwrap();
+
+        // The data_ref should read from the offset from where it was created 
+        let mut output = vec![];
+        data_ref.read_to_end(&mut output).unwrap();
+        assert_eq!(output, [2, 3, 4, 5]);
+
+        // Reading the data_ref should not affect the original reader
         assert_eq!(reader.get_u8().unwrap(), 4);
     }
 }
