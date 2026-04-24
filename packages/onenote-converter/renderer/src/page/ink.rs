@@ -11,10 +11,12 @@ struct InkPart {
 
     /// Size of the ink
     content_size_px: Vec2,
+    /// x/y position of the element containing the ink
+    content_offset_px: Vec2,
     /// Size of the element containing the ink
     display_size_px: Vec2,
-    /// x/y position of the element containing the ink
-    offset_px: Vec2,
+    /// Ofset of the original bounding box for the element
+    display_offset_px: Vec2,
 }
 
 pub(crate) struct InkBuilder {
@@ -93,8 +95,20 @@ impl InkBuilder {
         let display_y_min = display_bounding_box.map(|bb| bb.y()).unwrap_or_default();
         let display_x_min = display_bounding_box.map(|bb| bb.x()).unwrap_or_default();
 
-        let top_px = (y_min - display_y_min) / Self::SVG_SCALING_FACTOR + offset_vertical * 48.0 + self.offset.1;
-        let left_px = (x_min - display_x_min) / Self::SVG_SCALING_FACTOR + offset_horizontal * 48.0 + self.offset.0;
+        let top_px = (y_min - display_y_min) / Self::SVG_SCALING_FACTOR
+            + offset_vertical * 48.0
+            + self.offset.1;
+        let left_px = (x_min - display_x_min) / Self::SVG_SCALING_FACTOR
+            + offset_horizontal * 48.0
+            + self.offset.0;
+
+        let display_offset_px = if let Some(ink_bbox) = display_bounding_box {
+            let display_offset_x = ink_bbox.x() / Self::SVG_SCALING_FACTOR;
+            let display_offset_y = ink_bbox.y() / Self::SVG_SCALING_FACTOR;
+            (display_offset_x, display_offset_y)
+        } else {
+            (left_px, top_px)
+        };
 
         let translate = (
             left_px * Self::SVG_SCALING_FACTOR - x_min,
@@ -104,9 +118,10 @@ impl InkBuilder {
         let path = self.render_ink_path(strokes, scale, translate);
         self.parts.push(InkPart {
             content: path,
+            content_offset_px: (left_px, top_px),
             content_size_px: (width_px, height_px),
+            display_offset_px,
             display_size_px,
-            offset_px: (left_px, top_px),
         });
 
         // The size of previous embedded ink determines the position of the next
@@ -130,25 +145,33 @@ impl InkBuilder {
         let path = self.parts.iter().map(|part| &part.content).join("");
 
         let (offset, content_size, display_size) = {
-            let mut offset = (f32::INFINITY, f32::INFINITY);
+            let mut min_content = (f32::INFINITY, f32::INFINITY);
+            let mut min_display = (f32::INFINITY, f32::INFINITY);
             let mut max_content = (f32::NEG_INFINITY, f32::NEG_INFINITY);
             let mut max_display = (f32::NEG_INFINITY, f32::NEG_INFINITY);
 
             for item in self.parts.iter() {
-                let item_offset = item.offset_px;
+                let item_offset = item.content_offset_px;
 
-                offset.0 = offset.0.min(item_offset.0);
-                offset.1 = offset.1.min(item_offset.1);
+                min_content.0 = min_content.0.min(item_offset.0);
+                min_content.1 = min_content.1.min(item_offset.1);
+                min_display.0 = min_display.0.min(item.display_offset_px.0);
+                min_display.1 = min_display.1.min(item.display_offset_px.1);
+
                 max_content.0 = max_content.0.max(item_offset.0 + item.content_size_px.0);
                 max_content.1 = max_content.1.max(item_offset.1 + item.content_size_px.1);
-                max_display.0 = max_display.0.max(item_offset.0 + item.display_size_px.0);
-                max_display.1 = max_display.1.max(item_offset.1 + item.display_size_px.1);
+                max_display.0 = max_display
+                    .0
+                    .max(item.display_offset_px.0 + item.display_size_px.0);
+                max_display.1 = max_display
+                    .1
+                    .max(item.display_offset_px.1 + item.display_size_px.1);
             }
 
-            let content_size = (max_content.0 - offset.0, max_content.1 - offset.1);
-            let display_size = (max_display.0 - offset.0, max_display.1 - offset.1);
+            let content_size = (max_content.0 - min_content.0, max_content.1 - min_content.1);
+            let display_size = (max_display.0 - min_display.0, max_display.1 - min_display.1);
 
-            (offset, content_size, display_size)
+            (min_content, content_size, display_size)
         };
 
         let offset = round_svg_vec(offset);
