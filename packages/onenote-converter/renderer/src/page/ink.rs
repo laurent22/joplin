@@ -126,7 +126,7 @@ impl InkBuilder {
 
         // The size of previous embedded ink determines the position of the next
         if self.embedded {
-            self.offset = (self.offset.0 + width_px, self.offset.1);
+            self.offset = (self.offset.0 + display_size_px.0, self.offset.1);
         }
     }
 
