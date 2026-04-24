@@ -149,6 +149,9 @@ impl FileApiDriver for FileApiDriverImpl {
     }
 
     fn stream_to_file(&self, path: &str, data: &mut dyn std::io::Read) -> ApiResult<()> {
+        // Create and clear the file. This is important for zero-size files
+        self.write_file(path, &[])?;
+
         let chunk_size = 2 * 1024 * 1024; // 2 MB
         let mut buffer = vec![0; chunk_size];
         loop {
