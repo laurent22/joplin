@@ -12,24 +12,8 @@ import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Tag from '@joplin/lib/models/Tag';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
-import BackgroundService from 'react-native-background-actions';
-import { initializeRegistry } from '@joplin/lib/registry';
 
 require('./web/rnVectorIconsSetup.js');
-
-initializeRegistry({
-	backgroundService: {
-		start: async (task, options) => {
-			return BackgroundService.start(task, options);
-		},
-		stop: async () => {
-			return BackgroundService.stop();
-		},
-		isRunning: () => {
-			return BackgroundService.isRunning();
-		},
-	},
-});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Necessary until Root doesn't extend `any`
 AppRegistry.registerComponent('Joplin', () => Root as any);

@@ -32,7 +32,7 @@ import Revision from '@joplin/lib/models/Revision';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
-import { reg } from '@joplin/lib/registry';
+import { initializeRegistry, reg } from '@joplin/lib/registry';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
@@ -93,6 +93,7 @@ import { Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+import BackgroundService from 'react-native-background-actions';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -433,6 +434,20 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().dispatch = dispatch;
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
+
+		initializeRegistry({
+			backgroundService: {
+				start: async (task, options) => {
+					return BackgroundService.start(task, options);
+				},
+				stop: async () => {
+					return BackgroundService.stop();
+				},
+				isRunning: () => {
+					return BackgroundService.isRunning();
+				},
+			},
+		});
 
 		reg.setupRecurrentSync();
 

@@ -294,12 +294,7 @@ class Registry {
 
 		try {
 			return await bg.start(async () => {
-				try {
-					return await sync.start(options);
-				} finally {
-					// Ensure any notification is removed when sync completes
-					await bg.stop();
-				}
+				return await sync.start(options);
 			}, {
 				taskName: 'Sync',
 				taskTitle: 'Syncing data',
