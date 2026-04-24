@@ -157,7 +157,17 @@ impl FileApiDriver for FileApiDriverImpl {
         let mut buffer = vec![0; chunk_size];
 
         loop {
-            let size = data.read(&mut buffer)?;
+            let size = match data.read(&mut buffer) {
+                Ok(size) => size,
+                // Interrupted errors can be retried
+                Err(err) if err.kind() == std::io::ErrorKind::Interrupted => {
+                    continue;
+                }
+                Err(err) => {
+                    return Err(err);
+                }
+            };
+
             if size == 0 {
                 break;
             }
