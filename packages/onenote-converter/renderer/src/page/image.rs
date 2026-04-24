@@ -1,4 +1,4 @@
-use std::io::{ Cursor, Read };
+use std::io::{Cursor, Read};
 
 use crate::page::Renderer;
 use crate::utils::{AttributeSet, StyleSet, detect_png, px};
@@ -11,7 +11,7 @@ impl<'a> Renderer<'a> {
         let mut content = String::new();
 
         if let Some(mut reader) = image.read()? {
-            let mut initial_bytes = vec![0;1024];
+            let mut initial_bytes = vec![0; 1024];
             reader.read(&mut initial_bytes)?;
 
             let filename = self.determine_image_filename(image, &initial_bytes)?;
