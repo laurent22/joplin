@@ -261,6 +261,15 @@ pub enum ReaderDataRef {
     FilePointer(ReaderFilePointer),
 }
 
+impl ReaderDataRef {
+    pub fn read(&self) -> Result<Box<dyn Read>> {
+        match self {
+            ReaderDataRef::Vec(slice) => Ok(Box::new(Cursor::new(slice.to_vec()))),
+            ReaderDataRef::FilePointer(ptr) => Ok(Box::new(ptr.clone())),
+        }
+    }
+}
+
 #[derive(Clone)]
 pub struct ReaderFilePointer {
     file: ReaderFileHandle,
@@ -295,15 +304,6 @@ impl Read for ReaderFilePointer {
                 Ok(size)
             }
             Err(err) => Err(err),
-        }
-    }
-}
-
-impl ReaderDataRef {
-    pub fn as_reader(&self) -> Result<Box<dyn Read>> {
-        match self {
-            ReaderDataRef::Vec(slice) => Ok(Box::new(Cursor::new(slice.to_vec()))),
-            ReaderDataRef::FilePointer(ptr) => Ok(Box::new(ptr.clone())),
         }
     }
 }

@@ -13,18 +13,14 @@ impl<'a> Renderer<'a> {
         if let Some(mut reader) = image.read()? {
             // Read up to the first kilobyte so that determine_image_filename can do
             // file type detection
-            let initial_bytes = {
-                let mut bytes = vec![0; 1024];
-                let read_length = reader.read(&mut bytes)?;
-                bytes.resize(read_length, 0);
-                bytes
-            };
+            let image_start_bytes = read_file_start(&mut reader)?;
 
-            let filename = self.determine_image_filename(image, &initial_bytes)?;
+            let filename = self.determine_image_filename(image, &image_start_bytes)?;
             let path = fs_driver().join(&self.output, &filename);
             log!("Rendering image: {:?}", path);
 
-            let mut reader = Cursor::new(initial_bytes).chain(reader);
+            // Rebuild the reader so that the image start bytes are included in the file
+            let mut reader = Cursor::new(image_start_bytes).chain(reader);
             fs_driver().stream_to_file(&path, &mut reader)?;
 
             let mut attrs = AttributeSet::new();
@@ -94,4 +90,12 @@ impl<'a> Renderer<'a> {
             .to_unique_safe_filename(&self.output, &format!("image{}", ext))?;
         Ok(filename)
     }
+}
+
+fn read_file_start(reader: &mut Box<dyn Read>) -> Result<Vec<u8>> {
+    let size: usize = 1024;
+    let mut sub_reader = reader.by_ref().take(size as u64);
+    let mut bytes = vec![0; size];
+    sub_reader.read_to_end(&mut bytes)?;
+    Ok(bytes)
 }
