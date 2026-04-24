@@ -182,9 +182,9 @@ export default function(props: Props) {
 
 	const onSelectButtonClick = useCallback(async (name: SyncTargetInfoName) => {
 		const routes = {
-			'dropbox': { name: 'DropboxLogin', target: 7 },
-			'onedrive': { name: 'OneDriveLogin', target: 3 },
-			'joplinCloud': { name: 'JoplinCloudLogin', target: 10 },
+			'dropbox': { name: 'DropboxLogin', target: 7, shouldRestoreSyncSection: true },
+			'onedrive': { name: 'OneDriveLogin', target: 3, shouldRestoreSyncSection: true },
+			'joplinCloud': { name: 'JoplinCloudLogin', target: 10, shouldRestoreSyncSection: false },
 		};
 		const route = routes[name];
 		if (!route) return; // throw error??
@@ -192,6 +192,15 @@ export default function(props: Props) {
 		Setting.setValue('sync.target', route.target);
 		await Setting.saveAll();
 		closeDialog();
+
+		if (route.shouldRestoreSyncSection) {
+			props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: { defaultSection: 'sync' },
+			});
+		}
+
 		props.dispatch({
 			type: 'NAV_GO',
 			routeName: route.name,

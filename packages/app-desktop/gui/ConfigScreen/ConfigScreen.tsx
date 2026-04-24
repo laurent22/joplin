@@ -318,7 +318,19 @@ class ConfigScreenComponent extends React.Component<any, any> {
 						<Button
 							title={_('Sign in')}
 							level={ButtonLevel.Primary}
-							onClick={() => {
+							onClick={async () => {
+								// Save settings first so reg.syncTarget() uses the correct target
+								await shared.saveSettings(this);
+
+								// Re-navigate to Config with the sync section selected so that
+								// pressing "Back" from the auth screen returns here instead of
+								// the General section.
+								this.props.dispatch({
+									type: 'NAV_GO',
+									routeName: 'Config',
+									props: { defaultSection: 'sync' },
+								});
+
 								void CommandService.instance().execute('synchronize');
 							}}
 						/>

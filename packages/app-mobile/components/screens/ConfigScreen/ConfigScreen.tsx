@@ -144,6 +144,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	private onAuthenticateOAuth_ = async () => {
 		// Save any unsaved settings first (e.g. the sync target selection itself)
 		await this.saveButton_press();
+		await NavService.go('Config', { sectionName: 'sync' });
 		await performSync(false, this.props.dispatch);
 	};
 
@@ -392,6 +393,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	public sectionToComponent(key: string, section: SettingMetadataSection, settings: any, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
+		let syncOauthButtonsAdded = false;
 
 		const headerTitle = Setting.sectionNameToLabel(section.name);
 		const sectionDescription = Setting.sectionDescription(key, AppType.Mobile);
@@ -445,6 +447,23 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				relatedText.push(options.description);
 			}
 			addSettingComponent(this.renderButton(key, title, clickHandler, options), relatedText);
+		};
+
+		const addSyncOauthComponents = () => {
+			const currentSyncTargetId = settings['sync.target'];
+			if (currentSyncTargetId === SyncTargetRegistry.nameToId('dropbox')
+				|| currentSyncTargetId === SyncTargetRegistry.nameToId('onedrive')) {
+				const syncTargetLabel = SyncTargetRegistry.idToMetadata(currentSyncTargetId).label;
+				addSettingButton(
+					'auth_oauth_button',
+					_('Sign in'),
+					this.onAuthenticateOAuth_,
+					{ description: _('After selecting %s, tap "Sign in" to authenticate.', syncTargetLabel) },
+				);
+			}
+
+			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
+			syncOauthButtonsAdded = true;
 		};
 
 		const styleSheet = this.styles().styleSheet;
@@ -519,6 +538,14 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				relatedText,
 				md,
 			);
+
+			if (section.name === 'sync' && md.key === 'sync.mobileWifiOnly') {
+				addSyncOauthComponents();
+			}
+		}
+
+		if (section.name === 'sync' && !syncOauthButtonsAdded) {
+			addSyncOauthComponents();
 		}
 
 		if (section.name === 'plugins') {
@@ -573,20 +600,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
-			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
-
-			const currentSyncTargetId = settings['sync.target'];
-			if (currentSyncTargetId === SyncTargetRegistry.nameToId('dropbox')
-				|| currentSyncTargetId === SyncTargetRegistry.nameToId('onedrive')) {
-				const syncTargetLabel = SyncTargetRegistry.idToMetadata(currentSyncTargetId).label;
-				addSettingButton(
-					'auth_oauth_button',
-					_('Sign in'),
-					this.onAuthenticateOAuth_,
-					{ description: _('After selecting %s, tap "Sign in" to authenticate.', syncTargetLabel) },
-				);
-			}
 		}
 
 		if (section.name === 'joplinCloud') {
