@@ -10,6 +10,7 @@ import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import { parseNotesParent } from '@joplin/lib/reducer';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
+import applyNewProfilePluginStates from '@joplin/lib/services/profileConfig/applyNewProfilePluginStates';
 import { setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
@@ -271,6 +272,8 @@ const buildStartupTasks = (
 		BaseItem.syncShareCache = parseShareCache(Setting.value('sync.shareCache'));
 
 		if (Setting.value('firstStart')) {
+			await applyNewProfilePluginStates(Setting.value('profileDir'));
+
 			const detectedLocale = shim.detectAndSetLocale(Setting);
 			reg.logger().info(`First start: detected locale as ${detectedLocale}`);
 

@@ -6,6 +6,8 @@ import ScreenHeader from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import { loadProfileConfig, saveProfileConfig } from '../../services/profiles';
 import { createNewProfile } from '@joplin/lib/services/profileConfig';
+import seedNewProfilePluginStates from '@joplin/lib/services/profileConfig/seedNewProfilePluginStates';
+import Setting from '@joplin/lib/models/Setting';
 import useProfileConfig from './useProfileConfig';
 const { TextInput } = require('react-native-paper');
 
@@ -51,6 +53,13 @@ export default (props: Props) => {
 		if (isNew) {
 			const profileConfig = await loadProfileConfig();
 			const result = createNewProfile(profileConfig, name);
+
+			await seedNewProfilePluginStates(
+				Setting.value('rootProfileDir'),
+				result.newProfile.id,
+				Setting.value('plugins.states'),
+			);
+
 			await saveProfileConfig(result.newConfig);
 		} else {
 			const newProfiles = profileConfig.profiles.map(p => {

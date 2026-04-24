@@ -1620,10 +1620,12 @@ packages/lib/services/plugins/utils/validatePluginPlatforms.test.js
 packages/lib/services/plugins/utils/validatePluginPlatforms.js
 packages/lib/services/plugins/utils/validatePluginVersion.test.js
 packages/lib/services/plugins/utils/validatePluginVersion.js
+packages/lib/services/profileConfig/applyNewProfilePluginStates.js
 packages/lib/services/profileConfig/index.test.js
 packages/lib/services/profileConfig/index.js
 packages/lib/services/profileConfig/initProfile.js
 packages/lib/services/profileConfig/mergeGlobalAndLocalSettings.js
+packages/lib/services/profileConfig/seedNewProfilePluginStates.js
 packages/lib/services/profileConfig/splitGlobalAndLocalSettings.js
 packages/lib/services/profileConfig/types.js
 packages/lib/services/rest/Api.test.js

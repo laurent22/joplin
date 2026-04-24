@@ -45,6 +45,7 @@ import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
 import { loadKeychainServiceAndSettings } from './services/SettingUtils';
+import applyNewProfilePluginStates from './services/profileConfig/applyNewProfilePluginStates';
 import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
@@ -813,6 +814,7 @@ export default class BaseApplication {
 		}
 
 		if (Setting.value('firstStart')) {
+			await applyNewProfilePluginStates(Setting.value('profileDir'));
 
 			// detectAndSetLocale sets the locale to the system default locale.
 			// Not calling it when a new profile is created ensures that the
