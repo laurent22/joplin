@@ -48,7 +48,7 @@ impl EmbeddedFile {
     }
 
     /// A reader over the file's binary data.
-    pub fn reader(&self) -> Result<Box<dyn Read>> {
+    pub fn read(&self) -> Result<Box<dyn Read>> {
         self.data.read()
     }
 

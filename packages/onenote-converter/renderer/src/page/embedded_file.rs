@@ -15,7 +15,7 @@ impl<'a> Renderer<'a> {
         let path = fs_driver().join(&self.output, &filename);
 
         log!("Rendering embedded file: {:?}", path);
-        let mut reader = file.reader()?;
+        let mut reader = file.read()?;
         fs_driver().stream_to_file(&path, &mut reader)?;
 
         let mut styles = StyleSet::new();
