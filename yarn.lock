@@ -12845,10 +12845,10 @@ __metadata:
     react: "npm:19.1.4"
     react-dom: "npm:19.1.4"
     react-native: "npm:0.81.6"
+    react-native-background-actions: "npm:4.1.0"
     react-native-device-info: "npm:14.1.1"
     react-native-dropdownalert: "npm:5.2.0"
     react-native-file-viewer: "npm:2.1.5"
-    react-native-foreground-service-turbo: "github:paulkiren/react-native-foreground-service-turbo"
     react-native-get-random-values: "npm:1.11.0"
     react-native-image-picker: "npm:8.2.1"
     react-native-localize: "npm:3.6.1"
@@ -31639,7 +31639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.4":
+"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.4, eventemitter3@npm:^4.0.7":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 10/8030029382404942c01d0037079f1b1bc8fed524b5849c237b80549b01e2fc49709e1d0c557fa65ca4498fc9e24cff1475ef7b855121fcc15f9d61f93e282346
@@ -49678,6 +49678,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-background-actions@npm:4.1.0":
+  version: 4.1.0
+  resolution: "react-native-background-actions@npm:4.1.0"
+  dependencies:
+    eventemitter3: "npm:^4.0.7"
+  peerDependencies:
+    react-native: ">=0.47.0"
+  checksum: 10/a7aa27ae7544314ae9adf64c44b426035dfa1552bd70837696d48c5c35829b7fcb0f4befbc06ef7947e06be0c7d0dc35c59ed1b1f47c5630f326df62a17d7a77
+  languageName: node
+  linkType: hard
+
 "react-native-codegen@npm:^0.70.6":
   version: 0.70.6
   resolution: "react-native-codegen@npm:0.70.6"
@@ -49712,16 +49723,6 @@ __metadata:
   peerDependencies:
     react-native: ">=0.47"
   checksum: 10/0a99496d193dedf51e3773a0703a79b7517b5266df49bcf994dafaf845705112ed8e11a1ffde2e923d3fbea6afbda559c057b81e9711fe4116ff09eac1f30f23
-  languageName: node
-  linkType: hard
-
-"react-native-foreground-service-turbo@github:paulkiren/react-native-foreground-service-turbo":
-  version: 0.1.0
-  resolution: "react-native-foreground-service-turbo@https://github.com/paulkiren/react-native-foreground-service-turbo.git#commit=70cdd21d4a71790b8fc93c39a0b4062f00dce500"
-  peerDependencies:
-    react: "*"
-    react-native: ">=0.68.0"
-  checksum: 10/3bd71a2ae31ed176de1454ffda5b3fb42e87c3aa3e09abfcc0d963dbaec9e524a581ef8474fb9ae8bab5da178828250616eec8e821bd86832ea571ecd803a77e
   languageName: node
   linkType: hard
 

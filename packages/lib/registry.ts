@@ -5,32 +5,34 @@ import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
 
-export interface StartServiceConfig {
-	id: number;
-	title?: string;
-	message?: string;
-	serviceType?: string;
-	button?: {
-		text: string;
-		onPressEvent: string;
+export interface BackgroundServiceOptions {
+	taskName: string;
+	taskTitle: string;
+	taskDesc: string;
+	taskIcon: {
+		name: string;
+		type: string;
+		package?: string;
 	};
-	progress?: {
+	color?: string | undefined;
+	linkingURI?: string | undefined;
+	progressBar?: {
 		max: number;
-		curr: number;
-	};
+		value: number;
+		indeterminate?: boolean | undefined;
+	} | undefined;
+	foregroundServiceType?: ("dataSync" | "mediaPlayback" | "phoneCall" | "location" | "connectedDevice" | "mediaProjection" | "camera" | "microphone" | "health" | "remoteMessaging" | "systemExempted" | "shortService" | "specialUse")[] | undefined;
 }
 
-export interface TaskOptions {
-	delay?: number;
-	onLoop?: boolean;
-	taskId?: string;
-}
+export interface BackgroundService {
+	start(
+		task: (taskData?: any) => Promise<void>,
+		options: BackgroundServiceOptions
+	): Promise<void>;
 
-export interface ForegroundService {
-	start(options: StartServiceConfig): Promise<void>;
 	stop(): Promise<void>;
-	add_task(task: () => Promise<void>, options: TaskOptions): void;
-	remove_task(id: string): void;
+
+	isRunning(): Promise<boolean>;
 }
 
 class Registry {
@@ -52,10 +54,10 @@ class Registry {
 	private db_: any;
 	private isOnMobileData_ = false;
 	private dispatch_: Dispatch = (() => {}) as Dispatch;
-	private foregroundService_: ForegroundService | null = null;
+	private backgroundService_: BackgroundService | null = null;
 
-	public setForegroundService(service: ForegroundService) {
-		this.foregroundService_ = service;
+	public setBackgroundService(service: BackgroundService) {
+		this.backgroundService_ = service;
 	}
 
 	public logger() {
@@ -283,42 +285,35 @@ class Registry {
 	};
 
 	private async startSync(sync: any, options: any) {
-		let resolveDone: (value: any) => void;
+		const bg = this.backgroundService_;
 
-		const donePromise = new Promise(resolve => {
-			resolveDone = resolve;
-		});
-
-		const fg = this.foregroundService_;
-
-		if (!fg) {
-			// fallback: run without foreground service
+		if (!bg) {
 			const result = await sync.start(options);
 			return result;
 		}
 
-		await fg.start({
-			id: 1,
-			title: 'Synchronising data',
-			message: 'Synchronising...',
-			serviceType: 'dataSync',
-			button: { text: 'Cancel', onPressEvent: 'cancel' },
-		});
+		const running = bg.isRunning ? await bg.isRunning() : false;
 
-		fg.add_task(
-			async () => {
-				const result = await sync.start(options);
-			
-				if (result) {
-					fg.remove_task('synchronise');
-					await fg.stop();
-					resolveDone(result);
-				}
+		if (running) {
+			return;
+		}
+
+		return await bg.start(async () => {
+			try {
+				return await sync.start(options);
+			} finally {
+				await bg.stop();
+			}
+		}, {
+			taskName: 'Sync',
+			taskTitle: 'Syncing data',
+			taskDesc: 'Sync in progress...',
+			taskIcon: {
+				name: 'ic_launcher',
+				type: 'mipmap',
 			},
-			{ delay: 0, onLoop: true, taskId: 'synchronise' }
-		);
-
-		return donePromise;
+			foregroundServiceType: ['dataSync'],
+		});
 	}
 
 	public setupRecurrentSync() {
@@ -395,9 +390,9 @@ const reg = new Registry();
 export { reg };
 
 export function initializeRegistry(deps: {
-	foregroundService?: ForegroundService;
+	backgroundService?: BackgroundService;
 }) {
-	if (deps.foregroundService) {
-		reg.setForegroundService(deps.foregroundService);
+	if (deps.backgroundService) {
+		reg.setBackgroundService(deps.backgroundService);
 	}
 }

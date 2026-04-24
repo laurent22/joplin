@@ -1,6 +1,6 @@
 import './utils/polyfills';
 import './utils/initReact';
-import { AppRegistry, PermissionsAndroid, Platform } from 'react-native';
+import { AppRegistry } from 'react-native';
 import Root from './root';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
@@ -12,20 +12,23 @@ import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Tag from '@joplin/lib/models/Tag';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
-import ForegroundService, { StartServiceConfig, TaskOptions } from 'react-native-foreground-service-turbo';
+import BackgroundService from 'react-native-background-actions';
 import { initializeRegistry } from '@joplin/lib/registry';
 
 require('./web/rnVectorIconsSetup.js');
 
-ForegroundService.register();
-
 initializeRegistry({
-  foregroundService: {
-    start: (options: StartServiceConfig) => ForegroundService.start(options),
-    stop: () => ForegroundService.stop(),
-    add_task: (task: () => Promise<void> | void, options: TaskOptions) => ForegroundService.add_task(task, options),
-    remove_task: (id: string) => ForegroundService.remove_task(id),
-  },
+	backgroundService: {
+		start: async (task, options) => {
+			return BackgroundService.start(task, options);
+		},
+		stop: async () => {
+			return BackgroundService.stop();
+		},
+		isRunning: async () => {
+			return BackgroundService.isRunning();
+		},
+	},
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Necessary until Root doesn't extend `any`
@@ -96,18 +99,6 @@ const keepAppAboveKeyboard = () => {
 	}
 };
 
-const requestNotificationPermission = async () => {
-	if (Platform.OS === 'android' && Platform.Version >= 33) {
-		const result = await PermissionsAndroid.request(
-			PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-		);
-
-		return result === PermissionsAndroid.RESULTS.GRANTED;
-	}
-
-	return true;
-}
-
 addEventListener('DOMContentLoaded', async () => {
 	if (window.crossOriginIsolated === false) {
 		// Currently, reloading should be handled by serviceWorker.ts -- this change is left for
@@ -119,7 +110,6 @@ addEventListener('DOMContentLoaded', async () => {
 
 	keepAppAboveKeyboard();
 	void requestPersistentStorage();
-	void requestNotificationPermission();
 
 	AppRegistry.runApplication('Joplin', {
 		rootTag: document.querySelector('#root'),
