@@ -2,6 +2,7 @@ use super::ApiResult;
 use super::FileApiDriver;
 use super::FileHandle;
 use std::fs;
+use std::fs::File;
 use std::io::BufReader;
 use std::path;
 use std::path::Path;
@@ -44,6 +45,12 @@ impl FileApiDriver for FileApiDriverImpl {
 
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()> {
         fs::write(path, data)
+    }
+
+    fn stream_to_file(&self, path: &str, data: &mut dyn std::io::Read) -> ApiResult<()> {
+        let mut f = File::create(path)?;
+        std::io::copy(data, &mut f)?;
+        Ok(())
     }
 
     fn exists(&self, path: &str) -> ApiResult<bool> {

@@ -1,3 +1,5 @@
+use std::io::{ Cursor, Read };
+
 use crate::page::Renderer;
 use crate::utils::{AttributeSet, StyleSet, detect_png, px};
 use color_eyre::Result;
@@ -8,11 +10,16 @@ impl<'a> Renderer<'a> {
     pub(crate) fn render_image(&mut self, image: &Image) -> Result<String> {
         let mut content = String::new();
 
-        if let Some(data) = image.data()? {
-            let filename = self.determine_image_filename(image, &data)?;
+        if let Some(mut reader) = image.read()? {
+            let mut initial_bytes = vec![0;1024];
+            reader.read(&mut initial_bytes)?;
+
+            let filename = self.determine_image_filename(image, &initial_bytes)?;
             let path = fs_driver().join(&self.output, &filename);
             log!("Rendering image: {:?}", path);
-            fs_driver().write_file(&path, &data[..])?;
+
+            let mut reader = Cursor::new(initial_bytes).chain(reader);
+            fs_driver().stream_to_file(&path, &mut reader)?;
 
             let mut attrs = AttributeSet::new();
             let mut styles = StyleSet::new();

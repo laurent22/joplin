@@ -6,7 +6,7 @@ use bytes::Buf;
 use paste::paste;
 use std::{
     cell::RefCell,
-    io::{Read, Seek, SeekFrom},
+    io::{Cursor, Read, Seek, SeekFrom},
     mem,
     rc::Rc,
 };
@@ -163,11 +163,11 @@ impl<'a> Reader<'a> {
                 // data. Large data should generally use `ReaderData::File`.
                 Ok(ReaderDataRef::Vec(buffer[start..start + size].to_vec()))
             }
-            ReaderData::File(file) => Ok(ReaderDataRef::FilePointer {
+            ReaderData::File(file) => Ok(ReaderDataRef::FilePointer(ReaderFilePointer {
                 file: file.clone(),
                 offset: self.data_offset,
                 size,
-            }),
+            })),
         }
     }
 
@@ -258,32 +258,48 @@ impl<'a> From<&'a [u8]> for Reader<'a> {
 
 pub enum ReaderDataRef {
     Vec(Vec<u8>),
-    FilePointer {
-        file: ReaderFileHandle,
-        offset: u64,
-        size: usize,
-    },
+    FilePointer(ReaderFilePointer),
+}
+
+#[derive(Clone)]
+pub struct ReaderFilePointer {
+    file: ReaderFileHandle,
+    offset: u64,
+    size: usize,
+}
+
+impl Read for ReaderFilePointer {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        let max_offset = self.offset + (self.size as u64);
+        let offset = self.offset;
+        if offset > max_offset {
+            return Ok(0);
+        }
+
+        let mut file = self.file.borrow_mut();
+        let original_offset = file.seek(SeekFrom::Current(0))?;
+        let read_result = (|| {
+            file.seek(SeekFrom::Start(offset))?;
+
+            file.read(buf)
+        })();
+        file.seek(SeekFrom::Start(original_offset))?;
+
+        match read_result {
+            Ok(size) => {
+                self.offset += size as u64;
+                Ok(size)
+            }
+            Err(err) => Err(err),
+        }
+    }
 }
 
 impl ReaderDataRef {
-    pub fn bytes(&self) -> Result<Vec<u8>> {
+    pub fn as_reader(&self) -> Result<Box<dyn Read>> {
         match self {
-            ReaderDataRef::Vec(slice) => Ok(slice.clone()),
-            ReaderDataRef::FilePointer { file, offset, size } => {
-                let mut file = file.borrow_mut();
-                let original_offset = file.seek(SeekFrom::Current(0))?;
-                let read_result = (|| {
-                    file.seek(SeekFrom::Start(*offset))?;
-
-                    let mut result = vec![0; *size];
-                    file.read_exact(&mut result)?;
-
-                    Ok(result)
-                })();
-                file.seek(SeekFrom::Start(original_offset))?;
-
-                read_result
-            }
+            ReaderDataRef::Vec(slice) => Ok(Box::new(Cursor::new(slice.to_vec()))),
+            ReaderDataRef::FilePointer(ptr) => Ok(Box::new(ptr.clone())),
         }
     }
 }

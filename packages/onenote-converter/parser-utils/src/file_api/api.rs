@@ -12,6 +12,7 @@ pub trait FileApiDriver: Send + Sync {
     fn read_dir(&self, path: &str) -> ApiResult<Vec<String>>;
     fn read_file(&self, path: &str) -> ApiResult<Vec<u8>>;
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()>;
+    fn stream_to_file(&self, path: &str, data: &mut dyn Read) -> ApiResult<()>;
     fn make_dir(&self, path: &str) -> ApiResult<()>;
     fn exists(&self, path: &str) -> ApiResult<bool>;
     fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>>;

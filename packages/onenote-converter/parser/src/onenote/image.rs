@@ -1,3 +1,5 @@
+use std::io::Read;
+
 use crate::one::property::layout_alignment::LayoutAlignment;
 use crate::one::property_set::{image_node, picture_container};
 use crate::onenote::iframe::{IFrame, parse_iframe};
@@ -49,11 +51,11 @@ pub struct Image {
 }
 
 impl Image {
-    /// The image's binary data.
+    /// Reads the image's binary data.
     ///
     /// If `None` this means that the image data hasn't been uploaded yet.
-    pub fn data(&self) -> Result<Option<Vec<u8>>> {
-        self.data.as_ref().map(|data| data.load()).transpose()
+    pub fn read(&self) -> Result<Option<Box<dyn Read>>> {
+        self.data.as_ref().map(|data| data.read()).transpose()
     }
 
     /// The image's file extension.
