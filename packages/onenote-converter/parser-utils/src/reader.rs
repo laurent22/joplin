@@ -165,8 +165,8 @@ impl<'a> Reader<'a> {
             }
             ReaderData::File(file) => Ok(ReaderDataRef::FilePointer(ReaderFilePointer {
                 file: file.clone(),
-                offset: self.data_offset,
-                size,
+                start_offset: self.data_offset,
+                end_offset: self.data_offset + (size as u64),
             })),
         }
     }
@@ -264,15 +264,14 @@ pub enum ReaderDataRef {
 #[derive(Clone)]
 pub struct ReaderFilePointer {
     file: ReaderFileHandle,
-    offset: u64,
-    size: usize,
+    start_offset: u64,
+    end_offset: u64,
 }
 
 impl Read for ReaderFilePointer {
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
-        let max_offset = self.offset + (self.size as u64);
-        let offset = self.offset;
-        if offset > max_offset {
+        let offset = self.start_offset;
+        if offset > self.end_offset {
             return Ok(0);
         }
 
@@ -287,7 +286,7 @@ impl Read for ReaderFilePointer {
 
         match read_result {
             Ok(size) => {
-                self.offset += size as u64;
+                self.start_offset += size as u64;
                 Ok(size)
             }
             Err(err) => Err(err),
