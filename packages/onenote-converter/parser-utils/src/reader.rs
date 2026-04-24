@@ -345,7 +345,7 @@ mod test {
 
         reader.advance(2).unwrap();
 
-        // The data_ref should read from the offset from where it was created 
+        // The data_ref should read from the offset from where it was created
         let mut output = vec![];
         data_ref.read_to_end(&mut output).unwrap();
         assert_eq!(output, [2, 3, 4, 5]);
