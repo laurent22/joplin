@@ -153,8 +153,16 @@ fn convert_printout() {
     );
 
     // Should correctly create the PNG
-    let png_data = fs::read(output_dir.join("Printout").join("test4_1.pdf.png"))
-        .expect("should read the PNG");
-    assert_eq!(png_data[0..4], [0x89, 0x50, 0x4E, 0x47], "PNG should have the correct initial bytes");
-    assert_eq!(png_data.len(), 14_005, "PNG should have the correct byte length");
+    let png_data =
+        fs::read(output_dir.join("Printout").join("test4_1.pdf.png")).expect("should read the PNG");
+    assert_eq!(
+        png_data[0..4],
+        [0x89, 0x50, 0x4E, 0x47],
+        "PNG should have the correct initial bytes"
+    );
+    assert_eq!(
+        png_data.len(),
+        14_005,
+        "PNG should have the correct byte length"
+    );
 }
