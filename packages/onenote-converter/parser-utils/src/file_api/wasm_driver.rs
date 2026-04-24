@@ -152,8 +152,10 @@ impl FileApiDriver for FileApiDriverImpl {
         // Create and clear the file. This is important for zero-size files
         self.write_file(path, &[])?;
 
-        let chunk_size = 2 * 1024 * 1024; // 2 MB
+        let mut chunk_size = 1024 * 1024; // 1 MB
+        let max_chunk_size = 50 * 1024 * 1024;
         let mut buffer = vec![0; chunk_size];
+
         loop {
             let size = data.read(&mut buffer)?;
             if size == 0 {
@@ -162,6 +164,12 @@ impl FileApiDriver for FileApiDriverImpl {
 
             if let Err(error) = append_file(path, &buffer[0..size]) {
                 return Err(handle_error(error, &format!("writing file {}", path)));
+            }
+
+            // For performance, try to increase the chunk size
+            if size == chunk_size && chunk_size < max_chunk_size {
+                chunk_size = (chunk_size * 2).min(max_chunk_size);
+                buffer.resize(chunk_size, 0);
             }
         }
         Ok(())
