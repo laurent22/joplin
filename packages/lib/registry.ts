@@ -29,10 +29,9 @@ export interface BackgroundService {
 		task: (taskData?: any) => Promise<void>,
 		options: BackgroundServiceOptions
 	): Promise<void>;
-
 	stop(): Promise<void>;
-
 	isRunning(): boolean;
+	requestPermissions(): Promise<void>;
 }
 
 class Registry {
@@ -292,6 +291,8 @@ class Registry {
 			return result;
 		}
 
+		await bg.requestPermissions();
+
 		try {
 			return await bg.start(async () => {
 				return await sync.start(options);
@@ -300,8 +301,8 @@ class Registry {
 				taskTitle: 'Syncing data',
 				taskDesc: 'Sync in progress...',
 				taskIcon: {
-					name: 'ic_launcher',
-					type: 'mipmap',
+					name: 'ic_stat_sync',
+					type: 'drawable',
 				},
 				foregroundServiceType: ['dataSync'],
 			});

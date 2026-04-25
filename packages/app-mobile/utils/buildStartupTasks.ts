@@ -89,11 +89,12 @@ import { AppState } from '../utils/types';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import { Profile } from '@joplin/lib/services/profileConfig/types';
 import shim from '@joplin/lib/shim';
-import { Platform } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import BackgroundService from 'react-native-background-actions';
+import checkPermissions from './checkPermissions';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -445,6 +446,19 @@ const buildStartupTasks = (
 				},
 				isRunning: () => {
 					return BackgroundService.isRunning();
+				},
+				requestPermissions: async () => {
+					if (Platform.OS === 'android') {
+						const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+			
+						// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+						// (If unsupported, returns NEVER_ASK_AGAIN).
+						// On earlier releases, notifications should work without this permission.
+						if (response === PermissionsAndroid.RESULTS.DENIED) {
+							logger.warn('POST_NOTIFICATIONS permission was not granted');
+							return;
+						}
+					}
 				},
 			},
 		});
