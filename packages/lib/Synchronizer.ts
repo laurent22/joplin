@@ -384,6 +384,15 @@ export default class Synchronizer {
 		}
 	}
 
+	public throwIfSyncInProgress() {
+		if (this.state() !== 'idle') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			const error: any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
+			error.code = 'alreadyStarted';
+			throw error;
+		}
+	}
+
 	// Synchronisation is done in three major steps:
 	//
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
@@ -392,13 +401,7 @@ export default class Synchronizer {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(options: any = null) {
 		if (!options) options = {};
-
-		if (this.state() !== 'idle') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const error: any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
-			error.code = 'alreadyStarted';
-			throw error;
-		}
+		this.throwIfSyncInProgress();
 
 		this.state_ = 'in_progress';
 

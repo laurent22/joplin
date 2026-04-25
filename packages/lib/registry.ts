@@ -289,6 +289,7 @@ class Registry {
 		if (!service) return sync.start(options);
 
 		await service.requestPermissions();
+		sync.throwIfSyncInProgress(); // throw early, as the error may not get propogated to the caller, if called within the service task
 
 		try {
 			return await service.start(async () => {
@@ -304,7 +305,8 @@ class Registry {
 				foregroundServiceType: ['dataSync'],
 			});
 		} catch (e) {
-			this.logger().warn('Foreground service failed, running sync directly', e);
+			// Normally this should not happen, but if this function is triggered while the service is still running, just call sync without using the service
+			this.logger().warn('Starting background service failed, running sync directly', e);
 			return sync.start(options);
 		}
 	}
