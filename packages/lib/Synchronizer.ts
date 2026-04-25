@@ -384,15 +384,6 @@ export default class Synchronizer {
 		}
 	}
 
-	public throwIfSyncInProgress() {
-		if (this.state() !== 'idle') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const error: any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
-			error.code = 'alreadyStarted';
-			throw error;
-		}
-	}
-
 	// Synchronisation is done in three major steps:
 	//
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
@@ -401,7 +392,13 @@ export default class Synchronizer {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async start(options: any = null) {
 		if (!options) options = {};
-		this.throwIfSyncInProgress();
+
+		if (this.state() !== 'idle') {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			const error: any = new Error(sprintf('Synchronisation is already in progress. State: %s', this.state()));
+			error.code = 'alreadyStarted';
+			throw error;
+		}
 
 		this.state_ = 'in_progress';
 
@@ -422,7 +419,7 @@ export default class Synchronizer {
 
 		const synchronizationId = time.unixMs().toString();
 
-		const outputContext = { ...lastContext };
+		let outputContext = { ...lastContext };
 
 		this.progressReport_.startTime = time.unixMs();
 
@@ -1273,7 +1270,17 @@ export default class Synchronizer {
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
-				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				
+				if (!!options.isNativeMobile) {
+					await new Promise(r => setTimeout(r, 1000));
+					// Ensure if any was sync triggered elsewhere during the interval that has completed first, otherwise the sync here will be rejected,
+					// and the existing sync will not be tracked by the native background service
+					await this.waitForSyncToFinish();
+					outputContext = await this.start(options);
+				} else {
+					void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				}
+
 				hasOutgoingChanges = true;
 			}
 		}

@@ -286,13 +286,16 @@ class Registry {
 	private async startSync(sync: any, options: any) {
 		// Service will only be populated for the native mobile apps
 		const service = this.backgroundService_;
+		options = { ...options, isNativeMobile: !!service }
 		if (!service) return sync.start(options);
 
 		await service.requestPermissions();
-		sync.throwIfSyncInProgress(); // throw early, as the error may not get propogated to the caller, if called within the service task
 
 		try {
 			return await service.start(async () => {
+				// Ensure if any sync was triggered elsewhere that it has completed first, otherwise the sync here will be rejected, and the existing sync
+				// will not be tracked by the service
+				await sync.waitForSyncToFinish();
 				return await sync.start(options);
 			}, {
 				taskName: 'Sync',
