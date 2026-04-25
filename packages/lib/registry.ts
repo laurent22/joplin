@@ -284,17 +284,14 @@ class Registry {
 	};
 
 	private async startSync(sync: any, options: any) {
-		const bg = this.backgroundService_;
+		// Service will only be populated for the native mobile apps
+		const service = this.backgroundService_;
+		if (!service) return sync.start(options);
 
-		if (!bg) {
-			const result = await sync.start(options);
-			return result;
-		}
-
-		await bg.requestPermissions();
+		await service.requestPermissions();
 
 		try {
-			return await bg.start(async () => {
+			return await service.start(async () => {
 				return await sync.start(options);
 			}, {
 				taskName: 'Sync',

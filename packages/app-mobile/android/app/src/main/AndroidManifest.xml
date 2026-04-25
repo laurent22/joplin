@@ -124,7 +124,7 @@
 			android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask"
 			android:exported="false"
 			android:foregroundServiceType="dataSync"
-			android:stopWithTask="true"
+			android:stopWithTask="false"
         />
 
 	</application>

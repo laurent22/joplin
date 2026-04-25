@@ -436,32 +436,34 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
 
-		initializeRegistry({
-			backgroundService: {
-				start: async (task, options) => {
-					return BackgroundService.start(task, options);
-				},
-				stop: async () => {
-					return BackgroundService.stop();
-				},
-				isRunning: () => {
-					return BackgroundService.isRunning();
-				},
-				requestPermissions: async () => {
-					if (Platform.OS === 'android') {
-						const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-			
-						// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
-						// (If unsupported, returns NEVER_ASK_AGAIN).
-						// On earlier releases, notifications should work without this permission.
-						if (response === PermissionsAndroid.RESULTS.DENIED) {
-							logger.warn('POST_NOTIFICATIONS permission was not granted');
-							return;
+		if (Platform.OS !== 'web') {
+			initializeRegistry({
+				backgroundService: {
+					start: async (task, options) => {
+						return BackgroundService.start(task, options);
+					},
+					stop: async () => {
+						return BackgroundService.stop();
+					},
+					isRunning: () => {
+						return BackgroundService.isRunning();
+					},
+					requestPermissions: async () => {
+						if (Platform.OS === 'android') {
+							const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+				
+							// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+							// (If unsupported, returns NEVER_ASK_AGAIN).
+							// On earlier releases, notifications should work without this permission.
+							if (response === PermissionsAndroid.RESULTS.DENIED) {
+								logger.warn('POST_NOTIFICATIONS permission was not granted');
+								return;
+							}
 						}
-					}
+					},
 				},
-			},
-		});
+			});
+		}
 
 		reg.setupRecurrentSync();
 
