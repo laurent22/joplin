@@ -419,7 +419,7 @@ export default class Synchronizer {
 
 		const synchronizationId = time.unixMs().toString();
 
-		let outputContext = { ...lastContext };
+		const outputContext = { ...lastContext };
 
 		this.progressReport_.startTime = time.unixMs();
 
@@ -1270,17 +1270,7 @@ export default class Synchronizer {
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
-				
-				if (!!options.isNativeMobile) {
-					await new Promise(r => setTimeout(r, 1000));
-					// Ensure if any was sync triggered elsewhere during the interval that has completed first, otherwise the sync here will be rejected,
-					// and the existing sync will not be tracked by the native background service
-					await this.waitForSyncToFinish();
-					outputContext = await this.start(options);
-				} else {
-					void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
-				}
-
+				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 				hasOutgoingChanges = true;
 			}
 		}

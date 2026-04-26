@@ -4,6 +4,7 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
+import time from './time';
 
 export interface BackgroundServiceOptions {
 	taskName: string;
@@ -283,6 +284,26 @@ class Registry {
 		}
 	};
 
+	private async waitForAllSyncActivityToFinish(sync: any) {
+		while (true) {
+			// Wait until no scheduled sync exists
+			while (this.scheduleSyncId_) {
+				await time.sleep(1);
+			}
+	
+			// Grace period - as there are some async calls between clearing out scheduleSyncId_ and actually triggering the sync
+			await time.sleep(0.5);
+	
+			// Wait until sync the sync has completed
+			await sync.waitForSyncToFinish();
+	
+			// If new scheduling happened, restart loop
+			if (!this.scheduleSyncId_) {
+				break;
+			}
+		}
+	}
+
 	private async startSync(sync: any, options: any) {
 		// Service will only be populated for the native mobile apps
 		const service = this.backgroundService_;
@@ -293,10 +314,14 @@ class Registry {
 
 		try {
 			return await service.start(async () => {
-				// Ensure if any sync was triggered elsewhere that it has completed first, otherwise the sync here will be rejected, and the existing sync
-				// will not be tracked by the service
-				await sync.waitForSyncToFinish();
-				return await sync.start(options);
+				let response = null;
+				if (sync.state() === 'idle') response = await sync.start(options);
+
+				// The sync may schedule another sync which will sync items changed during the sync. We need to wait for this sync to complete if that is the case,
+				// because if the app is in the background when this happens, we need to keep the service active for this additional sync to complete. Alternatively,
+				// if sync is in progress and the service was not already running for some reason, keep open the service just started until all syncing completes
+				await this.waitForAllSyncActivityToFinish(sync);
+				return response;
 			}, {
 				taskName: 'Sync',
 				taskTitle: 'Syncing data',
@@ -308,8 +333,10 @@ class Registry {
 				foregroundServiceType: ['dataSync'],
 			});
 		} catch (e) {
-			// Normally this should not happen, but if this function is triggered while the service is still running, just call sync without using the service
-			this.logger().warn('Starting background service failed, running sync directly', e);
+			// service.start fails when the service is already running. Usually this would happen when a sync is triggered while a sync is in progress, which
+			// would result is sync.start cancelling immediately. But still trigger a sync normally without the service here, for edge cases where the service
+			// takes longer than usual to stop, and another sync is triggered while it is stopping
+			this.logger().info('Starting background service failed, running sync directly', e);
 			return sync.start(options);
 		}
 	}
