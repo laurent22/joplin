@@ -307,7 +307,6 @@ class Registry {
 	private async startSync(sync: any, options: any) {
 		// Service will only be populated for the native mobile apps
 		const service = this.backgroundService_;
-		options = { ...options, isNativeMobile: !!service }
 		if (!service) return sync.start(options);
 
 		await service.requestPermissions();
