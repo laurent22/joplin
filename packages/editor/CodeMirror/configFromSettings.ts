@@ -10,7 +10,7 @@ import markdownHighlightExtension, { markdownInsertExtension } from './extension
 import markdownFrontMatterExtension from './extensions/markdownFrontMatterExtension';
 import lookUpLanguage from './utils/markdown/codeBlockLanguages/lookUpLanguage';
 import { html } from '@codemirror/lang-html';
-import { defaultKeymap, emacsStyleKeymap, standardKeymap } from '@codemirror/commands';
+import { defaultKeymap, emacsStyleKeymap } from '@codemirror/commands';
 import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
 import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
@@ -81,9 +81,6 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	})();
 
 	const extensions = [
-		keymap.of([
-			...standardKeymap,
-		]),
 		languageExtension,
 		closingFencedBlock,
 		createTheme(settings.themeData),
