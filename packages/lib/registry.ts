@@ -22,12 +22,13 @@ export interface BackgroundServiceOptions {
 		value: number;
 		indeterminate?: boolean | undefined;
 	} | undefined;
-	foregroundServiceType?: ("dataSync" | "mediaPlayback" | "phoneCall" | "location" | "connectedDevice" | "mediaProjection" | "camera" | "microphone" | "health" | "remoteMessaging" | "systemExempted" | "shortService" | "specialUse")[] | undefined;
+	foregroundServiceType?: ('dataSync' | 'mediaPlayback' | 'phoneCall' | 'location' | 'connectedDevice' | 'mediaProjection' | 'camera' | 'microphone' | 'health' | 'remoteMessaging' | 'systemExempted' | 'shortService' | 'specialUse')[] | undefined;
 }
 
 export interface BackgroundService {
 	start(
-		task: (taskData?: any) => Promise<void>,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+		task: (taskData?: any)=> Promise<void>,
 		options: BackgroundServiceOptions
 	): Promise<void>;
 	stop(): Promise<void>;
@@ -284,27 +285,8 @@ class Registry {
 		}
 	};
 
-	private async waitForAllSyncActivityToFinish(sync: any) {
-		while (true) {
-			// Wait until no scheduled sync exists
-			while (this.scheduleSyncId_) {
-				await time.sleep(1);
-			}
-	
-			// Grace period - as there are some async calls between clearing out scheduleSyncId_ and actually triggering the sync
-			await time.sleep(0.5);
-	
-			// Wait until sync the sync has completed
-			await sync.waitForSyncToFinish();
-	
-			// If new scheduling happened, restart loop
-			if (!this.scheduleSyncId_) {
-				break;
-			}
-		}
-	}
-
-	private async startSync(sync: any, options: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+	private async startSync(sync: Synchronizer, options: any) {
 		// Service will only be populated for the native mobile apps
 		const service = this.backgroundService_;
 		if (!service) return sync.start(options);
@@ -314,12 +296,25 @@ class Registry {
 		try {
 			return await service.start(async () => {
 				let response = null;
-				if (sync.state() === 'idle') response = await sync.start(options);
+				if (sync.state() === 'idle') {
+					this.logger().debug('registry.startSync: Background service started');
+					response = await sync.start(options);
 
-				// The sync may schedule another sync which will sync items changed during the sync. We need to wait for this sync to complete if that is the case,
-				// because if the app is in the background when this happens, we need to keep the service active for this additional sync to complete. Alternatively,
-				// if sync is in progress and the service was not already running for some reason, keep open the service just started until all syncing completes
-				await this.waitForAllSyncActivityToFinish(sync);
+					// The sync may schedule another sync which will sync items changed during the sync. We need to wait for this sync to complete if that
+					// is the case, because if the app is in the background when this happens, we need to keep the service active for this additional sync
+					// to complete
+					while (this.scheduleSyncId_) {
+						await time.sleep(1);
+					}
+
+					// Grace period - required as there are some async calls between clearing out scheduleSyncId_ and actually triggering the sync
+					await time.sleep(0.5);
+
+					if (sync.state() !== 'idle') this.logger().debug('registry.startSync: Waiting for additional sync to finish');
+					await sync.waitForSyncToFinish();
+				}
+
+				this.logger().debug('registry.startSync: Background service ended');
 				return response;
 			}, {
 				taskName: 'Sync',
@@ -332,10 +327,9 @@ class Registry {
 				foregroundServiceType: ['dataSync'],
 			});
 		} catch (e) {
-			// service.start fails when the service is already running. Usually this would happen when a sync is triggered while a sync is in progress, which
-			// would result is sync.start cancelling immediately. But still trigger a sync normally without the service here, for edge cases where the service
-			// takes longer than usual to stop, and another sync is triggered while it is stopping
-			this.logger().info('Starting background service failed, running sync directly', e);
+			// Local testing shows that service.start will execute the enclosed logic even while the service is already running, so it isn't expected for
+			// an exception to be thrown here. But if this does happen, just run the sync normally
+			this.logger().warn('registry.startSync: Starting background service failed, running sync directly', e);
 			return sync.start(options);
 		}
 	}

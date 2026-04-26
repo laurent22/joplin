@@ -451,7 +451,7 @@ const buildStartupTasks = (
 					requestPermissions: async () => {
 						if (Platform.OS === 'android') {
 							const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-				
+
 							// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
 							// (If unsupported, returns NEVER_ASK_AGAIN).
 							// On earlier releases, notifications should work without this permission.
