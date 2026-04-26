@@ -10,6 +10,8 @@ import collectionToPaginatedResults from '../utils/collectionToPaginatedResults'
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import Resource from '../../../models/Resource';
 import Note from '../../../models/Note';
+import * as path from 'path';
+import * as os from 'os';
 
 export default async function(request: Request, id: string = null, link: string = null) {
 	// fieldName: "data"
@@ -62,7 +64,11 @@ export default async function(request: Request, id: string = null, link: string 
 		}
 
 		if (isUpdate && !id) throw new ErrorBadRequest('Missing resource ID');
-		const filePath = request.files[0].path;
+		// Prevent path traversal: extract only the filename portion and
+		// validate it against a strict whitelist before use.
+		const fileName = path.basename(request.files[0].path);
+		if (!fileName || !/^[\w.\-]+$/.test(fileName)) throw new ErrorBadRequest('Invalid file path');
+		const filePath = os.tmpdir() + path.sep + fileName;
 		const defaultProps = request.bodyJson(readonlyProperties(request.method));
 		return shim.createResourceFromPath(filePath, defaultProps, {
 			userSideValidation: true,
