@@ -153,7 +153,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 	const result = next(action);
 	const newState: AppState = store.getState();
-	let doRefreshFolders = false;
+	let doRefreshFolders: boolean | string = false;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
@@ -248,9 +248,17 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
 	}
 
+	if (action.type === 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) {
+		doRefreshFolders = 'now';
+	}
+
 	if (doRefreshFolders) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
+		if (doRefreshFolders === 'now') {
+			await refreshFolders(storeDispatch, newState.selectedFolderId);
+		} else {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
+		}
 	}
 
 	return result;

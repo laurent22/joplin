@@ -907,7 +907,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			isEnum: true,
 			public: true,
-			appTypes: [AppType.Cli],
+			appTypes: [AppType.Cli, AppType.Mobile],
+			section: 'appearance',
 			label: () => _('Sort notebooks by'),
 			options: () => {
 				const Folder = require('../Folder').default;
@@ -921,7 +922,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			},
 			storage: SettingStorage.File,
 		},
-		'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+		'folders.sortOrder.reverse': {
+			value: false,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			isGlobal: true,
+			public: true,
+			section: 'appearance',
+			label: () => {
+				if (mobilePlatform) {
+					// For config screen on mobile, there is no sections for notebooks
+					// Explicitly mark it as an option for notebook order
+					return _('Reverse notebook sort order');
+				} else {
+					return _('Reverse sort order');
+				}
+			},
+			appTypes: [AppType.Cli, AppType.Mobile],
+		},
 		trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Save geo-location with notes') },
 
 		'editor.usePlainText': {

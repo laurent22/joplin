@@ -1390,7 +1390,7 @@ class Setting extends BaseModel {
 		// TODO: This is currently specific to the mobile app
 		const sectionNameToSummary: Record<string, string> = {
 			'general': _('Language, date format'),
-			'appearance': _('Themes'),
+			'appearance': _('Themes, notebook sort order'),
 			'sync': _('Sync, encryption, proxy'),
 			'joplinCloud': _('Email To Note, login information'),
 			'editor': _('Typography, spellcheck, layout'),
