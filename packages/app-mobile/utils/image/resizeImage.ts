@@ -15,7 +15,7 @@ interface Options {
 	maxWidth: number;
 	maxHeight: number;
 	format: OutputFormat;
-	// A number from 0 to 100, where 100 is least compressed.
+	// A number from 0 to 1, where 1 is least compressed.
 	quality: number;
 }
 
@@ -79,7 +79,7 @@ const resizeImage = async (options: Options) => {
 		const final = await context.renderAsync();
 		const saved = await final.saveAsync({
 			format: options.format === 'PNG' ? SaveFormat.PNG : SaveFormat.JPEG,
-			compress: options.quality / 100,
+			compress: options.quality,
 		});
 
 		const resizedImagePath = saved.uri;
