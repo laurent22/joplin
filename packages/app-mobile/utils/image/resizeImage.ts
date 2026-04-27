@@ -78,7 +78,7 @@ const resizeImage = async (options: Options) => {
 		const final = await context.renderAsync();
 		const saved = await final.saveAsync({
 			format: options.format === 'PNG' ? SaveFormat.PNG : SaveFormat.JPEG,
-			compress: options.quality,
+			compress: options.quality / 100,
 		});
 
 		const resizedImagePath = saved.uri;
