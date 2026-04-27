@@ -15,6 +15,7 @@ interface Options {
 	maxWidth: number;
 	maxHeight: number;
 	format: OutputFormat;
+	// A number from 0 to 100, where 100 is least compressed.
 	quality: number;
 }
 
