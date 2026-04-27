@@ -302,12 +302,7 @@ class Registry {
 	private async startSync(sync: Synchronizer, options: any) {
 		// Service will only be populated for the native mobile apps
 		const service = this.backgroundService_;
-
-		if (!service || service.isRunning()) {
-			// Avoid starting another service while a service is running, but instead call sync normally. If this call was invoked via the sync itself,
-			// the original service will wait for this sync to complete before it ends
-			return sync.start(options);
-		}
+		if (!service) return sync.start(options);
 
 		await service.requestPermissions();
 
