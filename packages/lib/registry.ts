@@ -4,6 +4,7 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
+import uuid from './uuid';
 
 export interface BackgroundServiceOptions {
 	taskName: string;
@@ -298,9 +299,10 @@ class Registry {
 		try {
 			return await service.start(async () => {
 				let response = null;
-				this.logger().debug('registry.startSync: Background service started');
+				const uid = uuid.create();
+				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
 				response = await sync.start(options);
-				this.logger().debug('registry.startSync: Background service ended');
+				this.logger().debug(`registry.startSync [${uid}]: Background service ended`);
 				return response;
 			}, {
 				taskName: 'Sync',
