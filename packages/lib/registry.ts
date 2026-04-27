@@ -293,13 +293,14 @@ class Registry {
 		if (!service) return sync.start(options);
 
 		await service.requestPermissions();
-		options = { ...options, appIsActive: service ? service.appIsActive : null };
+
 		if (sync.state() !== 'idle') return null;
+		options = { ...options, appIsActive: service ? service.appIsActive : null };
+		const uid = uuid.create();
 
 		try {
 			return await service.start(async () => {
 				let response = null;
-				const uid = uuid.create();
 				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
 				response = await sync.start(options);
 				this.logger().debug(`registry.startSync [${uid}]: Background service ended`);
@@ -319,7 +320,7 @@ class Registry {
 			// an exception is thrown instead, possibly when starting the service when there are already 2 overlapping services for the same task. As we avoid
 			// starting more than 1 service, by skipping if the sync is already running, this isn't expected to happen. But if it does happen, then run the
 			// sync normally to avoid introducing potential issues
-			this.logger().warn('registry.startSync: Starting background service failed, running sync directly', e);
+			this.logger().warn(`registry.startSync [${uid}]: Starting background service failed, running sync directly`, e);
 			return sync.start(options);
 		}
 	}
