@@ -315,7 +315,7 @@ class Registry {
 
 					// The sync may schedule another sync which will sync items changed during the sync. We need to wait for this sync to complete if that
 					// is the case, because if the app is in the background when this happens, we need to keep the service active for this additional sync
-					// to complete
+					// to trigger and complete
 					while (this.scheduleSyncId_) {
 						await time.sleep(1);
 					}
@@ -323,7 +323,10 @@ class Registry {
 					// Grace period to prevent race conditions
 					await time.sleep(0.1);
 
-					if (sync.state() !== 'idle') this.logger().debug('registry.startSync: Waiting for additional sync to finish');
+					if (sync.state() !== 'idle') this.logger().debug('registry.startSync: An additional sync was triggered');
+
+					// It doesn't seem like we need to wait for the actual sync to complete, as a new service should overlap at this point, but if for
+					// whatever reason the service could not start, this will ensure that the additional sync will still complete when in the background
 					await sync.waitForSyncToFinish();
 				}
 
