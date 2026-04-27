@@ -189,11 +189,11 @@ class Registry {
 				let newContext;
 
 				try {
-					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
 
 					if (doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
 						this.logger().info('Sync cancelled because we\'re on mobile data');
+						this.scheduleSyncId_ = null;
 						promiseResolve();
 						return;
 					}
@@ -202,16 +202,25 @@ class Registry {
 
 					if (!syncTargetId) {
 						this.logger().info('Sync cancelled - no sync target is selected.');
+						this.scheduleSyncId_ = null;
 						promiseResolve();
 						return;
 					}
 
-					if (!(await this.syncTarget(syncTargetId).isAuthenticated())) {
+					let isAuthenticated;
+					try {
+						isAuthenticated = await this.syncTarget(syncTargetId).isAuthenticated();
+					} catch (e) {
+						isAuthenticated = false;
+					}
+
+					if (!isAuthenticated) {
 						this.dispatch({
 							type: 'MUST_AUTHENTICATE',
 							value: true,
 						});
 						this.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');
+						this.scheduleSyncId_ = null;
 						promiseResolve();
 						return;
 					}
@@ -219,6 +228,10 @@ class Registry {
 						type: 'MUST_AUTHENTICATE',
 						value: false,
 					});
+
+					// Only clear this after checking authentication, so there is no async logic between this and updating the sync status when the
+					// sync is triggered, assuming the synchronizer has already been initialised
+					this.scheduleSyncId_ = null;
 
 					try {
 						const sync = await this.syncTarget(syncTargetId).synchronizer();
@@ -302,7 +315,7 @@ class Registry {
 			return await service.start(async () => {
 				let response = null;
 				if (sync.state() === 'idle') {
-					this.logger().info('registry.startSync: Background service started');
+					this.logger().debug('registry.startSync: Background service started');
 					response = await sync.start(options);
 
 					// The sync may schedule another sync which will sync items changed during the sync. We need to wait for this sync to complete if that
@@ -312,14 +325,14 @@ class Registry {
 						await time.sleep(1);
 					}
 
-					// Grace period - required as there are some async calls between clearing out scheduleSyncId_ and actually triggering the sync
-					await time.sleep(0.5);
+					// Grace period to prevent race conditions
+					await time.sleep(0.1);
 
-					if (sync.state() !== 'idle') this.logger().info('registry.startSync: Waiting for additional sync to finish');
+					if (sync.state() !== 'idle') this.logger().debug('registry.startSync: Waiting for additional sync to finish');
 					await sync.waitForSyncToFinish();
 				}
 
-				this.logger().info('registry.startSync: Background service ended');
+				this.logger().debug('registry.startSync: Background service ended');
 				return response;
 			}, {
 				taskName: 'Sync',
