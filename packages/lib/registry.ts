@@ -298,9 +298,9 @@ class Registry {
 		try {
 			return await service.start(async () => {
 				let response = null;
-				this.logger().info('registry.startSync: Background service started');
+				this.logger().debug('registry.startSync: Background service started');
 				response = await sync.start(options);
-				this.logger().info('registry.startSync: Background service ended');
+				this.logger().debug('registry.startSync: Background service ended');
 				return response;
 			}, {
 				taskName: 'Sync',

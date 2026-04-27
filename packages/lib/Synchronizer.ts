@@ -1271,7 +1271,7 @@ export default class Synchronizer {
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
 				if (typeof options.appIsActive === 'function' && !options.appIsActive()) {
-					outputContext = await reg.scheduleSync(0, { syncSteps }, true);
+					outputContext = await this.start(options);
 				} else {
 					void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 				}
