@@ -4,7 +4,6 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
-import time from './time';
 
 export interface BackgroundServiceOptions {
 	taskName: string;
@@ -34,6 +33,7 @@ export interface BackgroundService {
 	stop(): Promise<void>;
 	isRunning(): boolean;
 	requestPermissions(): Promise<void>;
+	appIsActive(): boolean;
 }
 
 class Registry {
@@ -189,11 +189,11 @@ class Registry {
 				let newContext;
 
 				try {
+					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
 
 					if (doWifiConnectionCheck && Setting.value('sync.mobileWifiOnly') && this.isOnMobileData_) {
 						this.logger().info('Sync cancelled because we\'re on mobile data');
-						this.scheduleSyncId_ = null;
 						promiseResolve();
 						return;
 					}
@@ -202,25 +202,16 @@ class Registry {
 
 					if (!syncTargetId) {
 						this.logger().info('Sync cancelled - no sync target is selected.');
-						this.scheduleSyncId_ = null;
 						promiseResolve();
 						return;
 					}
 
-					let isAuthenticated;
-					try {
-						isAuthenticated = await this.syncTarget(syncTargetId).isAuthenticated();
-					} catch (e) {
-						isAuthenticated = false;
-					}
-
-					if (!isAuthenticated) {
+					if (!(await this.syncTarget(syncTargetId).isAuthenticated())) {
 						this.dispatch({
 							type: 'MUST_AUTHENTICATE',
 							value: true,
 						});
 						this.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');
-						this.scheduleSyncId_ = null;
 						promiseResolve();
 						return;
 					}
@@ -228,10 +219,6 @@ class Registry {
 						type: 'MUST_AUTHENTICATE',
 						value: false,
 					});
-
-					// Only clear this after checking authentication, so there is no async logic between this and updating the sync status when the
-					// sync is triggered, assuming the synchronizer has already been initialised
-					this.scheduleSyncId_ = null;
 
 					try {
 						const sync = await this.syncTarget(syncTargetId).synchronizer();
@@ -305,32 +292,15 @@ class Registry {
 		if (!service) return sync.start(options);
 
 		await service.requestPermissions();
+		options = { ...options, appIsActive: service ? service.appIsActive : null };
+		if (sync.state() !== 'idle') return null;
 
 		try {
 			return await service.start(async () => {
 				let response = null;
-				if (sync.state() === 'idle') {
-					this.logger().debug('registry.startSync: Background service started');
-					response = await sync.start(options);
-
-					// The sync may schedule another sync which will sync items changed during the sync. We need to wait for this sync to complete if that
-					// is the case, because if the app is in the background when this happens, we need to keep the service active for this additional sync
-					// to trigger and complete
-					while (this.scheduleSyncId_) {
-						await time.sleep(1);
-					}
-
-					// Grace period to prevent race conditions
-					await time.sleep(0.1);
-
-					if (sync.state() !== 'idle') this.logger().debug('registry.startSync: An additional sync was triggered');
-
-					// It doesn't seem like we need to wait for the actual sync to complete, as a new service should overlap at this point, but if for
-					// whatever reason the service could not start, this will ensure that the additional sync will still complete when in the background
-					await sync.waitForSyncToFinish();
-				}
-
-				this.logger().debug('registry.startSync: Background service ended');
+				this.logger().info('registry.startSync: Background service started');
+				response = await sync.start(options);
+				this.logger().info('registry.startSync: Background service ended');
 				return response;
 			}, {
 				taskName: 'Sync',
@@ -343,8 +313,10 @@ class Registry {
 				foregroundServiceType: ['dataSync'],
 			});
 		} catch (e) {
-			// Local testing shows that service.start will execute the enclosed logic even while the service is already running, so it isn't expected for
-			// an exception to be thrown here. But if this does happen, just run the sync normally
+			// Local testing shows that service.start can execute the enclosed logic even while the service is already running on Android, but in some cases
+			// an exception is thrown instead, possibly when starting the service when there are already 2 overlapping services for the same task. As we avoid
+			// starting more than 1 service, by skipping if the sync is already running, this isn't expected to happen. But if it does happen, then run the
+			// sync normally to avoid introducing potential issues
 			this.logger().warn('registry.startSync: Starting background service failed, running sync directly', e);
 			return sync.start(options);
 		}

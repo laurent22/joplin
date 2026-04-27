@@ -89,7 +89,7 @@ import { AppState } from '../utils/types';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import { Profile } from '@joplin/lib/services/profileConfig/types';
 import shim from '@joplin/lib/shim';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { PermissionsAndroid, Platform, AppState as NativeAppState } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
@@ -460,6 +460,9 @@ const buildStartupTasks = (
 								return;
 							}
 						}
+					},
+					appIsActive: () => {
+						return NativeAppState.currentState === 'active';
 					},
 				},
 			});

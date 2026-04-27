@@ -419,7 +419,7 @@ export default class Synchronizer {
 
 		const synchronizationId = time.unixMs().toString();
 
-		const outputContext = { ...lastContext };
+		let outputContext = { ...lastContext };
 
 		this.progressReport_.startTime = time.unixMs();
 
@@ -1270,7 +1270,11 @@ export default class Synchronizer {
 
 			if (result.items.length > 0) {
 				logger.info('There are more outgoing changes to sync, schedule the sync again');
-				void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				if (typeof options.appIsActive === 'function' && !options.appIsActive()) {
+					outputContext = await reg.scheduleSync(0, { syncSteps }, true);
+				} else {
+					void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
+				}
 				hasOutgoingChanges = true;
 			}
 		}
