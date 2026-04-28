@@ -74,6 +74,12 @@ Everything lives with you — sync only when *you decide*.
   </a>
 </p>
 
+<p align="center">
+  <sub>
+    For other options, such as the portable application, terminal application, or Android APK file, see the full installation details.
+    <a href="https://joplinapp.org/help/install/">Learn more →</a>
+  </sub>
+</p>
 
 ---
 
@@ -106,15 +112,6 @@ No matter what happens to services or platforms — your data remains yours.
 
 ---
 
-## ✦ Tech Stack
-
-* Electron (Desktop)
-* React / React Native
-* Node.js
-* SQLite
-
----
-
 ## ✦ Why Joplin?
 
 Because most note apps:
@@ -126,6 +123,17 @@ Because most note apps:
 Joplin doesn’t.
 
 ---
+## ✦ Support
+
+<p align="center">
+  <sub>
+    Support the project →
+    <a href="https://www.paypal.com/donate">PayPal</a> ·
+    <a href="https://github.com/sponsors/laurent22">GitHub Sponsors</a> ·
+    <a href="https://www.patreon.com/joplin">Patreon</a> ·
+    <a href="https://joplinapp.org/donate/">IBAN</a>
+  </sub>
+</p>
 
 <p align="center">
   Minimal • Local-first • Durable
