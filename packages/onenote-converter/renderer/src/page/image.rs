@@ -1,3 +1,5 @@
+use std::io::{Cursor, Read};
+
 use crate::page::Renderer;
 use crate::utils::{AttributeSet, StyleSet, detect_png, px};
 use color_eyre::Result;
@@ -8,11 +10,18 @@ impl<'a> Renderer<'a> {
     pub(crate) fn render_image(&mut self, image: &Image) -> Result<String> {
         let mut content = String::new();
 
-        if let Some(data) = image.data()? {
-            let filename = self.determine_image_filename(image, &data)?;
+        if let Some(mut reader) = image.read()? {
+            // Read up to the first kilobyte so that determine_image_filename can do
+            // file type detection
+            let image_start_bytes = read_file_start(&mut reader)?;
+
+            let filename = self.determine_image_filename(image, &image_start_bytes)?;
             let path = fs_driver().join(&self.output, &filename);
             log!("Rendering image: {:?}", path);
-            fs_driver().write_file(&path, &data[..])?;
+
+            // Rebuild the reader so that the image start bytes are included in the file
+            let mut reader = Cursor::new(image_start_bytes).chain(reader);
+            fs_driver().stream_to_file(&path, &mut reader)?;
 
             let mut attrs = AttributeSet::new();
             let mut styles = StyleSet::new();
@@ -81,4 +90,12 @@ impl<'a> Renderer<'a> {
             .to_unique_safe_filename(&self.output, &format!("image{}", ext))?;
         Ok(filename)
     }
+}
+
+fn read_file_start(reader: &mut Box<dyn Read>) -> Result<Vec<u8>> {
+    let size: usize = 1024;
+    let mut sub_reader = reader.by_ref().take(size as u64);
+    let mut bytes = Vec::with_capacity(size);
+    sub_reader.read_to_end(&mut bytes)?;
+    Ok(bytes)
 }

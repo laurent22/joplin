@@ -16,6 +16,10 @@ pub trait FileApiDriver: Send + Sync {
     fn exists(&self, path: &str) -> ApiResult<bool>;
     fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>>;
 
+    /// Writes data from `stream` to the file at `path`.
+    /// Note: If `stream.read` fails, the file may be left in a partially-written state.
+    fn stream_to_file(&self, path: &str, stream: &mut dyn Read) -> ApiResult<()>;
+
     // These functions correspond to the similarly-named
     // NodeJS path functions and should behave like the NodeJS
     // functions (rather than the corresponding Rust functions).

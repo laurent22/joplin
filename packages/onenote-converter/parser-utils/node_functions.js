@@ -28,6 +28,11 @@ function normalizeAndWriteFile(filePath, data) {
 	fs.writeFileSync(filePath, data);
 }
 
+function normalizeAndAppendFile(filePath, data) {
+	filePath = path.normalize(filePath);
+	fs.appendFileSync(filePath, data);
+}
+
 function fileReader(path) {
 	const fd = fs.openSync(path);
 	// TODO: When Node v20 is EOL, replace this with the { bigint: true }
@@ -66,6 +71,7 @@ module.exports = {
 	readDir,
 	removePrefix,
 	normalizeAndWriteFile,
+	normalizeAndAppendFile,
 	fileReader,
 	isWindows,
 };
