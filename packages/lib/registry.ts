@@ -303,7 +303,10 @@ class Registry {
 				let response = null;
 				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
 				response = await sync.start(options);
-				this.logger().debug(`registry.startSync [${uid}]: Background service ended`);
+				// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
+				// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
+				await service.stop();
+				this.logger().debug(`registry.startSync [${uid}]: Background service stopped`);
 				return response;
 			}, {
 				taskName: 'Sync',
@@ -316,11 +319,11 @@ class Registry {
 				foregroundServiceType: ['dataSync'],
 			});
 		} catch (e) {
-			// Local testing shows that service.start can execute the enclosed logic even while the service is already running on Android, but in some cases
-			// an exception is thrown instead, possibly when starting the service when there are already 2 overlapping services for the same task. As we avoid
-			// starting more than 1 service, by skipping if the sync is already running, this isn't expected to happen. But if it does happen, then run the
-			// sync normally to avoid introducing potential issues
-			this.logger().warn(`registry.startSync [${uid}]: Starting background service failed, running sync directly`, e);
+			// If service.start is called while the service is already running, it will kill the existing service and start a new one. However if service.start
+			// is called while the app is in background, it will throw an exception and end up here. This can happen when the sync is triggered at the user
+			// configured sync interval. We should still run the sync normally in this case, in case there are other occasions this error will happen, but we
+			// it doesn't really matter if this sync does not complete while in the background, due to there being no service to keep it alive
+			this.logger().info(`registry.startSync [${uid}]: Starting background service failed, running sync directly`, e);
 			return sync.start(options);
 		}
 	}
