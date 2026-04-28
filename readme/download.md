@@ -51,16 +51,16 @@ Everything lives with you — sync only when *you decide*.
 ## ✦ Platforms
 
 <p align="center">
-  <a href="https://objects.joplinusercontent.com/v3.5.13/Joplin-Setup-3.5.13.exe">
+  <a href="https://joplinapp.org/download/">
     <img width="120" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png" alt="Download for Windows"/>
   </a>
-  <a href="https://objects.joplinusercontent.com/v3.5.13/Joplin-3.5.13.dmg">
+  <a href="https://joplinapp.org/download/">
     <img width="120" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png" alt="Download for macOS"/>
   </a>
-  <a href="https://objects.joplinusercontent.com/v3.5.13/Joplin-3.5.13-arm64.DMG">
+  <a href="https://joplinapp.org/download/">
     <img width="120" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOSM1.png" alt="Download for macOS Apple Silicon"/>
   </a>
-  <a href="https://objects.joplinusercontent.com/v3.5.13/Joplin-3.5.13.AppImage">
+  <a href="https://joplinapp.org/download/">
     <img width="120" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png" alt="Download for Linux"/>
   </a>
 </p>
@@ -73,6 +73,7 @@ Everything lives with you — sync only when *you decide*.
     <img height="36" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeIOS.png" alt="Download on the App Store"/>
   </a>
 </p>
+
 
 ---
 
