@@ -1,7 +1,9 @@
+---
+sidebar_position: 1
+---
+
 <!-- ========================= -->
-
 <!-- ✦ ELITE README ✦ -->
-
 <!-- ========================= -->
 
 <p align="center">
@@ -120,9 +122,10 @@ Because most note apps:
 * force subscriptions
 * depend entirely on cloud
 
-Joplin doesn’t.
+Joplin doesn't.
 
 ---
+
 ## ✦ Support
 
 <p align="center">
