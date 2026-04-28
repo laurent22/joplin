@@ -3,6 +3,8 @@ sidebar_position: 1
 title: Download Joplin
 ---
 
+# Download Joplin
+
 <!-- ========================= -->
 <!-- ✦ ELITE README ✦ -->
 <!-- ========================= -->
