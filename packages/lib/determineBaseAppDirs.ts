@@ -1,12 +1,18 @@
 import { homedir } from 'os';
 import { toSystemSlashes } from './path-utils';
+import { dirname, isAbsolute } from 'path';
 
 export default (profileFromArgs: string, appName: string, altInstanceId: string) => {
 	let profileDir = '';
 	let homeDir = '';
 
 	if (profileFromArgs) {
-		profileDir = profileFromArgs;
+		if (isAbsolute(profileFromArgs)) {
+			profileDir = profileFromArgs;
+		}
+		else {
+			profileDir = `${dirname(process.execPath)}/${profileFromArgs}`;
+		}
 		homeDir = profileDir;
 	} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
 		profileDir = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
