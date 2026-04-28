@@ -9,8 +9,7 @@ export default (profileFromArgs: string, appName: string, altInstanceId: string)
 	if (profileFromArgs) {
 		if (isAbsolute(profileFromArgs)) {
 			profileDir = profileFromArgs;
-		}
-		else {
+		} else {
 			profileDir = `${dirname(process.execPath)}/${profileFromArgs}`;
 		}
 		homeDir = profileDir;
