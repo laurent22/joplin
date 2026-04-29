@@ -91,6 +91,7 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>processing</string>
 		<string>audio</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -116,10 +117,6 @@
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>processing</string>
-	</array>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
