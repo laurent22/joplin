@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
           java-version: '20'
           
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/setup-node@v6
         with:
