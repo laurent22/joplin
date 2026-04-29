@@ -20,24 +20,21 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - name: Minimize all CodeRabbit reviews and comments
+      - name: Clean up CodeRabbit comments
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
         run: |
-          # Minimize all CodeRabbit reviews on this PR
-          REVIEW_NODE_IDS=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/reviews" \
-            --jq '[.[] | select(.user.login == "coderabbitai[bot]") | .node_id] | .[]')
+          # Clear the body of all CodeRabbit reviews on this PR
+          # (We can't delete reviews, but clearing the body removes the spam
+          # while keeping inline code comments visible)
+          REVIEW_IDS=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/reviews" \
+            --jq '[.[] | select(.user.login == "coderabbitai[bot]" and .body != "") | .id] | .[]')
 
-          for NODE_ID in $REVIEW_NODE_IDS; do
-            gh api graphql -f query='
-              mutation {
-                minimizeComment(input: {subjectId: "'"${NODE_ID}"'", classifier: OFF_TOPIC}) {
-                  minimizedComment { isMinimized }
-                }
-              }
-            ' 2>/dev/null || true
+          for REVIEW_ID in $REVIEW_IDS; do
+            gh api -X PUT "repos/${REPO}/pulls/${PR_NUMBER}/reviews/${REVIEW_ID}" \
+              -f body="" 2>/dev/null || true
           done
 
           # Delete all CodeRabbit issue comments on this PR

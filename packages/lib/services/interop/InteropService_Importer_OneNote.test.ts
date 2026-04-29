@@ -387,6 +387,13 @@ describe('InteropService_Importer_OneNote', () => {
 		).toMatchSnapshot();
 	});
 
+	it('should import inline tags', async () => {
+		const notes = await importNote(`${supportDir}/onenote/tagged-lines.one`);
+		const note = notes.find(note => note.title === 'Checklists');
+		expect(notesToMarkdownString([note])).toMatchSnapshot();
+		expect(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
+
 	it('should import bold and italic in a way that can be converted to Markdown', async () => {
 		const notes = await importNote(`${supportDir}/onenote/bold_and_italic.one`);
 		const matchingNotes = notes.filter(n => n.title === 'Bold & italic');

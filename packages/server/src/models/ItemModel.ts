@@ -39,6 +39,10 @@ export interface DeleteDatabaseContentOptions {
 	maxProcessedItems?: number;
 }
 
+export interface ProcessOrphanedItemsOptions {
+	batchSize?: number;
+}
+
 export interface SaveFromRawContentItem {
 	name: string;
 	body: Buffer;
@@ -1019,33 +1023,72 @@ export default class ItemModel extends BaseModel<Item> {
 	// can't be replicated so far. On Joplin Cloud it happens on only 0.0008% of
 	// items, so a simple processing task like this one is sufficient for now
 	// but it would be nice to get to the bottom of this bug.
-	public processOrphanedItems = async () => {
-		await this.withTransaction(async () => {
+	public processOrphanedItems = async (options: ProcessOrphanedItemsOptions = {}) => {
+		// Process in batches to avoid long-running transactions that can timeout
+		// and poison the connection pool.
+		const batchSize = options.batchSize ?? 100;
+		let batchNum = 0;
+		let totalProcessed = 0;
+
+		modelLogger.info(`processOrphanedItems: Starting with batchSize=${batchSize}`);
+
+		while (true) {
+			batchNum++;
+			const batchStartTime = Date.now();
+
 			// Find items that have no corresponding entry in user_items.
 			// NOT EXISTS is used instead of LEFT JOIN for performance as it
 			// allows Postgres to short-circuit on the first match per item.
 			const orphanedItems: Item[] = await this.db(this.tableName)
-				.select(['items.id', 'items.owner_id'])
+				.select(['items.id', 'items.name', 'items.owner_id'])
 				.whereNotExists(
 					this.db('user_items')
 						.select(this.db.raw('1'))
 						.whereRaw('user_items.item_id = items.id'),
-				);
+				)
+				.limit(batchSize);
 
-			const userIds: string[] = orphanedItems.map(i => i.owner_id);
+			if (!orphanedItems.length) {
+				modelLogger.info(`processOrphanedItems: Completed. Total items processed: ${totalProcessed}`);
+				break;
+			}
+
+			modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Found ${orphanedItems.length} orphaned items`);
+
+			const userIds: string[] = unique(orphanedItems.map(i => i.owner_id));
 			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
+			const existingUserIds = new Set(users.map(u => u.id));
 
-			for (const orphanedItem of orphanedItems) {
-				if (!users.find(u => u.id)) {
-					// The user may have been deleted since then. In that case, we
-					// simply delete the orphaned item.
-					await this.delete(orphanedItem.id);
+			const itemsToDelete: string[] = [];
+			const itemsToRestoreByUser = new Map<string, Item[]>();
+
+			for (const item of orphanedItems) {
+				if (!existingUserIds.has(item.owner_id)) {
+					itemsToDelete.push(item.id);
 				} else {
-					// Otherwise we add it back to the user's collection
-					await this.models().userItem().add(orphanedItem.owner_id, orphanedItem.id);
+					const userItems = itemsToRestoreByUser.get(item.owner_id) || [];
+					userItems.push(item);
+					itemsToRestoreByUser.set(item.owner_id, userItems);
 				}
 			}
-		}, 'ItemModel::processOrphanedItems');
+
+			if (itemsToDelete.length) {
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Deleting ${itemsToDelete.length} items (users no longer exist)`);
+				await this.delete(itemsToDelete);
+			}
+
+			if (itemsToRestoreByUser.size) {
+				const restoreCount = Array.from(itemsToRestoreByUser.values()).reduce((sum, items) => sum + items.length, 0);
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Restoring ${restoreCount} items for ${itemsToRestoreByUser.size} users`);
+				for (const [userId, items] of itemsToRestoreByUser) {
+					await this.models().userItem().addMulti(userId, items);
+				}
+			}
+
+			totalProcessed += orphanedItems.length;
+			const batchDuration = Date.now() - batchStartTime;
+			modelLogger.info(`processOrphanedItems: Batch ${batchNum} completed in ${batchDuration}ms`);
+		}
 	};
 
 	// This method should be private because items should only be saved using

@@ -138,17 +138,17 @@ jeudi 23 octobre 2025
 
 ## Todo HBA
 
--  [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
--  [ ] Transmettre aux dev Joplin (case non cochée)
-    -  [x] Exporter le carnet en \\*.onepkg (case cochée)
-    -  [ ] Exporter des page en \\*.one (case non cochée)
+- [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
+- [ ] Transmettre aux dev Joplin (case non cochée)
+    - [x] Exporter le carnet en \\*.onepkg (case cochée)
+    - [ ] Exporter des page en \\*.one (case non cochée)
 
 &nbsp;
 
 ## Todo Team appli
 
--  [ ] Rédiger compte-rendu réunion de service
--  [ ] Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS  
+- [ ] Rédiger compte-rendu réunion de service
+- [ ] Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS  
     la doc sur le partage : [\\\\\\\\mondomaine.local\\\\partage\\\\DSI\\\\Projets Techniques 2025\\\\Remplacement Office\\\\JOPLIN_Alternatives_OneNote\\\\formation](file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation)
     - [x] Documenter configuration synchro JBS saml pour un utilisateur (case cochée)"
 `;
@@ -959,6 +959,106 @@ Thursday, April 23, 2026
 **Bold** and *italic* and **bold italic**."
 `;
 
+exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
+"# Note: Checklists
+
+ Checklists 
+
+Checklists
+
+Wednesday, April 22, 2026
+
+1:45 PM
+
+## Tagged list
+
+This note includes a **tagged list**:
+
+&nbsp;
+
+- ❗Exclamation point
+- ❓Question mark
+- [ ] Checkbox with exclamation point
+- [x] Checkbox (complete)
+    - [ ] Sub-checkbox (incomplete)
+    - [x] [x] Sub-checkbox, with arrow (complete)
+- ⭐Star
+    - 🗨️Sub-item
+- 🖊️Pen
+- 💡Lightbulb
+- 🔒Padlock
+- 📨Paper airplane
+- 📖Book
+- 🎵Music note
+- 🟥Red
+- [x] Checkmark
+- 🏠House
+- 📞Phone
+- 🔗Link
+- 🎞️Film
+- 👥Large text
+
+- 💡💡More large text"
+`;
+
+exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Checklists</title>
+    
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    .icon-0 > .text { color: #ffd678; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #ffd678; }
+    .icon-6 > .text { color: #4673b7; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Checklists</span></div>
+</div><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Wednesday, April 22, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">1:45 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt;">Tagged list</h2></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">This note includes a <strong style="font-weight: bold;">tagged list</strong>:</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❗</span></span>Exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❓</span></span>Question mark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><span class="text">☐<span class="icon-secondary"><span class="content">!</span></span></span></span>Checkbox with exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Checkbox (complete)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Sub-checkbox (incomplete)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span>Sub-checkbox, with arrow (complete)</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal"><span class="text">⭐</span></span>Star</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🗨️</span></span>Sub-item</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🖊️</span></span>Pen</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">💡</span></span>Lightbulb</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔒</span></span>Padlock</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📨</span></span>Paper airplane</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📖</span></span>Book</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎵</span></span>Music note</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🟥</span></span>Red</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><span class="text">✓</span></span>Checkmark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🏠</span></span>House</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📞</span></span>Phone</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔗</span></span>Link</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎞️</span></span>Film</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 16pt;"><span class="note-tag-icon -normal"><span class="text">👥</span></span>Large text</span></li>
+</ul></div><div class="container-outline" style="left: 72px; position: absolute; top: 595px; width: 624px;"><ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="color: rgb(30,78,121); font-family: &quot;Calibri&quot;, sans-serif; font-size: 16pt; line-height: 25px;"><span class="note-tag-icon -normal"><span class="text">💡</span></span><span class="note-tag-icon -normal"><span class="text">💡</span></span>More large text</span></li>
+</ul></div>
+
+
+
+</body></html>"
+`;
+
 exports[`InteropService_Importer_OneNote should import nested ink 1`] = `
 [
   "<!DOCTYPE HTML>
@@ -1423,13 +1523,13 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 /* (For testing: Removed default CSS) */
 
 
-    .icon-0 > svg, .icon-0 > img { fill: #4673b7; }
-    .icon-1 > svg, .icon-1 > img { fill: #4673b7; }
-    .icon-2 > svg, .icon-2 > img { fill: #4673b7; }
-    .icon-3 > svg, .icon-3 > img { fill: #4673b7; }
-    .icon-4 > svg, .icon-4 > img { fill: #4673b7; }
-    .icon-5 > svg, .icon-5 > img { fill: #4673b7; }
-    .icon-6 > svg, .icon-6 > img { fill: #4673b7; }
+    .icon-0 > .text { color: #4673b7; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #4673b7; }
+    .icon-6 > .text { color: #4673b7; }
     
     </style>
 </head>
@@ -1439,21 +1539,14 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 </div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">jeudi 23 octobre 2025</span></div>
 <div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">09:24</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;">Todo HBA</h2></div>
-<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Exporter le carnet en *.onepkg (case cochée)</span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Exporter des page en *.one (case non cochée)</span></li>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Exporter le carnet en *.onepkg (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Exporter des page en *.one (case non cochée)</span></li>
 </ul></li>
 </ul><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 <div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;">Todo Team appli</h2></div>
-<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Rédiger compte-rendu réunion de service</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</span></li>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Rédiger compte-rendu réunion de service</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</span></li>
 </ul></li>
 </ul></div>
 

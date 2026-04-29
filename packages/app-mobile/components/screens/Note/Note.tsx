@@ -870,7 +870,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				outputPath: targetPath,
 				maxWidth: dimensions.width,
 				maxHeight: dimensions.height,
-				quality: 85,
+				quality: 0.85,
 				format: mimeType === 'image/png' ? 'PNG' : 'JPEG',
 			});
 			return true;

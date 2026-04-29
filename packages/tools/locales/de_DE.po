@@ -6352,7 +6352,7 @@ msgid ""
 "note."
 msgstr ""
 "Die Anhänge werden nicht mehr überwacht, wenn du zu einer anderen Notiz "
-"wechseln."
+"wechselst."
 
 #: packages/app-cli/app/app.ts:288
 msgid "The command \"%s\" is only available in GUI mode"

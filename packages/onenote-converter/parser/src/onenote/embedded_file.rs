@@ -1,3 +1,5 @@
+use std::io::Read;
+
 use crate::one::property::file_type::FileType;
 use crate::one::property_set::{embedded_file_container, embedded_file_node};
 use crate::onenote::note_tag::{NoteTag, parse_note_tags};
@@ -45,9 +47,9 @@ impl EmbeddedFile {
         &self.file_type
     }
 
-    /// The file's binary data.
-    pub fn data(&self) -> Result<Vec<u8>> {
-        self.data.load()
+    /// A reader over the file's binary data.
+    pub fn read(&self) -> Result<Box<dyn Read>> {
+        self.data.read()
     }
 
     /// The max width of the embedded file's icon in half-inch increments.

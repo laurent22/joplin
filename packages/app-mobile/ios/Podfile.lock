@@ -4,7 +4,7 @@ PODS:
   - EXImageLoader (6.0.0):
     - ExpoModulesCore
     - React-Core
-  - Expo (54.0.31):
+  - Expo (54.0.32):
     - ExpoModulesCore
     - hermes-engine
     - RCTRequired
@@ -39,7 +39,7 @@ PODS:
     - ZXingObjC/PDF417
   - ExpoFileSystem (19.0.21):
     - ExpoModulesCore
-  - ExpoFont (14.0.10):
+  - ExpoFont (14.0.11):
     - ExpoModulesCore
   - ExpoImageManipulator (14.0.8):
     - EXImageLoader
@@ -2011,7 +2011,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNCPushNotificationIOS (1.11.0):
+  - RNCPushNotificationIOS (1.12.0):
     - React-Core
   - RNDateTimePicker (8.5.1):
     - hermes-engine
@@ -2065,7 +2065,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (12.2.2):
+  - RNShare (12.2.4):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2521,12 +2521,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   EXImageLoader: 189e3476581efe3ad4d1d3fb4735b7179eb26f05
-  Expo: 04993fbd7b06dc98ffac58da8847298470dc3db1
+  Expo: 4e503a041c59c4e34c8be262a135848ad5cd3710
   ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18
   ExpoAudio: e4cfe3a2f3317b8487460685385a9867a07fb4fb
   ExpoCamera: 6a326deb45ba840749652e4c15198317aa78497e
   ExpoFileSystem: 858a44267a3e6e9057e0888ad7c7cfbf55d52063
-  ExpoFont: 35ac6191ed86bbf56b3ebd2d9154eda9fad5b509
+  ExpoFont: f543ce20a228dd702813668b1a07b46f51878d47
   ExpoImageManipulator: 607a5c8c88085381639458a46cc55fb9d3869148
   ExpoLocalAuthentication: 8a31808565da7af926dd9b595e98594d8b1553b6
   ExpoModulesCore: f3da4f1ab5a8375d0beafab763739dbee8446583
@@ -2622,14 +2622,14 @@ SPEC CHECKSUMS:
   ReactNativeFs: 601d5cf876d91f779583cef9a7d90d8b45394492
   rn-fetch-blob: 25612b6d6f6e980c6f17ed98ba2f58f5696a51ca
   RNCClipboard: 88d7eeb555d1183915f0885bdbc5c97eb6f7f3ba
-  RNCPushNotificationIOS: 6c4ca3388c7434e4a662b92e4dfeeee858e6f440
+  RNCPushNotificationIOS: 85957a0534fd1309b4c028ccbe5b1baf9ab5cf57
   RNDateTimePicker: 19ffa303c4524ec0a2dfdee2658198451c16b7f1
   RNDeviceInfo: bcce8752b5043a623fe3c26789679b473f705d3c
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNLocalize: 44b09911588826d01c5b949e8e3f9ed5fae16b32
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
-  RNShare: a075abc351f03fd89517bbee912593f299eb8a64
+  RNShare: 900932239a5316b6f9324c5549a69d51aeb962f4
   RNSVG: cf9ae78f2edf2988242c71a6392d15ff7dd62522
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
