@@ -4,6 +4,7 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
+import time from './time';
 
 class Registry {
 
@@ -81,6 +82,10 @@ class Registry {
 		}
 	}
 
+	public defaultScheduleInterval() {
+		return 1000 * 10;
+	}
+
 	public syncTarget = (syncTargetId: number = null) => {
 		if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 		if (this.syncTargets_[syncTargetId]) return this.syncTargets_[syncTargetId];
@@ -97,7 +102,7 @@ class Registry {
 	// This can be used when some data has been modified and we want to make
 	// sure it gets synced. So we wait for the current sync operation to
 	// finish (if one is running), then we trigger a sync just after.
-	public waitForSyncFinishedThenSync = async (delay: number | null = 0) => {
+	public waitForSyncFinishedThenSync = async (delay = 0) => {
 		if (!Setting.value('sync.target')) {
 			this.logger().info('waitForSyncFinishedThenSync - cancelling because no sync target is selected.');
 			return;
@@ -107,7 +112,9 @@ class Registry {
 		try {
 			const synchronizer = await this.syncTarget().synchronizer();
 			await synchronizer.waitForSyncToFinish();
-			await this.scheduleSync(delay);
+			if (delay) await time.msleep(delay);
+			// delay must be 0, otherwise if you await the function, the promise will never resolve if another sync is scheduled during the delay
+			await this.scheduleSync(0);
 		} finally {
 			this.waitForReSyncCalls_.pop();
 		}
@@ -118,7 +125,7 @@ class Registry {
 		this.schedSyncCalls_.push(true);
 
 		try {
-			if (delay === null) delay = 1000 * 10;
+			if (delay === null) delay = this.defaultScheduleInterval();
 			if (syncOptions === null) syncOptions = {};
 
 			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

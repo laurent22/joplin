@@ -11,6 +11,7 @@ import Folder from '@joplin/lib/models/Folder';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import CommandService from '@joplin/lib/services/CommandService';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import time from '@joplin/lib/time';
 
 const logger = Logger.create('command-share');
 
@@ -248,7 +249,8 @@ class Command extends BaseCommand {
 
 			logger.info('Unsharing folder', folder.id);
 			await ShareService.instance().unshareFolder(folder.id);
-			await reg.scheduleSync();
+			await time.sleep(10);
+			await reg.scheduleSync(0);
 		};
 
 		if (args.command === 'add' || args.command === 'remove' || args.command === 'delete') {
