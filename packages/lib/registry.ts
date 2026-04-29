@@ -29,7 +29,7 @@ export interface BackgroundService {
 	start<T>(
 		task: (taskData?: unknown)=> Promise<T>,
 		options: BackgroundServiceOptions
-	): Promise<void>;
+	): Promise<T>;
 	stop(): Promise<void>;
 	requestPermissions(): Promise<void>;
 	appIsActive(): boolean;
