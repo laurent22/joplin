@@ -26,10 +26,11 @@ export interface BackgroundServiceOptions {
 }
 
 export interface BackgroundService {
-	start<T>(
-		task: (taskData?: unknown)=> Promise<T>,
+	start(
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
+		task: (taskData?: any)=> Promise<void>,
 		options: BackgroundServiceOptions
-	): Promise<T>;
+	): Promise<void>;
 	stop(): Promise<void>;
 	requestPermissions(): Promise<void>;
 	appIsActive(): boolean;
@@ -297,10 +298,10 @@ class Registry {
 		const uid = uuid.create();
 
 		try {
-			return await service.start(async () => {
+			await service.start(async () => {
 				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
 				try {
-					return await sync.start(options);
+					await sync.start(options);
 				} finally {
 					// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
 					// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
@@ -325,6 +326,10 @@ class Registry {
 			this.logger().info(`registry.startSync [${uid}]: Starting background service failed, running sync directly`, e);
 			return sync.start(options);
 		}
+
+		// When the sync completes successfully via the service, we cannot get a return value. However the SYNC_PENDING_UPDATE event which the response
+		// determines is not used on mobile, so this does not matter
+		return null;
 	}
 
 	public setupRecurrentSync() {
