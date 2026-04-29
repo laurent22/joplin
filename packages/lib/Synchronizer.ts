@@ -1269,10 +1269,13 @@ export default class Synchronizer {
 			const result = await BaseItem.itemsThatNeedSync(syncTargetId);
 
 			if (result.items.length > 0) {
-				logger.info('There are more outgoing changes to sync, schedule the sync again');
 				if (typeof options.appIsActive === 'function' && !options.appIsActive()) {
+					// If the app is in the background, the user can't make more changes, so it is fine to sync again immediately, as excessive data usage from
+					// making continuous changes is not a concern
+					logger.info('There are more outgoing changes to sync, run the sync again');
 					outputContext = await this.start(options);
 				} else {
+					logger.info('There are more outgoing changes to sync, schedule the sync again');
 					void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
 				}
 				hasOutgoingChanges = true;
