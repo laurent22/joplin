@@ -26,9 +26,8 @@ export interface BackgroundServiceOptions {
 }
 
 export interface BackgroundService {
-	start(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-		task: (taskData?: any)=> Promise<void>,
+	start<T>(
+		task: (taskData?: unknown)=> Promise<T>,
 		options: BackgroundServiceOptions
 	): Promise<void>;
 	stop(): Promise<void>;
@@ -299,14 +298,15 @@ class Registry {
 
 		try {
 			return await service.start(async () => {
-				let response = null;
 				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
-				response = await sync.start(options);
-				// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
-				// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
-				await service.stop();
-				this.logger().debug(`registry.startSync [${uid}]: Background service stopped`);
-				return response;
+				try {
+					return await sync.start(options);
+				} finally {
+					// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
+					// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
+					await service.stop();
+					this.logger().debug(`registry.startSync [${uid}]: Background service stopped`);
+				}
 			}, {
 				taskName: 'Sync',
 				taskTitle: 'Syncing data',
