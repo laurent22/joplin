@@ -4,7 +4,6 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
-import time from './time';
 
 class Registry {
 
@@ -102,7 +101,7 @@ class Registry {
 	// This can be used when some data has been modified and we want to make
 	// sure it gets synced. So we wait for the current sync operation to
 	// finish (if one is running), then we trigger a sync just after.
-	public waitForSyncFinishedThenSync = async (delay = 0) => {
+	public waitForSyncFinishedThenSync = async () => {
 		if (!Setting.value('sync.target')) {
 			this.logger().info('waitForSyncFinishedThenSync - cancelling because no sync target is selected.');
 			return;
@@ -112,8 +111,6 @@ class Registry {
 		try {
 			const synchronizer = await this.syncTarget().synchronizer();
 			await synchronizer.waitForSyncToFinish();
-			if (delay) await time.msleep(delay);
-			// delay must be 0, otherwise if you await the function, the promise will never resolve if another sync is scheduled during the delay
 			await this.scheduleSync(0);
 		} finally {
 			this.waitForReSyncCalls_.pop();
