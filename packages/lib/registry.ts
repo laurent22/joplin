@@ -32,7 +32,6 @@ export interface BackgroundService {
 		options: BackgroundServiceOptions
 	): Promise<void>;
 	stop(): Promise<void>;
-	isRunning(): boolean;
 	requestPermissions(): Promise<void>;
 	appIsActive(): boolean;
 }
@@ -288,7 +287,7 @@ class Registry {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
 	private async startSync(sync: Synchronizer, options: any) {
-		// Service will only be populated for the native mobile apps
+		// Service will only be populated for the native Android app
 		const service = this.backgroundService_;
 		if (!service) return sync.start(options);
 
