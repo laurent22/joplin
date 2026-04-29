@@ -249,7 +249,7 @@ class Command extends BaseCommand {
 
 			logger.info('Unsharing folder', folder.id);
 			await ShareService.instance().unshareFolder(folder.id);
-			await time.sleep(10);
+			await time.msleep(reg.defaultScheduleInterval());
 			await reg.scheduleSync(0);
 		};
 
