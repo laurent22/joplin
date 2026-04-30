@@ -1,0 +1,46 @@
+name: Delete CodeRabbit PR Comments
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  delete-coderabbit-comments:
+    if: >
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       (github.event.comment.user.login == 'coderabbitai' || github.event.comment.user.login == 'coderabbitai[bot]'))
+      ||
+      (github.event_name == 'pull_request_review' &&
+       (github.event.review.user.login == 'coderabbitai' || github.event.review.user.login == 'coderabbitai[bot]'))
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Clean up CodeRabbit comments
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        run: |
+          # Clear the body of all CodeRabbit reviews on this PR
+          # (We can't delete reviews, but clearing the body removes the spam
+          # while keeping inline code comments visible)
+          REVIEW_IDS=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/reviews" \
+            --jq '[.[] | select(.user.login == "coderabbitai[bot]" and .body != "") | .id] | .[]')
+
+          for REVIEW_ID in $REVIEW_IDS; do
+            gh api -X PUT "repos/${REPO}/pulls/${PR_NUMBER}/reviews/${REVIEW_ID}" \
+              -f body="" 2>/dev/null || true
+          done
+
+          # Delete all CodeRabbit issue comments on this PR
+          COMMENT_URLS=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments?per_page=100" \
+            --jq '[.[] | select(.user.login == "coderabbitai[bot]") | .url] | .[]')
+
+          for URL in $COMMENT_URLS; do
+            gh api -X DELETE "$URL" 2>/dev/null || true
+          done

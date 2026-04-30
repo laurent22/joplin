@@ -117,10 +117,6 @@ const useStyles = (themeId: number) => {
 			sidebarIcon: sidebarIconStyle,
 			folderButton: folderButtonStyle,
 			folderButtonText: folderButtonTextStyle,
-			conflictFolderButtonText: {
-				...folderButtonTextStyle,
-				color: theme.colorError,
-			},
 			folderButtonSelected: {
 				...folderButtonStyle,
 				backgroundColor: theme.selectedColor,
@@ -197,6 +193,12 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 				paddingRight: 10,
 				backgroundColor: props.selected ? theme.selectedColor : undefined,
 			},
+			conflictFolderButtonText: {
+				color: theme.colorError,
+			},
+			conflictFolderButtonSelectedText: {
+				color: theme.colorErrorSelected,
+			},
 		});
 	}, [props.selected, props.depth, props.themeId]);
 	const baseStyles = props.styles;
@@ -268,7 +270,18 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 	// depth is specified with an accessibilityLabel:
 	const folderDepthDescription = props.depth > 0 ? _('(level %d)', props.depth) : '';
 	const accessibilityLabel = `${folderTitle}  ${folderDepthDescription}`.trim();
-	const folderButtonTextStyle = props.folder.id === Folder.conflictFolderId() ? baseStyles.conflictFolderButtonText : baseStyles.folderButtonText;
+	const isConflictFolder = props.folder.id === Folder.conflictFolderId();
+	const textStyle = useMemo(() => {
+		const result: TextStyle[] = [baseStyles.folderButtonText];
+		if (isConflictFolder) {
+			result.push(styles.conflictFolderButtonText);
+			if (props.selected) {
+				result.push(styles.conflictFolderButtonSelectedText);
+			}
+		}
+		return result;
+	}, [styles, props.selected, isConflictFolder, baseStyles.folderButtonText]);
+
 	return (
 		<View key={props.folder.id} style={styles.buttonWrapper}>
 			<TouchableRipple
@@ -284,7 +297,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 					{renderFolderIcon(props.folder.id, folderIcon)}
 					<Text
 						numberOfLines={1}
-						style={folderButtonTextStyle}
+						style={textStyle}
 						accessibilityLabel={accessibilityLabel}
 					>
 						{folderTitle}

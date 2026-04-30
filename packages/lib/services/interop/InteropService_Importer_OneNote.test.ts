@@ -376,4 +376,27 @@ describe('InteropService_Importer_OneNote', () => {
 		// The other section should import successfully
 		expect(notes.map(note => note.title).sort()).toEqual(['Test note', 'Test section']);
 	});
+
+	it('should import nested ink', async () => {
+		const notes = await importNote(`${supportDir}/onenote/desktop_missing_ink.one`);
+		expect(
+			notes
+				.filter(note => note.title === 'Ink Missing - only one example missing part')
+				.map(note => normalizeNoteForSnapshot(note.body))
+				.sort(),
+		).toMatchSnapshot();
+	});
+
+	it('should import inline tags', async () => {
+		const notes = await importNote(`${supportDir}/onenote/tagged-lines.one`);
+		const note = notes.find(note => note.title === 'Checklists');
+		expect(notesToMarkdownString([note])).toMatchSnapshot();
+		expect(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
+
+	it('should import bold and italic in a way that can be converted to Markdown', async () => {
+		const notes = await importNote(`${supportDir}/onenote/bold_and_italic.one`);
+		const matchingNotes = notes.filter(n => n.title === 'Bold & italic');
+		expect(notesToMarkdownString(matchingNotes)).toMatchSnapshot();
+	});
 });

@@ -13,8 +13,10 @@ impl<'a> Renderer<'a> {
             .section
             .to_unique_safe_filename(&self.output, file.filename())?;
         let path = fs_driver().join(&self.output, &filename);
+
         log!("Rendering embedded file: {:?}", path);
-        fs_driver().write_file(&path, &file.data()?)?;
+        let mut reader = file.read()?;
+        fs_driver().stream_to_file(&path, &mut reader)?;
 
         let mut styles = StyleSet::new();
         if let Some(offset_x_half_inches) = file.offset_horizontal() {

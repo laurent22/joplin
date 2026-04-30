@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Poedit 3.6\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -7008,8 +7008,8 @@ msgid ""
 "commands."
 msgstr ""
 "Skriv titeln på en anteckning för att hoppa till den. Eller skriv # följt av "
-"namnet på en tagg eller@ följt av namnet på en anteckningsbok. Eller skriv : "
-"för att söka efter kommandon."
+"namnet på en tagg eller @ följt av namnet på en anteckningsbok. Eller "
+"skriv : för att söka efter kommandon."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:706
 msgid "Type a note title to search for it."
@@ -7260,8 +7260,8 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Använd detta för att återuppbygga sökindex om det finns sökproblem. Det kan "
-"ta lång tid beroende på antal anteckningar."
+"Använd detta för att återuppbygga sökindex om det är problem med sökningen. "
+"Det kan ta lång tid beroende på antal anteckningar."
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:83
 msgid ""
@@ -7276,8 +7276,8 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
-"Används för mest text i markdown-redigeraren. Om det inte hittas används ett "
-"generiskt proportionellt (variabelt bredd) teckensnitt."
+"Används för det mesta av texten i markdown-redigeraren. Om det inte hittas "
+"används ett generiskt proportionellt (variabel bredd) teckensnitt."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1262
 msgid ""
@@ -7385,7 +7385,7 @@ msgstr "Varning"
 #: packages/app-desktop/gui/ResourceScreen.tsx:322
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
-"Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
+"Varning: alla resurser visas inte för förbättrad prestanda (gräns: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
@@ -7483,7 +7483,7 @@ msgid ""
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
 "När det är aktiverat kommer programmet att skanna dina bilagor och extrahera "
-"texten från den. Detta gör att du kan söka efter text i dessa bilagor."
+"texten från dem. Detta gör att du kan söka efter text i dessa bilagor."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:281
 msgid "Window unresponsive."
@@ -7562,7 +7562,7 @@ msgid ""
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
 "Du kan använda verktyget nedan för att omkryptera dina data, exempelvis om "
-"du vill veta om vissa av dina anteckningar är krypterade med en gammal "
+"du vet att vissa av dina anteckningar är krypterade med en gammal "
 "krypteringsmetod."
 
 #: packages/lib/services/joplinCloudUtils.ts:53

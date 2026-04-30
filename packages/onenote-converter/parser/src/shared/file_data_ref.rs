@@ -1,4 +1,5 @@
 use std::fmt::Debug;
+use std::io::{Cursor, Read};
 use std::rc::Rc;
 
 use parser_utils::Result;
@@ -19,18 +20,18 @@ impl PartialEq for FileBlob {
 }
 
 pub trait FileDataLoader {
-    fn load(&self) -> Result<Vec<u8>>;
+    fn read(&self) -> Result<Box<dyn Read>>;
 }
 
 impl FileDataLoader for Vec<u8> {
-    fn load(&self) -> Result<Vec<u8>> {
-        Ok(self.clone())
+    fn read(&self) -> Result<Box<dyn Read>> {
+        Ok(Box::new(Cursor::new(self.clone())))
     }
 }
 
 impl FileDataLoader for ReaderDataRef {
-    fn load(&self) -> Result<Vec<u8>> {
-        self.bytes()
+    fn read(&self) -> Result<Box<dyn Read>> {
+        Ok(ReaderDataRef::read(self))
     }
 }
 
@@ -61,7 +62,7 @@ impl FileBlob {
         self.size
     }
 
-    pub fn load(&self) -> Result<Vec<u8>> {
-        self.loader.load()
+    pub fn read(&self) -> Result<Box<dyn Read>> {
+        self.loader.read()
     }
 }
