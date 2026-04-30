@@ -27,6 +27,20 @@ docker run --rm --env-file .env-transcribe -p 4567:4567 \
 	joplin/transcribe:amd64-latest
 ```
 
+### GPU support
+
+The server uses CPU by default. For NVIDIA GPU, run a GPU-capable image with `--gpus all` and set `HTR_CLI_GPU_LAYERS=9999`.
+
+```shell
+docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
+	-e HTR_CLI_GPU_LAYERS=9999 \
+	-v ./data:/data \
+	joplin/transcribe:amd64-latest
+```
+
+This needs NVIDIA Container Toolkit on the host. Use `0` or leave it unset for CPU.
+
+
 The container automatically creates the following inside `/data`:
 - `images/` - uploaded images
 - `models/` - AI models (you provide these)
