@@ -244,8 +244,8 @@ class Registry {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
 							}
-							newContext = await this.startSync(sync, options);
-							Setting.setValue(contextKey, JSON.stringify(newContext));
+							newContext = await this.startSync(sync, options, contextKey);
+							if (newContext) Setting.setValue(contextKey, JSON.stringify(newContext));
 						} catch (error) {
 							if (error.code === 'alreadyStarted') {
 								this.logger().info(error.message);
@@ -285,7 +285,7 @@ class Registry {
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	private async startSync(sync: Synchronizer, options: any) {
+	private async startSync(sync: Synchronizer, options: any, contextKey: string) {
 		// Service will only be populated for the native Android app
 		const service = this.backgroundService_;
 		if (!service) return sync.start(options);
@@ -300,7 +300,8 @@ class Registry {
 			await service.start(async () => {
 				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
 				try {
-					await sync.start(options);
+					const newContext = await sync.start(options);
+					Setting.setValue(contextKey, JSON.stringify(newContext));
 				} finally {
 					// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
 					// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
