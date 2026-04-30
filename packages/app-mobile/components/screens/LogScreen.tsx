@@ -163,6 +163,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 
 	private async refreshLogEntries(showErrorsOnly: boolean = null) {
 		if (showErrorsOnly === null) showErrorsOnly = this.state.showErrorsOnly;
+		const prevShowErrorsOnly = this.state.showErrorsOnly;
 
 		const limit = 1000;
 		const logEntries = await this.getLogEntries(showErrorsOnly, limit);
@@ -171,7 +172,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 			logEntries: logEntries,
 			showErrorsOnly: showErrorsOnly,
 		}, () => {
-			if (this.state.filter !== undefined) {
+			if (this.state.filter !== undefined || prevShowErrorsOnly !== showErrorsOnly) {
 				this.logListRef_.current?.scrollToOffset({ offset: 0, animated: false });
 			}
 		});
