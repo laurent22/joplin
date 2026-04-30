@@ -40,6 +40,15 @@ interface Props {
 	masterPasswordDialogOpen: boolean;
 }
 
+interface EncryptionDialogOptions{
+	className: string;
+	title: string;
+	content: React.ReactNode;
+	onClose: ()=> void;
+	onDialogButtonRowClick: (event: { buttonName: string })=> void;
+	okButtonDisabled?: boolean;
+}
+
 export const EncryptionConfigScreen = (props: Props) => {
 	const { inputPasswords, onInputPasswordChange } = useInputPasswords(props.passwords);
 	const [pendingEnableEncryption, setPendingEnableEncryption] = useState(false);
@@ -290,6 +299,24 @@ export const EncryptionConfigScreen = (props: Props) => {
 		}
 	}, [props.dispatch, props.masterPassword, props.masterPasswordDialogOpen]);
 
+	const renderEncryptionDialog = (options: EncryptionDialogOptions) => {
+		return (
+			<Dialog onCancel={options.onClose} className={options.className}>
+				<div className='dialog-root'>
+					<DialogTitle title={options.title}/>
+					<div className='dialog-content'>
+						{options.content}
+					</div>
+					<DialogButtonRow
+						themeId={props.themeId}
+						onClick={options.onDialogButtonRowClick}
+						okButtonDisabled={options.okButtonDisabled ?? false}
+					/>
+				</div>
+			</Dialog>
+		);
+	};
+
 	const renderEnableEncryptionDialog = () => {
 		if (!enableEncryptionPromptVisible) return null;
 
@@ -320,31 +347,28 @@ export const EncryptionConfigScreen = (props: Props) => {
 			setEnableEncryptionPassword(event.target.value);
 		};
 
-		return (
-			<Dialog onCancel={onClose} className="enable-encryption-dialog">
-				<div className="dialog-root">
-					<DialogTitle title={_('Enable encryption')}/>
-					<div className="dialog-content">
-						<div style={{ marginBottom: 16 }}>
-							{messageComps}
-						</div>
-						<div style={{ marginBottom: 16 }}>
-							<label style={{ ...theme.textStyle, marginBottom: 5, display: 'block' }} htmlFor="enable-encryption-password">{_('Password:')}</label>
-							<PasswordInput
-								inputId="enable-encryption-password"
-								value={enableEncryptionPassword}
-								onChange={onPasswordInputChange}
-							/>
-						</div>
+		return renderEncryptionDialog({
+			className: 'enable-encryption-dialog',
+			title: _('Enable encryption'),
+			content: (
+				<>
+					<div style={{ marginBottom: 16 }}>
+						{messageComps}
 					</div>
-					<DialogButtonRow
-						themeId={props.themeId}
-						onClick={onDialogButtonRowClick}
-						okButtonDisabled={!enableEncryptionPassword}
-					/>
-				</div>
-			</Dialog>
-		);
+					<div style={{ marginBottom: 16 }}>
+						<label style={{ ...theme.textStyle, marginBottom: 5, display: 'block' }} htmlFor="enable-encryption-password">{_('Password:')}</label>
+						<PasswordInput
+							inputId="enable-encryption-password"
+							value={enableEncryptionPassword}
+							onChange={onPasswordInputChange}
+						/>
+					</div>
+				</>
+			),
+			onClose,
+			onDialogButtonRowClick,
+			okButtonDisabled: !enableEncryptionPassword,
+		});
 	};
 
 	const renderDisableEncryptionDialog = () => {
@@ -367,27 +391,19 @@ export const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
-		return (
-			<Dialog
-				onCancel={onClose}
-				className="disable-encryption-dialog"
-			>
-				<div className="dialog-root">
-					<DialogTitle title={_('Disable encryption')} />
-					<div className="dialog-content">
-						<div style={{ marginBottom: 16 }}>
-							<p style={theme.textStyle}>
-								{_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?')}
-							</p>
-						</div>
-					</div>
-					<DialogButtonRow
-						themeId={props.themeId}
-						onClick={onDialogButtonRowClick}
-					/>
+		return renderEncryptionDialog({
+			className: 'disable-encryption-dialog',
+			title: _('Disable encryption'),
+			content: (
+				<div style={{ marginBottom: 16 }}>
+					<p style={theme.textStyle}>
+						{_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?')}
+					</p>
 				</div>
-			</Dialog>
-		);
+			),
+			onClose,
+			onDialogButtonRowClick,
+		});
 	};
 
 	const renderEncryptionSection = () => {
