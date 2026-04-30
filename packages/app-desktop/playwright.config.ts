@@ -29,6 +29,12 @@ export default defineConfig({
 	// The CI machines can sometimes be very slow. Increase per-test timeout in CI.
 	timeout: process.env.CI ? 70_000 : 60_000, // milliseconds
 
+	// Raise the default assertion timeout on CI — imports and React state updates
+	// can take longer on slow Ubuntu runners than the built-in 5 s default.
+	expect: {
+		timeout: process.env.CI ? 15_000 : 5_000,
+	},
+
 	// Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions.
 	use: {
 		// Base URL to use in actions like `await page.goto('/')`.

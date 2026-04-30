@@ -19,6 +19,9 @@ import { _ } from '@joplin/lib/locale';
 import type { MenuItem as MenuItemType } from 'electron';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('useContextMenu');
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -157,13 +160,24 @@ export default function(editor: Editor, plugins: PluginStates, dispatch: Dispatc
 			}
 		};
 
-		targetWindow.webContents.prependListener('context-menu', onElectronContextMenu);
+		try {
+			targetWindow.webContents.prependListener('context-menu', onElectronContextMenu);
+		} catch (error) {
+			logger.error('Failed to register context menu', error);
+		}
 		editor.on('contextmenu', onBrowserContextMenu);
 
 		return () => {
 			editor.off('contextmenu', onBrowserContextMenu);
-			if (!targetWindow.isDestroyed() && targetWindow?.webContents?.off) {
-				targetWindow.webContents.off('context-menu', onElectronContextMenu);
+
+			try {
+				if (!targetWindow.isDestroyed() && targetWindow?.webContents?.off) {
+					targetWindow.webContents.off('context-menu', onElectronContextMenu);
+				}
+			} catch (error) {
+				// This can happen if the window closes after the isDestroyed check, but before webContents.off
+				// finishes running.
+				logger.error('Error removing context menu listener', error);
 			}
 		};
 	}, [editor, plugins, dispatch, htmlToMd, mdToHtml, editDialog, windowId]);

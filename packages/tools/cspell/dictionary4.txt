@@ -261,3 +261,7 @@ llamacpp
 bgcolor
 bordercolor
 togglefullscreen
+onestore
+macshot
+pdate
+coderabbitai

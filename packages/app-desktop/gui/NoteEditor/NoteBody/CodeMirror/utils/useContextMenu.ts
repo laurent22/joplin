@@ -16,6 +16,9 @@ import { menuItems } from '../../../utils/contextMenu';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('useContextMenu');
 
 export type ResourceMarkupType = 'image' | 'file';
 
@@ -355,11 +358,21 @@ const useContextMenu = (props: ContextMenuProps) => {
 
 		// Prepend the event listener so that it gets called before
 		// the listener that shows the default menu.
-		targetWindow.webContents.prependListener('context-menu', onContextMenu);
+		try {
+			targetWindow.webContents.prependListener('context-menu', onContextMenu);
+		} catch (error) {
+			logger.warn('Error registering menu', error);
+		}
 
 		return () => {
-			if (!targetWindow.isDestroyed()) {
-				targetWindow.webContents.off('context-menu', onContextMenu);
+			try {
+				if (!targetWindow.isDestroyed()) {
+					targetWindow.webContents.off('context-menu', onContextMenu);
+				}
+			} catch (error) {
+				// This can happen if the window closes after the isDestroyed check, but before webContents.off
+				// finishes running.
+				logger.warn('Error removing menu listener', error);
 			}
 		};
 	}, [

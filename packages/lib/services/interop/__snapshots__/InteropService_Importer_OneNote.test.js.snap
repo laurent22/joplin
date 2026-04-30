@@ -5,7 +5,6 @@ exports[`InteropService_Importer_OneNote should apply position data for embedded
 <html><head>
     <meta charset="UTF-8">
     <title>Embedded doc sheet</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -16,10 +15,10 @@ exports[`InteropService_Importer_OneNote should apply position data for embedded
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Embedded doc sheet</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Wednesday, December 11, 2019</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">5:35 PM</span></div>
-</div></div><p style="font-size: 11pt; line-height: 17px; margin-left: 2in; margin-top: 1.7in;"><a href=":/id-here">Dude this is a super cool embedded doc.docx</a></p><div class="container-outline" style="left: 192px; position: absolute; top: 259px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Embedded doc sheet</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Wednesday, December 11, 2019</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">5:35 PM</span></div>
+</div></div><p style="font-size: 11pt; line-height: 17px; margin-left: 2in; margin-top: 1.7in;"><a href=":/id-here">Dude this is a super cool embedded doc.docx</a></p><div class="container-outline" style="left: 192px; position: absolute; top: 259px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 </div>
 
 
@@ -105,7 +104,6 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 <html><head>
     <meta charset="UTF-8">
     <title>title</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -116,10 +114,10 @@ exports[`InteropService_Importer_OneNote should be able to create notes from cor
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">title</span></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">title</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Untitled</a></p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/6">Untitled_1</a></p></div>
-</div><div class="container-outline" style="left: 909px; position: absolute; top: 132px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 909px; position: absolute; top: 132px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
 </div>
 
 
@@ -138,17 +136,17 @@ jeudi 23 octobre 2025
 
 ## Todo HBA
 
--  [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
--  [ ] Transmettre aux dev Joplin (case non cochée)
-    -  [x] Exporter le carnet en \\*.onepkg (case cochée)
-    -  [ ] Exporter des page en \\*.one (case non cochée)
+- [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
+- [ ] Transmettre aux dev Joplin (case non cochée)
+    - [x] Exporter le carnet en \\*.onepkg (case cochée)
+    - [ ] Exporter des page en \\*.one (case non cochée)
 
 &nbsp;
 
 ## Todo Team appli
 
--  [ ] Rédiger compte-rendu réunion de service
--  [ ] Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS  
+- [ ] Rédiger compte-rendu réunion de service
+- [ ] Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS  
     la doc sur le partage : [\\\\\\\\mondomaine.local\\\\partage\\\\DSI\\\\Projets Techniques 2025\\\\Remplacement Office\\\\JOPLIN_Alternatives_OneNote\\\\formation](file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation)
     - [x] Documenter configuration synchro JBS saml pour un utilisateur (case cochée)"
 `;
@@ -264,7 +262,7 @@ Link to page: [Page 2](:/id-here)
 - [A test](:/id-here "A test")
 
 
-# Note: Untitled Page 1
+# Note: Untitled Page
 
  Untitled Page 
 
@@ -318,12 +316,11 @@ Integral identities (see https://en.wikipedia.org/wiki/Lists_of_integrals), belo
 &nbsp;"
 `;
 
-exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants 1`] = `
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants? 1`] = `
 "<!DOCTYPE HTML>
 <html><head>
     <meta charset="UTF-8">
     <title>A page can have any width it wants?</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -334,12 +331,12 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">A page can have any width it wants?</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">15:01</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: Calibri; font-size: 10.5pt;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget convallis velit. Nullam at luctus libero.</span><span style="font-family: Calibri; font-size: 10.5pt;"> Phasellus id pharetra odio. Duis luctus lorem ut tellus imperdiet, a aliquet elit pretium. Donec sit amet urna et mi gravida cursus et id felis. Ut quis congue velit, eget mollis tortor. Vestibulum porttitor lobortis justo, in imperdiet leo porta id. Sed ornare ex nisi, sed laoreet nulla suscipit a. Cras nec lectus porta, fermentum quam ac, sagittis ipsum. Ut massa lacus, ornare in hendrerit sit amet, tempor quis ligula. Nulla facilisi. Maecenas quam dolor, lacinia id magna nec, blandit tincidunt ipsum. Proin placerat dui gravida, lacinia tortor eu, rhoncus ex. Pellentesque accumsan nunc id venenatis condimentum. Aenean sodales tortor id risus varius, id tincidunt libero tincidunt. Curabitur quis interdum metus.</span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
-</div><div class="container-outline" style="left: 944px; position: absolute; top: 361px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">This is another paragraph by the right side</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A page can have any width it wants?</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">15:01</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget convallis velit. Nullam at luctus libero.</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;"> Phasellus id pharetra odio. Duis luctus lorem ut tellus imperdiet, a aliquet elit pretium. Donec sit amet urna et mi gravida cursus et id felis. Ut quis congue velit, eget mollis tortor. Vestibulum porttitor lobortis justo, in imperdiet leo porta id. Sed ornare ex nisi, sed laoreet nulla suscipit a. Cras nec lectus porta, fermentum quam ac, sagittis ipsum. Ut massa lacus, ornare in hendrerit sit amet, tempor quis ligula. Nulla facilisi. Maecenas quam dolor, lacinia id magna nec, blandit tincidunt ipsum. Proin placerat dui gravida, lacinia tortor eu, rhoncus ex. Pellentesque accumsan nunc id venenatis condimentum. Aenean sodales tortor id risus varius, id tincidunt libero tincidunt. Curabitur quis interdum metus.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 944px; position: absolute; top: 361px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">This is another paragraph by the right side</p></div>
 </div><img style="height: 165.64px; left: 135.42px; pointer-events: none; position: absolute; top: 221.29px; width: 1087.82px;" src=":/10">
 
 
@@ -352,7 +349,6 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html><head>
     <meta charset="UTF-8">
     <title>A page with a lot of svgs</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -363,10 +359,10 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">A page with a lot of svgs</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">10:40</span></div>
-</div></div><img style="height: 949.4px; left: 52.35px; pointer-events: none; position: absolute; top: 121.25px; width: 1162.86px;" src=":/11"><div class="container-outline" style="left: 62px; position: absolute; top: 119px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">This is a text paragraph that should apppear behind the drawings</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A page with a lot of svgs</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:40</span></div>
+</div></div><img style="height: 949.4px; left: 52.35px; pointer-events: none; position: absolute; top: 121.25px; width: 1162.86px;" src=":/11"><div class="container-outline" style="left: 62px; position: absolute; top: 119px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">This is a text paragraph that should apppear behind the drawings</p></div>
 </div>
 
 
@@ -379,7 +375,6 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html><head>
     <meta charset="UTF-8">
     <title>A page with text and drawing above it</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -390,16 +385,16 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">A page with text and drawing above it</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">02:48</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: Calibri; font-size: 10.5pt;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam </span><span style="font-family: Calibri; font-size: 10.5pt;">eget</span><span style="font-family: Calibri; font-size: 10.5pt;"> convallis velit. Nullam at luctus libero. </span><span style="font-family: Calibri; font-size: 10.5pt;">Phasellus</span><span style="font-family: Calibri; font-size: 10.5pt;"> id pharetra odio. Duis luctus lorem ut tellus imperdiet, a aliquet elit pretium. Donec sit amet urna et mi gravida cursus et id felis. Ut quis congue velit, eget mollis tortor. Vestibulum porttitor lobortis justo, in imperdiet leo porta id. Sed ornare ex nisi, sed laoreet nulla suscipit a. Cras nec lectus porta, fermentum quam ac, sagittis ipsum. Ut massa lacus, ornare in hendrerit sit amet, tempor quis ligula. Nulla facilisi. Maecenas quam dolor, lacinia id magna nec, blandit tincidunt ipsum. Proin placerat dui gravida, lacinia tortor eu, rhoncus ex. Pellentesque accumsan nunc id venenatis condimentum. Aenean sodales tortor id risus varius, id tincidunt libero tincidunt. Curabitur quis interdum metus.</span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Vestibulum sed sem nec nulla tincidunt maximus. Nam nulla sapien, vestibulum ac eros a, eleifend sollicitudin lectus. Praesent pellentesque pulvinar porttitor. Morbi rutrum, erat nec blandit commodo, nunc nulla venenatis massa, at viverra leo nisi eu nisl. Sed cursus quam a sem mattis suscipit. Duis gravida tellus ut nibh congue aliquam. Nulla velit orci, pretium sed hendrerit a, vulputate in lacus. Sed vitae ligula ex.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Nullam ut ullamcorper arcu, a porta lectus. Nulla suscipit lorem et nibh viverra eleifend. Pellentesque placerat fermentum ligula. Vivamus sit amet justo quis enim convallis condimentum. Ut non aliquet dui, vel vestibulum libero. In mauris ligula, pharetra eu maximus ut, ultrices ac justo. Donec varius condimentum augue eget tincidunt. Nunc eu egestas est.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Quisque scelerisque commodo maximus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed egestas et felis consectetur bibendum. Fusce interdum purus nec commodo porta. Praesent gravida efficitur rutrum. Phasellus semper erat urna, vitae hendrerit velit dictum et. Aenean eget dignissim tellus.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Proin ullamcorper quam quis justo maximus, eget elementum justo porttitor. Duis tellus leo, vestibulum vel felis sit amet, luctus vestibulum arcu. Nullam mauris quam, consequat eget varius nec, pellentesque quis ante. Fusce vitae sollicitudin orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ac rutrum ipsum. Nulla in sapien lorem. Etiam sit amet leo eros. Vestibulum lacinia ipsum lobortis lacus congue, a posuere urna sollicitudin. Donec fermentum, ipsum nec tempor dictum, mi sapien sodales mi, eget tempor diam diam ut erat. Integer euismod sit amet tortor ut sollicitudin. Etiam at elit massa. Vivamus faucibus ipsum eget neque semper, at maximus lectus posuere. Nam metus orci, ultricies et lorem at, iaculis placerat diam.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Vestibulum massa magna, pulvinar id tempus vitae, egestas at eros. Maecenas sollicitudin tincidunt est eget accumsan. Ut ut hendrerit lectus. Pellentesque efficitur lacus in nulla posuere convallis. Ut vulputate erat id odio tincidunt, rhoncus eleifend metus vulputate. Phasellus blandit sem diam, at auctor diam consectetur a. Aliquam sit amet fermentum massa, id ultrices ligula. Aenean tincidunt quam risus, vel aliquet massa tristique at. In lectus nulla, dapibus quis vulputate eu, luctus vel nunc. Duis sollicitudin consequat dui, nec placerat dolor euismod ut. Quisque posuere leo nec accumsan posuere. Vestibulum tristique gravida justo egestas vestibulum. Nunc placerat semper erat vel egestas. Mauris massa sapien, sodales vitae fringilla vel, volutpat dapibus velit.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A page with text and drawing above it</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">02:48</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam </span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">eget</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;"> convallis velit. Nullam at luctus libero. </span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">Phasellus</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;"> id pharetra odio. Duis luctus lorem ut tellus imperdiet, a aliquet elit pretium. Donec sit amet urna et mi gravida cursus et id felis. Ut quis congue velit, eget mollis tortor. Vestibulum porttitor lobortis justo, in imperdiet leo porta id. Sed ornare ex nisi, sed laoreet nulla suscipit a. Cras nec lectus porta, fermentum quam ac, sagittis ipsum. Ut massa lacus, ornare in hendrerit sit amet, tempor quis ligula. Nulla facilisi. Maecenas quam dolor, lacinia id magna nec, blandit tincidunt ipsum. Proin placerat dui gravida, lacinia tortor eu, rhoncus ex. Pellentesque accumsan nunc id venenatis condimentum. Aenean sodales tortor id risus varius, id tincidunt libero tincidunt. Curabitur quis interdum metus.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Vestibulum sed sem nec nulla tincidunt maximus. Nam nulla sapien, vestibulum ac eros a, eleifend sollicitudin lectus. Praesent pellentesque pulvinar porttitor. Morbi rutrum, erat nec blandit commodo, nunc nulla venenatis massa, at viverra leo nisi eu nisl. Sed cursus quam a sem mattis suscipit. Duis gravida tellus ut nibh congue aliquam. Nulla velit orci, pretium sed hendrerit a, vulputate in lacus. Sed vitae ligula ex.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Nullam ut ullamcorper arcu, a porta lectus. Nulla suscipit lorem et nibh viverra eleifend. Pellentesque placerat fermentum ligula. Vivamus sit amet justo quis enim convallis condimentum. Ut non aliquet dui, vel vestibulum libero. In mauris ligula, pharetra eu maximus ut, ultrices ac justo. Donec varius condimentum augue eget tincidunt. Nunc eu egestas est.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Quisque scelerisque commodo maximus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed egestas et felis consectetur bibendum. Fusce interdum purus nec commodo porta. Praesent gravida efficitur rutrum. Phasellus semper erat urna, vitae hendrerit velit dictum et. Aenean eget dignissim tellus.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Proin ullamcorper quam quis justo maximus, eget elementum justo porttitor. Duis tellus leo, vestibulum vel felis sit amet, luctus vestibulum arcu. Nullam mauris quam, consequat eget varius nec, pellentesque quis ante. Fusce vitae sollicitudin orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ac rutrum ipsum. Nulla in sapien lorem. Etiam sit amet leo eros. Vestibulum lacinia ipsum lobortis lacus congue, a posuere urna sollicitudin. Donec fermentum, ipsum nec tempor dictum, mi sapien sodales mi, eget tempor diam diam ut erat. Integer euismod sit amet tortor ut sollicitudin. Etiam at elit massa. Vivamus faucibus ipsum eget neque semper, at maximus lectus posuere. Nam metus orci, ultricies et lorem at, iaculis placerat diam.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Vestibulum massa magna, pulvinar id tempus vitae, egestas at eros. Maecenas sollicitudin tincidunt est eget accumsan. Ut ut hendrerit lectus. Pellentesque efficitur lacus in nulla posuere convallis. Ut vulputate erat id odio tincidunt, rhoncus eleifend metus vulputate. Phasellus blandit sem diam, at auctor diam consectetur a. Aliquam sit amet fermentum massa, id ultrices ligula. Aenean tincidunt quam risus, vel aliquet massa tristique at. In lectus nulla, dapibus quis vulputate eu, luctus vel nunc. Duis sollicitudin consequat dui, nec placerat dolor euismod ut. Quisque posuere leo nec accumsan posuere. Vestibulum tristique gravida justo egestas vestibulum. Nunc placerat semper erat vel egestas. Mauris massa sapien, sodales vitae fringilla vel, volutpat dapibus velit.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
 </div><img style="height: 782.93px; left: 32.35px; pointer-events: none; position: absolute; top: 98.34px; width: 724.56px;" src=":/12">
 
 
@@ -412,7 +407,6 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html><head>
     <meta charset="UTF-8">
     <title>A simple filename</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -423,10 +417,10 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">A simple filename</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Friday, April 19, 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">5:46 PM</span></div>
-</div></div><img style="height: 475.65px; left: 60.06px; pointer-events: none; position: absolute; top: 159.34px; width: 298.12px;" src=":/13"><div class="container-outline" style="left: 257px; position: absolute; top: 629px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A simple filename</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Friday, April 19, 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">5:46 PM</span></div>
+</div></div><img style="height: 475.65px; left: 60.06px; pointer-events: none; position: absolute; top: 159.34px; width: 298.12px;" src=":/13"><div class="container-outline" style="left: 257px; position: absolute; top: 629px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
 </div>
 
 
@@ -439,7 +433,6 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html><head>
     <meta charset="UTF-8">
     <title>Page with more than one font size</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -450,13 +443,13 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">Page with more than one font size</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">segunda-feira, 29 de abril de 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">10:27</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Suspendisse vitae odio nibh. Etiam fringilla mattis dapibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce vel ultricies ligula. Sed a nunc ante. Praesent suscipit fermentum magna. Aliquam convallis porttitor lacus ac posuere. Vestibulum maximus leo vel tortor condimentum, et tristique leo maximus. Nulla elementum, augue eu sollicitudin tempus, arcu ex lacinia enim, ut posuere lectus libero non eros. Vestibulum a libero leo. Donec id leo commodo, ornare ante ac, molestie tellus. Aenean a neque quis turpis euismod porta. Quisque vulputate augue vitae orci accumsan, a lobortis leo luctus. Nunc sodales sapien vitae lacus faucibus hendrerit. In ac lacinia diam.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: Calibri; font-size: 14pt;">Nam tempor urna eget posuere mollis. Aliquam erat volutpat. Sed ipsum massa, dictum eget sagittis id, fermentum a justo. Vivamus in iaculis libero. Pellentesque malesuada felis dictum turpis placerat, at ultrices justo viverra. Praesent nisi lectus, tincidunt ut tellus in, convallis euismod urna. Phasellus molestie porttitor odio vitae efficitur. Curabitur vulputate congue tincidunt. Fusce mattis orci at porttitor fermentum. Cras eu placerat odio. Fusce eu tortor sit amet massa pretium efficitur. Nam consequat, mauris at blandit placerat, est sapien feugiat felis, quis imperdiet sapien neque in justo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus vestibulum rhoncus dolor, ut ullamcorper purus scelerisque eu. Integer sem felis, pellentesque in rutrum id, porta a ante.</span><span style="font-family: Calibri; font-size: 18pt;">Vivamus finibus imperdiet massa, at interdum turpis rhoncus et. Phasellus leo nibh, mattis vel tortor at, gravida finibus felis. Donec bibendum enim euismod, dignissim ipsum eu, laoreet nisl. Ut auctor sollicitudin eros dictum gravida.</span><span style="font-family: Calibri; font-size: 14pt;"> Vestibulum pellentesque, ex quis vulputate efficitur, dolor metus efficitur nisl, id elementum mi nulla sit amet orci. Nam odio sem, bibendum at hendrerit finibus, vestibulum vitae dolor. In hac habitasse platea dictumst. Curabitur et ligula elit. Donec vulputate, diam non gravida efficitur, mi odio imperdiet ipsum, nec rhoncus mi nibh non magna.</span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Suspendisse varius enim vel odio congue sodales. Integer sit amet nisi sagittis, dapibus mi ut, tincidunt magna. Duis posuere est felis, et rhoncus magna volutpat a. Nullam tempor dignissim suscipit. Vestibulum cursus felis vitae libero pulvinar molestie. Donec at metus eget arcu blandit tincidunt. Donec purus felis, malesuada ac egestas eu, interdum sed erat. Praesent nec accumsan orci. Nunc bibendum rutrum erat, vel luctus odio. Pellentesque iaculis gravida arcu, eu consequat turpis congue sit amet. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis eget urna vel erat aliquet fringilla. Praesent vel luctus ligula, nec viverra nisl. Sed ac sem consectetur, sodales ante sodales, feugiat arcu.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;">It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him. </span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;">The hallway smelt of boiled cabbage and old rag mats. At one end of it a coloured poster, too large for indoor display, had been tacked to the wall. It depicted simply an enormous face, more than a metre wide: the face of a man of about forty-five, with a heavy black moustache and ruggedly handsome features. Winston made for the stairs. It was no use trying the lift. Even at the best of times it was seldom working, and at present the electric current was cut off during daylight hours. It was part of the economy drive in preparation for Hate Week. The flat was seven flights up, and Winston, who was thirty-nine and had a varicose ulcer above his right ankle, went slowly, resting several times on the way. On each landing, opposite the lift-shaft, the poster with the enormous face gazed from the wall. It was one of those pictures which are so contrived that the eyes follow you about when you move. BIG BROTHER IS WATCHING YOU, the caption beneath it ran. </span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;">Inside the flat a fruity voice was reading out a list of figures which had something to do with the production of pig-iron. The voice came from an oblong metal plaque like a dulled mirror which formed part of the surface of the right-hand wall. Winston turned a switch and the voice sank somewhat, though the words were still distinguishable. The instrument (the telescreen, it was called) could be dimmed, but there was no way of shutting it off completely. He moved over to the window: a smallish, frail figure, the meagreness of his body merely emphasized by the blue overalls which were the uniform of the party. His hair was very fair, his face naturally sanguine, his skin roughened by coarse soap and blunt razor blades and the cold of the winter that had just ended. </span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: Calibri; font-size: 10pt;"><br></span>Outside, even through the shut window-pane, the world looked cold. Down in the street little eddies of wind were whirling dust and torn paper into spirals, and though the sun was shining and the sky a harsh blue, there seemed to be no colour in anything, except the posters that were plastered everywhere. The blackmoustachio'd face gazed down from every commanding corner. There was one on the house-front immediately opposite. BIG BROTHER IS WATCHING YOU, the caption said, while the dark eyes looked deep into Winston's own. Down at streetlevel another poster, torn at one corner, flapped fitfully in the wind, alternately covering and uncovering the single word INGSOC. In the far distance a helicopter skimmed down between the roofs, hovered for an instant like a bluebottle, and darted away again with a curving flight. It was the police patrol, snooping into people's windows. The patrols did not matter, however. Only the Thought Police mattered. <br><br>Behind Winston's back the voice from the telescreen was still babbling away about pig-iron and the overfulfilment of the Ninth Three-Year Plan. The telescreen received and transmitted simultaneously. Any sound that Winston made, above the level of a very low whisper, would be picked up by it, moreover, so long as he remained within the field of vision which the metal plaque commanded, he could be seen as well as heard. There was of course no way of knowing whether you were being watched at any given moment. How often, or on what system, the Thought Police plugged in on any individual wire was guesswork. It was even conceivable that they watched everybody all the time. But at any rate they could plug in your wire whenever they wanted to. You had to live -- did live, from habit that became instinct -- in the assumption that every sound you made was overheard, and, except in darkness, every movement scrutinized. </p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Page with more than one font size</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">segunda-feira, 29 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:27</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Suspendisse vitae odio nibh. Etiam fringilla mattis dapibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce vel ultricies ligula. Sed a nunc ante. Praesent suscipit fermentum magna. Aliquam convallis porttitor lacus ac posuere. Vestibulum maximus leo vel tortor condimentum, et tristique leo maximus. Nulla elementum, augue eu sollicitudin tempus, arcu ex lacinia enim, ut posuere lectus libero non eros. Vestibulum a libero leo. Donec id leo commodo, ornare ante ac, molestie tellus. Aenean a neque quis turpis euismod porta. Quisque vulputate augue vitae orci accumsan, a lobortis leo luctus. Nunc sodales sapien vitae lacus faucibus hendrerit. In ac lacinia diam.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt;">Nam tempor urna eget posuere mollis. Aliquam erat volutpat. Sed ipsum massa, dictum eget sagittis id, fermentum a justo. Vivamus in iaculis libero. Pellentesque malesuada felis dictum turpis placerat, at ultrices justo viverra. Praesent nisi lectus, tincidunt ut tellus in, convallis euismod urna. Phasellus molestie porttitor odio vitae efficitur. Curabitur vulputate congue tincidunt. Fusce mattis orci at porttitor fermentum. Cras eu placerat odio. Fusce eu tortor sit amet massa pretium efficitur. Nam consequat, mauris at blandit placerat, est sapien feugiat felis, quis imperdiet sapien neque in justo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus vestibulum rhoncus dolor, ut ullamcorper purus scelerisque eu. Integer sem felis, pellentesque in rutrum id, porta a ante.</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 18pt;">Vivamus finibus imperdiet massa, at interdum turpis rhoncus et. Phasellus leo nibh, mattis vel tortor at, gravida finibus felis. Donec bibendum enim euismod, dignissim ipsum eu, laoreet nisl. Ut auctor sollicitudin eros dictum gravida.</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt;"> Vestibulum pellentesque, ex quis vulputate efficitur, dolor metus efficitur nisl, id elementum mi nulla sit amet orci. Nam odio sem, bibendum at hendrerit finibus, vestibulum vitae dolor. In hac habitasse platea dictumst. Curabitur et ligula elit. Donec vulputate, diam non gravida efficitur, mi odio imperdiet ipsum, nec rhoncus mi nibh non magna.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Suspendisse varius enim vel odio congue sodales. Integer sit amet nisi sagittis, dapibus mi ut, tincidunt magna. Duis posuere est felis, et rhoncus magna volutpat a. Nullam tempor dignissim suscipit. Vestibulum cursus felis vitae libero pulvinar molestie. Donec at metus eget arcu blandit tincidunt. Donec purus felis, malesuada ac egestas eu, interdum sed erat. Praesent nec accumsan orci. Nunc bibendum rutrum erat, vel luctus odio. Pellentesque iaculis gravida arcu, eu consequat turpis congue sit amet. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis eget urna vel erat aliquet fringilla. Praesent vel luctus ligula, nec viverra nisl. Sed ac sem consectetur, sodales ante sodales, feugiat arcu.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him. </span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">The hallway smelt of boiled cabbage and old rag mats. At one end of it a coloured poster, too large for indoor display, had been tacked to the wall. It depicted simply an enormous face, more than a metre wide: the face of a man of about forty-five, with a heavy black moustache and ruggedly handsome features. Winston made for the stairs. It was no use trying the lift. Even at the best of times it was seldom working, and at present the electric current was cut off during daylight hours. It was part of the economy drive in preparation for Hate Week. The flat was seven flights up, and Winston, who was thirty-nine and had a varicose ulcer above his right ankle, went slowly, resting several times on the way. On each landing, opposite the lift-shaft, the poster with the enormous face gazed from the wall. It was one of those pictures which are so contrived that the eyes follow you about when you move. BIG BROTHER IS WATCHING YOU, the caption beneath it ran. </span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Inside the flat a fruity voice was reading out a list of figures which had something to do with the production of pig-iron. The voice came from an oblong metal plaque like a dulled mirror which formed part of the surface of the right-hand wall. Winston turned a switch and the voice sank somewhat, though the words were still distinguishable. The instrument (the telescreen, it was called) could be dimmed, but there was no way of shutting it off completely. He moved over to the window: a smallish, frail figure, the meagreness of his body merely emphasized by the blue overalls which were the uniform of the party. His hair was very fair, his face naturally sanguine, his skin roughened by coarse soap and blunt razor blades and the cold of the winter that had just ended. </span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span>Outside, even through the shut window-pane, the world looked cold. Down in the street little eddies of wind were whirling dust and torn paper into spirals, and though the sun was shining and the sky a harsh blue, there seemed to be no colour in anything, except the posters that were plastered everywhere. The blackmoustachio'd face gazed down from every commanding corner. There was one on the house-front immediately opposite. BIG BROTHER IS WATCHING YOU, the caption said, while the dark eyes looked deep into Winston's own. Down at streetlevel another poster, torn at one corner, flapped fitfully in the wind, alternately covering and uncovering the single word INGSOC. In the far distance a helicopter skimmed down between the roofs, hovered for an instant like a bluebottle, and darted away again with a curving flight. It was the police patrol, snooping into people's windows. The patrols did not matter, however. Only the Thought Police mattered. <br><br>Behind Winston's back the voice from the telescreen was still babbling away about pig-iron and the overfulfilment of the Ninth Three-Year Plan. The telescreen received and transmitted simultaneously. Any sound that Winston made, above the level of a very low whisper, would be picked up by it, moreover, so long as he remained within the field of vision which the metal plaque commanded, he could be seen as well as heard. There was of course no way of knowing whether you were being watched at any given moment. How often, or on what system, the Thought Police plugged in on any individual wire was guesswork. It was even conceivable that they watched everybody all the time. But at any rate they could plug in your wire whenever they wanted to. You had to live -- did live, from habit that became instinct -- in the assumption that every sound you made was overheard, and, except in darkness, every movement scrutinized. </p></div>
 </div><img style="height: 1402.34px; left: 45.35px; pointer-events: none; position: absolute; top: 127.33px; width: 437.06px;" src=":/14">
 
 
@@ -552,7 +545,6 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 <html><head>
     <meta charset="UTF-8">
     <title>text</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -563,14 +555,14 @@ exports[`InteropService_Importer_OneNote should expect notes to be rendered the 
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">text</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">15:39</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri Light; font-size: 8pt; padding-bottom: 7px; padding-top: 7px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus egestas, enim vel tempor scelerisque, metus magna imperdiet purus, facilisis consequat mi augue eget risus. Vestibulum tincidunt lobortis turpis, id consectetur mauris consectetur et. Aliquam interdum ante ut lectus varius, ut mattis turpis tincidunt. Donec vitae sem sagittis, porta ex a, mattis tortor. Curabitur non velit suscipit, eleifend lectus quis, convallis velit. Nunc a blandit nisl. Cras rhoncus, enim a malesuada commodo, dolor dui pulvinar eros, non lobortis diam velit quis est. Donec pharetra, dolor a faucibus tincidunt, turpis dolor fermentum nibh, facilisis mollis neque urna a neque. Sed sit amet efficitur elit. Duis at elit non quam semper semper non quis mauris. Integer dignissim sodales urna, eu mattis urna viverra sit amet. In porta arcu id mauris hendrerit, in congue erat porta. In hac habitasse platea dictumst. Maecenas finibus sem pharetra blandit suscipit. Proin in nisl ac est pellentesque finibus. Cras ligula tellus, tempor eget leo in, vulputate interdum turpis.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; padding-bottom: 7px; padding-top: 7px;">Nam sit amet massa vehicula, elementum nisl feugiat, fermentum quam. Donec eros urna, ultrices vel fringilla suscipit, pretium non ligula. Sed sit amet pellentesque lorem, quis pharetra augue. Integer vitae sodales ex, luctus imperdiet arcu. Integer luctus urna eu urna ultricies ultricies. Aliquam sit amet maximus orci. Sed molestie vehicula vehicula. Morbi lacinia, dolor eu consectetur commodo, ipsum ante suscipit sem, eget facilisis nibh nisi venenatis magna. Donec ac risus ligula. In sit amet dapibus ante, sit amet pellentesque dolor. Nulla facilisi. Sed a nibh viverra, placerat purus at, rutrum justo. Fusce finibus consequat mattis. Sed felis tellus, consequat id nunc non, cursus tempus ligula. In hac habitasse platea dictumst. Praesent eget consectetur elit, ac mollis est.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri Light; font-size: 18pt; padding-bottom: 7px; padding-top: 7px;">Quisque facilisis justo diam, eget tincidunt augue lobortis non. Quisque rutrum diam sed diam feugiat, quis dictum ex bibendum. Nunc sagittis quam erat, sed pharetra nunc consequat a. Etiam in sollicitudin nunc. Aliquam non dolor laoreet ex egestas efficitur vel ut ligula. Duis mollis ornare laoreet. Nullam vitae velit feugiat leo bibendum faucibus. Morbi nisl nisl, sodales nec sodales vel, consequat in mi. Pellentesque bibendum erat iaculis dui volutpat ornare. Etiam ultricies tincidunt ipsum a congue. In at lacinia massa. Ut auctor id elit et pellentesque.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 24pt; padding-bottom: 7px; padding-top: 7px;">Donec ac condimentum dui, tincidunt rhoncus augue. Maecenas aliquam non nisl ac fringilla. Aliquam pulvinar enim sit amet accumsan tristique. Cras sapien ipsum, ultricies eu dui eget, efficitur ornare elit. Curabitur hendrerit mauris dolor, gravida elementum enim convallis quis. Vivamus varius luctus massa, in egestas mi egestas id. Nullam elementum scelerisque nisi sit amet pellentesque. In varius mollis risus, vel laoreet tortor. Pellentesque et blandit velit, nec auctor nunc. Aliquam quis purus vel ligula auctor rhoncus. Duis sed tempus metus. Praesent ac libero sed leo posuere feugiat id vel felis. Aenean commodo dapibus hendrerit. Sed eleifend, tortor sed placerat auctor, dolor dolor efficitur dolor, ut rhoncus eros libero sed ante. Mauris quis blandit sem. Nullam porta urna eros, at viverra sem iaculis in.</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">text</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">15:39</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 8pt; padding-bottom: 7px; padding-top: 7px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus egestas, enim vel tempor scelerisque, metus magna imperdiet purus, facilisis consequat mi augue eget risus. Vestibulum tincidunt lobortis turpis, id consectetur mauris consectetur et. Aliquam interdum ante ut lectus varius, ut mattis turpis tincidunt. Donec vitae sem sagittis, porta ex a, mattis tortor. Curabitur non velit suscipit, eleifend lectus quis, convallis velit. Nunc a blandit nisl. Cras rhoncus, enim a malesuada commodo, dolor dui pulvinar eros, non lobortis diam velit quis est. Donec pharetra, dolor a faucibus tincidunt, turpis dolor fermentum nibh, facilisis mollis neque urna a neque. Sed sit amet efficitur elit. Duis at elit non quam semper semper non quis mauris. Integer dignissim sodales urna, eu mattis urna viverra sit amet. In porta arcu id mauris hendrerit, in congue erat porta. In hac habitasse platea dictumst. Maecenas finibus sem pharetra blandit suscipit. Proin in nisl ac est pellentesque finibus. Cras ligula tellus, tempor eget leo in, vulputate interdum turpis.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 12pt; padding-bottom: 7px; padding-top: 7px;">Nam sit amet massa vehicula, elementum nisl feugiat, fermentum quam. Donec eros urna, ultrices vel fringilla suscipit, pretium non ligula. Sed sit amet pellentesque lorem, quis pharetra augue. Integer vitae sodales ex, luctus imperdiet arcu. Integer luctus urna eu urna ultricies ultricies. Aliquam sit amet maximus orci. Sed molestie vehicula vehicula. Morbi lacinia, dolor eu consectetur commodo, ipsum ante suscipit sem, eget facilisis nibh nisi venenatis magna. Donec ac risus ligula. In sit amet dapibus ante, sit amet pellentesque dolor. Nulla facilisi. Sed a nibh viverra, placerat purus at, rutrum justo. Fusce finibus consequat mattis. Sed felis tellus, consequat id nunc non, cursus tempus ligula. In hac habitasse platea dictumst. Praesent eget consectetur elit, ac mollis est.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 18pt; padding-bottom: 7px; padding-top: 7px;">Quisque facilisis justo diam, eget tincidunt augue lobortis non. Quisque rutrum diam sed diam feugiat, quis dictum ex bibendum. Nunc sagittis quam erat, sed pharetra nunc consequat a. Etiam in sollicitudin nunc. Aliquam non dolor laoreet ex egestas efficitur vel ut ligula. Duis mollis ornare laoreet. Nullam vitae velit feugiat leo bibendum faucibus. Morbi nisl nisl, sodales nec sodales vel, consequat in mi. Pellentesque bibendum erat iaculis dui volutpat ornare. Etiam ultricies tincidunt ipsum a congue. In at lacinia massa. Ut auctor id elit et pellentesque.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 24pt; padding-bottom: 7px; padding-top: 7px;">Donec ac condimentum dui, tincidunt rhoncus augue. Maecenas aliquam non nisl ac fringilla. Aliquam pulvinar enim sit amet accumsan tristique. Cras sapien ipsum, ultricies eu dui eget, efficitur ornare elit. Curabitur hendrerit mauris dolor, gravida elementum enim convallis quis. Vivamus varius luctus massa, in egestas mi egestas id. Nullam elementum scelerisque nisi sit amet pellentesque. In varius mollis risus, vel laoreet tortor. Pellentesque et blandit velit, nec auctor nunc. Aliquam quis purus vel ligula auctor rhoncus. Duis sed tempus metus. Praesent ac libero sed leo posuere feugiat id vel felis. Aenean commodo dapibus hendrerit. Sed eleifend, tortor sed placerat auctor, dolor dolor efficitur dolor, ut rhoncus eros libero sed ante. Mauris quis blandit sem. Nullam porta urna eros, at viverra sem iaculis in.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
 </div><img style="height: 949.63px; left: 44.07px; pointer-events: none; position: absolute; top: 224.58px; width: 237.09px;" src=":/15">
 
 
@@ -864,7 +856,6 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
 <html><head>
     <meta charset="UTF-8">
     <title>Action research - Wikipedia</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -879,20 +870,20 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">Action research - Wikipedia</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Monday, May 27, 2019</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">12:13 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Clipped from: </span><a href="https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development" style="font-family: Verdana; font-size: 12pt;">https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development</a></p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Action research - Wikipedia</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Monday, May 27, 2019</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">12:13 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Clipped from: </span><a href="https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development" style="font-family: Verdana; font-size: 12pt;">https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development</a></p></div>
 <div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: -48px; max-width: -48px;"></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">569 revisions since </span><a href="https://en.wikipedia.org/wiki/Special%3APermaLink%2F2264241" style="font-family: Verdana; font-size: 12pt;">2003-05-19</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="https://en.wikipedia.org/wiki/Special%3ADiff%2F898227450" style="font-family: Verdana; font-size: 12pt;">+5 days</a><span style="font-family: Verdana; font-size: 12pt;">), 328 editors, 90 watchers, </span><a href="https://tools.wmflabs.org/pageviews?project=en.wikipedia.org&amp;pages=Action%20research&amp;range=latest-30" style="font-family: Verdana; font-size: 12pt;">18,937 pageviews</a><span style="font-family: Verdana; font-size: 12pt;"> (30 days), created by: </span><a href="https://en.wikipedia.org/wiki/User:Thseamon" style="font-family: Verdana; font-size: 12pt;">Thseamon</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="http://xtools.wmflabs.org/ec/en.wikipedia.org/Thseamon" style="font-family: Verdana; font-size: 12pt;">762</a><span style="font-family: Verdana; font-size: 12pt;">) · </span><a href="http://xtools.wmflabs.org/articleinfo/en.wikipedia.org/Action%20research" style="font-family: Verdana; font-size: 12pt;">See full page statistics</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><a href="https://en.wikipedia.org/wiki/Action_research#mw-head" style="font-family: Verdana; font-size: 12pt;">Jump to navigation</a><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://en.wikipedia.org/wiki/Action_research#p-search" style="font-family: Verdana; font-size: 12pt;">Jump to search</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">For the British charity formerly named Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Medical_Research" style="font-family: Verdana; font-size: 12pt;">Action Medical Research</a><span style="font-family: Verdana; font-size: 12pt;">. For the academic journal titled Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Research_(journal)" style="font-family: Verdana; font-size: 12pt;">Action Research (journal)</a><span style="font-family: Verdana; font-size: 12pt;">.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">569 revisions since </span><a href="https://en.wikipedia.org/wiki/Special%3APermaLink%2F2264241" style="font-family: Verdana; font-size: 12pt;">2003-05-19</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="https://en.wikipedia.org/wiki/Special%3ADiff%2F898227450" style="font-family: Verdana; font-size: 12pt;">+5 days</a><span style="font-family: Verdana; font-size: 12pt;">), 328 editors, 90 watchers, </span><a href="https://tools.wmflabs.org/pageviews?project=en.wikipedia.org&amp;pages=Action%20research&amp;range=latest-30" style="font-family: Verdana; font-size: 12pt;">18,937 pageviews</a><span style="font-family: Verdana; font-size: 12pt;"> (30 days), created by: </span><a href="https://en.wikipedia.org/wiki/User:Thseamon" style="font-family: Verdana; font-size: 12pt;">Thseamon</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="http://xtools.wmflabs.org/ec/en.wikipedia.org/Thseamon" style="font-family: Verdana; font-size: 12pt;">762</a><span style="font-family: Verdana; font-size: 12pt;">) · </span><a href="http://xtools.wmflabs.org/articleinfo/en.wikipedia.org/Action%20research" style="font-family: Verdana; font-size: 12pt;">See full page statistics</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><a href="https://en.wikipedia.org/wiki/Action_research#mw-head" style="font-family: Verdana; font-size: 12pt;">Jump to navigation</a><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://en.wikipedia.org/wiki/Action_research#p-search" style="font-family: Verdana; font-size: 12pt;">Jump to search</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">For the British charity formerly named Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Medical_Research" style="font-family: Verdana; font-size: 12pt;">Action Medical Research</a><span style="font-family: Verdana; font-size: 12pt;">. For the academic journal titled Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Research_(journal)" style="font-family: Verdana; font-size: 12pt;">Action Research (journal)</a><span style="font-family: Verdana; font-size: 12pt;">.</span></p></div>
 <div class="outline-element" style="margin-left: 0px;"><table cellpadding="0" cellspacing="0" style="border-collapse: collapse;"><tbody><tr><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><img src=":/6" style="max-height: 39px; max-width: 50px;"></div>
-</td><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt;">This article </span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">needs additional citations for </span><a href="https://en.wikipedia.org/wiki/Wikipedia:Verifiability" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">verification</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Please help </span><a href="https://en.wikipedia.org/w/index.php?title=Action_research&amp;action=edit" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">improve this article</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;"> by </span><a href="https://en.wikipedia.org/wiki/Help:Introduction_to_referencing_with_Wiki_Markup/1" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">adding citations to reliable sources</a><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Unsourced material may be challenged and removed.</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;"><br></span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Find sources:</span><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><a href="https://www.google.com/search?as_eq=wikipedia&amp;q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">"Action research"</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;–&nbsp;</span><a href="https://www.google.com/search?tbm=nws&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">news</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?&amp;q=%22Action+research%22+site:news.google.com/newspapers&amp;source=newspapers" style="font-family: Verdana; font-size: 12pt;">newspapers</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?tbs=bks:1&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">books</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://scholar.google.com/scholar?q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">scholar</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</span><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.jstor.org/action/doBasicSearch?Query=%22Action+research%22&amp;acc=on&amp;wc=on" style="font-family: Verdana; font-size: 12pt;">JSTOR</a><span style="font-family: Verdana; font-size: 12pt;"> </span><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">(May 2019)</span><span style="font-family: Verdana; font-size: 12pt; font-style: italic;"> (</span><a href="https://en.wikipedia.org/wiki/Help:Maintenance_template_removal" style="font-family: Verdana; font-size: 12pt; font-style: italic;">Learn how and when to remove this template message</a><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">)</span></p></div>
+</td><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt;">This article </span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">needs additional citations for </strong><a href="https://en.wikipedia.org/wiki/Wikipedia:Verifiability" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">verification</a><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Please help </strong><a href="https://en.wikipedia.org/w/index.php?title=Action_research&amp;action=edit" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">improve this article</a><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;"> by </strong><a href="https://en.wikipedia.org/wiki/Help:Introduction_to_referencing_with_Wiki_Markup/1" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">adding citations to reliable sources</a><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Unsourced material may be challenged and removed.</strong><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;"><br></strong><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Find sources:</strong><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><a href="https://www.google.com/search?as_eq=wikipedia&amp;q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">"Action research"</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;–&nbsp;</span><a href="https://www.google.com/search?tbm=nws&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">news</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?&amp;q=%22Action+research%22+site:news.google.com/newspapers&amp;source=newspapers" style="font-family: Verdana; font-size: 12pt;">newspapers</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?tbs=bks:1&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">books</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://scholar.google.com/scholar?q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">scholar</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.jstor.org/action/doBasicSearch?Query=%22Action+research%22&amp;acc=on&amp;wc=on" style="font-family: Verdana; font-size: 12pt;">JSTOR</a><span style="font-family: Verdana; font-size: 12pt;"> </span><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">(May 2019)</em><em style="font-family: Verdana; font-size: 12pt; font-style: italic;"> (</em><a href="https://en.wikipedia.org/wiki/Help:Maintenance_template_removal" style="font-family: Verdana; font-size: 12pt; font-style: italic;">Learn how and when to remove this template message</a><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">)</em></p></div>
 </td></tr></tbody></table></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Action research</span><span style="font-family: Verdana; font-size: 12pt;"> seeks transformative change through the simultaneous process of taking action and doing research, which are linked together by critical reflection.</span><a href="https://en.wikipedia.org/wiki/Kurt_Lewin" style="font-family: Verdana; font-size: 12pt;">Kurt Lewin</a><span style="font-family: Verdana; font-size: 12pt;">, then a professor at </span><a href="https://en.wikipedia.org/wiki/MIT" style="font-family: Verdana; font-size: 12pt;">MIT</a><span style="font-family: Verdana; font-size: 12pt;">, first coined the term "action research" in 1944. In his 1946 paper "Action Research and Minority Problems" he described action research as "a comparative research on the conditions and effects of various forms of social action and research leading to social action" that uses "a spiral of steps, each of which is composed of a circle of planning, action and fact-finding about the result of the action". </span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research practitioners reflect upon the consequences of their own questions, beliefs, assumptions, and practices with the goal of understanding, developing, and improving social practices.</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-1" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[1]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> This action is designed to create three levels of change</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-2" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[2]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> (1) self-change as the only subject of action research is the person who conducting the research. This person is seeking to be better understand the effects of their action in social settings and to engage in a process of living his or her's values. The second level is a collective process of understanding change in a classroom, office, community, organization or institution. Action research enlists others and works to create a democratic sharing of voice to achieve deeper understanding of collective actions</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-3" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[3]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. Finally action research is process of sharing finding with the community of researchers. This can be done is many ways, in journals</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-4" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[4]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">, on websites, in books, videos or at conferences. The Social Publishers Foundation</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-5" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[5]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> provides support for this action research process. </span></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research involves actively participating in a change situation, often via an existing organization, whilst simultaneously conducting research. Action research can also be undertaken by larger organizations or institutions, assisted or guided by professional researchers, with the aim of improving their strategies, practices and knowledge of the environments within which they practice. As designers and stakeholders, researchers work with others to propose a new course of action to help their community improve its work practices. Depending upon the nature of the people involved in the action research as well as the person(s) organizing it, there are different ways of describing action research</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-6" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[6]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. </span></p></div><ul class="list-0" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Collaborative Action Research</span></li>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Action research</strong><span style="font-family: Verdana; font-size: 12pt;"> seeks transformative change through the simultaneous process of taking action and doing research, which are linked together by critical reflection.</span><a href="https://en.wikipedia.org/wiki/Kurt_Lewin" style="font-family: Verdana; font-size: 12pt;">Kurt Lewin</a><span style="font-family: Verdana; font-size: 12pt;">, then a professor at </span><a href="https://en.wikipedia.org/wiki/MIT" style="font-family: Verdana; font-size: 12pt;">MIT</a><span style="font-family: Verdana; font-size: 12pt;">, first coined the term "action research" in 1944. In his 1946 paper "Action Research and Minority Problems" he described action research as "a comparative research on the conditions and effects of various forms of social action and research leading to social action" that uses "a spiral of steps, each of which is composed of a circle of planning, action and fact-finding about the result of the action". </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research practitioners reflect upon the consequences of their own questions, beliefs, assumptions, and practices with the goal of understanding, developing, and improving social practices.</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-1" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[1]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> This action is designed to create three levels of change</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-2" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[2]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> (1) self-change as the only subject of action research is the person who conducting the research. This person is seeking to be better understand the effects of their action in social settings and to engage in a process of living his or her's values. The second level is a collective process of understanding change in a classroom, office, community, organization or institution. Action research enlists others and works to create a democratic sharing of voice to achieve deeper understanding of collective actions</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-3" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[3]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. Finally action research is process of sharing finding with the community of researchers. This can be done is many ways, in journals</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-4" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[4]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">, on websites, in books, videos or at conferences. The Social Publishers Foundation</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-5" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[5]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> provides support for this action research process. </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research involves actively participating in a change situation, often via an existing organization, whilst simultaneously conducting research. Action research can also be undertaken by larger organizations or institutions, assisted or guided by professional researchers, with the aim of improving their strategies, practices and knowledge of the environments within which they practice. As designers and stakeholders, researchers work with others to propose a new course of action to help their community improve its work practices. Depending upon the nature of the people involved in the action research as well as the person(s) organizing it, there are different ways of describing action research</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-6" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[6]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. </span></p></div><ul class="list-0" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Collaborative Action Research</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Participatory Action Research</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Community-Based Action Research</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Youth Action Research</span></li>
@@ -902,15 +893,15 @@ exports[`InteropService_Importer_OneNote should ignore broken characters at the 
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Action Science</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Living Theory Action Research</span></li>
 </ul>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">There are also a set of approaches that share some properties with action research but have some different practices</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-7" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[7]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. These include: </span></p></div><ul class="list-1" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Appreciative Inquiry is a way of starting with what is working well and then using action research to improve it.</span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Lesson Study</span><span style="font-family: Verdana; font-size: 12pt;"> places the teaching of a shared lesson as the action and has a set of protocols for understanding the outcomes.</span></span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Practitioner Research</span><span style="font-family: Verdana; font-size: 12pt;"> does not have to be action research, as practitioners can engage in any form of the many forms of research.</span></span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Reflective Practice/Self Study</span><span style="font-family: Verdana; font-size: 12pt;"> is the first part of action research but does not require the practitioner to make the results public, to share the results of the learning with others.&nbsp; Many of these approaches will be described in these resources.</span></span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt; font-style: italic;">Teacher Research</span><span style="font-family: Verdana; font-size: 12pt;"> can be any form of research that teachers do, including action research, but not limited to it. At George Mason University, teacher research is described in a way that is very similar to what most authors understand as action research. And at some point, they suggest that action research can be a synonym of teacher research.&nbsp; The description of action research posted on this site is more closely aligned to what we have called reflective practice.&nbsp; &nbsp;This shows the variation in the way that people working in the field have of conceptualizing these terms.</span></span></li>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">There are also a set of approaches that share some properties with action research but have some different practices</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-7" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[7]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. These include: </span></p></div><ul class="list-1" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Appreciative Inquiry is a way of starting with what is working well and then using action research to improve it.</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Lesson Study</em><span style="font-family: Verdana; font-size: 12pt;"> places the teaching of a shared lesson as the action and has a set of protocols for understanding the outcomes.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Practitioner Research</em><span style="font-family: Verdana; font-size: 12pt;"> does not have to be action research, as practitioners can engage in any form of the many forms of research.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Reflective Practice/Self Study</em><span style="font-family: Verdana; font-size: 12pt;"> is the first part of action research but does not require the practitioner to make the results public, to share the results of the learning with others.&nbsp; Many of these approaches will be described in these resources.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Teacher Research</em><span style="font-family: Verdana; font-size: 12pt;"> can be any form of research that teachers do, including action research, but not limited to it. At George Mason University, teacher research is described in a way that is very similar to what most authors understand as action research. And at some point, they suggest that action research can be a synonym of teacher research.&nbsp; The description of action research posted on this site is more closely aligned to what we have called reflective practice.&nbsp; &nbsp;This shows the variation in the way that people working in the field have of conceptualizing these terms.</span></span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Action Inquiry draws on action research and recasts evaluation research to help navigate complexity when enacting collective leadership. Find out more about by reading this document from Scotland.</span></li>
 <li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Improvement Science is explicitly designed to accelerate learning-by-doing. It's a more user-centered and problem-centered approached to improving teaching and learning that is highly similar to action research supported by the Carnegie Foundation for the Advancement of Teaching.</span></li>
 </ul>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><br></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><br></p></div>
 </div>
 
 
@@ -923,7 +914,6 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
 <html><head>
     <meta charset="UTF-8">
     <title>Page title</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -934,11 +924,182 @@ exports[`InteropService_Importer_OneNote should import a simple OneNote notebook
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">Page title</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Friday, May 3, 2024</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">6:30 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">Page content</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Page title</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Friday, May 3, 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">6:30 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">Page content</p></div>
 </div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should import bold and italic in a way that can be converted to Markdown 1`] = `
+"# Note: Bold & italic
+
+ Bold & italic 
+
+Bold & italic
+
+Thursday, April 23, 2026
+
+9:58 AM
+
+**Bold** and *italic* and **bold italic**."
+`;
+
+exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
+"# Note: Checklists
+
+ Checklists 
+
+Checklists
+
+Wednesday, April 22, 2026
+
+1:45 PM
+
+## Tagged list
+
+This note includes a **tagged list**:
+
+&nbsp;
+
+- ❗Exclamation point
+- ❓Question mark
+- [ ] Checkbox with exclamation point
+- [x] Checkbox (complete)
+    - [ ] Sub-checkbox (incomplete)
+    - [x] [x] Sub-checkbox, with arrow (complete)
+- ⭐Star
+    - 🗨️Sub-item
+- 🖊️Pen
+- 💡Lightbulb
+- 🔒Padlock
+- 📨Paper airplane
+- 📖Book
+- 🎵Music note
+- 🟥Red
+- [x] Checkmark
+- 🏠House
+- 📞Phone
+- 🔗Link
+- 🎞️Film
+- 👥Large text
+
+- 💡💡More large text"
+`;
+
+exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Checklists</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    .icon-0 > .text { color: #ffd678; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #ffd678; }
+    .icon-6 > .text { color: #4673b7; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Checklists</span></div>
+</div><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Wednesday, April 22, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">1:45 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt;">Tagged list</h2></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">This note includes a <strong style="font-weight: bold;">tagged list</strong>:</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❗</span></span>Exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❓</span></span>Question mark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><span class="text">☐<span class="icon-secondary"><span class="content">!</span></span></span></span>Checkbox with exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Checkbox (complete)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Sub-checkbox (incomplete)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span>Sub-checkbox, with arrow (complete)</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal"><span class="text">⭐</span></span>Star</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🗨️</span></span>Sub-item</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🖊️</span></span>Pen</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">💡</span></span>Lightbulb</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔒</span></span>Padlock</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📨</span></span>Paper airplane</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📖</span></span>Book</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎵</span></span>Music note</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🟥</span></span>Red</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><span class="text">✓</span></span>Checkmark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🏠</span></span>House</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📞</span></span>Phone</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔗</span></span>Link</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎞️</span></span>Film</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 16pt;"><span class="note-tag-icon -normal"><span class="text">👥</span></span>Large text</span></li>
+</ul></div><div class="container-outline" style="left: 72px; position: absolute; top: 595px; width: 624px;"><ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="color: rgb(30,78,121); font-family: &quot;Calibri&quot;, sans-serif; font-size: 16pt; line-height: 25px;"><span class="note-tag-icon -normal"><span class="text">💡</span></span><span class="note-tag-icon -normal"><span class="text">💡</span></span>More large text</span></li>
+</ul></div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should import nested ink 1`] = `
+[
+  "<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Ink Missing - only one example missing part</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 753px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Ink Missing - only one example missing part</span></div>
+</div><div class="container-outline" style="width: 753px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Mittwoch, 1. April 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">04:25</span></div>
+</div></div><div class="container-outline" style="left: 277px; position: absolute; top: 485px; width: 474px;"><div class="outline-element" style="margin-left: 0px;"><p><span style="height: 77.37px; width: 108.4px;" class="ink-text"><img style="height: 54px; left: 22.9px; pointer-events: none; position: absolute; top: -2.61px; width: 90px;" src=":/id-here"></span><span class="ink-space" style="padding-left: 25px; padding-top: 77px;"></span><span style="height: 77.37px; width: 276.32px;" class="ink-text"><img style="height: 86px; left: -2.61px; pointer-events: none; position: absolute; top: 5.78px; width: 283px;" src=":/id-here"></span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p><span style="height: 66.41px; width: 183.38px;" class="ink-text"><img style="height: 70px; left: -2.61px; pointer-events: none; position: absolute; top: -10.05px; width: 190px;" src=":/id-here"></span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p><span style="height: 71.28px; width: 373.91px;" class="ink-text"><img style="height: 68px; left: 34.28px; pointer-events: none; position: absolute; top: 7.56px; width: 344px;" src=":/id-here"></span></p></div>
+</div><div class="container-outline" style="left: 262px; position: absolute; top: 130px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 285px; position: absolute; top: 243px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 560px; position: absolute; top: 195px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>",
+]
+`;
+
+exports[`InteropService_Importer_OneNote should import vertically-scaled ink 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Scaled</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Scaled</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Wednesday, April 15, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">12:36 AM</span></div>
+</div></div><img style="height: 492.21px; left: 128.13px; pointer-events: none; position: absolute; top: 144.3px; width: 187.42px;" src=":/id-here">
 
 
 
@@ -1024,12 +1185,11 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Qui
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tips from a Pro Using Trees for Dramatic Landscape Photography 1`] = `
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tips from a Pro: Using Trees for Dramatic Landscape Photography 1`] = `
 "<!DOCTYPE HTML>
 <html><head>
     <meta charset="UTF-8">
     <title>Tips from a Pro: Using Trees for Dramatic Landscape Photography</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1040,10 +1200,10 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tip
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
-</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Saturday, February 11, 2023</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">12:56 AM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 14pt; line-height: 22px;"><a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&amp;section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&amp;page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&amp;end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Saturday, February 11, 2023</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">12:56 AM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;"><a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&amp;section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&amp;page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&amp;end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></p></div>
 </div>
 
 
@@ -1056,7 +1216,6 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
 <html><head>
     <meta charset="UTF-8">
     <title>wikipedia link</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1067,10 +1226,10 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">&nbsp;</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">Sunday, January 05, 2025</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">10:15 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href="https://zh.wikipedia.org/zh-hans/%E9%A3%8E%E6%99%AF" style="">wikipedia link</a></p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">&nbsp;</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Sunday, January 05, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:15 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><a href="https://zh.wikipedia.org/zh-hans/%E9%A3%8E%E6%99%AF" style="">wikipedia link</a></p></div>
 </div>
 
 
@@ -1078,12 +1237,11 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: wik
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景  (Web view) 1`] = `
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 (Web view) 1`] = `
 "<!DOCTYPE HTML>
 <html><head>
     <meta charset="UTF-8">
     <title>风景  (Web view)</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1094,10 +1252,10 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">&nbsp;</span></div>
-</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Sunday, January 5, 2025</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">10:13 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;"><a href=":/6" style="font-family: Calibri; font-size: 11pt;">风景</a><span style="font-family: Calibri; font-size: 11pt;">  (</span><a href="https://onedrive.live.com/edit.aspx?resid=193EE54E3252492D!s9b62db4219f740709f444bc0129de4e9&amp;migratedtospo=true&amp;wd=target%28Quick%20Notes.one%7C75256889-9e75-4ec2-82ed-fc799557e1b9%2F%E9%A3%8E%E6%99%AF%7Cd099b6f3-7f5a-4c08-aed7-e8d42c59523f%2F%29&amp;wdorigin=703&amp;wdpreservelink=1" style="font-family: Calibri; font-size: 11pt;">Web view</a><span style="font-family: Calibri; font-size: 11pt;">)</span></p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Sunday, January 5, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:13 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><a href=":/6" style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">风景</a><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">  (</span><a href="https://onedrive.live.com/edit.aspx?resid=193EE54E3252492D!s9b62db4219f740709f444bc0129de4e9&amp;migratedtospo=true&amp;wd=target%28Quick%20Notes.one%7C75256889-9e75-4ec2-82ed-fc799557e1b9%2F%E9%A3%8E%E6%99%AF%7Cd099b6f3-7f5a-4c08-aed7-e8d42c59523f%2F%29&amp;wdorigin=703&amp;wdpreservelink=1" style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">Web view</a><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">)</span></p></div>
 </div>
 
 
@@ -1110,7 +1268,6 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 <html><head>
     <meta charset="UTF-8">
     <title>风景</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1121,9 +1278,9 @@ exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">风景</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">Sunday, January 05, 2025</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: Calibri; font-size: 10pt;">10:14 PM</span></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">风景</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Sunday, January 05, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:14 PM</span></div>
 </div></div>
 
 
@@ -1136,7 +1293,6 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
 <html><head>
     <meta charset="UTF-8">
     <title>My title</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1147,15 +1303,15 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt;">My title</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">Friday, March 7, 2025</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt;">11:16 AM</span></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">My title</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Friday, March 7, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">11:16 AM</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Audio Recording.wav</a></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
-</div><div class="container-outline" style="left: 245px; position: absolute; top: 166px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
-</div><div class="container-outline" style="left: 61px; position: absolute; top: 304px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">Some text here</p></div>
-</div><div class="container-outline" style="left: 240px; position: absolute; top: 373px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 245px; position: absolute; top: 166px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 61px; position: absolute; top: 304px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">Some text here</p></div>
+</div><div class="container-outline" style="left: 240px; position: absolute; top: 373px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
 </div>
 
 
@@ -1236,12 +1392,11 @@ exports[`InteropService_Importer_OneNote should render audio as links to resourc
 </body></html>"
 `;
 
-exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Is Mexico safe for shooting Street Photography 1`] = `
+exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Is Mexico safe for shooting Street Photography? 1`] = `
 "<!DOCTYPE HTML>
 <html><head>
     <meta charset="UTF-8">
     <title>Is Mexico safe for shooting Street Photography?</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1252,11 +1407,11 @@ exports[`InteropService_Importer_OneNote should render links properly by ignorin
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
-</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">Monday, August 28, 2023</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">10:52 AM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 19px;"><a href="https://www.youtube.com/watch?v=-U-uj1jaHtk" style="">Is Mexico safe for shooting Street Photography?</a></p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Monday, August 28, 2023</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">10:52 AM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 12pt; line-height: 19px;"><a href="https://www.youtube.com/watch?v=-U-uj1jaHtk" style="">Is Mexico safe for shooting Street Photography?</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
 <div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: 200px; max-width: 356px;"></div>
 </div>
 
@@ -1343,43 +1498,35 @@ exports[`InteropService_Importer_OneNote should support importing .one files tha
 <html><head>
     <meta charset="UTF-8">
     <title>Test Todo : cases à cocher lien vers doc sur partage</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
 
 
-    .icon-0 > svg, .icon-0 > img { fill: #4673b7; }
-    .icon-1 > svg, .icon-1 > img { fill: #4673b7; }
-    .icon-2 > svg, .icon-2 > img { fill: #4673b7; }
-    .icon-3 > svg, .icon-3 > img { fill: #4673b7; }
-    .icon-4 > svg, .icon-4 > img { fill: #4673b7; }
-    .icon-5 > svg, .icon-5 > img { fill: #4673b7; }
-    .icon-6 > svg, .icon-6 > img { fill: #4673b7; }
+    .icon-0 > .text { color: #4673b7; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #4673b7; }
+    .icon-6 > .text { color: #4673b7; }
     
     </style>
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Test Todo : cases à cocher lien vers doc sur partage</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">jeudi 23 octobre 2025</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: Calibri; font-size: 10pt; line-height: 16px;">09:24</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt; line-height: 22px;">Todo HBA</h2></div>
-<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Exporter le carnet en *.onepkg (case cochée)</span></li>
-<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Exporter des page en *.one (case non cochée)</span></li>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Test Todo : cases à cocher lien vers doc sur partage</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">jeudi 23 octobre 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">09:24</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;">Todo HBA</h2></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Exporter le carnet en *.onepkg (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Exporter des page en *.one (case non cochée)</span></li>
 </ul></li>
-</ul><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: Calibri; font-size: 14pt; line-height: 22px;">Todo Team appli</h2></div>
-<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Rédiger compte-rendu réunion de service</span></li>
-<li class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><img class="checkbox-icon" alt="Unchecked" src=":/id-here">
-</span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Calibri; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><img alt="Checked" src=":/id-here">
-</span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</span></li>
+</ul><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;">Todo Team appli</h2></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Rédiger compte-rendu réunion de service</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</span></li>
 </ul></li>
 </ul></div>
 
@@ -1393,7 +1540,6 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <html><head>
     <meta charset="UTF-8">
     <title>Marketing Funnel &amp; Training</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1405,16 +1551,16 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <body>
 
 <div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Trebuchet MS; font-size: 20pt; line-height: 32px;">Marketing Funnel &amp; Training</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt; line-height: 16px;">Tuesday, October 06, 2015</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt; line-height: 16px;">12:27 PM</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Tuesday, October 06, 2015</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">12:27 PM</span></div>
 </div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><img src=":/id-here"></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><cite style="color: rgb(89,89,89); font-family: Calibri; font-size: 9pt; line-height: 14px;">From &lt;<a href="http://adamhcohen.com/wp-content/uploads/New-Marketing-Funnel1.JPG" style="">http://adamhcohen.com/wp-content/uploads/New-Marketing-Funnel1.JPG</a>&gt; </cite></div>
+<div class="outline-element" style="margin-left: 0px;"><cite style="color: rgb(89,89,89); font-family: &quot;Calibri&quot;, sans-serif; font-size: 9pt; line-height: 14px;">From &lt;<a href="http://adamhcohen.com/wp-content/uploads/New-Marketing-Funnel1.JPG" style="">http://adamhcohen.com/wp-content/uploads/New-Marketing-Funnel1.JPG</a>&gt; </cite></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
 </div><div class="container-outline" style="left: 72px; position: absolute; top: 475px; width: 146px;"><div class="outline-element" style="margin-left: 0px;"><p style="color: rgb(91,155,213); font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">Customer Success Management</p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="color: rgb(91,155,213); font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">and</p></div>
 <div class="outline-element" style="margin-left: 0px;"><p style="color: rgb(91,155,213); font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">Training</p></div>
-</div><img style="height: 170px; left: 57.15px; pointer-events: none; position: absolute; top: 435.1px; width: 310px;" src=":/id-here">
+</div><img style="height: 173px; left: 57.15px; pointer-events: none; position: absolute; top: 443.15px; width: 310px;" src=":/id-here">
 
 
 
@@ -1426,7 +1572,6 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 <html><head>
     <meta charset="UTF-8">
     <title>Decrease support costs</title>
-    
     <style>
     
 /* (For testing: Removed default CSS) */
@@ -1437,18 +1582,18 @@ exports[`InteropService_Importer_OneNote should use default value for EntityGuid
 </head>
 <body>
 
-<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Calibri Light; font-size: 20pt; line-height: 32px;">Decrease support costs</span></div>
-</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt; line-height: 16px;">Saturday, October 10, 2015</span></div>
-<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: Calibri; font-size: 10pt; line-height: 16px;">11:15 PM</span></div>
-</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 88px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">One of the strategic goals of training <span style="font-style: italic; font-weight: bold;">must</span> be to decrease the cost of customer support. To do this training must teach customers to "<span style="font-weight: bold;">do</span>" not to "know."  How many customers call asking to know something?</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
-<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Decrease support costs</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Saturday, October 10, 2015</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">11:15 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 88px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">One of the strategic goals of training <strong style="font-style: italic; font-weight: bold;">must</strong> be to decrease the cost of customer support. To do this training must teach customers to "<strong style="font-weight: bold;">do</strong>" not to "know."  How many customers call asking to know something?</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
 </div>
 
 

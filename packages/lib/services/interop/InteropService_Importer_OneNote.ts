@@ -9,6 +9,7 @@ import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
 import { unique } from '../../ArrayUtils';
+import Note from '../../models/Note';
 
 const logger = Logger.create('InteropService_Importer_OneNote');
 
@@ -34,6 +35,20 @@ const getOneNoteConverter = (): NativeOneNoteConverter => {
 		throw new Error('Failed to load @joplin/onenote-converter. Please check that the onenote-converter package was built correctly and bundled with this version of Joplin.\n\nFor build instructions, see https://github.com/laurent22/joplin/blob/dev/packages/onenote-converter/README.md#building.');
 	}
 };
+
+const setEnableUnresponsiveCheck = (enabled: boolean) => {
+	if (shim.isElectron()) {
+		shim.electronBridge().setEnableUnresponsiveCheck(enabled);
+	}
+};
+
+interface NoteMetadata {
+	created: Date;
+	updated: Date;
+	// Saving the title in the metadata allows using special characters not supported by the file
+	// system in imported note titles (e.g. "/")
+	title: string;
+}
 
 // See onenote-converter README.md for more information
 export default class InteropService_Importer_OneNote extends InteropService_Importer_Base {
@@ -119,6 +134,11 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			}
 
 			try {
+				// HACK: The OneNote importer currently runs in the renderer process on desktop.
+				// If importing a large file takes a long time, the "unresponsive" dialog can be
+				// shown. Work around this by temporarily disabling the dialog:
+				setEnableUnresponsiveCheck(false);
+
 				await oneNoteConverter(notebookFilePath, resolve(outputDirectory2), notebookBaseDir);
 			} catch (error) {
 				// Forward only the error message. Usually the stack trace points to bytes in the WASM file.
@@ -126,6 +146,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 				// length for auto-creating a forum post:
 				this.options_.onError?.(error.message ?? error);
 				console.error(error);
+			} finally {
+				setEnableUnresponsiveCheck(true);
 			}
 		}
 
@@ -134,10 +156,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 
 		logger.info('Postprocessing imported content...');
-		await this.postprocessGeneratedHtmlInFolder_(tempOutputDirectory);
+		const fileToMetadata = await this.postprocessGeneratedHtmlInFolder_(tempOutputDirectory);
 
 		logger.info('Importing HTML into Joplin');
-		const importer = new InteropService_Importer_Md();
+		const importer = new OneNoteHtmlImporter(fileToMetadata);
 		importer.setMetadata({ fileExtensions: ['html'] });
 		await importer.init(tempOutputDirectory, {
 			...this.options_,
@@ -194,16 +216,21 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	private async postprocessGeneratedHtmlInFolder_(baseFolder: string) {
 		const htmlFiles = await this.getValidHtmlFiles_(resolve(baseFolder));
 		const idMap = await this.buildIdMap_(baseFolder);
+		const fileToMetadata = new Map<string, NoteMetadata>();
 
 		for (const file of htmlFiles) {
 			const fileLocation = join(baseFolder, file.path);
 			const originalHtml = await shim.fsDriver().readFile(fileLocation);
-			const { changed, html } = await this.postprocessGeneratedHtml_(originalHtml, dirname(fileLocation), idMap);
+			const { changed, html, metadata } = await this.postprocessGeneratedHtml_(originalHtml, dirname(fileLocation), idMap);
 
 			if (changed) {
 				await shim.fsDriver().writeFile(fileLocation, html, 'utf-8');
 			}
+
+			fileToMetadata.set(resolve(fileLocation), metadata);
 		}
+
+		return fileToMetadata;
 	}
 
 	// Public to allow testing
@@ -213,7 +240,34 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder, idMap),
 			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
 		];
+		// Workaround: HTML read directly from the filesystem can cause parseFromString to hang.
+		// Force creation of a new string.
+		// See https://github.com/laurent22/joplin/issues/15132
+		html = `${html} `.substring(0, html.length);
 		const dom = this.domParser.parseFromString(html, 'text/html');
+
+		const parseMetadata = (dom: Document) => {
+			const parseTimestampMeta = (selector: string) => {
+				const element = dom.querySelector<HTMLMetaElement>(selector);
+				// Not all files processed by the importer have timestamp metadata tags
+				// (e.g. files that contain lists of pages). Fall back:
+				if (!element) return new Date();
+
+				const timeSeconds = Number(element.content);
+				if (!isFinite(timeSeconds) || timeSeconds < 0) return new Date();
+
+				return new Date(timeSeconds * 1000);
+			};
+
+			return {
+				created: parseTimestampMeta('meta[name="X-Created-Time"]'),
+				updated: parseTimestampMeta('meta[name="X-Updated-Time"]'),
+				title: dom.title,
+			};
+		};
+
+		// Parse metadata first, since the pipeline can adjust the HTML:
+		const metadata = parseMetadata(dom);
 
 		let changed = false;
 		for (const task of pipeline) {
@@ -226,7 +280,11 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			html = `<!DOCTYPE HTML>\n${dom.documentElement.outerHTML}`;
 		}
 
-		return { changed, html };
+		return {
+			changed,
+			html,
+			metadata,
+		};
 	}
 
 	private async getValidHtmlFiles_(baseFolder: string) {
@@ -260,19 +318,31 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	}
 
 	private simplifyHtml_(dom: Document) {
-		const selectors = [
+		const removeLeadingSpace = (element: Element) => {
+			const sibling = element.previousSibling;
+			if (sibling && sibling.nodeName === '#text' && sibling.textContent.trim() === '') {
+				sibling.remove();
+			}
+		};
+
+		const nodesToRemove = [
 			// <script> blocks that aren't marked with a specific type (e.g. application/tex).
-			'script:not([type])',
-			// ID mappings (unused at this stage of the import process)
-			'meta[name="X-Original-Page-Id"]',
+			{ selector: 'script:not([type])' },
+
+			// ID mappings and other metadata (unused at this stage of the import process)
+			// Remove leading space to avoid unnecessary blank lines in test snapshots
+			{ selector: 'meta[name="X-Original-Page-Id"]', preprocess: removeLeadingSpace },
+			{ selector: 'meta[name="X-Created-Time"]', preprocess: removeLeadingSpace },
+			{ selector: 'meta[name="X-Updated-Time"]', preprocess: removeLeadingSpace },
 
 			// Empty iframes
-			'iframe[src=""]',
+			{ selector: 'iframe[src=""]' },
 		];
 
 		let changed = false;
-		for (const selector of selectors) {
+		for (const { selector, preprocess } of nodesToRemove) {
 			for (const element of dom.querySelectorAll(selector)) {
+				preprocess?.(element);
 				element.remove();
 				changed = true;
 			}
@@ -341,5 +411,39 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			svgs,
 			changed: true,
 		};
+	}
+}
+
+class OneNoteHtmlImporter extends InteropService_Importer_Md {
+	public constructor(private noteMetadata_: Map<string, NoteMetadata>) {
+		super();
+	}
+
+	public override async importFile(filePath: string, parentFolderId: string) {
+		try {
+			const resolvedPath = shim.fsDriver().resolve(filePath);
+			const note = await super.importFile(filePath, parentFolderId);
+
+			const metadata = this.noteMetadata_.get(resolvedPath);
+			if (metadata) {
+				const updatedNote = {
+					...note,
+
+					user_updated_time: metadata.updated.getTime(),
+					user_created_time: metadata.created.getTime(),
+					title: metadata.title || note.title,
+				};
+
+				const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
+
+				this.importedNotes[resolvedPath] = noteItem;
+				return noteItem;
+			} else {
+				return note;
+			}
+		} catch (error) {
+			error.message = `On ${filePath}: ${error.message}`;
+			throw error;
+		}
 	}
 }

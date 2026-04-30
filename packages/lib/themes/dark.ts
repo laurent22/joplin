@@ -21,6 +21,7 @@ const theme: Theme = {
 	dividerColor: '#555555',
 	selectedColor: '#616161',
 	urlColor: 'rgb(166,166,255)',
+	colorErrorSelected: '#FFD7D7',
 
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.

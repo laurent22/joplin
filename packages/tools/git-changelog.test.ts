@@ -38,6 +38,8 @@ describe('git-changelog', () => {
 			['Update aws-sdk-js-v3 monorepo to v3.215.0', 'aws-sdk-js-v3', 'v3.215.0'],
 			['Update dependency moment to v2.29.4 (#7087)', 'moment', 'v2.29.4'],
 			['Update aws (#8106)', 'aws', ''],
+			['fix(deps): update dependency prosemirror-gapcursor to v1.4.0 (#15069)', 'prosemirror-gapcursor', 'v1.4.0'],
+			['chore(deps): update dependency webpack-dev-server to v5.2.3 (#15078)', 'webpack-dev-server', 'v5.2.3'],
 		];
 
 		for (const testCase of testCases) {

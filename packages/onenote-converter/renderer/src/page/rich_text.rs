@@ -56,20 +56,18 @@ impl<'a> Renderer<'a> {
                 match object {
                     EmbeddedObject::Ink(container) => {
                         ink_builder.push(container.ink(), container.bounding_box());
+                        result.push(ink_builder.finish());
                     }
                     EmbeddedObject::InkSpace(space) => {
-                        result.push(ink_builder.finish());
                         result.push(format!("<span class=\"ink-space\" style=\"padding-left: {}; padding-top: {};\"></span>",
                                 px(space.width()), px(space.height())));
                     }
                     EmbeddedObject::InkLineBreak => {
-                        result.push(ink_builder.finish());
                         result.push("<span class=\"ink-linebreak\"><br></span>".to_string());
                     }
                 }
             }
 
-            result.push(ink_builder.finish());
             return Ok(result.join(""));
         }
 
@@ -115,7 +113,15 @@ impl<'a> Renderer<'a> {
                     let text_html = html_entities(part.text());
                     if style.len() > 0 {
                         let style_attr = style.to_html_attr();
-                        Ok(format!("<span {style_attr}>{text_html}</span>"))
+                        let tag = if style.is_bold() {
+                            "strong"
+                        } else if style.is_italic() {
+                            "em"
+                        } else {
+                            "span"
+                        };
+
+                        Ok(format!("<{tag} {style_attr}>{text_html}</{tag}>"))
                     } else {
                         Ok(text_html)
                     }
@@ -205,7 +211,7 @@ impl<'a> Renderer<'a> {
         }
 
         if let Some(font) = style.font() {
-            styles.set("font-family", font.to_string());
+            styles.set("font-family", font_with_fallback(font));
         }
 
         if let Some(size) = style.font_size() {
@@ -289,4 +295,12 @@ fn fix_newlines(text: &str) -> String {
             "<br>".to_string() + &"&nbsp;".repeat(captures[1].len())
         })
         .to_string()
+}
+
+fn font_with_fallback(font: &str) -> String {
+    if font.starts_with("Calibri") {
+        format!("\"{}\", sans-serif", font)
+    } else {
+        font.to_string()
+    }
 }

@@ -2,7 +2,9 @@ use sanitize_filename::{Options as SanitizeOptions, sanitize_with_options};
 use std::io::{Read, Seek};
 
 pub type ApiResult<T> = std::result::Result<T, std::io::Error>;
-pub trait FileHandle: Read + Seek {}
+pub trait FileHandle: Read + Seek {
+    fn byte_length(&self) -> u64;
+}
 
 pub trait FileApiDriver: Send + Sync {
     fn is_windows(&self) -> bool;
@@ -13,6 +15,10 @@ pub trait FileApiDriver: Send + Sync {
     fn make_dir(&self, path: &str) -> ApiResult<()>;
     fn exists(&self, path: &str) -> ApiResult<bool>;
     fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>>;
+
+    /// Writes data from `stream` to the file at `path`.
+    /// Note: If `stream.read` fails, the file may be left in a partially-written state.
+    fn stream_to_file(&self, path: &str, stream: &mut dyn Read) -> ApiResult<()>;
 
     // These functions correspond to the similarly-named
     // NodeJS path functions and should behave like the NodeJS

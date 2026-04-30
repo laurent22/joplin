@@ -43,6 +43,12 @@ export interface FolderPickerOptions {
 	mustSelect?: boolean;
 }
 
+export enum ViewToggleButtonMode {
+	Hidden = 'hidden',
+	ShowViewer = 'show-viewer',
+	ShowEditor = 'show-editor',
+}
+
 interface ScreenHeaderProps {
 	selectedNoteIds: string[];
 	selectedFolderId: string;
@@ -70,9 +76,8 @@ interface ScreenHeaderProps {
 	showContextMenuButton?: boolean;
 	showPluginEditorButton?: boolean;
 	showBackButton?: boolean;
-	showViewToggleButton?: boolean;
+	viewToggleButtonMode?: ViewToggleButtonMode;
 	onViewTogglePress?: OnPressCallback;
-	viewToggleIconName?: string;
 
 	saveButtonDisabled?: boolean;
 	showSaveButton?: boolean;
@@ -376,10 +381,12 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		};
 
 		const renderViewToggleButton = () => {
-			if (!this.props.showViewToggleButton || !this.props.onViewTogglePress || !this.props.viewToggleIconName) return null;
+			const mode = this.props.viewToggleButtonMode ?? ViewToggleButtonMode.Hidden;
+			if (mode === ViewToggleButtonMode.Hidden || !this.props.onViewTogglePress) return null;
+
 			return renderTopButton({
-				iconName: this.props.viewToggleIconName,
-				description: _('Toggle view/edit'),
+				iconName: mode === ViewToggleButtonMode.ShowViewer ? 'ionicon book' : 'ionicon pencil',
+				description: mode === ViewToggleButtonMode.ShowViewer ? _('Stop editing') : _('Edit'),
 				onPress: this.props.onViewTogglePress,
 				visible: true,
 			});

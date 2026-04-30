@@ -91,6 +91,19 @@ export function resourcesStatus(resourceInfos: any) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+const clipboardImageToResource = async (image: any, mime: string) => {
+	const fileExt = mimeUtils.toFileExtension(mime);
+	const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
+	await shim.writeImageToFile(image, mime, filePath);
+	try {
+		const md = await commandAttachFileToBody('', [filePath]);
+		return md;
+	} finally {
+		await shim.fsDriver().remove(filePath);
+	}
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export async function getResourcesFromPasteEvent(event: any) {
 	const output = [];
 	const formats = clipboard.availableFormats();
@@ -104,19 +117,22 @@ export async function getResourcesFromPasteEvent(event: any) {
 				continue;
 			}
 			if (event) event.preventDefault();
-
-			const image = clipboard.readImage();
-
-			const fileExt = mimeUtils.toFileExtension(format);
-			const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
-
-			await shim.writeImageToFile(image, format, filePath);
-			const md = await commandAttachFileToBody('', [filePath]);
-			await shim.fsDriver().remove(filePath);
-
+			const md = await clipboardImageToResource(clipboard.readImage(), format);
 			if (md) output.push(md);
 		}
 	}
+
+	// Some applications (e.g. macshot) copy images to the clipboard without
+	// an image/* format, but clipboard.readImage() can still read them.
+	if (!output.length) {
+		const image = clipboard.readImage();
+		if (!image.isEmpty()) {
+			if (event) event.preventDefault();
+			const md = await clipboardImageToResource(image, 'image/png');
+			if (md) output.push(md);
+		}
+	}
+
 	return output;
 }
 

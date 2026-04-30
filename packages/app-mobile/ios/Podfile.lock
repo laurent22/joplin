@@ -4,7 +4,7 @@ PODS:
   - EXImageLoader (6.0.0):
     - ExpoModulesCore
     - React-Core
-  - Expo (54.0.31):
+  - Expo (54.0.32):
     - ExpoModulesCore
     - hermes-engine
     - RCTRequired
@@ -39,7 +39,7 @@ PODS:
     - ZXingObjC/PDF417
   - ExpoFileSystem (19.0.21):
     - ExpoModulesCore
-  - ExpoFont (14.0.10):
+  - ExpoFont (14.0.11):
     - ExpoModulesCore
   - ExpoImageManipulator (14.0.8):
     - EXImageLoader
@@ -113,7 +113,30 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - OpenSSL-Universal (3.3.3001)
+  - QuickCrypto (1.0.19):
+    - hermes-engine
+    - NitroModules
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RCTDeprecation (0.81.6)
   - RCTRequired (0.81.6)
   - RCTTypeSafety (0.81.6):
@@ -1467,30 +1490,6 @@ PODS:
     - React-Core
   - react-native-quick-base64 (2.2.2):
     - React-Core
-  - react-native-quick-crypto (0.7.17):
-    - hermes-engine
-    - OpenSSL-Universal
-    - RCTRequired
-    - RCTTypeSafety
-    - React
-    - React-Core
-    - React-Core-prebuilt
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - Yoga
   - react-native-rsa-native (2.0.5):
     - React
   - react-native-saf-x (3.6.0):
@@ -2012,7 +2011,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNCPushNotificationIOS (1.11.0):
+  - RNCPushNotificationIOS (1.12.0):
     - React-Core
   - RNDateTimePicker (8.5.1):
     - hermes-engine
@@ -2066,7 +2065,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (12.2.1):
+  - RNShare (12.2.4):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2133,7 +2132,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - SDWebImage/Core (5.21.7)
+  - SDWebImage/Core (5.21.5)
   - SDWebImageWebPCoder (0.15.0):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
@@ -2184,6 +2183,7 @@ DEPENDENCIES:
   - JoplinCommonShareExtension (from `ShareExtension`)
   - JoplinRNShareExtension (from `ShareExtension`)
   - NitroModules (from `../node_modules/react-native-nitro-modules`)
+  - QuickCrypto (from `../node_modules/react-native-quick-crypto`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -2225,7 +2225,6 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
-  - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - "react-native-saf-x (from `../node_modules/@joplin/react-native-saf-x`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -2286,7 +2285,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - libwebp
-    - OpenSSL-Universal
     - SDWebImage
     - SDWebImageWebPCoder
     - ZXingObjC
@@ -2325,6 +2323,8 @@ EXTERNAL SOURCES:
     :path: ShareExtension
   NitroModules:
     :path: "../node_modules/react-native-nitro-modules"
+  QuickCrypto:
+    :path: "../node_modules/react-native-quick-crypto"
   RCTDeprecation:
     :path: "../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation"
   RCTRequired:
@@ -2405,8 +2405,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-quick-base64:
     :path: "../node_modules/react-native-quick-base64"
-  react-native-quick-crypto:
-    :path: "../node_modules/react-native-quick-crypto"
   react-native-rsa-native:
     :path: "../node_modules/react-native-rsa-native"
   react-native-saf-x:
@@ -2523,12 +2521,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   EXImageLoader: 189e3476581efe3ad4d1d3fb4735b7179eb26f05
-  Expo: 04993fbd7b06dc98ffac58da8847298470dc3db1
+  Expo: 4e503a041c59c4e34c8be262a135848ad5cd3710
   ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18
   ExpoAudio: e4cfe3a2f3317b8487460685385a9867a07fb4fb
   ExpoCamera: 6a326deb45ba840749652e4c15198317aa78497e
   ExpoFileSystem: 858a44267a3e6e9057e0888ad7c7cfbf55d52063
-  ExpoFont: 35ac6191ed86bbf56b3ebd2d9154eda9fad5b509
+  ExpoFont: f543ce20a228dd702813668b1a07b46f51878d47
   ExpoImageManipulator: 607a5c8c88085381639458a46cc55fb9d3869148
   ExpoLocalAuthentication: 8a31808565da7af926dd9b595e98594d8b1553b6
   ExpoModulesCore: f3da4f1ab5a8375d0beafab763739dbee8446583
@@ -2538,7 +2536,7 @@ SPEC CHECKSUMS:
   JoplinRNShareExtension: e158a4b53ee0aa9cd3037a16221dc8adbd6f7860
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   NitroModules: 114b4f79e10be9b202723e721d6a54382fa4b599
-  OpenSSL-Universal: 6082b0bf950e5636fe0d78def171184e2b3899c2
+  QuickCrypto: 0708a392535332365b7f4a16a0b229482be9a1e0
   RCTDeprecation: ff38238d8b6ddfe1fcfeb2718d1c14da9564c1c3
   RCTRequired: 5916f53ff05efcc2bf095b0de01a0e5b00112a55
   RCTTypeSafety: bfbd8d69504a7459a65040705fc6ce10806c383b
@@ -2579,7 +2577,6 @@ SPEC CHECKSUMS:
   react-native-image-picker: 48d850454b4a389753053e1d7378b624d3b47d77
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
-  react-native-quick-crypto: 1a2467cf17acc57dce5bb076a953978b79e3fd11
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
   react-native-saf-x: 50d176763ed692b379c190bf55ae7293a3ee09bb
   react-native-safe-area-context: 37e680fc4cace3c0030ee46e8987d24f5d3bdab2
@@ -2625,16 +2622,16 @@ SPEC CHECKSUMS:
   ReactNativeFs: 601d5cf876d91f779583cef9a7d90d8b45394492
   rn-fetch-blob: 25612b6d6f6e980c6f17ed98ba2f58f5696a51ca
   RNCClipboard: 88d7eeb555d1183915f0885bdbc5c97eb6f7f3ba
-  RNCPushNotificationIOS: 6c4ca3388c7434e4a662b92e4dfeeee858e6f440
+  RNCPushNotificationIOS: 85957a0534fd1309b4c028ccbe5b1baf9ab5cf57
   RNDateTimePicker: 19ffa303c4524ec0a2dfdee2658198451c16b7f1
   RNDeviceInfo: bcce8752b5043a623fe3c26789679b473f705d3c
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNLocalize: 44b09911588826d01c5b949e8e3f9ed5fae16b32
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
-  RNShare: 0e600372fb35783fe30d413efd28d11de2bf6cf0
+  RNShare: 900932239a5316b6f9324c5549a69d51aeb962f4
   RNSVG: cf9ae78f2edf2988242c71a6392d15ff7dd62522
-  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
+  SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   WhisperVoiceTyping: 343ea840cbde2a5f3508f8b016ebcf1c089179ea
   Yoga: 786fa7d9d2ff6060b4e688062243fa69c323d140

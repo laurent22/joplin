@@ -90,7 +90,23 @@ Suppose that the importer's Rust code is failing to parse a specific `example.on
 2. Setting up Rust and Rust debugging. See [the relevant VSCode documentation](https://code.visualstudio.com/docs/languages/rust#_debugging) for details.
 3. Clicking the "Debug" button for the test added in step 1. This button should be provided by extensions set up in step 2.
 
+### Inspecting `.one` files
 
+The `inspect` binary target of the `parser` crate allows inspecting `.one` file data.
+
+For example, to inspect lower-level OneStore data:
+```console
+bash$ cd parser/
+bash$ cargo run -- ../test-data/ink.one --onestore
+```
+
+To inspect higher-level (parsed) section data:
+```console
+bash$ cd parser/
+bash$ cargo run -- ../test-data/ink.one --section
+```
+
+**Note**: `inspect`'s output is unstable and should not be relied upon by scripts.
 
 ### Developing
 

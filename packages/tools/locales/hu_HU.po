@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2026-01-09 17:09+0100\n"
-"Last-Translator: summoner <summoner@vivaldi.net>\n"
+"Last-Translator: summoner <summoner@disroot.org>\n"
 "Language-Team: Hungarian <>\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
@@ -1998,7 +1998,7 @@ msgstr "Módosítások elvetése"
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:166
 #: packages/app-mobile/root.tsx:783
 msgid "Dismiss"
-msgstr "Elvetés"
+msgstr "Eltüntetés"
 
 #: packages/app-cli/app/command-geoloc.ts:13
 msgid "Displays a geolocation URL for the note."
@@ -2868,7 +2868,7 @@ msgstr "Kényszerített elérési út stílusa"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
-msgstr "Továbbítás"
+msgstr "Előre"
 
 #: packages/app-cli/app/command-import.ts:53
 #: packages/app-desktop/gui/ImportScreen.tsx:89

@@ -1,3 +1,4 @@
+use crate::templates::page::PageTimestamps;
 use crate::utils::StyleSet;
 use crate::{page::ink::InkBuilder, section};
 use color_eyre::Result;
@@ -68,6 +69,10 @@ impl<'a> Renderer<'a> {
 
         crate::templates::page::render(
             &page.link_target_id(),
+            &PageTimestamps {
+                created_time: page.created_time().unix_timestamp(),
+                updated_time: page.updated_time().unix_timestamp(),
+            },
             &title_text,
             &content,
             &self.global_styles,
