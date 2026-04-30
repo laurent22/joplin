@@ -167,7 +167,7 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 
 			await saveNewProfileConfig(() => deleteProfileById(profileConfig, profile.id));
 		} else {
-			const dirsToDelete = ['cache', 'JoplinBackup', 'resources', 'tmp'];
+			const dirsToDelete = ['cache', 'resources', 'tmp'];
 			const filesToDelete = ['database.sqlite', 'log.txt', 'keymap-desktop.json'];
 
 			// Reset settings for the default profile, but retain global settings
