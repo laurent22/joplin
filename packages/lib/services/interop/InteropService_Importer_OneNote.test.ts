@@ -244,7 +244,7 @@ describe('InteropService_Importer_OneNote', () => {
 	it('should group link parts even if they have different css styles', async () => {
 		const notes = await importNote(`${supportDir}/onenote/remove_hyperlink_on_title.zip`);
 
-		const noteToTest = notes.find(n => n.title === 'Tips from a Pro Using Trees for Dramatic Landscape Photography');
+		const noteToTest = notes.find(n => n.title === 'Tips from a Pro: Using Trees for Dramatic Landscape Photography');
 
 		expectWithInstructions(noteToTest).toBeTruthy();
 		expectWithInstructions(noteToTest.body).toContain('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&amp;section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&amp;page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&amp;end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>');
@@ -398,5 +398,13 @@ describe('InteropService_Importer_OneNote', () => {
 		const notes = await importNote(`${supportDir}/onenote/bold_and_italic.one`);
 		const matchingNotes = notes.filter(n => n.title === 'Bold & italic');
 		expect(notesToMarkdownString(matchingNotes)).toMatchSnapshot();
+	});
+
+	it('should import updated/created timestamps', async () => {
+		const notes = await importNote(`${supportDir}/onenote/testOneNoteEmbeddedWordDoc.one`);
+		const importedNote = notes.find(n => n.title.startsWith('Embedded doc sheet'));
+
+		expect(importedNote.user_updated_time).toBe(new Date('2019-12-11T23:37:28.000Z').getTime());
+		expect(importedNote.user_created_time).toBe(new Date('2019-12-11T23:35:52.000Z').getTime());
 	});
 });

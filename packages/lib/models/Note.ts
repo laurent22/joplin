@@ -46,6 +46,7 @@ export interface PreviewsOptions {
 
 export default class Note extends BaseItem {
 
+	public static defaultIntevalBetweenNotes = 60 * 60 * 1000;
 	public static updateGeolocationEnabled_ = true;
 	private static geolocationUpdating_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -1125,19 +1126,18 @@ export default class Note extends BaseItem {
 			// and the increment between the order values of each inserted notes.
 			let newOrder = 0;
 			let intervalBetweenNotes = 0;
-			const defaultIntevalBetweenNotes = 60 * 60 * 1000;
 
 			if (!relevantExistingNoteCount) { // If there's no (relevant) notes in the target notebook
 				newOrder = Date.now();
-				intervalBetweenNotes = defaultIntevalBetweenNotes;
+				intervalBetweenNotes = this.defaultIntevalBetweenNotes;
 			} else if (index > lastRelevantNoteIndex) { // Insert at the end (of relevant group)
 				intervalBetweenNotes = notes[lastRelevantNoteIndex].order / (noteIds.length + 1);
 				newOrder = notes[lastRelevantNoteIndex].order - intervalBetweenNotes;
 			} else if (index <= firstRelevantNoteIndex) { // Insert at the beginning (of relevant group)
 				const firstNoteOrder = notes[firstRelevantNoteIndex].order;
 				if (firstNoteOrder >= Date.now()) {
-					intervalBetweenNotes = defaultIntevalBetweenNotes;
-					newOrder = firstNoteOrder + defaultIntevalBetweenNotes;
+					intervalBetweenNotes = this.defaultIntevalBetweenNotes;
+					newOrder = firstNoteOrder + this.defaultIntevalBetweenNotes;
 				} else {
 					intervalBetweenNotes = (Date.now() - firstNoteOrder) / (noteIds.length + 1);
 					newOrder = firstNoteOrder + intervalBetweenNotes * noteIds.length;
@@ -1151,7 +1151,7 @@ export default class Note extends BaseItem {
 					for (let i = index; i >= 0; i--) {
 						const n = notes[i];
 						if (n.order <= previousOrder) {
-							const o = previousOrder + defaultIntevalBetweenNotes;
+							const o = previousOrder + this.defaultIntevalBetweenNotes;
 							const updatedNote = await this.updateNoteOrder_(n, o);
 							notes[i] = { ...n, ...updatedNote };
 							previousOrder = o;
@@ -1202,5 +1202,16 @@ export default class Note extends BaseItem {
 		conflictNote.is_conflict = 1;
 		conflictNote.conflict_original_id = sourceNote.id;
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
+
+	public static async getNextOrderValue(folderId: string) {
+		const reverse = Setting.value('notes.sortOrder.reverse');
+		if (reverse) {
+			const folder = await this.modelSelectOne('SELECT MAX(`order`) as `order` FROM notes WHERE parent_id = ?', [folderId]);
+			return Number(folder.order ?? 0) + this.defaultIntevalBetweenNotes;
+		} else {
+			const folder = await this.modelSelectOne('SELECT MIN(`order`) as `order` FROM notes WHERE parent_id = ?', [folderId]);
+			return Number(folder.order ?? 0) - this.defaultIntevalBetweenNotes;
+		}
 	}
 }

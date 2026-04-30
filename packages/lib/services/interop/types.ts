@@ -76,6 +76,7 @@ export interface ExportOptions {
 	plugins?: PluginStates;
 	customCss?: string;
 	packIntoSingleFile?: boolean;
+	shouldEmbedOnlyImages?: boolean;
 
 	onProgress?: OnExportProgressCallback;
 }

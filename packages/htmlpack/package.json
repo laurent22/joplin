@@ -12,6 +12,10 @@
     "./packToString": {
       "types": "./packToString.ts",
       "default": "./dist/packToString.js"
+    },
+    "./packToWriter": {
+      "types": "./packToWriter.ts",
+      "default": "./dist/packToWriter.js"
     }
   },
   "publishConfig": {

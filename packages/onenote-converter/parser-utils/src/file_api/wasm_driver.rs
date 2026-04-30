@@ -28,6 +28,9 @@ extern "C" {
     #[wasm_bindgen(js_name = normalizeAndWriteFile, catch)]
     fn write_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
 
+    #[wasm_bindgen(js_name = normalizeAndAppendFile, catch)]
+    fn append_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
+
     #[wasm_bindgen(js_name = isDirectory, catch)]
     fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
 
@@ -143,6 +146,43 @@ impl FileApiDriver for FileApiDriverImpl {
         } else {
             Ok(())
         }
+    }
+
+    fn stream_to_file(&self, path: &str, data: &mut dyn std::io::Read) -> ApiResult<()> {
+        // Create and clear the file. This is important for zero-size files
+        self.write_file(path, &[])?;
+
+        let mut chunk_size = 1024 * 1024; // 1 MB
+        let max_chunk_size = 50 * 1024 * 1024;
+        let mut buffer = vec![0; chunk_size];
+
+        loop {
+            let size = match data.read(&mut buffer) {
+                Ok(size) => size,
+                // Interrupted errors can be retried
+                Err(err) if err.kind() == std::io::ErrorKind::Interrupted => {
+                    continue;
+                }
+                Err(err) => {
+                    return Err(err);
+                }
+            };
+
+            if size == 0 {
+                break;
+            }
+
+            if let Err(error) = append_file(path, &buffer[0..size]) {
+                return Err(handle_error(error, &format!("writing file {}", path)));
+            }
+
+            // For performance, try to increase the chunk size
+            if size == chunk_size && chunk_size < max_chunk_size {
+                chunk_size = (chunk_size * 2).min(max_chunk_size);
+                buffer.resize(chunk_size, 0);
+            }
+        }
+        Ok(())
     }
 
     fn exists(&self, path: &str) -> ApiResult<bool> {

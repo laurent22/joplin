@@ -277,6 +277,12 @@ const commands: Record<EditorCommandType, ExtendedCommand|null> = {
 	[EditorCommandType.JumpToHash]: (state, dispatch, view, [targetHash]) => {
 		return jumpToHash(targetHash)(state, dispatch, view);
 	},
+
+	// Table editing commands (handled by prosemirror-tables plugin, not here)
+	[EditorCommandType.TableAddRow]: null,
+	[EditorCommandType.TableAddColumn]: null,
+	[EditorCommandType.TableDeleteRow]: null,
+	[EditorCommandType.TableDeleteColumn]: null,
 };
 
 export default commands;

@@ -2,6 +2,7 @@ import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@jopl
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
+import Setting from '@joplin/lib/models/Setting';
 
 export const newNoteEnabledConditions = 'oneFolderSelected && selectedFolderIsValid && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
 
@@ -19,9 +20,17 @@ export const runtime = (): CommandRuntime => {
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
-			let newNote = { ...defaultValues, parent_id: folder.id,
+			let order;
+			if (Setting.value('notes.sortOrder.field') === 'order') {
+				order = await Note.getNextOrderValue(folder.id);
+			}
+
+			let newNote = {
+				...defaultValues, parent_id: folder.id,
 				is_todo: isTodo ? 1 : 0,
-				body: body };
+				body: body,
+				...(order !== undefined ? { order } : {}),
+			};
 
 			newNote = await Note.save(newNote, { provisional: true });
 
