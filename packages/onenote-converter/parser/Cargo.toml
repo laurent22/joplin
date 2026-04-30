@@ -33,3 +33,6 @@ features = [
 
 [lib]
 crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "inspect"

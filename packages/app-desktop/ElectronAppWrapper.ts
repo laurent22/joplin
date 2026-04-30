@@ -59,6 +59,7 @@ export default class ElectronAppWrapper {
 	private secondaryWindows_: Map<SecondaryWindowId, SecondaryWindowData> = new Map();
 
 	private willQuitApp_ = false;
+	private enableUnresponsiveCheck_ = true;
 	private tray_: Tray = null;
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
@@ -307,6 +308,8 @@ export default class ElectronAppWrapper {
 		let unresponsiveTimeout: ReturnType<typeof setTimeout>|null = null;
 
 		this.win_.webContents.on('unresponsive', () => {
+			if (!this.enableUnresponsiveCheck_) return;
+
 			// Don't show the "unresponsive" dialog immediately -- the "unresponsive" event
 			// can be fired when showing a dialog or modal (e.g. the update dialog).
 			//
@@ -896,6 +899,10 @@ export default class ElectronAppWrapper {
 		return this.customProtocolHandlers_.pluginContent;
 	}
 
+	public setEnableUnresponsiveCheck(enabled: boolean) {
+		this.enableUnresponsiveCheck_ = enabled;
+	}
+
 	private async fixLinuxAccessibility_() {
 		if (this.electronApp().accessibilitySupportEnabled) return;
 
@@ -939,6 +946,7 @@ export default class ElectronAppWrapper {
 		this.electronApp_.on('before-quit', () => {
 			this.appLogger_.info('[appClose] before-quit event fired, setting willQuitApp_ = true');
 			this.willQuitApp_ = true;
+			bridge().unregisterGlobalHotkey();
 		});
 
 		this.electronApp_.on('window-all-closed', () => {

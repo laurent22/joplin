@@ -548,6 +548,30 @@ describe('ItemModel', () => {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(1);
 	});
 
+	test('should process orphaned items in batches', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{ id: '000000000000000000000000000000F1' },
+			{ id: '000000000000000000000000000000F2' },
+			{ id: '000000000000000000000000000000F3' },
+			{ id: '000000000000000000000000000000F4' },
+			{ id: '000000000000000000000000000000F5' },
+		]);
+
+		await db()('user_items').where('user_id', '=', user1.id).delete();
+
+		expect(await models().item().count()).toBe(5);
+		expect(await models().userItem().count()).toBe(0);
+
+		// Process with batch size of 2 - should require 3 batches to process all 5 items
+		await models().item().processOrphanedItems({ batchSize: 2 });
+
+		expect(await models().item().count()).toBe(5);
+		expect(await models().userItem().count()).toBe(5);
+		expect((await models().userItem().byUserId(user1.id)).length).toBe(5);
+	});
+
 	test('should return multiple item contents', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 

@@ -29,7 +29,7 @@ const pbkdf2Raw = (password: string, salt: CryptoBuffer, iterations: number, key
 
 const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	const cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as CipherGCM;
+	const cipher = QuickCrypto.createCipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as unknown as CipherGCM;
 
 	cipher.setAAD(associatedData, { plaintextLength: Buffer.byteLength(data) });
 
@@ -41,7 +41,7 @@ const encryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoB
 
 const decryptRaw = (data: CryptoBuffer, algorithm: CipherAlgorithm, key: CryptoBuffer, iv: CryptoBuffer, authTagLength: number, associatedData: CryptoBuffer) => {
 
-	const decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as DecipherGCM;
+	const decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as unknown as DecipherGCM;
 
 	const authTag = data.subarray(-authTagLength);
 	const encryptedData = data.subarray(0, data.byteLength - authTag.byteLength);

@@ -7,26 +7,40 @@ import activateMainMenuItem from './util/activateMainMenuItem';
 import setSettingValue from './util/setSettingValue';
 import { toForwardSlashes } from '@joplin/utils/path';
 import mockClipboard from './util/mockClipboard';
+import { ElectronApplication, Page } from '@playwright/test';
 
+const importAndOpenHtmlExport = async (mainWindow: Page, electronApp: ElectronApplication, noteTitle: string) => {
+	const mainScreen = await new MainScreen(mainWindow).setup();
+	await mainScreen.waitFor();
+
+	await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
+	const importedFolder = mainScreen.sidebar.container.getByText('html-import');
+	await importedFolder.waitFor();
+
+	// Retry -- focusing the imported-folder may fail in some cases
+	await expect(async () => {
+		await importedFolder.click();
+
+		await mainScreen.noteList.focusContent(electronApp);
+
+		const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle(noteTitle);
+		await importedHtmlFileItem.click({ timeout: 300 });
+	}).toPass();
+
+	return { mainScreen };
+};
 
 test.describe('markdownEditor', () => {
+	test('editor should render the full content of HTML notes', async ({ mainWindow, electronApp }) => {
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-spans');
+
+		const editor = mainScreen.noteEditor.codeMirrorEditor;
+		// Regression test: The <span> should not be hidden by inline Markdown rendering (since this is an HTML note):
+		await expect(editor).toHaveText('<p><span style="margin-left: 100px;">test</span></p>');
+	});
+
 	test('preview pane should render images in HTML notes', async ({ mainWindow, electronApp }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.waitFor();
-
-		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
-		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
-		await importedFolder.waitFor();
-
-		// Retry -- focusing the imported-folder may fail in some cases
-		await expect(async () => {
-			await importedFolder.click();
-
-			await mainScreen.noteList.focusContent(electronApp);
-
-			const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
-			await importedHtmlFileItem.click({ timeout: 300 });
-		}).toPass();
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-image');
 
 		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
 		// Should render headers

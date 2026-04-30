@@ -1,5 +1,5 @@
 use parser_utils::Reader;
-use parser_utils::errors::{ErrorKind, Result};
+use parser_utils::errors::Result;
 
 /// A compact unsigned 64-bit integer.
 ///
@@ -21,94 +21,63 @@ impl CompactU64 {
     }
 
     pub(crate) fn parse(reader: Reader) -> Result<CompactU64> {
-        let bytes = reader.bytes();
-
-        let first_byte = bytes.first().copied().ok_or(ErrorKind::UnexpectedEof(
-            "Reading CompactU64 (first byte)".into(),
-        ))?;
+        let first_byte = reader.get_u8()?;
 
         if first_byte == 0 {
-            reader.advance(1)?;
-
             return Ok(CompactU64(0));
         }
 
         if first_byte & 1 != 0 {
-            return Ok(CompactU64((reader.get_u8()? >> 1) as u64));
+            return Ok(CompactU64((first_byte >> 1) as u64));
         }
 
         if first_byte & 2 != 0 {
-            return Ok(CompactU64((reader.get_u16()? >> 2) as u64));
+            let second_byte = reader.get_u8()?;
+            let value = u16::from_le_bytes([first_byte, second_byte]);
+            return Ok(CompactU64((value >> 2) as u64));
         }
 
         if first_byte & 4 != 0 {
-            if reader.remaining() < 3 {
-                return Err(ErrorKind::UnexpectedEof("Reading CompactU64".into()).into());
-            }
-
-            let value = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], 0]);
-
-            reader.advance(3)?;
+            let bytes = reader.read(2)?;
+            let value = u32::from_le_bytes([first_byte, bytes[0], bytes[1], 0]);
 
             return Ok(CompactU64((value >> 3) as u64));
         }
 
         if first_byte & 8 != 0 {
-            if reader.remaining() < 4 {
-                return Err(ErrorKind::UnexpectedEof("CompactU64".into()).into());
-            }
-
-            let value = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
-
-            reader.advance(4)?;
+            let bytes = reader.read(3)?;
+            let value = u32::from_le_bytes([first_byte, bytes[0], bytes[1], bytes[2]]);
 
             return Ok(CompactU64((value >> 4) as u64));
         }
 
         if first_byte & 16 != 0 {
-            if reader.remaining() < 5 {
-                return Err(ErrorKind::UnexpectedEof("CompactU64".into()).into());
-            }
-
+            let bytes = reader.read(4)?;
             let value =
-                u64::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], 0, 0, 0]);
-
-            reader.advance(5)?;
+                u64::from_le_bytes([first_byte, bytes[0], bytes[1], bytes[2], bytes[3], 0, 0, 0]);
 
             return Ok(CompactU64(value >> 5));
         }
 
         if first_byte & 32 != 0 {
-            if reader.remaining() < 6 {
-                return Err(ErrorKind::UnexpectedEof("CompactU64".into()).into());
-            }
-
+            let bytes = reader.read(5)?;
             let value = u64::from_le_bytes([
-                first_byte, bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], 0, 0,
+                first_byte, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], 0, 0,
             ]);
-
-            reader.advance(6)?;
 
             return Ok(CompactU64(value >> 6));
         }
 
         if first_byte & 64 != 0 {
-            if reader.remaining() < 7 {
-                return Err(ErrorKind::UnexpectedEof("CompactU64".into()).into());
-            }
-
+            let bytes = reader.read(6)?;
             let value = u64::from_le_bytes([
-                first_byte, bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], 0,
+                first_byte, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], 0,
             ]);
-
-            reader.advance(7)?;
 
             return Ok(CompactU64(value >> 7));
         }
 
         if first_byte & 128 != 0 {
-            reader.advance(1)?;
-
             return Ok(CompactU64(reader.get_u64()?));
         }
 
@@ -122,76 +91,42 @@ mod test {
     use parser_utils::reader::Reader;
 
     #[test]
-    fn test_zero() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
-    }
-
-    #[test]
-    fn test_7_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
-    }
-
-    #[test]
-    fn test_14_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
-    }
-
-    #[test]
-    fn test_21_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0xd4u8, 0x8b, 0x10]))
-                .unwrap()
-                .value(),
-            135546
-        );
-    }
-
-    #[test]
-    fn test_28_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
-    }
-
-    #[test]
-    fn test_35_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
-    }
-
-    #[test]
-    fn test_42_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
-    }
-
-    #[test]
-    fn test_49_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
-    }
-
-    #[test]
-    fn test_64_bit() {
-        assert_eq!(
-            CompactU64::parse(&mut Reader::new(&[0u8])).unwrap().value(),
-            0
-        );
+    fn should_parse_from_reader() {
+        for (input, expected) in [
+            // Zero case
+            (vec![0u8], 0),
+            // 7-bit case
+            (vec![0xF], 7),
+            // 14-bit case
+            (vec![0xFE, 0x0], 0x3F),
+            // 21-bit case
+            (vec![0xd4, 0x8b, 0x10], 135546),
+            // 28-bit case
+            (vec![0xd8, 0x8b, 0x10, 0x10], 0x10108bd),
+            // 35-bit case
+            (vec![0x10, 0x8b, 0x10, 0x13, 0x10], 0x1013108b0 >> 1),
+            // 42-bit case
+            (vec![0x20, 0x8b, 0x10, 0x13, 0x10, 0x10], 0x101013108b0 >> 2),
+            // 49-bit case
+            (
+                vec![0x40, 0x8b, 0x10, 0x13, 0x10, 0x10, 0x14],
+                0x14101013108b0 >> 3,
+            ),
+            // 64-bit case
+            (
+                vec![0x80, 0x8b, 0x10, 0x13, 0x10, 0x10, 0x14, 0x10, 0x14],
+                0x141014101013108b,
+            ),
+        ] {
+            let test_label = format!("{input:?} should parse to 0x{expected:0x}");
+            assert_eq!(
+                CompactU64::parse(&mut Reader::from(&input as &[u8]))
+                    .expect(&test_label)
+                    .value(),
+                expected,
+                "{}",
+                test_label,
+            );
+        }
     }
 }

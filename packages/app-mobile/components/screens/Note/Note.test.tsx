@@ -134,7 +134,7 @@ const expectToBeEditing = async (editing: boolean) => {
 };
 
 const openEditor = async () => {
-	const editToggle = await screen.findByLabelText('Toggle view/edit');
+	const editToggle = await screen.findByLabelText('Edit');
 
 	fireEvent.press(editToggle);
 	await expectToBeEditing(true);
@@ -383,10 +383,10 @@ describe('screens/Note', () => {
 		unmount();
 	});
 
-	it('should show toggle button', async () => {
+	it('should show edit button', async () => {
 		const { unmount } = await setupNoteWithPanes(['viewer']);
-		const toggleButton = await screen.findByLabelText('Toggle view/edit');
-		expect(toggleButton).toBeVisible();
+		const editButton = await screen.findByLabelText('Edit');
+		expect(editButton).toBeVisible();
 		unmount();
 	});
 
@@ -398,9 +398,32 @@ describe('screens/Note', () => {
 		const expectedEditing = !initialEditing;
 		const { unmount } = await setupNoteWithPanes(panes);
 		await expectToBeEditing(initialEditing);
-		const toggleButton = await screen.findByLabelText('Toggle view/edit');
+		const toggleButton = await screen.findByLabelText(/Edit|Stop editing/);
 		fireEvent.press(toggleButton);
 		await expectToBeEditing(expectedEditing);
+		unmount();
+	});
+
+	it('should set title, body, and parent_id correctly when a note is created via share', async () => {
+		const folder = await Folder.save({ title: 'Share target folder', parent_id: '' });
+		const note = await Note.save({ parent_id: folder.id }, { provisional: true });
+
+		store.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Note',
+			noteId: note.id,
+			sharedData: { title: 'Shared title', text: 'https://example.com' },
+		});
+		store.dispatch({ type: 'NOTE_UPDATE_ONE', note: { ...note }, provisional: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await waitForNoteToMatch(note.id, {
+			title: 'Shared title',
+			body: 'https://example.com',
+			parent_id: folder.id,
+		});
+
 		unmount();
 	});
 

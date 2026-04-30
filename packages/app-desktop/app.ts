@@ -150,6 +150,10 @@ class Application extends BaseApplication {
 			bridge().extraAllowedOpenExtensions = Setting.value('linking.extraAllowedExtensions');
 		}
 
+		if ((action.type === 'SETTING_UPDATE_ONE' && action.key === 'globalHotkey') || action.type === 'SETTING_UPDATE_ALL') {
+			bridge().updateGlobalHotkey(Setting.value('globalHotkey'));
+		}
+
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}

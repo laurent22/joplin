@@ -39,6 +39,10 @@ export interface DeleteDatabaseContentOptions {
 	maxProcessedItems?: number;
 }
 
+export interface ProcessOrphanedItemsOptions {
+	batchSize?: number;
+}
+
 export interface SaveFromRawContentItem {
 	name: string;
 	body: Buffer;
@@ -723,55 +727,50 @@ export default class ItemModel extends BaseModel<Item> {
 
 				const itemToSave = { ...o.item };
 
+				const content = itemToSave.content;
+				delete itemToSave.content;
+
+				itemToSave.content_storage_id = (await this.storageDriver()).storageId;
+
+				itemToSave.content_size = content ? content.byteLength : 0;
+
+				// Here we save the item row and content, and we want to
+				// make sure that either both are saved or none of them.
+				// The savepoint wraps the entire operation so that any
+				// error (including unique constraint violations) is
+				// rolled back cleanly without aborting the outer
+				// transaction.
+
+				// TODO: When an item is uploaded multiple times
+				// simultaneously there could be a race condition, where the
+				// content would not match the db row (for example, the
+				// content_size would differ).
+				//
+				// Possible solutions:
+				//
+				// - Row-level lock on items.id, and release once the
+				//   content is saved.
+				// - Or external lock - eg. Redis.
+
+				const savePoint = await this.setSavePoint();
+
 				try {
-					const content = itemToSave.content;
-					delete itemToSave.content;
-
-					itemToSave.content_storage_id = (await this.storageDriver()).storageId;
-
-					itemToSave.content_size = content ? content.byteLength : 0;
-
-					// Here we save the item row and content, and we want to
-					// make sure that either both are saved or none of them.
-					// This is done by setting up a save point before saving the
-					// row, and rollbacking if the content cannot be saved.
-					//
-					// Normally, since we are in a transaction, throwing an
-					// error should work, but since we catch all errors within
-					// this block it doesn't work.
-
-					// TODO: When an item is uploaded multiple times
-					// simultaneously there could be a race condition, where the
-					// content would not match the db row (for example, the
-					// content_size would differ).
-					//
-					// Possible solutions:
-					//
-					// - Row-level lock on items.id, and release once the
-					//   content is saved.
-					// - Or external lock - eg. Redis.
-
-					const savePoint = await this.setSavePoint();
 					const savedItem = await this.saveForUser(user.id, itemToSave);
-
-					try {
-						await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
-						await this.releaseSavePoint(savePoint);
-					} catch (error) {
-						await this.rollbackSavePoint(savePoint);
-						throw error;
-					}
+					await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
 
 					if (o.isNote) {
 						await this.models().itemResource().deleteByItemId(savedItem.id);
 						await this.models().itemResource().addResourceIds(savedItem.id, o.resourceIds);
 					}
 
+					await this.releaseSavePoint(savePoint);
+
 					output[name] = {
 						item: savedItem,
 						error: null,
 					};
 				} catch (error) {
+					await this.rollbackSavePoint(savePoint);
 					output[name] = {
 						item: null,
 						error: error,
@@ -1024,27 +1023,72 @@ export default class ItemModel extends BaseModel<Item> {
 	// can't be replicated so far. On Joplin Cloud it happens on only 0.0008% of
 	// items, so a simple processing task like this one is sufficient for now
 	// but it would be nice to get to the bottom of this bug.
-	public processOrphanedItems = async () => {
-		await this.withTransaction(async () => {
+	public processOrphanedItems = async (options: ProcessOrphanedItemsOptions = {}) => {
+		// Process in batches to avoid long-running transactions that can timeout
+		// and poison the connection pool.
+		const batchSize = options.batchSize ?? 100;
+		let batchNum = 0;
+		let totalProcessed = 0;
+
+		modelLogger.info(`processOrphanedItems: Starting with batchSize=${batchSize}`);
+
+		while (true) {
+			batchNum++;
+			const batchStartTime = Date.now();
+
+			// Find items that have no corresponding entry in user_items.
+			// NOT EXISTS is used instead of LEFT JOIN for performance as it
+			// allows Postgres to short-circuit on the first match per item.
 			const orphanedItems: Item[] = await this.db(this.tableName)
-				.select(['items.id', 'items.owner_id'])
-				.leftJoin('user_items', 'user_items.item_id', 'items.id')
-				.whereNull('user_items.user_id');
+				.select(['items.id', 'items.name', 'items.owner_id'])
+				.whereNotExists(
+					this.db('user_items')
+						.select(this.db.raw('1'))
+						.whereRaw('user_items.item_id = items.id'),
+				)
+				.limit(batchSize);
 
-			const userIds: string[] = orphanedItems.map(i => i.owner_id);
+			if (!orphanedItems.length) {
+				modelLogger.info(`processOrphanedItems: Completed. Total items processed: ${totalProcessed}`);
+				break;
+			}
+
+			modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Found ${orphanedItems.length} orphaned items`);
+
+			const userIds: string[] = unique(orphanedItems.map(i => i.owner_id));
 			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
+			const existingUserIds = new Set(users.map(u => u.id));
 
-			for (const orphanedItem of orphanedItems) {
-				if (!users.find(u => u.id)) {
-					// The user may have been deleted since then. In that case, we
-					// simply delete the orphaned item.
-					await this.delete(orphanedItem.id);
+			const itemsToDelete: string[] = [];
+			const itemsToRestoreByUser = new Map<string, Item[]>();
+
+			for (const item of orphanedItems) {
+				if (!existingUserIds.has(item.owner_id)) {
+					itemsToDelete.push(item.id);
 				} else {
-					// Otherwise we add it back to the user's collection
-					await this.models().userItem().add(orphanedItem.owner_id, orphanedItem.id);
+					const userItems = itemsToRestoreByUser.get(item.owner_id) || [];
+					userItems.push(item);
+					itemsToRestoreByUser.set(item.owner_id, userItems);
 				}
 			}
-		}, 'ItemModel::processOrphanedItems');
+
+			if (itemsToDelete.length) {
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Deleting ${itemsToDelete.length} items (users no longer exist)`);
+				await this.delete(itemsToDelete);
+			}
+
+			if (itemsToRestoreByUser.size) {
+				const restoreCount = Array.from(itemsToRestoreByUser.values()).reduce((sum, items) => sum + items.length, 0);
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Restoring ${restoreCount} items for ${itemsToRestoreByUser.size} users`);
+				for (const [userId, items] of itemsToRestoreByUser) {
+					await this.models().userItem().addMulti(userId, items);
+				}
+			}
+
+			totalProcessed += orphanedItems.length;
+			const batchDuration = Date.now() - batchStartTime;
+			modelLogger.info(`processOrphanedItems: Batch ${batchNum} completed in ${batchDuration}ms`);
+		}
 	};
 
 	// This method should be private because items should only be saved using

@@ -19,25 +19,38 @@
     .note-tag-icon {
         position: relative;
         --note-tag-left: -23px;
-        --note-tag-width: 16px;
-        --note-tag-height: 16px;
+        --note-tag-font-size: 16px;
     }
     .note-tag-icon.-large {
         --note-tag-left: -25px;
-        --note-tag-width: 20px;
-        --note-tag-height: 20px;
+        --note-tag-font-size: 20px;
     }
-    .note-tag-icon > img, .note-tag-icon > svg {
-        width: var(--note-tag-width);
-        height: var(--note-tag-height);
+    .note-tag-icon > .text {
+        position: absolute;
         left: var(--note-tag-left);
+        font-size: var(--note-tag-font-size);
+    }
+    .note-tag-icon.-checkbox > .text {
+        bottom: -0.2em;
     }
 
     .tagged-list { list-style: none; padding-left: 0; }
     {# Select both SVGs and IMGs: Joplin post-processes the converter's output, converting SVGs to IMGs. #}
     .note-tag-icon > svg, .note-tag-icon > img { position: absolute; }
-    .icon-secondary > svg, .icon-secondary > img { position: absolute; fill: black; filter: drop-shadow(0 0 2px white); height: 12px; top: -1px; }
-    .icon-secondary > .content { position: absolute; color: black; filter: drop-shadow(0 0 2px white); font-size: 10px; color: black; top: -1px; user-select: none; }
+    .icon-secondary > svg, .icon-secondary > img, .icon-secondary > .content {
+        position: absolute;
+        fill: black;
+        color: black;
+        filter: drop-shadow(0 0 2px white);
+        height: 12px;
+        top: -1px;
+        right: 1px;
+    }
+    .icon-secondary > .content {
+        height: auto;
+        user-select: none;
+        font-size: 10px;
+    }
     /*** End default CSS ***/
 
     {% for entry in global_styles -%}

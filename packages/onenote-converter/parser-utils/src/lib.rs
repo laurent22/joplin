@@ -2,6 +2,7 @@
 
 use widestring::U16CString;
 
+pub mod debug;
 pub mod errors;
 mod file_api;
 pub mod log;
@@ -26,6 +27,6 @@ impl Utf16ToString for &[u8] {
             .collect();
 
         let value = U16CString::from_vec_truncate(data);
-        Ok(value.to_string().unwrap())
+        value.to_string().map_err(|err| err.into())
     }
 }

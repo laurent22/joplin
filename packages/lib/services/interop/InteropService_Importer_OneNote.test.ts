@@ -299,6 +299,14 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(normalizeNoteForSnapshot(note2Content)).toMatchSnapshot();
 	});
 
+	it('should import vertically-scaled ink', async () => {
+		const notes = await importNote(`${supportDir}/onenote/scaled_ink.one`);
+
+		const note = notes.find(n => n.title === 'Scaled');
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
+
 	it('should support directly importing .one files', async () => {
 		const notes = await importNote(`${supportDir}/onenote/onenote_desktop.one`);
 
@@ -367,5 +375,28 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(errorMessage).toMatch(/Unexpected end of file/);
 		// The other section should import successfully
 		expect(notes.map(note => note.title).sort()).toEqual(['Test note', 'Test section']);
+	});
+
+	it('should import nested ink', async () => {
+		const notes = await importNote(`${supportDir}/onenote/desktop_missing_ink.one`);
+		expect(
+			notes
+				.filter(note => note.title === 'Ink Missing - only one example missing part')
+				.map(note => normalizeNoteForSnapshot(note.body))
+				.sort(),
+		).toMatchSnapshot();
+	});
+
+	it('should import inline tags', async () => {
+		const notes = await importNote(`${supportDir}/onenote/tagged-lines.one`);
+		const note = notes.find(note => note.title === 'Checklists');
+		expect(notesToMarkdownString([note])).toMatchSnapshot();
+		expect(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
+
+	it('should import bold and italic in a way that can be converted to Markdown', async () => {
+		const notes = await importNote(`${supportDir}/onenote/bold_and_italic.one`);
+		const matchingNotes = notes.filter(n => n.title === 'Bold & italic');
+		expect(notesToMarkdownString(matchingNotes)).toMatchSnapshot();
 	});
 });
