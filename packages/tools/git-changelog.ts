@@ -145,9 +145,9 @@ export interface RenovateMessage {
 
 export const parseRenovateMessage = (message: string): RenovateMessage => {
 	const regexes = [
-		/^Update dependency ([^\s]+) to ([^\s]+)/,
-		/^Update ([^\s]+) monorepo to ([^\s]+)/,
-		/^Update ([^\s]+)/,
+		/^(?:(?:fix|chore)\(deps\): )?[Uu]pdate dependency ([^\s]+) to ([^\s]+)/,
+		/^(?:(?:fix|chore)\(deps\): )?[Uu]pdate ([^\s]+) monorepo to ([^\s]+)/,
+		/^(?:(?:fix|chore)\(deps\): )?[Uu]pdate ([^\s]+)/,
 	];
 
 	for (const regex of regexes) {

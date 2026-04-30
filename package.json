@@ -106,6 +106,7 @@
     "@codemirror/state": "6.6.0",
     "@codemirror/view": "6.41.0",
     "@codemirror/language": "6.12.3",
+    "react-native-camera@4.2.1": "patch:react-native-camera@npm%3A4.2.1#./.yarn/patches/react-native-camera-npm-4.2.1-24b2600a7e.patch",
     "eslint": "patch:eslint@8.57.1#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch",
     "nanoid": "patch:nanoid@npm%3A3.3.7#./.yarn/patches/nanoid-npm-3.3.7-98824ba130.patch",
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",

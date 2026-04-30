@@ -3,8 +3,8 @@ Hash: SHA512
 
 Joplin Warrant Canary
 
-Statement date: 19 February 2026
-Valid until: 20 April 2026
+Statement date: 20 April 2026
+Valid until: 19 June 2026
 
 This warrant canary is updated every 60 days.
 If this document has not been updated within 75 days of the
@@ -31,16 +31,17 @@ To prevent backdating, this statement includes current public events:
 
 Current international events:
 
-1. Andrew Mountbatten-Windsor arrested as police open investigation into misconduct in public office
-2. South Korea’s former president Yoon Suk Yeol jailed for life for leading insurrection
+1. Iran sends mixed signals on talks after US seizes ship
+2. Carney says Canada’s strong economic ties to US are ‘weakness’ to be corrected
 
 Canary signing key fingerprint:
 
 F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
 -----BEGIN PGP SIGNATURE-----
 
-iIsEARYKADMWIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaZbmZRUcY2FuYXJ5QGpv
-cGxpbmFwcC5vcmcACgkQlGrp+lkV71PVYgD+LQ5ubtLvAV7SYU7YHrAyjFPmq85f
-eTFXmYC+nc0da0gBAPnZ1b/OpFHE366CoT/soH1gzUknSRkpCRKxSYpdSh0C
-=DeAc
+iKcEARYKAE8WIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaeY82xsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwwLDMVHGNhbmFyeUBqb3BsaW5hcHAub3JnAAoJEJRq6fpZ
+Fe9TaH0BAM24c/9HjyqS+i9cgqIBpsttXlD6lan4x7rcjiohqsvTAPwNju/nww9q
+M6ILELmcKdzgarmL9hTn+YQGki/2xBoFAA==
+=H46T
 -----END PGP SIGNATURE-----

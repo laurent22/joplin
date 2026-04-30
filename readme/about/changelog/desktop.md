@@ -1,5 +1,35 @@
 # Joplin Desktop Changelog
 
+## [v3.6.10](https://github.com/laurent22/joplin/releases/tag/v3.6.10) (Pre-release) - 2026-04-25T07:58:25Z
+
+- Improved: Add sync status icon and collapsible sync report to sidebar ([#15115](https://github.com/laurent22/joplin/issues/15115)) ([#14788](https://github.com/laurent22/joplin/issues/14788))
+- Improved: Apply Markdown formatting commands per-line ([#15164](https://github.com/laurent22/joplin/issues/15164)) ([#14854](https://github.com/laurent22/joplin/issues/14854) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Importing from OneNote: Disable unresponsiveness warning while importing ([#15127](https://github.com/laurent22/joplin/issues/15127) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Importing from OneNote: Improve display of note tags after converting to Markdown ([#15181](https://github.com/laurent22/joplin/issues/15181) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Defer sync after master password save to prevent encryption enable race ([#15118](https://github.com/laurent22/joplin/issues/15118)) ([#15107](https://github.com/laurent22/joplin/issues/15107) by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Fix copy/paste not working in Settings text fields ([#15099](https://github.com/laurent22/joplin/issues/15099))
+- Fixed: Fix hang when importing certain OneNote files ([#15159](https://github.com/laurent22/joplin/issues/15159)) ([#15132](https://github.com/laurent22/joplin/issues/15132) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix pasting images from clipboard when no image/* format is reported ([#15101](https://github.com/laurent22/joplin/issues/15101)) ([#15100](https://github.com/laurent22/joplin/issues/15100))
+- Fixed: Importing from OneNote: Fix PDF printouts are imported as broken images ([#15124](https://github.com/laurent22/joplin/issues/15124) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Fix imported bold and italic aren't converted to Markdown ([#15187](https://github.com/laurent22/joplin/issues/15187) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Fix imported notes are often displayed in a Serif font ([#15186](https://github.com/laurent22/joplin/issues/15186) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Fix incorrect import of vertically-scaled ink ([#15110](https://github.com/laurent22/joplin/issues/15110) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Fix incorrectly positioned ink ([#15178](https://github.com/laurent22/joplin/issues/15178) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Fix large `.one` files with many attachments fail to import ([#15117](https://github.com/laurent22/joplin/issues/15117) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Fix text objects are displayed in a Serif font, when Calibri is unavailable ([#15179](https://github.com/laurent22/joplin/issues/15179) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Support importing nested ink containers ([#15109](https://github.com/laurent22/joplin/issues/15109)) ([#15092](https://github.com/laurent22/joplin/issues/15092) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Fix freeze/crash when rapidly closing secondary windows ([#15035](https://github.com/laurent22/joplin/issues/15035)) ([#14968](https://github.com/laurent22/joplin/issues/14968) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages sass (v1.95.1)
+- Fixed: Accessibility: Fix focus unexpectedly jumps to the note list while editing/navigating ([#15090](https://github.com/laurent22/joplin/issues/15090)) ([#15029](https://github.com/laurent22/joplin/issues/15029) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Add global shortcut to show/hide Joplin ([#15013](https://github.com/laurent22/joplin/issues/15013)) ([#11805](https://github.com/laurent22/joplin/issues/11805) by Ashutosh Singh)
+- Fixed: Auto-generated note title retains inline markdown due to incomplete filtering ([#14947](https://github.com/laurent22/joplin/issues/14947)) ([#14946](https://github.com/laurent22/joplin/issues/14946) by [@MANVENDRA-github](https://github.com/MANVENDRA-github))
+- Fixed: Fix pasting in YesYouKan while Markdown editor is hidden ([#15037](https://github.com/laurent22/joplin/issues/15037))
+- Fixed: Fix undo/redo in plugins and the note titlebar ([#15042](https://github.com/laurent22/joplin/issues/15042)) ([#15023](https://github.com/laurent22/joplin/issues/15023) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown editor: Fix unselected `&lt;span&gt;`s are hidden in HTML notes ([#15089](https://github.com/laurent22/joplin/issues/15089) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: OCR not working with Chinese and Norwegian language ([#15076](https://github.com/laurent22/joplin/issues/15076)) ([#14208](https://github.com/laurent22/joplin/issues/14208))
+- Fixed: Prevent sync panel from jumping (v2 with startup fix) ([#14881](https://github.com/laurent22/joplin/issues/14881)) ([#14788](https://github.com/laurent22/joplin/issues/14788) by [@dipanshurdev](https://github.com/dipanshurdev))
+- Fixed: Text copied from note viewer and pasted in an external rich text editor duplicates the codeblocks ([#14860](https://github.com/laurent22/joplin/issues/14860)) ([#14852](https://github.com/laurent22/joplin/issues/14852) by Ashutosh Singh)
+
 ## [v3.6.8](https://github.com/laurent22/joplin/releases/tag/v3.6.8) (Pre-release) - 2026-04-07T07:28:36Z
 
 - Desktop: Fixed regression that prevented images from being pasted in editor ([#14750](https://github.com/laurent22/joplin/issues/14750))

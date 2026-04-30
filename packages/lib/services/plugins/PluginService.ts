@@ -287,14 +287,24 @@ export default class PluginService extends BaseService {
 		return this.loadPlugin(baseDir, r.manifestText, r.scriptText, pluginIdIfNotSpecified);
 	}
 
-	public async loadPluginFromPackage(baseDir: string, path: string): Promise<Plugin> {
+	public async loadPluginFromPackage(baseDir: string, path: string, manifestOnly = false): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const fname = filename(path);
-		const hash = await shim.fsDriver().md5File(path);
-
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
+
+		if (manifestOnly) {
+			// When loading only the manifest (e.g. for disabled plugins), try
+			// to use an already-extracted manifest from cache to avoid the
+			// expensive MD5 hash and tar extraction.
+			const manifest = await this.loadManifestToObject(manifestFilePath);
+			if (manifest) {
+				return this.loadPlugin(unpackDir, JSON.stringify(manifest), '', makePluginId(fname));
+			}
+		}
+
+		const hash = await shim.fsDriver().md5File(path);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let manifest: any = await this.loadManifestToObject(manifestFilePath);
@@ -318,7 +328,7 @@ export default class PluginService extends BaseService {
 			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest, null, '\t'), 'utf8');
 		}
 
-		return this.loadPluginFromPath(unpackDir);
+		return this.loadPluginFromPath(unpackDir, manifestOnly);
 	}
 
 	// Loads the manifest as a simple object with no validation. Used only
@@ -333,7 +343,7 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public async loadPluginFromPath(path: string): Promise<Plugin> {
+	public async loadPluginFromPath(path: string, manifestOnly = false): Promise<Plugin> {
 		path = rtrimSlashes(path);
 
 		const fsDriver = shim.fsDriver();
@@ -341,7 +351,7 @@ export default class PluginService extends BaseService {
 		if (path.toLowerCase().endsWith('.js')) {
 			return this.loadPluginFromJsBundle(dirname(path), await fsDriver.readFile(path), filename(path));
 		} else if (path.toLowerCase().endsWith('.jpl')) {
-			return this.loadPluginFromPackage(dirname(path), path);
+			return this.loadPluginFromPackage(dirname(path), path, manifestOnly);
 		} else {
 			let distPath = path;
 			if (!(await fsDriver.exists(`${distPath}/manifest.json`))) {
@@ -350,8 +360,8 @@ export default class PluginService extends BaseService {
 
 			logger.info(`Loading plugin from ${path}`);
 
-			const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
 			const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
+			const scriptText = manifestOnly ? '' : await fsDriver.readFile(`${distPath}/index.js`);
 			const pluginId = makePluginId(filename(path));
 
 			return this.loadPlugin(distPath, manifestText, scriptText, pluginId);
@@ -449,8 +459,16 @@ export default class PluginService extends BaseService {
 			}
 
 			try {
-				const plugin = await this.loadPluginFromPath(pluginPath);
+				// Load only the manifest first to check if the plugin is
+				// enabled before doing the expensive full load.
+				let plugin = await this.loadPluginFromPath(pluginPath, true);
 				const enabled = this.pluginEnabled(settings, plugin.id);
+				if (enabled) {
+					logger.info(`Loading full plugin: ${plugin.id}`);
+					plugin = await this.loadPluginFromPath(pluginPath, false);
+				} else {
+					logger.info(`Loading manifest only for disabled plugin: ${plugin.id}`);
+				}
 
 				const existingPlugin = this.plugins_[plugin.id];
 				if (existingPlugin) {

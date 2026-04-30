@@ -9,7 +9,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { NoteEntity, ResourceEntity, ResourceLocalStateEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
-import packToString from '@joplin/htmlpack/packToString';
+import packToWriter from '@joplin/htmlpack/packToWriter';
 const { themeStyle } = require('../../theme');
 const { escapeHtml } = require('../../string-utils.js');
 import { assetsToHeaders } from '@joplin/renderer';
@@ -20,6 +20,7 @@ import { parseRenderedNoteMetadata } from './utils';
 import ResourceLocalState from '../../models/ResourceLocalState';
 import { getGlobalSettings, ResourceInfos } from '@joplin/renderer/types';
 import { fromFilename } from '../../mime-utils';
+const { isImageMimeType } = require('../../resourceUtils');
 
 const logger = Logger.create('InteropService_Exporter_Html');
 
@@ -35,6 +36,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private style_: any;
 	private packIntoSingleFile_ = false;
+	private shouldEmbedOnlyImages_ = false;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async init(path: string, options: any = {}) {
@@ -44,6 +46,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			this.destDir_ = dirname(path);
 			this.filePath_ = path;
 			this.packIntoSingleFile_ = 'packIntoSingleFile' in options ? options.packIntoSingleFile : true;
+			this.shouldEmbedOnlyImages_ = !!options.shouldEmbedOnlyImages;
 		} else {
 			this.destDir_ = path;
 			this.filePath_ = null;
@@ -202,27 +205,62 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 					return shim.fsDriver().resolve(this.destDir_, path);
 				}
 			};
-			const packedHtml = await packToString(
-				this.destDir_,
-				mainHtml,
-				{
-					exists: (path) => {
-						path = resolveToAllowedDir(path);
-						return shim.fsDriver().exists(path);
+			// Chunk size must be divisible by 3 so base64 encoding does not add padding in the middle of the stream.
+			const chunkBytes = 3 * 1024 * 1024;
+			const tempFilePath = await shim.fsDriver().findUniqueFilename(`${this.filePath_}.tmp`);
+			await shim.fsDriver().writeFile(tempFilePath, '', 'utf8');
+
+			try {
+				await packToWriter(
+					this.destDir_,
+					mainHtml,
+					{
+						exists: async (path) => {
+							path = resolveToAllowedDir(path);
+							const isFound = await shim.fsDriver().exists(path);
+							if (!isFound) return false;
+							const isDir = await shim.fsDriver().isDirectory(path);
+							return !isDir;
+						},
+						readFileDataUri: async (path) => {
+							path = resolveToAllowedDir(path);
+							const mimeType = fromFilename(path);
+							const content = await shim.fsDriver().readFile(path, 'base64');
+							return `data:${mimeType};base64,${content}`;
+						},
+						readFileText: (path) => {
+							path = resolveToAllowedDir(path);
+							return shim.fsDriver().readFile(path, 'utf8');
+						},
+						streamFileDataUri: async (path, onChunk) => {
+							path = resolveToAllowedDir(path);
+							if (this.shouldEmbedOnlyImages_ && !isImageMimeType(fromFilename(path))) return;
+							const handle = await shim.fsDriver().open(path, 'r');
+							try {
+								const mimeType = fromFilename(path);
+								await onChunk(`data:${mimeType};base64,`);
+								while (true) {
+									const chunk = await shim.fsDriver().readFileChunk(handle, chunkBytes, 'base64');
+									if (!chunk) break;
+									await onChunk(chunk);
+								}
+							} finally {
+								await shim.fsDriver().close(handle);
+							}
+						},
+						async writeChunk(chunk) {
+							await shim.fsDriver().appendFile(tempFilePath, chunk, 'utf8');
+						},
 					},
-					readFileDataUri: async (path) => {
-						path = resolveToAllowedDir(path);
-						const mimeType = fromFilename(path);
-						const content = await shim.fsDriver().readFile(path, 'base64');
-						return `data:${mimeType};base64,${content}`;
-					},
-					readFileText: (path) => {
-						path = resolveToAllowedDir(path);
-						return shim.fsDriver().readFile(path, 'utf8');
-					},
-				},
-			);
-			await shim.fsDriver().writeFile(this.filePath_, packedHtml, 'utf8');
+				);
+
+				await shim.fsDriver().move(tempFilePath, this.filePath_);
+			} catch (error) {
+				if (await shim.fsDriver().exists(tempFilePath)) {
+					await shim.fsDriver().remove(tempFilePath);
+				}
+				throw error;
+			}
 
 			for (const d of this.createdDirs_) {
 				await shim.fsDriver().remove(d);

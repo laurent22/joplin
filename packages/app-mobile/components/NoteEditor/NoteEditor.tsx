@@ -65,6 +65,7 @@ interface Props {
 	plugins: PluginStates;
 	noteResources: ResourceInfos;
 	editorImageRendering: boolean;
+	editorTableEditing: boolean;
 	editorInlineRendering: boolean;
 
 	onScroll: OnScroll;
@@ -283,6 +284,7 @@ const useEditorSettings = (props: Props) => {
 		katexEnabled: Setting.value('markdown.plugin.katex'),
 		spellcheckEnabled: Setting.value('editor.mobile.spellcheckEnabled'),
 		inlineRenderingEnabled,
+		tableEditingEnabled: props.editorTableEditing,
 		imageRenderingEnabled: props.editorImageRendering,
 		language: props.markupLanguage === MarkupLanguage.Html ? EditorLanguageType.Html : EditorLanguageType.Markdown,
 		useExternalSearch: true,
@@ -301,7 +303,7 @@ const useEditorSettings = (props: Props) => {
 		indentWithTabs: true,
 
 		editorLabel: _('Markdown editor'),
-	}), [props.themeId, props.readOnly, props.markupLanguage, highlightActiveLine, inlineRenderingEnabled, props.editorImageRendering]);
+	}), [props.themeId, props.readOnly, props.markupLanguage, highlightActiveLine, inlineRenderingEnabled, props.editorImageRendering, props.editorTableEditing]);
 
 	return editorSettings;
 };
@@ -512,6 +514,7 @@ export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		editorInlineRendering: state.settings['editor.inlineRendering'],
+		editorTableEditing: state.settings['editor.tableEditing'],
 		editorImageRendering: state.settings['editor.imageRendering'],
 	};
 }, null, null, { forwardRef: true })(NoteEditor);

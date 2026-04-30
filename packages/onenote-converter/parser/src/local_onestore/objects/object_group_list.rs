@@ -6,7 +6,7 @@ use crate::{
     },
     shared::exguid::ExGuid,
 };
-use parser_utils::{errors::Result, log};
+use parser_utils::errors::Result;
 use std::fmt::Debug;
 use std::rc::Rc;
 
@@ -73,8 +73,9 @@ impl ObjectGroupList {
             if matches!(item, FileNodeData::ObjectGroupEndFND) {
                 break;
             } else if let FileNodeData::DataSignatureGroupDefinitionFND(_) = item {
+                // Marks the end of a signature block. Ignored.
+                // See https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-onestore/0fa4c886-011a-4c19-9651-9a69e43a19c6
                 iterator.next();
-                log!("Ignoring DataSignatureGroupDefinitionFND");
             } else if let Some(object) = Object::try_parse(iterator, &parse_context)? {
                 objects.push(Rc::new(object));
             } else {

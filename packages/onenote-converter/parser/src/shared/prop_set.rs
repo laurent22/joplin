@@ -1,6 +1,8 @@
 use crate::one::property::PropertyType;
 use crate::shared::property::{PropertyId, PropertyValue};
 use parser_utils::Reader;
+use parser_utils::Utf16ToString;
+use parser_utils::debug::DebugOutput;
 use parser_utils::errors::Result;
 use std::collections::HashMap;
 use std::fmt::Debug;
@@ -25,12 +27,41 @@ pub(crate) struct PropertySet {
 
 impl Debug for PropertySet {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        fn format_value(value: &PropertyValue) -> String {
+            match value {
+                PropertyValue::Vec(vec) => {
+                    // Vec() property values are used to represent strings. Try creating a string representation for
+                    // debugging purposes:
+                    let s = vec
+                        .as_slice()
+                        // OneNote file strings are usually UTF-16
+                        .utf16_to_string()
+                        .unwrap_or("".to_string());
+
+                    // Heuristic: If the text contains at least one ASCII letter/space character, it's probably a string.
+                    // This will miss some non-ASCII strings and incorrectly print some non-string vecs.
+                    let is_probably_string = !s.is_empty()
+                        && s.chars()
+                            .any(|c| c.is_ascii_whitespace() || c.is_ascii_alphanumeric());
+                    if is_probably_string {
+                        format!("{:?} ({:?})", s, vec)
+                    } else {
+                        format!("{:?}", vec)
+                    }
+                }
+                // Use the default compact representation of the value.
+                // This keeps potentially-long property values on a single line when producing
+                // multi-line debug output, which is usually more readable.
+                _ => format!("{:?}", value),
+            }
+        }
+
         let mut debug_map = f.debug_map();
         for (key, (_, value)) in &self.values {
             let formatted_key = format!("{:#0x}", key);
-            // Use the default compact representation of the value
-            let formatted_value = format!("{:?}", value);
-            debug_map.entry(&formatted_key, &formatted_value);
+            let formatted_value = format_value(value);
+
+            debug_map.entry(&formatted_key, &DebugOutput::from(formatted_value.as_str()));
         }
         debug_map.finish()
     }

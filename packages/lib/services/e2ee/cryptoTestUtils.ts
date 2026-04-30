@@ -67,6 +67,16 @@ export async function checkDecryptTestData(data: DecryptTestData, options: Check
 		messages.push(`Failed to decrypt data: Error: ${error}`);
 	}
 
+	try {
+		const decrypted = await EncryptionService.instance().decrypt(data.method, `${data.password}-bad`, data.ciphertext);
+		messages.push('Data could be decrypted with incorrect password');
+		messages.push('Expected:', data.plaintext);
+		messages.push('Got:', decrypted);
+		hasError = true;
+	} catch (error) {
+		messages.push(`Could not decrypt data with an invalid password (${error})`);
+	}
+
 	if (hasError && options.throwOnError) {
 		const label = options.testLabel ? ` (test ${options.testLabel})` : '';
 		throw new Error(`Testing Crypto failed${label}: \n${messages.join('\n')}`);

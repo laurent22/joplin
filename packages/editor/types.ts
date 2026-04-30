@@ -33,6 +33,12 @@ export enum EditorCommandType {
 	InsertTable = 'textTable',
 	InsertCodeBlock = 'textCodeBlock',
 
+	// Table editing commands
+	TableAddRow = 'tableAddRow',
+	TableAddColumn = 'tableAddColumn',
+	TableDeleteRow = 'tableDeleteRow',
+	TableDeleteColumn = 'tableDeleteColumn',
+
 	// Find commands
 	ToggleSearch = 'textSearch',
 	ShowSearch = 'find',
@@ -212,6 +218,7 @@ export interface EditorSettings {
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
 	inlineRenderingEnabled: boolean;
+	tableEditingEnabled: boolean;
 	imageRenderingEnabled: boolean;
 	readOnly: boolean;
 	highlightActiveLine: boolean;
