@@ -517,12 +517,12 @@ const buildStartupTasks = (
 		}
 	});
 
-	// remove temp cache file
+	// Clear orphaned .crypted files left over from interrupted uploads
 	addTask('buildStartupTasks/empty temp encryption cache', async () => {
 		try {
 			await Resource.emptyTempEncryptionCache();
 		} catch (error) {
-			logger.warn('Failed to empty temp encryption cache during startup:', error);
+			logger.warn('Failed to empty temp encryption cache during startup:', error.message);
 		}
 	});
 

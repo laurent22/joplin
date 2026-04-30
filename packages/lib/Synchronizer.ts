@@ -774,6 +774,10 @@ export default class Synchronizer {
 									const syncItem = await BaseItem.syncItem(syncTargetId, resource.id, { fields: ['sync_time', 'force_sync'] });
 									if (!syncItem || syncItem.sync_time < resource.blob_updated_time || syncItem.force_sync) {
 										await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
+										// clears the files in encryptionCache
+										if (localResourceContentPath && localResourceContentPath.includes('/encryptionCache/')) {
+											await shim.fsDriver().remove(localResourceContentPath);
+										}
 									}
 								} catch (error) {
 									if (isCannotSyncError(error)) {

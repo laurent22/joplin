@@ -408,11 +408,11 @@ class Application extends BaseApplication {
 
 		initializeCommandService(this.store(), Setting.value('env') === Env.Dev);
 
-		// remove temp cache file
+		// Clear orphaned .crypted files left over from interrupted uploads
 		try {
 			await Resource.emptyTempEncryptionCache();
 		} catch (error) {
-			this.logger().warn('Failed to empty temp encryption cache during startup:', error);
+			this.logger().warn('Failed to empty temp encryption cache during startup:', error.message);
 		}
 
 		// If we have some arguments left at this point, it's a command

@@ -599,11 +599,12 @@ class Application extends BaseApplication {
 
 		addTask('app/updateTray', () => this.updateTray());
 
-		addTask('app/deleteOrphanedTempCache', async () =>{
+		// Clear orphaned .crypted files left over from interrupted uploads
+		addTask('app/empty temp encryption cache', async () => {
 			try {
 				await Resource.emptyTempEncryptionCache();
 			} catch (error) {
-				this.logger().warn('Failed to empty temp encryption cache during startup:', error);
+				this.logger().warn('Failed to empty temp encryption cache during startup:', error.message);
 			}
 		});
 
