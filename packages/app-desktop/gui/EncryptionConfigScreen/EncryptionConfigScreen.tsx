@@ -58,6 +58,14 @@ export const EncryptionConfigScreen = (props: Props) => {
 	const disablePromptPromiseRef = useRef<(value: boolean)=> void>(null);
 	const promptPromiseRef = useRef<(password: string | null)=> void>(null);
 
+	// Cleanup on unmount to resolve pending promises if the user navigates away
+	useEffect(() => {
+		return () => {
+			if (disablePromptPromiseRef.current) disablePromptPromiseRef.current(false);
+			if (promptPromiseRef.current) promptPromiseRef.current(null);
+		};
+	}, []);
+
 	const wasMasterPasswordDialogOpen = useRef(props.masterPasswordDialogOpen);
 
 	const theme = useMemo(() => {
