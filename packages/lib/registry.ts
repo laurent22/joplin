@@ -26,9 +26,8 @@ export interface BackgroundServiceOptions {
 }
 
 export interface BackgroundService {
-	start(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-		task: (taskData?: any)=> Promise<void>,
+	start<T>(
+		task: (taskData?: T)=> Promise<void>,
 		options: BackgroundServiceOptions
 	): Promise<void>;
 	stop(): Promise<void>;
