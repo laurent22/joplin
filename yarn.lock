@@ -12758,9 +12758,9 @@ __metadata:
     taboverride: "npm:4.0.3"
     tesseract.js: "npm:6.0.1"
     tinymce: "npm:6.8.5"
-    ts-jest: "npm:29.4.1"
+    ts-jest: "npm:29.4.6"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -12801,7 +12801,7 @@ __metadata:
     "@react-native-vector-icons/material-icons": "patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch"
     "@react-native/babel-preset": "npm:0.81.6"
     "@react-native/metro-config": "npm:0.81.6"
-    "@react-native/typescript-config": "npm:0.81.6"
+    "@react-native/typescript-config": "npm:0.83.1"
     "@sqlite.org/sqlite-wasm": "npm:3.46.0-build2"
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
@@ -12882,10 +12882,10 @@ __metadata:
     tar-stream: "npm:3.1.7"
     timers: "npm:0.1.1"
     timers-browserify: "npm:2.0.12"
-    ts-jest: "npm:29.4.1"
+    ts-jest: "npm:29.4.6"
     ts-loader: "npm:9.5.4"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     url: "npm:0.11.4"
     url-loader: "npm:4.1.1"
     webpack: "npm:5.97.1"
@@ -12903,7 +12903,7 @@ __metadata:
     fs-extra: "npm:11.3.3"
     joplin-plugin-freehand-drawing: "npm:4.3.0"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
@@ -12977,8 +12977,8 @@ __metadata:
     prosemirror-tables: "npm:1.7.1"
     prosemirror-transform: "npm:1.10.5"
     prosemirror-view: "npm:1.40.0"
-    ts-jest: "npm:29.4.1"
-    typescript: "npm:5.8.3"
+    ts-jest: "npm:29.4.6"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -12997,9 +12997,9 @@ __metadata:
     entities: "npm:2.2.0"
     eslint: "npm:8.57.1"
     jest: "npm:29.7.0"
-    prettier: "npm:3.6.2"
-    ts-jest: "npm:29.4.1"
-    typescript: "npm:5.8.3"
+    prettier: "npm:3.7.4"
+    ts-jest: "npm:29.4.6"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -13020,7 +13020,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     jest: "npm:29.7.0"
     node-emoji: "npm:1.11.0"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -13036,7 +13036,7 @@ __metadata:
     fs-extra: "npm:11.3.3"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -13124,7 +13124,7 @@ __metadata:
     tar: "npm:7.5.8"
     tcp-port-used: "npm:1.0.2"
     tesseract.js: "npm:6.0.1"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
     url-parse: "npm:1.5.10"
     uuid: "npm:11.1.0"
@@ -13165,9 +13165,9 @@ __metadata:
     react-dom: "npm:19.1.5"
     style-loader: "npm:3.3.4"
     styled-components: "npm:5.3.11"
-    ts-jest: "npm:29.4.1"
+    ts-jest: "npm:29.4.6"
     ts-loader: "npm:9.5.4"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     webpack: "npm:5.74.0"
     webpack-cli: "npm:4.10.0"
   languageName: unknown
@@ -13189,7 +13189,7 @@ __metadata:
     node-fetch: "npm:2.6.7"
     source-map-loader: "npm:5.0.0"
     source-map-support: "npm:0.5.21"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     webpack: "npm:5.97.1"
     webpack-cli: "npm:4.10.0"
     yargs: "npm:17.7.2"
@@ -13220,7 +13220,7 @@ __metadata:
     "@babel/core": "npm:7.16.0"
     react: "npm:19.1.5"
     react-native: "npm:0.81.6"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -13263,8 +13263,8 @@ __metadata:
     markdown-it-toc-done-right: "npm:4.2.0"
     md5: "npm:2.3.0"
     mermaid: "npm:11.10.1"
-    ts-jest: "npm:29.4.1"
-    typescript: "npm:5.8.3"
+    ts-jest: "npm:29.4.6"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -13330,7 +13330,7 @@ __metadata:
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
     stripe: "npm:13.9.0"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     uuid: "npm:11.1.0"
     yargs: "npm:17.7.2"
     zxcvbn: "npm:4.4.2"
@@ -13381,7 +13381,7 @@ __metadata:
     sqlite3: "npm:5.1.6"
     style-to-js: "npm:1.1.21"
     ts-node: "npm:10.9.2"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     uri-template: "npm:2.0.0"
     yargs: "npm:17.7.2"
   languageName: unknown
@@ -13412,7 +13412,7 @@ __metadata:
     pg-boss: "npm:10.4.0"
     sharp: "npm:0.34.5"
     sqlite3: "npm:5.1.6"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -13481,8 +13481,8 @@ __metadata:
     node-fetch: "npm:2.6.7"
     sprintf-js: "npm:1.1.3"
     tcp-port-used: "npm:1.0.2"
-    ts-jest: "npm:29.4.1"
-    typescript: "npm:5.8.3"
+    ts-jest: "npm:29.4.6"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -13495,7 +13495,7 @@ __metadata:
     react: "npm:19.1.5"
     react-native: "npm:0.81.6"
     react-native-nitro-modules: "npm:0.33.2"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -16643,10 +16643,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/typescript-config@npm:0.81.6":
-  version: 0.81.6
-  resolution: "@react-native/typescript-config@npm:0.81.6"
-  checksum: 10/bfde8a72136526bb3a95f0a442feb53ed60a0ed698df42d7e6551d52eb19d11553e7b39cbc82f16e95b5f83b3b28fb59603161740be2dd01420a1520fee95fdf
+"@react-native/typescript-config@npm:0.83.1":
+  version: 0.83.1
+  resolution: "@react-native/typescript-config@npm:0.83.1"
+  checksum: 10/fb0d4716fb0fc01cf50cb872ed417d6387e64d25a283dffa22053db3986550b0adb57c09d2e6c6fa3114b13bf366da06e2cc466e77c4aeb71106448bfd166847
   languageName: node
   linkType: hard
 
@@ -38869,7 +38869,7 @@ __metadata:
     temp: "npm:0.9.4"
     terminal-kit: "npm:3.1.2"
     tkwidgets: "npm:0.5.27"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
     url-parse: "npm:1.5.10"
     word-wrap: "npm:1.2.5"
     yargs-parser: "npm:21.1.1"
@@ -48389,12 +48389,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.6.2":
-  version: 3.6.2
-  resolution: "prettier@npm:3.6.2"
+"prettier@npm:3.7.4":
+  version: 3.7.4
+  resolution: "prettier@npm:3.7.4"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/1213691706bcef1371d16ef72773c8111106c3533b660b1cc8ec158bd109cdf1462804125f87f981f23c4a3dba053b6efafda30ab0114cc5b4a725606bb9ff26
+  checksum: 10/b4d00ea13baed813cb777c444506632fb10faaef52dea526cacd03085f01f6db11fc969ccebedf05bf7d93c3960900994c6adf1b150e28a31afd5cfe7089b313
   languageName: node
   linkType: hard
 
@@ -52075,7 +52075,7 @@ __metadata:
     node-gyp: "npm:11.5.0"
     nodemon: "npm:3.1.11"
     npm-package-json-lint: "npm:9.0.0"
-    typescript: "npm:5.8.3"
+    typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -56901,9 +56901,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:29.4.1":
-  version: 29.4.1
-  resolution: "ts-jest@npm:29.4.1"
+"ts-jest@npm:29.4.6":
+  version: 29.4.6
+  resolution: "ts-jest@npm:29.4.6"
   dependencies:
     bs-logger: "npm:^0.2.6"
     fast-json-stable-stringify: "npm:^2.1.0"
@@ -56911,7 +56911,7 @@ __metadata:
     json5: "npm:^2.2.3"
     lodash.memoize: "npm:^4.1.2"
     make-error: "npm:^1.3.6"
-    semver: "npm:^7.7.2"
+    semver: "npm:^7.7.3"
     type-fest: "npm:^4.41.0"
     yargs-parser: "npm:^21.1.1"
   peerDependencies:
@@ -56937,7 +56937,7 @@ __metadata:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: 10/6aed48232c01a70c7d24c8e1e1fa4c10fcc7d4845913cc4b4c3def10d2d5ba32e98e495b427d3aca5682c13ac0754e6145af81d977ffcc71a26c54a2ca634d65
+  checksum: 10/e0ff9e13f684166d5331808b288043b8054f49a1c2970480a92ba3caec8d0ff20edd092f2a4e7a3ad8fcb9ba4d674bee10ec7ee75046d8066bbe43a7d16cf72e
   languageName: node
   linkType: hard
 
@@ -57523,13 +57523,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.8.3, typescript@npm:^5.7.3, typescript@npm:^5.8.3":
-  version: 5.8.3
-  resolution: "typescript@npm:5.8.3"
+"typescript@npm:5.9.3, typescript@npm:^5.4.0":
+  version: 5.9.3
+  resolution: "typescript@npm:5.9.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/65c40944c51b513b0172c6710ee62e951b70af6f75d5a5da745cb7fab132c09ae27ffdf7838996e3ed603bb015dadd099006658046941bd0ba30340cc563ae92
+  checksum: 10/c089d9d3da2729fd4ac517f9b0e0485914c4b3c26f80dc0cffcb5de1719a17951e92425d55db59515c1a7ddab65808466debb864d0d56dcf43f27007d0709594
   languageName: node
   linkType: hard
 
@@ -57543,13 +57543,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.4.0":
-  version: 5.9.3
-  resolution: "typescript@npm:5.9.3"
+"typescript@npm:^5.7.3, typescript@npm:^5.8.3":
+  version: 5.8.3
+  resolution: "typescript@npm:5.8.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/c089d9d3da2729fd4ac517f9b0e0485914c4b3c26f80dc0cffcb5de1719a17951e92425d55db59515c1a7ddab65808466debb864d0d56dcf43f27007d0709594
+  checksum: 10/65c40944c51b513b0172c6710ee62e951b70af6f75d5a5da745cb7fab132c09ae27ffdf7838996e3ed603bb015dadd099006658046941bd0ba30340cc563ae92
   languageName: node
   linkType: hard
 
@@ -57563,13 +57563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.7.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.8.3#optional!builtin<compat/typescript>":
-  version: 5.8.3
-  resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
+"typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.4.0#optional!builtin<compat/typescript>":
+  version: 5.9.3
+  resolution: "typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/b9b1e73dabac5dc730c041325dbd9c99467c1b0d239f1b74ec3b90d831384af3e2ba973946232df670519147eb51a2c20f6f96163cea2b359f03de1e2091cc4f
+  checksum: 10/696e1b017bc2635f4e0c94eb4435357701008e2f272f553d06e35b494b8ddc60aa221145e286c28ace0c89ee32827a28c2040e3a69bdc108b1a5dc8fb40b72e3
   languageName: node
   linkType: hard
 
@@ -57583,13 +57583,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.4.0#optional!builtin<compat/typescript>":
-  version: 5.9.3
-  resolution: "typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"
+"typescript@patch:typescript@npm%3A^5.7.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.8.3#optional!builtin<compat/typescript>":
+  version: 5.8.3
+  resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/696e1b017bc2635f4e0c94eb4435357701008e2f272f553d06e35b494b8ddc60aa221145e286c28ace0c89ee32827a28c2040e3a69bdc108b1a5dc8fb40b72e3
+  checksum: 10/b9b1e73dabac5dc730c041325dbd9c99467c1b0d239f1b74ec3b90d831384af3e2ba973946232df670519147eb51a2c20f6f96163cea2b359f03de1e2091cc4f
   languageName: node
   linkType: hard
 
