@@ -9,8 +9,8 @@ import Folder from '@joplin/lib/models/Folder';
 import ShareService, { ApiShare } from '@joplin/lib/services/share/ShareService';
 import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
-import StyledInput from '../style/StyledInput';
 import Button, { ButtonSize } from '../Button/Button';
+import InlineCombobox from '../InlineCombobox';
 import Logger from '@joplin/utils/Logger';
 import StyledMessage from '../style/StyledMessage';
 import { SharePermissions, ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
@@ -21,6 +21,7 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import { ChangeEvent, Dropdown, DropdownOptions, DropdownVariant } from '../Dropdown/Dropdown';
 import shim from '@joplin/lib/shim';
 import { SettingsRecord } from '@joplin/lib/models/Setting';
+const debounce = require('debounce');
 
 const logger = Logger.create('ShareFolderDialog');
 
@@ -39,11 +40,6 @@ const StyledFolder = styled.div`
 const StyledRecipientControls = styled.div`
 	display: flex;
 	flex-direction: row;
-`;
-
-const StyledRecipientInput = styled(StyledInput)`
-	width: 100%;
-	margin-right: 10px;
 `;
 
 const StyledAddRecipient = styled.div`
@@ -131,6 +127,7 @@ function ShareFolderDialog(props: Props) {
 	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
 	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
 	const [recipientsBeingUpdated, setRecipientsBeingUpdated] = useState<Record<string, boolean>>({});
+	const [recipientSuggestions, setRecipientSuggestions] = useState<string[]>([]);
 
 	async function synchronize(event: AsyncEffectEvent = null) {
 		setShareState(ShareState.Synchronizing);
@@ -169,6 +166,37 @@ function ShareFolderDialog(props: Props) {
 		if (!sus) return;
 		setShareUsers(sus);
 	}, [share, props.shareUsers]);
+
+	useEffect(() => {
+		setRecipientSuggestions([]);
+
+		let cancelled = false;
+
+		const loadSuggestions = async () => {
+			if (!recipientEmail) return;
+			try {
+				const result = await ShareService.instance().loadTeamUsers('me', recipientEmail);
+
+				if (!cancelled) {
+					setRecipientSuggestions(result.items.map(item => item.email));
+				}
+			} catch (error) {
+				logger.error('Could not load team users', error);
+				if (!cancelled) {
+					setLatestError(error);
+					setRecipientSuggestions([]);
+				}
+			}
+		};
+
+		const debouncedLoad = debounce(loadSuggestions, 250);
+		debouncedLoad();
+
+		return () => {
+			cancelled = true;
+			debouncedLoad.clear();
+		};
+	}, [recipientEmail]);
 
 	const permissionsFromString = (p: string): SharePermissions => {
 		return {
@@ -227,10 +255,9 @@ function ShareFolderDialog(props: Props) {
 		}
 	}, [recipientPermissions, props.folderId, recipientEmail]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function recipientEmail_change(event: any) {
-		setRecipientEmail(event.target.value);
-	}
+	const recipientEmail_change = useCallback((value: string) => {
+		setRecipientEmail(value);
+	}, []);
 
 	async function recipient_delete(event: RecipientDeleteEvent) {
 		if (!await shim.showConfirmationDialog(_('Delete this invitation? The recipient will no longer have access to this shared notebook.'))) return;
@@ -265,8 +292,17 @@ function ShareFolderDialog(props: Props) {
 		return (
 			<StyledAddRecipient>
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
-				<StyledRecipientControls>
-					<StyledRecipientInput disabled={disabled} type="email" placeholder="example@domain.com" value={recipientEmail} onChange={recipientEmail_change} />
+				<StyledRecipientControls className="share-recipient-input">
+					<div className="field">
+						<InlineCombobox
+							value={recipientEmail}
+							onChange={recipientEmail_change}
+							suggestedValues={disabled ? [] : recipientSuggestions}
+							renderOption={suggestedValue => <div>{suggestedValue}</div>}
+							inputStyle={{}}
+							inputId='share-folder-dialog-recipient-email'
+						/>
+					</div>
 					{dropdown}
 					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
