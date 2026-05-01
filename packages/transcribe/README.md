@@ -40,6 +40,22 @@ docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
 
 This needs NVIDIA Container Toolkit on the host. Use `0` or leave it unset for CPU.
 
+### Native macOS/Metal
+
+Apple Silicon GPU acceleration stays native. Use a macOS ARM64 `llama-mtmd-cli` binary with Metal support, then set `HTR_CLI_GPU_LAYERS` so the server can pass the GPU layer count to it.
+
+The model files still need to be available under `$DATA_DIR/models`:
+
+```env
+DATA_DIR=/path/to/transcribe-data
+HTR_CLI_BINARY_PATH=/path/to/llama-mtmd-cli
+HTR_CLI_GPU_LAYERS=9999
+API_KEY=...
+QUEUE_DRIVER=sqlite
+```
+
+With this setup, the server passes `-ngl 9999` to `llama-mtmd-cli`. Metal support comes from the binary.
+
 
 The container automatically creates the following inside `/data`:
 - `images/` - uploaded images
