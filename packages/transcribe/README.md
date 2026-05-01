@@ -35,7 +35,7 @@ The server uses CPU by default. For NVIDIA GPU, run a GPU-capable image with `--
 docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
 	-e HTR_CLI_GPU_LAYERS=9999 \
 	-v ./data:/data \
-	joplin/transcribe:amd64-latest
+	joplin/transcribe:gpu-latest
 ```
 
 This needs NVIDIA Container Toolkit on the host. Use `0` or leave it unset for CPU.
