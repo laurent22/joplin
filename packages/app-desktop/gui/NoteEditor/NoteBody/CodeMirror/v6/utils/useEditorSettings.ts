@@ -21,6 +21,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 		markdownInsert: state.settings['markdown.plugin.insert'],
 		katex: state.settings['markdown.plugin.katex'],
 		inlineRendering: state.settings['editor.inlineRendering'],
+		tableEditing: state.settings['editor.tableEditing'],
 		imageRendering: state.settings['editor.imageRendering'],
 		highlightActiveLine: state.settings['editor.highlightActiveLine'],
 		monospaceFont: state.settings['style.editor.monospaceFontFamily'],
@@ -48,6 +49,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 			markdownInsertEnabled: settings.markdownInsert,
 			katexEnabled: settings.katex,
 			inlineRenderingEnabled: settings.inlineRendering,
+			tableEditingEnabled: settings.tableEditing,
 			imageRenderingEnabled: settings.imageRendering,
 			highlightActiveLine: settings.highlightActiveLine,
 			themeData: {

@@ -12,7 +12,6 @@ const markdownEditorOnlyCommands = [
 
 
 const richTextEditorOnlyCommands = [
-	EditorCommandType.InsertTable,
 	EditorCommandType.InsertCodeBlock,
 ].map(command => `editor.${command}`);
 

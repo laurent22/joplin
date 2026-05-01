@@ -8,11 +8,13 @@ const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 	}
 
 	let targetHeaderPos: number|null = null;
+	let targetHeadingNodePos: number|null = null;
 	forEachHeading(view.state.doc, (node, hash, pos) => {
 		if (hash === targetHash) {
 			// Subtract one to move the selection to the end of
 			// the node:
 			targetHeaderPos = pos + node.nodeSize - 1;
+			targetHeadingNodePos = pos;
 		}
 
 		return targetHeaderPos !== null;
@@ -26,6 +28,14 @@ const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 					.scrollIntoView(),
 			);
 			if (view) {
+				// Scroll the heading to the top of the viewport, consistent with view
+				// mode behavior. Uses window.scrollTo to avoid relying on scrollIntoView
+				// option support across WebView versions.
+				const headingDom = view.nodeDOM(targetHeadingNodePos);
+				if (headingDom instanceof Element) {
+					const rect = headingDom.getBoundingClientRect();
+					window.scrollTo(0, window.scrollY + rect.top);
+				}
 				focus('jumpToHash', view);
 			}
 		}

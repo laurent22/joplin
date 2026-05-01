@@ -34,6 +34,23 @@ const expectNoViolations = async (page: Page) => {
 	// random failure in CI.
 	await expect.poll(async () => {
 		const results = await scanner.analyze();
+		if (results.violations.length > 0) {
+			// Keep CI failures actionable with compact, structured rule/selector details.
+			const violationSummary = results.violations.map(violation => ({
+				rule: violation.id,
+				impact: violation.impact,
+				description: violation.description,
+				help: violation.help,
+				helpUrl: violation.helpUrl,
+				nodes: violation.nodes.map(node => ({
+					target: node.target,
+					failureSummary: node.failureSummary,
+				})),
+			}));
+
+			console.error('WCAG violations detected:');
+			console.error(JSON.stringify(violationSummary, null, 2));
+		}
 		return results.violations;
 	}).toEqual([]);
 };

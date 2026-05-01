@@ -252,6 +252,23 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 							reg.logger().warn('"editor.scrollToText" is unsupported in legacy editor - please use the new editor');
 							return false;
 						},
+						// Table editing commands are only supported in the v6 editor
+						'editor.tableAddRow': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableAddColumn': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableDeleteRow': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableDeleteColumn': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
 					};
 
 					if (commands[cmd.name]) {

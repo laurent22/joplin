@@ -1552,6 +1552,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'editor',
 			storage: SettingStorage.File,
 		},
+		'editor.tableEditing': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Interactive table editing'),
+			description: () => _('When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.'),
+			section: 'editor',
+			storage: SettingStorage.File,
+		},
 		'editor.imageRendering': {
 			value: true,
 			type: SettingItemType.Bool,

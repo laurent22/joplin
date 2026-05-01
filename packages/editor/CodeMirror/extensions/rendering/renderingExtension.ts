@@ -5,8 +5,9 @@ import replaceCheckboxes from './replaceCheckboxes';
 import replaceDividers from './replaceDividers';
 import replaceFormatCharacters from './replaceFormatCharacters';
 import replaceInlineHtml from './replaceInlineHtml';
+import renderTables from './renderTables';
 
-export default () => {
+export default (tableEditingEnabled = true) => {
 	return [
 		replaceCheckboxes,
 		replaceBulletLists,
@@ -15,5 +16,6 @@ export default () => {
 		replaceDividers,
 		addFormattingClasses,
 		replaceInlineHtml,
+		...(tableEditingEnabled ? [renderTables] : []),
 	];
 };

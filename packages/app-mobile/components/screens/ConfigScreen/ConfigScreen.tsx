@@ -14,6 +14,7 @@ import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
 import * as shared from '@joplin/lib/components/shared/config/config-shared';
+import { shouldShowBySearch, hasNormalizedQuery } from '@joplin/lib/components/shared/config/config-search-text';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
@@ -48,6 +49,7 @@ interface ConfigScreenState {
 	changedSettingKeys: string[];
 
 	searchQuery: string;
+	searchSectionFilter: string|null;
 	searching: boolean;
 
 	fixingSearchIndex: boolean;
@@ -398,22 +400,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {
-			let searchThrough;
-			if (Array.isArray(relatedText)) {
-				searchThrough = relatedText.join('\n');
-			} else {
-				searchThrough = relatedText;
-			}
-			searchThrough = searchThrough.toLocaleLowerCase();
-
-			const searchQuery = this.state.searchQuery.toLocaleLowerCase().trim();
-
-			const hasSearchMatches =
-				headerTitle.toLocaleLowerCase() === searchQuery
-				|| searchThrough.includes(searchQuery);
-
-			// Don't show results when the search input is empty
-			return this.state.searchQuery.length > 0 && hasSearchMatches;
+			return shouldShowBySearch(this.state.searchQuery, headerTitle, relatedText);
 		};
 
 		const addSettingComponent = (
@@ -421,7 +408,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			relatedText: string|string[],
 			settingMetadata?: { advanced?: boolean },
 		) => {
-			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
+			const hiddenBySearch = this.state.searching && hasNormalizedQuery(this.state.searchQuery) && !matchesSearchQuery(relatedText);
 			if (component && !hiddenBySearch) {
 				if (settingMetadata?.advanced) {
 					advancedSettingComps.push(component);
