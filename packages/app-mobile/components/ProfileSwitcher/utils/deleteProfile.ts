@@ -57,7 +57,7 @@ const deleteProfile = async (options: DeleteProfileOptions) => {
 				if (item.isDirectory()) continue;
 				const fileName = item.path;
 
-				if (/^[a-z0-9]{32}\./.test(fileName)) {
+				if (/^[a-f0-9]{32}\./.test(fileName)) {
 					const fullPath = `${resourcesDir}/${fileName}`;
 					try {
 						await shim.fsDriver().unlink(fullPath);
