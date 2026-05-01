@@ -375,7 +375,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 						/>
 					</div>
 					{enableEncryptionError && (
-						<div style={{ ...theme.textStyle, color: theme.colorError, marginTop: 10 }}>
+						<div style={{ ...theme.textStyle, color: theme.colorError, marginTop: 10, marginBottom: 10 }}>
 							{enableEncryptionError}
 						</div>
 					)}
