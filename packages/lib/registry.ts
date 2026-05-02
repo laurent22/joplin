@@ -302,7 +302,7 @@ class Registry {
 		await service.requestPermissions();
 
 		if (sync.state() !== 'idle') return null;
-		options = { ...options, appIsActive: service ? service.appIsActive : null };
+		options = { ...options, appIsActive: service.appIsActive };
 
 		try {
 			await service.start(async () => {
@@ -315,11 +315,16 @@ class Registry {
 						})(),
 						time.msleep(5 * 60 * 1000),
 					]);
+				} catch (e) {
+					// This should not happen, because the synchronizer only explicitly throws if the sync is already in progress, which is checked just before this.
+					// But any possible exceptions should be caught here to avoid reaching the outer catch block, which would trigger another sync
+					this.logger().warn('registry.sync: Unexpected error during sync', e);
 				} finally {
 					// Always stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while
 					// the app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
-					await service.stop();
-					this.logger().info('registry.sync: Background service stopped');
+					void service.stop()
+						.then(() => this.logger().info('registry.sync: Background service stopped'))
+						.catch(e => this.logger().warn('registry.sync: Stopping background service failed', e));
 				}
 			}, {
 				taskName: 'Sync',
@@ -332,11 +337,7 @@ class Registry {
 				foregroundServiceType: ['dataSync'],
 			});
 		} catch (e) {
-			// If service.start is called while the service is already running, it will kill the existing service and start a new one. However if service.start
-			// is called while the app is in background, it will throw an exception and end up here. This can happen when the sync is triggered at the user
-			// configured sync interval. We should still run the sync normally in this case, in case there are other occasions this error will happen, but we
-			// it doesn't really matter if this sync does not complete while in the background, due to there being no service to keep it alive
-			this.logger().info('registry.sync: Starting background service failed, running sync directly', e);
+			this.logger().warn('registry.sync: Starting background service failed, running sync directly', e);
 			return sync.start(options);
 		}
 
