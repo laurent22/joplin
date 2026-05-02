@@ -78,7 +78,6 @@ export default class Synchronizer {
 	private syncTargetIsLocked_ = false;
 	private shareService_: ShareService = null;
 	private lockClientType_: LockClientType = null;
-	private syncStartTime_ = 0;
 
 	// Debug flags are used to test certain hard-to-test conditions
 	// such as cancelling in the middle of a loop.
@@ -310,7 +309,6 @@ export default class Synchronizer {
 	}
 
 	public cancelling() {
-		reg.stopBackgroundServiceIfExpired(this.syncStartTime_);
 		return this.cancelling_;
 	}
 
@@ -403,8 +401,6 @@ export default class Synchronizer {
 		}
 
 		this.state_ = 'in_progress';
-		if (options.syncStartTime === undefined) this.syncStartTime_ = Date.now();
-		options = { ...options, syncStartTime: this.syncStartTime_ };
 
 		this.onProgress_ = options.onProgress ? options.onProgress : function() {};
 		this.progressReport_ = { errors: [] };

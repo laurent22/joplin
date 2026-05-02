@@ -5,6 +5,7 @@ import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
 import uuid from './uuid';
+import time from './time';
 
 export interface BackgroundServiceOptions {
 	taskName: string;
@@ -297,7 +298,7 @@ class Registry {
 	private async startSync(sync: Synchronizer, options: any, contextKey: string) {
 		// Service will only be populated for the native Android app
 		const service = this.backgroundService_;
-		if (!service || options.useService === false) return sync.start(options);
+		if (!service || service.isRunning() || options.useService === false) return sync.start(options);
 
 		await service.requestPermissions();
 
@@ -309,8 +310,13 @@ class Registry {
 			await service.start(async () => {
 				this.logger().debug(`registry.sync [${uid}]: Background service started`);
 				try {
-					const newContext = await sync.start(options);
-					Setting.setValue(contextKey, JSON.stringify(newContext));
+					await Promise.race([
+						(async () => {
+							const newContext = await sync.start(options);
+							Setting.setValue(contextKey, JSON.stringify(newContext));
+						})(),
+						time.msleep(5 * 60 * 1000),
+					]);
 				} finally {
 					// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
 					// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
@@ -339,18 +345,6 @@ class Registry {
 		// When the sync completes successfully via the service, we cannot get a return value. However the SYNC_PENDING_UPDATE event which the response
 		// determines is not used on mobile, so this does not matter
 		return null;
-	}
-
-	public stopBackgroundServiceIfExpired(syncStartTime: number) {
-		const service = this.backgroundService_;
-		if (!service) return;
-
-		const maxRuntimeExceeded = Date.now() - syncStartTime >= 5 * 60 * 1000;
-
-		if (service.isRunning() && !service.appIsActive() && maxRuntimeExceeded) {
-			void service.stop();
-			this.logger().debug('registry.sync: Background service stopped due to timing out');
-		}
 	}
 
 	public setupRecurrentSync() {
