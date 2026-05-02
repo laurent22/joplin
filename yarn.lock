@@ -12272,7 +12272,7 @@ __metadata:
     "@joplin/default-plugins": "npm:~3.6"
     "@joplin/editor": "npm:~3.6"
     "@joplin/lib": "npm:~3.6"
-    "@joplin/onenote-converter": "npm:~3.6"
+    "@joplin/onenote-converter": "npm:~3.4.0"
     "@joplin/renderer": "npm:~3.6"
     "@joplin/tools": "npm:~3.6"
     "@joplin/utils": "npm:~3.6"
@@ -12630,7 +12630,7 @@ __metadata:
     "@joplin/fork-sax": "npm:^1.2.64"
     "@joplin/fork-uslug": "npm:^2.0.3"
     "@joplin/htmlpack": "npm:~3.6"
-    "@joplin/onenote-converter": "npm:~3.6"
+    "@joplin/onenote-converter": "npm:~3.4.0"
     "@joplin/renderer": "npm:~3.6"
     "@joplin/turndown": "npm:^4.0.82"
     "@joplin/turndown-plugin-gfm": "npm:^1.0.64"
@@ -12712,7 +12712,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/onenote-converter@npm:~3.6, @joplin/onenote-converter@workspace:packages/onenote-converter":
+"@joplin/onenote-converter@npm:~3.4.0":
+  version: 3.4.1
+  resolution: "@joplin/onenote-converter@npm:3.4.1"
+  checksum: 10/0854ef7f6373359feeebae3896ae1d087cdc4f4e6b0da4dcc905572d5380c280b896c095386e0ad97930e9a4c212c4535d08314a3a2baa75ec4038a81857e455
+  languageName: node
+  linkType: hard
+
+"@joplin/onenote-converter@workspace:packages/onenote-converter":
   version: 0.0.0-use.local
   resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
   dependencies:
