@@ -771,10 +771,12 @@ export default class Synchronizer {
 									// that case, it means the resource metadata
 									// (title, filename, etc.) has been changed,
 									// but not the data blob.
-									const syncItem = await BaseItem.syncItem(syncTargetId, resource.id, { fields: ['sync_time', 'force_sync'] });
-									if (!syncItem || syncItem.sync_time < resource.blob_updated_time || syncItem.force_sync) {
-										await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
-
+									try {
+										const syncItem = await BaseItem.syncItem(syncTargetId, resource.id, { fields: ['sync_time', 'force_sync'] });
+										if (!syncItem || syncItem.sync_time < resource.blob_updated_time || syncItem.force_sync) {
+											await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
+										}
+									} finally {
 										// clears the files in encryptionCache
 										const tempDir = Setting.value('tempDir');
 										const encryptionCacheDir = `${tempDir}/encryptionCache/`;

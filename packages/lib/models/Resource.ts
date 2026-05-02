@@ -230,8 +230,11 @@ export default class Resource extends BaseItem {
 			}
 		}
 
+		decryptedItem.encryption_blob_encrypted = 0;
+		const savedItem = await super.save(decryptedItem, { autoTimestamp: false });
+
 		// We do this outside the main decrypt Try/Catch block
-		// If this fails it does NOT throw an error and only logs a warning, letting the db transaction occur below
+		// If this fails it does NOT throw an error and only logs a warning.
 		try {
 			if (await this.fsDriver().exists(encryptedPath)) {
 				// The file was successfully decrypted into plaintext.
@@ -242,8 +245,7 @@ export default class Resource extends BaseItem {
 			this.logger().warn(`Could not remove leftover .crypted file ${encryptedPath}:`, cleanupError);
 		}
 
-		decryptedItem.encryption_blob_encrypted = 0;
-		return super.save(decryptedItem, { autoTimestamp: false });
+		return savedItem;
 	}
 
 	public static async tempCryptedPath(resourceId: string): Promise<string> {
