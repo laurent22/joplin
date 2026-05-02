@@ -445,6 +445,9 @@ const buildStartupTasks = (
 					stop: async () => {
 						return BackgroundService.stop();
 					},
+					isRunning: () => {
+						return BackgroundService.isRunning();
+					},
 					requestPermissions: async () => {
 						const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 

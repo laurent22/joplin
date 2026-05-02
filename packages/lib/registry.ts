@@ -31,6 +31,7 @@ export interface BackgroundService {
 		options: BackgroundServiceOptions
 	): Promise<void>;
 	stop(): Promise<void>;
+	isRunning(): boolean;
 	requestPermissions(): Promise<void>;
 	appIsActive(): boolean;
 }
@@ -55,6 +56,7 @@ class Registry {
 	private isOnMobileData_ = false;
 	private dispatch_: Dispatch = (() => {}) as Dispatch;
 	private backgroundService_: BackgroundService | null = null;
+	private syncStartTime = 0;
 
 	public setBackgroundService(service: BackgroundService) {
 		this.backgroundService_ = service;
@@ -299,6 +301,7 @@ class Registry {
 		try {
 			await service.start(async () => {
 				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
+				this.syncStartTime = Date.now();
 				try {
 					const newContext = await sync.start(options);
 					Setting.setValue(contextKey, JSON.stringify(newContext));
@@ -330,6 +333,17 @@ class Registry {
 		// When the sync completes successfully via the service, we cannot get a return value. However the SYNC_PENDING_UPDATE event which the response
 		// determines is not used on mobile, so this does not matter
 		return null;
+	}
+
+	public stopBackgroundServiceIfExpired() {
+		const service = this.backgroundService_;
+		if (!service) return;
+
+		const maxRuntimeExceeded = Date.now() - this.syncStartTime >= 5 * 60 * 1000;
+
+		if (service.isRunning() && !service.appIsActive() && maxRuntimeExceeded) {
+			void service.stop();
+		}
 	}
 
 	public setupRecurrentSync() {

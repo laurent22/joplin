@@ -309,6 +309,7 @@ export default class Synchronizer {
 	}
 
 	public cancelling() {
+		reg.stopBackgroundServiceIfExpired();
 		return this.cancelling_;
 	}
 
