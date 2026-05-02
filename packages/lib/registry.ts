@@ -155,7 +155,8 @@ class Registry {
 
 	// This function should not be awaited directly, as awaiting this function with a delay other than 0 will result in the promise never being
 	// returned, if another sync is scheduled during the delay. Also on platforms where the background service is set, this will resolve immediately,
-	// without waiting for the sync to complete. If required to wait for the sync to complete, use the waitForSyncFinishedThenSync function instead
+	// without waiting for the sync to complete. PR https://github.com/laurent22/joplin/pull/15216/ removed existing usages which await this function.
+	// If required to wait for the sync to complete, the waitForSyncFinishedThenSync function should be used instead
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
