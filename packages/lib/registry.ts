@@ -342,7 +342,12 @@ class Registry {
 		const maxRuntimeExceeded = Date.now() - this.syncStartTime >= 5 * 60 * 1000;
 
 		if (service.isRunning() && !service.appIsActive() && maxRuntimeExceeded) {
-			void service.stop();
+			try {
+				void service.stop();
+				this.logger().debug('registry.startSync: Background service stopped due to timing out');
+			} catch (e) {
+				// Avoid throwing here so that if an error occurs, it does not stop the sync
+			}
 		}
 	}
 
