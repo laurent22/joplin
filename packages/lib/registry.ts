@@ -56,7 +56,6 @@ class Registry {
 	private isOnMobileData_ = false;
 	private dispatch_: Dispatch = (() => {}) as Dispatch;
 	private backgroundService_: BackgroundService | null = null;
-	private syncStartTime = 0;
 
 	public setBackgroundService(service: BackgroundService) {
 		this.backgroundService_ = service;
@@ -301,7 +300,6 @@ class Registry {
 		try {
 			await service.start(async () => {
 				this.logger().debug(`registry.sync [${uid}]: Background service started`);
-				this.syncStartTime = Date.now();
 				try {
 					const newContext = await sync.start(options);
 					Setting.setValue(contextKey, JSON.stringify(newContext));
@@ -335,11 +333,11 @@ class Registry {
 		return null;
 	}
 
-	public stopBackgroundServiceIfExpired() {
+	public stopBackgroundServiceIfExpired(syncStartTime: number) {
 		const service = this.backgroundService_;
 		if (!service) return;
 
-		const maxRuntimeExceeded = Date.now() - this.syncStartTime >= 5 * 60 * 1000;
+		const maxRuntimeExceeded = Date.now() - syncStartTime >= 5 * 60 * 1000;
 
 		if (service.isRunning() && !service.appIsActive() && maxRuntimeExceeded) {
 			void service.stop();
