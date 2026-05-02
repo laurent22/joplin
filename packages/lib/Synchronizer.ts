@@ -1277,7 +1277,7 @@ export default class Synchronizer {
 					// If the app is in the background, the user can't make more changes, so it is fine to sync again immediately, as excessive data usage from
 					// making continuous changes is not a concern
 					logger.info('There are more outgoing changes to sync, run the sync again');
-					outputContext = await this.start(options);
+					outputContext = await this.start({ ...options, context: outputContext });
 				} else {
 					logger.info('There are more outgoing changes to sync, schedule the sync again');
 					void reg.scheduleSync(reg.syncAsYouTypeInterval(), { syncSteps }, true);
