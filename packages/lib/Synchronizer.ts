@@ -579,7 +579,9 @@ export default class Synchronizer {
 			if (syncSteps.indexOf('delete_remote') >= 0) {
 				await syncDeleteStep(
 					syncTargetId,
-					this.cancelling,
+					() => {
+						return this.cancelling();
+					},
 					(action, local, logSyncOperation, message, actionCount) => {
 						this.logSyncOperation(action, local, logSyncOperation, message, actionCount);
 					},
