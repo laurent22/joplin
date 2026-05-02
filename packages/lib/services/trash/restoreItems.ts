@@ -78,11 +78,11 @@ const restoreItems = async (itemType: ModelType, itemsOrIds: NoteEntity[] | Fold
 			await restoreItems(ModelType.Folder, deletedChildrenFolders);
 
 			const notes = await Folder.notes(item.id, {
-				fields: ['id', 'parent_id'],
+				fields: ['id', 'parent_id', 'deleted_time'],
 				includeDeleted: true,
 			});
-
-			await restoreItems(ModelType.Note, notes);
+			const deletedNotes = notes.filter(n => !!n.deleted_time);
+			await restoreItems(ModelType.Note, deletedNotes);
 		}
 	}
 };
