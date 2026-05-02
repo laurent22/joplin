@@ -1,4 +1,5 @@
 @use "./styles/index.scss";
+@use "./Sidebar/style.scss" as sidebar-styles;
 
 .config-screen-content-wrapper {
 	padding: 24px;
@@ -45,4 +46,67 @@
 	background-color: var(--joplin-background-color3);
 	display: flex;
 	align-items: center;
+}
+
+// Container styles
+.config-screen-settings-container {
+	overflow: auto;
+	padding: var(--joplin-config-screen-padding);
+	padding-top: 0;
+	display: flex;
+	flex: 1;
+
+	&.hidden {
+		display: none;
+	}
+}
+
+// Search mode styles
+.search-results {
+	display: block;
+	overflow: auto;
+	padding: var(--joplin-config-screen-padding);
+	padding-top: 0;
+	flex: 1;
+}
+
+.search-filter-control {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 20px;
+	margin-bottom: 8px;
+	color: var(--joplin-color);
+}
+
+.search-section-title {
+	font-weight: 500;
+	margin-top: 30px;
+	margin-bottom: 10px;
+	padding: 8px;
+	display: flex;
+	align-items: center;
+	color: var(--joplin-color2);
+	background-color: var(--joplin-background-color2);
+	font-size: calc(var(--joplin-font-size) * 1.2);
+
+	> i {
+		margin-right: 8px;
+	}
+}
+
+.search-message {
+	margin-bottom: 20px;
+	color: var(--joplin-color);
+}
+
+.search-no-results {
+	margin-top: 20px;
+	color: var(--joplin-color-faded);
+}
+
+.config-screen mark {
+	background-color: var(--joplin-search-marker-background-color);
+	color: var(--joplin-search-marker-color);
+	padding: 0;
 }

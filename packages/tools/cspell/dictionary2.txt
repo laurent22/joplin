@@ -214,6 +214,7 @@ mkdir
 mkdirp
 mknote
 mktodo
+MLKEM
 MMYY
 mmproj
 mnop

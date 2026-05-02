@@ -14,6 +14,8 @@ import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, 
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { showLinkEditor } from '../utils/handleLinkEditRequests';
 import jumpToHash from './jumpToHash';
+import { tableAddRow, tableAddColumn, tableDeleteRow, tableDeleteColumn } from './tableCommands';
+import { generateTable } from '../utils/markdown/tableUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Commands have varying argument types
 export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> any;
@@ -46,13 +48,7 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.ToggleHeading5]: toggleHeaderLevel(5),
 	[EditorCommandType.InsertHorizontalRule]: insertHorizontalRule,
 	[EditorCommandType.InsertTable]: editor => {
-		replaceSelectionCommand(editor, [
-			'',
-			'|    |    |',
-			'|----|----|',
-			'|    |    |',
-			'',
-		].join('\n'));
+		replaceSelectionCommand(editor, `\n${generateTable(1, 2)}\n\n`);
 	},
 	[EditorCommandType.InsertCodeBlock]: editor => {
 		replaceSelectionCommand(editor, [
@@ -128,6 +124,12 @@ const editorCommands: Record<EditorCommandType, EditorCommandFunction> = {
 	[EditorCommandType.JumpToHash]: (editor, hash: string) => {
 		return jumpToHash(editor, hash);
 	},
+
+	// Table editing commands
+	[EditorCommandType.TableAddRow]: tableAddRow,
+	[EditorCommandType.TableAddColumn]: tableAddColumn,
+	[EditorCommandType.TableDeleteRow]: tableDeleteRow,
+	[EditorCommandType.TableDeleteColumn]: tableDeleteColumn,
 };
 export default editorCommands;
 

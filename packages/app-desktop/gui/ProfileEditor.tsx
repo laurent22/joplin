@@ -7,7 +7,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import bridge from '../services/bridge';
 import dialogs from './dialogs';
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
-import { deleteProfileById, saveProfileConfig } from '@joplin/lib/services/profileConfig';
+import { deleteProfileById, isSubProfile, saveProfileConfig } from '@joplin/lib/services/profileConfig';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
@@ -150,18 +150,64 @@ const ProfileEditorComponent: React.FC<Props> = props => {
 		});
 		if (!ok) return;
 
+		const subProfile = isSubProfile(profile);
 		const rootDir = Setting.value('rootProfileDir');
-		const profileDir = `${rootDir}/profile-${profile.id}`;
 
-		try {
-			await shim.fsDriver().remove(profileDir);
-			logger.info('Deleted profile directory: ', profileDir);
-		} catch (error) {
-			logger.error('Error deleting profile directory: ', error);
-			bridge().showErrorMessageBox(error.message);
+		// Deleting the default profile must be handled differently. We can't delete the whole directory because it contains other profiles and global settings
+		if (subProfile) {
+			const profileDir = `${rootDir}/profile-${profile.id}`;
+
+			try {
+				await shim.fsDriver().remove(profileDir);
+				logger.info('Deleted profile directory: ', profileDir);
+			} catch (error) {
+				logger.error('Error deleting profile directory: ', error);
+				bridge().showErrorMessageBox(error.message);
+			}
+
+			await saveNewProfileConfig(() => deleteProfileById(profileConfig, profile.id));
+		} else {
+			const dirsToDelete = ['cache', 'resources', 'tmp'];
+			const filesToDelete = ['database.sqlite', 'log.txt', 'keymap-desktop.json'];
+
+			// Reset settings for the default profile, but retain global settings
+			try {
+				await Setting.resetDefaultProfileSettings();
+			} catch (error) {
+				// If the first stage fails, nothing has happened, so throw an error. But if there is a failure in later steps, ignore errors but log them
+				logger.error('Error deleting the default profile: ', error);
+				bridge().showErrorMessageBox(error.message);
+				return;
+			}
+
+			// Delete directories
+			for (const dir of dirsToDelete) {
+				const fullPath = `${rootDir}/${dir}`;
+				try {
+					if (await shim.fsDriver().exists(fullPath)) {
+						await shim.fsDriver().remove(fullPath);
+						logger.info('Deleted directory: ', fullPath);
+					}
+				} catch (error) {
+					logger.error('Error deleting directory: ', fullPath, error);
+				}
+			}
+
+			// Delete files
+			for (const file of filesToDelete) {
+				const fullPath = `${rootDir}/${file}`;
+				try {
+					if (await shim.fsDriver().exists(fullPath)) {
+						await shim.fsDriver().unlink(fullPath);
+						logger.info('Deleted file: ', fullPath);
+					}
+				} catch (error) {
+					logger.error('Error deleting file: ', fullPath, error);
+				}
+			}
+
+			bridge().showMessageBox(_('The default profile has been reset.'));
 		}
-
-		await saveNewProfileConfig(() => deleteProfileById(profileConfig, profile.id));
 	};
 
 	return (

@@ -2,12 +2,12 @@ import { AppType, MetadataBySection, SettingMetadataSection, SettingSectionSourc
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
-const styled = require('styled-components').default;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
+import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text';
+import { type SearchResultGroup } from './configSearch';
+import highlightSearchText from './searchHighlight';
 
 interface SectionChangeEvent {
 	section: SettingMetadataSection;
@@ -17,67 +17,19 @@ interface Props {
 	selection: string;
 	onSelectionChange: (event: SectionChangeEvent)=> void;
 	sections: MetadataBySection;
+	searchQuery: string;
+	onSearchQueryChange: (event: OnChangeEvent)=> void;
+	onSearchButtonClick: ()=> void;
+	searchResultGroups: SearchResultGroup[];
 }
-
-export const StyledRoot = styled.div`
-	display: flex;
-	background-color: ${(props: StyleProps) => props.theme.backgroundColor2};
-	flex-direction: column;
-	overflow-x: hidden;
-	overflow-y: auto;
-`;
-
-export const StyledListItem = styled.a`
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: row;
-	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
-	background: ${(props: StyleProps) => props.selected ? props.theme.selectedColor2 : 'none'};
-	transition: 0.1s;
-	text-decoration: none;
-	cursor: default;
-	opacity: ${(props: StyleProps) => props.selected ? 1 : 0.8};
-	padding-left: ${(props: StyleProps) => props.isSubSection ? '35' : props.theme.mainPadding}px;
-
-	&:hover {
-		background-color: ${(props: StyleProps) => props.theme.backgroundColorHover2};
-	}
-`;
-
-export const StyledDivider = styled.div`
-	box-sizing: border-box;
-	display: flex;
-	flex-direction: row;
-	color: ${(props: StyleProps) => props.theme.color2};
-	padding: ${(props: StyleProps) => props.theme.mainPadding}px;
-	padding-top: ${(props: StyleProps) => props.theme.mainPadding * .8}px;
-	padding-bottom: ${(props: StyleProps) => props.theme.mainPadding * .8}px;
-	border-top: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
-	border-bottom: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
-	background-color: ${(props: StyleProps) => props.theme.selectedColor2};
-	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize)}px;
-	opacity: 0.58;
-`;
-
-export const StyledListItemLabel = styled.span`
-	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize * 1.2)}px;
-	font-weight: 500;
-	color: ${(props: StyleProps) => props.theme.color2};
-	white-space: nowrap;
-	display: flex;
-	flex: 1;
-	align-items: center;
-	user-select: none;
-`;
-
-export const StyledListItemIcon = styled.i`
-	font-size: ${(props: StyleProps) => Math.round(props.theme.fontSize * 1.4)}px;
-	color: ${(props: StyleProps) => props.theme.color2};
-	margin-right: ${(props: StyleProps) => props.theme.mainPadding / 1.5}px;
-`;
 
 export default function Sidebar(props: Props) {
 	const buttonRefs = useRef<HTMLElement[]>([]);
+	const isSearching = !!normalizeQuery(props.searchQuery);
+
+	const matchedSectionNames = useMemo(() => {
+		return new Set(props.searchResultGroups.map(group => group.sectionName));
+	}, [props.searchResultGroups]);
 
 	// Making a tabbed region accessible involves supporting keyboard interaction.
 	// See https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ for details
@@ -85,18 +37,42 @@ export default function Sidebar(props: Props) {
 		const selectedIndex = props.sections.findIndex(section => section.name === props.selection);
 		let newIndex = selectedIndex;
 
+		// Determine navigation direction
+		let isMovingUp = false;
 		if (event.code === 'ArrowUp') {
 			newIndex --;
+			isMovingUp = true;
 		} else if (event.code === 'ArrowDown') {
 			newIndex ++;
+			isMovingUp = false;
 		} else if (event.code === 'Home') {
 			newIndex = 0;
+			isMovingUp = false;
 		} else if (event.code === 'End') {
 			newIndex = props.sections.length - 1;
+			isMovingUp = true;
 		}
 
 		if (newIndex < 0) newIndex += props.sections.length;
 		newIndex %= props.sections.length;
+
+		// Skip disabled (no-match) sections during search
+		if (isSearching) {
+			const initialIndex = newIndex;
+			while (!matchedSectionNames.has(props.sections[newIndex].name)) {
+				if (isMovingUp) {
+					newIndex--;
+					if (newIndex < 0) newIndex += props.sections.length;
+				} else {
+					newIndex++;
+					newIndex %= props.sections.length;
+				}
+				// Prevent infinite loop if no matched sections
+				if (newIndex === initialIndex) break;
+			}
+
+			if (!matchedSectionNames.has(props.sections[newIndex].name)) return;
+		}
 
 		if (newIndex !== selectedIndex) {
 			event.preventDefault();
@@ -107,46 +83,60 @@ export default function Sidebar(props: Props) {
 				focus('Sidebar', targetButton);
 			}
 		}
-	}, [props.sections, props.selection, props.onSelectionChange]);
+	}, [props.sections, props.selection, props.onSelectionChange, matchedSectionNames, isSearching]);
 
 	const buttons: React.ReactNode[] = [];
 
 	function renderButton(section: SettingMetadataSection, index: number) {
 		const selected = props.selection === section.name;
+		const hasMatch = matchedSectionNames.has(section.name);
+		const isDisabled = isSearching && !hasMatch;
+		const isActiveTab = selected && !isDisabled;
+
+		const classNames = ['item'];
+		if (Setting.isSubSection(section.name)) classNames.push('sub');
+		if (isActiveTab) classNames.push('selected');
+		if (isDisabled) classNames.push('disabled');
+
 		return (
-			<StyledListItem
+			<button
 				key={section.name}
-				href='#'
+				type='button'
 				role='tab'
-				ref={(item: HTMLElement) => { buttonRefs.current[index] = item; }}
-
+				ref={(item: HTMLElement | null) => {
+					if (item) {
+						buttonRefs.current[index] = item;
+					}
+				}}
+				className={classNames.join(' ')}
 				id={`setting-tab-${section.name}`}
-				aria-controls={`setting-section-${section.name}`}
-				aria-selected={selected}
-				tabIndex={selected ? 0 : -1}
-
-				isSubSection={Setting.isSubSection(section.name)}
-				selected={selected}
-				onClick={() => { props.onSelectionChange({ section: section }); }}
-				onKeyDown={onKeyDown}
+				aria-controls={isSearching ? (isDisabled ? undefined : 'setting-section-search-results') : `setting-section-${section.name}`}
+				aria-selected={isActiveTab}
+				aria-disabled={isDisabled}
+				tabIndex={isActiveTab ? 0 : -1}
+				onClick={() => {
+					if (isDisabled) return;
+					props.onSelectionChange({ section: section });
+				}}
+				onKeyDown={!isDisabled ? onKeyDown : undefined}
 			>
-				<StyledListItemIcon
-					className={Setting.sectionNameToIcon(section.name, AppType.Desktop)}
+				<i
+					className={`icon ${Setting.sectionNameToIcon(section.name, AppType.Desktop)}`}
 					role='img'
 					aria-hidden='true'
 				/>
-				<StyledListItemLabel>
-					{Setting.sectionNameToLabel(section.name)}
-				</StyledListItemLabel>
-			</StyledListItem>
+				<span className='label'>
+					{highlightSearchText(Setting.sectionNameToLabel(section.name), props.searchQuery)}
+				</span>
+			</button>
 		);
 	}
 
 	function renderDivider(key: string) {
 		return (
-			<StyledDivider key={key}>
+			<div key={key} className='separator' role='presentation' aria-hidden='true'>
 				{_('Plugins')}
-			</StyledDivider>
+			</div>
 		);
 	}
 
@@ -164,8 +154,23 @@ export default function Sidebar(props: Props) {
 	}
 
 	return (
-		<StyledRoot className='settings-sidebar _scrollbar2' role='tablist'>
-			{buttons}
-		</StyledRoot>
+		<div className='settings-sidebar _scrollbar2'>
+			<div className='searchbox'>
+				<SearchInput
+					inputRef={null}
+					inputClassName='settings'
+					value={props.searchQuery}
+					onChange={props.onSearchQueryChange}
+					onSearchButtonClick={props.onSearchButtonClick}
+					searchStarted={isSearching}
+					placeholder={_('Search settings...')}
+					aria-controls={isSearching ? 'setting-section-search-results' : undefined}
+					iconButtonTabIndex={-1}
+				/>
+			</div>
+			<div role='tablist' className='tablist'>
+				{buttons}
+			</div>
+		</div>
 	);
 }
