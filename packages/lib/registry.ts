@@ -318,8 +318,8 @@ class Registry {
 						time.msleep(5 * 60 * 1000),
 					]);
 				} finally {
-					// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
-					// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
+					// Always stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while
+					// the app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
 					await service.stop();
 					this.logger().debug(`registry.sync [${uid}]: Background service stopped`);
 				}
