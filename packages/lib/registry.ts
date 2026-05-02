@@ -300,7 +300,7 @@ class Registry {
 
 		try {
 			await service.start(async () => {
-				this.logger().debug(`registry.startSync [${uid}]: Background service started`);
+				this.logger().debug(`registry.sync [${uid}]: Background service started`);
 				this.syncStartTime = Date.now();
 				try {
 					const newContext = await sync.start(options);
@@ -309,7 +309,7 @@ class Registry {
 					// Stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while the
 					// app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
 					await service.stop();
-					this.logger().debug(`registry.startSync [${uid}]: Background service stopped`);
+					this.logger().debug(`registry.sync [${uid}]: Background service stopped`);
 				}
 			}, {
 				taskName: 'Sync',
@@ -326,7 +326,7 @@ class Registry {
 			// is called while the app is in background, it will throw an exception and end up here. This can happen when the sync is triggered at the user
 			// configured sync interval. We should still run the sync normally in this case, in case there are other occasions this error will happen, but we
 			// it doesn't really matter if this sync does not complete while in the background, due to there being no service to keep it alive
-			this.logger().info(`registry.startSync [${uid}]: Starting background service failed, running sync directly`, e);
+			this.logger().info(`registry.sync [${uid}]: Starting background service failed, running sync directly`, e);
 			return sync.start(options);
 		}
 
@@ -344,7 +344,7 @@ class Registry {
 		if (service.isRunning() && !service.appIsActive() && maxRuntimeExceeded) {
 			try {
 				void service.stop();
-				this.logger().debug('registry.startSync: Background service stopped due to timing out');
+				this.logger().debug('registry.sync: Background service stopped due to timing out');
 			} catch (e) {
 				// Avoid throwing here so that if an error occurs, it does not stop the sync
 			}
