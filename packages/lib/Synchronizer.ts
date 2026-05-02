@@ -403,7 +403,8 @@ export default class Synchronizer {
 		}
 
 		this.state_ = 'in_progress';
-		this.syncStartTime_ = Date.now();
+		if (options.syncStartTime === undefined) this.syncStartTime_ = Date.now();
+		options = { ...options, syncStartTime: this.syncStartTime_ };
 
 		this.onProgress_ = options.onProgress ? options.onProgress : function() {};
 		this.progressReport_ = { errors: [] };
