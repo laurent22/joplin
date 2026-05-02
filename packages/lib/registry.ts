@@ -147,12 +147,15 @@ class Registry {
 		try {
 			const synchronizer = await this.syncTarget().synchronizer();
 			await synchronizer.waitForSyncToFinish();
-			await this.scheduleSync(0);
+			await this.scheduleSync(0, { useService: false });
 		} finally {
 			this.waitForReSyncCalls_.pop();
 		}
 	};
 
+	// This function should not be awaited directly, as awaiting this function with a delay other than 0 will result in the promise never being
+	// returned, if another sync is scheduled during the delay. Also on platforms where the background service is set, this will resolve immediately,
+	// without waiting for the sync to complete. If required to wait for the sync to complete, use the waitForSyncFinishedThenSync function instead
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
@@ -293,7 +296,7 @@ class Registry {
 	private async startSync(sync: Synchronizer, options: any, contextKey: string) {
 		// Service will only be populated for the native Android app
 		const service = this.backgroundService_;
-		if (!service) return sync.start(options);
+		if (!service || options.useService === false) return sync.start(options);
 
 		await service.requestPermissions();
 
