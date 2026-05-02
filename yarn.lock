@@ -27731,7 +27731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.0.0, debug@npm:^4.3.6, debug@npm:^4.4.3":
+"debug@npm:^4.0.0, debug@npm:^4.4.3":
   version: 4.4.3
   resolution: "debug@npm:4.4.3"
   dependencies:
@@ -44125,15 +44125,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-package-json-lint@npm:9.0.0":
-  version: 9.0.0
-  resolution: "npm-package-json-lint@npm:9.0.0"
+"npm-package-json-lint@npm:9.1.0":
+  version: 9.1.0
+  resolution: "npm-package-json-lint@npm:9.1.0"
   dependencies:
     ajv: "npm:^6.12.6"
     ajv-errors: "npm:^1.0.1"
     chalk: "npm:^4.1.2"
     cosmiconfig: "npm:^8.3.6"
-    debug: "npm:^4.3.6"
+    debug: "npm:^4.4.3"
     globby: "npm:^11.1.0"
     ignore: "npm:^5.3.2"
     is-plain-obj: "npm:^3.0.0"
@@ -44141,14 +44141,14 @@ __metadata:
     log-symbols: "npm:^4.1.0"
     meow: "npm:^9.0.0"
     plur: "npm:^4.0.0"
-    semver: "npm:^7.6.3"
+    semver: "npm:^7.7.3"
     slash: "npm:^3.0.0"
     strip-json-comments: "npm:^3.1.1"
-    type-fest: "npm:^4.26.1"
+    type-fest: "npm:^5.0.1"
     validate-npm-package-name: "npm:^6.0.0"
   bin:
     npmPkgJsonLint: dist/cli.js
-  checksum: 10/449a0d4235e8f12f752fd181718bec7916513fe8f64b9ba3155853da7f05450021e2d7e546fcc3811d4239f16cb996b6aaabe6d7213c2e08acc6bc0c39213833
+  checksum: 10/6dc2901bb636ee2d568eb29ae2d64f7181aadb5a6c5ed7096ab2129b1db9bcf356ef8b2edf4d1b286c894ee19b8f5bc9de980dc85edc400b2764bf0ff3c7c6b3
   languageName: node
   linkType: hard
 
@@ -51536,7 +51536,7 @@ __metadata:
     madge: "npm:8.0.0"
     node-gyp: "npm:11.5.0"
     nodemon: "npm:3.1.11"
-    npm-package-json-lint: "npm:9.0.0"
+    npm-package-json-lint: "npm:9.1.0"
     typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
@@ -55038,6 +55038,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tagged-tag@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "tagged-tag@npm:1.0.0"
+  checksum: 10/e37653df3e495daa7ea7790cb161b810b00075bba2e4d6c93fb06a709e747e3ae9da11a120d0489833203926511b39e038a2affbd9d279cfb7a2f3fcccd30b5d
+  languageName: node
+  linkType: hard
+
 "taketalk@npm:^1.0.0":
   version: 1.0.0
   resolution: "taketalk@npm:1.0.0"
@@ -56745,10 +56752,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.26.1, type-fest@npm:^4.41.0":
+"type-fest@npm:^4.41.0":
   version: 4.41.0
   resolution: "type-fest@npm:4.41.0"
   checksum: 10/617ace794ac0893c2986912d28b3065ad1afb484cad59297835a0807dc63286c39e8675d65f7de08fafa339afcb8fe06a36e9a188b9857756ae1e92ee8bda212
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^5.0.1":
+  version: 5.6.0
+  resolution: "type-fest@npm:5.6.0"
+  dependencies:
+    tagged-tag: "npm:^1.0.0"
+  checksum: 10/2cc7a510f46a538af7a365ed50cee10e51a69bd353ca66c2a432e172b90ff12efff9ba59c7ba493d6361d07fd298c84945b9e4481ab63f85a29860c0b0430233
   languageName: node
   linkType: hard
 
