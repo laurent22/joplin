@@ -54,6 +54,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 	const [pendingEnableEncryption, setPendingEnableEncryption] = useState(false);
 	const [enableEncryptionPromptVisible, setEnableEncryptionPromptVisible] = useState(false);
 	const [enableEncryptionPassword, setEnableEncryptionPassword] = useState('');
+	const [enableEncryptionError, setEnableEncryptionError] = useState('');
 	const [disableEncryptionPromptVisible, setDisableEncryptionPromptVisible] = useState(false);
 	const disablePromptPromiseRef = useRef<(value: boolean)=> void>(null);
 	const promptPromiseRef = useRef<(password: string | null)=> void>(null);
@@ -285,19 +286,13 @@ export const EncryptionConfigScreen = (props: Props) => {
 
 			// Wait for the custom React Dialog to resolve
 			setEnableEncryptionPassword('');
+			setEnableEncryptionError('');
 			setEnableEncryptionPromptVisible(true);
 			newPassword = await new Promise<string | null>((resolve) => {
 				promptPromiseRef.current = resolve;
 			});
 
 			if (newPassword === null) return; // User cancelled
-		}
-
-		if (hasMasterPassword && newEnabled) {
-			if (!(await masterPasswordIsValid(newPassword))) {
-				await dialogs.alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
-				return;
-			}
 		}
 
 		try {
@@ -339,12 +334,19 @@ export const EncryptionConfigScreen = (props: Props) => {
 			if (promptPromiseRef.current) promptPromiseRef.current(null);
 		};
 
-		const onDialogButtonRowClick = (event: { buttonName: string }) => {
+		const onDialogButtonRowClick = async (event: { buttonName: string }) => {
 			if (event.buttonName === 'cancel') {
 				onClose();
 				return;
 			}
 			if (event.buttonName === 'ok') {
+				if (hasMasterPassword) {
+					if (!(await masterPasswordIsValid(enableEncryptionPassword))) {
+						setEnableEncryptionError(_('Invalid password. Please try again. If you have forgotten your password you will need to reset it.'));
+						return;
+					}
+				}
+				setEnableEncryptionError('');
 				setEnableEncryptionPromptVisible(false);
 				if (promptPromiseRef.current) promptPromiseRef.current(enableEncryptionPassword);
 			}
@@ -352,6 +354,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required because PasswordInput's ChangeEventHandler type is incorrect
 		const onPasswordInputChange = (event: any) => {
+			setEnableEncryptionError('');
 			setEnableEncryptionPassword(event.target.value);
 		};
 
@@ -371,6 +374,11 @@ export const EncryptionConfigScreen = (props: Props) => {
 							onChange={onPasswordInputChange}
 						/>
 					</div>
+					{enableEncryptionError && (
+						<div style={{ ...theme.textStyle, color: theme.colorError, marginTop: 10, marginBottom: 10 }}>
+							{enableEncryptionError}
+						</div>
+					)}
 				</>
 			),
 			onClose,
