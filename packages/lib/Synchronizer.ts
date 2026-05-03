@@ -868,6 +868,10 @@ export default class Synchronizer {
 			// have been created or updated, and apply the changes to local.
 			// ------------------------------------------------------------------------
 
+			// The delta step can cause background execution to get stuck, so if a full sync is run, stop the service after the upload step has completed,
+			// as the primary purpose of the background sync is to help ensure outgoing changes are uploaded
+			void reg.stopBackgroundService();
+
 			if (this.downloadQueue_) await this.downloadQueue_.stop();
 			this.downloadQueue_ = new TaskQueue('syncDownload');
 			this.downloadQueue_.logger_ = logger;

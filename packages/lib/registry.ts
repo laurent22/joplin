@@ -297,7 +297,7 @@ class Registry {
 	private async startSync(sync: Synchronizer, options: any, contextKey: string) {
 		// Service will only be populated for the native Android app
 		const service = this.backgroundService_;
-		if (!service || options.useService === false || service.isRunning() || !service.appIsActive()) return sync.start(options);
+		if (!service || options.useService === false || service.isRunning()) return sync.start(options);
 
 		await service.requestPermissions();
 
@@ -322,9 +322,7 @@ class Registry {
 				} finally {
 					// Always stop the service explicitly, as on some devices such as Samsung phones, the notification for the foreground service gets frozen while
 					// the app is in the background, preventing the notification being updated via updateNotification and preventing it dismissing automatically
-					void service.stop()
-						.then(() => this.logger().info('registry.sync: Background service stopped'))
-						.catch(e => this.logger().warn('registry.sync: Stopping background service failed', e));
+					void this.stopBackgroundService();
 				}
 			}, {
 				taskName: 'Sync',
@@ -337,13 +335,29 @@ class Registry {
 				foregroundServiceType: ['dataSync'],
 			});
 		} catch (e) {
-			this.logger().warn('registry.sync: Starting background service failed, running sync directly', e);
+			// If service.start is called while the service is already running, it will kill the existing service and start a new one. However if service.start
+			// is called while the app is in background (sometimes after a grace period), it will throw an exception and end up here. This can happen when the sync
+			// is triggered at the user configured sync interval. We should still run the sync normally in this case, in case there are other occasions this error
+			// will happen, but it doesn't really matter if this sync does not complete while in the background, due to there being no service to keep it alive
+			this.logger().info('registry.sync: Starting background service failed, running sync directly', e);
 			return sync.start(options);
 		}
 
 		// When the sync completes successfully via the service, we cannot get a return value. However the SYNC_PENDING_UPDATE event which the response
 		// determines is not used on mobile, so this does not matter
 		return null;
+	}
+
+	public async stopBackgroundService() {
+		const service = this.backgroundService_;
+		if (!service || !service.isRunning()) return;
+
+		try {
+			await service.stop();
+			this.logger().info('registry.sync: Background service stopped');
+		} catch (e) {
+			this.logger().warn('registry.sync: Stopping background service failed', e);
+		}
 	}
 
 	public setupRecurrentSync() {
