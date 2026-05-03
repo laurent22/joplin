@@ -60,7 +60,20 @@ const StatusBar: React.FC<Props> = props => {
 		const noteIds = [props.noteId];
 		const instructions = (
 			<span
+				role='button'
+				tabIndex={props.setTagsToolbarButtonInfo.enabled ? 0 : -1}
+				aria-disabled={!props.setTagsToolbarButtonInfo.enabled}
 				onClick={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+
+					if (!props.setTagsToolbarButtonInfo.enabled) return;
+
+					void CommandService.instance().execute('setTags', noteIds);
+				}}
+				onKeyDown={(e) => {
+					if (e.key !== 'Enter' && e.key !== ' ') return;
+
 					e.preventDefault();
 					e.stopPropagation();
 
