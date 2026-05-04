@@ -34,6 +34,7 @@ import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
 import { reg } from './registry';
 import SyncTargetRegistry from './SyncTargetRegistry';
+import { Day } from '@joplin/utils/time';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -633,7 +634,7 @@ export default class Synchronizer {
 						//   (by setting an updated_time less than current time).
 						if (donePaths.indexOf(path) >= 0) {
 							const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['force_sync'] });
-							if (local.updated_time > time.unixMs() + 24 * 60 * 60 * 1000) {
+							if (local.updated_time > time.unixMs() + Day) {
 								throw new JoplinError(sprintf('Remote item %s has an updated_time in the future', path), 'unexpectedData');
 							} else if (local.updated_time > time.unixMs()) {
 								throw new JoplinError(sprintf('Processing a path that has already been done: %s. Remote item has an updated_time in the future', path), 'processingPathTwice');
