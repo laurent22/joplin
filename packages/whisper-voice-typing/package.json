@@ -49,7 +49,7 @@
     "nitrogen": "0.33.3",
     "react": "19.1.5",
     "react-native": "0.81.6",
-    "react-native-nitro-modules": "0.33.2",
+    "react-native-nitro-modules": "0.33.5",
     "typescript": "5.9.3"
   },
   "peerDependencies": {
