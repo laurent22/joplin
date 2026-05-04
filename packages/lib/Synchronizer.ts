@@ -635,7 +635,7 @@ export default class Synchronizer {
 							const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['force_sync'] });
 							if (local.updated_time > time.unixMs()) {
 								if (local.updated_time > time.unixMs() + 24 * 60 * 60 * 1000) {
-									throw new JoplinError(sprintf('Unexpected data: Remote item %s has an updated_time over 24 hours in the future', path), 'unexpectedData');
+									throw new JoplinError(sprintf('Remote item %s has an updated_time over 24 hours in the future', path), 'unexpectedData');
 								} else {
 									throw new JoplinError(sprintf('Processing a path that has already been done: %s. Remote item has an updated_time in the future', path), 'processingPathTwice');
 								}
