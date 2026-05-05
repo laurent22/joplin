@@ -12858,7 +12858,7 @@ __metadata:
     "@joplin/utils": "npm:~3.6"
     "@koa/cors": "npm:3.4.3"
     "@rmp135/sql-ts": "npm:1.18.1"
-    "@types/bcryptjs": "npm:2.4.6"
+    "@types/bcryptjs": "npm:3.0.0"
     "@types/formidable": "npm:2.0.6"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
@@ -12873,7 +12873,7 @@ __metadata:
     "@types/uuid": "npm:11.0.0"
     "@types/yargs": "npm:17.0.35"
     "@types/zxcvbn": "npm:4.4.5"
-    bcryptjs: "npm:2.4.3"
+    bcryptjs: "npm:3.0.2"
     bulma: "npm:1.0.4"
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.19"
@@ -17906,10 +17906,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bcryptjs@npm:2.4.6":
-  version: 2.4.6
-  resolution: "@types/bcryptjs@npm:2.4.6"
-  checksum: 10/00153c460bd6bfc68e7670993a1ad8bd511413fd08e8a983cde1a8bf5a08afc5a51613c92ca4ad350d5a924499afed57f008a66a9abc1fd83879061596814124
+"@types/bcryptjs@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@types/bcryptjs@npm:3.0.0"
+  dependencies:
+    bcryptjs: "npm:*"
+  checksum: 10/15fcb37f90ff9726b436bad453248402c6a6d6c0f1b9689faf2c0c0f0f5eab519e04b34848c99ea7603821a07cd494df995bec29f020130665133570b5a5185e
   languageName: node
   linkType: hard
 
@@ -22819,10 +22821,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bcryptjs@npm:2.4.3":
-  version: 2.4.3
-  resolution: "bcryptjs@npm:2.4.3"
-  checksum: 10/f6798e57eacfe86960d31af9b8fbc15dc73281c42cfb2a294e2d737e0e9bb7e402dbd39ac68b114867b234fd841ae689dbac031cc6af822b9e72099f52157a8c
+"bcryptjs@npm:*":
+  version: 3.0.3
+  resolution: "bcryptjs@npm:3.0.3"
+  bin:
+    bcrypt: bin/bcrypt
+  checksum: 10/c24c2b02d2156be4a2842752526ffcc48eb49f6c5c1271765d10f6f847eb40005716f0b910df8c04811fb5223ba9b80b84223c2a6f0a346584df9be2c44e2d14
+  languageName: node
+  linkType: hard
+
+"bcryptjs@npm:3.0.2":
+  version: 3.0.2
+  resolution: "bcryptjs@npm:3.0.2"
+  bin:
+    bcrypt: bin/bcrypt
+  checksum: 10/02c37e7298aba74e13e0576d63617cc1c9005efc165e55c11b287dc17192bedce8cd6f6e78180203c2519a211d9eb77ff14b286f962e2f0b93c08d2ada02dc22
   languageName: node
   linkType: hard
 
