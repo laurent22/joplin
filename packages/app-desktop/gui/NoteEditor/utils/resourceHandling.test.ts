@@ -57,6 +57,27 @@ describe('resourceHandling', () => {
 		}
 	});
 
+	it('should preserve leading and trailing whitespace when pasting', async () => {
+		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
+
+		const normalizeHtmlEntities = (html: string) => {
+			return html
+				.replace(/&nbsp;|&#160;|&#xA0;/gi, ' ')
+				.replace(/&bull;|&#8226;|&#x2022;/gi, '•');
+		};
+
+		const testCases: [string, string][] = [
+			['&nbsp;&nbsp;&nbsp;Hello', '   Hello'],
+			['Hello&nbsp;&nbsp;&nbsp;', 'Hello   '],
+			['&nbsp;&nbsp;Hello&nbsp;&nbsp;', '  Hello  '],
+			['•&nbsp;', '• '],
+		];
+
+		for (const [html, expected] of testCases) {
+			const result = await processPastedHtml(html, htmlToMd, markupToHtml);
+			expect(normalizeHtmlEntities(result)).toBe(expected);
+		}
+	});
 	it('should preserve images pasted from the resource directory', async () => {
 		const { markupToHtml, htmlToMd } = createTestMarkupConverters();
 

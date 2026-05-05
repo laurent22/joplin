@@ -247,6 +247,8 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	// inserted into the TinyMCE editor (using insertContent), they will be
 	// dropped. So here we convert them to regular spaces.
 	// https://stackoverflow.com/a/31790544/561309
+	const hasBoundaryWhitespace = /^(?:\s|&nbsp;|&#160;|&#xA0;)/i.test(html) || /(?:\s|&nbsp;|&#160;|&#xA0;)\s*$/i.test(html);
+
 	html = html.replace(/[\u202F\u00A0]/g, ' ');
 
 	html = await processImagesInPastedHtml(html);
@@ -276,7 +278,7 @@ export async function processPastedHtml(html: string, htmlToMd: HtmlToMarkdownHa
 	// Markdown. For example the content may have a dark background which would be supported by
 	// TinyMCE, but lost once the note is saved. So here we convert the HTML to Markdown then back
 	// to HTML to ensure that the content we paste will be handled correctly by the app.
-	if (htmlToMd && mdToHtml) {
+	if (htmlToMd && mdToHtml && !hasBoundaryWhitespace) {
 		const md = await htmlToMd(MarkupLanguage.Markdown, html, '', { preserveColorStyles: Setting.value('editor.pastePreserveColors') });
 		html = (await mdToHtml(MarkupLanguage.Markdown, md, markupRenderOptions({ bodyOnly: true }))).html;
 
