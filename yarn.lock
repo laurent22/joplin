@@ -12887,7 +12887,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
-    ldapts: "npm:8.1.4"
+    ldapts: "npm:8.1.6"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
@@ -39318,13 +39318,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:8.1.4":
-  version: 8.1.4
-  resolution: "ldapts@npm:8.1.4"
+"ldapts@npm:8.1.6":
+  version: 8.1.6
+  resolution: "ldapts@npm:8.1.6"
   dependencies:
     strict-event-emitter-types: "npm:2.0.0"
-    whatwg-url: "npm:15.1.0"
-  checksum: 10/be621caa6d715e9645ca2bc23209d1b7733364f2c524ebb3907accb8c21b23cd3e751c365d017e06abd3f7e8267695c9266699068b5b66285fa3373c5ef41e4c
+  checksum: 10/3ebcdf335e1477d920cdea562fdf1f91218cb4bed6de7077a837a33ec93f3a8e1659e346c28335bd0be0144505315f9445c87acae857b8af385939f0ac78a60e
   languageName: node
   linkType: hard
 
@@ -56189,15 +56188,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tr46@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "tr46@npm:6.0.0"
-  dependencies:
-    punycode: "npm:^2.3.1"
-  checksum: 10/e6d402eb2b780a40042f327f77b4ae316da1d2b18a29c16e48c239f5267c6005bbf780f854179cfae62b02dfaa70b0e9aad8f0078ccc4225f5b3b3b131928e8f
-  languageName: node
-  linkType: hard
-
 "tr46@npm:~0.0.3":
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
@@ -58753,13 +58743,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webidl-conversions@npm:^8.0.0":
-  version: 8.0.1
-  resolution: "webidl-conversions@npm:8.0.1"
-  checksum: 10/0f7007311f1fc257a8e406dd236f13b61fb57cf0fddb476aec33457d2d0add2d012d6df0eeb00934399238e3f3b9dad30f59dc6ac83024ae0ebd5a518bf365e8
-  languageName: node
-  linkType: hard
-
 "webpack-bundle-analyzer@npm:^4.10.2":
   version: 4.10.2
   resolution: "webpack-bundle-analyzer@npm:4.10.2"
@@ -59314,16 +59297,6 @@ __metadata:
     punycode: "npm:^2.1.1"
     webidl-conversions: "npm:^5.0.0"
   checksum: 10/aa588b54b75304335c5e189f8572626f989364c2ac5be5a1643ac687c2501f044405e1eb5761d65a826f570befade5fe51a723d917e9ab7672bb65d14065e82f
-  languageName: node
-  linkType: hard
-
-"whatwg-url@npm:15.1.0":
-  version: 15.1.0
-  resolution: "whatwg-url@npm:15.1.0"
-  dependencies:
-    tr46: "npm:^6.0.0"
-    webidl-conversions: "npm:^8.0.0"
-  checksum: 10/9ae5ce70060f2a9ea73799062af6e796ec2477f44bf1a886953b405700e3ab11d15aa0fe7088c4215f839e56a845d5d1c44584ed292a832837a8c8549c566886
   languageName: node
   linkType: hard
 
