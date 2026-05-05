@@ -169,6 +169,7 @@ function ShareFolderDialog(props: Props) {
 
 	useEffect(() => {
 		setRecipientSuggestions([]);
+		setLatestError(null);
 
 		let cancelled = false;
 
