@@ -154,6 +154,8 @@ Local filesystem sync can be initiated after starting the joplin terminal app by
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
+	:config sync.target 3
+
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
 
 ## URLs
