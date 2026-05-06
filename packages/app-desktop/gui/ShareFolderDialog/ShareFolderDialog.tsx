@@ -288,7 +288,7 @@ function ShareFolderDialog(props: Props) {
 	function renderAddRecipient() {
 		const disabled = shareState !== ShareState.Idle && shareState !== ShareState.Synchronizing;
 
-		const dropdown = !props.canUseSharePermissions ? null : <Dropdown className="permission-dropdown" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
+		const dropdown = !props.canUseSharePermissions ? null : <Dropdown className="permissions" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
 
 		return (
 			<StyledAddRecipient>
@@ -302,6 +302,7 @@ function ShareFolderDialog(props: Props) {
 							renderOption={suggestedValue => <div>{suggestedValue}</div>}
 							inputStyle={{}}
 							inputId='share-folder-dialog-recipient-email'
+							className='-share-recipient'
 						/>
 					</div>
 					{dropdown}

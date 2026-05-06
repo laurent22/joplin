@@ -7,6 +7,7 @@ import ItemList from './ItemList';
 interface Props {
 	inputType?: string;
 	inputStyle: CSSProperties;
+	className?: string;
 
 	value: string;
 	onChange: (newValue: string)=> void;
@@ -23,7 +24,7 @@ const suggestionMatchesFilter = (suggestion: string, filter: string) => {
 	return suggestion.toLowerCase().startsWith(filter.toLowerCase());
 };
 
-const InlineCombobox: React.FC<Props> = ({ inputType, controls, inputStyle, value, suggestedValues, renderOption, onChange, inputId }) => {
+const InlineCombobox: React.FC<Props> = ({ inputType, controls, inputStyle, className, value, suggestedValues, renderOption, onChange, inputId }) => {
 	const [showList, setShowList] = useState(false);
 	const containerRef = useRef<HTMLDivElement|null>(null);
 	const inputRef = useRef<HTMLInputElement|null>(null);
@@ -149,7 +150,7 @@ const InlineCombobox: React.FC<Props> = ({ inputType, controls, inputStyle, valu
 
 	return (
 		<div
-			className={`combobox-wrapper ${showList ? '-expanded' : ''}`}
+			className={`combobox-wrapper ${showList ? '-expanded' : ''} ${className ?? ''}`}
 			onFocus={onFocus}
 			onBlur={onBlur}
 
