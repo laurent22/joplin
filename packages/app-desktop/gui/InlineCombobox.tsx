@@ -37,6 +37,7 @@ const InlineCombobox: React.FC<Props> = ({ inputType, controls, inputStyle, clas
 	}, [suggestedValues]);
 
 	const selectedIndex = filteredSuggestions.indexOf(value);
+	const hasSuggestions = filteredSuggestions.length > 0;
 
 	useEffect(() => {
 		if (selectedIndex >= 0 && showList) {
@@ -158,6 +159,7 @@ const InlineCombobox: React.FC<Props> = ({ inputType, controls, inputStyle, clas
 			ref={containerRef}
 		>
 			<input
+				className='input'
 				type={inputType ?? 'text'}
 				style={inputStyle}
 				value={value}
@@ -173,7 +175,7 @@ const InlineCombobox: React.FC<Props> = ({ inputType, controls, inputStyle, clas
 				aria-expanded={showList}
 				aria-activedescendant={itemId(selectedIndex)}
 			/>
-			<div className='suggestions'>
+			<div className={`suggestions ${hasSuggestions ? '' : '-empty'}`}>
 				{
 					// Custom controls
 					controls

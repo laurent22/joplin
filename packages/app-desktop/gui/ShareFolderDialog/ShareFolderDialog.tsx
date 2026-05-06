@@ -42,6 +42,16 @@ const StyledRecipientControls = styled.div`
 	flex-direction: row;
 `;
 
+const StyledRecipientField = styled.div`
+	flex: 1;
+	min-width: 0;
+	margin-right: 10px;
+`;
+
+const StyledRecipientPermissions = styled(Dropdown)`
+	margin-right: 10px;
+`;
+
 const StyledAddRecipient = styled.div`
 	margin-bottom: 1em;
 `;
@@ -288,13 +298,13 @@ function ShareFolderDialog(props: Props) {
 	function renderAddRecipient() {
 		const disabled = shareState !== ShareState.Idle && shareState !== ShareState.Synchronizing;
 
-		const dropdown = !props.canUseSharePermissions ? null : <Dropdown className="permissions" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
+		const dropdown = !props.canUseSharePermissions ? null : <StyledRecipientPermissions options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
 
 		return (
 			<StyledAddRecipient>
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
-				<StyledRecipientControls className="share-recipient-input">
-					<div className="field">
+				<StyledRecipientControls>
+					<StyledRecipientField>
 						<InlineCombobox
 							value={recipientEmail}
 							onChange={recipientEmail_change}
@@ -304,7 +314,7 @@ function ShareFolderDialog(props: Props) {
 							inputId='share-folder-dialog-recipient-email'
 							className='-share-recipient'
 						/>
-					</div>
+					</StyledRecipientField>
 					{dropdown}
 					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
