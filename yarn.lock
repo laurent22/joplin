@@ -12435,7 +12435,7 @@ __metadata:
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-base64: "npm:2.2.2"
-    react-native-quick-crypto: "npm:1.0.19"
+    react-native-quick-crypto: "npm:1.1.2"
     react-native-rsa-native: "npm:2.0.5"
     react-native-safe-area-context: "npm:5.6.2"
     react-native-securerandom: "npm:1.0.1"
@@ -49264,9 +49264,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-crypto@npm:1.0.19":
-  version: 1.0.19
-  resolution: "react-native-quick-crypto@npm:1.0.19"
+"react-native-quick-crypto@npm:1.1.2":
+  version: 1.1.2
+  resolution: "react-native-quick-crypto@npm:1.1.2"
   dependencies:
     "@craftzdog/react-native-buffer": "npm:6.1.0"
     events: "npm:3.3.0"
@@ -49279,14 +49279,14 @@ __metadata:
     expo-build-properties: "*"
     react: "*"
     react-native: "*"
-    react-native-nitro-modules: ">=0.29.1"
+    react-native-nitro-modules: ">=0.31.2"
     react-native-quick-base64: ">=2.1.0"
   peerDependenciesMeta:
     expo:
       optional: true
     expo-build-properties:
       optional: true
-  checksum: 10/73a6ac9e3c11d297ff72e4b5ae07b194c5f12ca8dc5d8f160feaf1c73ebf05acbd66effdb04e76b4accefd4782e267daa69e0ef6bf97d2196f854f7d1225e1c6
+  checksum: 10/f3abae21395e6bd342f3fdeaf55b3e244115fc062e96213ca97ab1b57b5e52c6f830e35ceb56ed00ef9f217fc531c7eeb4887220fc7cf45a1d69d6a421e7fc30
   languageName: node
   linkType: hard
 
