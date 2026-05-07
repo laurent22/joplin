@@ -110,7 +110,7 @@ export async function testStringPerformance(method: EncryptionMethod, dataSize: 
 
 		const crypto = shim.crypto;
 
-		const content = (await crypto.randomBytes(dataSize / 2)).toString('hex');
+		const content = crypto.bufferToString(await crypto.randomBytes(dataSize / 2), 'hex');
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'encrypted note', body: content, parent_id: folder.id });
 
@@ -174,7 +174,7 @@ export async function testFilePerformance(method: EncryptionMethod, dataSize: nu
 		const encryptedPath = `${Setting.value('tempDir')}/testData.crypted`;
 		const decryptedPath = `${Setting.value('tempDir')}/testData.decrypted`;
 		await fsDriver.writeFile(sourcePath, '');
-		await fsDriver.appendFile(sourcePath, (await crypto.randomBytes(dataSize)).toString('base64'), 'base64');
+		await fsDriver.appendFile(sourcePath, crypto.bufferToString(await crypto.randomBytes(dataSize), 'base64'), 'base64');
 
 		let encryptTime = 0.0;
 		let decryptTime = 0.0;

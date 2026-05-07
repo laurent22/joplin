@@ -1,4 +1,4 @@
-import { Crypto, CryptoBuffer, Digest, EncryptionResult, EncryptionParameters } from './types';
+import { Crypto, CryptoBuffer, CryptoBufferEncoding, Digest, EncryptionResult, EncryptionParameters } from './types';
 import { webcrypto } from 'crypto';
 import { Buffer } from 'buffer';
 import {
@@ -70,7 +70,7 @@ const crypto: Crypto = {
 
 		// Parameters in EncryptionParameters won't appear in result
 		const result: EncryptionResult = {
-			salt: salt.toString('base64'),
+			salt: crypto.bufferToString(salt, 'base64'),
 			iv: '',
 			ct: '', // cipherText
 		};
@@ -82,8 +82,8 @@ const crypto: Crypto = {
 		const key = await pbkdf2Raw(password, salt, encryptionParameters.iterationCount, encryptionParameters.keyLength, encryptionParameters.digestAlgorithm);
 		const encrypted = await encryptRaw(data, key, iv, encryptionParameters.authTagLength, encryptionParameters.associatedData);
 
-		result.iv = iv.toString('base64');
-		result.ct = encrypted.toString('base64');
+		result.iv = crypto.bufferToString(iv, 'base64');
+		result.ct = crypto.bufferToString(encrypted, 'base64');
 
 		return result;
 	},
@@ -99,8 +99,13 @@ const crypto: Crypto = {
 		return decrypted;
 	},
 
-	encryptString: async (password: string, salt: CryptoBuffer, data: string, encoding: BufferEncoding, encryptionParameters: EncryptionParameters) => {
+	encryptString: async (password: string, salt: CryptoBuffer, data: string, encoding: CryptoBufferEncoding, encryptionParameters: EncryptionParameters) => {
 		return crypto.encrypt(password, salt, Buffer.from(data, encoding), encryptionParameters);
+	},
+
+	bufferToString: (buffer: CryptoBuffer, encoding: CryptoBufferEncoding) => {
+		if (Buffer.isBuffer(buffer)) return buffer.toString(encoding);
+		return Buffer.from(buffer.buffer, buffer.byteOffset, buffer.byteLength).toString(encoding);
 	},
 
 	generateNonce: generateNonceShared,

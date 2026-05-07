@@ -1,4 +1,4 @@
-import { CipherAlgorithm, Digest, MasterKeyEntity } from './types';
+import { CipherAlgorithm, CryptoBuffer, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
@@ -76,7 +76,7 @@ export default class EncryptionService {
 	public defaultFileEncryptionMethod_ = EncryptionMethod.FileV1; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.KeyV1;
 
-	private encryptionNonce_: Uint8Array = null;
+	private encryptionNonce_: CryptoBuffer = null;
 
 	private headerTemplates_ = {
 		// Template version 1
@@ -538,32 +538,32 @@ export default class EncryptionService {
 		const sjcl = shim.sjclModule;
 		const crypto = shim.crypto;
 		if (method === EncryptionMethod.KeyV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 220000,
-			})).toString('hex');
+			}), 'hex');
 		} else if (method === EncryptionMethod.FileV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 3,
-			})).toString('base64');
+			}), 'base64');
 		} else if (method === EncryptionMethod.StringV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 3,
-			})).toString('utf16le');
+			}), 'utf16le');
 		} else if (this.isValidSjclEncryptionMethod(method)) {
 			try {
 				const output = sjcl.json.decrypt(key, cipherText);
