@@ -172,6 +172,7 @@ const createEditor = async (
 			insertPos = adjustListItemDropInsertPos(tr.doc, insertPos, slice);
 
 			const beforeInsert = tr.doc;
+			const insertStepStart = tr.steps.length;
 			const isNodeSlice = slice.openStart === 0 && slice.openEnd === 0 && slice.content.childCount === 1;
 			if (isNodeSlice) {
 				tr.replaceRangeWith(insertPos, insertPos, slice.content.firstChild);
@@ -180,7 +181,10 @@ const createEditor = async (
 			}
 
 			if (!tr.doc.eq(beforeInsert)) {
-				const mappedPos = tr.mapping.map(insertPos, 1);
+				// Only map through the insert steps — insertPos is already
+				// in post-deleteSelection coordinates, so mapping through
+				// the full tr.mapping would apply the delete offset twice.
+				const mappedPos = tr.mapping.slice(insertStepStart).map(insertPos, 1);
 				const clampedPos = Math.min(mappedPos, tr.doc.content.size);
 				tr.setSelection(Selection.near(tr.doc.resolve(clampedPos), -1));
 				focus('createEditor', view);
