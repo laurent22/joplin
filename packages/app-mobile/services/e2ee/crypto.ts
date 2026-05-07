@@ -43,10 +43,11 @@ const decryptRaw = (data: ArrayBuffer, algorithm: CipherAlgorithm, key: CryptoBu
 
 	const decipher = QuickCrypto.createDecipheriv(algorithm, key, iv, { authTagLength: authTagLength } as CipherGCMOptions) as unknown as DecipherGCM;
 
-	const authTag = new Uint8Array(data, data.byteLength - authTagLength, authTagLength);
-	const encryptedData = new Uint8Array(data, 0, data.byteLength - authTagLength);
+	const plaintextLength = data.byteLength - authTagLength;
+	const authTag = new Uint8Array(data, plaintextLength, authTagLength);
+	const encryptedData = new Uint8Array(data, 0, plaintextLength);
 	decipher.setAuthTag(authTag);
-	decipher.setAAD(associatedData, { plaintextLength: data.byteLength });
+	decipher.setAAD(associatedData, { plaintextLength: plaintextLength });
 
 	try {
 		return Buffer.concat([decipher.update(encryptedData), decipher.final()]);
