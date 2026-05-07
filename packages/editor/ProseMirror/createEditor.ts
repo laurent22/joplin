@@ -1,6 +1,6 @@
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { ContentScriptData, EditorCommandType, EditorControl, EditorProps, EditorSettings, SearchState, UpdateBodyOptions, UserEventSource } from '../types';
-import { EditorState, NodeSelection, Selection, TextSelection, Transaction } from 'prosemirror-state';
+import { EditorState, Selection, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { DOMParser as ProseMirrorDomParser } from 'prosemirror-model';
 import { history } from 'prosemirror-history';
@@ -36,16 +36,7 @@ interface ProseMirrorControl extends EditorControl {
 	getSettings(): EditorSettings;
 }
 
-interface DraggingState {
-	move: boolean;
-	node?: NodeSelection;
-}
-
 const eventCoords = (event: MouseEvent) => ({ left: event.clientX, top: event.clientY });
-
-const getDraggingState = (view: EditorView): DraggingState | null => {
-	return (view as EditorView & { dragging: DraggingState | null }).dragging;
-};
 
 
 const createEditor = async (
@@ -163,9 +154,6 @@ const createEditor = async (
 		handleDrop: (view, event, slice, moved) => {
 			if (!moved) return false;
 
-			const dragging = getDraggingState(view);
-			if (!dragging?.node) return false;
-
 			const eventPos = view.posAtCoords(eventCoords(event));
 			if (!eventPos) return false;
 
@@ -178,7 +166,7 @@ const createEditor = async (
 			}
 
 			const tr = view.state.tr;
-			dragging.node.replace(tr);
+			tr.deleteSelection();
 
 			insertPos = tr.mapping.map(insertPos);
 			insertPos = adjustListItemDropInsertPos(tr.doc, insertPos, slice);
