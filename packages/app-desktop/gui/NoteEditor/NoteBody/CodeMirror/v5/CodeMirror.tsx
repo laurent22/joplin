@@ -54,6 +54,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	rootRef.current = editorRoot;
 
 	const webviewRef = useRef(null);
+	const previousContentKeyRef = useRef(props.contentKey);
+	const wasViewerVisibleRef = useRef(props.visiblePanes.includes('viewer'));
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
@@ -637,6 +639,19 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		content: props.content,
 		onMessage: props.onMessage,
 	});
+
+	useEffect(() => {
+		const viewerVisible = props.visiblePanes.includes('viewer');
+		const viewerWasHidden = wasViewerVisibleRef.current && !viewerVisible;
+		const noteChanged = previousContentKeyRef.current !== props.contentKey;
+
+		if (viewerWasHidden || noteChanged) {
+			webviewRef.current?.send('pauseMediaPlayback');
+		}
+
+		previousContentKeyRef.current = props.contentKey;
+		wasViewerVisibleRef.current = viewerVisible;
+	}, [props.contentKey, props.visiblePanes]);
 
 	useEffect(() => {
 		let cancelled = false;

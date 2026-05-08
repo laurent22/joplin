@@ -430,8 +430,43 @@
 			}
 		};
 
+		const pauseMediaElements = (root = document) => {
+			for (const element of root.querySelectorAll('audio, video')) {
+				element.pause();
+			}
+
+			for (const element of root.querySelectorAll('*')) {
+				if (element.shadowRoot) {
+					pauseMediaElements(element.shadowRoot);
+				}
+			}
+		};
+
+		let pauseMediaPlaybackTimeoutIds_ = [];
+		const clearPauseMediaPlaybackTimeouts = () => {
+			for (const timeoutId of pauseMediaPlaybackTimeoutIds_) {
+				clearTimeout(timeoutId);
+			}
+			pauseMediaPlaybackTimeoutIds_ = [];
+		};
+
+		ipc.pauseMediaPlayback = () => {
+			clearPauseMediaPlaybackTimeouts();
+			pauseMediaElements();
+
+			for (const delay of [100, 500]) {
+				const timeoutId = setTimeout(() => {
+					pauseMediaElements();
+					pauseMediaPlaybackTimeoutIds_ = pauseMediaPlaybackTimeoutIds_.filter(id => id !== timeoutId);
+				}, delay);
+				pauseMediaPlaybackTimeoutIds_.push(timeoutId);
+			}
+		}
+
 		ipc.setHtml = (event) => {
 			const html = event.html;
+
+			clearPauseMediaPlaybackTimeouts();
 
 			markJsHackMarkerInserted_ = false;
 

@@ -75,6 +75,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 	usePluginMessageResponder(webviewRef);
 
 	const domReadyRef = useRef(false);
+	const pauseMediaPlaybackWhenReadyRef = useRef(false);
 	type RemovePluginAssetsCallback = ()=> void;
 	const removePluginAssetsCallbackRef = useRef<RemovePluginAssetsCallback|null>(null);
 
@@ -111,6 +112,11 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 				});
 			},
 			send: (channel: string, arg0: unknown = null, arg1: unknown = null) => {
+				if (channel === 'pauseMediaPlayback' && !domReadyRef.current) {
+					pauseMediaPlaybackWhenReadyRef.current = true;
+					return;
+				}
+
 				const win = webviewRef.current?.contentWindow;
 
 				// Window may already be closed
@@ -139,6 +145,10 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 
 				if (channel === 'setMarkers') {
 					win.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: arg0, options: arg1 } }, '*');
+				}
+
+				if (channel === 'pauseMediaPlayback') {
+					win.postMessage({ target: 'webview', name: 'pauseMediaPlayback', data: {} }, '*');
 				}
 			},
 			focus: () => {
@@ -172,6 +182,10 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 	const webview_domReadyRef = useRef<EventListener>(null);
 	webview_domReadyRef.current = (event: Event) => {
 		domReadyRef.current = true;
+		if (pauseMediaPlaybackWhenReadyRef.current) {
+			pauseMediaPlaybackWhenReadyRef.current = false;
+			webviewRef.current?.contentWindow?.postMessage({ target: 'webview', name: 'pauseMediaPlayback', data: {} }, '*');
+		}
 		if (props.onDomReady) props.onDomReady(event);
 	};
 
