@@ -2553,14 +2553,6 @@
       "pullRequestNo": 14016
     },
     {
-      "name": "magicdude4eva",
-      "id": 1632781,
-      "comment_id": 3703803145,
-      "created_at": "2026-01-01T15:04:00Z",
-      "repoId": 79162682,
-      "pullRequestNo": 14016
-    },
-    {
       "name": "Kaifu-stack",
       "id": 208913408,
       "comment_id": 3711415863,
@@ -3073,14 +3065,6 @@
       "pullRequestNo": 14551
     },
     {
-      "name": "dipanshurdev",
-      "id": 124811276,
-      "comment_id": 4009293066,
-      "created_at": "2026-03-06T03:25:13Z",
-      "repoId": 79162682,
-      "pullRequestNo": 14551
-    },
-    {
       "name": "ashokkmt",
       "id": 72979218,
       "comment_id": 4009666008,
@@ -3101,14 +3085,6 @@
       "id": 149880529,
       "comment_id": 4010351632,
       "created_at": "2026-03-06T08:38:01Z",
-      "repoId": 79162682,
-      "pullRequestNo": 14597
-    },
-    {
-      "name": "AkankshaMishra2",
-      "id": 149880529,
-      "comment_id": 4010358598,
-      "created_at": "2026-03-06T08:39:32Z",
       "repoId": 79162682,
       "pullRequestNo": 14597
     },
