@@ -194,6 +194,15 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	});
 
 	useEffect(() => {
+		if (!props.visiblePanes.includes('viewer')) {
+			setRenderedBody(defaultRenderedBody());
+			setRenderedBodyContentKey(null);
+		} else if (renderedBodyContentKey && renderedBodyContentKey !== props.contentKey) {
+			setRenderedBody(defaultRenderedBody());
+		}
+	}, [props.contentKey, props.visiblePanes, renderedBodyContentKey]);
+
+	useEffect(() => {
 		let cancelled = false;
 
 		// When a new note is loaded (contentKey is different), we want the note to be displayed
