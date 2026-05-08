@@ -62,8 +62,8 @@ const getDiffDebugMessage = (actual: string, expected: string) => {
 			diffMessage.push(
 				'Last binary difference (working from end)', ': ',
 				expectedBinary[indexExpected], '!=', actualBinary[indexActual], `(expected[${indexExpected}] != actual[${indexActual}])`,
-				'\n\tContext: expected[a-6:a+3] = ', [...expectedBinary.slice(indexExpected - 6, indexExpected + 3)],
-				'\n\tContext: actual[b-6 : b+3] = ', [...actualBinary.slice(indexActual - 6, indexActual + 3)],
+				'\n\tContext: expected[a-6:a+3] = ', [...expectedBinary.slice(Math.max(indexExpected - 6, 0), indexExpected + 3)],
+				'\n\tContext: actual[b-6 : b+3] = ', [...actualBinary.slice(Math.max(indexActual - 6, 0), indexActual + 3)],
 				'\n\twhere expected.byteLength = ', expectedBinary.byteLength, 'and actual.byteLength = ', actualBinary.byteLength,
 				'\n\n',
 			);
