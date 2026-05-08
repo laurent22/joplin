@@ -10,7 +10,99 @@ import { uuidgen } from '../../uuid';
 import shim from '../../shim';
 import { unique } from '../../ArrayUtils';
 
+// cspell:ignore oxps Pbgra
+
 const logger = Logger.create('InteropService_Importer_OneNote');
+
+const xpsPrintoutImageExtensions = ['.xps', '.oxps'];
+const xpsPrintoutPageNumberAttributes = [
+	'data-onenote-page-number',
+	'data-joplin-onenote-page-number',
+];
+
+const xpsToPngPowerShellScript = String.raw`
+$ErrorActionPreference = 'Stop'
+
+$assemblies = @(
+	'PresentationCore',
+	'PresentationFramework',
+	'ReachFramework',
+	'System.Xaml',
+	'WindowsBase'
+)
+
+foreach ($assembly in $assemblies) {
+	Add-Type -AssemblyName $assembly
+}
+
+Add-Type -ReferencedAssemblies $assemblies -TypeDefinition @"
+using System;
+using System.IO;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Xps.Packaging;
+
+namespace Joplin {
+	public static class XpsConverter {
+		public static void RenderPage(string inputPath, string outputPath, int pageNumber, double scale) {
+			if (String.IsNullOrEmpty(inputPath)) {
+				throw new ArgumentException("Missing input path.", "inputPath");
+			}
+
+			if (String.IsNullOrEmpty(outputPath)) {
+				throw new ArgumentException("Missing output path.", "outputPath");
+			}
+
+			if (pageNumber < 1) {
+				throw new ArgumentOutOfRangeException("pageNumber");
+			}
+
+			using (XpsDocument document = new XpsDocument(inputPath, FileAccess.Read)) {
+				FixedDocumentSequence sequence = document.GetFixedDocumentSequence();
+				DocumentPaginator paginator = sequence.DocumentPaginator;
+				paginator.ComputePageCount();
+
+				int pageIndex = pageNumber - 1;
+				if (pageIndex >= paginator.PageCount) {
+					throw new ArgumentOutOfRangeException("pageNumber");
+				}
+
+				DocumentPage page = paginator.GetPage(pageIndex);
+				try {
+					Size pageSize = page.Size;
+					int pixelWidth = Math.Max(1, (int)Math.Ceiling(pageSize.Width * scale));
+					int pixelHeight = Math.Max(1, (int)Math.Ceiling(pageSize.Height * scale));
+
+					DrawingVisual visual = new DrawingVisual();
+					using (DrawingContext context = visual.RenderOpen()) {
+						context.DrawRectangle(Brushes.White, null, new Rect(new Point(0, 0), pageSize));
+						context.PushTransform(new ScaleTransform(scale, scale));
+						context.DrawRectangle(new VisualBrush(page.Visual), null, new Rect(new Point(0, 0), pageSize));
+						context.Pop();
+					}
+
+					RenderTargetBitmap bitmap = new RenderTargetBitmap(pixelWidth, pixelHeight, 96, 96, PixelFormats.Pbgra32);
+					bitmap.Render(visual);
+
+					PngBitmapEncoder encoder = new PngBitmapEncoder();
+					encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+					using (FileStream stream = new FileStream(outputPath, FileMode.Create, FileAccess.Write)) {
+						encoder.Save(stream);
+					}
+				} finally {
+					page.Dispose();
+				}
+			}
+		}
+	}
+}
+"@
+
+[Joplin.XpsConverter]::RenderPage($env:JOPLIN_XPS_INPUT, $env:JOPLIN_XPS_OUTPUT, [int]$env:JOPLIN_XPS_PAGE_NUMBER, 2.0)
+`;
 
 export type SvgXml = {
 	title: string;
@@ -223,6 +315,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	public async postprocessGeneratedHtml_(html: string, baseFolder: string, idMap: PageIdMap) {
 		const pipeline = [
 			(dom: Document, currentFolder: string) => this.extractSvgsToFiles_(dom, currentFolder),
+			(dom: Document, currentFolder: string) => this.convertXpsPrintoutsToImages_(dom, currentFolder),
 			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder, idMap),
 			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
 		];
@@ -291,6 +384,148 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		for (const selector of selectors) {
 			for (const element of dom.querySelectorAll(selector)) {
 				element.remove();
+				changed = true;
+			}
+		}
+
+		return changed;
+	}
+
+	private isXpsPrintoutImage_(image: HTMLImageElement) {
+		const src = image.getAttribute('src') ?? '';
+		return xpsPrintoutImageExtensions.includes(extname(src).toLowerCase());
+	}
+
+	private safeDecodeFileSrc_(src: string) {
+		try {
+			return decodeURIComponent(src);
+		} catch (error) {
+			logger.warn('Failed to decode OneNote image path:', src, error);
+			return src;
+		}
+	}
+
+	private xpsPrintoutOutputFilename_(sourcePath: string, pageNumber: number) {
+		const extension = extname(sourcePath);
+		return `${basename(sourcePath, extension)}.page-${pageNumber}.png`;
+	}
+
+	private xpsPrintoutDisplayedPageNumber_(image: HTMLImageElement) {
+		const pageNumberAttribute = xpsPrintoutPageNumberAttributes.find(attribute => image.hasAttribute(attribute));
+		const parsedPageNumber = Number.parseInt(pageNumberAttribute ? image.getAttribute(pageNumberAttribute) : '', 10);
+		return Number.isFinite(parsedPageNumber) && parsedPageNumber >= 0 ? parsedPageNumber : null;
+	}
+
+	private removeXpsPrintoutPageNumberAttributes_(image: HTMLImageElement) {
+		for (const attribute of xpsPrintoutPageNumberAttributes) {
+			image.removeAttribute(attribute);
+		}
+	}
+
+	private replaceXpsPrintoutImageWithLink_(dom: Document, image: HTMLImageElement) {
+		const src = image.getAttribute('src') ?? '';
+		const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
+		const link = dom.createElement('a');
+		const style = image.getAttribute('style');
+
+		link.setAttribute('href', src);
+		if (style) link.setAttribute('style', style);
+		link.textContent = displayedPageNumber === null
+			? 'XPS printout: Open original XPS file'
+			: `XPS printout page ${displayedPageNumber}: Open original XPS file`;
+
+		image.replaceWith(link);
+	}
+
+	private async convertXpsPrintoutPageToImage_(sourcePath: string, outputPath: string, pageNumber: number) {
+		if (await shim.fsDriver().exists(outputPath)) return;
+
+		const { spawn } = shim.requireDynamic('child_process') as typeof import('child_process');
+
+		await new Promise<void>((resolve, reject) => {
+			const processEnv = {
+				...process.env,
+				JOPLIN_XPS_INPUT: sourcePath,
+				JOPLIN_XPS_OUTPUT: outputPath,
+				JOPLIN_XPS_PAGE_NUMBER: `${pageNumber}`,
+			};
+
+			const childProcess = spawn('PowerShell.exe', [
+				'-NoProfile',
+				'-NonInteractive',
+				'-ExecutionPolicy',
+				'Bypass',
+				'-Sta',
+				'-Command',
+				'-',
+			], {
+				env: processEnv,
+				windowsHide: true,
+			});
+
+			let stderr = '';
+			let stdout = '';
+
+			childProcess.stderr.on('data', data => {
+				stderr += data.toString();
+			});
+			childProcess.stdout.on('data', data => {
+				stdout += data.toString();
+			});
+			childProcess.on('error', error => {
+				reject(error);
+			});
+			childProcess.on('close', code => {
+				if (code === 0) {
+					resolve();
+				} else {
+					const output = (stderr || stdout).trim();
+					reject(new Error(`PowerShell.exe exited with code ${code}.${output ? ` Output: ${output}` : ''}`));
+				}
+			});
+
+			childProcess.stdin.end(xpsToPngPowerShellScript);
+		});
+	}
+
+	private async convertXpsPrintoutsToImages_(dom: Document, baseFolder: string) {
+		const images = Array.from(dom.querySelectorAll<HTMLImageElement>('img[src]')).filter(image => this.isXpsPrintoutImage_(image));
+		if (!images.length) return false;
+
+		if (!shim.isWindows()) {
+			for (const image of images) {
+				this.replaceXpsPrintoutImageWithLink_(dom, image);
+			}
+			return true;
+		}
+
+		const conversions = new Map<string, Promise<string|null>>();
+		let changed = false;
+
+		for (const image of images) {
+			const src = image.getAttribute('src') ?? '';
+			const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
+			const pageNumber = displayedPageNumber === null ? 1 : displayedPageNumber + 1;
+			const sourcePath = resolve(baseFolder, this.safeDecodeFileSrc_(src));
+			const outputPath = join(dirname(sourcePath), this.xpsPrintoutOutputFilename_(sourcePath, pageNumber));
+			const conversionKey = `${sourcePath}:${pageNumber}`;
+
+			if (!conversions.has(conversionKey)) {
+				conversions.set(conversionKey, (async () => {
+					try {
+						await this.convertXpsPrintoutPageToImage_(sourcePath, outputPath, pageNumber);
+						return outputPath;
+					} catch (error) {
+						logger.warn('Failed to convert OneNote XPS printout page:', sourcePath, pageNumber, error);
+						return null;
+					}
+				})());
+			}
+
+			const convertedPath = await conversions.get(conversionKey);
+			if (convertedPath) {
+				image.setAttribute('src', relative(baseFolder, convertedPath).split(sep).join('/'));
+				this.removeXpsPrintoutPageNumberAttributes_(image);
 				changed = true;
 			}
 		}
